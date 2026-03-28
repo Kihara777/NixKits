@@ -1,3 +1,3 @@
 # NixKits
-Some basic configuraion for NixOS.
+Some basic configuraion for NixOS.</br>
 ...and a workaround for vscode-server-workround.
