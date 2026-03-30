@@ -1,0 +1,10 @@
+{ config, lib, pkgs, ... }:
+
+let
+  cfg = config.services.mihox;
+  configDir = "/var/lib/mihomo";
+  configFile = "/config.yaml";
+in
+{
+
+}
