@@ -149,8 +149,9 @@ cat <<CFK> "$CONF_KIX"
   
   # VS Code
   vscode-remote-workaround.enable = true;
-  #vscode-remote-workaround.package = pkgs.nodejs_latest;
-
+  vscode-remote-workaround.package = pkgs.nodejs_latest;
+  
+  
   # Hostname
   networking.hostName = "$kix_hostname";
 
@@ -189,5 +190,6 @@ else
 CFKH
 fi
 
-#nix-channel --add https://channels.nixos.org/nixos-unstable-small nixos
-nixos-rebuild switch --upgrade
+nix-channel --add https://channels.nixos.org/nixos-unstable-small nixos
+nixos-rebuild switch --upgrade-all
+nix-store --gc
