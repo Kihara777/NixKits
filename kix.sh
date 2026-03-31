@@ -17,6 +17,8 @@ CONF_KIX="$CONF_DIR/kits.nix"
 CONF_VSC_URL="https://raw.githubusercontent.com/K900/vscode-remote-workaround/main/vscode.nix"
 KIX_USER="kix"
 KIX_HOSTNAME="HarukaX"
+MHX_FILE="/etc/mihomo/config.yaml"
+MHX_DIR="${MHX_FILE%/*}"
 
 if [ ! -f $CONF_BASE ]; then
   mv $CONF_MAIN $CONF_BASE
@@ -35,29 +37,37 @@ cat <<CFM> "$CONF_MAIN"
 }
 CFM
 
-curl -sLo "$CONF_VSC" "$CONF_VSC_URL"
+if curl -sfLo "$CONF_VSC" "$CONF_VSC_URL"; then
+  echo "VS Code workaround downloaded."
+else
+  echo "Failed to download VS Code workaroun."
+  exit 1
+fi
+echo "Preparing workaround for workaround..."
 sed -i 's/nodejs-\([0-9]\+\)_x/nodejs_latest/g' "$CONF_VSC"
 
-cat <<'CFH'> "$CONF_MHX"
+cat <<CFH> "$CONF_MHX"
 { config, lib, pkgs, ... }:
 
 let
   cfg = config.services.mihox;
-  configDir = "/var/lib/mihomo";
-  configFile = "${configDir}/config.yaml";
+  configDir = "$MHX_DIR";
+  configFile = "$MHX_FILE";
+CFH
+cat <<'CFH'>> "$CONF_MHX"
 in
 {
   options.services.mihox =
   {
     enable = lib.mkEnableOption "Subscription auto updater for mihomo";
-
+    
     url = lib.mkOption
     {
       type = lib.types.str;
       description = "Mihomo subscripition";
       example = "your.provider/identifer";
     };
-
+    
     interval = lib.mkOption
     {
       type = lib.types.str;
@@ -65,55 +75,43 @@ in
       description = "Accept systemd time format like 'hourly', 'daily', '*:0/30'. Leave empty to disable";
     };
   };
-
+  
   config = lib.mkIf cfg.enable
   {
-    systemd.tmpfiles.rules =
-    [
-      "d ${configDir} 0755 mihomo mihomo -"
-    ];
-
-    systemd.services.mihox-prepare =
+    systemd.services.mihox =
     {
-      description = "Prepare initial mihomo config";
+      description = "Fetch mihomo config and restart mihomo";
+      requires = [ "network-online.target" ];
       before = [ "mihomo.service" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
       {
         Type = "oneshot";
-        User = "mihomo";
-        ExecStart =
-        "
-          ${pkgs.curl}/bin/curl -Lo ${configFile}.tmp ${cfg.url} \
-          && mv ${configFile}.tmp ${configFile} \
-          || true
-        ";
+        User = "root";
+        ExecStart = pkgs.writeShellScript "update-mihomo-config"
+        ''
+          tmp=$(mktemp)
+          mkdir -p "${configDir}"
+          if ${pkgs.curl}/bin/curl -fsLo "$tmp" ${cfg.url}; then
+            cp "$tmp" "${configFile}"
+            rm -f "$tmp"
+            echo "Subscription updated."
+          else
+            echo "Failed to update subscription."
+            exit 1
+          fi
+        '';
       };
     };
-
-    systemd.services.mihox-fetcher =
+    
+    systemd.timers.mihox = lib.mkIf (cfg.interval != "")
     {
-      description = "Fetch mihomo subscription";
-      serviceConfig =
-      {
-        Type = "oneshot";
-        User = "mihomo";
-        ExecStart =
-        "
-          ${pkgs.curl}/bin/curl -Lo ${configFile}.tmp ${cfg.url} \
-          && mv ${configFile}.tmp ${configFile}
-        ";
-        ExecStartPost = "${pkgs.systemd}/bin/systemctl try-restart mihomo.service";
-      };
-    };
-
-    systemd.timers.mihoz-fetcher = lib.mkIf (cfg.interval != "")
-    {
-      description = "Timer for mihomo fetcher";
+      description = "Timer for mihomo config update";
       wantedBy = [ "timers.target" ];
       timerConfig =
       {
-        OnCalendar = cfg.interval;
+        OnCalendar = "${cfg.interval}";
         Persistent = true;
       };
     };
@@ -135,7 +133,7 @@ cat <<CFK> "$CONF_KIX"
   environment.systemPackages = with pkgs;
   [
     # Utilities
-    fastfetch
+    fastfetch wget
     # Develop
     github-cli git
   ];
@@ -151,6 +149,7 @@ cat <<CFK> "$CONF_KIX"
   
   # VS Code
   vscode-remote-workaround.enable = true;
+  #vscode-remote-workaround.package = pkgs.nodejs_latest;
 
   # Hostname
   networking.hostName = "$kix_hostname";
@@ -166,20 +165,20 @@ cat <<CFK> "$CONF_KIX"
   virtualisation.docker.rootless.setSocketVariable = true;
 CFK
 
-if curl  -sfIL "https://$MHX_URL" &>/dev/null; then
+if curl -sfIL "https://$MHX_URL" &>/dev/null; then
   echo "Mihomo subscription found."
   cat <<CFKH>> "$CONF_KIX"
   services.mihox =
   {
     enable = true;
     url = "$MHX_URL";
-    #interval = "weekly";
+    interval = "";
   };
 
-  services.mihomo = 
+  services.mihomo =
   {
     enable = true;
-    configFile = "/var/lib/mihomo/config.yaml";
+    configFile = "$MHX_FILE";
     tunMode = true;
   };
 }
@@ -190,5 +189,5 @@ else
 CFKH
 fi
 
-nix-channel --add https://channels.nixos.org/nixos-unstable-small nixos
+#nix-channel --add https://channels.nixos.org/nixos-unstable-small nixos
 nixos-rebuild switch --upgrade
