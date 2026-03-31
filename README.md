@@ -7,7 +7,7 @@ make sure
 ```
 wsl.interop.register = true;
 ```
-is enabled in your base config/
+is enabled in your base config.
 ## Mihox Service
 This service run before mihomo. To use it, pass ```$MHX_URL``` to the script.
 ```
