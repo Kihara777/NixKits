@@ -4,11 +4,12 @@ Some basic configuraion for NixOS.</br>
 ## Env Vars
 For extra features, pass these to the script.
 ### Custom NixCache and/or NixChannel
+</br>
 '''
 sudo NIC_URL="your.cache.server/cachePath" NIR_URL="your.channel.server/channelPath" ./kix.sh
 '''
 ### Mihox Service
-This service run before mihomo and automatically update the config from subscription url..
+This service run before mihomo and automatically update the config from subscription url.
 ```
 sudo MHX_URL="your.provider/identifer" ./kix.sh
 ```
