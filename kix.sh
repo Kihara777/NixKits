@@ -166,6 +166,22 @@ cat <<CFK> "$CONF_KIX"
   virtualisation.docker.rootless.setSocketVariable = true;
 CFK
 
+if uname -r | grep -qi "microsoft"; then
+  echo "WSL detected, enable interlop register."
+  cat <<CFW>> "$CONF_KIX"
+  # WSL Interlop
+  wsl.interop.register = true;
+CFW
+fi
+
+if curl -sfIL "https://$NIC_URL/nix-cache-info" &>/dev/null; then
+  echo "Custom binary cache found."
+  cat <<CFNC>> "$CONF_KIX"
+  # Nix Binary Cache
+  nix.settings.substituters = [ "https://$NIC_URL" ];
+CFNC
+fi
+
 if curl -sfIL "https://$MHX_URL" &>/dev/null; then
   echo "Mihomo subscription found."
   cat <<CFKH>> "$CONF_KIX"
@@ -190,6 +206,12 @@ else
 CFKH
 fi
 
-nix-channel --add https://channels.nixos.org/nixos-unstable-small nixos
+if curl -sfIL "https://$NIC_URL" &>/dev/null; then
+  echo "Custom channel found."
+else
+  NIR_URL="https://channels.nixos.org/nixos-unstable-small"
+fi
+
+nix-channel --add https://$NIR_URL nixos
 nixos-rebuild switch --upgrade-all
 nix-store --gc
