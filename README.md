@@ -1,15 +1,40 @@
-# NixKits
-Some basic configuraion for NixOS.</br>
-...and a workaround for vscode-server-workround.
-## VS Code in WSL
-If you see ```/Path/to/Code.exe: cannot execute binary file: Exec format error```,</br>
-make sure 
+# NixKits 🐾
+
+> A comprehensive NixOS configuration repository in active development.
+
+## What is this?
+
+NixKits is a personal NixOS flakes repository that provides:
+
+- **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on laptops
+
+## Current Features
+
+### RCC-FIX Overlay
+
+The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on ROG Flow Z13, particularly:
+
+- Keyboard detection improvements
+- Aura lighting control fixes
+- Better error handling
+
+**Requirements**: 
+- `programs.rog-control-center.enable = true` must be set when using `nix-kits.overlays.rcc-fix`
+
+**Usage:
+
+```nix
+nixpkgs.overlays = [ nix-kits.overlays.rcc-fix ];
 ```
-wsl.interop.register = true;
-```
-is enabled in your base config/
-## Mihox Service
-This service run before mihomo. To use it, pass ```$MHX_URL``` to the script.
-```
-sudo MHX_URL="your.provider/identifer" ./kix.sh
-```
+
+## Development Status
+
+🚧 **Work in Progress**
+
+This repository is actively being developed. Features may change, and new modules will be added over time.
+
+---
+
+**Created by**: 狐莉 キツのり (Kitsunori)  
+**First Commit**: 2026-04-30  
+**Status**: Active Development 🐾
