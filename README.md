@@ -1,12 +1,12 @@
 # NixKits 🐾
 
-> A comprehensive NixOS configuration repository in active development.
+> A comprehensive NixOS flakesrepository in active development.
 
 ## What is this?
 
 NixKits is a personal NixOS flakes repository that provides:
 
-- **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on laptops
+- **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on tablets
 
 ## Current Features
 
@@ -18,10 +18,8 @@ The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on
 - Aura lighting control fixes
 - Better error handling
 
-**Requirements**: 
-- `programs.rog-control-center.enable = true` must be set.
-
 **Usage**:
+- `programs.rog-control-center.enable = true` must be set.
 ```nix
 nixpkgs.overlays = [ nix-kits.overlays.rcc-fix ];
 ```
