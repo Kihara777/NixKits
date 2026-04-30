@@ -19,10 +19,9 @@ The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on
 - Better error handling
 
 **Requirements**: 
-- `programs.rog-control-center.enable = true` must be set when using `nix-kits.overlays.rcc-fix`
+- `programs.rog-control-center.enable = true` must be set.
 
-**Usage:
-
+**Usage**:
 ```nix
 nixpkgs.overlays = [ nix-kits.overlays.rcc-fix ];
 ```
