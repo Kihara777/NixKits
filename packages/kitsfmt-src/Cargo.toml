@@ -1,0 +1,16 @@
+[package]
+name = "kitsfmt"
+version = "0.1.0"
+edition = "2021"
+description = "A minimal Nix configuration formatter using nixpkgs-fmt"
+
+[dependencies]
+glob = "0.3"
+
+[[bin]]
+name = "kitsfmt"
+path = "src/main.rs"
+
+[profile.release]
+lto = true
+opt-level = "s"
