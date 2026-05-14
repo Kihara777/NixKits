@@ -1,20 +1,17 @@
 { pkgs }:
 
 let
-  name = "test";
-  version = 1;
-  # 这是一个测试注释
+  # Test configuration for kitsfmt formatter
   config = {
     a = 1;
     b = 2;
   };
 in
 {
-  hello = "world";
-  foo = "bar";
+  demo = "value";
   services = {
     nginx.enable = true;
-    # 另一个注释
-    postgresql.package = pkgs.postgresql_14;
+    # Test comment preserved by formatter
+    database.package = pkgs.postgresql_14;
   };
 }
