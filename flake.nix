@@ -10,6 +10,12 @@
       url = "github:Zarosmm/obs-bilibili-stream";
       flake = false;
     };
+
+    # Input for llama.cpp (non-flake source)
+    llama-cpp-src = {
+      url = "github:ggml-org/llama.cpp";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -17,6 +23,7 @@
     nixpkgs,
     flake-utils,
     obs-bilibili-src,
+    llama-cpp-src
   } @inputs:
   {
     # NixOS modules
@@ -26,6 +33,9 @@
     overlays = {
       # OBS Bilibili Stream plugin overlay
       obs-bilibili-stream = import ./overlays/obs-bilibili-stream.nix { src = inputs.obs-bilibili-src; };
+
+      # MTP support for llama-cpp-rocm
+      llama-cpp-rocm = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-src; };
 
       # RCC-FIX overlay for ASUS ROG Control Center
       rcc-fix = import ./overlays/rog-control-center-fix.nix;
@@ -44,7 +54,6 @@
     in {
       obs-bilibili-stream = obsBiliStream;
       kitsfmt = kitsfmt;
-      default = kitsfmt;
     };
   };
 }
