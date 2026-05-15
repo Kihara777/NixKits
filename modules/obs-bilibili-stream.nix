@@ -1,7 +1,14 @@
-{ config, pkgs, lib, nix-kits, ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.programs.obs-bilibili-stream;
+in
 {
-  programs.obs-studio = {
-    enable = true;
-    plugins = [ nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+  options.programs.obs-bilibili-stream = {
+    enable = mkEnableOption "OBS Studio Bilibili streaming plugin";
+  };
+
+  config = mkIf cfg.enable {
+    programs.obs-studio.plugins = [ pkgs.obs-bilibili-stream ];
   };
 }

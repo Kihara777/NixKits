@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
  src = fetchFromGitHub {
    owner = "Zarosmm";
    repo = "obs-bilibili-stream";
-   rev = "v${version}";
-   sha256 = ""; # 首次构建后填入
+   rev = "${version}";
+   sha256 = "sha256-biilxvrymrvpvkh7scnjh0v0i42w8bhq";
  };
 
  nativeBuildInputs = [

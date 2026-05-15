@@ -1,7 +1,6 @@
 { pkgs }:
 
 let
-  # Test configuration for kitsfmt formatter
   config = {
     a = 1;
     b = 2;

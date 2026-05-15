@@ -1,0 +1,16 @@
+# Nix
+result*
+*.drv
+/nix/store/
+
+# Rust
+packages/kitsfmt-src/target/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.swp
+*.swo
+*~
