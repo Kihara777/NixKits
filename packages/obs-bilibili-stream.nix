@@ -1,56 +1,55 @@
-{ lib, stdenv, cmake, obs-studio, curl, src, qt6 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, obs-studio
+, curl
+, qt6
+}:
 
-stdenv.mkDerivation {
-  pname = "obs-bilibili-stream";
-  version = "1.0.0";
-  inherit src;
+stdenv.mkDerivation rec {
+ pname = "obs-bilibili-stream";
+ version = "2.0.12";
 
-  nativeBuildInputs = [
-    cmake
-    qt6.wrapQtAppsHook
-  ];
+ src = fetchFromGitHub {
+   owner = "Zarosmm";
+   repo = "obs-bilibili-stream";
+   rev = "v${version}";
+   sha256 = ""; # 首次构建后填入
+ };
 
-  buildInputs = [
-    obs-studio
-    curl
-    # 仅使用 Qt6
-    qt6.qtbase
-    qt6.qtbase.dev
-    qt6.qtsvg
-    qt6.qtsvg.dev
-    qt6.qt5compat
-  ];
+ nativeBuildInputs = [
+   cmake
+   pkg-config
+ ];
 
-  # 设置 Qt6 环境变量
-  QT_DIR = "${qt6.qtbase}";
-  QMAKE = "${qt6.qtbase.dev}/bin/qmake6";
+ buildInputs = [
+   obs-studio
+   curl
+   qt6.qtbase # Qt6::Widgets, Qt6::Network 等
+   qt6.qtwebsockets # 直播间消息 Websocket 通信
+ ];
 
-  # Qt6 头文件路径
-  NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    "-isystem ${qt6.qtbase.dev}/include"
-    "-isystem ${qt6.qtbase.dev}/include/QtCore"
-    "-isystem ${qt6.qtbase.dev}/include/QtWidgets"
-    "-isystem ${qt6.qtbase.dev}/include/QtGui"
-    "-isystem ${qt6.qtsvg.dev}/include/QtSvg"
-    "-isystem ${qt6.qt5compat.dev}/include/Qt5Compat"
-  ];
+ # 启用 GUI 前端接口和 Qt 支持（与 OBS 界面集成）
+ cmakeFlags = [
+   "-DENABLE_FRONTEND_API=ON"
+   "-DENABLE_QT=ON"
+ ];
 
-  # CMake 配置
-  cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}:${qt6.qtsvg.dev}"
-    "-DQt6_DIR=${qt6.qtbase.dev}/lib/cmake/Qt6"
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
+ # 防止 Nix 按独立 Qt 应用去包装（本插件不是独立程序）
+ dontWrapQtApps = true;
 
-  # 让 CMake 自动查找 Qt6
-  CMAKE_FIND_ROOT_PATH = [ "${qt6.qtbase.dev}" "${qt6.qtsvg.dev}" ];
+ # 移除无用的输出目录，与现有 OBS 插件包行为一致
+ postInstall = ''
+   rm -rf $out/obs-plugins $out/data
+ '';
 
-  meta = with lib; {
-    description = "Bilibili 直播插件 for OBS Studio";
-    homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
-  };
+ meta = with lib; {
+   description = "OBS 插件，用于 Bilibili 直播开播、获取推流地址等";
+   homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
+   license = licenses.gpl2Plus;
+   maintainers = [ ]; # 不在官方列表可留空
+   platforms = platforms.linux;
+ };
 }

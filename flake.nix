@@ -3,20 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-    
-    # Input for OBS Bilibili Stream plugin (non-flake source)
-    obs-bilibili-src = {
-      url = "github:Zarosmm/obs-bilibili-stream";
-      flake = false;
-    };
   };
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
-    obs-bilibili-src,
   } @inputs:
   {
     # NixOS modules
@@ -25,7 +16,7 @@
     # Overlays
     overlays = {
       # OBS Bilibili Stream plugin overlay
-      obs-bilibili-stream = import ./overlays/obs-bilibili-stream.nix { src = inputs.obs-bilibili-src; };
+      obs-bilibili-stream = import ./overlays/obs-bilibili-stream.nix;
 
       # MTP support (PR 22673) for llama-cpp-rocm
       llama-cpp-rocm = import ./overlays/llama-cpp-rocm.nix;
@@ -40,9 +31,7 @@
     # Per-system packages
     packages.x86_64-linux = let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      obsBiliStream = pkgs.callPackage ./packages/obs-bilibili-stream.nix {
-        src = inputs.obs-bilibili-src;
-      };
+      obsBiliStream = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       kitsfmt = pkgs.callPackage ./packages/kitsfmt.nix { };
     in {
       obs-bilibili-stream = obsBiliStream;

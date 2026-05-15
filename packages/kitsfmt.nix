@@ -20,6 +20,6 @@ buildRustPackage {
     homepage = "https://github.com/Kihara777/NixKits";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = [ "Kihara777" ];
   };
 }

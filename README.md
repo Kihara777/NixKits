@@ -7,6 +7,7 @@
 NixKits is a personal NixOS flake repository that provides:
 
 - **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on tablets
+- **llama-cpp-rocm-mtp**: ROCm build of llama.cpp with MTP (Multi-Token Prediction) support
 - **kitsfmt**: A lightweight Nix configuration formatter
 - **obs-bilibili-stream**: Bilibili streaming plugin for OBS Studio
 
@@ -31,6 +32,34 @@ Add `nix-kits` as an input to your flake:
 Then use the outputs from `nix-kits` in your configuration.
 
 ## Current Features
+
+### llama-cpp-rocm-mtp Overlay
+
+`llama-cpp-rocm-mtp` overlay builds `llama.cpp` with ROCm GPU support and MTP (Multi-Token Prediction) from the `am17an/llama.cpp` fork:
+
+- ✅ ROCm hardware acceleration for AMD GPUs
+- ✅ MTP support (multi-token prediction)
+- ✅ Based on `am17an/llama.cpp` branch `mtp-clean`
+
+**Usage**:
+```nix
+{
+  inputs.nix-kits.url = "path:/path/to/NixKits";
+
+  outputs = {
+    nixpkgs.overlays = [
+      nix-kits.overlays.llama-cpp-rocm
+    ];
+  };
+}
+```
+
+Then use `llama-cpp-rocm-mtp` from `nixpkgs`:
+```nix
+environment.systemPackages = [ pkgs.llama-cpp-rocm-mtp ];
+```
+
+---
 
 ### RCC-FIX Overlay
 
@@ -135,6 +164,7 @@ NixKits/
 │   └── obs-bilibili-stream.nix
 ├── overlays/                    # nixpkgs overlays
 │   ├── kitsfmt.nix
+│   ├── llama-cpp-rocm.nix
 │   ├── obs-bilibili-stream.nix
 │   └── rog-control-center-fix.nix
 ├── packages/                    # Custom packages
@@ -143,6 +173,8 @@ NixKits/
 │   └── obs-bilibili-stream.nix
 ├── patches/                     # Patch files
 │   └── rog-control-center-fix.patch
+├── flake.lock                   # Flake lock file
+└── LICENSE
 └── README.md
 ```
 

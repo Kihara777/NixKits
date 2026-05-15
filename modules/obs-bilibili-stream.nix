@@ -2,6 +2,6 @@
 {
   programs.obs-studio = {
     enable = true;
-    plugins = with pkgs; [ nix-kits.packages.x86_64-linux.obs-bilibili-stream ];
+    plugins = [ nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
   };
 }
