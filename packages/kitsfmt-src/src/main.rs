@@ -43,7 +43,6 @@ fn comments_before(node: &SyntaxNode) -> String {
                             None
                         }
                     }
-                    _ => None,
                 }
             },
             _ => None,
