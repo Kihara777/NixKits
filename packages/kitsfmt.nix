@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage {
   pname = "kitsfmt";
   version = "0.3.0";
 
-  src = ./packages/kitsfmt-src;
+  src = ./kitsfmt-src;
 
   cargoLock = {
     lockFile = ../packages/kitsfmt-src/Cargo.lock;
