@@ -3,11 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     
     # Input for OBS Bilibili Stream plugin (non-flake source)
     obs-bilibili-src = {
-      url = "github:Zarosmm/obs-bilibili-stream";
+      url = "github:Zarosmm/obs-bilibili-stream/v2.0.12";
       flake = false;
     };
   };

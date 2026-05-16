@@ -2,7 +2,6 @@
   llama-cpp-rocm-mtp = (prev.llama-cpp.override {
     rocmSupport = true;
   }).overrideAttrs (oldAttrs: {
-    # version = "pr22673";
     npmDepsHash = "sha256-WaEePrEZ7O/7deP2KJhe0AwiSKYA8HOqETmMHUkmBe0=";
     src = final.fetchFromGitHub {
       owner = "am17an";

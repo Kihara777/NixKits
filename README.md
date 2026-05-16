@@ -7,6 +7,7 @@
 NixKits is a personal NixOS flake repository that provides:
 
 - **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on tablets
+- **llama-cpp-rocm-mtp**: ROCm build of llama.cpp with MTP (Multi-Token Prediction) support
 - **kitsfmt**: A lightweight Nix configuration formatter
 - **obs-bilibili-stream**: Bilibili streaming plugin for OBS Studio
 
@@ -55,6 +56,46 @@ The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on
   programs.rog-control-center.enable = true;
 }
 ```
+
+### llama-cpp-rocm-mtp Overlay
+
+`llama-cpp-rocm-mtp` builds `llama.cpp` with ROCm GPU support and MTP (Multi-Token Prediction):
+
+- ✅ ROCm hardware acceleration for AMD GPUs (Strix Halo / Radeon 8060S)
+- ✅ MTP support — built-in from `am17an/llama.cpp` branch `mtp-clean`
+
+**Usage**:
+```nix
+{
+  inputs.nix-kits.url = "path:/path/to/NixKits";
+
+  outputs = {
+    nixpkgs.overlays = [
+      nix-kits.overlays.llama-cpp-rocm
+    ];
+  };
+}
+```
+
+Then use `llama-cpp-rocm-mtp` from `nixpkgs`:
+```nix
+environment.systemPackages = [ pkgs.llama-cpp-rocm-mtp ];
+```
+
+**MTP 启用说明**:
+
+MTP 功能已内置在 `mtp-clean` 分支中，无需额外编译选项。使用时添加以下参数：
+
+```bash
+# 使用 2 个草稿令牌的 MTP 进行推理
+llama-server -hf <model-with-mtp.gguf> --spec-type draft-mtp --spec-draft-n-max 2
+```
+
+**关键参数**：
+- `--spec-type draft-mtp`：指定使用 MTP 作为推测解码的草案模型类型
+- `--spec-draft-n-max 2`：指定草案模型每次尝试预测的最大 token 数量（推荐值 2-3）
+
+代码会自动从 GGUF 模型文件中加载集成的 MTP 头，无需手动指定独立草案模型。
 
 ### Kitsfmt Package
 
@@ -135,6 +176,7 @@ NixKits/
 │   └── obs-bilibili-stream.nix
 ├── overlays/                    # nixpkgs overlays
 │   ├── kitsfmt.nix
+│   ├── llama-cpp-rocm.nix
 │   ├── obs-bilibili-stream.nix
 │   └── rog-control-center-fix.nix
 ├── packages/                    # Custom packages
