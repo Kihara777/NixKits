@@ -38,7 +38,6 @@ fn comments_before(node: &SyntaxNode) -> String {
                     ast::Whitespace(_) => Some(None),
                 }
             },
-            _ => None,
         })
         .flatten()
         .map(|s| s.text().trim().to_string())
