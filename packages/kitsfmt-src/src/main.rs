@@ -35,38 +35,15 @@ fn comments_before(node: &SyntaxNode) -> String {
             NodeOrToken::Token(token) => match_ast! {
                 match token {
                     ast::Comment(it) => Some(Some(it)),
-                    ast::Whitespace(ws) => {
-                        let text = ws.text();
-                        if text.contains('\n') {
-                            Some(None)
-                        } else {
-                            None
-                        }
-                    }
+                    ast::Whitespace(_) => Some(None),
                 }
             },
             _ => None,
         })
-        .scan(String::new(), |state, comment| {
-            if let Some(c) = comment {
-                let text = c.text().trim().to_string();
-                if text.starts_with("#") || text.starts_with("//") {
-                    *state = text;
-                    Some(text)
-                } else {
-                    None
-                }
-            } else {
-                // newline separator
-                if !state.is_empty() {
-                    Some("\n".to_string())
-                } else {
-                    None
-                }
-            }
-        })
+        .flatten()
+        .map(|s| s.text().trim().to_string())
         .collect::<Vec<_>>()
-        .join("")
+        .join("\n")
 }
 
 /// Format an attribute name for sorting
@@ -93,16 +70,16 @@ fn entry_sort_key(entry: &Entry) -> String {
 /// Format a single entry with its comments
 fn format_entry(entry: &Entry, indent: usize) -> String {
     let prefix = "  ".repeat(indent);
-    
+
     match entry {
         Entry::AttrpathValue(attrpath_value) => {
             let comments = comments_before(attrpath_value.syntax());
             let comment_part = if !comments.is_empty() {
-                format!("{}{}\n", comments, prefix)
+                format!("{}\n", comments)
             } else {
                 String::new()
             };
-            
+
             if let Some(attrpath) = attrpath_value.attrpath() {
                 if let Some(value) = attrpath_value.value() {
                     format!(
@@ -122,11 +99,11 @@ fn format_entry(entry: &Entry, indent: usize) -> String {
         Entry::Inherit(inherit) => {
             let comments = comments_before(inherit.syntax());
             let comment_part = if !comments.is_empty() {
-                format!("{}{}\n", comments, prefix)
+                format!("{}\n", comments)
             } else {
                 String::new()
             };
-            
+
             if let Some(attr_path) = inherit.attr_path() {
                 if let Some(from_clause) = inherit.from_clause() {
                     format!(
@@ -233,7 +210,7 @@ fn format_let(let_in: &ast::LetIn, indent: usize) -> String {
 
     format!("let\n{}\nin\n{}",
         bindings.join("\n"),
-        format_expr(&let_in.body().ok_or_else(|| rnix::ast::Error::new()).unwrap_or_default(), indent)
+        format_expr(&let_in.body().ok().unwrap_or_default(), indent)
     )
 }
 
