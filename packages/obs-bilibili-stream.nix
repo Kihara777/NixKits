@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
    owner = "Zarosmm";
    repo = "obs-bilibili-stream";
    rev = "${version}";
-   sha256 = "sha256-biilxvrymrvpvkh7scnjh0v0i42w8bhq";
+   sha256 = "ilx1u4jN58AUfPh3heEhANxsYJVxoIRfuAOObDY5WoU=";
  };
 
  nativeBuildInputs = [

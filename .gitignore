@@ -1,16 +1,26 @@
-# Nix
+# Nix build artifacts
 result*
 *.drv
 /nix/store/
 
-# Rust
+# Rust build cache
 packages/kitsfmt-src/target/
+
+# Generated files from overlays
+*/COMMIT
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Misc
+# Editor
 *.swp
 *.swo
 *~
+.vscode/
+.idea/
+
+# Build outputs
+*.o
+*.so
+*.a

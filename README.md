@@ -37,8 +37,8 @@ Then use the outputs from `nix-kits` in your configuration.
 
 `llama-cpp-rocm-mtp` overlay builds `llama.cpp` with ROCm GPU support and MTP (Multi-Token Prediction) from the `am17an/llama.cpp` fork:
 
-- ✅ ROCm hardware acceleration for AMD GPUs
-- ✅ MTP support (multi-token prediction)
+- ✅ ROCm hardware acceleration for AMD GPUs (Strix Halo / Radeon 8060S)
+- ✅ MTP support (multi-token prediction) — 已内置，无需编译选项
 - ✅ Based on `am17an/llama.cpp` branch `mtp-clean`
 
 **Usage**:
@@ -58,6 +58,24 @@ Then use `llama-cpp-rocm-mtp` from `nixpkgs`:
 ```nix
 environment.systemPackages = [ pkgs.llama-cpp-rocm-mtp ];
 ```
+
+#### MTP 启用说明
+
+MTP 功能已内置在 `mtp-clean` 分支中，无需额外编译选项。启用方式是在运行时添加以下参数：
+
+```bash
+# 使用 3 个草稿令牌的 MTP 进行推理
+llama-server -hf <model-with-mtp.gguf> --spec-type draft-mtp --spec-draft-n-max 3
+```
+
+**关键参数**：
+- `--spec-type draft-mtp`：指定使用 MTP 作为推测解码（speculative decoding）的草案模型类型
+- `--spec-draft-n-max N`：指定草案模型每次尝试预测的最大 token 数量（推荐值 2-3，不要设为 1）
+
+**代码依据**：
+- 参数解析位于 `common/arg.cpp`，检查 `params.speculative.types` 是否包含 `COMMON_SPECULATIVE_TYPE_DRAFT_MTP`
+- 模型自动加载：当指定 `--spec-type draft-mtp` 后，代码会自动寻找 GGUF 模型文件中集成的 MTP 头，无需手动指定独立草案模型路径
+- 构建配置：overlay 中指定 `src = final.fetchFromGitHub { owner = "am17an"; repo = "llama.cpp"; rev = "mtp-clean"; ... }`，确保使用包含 MTP 支持的分支
 
 ---
 
