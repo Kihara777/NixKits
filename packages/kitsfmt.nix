@@ -6,10 +6,9 @@ rustPlatform.buildRustPackage {
 
   src = ./packages/kitsfmt-src;
 
-  # 不指定 cargoLock，让 nix 自动生成
-  # cargoLock = {
-  #   lockFile = ../packages/kitsfmt-src/Cargo.lock;
-  # };
+  cargoLock = {
+    lockFile = ../packages/kitsfmt-src/Cargo.lock;
+  };
 
   meta = with lib; {
     description = "A Nix configuration formatter with AST-based sorting, merging, and comment preservation";
