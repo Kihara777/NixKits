@@ -6,7 +6,7 @@
     
     # Input for OBS Bilibili Stream plugin (non-flake source)
     obs-bilibili-src = {
-      url = "github:Zarosmm/obs-bilibili-stream/v2.0.12";
+      url = "github:Zarosmm/obs-bilibili-stream/2.0.12";
       flake = false;
     };
   };

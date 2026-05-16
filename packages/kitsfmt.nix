@@ -1,22 +1,18 @@
-{ lib, stdenv, cargo, rustPlatform, nixpkgs-fmt, fetchFromGitHub }:
+{ lib, stdenv, cargo, rustPlatform }:
 
-let
-  buildRustPackage = rustPlatform.buildRustPackage;
-in
+rustPlatform.buildRustPackage {
+  pname = "kitsfmt";
+  version = "0.3.0";
 
-buildRustPackage {
-  name = "kitsfmt-0.2.0";
+  src = ./packages/kitsfmt-src;
 
-  src = ./kitsfmt-src;
-
-  nativeBuildInputs = [ cargo ];
-
-  cargoLock = {
-    lockFile = ../packages/kitsfmt-src/Cargo.lock;
-  };
+  # 不指定 cargoLock，让 nix 自动生成
+  # cargoLock = {
+  #   lockFile = ../packages/kitsfmt-src/Cargo.lock;
+  # };
 
   meta = with lib; {
-    description = "A minimal Nix configuration formatter written in Rust";
+    description = "A Nix configuration formatter with AST-based sorting, merging, and comment preservation";
     homepage = "https://github.com/Kihara777/NixKits";
     license = licenses.mit;
     platforms = platforms.all;
