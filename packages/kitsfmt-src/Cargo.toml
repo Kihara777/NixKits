@@ -5,7 +5,6 @@ edition = "2021"
 description = "A minimal Nix configuration formatter with custom style rules"
 
 [dependencies]
-glob = "0.3"
 
 [[bin]]
 name = "kitsfmt"

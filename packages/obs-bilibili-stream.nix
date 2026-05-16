@@ -40,11 +40,6 @@ stdenv.mkDerivation rec {
  # 防止 Nix 按独立 Qt 应用去包装（本插件不是独立程序）
  dontWrapQtApps = true;
 
- # 移除无用的输出目录，与现有 OBS 插件包行为一致
- postInstall = ''
-   rm -rf $out/obs-plugins $out/data
- '';
-
  meta = with lib; {
    description = "OBS 插件，用于 Bilibili 直播开播、获取推流地址等";
    homepage = "https://github.com/Zarosmm/obs-bilibili-stream";

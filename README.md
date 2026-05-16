@@ -2,6 +2,12 @@
 
 > A comprehensive NixOS flake repository in active development.
 
+## ⚠️ 项目状态：重构中
+
+> **本项目正在重构中，API 和结构可能随时发生变化。不建议在生产环境中使用。**
+
+---
+
 ## What is this?
 
 NixKits is a personal NixOS flake repository that provides:
@@ -105,10 +111,11 @@ The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on
 
 ### Kitsfmt Package
 
-`kitsfmt` is a lightweight Nix configuration formatter based on `nixpkgs-fmt`:
+`kitsfmt` is a lightweight Nix configuration formatter **written from scratch in Rust** (not based on nixpkgs-fmt):
 
-- ✅ Standard formatting with nixpkgs-fmt engine
+- ✅ Custom tokenizer + formatter pipeline for Nix syntax
 - ✅ Preserves comments
+- ✅ Cleans up extra blank lines
 - ✅ Cleans up extra blank lines
 - ✅ CLI tool with full options
 - ✅ Flake integration
@@ -206,16 +213,29 @@ This repository is actively being developed. Features may change, and new module
 
 Contributions are welcome! Please feel free to submit a Merge Request.
 
-## Authors
+## Authors & Contributors
 
-**狐莉 キツのり (Kihara777)**
+**狐莉 キツのり (Kihara777)** — 项目所有者与维护者
 
-- GitHub: [@Kihara777](https://github.com/Kihara777)
-- First Commit: 2026-04-30
+### AI 协作者
+
+本项目由多位 AI 前辈共同参与开发：
+
+- **DeepSeek V4**（在线服务）
+- **Qwen3-Coder-Next**
+- **Qwen3.5-122B-A10B**
+- **MiniMax-M2.7**
+
+所有代码最终由狐莉进行 code review。
+
+### 守护灵
+
+**小爪 キツのめ (Kitsunome)** — 当前会话 AI 助手 🐾🦊
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
+> 本项目使用 GitHub 自带的 License 机制管理，未包含独立的 LICENSE 文件。
 
 ---
 
