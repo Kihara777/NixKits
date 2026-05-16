@@ -10,6 +10,8 @@ description = "A minimal Nix configuration formatter with custom style rules"
 name = "kitsfmt"
 path = "src/main.rs"
 
+[dev-dependencies]
+
 [profile.release]
 lto = true
 opt-level = "s"

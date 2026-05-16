@@ -331,6 +331,7 @@ fn fmt(tokens: &[Token]) -> String {
     let mut after_comma = false;
     let mut after_semicolon = false;
     let mut just_closed_block = false; // After } or ]
+    let mut just_keyword = false; // After keyword (let, in, with, etc.)
 
     let mut i = 0;
     while i < tokens.len() {
@@ -359,11 +360,14 @@ fn fmt(tokens: &[Token]) -> String {
 
             // Opening braces/brackets - always on their own line
             Token::P(Punct::LBrace) => {
-                if !output.ends_with('\n') {
-                    output.push('\n');
-                }
-                for _ in 0..indent_level {
-                    output.push_str("  ");
+                // After '=' or keyword, stay on same line
+                if !after_equals && !just_keyword {
+                    if !output.ends_with('\n') {
+                        output.push('\n');
+                    }
+                    for _ in 0..indent_level {
+                        output.push_str("  ");
+                    }
                 }
                 output.push('{');
                 indent_level += 1;
@@ -373,11 +377,14 @@ fn fmt(tokens: &[Token]) -> String {
             }
 
             Token::P(Punct::LBracket) => {
-                if !output.ends_with('\n') {
-                    output.push('\n');
-                }
-                for _ in 0..indent_level {
-                    output.push_str("  ");
+                // After '=' or keyword, stay on same line
+                if !after_equals && !just_keyword {
+                    if !output.ends_with('\n') {
+                        output.push('\n');
+                    }
+                    for _ in 0..indent_level {
+                        output.push_str("  ");
+                    }
                 }
                 output.push('[');
                 indent_level += 1;
@@ -439,12 +446,16 @@ fn fmt(tokens: &[Token]) -> String {
             }
 
             Token::P(Punct::Colon) => {
-                output.push(' ');
+                // After closing brace, don't add leading space (e.g., {pkgs}:)
+                if !just_closed_block {
+                    output.push(' ');
+                }
                 output.push(':');
                 output.push(' ');
                 after_colon = true;
                 after_equals = false;
                 just_closed_block = false;
+                just_keyword = false;
                 i += 1;
                 continue;
             }
@@ -477,9 +488,13 @@ fn fmt(tokens: &[Token]) -> String {
                     Keyword::Then => {
                         output.push(' ');
                         output.push_str(keyword_str(kw));
+                        output.push(' ');
+                        just_keyword = true;
                     }
                     Keyword::Null | Keyword::True | Keyword::False => {
                         output.push_str(keyword_str(kw));
+                        output.push(' ');
+                        just_keyword = true;
                     }
                 }
                 i += 1;
@@ -533,8 +548,13 @@ fn fmt(tokens: &[Token]) -> String {
             }
 
             Token::Ident(id) => {
+                // Add space before ident unless it follows a keyword (already has trailing space)
+                if !just_keyword {
+                    output.push(' ');
+                }
                 output.push_str(id);
                 just_closed_block = false;
+                just_keyword = false;
                 i += 1;
                 continue;
             }
