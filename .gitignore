@@ -1,0 +1,20 @@
+# Nix build artifacts
+result
+*.drv
+*.log
+*.o
+*.hi
+
+# Rust build artifacts
+packages/kitsfmt-src/target/
+packages/kitsfmt-src/*.exe
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
