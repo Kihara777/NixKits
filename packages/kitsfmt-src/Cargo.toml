@@ -10,6 +10,7 @@ path = "src/main.rs"
 
 [dependencies]
 rnix = "0.14"
+rowan = "0.16"
 
 [profile.release]
 lto = true

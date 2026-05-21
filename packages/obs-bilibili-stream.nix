@@ -1,56 +1,54 @@
-{ lib, stdenv, cmake, obs-studio, curl, src, qt6 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, obs-studio
+, curl
+, qtbase
+, pkg-config
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "obs-bilibili-stream";
-  version = "1.0.0";
-  inherit src;
+  version = "2.0.12";
+
+  src = fetchFromGitHub {
+    owner = "Zarosmm";
+    repo = "obs-bilibili-stream";
+    tag = "2.0.12";
+    hash = "sha256-ilx1u4jN58AUfPh3heEhANxsYJVxoIRfuAOObDY5WoU=";
+  };
 
   nativeBuildInputs = [
     cmake
-    qt6.wrapQtAppsHook
+    pkg-config
   ];
 
   buildInputs = [
     obs-studio
     curl
-    # 仅使用 Qt6
-    qt6.qtbase
-    qt6.qtbase.dev
-    qt6.qtsvg
-    qt6.qtsvg.dev
-    qt6.qt5compat
+    qtbase
   ];
 
-  # 设置 Qt6 环境变量
-  QT_DIR = "${qt6.qtbase}";
-  QMAKE = "${qt6.qtbase.dev}/bin/qmake6";
+  dontWrapQtApps = true;
 
-  # Qt6 头文件路径
-  NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    "-isystem ${qt6.qtbase.dev}/include"
-    "-isystem ${qt6.qtbase.dev}/include/QtCore"
-    "-isystem ${qt6.qtbase.dev}/include/QtWidgets"
-    "-isystem ${qt6.qtbase.dev}/include/QtGui"
-    "-isystem ${qt6.qtsvg.dev}/include/QtSvg"
-    "-isystem ${qt6.qt5compat.dev}/include/Qt5Compat"
-  ];
-
-  # CMake 配置
+  # OBS 插件 bootstrap 系统通过 OBS_SOURCE 定位 obs-studio 的 cmake 模块
   cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}:${qt6.qtsvg.dev}"
-    "-DQt6_DIR=${qt6.qtbase.dev}/lib/cmake/Qt6"
-    "-DCMAKE_BUILD_TYPE=Release"
+    "-DOBS_SOURCE=${obs-studio}"
+    "-DENABLE_QT=ON"
   ];
 
-  # 让 CMake 自动查找 Qt6
-  CMAKE_FIND_ROOT_PATH = [ "${qt6.qtbase.dev}" "${qt6.qtsvg.dev}" ];
+ # CMake 已正确安装到 $out/lib/obs-plugins/ 和 $out/share/obs/obs-plugins/
+  # 清理冗余的 64bit 目录
+  postInstall = ''
+    rm -rf $out/obs-plugins
+  '';
 
   meta = with lib; {
     description = "Bilibili 直播插件 for OBS Studio";
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

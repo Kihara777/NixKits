@@ -1,214 +1,249 @@
-# NixKits 🐾
+# NixKits
 
-> A comprehensive NixOS flake repository in active development.
+个人 NixOS flake 仓库，提供自定义包、overlay 和 NixOS 模块。
 
-## What is this?
-
-NixKits is a personal NixOS flake repository that provides:
-
-- **RCC-FIX Overlay**: A fix for ASUS ROG Control Center on tablets
-- **llama-cpp-rocm-mtp**: ROCm build of llama.cpp with MTP (Multi-Token Prediction) support
-- **kitsfmt**: A lightweight Nix configuration formatter
-- **obs-bilibili-stream**: Bilibili streaming plugin for OBS Studio
-
-## Prerequisites
-
-- Nix 2.4+ with flake support enabled
-- Modern NixOS system
-
-## Installation
-
-Add `nix-kits` as an input to your flake:
+## 添加为 flake input
 
 ```nix
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nix-kits.url = "path:/path/to/NixKits";  # or github:Kihara777/NixKits
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    nix-kits.url = "github:Kihara777/NixKits";
   };
 }
 ```
 
-Then use the outputs from `nix-kits` in your configuration.
+## 支持系统
 
-## Current Features
-
-### RCC-FIX Overlay
-
-The `rcc-fix` overlay patches `asusctl` to fix issues with ROG Control Center on ROG Flow Z13, particularly:
-
-- Keyboard detection improvements
-- Aura lighting control fixes
-- Better error handling
-
-**Usage**:
-```nix
-{
-  inputs.nix-kits.url = "path:/path/to/NixKits";  # or github:Kihara777/NixKits
-  
-  outputs = {
-    nixpkgs.overlays = [
-      nix-kits.overlays.rcc-fix
-    ];
-  };
-  
-  # Enable ROG Control Center
-  programs.rog-control-center.enable = true;
-}
-```
-
-### llama-cpp-rocm-mtp Overlay
-
-`llama-cpp-rocm-mtp` builds `llama.cpp` with ROCm GPU support and MTP (Multi-Token Prediction):
-
-- ✅ ROCm hardware acceleration for AMD GPUs (Strix Halo / Radeon 8060S)
-- ✅ MTP support — built-in from `am17an/llama.cpp` branch `mtp-clean`
-
-**Usage**:
-```nix
-{
-  inputs.nix-kits.url = "path:/path/to/NixKits";
-
-  outputs = {
-    nixpkgs.overlays = [
-      nix-kits.overlays.llama-cpp-rocm
-    ];
-  };
-}
-```
-
-Then use `llama-cpp-rocm-mtp` from `nixpkgs`:
-```nix
-environment.systemPackages = [ pkgs.llama-cpp-rocm-mtp ];
-```
-
-**MTP 启用说明**:
-
-MTP 功能已内置在 `mtp-clean` 分支中，无需额外编译选项。使用时添加以下参数：
-
-```bash
-# 使用 2 个草稿令牌的 MTP 进行推理
-llama-server -hf <model-with-mtp.gguf> --spec-type draft-mtp --spec-draft-n-max 2
-```
-
-**关键参数**：
-- `--spec-type draft-mtp`：指定使用 MTP 作为推测解码的草案模型类型
-- `--spec-draft-n-max 2`：指定草案模型每次尝试预测的最大 token 数量（推荐值 2-3）
-
-代码会自动从 GGUF 模型文件中加载集成的 MTP 头，无需手动指定独立草案模型。
-
-### Kitsfmt Package
-
-`kitsfmt` is a lightweight Nix configuration formatter based on `nixpkgs-fmt`:
-
-- ✅ Standard formatting with nixpkgs-fmt engine
-- ✅ Preserves comments
-- ✅ Cleans up extra blank lines
-- ✅ CLI tool with full options
-- ✅ Flake integration
-
-**Usage**:
-```nix
-{
-  inputs.nix-kits.url = "path:/path/to/NixKits";  # or github:Kihara777/NixKits
-  
-  # As system package
-  environment.systemPackages = [
-    nix-kits.packages.x86_64-linux.kitsfmt
-  ];
-  
-  # Or as Nix formatter
-  nix.settings.formatter = nix-kits.packages.x86_64-linux.kitsfmt;
-}
-```
-
-**Command examples**:
-```bash
-# Format a file
-kitsfmt file.nix
-
-# Check if formatted (no modifications)
-kitsfmt --check file.nix
-
-# From stdin
-cat config.nix | kitsfmt
-```
-
-### OBS Bilibili Stream Plugin
-
-Bilibili streaming plugin for OBS Studio:
-
-- ✅ Bilibili live streaming support
-- ✅ Qt6-based UI
-- ✅ Integrated with OBS Studio
-
-**Usage**:
-```nix
-{
-  inputs.nix-kits.url = "path:/path/to/NixKits";  # or github:Kihara777/NixKits
-  
-  # Enable OBS with Bilibili plugin
-  programs.obs-studio = {
-    enable = true;
-    plugins = [
-      nix-kits.packages.x86_64-linux.obs-bilibili-stream
-    ];
-  };
-}
-```
-
-Or use the provided NixOS module:
-
-```nix
-{
-  imports = [
-    nix-kits.nixosModules.obs-bilibili-stream
-  ];
-}
-```
-
-## Project Structure
-
-```
-NixKits/
-├── flake.nix                    # Main flake definition
-├── modules/                     # NixOS modules
-│   └── obs-bilibili-stream.nix
-├── overlays/                    # nixpkgs overlays
-│   ├── kitsfmt.nix
-│   ├── llama-cpp-rocm.nix
-│   ├── obs-bilibili-stream.nix
-│   └── rog-control-center-fix.nix
-├── packages/                    # Custom packages
-│   ├── kitsfmt.nix
-│   ├── kitsfmt-src/             # kitsfmt Rust source
-│   └── obs-bilibili-stream.nix
-├── patches/                     # Patch files
-│   └── rog-control-center-fix.patch
-└── README.md
-```
-
-## Development Status
-
-🚧 **Work in Progress**
-
-This repository is actively being developed. Features may change, and new modules will be added over time.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Merge Request.
-
-## Authors
-
-**狐莉 キツのり (Kihara777)**
-
-- GitHub: [@Kihara777](https://github.com/Kihara777)
-- First Commit: 2026-04-30
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+| 包 | x86_64-linux | aarch64-linux |
+|---|:---:|:---:|
+| kitsfmt | ✅ | ✅ |
+| opencode-telegram | ✅ | ✅ |
+| mcp-searxng | ✅ | ✅ |
+| obs-bilibili-stream | ✅ | ✅ |
+| llama-cpp-rocm | ✅ | ✅ |
+| rcc-fix | ✅ | ✅ |
 
 ---
 
-**Repository**: https://github.com/Kihara777/NixKits
+## kitsfmt
+
+Rust 编写的 Nix 格式化器，基于 `rnix` AST 解析，支持属性排序、注释保留、缩进规范化。
+
+**直接引用**：
+```nix
+{ inputs, ... }: {
+  environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+}
+```
+
+**作为 Nix 默认格式化器**：
+```nix
+{ inputs, ... }: {
+  nix.settings.formatter = "${inputs.nix-kits.packages.${pkgs.system}.kitsfmt}/bin/kitsfmt";
+}
+```
+
+**Overlay**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.kitsfmt ];
+}
+# → pkgs.kitsfmt
+```
+
+**CLI**：
+```bash
+kitsfmt file.nix           # 格式化输出到 stdout
+kitsfmt --check file.nix   # 检查是否已格式化（幂等性）
+kitsfmt --inplace file.nix # 原地格式化
+```
+
+---
+
+## opencode-telegram
+
+[OpenCode](https://opencode.ai) 的 Telegram Bot 客户端，通过手机远程执行 AI 编码任务。
+
+**直接引用**：
+```nix
+{ inputs, ... }: {
+  environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
+}
+```
+
+**Overlay**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.opencode-telegram ];
+}
+# → pkgs.opencode-telegram
+```
+
+**systemd service**：
+```nix
+{ inputs, ... }: {
+  systemd.services.opencode-telegram = {
+    description = "OpenCode Telegram Bot";
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${inputs.nix-kits.packages.${pkgs.system}.opencode-telegram}/bin/opencode-telegram start --daemon";
+      Restart = "on-failure";
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+}
+```
+
+**使用**：
+```bash
+opencode-telegram start          # 交互式配置
+opencode-telegram start --daemon # 后台运行
+opencode-telegram status         # 查看状态
+opencode-telegram stop           # 停止
+```
+
+---
+
+## mcp-searxng
+
+[SearXNG](https://docs.searxng.org) 的 [MCP](https://modelcontextprotocol.io) Server，为 AI 助手提供网页搜索能力。
+
+**直接引用**：
+```nix
+{ inputs, ... }: {
+  environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.mcp-searxng ];
+}
+```
+
+**Overlay**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.mcp-searxng ];
+}
+# → pkgs.mcp-searxng
+```
+
+**Claude Desktop 配置**（`claude_desktop_config.json`）：
+```json
+{
+  "mcpServers": {
+    "searxng": {
+      "command": "mcp-searxng",
+      "env": {
+        "SEARXNG_URL": "https://your-searxng-instance"
+      }
+    }
+  }
+}
+```
+
+**前提条件**：SearXNG 实例需启用 JSON 格式：
+```yaml
+# settings.yml
+search:
+  formats:
+    - html
+    - json
+```
+
+---
+
+## obs-bilibili-stream
+
+OBS Studio 的 Bilibili 直播插件。Linux only。
+
+**NixOS module（推荐）**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.obs-bilibili-stream ];
+  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+}
+```
+
+**手动配置**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.obs-bilibili-stream ];
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = [ pkgs.obs-bilibili-stream ];
+  };
+}
+```
+
+**Home Manager**：
+```nix
+{ inputs, ... }: {
+  home.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+}
+```
+
+---
+
+## llama-cpp-rocm
+
+基于上游 `llama.cpp`，启用 ROCm GPU 加速，版本号自动跟踪最新 GitHub Release。
+
+**Overlay**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+}
+# → pkgs.llama-cpp-rocm
+```
+
+**使用**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+
+  environment.systemPackages = [ pkgs.llama-cpp-rocm ];
+}
+```
+
+```bash
+llama-server -m model.gguf --gpu-device 0
+```
+
+---
+
+## rcc-fix
+
+修补 `asusctl`，改善 ASUS ROG Control Center 在二合一设备上的表现：键盘连接检测、Aura 灯光控制边界检查、友好提示信息。
+
+**Overlay**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+}
+# → 修补后的 pkgs.asusctl
+```
+
+**使用**：
+```nix
+{ inputs, ... }: {
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+
+  services.asusctl = {
+    enable = true;
+    power-profile = true;
+    cpu-power-control = true;
+  };
+}
+```
+
+---
+
+## 开发
+
+```bash
+nix flake check              # 检查当前系统
+nix flake check --all-systems # 检查所有支持系统
+nix build .#kitsfmt          # 构建指定包
+```
+
+## License
+
+MIT

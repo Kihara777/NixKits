@@ -1,3 +1,3 @@
 final: prev: {
-  kitsfmt = prev.callPackage ../packages/kitsfmt.nix { };
+  kitsfmt = final.callPackage ../packages/kitsfmt.nix { };
 }
