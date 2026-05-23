@@ -3,11 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
+    llama-cpp-ver.url = "https://api.github.com/repos/ggerganov/llama.cpp/releases/latest";
+    llama-cpp-ver.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
+    llama-cpp-ver
   } @ inputs:
   {
     # NixOS modules
@@ -19,7 +22,7 @@
       obs-bilibili-stream = import ./overlays/obs-bilibili-stream.nix;
 
       # ROCm-accelerated llama.cpp with latest release tracking
-      llama-cpp-rocm = import ./overlays/llama-cpp-rocm.nix;
+      llama-cpp-rocm = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
 
       # RCC-FIX overlay for ASUS ROG Control Center
       rcc-fix = import ./overlays/rog-control-center-fix.nix;
