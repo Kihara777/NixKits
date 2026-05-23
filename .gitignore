@@ -1,0 +1,19 @@
+# Nix build artifacts
+result
+*.drv
+*.log
+*.o
+*.hi
+
+# Local reports
+BUILD_REPORT.md
+TESTING.md
+flake.lock
+
+# Rust build artifacts
+packages/kitsfmt-src/target/
+
+# IDE
+.vscode/
+*.swp
+*.swo
