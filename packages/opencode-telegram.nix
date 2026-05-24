@@ -31,12 +31,12 @@ buildNpmPackage (finalAttrs: {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "OpenCode Telegram Bot - Secure Telegram client for OpenCode CLI";
     homepage = "https://github.com/grinev/opencode-telegram-bot";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "opencode-telegram";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 })

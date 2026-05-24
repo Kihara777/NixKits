@@ -34,12 +34,12 @@ buildNpmPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "MCP Server for SearXNG integration";
     homepage = "https://github.com/ihor-sokoliuk/mcp-searxng";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "mcp-searxng";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 })

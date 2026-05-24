@@ -8,14 +8,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation finalAttrs@{
   pname = "obs-bilibili-stream";
   version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "Zarosmm";
     repo = "obs-bilibili-stream";
-    tag = "2.0.12";
+    tag = finalAttrs.version;
     hash = "sha256-ilx1u4jN58AUfPh3heEhANxsYJVxoIRfuAOObDY5WoU=";
   };
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bilibili 直播插件 for OBS Studio";
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

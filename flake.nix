@@ -3,14 +3,28 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
-    llama-cpp-ver.url = "https://api.github.com/repos/ggerganov/llama.cpp/releases/latest";
+
+    # Source projects
+    llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
     llama-cpp-ver.flake = false;
+
+    obs-bilibili-stream-src.url = "github:Zarosmm/obs-bilibili-stream/2.0.12";
+    obs-bilibili-stream-src.flake = false;
+
+    opencode-telegram-src.url = "github:grinev/opencode-telegram-bot/v0.20.5";
+    opencode-telegram-src.flake = false;
+
+    mcp-searxng-src.url = "github:ihor-sokoliuk/MCP-searxng/v1.0.3";
+    mcp-searxng-src.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
-    llama-cpp-ver
+    llama-cpp-ver,
+    obs-bilibili-stream-src,
+    opencode-telegram-src,
+    mcp-searxng-src,
   } @ inputs:
   {
     # NixOS modules

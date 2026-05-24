@@ -12,11 +12,11 @@ rustPlatform.buildRustPackage {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "A Nix configuration formatter with AST-based sorting, merging, and comment preservation";
     homepage = "https://github.com/Kihara777/NixKits";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

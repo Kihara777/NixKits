@@ -63,6 +63,8 @@ kitsfmt --inplace file.nix # 原地格式化
 
 ## opencode-telegram
 
+> 源码：[grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot)
+
 [OpenCode](https://opencode.ai) 的 Telegram Bot 客户端，通过手机远程执行 AI 编码任务。
 
 **直接引用**：
@@ -106,6 +108,8 @@ opencode-telegram stop           # 停止
 ---
 
 ## mcp-searxng
+
+> 源码：[ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng)
 
 [SearXNG](https://docs.searxng.org) 的 [MCP](https://modelcontextprotocol.io) Server，为 AI 助手提供网页搜索能力。
 
@@ -151,6 +155,8 @@ search:
 
 ## obs-bilibili-stream
 
+> 源码：[Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream)
+
 OBS Studio 的 Bilibili 直播插件。Linux only。
 
 **NixOS module（推荐）**：
@@ -184,6 +190,8 @@ OBS Studio 的 Bilibili 直播插件。Linux only。
 
 ## llama-cpp-rocm
 
+> 源码：[ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)
+
 基于上游 `llama.cpp`，启用 ROCm GPU 加速，版本号自动跟踪最新 GitHub Release。
 
 **Overlay**：
@@ -210,6 +218,8 @@ llama-server -m model.gguf --gpu-device 0
 ---
 
 ## rcc-fix
+
+> 源码：[Asus-linux/asusctl](https://github.com/Asus-linux/asusctl)（nixpkgs 上游）+ 本地补丁
 
 修补 `asusctl`，改善 ASUS ROG Control Center 在二合一设备上的表现：键盘连接检测、Aura 灯光控制边界检查、友好提示信息。
 
