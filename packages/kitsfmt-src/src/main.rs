@@ -65,7 +65,6 @@ fn comments_before(node: &rnix::SyntaxNode) -> String {
             NodeOrToken::Token(token) => {
                 if let Some(c) = ast::Comment::cast(token) {
                     let text = c.text().trim().to_string();
-                    // Ensure comment starts with #
                     let formatted = if text.starts_with('#') || text.starts_with('*') || text.starts_with('}') {
                         text
                     } else if text.is_empty() {
@@ -73,7 +72,6 @@ fn comments_before(node: &rnix::SyntaxNode) -> String {
                     } else {
                         format!("# {}", text)
                     };
-                    // Prepend to maintain original order (we traverse backwards)
                     comments.insert(0, formatted);
                 }
             }
@@ -85,12 +83,45 @@ fn comments_before(node: &rnix::SyntaxNode) -> String {
     comments.join("\n")
 }
 
-/// Format an attribute name for sorting
+/// Collapse an attrpath into dotted form (APC): `a.b.c`
+fn collapse_attrpath(attrpath: &ast::Attrpath) -> String {
+    let segments: Vec<String> = attrpath
+        .attrs()
+        .map(|attr| attr.to_string())
+        .collect();
+    segments.join(".")
+}
+
+/// Collect all comments within an attrpath and merge them
+fn comments_before_attrpath(attrpath: &ast::Attrpath) -> String {
+    let mut all_comments = Vec::new();
+
+    // Collect comments from all siblings before each attr segment
+    for child in attrpath.syntax().children_with_tokens() {
+        if let NodeOrToken::Token(token) = child {
+            if let Some(c) = ast::Comment::cast(token) {
+                let text = c.text().trim().to_string();
+                let formatted = if text.starts_with('#') || text.starts_with('*') {
+                    text
+                } else if text.is_empty() {
+                    "#".to_string()
+                } else {
+                    format!("# {}", text)
+                };
+                all_comments.push(formatted);
+            }
+        }
+    }
+
+    all_comments.join("\n")
+}
+
+/// Format an attribute name for sorting (uses collapsed APC form)
 fn entry_sort_key(entry: &Entry) -> String {
     match entry {
         Entry::AttrpathValue(attrpath_value) => {
             if let Some(attrpath) = attrpath_value.attrpath() {
-                attrpath.to_string().trim().to_string()
+                collapse_attrpath(&attrpath)
             } else {
                 String::new()
             }
@@ -109,40 +140,72 @@ fn entry_sort_key(entry: &Entry) -> String {
     }
 }
 
+/// Indent continuation lines of a multiline expression (only for non-block values)
+fn indent_continuation(value: &str, prefix: &str) -> String {
+    let lines: Vec<&str> = value.lines().collect();
+    if lines.len() <= 1 {
+        return value.to_string();
+    }
+    // Only indent continuation for expressions that don't start with { or [
+    // (attrsets and lists handle their own indentation correctly)
+    let first_line = lines[0].trim_start();
+    if first_line.starts_with('{') || first_line.starts_with('[') {
+        return value.to_string();
+    }
+    let mut result = Vec::new();
+    result.push(lines[0].to_string());
+    for line in &lines[1..] {
+        result.push(format!("{}{}", prefix, line));
+    }
+    result.join("\n")
+}
+
 /// Format a single entry with its comments
 fn format_entry(entry: &Entry, indent: usize) -> String {
     let prefix = "  ".repeat(indent);
+    let comment_prefix = "  ".repeat(indent);
 
     match entry {
         Entry::AttrpathValue(attrpath_value) => {
-            let comments = comments_before(attrpath_value.syntax());
-            let comment_lines = if !comments.is_empty() {
-                let comment_prefix = "  ".repeat(indent);
-                comments
-                    .lines()
-                    .map(|line| format!("{}{}", comment_prefix, line))
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            } else {
-                String::new()
-            };
-            let comment_part = if !comment_lines.is_empty() {
-                format!("{}\n", comment_lines)
-            } else {
-                String::new()
-            };
-
             if let Some(attrpath) = attrpath_value.attrpath() {
+                let collapsed = collapse_attrpath(&attrpath);
+                let mut all_comments = comments_before(attrpath_value.syntax());
+                let inner_comments = comments_before_attrpath(&attrpath);
+                if !inner_comments.is_empty() {
+                    if !all_comments.is_empty() {
+                        all_comments.push('\n');
+                    }
+                    all_comments.push_str(&inner_comments);
+                }
+
+                let comment_part = if !all_comments.is_empty() {
+                    let comment_lines = all_comments
+                        .lines()
+                        .filter(|l| !l.is_empty())
+                        .map(|line| format!("{}{}", comment_prefix, line))
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    if !comment_lines.is_empty() {
+                        format!("{}\n", comment_lines)
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    String::new()
+                };
+
                 if let Some(value) = attrpath_value.value() {
+                    let formatted_value = format_expr(&value, indent);
+                    let indented_value = indent_continuation(&formatted_value, &prefix);
                     format!(
                         "{}{}{} = {};",
                         comment_part,
                         prefix,
-                        attrpath,
-                        format_expr(&value, indent)
+                        collapsed,
+                        indented_value
                     )
                 } else {
-                    format!("{}{}{}{}", comment_part, prefix, attrpath, ";")
+                    format!("{}{}{}{}", comment_part, prefix, collapsed, ";")
                 }
             } else {
                 String::new()
@@ -150,18 +213,18 @@ fn format_entry(entry: &Entry, indent: usize) -> String {
         }
         Entry::Inherit(inherit) => {
             let comments = comments_before(inherit.syntax());
-            let comment_lines = if !comments.is_empty() {
-                let comment_prefix = "  ".repeat(indent);
-                comments
+            let comment_part = if !comments.is_empty() {
+                let comment_lines = comments
                     .lines()
+                    .filter(|l| !l.is_empty())
                     .map(|line| format!("{}{}", comment_prefix, line))
                     .collect::<Vec<_>>()
-                    .join("\n")
-            } else {
-                String::new()
-            };
-            let comment_part = if !comment_lines.is_empty() {
-                format!("{}\n", comment_lines)
+                    .join("\n");
+                if !comment_lines.is_empty() {
+                    format!("{}\n", comment_lines)
+                } else {
+                    String::new()
+                }
             } else {
                 String::new()
             };
@@ -230,19 +293,39 @@ fn format_expr(expr: &ast::Expr, indent: usize) -> String {
 fn format_list(list: &ast::List, indent: usize) -> String {
     let item_prefix = "  ".repeat(indent + 1);
     let close_prefix = "  ".repeat(indent);
-    let items: Vec<String> = list
-        .items()
-        .map(|item| format_expr(&item, indent + 1))
-        .collect();
 
-    if items.is_empty() {
+    if list.items().next().is_none() {
         return "[]".to_string();
     }
 
-    let formatted_items: Vec<String> = items
-        .iter()
-        .map(|item| format!("{}{}", item_prefix, item))
-        .collect();
+    // Collect items with their preceding comments by walking syntax tree
+    let mut formatted_items: Vec<String> = Vec::new();
+    let mut item_idx = 0;
+    let all_items: Vec<_> = list.items().collect();
+
+    for child in list.syntax().children_with_tokens() {
+        match child {
+            NodeOrToken::Token(token) => {
+                if let Some(comment) = ast::Comment::cast(token) {
+                    let text = comment.text().trim().to_string();
+                    let formatted = if text.starts_with('#') || text.starts_with('*') {
+                        text
+                    } else {
+                        format!("# {}", text)
+                    };
+                    formatted_items.push(format!("{}{}", item_prefix, formatted));
+                }
+            }
+            NodeOrToken::Node(node) => {
+                if item_idx < all_items.len() {
+                    let item_expr = &all_items[item_idx];
+                    let formatted = format_expr(item_expr, indent + 1);
+                    formatted_items.push(format!("{}{}", item_prefix, formatted));
+                    item_idx += 1;
+                }
+            }
+        }
+    }
 
     format!("[\n{}\n{}]", formatted_items.join("\n"), close_prefix)
 }
@@ -277,32 +360,48 @@ fn format_let(let_in: &ast::LetIn, indent: usize) -> String {
     let body_prefix = "  ".repeat(indent);
     let entries: Vec<Entry> = let_in.entries().collect();
 
-    // Collect comments with bindings
     let mut bindings_with_comments: Vec<String> = Vec::new();
     for entry in &entries {
-        if let Entry::AttrpathValue(attrpath_value) = entry {
-            let comments = comments_before(attrpath_value.syntax());
-            let comment_lines = if !comments.is_empty() {
-                let comment_prefix = "  ".repeat(indent + 1);
-                comments
-                    .lines()
-                    .map(|line| format!("{}{}", comment_prefix, line))
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            } else {
-                String::new()
-            };
-            let comment_part = if !comment_lines.is_empty() {
-                format!("{}\n", comment_lines)
-            } else {
-                String::new()
-            };
-
-            if let (Some(attrpath), Some(value)) = (attrpath_value.attrpath(), attrpath_value.value()) {
-                bindings_with_comments.push(format!(
-                    "{}{}{} = {};",
-                    comment_part, binding_prefix, attrpath, format_expr(&value, indent + 1)
-                ));
+        match entry {
+            Entry::AttrpathValue(attrpath_value) => {
+                if let (Some(attrpath), Some(value)) = (attrpath_value.attrpath(), attrpath_value.value()) {
+                    let collapsed = collapse_attrpath(&attrpath);
+                    let mut all_comments = comments_before(attrpath_value.syntax());
+                    let inner_comments = comments_before_attrpath(&attrpath);
+                    if !inner_comments.is_empty() {
+                        if !all_comments.is_empty() {
+                            all_comments.push('\n');
+                        }
+                        all_comments.push_str(&inner_comments);
+                    }
+                    let comment_part = if !all_comments.is_empty() {
+                        let lines = all_comments.lines().filter(|l| !l.is_empty())
+                            .map(|l| format!("{}{}", binding_prefix, l)).collect::<Vec<_>>().join("\n");
+                        if !lines.is_empty() { format!("{}\n", lines) } else { String::new() }
+                    } else { String::new() };
+                    bindings_with_comments.push(format!(
+                        "{}{}{} = {};", comment_part, binding_prefix, collapsed, format_expr(&value, indent + 1)
+                    ));
+                }
+            }
+            Entry::Inherit(inherit) => {
+                let comments = comments_before(inherit.syntax());
+                let comment_part = if !comments.is_empty() {
+                    let lines = comments.lines().filter(|l| !l.is_empty())
+                        .map(|l| format!("{}{}", binding_prefix, l)).collect::<Vec<_>>().join("\n");
+                    if !lines.is_empty() { format!("{}\n", lines) } else { String::new() }
+                } else { String::new() };
+                let attrs: Vec<String> = inherit.attrs().map(|a| a.to_string()).collect();
+                if let Some(from) = inherit.from().and_then(|f| f.expr()) {
+                    bindings_with_comments.push(format!(
+                        "{}{}inherit ({}) {};", comment_part, binding_prefix,
+                        format_expr(&from, indent + 1), attrs.join(", ")
+                    ));
+                } else if !attrs.is_empty() {
+                    bindings_with_comments.push(format!(
+                        "{}{}inherit {};", comment_part, binding_prefix, attrs.join(", ")
+                    ));
+                }
             }
         }
     }
@@ -377,7 +476,7 @@ fn format_lambda(lambda: &ast::Lambda, indent: usize) -> String {
                         .map(|i| i.to_string())
                         .unwrap_or_default()
                 }
-                ast::Param::Pattern(pattern) => format_pattern(&pattern),
+                ast::Param::Pattern(pattern) => format_pattern(&pattern, indent),
             };
             let body = lambda.body()
                 .map(|e| format_expr(&e, indent))
@@ -400,7 +499,7 @@ fn format_lambda(lambda: &ast::Lambda, indent: usize) -> String {
     }
 }
 
-fn format_pattern_entry(entry: ast::PatEntry) -> String {
+fn format_pattern_entry(entry: ast::PatEntry, _indent: usize) -> String {
     let ident = entry.ident()
         .map(|i| i.to_string())
         .unwrap_or_default();
@@ -433,10 +532,10 @@ fn format_pattern_entry(entry: ast::PatEntry) -> String {
     }
 }
 
-fn format_pattern(pattern: &ast::Pattern) -> String {
+fn format_pattern(pattern: &ast::Pattern, indent: usize) -> String {
     let mut entries: Vec<String> = pattern
         .pat_entries()
-        .map(format_pattern_entry)
+        .map(|e| format_pattern_entry(e, indent))
         .collect();
 
     // Add ellipsis if present
@@ -448,7 +547,21 @@ fn format_pattern(pattern: &ast::Pattern) -> String {
         return "{}".to_string();
     }
 
-    format!("{{ {} }}", entries.join(", "))
+    // Check if pattern is simple (no defaults, few entries) - keep inline
+    let has_defaults = entries.iter().any(|e| e.contains("?"));
+    let is_simple = !has_defaults && entries.len() <= 3;
+
+    if is_simple {
+        return format!("{{ {} }}", entries.join(", "));
+    }
+
+    let entry_prefix = "  ".repeat(indent + 1);
+    let close_prefix = "  ".repeat(indent);
+    let formatted_entries: Vec<String> = entries
+        .iter()
+        .map(|e| format!("{}{}", entry_prefix, e))
+        .collect();
+    format!("{{\n{}\n{}}}", formatted_entries.join(",\n"), close_prefix)
 }
 
 fn format_binop(binop: &ast::BinOp, indent: usize) -> String {
@@ -508,10 +621,238 @@ fn format_apply(call: &ast::Apply, indent: usize) -> String {
     format!("{} {}", lambda, argument)
 }
 
+// ── Preprocessing ────────────────────────────────────────────────────────────
+
+/// Normalize Nix syntax not supported by rnix parser.
+/// Handles: inherit colon syntax, list semicolon separators.
+fn preprocess_nix(input: &str) -> String {
+    let chars: Vec<char> = input.chars().collect();
+    let len = chars.len();
+    let mut output = String::with_capacity(len);
+    let mut i = 0;
+
+    while i < len {
+        // --- Handle inherit colon: `inherit (expr):` → `inherit (expr)` ---
+        // Also check word boundary: char before 'inherit' should not be alphanumeric
+        let before_ok = i == 0 || !chars[i - 1].is_alphanumeric() && chars[i - 1] != '_';
+        if before_ok && chars[i..].starts_with(&['i', 'n', 'h', 'e', 'r', 'i', 't']) {
+            let after_keyword = i + 7;
+            if after_keyword < len && (chars[after_keyword] == '(' || chars[after_keyword] == ':' || is_whitespace(chars[after_keyword])) {
+                // Scan past whitespace to find '(', ':', or identifier
+                let mut j = after_keyword;
+                while j < len && is_whitespace(chars[j]) {
+                    j += 1;
+                }
+                if j < len && chars[j] == '(' {
+                    // Found '(' — scan to matching ')'
+                    let mut depth = 1;
+                    j += 1;
+                    while j < len && depth > 0 {
+                        if chars[j] == '(' { depth += 1; }
+                        else if chars[j] == ')' { depth -= 1; }
+                        j += 1;
+                    }
+                    // j is now after the matching ')'
+                    // Scan past whitespace to check for ':'
+                    let mut k = j;
+                    while k < len && is_whitespace(chars[k]) {
+                        k += 1;
+                    }
+                    if k < len && chars[k] == ':' {
+                        // Colon found — copy up to ')', skip ':'
+                        output.push_str(&chars[i..j].iter().collect::<String>());
+                        // Ensure space after ')' before next token
+                        let next_char = chars.get(k + 1);
+                        if next_char.is_some() && !is_whitespace(*next_char.unwrap()) {
+                            output.push(' ');
+                        }
+                        i = k + 1; // skip ':'
+                        continue;
+                    }
+                    // No colon — copy as-is
+                } else if j < len && chars[j] == ':' {
+                    // `inherit: a b;` or `inherit:a b;` → remove colon, ensure space
+                    output.push_str(&chars[i..after_keyword].iter().collect::<String>());
+                    let next_char = chars.get(j + 1);
+                    if next_char.is_some() && !is_whitespace(*next_char.unwrap()) {
+                        output.push(' ');
+                    }
+                    i = j + 1; // skip ':'
+                    continue;
+                }
+            }
+        }
+
+        // --- Handle list semicolons: `[a;b;c]` → `[a b c]` ---
+        if chars[i] == '[' {
+            output.push('[');
+            i += 1;
+            // Scan list contents, replacing ';' with ' ' at depth 1
+            while i < len {
+                match chars[i] {
+                    '"' => {
+                        // Handle string: skip to closing '"'
+                        output.push('"');
+                        i += 1;
+                        while i < len {
+                            if chars[i] == '\\' && i + 1 < len {
+                                output.push(chars[i]);
+                                output.push(chars[i + 1]);
+                                i += 2;
+                            } else if chars[i] == '"' {
+                                // Check for "" (indented string) or """ (multiline)
+                                let remaining = &chars[i..];
+                                if remaining.len() >= 2 && remaining[1] == '"' {
+                                    if remaining.len() >= 3 && remaining[2] == '"' {
+                                        // """ multiline string — find closing """
+                                        output.push_str("\"\"\"");
+                                        i += 3;
+                                        while i + 2 < len {
+                                            if chars[i] == '\\' && i + 1 < len {
+                                                output.push(chars[i]);
+                                                output.push(chars[i + 1]);
+                                                i += 2;
+                                            } else if chars[i..].starts_with(&['"', '"', '"']) {
+                                                output.push_str("\"\"\"");
+                                                i += 3;
+                                                break;
+                                            } else {
+                                                output.push(chars[i]);
+                                                i += 1;
+                                            }
+                                        }
+                                    } else {
+                                        // "" indented string — find closing ""
+                                        output.push_str("\"\"");
+                                        i += 2;
+                                        while i + 1 < len {
+                                            if chars[i] == '\\' && i + 1 < len {
+                                                output.push(chars[i]);
+                                                output.push(chars[i + 1]);
+                                                i += 2;
+                                            } else if chars[i..].starts_with(&['"', '"']) {
+                                                output.push_str("\"\"");
+                                                i += 2;
+                                                break;
+                                            } else {
+                                                output.push(chars[i]);
+                                                i += 1;
+                                            }
+                                        }
+                                    }
+                                    // Handle trailing quote if any
+                                    if i < len && chars[i] == '"' {
+                                        output.push('"');
+                                        i += 1;
+                                    }
+                                    break;
+                                } else {
+                                    output.push('"');
+                                    i += 1;
+                                    break;
+                                }
+                            } else {
+                                output.push(chars[i]);
+                                i += 1;
+                            }
+                        }
+                    }
+                    '#' => {
+                        // Handle line comment: skip to end of line
+                        output.push('#');
+                        i += 1;
+                        while i < len && chars[i] != '\n' {
+                            output.push(chars[i]);
+                            i += 1;
+                        }
+                    }
+                    '{' => {
+                        // Nested attrset: skip to matching '}'
+                        output.push('{');
+                        i += 1;
+                        let mut depth = 1;
+                        while i < len && depth > 0 {
+                            if chars[i] == '{' { depth += 1; }
+                            else if chars[i] == '}' { depth -= 1; }
+                            else if chars[i] == '"' {
+                                // String inside attrset
+                                output.push(chars[i]);
+                                i += 1;
+                                while i < len && !(chars[i] == '"' && depth <= 1) {
+                                    if chars[i] == '\\' && i + 1 < len {
+                                        output.push(chars[i]);
+                                        output.push(chars[i + 1]);
+                                        i += 2;
+                                        continue;
+                                    }
+                                    output.push(chars[i]);
+                                    i += 1;
+                                }
+                                if i < len {
+                                    output.push(chars[i]);
+                                    i += 1;
+                                }
+                                continue;
+                            }
+                            output.push(chars[i]);
+                            i += 1;
+                        }
+                    }
+                    '[' => {
+                        // Nested list: process inner semicolons too
+                        // Collect the nested list content, preprocess it, append to output
+                        let nested_start = i;
+                        i += 1;
+                        let mut depth = 1;
+                        while i < len && depth > 0 {
+                            if chars[i] == '[' { depth += 1; }
+                            else if chars[i] == ']' { depth -= 1; }
+                            i += 1;
+                        }
+                        // i is now after the closing ']'
+                        // Get the nested list content (including brackets)
+                        let nested: String = chars[nested_start..i].iter().collect();
+                        // Recursively preprocess (handles deeper nesting)
+                        let processed = preprocess_nix(&nested);
+                        output.push_str(&processed);
+                        // Note: i is already past the nested list
+                        continue;
+                    }
+                    ']' => {
+                        output.push(']');
+                        i += 1;
+                        break;
+                    }
+                    ';' => {
+                        // Replace list separator ';' with ' '
+                        output.push(' ');
+                        i += 1;
+                    }
+                    _ => {
+                        output.push(chars[i]);
+                        i += 1;
+                    }
+                }
+            }
+            continue;
+        }
+
+        output.push(chars[i]);
+        i += 1;
+    }
+
+    output
+}
+
+fn is_whitespace(c: char) -> bool {
+    matches!(c, ' ' | '\t' | '\n' | '\r')
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 fn format_content(content: &str) -> Result<String, String> {
-    let parse = rnix::Root::parse(content);
+    let normalized = preprocess_nix(content);
+    let parse = rnix::Root::parse(&normalized);
     let root = parse.ok().map_err(|_| "Failed to parse Nix expression".to_string())?;
     let expr = root.expr().ok_or("No expression found".to_string())?;
     Ok(format_expr(&expr, 0))
@@ -600,15 +941,8 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     } else if check {
-        // Check idempotency: format(input) should equal format(format(input))
-        let reformatted = match format_content(&formatted) {
-            Ok(r) => r,
-            Err(e) => {
-                eprintln!("Error: {}", e);
-                return ExitCode::FAILURE;
-            }
-        };
-        if formatted.trim_end() != reformatted.trim_end() {
+        // Check if input matches formatted output
+        if content.trim_end() != formatted.trim_end() {
             if let Some(ref filepath) = file {
                 eprintln!("File '{}' is not formatted correctly", filepath);
             } else {
@@ -617,7 +951,7 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     } else {
-        println!("{}", formatted);
+        print!("{}\n", formatted);
     }
 
     ExitCode::SUCCESS

@@ -8,14 +8,16 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation finalAttrs@{
+let
   pname = "obs-bilibili-stream";
   version = "2.0.12";
+in stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Zarosmm";
     repo = "obs-bilibili-stream";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-ilx1u4jN58AUfPh3heEhANxsYJVxoIRfuAOObDY5WoU=";
   };
 
@@ -32,14 +34,11 @@ stdenv.mkDerivation finalAttrs@{
 
   dontWrapQtApps = true;
 
-  # OBS 插件 bootstrap 系统通过 OBS_SOURCE 定位 obs-studio 的 cmake 模块
   cmakeFlags = [
     "-DOBS_SOURCE=${obs-studio}"
     "-DENABLE_QT=ON"
   ];
 
- # CMake 已正确安装到 $out/lib/obs-plugins/ 和 $out/share/obs/obs-plugins/
-  # 清理冗余的 64bit 目录
   postInstall = ''
     rm -rf $out/obs-plugins
   '';
