@@ -17,7 +17,7 @@ fn print_usage() {
     eprintln!();
     eprintln!("Options:");
     eprintln!("  -i, --inplace    Modify file in-place");
-    eprintln!("  -c, --check      Check if file is formatted correctly");
+    eprintln!("  -c, --check      Check if file is formatted correctly and idempotent");
     eprintln!("  -v, --version    Print version information");
     eprintln!("  -h, --help       Print help information");
     eprintln!();
@@ -84,12 +84,17 @@ fn comments_before(node: &rnix::SyntaxNode) -> String {
 }
 
 /// Collapse an attrpath into dotted form (APC): `a.b.c`
+/// Single-segment attrpaths are returned as-is to avoid Select/Attrpath ambiguity.
 fn collapse_attrpath(attrpath: &ast::Attrpath) -> String {
     let segments: Vec<String> = attrpath
         .attrs()
         .map(|attr| attr.to_string())
         .collect();
-    segments.join(".")
+    if segments.len() == 1 {
+        segments.into_iter().next().unwrap_or_default()
+    } else {
+        segments.join(".")
+    }
 }
 
 /// Collect all comments within an attrpath and merge them
@@ -479,18 +484,17 @@ fn format_lambda(lambda: &ast::Lambda, indent: usize) -> String {
                 ast::Param::Pattern(pattern) => format_pattern(&pattern, indent),
             };
             let body = lambda.body()
-                .map(|e| format_expr(&e, indent))
+                .map(|e| format_expr(&e, indent + 1))
                 .unwrap_or_default();
-            // For complex bodies (let-in, if-else, attrset, list, with), put on new line
             let is_complex = body.starts_with("let")
                 || body.starts_with("if ")
                 || body.starts_with("{")
                 || body.starts_with("[")
                 || body.starts_with("with ");
             if is_complex {
-                format!("{}{}{}:\n{}", prefix, arg_str, "", body)
+                format!("{}{}:\n{}", prefix, arg_str, body)
             } else {
-                format!("{}{}{}: {}", prefix, arg_str, "", body)
+                format!("{}{}: {}", prefix, arg_str, body)
             }
         }
         None => lambda.body()
@@ -538,8 +542,8 @@ fn format_pattern(pattern: &ast::Pattern, indent: usize) -> String {
         .map(|e| format_pattern_entry(e, indent))
         .collect();
 
-    // Add ellipsis if present
-    if pattern.ellipsis_token().is_some() && !entries.contains(&"...".to_string()) {
+    // Add ellipsis if present in AST
+    if pattern.ellipsis_token().is_some() {
         entries.push("...".to_string());
     }
 
@@ -855,7 +859,11 @@ fn format_content(content: &str) -> Result<String, String> {
     let parse = rnix::Root::parse(&normalized);
     let root = parse.ok().map_err(|_| "Failed to parse Nix expression".to_string())?;
     let expr = root.expr().ok_or("No expression found".to_string())?;
-    Ok(format_expr(&expr, 0))
+    let result = format_expr(&expr, 0);
+    if result.trim().is_empty() && content.trim().len() > 0 {
+        return Err("Formatter produced empty output for non-empty input".to_string());
+    }
+    Ok(result)
 }
 
 fn main() -> ExitCode {
@@ -927,10 +935,24 @@ fn main() -> ExitCode {
         }
     };
 
-    if inplace {
+   if inplace {
         if let Some(ref filepath) = file {
-            match fs::write(filepath, &formatted) {
-                Ok(_) => {}
+            if formatted.trim().is_empty() {
+                eprintln!("Error: Formatting produced empty output for '{}'", filepath);
+                return ExitCode::FAILURE;
+            }
+            let tmp_path = format!("{}.tmp", filepath);
+            match fs::write(&tmp_path, &formatted) {
+                Ok(_) => {
+                    match fs::rename(&tmp_path, filepath) {
+                        Ok(_) => {}
+                        Err(e) => {
+                            eprintln!("Error: Failed to replace '{}': {}", filepath, e);
+                            let _ = fs::remove_file(&tmp_path);
+                            return ExitCode::FAILURE;
+                        }
+                    }
+                }
                 Err(e) => {
                     eprintln!("Error: Failed to write '{}': {}", filepath, e);
                     return ExitCode::FAILURE;
@@ -941,12 +963,26 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     } else if check {
-        // Check if input matches formatted output
         if content.trim_end() != formatted.trim_end() {
             if let Some(ref filepath) = file {
                 eprintln!("File '{}' is not formatted correctly", filepath);
             } else {
                 eprintln!("Input is not formatted correctly");
+            }
+            return ExitCode::FAILURE;
+        }
+        let re_formatted = match format_content(&formatted) {
+            Ok(r) => r,
+            Err(e) => {
+                eprintln!("Error: Formatter is not idempotent: {}", e);
+                return ExitCode::FAILURE;
+            }
+        };
+        if formatted.trim_end() != re_formatted.trim_end() {
+            if let Some(ref filepath) = file {
+                eprintln!("Warning: Formatter is not idempotent for '{}'", filepath);
+            } else {
+                eprintln!("Warning: Formatter is not idempotent");
             }
             return ExitCode::FAILURE;
         }
