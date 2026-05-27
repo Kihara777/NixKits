@@ -55,9 +55,7 @@
     packages = builtins.mapAttrs (system: _: let
       pkgs = nixpkgs.legacyPackages.${system};
       lib = nixpkgs.lib;
-      obsBiliStream = pkgs.callPackage ./packages/obs-bilibili-stream.nix {
-        qtbase = pkgs.qt6.qtbase;
-      };
+      obsBiliStream = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       kitsfmt = pkgs.callPackage ./packages/kitsfmt.nix { };
       opencodeTelegram = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcpSearxng = pkgs.callPackage ./packages/mcp-searxng.nix { };

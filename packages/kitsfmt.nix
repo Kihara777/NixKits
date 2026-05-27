@@ -1,4 +1,7 @@
-{ lib, stdenv, cargo, rustPlatform }:
+{
+  lib,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "kitsfmt";
@@ -7,7 +10,7 @@ rustPlatform.buildRustPackage {
   src = ./kitsfmt-src;
 
   cargoLock = {
-    lockFile = ../packages/kitsfmt-src/Cargo.lock;
+    lockFile = ./kitsfmt-src/Cargo.lock;
   };
 
   doCheck = true;

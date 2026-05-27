@@ -1,35 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
-, curl
-, qtbase
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  curl,
+  qt6,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-bilibili-stream";
   version = "2.0.12";
-in stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Zarosmm";
     repo = "obs-bilibili-stream";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ilx1u4jN58AUfPh3heEhANxsYJVxoIRfuAOObDY5WoU=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkg-config
   ];
 
   buildInputs = [
     obs-studio
     curl
-    qtbase
+    qt6.qtbase
   ];
 
   dontWrapQtApps = true;
@@ -40,14 +37,15 @@ in stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    rm -rf $out/obs-plugins
+    rm -rf "$out/obs-plugins"
   '';
 
   meta = {
-    description = "Bilibili 直播插件 for OBS Studio";
+    description = "Bilibili streaming plugin for OBS Studio";
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
+    changelog = "https://github.com/Zarosmm/obs-bilibili-stream/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
     maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})
