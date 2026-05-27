@@ -12,7 +12,7 @@
 
   version = if fetchedTag.success
     then prev.lib.removePrefix "b" fetchedTag.value
-    else version;
+    else prev.llama-cpp.version;
 in {
   llama-cpp-rocm = (prev.llama-cpp.override {
     rocmSupport = true;

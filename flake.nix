@@ -14,7 +14,7 @@
     opencode-telegram-src.url = "github:grinev/opencode-telegram-bot/v0.20.5";
     opencode-telegram-src.flake = false;
 
-    mcp-searxng-src.url = "github:ihor-sokoliuk/MCP-searxng/v1.0.3";
+    mcp-searxng-src.url = "github:ihor-sokoliuk/mcp-searxng/v1.0.3";
     mcp-searxng-src.flake = false;
   };
 

@@ -3,9 +3,12 @@
   rustPlatform,
 }:
 
+let
+  cargoToml = builtins.fromTOML (builtins.readFile ./kitsfmt-src/Cargo.toml);
+in
 rustPlatform.buildRustPackage {
   pname = "kitsfmt";
-  version = "0.3.0";
+  version = cargoToml.package.version;
 
   src = ./kitsfmt-src;
 
