@@ -13,6 +13,6 @@ TESTING.md
 packages/kitsfmt-src/target/
 
 # IDE
-.vscode/
+/.vscode/
 *.swp
 *.swo
