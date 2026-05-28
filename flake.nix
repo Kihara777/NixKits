@@ -39,7 +39,7 @@
       mcp-searxng = import ./overlays/mcp-searxng.nix;
     };
 
-    # Per-system packages
+    # Per-system packages (auto-syncs with all lib.platforms.linux)
     packages = builtins.mapAttrs (system: _: let
       pkgs = nixpkgs.legacyPackages.${system};
       lib = nixpkgs.lib;
@@ -55,9 +55,6 @@
       default = kitsfmt;
     } // (lib.optionalAttrs isLinux {
       obs-bilibili-stream = obsBiliStream;
-    })) {
-      x86_64-linux = {};
-      aarch64-linux = {};
-    };
+    })) (nixpkgs.lib.filterAttrs (system: _: builtins.match ".*-linux" system != null) nixpkgs.legacyPackages);
   };
 }

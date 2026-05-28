@@ -21,7 +21,7 @@
 | llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/llama-cpp-rocm.md](docs/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/rcc-fix.md](docs/rcc-fix.md) |
 
-支持系统：`x86_64-linux` `aarch64-linux`
+支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
 ## 开发
 
