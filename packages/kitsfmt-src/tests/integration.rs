@@ -313,12 +313,12 @@ fn test_bp_multiple_urls_in_attrset() {
     assert_eq!(result.trim_end(), "{\n  a = \"https://a.com\";\n  b = 2;\n  c = \"https://c.com\";\n}");
 }
 
-// ── Best-practice: rec → let-in transformation (stub) ────────────────────────
+// ── Best-practice: rec → let-in transformation ────────────────────────────
 
 #[test]
-fn test_bp_rec_attrset_preserved() {
+fn test_bp_rec_to_letin() {
     let result = format("rec { a = 1; b = a + 2; }");
-    assert_eq!(result.trim_end(), "rec {\n  a = 1;\n  b = a + 2;\n}");
+    assert_eq!(result.trim_end(), "let\n  a = 1;\n  b = a + 2;\nin\n{\n  inherit a b;\n}");
 }
 
 #[test]
@@ -328,7 +328,41 @@ fn test_bp_rec_empty_attrset() {
 }
 
 #[test]
-fn test_bp_rec_nested() {
+fn test_bp_rec_to_letin_nested() {
     let result = format("rec { outer = rec { x = 1; y = x * 2; }; }");
-    assert_eq!(result.trim_end(), "rec {\n  outer = rec {\n    x = 1;\n    y = x * 2;\n  };\n}");
+    assert_eq!(result.trim_end(), "let\n  outer = let\n    x = 1;\n    y = x * 2;\nin\n  {\n    inherit x y;\n  };\nin\n{\n  inherit outer;\n}");
+}
+
+#[test]
+fn test_bp_rec_to_letin_with_inherit() {
+    let result = format("rec { a = 1; inherit (pkgs) curl jq; }");
+    let output = format(result.as_str());
+    assert!(output.contains("inherit (pkgs) curl jq;"));
+    assert!(output.contains("inherit a curl jq;"));
+}
+
+#[test]
+fn test_bp_rec_disabled() {
+    // With -B flag, rec should be preserved as-is
+    use std::process::{Command, Stdio};
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("-B")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    use std::io::Write;
+    child.stdin.as_mut().unwrap().write_all(b"rec { a = 1; b = 2; }").unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    let result = String::from_utf8_lossy(&output.stdout).to_string();
+    assert_eq!(result.trim_end(), "rec {\n  a = 1;\n  b = 2;\n}");
+}
+
+#[test]
+fn test_bp_rec_to_letin_idempotent() {
+    let input = "rec { a = 1; b = a + 2; c = 3; }";
+    let formatted = format(input);
+    let reformatted = format(formatted.trim_end());
+    assert_eq!(formatted.trim_end(), reformatted.trim_end(), "rec→let-in is not idempotent");
 }

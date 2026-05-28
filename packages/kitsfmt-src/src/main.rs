@@ -36,16 +36,19 @@ fn env_bool(name: &str) -> Option<bool> {
 fn print_usage() {
     eprintln!("kitsfmt {} - A Nix formatter with AST-based sorting & merging", VERSION);
     eprintln!();
-    eprintln!("Usage: kitsfmt [OPTIONS] [FILE]");
+    eprintln!("Usage: kitsfmt [OPTIONS] [FILE]...");
     eprintln!();
     eprintln!("Options:");
-    eprintln!("  -i, --inplace          Modify file in-place [env: KITSFMT_INPLACE=1]");
-    eprintln!("  -c, --check            Check if file is formatted correctly and idempotent [env: KITSFMT_CHECK=1]");
+    eprintln!("  -i, --inplace          Modify file(s) in-place [env: KITSFMT_INPLACE=1]");
+    eprintln!("  -c, --check            Check if file(s) are formatted correctly [env: KITSFMT_CHECK=1]");
     eprintln!("  -B, --no-best-practices  Disable best-practice auto-corrections [env: KITSFMT_BEST_PRACTICES=0]");
     eprintln!("  -v, --version          Print version information");
     eprintln!("  -h, --help             Print help information");
     eprintln!();
     eprintln!("If no FILE is provided, reads from stdin.");
+    eprintln!("Best-practice fixes (enabled by default):");
+    eprintln!("  - Quoting bare URLs (RFC 45)");
+    eprintln!("  - Converting rec attrsets to let-in form");
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -392,6 +395,11 @@ fn format_attrset(attrset: &ast::AttrSet, indent: usize) -> String {
         key_a.cmp(&key_b)
     });
 
+    // If best practices enabled and attrset is recursive, convert to let-in
+    if is_rec && best_practices_enabled() {
+        return format_rec_as_let(&sorted_entries, indent);
+    }
+
     // Format each entry at indent+1 level
     let formatted_entries: Vec<String> = sorted_entries
         .iter()
@@ -403,6 +411,92 @@ fn format_attrset(attrset: &ast::AttrSet, indent: usize) -> String {
     } else {
         format!("{{\n{}\n{}}}", formatted_entries.join("\n"), close_prefix)
     }
+}
+
+/// Convert a recursive attrset to let-in form (best-practice auto-fix).
+/// `rec { a = 1; b = a + 2; inherit c; }` becomes:
+/// `let a = 1; b = a + 2; inherit c; in { inherit a b c; }`
+fn format_rec_as_let(entries: &[Entry], indent: usize) -> String {
+    let binding_prefix = "  ".repeat(indent + 1);
+    let body_prefix   = "  ".repeat(indent);
+    let close_prefix  = "  ".repeat(indent);
+
+    let mut bindings: Vec<String> = Vec::new();
+    let mut inherit_names: Vec<String> = Vec::new();
+
+    for entry in entries {
+        match entry {
+            Entry::AttrpathValue(attrpath_value) => {
+                if let (Some(attrpath), Some(value)) = (attrpath_value.attrpath(), attrpath_value.value()) {
+                    let collapsed = collapse_attrpath(&attrpath);
+                    let mut all_comments = comments_before(attrpath_value.syntax());
+                    let inner_comments = comments_before_attrpath(&attrpath);
+                    if !inner_comments.is_empty() {
+                        if !all_comments.is_empty() { all_comments.push('\n'); }
+                        all_comments.push_str(&inner_comments);
+                    }
+                    let comment_part = format_comments(&all_comments, &binding_prefix);
+
+                    let formatted_value = format_expr(&value, indent + 1);
+                    bindings.push(format!(
+                        "{}{}{} = {};",
+                        comment_part, binding_prefix, collapsed, formatted_value
+                    ));
+                    inherit_names.push(collapsed);
+                }
+            }
+            Entry::Inherit(inherit) => {
+                let comments = comments_before(inherit.syntax());
+                let comment_part = format_comments(&comments, &binding_prefix);
+                let attrs: Vec<String> = inherit.attrs().map(|a| a.to_string()).collect();
+
+                if let Some(from) = inherit.from().and_then(|f| f.expr()) {
+                    bindings.push(format!(
+                        "{}{}inherit ({}) {};",
+                        comment_part, binding_prefix,
+                        format_expr(&from, indent + 1),
+                        attrs.join(" ")
+                    ));
+                } else if !attrs.is_empty() {
+                    bindings.push(format!(
+                        "{}{}inherit {};", comment_part, binding_prefix, attrs.join(" ")
+                    ));
+                }
+                for a in &attrs {
+                    inherit_names.push(a.clone());
+                }
+            }
+        }
+    }
+
+    let open_b  = format!("{}{{", body_prefix);
+    let close_b = format!("{}}}", close_prefix);
+    let inherit_line = if inherit_names.is_empty() {
+        String::new()
+    } else {
+        format!("{}  inherit {};\n", close_prefix, inherit_names.join(" "))
+    };
+
+    format!(
+        "let\n{}\nin\n{}\n{}{}",
+        bindings.join("\n"),
+        open_b,
+        inherit_line,
+        close_b,
+    )
+}
+
+/// Helper: format comment block with a given prefix, or return empty string.
+fn format_comments(comments: &str, prefix: &str) -> String {
+    if comments.is_empty() {
+        return String::new();
+    }
+    let lines: Vec<&str> = comments.lines().filter(|l| !l.is_empty()).collect();
+    if lines.is_empty() {
+        return String::new();
+    }
+    let formatted: Vec<String> = lines.iter().map(|l| format!("{}{}", prefix, l)).collect();
+    format!("{}\n", formatted.join("\n"))
 }
 
 fn format_let(let_in: &ast::LetIn, indent: usize) -> String {
@@ -932,7 +1026,7 @@ fn main() -> ExitCode {
     let mut inplace = false;
     let mut check = false;
     let mut no_best_practices = false;
-    let mut file: Option<String> = None;
+    let mut files: Vec<String> = Vec::new();
 
     // Apply env var defaults (CLI flags override them)
     if let Some(v) = env_bool("KITSFMT_INPLACE")       { inplace = v; }
@@ -952,13 +1046,7 @@ fn main() -> ExitCode {
                 no_best_practices = true;
             }
             _ => {
-                if file.is_none() {
-                    file = Some(args[i].clone());
-                } else {
-                    eprintln!("Error: Multiple files not supported");
-                    print_usage();
-                    return ExitCode::FAILURE;
-                }
+                files.push(args[i].clone());
             }
         }
         i += 1;
@@ -966,62 +1054,90 @@ fn main() -> ExitCode {
 
     BEST_PRACTICES.with(|bp| bp.set(!no_best_practices));
 
-    let content = if let Some(ref filepath) = file {
-        match fs::read_to_string(filepath) {
-            Ok(content) => content,
+    // Stdin mode
+    if files.is_empty() {
+        let content = {
+            let mut buffer = String::new();
+            if let Err(e) = io::stdin().read_to_string(&mut buffer) {
+                eprintln!("Error: Failed to read stdin: {}", e);
+                return ExitCode::FAILURE;
+            }
+            buffer
+        };
+        return format_and_output(&content, None, inplace, check, false);
+    }
+
+    // Multi-file mode — track whether we need file headers for stdout
+    if inplace && files.len() > 1 {
+        eprintln!("Formatting {} files in-place...", files.len());
+    }
+    let multi = files.len() > 1;
+
+    let mut all_ok = true;
+    for filepath in &files {
+        let content = match fs::read_to_string(filepath) {
+            Ok(c) => c,
             Err(e) => {
                 eprintln!("Error: Failed to read '{}': {}", filepath, e);
-                return ExitCode::FAILURE;
+                all_ok = false;
+                continue;
             }
+        };
+        if format_and_output(&content, Some(filepath), inplace, check, multi) == ExitCode::FAILURE {
+            all_ok = false;
         }
-    } else {
-        let mut buffer = String::new();
-        if let Err(e) = io::stdin().read_to_string(&mut buffer) {
-            eprintln!("Error: Failed to read stdin: {}", e);
-            return ExitCode::FAILURE;
-        }
-        buffer
-    };
+    }
 
-    let formatted = match format_content(&content) {
-        Ok(formatted) => formatted,
+    if all_ok { ExitCode::SUCCESS } else { ExitCode::FAILURE }
+}
+
+/// Format content and handle output (stdout / inplace / check).
+fn format_and_output(content: &str, filepath: Option<&str>, inplace: bool, check: bool, multi: bool) -> ExitCode {
+    let formatted = match format_content(content) {
+        Ok(f) => f,
         Err(e) => {
-            eprintln!("Error: {}", e);
+            if let Some(fp) = filepath {
+                eprintln!("Error: Failed to format '{}': {}", fp, e);
+            } else {
+                eprintln!("Error: {}", e);
+            }
             return ExitCode::FAILURE;
         }
     };
 
-   if inplace {
-        if let Some(ref filepath) = file {
-            if formatted.trim().is_empty() {
-                eprintln!("Error: Formatting produced empty output for '{}'", filepath);
+    if inplace {
+        let filepath = match filepath {
+            Some(fp) => fp,
+            None => {
+                eprintln!("Error: Cannot use --inplace without a file");
                 return ExitCode::FAILURE;
             }
-            let tmp_path = format!("{}.tmp", filepath);
-            match fs::write(&tmp_path, &formatted) {
-                Ok(_) => {
-                    match fs::rename(&tmp_path, filepath) {
-                        Ok(_) => {}
-                        Err(e) => {
-                            eprintln!("Error: Failed to replace '{}': {}", filepath, e);
-                            let _ = fs::remove_file(&tmp_path);
-                            return ExitCode::FAILURE;
-                        }
+        };
+        if formatted.trim().is_empty() {
+            eprintln!("Error: Formatting produced empty output for '{}'", filepath);
+            return ExitCode::FAILURE;
+        }
+        let tmp_path = format!("{}.tmp", filepath);
+        match fs::write(&tmp_path, &formatted) {
+            Ok(_) => {
+                match fs::rename(&tmp_path, filepath) {
+                    Ok(_) => {}
+                    Err(e) => {
+                        eprintln!("Error: Failed to replace '{}': {}", filepath, e);
+                        let _ = fs::remove_file(&tmp_path);
+                        return ExitCode::FAILURE;
                     }
                 }
-                Err(e) => {
-                    eprintln!("Error: Failed to write '{}': {}", filepath, e);
-                    return ExitCode::FAILURE;
-                }
             }
-        } else {
-            eprintln!("Error: Cannot use --inplace without a file");
-            return ExitCode::FAILURE;
+            Err(e) => {
+                eprintln!("Error: Failed to write '{}': {}", filepath, e);
+                return ExitCode::FAILURE;
+            }
         }
     } else if check {
         if content.trim_end() != formatted.trim_end() {
-            if let Some(ref filepath) = file {
-                eprintln!("File '{}' is not formatted correctly", filepath);
+            if let Some(fp) = filepath {
+                eprintln!("File '{}' is not formatted correctly", fp);
             } else {
                 eprintln!("Input is not formatted correctly");
             }
@@ -1035,15 +1151,19 @@ fn main() -> ExitCode {
             }
         };
         if formatted.trim_end() != re_formatted.trim_end() {
-            if let Some(ref filepath) = file {
-                eprintln!("Warning: Formatter is not idempotent for '{}'", filepath);
+            if let Some(fp) = filepath {
+                eprintln!("Warning: Formatter is not idempotent for '{}'", fp);
             } else {
                 eprintln!("Warning: Formatter is not idempotent");
             }
             return ExitCode::FAILURE;
         }
     } else {
-        print!("{}\n", formatted);
+        if multi {
+            print!("--- {}\n{}\n", filepath.unwrap_or(""), formatted);
+        } else {
+            print!("{}\n", formatted);
+        }
     }
 
     ExitCode::SUCCESS
