@@ -34,7 +34,7 @@ nix build .#kitsfmt          # 构建指定包
 ## 作者
 
 - **狐莉 (Kitsunori)** — 创建和维护
-- **小爪 (Kitsunome)** — 设计、开发 feat. deepseek-v4-pro · Qwen3.6-27B-MTP · Qwen3.6-35B-A3B-MTP · Qwen3.5-122B-A10B-MTP · Qwen3-Coder-Next · MiniMax-M2.7
+- **小爪 (Kitsunome)** — 设计、开发 feat. deepseek-v4-pro (Max) · llama-cpp-rocm: Qwen3.6-27B-MTP · Qwen3.6-35B-A3B-MTP · Qwen3.5-122B-A10B-MTP · Qwen3-Coder-Next · MiniMax-M2.7
 
 ## License
 
