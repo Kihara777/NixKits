@@ -1,0 +1,42 @@
+# opencode-telegram
+
+[OpenCode](https://opencode.ai) 的 Telegram Bot 客户端。
+
+## 基本信息
+
+| 项目 | 值 |
+|------|-----|
+| 版本 | 0.20.5 |
+| 上游 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
+
+## 使用
+
+```bash
+opencode-telegram start           # 交互式配置
+opencode-telegram start --daemon  # 后台运行
+opencode-telegram status          # 查看状态
+opencode-telegram stop            # 停止
+```
+
+## 引用
+
+```nix
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
+
+# Overlay → pkgs.opencode-telegram
+nixpkgs.overlays = [ inputs.nix-kits.overlays.opencode-telegram ];
+```
+
+## systemd 服务
+
+```nix
+systemd.services.opencode-telegram = {
+  description = "OpenCode Telegram Bot";
+  serviceConfig = {
+    Type = "simple";
+    ExecStart = "${pkgs.opencode-telegram}/bin/opencode-telegram start --daemon";
+    Restart = "on-failure";
+  };
+  wantedBy = [ "multi-user.target" ];
+};
+```

@@ -1,0 +1,43 @@
+# kitsfmt
+
+**Nix 格式化器** — 基于 rnix AST，支持属性排序、注释保留、缩进规范化。
+
+## 基本信息
+
+| 项目 | 值 |
+|------|-----|
+| 版本 | 0.5.0 |
+| 语言 | Rust |
+| 源码 | 本仓库 `packages/kitsfmt-src/` |
+
+## 使用
+
+```bash
+kitsfmt file.nix             # 输出到 stdout
+kitsfmt --inplace file.nix   # 原地格式化
+kitsfmt --check file.nix     # 检查是否已格式化
+kitsfmt --no-best-practices  # 关闭自动修正
+kitsfmt file1.nix file2.nix  # 多文件
+```
+
+环境变量：`KITSFMT_INPLACE=1`、`KITSFMT_CHECK=1`、`KITSFMT_BEST_PRACTICES=0`
+
+## 引用
+
+```nix
+# 直接引用
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+
+# Overlay
+nixpkgs.overlays = [ inputs.nix-kits.overlays.kitsfmt ];  # → pkgs.kitsfmt
+```
+
+## 功能
+
+- 属性排序（含 APC 折叠 `a.b.c`）
+- 注释保持
+- 幂等格式化
+- **Best-Practice 自动修正**（默认开启，`-B` 关闭）：
+  - 裸 URL 引号化（RFC 45）：`https://x.com` → `"https://x.com"`
+  - `rec` → `let-in`：`rec { a = 1; b = a + 2; }` → `let a=1; b=a+2; in { inherit a b; }`
+  - `with` → `builtins.attrValues`：`with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`
