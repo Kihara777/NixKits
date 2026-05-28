@@ -366,3 +366,74 @@ fn test_bp_rec_to_letin_idempotent() {
     let reformatted = format(formatted.trim_end());
     assert_eq!(formatted.trim_end(), reformatted.trim_end(), "rec→let-in is not idempotent");
 }
+
+// ── Best-practice: with → builtins.attrValues ─────────────────────────────
+
+#[test]
+fn test_bp_with_to_attrvalues_simple() {
+    let result = format("with pkgs; [ curl jq ]");
+    assert_eq!(result.trim_end(), "builtins.attrValues {\n  inherit (pkgs) curl jq;\n}");
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_inside_attrset() {
+    let result = format("{ buildInputs = with pkgs; [ curl jq ]; }");
+    assert_eq!(result.trim_end(), "{\n  buildInputs = builtins.attrValues {\n    inherit (pkgs) curl jq;\n  };\n}");
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_multiple() {
+    let result = format("with pkgs; [ curl jq ripgrep htop ]");
+    assert_eq!(result.trim_end(), "builtins.attrValues {\n  inherit (pkgs) curl jq ripgrep htop;\n}");
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_nested() {
+    let result = format("{ x = with lib; [ mkOption mkIf mkForce ]; }");
+    let output = format(result.as_str());
+    assert!(output.contains("inherit (lib)"));
+    assert!(output.contains("mkOption"));
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_no_transform_non_list() {
+    let result = format("with pkgs; { a = curl; b = jq; }");
+    assert!(result.contains("with pkgs;"));
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_no_transform_mixed() {
+    let result = format("with pkgs; [ curl (jq.override { }) ]");
+    assert!(result.contains("with pkgs;"));
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_disabled() {
+    use std::process::{Command, Stdio};
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("-B")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    use std::io::Write;
+    child.stdin.as_mut().unwrap().write_all(b"with pkgs; [ curl jq ]").unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    let result = String::from_utf8_lossy(&output.stdout).to_string();
+    assert!(result.contains("with pkgs;"));
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_idempotent() {
+    let input = "{ x = with pkgs; [ curl jq ripgrep ]; }";
+    let formatted = format(input);
+    let reformatted = format(formatted.trim_end());
+    assert_eq!(formatted.trim_end(), reformatted.trim_end(), "with→attrValues is not idempotent");
+}
+
+#[test]
+fn test_bp_with_to_attrvalues_empty_list_noop() {
+    let result = format("with pkgs; []");
+    assert!(result.contains("with pkgs;"));
+}

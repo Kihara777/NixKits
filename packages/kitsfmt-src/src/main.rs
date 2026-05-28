@@ -49,6 +49,7 @@ fn print_usage() {
     eprintln!("Best-practice fixes (enabled by default):");
     eprintln!("  - Quoting bare URLs (RFC 45)");
     eprintln!("  - Converting rec attrsets to let-in form");
+    eprintln!("  - Converting `with ns; [a b c]` to builtins.attrValues form");
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -186,7 +187,7 @@ fn indent_continuation(value: &str, prefix: &str) -> String {
     // Only indent continuation for expressions that don't start with { or [
     // (attrsets and lists handle their own indentation correctly)
     let first_line = lines[0].trim_start();
-    if first_line.starts_with('{') || first_line.starts_with('[') || first_line.starts_with("rec {") {
+    if first_line.starts_with('{') || first_line.starts_with('[') || first_line.starts_with("rec {") || first_line.ends_with('{') {
         return value.to_string();
     }
     let mut result = Vec::new();
@@ -316,7 +317,14 @@ fn format_expr(expr: &ast::Expr, indent: usize) -> String {
         ast::Expr::LegacyLet(_) => String::new(),
         ast::Expr::IfElse(if_expr) => format_ifelse(if_expr, indent),
         ast::Expr::Assert(assert) => format_assert(assert, indent),
-        ast::Expr::With(with) => format_with(with, indent),
+        ast::Expr::With(with) => {
+            if best_practices_enabled() {
+                if let Some(transformed) = try_format_with_attrvalues(with, indent) {
+                    return transformed;
+                }
+            }
+            format_with(with, indent)
+        }
         ast::Expr::Lambda(lambda) => format_lambda(lambda, indent),
         ast::Expr::BinOp(binop) => format_binop(binop, indent),
         ast::Expr::UnaryOp(unary) => format_unary(unary, indent),
@@ -608,6 +616,44 @@ fn format_with(with: &ast::With, indent: usize) -> String {
         .map(|e| format_expr(&e, indent))
         .unwrap_or_default();
     format!("with {};\n{}", ns, body)
+}
+
+/// Best-practice auto-fix: `with ns; [ a b c ]` → `builtins.attrValues { inherit (ns) a b c; }`
+/// Returns `None` if the transformation is not applicable (body is not a pure-id list).
+fn try_format_with_attrvalues(with: &ast::With, indent: usize) -> Option<String> {
+    let ns = with.namespace()?;
+    let body = with.body()?;
+
+    let list = match body {
+        ast::Expr::List(l) => l,
+        _ => return None,
+    };
+
+    let items: Vec<ast::Expr> = list.items().collect();
+    if items.is_empty() {
+        return None;
+    }
+
+    // All items must be simple identifiers
+    let mut idents: Vec<String> = Vec::new();
+    for item in &items {
+        if let ast::Expr::Ident(ident) = item {
+            idents.push(ident.to_string());
+        } else {
+            return None;
+        }
+    }
+
+    let close_prefix = "  ".repeat(indent);
+    let inner_prefix = "  ".repeat(indent + 1);
+
+    Some(format!(
+        "builtins.attrValues {{\n{}inherit ({}) {};\n{}}}",
+        inner_prefix,
+        format_expr(&ns, indent + 1),
+        idents.join(" "),
+        close_prefix,
+    ))
 }
 
 fn format_lambda(lambda: &ast::Lambda, indent: usize) -> String {
