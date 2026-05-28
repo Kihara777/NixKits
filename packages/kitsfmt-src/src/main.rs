@@ -1,12 +1,35 @@
-use rnix::ast::{self, AstToken, BinOpKind, Entry, HasEntry, UnaryOpKind};
+use rnix::ast::{self, AstToken, BinOpKind, Entry, HasEntry, LiteralKind, UnaryOpKind};
 use rowan::ast::AstNode as RowanAstNode;
 use rowan::{NodeOrToken, Direction};
+use std::cell::Cell;
 use std::env;
 use std::fs;
 use std::io::{self, Read};
 use std::process::ExitCode;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+thread_local! {
+    /// Enable nix.dev best-practice auto-corrections (default: true).
+    /// Set via `--no-best-practices` flag or `KITSFMT_BEST_PRACTICES=0`.
+    static BEST_PRACTICES: Cell<bool> = const { Cell::new(true) };
+}
+
+/// Returns true if best-practice fixes are enabled.
+fn best_practices_enabled() -> bool {
+    BEST_PRACTICES.with(|bp| bp.get())
+}
+
+// ── Env var helpers ──────────────────────────────────────────────────────────
+
+/// Read a boolean env var — true for "1"/"true"/"yes", false for "0"/"false"/"no"
+fn env_bool(name: &str) -> Option<bool> {
+    env::var(name).ok().map(|v| match v.to_lowercase().as_str() {
+        "1" | "true"  | "yes" => true,
+        "0" | "false" | "no"  => false,
+        _ => true,
+    })
+}
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
 
@@ -16,10 +39,11 @@ fn print_usage() {
     eprintln!("Usage: kitsfmt [OPTIONS] [FILE]");
     eprintln!();
     eprintln!("Options:");
-    eprintln!("  -i, --inplace    Modify file in-place");
-    eprintln!("  -c, --check      Check if file is formatted correctly and idempotent");
-    eprintln!("  -v, --version    Print version information");
-    eprintln!("  -h, --help       Print help information");
+    eprintln!("  -i, --inplace          Modify file in-place [env: KITSFMT_INPLACE=1]");
+    eprintln!("  -c, --check            Check if file is formatted correctly and idempotent [env: KITSFMT_CHECK=1]");
+    eprintln!("  -B, --no-best-practices  Disable best-practice auto-corrections [env: KITSFMT_BEST_PRACTICES=0]");
+    eprintln!("  -v, --version          Print version information");
+    eprintln!("  -h, --help             Print help information");
     eprintln!();
     eprintln!("If no FILE is provided, reads from stdin.");
 }
@@ -159,7 +183,7 @@ fn indent_continuation(value: &str, prefix: &str) -> String {
     // Only indent continuation for expressions that don't start with { or [
     // (attrsets and lists handle their own indentation correctly)
     let first_line = lines[0].trim_start();
-    if first_line.starts_with('{') || first_line.starts_with('[') {
+    if first_line.starts_with('{') || first_line.starts_with('[') || first_line.starts_with("rec {") {
         return value.to_string();
     }
     let mut result = Vec::new();
@@ -272,7 +296,14 @@ fn format_entry(entry: &Entry, indent: usize) -> String {
 fn format_expr(expr: &ast::Expr, indent: usize) -> String {
     match expr {
         ast::Expr::Ident(ident) => ident.to_string(),
-        ast::Expr::Literal(literal) => literal.to_string(),
+        ast::Expr::Literal(literal) => {
+            if best_practices_enabled() {
+                if let LiteralKind::Uri(uri) = literal.kind() {
+                    return format!("\"{}\"", uri);
+                }
+            }
+            literal.to_string()
+        }
         ast::Expr::Paren(paren) => paren.expr()
             .map(|e| format!("({})", format_expr(&e, 0)))
             .unwrap_or_else(|| "()".to_string()),
@@ -345,8 +376,13 @@ fn format_attrset(attrset: &ast::AttrSet, indent: usize) -> String {
     let entries: Vec<Entry> = attrset.entries().collect();
 
     if entries.is_empty() {
+        if attrset.rec_token().is_some() {
+            return "rec {}".to_string();
+        }
         return "{}".to_string();
     }
+
+    let is_rec = attrset.rec_token().is_some();
 
     // Sort entries by attribute name
     let mut sorted_entries = entries.clone();
@@ -362,7 +398,11 @@ fn format_attrset(attrset: &ast::AttrSet, indent: usize) -> String {
         .map(|entry| format_entry(entry, indent + 1))
         .collect();
 
-    format!("{{\n{}\n{}}}", formatted_entries.join("\n"), close_prefix)
+    if is_rec {
+        format!("rec {{\n{}\n{}}}", formatted_entries.join("\n"), close_prefix)
+    } else {
+        format!("{{\n{}\n{}}}", formatted_entries.join("\n"), close_prefix)
+    }
 }
 
 fn format_let(let_in: &ast::LetIn, indent: usize) -> String {
@@ -891,7 +931,13 @@ fn main() -> ExitCode {
 
     let mut inplace = false;
     let mut check = false;
+    let mut no_best_practices = false;
     let mut file: Option<String> = None;
+
+    // Apply env var defaults (CLI flags override them)
+    if let Some(v) = env_bool("KITSFMT_INPLACE")       { inplace = v; }
+    if let Some(v) = env_bool("KITSFMT_CHECK")         { check = v; }
+    if let Some(v) = env_bool("KITSFMT_BEST_PRACTICES") { no_best_practices = !v; }
 
     let mut i = 1;
     while i < args.len() {
@@ -901,6 +947,9 @@ fn main() -> ExitCode {
             }
             "-c" | "--check" => {
                 check = true;
+            }
+            "-B" | "--no-best-practices" => {
+                no_best_practices = true;
             }
             _ => {
                 if file.is_none() {
@@ -914,6 +963,8 @@ fn main() -> ExitCode {
         }
         i += 1;
     }
+
+    BEST_PRACTICES.with(|bp| bp.set(!no_best_practices));
 
     let content = if let Some(ref filepath) = file {
         match fs::read_to_string(filepath) {

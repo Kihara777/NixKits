@@ -244,3 +244,91 @@ fn test_mixed_inherit_and_attrs() {
     let result = format("{ z = 3; inherit a; b = 2; }");
     assert_eq!(result.trim_end(), "{\n  b = 2;\n  inherit a;\n  z = 3;\n}");
 }
+
+// ── Best-practice: URL quoting ──────────────────────────────────────────────
+
+#[test]
+fn test_bp_url_quoting_simple() {
+    // Default: best practices ON — bare URL should be quoted
+    let result = format("{ url = https://example.com; }");
+    assert_eq!(result.trim_end(), "{\n  url = \"https://example.com\";\n}");
+}
+
+#[test]
+fn test_bp_url_quoting_complex() {
+    let result = format("{ src = fetchTarball https://github.com/NixOS/nixpkgs/archive/master.tar.gz; }");
+    assert_eq!(result.trim_end(), "{\n  src = fetchTarball \"https://github.com/NixOS/nixpkgs/archive/master.tar.gz\";\n}");
+}
+
+#[test]
+fn test_bp_url_in_attrset_value() {
+    let result = format("{ inputs.nixpkgs.url = github:NixOS/nixpkgs; }");
+    assert_eq!(result.trim_end(), "{\n  inputs.nixpkgs.url = \"github:NixOS/nixpkgs\";\n}");
+}
+
+#[test]
+fn test_bp_url_https_with_query() {
+    let result = format("{ api = https://api.example.com/v1?key=value&lang=en; }");
+    assert_eq!(result.trim_end(), "{\n  api = \"https://api.example.com/v1?key=value&lang=en\";\n}");
+}
+
+#[test]
+fn test_bp_url_git_ssh() {
+    let result = format("{ repo = git+ssh://git@github.com/NixOS/nix.git; }");
+    assert_eq!(result.trim_end(), "{\n  repo = \"git+ssh://git@github.com/NixOS/nix.git\";\n}");
+}
+
+#[test]
+fn test_bp_url_in_let() {
+    let result = format("let src = https://example.com; in src");
+    assert_eq!(result.trim_end(), "let\n  src = \"https://example.com\";\nin\nsrc");
+}
+
+#[test]
+fn test_bp_url_in_list() {
+    let result = format("[ https://a.example.com https://b.example.com ]");
+    let output = format(result.as_str());
+    assert!(output.contains("\"https://a.example.com\""));
+    assert!(output.contains("\"https://b.example.com\""));
+}
+
+#[test]
+fn test_bp_url_idempotent() {
+    let input = "{ url = https://example.com; }";
+    let formatted = format(input);
+    let reformatted = format(formatted.trim_end());
+    assert_eq!(formatted.trim_end(), reformatted.trim_end(), "URL quoting is not idempotent");
+}
+
+#[test]
+fn test_bp_url_not_quoting_strings() {
+    // Already-quoted strings should stay quoted and not be double-quoted
+    let result = format("{ url = \"https://example.com\"; }");
+    assert_eq!(result.trim_end(), "{\n  url = \"https://example.com\";\n}");
+}
+
+#[test]
+fn test_bp_multiple_urls_in_attrset() {
+    let result = format("{ a = https://a.com; b = 2; c = https://c.com; }");
+    assert_eq!(result.trim_end(), "{\n  a = \"https://a.com\";\n  b = 2;\n  c = \"https://c.com\";\n}");
+}
+
+// ── Best-practice: rec → let-in transformation (stub) ────────────────────────
+
+#[test]
+fn test_bp_rec_attrset_preserved() {
+    let result = format("rec { a = 1; b = a + 2; }");
+    assert_eq!(result.trim_end(), "rec {\n  a = 1;\n  b = a + 2;\n}");
+}
+
+#[test]
+fn test_bp_rec_empty_attrset() {
+    let result = format("rec {}");
+    assert_eq!(result.trim_end(), "rec {}");
+}
+
+#[test]
+fn test_bp_rec_nested() {
+    let result = format("rec { outer = rec { x = 1; y = x * 2; }; }");
+    assert_eq!(result.trim_end(), "rec {\n  outer = rec {\n    x = 1;\n    y = x * 2;\n  };\n}");
+}
