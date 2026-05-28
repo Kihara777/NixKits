@@ -34,8 +34,6 @@ buildNpmPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  doCheck = false;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

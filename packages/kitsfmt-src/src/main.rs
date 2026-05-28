@@ -139,16 +139,21 @@ fn entry_sort_key(entry: &Entry) -> String {
             if attrs.is_empty() {
                 "inherit".to_string()
             } else {
-                format!("inherit {}", attrs.join(", "))
+                format!("inherit {}", attrs.join(" "))
             }
         }
     }
 }
 
-/// Indent continuation lines of a multiline expression (only for non-block values)
+/// Indent continuation lines of a multiline expression (only for non-block values).
+/// Skips indentation for values containing '' (indented strings) whose indentation
+/// is semantically meaningful and must be preserved exactly.
 fn indent_continuation(value: &str, prefix: &str) -> String {
     let lines: Vec<&str> = value.lines().collect();
     if lines.len() <= 1 {
+        return value.to_string();
+    }
+    if value.contains("''") {
         return value.to_string();
     }
     // Only indent continuation for expressions that don't start with { or [
@@ -239,7 +244,7 @@ fn format_entry(entry: &Entry, indent: usize) -> String {
                 .map(|a| a.to_string())
                 .collect();
 
-            if let Some(from) = inherit.from().and_then(|f| f.expr()) {
+                if let Some(from) = inherit.from().and_then(|f| f.expr()) {
                 if attrs.is_empty() {
                     format!(
                         "{}{}inherit ({});",
@@ -251,13 +256,13 @@ fn format_entry(entry: &Entry, indent: usize) -> String {
                         comment_part,
                         prefix,
                         format_expr(&from, indent),
-                        attrs.join(", ")
+                        attrs.join(" ")
                     )
                 }
             } else if attrs.is_empty() {
                 format!("{}{}inherit;", comment_part, prefix)
             } else {
-                format!("{}{}inherit {};", comment_part, prefix, attrs.join(", "))
+                format!("{}{}inherit {};", comment_part, prefix, attrs.join(" "))
             }
         }
     }
@@ -269,7 +274,7 @@ fn format_expr(expr: &ast::Expr, indent: usize) -> String {
         ast::Expr::Ident(ident) => ident.to_string(),
         ast::Expr::Literal(literal) => literal.to_string(),
         ast::Expr::Paren(paren) => paren.expr()
-            .map(|e| format!("({})", format_expr(&e, indent)))
+            .map(|e| format!("({})", format_expr(&e, 0)))
             .unwrap_or_else(|| "()".to_string()),
         ast::Expr::List(list) => format_list(list, indent),
         ast::Expr::AttrSet(attrset) => format_attrset(attrset, indent),
@@ -321,7 +326,7 @@ fn format_list(list: &ast::List, indent: usize) -> String {
                     formatted_items.push(format!("{}{}", item_prefix, formatted));
                 }
             }
-            NodeOrToken::Node(node) => {
+            NodeOrToken::Node(_node) => {
                 if item_idx < all_items.len() {
                     let item_expr = &all_items[item_idx];
                     let formatted = format_expr(item_expr, indent + 1);
@@ -400,11 +405,11 @@ fn format_let(let_in: &ast::LetIn, indent: usize) -> String {
                 if let Some(from) = inherit.from().and_then(|f| f.expr()) {
                     bindings_with_comments.push(format!(
                         "{}{}inherit ({}) {};", comment_part, binding_prefix,
-                        format_expr(&from, indent + 1), attrs.join(", ")
+                        format_expr(&from, indent + 1), attrs.join(" ")
                     ));
                 } else if !attrs.is_empty() {
                     bindings_with_comments.push(format!(
-                        "{}{}inherit {};", comment_part, binding_prefix, attrs.join(", ")
+                        "{}{}inherit {};", comment_part, binding_prefix, attrs.join(" ")
                     ));
                 }
             }
@@ -494,7 +499,7 @@ fn format_lambda(lambda: &ast::Lambda, indent: usize) -> String {
             if is_complex {
                 format!("{}{}:\n{}", prefix, arg_str, body)
             } else {
-                format!("{}{}: {}", prefix, arg_str, body)
+                format!("{}{}: {}", prefix, arg_str, body.trim_start())
             }
         }
         None => lambda.body()

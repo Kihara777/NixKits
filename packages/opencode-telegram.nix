@@ -33,8 +33,6 @@ buildNpmPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  doCheck = false;
-
   meta = {
     description = "OpenCode Telegram Bot - Secure Telegram client for OpenCode CLI";
     homepage = "https://github.com/grinev/opencode-telegram-bot";
