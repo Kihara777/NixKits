@@ -10,6 +10,20 @@
 }
 ```
 
+**推荐：使用 default overlay 一次性添加所有包**
+
+```nix
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+# → pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
+```
+
+**独立 overlay**（仅 overlay 存在的包）：
+
+```nix
+inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
+inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
+```
+
 ## 包
 
 | 包 | 说明 | 文档 |

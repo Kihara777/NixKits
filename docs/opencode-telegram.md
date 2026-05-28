@@ -23,8 +23,8 @@ opencode-telegram stop            # 停止
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
 
-# Overlay → pkgs.opencode-telegram
-nixpkgs.overlays = [ inputs.nix-kits.overlays.opencode-telegram ];
+# Default overlay → pkgs.opencode-telegram
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
 ## systemd 服务

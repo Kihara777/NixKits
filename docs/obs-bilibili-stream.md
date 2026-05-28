@@ -16,7 +16,7 @@ OBS Studio 的 Bilibili 直播推流插件。
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
   imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
 }
 ```
@@ -25,7 +25,7 @@ OBS Studio 的 Bilibili 直播推流插件。
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-bilibili-stream ];

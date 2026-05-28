@@ -14,8 +14,8 @@
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.mcp-searxng ];
 
-# Overlay → pkgs.mcp-searxng
-nixpkgs.overlays = [ inputs.nix-kits.overlays.mcp-searxng ];
+# Default overlay → pkgs.mcp-searxng
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
 ## 配置示例

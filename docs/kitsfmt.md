@@ -28,8 +28,8 @@ kitsfmt file1.nix file2.nix  # 多文件
 # 直接引用
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
 
-# Overlay
-nixpkgs.overlays = [ inputs.nix-kits.overlays.kitsfmt ];  # → pkgs.kitsfmt
+# Default overlay (推荐)
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
 ```
 
 ## 功能
