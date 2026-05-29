@@ -1,1 +1,0 @@
-<nixpkgs/pkgs/development/tools/rust/cargo>

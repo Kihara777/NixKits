@@ -1,1 +1,0 @@
-{ inherit a (b) c; }
