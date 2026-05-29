@@ -1,6 +1,6 @@
 diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/setup_aura.rs
 --- a/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:11:09.407105612 +0900
-+++ b/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:49:51.393139861 +0900
++++ b/rog-control-center/src/ui/setup_aura.rs	2026-05-29 15:20:49.696303113 +0900
 @@ -1,6 +1,6 @@
  use std::sync::{Arc, Mutex};
  
@@ -77,24 +77,58 @@ diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/
                          handle
                              .global::<AuraPageData>()
                              .set_supported_power_zones(p.as_slice().into());
-@@ -235,6 +263,25 @@
+@@ -235,6 +263,59 @@
              }
          });
          debug!("Aura setup done");
 +
 +        if !keyboard_connected {
++            // Listen for D-Bus InterfacesAdded to detect keyboard hotplug.
 +            let hotplug_handle = handle.clone();
-+            let hotplug_aura = aura.clone();
 +            tokio::spawn(async move {
-+                loop {
-+                    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
-+                    let Ok(dev) = hotplug_aura.device_type().await else { continue };
-+                    if dev == AuraDeviceType::Unknown { continue }
-+                    info!("Keyboard reconnected ({dev:?}), restoring Aura UI");
-+                    hotplug_handle.upgrade_in_event_loop(move |h| {
-+                        h.global::<AuraPageData>().set_device_type(dev.into());
-+                        h.global::<AuraPageData>().set_keyboard_connected(true);
-+                    }).ok();
++                let conn = match zbus::Connection::system().await {
++                    Ok(c) => c,
++                    Err(e) => {
++                        warn!("Hotplug: cannot connect to system bus: {e}");
++                        return;
++                    }
++                };
++                let mgr = match zbus::fdo::ObjectManagerProxy::new(
++                    &conn, "xyz.ljones.Asusd", "/",
++                )
++                .await
++                {
++                    Ok(m) => m,
++                    Err(e) => {
++                        warn!("Hotplug: cannot create ObjectManager proxy: {e}");
++                        return;
++                    }
++                };
++                use futures_util::StreamExt;
++                let mut stream = match mgr.receive_interfaces_added().await {
++                    Ok(s) => s,
++                    Err(e) => {
++                        warn!("Hotplug: cannot listen for interfaces: {e}");
++                        return;
++                    }
++                };
++                while let Some(signal) = stream.next().await {
++                    let Ok(args) = signal.args() else { continue };
++                    // Check if any newly-added interface is an Aura device
++                    let has_aura = args
++                        .interfaces_and_properties
++                        .iter()
++                        .any(|(iface, _)| iface.as_str() == "xyz.ljones.Aura");
++                    if !has_aura {
++                        continue;
++                    }
++                    info!("Aura interface appeared — keyboard reconnected, restoring UI");
++                    hotplug_handle
++                        .upgrade_in_event_loop(move |h| {
++                            h.global::<AuraPageData>()
++                                .set_keyboard_connected(true);
++                        })
++                        .ok();
 +                    break;
 +                }
 +            });
