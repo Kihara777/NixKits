@@ -8,7 +8,7 @@ Upstream [llama.cpp](https://github.com/ggml-org/llama.cpp) with ROCm GPU accele
 
 | Item | Value |
 |------|-------|
-| Version | Follows nixpkgs `llama-cpp` |
+| Version | Auto-tracks upstream |
 | Upstream | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
 | Note | Overlay-only, no standalone package output |
 

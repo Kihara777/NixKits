@@ -4,12 +4,16 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+
+    llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
+    llama-cpp-ver.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    llama-cpp-ver,
   } @ inputs:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = nixpkgs.legacyPackages.${system};
@@ -33,7 +37,7 @@
 
     overlays = {
       default           = import ./overlays/default.nix;
-      llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix;
+      llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
     };
 
