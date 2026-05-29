@@ -8,7 +8,7 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 |------|-----|
 | 版本 | 0.8.47 |
 | 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| 类型 | Rust 工作区（CLI + TUI 双二进制） |
+| 类型 | 预编译二进制（GitHub Releases） |
 
 ## 引用
 
