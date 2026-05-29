@@ -12,9 +12,7 @@ rustPlatform.buildRustPackage {
 
   src = ./kitsfmt-src;
 
-  cargoLock = {
-    lockFile = ./kitsfmt-src/Cargo.lock;
-  };
+  cargoVendorDir = "vendor";
 
   doCheck = true;
 
