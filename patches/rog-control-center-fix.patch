@@ -1,7 +1,6 @@
-diff --git a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/setup_aura.rs
-index f8b9577..00768d9 100644
---- a/rog-control-center/src/ui/setup_aura.rs
-+++ b/rog-control-center/src/ui/setup_aura.rs
+diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/src/ui/setup_aura.rs /tmp/rcc-fix-work/src/ui/setup_aura.rs
+--- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/src/ui/setup_aura.rs	1970-01-01 09:00:01.000000000 +0900
++++ /tmp/rcc-fix-work/src/ui/setup_aura.rs	2026-05-29 14:02:39.874129722 +0900
 @@ -1,6 +1,6 @@
  use std::sync::{Arc, Mutex};
  
@@ -10,41 +9,40 @@ index f8b9577..00768d9 100644
  use rog_aura::keyboard::LaptopAuraPower;
  use rog_aura::{AuraDeviceType, PowerZones};
  use rog_dbus::zbus_aura::AuraProxy;
-@@ -131,26 +131,60 @@ pub fn setup_aura_page(
+@@ -131,8 +131,25 @@
                  .device_type()
                  .await
                  .unwrap_or(AuraDeviceType::LaptopKeyboard2021);
-+            
-+            // 检查键盘是否连接：如果设备类型是 Unknown，可能键盘未连接
++
++            // Detect USB detachable keyboard (2-in-1 devices): if the
++            // device type is Unknown then the keyboard is likely not
++            // connected.  Disable Aura controls and show a message.
 +            let keyboard_connected = dev != AuraDeviceType::Unknown;
-+            
++
              handle
                  .upgrade_in_event_loop(move |handle| {
-+                    // 如果键盘未连接，禁用 Aura 页面并显示提示
 +                    if !keyboard_connected {
 +                        info!("Keyboard not detected. Aura controls disabled.");
-+                        // 设置一个标志来显示键盘未连接的提示
-+                        handle.global::<AuraPageData>().set_keyboard_connected(false);
++                        handle
++                            .global::<AuraPageData>()
++                            .set_keyboard_connected(false);
 +                        return;
 +                    }
-+                    
-+                    handle.global::<AuraPageData>().set_keyboard_connected(true);
-+                    
++                    handle
++                        .global::<AuraPageData>()
++                        .set_keyboard_connected(true);
++
                      let names: Vec<SharedString> = handle
                          .global::<AuraPageData>()
                          .get_power_zone_names()
-                         .iter()
-                         .collect();
-+                    
-                     if dev.is_old_laptop() {
-                         if pow3r.contains(&PowerZones::Keyboard)
-                             && pow3r.contains(&PowerZones::Lightbar)
+@@ -144,13 +161,35 @@
                          {
                              pow3r.push(PowerZones::KeyboardAndLightbar);
                          }
 -                        let n: Vec<SharedString> =
 -                            pow3r.iter().map(|z| names[(*z) as usize].clone()).collect();
-+                        // 添加边界检查，防止数组越界
++                        // Boundary check to prevent crash when names array
++                        // is smaller than the PowerZones discriminant.
 +                        let n: Vec<SharedString> = pow3r
 +                            .iter()
 +                            .filter_map(|z| {
@@ -52,7 +50,11 @@ index f8b9577..00768d9 100644
 +                                if idx >= 0 && (idx as usize) < names.len() {
 +                                    Some(names[idx as usize].clone())
 +                                } else {
-+                                    warn!("Invalid PowerZone index: {}, max: {}", idx, names.len());
++                                    warn!(
++                                        "Invalid PowerZone index: {}, max: {}",
++                                        idx,
++                                        names.len()
++                                    );
 +                                    None
 +                                }
 +                            })
@@ -62,53 +64,85 @@ index f8b9577..00768d9 100644
                              .set_power_zone_names_old(n.as_slice().into());
                      } else {
 -                        let p: Vec<SlintPowerZones> = pow3r.iter().map(|z| (*z).into()).collect();
-+                        // 过滤掉无效的 PowerZones
++                        // Filter out invalid PowerZones (the None variant = 255)
++                        // which can appear when hardware reports unknown zones.
 +                        let p: Vec<SlintPowerZones> = pow3r
 +                            .iter()
-+                            .filter(|z| {
-+                                // PowerZones::None = 255 是无效的，排除它
-+                                **z != PowerZones::None
-+                            })
++                            .filter(|z| **z != PowerZones::None)
 +                            .map(|z| (*z).into())
 +                            .collect();
                          handle
                              .global::<AuraPageData>()
                              .set_supported_power_zones(p.as_slice().into());
-diff --git a/rog-control-center/ui/pages/aura.slint b/rog-control-center/ui/pages/aura.slint
-index e7c3d2a..c01b74b 100644
---- a/rog-control-center/ui/pages/aura.slint
-+++ b/rog-control-center/ui/pages/aura.slint
-@@ -9,6 +9,41 @@ export component PageAura inherits Rectangle {
+@@ -235,6 +274,34 @@
+             }
+         });
+         debug!("Aura setup done");
++
++        // Hot-plug: if the keyboard was not connected at startup, keep
++        // polling the device type periodically.  When the keyboard is
++        // reconnected, restore the Aura UI without requiring a restart.
++        if !keyboard_connected {
++            let hotplug_handle = handle.clone();
++            let hotplug_aura = aura.clone();
++            tokio::spawn(async move {
++                loop {
++                    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
++                    let Ok(dev) = hotplug_aura.device_type().await else {
++                        continue;
++                    };
++                    if dev == AuraDeviceType::Unknown {
++                        continue;
++                    }
++                    info!("Keyboard reconnected (device type: {dev:?}), restoring Aura UI");
++                    hotplug_handle
++                        .upgrade_in_event_loop(move |h| {
++                            h.global::<AuraPageData>().set_device_type(dev.into());
++                            h.global::<AuraPageData>().set_keyboard_connected(true);
++                        })
++                        .ok();
++                    break;
++                }
++            });
++        }
++
+         Ok(())
+     });
+ }
+diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/pages/aura.slint /tmp/rcc-fix-work/ui/pages/aura.slint
+--- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/pages/aura.slint	1970-01-01 09:00:01.000000000 +0900
++++ /tmp/rcc-fix-work/ui/pages/aura.slint	2026-05-29 14:02:12.974343593 +0900
+@@ -9,6 +9,42 @@
      property <bool> show_fade_cover: false;
      property <bool> show_aura_power: false;
      callback external_colour_change();
-+    
-+    // 键盘未连接时的提示信息
++
++    // Keyboard-not-connected overlay for 2-in-1 detachable devices.
 +    if !AuraPageData.keyboard_connected: Rectangle {
++        background: Palette.background;
 +        width: 100%;
 +        height: 100%;
-+        background: Palette.background;
 +        opacity: 0.95;
 +        VerticalLayout {
 +            padding: 20px;
 +            spacing: 15px;
 +            alignment: LayoutAlignment.center;
-+            
++
 +            Text {
 +                text: @tr("Keyboard not detected");
 +                font-size: 20px;
 +                color: Palette.foreground;
 +                horizontal-alignment: TextHorizontalAlignment.center;
 +            }
-+            
++
 +            Text {
-+                text: @tr("The keyboard appears to be disconnected. This may happen on 2-in-1 devices after reboot. Please connect the keyboard and restart the application.");
++                text: @tr("The keyboard appears to be disconnected.  This may happen on 2-in-1 devices after reboot.  Please connect the keyboard and restart the application.");
 +                font-size: 14px;
 +                color: Palette.foreground;
 +                horizontal-alignment: TextHorizontalAlignment.center;
 +                wrap: TextWrap.word-wrap;
 +            }
-+            
++
 +            Text {
 +                text: @tr("Aura lighting controls are unavailable until the keyboard is connected.");
 +                font-size: 12px;
@@ -117,18 +151,20 @@ index e7c3d2a..c01b74b 100644
 +            }
 +        }
 +    }
++
      external_colour_change() => {
          c1.colourbox = AuraPageData.led_mode_data.colour1;
          c1.final_colour = AuraPageData.led_mode_data.colour1;
-diff --git a/rog-control-center/ui/types/aura_types.slint b/rog-control-center/ui/types/aura_types.slint
-index e6d4795..1fd06f3 100644
---- a/rog-control-center/ui/types/aura_types.slint
-+++ b/rog-control-center/ui/types/aura_types.slint
-@@ -168,4 +168,7 @@ export global AuraPageData {
+diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/types/aura_types.slint /tmp/rcc-fix-work/ui/types/aura_types.slint
+--- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/types/aura_types.slint	1970-01-01 09:00:01.000000000 +0900
++++ /tmp/rcc-fix-work/ui/types/aura_types.slint	2026-05-29 14:02:03.461062209 +0900
+@@ -168,4 +168,9 @@
          }]
      };
      callback cb_led_power(LaptopAuraPower);
-+    
-+    // 键盘连接状态：false 表示键盘未连接（二合一设备重启后）
++
++    // Keyboard connection status.  False when the keyboard is physically
++    // disconnected (2-in-1 detachable devices).  Aura lighting controls
++    // are unavailable until the keyboard is reconnected.
 +    in-out property <bool> keyboard_connected: true;
  }

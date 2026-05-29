@@ -437,3 +437,69 @@ fn test_bp_with_to_attrvalues_empty_list_noop() {
     let result = format("with pkgs; []");
     assert!(result.contains("with pkgs;"));
 }
+
+// ── CLI: --stdin flag ──────────────────────────────────────────────────────
+
+#[test]
+fn test_stdin_flag_explicit() {
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("--stdin")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    child.stdin.as_mut().unwrap().write_all(b"{ a = 1; }").unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    let result = String::from_utf8_lossy(&output.stdout).to_string();
+    assert_eq!(result.trim_end(), "{\n  a = 1;\n}");
+}
+
+#[test]
+fn test_stdin_flag_overrides_files() {
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("--stdin")
+        .arg("/nonexistent/file.nix")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    child.stdin.as_mut().unwrap().write_all(b"{ z = 1; }").unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    let result = String::from_utf8_lossy(&output.stdout).to_string();
+    assert_eq!(result.trim_end(), "{\n  z = 1;\n}");
+}
+
+#[test]
+fn test_stdin_flag_with_check() {
+    let formatted = format("{ a = 1; }");
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("--stdin")
+        .arg("-c")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    child.stdin.as_mut().unwrap().write_all(formatted.as_bytes()).unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    assert!(output.status.success(), "Check failed: {}", String::from_utf8_lossy(&output.stderr));
+}
+
+#[test]
+fn test_stdin_flag_via_env() {
+    let mut child = Command::new(env!("CARGO_BIN_EXE_kitsfmt"))
+        .arg("-s")
+        .env("KITSFMT_BEST_PRACTICES", "0")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to spawn kitsfmt");
+    child.stdin.as_mut().unwrap().write_all(b"{ url = https://x.com; }").unwrap();
+    let output = child.wait_with_output().expect("Failed to wait");
+    let result = String::from_utf8_lossy(&output.stdout).to_string();
+    assert!(result.contains("https://x.com"));
+    assert!(!result.contains("\"https://x.com\""));
+}
