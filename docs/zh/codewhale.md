@@ -1,5 +1,7 @@
 # codewhale
 
+[中文](codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md)
+
 DeepSeek V4 专用的终端编码代理（TUI 工具）。
 
 ## 基本信息

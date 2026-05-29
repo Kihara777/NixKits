@@ -1,5 +1,7 @@
 # kitsfmt
 
+[中文](kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md)
+
 **Nix 格式化器** — 基于 rnix AST，支持属性排序、注释保留、缩进规范化。
 
 ## 基本信息

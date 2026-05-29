@@ -1,5 +1,7 @@
 # llama-cpp-rocm
 
+[中文](llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md)
+
 基于 [llama.cpp](https://github.com/ggml-org/llama.cpp) 上游，启用 ROCm GPU 加速。版本自动追踪上游最新 Release。
 
 ## 基本信息

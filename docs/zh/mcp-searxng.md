@@ -1,5 +1,7 @@
 # mcp-searxng
 
+[中文](mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md)
+
 [SearXNG](https://docs.searxng.org) 的 [MCP Server](https://modelcontextprotocol.io)，为 AI 助手提供网页搜索能力。
 
 ## 基本信息

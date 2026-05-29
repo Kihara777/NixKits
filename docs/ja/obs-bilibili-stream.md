@@ -1,18 +1,20 @@
 # obs-bilibili-stream
 
-OBS Studio 的 Bilibili 直播推流插件。
+[中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](obs-bilibili-stream.md)
 
-## 基本信息
+OBS Studio 用 Bilibili ライブ配信プラグイン。
 
-| 项目 | 值 |
+## 基本情報
+
+| 項目 | 値 |
 |------|-----|
-| 版本 | 2.0.12 |
-| 上游 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| 平台 | Linux only |
+| バージョン | 2.0.12 |
+| アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| プラットフォーム | Linux のみ |
 
-## 引用
+## インストール
 
-**推荐：NixOS 模块**
+**推奨: NixOS モジュール**
 
 ```nix
 {
@@ -21,7 +23,7 @@ OBS Studio 的 Bilibili 直播推流插件。
 }
 ```
 
-**手动**
+**手動**
 
 ```nix
 {

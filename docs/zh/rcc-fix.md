@@ -1,5 +1,7 @@
 # rcc-fix
 
+[中文](rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md)
+
 修补 `asusctl`，改善 ASUS ROG Control Center 在二合一设备上的体验。
 
 ## 基本信息

@@ -28,13 +28,13 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 
 | 包 | 说明 | 文档 |
 |---|------|------|
-| codewhale | DeepSeek V4 终端编码代理 | [docs/codewhale.md](docs/codewhale.md) |
-| kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/kitsfmt.md](docs/kitsfmt.md) |
-| opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/opencode-telegram.md](docs/opencode-telegram.md) |
-| mcp-searxng | SearXNG 的 MCP Server | [docs/mcp-searxng.md](docs/mcp-searxng.md) |
-| obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/obs-bilibili-stream.md](docs/obs-bilibili-stream.md) |
-| llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/llama-cpp-rocm.md](docs/llama-cpp-rocm.md) |
-| rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/rcc-fix.md](docs/rcc-fix.md) |
+| codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
+| kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
+| opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
+| mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
+| obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
+| llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
+| rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 
 支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
