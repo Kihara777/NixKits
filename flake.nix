@@ -19,11 +19,12 @@
     pkgs = nixpkgs.legacyPackages.${system};
   in {
     packages = rec {
+      codewhale            = pkgs.callPackage ./packages/codewhale.nix { };
       kitsfmt              = pkgs.callPackage ./packages/kitsfmt.nix { };
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
       obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
-      default              = kitsfmt;
+      default              = codewhale;
     };
   }) // {
 

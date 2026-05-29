@@ -14,7 +14,7 @@
 
 ```nix
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-# → pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
+# → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```
 
 **独立 overlay**（仅 overlay 存在的包）：
@@ -28,6 +28,7 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 
 | 包 | 说明 | 文档 |
 |---|------|------|
+| codewhale | DeepSeek V4 终端编码代理 | [docs/codewhale.md](docs/codewhale.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/kitsfmt.md](docs/kitsfmt.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/opencode-telegram.md](docs/opencode-telegram.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/mcp-searxng.md](docs/mcp-searxng.md) |
