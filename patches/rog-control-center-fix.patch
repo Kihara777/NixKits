@@ -1,6 +1,6 @@
-diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/src/ui/setup_aura.rs /tmp/rcc-fix-work/src/ui/setup_aura.rs
---- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/src/ui/setup_aura.rs	1970-01-01 09:00:01.000000000 +0900
-+++ /tmp/rcc-fix-work/src/ui/setup_aura.rs	2026-05-29 14:02:39.874129722 +0900
+diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/setup_aura.rs
+--- a/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:11:09.407105612 +0900
++++ b/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:14:01.641516766 +0900
 @@ -1,6 +1,6 @@
  use std::sync::{Arc, Mutex};
  
@@ -9,40 +9,37 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
  use rog_aura::keyboard::LaptopAuraPower;
  use rog_aura::{AuraDeviceType, PowerZones};
  use rog_dbus::zbus_aura::AuraProxy;
-@@ -131,8 +131,25 @@
+@@ -126,13 +126,24 @@
+             .map_err(|e| error!("{e}"))
+             .ok();
+ 
++        let mut keyboard_connected = false;
+         if let Ok(mut pow3r) = aura.supported_power_zones().await {
+             let dev = aura
                  .device_type()
                  .await
                  .unwrap_or(AuraDeviceType::LaptopKeyboard2021);
 +
-+            // Detect USB detachable keyboard (2-in-1 devices): if the
-+            // device type is Unknown then the keyboard is likely not
-+            // connected.  Disable Aura controls and show a message.
-+            let keyboard_connected = dev != AuraDeviceType::Unknown;
++            keyboard_connected = dev != AuraDeviceType::Unknown;
 +
              handle
                  .upgrade_in_event_loop(move |handle| {
 +                    if !keyboard_connected {
 +                        info!("Keyboard not detected. Aura controls disabled.");
-+                        handle
-+                            .global::<AuraPageData>()
-+                            .set_keyboard_connected(false);
++                        handle.global::<AuraPageData>().set_keyboard_connected(false);
 +                        return;
 +                    }
-+                    handle
-+                        .global::<AuraPageData>()
-+                        .set_keyboard_connected(true);
++                    handle.global::<AuraPageData>().set_keyboard_connected(true);
 +
                      let names: Vec<SharedString> = handle
                          .global::<AuraPageData>()
                          .get_power_zone_names()
-@@ -144,13 +161,35 @@
+@@ -144,13 +155,27 @@
                          {
                              pow3r.push(PowerZones::KeyboardAndLightbar);
                          }
 -                        let n: Vec<SharedString> =
 -                            pow3r.iter().map(|z| names[(*z) as usize].clone()).collect();
-+                        // Boundary check to prevent crash when names array
-+                        // is smaller than the PowerZones discriminant.
 +                        let n: Vec<SharedString> = pow3r
 +                            .iter()
 +                            .filter_map(|z| {
@@ -50,11 +47,7 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
 +                                if idx >= 0 && (idx as usize) < names.len() {
 +                                    Some(names[idx as usize].clone())
 +                                } else {
-+                                    warn!(
-+                                        "Invalid PowerZone index: {}, max: {}",
-+                                        idx,
-+                                        names.len()
-+                                    );
++                                    warn!("Invalid PowerZone idx {}", idx);
 +                                    None
 +                                }
 +                            })
@@ -64,8 +57,6 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
                              .set_power_zone_names_old(n.as_slice().into());
                      } else {
 -                        let p: Vec<SlintPowerZones> = pow3r.iter().map(|z| (*z).into()).collect();
-+                        // Filter out invalid PowerZones (the None variant = 255)
-+                        // which can appear when hardware reports unknown zones.
 +                        let p: Vec<SlintPowerZones> = pow3r
 +                            .iter()
 +                            .filter(|z| **z != PowerZones::None)
@@ -74,33 +65,24 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
                          handle
                              .global::<AuraPageData>()
                              .set_supported_power_zones(p.as_slice().into());
-@@ -235,6 +274,34 @@
+@@ -235,6 +260,25 @@
              }
          });
          debug!("Aura setup done");
 +
-+        // Hot-plug: if the keyboard was not connected at startup, keep
-+        // polling the device type periodically.  When the keyboard is
-+        // reconnected, restore the Aura UI without requiring a restart.
 +        if !keyboard_connected {
 +            let hotplug_handle = handle.clone();
 +            let hotplug_aura = aura.clone();
 +            tokio::spawn(async move {
 +                loop {
 +                    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
-+                    let Ok(dev) = hotplug_aura.device_type().await else {
-+                        continue;
-+                    };
-+                    if dev == AuraDeviceType::Unknown {
-+                        continue;
-+                    }
-+                    info!("Keyboard reconnected (device type: {dev:?}), restoring Aura UI");
-+                    hotplug_handle
-+                        .upgrade_in_event_loop(move |h| {
-+                            h.global::<AuraPageData>().set_device_type(dev.into());
-+                            h.global::<AuraPageData>().set_keyboard_connected(true);
-+                        })
-+                        .ok();
++                    let Ok(dev) = hotplug_aura.device_type().await else { continue };
++                    if dev == AuraDeviceType::Unknown { continue }
++                    info!("Keyboard reconnected ({dev:?}), restoring Aura UI");
++                    hotplug_handle.upgrade_in_event_loop(move |h| {
++                        h.global::<AuraPageData>().set_device_type(dev.into());
++                        h.global::<AuraPageData>().set_keyboard_connected(true);
++                    }).ok();
 +                    break;
 +                }
 +            });
@@ -109,15 +91,14 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
          Ok(())
      });
  }
-diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/pages/aura.slint /tmp/rcc-fix-work/ui/pages/aura.slint
---- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/pages/aura.slint	1970-01-01 09:00:01.000000000 +0900
-+++ /tmp/rcc-fix-work/ui/pages/aura.slint	2026-05-29 14:02:12.974343593 +0900
-@@ -9,6 +9,42 @@
+diff -ruN a/rog-control-center/ui/pages/aura.slint b/rog-control-center/ui/pages/aura.slint
+--- a/rog-control-center/ui/pages/aura.slint	2026-05-29 14:11:09.407809238 +0900
++++ b/rog-control-center/ui/pages/aura.slint	2026-05-29 14:11:09.410029880 +0900
+@@ -9,6 +9,41 @@
      property <bool> show_fade_cover: false;
      property <bool> show_aura_power: false;
      callback external_colour_change();
 +
-+    // Keyboard-not-connected overlay for 2-in-1 detachable devices.
 +    if !AuraPageData.keyboard_connected: Rectangle {
 +        background: Palette.background;
 +        width: 100%;
@@ -136,7 +117,7 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
 +            }
 +
 +            Text {
-+                text: @tr("The keyboard appears to be disconnected.  This may happen on 2-in-1 devices after reboot.  Please connect the keyboard and restart the application.");
++                text: @tr("The keyboard appears to be disconnected. This may happen on 2-in-1 devices after reboot. Please connect the keyboard and restart the application.");
 +                font-size: 14px;
 +                color: Palette.foreground;
 +                horizontal-alignment: TextHorizontalAlignment.center;
@@ -155,16 +136,69 @@ diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/
      external_colour_change() => {
          c1.colourbox = AuraPageData.led_mode_data.colour1;
          c1.final_colour = AuraPageData.led_mode_data.colour1;
-diff -ruN /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/types/aura_types.slint /tmp/rcc-fix-work/ui/types/aura_types.slint
---- /nix/store/5bcrcg8ikifyswhaxvpzzqsxydiyagv5-source/rog-control-center/ui/types/aura_types.slint	1970-01-01 09:00:01.000000000 +0900
-+++ /tmp/rcc-fix-work/ui/types/aura_types.slint	2026-05-29 14:02:03.461062209 +0900
-@@ -168,4 +168,9 @@
+@@ -215,7 +250,6 @@
+ 
+                 for state[idx] in AuraPageData.led_power.states: zone := AuraPowerGroup {
+                     group-title: AuraPageData.power_zone_names[state.zone_name_idx];
+-                    // TODO: use the zone name
+                     boot_checked: state.boot;
+                     boot_toggled => {
+                         AuraPageData.led_power.states[idx].boot = zone.boot_checked;
+@@ -241,10 +275,6 @@
+         }
+     }
+ 
+-    // TUF devices: show the same configurable power groups as `New`, since
+-    // `setup_aura` fills `AuraPageData.supported_power_zones` and `led_power`
+-    // appropriately for TUF devices. This ensures the Power Settings panel
+-    // reflects what the firmware reports for TUF models.
+     if root.show_aura_power && AuraPageData.device_type == AuraDevType.Tuf: Rectangle {
+         background: Palette.background;
+         width: 100%;
+diff -ruN a/rog-control-center/ui/types/aura_types.slint b/rog-control-center/ui/types/aura_types.slint
+--- a/rog-control-center/ui/types/aura_types.slint	2026-05-29 14:11:09.408503225 +0900
++++ b/rog-control-center/ui/types/aura_types.slint	2026-05-29 14:11:09.410733746 +0900
+@@ -9,17 +9,11 @@
+ }
+ 
+ export struct AuraEffect {
+-    /// The effect type
+     mode: int,
+-    /// `AuraZone::None` for no zone or zoneless keyboards
+     zone: int,
+-    /// Primary colour for all modes
+     colour1: color,
+-    /// Secondary colour in some modes like Breathing or Stars
+     colour2: color,
+-    /// One of three speeds for modes that support speed (most that animate)
+     speed: int,
+-    /// Up, down, left, right. Only Rainbow mode seems to use this
+     direction: int,
+ }
+ 
+@@ -46,9 +40,6 @@
+     states: [AuraPowerState],
+ }
+ 
+-// Modes with colour1: Static,Breathe,Star,Rain,Highlight,Laser,Ripple,Pulse,Comet,Flash (excl. Strobe,Rainbow,Nothing)
+-// Modes with colour2: Breathe, Star only.
+-// Speed: Breathe,Strobe,Rainbow,Star,Rain,Highlight,Laser,Ripple. Direction: Rainbow only.
+ export global AuraPageData {
+     in-out property <[string]> power_zone_names: [
+         @tr("Aura power zone" => "Logo"),
+@@ -59,8 +50,6 @@
+         @tr("Aura power zone" => "Keyboard and Lightbar"),
+         @tr("Aura power zone" => "Ally"),
+     ];
+-    // Exists only for the older 0x1866 keybaords. On page setup it must
+-    // be set to match the supported_power_zones
+     in-out property <[string]> power_zone_names_old: [
+         @tr("Aura power zone" => "Keyboard"),
+         @tr("Aura power zone" => "Lightbar"),
+@@ -168,4 +157,6 @@
          }]
      };
      callback cb_led_power(LaptopAuraPower);
 +
-+    // Keyboard connection status.  False when the keyboard is physically
-+    // disconnected (2-in-1 detachable devices).  Aura lighting controls
-+    // are unavailable until the keyboard is reconnected.
 +    in-out property <bool> keyboard_connected: true;
  }
