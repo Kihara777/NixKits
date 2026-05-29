@@ -1,5 +1,6 @@
 # Nix build artifacts
 result
+flake.lock
 *.drv
 *.log
 *.o
