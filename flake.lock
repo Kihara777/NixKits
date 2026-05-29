@@ -21,7 +21,7 @@
     "llama-cpp-ver": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-xRZXdLDVRPbt1A7tyyv66SbZJ1vGLZ/yC2E+bG6MJAo=",
+        "narHash": "sha256-90ypnRoUfDK41yjKZ4nb637YjRiW0uE2DeGneaEkA3o=",
         "type": "file",
         "url": "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest"
       },
