@@ -8,7 +8,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 自动追踪上游最新 Release |
+| 版本 | 跟随 nixpkgs `llama-cpp` |
 | 上游 | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
 | 注意 | 此包仅以 overlay 形式提供，无独立 package 输出 |
 

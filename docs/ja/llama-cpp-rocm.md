@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | アップストリーム最新リリースを自動追跡 |
+| バージョン | nixpkgs `llama-cpp` に追従 |
 | アップストリーム | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
 | 注意 | overlay のみ提供、単独パッケージ出力なし |
 
