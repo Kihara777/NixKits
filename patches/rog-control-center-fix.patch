@@ -1,6 +1,6 @@
 diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/setup_aura.rs
 --- a/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:11:09.407105612 +0900
-+++ b/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:14:01.641516766 +0900
++++ b/rog-control-center/src/ui/setup_aura.rs	2026-05-29 14:49:51.393139861 +0900
 @@ -1,6 +1,6 @@
  use std::sync::{Arc, Mutex};
  
@@ -9,7 +9,19 @@ diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/
  use rog_aura::keyboard::LaptopAuraPower;
  use rog_aura::{AuraDeviceType, PowerZones};
  use rog_dbus::zbus_aura::AuraProxy;
-@@ -126,13 +126,24 @@
+@@ -75,7 +75,10 @@
+     let handle = ui.as_weak();
+     tokio::spawn(async move {
+         let Ok(aura) = find_aura_iface().await else {
+-            info!("No aura interfaces");
++            info!("No aura interfaces — keyboard likely disconnected");
++            handle.upgrade_in_event_loop(move |h| {
++                h.global::<AuraPageData>().set_keyboard_connected(false);
++            }).ok();
+             return Ok::<(), zbus::Error>(());
+         };
+ 
+@@ -126,13 +129,24 @@
              .map_err(|e| error!("{e}"))
              .ok();
  
@@ -34,7 +46,7 @@ diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/
                      let names: Vec<SharedString> = handle
                          .global::<AuraPageData>()
                          .get_power_zone_names()
-@@ -144,13 +155,27 @@
+@@ -144,13 +158,27 @@
                          {
                              pow3r.push(PowerZones::KeyboardAndLightbar);
                          }
@@ -65,7 +77,7 @@ diff -ruN a/rog-control-center/src/ui/setup_aura.rs b/rog-control-center/src/ui/
                          handle
                              .global::<AuraPageData>()
                              .set_supported_power_zones(p.as_slice().into());
-@@ -235,6 +260,25 @@
+@@ -235,6 +263,25 @@
              }
          });
          debug!("Aura setup done");
