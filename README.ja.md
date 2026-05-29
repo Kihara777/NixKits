@@ -1,0 +1,50 @@
+# NixKits
+
+[中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
+
+カスタムパッケージ、overlay、NixOS モジュールを提供する個人用 NixOS flake リポジトリ。
+
+## クイックスタート
+
+```nix
+{
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
+}
+```
+
+**推奨: デフォルト overlay ですべてのパッケージを追加**
+
+```nix
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+# → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
+```
+
+**スタンドアロン overlay**（overlay のみのパッケージ）:
+
+```nix
+inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
+inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl（パッチ適用済み）
+```
+
+## パッケージ
+
+| パッケージ | 説明 | ドキュメント |
+|-----------|------|-------------|
+| codewhale | DeepSeek V4 ターミナルコーディングエージェント | [docs/ja/codewhale.md](docs/ja/codewhale.md) |
+| kitsfmt | Nix フォーマッター（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](docs/ja/kitsfmt.md) |
+| opencode-telegram | OpenCode Telegram Bot クライアント | [docs/ja/opencode-telegram.md](docs/ja/opencode-telegram.md) |
+| mcp-searxng | SearXNG 用 MCP Server | [docs/ja/mcp-searxng.md](docs/ja/mcp-searxng.md) |
+| obs-bilibili-stream | OBS 用 Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](docs/ja/obs-bilibili-stream.md) |
+| llama-cpp-rocm | ROCm アクセラレーション llama.cpp | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
+| rcc-fix | 2-in-1 デバイス向け asusctl パッチ | [docs/ja/rcc-fix.md](docs/ja/rcc-fix.md) |
+
+対応システム: すべての `lib.platforms.linux`（nixpkgs に自動追従）
+
+## 作者
+
+- **狐莉 (Kitsunori)** — 作成・メンテナンス
+- **小爪 (Kitsunome)** — 設計・開発 feat. deepseek-v4-pro (Max) · llama-cpp-rocm: Qwen3.6-27B-MTP · Qwen3.6-35B-A3B-MTP · Qwen3.5-122B-A10B-MTP · Qwen3-Coder-Next · MiniMax-M2.7
+
+## ライセンス
+
+MIT

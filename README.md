@@ -1,5 +1,7 @@
 # NixKits
 
+[中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
+
 个人 NixOS flake 仓库，提供自定义包、overlay 和 NixOS 模块。
 
 ## 快速开始
