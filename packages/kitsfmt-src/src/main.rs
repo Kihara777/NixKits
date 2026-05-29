@@ -41,6 +41,7 @@ fn print_usage() {
     eprintln!("Options:");
     eprintln!("  -i, --inplace          Modify file(s) in-place [env: KITSFMT_INPLACE=1]");
     eprintln!("  -c, --check            Check if file(s) are formatted correctly [env: KITSFMT_CHECK=1]");
+    eprintln!("  -s, --stdin            Read from stdin explicitly [env: KITSFMT_STDIN=1]");
     eprintln!("  -B, --no-best-practices  Disable best-practice auto-corrections [env: KITSFMT_BEST_PRACTICES=0]");
     eprintln!("  -v, --version          Print version information");
     eprintln!("  -h, --help             Print help information");
@@ -1072,11 +1073,13 @@ fn main() -> ExitCode {
     let mut inplace = false;
     let mut check = false;
     let mut no_best_practices = false;
+    let mut stdin_mode = false;
     let mut files: Vec<String> = Vec::new();
 
     // Apply env var defaults (CLI flags override them)
     if let Some(v) = env_bool("KITSFMT_INPLACE")       { inplace = v; }
     if let Some(v) = env_bool("KITSFMT_CHECK")         { check = v; }
+    if let Some(v) = env_bool("KITSFMT_STDIN")         { stdin_mode = v; }
     if let Some(v) = env_bool("KITSFMT_BEST_PRACTICES") { no_best_practices = !v; }
 
     let mut i = 1;
@@ -1087,6 +1090,9 @@ fn main() -> ExitCode {
             }
             "-c" | "--check" => {
                 check = true;
+            }
+            "-s" | "--stdin" => {
+                stdin_mode = true;
             }
             "-B" | "--no-best-practices" => {
                 no_best_practices = true;
@@ -1100,8 +1106,8 @@ fn main() -> ExitCode {
 
     BEST_PRACTICES.with(|bp| bp.set(!no_best_practices));
 
-    // Stdin mode
-    if files.is_empty() {
+    // Stdin mode: no files, or --stdin flag explicitly set
+    if files.is_empty() || stdin_mode {
         let content = {
             let mut buffer = String::new();
             if let Err(e) = io::stdin().read_to_string(&mut buffer) {
