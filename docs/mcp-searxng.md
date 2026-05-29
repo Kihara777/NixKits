@@ -25,7 +25,7 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
   "mcpServers": {
     "searxng": {
       "command": "mcp-searxng",
-      "env": { "SEARXNG_URL": "https://your-instance" }
+      "env": { "SEARXNG_URL": "http://127.0.0.1:4270" }
     }
   }
 }

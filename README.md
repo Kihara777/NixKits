@@ -38,15 +38,6 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 
 支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
-## 开发
-
-```bash
-nix flake check              # 检查当前系统
-nix flake check --all-systems
-nix build .#kitsfmt          # 构建指定包
-nix fmt                      # 使用 kitsfmt 格式化本仓库
-```
-
 ## 作者
 
 - **狐莉 (Kitsunori)** — 创建和维护
