@@ -30,6 +30,12 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ]
 
 # Default overlay (推荐)
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
+
+# 作为 nix fmt 的 formatter
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+# flake.nix:
+#   formatter.${system} = inputs.nix-kits.formatter.${system};
+# 然后运行: nix fmt
 ```
 
 ## 功能

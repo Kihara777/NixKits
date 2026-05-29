@@ -17,15 +17,20 @@
   } @ inputs:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = nixpkgs.legacyPackages.${system};
+    kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
     packages = rec {
       codewhale            = pkgs.callPackage ./packages/codewhale.nix { };
-      kitsfmt              = pkgs.callPackage ./packages/kitsfmt.nix { };
+      kitsfmt              = kitsfmtDrv;
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
       obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       default              = codewhale;
     };
+
+    formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
+      exec ${kitsfmtDrv}/bin/kitsfmt -i "$@"
+    '';
   }) // {
 
     nixosModules.obs-bilibili-stream = import ./modules/obs-bilibili-stream.nix;

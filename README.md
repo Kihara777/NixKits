@@ -44,6 +44,7 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 nix flake check              # 检查当前系统
 nix flake check --all-systems
 nix build .#kitsfmt          # 构建指定包
+nix fmt                      # 使用 kitsfmt 格式化本仓库
 ```
 
 ## 作者
