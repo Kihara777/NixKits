@@ -48,6 +48,7 @@ OpenCode / CodeWhale auxiliary skills:
 |-------|-------------|------|
 | recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/en/skills/recover-nixos-config.md](docs/en/skills/recover-nixos-config.md) |
 | nixos-modern-cli | NixOS modern CLI operations guide (for AI models) | [docs/en/skills/nixos-modern-cli.md](docs/en/skills/nixos-modern-cli.md) |
+| nixkits-skills | NixKits skills installer (local/online) | [docs/en/skills/nixkits-skills.md](docs/en/skills/nixkits-skills.md) |
 
 ## Authors
 
