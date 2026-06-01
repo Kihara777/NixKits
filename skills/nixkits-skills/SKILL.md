@@ -1,6 +1,6 @@
 ---
 name: nixkits-skills
-description: Use when the user wants to install or update NixKits skills into coding agent directories (opencode, codewhale, etc.). Supports local and online installation modes.
+description: Use when the user wants to install or update NixKits skills into coding agent directories (opencode, codewhale, claude, openclaw, agents). Supports local and online installation modes.
 ---
 
 # NixKits Skills Installer

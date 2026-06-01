@@ -2,13 +2,13 @@
 
 [中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](recover-nixos-config.md)
 
-> OpenCode / CodeWhale スキル：誤って削除した `/etc/nixos` の設定ファイルを Nix store から復旧します。
+> Coding Agent スキル：誤って削除した `/etc/nixos` の設定ファイルを Nix store から復旧します。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | OpenCode / CodeWhale スキル |
+| タイプ | Coding Agent スキル |
 | パス | `skills/recover-nixos-config/SKILL.md` |
 
 ## トリガー

@@ -42,7 +42,7 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl（パッチ適用済
 
 ## スキル
 
-OpenCode / CodeWhale 補助スキル：
+複数のコーディングエージェント向け補助スキル：
 
 | スキル | 説明 | ドキュメント |
 |--------|------|-------------|

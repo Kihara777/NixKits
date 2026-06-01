@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | OpenCode / CodeWhale スキル |
+| タイプ | Coding Agent スキル |
 | パス | `skills/nixos-modern-cli/SKILL.md` |
 
 ## 解決する問題

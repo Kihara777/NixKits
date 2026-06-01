@@ -42,7 +42,7 @@ Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 
 ## Skills
 
-OpenCode / CodeWhale auxiliary skills:
+Auxiliary skills for multiple coding agents:
 
 | Skill | Description | Docs |
 |-------|-------------|------|

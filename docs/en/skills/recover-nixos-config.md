@@ -2,13 +2,13 @@
 
 [中文](../../zh/skills/recover-nixos-config.md) | [English](recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md)
 
-> OpenCode / CodeWhale skill: recover accidentally deleted `/etc/nixos` config files from the Nix store.
+> Coding Agent skill: recover accidentally deleted `/etc/nixos` config files from the Nix store.
 
 ## Info
 
 | Item | Value |
 |------|-------|
-| Type | OpenCode / CodeWhale Skill |
+| Type | Coding Agent Skill |
 | Path | `skills/recover-nixos-config/SKILL.md` |
 
 ## Trigger

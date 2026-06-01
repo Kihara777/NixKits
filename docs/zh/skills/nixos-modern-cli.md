@@ -8,7 +8,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 类型 | OpenCode / CodeWhale Skill |
+| 类型 | Coding Agent Skill |
 | 路径 | `skills/nixos-modern-cli/SKILL.md` |
 
 ## 解决的问题

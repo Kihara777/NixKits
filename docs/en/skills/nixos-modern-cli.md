@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| Type | OpenCode / CodeWhale Skill |
+| Type | Coding Agent Skill |
 | Path | `skills/nixos-modern-cli/SKILL.md` |
 
 ## Problem Solved

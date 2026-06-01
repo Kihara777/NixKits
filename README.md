@@ -40,9 +40,9 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 
 支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
-## Skills
+## 技能
 
-OpenCode / CodeWhale 辅助技能：
+面向多种 coding agent 的辅助技能：
 
 | 技能 | 说明 | 文档 |
 |------|------|------|
