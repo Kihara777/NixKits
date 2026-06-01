@@ -39,6 +39,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
     users.users = lib.mkIf (cfg.user == "opencode-telegram") {
       opencode-telegram = {
         isSystemUser = true;
