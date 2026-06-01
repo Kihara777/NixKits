@@ -29,7 +29,25 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## 系统服务
+## NixOS 模块（推荐）
+
+```nix
+{
+  imports = [ inputs.nix-kits.nixosModules.opencode-telegram ];
+
+  services.opencode-telegram = {
+    enable = true;
+    user = "kix";
+    group = "users";
+    afterServices = [ "network-online.target" "llama-cpp.service" ];
+    environment = {
+      PATH = "${pkgs.opencode}/bin:${pkgs.opencode-telegram}/bin:/run/wrappers/bin";
+    };
+  };
+}
+```
+
+## 手动 systemd 服务
 
 ```nix
 systemd.services.opencode-telegram = {

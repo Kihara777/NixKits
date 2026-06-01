@@ -34,6 +34,7 @@
   }) // {
 
     nixosModules.obs-bilibili-stream = import ./modules/obs-bilibili-stream.nix;
+    nixosModules.opencode-telegram   = import ./modules/opencode-telegram.nix;
 
     overlays = {
       default           = import ./overlays/default.nix;
