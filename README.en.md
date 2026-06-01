@@ -58,4 +58,4 @@ Auxiliary skills for multiple coding agents:
 
 ## License
 
-MIT
+[MIT](LICENSE)

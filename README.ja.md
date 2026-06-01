@@ -58,4 +58,4 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl（パッチ適用済
 
 ## ライセンス
 
-MIT
+[MIT](LICENSE)
