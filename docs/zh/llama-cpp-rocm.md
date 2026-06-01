@@ -28,50 +28,47 @@ llama-server -m model.gguf --gpu-device 0
 llama-cli -m model.gguf -p "Hello" --gpu-device 0
 ```
 
-## 系统服务
+## flake 模块
 
 ```nix
-let
-  hfCache = "/home/kix/.cache/huggingface/hub";
-in
+# flake.nix
 {
-  services.llama-cpp = {
-    enable = true;
-    package = pkgs.llama-cpp-rocm;
-    port = 2027;
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-    modelsPreset = {
-      "*" = {
-        n-gpu-layers = "99";
-        threads = "32";
-        flash-attn = "on";
-        cache-type-k = "q4_0";
-        cache-type-v = "q4_0";
-      };
-      "Qwen3.6-27B-MTP" = {
-        hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
-        alias = "Qwen3.6-27B-MTP";
-        temp = "0.6";
-        ctx-size = "1048576";
-      };
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.llama-cpp-rocm
+        {
+          services.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
+          };
+          services.llama-cpp = {
+            enable = true;
+            package = pkgs.llama-cpp-rocm;
+            port = 2027;
+            modelsPreset = {
+              "*" = {
+                n-gpu-layers = "99";
+                flash-attn = "on";
+              };
+              "Qwen3.6-27B-MTP" = {
+                hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+                temp = "0.6";
+                ctx-size = "1048576";
+              };
+            };
+          };
+        }
+      ];
     };
-  };
-
-  # 修改默认 systemd 服务以支持用户目录下的模型缓存
-  systemd.services.llama-cpp.serviceConfig = {
-    DynamicUser  = lib.mkForce false;
-    PrivateUsers = lib.mkForce false;
-    ProtectHome  = lib.mkForce false;    # 允许访问 /home 下的模型目录
-    ProcSubset   = lib.mkForce "all";     # 避免 journalctl 内存信息受限提示
-    User  = lib.mkForce "kix";
-    Group = lib.mkForce "users";
-    Environment = lib.mkForce [
-      "LLAMA_CACHE=${hfCache}"            # HuggingFace 缓存路径
-      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
-    ];
   };
 }
 ```
+
+模块自动将 `LLAMA_CACHE` 指向 `/home/<user>/.cache/huggingface/hub`，解除 `/home` 和 `/proc` 访问限制。
 
 > **⚠️ 警告：Home Manager 中的 llama-cpp 服务**
 >

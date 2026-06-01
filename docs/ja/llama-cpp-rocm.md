@@ -28,45 +28,47 @@ llama-server -m model.gguf --gpu-device 0
 llama-cli -m model.gguf -p "こんにちは" --gpu-device 0
 ```
 
-## システムサービス
+## Flake モジュール
 
 ```nix
-let
-  hfCache = "/home/kix/.cache/huggingface/hub";
-in
+# flake.nix
 {
-  services.llama-cpp = {
-    enable = true;
-    package = pkgs.llama-cpp-rocm;
-    port = 2027;
-    modelsPreset = {
-      "*" = {
-        n-gpu-layers = "99";
-        threads = "32";
-        flash-attn = "on";
-      };
-      "Qwen3.6-27B-MTP" = {
-        hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
-        temp = "0.6";
-        ctx-size = "1048576";
-      };
-    };
-  };
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  systemd.services.llama-cpp.serviceConfig = {
-    DynamicUser  = lib.mkForce false;
-    PrivateUsers = lib.mkForce false;
-    ProtectHome  = lib.mkForce false;    # /home 以下のモデルファイルにアクセス
-    ProcSubset   = lib.mkForce "all";     # journalctl のメモリ情報警告を抑制
-    User  = lib.mkForce "kix";
-    Group = lib.mkForce "users";
-    Environment = lib.mkForce [
-      "LLAMA_CACHE=${hfCache}"
-      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
-    ];
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.llama-cpp-rocm
+        {
+          services.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
+          };
+          services.llama-cpp = {
+            enable = true;
+            package = pkgs.llama-cpp-rocm;
+            port = 2027;
+            modelsPreset = {
+              "*" = {
+                n-gpu-layers = "99";
+                flash-attn = "on";
+              };
+              "Qwen3.6-27B-MTP" = {
+                hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+                temp = "0.6";
+                ctx-size = "1048576";
+              };
+            };
+          };
+        }
+      ];
+    };
   };
 }
 ```
+
+モジュールは `LLAMA_CACHE` を `/home/<user>/.cache/huggingface/hub` に自動設定し、`/home` と `/proc` のサンドボックス制限を解除します。
 
 > **警告: Home Manager の llama-cpp サービス**
 >

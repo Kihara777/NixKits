@@ -28,46 +28,47 @@ llama-server -m model.gguf --gpu-device 0
 llama-cli -m model.gguf -p "Hello" --gpu-device 0
 ```
 
-## System Service
+## Flake Module
 
 ```nix
-let
-  hfCache = "/home/kix/.cache/huggingface/hub";
-in
+# flake.nix
 {
-  services.llama-cpp = {
-    enable = true;
-    package = pkgs.llama-cpp-rocm;
-    port = 2027;
-    modelsPreset = {
-      "*" = {
-        n-gpu-layers = "99";
-        threads = "32";
-        flash-attn = "on";
-      };
-      "Qwen3.6-27B-MTP" = {
-        hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
-        temp = "0.6";
-        ctx-size = "1048576";
-      };
-    };
-  };
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  # Override defaults for user-directory model cache access
-  systemd.services.llama-cpp.serviceConfig = {
-    DynamicUser  = lib.mkForce false;
-    PrivateUsers = lib.mkForce false;
-    ProtectHome  = lib.mkForce false;    # allow model files in /home
-    ProcSubset   = lib.mkForce "all";     # suppress /proc access warnings
-    User  = lib.mkForce "kix";
-    Group = lib.mkForce "users";
-    Environment = lib.mkForce [
-      "LLAMA_CACHE=${hfCache}"
-      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
-    ];
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.llama-cpp-rocm
+        {
+          services.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
+          };
+          services.llama-cpp = {
+            enable = true;
+            package = pkgs.llama-cpp-rocm;
+            port = 2027;
+            modelsPreset = {
+              "*" = {
+                n-gpu-layers = "99";
+                flash-attn = "on";
+              };
+              "Qwen3.6-27B-MTP" = {
+                hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+                temp = "0.6";
+                ctx-size = "1048576";
+              };
+            };
+          };
+        }
+      ];
+    };
   };
 }
 ```
+
+The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and lifts `/home` and `/proc` sandbox restrictions.
 
 > **Warning: Home Manager llama-cpp service**
 >

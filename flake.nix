@@ -35,6 +35,7 @@
 
     nixosModules.obs-bilibili-stream = import ./modules/obs-bilibili-stream.nix;
     nixosModules.opencode-telegram   = import ./modules/opencode-telegram.nix;
+    nixosModules.llama-cpp-rocm      = import ./modules/llama-cpp-rocm.nix;
 
     overlays = {
       default           = import ./overlays/default.nix;
