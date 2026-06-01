@@ -19,18 +19,7 @@
 
 每次 `nixos-rebuild` 成功后，Nix 会将当时的 `/etc/nixos` flake 源文件快照保存到 Nix store（`*-source` 目录）。即使本地文件被删除，仍可从 store 中完整恢复。
 
-## 安装
-
 将 `skills/` 目录复制到任意 coding agent 技能目录：
-
-```
-~/.opencode/skills/
-~/.codewhale/skills/
-~/.claude/skills/
-~/.openclaw/skills/
-~/.agents/skills/
-```
-
 ## 使用
 
 由 AI 助手在检测到 `/etc/nixos` 文件丢失时自动激活，无需手动调用。恢复流程：

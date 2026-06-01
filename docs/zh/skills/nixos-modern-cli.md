@@ -11,18 +11,6 @@
 | 类型 | Coding Agent Skill |
 | 路径 | `skills/nixos-modern-cli/SKILL.md` |
 
-## 安装
-
-复制到任意 coding agent 技能目录：
-
-```
-~/.opencode/skills/
-~/.codewhale/skills/
-~/.claude/skills/
-~/.openclaw/skills/
-~/.agents/skills/
-```
-
 ## 解决的问题
 
 低参数量模型常将 NixOS 误认为传统 Linux 发行版，导致：

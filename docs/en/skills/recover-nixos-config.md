@@ -19,18 +19,7 @@ Automatically activated when the user has deleted files under `/etc/nixos` (flak
 
 Every successful `nixos-rebuild` preserves a snapshot of the `/etc/nixos` flake source in the Nix store (`*-source` directory). Deleted files can be recovered even without local backups.
 
-## Install
-
 Copy the `skills/` directory to any coding agent skill directory:
-
-```
-~/.opencode/skills/
-~/.codewhale/skills/
-~/.claude/skills/
-~/.openclaw/skills/
-~/.agents/skills/
-```
-
 ## Usage
 
 Automatically invoked by the AI assistant when `/etc/nixos` file loss is detected. No manual call needed. Recovery steps:

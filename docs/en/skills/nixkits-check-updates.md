@@ -11,18 +11,6 @@
 | Type | Coding Agent Skill |
 | Path | `skills/nixkits-check-updates/SKILL.md` |
 
-## Install
-
-Copy to any coding agent skill directory:
-
-```
-~/.opencode/skills/
-~/.codewhale/skills/
-~/.claude/skills/
-~/.openclaw/skills/
-~/.agents/skills/
-```
-
 ## Features
 
 - Confirm user is in a local NixKits repo

@@ -48,7 +48,7 @@ nixpkgs.overlays = [
 
 ## Skills
 
-Auxiliary skills for multiple coding agents:
+Auxiliary skills for AI coding assistants:
 
 | Skill | Description | Docs |
 |-------|-------------|------|

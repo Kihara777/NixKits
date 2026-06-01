@@ -19,18 +19,7 @@
 
 `nixos-rebuild` の成功ごとに、Nix はその時点の `/etc/nixos` flake ソースのスナップショットを Nix store（`*-source` ディレクトリ）に保存します。ローカルバックアップがなくても削除されたファイルを復元できます。
 
-## インストール
-
 `skills/` ディレクトリを任意のコーディングエージェントスキルディレクトリにコピー：
-
-```
-~/.opencode/skills/
-~/.codewhale/skills/
-~/.claude/skills/
-~/.openclaw/skills/
-~/.agents/skills/
-```
-
 ## 使い方
 
 `/etc/nixos` のファイル消失を AI アシスタントが検出すると自動的に呼び出されます。手動操作は不要です。復旧手順：
