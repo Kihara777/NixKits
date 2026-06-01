@@ -53,7 +53,7 @@ Auxiliary skills for multiple coding agents:
 ## Authors
 
 - **狐莉 (Kitsunori)** — creation and maintenance
-- **小爪 (Kitsunome)** — design and development feat. deepseek-v4-pro (Max) · llama-cpp-rocm: Qwen3.6-27B-MTP · Qwen3.6-35B-A3B-MTP · Qwen3.5-122B-A10B-MTP · Qwen3-Coder-Next · MiniMax-M2.7
+- **小爪 (Kitsunome)** — design and development feat. deepseek-v4-pro (Max) · llama-cpp-rocm: Qwen3.6-27B-MTP (Q4_K_XL) · Qwen3.6-35B-A3B-MTP (Q4_K_XL) · Qwen3.5-122B-A10B-MTP (Q4_K_XL) · Qwen3-Coder-Next (Q4_K_XL) · MiniMax-M2.7 (Q2_K_XL)
 
 ## License
 
