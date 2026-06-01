@@ -52,8 +52,9 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 
 ## 作者
 
-- **狐莉 (Kitsunori)** — 创建和维护
-- **小爪 (Kitsunome)** — 设计、开发 feat. deepseek-v4-pro (Max) · llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+- **狐莉 (キツのり)** — 创建和维护
+- **小爪 (キツのめ)** — 设计、开发 feat. deepseek-v4-pro (Max)
+- **小小爪 (キツのめ)** — 硬件推理基础设施 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## License
 
