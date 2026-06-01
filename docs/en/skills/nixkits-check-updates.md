@@ -14,7 +14,7 @@
 ## Features
 
 - Confirm user is in a local NixKits repo
-- Check 4 external packages for latest GitHub Release
+- Auto-discover all external packages in `flake.nix` for latest GitHub Release
 - Auto-update version, hash, npmDepsHash
 - Sync documentation (3 languages)
 - Report locally installed versions

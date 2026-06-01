@@ -14,10 +14,11 @@
 ## 功能
 
 - 确认用户位于本地 NixKits 仓库
-- 检查 4 个外部软件包的最新 GitHub Release
+- 自动发现 `flake.nix` 中所有外部软件包的最新 GitHub Release
 - 自动更新版本号、hash、npmDepsHash
 - 同步更新文档（3 语言）
 - 报告本地已安装版本
+- 自动排除自有软件、动态版本和 nixpkgs 补丁
 
 ## 检查范围
 
