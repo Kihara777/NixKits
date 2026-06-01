@@ -11,6 +11,18 @@
 | Type | Coding Agent Skill |
 | Path | `skills/nixos-modern-cli/SKILL.md` |
 
+## Install
+
+Copy to any coding agent skill directory:
+
+```
+~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
+```
+
 ## Problem Solved
 
 Small models often mistake NixOS for a traditional Linux distro, leading to:

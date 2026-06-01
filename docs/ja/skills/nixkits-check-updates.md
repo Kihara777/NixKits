@@ -11,6 +11,18 @@
 | タイプ | Coding Agent スキル |
 | パス | `skills/nixkits-check-updates/SKILL.md` |
 
+## インストール
+
+任意のコーディングエージェントスキルディレクトリにコピー：
+
+```
+~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
+```
+
 ## 機能
 
 - ローカル NixKits リポジトリ内であることを確認

@@ -11,6 +11,18 @@
 | 类型 | Coding Agent Skill |
 | 路径 | `skills/nixkits-check-updates/SKILL.md` |
 
+## 安装
+
+复制到任意 coding agent 技能目录：
+
+```
+~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
+```
+
 ## 功能
 
 - 确认用户位于本地 NixKits 仓库

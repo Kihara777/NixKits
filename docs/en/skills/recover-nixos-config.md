@@ -21,12 +21,14 @@ Every successful `nixos-rebuild` preserves a snapshot of the `/etc/nixos` flake 
 
 ## Install
 
-Copy the `skills/` directory to any of:
+Copy the `skills/` directory to any coding agent skill directory:
 
 ```
-~/.agents/skills/
-~/.codewhale/skills/
 ~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
 ```
 
 ## Usage

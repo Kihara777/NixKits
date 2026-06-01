@@ -11,6 +11,18 @@
 | タイプ | Coding Agent スキル |
 | パス | `skills/nixos-modern-cli/SKILL.md` |
 
+## インストール
+
+任意のコーディングエージェントスキルディレクトリにコピー：
+
+```
+~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
+```
+
 ## 解決する問題
 
 小規模モデルは NixOS を従来の Linux ディストリビューションと誤認しがちです：

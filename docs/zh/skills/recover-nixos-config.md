@@ -21,12 +21,14 @@
 
 ## 安装
 
-将 `skills/` 目录复制到以下任意位置：
+将 `skills/` 目录复制到任意 coding agent 技能目录：
 
 ```
-~/.agents/skills/
-~/.codewhale/skills/
 ~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
 ```
 
 ## 使用

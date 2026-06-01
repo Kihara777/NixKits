@@ -21,12 +21,14 @@
 
 ## インストール
 
-`skills/` ディレクトリを以下のいずれかにコピー：
+`skills/` ディレクトリを任意のコーディングエージェントスキルディレクトリにコピー：
 
 ```
-~/.agents/skills/
-~/.codewhale/skills/
 ~/.opencode/skills/
+~/.codewhale/skills/
+~/.claude/skills/
+~/.openclaw/skills/
+~/.agents/skills/
 ```
 
 ## 使い方
