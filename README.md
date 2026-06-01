@@ -4,7 +4,7 @@
 
 个人 NixOS flake 仓库，提供自定义包、overlay 和 NixOS 模块。
 
-## 快速开始
+## 添加
 
 ```nix
 {
@@ -26,9 +26,9 @@ inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
 inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 ```
 
-## 包
+## 软件
 
-| 包 | 说明 | 文档 |
+| 软件 | 说明 | 文档 |
 |---|------|------|
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
@@ -56,6 +56,6 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 - **小爪 (キツのめ)** — 设计、开发 feat. deepseek-v4-pro (Max)
 - **小小爪 (キツのめ)** — 硬件推理基础设施 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
-## License
+## 许可
 
 [MIT](LICENSE)
