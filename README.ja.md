@@ -55,6 +55,7 @@ nixpkgs.overlays = [
 | recover-nixos-config | Nix store から削除された /etc/nixos 設定を復旧 | [docs/ja/skills/recover-nixos-config.md](docs/ja/skills/recover-nixos-config.md) |
 | nixos-modern-cli | NixOS 最新 CLI 操作ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](docs/ja/skills/nixos-modern-cli.md) |
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](docs/ja/skills/nixkits-skills.md) |
+| nixkits-check-updates | アップストリーム更新を確認し自動アップグレード | [docs/ja/skills/nixkits-check-updates.md](docs/ja/skills/nixkits-check-updates.md) |
 
 ## 作者
 
