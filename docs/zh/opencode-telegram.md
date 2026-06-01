@@ -14,10 +14,14 @@
 ## 使用
 
 ```bash
-opencode-telegram start           # 交互式配置
-opencode-telegram start --daemon  # 后台运行
-opencode-telegram status          # 查看状态
-opencode-telegram stop            # 停止
+# 首次配置
+opencode serve                           # 启动 opencode 服务端
+opencode-telegram config                 # 交互式配置 Telegram Bot
+
+# 日常使用
+opencode-telegram start                  # 启动（自动拉起 opencode）
+opencode-telegram status                 # 查看状态
+opencode-telegram stop                   # 停止
 ```
 
 ## 引用

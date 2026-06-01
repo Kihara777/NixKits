@@ -14,10 +14,14 @@
 ## 使い方
 
 ```bash
-opencode-telegram start           # 対話型セットアップ
-opencode-telegram start --daemon  # バックグラウンド実行
-opencode-telegram status          # 状態確認
-opencode-telegram stop            # 停止
+# 初回セットアップ
+opencode serve                           # opencode サーバーを起動
+opencode-telegram config                 # 対話型 Telegram Bot 設定
+
+# 日常使用
+opencode-telegram start                  # 起動（opencode を自動起動）
+opencode-telegram status                 # 状態確認
+opencode-telegram stop                   # 停止
 ```
 
 ## インストール

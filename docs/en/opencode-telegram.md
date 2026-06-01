@@ -14,10 +14,14 @@ Telegram Bot client for [OpenCode](https://opencode.ai).
 ## Usage
 
 ```bash
-opencode-telegram start           # interactive setup
-opencode-telegram start --daemon  # background mode
-opencode-telegram status          # check status
-opencode-telegram stop            # stop
+# First-time setup
+opencode serve                           # start opencode server
+opencode-telegram config                 # interactive Telegram Bot config
+
+# Daily use
+opencode-telegram start                  # start (auto-launches opencode)
+opencode-telegram status                 # check status
+opencode-telegram stop                   # stop
 ```
 
 ## Install
