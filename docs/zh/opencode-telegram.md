@@ -29,7 +29,7 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## flake 模块
+## 服务配置
 
 ```nix
 {

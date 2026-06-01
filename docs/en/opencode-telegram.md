@@ -29,7 +29,7 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## Flake Module
+## Service Config
 
 ```nix
 {
