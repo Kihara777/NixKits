@@ -21,6 +21,9 @@
 
 ## 対象
 
-`opencode-telegram` `mcp-searxng` `obs-bilibili-stream` `codewhale`
+`flake.nix` からパッケージを動的に読み取り、以下を除外：
+- 自前（ソースがローカルリポジトリ内）
+- 動的バージョン（ビルド時に最新を取得）
+- nixpkgs 追従パッチ
 
-> 自前（kitsfmt）、動的リリース（llama-cpp-rocm）、nixpkgs追従（rcc-fix）はスキップ
+残りの外部パッケージすべてを自動チェックします。

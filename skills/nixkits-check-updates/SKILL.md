@@ -5,111 +5,96 @@ description: Use when the user wants to check all NixKits packages for upstream 
 
 # NixKits Package Update Checker
 
-Checks all externally-sourced NixKits packages for upstream release updates, applies version bumps, and updates documentation.
+Checks NixKits packages for upstream release updates, applies version bumps, and updates documentation.
 
-## Scope
+## Excluded Packages
 
-**Packages checked** (external, versioned):
-| Package | Upstream | .nix file |
-|---------|----------|-----------|
-| opencode-telegram | grinev/opencode-telegram-bot | `packages/opencode-telegram.nix` |
-| mcp-searxng | ihor-sokoliuk/MCP-searxng | `packages/mcp-searxng.nix` |
-| obs-bilibili-stream | Zarosmm/obs-bilibili-stream | `packages/obs-bilibili-stream.nix` |
-| codewhale | Hmbown/CodeWhale | `packages/codewhale.nix` |
+The following are NOT checked (no fixed upstream release version):
 
-**NOT checked**:
-- `kitsfmt` — self-hosted in this repo
-- `llama-cpp-rocm` — dynamic release tracking at build time
-- `rcc-fix` — follows nixpkgs version
+- Self-hosted packages (source is `./kitsfmt-src` or similar)
+- Dynamic release tracking (e.g. `llama-cpp-rocm` — fetches latest at build time)
+- Nixpkgs-tracked (e.g. `rcc-fix` — follows nixpkgs version)
+
+Everything else in `flake.nix` → `packages` is checked.
 
 ## Step 1: Confirm local NixKits repository
 
 ```bash
-# Verify we are inside NixKits source
 test -f flake.nix && grep -q "NixKits" flake.nix && echo "OK: NixKits repo" || echo "ERROR: not in NixKits repo"
 ```
 
-## Step 2: Check upstream releases
+## Step 2: Discover packages to check
+
+Read the packages section from `flake.nix` to find all external packages:
 
 ```bash
-# Use GitHub API to get latest release tag for each package
-check() {
-  local name="$1" repo="$2" current="$3" file="$4"
-  latest=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+')
-  if [ "$current" != "$latest" ]; then
-    echo "UPDATE: $name  $current → $latest  ($file)"
-  else
-    echo "OK: $name  $current"
-  fi
-}
-
-check "opencode-telegram" "grinev/opencode-telegram-bot" "$(grep -oP 'version = "\K[^"]+' packages/opencode-telegram.nix)" "packages/opencode-telegram.nix"
-check "mcp-searxng" "ihor-sokoliuk/MCP-searxng" "$(grep -oP 'version = "\K[^"]+' packages/mcp-searxng.nix)" "packages/mcp-searxng.nix"
-check "obs-bilibili-stream" "Zarosmm/obs-bilibili-stream" "$(grep -oP 'version = "\K[^"]+' packages/obs-bilibili-stream.nix)" "packages/obs-bilibili-stream.nix"
-check "codewhale" "Hmbown/CodeWhale" "$(grep -oP 'version = "\K[^"]+' packages/codewhale.nix)" "packages/codewhale.nix"
+# Extract package names that use fetchFromGitHub or fetchurl (external sources)
+grep -B1 "fetchFromGitHub\|fetchurl" flake.nix packages/*.nix | grep -oP '(?<=packages\.)\w+|(?<=pkgs\.callPackage \./packages/)\w+'
 ```
 
-## Step 3: Update build configurations
+Exclude known self-hosted/dynamic/nixpkgs packages. The remaining packages need to be checked.
+
+## Step 3: Check upstream releases
+
+For each discovered external package, determine its upstream repo from its `.nix` file, then compare:
+
+```bash
+check() {
+  local pkg="$1" current="$2" repo="$3"
+  latest=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+')
+  if [ "$current" != "$latest" ]; then
+    echo "UPDATE: $pkg  $current → $latest"
+  else
+    echo "OK: $pkg  $current"
+  fi
+}
+```
+
+## Step 4: Update build configurations
 
 For each package with an update:
 
-### npm packages (opencode-telegram, mcp-searxng)
+### npm packages
 
 1. Update `version` string in `.nix` file
 2. Set `hash` in `fetchFromGitHub` to empty placeholder
 3. Set `npmDepsHash` to empty placeholder
-4. Run `nix build .#<pkg>` to get correct hash
-5. Update hash with the value from `got: sha256-...`
-6. Run `nix build .#<pkg>` again to get `npmDepsHash`
-7. Update `npmDepsHash` with the value
+4. Run `nix build .#<pkg>` twice — first for source hash, second for npmDepsHash
+5. Update both hashes with the reported values
 
-### cmake packages (obs-bilibili-stream)
+### cmake packages
 
 1. Update `version` string
 2. Set `hash` in `fetchFromGitHub` to empty
 3. Run `nix build .#<pkg>` to get correct hash
 4. Update hash
 
-### pre-built binary packages (codewhale)
+### pre-built binary packages (fetchurl)
 
-1. Update `version` string
-2. Update both download URLs (CLI and TUI binaries)
-3. Set both `hash` values to empty
-4. Run `nix build .#codewhale` to get CLI hash
-5. Update CLI hash
-6. Run `nix build .#codewhale` again to get TUI hash
-7. Update TUI hash
+1. Update `version` string and all download URLs
+2. Set all `hash` values to empty
+3. Run `nix build .#<pkg>` for each binary hash
+4. Update hashes one by one
 
-## Step 4: Update documentation
+## Step 5: Update documentation
+
+For each updated package, update version numbers in all 3 language docs:
 
 ```bash
-# Update version numbers in all 3 language docs
 for lang in zh en ja; do
   sed -i "s/$OLD_VER/$NEW_VER/g" docs/$lang/<pkg>.md
 done
 ```
 
-Also update the package's `.nix` file `meta.changelog` URL if the version appears in it.
+Also check and update `meta.changelog` URL in the `.nix` file.
 
-## Step 5: Check locally installed versions
-
-After updating, check if the package is installed locally:
+## Step 6: Check locally installed versions
 
 ```bash
-# Check nix profile
-nix profile list 2>/dev/null | grep <pkg> || echo "  Not in nix profile"
-
-# Check NixOS system packages
-nix eval --raw nixpkgs#<pkg>.version 2>/dev/null || nix eval --raw .#<pkg>.version 2>/dev/null
-
-# Check if binary is in PATH
-which <binary> 2>/dev/null && <binary> --version 2>/dev/null || echo "  Not installed"
+nix eval --raw .#<pkg>.version 2>/dev/null
+which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 ```
 
-## Step 6: Report summary
+## Step 7: Report summary
 
-Present a table showing:
-- Package name
-- Old → New version
-- Build status (OK/FAILED)
-- Locally installed version (if any) or "not installed"
+Present a table with: package name, old → new version, build status, locally installed version.

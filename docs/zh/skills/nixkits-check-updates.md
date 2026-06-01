@@ -21,6 +21,9 @@
 
 ## 检查范围
 
-`opencode-telegram` `mcp-searxng` `obs-bilibili-stream` `codewhale`
+动态读取 `flake.nix` 中的 packages 定义，排除以下类别：
+- 自有软件（源码在本地仓库内）
+- 动态版本（构建时获取最新 Release）
+- 跟随 nixpkgs 的补丁
 
-> 跳过自有软件（kitsfmt）、动态版本（llama-cpp-rocm）、跟随 nixpkgs（rcc-fix）
+其余所有外部软件包均自动纳入检查。

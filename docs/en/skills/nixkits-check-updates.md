@@ -21,6 +21,9 @@
 
 ## Scope
 
-`opencode-telegram` `mcp-searxng` `obs-bilibili-stream` `codewhale`
+Dynamically reads packages from `flake.nix`, excluding:
+- Self-hosted (source in local repo)
+- Dynamic version (fetches latest at build time)
+- Nixpkgs-tracked patches
 
-> Skips self-hosted (kitsfmt), dynamic-release (llama-cpp-rocm), and nixpkgs-tracked (rcc-fix)
+All remaining external packages are checked automatically.
