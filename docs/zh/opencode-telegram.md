@@ -32,14 +32,24 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ## 服务配置
 
 ```nix
+# flake.nix
 {
-  imports = [ inputs.nix-kits.nixosModules.opencode-telegram ];
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  services.opencode-telegram = {
-    enable = true;
-    user = "kix";
-    group = "users";
-    afterServices = [ "network-online.target" "llama-cpp.service" ];
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.opencode-telegram
+        {
+          services.opencode-telegram = {
+            enable = true;
+            user = "kix";
+            group = "users";
+            afterServices = [ "network-online.target" "llama-cpp.service" ];
+          };
+        }
+      ];
+    };
   };
 }
 ```
