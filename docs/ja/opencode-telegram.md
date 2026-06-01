@@ -29,7 +29,7 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## NixOS モジュール（推奨）
+## NixOS モジュール
 
 ```nix
 {
@@ -40,30 +40,6 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
     user = "kix";
     group = "users";
     afterServices = [ "network-online.target" "llama-cpp.service" ];
-    environment = {
-      PATH = "${pkgs.opencode}/bin:${pkgs.opencode-telegram}/bin:/run/wrappers/bin";
-    };
   };
 }
-```
-
-## 手動 systemd サービス
-
-```nix
-systemd.services.opencode-telegram = {
-  after = [ "network-online.target" ];
-  wants = [ "network-online.target" ];
-  wantedBy = [ "multi-user.target" ];
-  serviceConfig = {
-    Type = "simple";
-    ExecStart = "${pkgs.opencode-telegram}/bin/opencode-telegram start";
-    Restart = "on-failure";
-    RestartSec = 10;
-    User = "kix";
-    Group = "users";
-    Environment = [
-      "PATH=${pkgs.opencode}/bin:${pkgs.opencode-telegram}/bin:/run/wrappers/bin"
-    ];
-  };
-};
 ```
