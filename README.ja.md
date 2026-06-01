@@ -47,6 +47,7 @@ OpenCode / CodeWhale 補助スキル：
 | スキル | 説明 | ドキュメント |
 |--------|------|-------------|
 | recover-nixos-config | Nix store から削除された /etc/nixos 設定を復旧 | [docs/ja/skills/recover-nixos-config.md](docs/ja/skills/recover-nixos-config.md) |
+| nixos-modern-cli | NixOS 最新 CLI 操作ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](docs/ja/skills/nixos-modern-cli.md) |
 
 ## 作者
 
