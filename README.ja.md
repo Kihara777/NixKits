@@ -36,7 +36,7 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 
 | パッチ | 説明 | ドキュメント |
 |--------|------|-------------|
-| llama-cpp-rocm | ROCm アクセラレーション llama.cpp | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
+| llama-cpp-rocm | GitHub 最新リリースを動的追跡する ROCm アクセラレーションビルド | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
 | rcc-fix | 2-in-1 デバイス向け asusctl パッチ | [docs/ja/rcc-fix.md](docs/ja/rcc-fix.md) |
 
 ```nix

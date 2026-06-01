@@ -36,7 +36,7 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 
 | 补丁 | 说明 | 文档 |
 |------|------|------|
-| llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
+| llama-cpp-rocm | 动态追踪上游最新 Release 的 ROCm 加速构建 | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 
 ```nix
