@@ -12,21 +12,13 @@ Personal NixOS flake repository providing custom packages, overlays, and NixOS m
 }
 ```
 
-**Recommended: use default overlay for all packages**
+## Packages
 
 ```nix
+# default overlay (required — installs all software packages)
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```
-
-**Standalone overlays** (overlay-only packages):
-
-```nix
-inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
-inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
-```
-
-## Packages
 
 | Package | Description | Docs |
 |---------|-------------|------|
@@ -35,10 +27,24 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 | opencode-telegram | OpenCode Telegram Bot client | [docs/en/opencode-telegram.md](docs/en/opencode-telegram.md) |
 | mcp-searxng | MCP Server for SearXNG | [docs/en/mcp-searxng.md](docs/en/mcp-searxng.md) |
 | obs-bilibili-stream | Bilibili streaming plugin for OBS | [docs/en/obs-bilibili-stream.md](docs/en/obs-bilibili-stream.md) |
+
+Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
+
+## Patches
+
+Standalone overlays not included in `default`:
+
+| Patch | Description | Docs |
+|-------|-------------|------|
 | llama-cpp-rocm | ROCm-accelerated llama.cpp | [docs/en/llama-cpp-rocm.md](docs/en/llama-cpp-rocm.md) |
 | rcc-fix | Patched asusctl for 2-in-1 devices | [docs/en/rcc-fix.md](docs/en/rcc-fix.md) |
 
-Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
+```nix
+nixpkgs.overlays = [
+  inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
+  inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
+];
+```
 
 ## Skills
 

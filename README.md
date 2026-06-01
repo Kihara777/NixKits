@@ -12,21 +12,13 @@
 }
 ```
 
-**推荐：使用 default overlay 一次性添加所有包**
+## 软件
 
 ```nix
+# default overlay（必要操作，安装所有软件包）
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```
-
-**独立 overlay**（仅 overlay 存在的包）：
-
-```nix
-inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
-inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
-```
-
-## 软件
 
 | 软件 | 说明 | 文档 |
 |---|------|------|
@@ -35,10 +27,24 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
+
+支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
+
+## 补丁
+
+独立 overlay，不包含在 `default` 内：
+
+| 补丁 | 说明 | 文档 |
+|------|------|------|
 | llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 
-支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
+```nix
+nixpkgs.overlays = [
+  inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
+  inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
+];
+```
 
 ## 技能
 
