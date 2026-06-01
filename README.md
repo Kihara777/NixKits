@@ -38,6 +38,8 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 | llama-cpp-rocm | ROCm 加速的 llama.cpp | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 
+支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
+
 ## Skills
 
 OpenCode / CodeWhale 辅助技能：
@@ -45,8 +47,6 @@ OpenCode / CodeWhale 辅助技能：
 | 技能 | 说明 | 文档 |
 |------|------|------|
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |
-
-支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
 ## 作者
 
