@@ -38,6 +38,14 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
 | llama-cpp-rocm | ROCm-accelerated llama.cpp | [docs/en/llama-cpp-rocm.md](docs/en/llama-cpp-rocm.md) |
 | rcc-fix | Patched asusctl for 2-in-1 devices | [docs/en/rcc-fix.md](docs/en/rcc-fix.md) |
 
+## Skills
+
+OpenCode / CodeWhale auxiliary skills:
+
+| Skill | Description | Docs |
+|-------|-------------|------|
+| recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/en/skills/recover-nixos-config.md](docs/en/skills/recover-nixos-config.md) |
+
 Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 
 ## Authors

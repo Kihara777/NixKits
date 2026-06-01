@@ -38,6 +38,14 @@ inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl（パッチ適用済
 | llama-cpp-rocm | ROCm アクセラレーション llama.cpp | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
 | rcc-fix | 2-in-1 デバイス向け asusctl パッチ | [docs/ja/rcc-fix.md](docs/ja/rcc-fix.md) |
 
+## スキル
+
+OpenCode / CodeWhale 補助スキル：
+
+| スキル | 説明 | ドキュメント |
+|--------|------|-------------|
+| recover-nixos-config | Nix store から削除された /etc/nixos 設定を復旧 | [docs/ja/skills/recover-nixos-config.md](docs/ja/skills/recover-nixos-config.md) |
+
 対応システム: すべての `lib.platforms.linux`（nixpkgs に自動追従）
 
 ## 作者
