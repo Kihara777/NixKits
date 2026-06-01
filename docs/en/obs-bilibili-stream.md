@@ -8,7 +8,7 @@ Bilibili live streaming plugin for OBS Studio.
 
 | Item | Value |
 |------|-------|
-| Version | 2.0.12 |
+| Version | 2.1.0 |
 | Upstream | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | Platform | Linux only |
 

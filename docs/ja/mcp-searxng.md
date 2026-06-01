@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 1.0.3 |
+| バージョン | 1.0.4 |
 | アップストリーム | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## インストール

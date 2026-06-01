@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "0.8.47";
+  version = "0.8.49";
   codewhale-cli = fetchurl {
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-x64";
-    hash = "sha256-g4a8XT9jwt0uKbVwgVVG/U+EI12la2hvSv5dBYE4aY8=";
+    hash = "sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=";
   };
   codewhale-tui = fetchurl {
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-x64";
-    hash = "sha256-yf2Mo7oNUXviXPeJtBFS2L3HRtiE6Mgf1cE/7Eu3T1c=";
+      hash = "sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=";
   };
 in
 stdenv.mkDerivation {

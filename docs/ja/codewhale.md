@@ -8,7 +8,7 @@ DeepSeek V4 専用のターミナルコーディングエージェント。
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.8.47 |
+| バージョン | 0.8.49 |
 | アップストリーム | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | タイプ | ビルド済みバイナリ（GitHub Releases） |
 

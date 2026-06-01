@@ -8,7 +8,7 @@ OBS Studio 的 Bilibili 直播推流插件。
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 2.0.12 |
+| 版本 | 2.1.0 |
 | 上游 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | 平台 | Linux only |
 
