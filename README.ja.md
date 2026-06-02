@@ -15,7 +15,7 @@
 ## パッケージ
 
 ```nix
-# デフォルト overlay（必須 — すべてのソフトウェアパッケージをインストール）
+# デフォルト overlay（必須 — すべてのソフトウェアパッケージを追加）
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```

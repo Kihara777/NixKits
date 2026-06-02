@@ -15,7 +15,7 @@ Personal NixOS flake repository providing custom packages, overlays, and NixOS m
 ## Packages
 
 ```nix
-# default overlay (required — installs all software packages)
+# default overlay (required — adds all software packages)
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```
