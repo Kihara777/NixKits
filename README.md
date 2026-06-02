@@ -16,11 +16,6 @@
 
 支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
-```nix
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-# → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
-```
-
 | 软件 | 说明 | 文档 |
 |---|------|------|
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |

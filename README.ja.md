@@ -16,11 +16,6 @@
 
 対応システム: すべての `lib.platforms.linux`（nixpkgs に自動追従）
 
-```nix
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-# → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
-```
-
 | パッケージ | 説明 | ドキュメント |
 |-----------|------|-------------|
 | codewhale | DeepSeek V4 ターミナルコーディングエージェント | [docs/ja/codewhale.md](docs/ja/codewhale.md) |

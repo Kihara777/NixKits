@@ -16,11 +16,6 @@ Personal NixOS flake repository providing custom packages, overlays, and NixOS m
 
 Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 
-```nix
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-# → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
-```
-
 | Package | Description | Docs |
 |---------|-------------|------|
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](docs/en/codewhale.md) |
