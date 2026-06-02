@@ -14,6 +14,8 @@ Personal NixOS flake repository providing custom packages, overlays, and NixOS m
 
 ## Packages
 
+Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
+
 ```nix
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
@@ -26,8 +28,6 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 | opencode-telegram | OpenCode Telegram Bot client | [docs/en/opencode-telegram.md](docs/en/opencode-telegram.md) |
 | mcp-searxng | MCP Server for SearXNG | [docs/en/mcp-searxng.md](docs/en/mcp-searxng.md) |
 | obs-bilibili-stream | Bilibili streaming plugin for OBS | [docs/en/obs-bilibili-stream.md](docs/en/obs-bilibili-stream.md) |
-
-Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 
 ## Patches
 

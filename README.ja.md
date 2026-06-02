@@ -14,6 +14,8 @@
 
 ## パッケージ
 
+対応システム: すべての `lib.platforms.linux`（nixpkgs に自動追従）
+
 ```nix
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
@@ -26,8 +28,6 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 | opencode-telegram | OpenCode Telegram Bot クライアント | [docs/ja/opencode-telegram.md](docs/ja/opencode-telegram.md) |
 | mcp-searxng | SearXNG 用 MCP Server | [docs/ja/mcp-searxng.md](docs/ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 用 Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](docs/ja/obs-bilibili-stream.md) |
-
-対応システム: すべての `lib.platforms.linux`（nixpkgs に自動追従）
 
 ## パッチ
 

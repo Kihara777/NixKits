@@ -14,6 +14,8 @@
 
 ## 软件
 
+支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
+
 ```nix
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
@@ -26,8 +28,6 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
-
-支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
 
 ## 补丁
 
