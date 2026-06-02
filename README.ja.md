@@ -28,17 +28,14 @@ NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コー�
 
 `default` に含まれないスタンドアロン overlay：
 
-| パッチ | 説明 | ドキュメント |
-|--------|------|-------------|
-| llama-cpp-rocm | GitHub 最新リリースを動的追跡する ROCm アクセラレーションビルド | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
-| rcc-fix | 2-in-1 デバイス向け asusctl パッチ | [docs/ja/rcc-fix.md](docs/ja/rcc-fix.md) |
-
 ```nix
 nixpkgs.overlays = [
   inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
   inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl（パッチ適用済み）
 ];
 ```
+
+| パッチ | 説明 | ドキュメント |
 
 ## スキル
 
