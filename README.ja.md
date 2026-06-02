@@ -7,9 +7,11 @@ NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コー�
 ## クイックスタート
 
 ```nix
-{
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
-}
+# リモート
+inputs.nix-kits.url = "github:Kihara777/NixKits";
+
+# ローカル
+inputs.nix-kits.url = "path:/home/kix/NixKits";
 ```
 
 ## パッケージ
