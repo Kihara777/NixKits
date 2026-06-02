@@ -30,13 +30,6 @@ Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 
 Standalone overlays not included in `default`:
 
-```nix
-nixpkgs.overlays = [
-  inputs.nix-kits.overlays.llama-cpp-rocm  # → pkgs.llama-cpp-rocm
-  inputs.nix-kits.overlays.rcc-fix         # → pkgs.asusctl (patched)
-];
-```
-
 | Patch | Description | Docs |
 |-------|-------------|------|
 | llama-cpp-rocm | ROCm-accelerated build tracking latest GitHub Release | [docs/en/llama-cpp-rocm.md](docs/en/llama-cpp-rocm.md) |
