@@ -23,7 +23,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 
 ## 使い方
 
-アップストリーム [llama.cpp](https://github.com/ggml-org/llama.cpp) のドキュメントを参照してください。
+アップストリーム llama.cpp のドキュメントを参照してください。
 
 ## Flake モジュール
 

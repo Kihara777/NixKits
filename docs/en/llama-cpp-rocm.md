@@ -23,7 +23,7 @@ Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest Gi
 
 ## Usage
 
-See upstream [llama.cpp](https://github.com/ggml-org/llama.cpp) docs.
+See upstream llama.cpp docs.
 
 ## Flake Module
 

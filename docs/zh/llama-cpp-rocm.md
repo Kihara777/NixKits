@@ -23,7 +23,7 @@
 
 ## 使用
 
-参考上游 [llama.cpp](https://github.com/ggml-org/llama.cpp) 文档。
+参考上游 llama.cpp 文档。
 
 ## flake 模块
 
