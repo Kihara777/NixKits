@@ -15,7 +15,6 @@
 ## 软件
 
 ```nix
-# default overlay（必要操作，添加所有软件包）
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 # → pkgs.codewhale  pkgs.kitsfmt  pkgs.opencode-telegram  pkgs.mcp-searxng  pkgs.obs-bilibili-stream
 ```
