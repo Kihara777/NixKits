@@ -2,7 +2,7 @@
 
 [中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-Personal NixOS flake repository providing custom packages, overlays, and NixOS modules.
+NixKits — a collection of software, patches, NixOS modules, and AI coding assistant skills.
 
 ## Quick Start
 

@@ -2,7 +2,7 @@
 
 [中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-カスタムパッケージ、overlay、NixOS モジュールを提供する個人用 NixOS flake リポジトリ。
+NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コーディングアシスタントスキルのコレクション。
 
 ## クイックスタート
 

@@ -2,7 +2,7 @@
 
 [中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-个人 NixOS flake 仓库，提供自定义包、overlay 和 NixOS 模块。
+NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 
 ## 添加
 
