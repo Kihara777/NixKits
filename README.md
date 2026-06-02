@@ -11,7 +11,7 @@ NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 inputs.nix-kits.url = "github:Kihara777/NixKits";
 
 # 本地
-inputs.nix-kits.url = "path:/home/kix/NixKits";
+inputs.nix-kits.url = "/home/kix/NixKits";
 ```
 
 ## 软件

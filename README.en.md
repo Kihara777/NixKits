@@ -11,7 +11,7 @@ NixKits — a collection of software, patches, NixOS modules, and AI coding assi
 inputs.nix-kits.url = "github:Kihara777/NixKits";
 
 # Local
-inputs.nix-kits.url = "path:/home/kix/NixKits";
+inputs.nix-kits.url = "/home/kix/NixKits";
 ```
 
 ## Packages
