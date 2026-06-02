@@ -2,7 +2,7 @@
 
 [中文](../zh/llama-cpp-rocm.md) | [English](llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md)
 
-Upstream [llama.cpp](https://github.com/ggml-org/llama.cpp) with ROCm GPU acceleration. Dynamically fetches the latest GitHub Release version at build time for testing cutting-edge features.
+Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest GitHub Release version at build time for testing cutting-edge features.
 
 ## Info
 
