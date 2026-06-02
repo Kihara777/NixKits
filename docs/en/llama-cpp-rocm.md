@@ -23,10 +23,7 @@ Upstream [llama.cpp](https://github.com/ggml-org/llama.cpp) with ROCm GPU accele
 
 ## Usage
 
-```bash
-llama-server -m model.gguf --gpu-device 0
-llama-cli -m model.gguf -p "Hello" --gpu-device 0
-```
+See upstream [llama.cpp](https://github.com/ggml-org/llama.cpp) docs.
 
 ## Flake Module
 

@@ -23,10 +23,7 @@
 
 ## 使い方
 
-```bash
-llama-server -m model.gguf --gpu-device 0
-llama-cli -m model.gguf -p "こんにちは" --gpu-device 0
-```
+アップストリーム [llama.cpp](https://github.com/ggml-org/llama.cpp) のドキュメントを参照してください。
 
 ## Flake モジュール
 

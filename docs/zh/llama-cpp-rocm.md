@@ -23,10 +23,7 @@
 
 ## 使用
 
-```bash
-llama-server -m model.gguf --gpu-device 0
-llama-cli -m model.gguf -p "Hello" --gpu-device 0
-```
+参考上游 [llama.cpp](https://github.com/ggml-org/llama.cpp) 文档。
 
 ## flake 模块
 
