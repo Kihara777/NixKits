@@ -21,8 +21,11 @@ Installs NixKits skills into coding agent skill directories.
 
 | Skill | Description |
 |-------|-------------|
-| `recover-nixos-config` | Recover deleted /etc/nixos files from Nix store |
+| `nixkits-check-updates` | Check upstream software releases and auto-upgrade |
+| `nixkits-skills` | NixKits skills installer (local/online) |
 | `nixos-modern-cli` | NixOS modern CLI operations guide for AI models |
+| `recover-nixos-config` | Recover deleted /etc/nixos files from Nix store |
+| `write-project-docs` | Generate multi-language project documentation in NixKits style |
 
 ## Installation Modes
 
