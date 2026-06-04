@@ -45,6 +45,7 @@ Auxiliary skills for AI coding assistants:
 | nixkits-skills | NixKits skills installer (local/online) | [docs/en/skills/nixkits-skills.md](docs/en/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS modern CLI operations guide (for AI models) | [docs/en/skills/nixos-modern-cli.md](docs/en/skills/nixos-modern-cli.md) |
 | recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/en/skills/recover-nixos-config.md](docs/en/skills/recover-nixos-config.md) |
+| write-project-docs | Generate multi-language project documentation in NixKits style | [docs/en/skills/write-project-docs.md](docs/en/skills/write-project-docs.md) |
 
 ## Authors
 

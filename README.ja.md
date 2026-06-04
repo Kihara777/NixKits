@@ -45,6 +45,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](docs/ja/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 最新 CLI 操作ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](docs/ja/skills/nixos-modern-cli.md) |
 | recover-nixos-config | Nix store から削除された /etc/nixos 設定を復旧 | [docs/ja/skills/recover-nixos-config.md](docs/ja/skills/recover-nixos-config.md) |
+| write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを生成 | [docs/ja/skills/write-project-docs.md](docs/ja/skills/write-project-docs.md) |
 
 ## 作者
 
