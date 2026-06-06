@@ -1,45 +1,45 @@
 ---
 name: nixkits-skills
-description: Use when the user wants to install or update NixKits skills into coding agent directories (opencode, codewhale, claude, openclaw, agents). Supports local and online installation modes.
+description: 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、claude、openclaw、agents）。支持本地和在线两种安装模式。
 ---
 
-# NixKits Skills Installer
+# NixKits 技能安装器
 
-Installs NixKits skills into coding agent skill directories.
+将 NixKits 技能安装到各编码助手的技能目录中。
 
-## Supported Agents
+## 支持的助手
 
-| Agent | Skill Directory |
-|-------|----------------|
+| 助手 | 技能目录 |
+|------|---------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
 | Claude Code | `~/.claude/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
-| Generic | `~/.agents/skills/` |
+| 通用 | `~/.agents/skills/` |
 
-## Available NixKits Skills
+## 可用的 NixKits 技能
 
-| Skill | Description |
-|-------|-------------|
-| `nixkits-check-updates` | Check upstream software releases and auto-upgrade |
-| `nixkits-skills` | NixKits skills installer (local/online) |
-| `nixos-modern-cli` | NixOS modern CLI operations guide for AI models |
-| `recover-nixos-config` | Recover deleted /etc/nixos files from Nix store |
-| `write-project-docs` | Generate multi-language project documentation in NixKits style |
+| 技能 | 说明 |
+|------|------|
+| `nixkits-check-updates` | 检查上游软件发布并自动升级 |
+| `nixkits-skills` | NixKits 技能安装器（本地/在线） |
+| `nixos-modern-cli` | NixOS 现代 CLI 操作指南（面向 AI 模型） |
+| `recover-nixos-config` | 从 Nix store 恢复误删的 /etc/nixos 文件 |
+| `write-project-docs` | 按 NixKits 风格生成多语言项目文档 |
 
-## Installation Modes
+## 安装模式
 
-### Mode 1: Local (from NixKits source)
+### 模式 1：本地安装（从 NixKits 源码）
 
-When the user is inside the NixKits source directory:
+当用户已位于 NixKits 源码目录内时：
 
 ```bash
-# Find the NixKits source directory
+# 确定 NixKits 源码目录
 NIXKITS_DIR=$(pwd)
-# Or if known path:
+# 或已知路径：
 NIXKITS_DIR="/home/kix/NixKits"
 
-# Copy skills to each existing agent directory
+# 将技能复制到各已存在的助手目录
 for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$NIXKITS_DIR/skills/"* "$dir/"
@@ -48,16 +48,16 @@ for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/s
 done
 ```
 
-### Mode 2: Online (from GitHub)
+### 模式 2：在线安装（从 GitHub）
 
-When NixKits source is not locally available:
+当本地没有 NixKits 源码时：
 
 ```bash
-# Clone NixKits to a temporary directory
+# 克隆 NixKits 到临时目录
 TMPDIR=$(mktemp -d)
 git clone https://github.com/Kihara777/NixKits.git "$TMPDIR"
 
-# Install from the cloned source
+# 从克隆的源码安装
 for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$TMPDIR/skills/"* "$dir/"
@@ -68,12 +68,12 @@ done
 rm -rf "$TMPDIR"
 ```
 
-## Checking for Updates
+## 检查更新
 
-Before installing, compare local skills against the source:
+安装前，将本地技能与源码对比：
 
 ```bash
-# Local mode: compare against NixKits source
+# 本地模式：与 NixKits 源码对比
 NIXKITS_DIR="/home/kix/NixKits"
 for skill_dir in "$NIXKITS_DIR/skills/"*/; do
   skill_name=$(basename "$skill_dir")
@@ -89,11 +89,11 @@ for skill_dir in "$NIXKITS_DIR/skills/"*/; do
 done
 ```
 
-## Workflow
+## 工作流程
 
-1. **Detect agent directories** — check which skill directories exist
-2. **Check for existing NixKits skills** — compare versions if already installed
-3. **Ask user** if updates should be applied when differences are found
-4. **Choose mode** — local if inside NixKits source, online otherwise
-5. **Install** — copy skills to each detected agent directory
-6. **Verify** — confirm installation was successful
+1. **检测助手目录** — 检查哪些技能目录存在
+2. **检查已安装的 NixKits 技能** — 如已安装则对比版本差异
+3. **询问用户** — 发现差异时确认是否应用更新
+4. **选择模式** — 在 NixKits 源码内则本地模式，否则在线模式
+5. **安装** — 将技能复制到各检测到的助手目录
+6. **验证** — 确认安装成功

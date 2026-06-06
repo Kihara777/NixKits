@@ -1,43 +1,43 @@
 ---
 name: write-project-docs
-description: Use when the user wants to write or regenerate complete project documentation following the NixKits style — multi-language (zh/en/ja), concise, table-driven, with language-switcher headers and module-classification READMEs. Covers README, per-module docs, and skill docs for any project.
+description: 按 NixKits 风格为任意项目编写或重新生成完整的多语言文档 — 中英日三语、简洁、表驱动、含语言切换器标题和模块分类 README。覆盖 README、各模块文档及技能文档。
 ---
 
-# Write Project Documentation (NixKits Style)
+# 项目文档编写（NixKits 风格）
 
-Generates a complete multi-language documentation system for any project, following the NixKits documentation conventions.
+为任意项目生成完整的多语言文档体系，遵循 NixKits 文档规范。
 
-## When to Use
+## 何时使用
 
-- User asks to "write documentation" or "generate docs" for a project
-- User wants docs in the NixKits style (concise, multi-language, table-driven)
-- User has an existing project with modules/packages/services that need documenting
+- 用户要求"编写文档"或"生成文档"
+- 用户希望采用 NixKits 风格（简洁、多语言、表驱动）
+- 用户有含模块/包/服务的现有项目需要文档化
 
-## Conventions (NixKits Style)
+## 规范（NixKits 风格）
 
-### Directory Structure
+### 目录结构
 
 ```
 <project>/
-├── README.md          # Primary language README
-├── README.en.md       # English README
-├── README.ja.md       # Japanese README
+├── README.md          # 主语言 README
+├── README.en.md       # 英文 README
+├── README.ja.md       # 日文 README
 ├── docs/
-│   ├── zh/            # Chinese docs
+│   ├── zh/            # 中文文档
 │   │   ├── <module>.md
-│   │   └── skills/    # Skill docs subdirectory
-│   ├── en/            # English docs
-│   └── ja/            # Japanese docs
+│   │   └── skills/    # 技能文档子目录
+│   ├── en/            # 英文文档
+│   └── ja/            # 日文文档
 ```
 
-### Per-Module Doc Template
+### 模块文档模板
 
 ```markdown
 # <module-name>
 
 [中文](<module>.md) | [English](../en/<module>.md) | [日本語](../ja/<module>.md)
 
-<one-line description>
+<一行描述>
 
 ## 基本信息
 
@@ -55,19 +55,19 @@ Generates a complete multi-language documentation system for any project, follow
 <reference / usage>
 ```
 
-- Language-switcher line uses relative paths appropriate to each language directory
-- zh files: `[中文](file.md) | [English](../en/file.md) | [日本語](../ja/file.md)`
-- en files: `[中文](../zh/file.md) | [English](file.md) | [日本語](../ja/file.md)`
-- ja files: `[中文](../zh/file.md) | [English](../en/file.md) | [日本語](file.md)`
+- 语言切换器行使用各语言目录对应的相对路径
+- zh 文件：`[中文](file.md) | [English](../en/file.md) | [日本語](../ja/file.md)`
+- en 文件：`[中文](../zh/file.md) | [English](file.md) | [日本語](../ja/file.md)`
+- ja 文件：`[中文](../zh/file.md) | [English](../en/file.md) | [日本語](file.md)`
 
-### Per-Skill Doc Template
+### 技能文档模板
 
 ```markdown
 # <skill-name> (Skill)
 
 [中文](<skill>.md) | [English](../../en/skills/<skill>.md) | [日本語](../../ja/skills/<skill>.md)
 
-> <one-line summary>
+> <一行摘要>
 
 ## 基本信息
 
@@ -78,117 +78,116 @@ Generates a complete multi-language documentation system for any project, follow
 
 ## 功能
 
-- <feature list>
+- <功能列表>
 
 ## 使用
 
-<trigger condition or usage>
+<触发条件或使用方法>
 ```
 
-### README Template
+### README 模板
 
 ```markdown
 # <Project Name>
 
 [中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
 
-<one-line project description>
+<一行项目描述>
 
-## <Category 1>
+## <分类 1>
 
 | 模块 | 说明 | 文档 |
 |------|------|------|
 | ... | ... | [docs/zh/...](docs/zh/...) |
 
-## <Category N>
+## <分类 N>
 
 ...
 
 ## 作者
 
-<author section>
+<作者信息>
 
 ## 许可
 
 <license>
 ```
 
-### Writing Rules
+### 编写规则
 
-- **Zero fluff** — no introductory rhetoric, no "welcome to", no "this document describes"
-- **Tables over prose** — use `基本信息` tables for metadata, comparison tables for options
-- **Code blocks are complete** — every code block should be copy-paste runnable
-- **Technical terms stay in English** — even in zh/ja docs
-- **Warnings use blockquotes** — `> **⚠️ 警告**` format
-- **Chinese section titles use 2- or 4-character words** — prefer concise, symmetric-length terms for visual
-  rhythm (e.g., `组件` not `软件包`, `基本信息` not `基础配置信息`). Category headings in
-  Chinese READMEs should match this cadence.
-- **No TOC** — documents are short enough to scan
+- **零废话** — 没有引导性修辞，没有"欢迎来到"，没有"本文档描述……"
+- **表格优先于段落** — 用 `基本信息` 表格展示元数据，用对照表展示选项
+- **代码块完整可运行** — 每个代码块应可直接复制粘贴执行
+- **技术术语保持英文** — 即使在中文和日文文档中
+- **警告使用引用块** — `> **⚠️ 警告**` 格式
+- **中文标题使用 2 或 4 字词** — 优先使用简洁、长度对称的词汇以保证视觉节奏
+  （如 `组件` 而非 `软件包`，`基本信息` 而非 `基础配置信息`）。中文 README 中的分类标题应遵循此韵律。
+- **不生成目录** — 文档足够短，可直接扫读
 
-## Workflow
+## 工作流程
 
-### Step 1: Assess the Project
+### 第 1 步：评估项目
 
-Read all available metadata about modules/packages/services:
-- Module definition files (e.g., `info.json`, `package.json`, `Cargo.toml`)
-- Existing `README.md` or `AGENTS.md`
-- Configuration files (e.g., `flake.nix`, `compose.yaml`)
-- Source directory structure
+读取所有可用的模块/包/服务元数据：
+- 模块定义文件（如 `info.json`、`package.json`、`Cargo.toml`）
+- 已有的 `README.md` 或 `AGENTS.md`
+- 配置文件（如 `flake.nix`、`compose.yaml`）
+- 源码目录结构
 
-Extract for each module:
-- Name (used as filename)
-- Description (one sentence)
-- Type (service / static / library / skill)
-- Dependencies
-- Installation command
-- Usage examples
+对每个模块提取：
+- 名称（用作文件名）
+- 描述（一句话）
+- 类型（service / static / library / skill）
+- 依赖
+- 安装命令
+- 使用示例
 
-### Step 2: Classify Modules
+### 第 2 步：模块分类
 
-Group modules into functional categories. Common patterns:
-- Infrastructure / core services
-- User-facing services
-- Proxy / cache
-- Navigation / entry points
-- Static content / links
-- Skills / operational guides
+按功能类别分组。常见模式：
+- 基础设施 / 核心服务
+- 用户面服务
+- 代理 / 缓存
+- 导航 / 入口
+- 静态内容 / 链接
+- 技能 / 操作指南
 
-### Step 3: Create Directory Structure
+### 第 3 步：创建目录结构
 
 ```bash
 mkdir -p docs/{zh,en,ja}/skills
 ```
 
-### Step 4: Write README (Primary Language First)
+### 第 4 步：编写 README（先写主语言版本）
 
-- Language switcher at top
-- Brief project description
-- Category sections with tables (Module | Description | Docs)
-- Author section
-- License
+- 顶部语言切换器
+- 简要项目描述
+- 分类段，各含表格（模块 | 说明 | 文档）
+- 作者段
+- 许可
 
-Then translate to other languages. README links point to the corresponding language's doc directory.
+然后翻译到其他语言。README 链接指向对应语言的文档目录。
 
-### Step 5: Write Per-Module Docs
+### 第 5 步：编写各模块文档
 
-For each module, create 3 files (zh/en/ja). Write the primary language version first as the reference, then translate.
+每个模块创建 3 个文件（zh/en/ja）。先写主语言版本作为基准，再翻译。
 
-Key sections:
-1. **基本信息** table — type, key attributes
-2. **安装** — install command
-3. **引用** — how to reference/use
-4. Additional sections as needed (配置, provides, 使用, 常见问题)
+核心段：
+1. **基本信息** 表格 — 类型、关键属性
+2. **安装** — 安装命令
+3. **引用** — 如何引用/使用
+4. 按需追加段（配置、provides、使用、常见问题）
 
-### Step 6: Write Skill Docs
+### 第 6 步：编写技能文档
 
-For each skill/operational guide, create 3 files in the `docs/{zh,en,ja}/skills/` subdirectory.
+对每个技能/操作指南，在 `docs/{zh,en,ja}/skills/` 子目录下各创建 3 个文件。
 
-### Step 7: Verify
+### 第 7 步：验证
 
-- Count files: `N modules × 3 languages + N skills × 3 languages + 3 READMEs`
-- Spot-check language switcher links
-- Verify all README links resolve to existing files
-- Check that technical terms are preserved across languages
+- 统计文件数：`N 个模块 × 3 种语言 + N 个技能 × 3 种语言 + 3 个 README`
+- 抽查语言切换器链接
+- 验证所有 README 中的链接指向存在的文件
+- 检查各语言版本间技术术语是否一致
 
 #### 日语特有检查
 
@@ -210,22 +209,23 @@ For each skill/operational guide, create 3 files in the `docs/{zh,en,ja}/skills/
 - 只在一种语言的 README 中加了表行（通常是主语言版本），漏了另外两种
 - 日语文档缺 `## 基本情報` 标准节
 
-## Parallelization
+## 并行化
 
-Use sub-agents for large projects. Batch modules by category and dispatch one sub-agent per category. Each sub-agent writes all 3 language versions for its assigned modules. Skills can be handled by a separate sub-agent.
+大型项目使用子代理。按类别分批模块，每个子代理负责一个类别。
+每个子代理为其分配的模块编写全部 3 个语言版本。技能可由单独的子代理处理。
 
-Typical sub-agent breakdown for a project with ~25 modules and ~20 skills:
-- Agent A: Infrastructure modules (5 modules × 3 langs = 15 files)
-- Agent B: Service modules (8 modules × 3 langs = 24 files)
-- Agent C: Proxy/navigation/static modules (12 modules × 3 langs = 36 files)
-- Agent D: Skills (20+ skills × 3 langs = 60+ files)
+约 25 个模块和 20 个技能的典型子代理拆分：
+- 代理 A：基础设施模块（5 个模块 × 3 语言 = 15 个文件）
+- 代理 B：服务模块（8 个模块 × 3 语言 = 24 个文件）
+- 代理 C：代理/导航/静态模块（12 个模块 × 3 语言 = 36 个文件）
+- 代理 D：技能（20+ 个技能 × 3 语言 = 60+ 个文件）
 
-## Anti-Patterns
+## 反模式
 
-- Do NOT hardcode project-specific module names in the skill body
-- Do NOT assume the project uses Docker / Nix / a specific toolchain
-- Do NOT write documentation before reading the project's actual metadata
-- Do NOT skip the verification step
-- Do NOT write English docs in Chinese or vice versa — match the target language directory
-- Do NOT add a README table row in only one language — all three READMEs must be updated together
-- Do NOT skip the `## 基本情報` table in Japanese docs — every ja doc requires it
+- 不要把项目特定的模块名硬编码到技能正文中
+- 不要假设项目使用 Docker / Nix / 特定工具链
+- 不要在读取项目实际元数据之前就编写文档
+- 不要跳过验证步骤
+- 不要用英语写中文文档，反之亦然 — 必须匹配目标语言目录
+- 不要只在一种语言的 README 中添加表行 — 三个 README 必须同步更新
+- 不要跳过日语文档的 `## 基本情報` 表格 — 每个 ja 文档都必须包含

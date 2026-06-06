@@ -40,6 +40,8 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 複数のコーディングエージェント向け補助スキル：
 
+> 本プロジェクトのスキルは主に中国語ユーザーと中国のオープンソース LLM を対象としており、すべての SKILL.md は中国語で記述されています。
+
 | スキル | 説明 | ドキュメント |
 |--------|------|-------------|
 | nixkits-check-updates | アップストリーム更新を確認し自動アップグレード | [docs/ja/skills/nixkits-check-updates.md](docs/ja/skills/nixkits-check-updates.md) |

@@ -40,6 +40,8 @@ Standalone overlays not included in `default`:
 
 Auxiliary skills for AI coding assistants:
 
+> These skills are written in Chinese, primarily targeting Chinese-speaking users and Chinese open-source LLMs.
+
 | Skill | Description | Docs |
 |-------|-------------|------|
 | nixkits-check-updates | Check upstream updates and auto-upgrade | [docs/en/skills/nixkits-check-updates.md](docs/en/skills/nixkits-check-updates.md) |

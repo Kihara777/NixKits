@@ -40,6 +40,8 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 供 AI 编码助手使用的技能：
 
+> 本项目的技能主要面向中文用户和中国开源模型，所有 SKILL.md 均使用中文编写。
+
 | 技能 | 说明 | 文档 |
 |------|------|------|
 | nixkits-check-updates | 检查上游软件更新并自动升级 | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |
