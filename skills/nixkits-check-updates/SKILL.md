@@ -53,6 +53,16 @@ check() {
 
 ## 第 4 步：更新构建配置
 
+> **⚠️ hash 计算注意事项**
+>
+> - SRI hash 格式必须使用标准 base64（`+` `/` `=`），**不能**使用 URL-safe base64（`-` `_`）。
+>   用 `nix hash to-sri --type sha256 <hash>` 或 `nix-prefetch-url --type sha256 <url>` 获取正确格式
+> - `fetchFromGitHub` 的 source hash **不能**从 GitHub archive tarball（`/archive/refs/tags/`）预计算 —
+>   两者可能不同。必须通过 `nix build` 的 hash mismatch 错误获取
+> - `npmDepsHash` 不能设为空字符串 `""`。清空时使用 `lib.fakeHash` 占位
+> - npm 包需要两次 `nix build`：第一次获取 source hash，第二次获取 npmDepsHash。
+>   如果 source hash 已知正确，可只清空 npmDepsHash 一次构建完成
+
 对每个有更新的包：
 
 ### npm 包
