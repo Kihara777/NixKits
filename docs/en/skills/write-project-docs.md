@@ -47,7 +47,7 @@ Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Featur
 - Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
 - No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
 - All three READMEs must be updated together
-- Japanese docs must include a `## 基本情報` table
+- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
 
 ## Usage
 
