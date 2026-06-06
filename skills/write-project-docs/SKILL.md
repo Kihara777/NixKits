@@ -190,6 +190,26 @@ For each skill/operational guide, create 3 files in the `docs/{zh,en,ja}/skills/
 - Verify all README links resolve to existing files
 - Check that technical terms are preserved across languages
 
+#### 日语特有检查
+
+- 每个日语版文档必须包含 `## 基本情報` 表格（`項目 | 値` 格式），与其他日语文档风格一致
+
+#### 新增条目的对称性检查
+
+当项目中新增一个模块、补丁或服务时，确保以下全部就位：
+
+- [ ] `docs/zh/<name>.md` — 存在且内容完整
+- [ ] `docs/en/<name>.md` — 存在且内容完整（翻译）
+- [ ] `docs/ja/<name>.md` — 存在且内容完整（翻译），包含 `## 基本情報`
+- [ ] `README.md` — 对应分类表中已添加行
+- [ ] `README.en.md` — 对应分类表中已添加行
+- [ ] `README.ja.md` — 对应分类表中已添加行
+
+常见遗漏模式：
+- 添加了 zh/en 文档却忘了 ja 文档
+- 只在一种语言的 README 中加了表行（通常是主语言版本），漏了另外两种
+- 日语文档缺 `## 基本情報` 标准节
+
 ## Parallelization
 
 Use sub-agents for large projects. Batch modules by category and dispatch one sub-agent per category. Each sub-agent writes all 3 language versions for its assigned modules. Skills can be handled by a separate sub-agent.
@@ -207,3 +227,5 @@ Typical sub-agent breakdown for a project with ~25 modules and ~20 skills:
 - Do NOT write documentation before reading the project's actual metadata
 - Do NOT skip the verification step
 - Do NOT write English docs in Chinese or vice versa — match the target language directory
+- Do NOT add a README table row in only one language — all three READMEs must be updated together
+- Do NOT skip the `## 基本情報` table in Japanese docs — every ja doc requires it
