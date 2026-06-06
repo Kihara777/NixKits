@@ -33,9 +33,10 @@
     '';
   }) // {
 
-    nixosModules.obs-bilibili-stream = import ./modules/obs-bilibili-stream.nix;
-    nixosModules.opencode-telegram   = import ./modules/opencode-telegram.nix;
-    nixosModules.llama-cpp-rocm      = import ./modules/llama-cpp-rocm.nix;
+    nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;
+    nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
+    nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
+    nixosModules.comfyui-strix-halo    = import ./modules/comfyui-strix-halo.nix;
 
     overlays = {
       default           = import ./overlays/default.nix;

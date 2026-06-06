@@ -32,6 +32,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 | パッチ | 説明 | ドキュメント |
 |--------|------|-------------|
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA 3.5) 向け ComfyUI ROCm サポート | [docs/ja/comfyui-strix-halo.md](docs/ja/comfyui-strix-halo.md) |
 | llama-cpp-rocm | GitHub 最新リリースを動的追跡する ROCm アクセラレーションビルド | [docs/ja/llama-cpp-rocm.md](docs/ja/llama-cpp-rocm.md) |
 | rcc-fix | 2-in-1 デバイス向け asusctl パッチ | [docs/ja/rcc-fix.md](docs/ja/rcc-fix.md) |
 

@@ -1,0 +1,145 @@
+diff --git a/nix/modules/comfyui.nix b/nix/modules/comfyui.nix
+index a438cb2..bf30218 100644
+--- a/nix/modules/comfyui.nix
++++ b/nix/modules/comfyui.nix
+@@ -32,6 +32,7 @@ let
+     cfg.dataDir
+   ]
+   ++ lib.optional cfg.enableManager "--enable-manager"
++  ++ lib.optional useRocm "--disable-xformers"  # nixpkgs xformers lacks ROCm backend
+   ++ cfg.extraArgs;
+   env = cfg.environment;
+   escapedArgs = lib.concatStringsSep " " (map lib.escapeShellArg args);
+@@ -111,6 +112,10 @@ in
+         this configuration, `gfx1100` has been tested as working, but others
+         may also work. Requires AMD drivers to be installed on the system.
+ 
++        For newer AMD GPUs not yet officially in the ROCm support matrix (e.g.
++        Strix Halo / gfx1151, RDNA 3.5 APUs), set `rocmGfxOverride` to force
++        a compatible GPU architecture (see below).
++
+         ---
+ 
+         Select `xpu` for Intel GPUs (oneAPI / SYCL, no IPEX required). Targets
+@@ -132,6 +137,28 @@ in
+       '';
+     };
+ 
++    rocmGfxOverride = lib.mkOption {
++      type = lib.types.nullOr lib.types.str;
++      default = null;
++      example = "11.0.0";
++      description = ''
++        Override the GPU architecture version reported to the ROCm runtime via
++        the `HSA_OVERRIDE_GFX_VERSION` environment variable.
++
++        This is useful for newer AMD GPUs that are not yet in the ROCm support
++        matrix but are binary-compatible with an existing architecture.
++
++        Format: `major.minor.patch` (e.g., `"11.0.0"` for gfx1100).
++
++        Common values:
++        - `"11.0.0"`: gfx1100 (RDNA 3) — recommended for gfx1151 (Strix Halo / RDNA 3.5)
++        - `"11.5.1"`: gfx1151 native — may work if the ROCm runtime recognizes it
++        - `"10.3.0"`: gfx1030 (RDNA 2) — fallback for older RDNA cards
++
++        Only takes effect when `gpuSupport = "rocm"`.
++      '';
++    };
++
+     cudaCapabilities = lib.mkOption {
+       type = lib.types.nullOr (lib.types.listOf lib.types.str);
+       default = null;
+@@ -376,7 +403,9 @@ in
+         (lib.optionalAttrs isDefaultDataDir { StateDirectory = "comfyui"; })
+       ];
+ 
+-      environment = env;
++      environment = env // lib.optionalAttrs (useRocm && cfg.rocmGfxOverride != null) {
++        HSA_OVERRIDE_GFX_VERSION = cfg.rocmGfxOverride;
++      };
+     };
+ 
+     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+diff --git a/nix/python-overrides.nix b/nix/python-overrides.nix
+index 5e8dd30..af68fa2 100644
+--- a/nix/python-overrides.nix
++++ b/nix/python-overrides.nix
+@@ -19,7 +19,12 @@ let
+ 
+   # Pre-built PyTorch ROCm wheels from pytorch.org
+   # These avoid compiling PyTorch from source (which requires 30-60GB RAM and hours of build time)
+-  rocmWheels = versions.pytorchWheels.rocm71;
++  rocmVersion =
++    if versions.pytorchWheels ? rocm72 && gpuSupport == "rocm" then "7.2"
++    else "7.1";
++  rocmWheels =
++    if rocmVersion == "7.2" then versions.pytorchWheels.rocm72
++    else versions.pytorchWheels.rocm71;
+ 
+   # Pre-built PyTorch XPU wheels from pytorch.org (Intel oneAPI / SYCL)
+   # Unlike CUDA/ROCm, the XPU torch wheel does NOT bundle its SYCL / MKL /
+@@ -354,7 +359,10 @@ lib.optionalAttrs useCuda {
+   };
+ }
+ # ROCm torch from pre-built wheels - avoids 30-60GB RAM compilation
+-# The wheels bundle ROCm libraries internally, providing full GPU support
++# The wheels bundle ROCm libraries internally, providing full GPU support.
++# Defaults to ROCm 7.2 when available (fallback: 7.1).
++# For newer GPUs not in the official support matrix (e.g., Strix Halo / gfx1151),
++# set HSA_OVERRIDE_GFX_VERSION to force a compatible architecture.
+ // lib.optionalAttrs useRocm {
+   torch = final.buildPythonPackage {
+     pname = "torch";
+@@ -394,17 +402,18 @@ lib.optionalAttrs useCuda {
+     doCheck = false;
+ 
+     # Passthru attributes expected by downstream packages (xformers, bitsandbytes, etc.)
+-    # The wheel bundles ROCm 7.1 and supports all GPU architectures
++    # The wheel bundles ROCm and supports all GPU architectures
+     passthru = {
+       cudaSupport = false;
+       rocmSupport = true;
+       # Provide rocmPackages for packages that need it (use default version)
+       cudaPackages = { };
+       rocmPackages = pkgs.rocmPackages;
++      inherit rocmVersion;
+     };
+ 
+     meta = {
+-      description = "PyTorch with ROCm ${rocmWheels.torch.version} (pre-built wheel)";
++      description = "PyTorch with ROCm ${rocmVersion} (${rocmWheels.torch.version}, pre-built wheel)";
+       homepage = "https://pytorch.org";
+       license = lib.licenses.bsd3;
+       platforms = [ "x86_64-linux" ];
+diff --git a/nix/versions.nix b/nix/versions.nix
+index 6509f88..2026a78 100644
+--- a/nix/versions.nix
++++ b/nix/versions.nix
+@@ -186,6 +186,26 @@
+         hash = "sha256-pUuMH2HeAbGrlGWJqgFYId0RCTVEcCJJ0gq6VpE8aLs=";
+       };
+     };
++    # Linux x86_64 ROCm 7.2
++    # ROCm 7.2 adds support for newer GPU architectures including
++    # RDNA 3.5 APUs (gfx1150/gfx1151/gfx1152 Strix Halo / Strix Point).
++    rocm72 = {
++      torch = {
++        version = "2.12.0";
++        url = "https://download.pytorch.org/whl/rocm7.2/torch-2.12.0%2Brocm7.2-cp312-cp312-manylinux_2_28_x86_64.whl";
++        hash = "sha256-RS30Eu/sB8dI/qpFA7C12xSujuTk8I81ExuWQp9K2z0=";
++      };
++      torchvision = {
++        version = "0.27.0";
++        url = "https://download.pytorch.org/whl/rocm7.2/torchvision-0.27.0%2Brocm7.2-cp312-cp312-manylinux_2_28_x86_64.whl";
++        hash = "sha256-+3A00Z5bfhbDTXqFAwjMBB8yOwKuXgHCfWeC0b/iKK0=";
++      };
++      torchaudio = {
++        version = "2.11.0";
++        url = "https://download.pytorch.org/whl/rocm7.2/torchaudio-2.11.0%2Brocm7.2-cp312-cp312-manylinux_2_28_x86_64.whl";
++        hash = "sha256-4DFtk4NGz6T/BLkUBakezFC9GHgQI+yldjt58Pe5vIw=";
++      };
++    };
+     # Linux x86_64 Intel XPU (oneAPI / SYCL)
+     # In-tree PyTorch XPU — no IPEX needed. Targets Arc A/B series and
+     # Core Ultra (Meteor Lake+) iGPUs. Older Xe-LP iGPUs (UHD 770) are
