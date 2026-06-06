@@ -18,6 +18,15 @@ ROCm 7.1 時点では gfx1151 は**公式サポート対象外**でしたが、R
 | `nix/python-overrides.nix` | ROCm バージョン自動選択：rocm72 定義があれば 7.2、なければ 7.1 にフォールバック |
 | `nix/modules/comfyui.nix` | `rocmGfxOverride` オプション + ROCm モード時の自動 `--disable-xformers` |
 
+## 基本情報
+
+| 項目 | 値 |
+|------|-----|
+| バージョン | comfyui-nix に追従 |
+| アップストリーム | [utensils/comfyui-nix](https://github.com/utensils/comfyui-nix) |
+| パッチ | 本リポジトリ `patches/comfyui-nix-strix-halo.patch` |
+| 注意 | 手動パッチまたは NixOS モジュールで適用 |
+
 ## 検証済み
 
 | 項目 | 結果 |
