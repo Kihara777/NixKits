@@ -45,4 +45,4 @@ cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
 - GPU 未识别时可尝试 `rocmGfxOverride = "11.0.0"`
 - ROCm 运行时缺失：`hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
 - xformers 报错时：补丁已自动 `--disable-xformers`
-- Strix Halo 统一内存架构自动配置 `amdgpu.gttsize=131072`
+- 模块自动设置 `amdgpu.gttsize=131072`（适配 Strix Halo 统一内存架构）

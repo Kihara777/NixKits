@@ -45,4 +45,4 @@ cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
 - If GPU is not detected, try `rocmGfxOverride = "11.0.0"`
 - Missing ROCm runtime: `hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
 - xformers errors: the patch auto-adds `--disable-xformers`
-- Strix Halo UMA auto-configures `amdgpu.gttsize=131072`
+- The module auto-sets `amdgpu.gttsize=131072` for Strix Halo UMA

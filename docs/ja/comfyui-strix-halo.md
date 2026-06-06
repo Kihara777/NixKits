@@ -45,4 +45,4 @@ cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
 - GPU 未認識の場合は `rocmGfxOverride = "11.0.0"` を試行
 - ROCm ランタイム不足時：`hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
 - xformers エラー発生時：本パッチが自動的に `--disable-xformers` を追加
-- Strix Halo の統合メモリ向けに `amdgpu.gttsize=131072` が自動設定される
+- モジュールが自動で `amdgpu.gttsize=131072` を設定（Strix Halo UMA 用）
