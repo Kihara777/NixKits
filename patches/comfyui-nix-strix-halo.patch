@@ -1,5 +1,5 @@
 diff --git a/nix/modules/comfyui.nix b/nix/modules/comfyui.nix
-index a438cb2..bf30218 100644
+index a438cb2..09368ed 100644
 --- a/nix/modules/comfyui.nix
 +++ b/nix/modules/comfyui.nix
 @@ -32,6 +32,7 @@ let
@@ -50,13 +50,30 @@ index a438cb2..bf30218 100644
      cudaCapabilities = lib.mkOption {
        type = lib.types.nullOr (lib.types.listOf lib.types.str);
        default = null;
-@@ -376,7 +403,9 @@ in
+@@ -328,7 +355,13 @@ in
+       requires = cfg.requiresMounts;
+       wantedBy = [ "multi-user.target" ];
+       path =
+-        lib.optionals useRocm [
++        [
++          # C compiler toolchain for custom node builds (ComfyUI Manager)
++          pkgs.stdenv.cc
++          pkgs.binutils
++          pkgs.gnumake
++        ]
++        ++ lib.optionals useRocm [
+           # rocminfo suppresses a ComfyUI startup warning about missing AMD GPU info
+           pkgs.rocmPackages.rocminfo
+         ]
+@@ -376,7 +409,11 @@ in
          (lib.optionalAttrs isDefaultDataDir { StateDirectory = "comfyui"; })
        ];
  
 -      environment = env;
 +      environment = env // lib.optionalAttrs (useRocm && cfg.rocmGfxOverride != null) {
 +        HSA_OVERRIDE_GFX_VERSION = cfg.rocmGfxOverride;
++      } // {
++        CC = "gcc";
 +      };
      };
  

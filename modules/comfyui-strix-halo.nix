@@ -15,6 +15,7 @@
 #   - ROCm version auto-selection (7.2 preferred, 7.1 fallback)
 #   - rocmGfxOverride module option
 #   - Auto --disable-xformers in ROCm mode (nixpkgs xformers lacks ROCm backend)
+#   - CC=gcc + C build toolchain (gcc, binutils, make) for custom node compilation
 #
 # Full documentation: ../docs/zh/comfyui-strix-halo.md
 #

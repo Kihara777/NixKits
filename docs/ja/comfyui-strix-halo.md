@@ -20,6 +20,8 @@ AMD Strix Halo（gfx1151 / RDNA 3.5 APU）向け ComfyUI ROCm アクセラレー
 - **バージョン自動選択**: rocm72 定義があれば 7.2、なければ 7.1 にフォールバック
 - **rocmGfxOverride オプション**: 未対応 GPU アーキテクチャの上書き（`HSA_OVERRIDE_GFX_VERSION`）
 - **xformers 自動無効化**: nixpkgs の xformers は ROCm バックエンド非対応のため
+- **C ビルドツールチェーン**: `stdenv.cc`、`binutils`、`gnumake` を注入、`CC=gcc` を設定し ComfyUI Manager のカスタムノードコンパイルに対応
+
 
 ## インストール
 

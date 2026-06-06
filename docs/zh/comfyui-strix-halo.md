@@ -20,6 +20,8 @@
 - **版本自动选择**: 存在 rocm72 定义时优先 7.2，否则回退 7.1
 - **rocmGfxOverride 选项**: GPU 架构未识别时的覆盖开关（`HSA_OVERRIDE_GFX_VERSION`）
 - **xformers 自动禁用**: nixpkgs 的 xformers 不含 ROCm 后端
+- **C 编译工具链**: 注入 `stdenv.cc`、`binutils`、`gnumake`，设置 `CC=gcc`，支持 ComfyUI Manager 自定义节点编译
+
 
 ## 安装
 
