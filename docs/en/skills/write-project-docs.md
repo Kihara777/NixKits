@@ -48,6 +48,7 @@ Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Featur
 - No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
 - All three READMEs must be updated together
 - Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
+- After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
 
 ## Usage
 
