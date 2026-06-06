@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md)
 
-> Installer that deploys NixKits skills to coding agent directories.
+> Installs or updates NixKits skills into coding agent directories (opencode, codewhale, claude, openclaw, agents).
 
 ## Info
 
@@ -13,18 +13,22 @@
 
 ## Features
 
-- **Local install**: copy skills from NixKits source directory
-- **Online install**: clone from GitHub then install
-- **Update check**: compare installed skills against source, prompt user
+- Detects installed coding agent skill directories
+- Compares local skills against NixKits source for differences
+- Supports local install (from source) and online install (from GitHub clone)
+- Shows diff before applying and asks for user confirmation
+- Verifies copy consistency after install
 
 ## Supported Agents
 
-`~/.opencode/skills/` `~/.codewhale/skills/` `~/.claude/skills/` `~/.openclaw/skills/` `~/.agents/skills/`
+| Agent | Directory |
+|-------|-----------|
+| OpenCode | `~/.opencode/skills/` |
+| CodeWhale | `~/.codewhale/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| OpenClaw | `~/.openclaw/skills/` |
+| Generic | `~/.agents/skills/` |
 
-## Workflow
+## Usage
 
-1. Detect existing agent directories
-2. Check installed NixKits skills for updates
-3. Ask user when differences are found
-4. Auto-select mode (local/online)
-5. Install and verify
+Activated when the user asks to "install skills" or "update NixKits skills".

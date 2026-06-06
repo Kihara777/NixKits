@@ -2,7 +2,7 @@
 
 [中文](nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md)
 
-> 检查 NixKits 中所有外部软件包的上游更新，自动更新构建配置和文档。
+> 检查 NixKits 所有软件包和补丁的上游版本更新，自动应用版本升级并更新文档。
 
 ## 基本信息
 
@@ -13,18 +13,22 @@
 
 ## 功能
 
-- 确认用户位于本地 NixKits 仓库
-- 自动发现 `flake.nix` 中所有外部软件包的最新 GitHub Release
-- 自动更新版本号、hash、npmDepsHash
-- 同步更新文档（3 语言）
+- 自动发现 `flake.nix` 中所有外部包的最新 GitHub Release
+- 更新构建配置（版本号、source hash、npmDepsHash）
+- 同步更新三语文档中的版本号
 - 报告本地已安装版本
-- 自动排除自有软件、动态版本和 nixpkgs 补丁
+- 识别补丁文件内的硬编码版本并提供检查指引
 
 ## 检查范围
 
-动态读取 `flake.nix` 中的 packages 定义，排除以下类别：
-- 自有软件（源码在本地仓库内）
-- 动态版本（构建时获取最新 Release）
-- 跟随 nixpkgs 的补丁
+动态读取 `flake.nix` → `packages`，排除以下类别：
+- 自建软件包（源码在仓库内）
+- 动态版本追踪（构建时获取最新版）
+- 跟随 nixpkgs 版本（补丁覆盖）
+- 补丁内硬编码版本（需手动检查，如 `comfyui-strix-halo`）
 
-其余所有外部软件包均自动纳入检查。
+其余外部包均自动纳入更新检查。
+
+## 使用
+
+由 AI 助手在用户要求「检查软件更新」或「更新包版本」时激活。

@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/recover-nixos-config.md) | [English](recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md)
 
-> Coding Agent skill: recover accidentally deleted `/etc/nixos` config files from the Nix store.
+> Recovers accidentally deleted `/etc/nixos` files from the Nix store.
 
 ## Info
 
@@ -11,21 +11,14 @@
 | Type | Coding Agent Skill |
 | Path | `skills/recover-nixos-config/SKILL.md` |
 
-## Trigger
+## Features
 
-Automatically activated when the user has deleted files under `/etc/nixos` (flake.nix, flake.lock, etc.) and the system was previously built successfully.
+- Locates the flake source snapshot from the most recent successful build in the Nix store
+- Searches `*-source` directories by hostname
+- Identifies the correct source matching the latest generation
+- Restores specified files (flake.nix, flake.lock, individual modules)
+- Validates the restored config with `nix flake check`
 
-## How It Works
-
-Every successful `nixos-rebuild` preserves a snapshot of the `/etc/nixos` flake source in the Nix store (`*-source` directory). Deleted files can be recovered even without local backups.
-
-Copy the `skills/` directory to any coding agent skill directory:
 ## Usage
 
-Automatically invoked by the AI assistant when `/etc/nixos` file loss is detected. No manual call needed. Recovery steps:
-
-1. Search Nix store for source snapshots matching the hostname
-2. Identify the source from the latest generation
-3. Verify file contents
-4. Copy lost files back to `/etc/nixos`
-5. Run `nix flake check` to validate
+Activated when the user reports accidentally deleting files under `/etc/nixos`.

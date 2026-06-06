@@ -2,33 +2,34 @@
 
 [中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)
 
-> Generate complete multi-language documentation for any project in the NixKits style — module docs, skill docs, classified READMEs.
+> Generates complete multi-language documentation following the NixKits style — trilingual (zh/en/ja), concise, table-driven.
 
-## 基本信息
+## Info
 
-| 项目 | 值 |
-|------|-----|
-| 类型 | Coding Agent Skill |
-| 路径 | `skills/write-project-docs/SKILL.md` |
+| Item | Value |
+|------|-------|
+| Type | Coding Agent Skill |
+| Path | `skills/write-project-docs/SKILL.md` |
 
-## 功能
+## Features
 
-- **Project assessment**: Read module/package definitions, extract metadata
-- **Module classification**: Group by function (infrastructure/services/proxy/navigation/static links)
-- **Directory creation**: Auto-generate `docs/{zh,en,ja}/skills/` structure
-- **README authoring**: Language switcher + category tables + doc links
-- **Module docs**: Info table + install + reference + usage (NixKits template)
-- **Skill docs**: Info table + feature list + trigger conditions
-- **Parallelization**: Dispatch sub-agents for large projects
-- **Verification**: File counts, link checking, term consistency
+- Assesses project metadata and extracts module information
+- Classifies modules by function (infra/services/proxy/skills)
+- Creates `docs/{zh,en,ja}/` directory structure
+- Writes categorized READMEs with language switchers
+- Writes per-module docs (info table + install + usage)
+- Supports sub-agent parallelization by module category
 
-## 使用
+## Writing Rules
+
+- Zero fluff, tables over prose, copy-paste-ready code blocks
+- Technical terms stay in English; warnings use blockquote format
+- Chinese section titles use 2- or 4-character words for visual rhythm
+- Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
+- No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
+- All three READMEs must be updated together
+- Japanese docs must include a `## 基本情報` table
+
+## Usage
 
 Activated when the user asks to "write documentation" or "generate docs in NixKits style".
-
-## Conventions
-
-- Zero fluff, tables over prose, complete code blocks
-- Technical terms remain in English
-- Warnings use `> **⚠️**` blockquotes
-- Three independent language files with relative-path language switchers

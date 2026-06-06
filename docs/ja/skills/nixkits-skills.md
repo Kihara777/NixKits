@@ -1,30 +1,34 @@
-# nixkits-skills（スキル）
+# nixkits-skills (Skill)
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](nixkits-skills.md)
 
-> NixKits スキルを各コーディングエージェントのディレクトリにインストールするインストーラー。
+> NixKits スキルをコーディングエージェントディレクトリ（opencode、codewhale、claude、openclaw、agents）にインストールまたは更新。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | Coding Agent スキル |
+| タイプ | Coding Agent Skill |
 | パス | `skills/nixkits-skills/SKILL.md` |
 
 ## 機能
 
-- **ローカルインストール**: NixKits ソースディレクトリからスキルをコピー
-- **オンラインインストール**: GitHub からクローンしてインストール
-- **更新チェック**: インストール済みスキルとソースを比較、ユーザーに更新を確認
+- インストール済みエージェントのスキルディレクトリを検出
+- ローカルスキルを NixKits ソースと比較し差異を表示
+- ローカルインストール（ソースから）とオンラインインストール（GitHub クローン）に対応
+- 適用前に差分を表示しユーザー確認を要求
+- インストール後にコピーの一貫性を検証
 
 ## 対応エージェント
 
-`~/.opencode/skills/` `~/.codewhale/skills/` `~/.claude/skills/` `~/.openclaw/skills/` `~/.agents/skills/`
+| エージェント | ディレクトリ |
+|-------------|-------------|
+| OpenCode | `~/.opencode/skills/` |
+| CodeWhale | `~/.codewhale/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| OpenClaw | `~/.openclaw/skills/` |
+| 汎用 | `~/.agents/skills/` |
 
-## ワークフロー
+## 使用
 
-1. 既存のエージェントディレクトリを検出
-2. インストール済み NixKits スキルの更新をチェック
-3. 差異がある場合にユーザーへ確認
-4. モードを自動選択（ローカル/オンライン）
-5. インストールと検証
+ユーザーが「スキルをインストール」または「NixKits スキルを更新」と依頼したときに起動。

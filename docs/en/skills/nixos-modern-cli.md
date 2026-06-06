@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixos-modern-cli.md) | [English](nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md)
 
-> Helps AI models correctly understand NixOS vs traditional Linux, using modern CLI for system maintenance.
+> Activated on NixOS systems. Ensures modern Nix CLI usage, full shell capability, and correct maintenance procedures.
 
 ## Info
 
@@ -11,19 +11,15 @@
 | Type | Coding Agent Skill |
 | Path | `skills/nixos-modern-cli/SKILL.md` |
 
-## Problem Solved
+## Features
 
-Small models often mistake NixOS for a traditional Linux distro, leading to:
-- Attempting `apt`/`yum` package installs
-- Unable to locate common command paths
-- Not knowing how to apply config changes
+- Corrects AI models that mistake NixOS for a traditional Linux distro
+- Provides a modern vs traditional CLI command reference table
+- Guides running scripts requiring POSIX tools via `nix shell --command`
+- Includes a common POSIX tool → nixpkgs package lookup table
+- Covers system maintenance, log viewing, and garbage collection
+- Lists NixOS-specific gotchas (PATH, nix-env persistence, etc.)
 
-This skill provides a complete NixOS operations reference.
+## Usage
 
-## Core Content
-
-- Key differences of NixOS declarative/immutable system
-- Modern CLI priority (`nixos`/`nix` > `nixos-rebuild`/`nix-env`)
-- Shell environment and ad-hoc tool installation
-- System update and maintenance workflows
-- Common pitfalls and solutions
+Auto-activated when the AI detects a NixOS environment, or on explicit request for "modern nix commands".

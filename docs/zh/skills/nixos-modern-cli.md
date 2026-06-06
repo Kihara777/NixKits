@@ -2,7 +2,7 @@
 
 [中文](nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md)
 
-> 帮助 AI 模型正确理解 NixOS 与传统 Linux 的区别，使用现代 CLI 进行系统维护。
+> 在 NixOS 系统上工作时激活。确保使用现代 Nix CLI、完整 shell 能力和正确的系统维护流程。
 
 ## 基本信息
 
@@ -11,19 +11,15 @@
 | 类型 | Coding Agent Skill |
 | 路径 | `skills/nixos-modern-cli/SKILL.md` |
 
-## 解决的问题
+## 功能
 
-低参数量模型常将 NixOS 误认为传统 Linux 发行版，导致：
-- 尝试使用 `apt`/`yum` 安装软件
-- 无法找到常用命令的路径
-- 不知道如何应用配置变更
+- 纠正 AI 模型将 NixOS 当作传统 Linux 发行版的常见错误
+- 提供现代 vs 传统 CLI 命令对照表
+- 指导使用 `nix shell --command` 运行需要 POSIX 工具的脚本
+- 包含常用 POSIX 工具的 nixpkgs 包名对照表
+- 提供系统维护、日志查看、垃圾回收的完整命令参考
+- 列出 NixOS 特有陷阱（PATH、nix-env 持久性等）
 
-此技能提供完整的 NixOS 操作指南。
+## 使用
 
-## 核心内容
-
-- NixOS 声明式、不可变系统的关键区别
-- 现代 CLI 优先（`nixos`/`nix` > `nixos-rebuild`/`nix-env`）
-- shell 环境与临时工具安装
-- 系统更新与维护流程
-- 常见陷阱与解决方案
+由 AI 助手在检测到 NixOS 环境时自动激活，或用户显式要求「使用现代 nix 命令」时激活。

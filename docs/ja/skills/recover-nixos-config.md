@@ -1,31 +1,24 @@
-# recover-nixos-config（スキル）
+# recover-nixos-config (Skill)
 
 [中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](recover-nixos-config.md)
 
-> Coding Agent スキル：誤って削除した `/etc/nixos` の設定ファイルを Nix store から復旧します。
+> 誤って削除した `/etc/nixos` ファイルを Nix store から復旧。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | Coding Agent スキル |
+| タイプ | Coding Agent Skill |
 | パス | `skills/recover-nixos-config/SKILL.md` |
 
-## トリガー
+## 機能
 
-ユーザーが `/etc/nixos` 配下のファイル（flake.nix、flake.lock など）を誤って削除し、かつシステムが以前に正常にビルドされていた場合に自動発動します。
+- Nix store 内の最新ビルドの flake ソーススナップショットを特定
+- ホスト名で `*-source` ディレクトリを検索
+- 最新 generation に対応する正しいソースを識別
+- 指定ファイル（flake.nix、flake.lock、各モジュール）を復元
+- `nix flake check` で復元した設定を検証
 
-## 復旧の仕組み
+## 使用
 
-`nixos-rebuild` の成功ごとに、Nix はその時点の `/etc/nixos` flake ソースのスナップショットを Nix store（`*-source` ディレクトリ）に保存します。ローカルバックアップがなくても削除されたファイルを復元できます。
-
-`skills/` ディレクトリを任意のコーディングエージェントスキルディレクトリにコピー：
-## 使い方
-
-`/etc/nixos` のファイル消失を AI アシスタントが検出すると自動的に呼び出されます。手動操作は不要です。復旧手順：
-
-1. Nix store からホスト名に一致するソーススナップショットを検索
-2. 最新世代のソースディレクトリを特定
-3. ファイル内容を確認
-4. 消失したファイルを `/etc/nixos` にコピー
-5. `nix flake check` で検証
+ユーザーが「/etc/nixos のファイルを誤って削除した」と報告したときに起動。
