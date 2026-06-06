@@ -19,6 +19,13 @@
 - 报告本地已安装版本
 - 识别补丁文件内的硬编码版本并提供检查指引
 
+## hash 计算注意事项
+
+- SRI hash 必须用标准 base64（`+` `/` `=`），不能使用 URL-safe 变体（`-` `_`）
+- `fetchFromGitHub` 的 source hash **不能**从 GitHub archive tarball 预计算，必须通过 `nix build` 的 hash mismatch 错误获取
+- `npmDepsHash` 清空时使用 `lib.fakeHash` 而非空字符串 `""`
+- npm 包需两次 `nix build`：第一次获取 source hash，第二次获取 npmDepsHash
+
 ## 检查范围
 
 动态读取 `flake.nix` → `packages`，排除以下类别：

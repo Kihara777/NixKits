@@ -19,6 +19,13 @@
 - ローカルにインストールされたバージョンを報告
 - パッチファイル内のハードコードされたバージョンを識別し確認手順を提供
 
+## hash の注意点
+
+- SRI hash は標準 base64（`+` `/` `=`）を使用し、URL-safe 変種（`-` `_`）は不可
+- `fetchFromGitHub` の source hash は GitHub archive tarball から**事前計算できない** — `nix build` の hash mismatch エラーから取得する必要あり
+- `npmDepsHash` を空にする場合は空文字列 `""` ではなく `lib.fakeHash` を使用
+- npm パッケージは 2 回の `nix build` が必要：1 回目で source hash、2 回目で npmDepsHash
+
 ## チェック範囲
 
 `flake.nix` → `packages` を動的読み取り、以下を除外：

@@ -19,6 +19,13 @@
 - Reports locally installed versions
 - Identifies hardcoded versions inside patch files and provides check guidance
 
+## Hash Gotchas
+
+- SRI hash must use standard base64 (`+` `/` `=`), not URL-safe variant (`-` `_`)
+- `fetchFromGitHub` source hash **cannot** be precomputed from the GitHub archive tarball — must come from `nix build` hash mismatch error
+- Use `lib.fakeHash` for empty `npmDepsHash`, not the empty string `""`
+- npm packages need two `nix build` passes: first for source hash, second for npmDepsHash
+
 ## Scope
 
 Reads `flake.nix` → `packages`, excluding:
