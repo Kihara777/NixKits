@@ -14,6 +14,7 @@ description: 检查 NixKits 所有软件包的上游版本更新并自动应用�
 - 自建软件包（源码为 `./kitsfmt-src` 或类似目录）
 - 动态版本追踪（如 `llama-cpp-rocm` — 构建时获取最新版）
 - 跟随 nixpkgs 版本（如 `rcc-fix` — 跟随 nixpkgs 版本号）
+- 补丁内硬编码版本（如 `comfyui-strix-halo` — 上游 wheel 版本嵌入在 `.patch` 文件中，见下方「检查补丁内版本」节）
 
 `flake.nix` → `packages` 中的其余所有包均需检查。
 
@@ -98,3 +99,51 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 ## 第 7 步：输出汇总报告
 
 以表格呈现：包名、旧版本 → 新版本、构建状态、本地安装版本。
+
+## 检查补丁内版本
+
+部分 NixKits 补丁（如 `comfyui-strix-halo`）在上游项目的补丁文件中直接硬编码了
+依赖的版本号和 hash，而非通过独立的 `.nix` 包定义管理。这类补丁的版本更新需要手动处理。
+
+### 识别
+
+在 `patches/` 目录下搜索硬编码版本：
+
+```bash
+grep -rn 'version\|torch\|wheel' patches/*.patch | grep -E '[0-9]+\.[0-9]+\.[0-9]+'
+```
+
+### 检查 comfyui-strix-halo 的 PyTorch ROCm wheel 更新
+
+该补丁的版本定义位于 patch 文件内的 `nix/versions.nix` 段：
+
+```bash
+# 提取当前版本
+grep -A2 'rocm72' patches/comfyui-nix-strix-halo.patch | grep -E '(torch|torchvision|torchaudio|version)'
+```
+
+检查上游是否有新 wheel 发布：
+
+```bash
+# 检查 PyTorch ROCm wheel 目录
+curl -s https://download.pytorch.org/whl/rocm7.2/ | grep -oP 'torch-[0-9]+\.[0-9]+\.[0-9]+' | sort -Vu | tail -1
+
+# 或检查 comfyui-nix 上游是否已更新 versions.nix
+curl -s https://raw.githubusercontent.com/utensils/comfyui-nix/main/nix/versions.nix | grep -A4 'rocm72'
+```
+
+### 更新流程
+
+1. 确认新版本在目标硬件上可用（Strix Halo 需要实测验证）
+2. 从 `https://download.pytorch.org/whl/rocm7.2/` 下载新 wheel 获取 SRI hash：
+
+```bash
+nix hash to-sri sha256:$(curl -sL <wheel-url> | sha256sum | cut -d' ' -f1)
+```
+
+3. 更新补丁文件中对应的 `version`、`url`、`hash` 字段
+4. 如果补丁引用了新 ROCm 主版本（如 `rocm7.3`），需要同步修改 `python-overrides.nix` 段中的版本选择逻辑
+5. 重新生成补丁：在 `comfyui-nix` 仓库中修改后执行 `git diff > patches/comfyui-nix-strix-halo.patch`
+6. 在目标硬件上测试构建和推理
+
+> **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的构建测试。
