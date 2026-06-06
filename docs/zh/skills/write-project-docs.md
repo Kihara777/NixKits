@@ -18,7 +18,26 @@
 - 生成 `docs/{zh,en,ja}/` 三语目录结构
 - 编写分类 README（含语言切换器）
 - 编写模块文档（基本信息表 + 安装 + 引用）
+- 编写技能文档（统一模板：基本信息 → 功能 → 使用）
 - 支持子代理并行化：按模块类别分派
+
+## 技能文档同步规则
+
+当 `SKILL.md` 变更时，对应三语文档必须同步更新。
+用 staleness check 定位过时文件：
+
+```bash
+for lang in zh en ja; do
+  for skill in skills/*/SKILL.md; do
+    name=$(basename $(dirname $skill))
+    doc="docs/$lang/skills/$name.md"
+    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
+  done
+done
+```
+
+更新顺序：中文基准 → 英文翻译 → 日文翻译。
+三语列名映射：`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能`。
 
 ## 编写规则
 

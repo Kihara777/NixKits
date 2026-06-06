@@ -18,7 +18,26 @@
 - Creates `docs/{zh,en,ja}/` directory structure
 - Writes categorized READMEs with language switchers
 - Writes per-module docs (info table + install + usage)
+- Writes skill docs using the unified template (Info → Features → Usage)
 - Supports sub-agent parallelization by module category
+
+## Skill Doc Sync Rules
+
+When `SKILL.md` changes, the corresponding trilingual docs must be updated.
+Use staleness check to locate outdated files:
+
+```bash
+for lang in zh en ja; do
+  for skill in skills/*/SKILL.md; do
+    name=$(basename $(dirname $skill))
+    doc="docs/$lang/skills/$name.md"
+    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
+  done
+done
+```
+
+Update order: Chinese baseline → English translation → Japanese translation.
+Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Features` / `機能`.
 
 ## Writing Rules
 

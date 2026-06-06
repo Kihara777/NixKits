@@ -18,7 +18,26 @@
 - `docs/{zh,en,ja}/` ディレクトリ構造を生成
 - 分類 README を作成（言語切替付き）
 - モジュールドキュメントを作成（基本情報表 + インストール + 参照）
+- 統一テンプレートでスキルドキュメントを作成（基本情報 → 機能 → 使用）
 - サブエージェントによるモジュールカテゴリ別の並列化に対応
+
+## スキルドキュメント同期ルール
+
+`SKILL.md` が変更された場合、対応する 3 言語のドキュメントを必ず更新。
+staleness check で古いファイルを特定：
+
+```bash
+for lang in zh en ja; do
+  for skill in skills/*/SKILL.md; do
+    name=$(basename $(dirname $skill))
+    doc="docs/$lang/skills/$name.md"
+    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
+  done
+done
+```
+
+更新順序：中国語ベースライン → 英語翻訳 → 日本語翻訳。
+列名マッピング：`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能`。
 
 ## 執筆ルール
 
