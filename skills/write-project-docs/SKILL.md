@@ -188,12 +188,60 @@ mkdir -p docs/{zh,en,ja}/skills
 
 对每个技能/操作指南，在 `docs/{zh,en,ja}/skills/` 子目录下各创建 3 个文件。
 
+技能文档遵循统一模板：
+
+```markdown
+# <skill-name> (Skill)
+
+[语言切换器]
+
+> 一句话摘要
+
+## 基本信息（ja: 基本情報 / en: Info）
+
+表格：类型、路径
+
+## 功能（ja: 機能 / en: Features）
+
+bullet list — 技能的关键能力
+
+## 使用（ja/en: Usage）
+
+触发条件 — 什么情况下 AI 助手应激活此技能
+```
+
+#### 技能文档同步规则
+
+当 `SKILL.md` 发生变更时，对应的三语文档 **必须同步更新**。
+用时间戳快速定位过时文档：
+
+```bash
+# 对比 SKILL.md 与三语文档的修改时间
+for lang in zh en ja; do
+  for skill in skills/*/SKILL.md; do
+    name=$(basename $(dirname $skill))
+    doc="docs/$lang/skills/$name.md"
+    [ -f "$doc" ] || continue
+    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
+  done
+done
+```
+
+过时文档更新时，保持三语结构一致：中文为基准翻译，英文和日文沿用各自列名
+（`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能` 等）。
+
 ### 第 7 步：验证
 
 - 统计文件数：`N 个模块 × 3 种语言 + N 个技能 × 3 种语言 + 3 个 README`
 - 抽查语言切换器链接
 - 验证所有 README 中的链接指向存在的文件
 - 检查各语言版本间技术术语是否一致
+
+#### 技能文档时效性检查
+
+- 运行 staleness check 确保所有 `docs/{zh,en,ja}/skills/*.md` 未被对应的 `SKILL.md` 超过
+- 过时文档按技能文档模板更新：中文基准 → 英文翻译 → 日文翻译
+- 三语列名映射：`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能`
 
 #### 日语特有检查
 
