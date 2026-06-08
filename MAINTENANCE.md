@@ -10,8 +10,6 @@ NixKits 软件更新维护日志。
 |--------|--------|--------|
 | mcp-searxng | 1.1.0 | 1.2.1 |
 
-文档：`docs/{zh,en,ja}/mcp-searxng.md`
-
 ---
 
 ## 2026-06-06T13:58:47+09:00
@@ -27,5 +25,3 @@ NixKits 软件更新维护日志。
 | opencode-telegram | 0.21.0 | 0.21.1 |
 | 　 | source hash | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
 | 　 | npmDepsHash | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
-
-文档：`codewhale` `mcp-searxng` `opencode-telegram` 各三语版
