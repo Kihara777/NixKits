@@ -37,6 +37,7 @@
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
     nixosModules.comfyui-strix-halo    = import ./modules/comfyui-strix-halo.nix;
+    nixosModules.rog-control-center-fix = import ./modules/rog-control-center-fix.nix;
 
     overlays = {
       default           = import ./overlays/default.nix;
