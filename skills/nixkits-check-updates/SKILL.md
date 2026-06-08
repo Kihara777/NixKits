@@ -110,6 +110,41 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 
 以表格呈现：包名、旧版本 → 新版本、构建状态、本地安装版本。
 
+## 第 8 步：更新维护记录
+
+每次软件更新后，在 `MAINTENANCE.md` 中追加记录。遵循以下规则：
+
+- **LIFO 顺序**：最新更新插入文件顶部（紧随 `---` 分隔线之后）。越早的更新越靠下
+- **章节标题**：ISO 8601 精确到秒的日期时间（`YYYY-MM-DDTHH:MM:SS+09:00`）
+- **章节开头**：三行三语摘要（中文 / English / 日本語），格式为「软件更新：<内容>」
+- **变更内容**：列出每个包的 `packages/<name>.nix` 路径、版本变更、hash 变更、构建验证状态、上游发布 URL
+- **文档**：列出同步更新的文档文件
+
+示例格式：
+
+```markdown
+## 2026-06-08T14:25:02+09:00
+
+软件更新：mcp-searxng 1.1.0 → 1.2.1
+
+Package update: mcp-searxng 1.1.0 → 1.2.1
+
+パッケージ更新：mcp-searxng 1.1.0 → 1.2.1
+
+### 变更内容
+
+- **mcp-searxng** (`packages/mcp-searxng.nix`)
+  - 版本号：`1.1.0` → `1.2.1`
+  - source hash：未变（`sha256-...`）
+  - npmDepsHash：未变（`sha256-...`）
+  - 构建验证：`/nix/store/...-mcp-searxng-1.2.1` ✅
+  - 上游发布：<https://github.com/ihor-sokoliuk/MCP-searxng/releases/tag/v1.2.1>
+
+### 文档
+
+- `docs/zh/mcp-searxng.md` `docs/en/mcp-searxng.md` `docs/ja/mcp-searxng.md` — 版本号同步
+```
+
 ## 检查补丁内版本
 
 部分 NixKits 补丁（如 `comfyui-strix-halo`）在上游项目的补丁文件中直接硬编码了
