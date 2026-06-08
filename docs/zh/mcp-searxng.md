@@ -8,7 +8,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 1.1.0 |
+| 版本 | 1.2.1 |
 | 上游 | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## 引用
