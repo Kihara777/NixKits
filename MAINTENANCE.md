@@ -9,10 +9,7 @@ NixKits 软件更新维护日志。
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | mcp-searxng | 1.1.0 | 1.2.1 |
-| 　 | source hash | 未变 `sha256-OVllsRMst6dWO/RagsmGyWN3muz1ATtffxfmLTfa0qU=` |
-| 　 | npmDepsHash | 未变 `sha256-LN9yDbwvlICoFl5KgQvzZjLGXflVM0QkSzaB2dJzR/w=` |
 
-构建：✅ `/nix/store/2xs7h7y...-mcp-searxng-1.2.1`
 文档：`docs/{zh,en,ja}/mcp-searxng.md`
 
 ---
