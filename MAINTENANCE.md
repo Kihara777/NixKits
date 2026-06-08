@@ -25,3 +25,71 @@ NixKits 软件更新维护日志。
 | opencode-telegram | 0.21.0 | 0.21.1 |
 | 　 | source hash | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
 | 　 | npmDepsHash | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
+
+---
+
+## 2026-06-06T12:51:46+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
+
+---
+
+## 2026-06-02T05:57:11+09:00
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.47 | 0.8.49 |
+| 　 | cli hash | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
+| 　 | tui hash | 新增 `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
+| mcp-searxng | 1.0.3 | 1.0.4 |
+| 　 | source hash | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
+| 　 | npmDepsHash | `sha256-...+` → `sha256-xnefgQnFuHVPSCWVSD8MWxjHmNSrKpWlbGaAtks5rkg=` |
+| obs-bilibili-stream | 2.0.12 | 2.1.0 |
+| 　 | source hash | — | → `sha256-lbN73L3ey7qZftsgmRGb9wPcj8DmwlOUWR9gdEni29w=` |
+| opencode-telegram | 0.20.5 | 0.21.0 |
+| 　 | source hash | `sha256-RKsZwK...` → `sha256-Al7CVol/HDgH3M0FwkdQWOze6xY/wvaWOskRsh9Abxo=` |
+| 　 | npmDepsHash | `sha256-...+` → `sha256-ZOhS7lX5z2bRi0Cilm2QBUVKmacK41oRcUn9kRcfdOg=` |
+
+---
+
+## 2026-05-29T10:18:46+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| codewhale | v0.8.47 |
+
+---
+
+## 2026-05-21T16:35:02+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| mcp-searxng | v1.0.3 |
+| opencode-telegram | v0.20.5 |
+
+---
+
+## 2026-05-14T17:10:06+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
+
+---
+
+## 2026-05-14T07:38:08+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| kitsfmt | 自建（`packages/kitsfmt-src/`） |
+| obs-bilibili-stream | v1.0.0 |
+
+---
+
+## 2026-05-01T01:08:15+09:00
+
+| 软件名 | 新增版本 |
+|--------|---------|
+| rcc-fix | 跟随 nixpkgs（overlay + patch） |
