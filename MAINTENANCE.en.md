@@ -2,22 +2,22 @@
 
 [中文](MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)
 
-NixKits 软件更新维护日志。
+NixKits package update changelog.
 
 ---
 
 ## 2026-06-08T14:25:02+09:00
 
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
+| Package | Old | New |
+|---------|-----|-----|
 | mcp-searxng | 1.1.0 | 1.2.1 |
 
 ---
 
 ## 2026-06-06T13:58:47+09:00
 
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
+| Package | Old | New |
+|---------|-----|-----|
 | codewhale | 0.8.49 | 0.8.53 |
 | 　 | cli hash | `sha256-97zk4L...` → `sha256-VxBNH2o4iEkk0PrnuZHDPECjvm+ARXR9T/BV8QqvYtw=` |
 | 　 | tui hash | `sha256-tc/s3e...` → `sha256-DBiWk4c4QFh/BKPlG5a3KkH0ZTxNQgqZ7IWwH4OaEEw=` |
@@ -32,19 +32,19 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-06T12:51:46+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
-| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
+| Package | Added |
+|---------|-------|
+| comfyui-strix-halo | Patch (ROCm 7.2 wheels embedded) |
 
 ---
 
 ## 2026-06-02T05:57:11+09:00
 
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
+| Package | Old | New |
+|---------|-----|-----|
 | codewhale | 0.8.47 | 0.8.49 |
 | 　 | cli hash | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
-| 　 | tui hash | 新增 `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
+| 　 | tui hash | Added `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
 | mcp-searxng | 1.0.3 | 1.0.4 |
 | 　 | source hash | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
 | 　 | npmDepsHash | `sha256-...+` → `sha256-xnefgQnFuHVPSCWVSD8MWxjHmNSrKpWlbGaAtks5rkg=` |
@@ -58,16 +58,16 @@ NixKits 软件更新维护日志。
 
 ## 2026-05-29T10:18:46+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
+| Package | Added |
+|---------|-------|
 | codewhale | v0.8.47 |
 
 ---
 
 ## 2026-05-21T16:35:02+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
+| Package | Added |
+|---------|-------|
 | mcp-searxng | v1.0.3 |
 | opencode-telegram | v0.20.5 |
 
@@ -75,23 +75,23 @@ NixKits 软件更新维护日志。
 
 ## 2026-05-14T17:10:06+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
-| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
+| Package | Added |
+|---------|-------|
+| llama-cpp-rocm | Dynamic (latest upstream release at build time) |
 
 ---
 
 ## 2026-05-14T07:38:08+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
-| kitsfmt | 自建（`packages/kitsfmt-src/`） |
+| Package | Added |
+|---------|-------|
+| kitsfmt | Self-hosted (`packages/kitsfmt-src/`) |
 | obs-bilibili-stream | v1.0.0 |
 
 ---
 
 ## 2026-05-01T01:08:15+09:00
 
-| 软件名 | 新增版本 |
-|--------|---------|
-| rcc-fix | 跟随 nixpkgs（overlay + patch） |
+| Package | Added |
+|---------|-------|
+| rcc-fix | Tracks nixpkgs (overlay + patch) |
