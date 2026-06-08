@@ -1,6 +1,6 @@
 # MAINTENANCE.md
 
-[中文](MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)
 
 NixKits package update changelog.
 

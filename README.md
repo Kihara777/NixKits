@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
+[中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)
 
 NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 

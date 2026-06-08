@@ -19,16 +19,22 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 
 ```
 <project>/
-├── README.md          # 主语言 README
-├── README.en.md       # 英文 README
-├── README.ja.md       # 日文 README
+├── README.md          # 主语言 README（中文）
+├── MAINTENANCE.md     # 维护记录（中文）
 ├── docs/
+│   ├── README.en.md   # 英文 README（本地化文件移入 docs/）
+│   ├── README.ja.md   # 日文 README
+│   ├── MAINTENANCE.en.md  # 英文维护记录
+│   ├── MAINTENANCE.ja.md  # 日文维护记录
 │   ├── zh/            # 中文文档
 │   │   ├── <module>.md
 │   │   └── skills/    # 技能文档子目录
 │   ├── en/            # 英文文档
 │   └── ja/            # 日文文档
 ```
+
+> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本（`*.en.md`、`*.ja.md`）
+> 移入 `docs/` 目录，文件名保持不变。
 
 ### 模块文档模板
 
@@ -56,9 +62,12 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 ```
 
 - 语言切换器行使用各语言目录对应的相对路径
-- zh 文件：`[中文](file.md) | [English](../en/file.md) | [日本語](../ja/file.md)`
-- en 文件：`[中文](../zh/file.md) | [English](file.md) | [日本語](../ja/file.md)`
-- ja 文件：`[中文](../zh/file.md) | [English](../en/file.md) | [日本語](file.md)`
+- 根目录无后缀文件指向 `docs/` 内的本地化版本：
+  `[中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)`
+- docs 内的本地化文件指向根目录：`[中文](../README.md) | ...`
+- zh 子目录文件：`[中文](file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md)`
+- en 子目录文件：`[中文](../../zh/file.md) | [English](file.md) | [日本語](../../ja/file.md)`
+- ja 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](file.md)`
 
 ### 技能文档模板
 
@@ -90,7 +99,7 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 ```markdown
 # <Project Name>
 
-[中文](README.md) | [English](README.en.md) | [日本語](README.ja.md)
+[中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)
 
 <一行项目描述>
 
@@ -258,8 +267,8 @@ done
 - [ ] `docs/en/<name>.md` — 存在且内容完整（翻译）
 - [ ] `docs/ja/<name>.md` — 存在且内容完整（翻译），包含 `## 基本情報`（`項目 | 値`）
 - [ ] `README.md` — 对应分类表中已添加行
-- [ ] `README.en.md` — 对应分类表中已添加行
-- [ ] `README.ja.md` — 对应分类表中已添加行
+- [ ] `docs/README.en.md` — 对应分类表中已添加行
+- [ ] `docs/README.ja.md` — 对应分类表中已添加行
 
 常见遗漏模式：
 - 添加了 zh/en 文档却忘了 ja 文档

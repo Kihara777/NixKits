@@ -121,7 +121,7 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
   - 已有软件更新：旧版本 → 新版本
   - 首次添加的软件：新旧版本列合并为一列，显示 `新增 v<version>`
 - **省略无变更信息**：构建验证结果不写入记录；未变化的 hash 不标出
-- **三语同步**：每次更新需同步 `MAINTENANCE.md` `MAINTENANCE.en.md` `MAINTENANCE.ja.md` 三个文件
+- **三语同步**：每次更新需同步 `MAINTENANCE.md` `docs/MAINTENANCE.en.md` `docs/MAINTENANCE.ja.md` 三个文件
 - **文档**：文档更新默认不记录；若有实质性重写（非版本号替换），可注明文件及 `+N -M` 行数变化
 
 示例格式：

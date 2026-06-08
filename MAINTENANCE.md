@@ -1,6 +1,6 @@
 # MAINTENANCE.md
 
-[中文](MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)
+[中文](MAINTENANCE.md) | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)
 
 NixKits 软件更新维护日志。
 
