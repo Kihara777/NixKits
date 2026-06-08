@@ -47,7 +47,8 @@ Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Featur
 - Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
 - No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
 - All three READMEs must be updated together
-- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
+- Root dir only holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`) live under `docs/`
+- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)`
 - After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
 
 ## Usage
