@@ -62,6 +62,8 @@ in
         ExecStart = "${lib.getExe cfg.package} start";
         Restart = "on-failure";
         RestartSec = 10;
+        TimeoutStopSec = 30;
+        KillMode = "mixed";
         User = cfg.user;
         Group = cfg.group;
       } // lib.optionalAttrs (cfg.environment != { }) {
