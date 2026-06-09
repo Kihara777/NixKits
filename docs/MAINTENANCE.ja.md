@@ -6,6 +6,17 @@ NixKits パッケージ更新履歴。
 
 ---
 
+## 2026-06-10T00:00:00+09:00
+
+| ソフトウェア | 旧バージョン | 新バージョン |
+|-------------|-------------|-------------|
+| codewhale | 0.8.53 | 0.8.55 |
+| 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
+| 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
+| mcp-searxng | 1.2.1 | 1.3.1 |
+
+---
+
 ## 2026-06-08T14:25:02+09:00
 
 | ソフトウェア | 旧バージョン | 新バージョン |
