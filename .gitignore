@@ -15,5 +15,6 @@ packages/kitsfmt-src/target/
 
 # IDE
 /.vscode/
+.codewhale/
 *.swp
 *.swo
