@@ -63,7 +63,7 @@ in
         Restart = "on-failure";
         RestartSec = 10;
         TimeoutStopSec = 30;
-        KillMode = "mixed";
+        KillMode = "process";
         User = cfg.user;
         Group = cfg.group;
       } // lib.optionalAttrs (cfg.environment != { }) {
