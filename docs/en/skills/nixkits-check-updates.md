@@ -16,7 +16,7 @@
 - Auto-discovers latest GitHub Releases for external packages in `flake.nix`
 - Updates build configs (version, source hash, npmDepsHash)
 - Syncs version numbers across all 3 language docs
-- Updates `MAINTENANCE.md` + `docs/MAINTENANCE.*.md` changelog (table-only, LIFO, omit unchanged, merged columns for new)
+- Updates `MAINTENANCE.md` + `docs/MAINTENANCE.*.md` changelog (table-only, LIFO, omit unchanged, merged columns for new, exact git time)
 - Reports locally installed versions
 - Identifies hardcoded versions inside patch files and provides check guidance
 

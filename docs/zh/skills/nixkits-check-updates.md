@@ -16,7 +16,7 @@
 - 自动发现 `flake.nix` 中所有外部包的最新 GitHub Release
 - 更新构建配置（版本号、source hash、npmDepsHash）
 - 同步更新三语文档中的版本号
-- 更新维护记录（`MAINTENANCE.md` + `docs/MAINTENANCE.*.md`、纯表格、LIFO、省略未变项、新增合并列）
+- 更新维护记录（`MAINTENANCE.md` + `docs/MAINTENANCE.*.md`、纯表格、LIFO、省略未变项、新增合并列、git commit 精确时间）
 - 报告本地已安装版本
 - 识别补丁文件内的硬编码版本并提供检查指引
 
