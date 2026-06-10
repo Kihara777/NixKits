@@ -1,4 +1,4 @@
-# MAINTENANCE.md
+# メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)
 
