@@ -17,15 +17,19 @@ description: 将 NixKits 技能安装或更新到编码助手目录（opencode�
 | OpenClaw | `~/.openclaw/skills/` |
 | 通用 | `~/.agents/skills/` |
 
-## 可用的 NixKits 技能
+## 可用的技能
 
-| 技能 | 说明 |
-|------|------|
-| `nixkits-check-updates` | 检查上游软件发布并自动升级 |
-| `nixkits-skills` | NixKits 技能安装器（本地/在线） |
-| `nixos-modern-cli` | NixOS 现代 CLI 操作指南（面向 AI 模型） |
-| `recover-nixos-config` | 从 Nix store 恢复误删的 /etc/nixos 文件 |
-| `write-project-docs` | 按 NixKits 风格生成多语言项目文档 |
+自动从 `skills/*/SKILL.md` 的 frontmatter 中提取：
+
+```bash
+for skill in skills/*/SKILL.md; do
+  name=$(grep '^name:' "$skill" | sed 's/name: *//')
+  desc=$(grep '^description:' "$skill" | sed 's/description: *//')
+  echo "| $name | $desc |"
+done
+```
+
+> 技能列表不应硬编码；每次执行时从当前 skills/ 目录动态生成。
 
 ## 安装模式
 
@@ -34,10 +38,10 @@ description: 将 NixKits 技能安装或更新到编码助手目录（opencode�
 当用户已位于 NixKits 源码目录内时：
 
 ```bash
-# 确定 NixKits 源码目录
+# 自动发现源码目录
 NIXKITS_DIR=$(pwd)
-# 或已知路径：
-NIXKITS_DIR="/home/kix/NixKits"
+# 或从 flake.nix 推断：
+[ -z "$NIXKITS_DIR" ] && NIXKITS_DIR=$(dirname "$(readlink -f flake.nix)" 2>/dev/null)
 
 # 将技能复制到各已存在的助手目录
 for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
@@ -53,9 +57,11 @@ done
 当本地没有 NixKits 源码时：
 
 ```bash
-# 克隆 NixKits 到临时目录
+# 自动发现远程仓库 URL
+REPO_URL=$(git remote get-url origin 2>/dev/null || echo "")
+# 克隆到临时目录
 TMPDIR=$(mktemp -d)
-git clone https://github.com/Kihara777/NixKits.git "$TMPDIR"
+git clone ${REPO_URL:-https://github.com/Kihara777/NixKits.git} "$TMPDIR"
 
 # 从克隆的源码安装
 for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
@@ -73,8 +79,8 @@ rm -rf "$TMPDIR"
 安装前，将本地技能与源码对比：
 
 ```bash
-# 本地模式：与 NixKits 源码对比
-NIXKITS_DIR="/home/kix/NixKits"
+# 本地模式：与源码对比
+NIXKITS_DIR=$(pwd)
 for skill_dir in "$NIXKITS_DIR/skills/"*/; do
   skill_name=$(basename "$skill_dir")
   for agent_dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do

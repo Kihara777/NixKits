@@ -9,31 +9,37 @@ description: 检查 NixKits 所有软件包的上游版本更新并自动应用�
 
 ## 排除的软件包
 
-以下**不检查**（无固定上游发布版本）：
+以下类别**不检查**（无固定上游发布版本）。通过 `.nix` 文件特征自动分类：
 
-- 自建软件包（源码为 `./kitsfmt-src` 或类似目录）
-- 动态版本追踪（如 `llama-cpp-rocm` — 构建时获取最新版）
-- 跟随 nixpkgs 版本（如 `rcc-fix` — 跟随 nixpkgs 版本号）
-- 补丁内硬编码版本（如 `comfyui-strix-halo` — 上游 wheel 版本嵌入在 `.patch` 文件中，见下方「检查补丁内版本」节）
+- **自建软件包**：`src` 指向本地路径（`./` 或 `../` 开头），如 `rustPlatform.buildRustPackage { src = ./src; }`
+- **动态版本追踪**：`version` 从外部输入动态读取，如 `builtins.readFile`、URL 抓取、`flake` input
+- **跟随 nixpkgs 版本**：使用 `overrideAttrs` 仅追加 patch，不定义独立 version
+- **补丁内硬编码版本**：`.patch` 文件中直接包含 `${version}` 或 wheel URL 及 hash（见下方「检查补丁内版本」节）
 
-`flake.nix` → `packages` 中的其余所有包均需检查。
+`flake.nix` → `packages` 中的其余包均自动纳入检查。
 
-## 第 1 步：确认本地 NixKits 仓库
+## 第 1 步：确认本地仓库
 
 ```bash
-test -f flake.nix && grep -q "NixKits" flake.nix && echo "OK: NixKits repo" || echo "ERROR: not in NixKits repo"
+# 通过 flake.nix 自动发现项目名
+test -f flake.nix && echo "OK: $(grep -oP 'description\s*=\s*"\K[^"]+' flake.nix | head -1)" || echo "ERROR: not in a flake project"
 ```
 
 ## 第 2 步：发现待检查的软件包
 
-读取 `flake.nix` 的 packages 段，找出所有外部包：
+从 `flake.nix` 的 packages 段自动提取，再按排除规则过滤：
 
 ```bash
-# 提取使用 fetchFromGitHub 或 fetchurl 的包名
-grep -B1 "fetchFromGitHub\|fetchurl" flake.nix packages/*.nix | grep -oP '(?<=packages\.)\w+|(?<=pkgs\.callPackage \./packages/)\w+'
-```
+# 自动发现所有被 callPackage 引用的包文件
+grep -oP '\./[a-zA-Z0-9_/-]+\.nix' flake.nix | sort -u > /tmp/all_pkgs.txt
 
-排除已知的自建/动态/nixpkgs 包。剩余的包需要检查。
+# 排除自建包（src 包含 ./ 或 ../）
+while read f; do
+  grep -q 'src\s*=\s*\./\.\.\|src\s*=\s*\.\/' "$f" 2>/dev/null && echo "SKIP self-hosted: $f"
+done < /tmp/all_pkgs.txt
+
+# 剩余包即为外部更新候选
+```
 
 ## 第 3 步：检查上游版本
 
@@ -138,48 +144,46 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 
 ## 检查补丁内版本
 
-部分 NixKits 补丁（如 `comfyui-strix-halo`）在上游项目的补丁文件中直接硬编码了
-依赖的版本号和 hash，而非通过独立的 `.nix` 包定义管理。这类补丁的版本更新需要手动处理。
+部分补丁在上游项目的 `.patch` 文件中直接硬编码了依赖的版本号和 hash。
+这类补丁的版本更新需要手动处理。
 
 ### 识别
 
-在 `patches/` 目录下搜索硬编码版本：
+在 `patches/` 目录下自动搜索硬编码版本：
 
 ```bash
-grep -rn 'version\|torch\|wheel' patches/*.patch | grep -E '[0-9]+\.[0-9]+\.[0-9]+'
+# 搜索 patch 文件中的版本号模式
+grep -rln -E '[0-9]+\.[0-9]+\.[0-9]+' patches/*.patch | sort -u
+
+# 对每个匹配的 patch，提取版本上下文
+for patch in $(grep -rln -E '[0-9]+\.[0-9]+\.[0-9]+' patches/*.patch); do
+  echo "=== $patch ==="
+  grep -n -E 'version|hash|url.*http' "$patch" | head -10
+done
 ```
 
-### 检查 comfyui-strix-halo 的 PyTorch ROCm wheel 更新
+### 通用更新流程
 
-该补丁的版本定义位于 patch 文件内的 `nix/versions.nix` 段：
+1. 从 patch 中提取上游资源 URL 和当前版本
+2. 检查上游是否有新版本：
 
 ```bash
-# 提取当前版本
-grep -A2 'rocm72' patches/comfyui-nix-strix-halo.patch | grep -E '(torch|torchvision|torchaudio|version)'
+# GitHub Release（如适用）
+curl -s "https://api.github.com/repos/<owner>/<repo>/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+'
+
+# PyPI / wheel 目录（如适用）
+curl -s "<wheel-index-url>" | grep -oP '<package>-[0-9]+\.[0-9]+\.[0-9]+' | sort -Vu | tail -1
 ```
 
-检查上游是否有新 wheel 发布：
+3. 下载新资源获取 SRI hash：
 
 ```bash
-# 检查 PyTorch ROCm wheel 目录
-curl -s https://download.pytorch.org/whl/rocm7.2/ | grep -oP 'torch-[0-9]+\.[0-9]+\.[0-9]+' | sort -Vu | tail -1
-
-# 或检查 comfyui-nix 上游是否已更新 versions.nix
-curl -s https://raw.githubusercontent.com/utensils/comfyui-nix/main/nix/versions.nix | grep -A4 'rocm72'
+nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
 ```
 
-### 更新流程
-
-1. 确认新版本在目标硬件上可用（Strix Halo 需要实测验证）
-2. 从 `https://download.pytorch.org/whl/rocm7.2/` 下载新 wheel 获取 SRI hash：
-
-```bash
-nix hash to-sri sha256:$(curl -sL <wheel-url> | sha256sum | cut -d' ' -f1)
-```
-
-3. 更新补丁文件中对应的 `version`、`url`、`hash` 字段
-4. 如果补丁引用了新 ROCm 主版本（如 `rocm7.3`），需要同步修改 `python-overrides.nix` 段中的版本选择逻辑
-5. 重新生成补丁：在 `comfyui-nix` 仓库中修改后执行 `git diff > patches/comfyui-nix-strix-halo.patch`
-6. 在目标硬件上测试构建和推理
+4. 更新 patch 文件中对应的 `version`、`url`、`hash` 字段
+5. 重新生成 patch：在上游仓库中修改后执行 `git diff > patches/<name>.patch`
+6. 在目标环境测试构建
 
 > **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的构建测试。
+> 涉及 GPU/硬件相关补丁时，需在目标硬件上实测验证。
