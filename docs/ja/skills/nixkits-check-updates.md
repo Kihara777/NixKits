@@ -13,7 +13,7 @@
 
 ## 機能
 
-- `flake.nix` 内の外部パッケージの最新 GitHub Release を自動検出
+- `flake.nix` から全外部パッケージを自動検出し最新 GitHub Release をチェック
 - ビルド設定（バージョン、source hash、npmDepsHash）を更新
 - 3 言語のドキュメントのバージョン番号を同期
 - メンテナンスログを更新（説明的タイトル、テーブルのみ、LIFO、未変更省略、新規統合カラム、git 正確時刻）

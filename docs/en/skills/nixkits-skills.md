@@ -13,6 +13,7 @@
 
 ## Features
 
+- Auto-discovers source directory and git remote URL
 - Detects installed coding agent skill directories
 - Compares local skills against NixKits source for differences
 - Supports local install (from source) and online install (from GitHub clone)

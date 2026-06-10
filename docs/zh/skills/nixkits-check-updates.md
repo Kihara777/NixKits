@@ -13,7 +13,7 @@
 
 ## 功能
 
-- 自动发现 `flake.nix` 中所有外部包的最新 GitHub Release
+- 从 `flake.nix` 自动发现所有外部包并检查最新 GitHub Release
 - 更新构建配置（版本号、source hash、npmDepsHash）
 - 同步更新三语文档中的版本号
 - 更新维护记录（描述性标题、纯表格、LIFO、省略未变项、新增合并列、git commit 精确时间）
