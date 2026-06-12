@@ -6,6 +6,19 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-12T10:51:31+09:00
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.57 | 0.8.58 |
+| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
+| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
+| mcp-searxng | 1.3.2 | 1.3.4 |
+| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
+| 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
+
+---
+
 ## 2026-06-11T04:52:16+09:00
 
 | 软件名 | 旧版本 | 新版本 |
