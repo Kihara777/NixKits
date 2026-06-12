@@ -143,3 +143,111 @@
 ## 模型说明
 
 `modelsPreset` 支持多个模型，服务启动时按需加载。全局预设 `"*"` 应用于所有模型，单个模型可覆盖特定参数。`hf-repo` 自动从 HuggingFace 下载 GGUF 格式模型文件。
+
+## 迁移指南
+
+### 受影响版本
+
+| 组件 | 受影响版本 | 变更内容 |
+|------|-----------|---------|
+| nixpkgs | ≥ 2026-06（master） | `services.llama-cpp.modelsPreset` 移除，`port`/`host`/`model`/`modelsDir` 重命名为 `settings.port`/`settings.host`/… |
+| NixKits | ≥ `6f52ddf`（`modules/llama-cpp-rocm.nix`） | 命名空间从 `services.llama-cpp-rocm` 迁移到 `nixkits.llama-cpp-rocm` |
+| 上游 llama.cpp | b9605 | `--models-preset` CLI 参数保留（底層能力未变） |
+
+### 配置项目对照
+
+| 旧配置（已废弃） | 新配置 | 说明 |
+|-----------------|--------|------|
+| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | `modelsPreset` 从 nixpkgs 移除，改为 NixKits 提供 |
+| `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | 命名空间统一 |
+| `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | 同上 |
+| `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | 同上 |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs 重命名 |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs 重命名 |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs 重命名 |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs 重命名 |
+| 手动 `systemd.services.llama-cpp.serviceConfig` | 删除 | NixKits 模块自动处理 DynamicUser/PrivateUsers/ProtectHome/ProcSubset |
+| `services.llama-cpp.extraFlags` | `services.llama-cpp.settings` 中添加对应 flag | nixpkgs 移除 |
+
+### 迁移示例
+
+> **⚠️ 第 1 步**：在 `flake.nix` 模块列表中添加 `nix-kits.nixosModules.llama-cpp-rocm`
+
+**迁移前**：
+
+```nix
+# flake.nix — 模块列表
+{ modules = [
+    # nix-kits.nixosModules.llama-cpp-rocm  # ← 尚未导入
+];}
+
+# llama-cpp.nix
+{
+  services.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+  };
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    port = 2027;
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
+      };
+    };
+  };
+  # 手动 systemd 配置
+  systemd.services.llama-cpp.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    PrivateUsers = lib.mkForce false;
+    ProtectHome = lib.mkForce false;
+    User = lib.mkForce "kix";
+    Group = lib.mkForce "users";
+    Environment = lib.mkForce [
+      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
+    ];
+    ProcSubset = lib.mkForce "all";
+  };
+}
+```
+
+**迁移后**：
+
+```nix
+# flake.nix — 模块列表（新增）
+{ modules = [
+    nix-kits.nixosModules.llama-cpp-rocm
+];}
+
+# llama-cpp.nix
+{
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    settings.port = 2027;
+  };
+  nixkits.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
+      };
+    };
+  };
+  # NixKits 模块未覆盖的环境变量
+  systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
+    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  ];
+}
+```

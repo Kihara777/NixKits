@@ -139,3 +139,111 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
 > **Warning: Home Manager llama-cpp service**
 >
 > If enabled via Home Manager, additional user-level sandboxing may prevent GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level configuration.
+
+## Migration Guide
+
+### Affected Versions
+
+| Component | Affected | Change |
+|-----------|----------|--------|
+| nixpkgs | ≥ 2026-06 (master) | `services.llama-cpp.modelsPreset` removed; `port`/`host`/`model`/`modelsDir` renamed to `settings.port`/`settings.host`/… |
+| NixKits | ≥ `6f52ddf` (`modules/llama-cpp-rocm.nix`) | Namespace: `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
+| Upstream llama.cpp | b9605 | `--models-preset` CLI argument retained |
+
+### Config Key Mapping
+
+| Old (deprecated) | New | Notes |
+|------------------|-----|-------|
+| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | Removed from nixpkgs, restored via NixKits |
+| `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | Namespace unified |
+| `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | Namespace unified |
+| `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | Namespace unified |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs rename |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs rename |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs rename |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs rename |
+| Manual `systemd.services.llama-cpp.serviceConfig` | Remove | Handled by NixKits module |
+| `services.llama-cpp.extraFlags` | Add flags to `services.llama-cpp.settings` | nixpkgs removal |
+
+### Migration Example
+
+> **⚠️ Step 1**: Add `nix-kits.nixosModules.llama-cpp-rocm` to your flake module list.
+
+**Before**:
+
+```nix
+# flake.nix — module list
+{ modules = [
+    # nix-kits.nixosModules.llama-cpp-rocm  # ← not yet imported
+];}
+
+# llama-cpp.nix
+{
+  services.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+  };
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    port = 2027;
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
+      };
+    };
+  };
+  # Manual systemd overrides
+  systemd.services.llama-cpp.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    PrivateUsers = lib.mkForce false;
+    ProtectHome = lib.mkForce false;
+    User = lib.mkForce "kix";
+    Group = lib.mkForce "users";
+    Environment = lib.mkForce [
+      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
+    ];
+    ProcSubset = lib.mkForce "all";
+  };
+}
+```
+
+**After**:
+
+```nix
+# flake.nix — module list (new)
+{ modules = [
+    nix-kits.nixosModules.llama-cpp-rocm
+];}
+
+# llama-cpp.nix
+{
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    settings.port = 2027;
+  };
+  nixkits.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
+      };
+    };
+  };
+  # Extra env vars not covered by NixKits options
+  systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
+    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  ];
+}
+```
