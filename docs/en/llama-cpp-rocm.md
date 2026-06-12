@@ -37,15 +37,15 @@ See upstream llama.cpp docs.
       modules = [
         nix-kits.nixosModules.llama-cpp-rocm
         {
-          services.llama-cpp-rocm = {
-            enable = true;
-            user = "kix";
-            group = "users";
-          };
           services.llama-cpp = {
             enable = true;
             package = pkgs.llama-cpp-rocm;
             port = 2027;
+          };
+          nixkits.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
             modelsPreset = {
               "*" = {
                 presence-penalty = "0.0";
