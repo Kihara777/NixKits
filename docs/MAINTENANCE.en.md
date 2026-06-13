@@ -6,6 +6,19 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-14T07:56:11+09:00
+
+| Package | Old | New |
+|---------|-----|-----|
+| codewhale | 0.8.58 | 0.8.59 |
+| 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
+| 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
+| mcp-searxng | 1.3.4 | 1.4.0 |
+| 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
+| 　 | npmDepsHash | `sha256-3hWshG0...` → `sha256-Lh1UoM8zSMFji/TkqDAOiRtFRrQ/jqn5TbONySj9ckg=` |
+
+---
+
 ## 2026-06-12T10:51:31+09:00
 
 | Package | Old | New |
