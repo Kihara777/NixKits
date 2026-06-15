@@ -77,3 +77,52 @@ in
 ```
 
 > SearXNG requires JSON format (configured above in `settings.search.formats`).
+
+## CodeWhale Config
+
+CodeWhale stores MCP configuration in `~/.deepseek/mcp.json`. After adding mcp-searxng, you **must manually set `SEARXNG_URL`** — the `codewhale mcp add` command does not auto-populate the `env` field.
+
+```json
+{
+  "servers": {
+    "SearXNG": {
+      "command": "/etc/profiles/per-user/kix/bin/mcp-searxng",
+      "args": [],
+      "env": {
+        "SEARXNG_URL": "http://127.0.0.1:42701"
+      }
+    }
+  }
+}
+```
+
+> **⚠️ Common pitfall**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` leaves `env` as `{}`.
+> Without `SEARXNG_URL` the MCP server fails silently — `codewhale mcp list` shows `[enabled]` but calls return no results.
+
+## Troubleshooting
+
+### MCP server unresponsive
+
+```bash
+# Check registration and status
+codewhale mcp list
+
+# Verify environment variable
+cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
+```
+
+### SearXNG backend connectivity
+
+```bash
+# Verify SearXNG API is reachable
+curl -s http://127.0.0.1:42701/config | head -c 100
+
+# Manual MCP server test (should show MCP handshake)
+SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
+```
+
+### Search returns no results
+
+- Ensure `settings.search.formats` includes `"json"` (required by MCP Server)
+- Verify lighttpd reverse proxy forwards `X-Forwarded-For` header
+- Check logs: `journalctl -u searx --no-pager -n 30`

@@ -84,3 +84,52 @@ in
 ```
 
 > SearXNG 需启用 JSON 格式（已在上述 `settings.search.formats` 中配置）。
+
+## CodeWhale 配置
+
+CodeWhale 的 MCP 配置文件位于 `~/.deepseek/mcp.json`。添加 mcp-searxng 后 **必须手动设置 `SEARXNG_URL`** 环境变量——`codewhale mcp add` 命令不会自动填充 `env` 字段。
+
+```json
+{
+  "servers": {
+    "SearXNG": {
+      "command": "/etc/profiles/per-user/kix/bin/mcp-searxng",
+      "args": [],
+      "env": {
+        "SEARXNG_URL": "http://127.0.0.1:42701"
+      }
+    }
+  }
+}
+```
+
+> **⚠️ 常见陷阱**：`codewhale mcp add SearXNG --command /path/to/mcp-searxng` 添加后 `env` 默认为 `{}`。
+> 缺少 `SEARXNG_URL` 时 MCP 服务器静默失败——`codewhale mcp list` 显示 `[enabled]` 但调用无结果。
+
+## 故障排查
+
+### MCP 服务器无响应
+
+```bash
+# 检查 MCP 服务器是否注册且启用
+codewhale mcp list
+
+# 检查环境变量是否正确配置
+cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
+```
+
+### SearXNG 后端连通性
+
+```bash
+# 验证 SearXNG API 是否可达
+curl -s http://127.0.0.1:42701/config | head -c 100
+
+# 手动测试 MCP 服务器（应显示 MCP 协议握手信息）
+SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
+```
+
+### SearXNG 搜索不工作
+
+- 确认 `settings.search.formats` 包含 `"json"`（MCP Server 需要 JSON API）
+- 检查 lighttpd 反向代理是否正确设置 `X-Forwarded-For` 头
+- 查看日志：`journalctl -u searx --no-pager -n 30`

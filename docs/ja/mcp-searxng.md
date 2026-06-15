@@ -77,3 +77,52 @@ in
 ```
 
 > SearXNG は JSON 形式を有効にする必要があります（上記 `settings.search.formats` で設定済み）。
+
+## CodeWhale 設定
+
+CodeWhale の MCP 設定ファイルは `~/.deepseek/mcp.json` にあります。mcp-searxng を追加した後、**必ず手動で `SEARXNG_URL` を設定してください** — `codewhale mcp add` コマンドは `env` フィールドを自動入力しません。
+
+```json
+{
+  "servers": {
+    "SearXNG": {
+      "command": "/etc/profiles/per-user/kix/bin/mcp-searxng",
+      "args": [],
+      "env": {
+        "SEARXNG_URL": "http://127.0.0.1:42701"
+      }
+    }
+  }
+}
+```
+
+> **⚠️ よくある落とし穴**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` を実行すると `env` は `{}` のままです。
+> `SEARXNG_URL` がない場合、MCP サーバーはサイレントに失敗します — `codewhale mcp list` には `[enabled]` と表示されますが、呼び出しても結果が返りません。
+
+## トラブルシューティング
+
+### MCP サーバーが応答しない
+
+```bash
+# 登録とステータスを確認
+codewhale mcp list
+
+# 環境変数の設定を確認
+cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
+```
+
+### SearXNG バックエンド接続
+
+```bash
+# SearXNG API が到達可能か確認
+curl -s http://127.0.0.1:42701/config | head -c 100
+
+# 手動 MCP サーバーテスト（MCP ハンドシェイクが表示されるはず）
+SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
+```
+
+### 検索結果が返らない
+
+- `settings.search.formats` に `"json"` が含まれているか確認（MCP Server の要件）
+- lighttpd リバースプロキシが `X-Forwarded-For` ヘッダーを転送しているか確認
+- ログを確認: `journalctl -u searx --no-pager -n 30`
