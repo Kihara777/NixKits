@@ -150,3 +150,60 @@ systemctl --user start/stop/restart <service>
 - **`nix-env` 变更不持久？** `nix-env` 是命令式的，绕过 NixOS 声明式配置 — 推荐编辑 `/etc/nixos/`
 - **需要编辑配置文件？** 编辑 `/etc/nixos/` 中的文件，然后 `sudo nixos-rebuild switch`
 - **如何安装系统级软件包？** 添加到 `configuration.nix` 的 `environment.systemPackages`，然后 rebuild
+
+## Nix Store 路径陷阱
+
+Nix 将软件安装在 `/nix/store/<hash>-<name>-<version>` 中。写入到配置文件
+（`.gitconfig`、`.bashrc`、systemd unit 等）的绝对 Nix store 路径在系统更新
+或 `nix store gc` 后会立即失效。
+
+### 典型场景：GitHub CLI 凭据助手
+
+`gh auth setup-git` 会将 gh 的绝对路径写入 `~/.gitconfig`：
+
+```
+[credential "https://github.com"]
+    helper = !/nix/store/pidh15...-gh-2.94.0/bin/.gh-wrapped auth git-credential
+```
+
+GC 回收旧 store 路径后，Git 无法调用凭据助手，回退到交互式终端提示。
+非交互环境下直接失败，症状为：
+
+```
+fatal: could not read Username for 'https://github.com': terminal prompts disabled
+```
+
+### 通用修复模式
+
+将硬编码的绝对路径替换为通过 `$PATH` 查找的命令名：
+
+```bash
+# 修复前（不稳定）
+git config --global credential.https://github.com.helper \
+  '!/nix/store/xxxx-gh-2.94.0/bin/.gh-wrapped auth git-credential'
+
+# 修复后（持久）
+git config --global credential.https://github.com.helper \
+  '!gh auth git-credential'
+```
+
+> **规则**：任何写入配置文件的 Nix store 绝对路径都会成为定时炸弹。
+> 优先使用裸命令名（依赖 `$PATH`）或指向 `/run/current-system/sw/bin/`
+> 的符号链接（该路径在系统更新时由 NixOS 自动替换）。
+
+### 识别方法
+
+检查常见配置文件中是否包含 `/nix/store/` 路径：
+
+```bash
+grep -rn '/nix/store/' ~/.gitconfig ~/.bashrc ~/.zshrc ~/.config/ 2>/dev/null
+```
+
+### 其他常见案例
+
+| 工具 | 陷阱 | 修复 |
+|------|------|------|
+| `pip install --user` | `~/.local/bin/` 中的脚本 shebang 指向 Nix store Python | 使用 `nix shell` 或虚拟环境，不要用 `pip install --user` |
+| `gem install` | 同 pip，二进制 stub 指向特定 Ruby 版本 | 使用 nixpkgs 中的 Ruby 包或 `bundler` |
+| `cargo install` | 二进制 hardcode 了构建时的 Nix store rpath | 使用 nixpkgs 中的 Rust 包或 `nix build` |
+| systemd unit `ExecStart=` | 指向 `/nix/store/…` 的绝对路径 | 使用 `lib.getExe pkg` 或在 `$PATH` 中引用 |

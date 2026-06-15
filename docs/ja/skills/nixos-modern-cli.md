@@ -19,6 +19,7 @@
 - 一般的な POSIX ツール → nixpkgs パッケージ対応表を搭載
 - システムメンテナンス、ログ確認、ガベージコレクションを網羅
 - NixOS 固有の注意点（PATH、nix-env の永続性など）を列挙
+- Nix Store パスの罠を診断：GC 回収で無効化された `/nix/store/` パスを特定・修正（例：`gh auth setup-git` の認証ヘルパー）
 
 ## 使用
 

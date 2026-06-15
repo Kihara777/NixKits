@@ -19,6 +19,7 @@
 - Includes a common POSIX tool → nixpkgs package lookup table
 - Covers system maintenance, log viewing, and garbage collection
 - Lists NixOS-specific gotchas (PATH, nix-env persistence, etc.)
+- Diagnoses Nix Store path traps: identifies and fixes stale `/nix/store/` paths in config files (e.g. `gh auth setup-git` credential helper breaking after GC)
 
 ## Usage
 

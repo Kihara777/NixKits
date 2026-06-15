@@ -19,6 +19,7 @@
 - 包含常用 POSIX 工具的 nixpkgs 包名对照表
 - 提供系统维护、日志查看、垃圾回收的完整命令参考
 - 列出 NixOS 特有陷阱（PATH、nix-env 持久性等）
+- 诊断 Nix Store 路径陷阱：识别并修复因 GC 回收导致失效的硬编码 `/nix/store/` 路径（如 `gh auth setup-git` 凭据助手）
 
 ## 使用
 
