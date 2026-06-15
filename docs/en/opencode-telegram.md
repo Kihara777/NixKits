@@ -8,7 +8,7 @@ Telegram Bot client for [OpenCode](https://opencode.ai).
 
 | Item | Value |
 |------|-------|
-| Version | 0.21.1 |
+| Version | 0.21.2 |
 | Upstream | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## Usage

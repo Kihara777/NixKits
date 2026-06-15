@@ -9,16 +9,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "opencode-telegram";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "grinev";
     repo = "opencode-telegram-bot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=";
+    hash = "sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=";
   };
 
-  npmDepsHash = "sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=";
+  npmDepsHash = "sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=";
   npmBuildScript = "build";
   npmInstallFlags = [ "--ignore-scripts" ];
 
