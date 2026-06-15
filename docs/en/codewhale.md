@@ -8,7 +8,7 @@ A terminal coding agent built for DeepSeek V4.
 
 | Item | Value |
 |------|-------|
-| Version | 0.8.59 |
+| Version | 0.8.60 |
 | Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | Type | Pre-built binaries (GitHub Releases) |
 
