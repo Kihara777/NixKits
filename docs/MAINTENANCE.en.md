@@ -6,6 +6,16 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-16T04:56:06+09:00
+
+| Package | Old | New |
+|---------|-----|-----|
+| opencode-telegram | 0.21.1 | 0.21.2 |
+| 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
+| 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
+
+---
+
 ## 2026-06-15T17:32:16+09:00
 
 | Package | Old | New |
