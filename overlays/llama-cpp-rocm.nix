@@ -1,20 +1,20 @@
 # llama-cpp-rocm: overlay that tracks upstream llama.cpp latest release.
 #
-# Version is fetched dynamically via builtins.fetchurl at evaluation time.
+# Version is fetched dynamically via builtins.fetchurl (impure fetch) at evaluation
+# time — no hash parameter means "fetch the current resource regardless of content".
 # This avoids the instability of locking a rapidly-changing API URL in flake.lock.
-# Graceful fallback to nixpkgs llama-cpp.version on network / API failures.
+#
+# Requirements:
+#   • Pure mode (default): falls back to nixpkgs llama-cpp.version
+#   • Impure mode (--impure): fetches live upstream release tag → version
+#
+# Graceful fallback to nixpkgs version on network / API failures in all modes.
 (final: prev: let
   fetchedTag = builtins.tryEval (
     let
       json = builtins.fromJSON (
         builtins.readFile (
-          builtins.fetchurl {
-            # Nix ≥ 2.19 allows empty hash for impure fetches in flakes.
-            # This is intentional — the upstream releases are updated hourly,
-            # so a fixed hash would be stale within minutes.
-            url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
-            hash = "";
-          }
+          builtins.fetchurl "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest"
         )
       );
     in json.tag_name
