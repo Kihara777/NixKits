@@ -25,6 +25,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
+| ruyi | RuyiSDK 包管理器（RISC-V 开发工具） | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
 ## 补丁
 
