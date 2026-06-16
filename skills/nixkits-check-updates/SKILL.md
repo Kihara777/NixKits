@@ -157,62 +157,13 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 
 以表格呈现：包名、旧版本 → 新版本、构建状态、本地安装版本。
 
-## 第 8 步：更新维护记录
+## 第 8 步：调用维护日志技能
 
-每次软件更新或错误修复后，在 `MAINTENANCE.md` 中追加记录。遵循以下规则：
+软件更新完成后，自动调用 `write-maintenance-log` 技能撰写维护记录。
+详细格式规范、撰写流程、三语同步规则均由该技能定义。
 
-### 记录时机
-
-- **软件版本变更**：上游发布新版时记录（原有规则）
-- **错误修复**：修复了影响功能的 bug 时记录（即使无版本变更）
-- **文档更新默认不记录**：仅涉及文档的提交不写入维护记录
-
-### 格式规则
-
-- **LIFO 顺序**：最新记录插入文件顶部（紧随 `---` 分隔线之后）
-- **章节标题**：ISO 8601 精确到秒的日期时间（`YYYY-MM-DDTHH:MM:SS+09:00`）
-  时间来源必须为 `git log -1 --format="%ai"` 提取的实际 commit 时间，**禁止使用占位符**
-- **摘要行**：每条记录以粗体 `**摘要**` 开头，一句话说明本次更新内容（允许从上游 release note 摘录）
-- **关联提交表**：列出本次变更相关的所有 commit id 及说明
-- **软件版本表**：仅在有版本变更时出现（格式同旧版）
-  - 已有软件更新：旧版本 → 新版本
-  - 首次添加的软件：新旧版本列合并为一列，显示 `新增 v<version>`
-  - 仅**有变更的 hash** 占据后续行
-- **纯 bug 修复无版本变更**：省略软件版本表，仅保留摘要和提交表
-- **三语同步**：每次更新需同步 `MAINTENANCE.md` `docs/MAINTENANCE.en.md` `docs/MAINTENANCE.ja.md` 三个文件
-- **标题**：使用描述性标题而非文件名：zh `# 维护日志`、en `# Maintenance Log`、ja `# メンテナンスログ`
-
-### 示例格式
-
-**软件更新**：
-
-```markdown
-## 2026-06-14T07:56:11+09:00
-
-**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
-
-| 提交 | 说明 |
-|------|------|
-| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
-| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
-| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.58 | 0.8.59 |
-| mcp-searxng | 1.3.4 | 1.4.0 |
 ```
-
-**错误修复**：
-
-```markdown
-## 2026-06-16TXX:XX:XX+09:00
-
-**摘要**：修复 mcp-searxng 入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
-
-| 提交 | 说明 |
-|------|------|
-| `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point |
+→ 触发技能: write-maintenance-log
 ```
 
 ## 检查补丁内版本
