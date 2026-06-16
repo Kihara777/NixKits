@@ -19,10 +19,10 @@
 - Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
 - Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
-## Triggers
+## Entry Points
 
-- **Auto**: after nixkits-check-updates completes
-- **Manual**: "record this fix", "write to maintenance log", "update MAINTENANCE"
+- **Record Fix**: auto-called after software updates, or on "record this fix" / "记入维护记录"
+- **Update Log**: on "update maintenance log" / "补全维护记录" — scans git history for missing records and backfills
 
 ## Usage
 
