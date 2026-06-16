@@ -16,7 +16,7 @@
 - Auto-discovers all external packages from `flake.nix` and checks latest GitHub Releases
 - Updates build configs (version, source hash, npmDepsHash)
 - Syncs version numbers across all 3 language docs
-- Updates maintenance log (descriptive titles, table-only, LIFO, omit unchanged, merged columns for new, exact git time)
+- Updates maintenance log (summary line + commit ID table + version table; records both software updates and bug fixes)
 - Reports locally installed versions
 - Identifies hardcoded versions inside patch files and provides check guidance
 
