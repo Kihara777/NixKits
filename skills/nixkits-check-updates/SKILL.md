@@ -100,19 +100,33 @@ check() {
 
 #### 前置检测
 
-确保 `.gitignore` 已排除 `flake.lock`（该文件由 `nix build` 自动更新，应随代码提交）：
+根据仓库状态决定如何处理 `flake.lock`：
 
 ```bash
-# 检测是否已忽略，未忽略则自动添加
-if ! grep -qx 'flake.lock' .gitignore 2>/dev/null; then
-  echo "flake.lock" >> .gitignore
-  echo "已添加 flake.lock 到 .gitignore"
+# 情况 1：flake.lock 已被 .gitignore 排除 → 跳过，无需提交
+if grep -qx 'flake.lock' .gitignore 2>/dev/null; then
+  echo "SKIP: flake.lock 已在 .gitignore 中，无需提交"
+  exit 0
+fi
+
+# 情况 2：仓库包含动态版本包 → 必须排除 flake.lock
+# 检测特征：builtins.fetchurl 无 hash 参数、flake input 指向 API URL 等
+if grep -rq 'builtins.fetchurl.*releases/latest\|\.url\s*=\s*"https\?://api\.' \
+   overlays/ flake.nix 2>/dev/null; then
+  echo "WARN: 检测到动态版本包，flake.lock 不可复现"
+  if ! grep -qx 'flake.lock' .gitignore 2>/dev/null; then
+    echo "flake.lock" >> .gitignore
+    echo "已添加 flake.lock 到 .gitignore"
+  fi
+  exit 0
 fi
 ```
 
+> **判断逻辑**：已排除 → 跳过；有动态版本 → 必须排除；其他情况 → 正常提交。
+
 #### 提交要求
 
-每次 `nix build` 后，Nix 会根据实际获取的资源更新 `flake.lock` 中的 input hash。
+在不属于上述两种情况时，每次 `nix build` 后 Nix 会根据实际获取的资源更新 `flake.lock` 中的 input hash。
 **必须在提交 hash 变更的同时提交 `flake.lock`**，确保锁文件与包定义一致。
 
 ```bash
