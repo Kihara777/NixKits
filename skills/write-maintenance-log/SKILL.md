@@ -54,6 +54,19 @@ done
 
 > 此入口**不修改软件版本表**中已记录的版本号与 hash 值，仅补充元数据。
 
+## 记录范围
+
+维护日志覆盖以下类别的变更：
+
+| 类别 | 记录条件 | 示例 |
+|------|---------|------|
+| **软件** | 版本更新或 bug 修复 | `chore(pkgs): bump codewhale` `fix(mcp-searxng): ...` |
+| **技能** | 新增技能、重大章节添加、bug 修复、重大重构 | `feat(skill): extract write-maintenance-log` `fix(skill): generalize 基本情報 rule` `refactor(skills): generalize hardcoded content` |
+| **文档** | 模块/包文档的实质性更新（新增章节、配置指南、故障排查、迁移指南） | `docs(mcp-searxng): add CodeWhale config` `docs(llama-cpp-rocm): add trilingual migration guide` |
+| **模块** | 新增模块或重大功能添加 | `feat(rcc-fix): add NixOS module` `feat(llama-cpp-rocm): restore modelsPreset` |
+
+**不记录**：纯机械性 trilingual sync（`docs(skills): sync ... to trilingual docs`）、仅涉及维护日志本身的提交（`docs(MAINTENANCE): ...`）。
+
 ## 记录类型
 
 ### 类型 1：软件版本更新
@@ -75,6 +88,16 @@ done
 - 关联提交表
 
 > **判断标准**：`git log` 中 `fix(...)` 或 `feat(...)` 类型、且涉及包/模块功能变更的提交应记录。纯文档 (`docs(...)`) 不记录。
+
+### 类型 3：技能与文档变更
+
+当技能有重大更新（新增技能、新增章节、重大重构）或模块/包文档有实质性内容添加时，记录：
+
+- 日期时间
+- 一句话摘要
+- 关联提交表
+
+> **判断标准**：`feat(skill):` `refactor(skill):` `docs(skill):`（新增章节）`fix(skill):` 应记录。`docs(skills): sync` 机械性同步不记录。
 
 ## 格式规范
 
