@@ -78,6 +78,7 @@ check() {
 3. 将 `npmDepsHash` 置为空占位符
 4. 运行 `nix build .#<pkg>` 两次 — 第一次获取源码 hash，第二次获取 npmDepsHash
 5. 用实际值更新两个 hash
+6. 运行 `nix build .#<pkg>` 验证构建成功
 
 ### cmake 包
 
@@ -85,13 +86,25 @@ check() {
 2. 将 `fetchFromGitHub` 的 `hash` 置空
 3. 运行 `nix build .#<pkg>` 获取正确的 hash
 4. 更新 hash
+5. 运行 `nix build .#<pkg>` 验证构建成功
 
 ### 预编译二进制包（fetchurl）
 
 1. 更新 `version` 字符串及所有下载 URL
 2. 将所有 `hash` 值置空
-3. 运行 `nix build .#<pkg>` 获取各二进制 hash
+3. 运行 `nix build .#<pkg>` 获取各二进制 hash（可能需要多次，每次获取一个 hash）
 4. 逐一更新 hash
+5. 运行 `nix build .#<pkg>` 验证构建成功
+
+### flake.lock 同步
+
+每次 `nix build` 后，Nix 会根据实际获取的资源更新 `flake.lock` 中的 input hash。
+**必须在提交 hash 变更的同时提交 `flake.lock`**，确保锁文件与包定义一致。
+
+```bash
+# 验证 flake.lock 是否有未提交的变更
+git diff flake.lock
+```
 
 ## 第 5 步：更新文档
 
