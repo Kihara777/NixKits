@@ -98,6 +98,20 @@ check() {
 
 ### flake.lock 同步
 
+#### 前置检测
+
+确保 `.gitignore` 已排除 `flake.lock`（该文件由 `nix build` 自动更新，应随代码提交）：
+
+```bash
+# 检测是否已忽略，未忽略则自动添加
+if ! grep -qx 'flake.lock' .gitignore 2>/dev/null; then
+  echo "flake.lock" >> .gitignore
+  echo "已添加 flake.lock 到 .gitignore"
+fi
+```
+
+#### 提交要求
+
 每次 `nix build` 后，Nix 会根据实际获取的资源更新 `flake.lock` 中的 input hash。
 **必须在提交 hash 变更的同时提交 `flake.lock`**，确保锁文件与包定义一致。
 
