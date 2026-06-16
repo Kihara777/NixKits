@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     makeWrapper "${nodejs}/bin/node" "$out/bin/mcp-searxng" \
-      --add-flags "$out/lib/node_modules/mcp-searxng/dist/index.js" \
+      --add-flags "$out/lib/node_modules/mcp-searxng/dist/cli.js" \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
