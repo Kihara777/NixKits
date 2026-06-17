@@ -44,6 +44,27 @@ ruyi device provision    # Provision a device
 
 > ruyi requires network access to clone the package index (`packages-index`). This happens automatically on first `ruyi list`.
 
+## Module
+
+Declarative NixOS module for ruyi runtime configuration:
+
+```nix
+# flake.nix
+{ modules = [ nix-kits.nixosModules.ruyi ]; }
+
+services.ruyi = {
+  enable = true;
+  settings = {
+    packages.prereleases = false;
+    repo.remote = "https://github.com/ruyisdk/packages-index.git";
+    telemetry.mode = "local";
+  };
+  telemetryOptout = true;  # RUYI_TELEMETRY_OPTOUT=1
+};
+```
+
+Generates `/etc/ruyi/config.toml` and sets corresponding environment variables.
+
 ## Notes
 
 - Maintained by [ISCAS](https://www.iscas.ac.cn) for RISC-V developers

@@ -44,6 +44,27 @@ ruyi device provision    # デバイスをプロビジョニング
 
 > ruyi はパッケージインデックス（`packages-index`）のクローンにネットワーク接続が必要です。初回 `ruyi list` 時に自動で行われます。
 
+## モジュール
+
+NixOS モジュールで ruyi のランタイム設定を宣言的に構成：
+
+```nix
+# flake.nix
+{ modules = [ nix-kits.nixosModules.ruyi ]; }
+
+services.ruyi = {
+  enable = true;
+  settings = {
+    packages.prereleases = false;
+    repo.remote = "https://github.com/ruyisdk/packages-index.git";
+    telemetry.mode = "local";
+  };
+  telemetryOptout = true;  # RUYI_TELEMETRY_OPTOUT=1
+};
+```
+
+`/etc/ruyi/config.toml` を自動生成し、対応する環境変数を設定します。
+
 ## 注意
 
 - [ISCAS](https://www.iscas.ac.cn) が RISC-V 開発者向けにメンテナンス

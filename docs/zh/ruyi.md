@@ -35,6 +35,27 @@ ruyi device provision    # 设备烧录
 
 > ruyi 需要网络连接以克隆软件包仓库（`packages-index`），首次运行 `ruyi list` 时会自动下载。
 
+## 模块
+
+声明式配置 ruyi 的运行时行为：
+
+```nix
+# flake.nix
+{ modules = [ nix-kits.nixosModules.ruyi ]; }
+
+services.ruyi = {
+  enable = true;
+  settings = {
+    packages.prereleases = false;
+    repo.remote = "https://github.com/ruyisdk/packages-index.git";
+    telemetry.mode = "local";
+  };
+  telemetryOptout = true;  # RUYI_TELEMETRY_OPTOUT=1
+};
+```
+
+模块自动生成 `/etc/ruyi/config.toml` 并设置对应的环境变量。
+
 ## 注意
 
 - 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
