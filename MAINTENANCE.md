@@ -6,6 +6,20 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-17T09:48:33+09:00
+
+**摘要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
+
+| 提交 | 说明 |
+|------|------|
+| `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
+
+| 软件名 | 新版本 |
+|--------|--------|
+| ruyi | 0.51.0-alpha.20260616 |
+
+---
+
 ## 2026-06-17T07:00:00+09:00
 
 **摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑

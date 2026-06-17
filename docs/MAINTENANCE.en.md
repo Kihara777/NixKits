@@ -6,6 +6,20 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-17T09:48:33+09:00
+
+**Summary**: ruyi 0.51.0-alpha.20260616 — RuyiSDK package manager, new package (Python/Poetry, ruff + mypy + 320 unit + 52 integration tests all passing)
+
+| Commit | Description |
+|--------|-------------|
+| `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
+
+| Package | New |
+|---------|-----|
+| ruyi | 0.51.0-alpha.20260616 |
+
+---
+
 ## 2026-06-17T07:00:00+09:00
 
 **Summary**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
