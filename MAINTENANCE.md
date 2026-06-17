@@ -6,6 +6,19 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-17T10:59:35+09:00
+
+**摘要**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
+
+| 提交 | 说明 |
+|------|------|
+| `5cea307` | feat(ruyi): add NixOS module for declarative configuration |
+| `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
+| `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
+| `cc396f8` | fix(ruyi): always generate config.toml when module enabled |
+
+---
+
 ## 2026-06-17T10:00:00+09:00
 
 **摘要**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境

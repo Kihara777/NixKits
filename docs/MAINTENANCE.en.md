@@ -6,6 +6,19 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-17T10:59:35+09:00
+
+**Summary**: ruyi — NixOS module (`services.ruyi`), declaratively generates `/etc/xdg/ruyi/config.toml` and environment variables
+
+| Commit | Description |
+|--------|-------------|
+| `5cea307` | feat(ruyi): add NixOS module for declarative configuration |
+| `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
+| `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
+| `cc396f8` | fix(ruyi): always generate config.toml when module enabled |
+
+---
+
 ## 2026-06-17T10:00:00+09:00
 
 **Summary**: ruyi — add devShell support, `nix develop github:Kihara777/NixKits#ruyi` for instant environment
