@@ -6,6 +6,16 @@ NixKits パッケージ更新履歴。
 
 ---
 
+## 2026-06-17T10:00:00+09:00
+
+**概要**: ruyi — devShell サポートを追加、`nix develop github:Kihara777/NixKits#ruyi` で即時環境へ
+
+| コミット | 説明 |
+|----------|------|
+| `975295d` | refactor(flake): remove default package alias |
+
+---
+
 ## 2026-06-17T09:48:33+09:00
 
 **概要**: ruyi 0.51.0-alpha.20260616 — RuyiSDK パッケージマネージャー、新規パッケージ（Python/Poetry、ruff + mypy + 320 ユニット + 52 統合テストすべて合格）

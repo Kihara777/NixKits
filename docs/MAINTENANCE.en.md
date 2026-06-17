@@ -6,6 +6,16 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-17T10:00:00+09:00
+
+**Summary**: ruyi — add devShell support, `nix develop github:Kihara777/NixKits#ruyi` for instant environment
+
+| Commit | Description |
+|--------|-------------|
+| `975295d` | refactor(flake): remove default package alias |
+
+---
+
 ## 2026-06-17T09:48:33+09:00
 
 **Summary**: ruyi 0.51.0-alpha.20260616 — RuyiSDK package manager, new package (Python/Poetry, ruff + mypy + 320 unit + 52 integration tests all passing)

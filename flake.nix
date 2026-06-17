@@ -31,6 +31,18 @@
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
       exec ${kitsfmtDrv}/bin/kitsfmt -i "$@"
     '';
+
+    devShells = let
+      ruyiDrv = pkgs.callPackage ./packages/ruyi.nix { };
+    in {
+      ruyi = pkgs.mkShell {
+        name = "ruyi-dev";
+        packages = [ ruyiDrv ];
+        shellHook = ''
+          echo "RuyiSDK $(ruyi --version 2>/dev/null | head -1)"
+        '';
+      };
+    };
   }) // {
 
     nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;

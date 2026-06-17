@@ -13,6 +13,14 @@
 | ライセンス | Apache 2.0 |
 | 注意 | アルファ段階のソフトウェア、API 変更の可能性あり |
 
+## Dev Shell
+
+```bash
+nix develop github:Kihara777/NixKits#ruyi
+```
+
+`$PATH` に `ruyi` が追加された環境に入ります。
+
 ## インストール
 
 ```nix

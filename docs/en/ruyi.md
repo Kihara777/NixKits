@@ -13,6 +13,14 @@ Package manager for [RuyiSDK](https://ruyisdk.org) — RISC-V development toolki
 | License | Apache 2.0 |
 | Note | Alpha-stage software, APIs may change |
 
+## Dev Shell
+
+```bash
+nix develop github:Kihara777/NixKits#ruyi
+```
+
+Enters an environment with `ruyi` available on `$PATH`.
+
 ## Install
 
 ```nix

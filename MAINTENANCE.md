@@ -6,6 +6,16 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-17T10:00:00+09:00
+
+**摘要**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
+
+| 提交 | 说明 |
+|------|------|
+| `975295d` | refactor(flake): remove default package alias |
+
+---
+
 ## 2026-06-17T09:48:33+09:00
 
 **摘要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
