@@ -3,14 +3,14 @@
 let
   cfg = config.services.ruyi;
 
-  configToml = lib.generators.toToml { } (
-    lib.filterAttrs (_: v: v != { } && v != null) {
-      packages = lib.optionalAttrs cfg.settings.packages.prereleases {
-        inherit (cfg.settings.packages) prereleases;
-      };
-      repo = lib.filterAttrs (_: v: v != null && v != "" && v != "main") cfg.settings.repo;
-      telemetry = lib.filterAttrs (_: v: v != null && v != "" && v != "local") cfg.settings.telemetry;
-    }
+  configToml = lib.concatStringsSep "\n" (
+    lib.optional (cfg.settings.packages.prereleases) "[packages]\nprereleases = true"
+    ++ lib.optional (cfg.settings.repo.local != null && cfg.settings.repo.local != "") "[repo]\nlocal = \"${cfg.settings.repo.local}\""
+    ++ lib.optional (cfg.settings.repo.remote != "https://github.com/ruyisdk/packages-index.git") "[repo]\nremote = \"${cfg.settings.repo.remote}\""
+    ++ lib.optional (cfg.settings.repo.branch != "main") "[repo]\nbranch = \"${cfg.settings.repo.branch}\""
+    ++ lib.optional (cfg.settings.telemetry.mode != "local") "[telemetry]\nmode = \"${cfg.settings.telemetry.mode}\""
+    ++ lib.optional (cfg.settings.telemetry.upload_consent != null) "[telemetry]\nupload_consent = \"${cfg.settings.telemetry.upload_consent}\""
+    ++ lib.optional (cfg.settings.telemetry.pm_telemetry_url != null) "[telemetry]\npm_telemetry_url = \"${cfg.settings.telemetry.pm_telemetry_url}\""
   );
 in
 {
