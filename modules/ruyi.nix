@@ -87,10 +87,73 @@ in
       default = null;
       description = "Explicitly set the Ruyi virtual environment via `RUYI_VENV`.";
     };
+
+    autoUpdate = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Automatically run `ruyi update` after system activation to refresh the package index.";
+    };
+
+    venvs = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule {
+        options = {
+          profile = lib.mkOption {
+            type = lib.types.str;
+            description = "Ruyi profile name (e.g. 'gnu-plct').";
+          };
+          toolchain = lib.mkOption {
+            type = lib.types.str;
+            description = "Toolchain specifier (e.g. 'gnu-plct').";
+          };
+          dest = lib.mkOption {
+            type = lib.types.str;
+            description = "Path to the virtual environment directory.";
+          };
+          emulator = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Emulator to use in the venv.";
+          };
+          sysroot = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Sysroot package specifier.";
+          };
+        };
+      });
+      default = { };
+      description = "Declarative Ruyi virtual environments. Created on activation.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+
+    # Auto-update package index on activation.
+    system.activationScripts.ruyiUpdate = lib.mkIf cfg.autoUpdate ''
+      if [ -x "${cfg.package}/bin/ruyi" ]; then
+        echo "ruyi: updating package index..."
+        RUYI_TELEMETRY_OPTOUT=1 ${cfg.package}/bin/ruyi update 2>&1 || true
+      fi
+    '';
+
+    # Declarative venvs — generate a helper script.
+    system.activationScripts.ruyiVenvs = let
+      venvCommands = lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: venv: ''
+          echo "ruyi: creating venv ${name}..."
+          RUYI_TELEMETRY_OPTOUT=1 ${cfg.package}/bin/ruyi venv \
+            --toolchain ${venv.toolchain} \
+            ${lib.optionalString (venv.emulator != null) "--emulator ${venv.emulator}"} \
+            ${lib.optionalString (venv.sysroot != null) "--copy-sysroot-from-pkg ${venv.sysroot}"} \
+            ${venv.profile} \
+            ${venv.dest} 2>&1 || echo "ruyi: venv ${name} skipped (toolchain not installed yet)"
+        '') cfg.venvs
+      );
+    in lib.mkIf (cfg.venvs != { }) ''
+      echo "ruyi: setting up declarative virtual environments..."
+      ${venvCommands}
+    '';
 
     # System-level configuration file.
     # ruyi respects $XDG_CONFIG_DIRS (default: /etc/xdg), so the file must
