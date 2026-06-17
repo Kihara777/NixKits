@@ -26,7 +26,6 @@
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
       obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       ruyi                 = pkgs.callPackage ./packages/ruyi.nix { };
-      default              = codewhale;
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
