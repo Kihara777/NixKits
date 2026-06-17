@@ -63,7 +63,7 @@ services.ruyi = {
 };
 ```
 
-Generates `/etc/ruyi/config.toml` and sets corresponding environment variables.
+Generates `/etc/xdg/ruyi/config.toml` and sets corresponding environment variables.
 
 ## Notes
 

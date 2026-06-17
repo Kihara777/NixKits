@@ -54,7 +54,7 @@ services.ruyi = {
 };
 ```
 
-模块自动生成 `/etc/ruyi/config.toml` 并设置对应的环境变量。
+模块自动生成 `/etc/xdg/ruyi/config.toml` 并设置对应的环境变量。
 
 ## 注意
 

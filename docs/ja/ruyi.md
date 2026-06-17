@@ -63,7 +63,7 @@ services.ruyi = {
 };
 ```
 
-`/etc/ruyi/config.toml` を自動生成し、対応する環境変数を設定します。
+`/etc/xdg/ruyi/config.toml` を自動生成し、対応する環境変数を設定します。
 
 ## 注意
 
