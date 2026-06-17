@@ -33,7 +33,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 | 包 | `nix develop` |
 |-----|---------------|
-| ruyi | `nix develop github:Kihara777/NixKits#ruyi` |
+| ruyi | `nix develop nix-kits#ruyi` |
 
 ## 补丁
 

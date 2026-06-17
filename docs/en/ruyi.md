@@ -16,7 +16,8 @@ Package manager for [RuyiSDK](https://ruyisdk.org) — RISC-V development toolki
 ## Dev Shell
 
 ```bash
-nix develop github:Kihara777/NixKits#ruyi
+nix develop nix-kits#ruyi             # when nix-kits is already a flake input
+nix develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
 ```
 
 Enters an environment with `ruyi` available on `$PATH`.

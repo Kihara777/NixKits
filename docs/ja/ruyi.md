@@ -16,7 +16,8 @@
 ## Dev Shell
 
 ```bash
-nix develop github:Kihara777/NixKits#ruyi
+nix develop nix-kits#ruyi             # nix-kits を flake input に追加済みの場合
+nix develop github:Kihara777/NixKits#ruyi  # 事前設定不要のワンショット
 ```
 
 `$PATH` に `ruyi` が追加された環境に入ります。
