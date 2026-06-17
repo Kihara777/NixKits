@@ -27,6 +27,14 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具） | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
+## 开发
+
+提供 `nix develop` 即用环境的包：
+
+| 包 | `nix develop` |
+|-----|---------------|
+| ruyi | `nix develop github:Kihara777/NixKits#ruyi` |
+
 ## 补丁
 
 独立 overlay，不包含在 `default` 内：
