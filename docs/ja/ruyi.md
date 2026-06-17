@@ -63,7 +63,17 @@ services.ruyi = {
 };
 ```
 
-`/etc/xdg/ruyi/config.toml` を自動生成し、対応する環境変数を設定します。
+`/etc/xdg/ruyi/config.toml` を自動生成し、環境変数を設定、さらにシステムアクティベーション時にパッケージインデックスを自動更新します。
+
+宣言的仮想環境もサポート：
+
+```nix
+services.ruyi.venvs.riscv = {
+  profile = "gnu-plct";
+  toolchain = "gnu-plct";
+  dest = "/home/kix/ruyi-venvs/riscv";
+};
+```
 
 ## 注意
 

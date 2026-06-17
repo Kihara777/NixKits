@@ -63,7 +63,17 @@ services.ruyi = {
 };
 ```
 
-Generates `/etc/xdg/ruyi/config.toml` and sets corresponding environment variables.
+Generates `/etc/xdg/ruyi/config.toml`, sets environment variables, and auto-updates the package index on activation.
+
+Supports declarative virtual environments:
+
+```nix
+services.ruyi.venvs.riscv = {
+  profile = "gnu-plct";
+  toolchain = "gnu-plct";
+  dest = "/home/kix/ruyi-venvs/riscv";
+};
+```
 
 ## Notes
 

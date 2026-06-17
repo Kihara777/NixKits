@@ -54,7 +54,17 @@ services.ruyi = {
 };
 ```
 
-模块自动生成 `/etc/xdg/ruyi/config.toml` 并设置对应的环境变量。
+模块自动生成 `/etc/xdg/ruyi/config.toml`、设置环境变量，并在系统激活时自动更新包仓库索引。
+
+支持声明式虚拟环境：
+
+```nix
+services.ruyi.venvs.riscv = {
+  profile = "gnu-plct";
+  toolchain = "gnu-plct";
+  dest = "/home/kix/ruyi-venvs/riscv";
+};
+```
 
 ## 注意
 
