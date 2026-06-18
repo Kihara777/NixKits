@@ -6,6 +6,16 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-18T09:03:48+09:00
+
+**摘要**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+
+| 提交 | 说明 |
+|------|------|
+| `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
+
+---
+
 ## 2026-06-17T10:59:35+09:00
 
 **摘要**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量

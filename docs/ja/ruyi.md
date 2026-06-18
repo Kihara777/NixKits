@@ -75,8 +75,16 @@ services.ruyi.venvs.riscv = {
 };
 ```
 
+## NixOS 互換性
+
+NixKits の ruyi ビルドには `patches/ruyi-nixos-compat.patch` が含まれ、NixOS 固有の問題を透過的に処理します：
+
+- **動的リンカパス**：プリコンパイルされた RISC-V ツールチェーンバイナリ（GCC、QEMU 等）は `/lib64/ld-linux-x86-64.so.2` を期待しますが NixOS には存在しません。パッチは NixOS の `ld.so` 経由で実行をリダイレクトします。
+- **ツールチェーンサブプロセス修復**：GCC 内部の `cc1`、`as`、`collect2` 等のサブプロセスは ruyi の mux をバイパスします。パッチは `patchelf` で ELF interpreter を自動修復します。
+- **Nix console_scripts 互換性**：`RUYI_ARGV0` 環境変数で Nix ラッパーで失われる `exec -a` の動作を回復します。
+
 ## 注意
 
 - [ISCAS](https://www.iscas.ac.cn) が RISC-V 開発者向けにメンテナンス
-- ランタイム依存（curl、gnutar、git など）は wrapProgram で注入
-- テストカバレッジ：ruff lint、mypy 型チェック、pytest ユニット（277）、統合（52）— すべて通過
+- ランタイム依存（curl、gnutar、git、patchelf など）は wrapProgram で注入
+- テストカバレッジ：ruff lint、mypy 型チェック、pytest ユニット（320）、統合（52）— すべて通過

@@ -1,0 +1,384 @@
+diff --git a/ruyi/mux/runtime.py b/ruyi/mux/runtime.py
+index c65f53f..7012fc7 100644
+--- a/ruyi/mux/runtime.py
++++ b/ruyi/mux/runtime.py
+@@ -18,9 +18,57 @@ def _run_exit_handlers_and_execv(
+     # crucially this includes our telemetry handler so we don't lose telemetry
+     # events in mux mode
+     atexit._run_exitfuncs()
++
++    # On NixOS, pre-compiled binaries (cross-toolchains, QEMU, etc.) may
++    # have a dynamic linker path that doesn't exist.  Transparently re-wrap
++    # through the NixOS ld.so when needed.
++    # Save the original binary path — wrap_exec_for_nixos may change
++    # `path` to the ld.so itself, and we need the original when fixing
++    # the toolchain sub-binaries below.
++    _orig_path = path
++    try:
++        from ..utils.nixos_compat import (
++            wrap_exec_for_nixos,
++            ensure_toolchain_nixos_compat,
++        )
++        path, argv = wrap_exec_for_nixos(path, argv)
++
++        # If we are about to launch a toolchain binary (e.g. a cross-GCC),
++        # also ensure that the *internal* binaries (cc1, as, collect2 …)
++        # have been patchelf-ed.  Those sub-processes are launched directly
++        # by GCC and skip the ruyi mux.
++        _maybe_fix_toolchain_sub_binaries(_orig_path)
++    except Exception as _exc:
++        # Log but don't block — the binary may still work with ld.so wrapper
++        import sys as _sys
++        print(
++            f"[ruyi] nixos toolchain repair skipped: {_exc}",
++            file=_sys.stderr,
++        )
++
+     os.execv(path, argv)
+ 
+ 
++def _maybe_fix_toolchain_sub_binaries(binpath: str) -> None:
++    """If *binpath* lives inside a Ruyi-managed toolchain, repair the
++    ELF interpreter of all sub-binaries in that toolchain so GCC
++    sub-processes work on NixOS."""
++    import os as _os
++
++    _ruyi_binaries_dir = _os.path.expanduser("~/.local/share/ruyi/binaries")
++    if not binpath.startswith(_ruyi_binaries_dir):
++        return
++
++    # binpath is e.g. …/gnu-upstream-0.20260201.0/bin/riscv64-…-gcc
++    # The toolchain root is two levels up (above bin/) — the whole
++    # extracted tarball.
++    _toolchain_root = _os.path.dirname(_os.path.dirname(binpath))
++    if not _os.path.isdir(_toolchain_root):
++        return
++
++    ensure_toolchain_nixos_compat(_toolchain_root)
++
++
+ def mux_main(
+     gm: ProvidesGlobalMode,
+     gc: GlobalConfig,
+diff --git a/ruyi/utils/nuitka.py b/ruyi/utils/nuitka.py
+index 14a6301..73415db 100644
+--- a/ruyi/utils/nuitka.py
++++ b/ruyi/utils/nuitka.py
+@@ -25,9 +25,13 @@ def get_argv0() -> str:
+         if ruyi.__compiled__.original_argv0 is not None:
+             return ruyi.__compiled__.original_argv0
+     except AttributeError:
+-        # Either we're not packaged with Nuitka, or the Nuitka used is
+-        # without our original_argv0 patch, in which case we cannot do any
+-        # better than simply returning sys.argv[0].
+         pass
+ 
++    # On platforms where the shell wrapper injects RUYI_ARGV0 (e.g. Nix
++    # console_scripts wrappers where `exec -a` is lost across shebang),
++    # prefer the environment variable over sys.argv[0].
++    env_argv0 = os.environ.get("RUYI_ARGV0")
++    if env_argv0:
++        return env_argv0
++
+     return sys.argv[0]
+diff --git a/stubs/fastjsonschema/__init__.pyi b/stubs/fastjsonschema/__init__.pyi
+index bb31867..1c8eca9 100644
+--- a/stubs/fastjsonschema/__init__.pyi
++++ b/stubs/fastjsonschema/__init__.pyi
+@@ -25,7 +25,7 @@ def validate(
+     use_default: bool = True,
+     use_formats: bool = True,
+     detailed_exceptions: bool = True,
+-): ...
++) -> object: ...
+ def compile(
+     definition: object,
+     handlers: Mapping[str, Callable[[str], object]] = {},
+---
+diff --git a/ruyi/utils/nixos_compat.py b/ruyi/utils/nixos_compat.py
+new file mode 100644
+index 0000000..a03f89c
+--- /dev/null
++++ b/ruyi/utils/nixos_compat.py
+@@ -0,0 +1,281 @@
++"""NixOS compatibility layer for ruyi.
++
++On NixOS, pre-compiled binaries downloaded by ruyi (e.g. RISC-V cross
++toolchains, QEMU emulators) cannot run directly because the dynamic
++linker path they expect (typically ``/lib64/ld-linux-x86-64.so.2``)
++does not exist — NixOS stores it under ``/nix/store/<hash>-glibc-.../lib/``.
++
++This module provides helpers that transparently re-wrap such binaries
++through the NixOS dynamic linker, so that ruyi's mux (and any other
++os.execv-style call site) works out-of-the-box on NixOS.
++
++The actual NixOS ld.so and glibc lib paths are injected at build time
++by the Nix flake via ``substituteInPlace``.  When running outside a
++Nix build (e.g. from a development checkout) the detection is a
++best-effort runtime probe.
++"""
++
++from __future__ import annotations
++
++import os
++import subprocess
++from typing import Final
++
++
++# ---- build-time placeholders (replaced by substituteInPlace) ----------
++
++# Absolute path to NixOS's ld-linux-x86-64.so.2 (or ld-linux-aarch64.so.1).
++_NIX_BUILDTIME_LD_SO: Final = "@nixLdSo@"
++
++# Absolute path to the directory containing glibc shared libraries on NixOS.
++_NIX_BUILDTIME_GLIBC_LIB: Final = "@nixGlibcLib@"
++
++
++# ---- NixOS detection --------------------------------------------------
++
++def is_nixos() -> bool:
++    """Return ``True`` if we are running on NixOS."""
++    # canonical marker file set by NixOS stage-1
++    if os.path.exists("/etc/NIXOS"):
++        return True
++    # heuristic: Nix store exists and we see the NixOS stdenv ld.so
++    if os.path.isdir("/nix/store"):
++        from glob import glob
++        if glob("/nix/store/*-glibc-*/lib/ld-linux-x86-64.so.2"):
++            return True
++        if glob("/nix/store/*-glibc-*/lib/ld-linux-aarch64.so.1"):
++            return True
++    return False
++
++
++# ---- dynamic linker path resolution -----------------------------------
++
++def _resolve_ld_so() -> str | None:
++    """Return the absolute path to a working NixOS ld.so, or ``None``."""
++    # 1. try the build-time injected value
++    if (
++        _NIX_BUILDTIME_LD_SO
++        and _NIX_BUILDTIME_LD_SO != "@nixLdSo@"
++        and os.path.exists(_NIX_BUILDTIME_LD_SO)
++    ):
++        return _NIX_BUILDTIME_LD_SO
++
++    # 2. runtime probe: look for a glibc store path
++    from glob import glob
++
++    for pattern in (
++        "/nix/store/*-glibc-*/lib/ld-linux-x86-64.so.2",
++        "/nix/store/*-glibc-*/lib/ld-linux-aarch64.so.1",
++    ):
++        paths = sorted(glob(pattern))
++        if paths:
++            return paths[-1]  # newest glibc
++
++    return None
++
++
++def _resolve_glibc_lib_dir(ld_so: str) -> str | None:
++    """Given an ld.so path, return the corresponding lib directory."""
++    lib_dir = os.path.join(os.path.dirname(ld_so), "..")
++    lib_dir = os.path.normpath(lib_dir)
++    if os.path.isdir(lib_dir):
++        return lib_dir
++    return None
++
++
++# ---- binary compatibility inspection ----------------------------------
++
++def _get_interpreter(binpath: str) -> str | None:
++    """Return the ELF interpreter (PT_INTERP) of *binpath*, or ``None``."""
++    try:
++        # prefer objdump when available (no external deps)
++        result = subprocess.run(
++            ["readelf", "-l", binpath],
++            capture_output=True, text=True, timeout=5,
++        )
++        for line in result.stdout.splitlines():
++            if "interpreter" in line:
++                return line.split(":", 1)[1].strip().strip("[]")
++        return None
++    except Exception:
++        pass
++
++    # fallback: try to exec and see if kernel rejects it
++    try:
++        result = subprocess.run(
++            [binpath, "--version"],
++            capture_output=True, text=True, timeout=10,
++        )
++        if result.returncode == 0:
++            return None  # works fine
++    except OSError:
++        pass
++
++    # last resort: hope we have patchelf
++    try:
++        result = subprocess.run(
++            ["patchelf", "--print-interpreter", binpath],
++            capture_output=True, text=True, timeout=5,
++        )
++        interp = result.stdout.strip()
++        return interp if interp else None
++    except Exception:
++        return None
++
++
++def _is_nixos_stub_interpreter(interp: str) -> bool:
++    """Return ``True`` if *interp* is a NixOS stub-ld symlink.
++
++    NixOS ships a ``/lib64/ld-linux-x86-64.so.2`` symlink that points to a
++    ``stub-ld`` program.  The stub merely prints an error and exits — it is
++    not a real dynamic linker.  We must NOT treat the presence of a stub
++    as proof that the binary can execute directly.
++    """
++    try:
++        target = os.readlink(interp)
++    except OSError:
++        return False
++    # Canonical stub target contains "stub-ld"
++    return "stub-ld" in target
++
++
++def can_exec_directly(binpath: str) -> bool:
++    """Check whether *binpath* can be ``execve``-ed directly on this system."""
++    if not os.access(binpath, os.X_OK):
++        return False
++    interp = _get_interpreter(binpath)
++    if interp is None:
++        # static binary — always okay
++        return True
++    if not os.path.exists(interp):
++        return False
++    if _is_nixos_stub_interpreter(interp):
++        return False
++    return True
++
++
++# ---- public API -------------------------------------------------------
++
++def wrap_exec_for_nixos(
++    binpath: str,
++    argv: list[str],
++) -> tuple[str, list[str]]:
++    """If running on NixOS, return a *(new_executable, new_argv)* pair
++    that launches *binpath* via the NixOS dynamic linker.
++
++    On NixOS, pre-compiled binaries (cross-toolchains, QEMU, etc.)
++    almost always have a dynamic linker path that either does not
++    exist or points to a ``stub-ld`` that merely prints an error.
++    Wrapping through the *real* NixOS ``ld.so`` is robust for both
++    dynamic and static executables: ``ld.so`` detects static binaries
++    and hands off execution transparently.
++
++    When no wrapping is necessary the returned *new_executable* equals
++    *binpath* and *new_argv* equals *argv* (identity).
++    """
++    if not is_nixos():
++        return binpath, argv
++
++    ld_so = _resolve_ld_so()
++    if ld_so is None:
++        # give up — let the caller get the kernel error
++        return binpath, argv
++
++    glibc_lib = _resolve_glibc_lib_dir(ld_so)
++
++    # Build: ld.so [--library-path <dir>] <original_binary> <args...>
++    new_argv = [ld_so]
++    if glibc_lib:
++        new_argv.extend(["--library-path", glibc_lib])
++    new_argv.append(binpath)
++    new_argv.extend(argv[1:])
++
++    return ld_so, new_argv
++
++
++# ---- toolchain-wide binary repair -------------------------------------
++
++def ensure_toolchain_nixos_compat(toolchain_root: str) -> bool:
++    """Fix the ELF interpreter of every dynamically linked executable
++    under *toolchain_root* so that it can run on NixOS.
++
++    This is needed because GCC internally launches sub-processes
++    (``cc1``, ``as``, ``collect2`` etc.) that do **not** go through
++    ruyi's mux.  Without this step those sub-processes would fail with
++    ``Could not start dynamically linked executable``.
++
++    Uses ``patchelf`` to rewrite the ``PT_INTERP`` header.  The
++    operation is idempotent — once a binary points to the NixOS
++    ``ld.so``, it will be skipped on subsequent calls.
++
++    Returns ``True`` if at least one binary was patched.
++    """
++    import subprocess
++    import shutil
++
++    if not is_nixos():
++        return False
++
++    ld_so = _resolve_ld_so()
++    if ld_so is None:
++        return False
++
++    if not os.path.isdir(toolchain_root):
++        return False
++
++    # Stamp file: avoid scanning the same tree repeatedly
++    stamp = os.path.join(toolchain_root, ".nixos-compat-stamp")
++    try:
++        if os.path.exists(stamp):
++            return False  # already processed
++    except OSError:
++        pass
++
++    patchelf_bin = shutil.which("patchelf")
++    if patchelf_bin is None:
++        return False
++
++    patched = 0
++    for dirpath, _dirnames, filenames in os.walk(toolchain_root):
++        for fn in filenames:
++            fpath = os.path.join(dirpath, fn)
++            if not os.access(fpath, os.X_OK):
++                continue
++            # Quick check: does the file look like an ELF binary?
++            try:
++                with open(fpath, "rb") as fh:
++                    if fh.read(4) != b"\x7fELF":
++                        continue
++            except OSError:
++                continue
++            # Read the current interpreter
++            try:
++                result = subprocess.run(
++                    [patchelf_bin, "--print-interpreter", fpath],
++                    capture_output=True, text=True, timeout=10,
++                )
++                current = result.stdout.strip()
++            except Exception:
++                continue
++            if not current:
++                continue  # static binary, nothing to patch
++            if os.path.exists(current) and not _is_nixos_stub_interpreter(current):
++                continue  # already fine (real interpreter present)
++            # Patch it
++            try:
++                subprocess.run(
++                    [patchelf_bin, "--set-interpreter", ld_so, fpath],
++                    capture_output=True, timeout=30,
++                )
++                patched += 1
++            except Exception:
++                pass
++
++    # Write stamp even if nothing was patched (avoids repeated scans)
++    try:
++        with open(stamp, "w") as fh:
++            fh.write(f"fixed-by-ruyi\n{ld_so}\n")
++    except OSError:
++        pass
++
++    return patched > 0

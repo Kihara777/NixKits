@@ -6,6 +6,16 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-18T09:03:48+09:00
+
+**Summary**: ruyi — NixOS compatibility patch (`patches/ruyi-nixos-compat.patch`), transparently handles dynamic linker paths for pre-compiled RISC-V toolchains, GCC sub-process ELF interpreter repair, and console_scripts argv0 issue
+
+| Commit | Description |
+|--------|-------------|
+| `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
+
+---
+
 ## 2026-06-17T10:59:35+09:00
 
 **Summary**: ruyi — NixOS module (`services.ruyi`), declaratively generates `/etc/xdg/ruyi/config.toml` and environment variables

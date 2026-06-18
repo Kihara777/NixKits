@@ -6,6 +6,16 @@ NixKits パッケージ更新履歴。
 
 ---
 
+## 2026-06-18T09:03:48+09:00
+
+**概要**: ruyi — NixOS 互換性パッチ（`patches/ruyi-nixos-compat.patch`）、プリコンパイル RISC-V ツールチェーンの動的リンカパス、GCC サブプロセス ELF interpreter 修復、console_scripts argv0 問題を透過的に処理
+
+| コミット | 説明 |
+|----------|------|
+| `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
+
+---
+
 ## 2026-06-17T10:59:35+09:00
 
 **概要**: ruyi — NixOS モジュール（`services.ruyi`）、`/etc/xdg/ruyi/config.toml` と環境変数を宣言的に生成
