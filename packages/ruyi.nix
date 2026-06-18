@@ -12,6 +12,7 @@
   zstd,
   unzip,
   git,
+  gnumake,
 }:
 
 let
@@ -57,7 +58,7 @@ python.pkgs.buildPythonApplication {
   postInstall = ''
     wrapProgram "$out/bin/ruyi" \
       --prefix PATH : "${lib.makeBinPath [
-        curl gnutar gzip bzip2 xz lz4 zstd unzip git
+        curl gnutar gzip bzip2 xz lz4 zstd unzip git gnumake
       ]}"
   '';
 
