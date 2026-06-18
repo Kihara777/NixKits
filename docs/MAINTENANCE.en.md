@@ -6,6 +6,26 @@ NixKits package update changelog.
 
 ---
 
+## 2026-06-18T09:52:34+09:00
+
+**Summary**: codewhale 0.8.61 — upstream fix; mcp-searxng 1.6.0 — upstream fix
+
+| Commit | Description |
+|--------|-------------|
+| `...` | chore(pkgs): bump codewhale 0.8.61 |
+| `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
+
+| Package | Old | New |
+|---------|-----|-----|
+| codewhale | 0.8.60 | 0.8.61 |
+| 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
+| 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
+| mcp-searxng | 1.4.0 | 1.6.0 |
+| 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
+| 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
+
+---
+
 ## 2026-06-18T09:03:48+09:00
 
 **Summary**: ruyi — NixOS compatibility patch (`patches/ruyi-nixos-compat.patch`), transparently handles dynamic linker paths for pre-compiled RISC-V toolchains, GCC sub-process ELF interpreter repair, and console_scripts argv0 issue

@@ -6,6 +6,26 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-18T09:52:34+09:00
+
+**摘要**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `...` | chore(pkgs): bump codewhale 0.8.61 |
+| `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.60 | 0.8.61 |
+| 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
+| 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
+| mcp-searxng | 1.4.0 | 1.6.0 |
+| 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
+| 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
+
+---
+
 ## 2026-06-18T09:03:48+09:00
 
 **摘要**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
