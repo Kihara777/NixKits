@@ -19,9 +19,5 @@ final: prev: {
       }' ruyi/mux/runtime.py
     '';
 
-    postInstall = (oldAttrs.postInstall or "") + ''
-      wrapProgram "$out/bin/ruyi" \
-        --prefix PATH : "${final.lib.makeBinPath [ final.patchelf ]}"
-    '';
   });
 }
