@@ -94,6 +94,17 @@ in
       description = "Automatically run `ruyi update` after system activation to refresh the package index.";
     };
 
+    buildTools = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum [ "gnumake" "cmake" "ninja" "meson" ]);
+      default = [ ];
+      example = [ "gnumake" ];
+      description = ''
+        Build tools to provide system-wide when ruyi is enabled.
+        These are injected into the ruyi runtime PATH so they are
+        available inside ruyi venvs.
+      '';
+    };
+
     venvs = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
@@ -127,7 +138,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ]
+      ++ lib.optionals (lib.elem "gnumake" cfg.buildTools) [ pkgs.gnumake ]
+      ++ lib.optionals (lib.elem "cmake" cfg.buildTools) [ pkgs.cmake ]
+      ++ lib.optionals (lib.elem "ninja" cfg.buildTools) [ pkgs.ninja ]
+      ++ lib.optionals (lib.elem "meson" cfg.buildTools) [ pkgs.meson ];
 
     # Auto-update package index on activation.
     system.activationScripts.ruyiUpdate = lib.mkIf cfg.autoUpdate ''
