@@ -24,11 +24,11 @@ in {
     src = prev.fetchFromGitHub {
       inherit (old.src) owner repo;
       rev = commitHash;
-      hash = "sha256-42gWbg6on0g8tR7lVqrNH7x1GejzijP8bVvrQa0D3bM=";
+      hash = "";
       fetchSubmodules = old.src.fetchSubmodules or false;
     };
 
-    vendorHash = "sha256-KpeFNqVtvOOB9NxETajOihcqOAFn3lLrbKns4UDUnnE=";
+    vendorHash = "";
 
     ldflags = [
       "-s"
