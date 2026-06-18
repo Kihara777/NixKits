@@ -37,6 +37,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 | comfyui-strix-halo | 为 AMD Strix Halo (gfx1151/RDNA3.5) 提供 ComfyUI ROCm 支持 | [docs/zh/comfyui-strix-halo.md](docs/zh/comfyui-strix-halo.md) |
 | llama-cpp-rocm | 动态追踪上游最新 Release 的 ROCm 加速构建 | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
+| ruyi-nixos-compat | 为 ruyi 提供 NixOS 运行时兼容（ELF interpreter 重定向 + GCC 子进程修复） | [docs/zh/ruyi-nixos-compat.md](docs/zh/ruyi-nixos-compat.md) |
 
 ## 技能
 
