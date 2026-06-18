@@ -7,6 +7,9 @@
 
     llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
     llama-cpp-ver.flake = false;
+
+    mihomo-ver.url = "https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha";
+    mihomo-ver.flake = false;
   };
 
   outputs = {
@@ -14,6 +17,7 @@
     nixpkgs,
     flake-utils,
     llama-cpp-ver,
+    mihomo-ver,
   } @ inputs:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = nixpkgs.legacyPackages.${system};
@@ -51,6 +55,7 @@
     nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
+    nixosModules.comfyui-rocm-patch    = import ./modules/comfyui-rocm-patch.nix;
     nixosModules.comfyui-strix-halo    = import ./modules/comfyui-strix-halo.nix;
     nixosModules.rog-control-center-fix = import ./modules/rog-control-center-fix.nix;
     nixosModules.ruyi                 = import ./modules/ruyi.nix;
@@ -60,6 +65,7 @@
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
+      mihomo-alpha      = import ./overlays/mihomo-alpha.nix { inherit mihomo-ver; };
     };
 
   };
