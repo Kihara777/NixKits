@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   python3,
   fetchFromGitHub,
   makeWrapper,
@@ -13,7 +12,6 @@
   zstd,
   unzip,
   git,
-  patchelf,
 }:
 
 let
@@ -33,29 +31,6 @@ python.pkgs.buildPythonApplication {
   inherit pname version src;
 
   pyproject = true;
-
-  # NixOS compatibility: transparently re-wrap pre-compiled RISC-V
-  # toolchain binaries through the NixOS dynamic linker.
-  patches = [
-    ../patches/ruyi-nixos-compat.patch
-  ];
-
-  # Inject build-time NixOS ld.so and glibc paths so ruyi can find
-  # them at runtime without probing /nix/store.
-  # The patch already fixes stubs/fastjsonschema/__init__.pyi.
-  # Inject build-time NixOS ld.so / glibc paths + fix import scoping.
-  postPatch = ''
-    substituteInPlace ruyi/utils/nixos_compat.py \
-      --replace-fail '@nixLdSo@'       '${stdenv.cc.bintools.dynamicLinker}' \
-      --replace-fail '@nixGlibcLib@'   '${stdenv.cc.libc}/lib'
-
-    # The patch's _maybe_fix_toolchain_sub_binaries references
-    # ensure_toolchain_nixos_compat from inside the function body, but the
-    # import lives in a different scope.  Add an explicit import inside the fn.
-    sed -i '/def _maybe_fix_toolchain_sub_binaries/,/ensure_toolchain_nixos_compat/{
-      /ensure_toolchain_nixos_compat/i\    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
-    }' ruyi/mux/runtime.py
-  '';
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
@@ -82,7 +57,7 @@ python.pkgs.buildPythonApplication {
   postInstall = ''
     wrapProgram "$out/bin/ruyi" \
       --prefix PATH : "${lib.makeBinPath [
-        curl gnutar gzip bzip2 xz lz4 zstd unzip git patchelf
+        curl gnutar gzip bzip2 xz lz4 zstd unzip git
       ]}"
   '';
 

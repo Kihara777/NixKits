@@ -34,10 +34,13 @@
 
     devShells = let
       ruyiDrv = pkgs.callPackage ./packages/ruyi.nix { };
+      # Apply ruyi-nixos-compat overlay so devShell also gets NixOS compat
+      ruyiOverlay = import ./overlays/ruyi-nixos-compat.nix;
+      ruyiWithCompat = (ruyiOverlay (pkgs // { ruyi = ruyiDrv; }) (pkgs // { ruyi = ruyiDrv; })).ruyi;
     in {
       ruyi = pkgs.mkShell {
         name = "ruyi-dev";
-        packages = [ ruyiDrv ];
+        packages = [ ruyiWithCompat ];
         shellHook = ''
           echo "RuyiSDK $(ruyi --version 2>/dev/null | head -1)"
         '';
