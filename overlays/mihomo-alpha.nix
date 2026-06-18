@@ -18,7 +18,7 @@
 
   version = "alpha-${commitHash}";
 in {
-  mihomo-alpha = prev.mihomo.overrideAttrs (old: {
+  mihomo = prev.mihomo.overrideAttrs (old: {
     inherit version;
 
     src = prev.fetchFromGitHub {
