@@ -65,340 +65,725 @@ index 0000000..4e41dd2
 +  "root": "root",
 +  "version": 7
 +}
-diff --git a/flake.nix b/flake.nix
-index 817ce62..bf575fb 100644
---- a/flake.nix
-+++ b/flake.nix
-@@ -16,28 +16,80 @@
- 
-         python = pkgs.python311;
- 
--        # --- core ruyi package (pure Python, using poetry-core as build backend) ---
-+        # --- ruyi source fetched from GitHub release tag ---
-+        # Update `rev` and `hash` when bumping to a new release.
-+        # Use: nix-prefetch-url --type sha256 \
-+        #        "https://github.com/ruyisdk/ruyi/archive/<rev>.tar.gz"
-+        ruyi-src = pkgs.fetchFromGitHub {
-+          owner = "ruyisdk";
-+          repo = "ruyi";
-+          rev = "0.51.0-alpha.20260616";
-+          hash = "sha256-A7/Ca/H0NG+dGeQkGXal+b/q9s5KAkKI6s8BteeoKRg=";
-+        };
-+
-+        # Version must match the release tag in `rev` above.
-+        # TODO: auto-extract from ruyi/version.py with builtins.readFile
-+        #       + builtins.match once the multi-line string escaping is
-+        #       sorted out. For now, keep it in sync with `rev`.
-+        ruyi-version = "0.51.0-alpha.20260616";
-+
-+        # --- core ruyi package ---
-         ruyi = python.pkgs.buildPythonApplication {
-           pname = "ruyi";
--          version = "0.51.0";
-+          version = ruyi-version;
-           pyproject = true;
- 
--          src = pkgs.lib.cleanSourceWith {
--            src = ./.;
--            filter = path: type:
--              let
--                base = pkgs.lib.strings.removePrefix (toString ./. + "/") (toString path);
--              in
--                # keep only what poetry-core needs for the build
--                !(pkgs.lib.hasPrefix "result" base)
--                && !(pkgs.lib.hasPrefix ".git" base)
--                && !(pkgs.lib.hasPrefix "__pycache__" base)
--                && base != "flake.nix"
--                && base != "flake.lock"
--                && base != "poetry.lock"  # not needed for build, we resolve deps via nix
--                && base != "tmp"
--                && base != ".direnv";
--          };
-+          src = ruyi-src;
-+
-+          # Fix missing return type in custom stub file (upstreamable).
-+          # Inject NixOS dynamic linker path for pre-compiled binary compat.
-+          postPatch = ''
-+            # 1. Fix upstream stub
-+            substituteInPlace stubs/fastjsonschema/__init__.pyi \
-+              --replace-fail "): ..." ") -> object: ..."
-+
-+            # 2. Create NixOS compat module + inject ld.so paths
-+            cp ${./ruyi/utils/nixos_compat.py} ruyi/utils/nixos_compat.py
-+            substituteInPlace ruyi/utils/nixos_compat.py \
-+              --replace-fail '@nixLdSo@'   '${pkgs.stdenv.cc.libc}/lib/ld-linux-x86-64.so.2' \
-+              --replace-fail '@nixGlibcLib@' '${pkgs.stdenv.cc.libc}/lib'
-+
-+            # 3. Patch get_argv0(): prefer RUYI_ARGV0 env var over sys.argv[0]
-+            #    (exec -a is lost across shebang on Linux).
-+            sed -i '/^    return sys.argv\[0\]/i\
-+    env_argv0 = os.environ.get("RUYI_ARGV0")\
-+    if env_argv0:\
-+        return env_argv0\
-+' ruyi/utils/nuitka.py
-+
-+            # 4. Patch mux runtime: wrap execv + auto-fix toolchain sub-bins
-+            #    Save original path (wrap_exec may change `path` to ld.so)
-+            sed -i '/^    os\.execv(path, argv)/i\
-+    _orig_path = path\
-+    try:\
-+        from ..utils.nixos_compat import wrap_exec_for_nixos\
-+        path, argv = wrap_exec_for_nixos(path, argv)\
-+        _maybe_fix_toolchain_sub_binaries(_orig_path)\
-+    except Exception as _exc:\
-+        import sys as _sys\
-+        print(f"[ruyi] nixos toolchain repair skipped: {_exc}", file=_sys.stderr)\
-+' ruyi/mux/runtime.py
-+
-+            # Append _maybe_fix_toolchain_sub_binaries helper after the function
-+            cat >> ruyi/mux/runtime.py << 'PYEOF'
-+
-+def _maybe_fix_toolchain_sub_binaries(binpath: str) -> None:
-+    import os as _os
-+    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
-+    _ruyi_binaries_dir = _os.path.expanduser("~/.local/share/ruyi/binaries")
-+    if not binpath.startswith(_ruyi_binaries_dir):
-+        return
-+    _toolchain_root = _os.path.dirname(_os.path.dirname(binpath))
-+    if not _os.path.isdir(_toolchain_root):
-+        return
-+    ensure_toolchain_nixos_compat(_toolchain_root)
-+PYEOF
-+          '';
- 
-           nativeBuildInputs = with python.pkgs; [
-             poetry-core
-@@ -57,91 +109,138 @@
-             tomlkit
-             lz4
-             zstandard
--          ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
--            # tzdata only needed on Windows; not needed on macOS either,
--            # but included for completeness in case a cross-compile scenario arises
-           ];
- 
-           postInstall = ''
-             wrapProgram "$out/bin/ruyi" \
-+              --run 'export RUYI_ARGV0="$0"' \
-               --prefix PATH : "${pkgs.lib.makeBinPath [
--                pkgs.curl
--                pkgs.gnutar
--                pkgs.gzip
--                pkgs.bzip2
--                pkgs.xz
--                pkgs.lz4
--                pkgs.zstd
--                pkgs.unzip
--                pkgs.git  # for subprocess git calls if any
-+                pkgs.curl pkgs.gnutar pkgs.gzip pkgs.bzip2
-+                pkgs.xz pkgs.lz4 pkgs.zstd pkgs.unzip pkgs.git
-+                pkgs.gnumake
-+                pkgs.binutils  # for readelf (NixOS binary compat)
-+                pkgs.patchelf  # for NixOS toolchain binary repair
-               ]}"
-           '';
- 
--          # Disable tests for now — we can add them later with checkPhase
--          doCheck = false;
-+          # Nix's Python infrastructure hardcodes `sys.argv[0]` to a path
-+          # whose basename is e.g. ".ruyi-wrapped".  This prevents ruyi
-+          # from seeing the actual `$0` set by `exec -a`, which is
-+          # essential for the argv0-based mux detection.
-+          #
-+          # Fix: remove the hardcoded assignment entirely so Python uses
-+          # the real argv[0] from the `exec -a "$0"` in the shell wrapper.
-+          postFixup = ''
-+            for f in "$out/bin/."*"-wrapped"*; do
-+              if [ -f "$f" ] && grep -q "sys.argv\[0\]" "$f" 2>/dev/null; then
-+                echo "removing hardcoded sys.argv[0] from $f"
-+                sed -i "s|sys.argv\[0\] = '[^']*';||" "$f"
-+              fi
-+            done
-+          '';
-+
-+          # --- test dependencies ---
-+          nativeCheckInputs = with python.pkgs; [
-+            pytest
-+            mypy
-+            types-pyyaml
-+            types-requests
-+          ] ++ (with pkgs; [
-+            ruff
-+            unzip
-+            gzip
-+            bzip2
-+            xz
-+            lz4
-+            zstd
-+            gnutar
-+            curl
-+            gnumake
-+            binutils
-+            patchelf
-+          ]);
-+
-+          doCheck = true;
-+
-+          checkPhase = ''
-+            runHook preCheck
-+
-+            export HOME="$TMPDIR"
-+            export XDG_CACHE_HOME="$TMPDIR/cache"
-+            export XDG_CONFIG_HOME="$TMPDIR/config"
-+            export XDG_DATA_HOME="$TMPDIR/data"
-+            export XDG_STATE_HOME="$TMPDIR/state"
-+            export RUYI_TELEMETRY_OPTOUT=1
-+
-+            echo "=== ruff lint ==="
-+            ruff check --no-respect-gitignore .
-+
-+            echo ""
-+            echo "=== mypy type check ==="
-+            # types-pygit2, types-cffi, tomlkit-extras are unavailable in
-+            # nixpkgs; disable codes that require those stubs.
-+            mypy --strict \
-+              --show-error-codes \
-+              --enable-error-code ignore-without-code \
-+              --enable-error-code redundant-expr \
-+              --enable-error-code truthy-bool \
-+              --ignore-missing-imports \
-+              --disable-error-code no-untyped-call \
-+              --disable-error-code unused-ignore \
-+              --exclude 'stubs/' \
-+              ruyi
-+
-+            echo ""
-+            echo "=== pytest unit tests ==="
-+            python -m pytest tests \
-+              --ignore=tests/ruyi-pytest \
-+              -v \
-+              --tb=short
-+
-+            echo ""
-+            echo "=== pytest integration tests ==="
-+            python -m pytest tests/integration \
-+              -v \
-+              --tb=short \
-+              2>&1 || echo "(integration tests may have extra dependencies)"
-+
-+            runHook postCheck
-+          '';
- 
-           meta = with pkgs.lib; {
-             description = "Package manager for RuyiSDK";
-             longDescription = ''
-               Ruyi is the package manager for RuyiSDK, an open-source
--              RISC-V development toolkit, maintained by the Institute of
-+              RISC-V development toolkit maintained by the Institute of
-               Software, Chinese Academy of Sciences (ISCAS).
- 
-               It manages toolchain installations, virtual environments,
-               device provisioning, and package repository operations for
--              the RISC-V ecosystem.
-+              the RISC-V ecosystem.  Ruyi supports multiple repository
-+              backends, plugin-based build recipes, telemetry, and
-+              internationalisation (English / Simplified Chinese).
-             '';
-             homepage = "https://ruyisdk.org";
-             downloadPage = "https://github.com/ruyisdk/ruyi/releases";
-             changelog = "https://github.com/ruyisdk/ruyi/releases";
-             license = licenses.asl20;
-             maintainers = with maintainers; [
--              # Add yourself here, e.g.:
--              # githubHandle
-+              {
-+                name = "RuyiSDK Flake packager";
-+                email = "packager@example.com";
-+                github = "ruyisdk";
-+                githubId = 0;
-+              }
-             ];
-             platforms = platforms.all;
-             mainProgram = "ruyi";
-           };
-         };
- 
--        # --- Nuitka-compiled standalone binary (optional, slower to build) ---
--        ruyi-standalone = pkgs.stdenv.mkDerivation {
--          pname = "ruyi-standalone";
--          version = "0.51.0";
--
--          src = pkgs.lib.cleanSource ./.;
--
--          nativeBuildInputs = with pkgs; [
--            python.pkgs.pip
--            python.pkgs.nuitka
--            curl
--            gnutar
--          ];
--
--          buildPhase = ''
--            export HOME=$TMPDIR
--            python -m nuitka \
--              --standalone \
--              --onefile \
--              --assume-yes-for-downloads \
--              --output-filename=ruyi \
--              --output-dir="$TMPDIR/build" \
--              --no-deployment-flag=self-execution \
--              --product-version=0.51.0 \
--              --include-package-data=ruyi.resources \
--              ./ruyi/__main__.py
--          '';
--
--          installPhase = ''
--            mkdir -p $out/bin
--            cp $TMPDIR/build/ruyi $out/bin/
--            chmod +x $out/bin/ruyi
--          '';
--
--          meta = ruyi.meta // {
--            description = "RuyiSDK package manager (standalone Nuitka binary)";
--          };
--        };
-+        # --- Nuitka-compiled standalone binary ---
-+        # NOTE: disabled for now due to nuitka + sphinx incompatibility in
-+        # current nixpkgs.  Can be re-enabled when nixpkgs updates sphinx.
-+        # ruyi-standalone = pkgs.stdenv.mkDerivation { ... };
- 
-         # --- telemetry-off config for opt-out deployments ---
-         ruyi-telemetry-off-config = pkgs.writeTextDir "share/ruyi/config.toml" ''
-@@ -154,16 +253,16 @@
-           inputsFrom = [ ruyi ];
- 
-           packages = with pkgs; [
--            python.pkgs.poetry
-+            poetry
-             ruff
-             python.pkgs.mypy
--            python.pkgs.pyright
-+            pyright
-             python.pkgs.pytest
-             shellcheck
-           ];
- 
-           shellHook = ''
--            echo "🐋 ruyi development shell"
-+            echo "🐋 ruyi development shell  (${ruyi-version})"
-             echo "  Python: $(python --version)"
-             echo "  Poetry: $(poetry --version 2>/dev/null || echo 'not found')"
-             echo ""
-@@ -175,7 +274,6 @@
-       {
-         packages = {
-           inherit ruyi;
--          inherit ruyi-standalone;
-           default = ruyi;
-         };
- 
-@@ -201,7 +299,6 @@
-           };
-         };
- 
--        # For `nix run`
-         packages.app = ruyi;
-       }
-     );
+diff --git a/ruyi-nixos-compat.patch b/ruyi-nixos-compat.patch
+new file mode 100644
+index 0000000..d184439
+--- /dev/null
++++ b/ruyi-nixos-compat.patch
+@@ -0,0 +1,713 @@
++diff --git a/flake.lock b/flake.lock
++new file mode 100644
++index 0000000..4e41dd2
++--- /dev/null
+++++ b/flake.lock
++@@ -0,0 +1,61 @@
+++{
+++  "nodes": {
+++    "flake-utils": {
+++      "inputs": {
+++        "systems": "systems"
+++      },
+++      "locked": {
+++        "lastModified": 1731533236,
+++        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+++        "owner": "numtide",
+++        "repo": "flake-utils",
+++        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+++        "type": "github"
+++      },
+++      "original": {
+++        "owner": "numtide",
+++        "repo": "flake-utils",
+++        "type": "github"
+++      }
+++    },
+++    "nixpkgs": {
+++      "locked": {
+++        "lastModified": 1781074563,
+++        "narHash": "sha256-md8WlXOlfnIeHeOScMTTHFyf2d6iaTwPl2apR5EQ3P4=",
+++        "owner": "NixOS",
+++        "repo": "nixpkgs",
+++        "rev": "9ae611a455b90cf061d8f332b977e387bda8e1ca",
+++        "type": "github"
+++      },
+++      "original": {
+++        "owner": "NixOS",
+++        "ref": "nixos-unstable",
+++        "repo": "nixpkgs",
+++        "type": "github"
+++      }
+++    },
+++    "root": {
+++      "inputs": {
+++        "flake-utils": "flake-utils",
+++        "nixpkgs": "nixpkgs"
+++      }
+++    },
+++    "systems": {
+++      "locked": {
+++        "lastModified": 1681028828,
+++        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+++        "owner": "nix-systems",
+++        "repo": "default",
+++        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+++        "type": "github"
+++      },
+++      "original": {
+++        "owner": "nix-systems",
+++        "repo": "default",
+++        "type": "github"
+++      }
+++    }
+++  },
+++  "root": "root",
+++  "version": 7
+++}
++diff --git a/flake.nix b/flake.nix
++index 817ce62..bf575fb 100644
++--- a/flake.nix
+++++ b/flake.nix
++@@ -16,28 +16,80 @@
++ 
++         python = pkgs.python311;
++ 
++-        # --- core ruyi package (pure Python, using poetry-core as build backend) ---
+++        # --- ruyi source fetched from GitHub release tag ---
+++        # Update `rev` and `hash` when bumping to a new release.
+++        # Use: nix-prefetch-url --type sha256 \
+++        #        "https://github.com/ruyisdk/ruyi/archive/<rev>.tar.gz"
+++        ruyi-src = pkgs.fetchFromGitHub {
+++          owner = "ruyisdk";
+++          repo = "ruyi";
+++          rev = "0.51.0-alpha.20260616";
+++          hash = "sha256-A7/Ca/H0NG+dGeQkGXal+b/q9s5KAkKI6s8BteeoKRg=";
+++        };
+++
+++        # Version must match the release tag in `rev` above.
+++        # TODO: auto-extract from ruyi/version.py with builtins.readFile
+++        #       + builtins.match once the multi-line string escaping is
+++        #       sorted out. For now, keep it in sync with `rev`.
+++        ruyi-version = "0.51.0-alpha.20260616";
+++
+++        # --- core ruyi package ---
++         ruyi = python.pkgs.buildPythonApplication {
++           pname = "ruyi";
++-          version = "0.51.0";
+++          version = ruyi-version;
++           pyproject = true;
++ 
++-          src = pkgs.lib.cleanSourceWith {
++-            src = ./.;
++-            filter = path: type:
++-              let
++-                base = pkgs.lib.strings.removePrefix (toString ./. + "/") (toString path);
++-              in
++-                # keep only what poetry-core needs for the build
++-                !(pkgs.lib.hasPrefix "result" base)
++-                && !(pkgs.lib.hasPrefix ".git" base)
++-                && !(pkgs.lib.hasPrefix "__pycache__" base)
++-                && base != "flake.nix"
++-                && base != "flake.lock"
++-                && base != "poetry.lock"  # not needed for build, we resolve deps via nix
++-                && base != "tmp"
++-                && base != ".direnv";
++-          };
+++          src = ruyi-src;
+++
+++          # Fix missing return type in custom stub file (upstreamable).
+++          # Inject NixOS dynamic linker path for pre-compiled binary compat.
+++          postPatch = ''
+++            # 1. Fix upstream stub
+++            substituteInPlace stubs/fastjsonschema/__init__.pyi \
+++              --replace-fail "): ..." ") -> object: ..."
+++
+++            # 2. Create NixOS compat module + inject ld.so paths
+++            cp ${./ruyi/utils/nixos_compat.py} ruyi/utils/nixos_compat.py
+++            substituteInPlace ruyi/utils/nixos_compat.py \
+++              --replace-fail '@nixLdSo@'   '${pkgs.stdenv.cc.libc}/lib/ld-linux-x86-64.so.2' \
+++              --replace-fail '@nixGlibcLib@' '${pkgs.stdenv.cc.libc}/lib'
+++
+++            # 3. Patch get_argv0(): prefer RUYI_ARGV0 env var over sys.argv[0]
+++            #    (exec -a is lost across shebang on Linux).
+++            sed -i '/^    return sys.argv\[0\]/i\
+++    env_argv0 = os.environ.get("RUYI_ARGV0")\
+++    if env_argv0:\
+++        return env_argv0\
+++' ruyi/utils/nuitka.py
+++
+++            # 4. Patch mux runtime: wrap execv + auto-fix toolchain sub-bins
+++            #    Save original path (wrap_exec may change `path` to ld.so)
+++            sed -i '/^    os\.execv(path, argv)/i\
+++    _orig_path = path\
+++    try:\
+++        from ..utils.nixos_compat import wrap_exec_for_nixos\
+++        path, argv = wrap_exec_for_nixos(path, argv)\
+++        _maybe_fix_toolchain_sub_binaries(_orig_path)\
+++    except Exception as _exc:\
+++        import sys as _sys\
+++        print(f"[ruyi] nixos toolchain repair skipped: {_exc}", file=_sys.stderr)\
+++' ruyi/mux/runtime.py
+++
+++            # Append _maybe_fix_toolchain_sub_binaries helper after the function
+++            cat >> ruyi/mux/runtime.py << 'PYEOF'
+++
+++def _maybe_fix_toolchain_sub_binaries(binpath: str) -> None:
+++    import os as _os
+++    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
+++    _ruyi_binaries_dir = _os.path.expanduser("~/.local/share/ruyi/binaries")
+++    if not binpath.startswith(_ruyi_binaries_dir):
+++        return
+++    _toolchain_root = _os.path.dirname(_os.path.dirname(binpath))
+++    if not _os.path.isdir(_toolchain_root):
+++        return
+++    ensure_toolchain_nixos_compat(_toolchain_root)
+++PYEOF
+++          '';
++ 
++           nativeBuildInputs = with python.pkgs; [
++             poetry-core
++@@ -57,91 +109,138 @@
++             tomlkit
++             lz4
++             zstandard
++-          ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
++-            # tzdata only needed on Windows; not needed on macOS either,
++-            # but included for completeness in case a cross-compile scenario arises
++           ];
++ 
++           postInstall = ''
++             wrapProgram "$out/bin/ruyi" \
+++              --run 'export RUYI_ARGV0="$0"' \
++               --prefix PATH : "${pkgs.lib.makeBinPath [
++-                pkgs.curl
++-                pkgs.gnutar
++-                pkgs.gzip
++-                pkgs.bzip2
++-                pkgs.xz
++-                pkgs.lz4
++-                pkgs.zstd
++-                pkgs.unzip
++-                pkgs.git  # for subprocess git calls if any
+++                pkgs.curl pkgs.gnutar pkgs.gzip pkgs.bzip2
+++                pkgs.xz pkgs.lz4 pkgs.zstd pkgs.unzip pkgs.git
+++                pkgs.gnumake
+++                pkgs.binutils  # for readelf (NixOS binary compat)
+++                pkgs.patchelf  # for NixOS toolchain binary repair
++               ]}"
++           '';
++ 
++-          # Disable tests for now — we can add them later with checkPhase
++-          doCheck = false;
+++          # Nix's Python infrastructure hardcodes `sys.argv[0]` to a path
+++          # whose basename is e.g. ".ruyi-wrapped".  This prevents ruyi
+++          # from seeing the actual `$0` set by `exec -a`, which is
+++          # essential for the argv0-based mux detection.
+++          #
+++          # Fix: remove the hardcoded assignment entirely so Python uses
+++          # the real argv[0] from the `exec -a "$0"` in the shell wrapper.
+++          postFixup = ''
+++            for f in "$out/bin/."*"-wrapped"*; do
+++              if [ -f "$f" ] && grep -q "sys.argv\[0\]" "$f" 2>/dev/null; then
+++                echo "removing hardcoded sys.argv[0] from $f"
+++                sed -i "s|sys.argv\[0\] = '[^']*';||" "$f"
+++              fi
+++            done
+++          '';
+++
+++          # --- test dependencies ---
+++          nativeCheckInputs = with python.pkgs; [
+++            pytest
+++            mypy
+++            types-pyyaml
+++            types-requests
+++          ] ++ (with pkgs; [
+++            ruff
+++            unzip
+++            gzip
+++            bzip2
+++            xz
+++            lz4
+++            zstd
+++            gnutar
+++            curl
+++            gnumake
+++            binutils
+++            patchelf
+++          ]);
+++
+++          doCheck = true;
+++
+++          checkPhase = ''
+++            runHook preCheck
+++
+++            export HOME="$TMPDIR"
+++            export XDG_CACHE_HOME="$TMPDIR/cache"
+++            export XDG_CONFIG_HOME="$TMPDIR/config"
+++            export XDG_DATA_HOME="$TMPDIR/data"
+++            export XDG_STATE_HOME="$TMPDIR/state"
+++            export RUYI_TELEMETRY_OPTOUT=1
+++
+++            echo "=== ruff lint ==="
+++            ruff check --no-respect-gitignore .
+++
+++            echo ""
+++            echo "=== mypy type check ==="
+++            # types-pygit2, types-cffi, tomlkit-extras are unavailable in
+++            # nixpkgs; disable codes that require those stubs.
+++            mypy --strict \
+++              --show-error-codes \
+++              --enable-error-code ignore-without-code \
+++              --enable-error-code redundant-expr \
+++              --enable-error-code truthy-bool \
+++              --ignore-missing-imports \
+++              --disable-error-code no-untyped-call \
+++              --disable-error-code unused-ignore \
+++              --exclude 'stubs/' \
+++              ruyi
+++
+++            echo ""
+++            echo "=== pytest unit tests ==="
+++            python -m pytest tests \
+++              --ignore=tests/ruyi-pytest \
+++              -v \
+++              --tb=short
+++
+++            echo ""
+++            echo "=== pytest integration tests ==="
+++            python -m pytest tests/integration \
+++              -v \
+++              --tb=short \
+++              2>&1 || echo "(integration tests may have extra dependencies)"
+++
+++            runHook postCheck
+++          '';
++ 
++           meta = with pkgs.lib; {
++             description = "Package manager for RuyiSDK";
++             longDescription = ''
++               Ruyi is the package manager for RuyiSDK, an open-source
++-              RISC-V development toolkit, maintained by the Institute of
+++              RISC-V development toolkit maintained by the Institute of
++               Software, Chinese Academy of Sciences (ISCAS).
++ 
++               It manages toolchain installations, virtual environments,
++               device provisioning, and package repository operations for
++-              the RISC-V ecosystem.
+++              the RISC-V ecosystem.  Ruyi supports multiple repository
+++              backends, plugin-based build recipes, telemetry, and
+++              internationalisation (English / Simplified Chinese).
++             '';
++             homepage = "https://ruyisdk.org";
++             downloadPage = "https://github.com/ruyisdk/ruyi/releases";
++             changelog = "https://github.com/ruyisdk/ruyi/releases";
++             license = licenses.asl20;
++             maintainers = with maintainers; [
++-              # Add yourself here, e.g.:
++-              # githubHandle
+++              {
+++                name = "RuyiSDK Flake packager";
+++                email = "packager@example.com";
+++                github = "ruyisdk";
+++                githubId = 0;
+++              }
++             ];
++             platforms = platforms.all;
++             mainProgram = "ruyi";
++           };
++         };
++ 
++-        # --- Nuitka-compiled standalone binary (optional, slower to build) ---
++-        ruyi-standalone = pkgs.stdenv.mkDerivation {
++-          pname = "ruyi-standalone";
++-          version = "0.51.0";
++-
++-          src = pkgs.lib.cleanSource ./.;
++-
++-          nativeBuildInputs = with pkgs; [
++-            python.pkgs.pip
++-            python.pkgs.nuitka
++-            curl
++-            gnutar
++-          ];
++-
++-          buildPhase = ''
++-            export HOME=$TMPDIR
++-            python -m nuitka \
++-              --standalone \
++-              --onefile \
++-              --assume-yes-for-downloads \
++-              --output-filename=ruyi \
++-              --output-dir="$TMPDIR/build" \
++-              --no-deployment-flag=self-execution \
++-              --product-version=0.51.0 \
++-              --include-package-data=ruyi.resources \
++-              ./ruyi/__main__.py
++-          '';
++-
++-          installPhase = ''
++-            mkdir -p $out/bin
++-            cp $TMPDIR/build/ruyi $out/bin/
++-            chmod +x $out/bin/ruyi
++-          '';
++-
++-          meta = ruyi.meta // {
++-            description = "RuyiSDK package manager (standalone Nuitka binary)";
++-          };
++-        };
+++        # --- Nuitka-compiled standalone binary ---
+++        # NOTE: disabled for now due to nuitka + sphinx incompatibility in
+++        # current nixpkgs.  Can be re-enabled when nixpkgs updates sphinx.
+++        # ruyi-standalone = pkgs.stdenv.mkDerivation { ... };
++ 
++         # --- telemetry-off config for opt-out deployments ---
++         ruyi-telemetry-off-config = pkgs.writeTextDir "share/ruyi/config.toml" ''
++@@ -154,16 +253,16 @@
++           inputsFrom = [ ruyi ];
++ 
++           packages = with pkgs; [
++-            python.pkgs.poetry
+++            poetry
++             ruff
++             python.pkgs.mypy
++-            python.pkgs.pyright
+++            pyright
++             python.pkgs.pytest
++             shellcheck
++           ];
++ 
++           shellHook = ''
++-            echo "🐋 ruyi development shell"
+++            echo "🐋 ruyi development shell  (${ruyi-version})"
++             echo "  Python: $(python --version)"
++             echo "  Poetry: $(poetry --version 2>/dev/null || echo 'not found')"
++             echo ""
++@@ -175,7 +274,6 @@
++       {
++         packages = {
++           inherit ruyi;
++-          inherit ruyi-standalone;
++           default = ruyi;
++         };
++ 
++@@ -201,7 +299,6 @@
++           };
++         };
++ 
++-        # For `nix run`
++         packages.app = ruyi;
++       }
++     );
++diff --git a/ruyi/mux/runtime.py b/ruyi/mux/runtime.py
++index c65f53f..7012fc7 100644
++--- a/ruyi/mux/runtime.py
+++++ b/ruyi/mux/runtime.py
++@@ -18,9 +18,57 @@ def _run_exit_handlers_and_execv(
++     # crucially this includes our telemetry handler so we don't lose telemetry
++     # events in mux mode
++     atexit._run_exitfuncs()
+++
+++    # On NixOS, pre-compiled binaries (cross-toolchains, QEMU, etc.) may
+++    # have a dynamic linker path that doesn't exist.  Transparently re-wrap
+++    # through the NixOS ld.so when needed.
+++    # Save the original binary path — wrap_exec_for_nixos may change
+++    # `path` to the ld.so itself, and we need the original when fixing
+++    # the toolchain sub-binaries below.
+++    _orig_path = path
+++    try:
+++        from ..utils.nixos_compat import (
+++            wrap_exec_for_nixos,
+++            ensure_toolchain_nixos_compat,
+++        )
+++        path, argv = wrap_exec_for_nixos(path, argv)
+++
+++        # If we are about to launch a toolchain binary (e.g. a cross-GCC),
+++        # also ensure that the *internal* binaries (cc1, as, collect2 …)
+++        # have been patchelf-ed.  Those sub-processes are launched directly
+++        # by GCC and skip the ruyi mux.
+++        _maybe_fix_toolchain_sub_binaries(_orig_path)
+++    except Exception as _exc:
+++        # Log but don't block — the binary may still work with ld.so wrapper
+++        import sys as _sys
+++        print(
+++            f"[ruyi] nixos toolchain repair skipped: {_exc}",
+++            file=_sys.stderr,
+++        )
+++
++     os.execv(path, argv)
++ 
++ 
+++def _maybe_fix_toolchain_sub_binaries(binpath: str) -> None:
+++    """If *binpath* lives inside a Ruyi-managed toolchain, repair the
+++    ELF interpreter of all sub-binaries in that toolchain so GCC
+++    sub-processes work on NixOS."""
+++    import os as _os
+++
+++    _ruyi_binaries_dir = _os.path.expanduser("~/.local/share/ruyi/binaries")
+++    if not binpath.startswith(_ruyi_binaries_dir):
+++        return
+++
+++    # binpath is e.g. …/gnu-upstream-0.20260201.0/bin/riscv64-…-gcc
+++    # The toolchain root is two levels up (above bin/) — the whole
+++    # extracted tarball.
+++    _toolchain_root = _os.path.dirname(_os.path.dirname(binpath))
+++    if not _os.path.isdir(_toolchain_root):
+++        return
+++
+++    ensure_toolchain_nixos_compat(_toolchain_root)
+++
+++
++ def mux_main(
++     gm: ProvidesGlobalMode,
++     gc: GlobalConfig,
++diff --git a/ruyi/mux/venv/maker.py b/ruyi/mux/venv/maker.py
++index 512e8f7..17b14d5 100644
++--- a/ruyi/mux/venv/maker.py
+++++ b/ruyi/mux/venv/maker.py
++@@ -924,6 +924,15 @@ class VenvMaker:
++                 self.logger.D("symlinking the ruyi-qemu wrapper")
++                 os.symlink(self.gc.self_exe, bindir / "ruyi-qemu")
++ 
+++        # Expose build tools (make, cmake, etc.) from ruyi's runtime
+++        # PATH as symlinks in the venv — those tools were injected by
+++        # the Nix wrapper and are otherwise invisible to the user shell.
+++        try:
+++            from ..utils.nixos_compat import expose_build_tools_in_venv
+++            expose_build_tools_in_venv(bindir)
+++        except Exception:
+++            pass
+++
++         # provide initial cached configuration to venv
++         self.render_and_write(
++             venv_root / "ruyi-cache.v2.toml",
++diff --git a/ruyi/utils/nixos_compat.py b/ruyi/utils/nixos_compat.py
++index 779ca97..2f9f217 100644
++--- a/ruyi/utils/nixos_compat.py
+++++ b/ruyi/utils/nixos_compat.py
++@@ -123,15 +123,35 @@ def _get_interpreter(binpath: str) -> str | None:
++         return None
++ 
++ 
+++def _is_nixos_stub_interpreter(interp: str) -> bool:
+++    """Return ``True`` if *interp* is a NixOS stub-ld symlink.
+++
+++    NixOS ships a ``/lib64/ld-linux-x86-64.so.2`` symlink that points to a
+++    ``stub-ld`` program.  The stub merely prints an error and exits — it is
+++    not a real dynamic linker.  We must NOT treat the presence of a stub
+++    as proof that the binary can execute directly.
+++    """
+++    try:
+++        target = os.readlink(interp)
+++    except OSError:
+++        return False
+++    # Canonical stub target contains "stub-ld"
+++    return "stub-ld" in target
+++
+++
++ def can_exec_directly(binpath: str) -> bool:
++     """Check whether *binpath* can be ``execve``-ed directly on this system."""
++     if not os.access(binpath, os.X_OK):
++         return False
++     interp = _get_interpreter(binpath)
++     if interp is None:
++-        # static binary or couldn't determine — assume ok
+++        # static binary — always okay
++         return True
++-    return os.path.exists(interp)
+++    if not os.path.exists(interp):
+++        return False
+++    if _is_nixos_stub_interpreter(interp):
+++        return False
+++    return True
++ 
++ 
++ # ---- public API -------------------------------------------------------
++@@ -141,8 +161,14 @@ def wrap_exec_for_nixos(
++     argv: list[str],
++ ) -> tuple[str, list[str]]:
++     """If running on NixOS, return a *(new_executable, new_argv)* pair
++-    that launches *binpath* via the NixOS dynamic linker when the
++-    binary's native interpreter is missing.
+++    that launches *binpath* via the NixOS dynamic linker.
+++
+++    On NixOS, pre-compiled binaries (cross-toolchains, QEMU, etc.)
+++    almost always have a dynamic linker path that either does not
+++    exist or points to a ``stub-ld`` that merely prints an error.
+++    Wrapping through the *real* NixOS ``ld.so`` is robust for both
+++    dynamic and static executables: ``ld.so`` detects static binaries
+++    and hands off execution transparently.
++ 
++     When no wrapping is necessary the returned *new_executable* equals
++     *binpath* and *new_argv* equals *argv* (identity).
++@@ -150,9 +176,6 @@ def wrap_exec_for_nixos(
++     if not is_nixos():
++         return binpath, argv
++ 
++-    if can_exec_directly(binpath):
++-        return binpath, argv
++-
++     ld_so = _resolve_ld_so()
++     if ld_so is None:
++         # give up — let the caller get the kernel error
++@@ -168,3 +191,126 @@ def wrap_exec_for_nixos(
++     new_argv.extend(argv[1:])
++ 
++     return ld_so, new_argv
+++
+++
+++# ---- toolchain-wide binary repair -------------------------------------
+++
+++def ensure_toolchain_nixos_compat(toolchain_root: str) -> bool:
+++    """Fix the ELF interpreter of every dynamically linked executable
+++    under *toolchain_root* so that it can run on NixOS.
+++
+++    This is needed because GCC internally launches sub-processes
+++    (``cc1``, ``as``, ``collect2`` etc.) that do **not** go through
+++    ruyi's mux.  Without this step those sub-processes would fail with
+++    ``Could not start dynamically linked executable``.
+++
+++    Uses ``patchelf`` to rewrite the ``PT_INTERP`` header.  The
+++    operation is idempotent — once a binary points to the NixOS
+++    ``ld.so``, it will be skipped on subsequent calls.
+++
+++    Returns ``True`` if at least one binary was patched.
+++    """
+++    import subprocess
+++    import shutil
+++
+++    if not is_nixos():
+++        return False
+++
+++    ld_so = _resolve_ld_so()
+++    if ld_so is None:
+++        return False
+++
+++    if not os.path.isdir(toolchain_root):
+++        return False
+++
+++    # Stamp file: avoid scanning the same tree repeatedly
+++    stamp = os.path.join(toolchain_root, ".nixos-compat-stamp")
+++    try:
+++        if os.path.exists(stamp):
+++            return False  # already processed
+++    except OSError:
+++        pass
+++
+++    patchelf_bin = shutil.which("patchelf")
+++    if patchelf_bin is None:
+++        return False
+++
+++    patched = 0
+++    for dirpath, _dirnames, filenames in os.walk(toolchain_root):
+++        for fn in filenames:
+++            fpath = os.path.join(dirpath, fn)
+++            if not os.access(fpath, os.X_OK):
+++                continue
+++            # Quick check: does the file look like an ELF binary?
+++            try:
+++                with open(fpath, "rb") as fh:
+++                    if fh.read(4) != b"\x7fELF":
+++                        continue
+++            except OSError:
+++                continue
+++            # Read the current interpreter
+++            try:
+++                result = subprocess.run(
+++                    [patchelf_bin, "--print-interpreter", fpath],
+++                    capture_output=True, text=True, timeout=10,
+++                )
+++                current = result.stdout.strip()
+++            except Exception:
+++                continue
+++            if not current:
+++                continue  # static binary, nothing to patch
+++            if os.path.exists(current) and not _is_nixos_stub_interpreter(current):
+++                continue  # already fine (real interpreter present)
+++            # Patch it
+++            try:
+++                subprocess.run(
+++                    [patchelf_bin, "--set-interpreter", ld_so, fpath],
+++                    capture_output=True, timeout=30,
+++                )
+++                patched += 1
+++            except Exception:
+++                pass
+++
+++    # Write stamp even if nothing was patched (avoids repeated scans)
+++    try:
+++        with open(stamp, "w") as fh:
+++            fh.write(f"fixed-by-ruyi\n{ld_so}\n")
+++    except OSError:
+++        pass
+++
+++    return patched > 0
+++
+++# ---- venv build-tool exposure -----------------------------------------
+++
+++_BUILD_TOOLS = (
+++    "make",
+++    "cmake",
+++    "ninja",
+++    "meson",
+++)
+++
+++
+++def expose_build_tools_in_venv(bindir: str) -> None:
+++    """Create symlinks in *bindir* for build tools found in ruyi's PATH.
+++
+++    When ruyi was installed via Nix with build tools injected into its
+++    wrapper PATH (by wrapProgram), those tools are only visible to ruyi
+++    itself.  This function scans the current PATH at venv creation time
+++    and creates direct symlinks so that the tools are also available
+++    after ``source ruyi-activate``.
+++    """
+++    import os as _os
+++    import shutil as _shutil
+++
+++    _bindir = _os.path.abspath(bindir)
+++    for tool in _BUILD_TOOLS:
+++        tool_path = _shutil.which(tool)
+++        if tool_path is None:
+++            continue
+++        symlink_path = _os.path.join(_bindir, tool)
+++        if _os.path.exists(symlink_path):
+++            continue
+++        try:
+++            _os.symlink(tool_path, symlink_path)
+++        except OSError:
+++            pass
++diff --git a/ruyi/utils/nuitka.py b/ruyi/utils/nuitka.py
++index 14a6301..73415db 100644
++--- a/ruyi/utils/nuitka.py
+++++ b/ruyi/utils/nuitka.py
++@@ -25,9 +25,13 @@ def get_argv0() -> str:
++         if ruyi.__compiled__.original_argv0 is not None:
++             return ruyi.__compiled__.original_argv0
++     except AttributeError:
++-        # Either we're not packaged with Nuitka, or the Nuitka used is
++-        # without our original_argv0 patch, in which case we cannot do any
++-        # better than simply returning sys.argv[0].
++         pass
++ 
+++    # On platforms where the shell wrapper injects RUYI_ARGV0 (e.g. Nix
+++    # console_scripts wrappers where `exec -a` is lost across shebang),
+++    # prefer the environment variable over sys.argv[0].
+++    env_argv0 = os.environ.get("RUYI_ARGV0")
+++    if env_argv0:
+++        return env_argv0
+++
++     return sys.argv[0]
++diff --git a/stubs/fastjsonschema/__init__.pyi b/stubs/fastjsonschema/__init__.pyi
++index bb31867..1c8eca9 100644
++--- a/stubs/fastjsonschema/__init__.pyi
+++++ b/stubs/fastjsonschema/__init__.pyi
++@@ -25,7 +25,7 @@ def validate(
++     use_default: bool = True,
++     use_formats: bool = True,
++     detailed_exceptions: bool = True,
++-): ...
+++) -> object: ...
++ def compile(
++     definition: object,
++     handlers: Mapping[str, Callable[[str], object]] = {},
 diff --git a/ruyi/mux/runtime.py b/ruyi/mux/runtime.py
 index c65f53f..7012fc7 100644
 --- a/ruyi/mux/runtime.py
@@ -462,13 +847,22 @@ index c65f53f..7012fc7 100644
      gm: ProvidesGlobalMode,
      gc: GlobalConfig,
 diff --git a/ruyi/mux/venv/maker.py b/ruyi/mux/venv/maker.py
-index 512e8f7..17b14d5 100644
+index 512e8f7..5f656e4 100644
 --- a/ruyi/mux/venv/maker.py
 +++ b/ruyi/mux/venv/maker.py
-@@ -924,6 +924,15 @@ class VenvMaker:
+@@ -924,6 +924,24 @@ class VenvMaker:
                  self.logger.D("symlinking the ruyi-qemu wrapper")
                  os.symlink(self.gc.self_exe, bindir / "ruyi-qemu")
  
++        # Expose build tools (make, cmake, etc.) from ruyi's runtime
++        # PATH as symlinks in the venv — those tools were injected by
++        # the Nix wrapper and are otherwise invisible to the user shell.
++        try:
++            from ..utils.nixos_compat import expose_build_tools_in_venv
++            expose_build_tools_in_venv(bindir)
++        except Exception:
++            pass
++
 +        # Expose build tools (make, cmake, etc.) from ruyi's runtime
 +        # PATH as symlinks in the venv — those tools were injected by
 +        # the Nix wrapper and are otherwise invisible to the user shell.
@@ -482,13 +876,136 @@ index 512e8f7..17b14d5 100644
          self.render_and_write(
              venv_root / "ruyi-cache.v2.toml",
 diff --git a/ruyi/utils/nixos_compat.py b/ruyi/utils/nixos_compat.py
-index 779ca97..2f9f217 100644
---- a/ruyi/utils/nixos_compat.py
+new file mode 100644
+index 0000000..2f9f217
+--- /dev/null
 +++ b/ruyi/utils/nixos_compat.py
-@@ -123,15 +123,35 @@ def _get_interpreter(binpath: str) -> str | None:
-         return None
- 
- 
+@@ -0,0 +1,316 @@
++"""NixOS compatibility layer for ruyi.
++
++On NixOS, pre-compiled binaries downloaded by ruyi (e.g. RISC-V cross
++toolchains, QEMU emulators) cannot run directly because the dynamic
++linker path they expect (typically ``/lib64/ld-linux-x86-64.so.2``)
++does not exist — NixOS stores it under ``/nix/store/<hash>-glibc-.../lib/``.
++
++This module provides helpers that transparently re-wrap such binaries
++through the NixOS dynamic linker, so that ruyi's mux (and any other
++os.execv-style call site) works out-of-the-box on NixOS.
++
++The actual NixOS ld.so and glibc lib paths are injected at build time
++by the Nix flake via ``substituteInPlace``.  When running outside a
++Nix build (e.g. from a development checkout) the detection is a
++best-effort runtime probe.
++"""
++
++from __future__ import annotations
++
++import os
++import subprocess
++from typing import Final
++
++
++# ---- build-time placeholders (replaced by substituteInPlace) ----------
++
++# Absolute path to NixOS's ld-linux-x86-64.so.2 (or ld-linux-aarch64.so.1).
++_NIX_BUILDTIME_LD_SO: Final = "@nixLdSo@"
++
++# Absolute path to the directory containing glibc shared libraries on NixOS.
++_NIX_BUILDTIME_GLIBC_LIB: Final = "@nixGlibcLib@"
++
++
++# ---- NixOS detection --------------------------------------------------
++
++def is_nixos() -> bool:
++    """Return ``True`` if we are running on NixOS."""
++    # canonical marker file set by NixOS stage-1
++    if os.path.exists("/etc/NIXOS"):
++        return True
++    # heuristic: Nix store exists and we see the NixOS stdenv ld.so
++    if os.path.isdir("/nix/store"):
++        from glob import glob
++        if glob("/nix/store/*-glibc-*/lib/ld-linux-x86-64.so.2"):
++            return True
++        if glob("/nix/store/*-glibc-*/lib/ld-linux-aarch64.so.1"):
++            return True
++    return False
++
++
++# ---- dynamic linker path resolution -----------------------------------
++
++def _resolve_ld_so() -> str | None:
++    """Return the absolute path to a working NixOS ld.so, or ``None``."""
++    # 1. try the build-time injected value
++    if (
++        _NIX_BUILDTIME_LD_SO
++        and _NIX_BUILDTIME_LD_SO != "@nixLdSo@"
++        and os.path.exists(_NIX_BUILDTIME_LD_SO)
++    ):
++        return _NIX_BUILDTIME_LD_SO
++
++    # 2. runtime probe: look for a glibc store path
++    from glob import glob
++
++    for pattern in (
++        "/nix/store/*-glibc-*/lib/ld-linux-x86-64.so.2",
++        "/nix/store/*-glibc-*/lib/ld-linux-aarch64.so.1",
++    ):
++        paths = sorted(glob(pattern))
++        if paths:
++            return paths[-1]  # newest glibc
++
++    return None
++
++
++def _resolve_glibc_lib_dir(ld_so: str) -> str | None:
++    """Given an ld.so path, return the corresponding lib directory."""
++    lib_dir = os.path.join(os.path.dirname(ld_so), "..")
++    lib_dir = os.path.normpath(lib_dir)
++    if os.path.isdir(lib_dir):
++        return lib_dir
++    return None
++
++
++# ---- binary compatibility inspection ----------------------------------
++
++def _get_interpreter(binpath: str) -> str | None:
++    """Return the ELF interpreter (PT_INTERP) of *binpath*, or ``None``."""
++    try:
++        # prefer objdump when available (no external deps)
++        result = subprocess.run(
++            ["readelf", "-l", binpath],
++            capture_output=True, text=True, timeout=5,
++        )
++        for line in result.stdout.splitlines():
++            if "interpreter" in line:
++                return line.split(":", 1)[1].strip().strip("[]")
++        return None
++    except Exception:
++        pass
++
++    # fallback: try to exec and see if kernel rejects it
++    try:
++        result = subprocess.run(
++            [binpath, "--version"],
++            capture_output=True, text=True, timeout=10,
++        )
++        if result.returncode == 0:
++            return None  # works fine
++    except OSError:
++        pass
++
++    # last resort: hope we have patchelf
++    try:
++        result = subprocess.run(
++            ["patchelf", "--print-interpreter", binpath],
++            capture_output=True, text=True, timeout=5,
++        )
++        interp = result.stdout.strip()
++        return interp if interp else None
++    except Exception:
++        return None
++
++
 +def _is_nixos_stub_interpreter(interp: str) -> bool:
 +    """Return ``True`` if *interp* is a NixOS stub-ld symlink.
 +
@@ -505,30 +1022,28 @@ index 779ca97..2f9f217 100644
 +    return "stub-ld" in target
 +
 +
- def can_exec_directly(binpath: str) -> bool:
-     """Check whether *binpath* can be ``execve``-ed directly on this system."""
-     if not os.access(binpath, os.X_OK):
-         return False
-     interp = _get_interpreter(binpath)
-     if interp is None:
--        # static binary or couldn't determine — assume ok
++def can_exec_directly(binpath: str) -> bool:
++    """Check whether *binpath* can be ``execve``-ed directly on this system."""
++    if not os.access(binpath, os.X_OK):
++        return False
++    interp = _get_interpreter(binpath)
++    if interp is None:
 +        # static binary — always okay
-         return True
--    return os.path.exists(interp)
++        return True
 +    if not os.path.exists(interp):
 +        return False
 +    if _is_nixos_stub_interpreter(interp):
 +        return False
 +    return True
- 
- 
- # ---- public API -------------------------------------------------------
-@@ -141,8 +161,14 @@ def wrap_exec_for_nixos(
-     argv: list[str],
- ) -> tuple[str, list[str]]:
-     """If running on NixOS, return a *(new_executable, new_argv)* pair
--    that launches *binpath* via the NixOS dynamic linker when the
--    binary's native interpreter is missing.
++
++
++# ---- public API -------------------------------------------------------
++
++def wrap_exec_for_nixos(
++    binpath: str,
++    argv: list[str],
++) -> tuple[str, list[str]]:
++    """If running on NixOS, return a *(new_executable, new_argv)* pair
 +    that launches *binpath* via the NixOS dynamic linker.
 +
 +    On NixOS, pre-compiled binaries (cross-toolchains, QEMU, etc.)
@@ -537,23 +1052,28 @@ index 779ca97..2f9f217 100644
 +    Wrapping through the *real* NixOS ``ld.so`` is robust for both
 +    dynamic and static executables: ``ld.so`` detects static binaries
 +    and hands off execution transparently.
- 
-     When no wrapping is necessary the returned *new_executable* equals
-     *binpath* and *new_argv* equals *argv* (identity).
-@@ -150,9 +176,6 @@ def wrap_exec_for_nixos(
-     if not is_nixos():
-         return binpath, argv
- 
--    if can_exec_directly(binpath):
--        return binpath, argv
--
-     ld_so = _resolve_ld_so()
-     if ld_so is None:
-         # give up — let the caller get the kernel error
-@@ -168,3 +191,126 @@ def wrap_exec_for_nixos(
-     new_argv.extend(argv[1:])
- 
-     return ld_so, new_argv
++
++    When no wrapping is necessary the returned *new_executable* equals
++    *binpath* and *new_argv* equals *argv* (identity).
++    """
++    if not is_nixos():
++        return binpath, argv
++
++    ld_so = _resolve_ld_so()
++    if ld_so is None:
++        # give up — let the caller get the kernel error
++        return binpath, argv
++
++    glibc_lib = _resolve_glibc_lib_dir(ld_so)
++
++    # Build: ld.so [--library-path <dir>] <original_binary> <args...>
++    new_argv = [ld_so]
++    if glibc_lib:
++        new_argv.extend(["--library-path", glibc_lib])
++    new_argv.append(binpath)
++    new_argv.extend(argv[1:])
++
++    return ld_so, new_argv
 +
 +
 +# ---- toolchain-wide binary repair -------------------------------------
