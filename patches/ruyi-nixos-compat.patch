@@ -546,7 +546,7 @@ index 0000000..d184439
 ++        # PATH as symlinks in the venv — those tools were injected by
 ++        # the Nix wrapper and are otherwise invisible to the user shell.
 ++        try:
-++            from ..utils.nixos_compat import expose_build_tools_in_venv
+++            from ...utils.nixos_compat import expose_build_tools_in_venv
 ++            expose_build_tools_in_venv(bindir)
 ++        except Exception:
 ++            pass
@@ -858,7 +858,7 @@ index 512e8f7..5f656e4 100644
 +        # PATH as symlinks in the venv — those tools were injected by
 +        # the Nix wrapper and are otherwise invisible to the user shell.
 +        try:
-+            from ..utils.nixos_compat import expose_build_tools_in_venv
++            from ...utils.nixos_compat import expose_build_tools_in_venv
 +            expose_build_tools_in_venv(bindir)
 +        except Exception:
 +            pass
@@ -867,7 +867,7 @@ index 512e8f7..5f656e4 100644
 +        # PATH as symlinks in the venv — those tools were injected by
 +        # the Nix wrapper and are otherwise invisible to the user shell.
 +        try:
-+            from ..utils.nixos_compat import expose_build_tools_in_venv
++            from ...utils.nixos_compat import expose_build_tools_in_venv
 +            expose_build_tools_in_venv(bindir)
 +        except Exception:
 +            pass
