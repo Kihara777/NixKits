@@ -101,10 +101,11 @@ marker = "os.symlink(self.gc.self_exe, bindir / " + chr(34) + "ruyi-qemu" + chr(
 insert = """\
         # Expose build tools from ruyi's runtime PATH
         try:
-            from ..utils.nixos_compat import expose_build_tools_in_venv
+            from ...utils.nixos_compat import expose_build_tools_in_venv
             expose_build_tools_in_venv(bindir)
-        except Exception:
-            pass
+        except Exception as _e:
+            import sys
+            print(f"[nixos-compat] expose_build_tools failed — {_e}", file=sys.stderr)
 """
 with open('ruyi/mux/venv/maker.py') as f:
     content = f.read()
