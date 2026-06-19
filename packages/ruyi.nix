@@ -129,7 +129,7 @@ PYEOF
     # detect the tool name (e.g. riscv64-unknown-linux-gnu-gcc) from
     # venv symlinks even after Nix's wrapProgram chains.
     if [ -f "$out/bin/ruyi" ]; then
-      sed -i "s|^exec -a|export RUYI_ARGV0=\$(basename \"\$0\")\nexec -a|" "$out/bin/ruyi"
+      sed -i "s|^exec -a|export RUYI_ARGV0=\$0\nexec -a|" "$out/bin/ruyi"
     fi
 
     # Fix Nix's console_scripts wrapper hardcoded sys.argv[0] inside
