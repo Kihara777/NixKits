@@ -32,7 +32,7 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 提供 `nix develop` 即用环境。首先添加 registry：
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nix-kits /home/kix/NixKits
 ```
 
 | 包 | `nix develop` |
