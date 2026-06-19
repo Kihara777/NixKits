@@ -125,10 +125,20 @@ PYEOF
   dontCheckRuntimeDeps = true;
 
   postFixup = ''
+    # Inject RUYI_ARGV0 export into the outermost wrapper so ruyi can
+    # detect the tool name (e.g. riscv64-unknown-linux-gnu-gcc) from
+    # venv symlinks even after Nix's wrapProgram chains.
+    if [ -f "$out/bin/ruyi" ]; then
+      sed -i "s|^exec -a|export RUYI_ARGV0=\$(basename \"\$0\")\nexec -a|" "$out/bin/ruyi"
+    fi
+
+    # Fix Nix's console_scripts wrapper hardcoded sys.argv[0] inside
+    # the wrapped binaries — use RUYI_ARGV0 env var set by the outer
+    # wrapper so that the tool name survives through wrapProgram chains.
     for f in "$out/bin/."*"-wrapped"*; do
       if [ -f "$f" ]; then
         if grep -q "sys.argv\[0\]" "$f" 2>/dev/null; then
-          sed -i "s|sys.argv\[0\] = '[^']*'|sys.argv[0] = '$out/bin/ruyi'|" "$f"
+          sed -i "s|sys.argv\[0\] = '[^']*'|import os as _os; sys.argv[0] = _os.environ.get('RUYI_ARGV0', sys.argv[0])|" "$f"
         fi
       fi
     done
