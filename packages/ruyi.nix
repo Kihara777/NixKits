@@ -63,6 +63,60 @@ python.pkgs.buildPythonApplication {
       ]}"
   '';
 
+  # Expose build tools (make, cmake, etc.) from the wrapper PATH into
+  # every venv's bin/ directory as symlinks so that `make` works after
+  # `source ruyi-activate` even though NixOS does not have make globally.
+  postPatch = ''
+    # 1. Append expose_build_tools_in_venv to nixos_compat.py
+    # (the file may already exist from ruyi-nixos-compat.patch)
+    mkdir -p ruyi/utils
+    touch ruyi/utils/__init__.py
+    if ! grep -q 'expose_build_tools_in_venv' ruyi/utils/nixos_compat.py 2>/dev/null; then
+      cat >> ruyi/utils/nixos_compat.py << 'NCEOF'
+_BUILD_TOOLS = ("make", "cmake", "ninja", "meson")
+
+def expose_build_tools_in_venv(bindir: str) -> None:
+    """Create symlinks in *bindir* for build tools found in ruyi's PATH."""
+    import os as _os, shutil as _shutil
+    _bindir = _os.path.abspath(bindir)
+    for tool in _BUILD_TOOLS:
+        tool_path = _shutil.which(tool)
+        if tool_path is None:
+            continue
+        symlink_path = _os.path.join(_bindir, tool)
+        if _os.path.exists(symlink_path):
+            continue
+        try:
+            _os.symlink(tool_path, symlink_path)
+        except OSError:
+            pass
+NCEOF
+    fi
+
+    # 2. Call it from maker.py after the QEMU symlink (idempotent)
+    if ! grep -q 'expose_build_tools_in_venv' ruyi/mux/venv/maker.py 2>/dev/null; then
+    cat > _inject_build_tools.py << 'PYEOF'
+import sys
+marker = "os.symlink(self.gc.self_exe, bindir / " + chr(34) + "ruyi-qemu" + chr(34) + ")"
+insert = """\
+        # Expose build tools from ruyi's runtime PATH
+        try:
+            from ..utils.nixos_compat import expose_build_tools_in_venv
+            expose_build_tools_in_venv(bindir)
+        except Exception:
+            pass
+"""
+with open('ruyi/mux/venv/maker.py') as f:
+    content = f.read()
+content = content.replace(marker, marker + insert)
+with open('ruyi/mux/venv/maker.py', 'w') as f:
+    f.write(content)
+PYEOF
+    ${python}/bin/python _inject_build_tools.py
+    rm _inject_build_tools.py
+    fi
+  '';
+
   # Nix's console_scripts wrapper hardcodes sys.argv[0] to a mangled path,
   # breaking ruyi's argv0-based mux detection.  Fix in postFixup.
   # pythonRuntimeDepsCheckHook fails on lz4 (the wheel declares it under
