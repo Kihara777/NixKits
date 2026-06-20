@@ -1,6 +1,6 @@
 # nixkits-check-updates (Skill)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) 
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | 偽中国語
 
 > NixKits 全パッケージ上流更新チェック，自動アップグレード・ドキュメント同期，修正メンテナンスログ記録。
 

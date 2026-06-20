@@ -1,6 +1,6 @@
 # ruyi-nixos-compat
 
-[中文](../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) 
+[中文](../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) | 偽中国語
 
 ruyi  NixOS ランタイム互換性提供：プリコンパイル RISC-V ツールチェーンバイナリ，期待動的リンカパス `/lib64/ld-linux-x86-64.so.2`  NixOS 存在，実行。 overlay パッチ通問題透過的処理。
 
