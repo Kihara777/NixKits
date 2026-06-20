@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](../README.md) | [English](README.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](README.katalish.md) | [偽中国語](README.pcn.md)
+[中文](../README.md) | [English](README.en.md) | 日本語 | [Katalish](README.katalish.md) | [Pseudo-Chinese](README.pcn.md)
 
 NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コーディングアシスタントスキルのコレクション。
 
