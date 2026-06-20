@@ -1,6 +1,6 @@
 # mcp-searxng
 
-[中文](../../zh/mcp-searxng.md) | English | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
+[中文](../../zh/mcp-searxng.md) | English | [日本語](../ja/mcp-searxng.md) | [Katalish](../katalish/mcp-searxng.md) | [Pseudo-Chinese](../pcn/mcp-searxng.md)
 
 [MCP Server](https://modelcontextprotocol.io) for [SearXNG](https://docs.searxng.org) — web search for AI assistants.
 

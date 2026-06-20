@@ -1,6 +1,6 @@
 # ruyi-nixos-compat
 
-[中文](../../zh/ruyi-nixos-compat.md) | English | [日本語](../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) | [偽中国語](../pcn/ruyi-nixos-compat.md)
+[中文](../../zh/ruyi-nixos-compat.md) | English | [日本語](../ja/ruyi-nixos-compat.md) | [Katalish](../katalish/ruyi-nixos-compat.md) | [Pseudo-Chinese](../pcn/ruyi-nixos-compat.md)
 
 Provides NixOS runtime compatibility for ruyi: pre-compiled RISC-V toolchain binaries cannot run directly on NixOS because the expected dynamic linker path `/lib64/ld-linux-x86-64.so.2` does not exist. This overlay transparently addresses this via a patch.
 

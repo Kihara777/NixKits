@@ -1,6 +1,6 @@
 # translate-pseudocn (Skill)
 
-[中文](../../zh/skills/translate-pseudocn.md) | English | [日本語](../../ja/skills/translate-pseudocn.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-pseudocn.md) | [偽中国語](../../pcn/skills/translate-pseudocn.md)
+[中文](../../zh/skills/translate-pseudocn.md) | English | [日本語](../../ja/skills/translate-pseudocn.md) | [Katalish](../../katalish/skills/translate-pseudocn.md) | [Pseudo-Chinese](../../pcn/skills/translate-pseudocn.md)
 
 > Pseudo-Chinese (pcn) language support for the document-writing skill. Auto-discovered by write-project-docs.
 

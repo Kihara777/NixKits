@@ -1,6 +1,6 @@
 # rcc-fix
 
-[中文](../../zh/rcc-fix.md) | English | [日本語](../ja/rcc-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rcc-fix.md) | [偽中国語](../pcn/rcc-fix.md)
+[中文](../../zh/rcc-fix.md) | English | [日本語](../ja/rcc-fix.md) | [Katalish](../katalish/rcc-fix.md) | [Pseudo-Chinese](../pcn/rcc-fix.md)
 
 Patches `asusctl` for better ASUS ROG Control Center on 2-in-1 detachable devices.
 
