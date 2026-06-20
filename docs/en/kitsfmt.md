@@ -1,6 +1,6 @@
 # kitsfmt
 
-[中文](../../zh/kitsfmt.md) | [English](kitsfmt.md) | [日本語](../../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../../katalish/kitsfmt.md)
+[中文](../../zh/kitsfmt.md) | [English](kitsfmt.md) | [日本語](../../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../../katalish/kitsfmt.md) | [偽中国語](../../pcn/kitsfmt.md)
 
 **Nix formatter** — AST-based with attribute sorting, comment preservation, and indentation normalization.
 

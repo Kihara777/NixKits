@@ -1,6 +1,6 @@
 # write-project-docs (ｽｷﾙ)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > ｼﾞｪﾈﾚｲﾂ complete multi-language ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ﾌｫﾛｰｲﾝｸﾞ ｻﾞ NixKits style — trilingual (zh/en/ja), concise, table-driven.
 

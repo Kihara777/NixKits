@@ -75,7 +75,7 @@ Full catalog ﾃﾞｰﾀ ｲｽﾞ ﾃﾞｨﾌｧｲﾝﾄﾞ ｲﾝ ｻﾞ Ch
 
 **ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ** (under `docs/<lang>/`):
 ```
-[中文](<name>.md) | [English](../en/<name>.md) | [日本語](../ja/<name>.md) | [ｶﾀﾘｯｼｭ](../katalish/<name>.md)
+[中文](../../zh/project.md) | [English](../en/project.md) | [日本語](../../ja/project.md) | [ｶﾀﾘｯｼｭ](project.md) | [偽中国語](../../pcn/project.md)
 ```
 
 **ｽｷﾙ ﾄﾞｷｭｽﾞ** (under `docs/<lang>/skills/`):

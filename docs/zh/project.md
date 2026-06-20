@@ -149,7 +149,7 @@ flake.nix
 
 **模块文档**（在 `docs/<lang>/` 下）：
 ```
-[中文](<name>.md) | [English](../en/<name>.md) | [日本語](../ja/<name>.md) | [ｶﾀﾘｯｼｭ](../katalish/<name>.md)
+[中文](project.md) | [English](../en/project.md) | [日本語](../ja/project.md) | [ｶﾀﾘｯｼｭ](../katalish/project.md) | [偽中国語](../pcn/project.md)
 ```
 
 **技能文档**（在 `docs/<lang>/skills/` 下）：

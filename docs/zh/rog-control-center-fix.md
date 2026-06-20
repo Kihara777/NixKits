@@ -1,6 +1,6 @@
 # rog-control-center-fix
 
-[中文](rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-fix.md)
+[中文](rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-fix.md) | [偽中国語](../pcn/rog-control-center-fix.md)
 
 修复 asusd 关机时 `asus-shutdown.service` 的死锁问题。
 

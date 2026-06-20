@@ -1,6 +1,6 @@
 # nixkits-skills (Skill)
 
-[中文](nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md)
+[中文](nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
 > 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、claude、openclaw、agents）。
 

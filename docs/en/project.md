@@ -75,7 +75,7 @@ flake.nix
 
 **Module docs** (under `docs/<lang>/`):
 ```
-[中文](<name>.md) | [English](../en/<name>.md) | [日本語](../ja/<name>.md) | [ｶﾀﾘｯｼｭ](../katalish/<name>.md)
+[中文](../../zh/project.md) | [English](project.md) | [日本語](../../ja/project.md) | [ｶﾀﾘｯｼｭ](../../katalish/project.md) | [偽中国語](../../pcn/project.md)
 ```
 
 **Skill docs** (under `docs/<lang>/skills/`):

@@ -1,6 +1,6 @@
 # recover-nixos-config (Skill)
 
-[中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](recover-nixos-config.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/recover-nixos-config.md)
+[中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](recover-nixos-config.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/recover-nixos-config.md) | [偽中国語](../../pcn/skills/recover-nixos-config.md)
 
 > 誤って削除した `/etc/nixos` ファイルを Nix store から復旧。
 
