@@ -1,0 +1,29 @@
+# write-maintenance-log (Skill)
+
+[中文](../../zh/skills/write-maintenance-log.md) | [English](write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)
+
+> Write or update MAINTENANCE.md following NixKits conventions. Supports software update and bug fix record types.
+
+## Info
+
+| Item | Value |
+|------|-------|
+| Type | Coding Agent Skill |
+| Path | `skills/write-maintenance-log/SKILL.md` |
+
+## Features
+
+- Writes software update records (summary + commit ID table + version table)
+- Writes bug fix records (summary + commit ID table)
+- Trilingual sync (zh/en/ja) of maintenance logs
+- Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
+- Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
+
+## Entry Points
+
+- **Record Fix**: auto-called after software updates, or on "record this fix" / "记入维护记录"
+- **Update Log**: on "update maintenance log" / "补全维护记录" — scans git history for missing records and backfills
+
+## Usage
+
+Activated automatically after software updates, or on user request to record a fix.

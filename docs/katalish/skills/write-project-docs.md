@@ -1,33 +1,34 @@
-# write-project-docs (技能)
+# write-project-docs (Skill)
 
-[中文](../zh/skills/write-project-docs.md) | [English](../en/skills/write-project-docs.md) | [日本語](../ja/skills/write-project-docs.md) | [偽中国語](write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)
 
-> NixKits 風格任意企画向完全多言語文書系作成 — 中英日+偽中国語四言語、簡潔、表駆動方式。
+> Generates complete multi-language documentation following the NixKits style — trilingual (zh/en/ja), concise, table-driven.
 
-## 基本情報
+## Info
 
-| 項目 | 値 |
-|------|-----|
-| 類型 | 符号作成 Agent 技能 |
-| 路径 | `skills/write-project-docs/SKILL.md` |
+| Item | Value |
+|------|-------|
+| Type | Coding Agent Skill |
+| Path | `skills/write-project-docs/SKILL.md` |
 
-## 機能
+## Features
 
-- 企画 metadata 評価及部品情報抽出
-- 部品機能別分類（基盤/役務/代理/技能等）
-- `docs/{zh,en,ja,pcn}/` 四言語目録構造生成
-- 分類 README 作成（言語切替器付）
-- 部品文書作成（基本情報表 + 安裝 + 引用）
-- 技能文書作成（統一雛形：基本情報→機能→使用）
-- 子代理並列化対応：部品類別別分派
+- Assesses project metadata and extracts module information
+- Classifies modules by function (infra/services/proxy/skills)
+- Creates `docs/{zh,en,ja}/` directory structure
+- Auto-discovers language extensions via `translate-*` naming convention in `skills/translate-*/`
+- Writes categorized READMEs with language switchers
+- Writes per-module docs (info table + install + usage)
+- Writes skill docs using the unified template (Info → Features → Usage)
+- Supports sub-agent parallelization by module category
 
-## 技能文書同期規則
+## Skill Doc Sync Rules
 
-`SKILL.md` 変更時、対応四言語文書同期更新必須。
-staleness check 用過期文件定位：
+When `SKILL.md` changes, the corresponding quadrilingual docs must be updated.
+Use staleness check to locate outdated files:
 
 ```bash
-for lang in zh en ja pcn; do
+for lang in zh en ja; do
   for skill in skills/*/SKILL.md; do
     name=$(basename $(dirname $skill))
     doc="docs/$lang/skills/$name.md"
@@ -36,22 +37,19 @@ for lang in zh en ja pcn; do
 done
 ```
 
-更新順序：中文基準→英文翻訳→日文翻訳→偽中国語翻訳。
-四言語列名映射：`基本信息`→`Info`/`基本情報`/`基本情報`、`功能`→`Features`/`機能`/`機能`。
-偽中国語（pcn）規則：日語漢字詞彙基盤、全仮名及送仮名剥離、日語構文中国語語順転換、中文標点使用。技術用語原形維持、英文略号及記号非翻訳。
+Update order: Chinese baseline → English translation → Japanese translation → Pseudo-Chinese translation.
+Column mapping: `基本信息` → `Info` / `基本情報` / `基本情報`, `功能` → `Features` / `機能` / `機能`.
 
-## 作成規則
+- Zero fluff, tables over prose, copy-paste-ready code blocks
+- Technical terms stay in English; warnings use blockquote format
+- Chinese section titles use 2- or 4-character words for visual rhythm
+- Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
+- No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
+- All four READMEs must be updated together
+- Root dir only holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`) live under `docs/`
+- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
+- After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
 
-- 零冗語、表優先、符号塊完全実行可能
-- 技術用語英文維持、警告引用塊使用
-- 中文標題 2 或 4 字詞使用視覚節奏確保
-- 目標行数 ~40-60 行、補丁/部品文書四段式標準（基本情報→修正内容→安裝→注意）
-- 禁止独立技術詳細、問題調査、参考章節 — 圧縮 `## 注意` bullet
-- 四 README 表行同期更新必須
-- 根目録中文無後綴 `.md` 維持、地域化版（`*.en.md`、`*.ja.md`、`*.pcn.md`）`docs/` 移動
-- 全言語基本情報表包含必須（中文 `## 基本信息`、英文 `## Info`、日文 `## 基本情報`、偽中国語 `## 基本情報`）
-- 補丁/部品源符号変更後、「修正内容」/「機能」列表同期更新必須、各 bullet 実際修正対応
+## Usage
 
-## 使用
-
-AI 補助者「文書作成」或「NixKits 風格文書生成」要求時起動。
+Activated when the user asks to "write documentation" or "generate docs in NixKits style".
