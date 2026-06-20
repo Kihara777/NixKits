@@ -1,8 +1,8 @@
-# ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ
+# mihomo-alpha
 
-[中文](../zh/mihomo-alpha.md) | [ｲﾝｸﾞﾘｯｼｭ](mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
+[中文](../zh/mihomo-alpha.md) | [English](mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
 
-> ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾄﾗｯｷﾝｸﾞ (ﾌﾟﾗｵｸｽｲ ﾂｰﾙ) — ｵｰﾊﾞｰﾚｲ ﾗｴｼﾞｲｽﾄﾗｱｼｮﾝ ｵﾌﾞ ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ'ｽ ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾘﾘｰｽ ﾌｫｱ NixOS ﾓｼﾞｭｰﾙ ﾕｰｽﾞ.
+> Prerelease-Alpha tracking (proxy tool) — overlay registration of MetaCubeX/mihomo's Prerelease-Alpha release for NixOS module use.
 
 ## ｲﾝﾌｫ
 
@@ -10,21 +10,21 @@
 |------|------|
 | ﾀｲﾌﾟ | ｵｰﾊﾞｰﾚｲ |
 | ｵｰﾊﾞｰﾚｲ ﾊﾟｽ | `nix-kits.overlays.mihomo-alpha` |
-| ﾊﾟｯｹｰｼﾞ ﾈｰﾑ | `mihomo` |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ](https://github.com/MetaCubeX/mihomo) |
-| ﾄﾗｱｯｸﾄﾞ ﾊﾞｰｼﾞｮﾝ | ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ |
+| ﾊﾟｯｹｰｼﾞ name | `mihomo` |
+| Upstream | [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) |
+| Tracked ﾊﾞｰｼﾞｮﾝ | Prerelease-Alpha |
 
-## ｲﾝｽﾄｱﾙﾙｱｼｮﾝ
+## Installation
 
 ```nix
-# ﾌﾚｲｸ.ﾆｯｸｽ
+# flake.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｴｸﾞｻﾞﾝﾌﾟﾙ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ ]; }
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.example = nixpkgs.lib.nixosSystem {
+      modules = [
+        { nixpkgs.overlays = [ nix-kits.overlays.mihomo-alpha ]; }
       ];
     };
   };
@@ -33,11 +33,11 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾄﾗｱｯｸｽﾞ ﾙｱﾄｴｽﾄ ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾘﾘｰｽ
-- ﾕｰｼｰｽﾞ ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ ﾙｲﾝｳｸｽ AMD64 ﾊﾞｲﾅﾘ
-- ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ `pkgs.mihomo` ﾊﾞｰｼﾞｮﾝ
+- Tracks latest MetaCubeX/mihomo Prerelease-Alpha release
+- Uses pre-built Linux amd64 binary
+- Overrides `pkgs.mihomo` ﾊﾞｰｼﾞｮﾝ
 
-## ﾉｰﾂ
+## Notes
 
-- ｾｲﾑ ｱｯﾌﾟﾃﾞｰﾄ ﾜｰｸﾌﾛｰ ｱｽﾞ ﾗﾏ-cpp-rocm: `nix flake update` ｾﾞﾝ ﾗｴﾌﾞｳｲﾙﾄﾞ
-- ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ｲｽﾞ ｱ ﾗｵﾙﾙｲﾝｸﾞ ﾄｱｸﾞ; ﾊﾞｰｼﾞｮﾝ ｲｽﾞ ｲﾄﾞｴﾝﾄｲﾌｲﾄﾞ ﾊﾞｲ ｺﾐｯﾄ ﾊｯｼｭ
+- Same ｱｯﾌﾟﾃﾞｰﾄ workflow ｱｽﾞ llama-cpp-rocm: `nix flake update` then rebuild
+- Prerelease-Alpha ｲｽﾞ ｱ rolling tag; ﾊﾞｰｼﾞｮﾝ ｲｽﾞ identified ﾊﾞｲ ｺﾐｯﾄ hash

@@ -1,6 +1,6 @@
-# ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
+# opencode-ﾃﾚｸﾞﾗﾑ
 
-[中文](../../zh/opencode-telegram.md) | [ｲﾝｸﾞﾘｯｼｭ](opencode-telegram.md) | [日本語](../../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../../katalish/opencode-telegram.md) | [偽中国語](../../pcn/opencode-telegram.md)
+[中文](../../zh/opencode-telegram.md) | [English](opencode-telegram.md) | [日本語](../../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../../katalish/opencode-telegram.md) | [偽中国語](../../pcn/opencode-telegram.md)
 
 ﾃﾚｸﾞﾗﾑ ﾎﾞｯﾄ ｸﾗｲｱﾝﾄ ﾌｫｱ [OpenCode](https://opencode.ai).
 
@@ -9,47 +9,47 @@
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | ﾊﾞｰｼﾞｮﾝ | 0.21.2 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｸﾞﾗｲﾝｴﾌﾞ/ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ-bot](https://github.com/grinev/opencode-telegram-bot) |
+| Upstream | [grinev/opencode-ﾃﾚｸﾞﾗﾑ-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-# ﾌｧｰｽﾄ-ﾄｲﾑｴ ｾｯﾄｱｯﾌﾟ
-ｵｰﾌﾟﾝｺｰﾄﾞ ｽｴﾗﾌﾞｴ                           # ｽﾀｰﾄ ｵｰﾌﾟﾝｺｰﾄﾞ ｻｰﾊﾞｰ
-ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｺﾝﾌｨｸﾞ                 # ｲﾝﾄｴﾗｱｸﾄｲﾌﾞｴ ﾃﾚｸﾞﾗﾑ ﾎﾞｯﾄ ｺﾝﾌｨｸﾞ
+# First-time setup
+opencode serve                           # start opencode server
+opencode-telegram config                 # interactive Telegram Bot config
 
-# ﾄﾞｱｲﾘｰ ﾕｰｽﾞ
-ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾀｰﾄ                  # ｽﾀｰﾄ (ｵｰﾄ-ﾙｱｳﾝﾁｽﾞ ｵｰﾌﾟﾝｺｰﾄﾞ)
-ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾄｱﾄｳｽﾞ                 # ﾁｪｯｸ ｽﾄｱﾄｳｽﾞ
-ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾄｯﾌﾟ                   # ｽﾄｯﾌﾟ
+# Daily use
+opencode-telegram start                  # start (auto-launches opencode)
+opencode-telegram status                 # check status
+opencode-telegram stop                   # stop
 ```
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ];
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
 
-# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
-ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.opencode-ﾃﾚｸﾞﾗﾑ
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## ﾌﾚｲｸ ﾓｼﾞｭｰﾙ
+## Flake ﾓｼﾞｭｰﾙ
 
 ```nix
-# ﾌﾚｲｸ.ﾆｯｸｽ
+# flake.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.opencode-telegram
         {
-          ｽｴﾗﾌﾞｲｸｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ = {
-            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾕｰｻﾞｰ = "ｸｲｸｽ";
-            ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-            ｱﾌﾄｴﾗｽｴﾗﾌﾞｲｸｽﾞ = [ "ﾝｴﾄｳｵﾗｸ-ｵﾝﾙｲﾝｴ.ﾄｱﾗｼﾞｴﾄ" "ﾗﾏ-cpp.ｻｰﾋﾞｽ" ];
+          services.opencode-telegram = {
+            enable = true;
+            user = "kix";
+            group = "users";
+            afterServices = [ "network-online.target" "llama-cpp.service" ];
           };
         }
       ];

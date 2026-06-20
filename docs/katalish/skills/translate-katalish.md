@@ -1,8 +1,8 @@
-# ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ (ｽｷﾙ)
+# translate-ｶﾀﾘｯｼｭ (ｽｷﾙ)
 
-[中文](../../zh/skills/translate-katalish.md) | [ｲﾝｸﾞﾘｯｼｭ](translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | [偽中国語](../../pcn/skills/translate-katalish.md)
+[中文](../../zh/skills/translate-katalish.md) | [English](translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | [偽中国語](../../pcn/skills/translate-katalish.md)
 
-> ｴｸｽﾄﾗｱ ﾝｱﾄｳﾗｱﾙ-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ.  ｱﾄﾞﾄﾞｽﾞ ｻﾞ ｶﾀﾘｯｼｭ (ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ) ﾗﾝｹﾞｰｼﾞ.
+> Extra natural-language support for the document-writing skill.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
 
 ## ｲﾝﾌｫ
 
@@ -10,25 +10,25 @@
 |------|-------|
 | ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ (ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ) |
 | ﾊﾟｽ | `skills/translate-katalish/SKILL.md` |
-| ｺｰﾙﾄﾞ ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ﾌﾟﾗｲﾑｱﾗｲ), NixKits-ﾁｪｯｸ-updates (ｲﾝﾄﾞｲﾗｴｸﾄ) |
+| Called ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (primary), nixkits-check-updates (indirect) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾆｭｰ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｲﾝｸﾞﾘｯｼｭ→ﾎｱﾙﾌｳｲﾄﾞｽ-ｶﾀｶﾅ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ
-- ﾌﾞｳｲﾙﾄ-ｲﾝ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ (~20 ｸｵﾑﾑｵﾝ ﾄｴﾁ-ﾄﾞｷｭ ｳｵﾗﾄﾞｽﾞ)
-- ﾙｰﾙ-ﾍﾞｰｽﾄﾞ ﾌｵﾝｴﾄｲｸ ﾌｱﾙﾙﾌﾞｱｯｸ ﾌｫｱ ｳｵﾗﾄﾞｽﾞ ﾉｯﾄ ｲﾝ ｻﾞ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ
-- ﾑｱﾗｸﾄﾞｵｳﾝ ｼﾝﾀｯｸｽ ｱﾝﾄﾞ ｺｰﾄﾞ ﾌﾞﾙｵｯｸｽﾞ ﾌﾟﾗｴｽｴﾗﾌﾞﾄﾞ
-- ﾌｧｲﾙ ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ: `docs/katalish/<name>.md`
+- ﾆｭｰ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — mechanical word-ﾚﾍﾞﾙ ｲﾝｸﾞﾘｯｼｭ→halfwidth-katakana substitution
+- Built-ｲﾝ dictionary (~20 common tech-ﾄﾞｷｭ words)
+- Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ ｲﾝ ｻﾞ dictionary
+- Markdown syntax ｱﾝﾄﾞ ｺｰﾄﾞ blocks preserved
+- File naming convention: `docs/katalish/<name>.md`
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ ｲﾝﾌﾞｵｸﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ｳｪﾝ ﾌﾟﾗｵﾄﾞｳｸｲﾝｸﾞ ｶﾀﾘｯｼｭ ﾄﾞｷｭﾒﾝﾄｽﾞ; ｷｬﾝ ｵﾙｿ ﾋﾞｰ ｺｰﾙﾄﾞ ﾄﾞｲﾗｴｸﾄﾘｰ:
+Automatically invoked ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs when producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ ｵﾙｿ ﾋﾞｰ called directly:
 
-- "ｼﾞｪﾈﾚｲﾄ ｱ ｶﾀｶﾅ-ｲﾝｸﾞﾘｯｼｭ ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ ﾄﾞｷｭﾒﾝﾄ"
-- "ｱﾄﾞ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ ﾌﾞｱﾗｲｱﾝﾄ"
-- "ﾄﾗｱﾝｽﾙｱﾄｴ ﾄｩ ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ"
+- "Generate ｱ katakana-ｲﾝｸﾞﾘｯｼｭ ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ document"
+- "ｱﾄﾞ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ variant"
+- "Translate ﾄｩ katakana ｲﾝｸﾞﾘｯｼｭ"
 
-## ｴｸﾞｻﾞﾝﾌﾟﾙ
+## Example
 
 ```
 NixKits — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS ﾓｼﾞｭｰﾙｽﾞ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙｽﾞ.

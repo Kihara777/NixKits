@@ -1,8 +1,8 @@
-# NixKits-ｽｷﾙｽﾞ (ｽｷﾙ)
+# nixkits-ｽｷﾙｽﾞ (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-skills.md) | [ｲﾝｸﾞﾘｯｼｭ](nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | [偽中国語](../../pcn/skills/nixkits-skills.md)
+[中文](../../zh/skills/nixkits-skills.md) | [English](nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
-> ｲﾝｽﾄｱﾙﾙｽﾞ ｵｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ NixKits ｽｷﾙｽﾞ ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ (ｵｰﾌﾟﾝｺｰﾄﾞ, codewhale, ｸﾙｱｳﾄﾞｴ, ｵﾌﾟｴﾝｸﾙｱｳ, ｱｼﾞｴﾝﾄｽﾞ).
+> Installs or updates NixKits skills into coding agent directories (opencode, codewhale, claude, openclaw, agents).
 
 ## ｲﾝﾌｫ
 
@@ -13,23 +13,23 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗｽﾞ ｿｰｽ ﾃﾞｨﾚｸﾄﾘ ｱﾝﾄﾞ git ﾘﾓｰﾄ ﾕｰｱｰﾙｴﾙ
-- ﾄﾞｴﾄｴｸﾄｽﾞ ｲﾝｽﾄｱﾙﾙﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ
-- ｸｵﾑﾌﾟｱﾗｽﾞ ﾛｰｶﾙ ｽｷﾙｽﾞ ｱｸﾞｱｲﾝｽﾄ NixKits ｿｰｽ ﾌｫｱ ﾄﾞｲﾌﾌｴﾗｴﾝｸｽﾞ
-- ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ﾛｰｶﾙ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｿｰｽ) ｱﾝﾄﾞ ｵﾝﾙｲﾝｴ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ GitHub ｸﾛｰﾝ)
-- ｼｵｳｽﾞ ﾃﾞｨﾌ ﾋﾞﾌｫｱ ｱﾌﾟﾌﾟﾙｲｲﾝｸﾞ ｱﾝﾄﾞ ｱｽｸｽﾞ ﾌｫｱ ﾕｰｻﾞｰ ｸｵﾝﾌｲﾗﾑｱｼｮﾝ
-- ﾌﾞｴﾗｲﾌｲｽﾞ ｺﾋﾟｰ ｸｵﾝｽｲｽﾄｴﾝｽｲ ｱﾌﾀｰ ｲﾝｽﾄｰﾙ
+- ｵｰﾄ-ﾃﾞｨｽｶﾊﾞｰｽﾞ ｿｰｽ directory ｱﾝﾄﾞ git remote ﾕｰｱｰﾙｴﾙ
+- Detects ｲﾝｽﾄｰﾙﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ directories
+- Compares local ｽｷﾙｽﾞ against NixKits ｿｰｽ ﾌｫｱ differences
+- ｻﾎﾟｰﾄｽﾞ local ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｿｰｽ) ｱﾝﾄﾞ online ｲﾝｽﾄｰﾙ (ﾌﾛﾑ GitHub clone)
+- Shows diff before applying ｱﾝﾄﾞ asks ﾌｫｱ ﾕｰｻﾞｰ confirmation
+- Verifies copy consistency after ｲﾝｽﾄｰﾙ
 
-## ｽｳﾌﾟﾌﾟｵﾗﾄﾄﾞ ｱｼﾞｴﾝﾄｽﾞ
+## ｻﾎﾟｰﾄﾄﾞ ｴｰｼﾞｪﾝﾄｽﾞ
 
-| ｴｰｼﾞｪﾝﾄ | ﾃﾞｨﾚｸﾄﾘ |
+| ｴｰｼﾞｪﾝﾄ | Directory |
 |-------|-----------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
-| ｸﾙｱｳﾄﾞｴ ｺｰﾄﾞ | `~/.claude/skills/` |
+| Claude ｺｰﾄﾞ | `~/.claude/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
-| ｼﾞｴﾝｴﾗｲｸ | `~/.agents/skills/` |
+| Generic | `~/.agents/skills/` |
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ ｱｽｸｽﾞ ﾄｩ "ｲﾝｽﾄｰﾙ ｽｷﾙｽﾞ" ｵｱ "ｱｯﾌﾟﾃﾞｰﾄ NixKits ｽｷﾙｽﾞ".
+Activated when ｻﾞ ﾕｰｻﾞｰ asks ﾄｩ "ｲﾝｽﾄｰﾙ ｽｷﾙｽﾞ" ｵｱ "ｱｯﾌﾟﾃﾞｰﾄ NixKits ｽｷﾙｽﾞ".

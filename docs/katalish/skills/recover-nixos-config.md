@@ -1,8 +1,8 @@
-# ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config (ｽｷﾙ)
+# recover-ﾆｯｸｽOS-config (ｽｷﾙ)
 
-[中文](../../zh/skills/recover-nixos-config.md) | [ｲﾝｸﾞﾘｯｼｭ](recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/recover-nixos-config.md) | [偽中国語](../../pcn/skills/recover-nixos-config.md)
+[中文](../../zh/skills/recover-nixos-config.md) | [English](recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/recover-nixos-config.md) | [偽中国語](../../pcn/skills/recover-nixos-config.md)
 
-> ﾗｴｸｵﾌﾞｴﾗｽﾞ ｱｸｽｲﾄﾞｴﾝﾄｱﾙﾘｰ ﾄﾞｴﾙｴﾄﾄﾞ `/etc/nixos` ﾌｧｲﾙｽﾞ ﾌﾛﾑ ｻﾞ ﾆｯｸｽ ｽﾄｵﾗｴ.
+> Recovers accidentally deleted `/etc/nixos` files from the Nix store.
 
 ## ｲﾝﾌｫ
 
@@ -13,12 +13,12 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾙｵｸｱﾄｽﾞ ｻﾞ ﾌﾚｲｸ ｿｰｽ ｽﾝｱﾌﾟｼｵﾄ ﾌﾛﾑ ｻﾞ ﾑｵｽﾄ ﾗｴｽｴﾝﾄ ｽｳｸｽｴｽｽﾌﾙ ﾋﾞﾙﾄﾞ ｲﾝ ｻﾞ ﾆｯｸｽ ｽﾄｵﾗｴ
-- ｽｴｱﾗﾁｽﾞ `*-source` ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ ﾊﾞｲ ﾎｵｽﾄﾝｱﾑｴ
-- ｲﾄﾞｴﾝﾄｲﾌｲｽﾞ ｻﾞ ｺﾚｸﾄ ｿｰｽ ﾑｱﾄﾁｲﾝｸﾞ ｻﾞ ﾙｱﾄｴｽﾄ ｼﾞｪﾈﾚｰｼｮﾝ
-- ﾗｴｽﾄｵﾗｽﾞ ｽﾌﾟｴｽｲﾌｲﾄﾞ ﾌｧｲﾙｽﾞ (ﾌﾚｲｸ.ﾆｯｸｽ, ﾌﾚｲｸ.ﾛｯｸ, ｲﾝﾄﾞｲﾌﾞｲﾄﾞｳｱﾙ ﾓｼﾞｭｰﾙｽﾞ)
-- ﾌﾞｱﾙｲﾄﾞｱﾄｽﾞ ｻﾞ ﾗｴｽﾄｵﾗﾄﾞ ｺﾝﾌｨｸﾞ ｳｨｽﾞ `nix flake check`
+- Locates ｻﾞ flake ｿｰｽ snapshot ﾌﾛﾑ ｻﾞ most recent successful ﾋﾞﾙﾄﾞ ｲﾝ ｻﾞ ﾆｯｸｽ store
+- Searches `*-source` directories ﾊﾞｲ hostname
+- Identifies ｻﾞ correct ｿｰｽ matching ｻﾞ latest generation
+- Restores specified files (flake.ﾆｯｸｽ, flake.lock, individual ﾓｼﾞｭｰﾙｽﾞ)
+- Validates ｻﾞ restored ｺﾝﾌｨｸﾞ ｳｨｽﾞ `nix flake check`
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ ﾗｴﾌﾟｵﾗﾄｽﾞ ｱｸｽｲﾄﾞｴﾝﾄｱﾙﾘｰ ﾄﾞｴﾙｴﾄｲﾝｸﾞ ﾌｧｲﾙｽﾞ ｱﾝﾀﾞｰ `/etc/nixos`.
+Activated when ｻﾞ ﾕｰｻﾞｰ reports accidentally deleting files under `/etc/nixos`.

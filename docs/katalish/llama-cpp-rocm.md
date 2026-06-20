@@ -1,129 +1,129 @@
-# ﾗﾏ-cpp-rocm
+# llama-cpp-rocm
 
-[中文](../../zh/llama-cpp-rocm.md) | [ｲﾝｸﾞﾘｯｼｭ](llama-cpp-rocm.md) | [日本語](../../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../../katalish/llama-cpp-rocm.md) | [偽中国語](../../pcn/llama-cpp-rocm.md)
+[中文](../../zh/llama-cpp-rocm.md) | [English](llama-cpp-rocm.md) | [日本語](../../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../../katalish/llama-cpp-rocm.md) | [偽中国語](../../pcn/llama-cpp-rocm.md)
 
-ｳﾌﾟｽﾄﾗｴｱﾑ ﾗﾏ.cpp ｳｨｽﾞ ﾛｯｸｴﾑ ｸﾞﾌﾟｳ ｱｸｽｴﾙｴﾗｱｼｮﾝ. ﾄﾞｲﾝｱﾑｲｸｱﾙﾘｰ ﾌｴﾄﾁｽﾞ ｻﾞ ﾙｱﾄｴｽﾄ GitHub ﾘﾘｰｽ ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ ﾄｲﾑｴ ﾌｫｱ ﾄｴｽﾄｲﾝｸﾞ ｸｳﾄﾄｲﾝｸﾞ-ｴﾄﾞｼﾞｴ ﾌｨｰﾁｬｰｽﾞ.
+Upstream llama.cpp ｳｨｽﾞ ﾛｯｸｴﾑ GPU acceleration. Dynamically fetches ｻﾞ latest GitHub Release ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge ﾌｨｰﾁｬｰｽﾞ.
 
 ## ｲﾝﾌｫ
 
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | ｵｰﾄ-ﾄﾗｱｯｸｽﾞ ｳﾌﾟｽﾄﾗｴｱﾑ |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｸﾞｸﾞﾑﾙ-ｵﾗｸﾞ/ﾗﾏ.cpp](https://github.com/ggml-org/llama.cpp) |
-| ﾉｰﾄ | ｵｰﾊﾞｰﾚｲ-ｵﾝﾘｰ, ﾉｰ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ﾊﾟｯｹｰｼﾞ ｱｳﾄﾌﾟｯﾄ |
+| ﾊﾞｰｼﾞｮﾝ | ｵｰﾄ-tracks upstream |
+| Upstream | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
+| Note | ｵｰﾊﾞｰﾚｲ-ｵﾝﾘｰ, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ output |
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾗﾏ-cpp-rocm ];
-  ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
 
 ## ﾕｰｾｰｼﾞ
 
-ｼｰ ｳﾌﾟｽﾄﾗｴｱﾑ ﾗﾏ.cpp ﾄﾞｷｭｽﾞ.
+See upstream llama.cpp ﾄﾞｷｭｽﾞ.
 
-## ﾌﾚｲｸ ﾓｼﾞｭｰﾙ
+## Flake ﾓｼﾞｭｰﾙ
 
 ```nix
-# ﾌﾚｲｸ.ﾆｯｸｽ
+# flake.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.llama-cpp-rocm
         {
-          ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-            ﾌﾟｵﾗﾄ = 2027;
+          services.llama-cpp = {
+            enable = true;
+            package = pkgs.llama-cpp-rocm;
+            port = 2027;
           };
-          NixKits.ﾗﾏ-cpp-rocm = {
-            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾕｰｻﾞｰ = "ｸｲｸｽ";
-            ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-            ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
+          nixkits.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
+            modelsPreset = {
               "*" = {
-                ﾌﾟﾗｴｽｴﾝｽｴ-ﾌﾟｴﾝｱﾙﾄｲ = "0.0";
-                ﾗｴﾌﾟｴｱﾄ-ﾌﾟｴﾝｱﾙﾄｲ   = "1.0";
-                ﾌﾙｱｼ-ｱﾄﾄﾝ       = "ｵﾝ";
-                ﾝ-ｸﾞﾌﾟｳ-layers     = "99";
-                ｷｬｯｼｭ-ﾀｲﾌﾟ-k     = "ｸ4_0";
-                ｷｬｯｼｭ-ﾀｲﾌﾟ-v     = "ｸ4_0";
-                ｽﾗｴｱﾄﾞｽﾞ          = "32";
-                ﾑﾑｱﾌﾟ             = "ｵﾌﾌ";
-                ｳｱﾗﾑｳﾌﾟ           = "ｵﾝ";
-                ｼﾞｲﾝｼﾞｱ            = "ｵﾝ";
-                ﾌｲﾄ              = "ｵﾌﾌ";
-                ﾌﾟﾗｲｵ             = "3";
+                presence-penalty = "0.0";
+                repeat-penalty   = "1.0";
+                flash-attn       = "on";
+                n-gpu-layers     = "99";
+                cache-type-k     = "q4_0";
+                cache-type-v     = "q4_0";
+                threads          = "32";
+                mmap             = "off";
+                warmup           = "on";
+                jinja            = "on";
+                fit              = "off";
+                prio             = "3";
               };
-              "ｸｳｴﾝ3.6-27B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.6-27B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.6-27B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.6-27B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.6-27B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3.6-35B-A3B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.6-35B-A3B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.6-35B-A3B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.6-35B-A3B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.6-35B-A3B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3.5-122B-A10B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.5-122B-A10B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.5-122B-A10B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.5-122B-A10B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.5-122B-A10B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3-Coder-Next" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ       = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ         = "ｸｳｴﾝ3-Coder-Next";
-                ﾄｴﾑﾌﾟ          = "1.0";
-                ﾄｵﾌﾟ-ﾌﾟ         = "0.95";
-                ﾄｵﾌﾟ-ｸ         = "40";
-                ﾑｲﾝ-ﾌﾟ         = "0.01";
-                ｽｴﾄﾞ          = "3407";
-                ｸﾄｸｽ-ｽｲｽﾞｴ      = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ  = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ    = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx = "262144";
+              "Qwen3-Coder-Next" = {
+                hf-repo       = "unsloth/Qwen3-Coder-Next-GGUF:UD-Q4_K_XL";
+                alias         = "Qwen3-Coder-Next";
+                temp          = "1.0";
+                top-p         = "0.95";
+                top-k         = "40";
+                min-p         = "0.01";
+                seed          = "3407";
+                ctx-size      = "1048576";
+                rope-scaling  = "yarn";
+                rope-scale    = "4";
+                yarn-orig-ctx = "262144";
               };
-              "ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ  = "ｳﾝｽﾙｵｽ/ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7-GGUF:ｳﾄﾞ-ｸ2_K_XL";
-                ｱﾙｲｱｽﾞ    = "ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7";
-                ﾄｴﾑﾌﾟ     = "1.0";
-                ﾄｵﾌﾟ-ﾌﾟ    = "0.95";
-                ﾄｵﾌﾟ-ｸ    = "40";
-                ﾑｲﾝ-ﾌﾟ    = "0.01";
-                ｸﾄｸｽ-ｽｲｽﾞｴ = "196608";
+              "MiniMax-M2.7" = {
+                hf-repo  = "unsloth/MiniMax-M2.7-GGUF:UD-Q2_K_XL";
+                alias    = "MiniMax-M2.7";
+                temp     = "1.0";
+                top-p    = "0.95";
+                top-k    = "40";
+                min-p    = "0.01";
+                ctx-size = "196608";
               };
             };
           };
@@ -134,116 +134,116 @@
 }
 ```
 
-ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄ-ｽｴﾄｽﾞ `LLAMA_CACHE` ﾄｩ `/home/<user>/.cache/huggingface/hub` ｱﾝﾄﾞ ﾙｲﾌﾄｽﾞ `/home` ｱﾝﾄﾞ `/proc` ｽｱﾝﾄﾞﾌﾞｵｸｽ ﾗｴｽﾄﾗｲｸｼｮﾝｽﾞ.
+ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `LLAMA_CACHE` ﾄｩ `/home/<user>/.cache/huggingface/hub` ｱﾝﾄﾞ lifts `/home` ｱﾝﾄﾞ `/proc` sandbox restrictions.
 
-> **ﾜｰﾆﾝｸﾞ: ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ ﾗﾏ-cpp ｻｰﾋﾞｽ**
+> **Warning: Home Manager llama-cpp service**
 >
-> ｲﾌ ｴﾝｱﾌﾞﾙﾄﾞ ﾌﾞｲｱ ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ, ｱﾄﾞﾄﾞｲﾄｲｵﾝｱﾙ ﾕｰｻﾞｰ-ﾚﾍﾞﾙ ｽｱﾝﾄﾞﾌﾞｵｸｽｲﾝｸﾞ ﾒｲ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸﾞﾌﾟｳ ｱｸｾｽ (`/dev/dri`, `/dev/kfd`). ﾌﾟﾗｴﾌｴﾗ ｼｽﾃﾑ-ﾚﾍﾞﾙ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ.
+> If enabled via Home Manager, additional user-level sandboxing may prevent GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level configuration.
 
-## ﾑｲｸﾞﾗｱｼｮﾝ ｶﾞｲﾄﾞ
+## Migration ｶﾞｲﾄﾞ
 
-### ｱﾌﾌｴｸﾄﾄﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ
+### Affected ﾊﾞｰｼﾞｮﾝｽﾞ
 
-| ｺﾝﾎﾟｰﾈﾝﾄ | ｱﾌﾌｴｸﾄﾄﾞ | ﾁｪﾝｼﾞ |
+| Component | Affected | Change |
 |-----------|----------|--------|
-| ﾝｲｸｽﾌﾟｸｸﾞｽﾞ | ≥ 2026-06 (ﾑｱｽﾄｴﾗ) | `services.llama-cpp.modelsPreset` ﾗｴﾑｵﾌﾞﾄﾞ; `port`/`host`/`model`/`modelsDir` ﾗｴﾝｱﾑﾄﾞ ﾄｩ `settings.port`/`settings.host`/… |
-| NixKits | ≥ `6f52ddf` (`modules/llama-cpp-rocm.nix`) | ﾝｱﾑｴｽﾌﾟｱｽｴ: `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
-| ｳﾌﾟｽﾄﾗｴｱﾑ ﾗﾏ.cpp | ﾌﾞ9605 | `--models-preset` ｼｰｴﾙｱｲ ｱﾗｸﾞｳﾒﾝﾄ ﾗｴﾄｱｲﾝﾄﾞ |
+| nixpkgs | ≥ 2026-06 (master) | `services.llama-cpp.modelsPreset` removed; `port`/`host`/`model`/`modelsDir` renamed ﾄｩ `settings.port`/`settings.host`/… |
+| NixKits | ≥ `6f52ddf` (`modules/llama-cpp-rocm.nix`) | Namespace: `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
+| Upstream llama.cpp | b9605 | `--models-preset` CLI argument retained |
 
 ### ｺﾝﾌｨｸﾞ ｷｰ ﾏｯﾋﾟﾝｸﾞ
 
-| ｵｰﾙﾄﾞ (ﾄﾞｴﾌﾟﾗｴｸｱﾄﾄﾞ) | ﾆｭｰ | ﾉｰﾂ |
+| ｵｰﾙﾄﾞ (deprecated) | ﾆｭｰ | Notes |
 |------------------|-----|-------|
-| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | ﾗｴﾑｵﾌﾞﾄﾞ ﾌﾛﾑ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾗｴｽﾄｵﾗﾄﾞ ﾌﾞｲｱ NixKits |
-| `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
-| `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
-| `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
-| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| ﾏﾆｭｱﾙ `systemd.services.llama-cpp.serviceConfig` | ﾘﾑｰﾌﾞ | ﾎｱﾝﾄﾞﾙﾄﾞ ﾊﾞｲ NixKits ﾓｼﾞｭｰﾙ |
-| `services.llama-cpp.extraFlags` | ｱﾄﾞ ﾌﾗｸﾞｽﾞ ﾄｩ `services.llama-cpp.settings` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾑｵﾌﾞｱﾙ |
+| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | Removed ﾌﾛﾑ nixpkgs, restored via NixKits |
+| `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | Namespace unified |
+| `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | Namespace unified |
+| `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | Namespace unified |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs rename |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs rename |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs rename |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs rename |
+| Manual `systemd.services.llama-cpp.serviceConfig` | ﾘﾑｰﾌﾞ | Handled ﾊﾞｲ NixKits ﾓｼﾞｭｰﾙ |
+| `services.llama-cpp.extraFlags` | ｱﾄﾞ flags ﾄｩ `services.llama-cpp.settings` | nixpkgs removal |
 
-### ﾑｲｸﾞﾗｱｼｮﾝ ｴｸﾞｻﾞﾝﾌﾟﾙ
+### Migration Example
 
-> **⚠️ ｽﾃｯﾌﾟ 1**: ｱﾄﾞ `nix-kits.nixosModules.llama-cpp-rocm` ﾄｩ ｲｵｳﾗ ﾌﾚｲｸ ﾓｼﾞｭｰﾙ ﾘｽﾄ.
+> **⚠️ Step 1**: Add `nix-kits.nixosModules.llama-cpp-rocm` to your flake module list.
 
-**ﾋﾞﾌｫｱ**:
+**Before**:
 
 ```nix
-# ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ
-{ ﾓｼﾞｭｰﾙｽﾞ = [
-    # ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm  # ← ﾉｯﾄ ｲｴﾄ ｲﾑﾌﾟｵﾗﾄﾄﾞ
+# flake.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ
+{ modules = [
+    # ﾆｯｸｽ-kits.nixosModules.llama-cpp-rocm  # ← ﾉｯﾄ yet imported
 ];}
 
-# ﾗﾏ-cpp.ﾆｯｸｽ
+# llama-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp-rocm = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾕｰｻﾞｰ = "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
+  services.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
   };
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-    ﾌﾟｵﾗﾄ = 2027;
-    ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
-      "ｸｳｴﾝ3-Coder-Next" = {
-        ﾎﾌ-ﾗｴﾌﾟｵ = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF";
-        ﾎﾌ-ﾌｧｲﾙ = "ｸｳｴﾝ3-Coder-Next-UD-Q4_K_XL.ｸﾞｸﾞｳﾌ";
-        ﾄｴﾑﾌﾟ = "1.0";
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    port = 2027;
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
       };
     };
   };
-  # ﾏﾆｭｱﾙ ｽｲｽﾄｴﾑﾄﾞ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ = {
-    ﾄﾞｲﾝｱﾑｲｸｳｽｴﾗ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾌﾟﾗｲﾌﾞｱﾄｴｳｽｴﾗｽﾞ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾌﾟﾗｵﾄｴｸｽｵﾑｴ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾕｰｻﾞｰ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ﾕｰｻﾞｰｽﾞ";
-    ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-      "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-      "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  # Manual systemd overrides
+  systemd.services.llama-cpp.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    PrivateUsers = lib.mkForce false;
+    ProtectHome = lib.mkForce false;
+    User = lib.mkForce "kix";
+    Group = lib.mkForce "users";
+    Environment = lib.mkForce [
+      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
-    ﾌﾟﾗｵｸｽｳﾌﾞｽｴﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｵｰﾙ";
+    ProcSubset = lib.mkForce "all";
   };
 }
 ```
 
-**ｱﾌﾀｰ**:
+**After**:
 
 ```nix
-# ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ (ﾆｭｰ)
-{ ﾓｼﾞｭｰﾙｽﾞ = [
-    ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm
+# flake.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ (ﾆｭｰ)
+{ modules = [
+    nix-kits.nixosModules.llama-cpp-rocm
 ];}
 
-# ﾗﾏ-cpp.ﾆｯｸｽ
+# llama-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-    ｾｯﾃｨﾝｸﾞｽﾞ.ﾌﾟｵﾗﾄ = 2027;
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    settings.port = 2027;
   };
-  NixKits.ﾗﾏ-cpp-rocm = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾕｰｻﾞｰ = "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-    ﾎﾌｸｱﾁｴﾄﾞｲﾗ = "/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ";
-    ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
-      "ｸｳｴﾝ3-Coder-Next" = {
-        ﾎﾌ-ﾗｴﾌﾟｵ = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF";
-        ﾎﾌ-ﾌｧｲﾙ = "ｸｳｴﾝ3-Coder-Next-UD-Q4_K_XL.ｸﾞｸﾞｳﾌ";
-        ﾄｴﾑﾌﾟ = "1.0";
+  nixkits.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
       };
     };
   };
-  # ｴｸｽﾄﾗｱ ｴﾇﾌﾞｲ ﾌﾞｱﾗｽﾞ ﾉｯﾄ ｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ NixKits ｵﾌﾟｼｮﾝｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ.ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-    "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-    "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  # Extra env vars ﾉｯﾄ covered ﾊﾞｲ NixKits options
+  systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
+    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

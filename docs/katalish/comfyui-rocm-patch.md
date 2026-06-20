@@ -1,20 +1,20 @@
 # ｶﾑﾌｨUI-ﾛｯｸｴﾑ-patch
 
-[中文](../zh/comfyui-rocm-patch.md) | [ｲﾝｸﾞﾘｯｼｭ](comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-rocm-patch.md) | [偽中国語](../pcn/comfyui-rocm-patch.md)
+[中文](../zh/comfyui-rocm-patch.md) | [English](comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-rocm-patch.md) | [偽中国語](../pcn/comfyui-rocm-patch.md)
 
-ﾛｯｸｴﾑ ｸｱﾌﾟｱﾌﾞｲﾙｲﾄｲ ﾊﾟｯﾁ ﾌｫｱ ｶﾑﾌｨUI.
+ﾛｯｸｴﾑ capability ﾊﾟｯﾁ ﾌｫｱ ｶﾑﾌｨUI.
 
 ## ｲﾝﾌｫ
 
-- **ﾌｨｰﾁｬｰ**: ﾊﾟｯﾁｰｽﾞ ｶﾑﾌｨUI ﾛｯｸｴﾑ ｻﾎﾟｰﾄ, ｴﾝｱﾌﾞﾙｽﾞ ｶｽﾀﾑ ﾝｵﾄﾞｴ ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ (ﾌﾞｲｱ `gfxOverride` ﾌｫｱ ｶｽﾀﾑ ｸﾞﾌﾟｳ ﾄｱﾗｼﾞｴﾄ)
-- **ﾙｵｸｱｼｮﾝ**: `modules/comfyui-rocm-patch.nix`
+- **ﾌｨｰﾁｬｰ**: ﾊﾟｯﾁｰｽﾞ ｶﾑﾌｨUI ﾛｯｸｴﾑ ｻﾎﾟｰﾄ, enables ｶｽﾀﾑ node ﾋﾞﾙﾄﾞ toolchain (via `gfxOverride` ﾌｫｱ ｶｽﾀﾑ GPU target)
+- **Location**: `modules/comfyui-rocm-patch.nix`
 
 ## ﾕｰｾｰｼﾞ
 
 ```nix
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ｶﾑﾌｨUI.ﾗｵｸﾑｸﾞﾌｸｽｵﾌﾞｴﾗﾗｲﾄﾞｴ = "ｸﾞﾌｸｽ1100";  # ｶｽﾀﾑ ｸﾞﾌﾟｳ ﾄｱﾗｼﾞｴﾄ ﾊﾞｰｼﾞｮﾝ
+  services.comfyui.rocmGfxOverride = "gfx1100";  # custom GPU target version
 }
 ```
 
-ｳｪﾝ `rocmGfxOverride` ｲｽﾞ ｾｯﾄ, ｻﾞ ﾓｼﾞｭｰﾙ ｲﾝｼﾞｴｸﾄｽﾞ `HSA_OVERRIDE_GFX_VERSION` ｲﾝﾄｩ ｻﾞ ｶﾑﾌｨUI ｻｰﾋﾞｽ.
+When `rocmGfxOverride` ｲｽﾞ set, ｻﾞ ﾓｼﾞｭｰﾙ injects `HSA_OVERRIDE_GFX_VERSION` into ｻﾞ ｶﾑﾌｨUI ｻｰﾋﾞｽ.
