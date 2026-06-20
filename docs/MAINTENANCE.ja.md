@@ -7,6 +7,17 @@ NixKits パッケージ更新履歴。
 ---
 
 
+## 2026-06-21T04:32:31+09:00
+
+**概要**：言語切替ラベル規則の汎化 — display_name の意味を言語自称に修正、言語名非ローカライズ規則を write-project-docs / translate-katalish / translate-pseudocn に追加；zh/katalish/pcn 全文書切替部の残留ローカライズ名を修正
+
+| コミット | 説明 |
+|------|------|
+| `f5aee43` | docs(skill): write-project-docs — 言語名非ローカライズ規則を追加 |
+| `7ba8c1d` | fix(katalish): 言語切替部の English を片仮名に変換しないよう修正 |
+| `5ce9f7d` | fix: display_name の意味を言語自称に修正 — 切替ラベルと分離 |
+| `aa8634b` | fix(docs): zh 文書切替部の残留旧名称修正 + MAINTENANCE 翻訳補完 + translate-* 汎化 |
+
 ## 2026-06-21T00:07:44+09:00
 
 **概要**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复

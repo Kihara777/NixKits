@@ -7,6 +7,17 @@ NixKits package update changelog.
 ---
 
 
+## 2026-06-21T04:32:31+09:00
+
+**Summary**：Language switcher label rules generalized — display_name semantics corrected to language self-name; added no-localization rule for language switcher labels to write-project-docs / translate-katalish / translate-pseudocn; fixed residual localized names in all zh/katalish/pcn doc switchers
+
+| Commit | Description |
+|------|------|
+| `f5aee43` | docs(skill): write-project-docs — add no-localization rule for language labels |
+| `7ba8c1d` | fix(katalish): English in language switcher must not be localized to katakana |
+| `5ce9f7d` | fix: correct display_name semantics — self-name vs switcher labels |
+| `aa8634b` | fix(docs): fix residual old labels in zh docs + MAINTENANCE translation + translate-* generalization |
+
 ## 2026-06-21T00:07:44+09:00
 
 **Summary**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复

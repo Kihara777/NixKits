@@ -7,6 +7,17 @@ NixKits 软件更新维护日志
 ---
 
 
+## 2026-06-21T04:32:31+09:00
+
+**摘要**：語言切替標籤規則汎化 — display_name 意味語言自称修正、語言名非本地化規則 write-project-docs / translate-katalish / translate-pseudocn 追加；zh/katalish/pcn 全文書切替部残留本地化名修正
+
+| 提交 | 説明 |
+|------|------|
+| `f5aee43` | docs(skill): write-project-docs — 語言名非本地化規則追加 |
+| `7ba8c1d` | fix(katalish): 語言切替部 English 片仮名変換防止修正 |
+| `5ce9f7d` | fix: display_name 意味語言自称修正 — 切替標籤分離 |
+| `aa8634b` | fix(docs): zh 文書切替部残留旧名称修正 + MAINTENANCE 翻訳補完 + translate-* 汎化 |
+
 ## 2026-06-21T00:07:44+09:00
 
 **概要**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
