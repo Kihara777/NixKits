@@ -1,8 +1,8 @@
 # nixkits-check-updates (Skill)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | [偽中国語](nixkits-check-updates.md)
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
 
-> NixKits 全軟件包補丁上流更新版本文檔同期自動適用
+> NixKits 全軟件包上流更新自動文檔同期修正維護日誌記録
 
 ## 基本情報
 
@@ -15,7 +15,7 @@
 
 - `flake.nix` 全外部軟件包自動検出最新 GitHub Release
 - 構建設定版本source hashnpmDepsHash更新
-- 3 言語文檔版本番号同期
+- 全言語文檔版本番号同期
 - 更新後 `write-maintenance-log` 技能自動呼出維護記録作成
 - 安裝版本報告
 - 補丁文件内代碼版本識別確認手順提供

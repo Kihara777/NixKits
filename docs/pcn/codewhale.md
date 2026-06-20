@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](codewhale.md)
+[中文](../../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
 
 DeepSeek V4 専用
 
@@ -8,7 +8,7 @@ DeepSeek V4 専用
 
 |項目|値|
 |------|-----|
-|版本|0.8.60|
+|版本|0.8.61|
 ||[Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale)|
 ||構建済GitHub Releases|
 

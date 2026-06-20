@@ -1,6 +1,6 @@
 # write-project-docs (Skill)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > NixKits 完全多言語文檔生成 — 中英日+偽中国語四言語簡潔表駆動
 
@@ -24,7 +24,7 @@
 
 ## 技能文檔同期
 
-`SKILL.md` 変更場合対応 3 言語文檔必更新
+`SKILL.md` 変更場合対応全言語文檔必更新
 staleness check 古文件特定：
 
 ```bash
@@ -49,6 +49,18 @@ done
 - 目錄中国語配置版`*.en.md``*.ja.md` `docs/` 格納
 - 全言語基本情報章節必須中文 `## 基本信息`英文 `## Info`日文 `## 基本情報`偽中国語 `## 基本情報`
 - 補丁/模塊変更後修正内容/機能必同期各 bullet 実際変更対応
+
+## 双方向自動検出
+
+本技能 `translate-*` 翻訳技能命名規則相互発見：
+
+|方向||
+|------|-----------|
+|文檔生成 → 翻訳技能|`skills/translate-*/` 各 SKILL.md frontmatter `language_code`/`display_name`/`base_language` 読取|
+|翻訳技能 → 本項目|各技能 SKILL.md 内他技能関係表宣言呼出明示|
+|言語代碼 →|`language_code` → 目錄名文件拡張子；`display_name` → 言語切替|
+
+翻訳技能文檔自身本模板従閉：文檔生成 → 翻訳呼出 → 翻訳技能文檔生成
 
 ## 使用
 
