@@ -2,16 +2,16 @@
 
 [中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](README.pcn.md)
 
-NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS ﾓｼﾞｭｰﾙｽﾞ, ｱﾝﾄﾞ ｱｲ ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄ ｽｷﾙｽﾞ.
+NixKits — a ｺﾚｸｼｮﾝ of ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS ﾓｼﾞｭｰﾙｽﾞ, and AI ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄ ｽｷﾙｽﾞ.
 
 ## ｸｲｯｸ ｽﾀｰﾄ
 
 ```nix
 # ﾘﾓｰﾄ
-ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+inputs.nix-kits.url = "github:Kihara777/NixKits";
 
 # ﾛｰｶﾙ
-ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "/ﾎｰﾑ/ｸｲｸｽ/NixKits";
+inputs.nix-kits.url = "/home/kix/NixKits";
 ```
 
 ## ｿﾌﾄｳｪｱ
@@ -20,60 +20,59 @@ NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰ
 
 | ｿﾌﾄｳｪｱ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |---|------|------|
-| codewhale | ﾄﾞｴｴﾌﾟｽｴｴｸ ﾌﾞ4 ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/codewhale.ﾑﾄﾞ](codewhale.ﾑﾄﾞ) |
-| kitsfmt | ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ (ｴｰｴｽﾃｨｰ ｿｰﾃｨﾝｸﾞ + ﾌﾞｴｽﾄ-ﾌﾟﾗｱｸﾄｲｽｴ ｵｰﾄ-ﾌｨｯｸｼｰｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/kitsfmt.ﾑﾄﾞ](kitsfmt.ﾑﾄﾞ) |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ.ﾑﾄﾞ](ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ.ﾑﾄﾞ) |
-| ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream | OBS Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream.ﾑﾄﾞ](ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream.ﾑﾄﾞ) |
-| ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ | ﾃﾚｸﾞﾗﾑ ﾎﾞｯﾄ ｸﾗｲｱﾝﾄ ﾌｫｱ OpenCode | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ.ﾑﾄﾞ](ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ.ﾑﾄﾞ) |
-| ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (ﾘｽｸ-ﾌﾞ ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ruyi.ﾑﾄﾞ](ruyi.ﾑﾄﾞ) |
-| ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo | AMD ｽﾄﾘｯｸｽ ﾍｲﾛｰ (ｸﾞﾌｸｽ1151/ﾗﾄﾞﾝｱ3.5) ｶﾑﾌｨUI ﾛｯｸｴﾑ ｻﾎﾟｰﾄ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo.ﾑﾄﾞ](ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo.ﾑﾄﾞ) |
+| codewhale | DeepSeek V4 terminal coding agent | [docs/zh/codewhale.md](codewhale.md) |
+| kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/zh/kitsfmt.md](kitsfmt.md) |
+| mcp-searxng | MCP server for SearXNG | [docs/zh/mcp-searxng.md](mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/zh/obs-bilibili-stream.md](obs-bilibili-stream.md) |
+| opencode-telegram | Telegram Bot client for OpenCode | [docs/zh/opencode-telegram.md](opencode-telegram.md) |
+| ruyi | RuyiSDK package manager (RISC-V development tools) | [docs/zh/ruyi.md](ruyi.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/zh/comfyui-strix-halo.md](comfyui-strix-halo.md) |
 
 ## ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ
 
-`nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-use ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
+`nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-ﾕｰｽﾞ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
 
 ```bash
-ﾆｯｸｽ ﾚｼﾞｽﾄﾘ ｱﾄﾞ ﾆｯｸｽ-ｸｲﾄｽﾞ ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits
+nix registry add nix-kits github:Kihara777/NixKits
 ```
 
-| ﾊﾟｯｹｰｼﾞ | `nix develop` |
+| Package | `nix develop` |
 |---------|---------------|
 | ruyi | `nix develop nix-kits#ruyi` |
 
-## ﾊﾟｯﾁｰｽﾞ
+## ﾊﾟｯﾁes
 
-ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｵﾌﾞｴﾗﾙｱｲｽﾞ, ﾉｯﾄ ｲﾝｸﾙｳﾄﾞﾄﾞ ｲﾝ `default`
+ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｵﾌﾞｴﾗﾙｱｲｽﾞ, ﾉｯﾄ ｲﾝｸﾙｳﾄﾞﾄﾞ ｲﾝ `default`:
 
 | ﾊﾟｯﾁ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |------|------|------|
-| ﾗﾏ-ｸﾌﾟﾌﾟ-rocm | ﾛｯｸｴﾑ-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ﾌﾞｳｲﾙﾄﾞｽﾞ ﾄﾗｯｷﾝｸﾞ ﾙｱﾄｴｽﾄ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾘｰｽ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ﾗﾏ-ｸﾌﾟﾌﾟ-rocm.ﾑﾄﾞ](ﾗﾏ-ｸﾌﾟﾌﾟ-rocm.ﾑﾄﾞ) |
-| ﾗｸｸ-ﾌｨｯｸｽ | ﾌｨｯｸｼｰｽﾞ 2-in-1 ﾄﾞｴﾌﾞｲｽｴ ｴｸｽﾌﾟｴﾗｲｴﾝｽｴ ﾌｫｱ ｱｽｳｽｸﾄﾙ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ﾗｸｸ-ﾌｨｯｸｽ.ﾑﾄﾞ](ﾗｸｸ-ﾌｨｯｸｽ.ﾑﾄﾞ) |
-| ruyi-ﾆｯｸｽOS-compat | NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi (ELF ｲﾝﾀｰﾌﾟﾘﾀ ﾘﾀﾞｲﾚｸﾄ + GCC ｻﾌﾞﾌﾟﾛｾｽ ﾌｨｯｸｽ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ruyi-ﾆｯｸｽOS-compat.ﾑﾄﾞ](ruyi-ﾆｯｸｽOS-compat.ﾑﾄﾞ) |
-| ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ | ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾄﾗｯｷﾝｸﾞ (ﾌﾟﾗｵｸｽｲ ﾂｰﾙ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ.ﾑﾄﾞ](ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ.ﾑﾄﾞ) |
+| llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md) |
+| rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/zh/rcc-fix.md](rcc-fix.md) |
+| ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md) |
 
-## ｽｷﾙｽﾞ
+## Skills
 
-ﾌｫｱ ｱｲ ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄｽﾞ:
+For AI ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄs:
 
 > ｽｷﾙｽﾞ ｲﾝ ﾃﾞｨｽ ﾌﾟﾛｼﾞｪｸﾄ ｱｰ ﾌﾟﾗｲﾑｱﾗｲﾘｰ ｱｲﾑﾄﾞ ｱｯﾄ ﾁｬｲﾆｰｽﾞ-ｽﾌﾟｴｱｸｲﾝｸﾞ ﾕｰｻﾞｰｽﾞ ｱﾝﾄﾞ ﾁｬｲﾆｰｽﾞ ｵｰﾌﾟﾝ-ｿｰｽ ﾑｵﾄﾞｴﾙｽﾞ. ｵｰﾙ ｽｷﾙ.ﾑﾄﾞ ﾌｧｲﾙｽﾞ ｱｰ ｳﾗｲﾄﾄｴﾝ ｲﾝ ﾁｬｲﾆｰｽﾞ.
 
-| ｽｷﾙ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
+| Skill | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |------|------|------|
-| NixKits-ﾁｪｯｸ-updates | ﾁｪｯｸ ﾌｫｱ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ｵｰﾄ-ｳﾌﾟｸﾞﾗｱﾄﾞｴ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/NixKits-ﾁｪｯｸ-updates.ﾑﾄﾞ](ｽｷﾙｽﾞ/NixKits-ﾁｪｯｸ-updates.ﾑﾄﾞ) |
-| NixKits-ｽｷﾙｽﾞ | NixKits ｽｷﾙ ｲﾝｽﾄｱﾙﾙｴﾗ (ﾛｰｶﾙ/ｵﾝﾙｲﾝｴ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/NixKits-ｽｷﾙｽﾞ.ﾑﾄﾞ](ｽｷﾙｽﾞ/NixKits-ｽｷﾙｽﾞ.ﾑﾄﾞ) |
-| ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli | NixOS ﾑｵﾄﾞｴﾗﾝ ｼｰｴﾙｱｲ ｶﾞｲﾄﾞ (ﾌｫｱ ｱｲ ﾑｵﾄﾞｴﾙｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli.ﾑﾄﾞ) |
-| ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config | ﾘｶﾊﾞｰ ﾄﾞｴﾙｴﾄﾄﾞ /ｴﾄｸ/ﾆｯｸｽOS ｺﾝﾌｨｸﾞ ﾌﾛﾑ ﾆｯｸｽ ｽﾄｵﾗｴ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config.ﾑﾄﾞ) |
-| ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ | ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ ﾄﾗｱﾝｽﾙｱｼｮﾝ (ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ ｵﾌﾞ ｲﾝｸﾞﾘｯｼｭ ﾄﾞｷｭｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ.ﾑﾄﾞ) |
-| ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ | ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ ﾄﾗｱﾝｽﾙｱｼｮﾝ (ｸｱﾝｱ ｽﾄﾘｯﾋﾟﾝｸﾞ + ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ ｺﾝﾊﾞｰｼﾞｮﾝ ﾌﾛﾑ ｼﾞｬﾊﾟﾆｰｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ.ﾑﾄﾞ) |
-| ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log | ﾗｲﾄ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ｴﾝﾄﾘｰｽﾞ ﾌﾟｴﾗ NixKits ｽﾌﾟｴｸ (ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ + ﾊﾞｸﾞ ﾌｨｯｸｼｰｽﾞ) | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log.ﾑﾄﾞ) |
-| ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs | ﾗｲﾄ ﾏﾙﾁﾘﾝｶﾞﾙ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ﾌｫｱ ｴﾆｰ ﾌﾟﾛｼﾞｪｸﾄ ｲﾝ NixKits ｽﾀｲﾙ | [ﾄﾞｷｭｽﾞ/ｽﾞﾎ/ｽｷﾙｽﾞ/ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs.ﾑﾄﾞ](ｽｷﾙｽﾞ/ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs.ﾑﾄﾞ) |
+| nixkits-check-updates | Check for upstream updates and auto-upgrade | [docs/zh/ｽｷﾙｽﾞ/nixkits-check-updates.md](skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits skill installer (local/online) | [docs/zh/ｽｷﾙｽﾞ/nixkits-skills.md](skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/zh/ｽｷﾙｽﾞ/nixos-modern-cli.md](skills/nixos-modern-cli.md) |
+| recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/zh/ｽｷﾙｽﾞ/recover-nixos-config.md](skills/recover-nixos-config.md) |
+| translate-katalish | Katakana English translation (mechanical word-level substitution of English docs) | [docs/zh/ｽｷﾙｽﾞ/translate-katalish.md](skills/translate-katalish.md) |
+| translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/zh/ｽｷﾙｽﾞ/translate-pseudocn.md](skills/translate-pseudocn.md) |
+| write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (ｿﾌﾄｳｪｱ updates + bug fixes) | [docs/zh/ｽｷﾙｽﾞ/write-maintenance-log.md](skills/write-maintenance-log.md) |
+| write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/zh/ｽｷﾙｽﾞ/write-project-docs.md](skills/write-project-docs.md) |
 
 ## ｸﾚｼﾞｯﾄ
 
 - **狐莉 (キツのり)** — ｸﾗｴｱﾄｵﾗ ｱﾝﾄﾞ ﾑｱｲﾝﾄｱｲﾝｴﾗ
-- **小爪 (キツのめ)** — ﾄﾞｴｽｲｸﾞﾝ, ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾌｴｱﾄ. ﾄﾞｴｴﾌﾟｽｴｴｸ ﾌﾞ4 ﾌﾟﾗｵ (ﾑｱｸｽ)
-- **小小爪 (キツのめ)** — ﾊｰﾄﾞｳｪｱ ｲﾝﾌｧﾚﾝｽ ｲﾝﾌﾗｽﾄﾗｸﾁｬｰ ﾌｴｱﾄ. ﾗﾏ-ｸﾌﾟﾌﾟ-rocm: ｸｳｴﾝ3.6-27B-MTP (ｳﾄﾞ-ｸ4_K_XL) · ｸｳｴﾝ3.6-35B-A3B-MTP (ｳﾄﾞ-ｸ4_K_XL) · ｸｳｴﾝ3.5-122B-A10B-MTP (ｳﾄﾞ-ｸ4_K_XL) · ｸｳｴﾝ3-Coder-Next (ｳﾄﾞ-ｸ4_K_XL) · ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7 (ｳﾄﾞ-ｸ2_K_XL)
+- **小爪 (キツのめ)** — ﾄﾞｴｽｲｸﾞﾝ, ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ feat. DeepSeek V4 Pro (Max)
+- **小小爪 (キツのめ)** — ﾊｰﾄﾞｳｪｱ ｲﾝﾌｧﾚﾝｽ ｲﾝﾌﾗｽﾄﾗｸﾁｬｰ feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## ﾗｲｾﾝｽ
 
-[ﾑｲﾄ](../ﾗｲｾﾝｽ)
+[MIT](../LICENSE)

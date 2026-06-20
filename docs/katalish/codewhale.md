@@ -15,10 +15,10 @@
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.codewhale ];
+environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
 
-# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.codewhale
-ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.codewhale
+nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
 ```
 
 ## ﾕｰｾｰｼﾞ

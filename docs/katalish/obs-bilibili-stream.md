@@ -1,4 +1,4 @@
-# ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream
+# obs-bilibili-stream
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/obs-bilibili-stream.md)
 
@@ -9,7 +9,7 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | ﾊﾞｰｼﾞｮﾝ | 2.1.0 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｽﾞｱﾗｵｽﾑﾑ/ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｽﾞｱﾗｵｽﾑﾑ/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | ﾌﾟﾗｯﾄﾌｫｰﾑ | ﾙｲﾝｳｸｽ ｵﾝﾘｰ |
 
 ## ｲﾝｽﾄｰﾙ
@@ -18,8 +18,8 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
-  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
+  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ inputs.nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.obs-bilibili-stream ];
 }
 ```
 
@@ -27,10 +27,10 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
   ﾌﾟﾗｵｸﾞﾗｱﾑｽﾞ.ｵﾌﾞｴｽ-ｽﾄｳﾄﾞｲｵ = {
     ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾌﾟﾙｳｼﾞｲﾝｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
+    ﾌﾟﾙｳｼﾞｲﾝｽﾞ = [ pkgs.obs-bilibili-stream ];
   };
 }
 ```
@@ -38,5 +38,5 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 **ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ**
 
 ```nix
-ﾎｰﾑ.ﾊﾟｯｹｰｼﾞｰｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
+ﾎｰﾑ.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```

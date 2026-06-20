@@ -1,4 +1,4 @@
-# ﾗﾏ-ｸﾌﾟﾌﾟ-rocm
+# llama-cpp-rocm
 
 [中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/llama-cpp-rocm.md)
 
@@ -16,8 +16,8 @@
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm ];
-  ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ pkgs.llama-cpp-rocm ];
 }
 ```
 
@@ -30,19 +30,19 @@
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.ﾕｰｱｰﾙｴﾙ = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm
+  ｵｳﾄﾌﾟｳﾄｽﾞ = { nixpkgs, nix-kits, ... }: {
+    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = nixpkgs.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
+      modules = [
+        nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.llama-cpp-rocm
         {
-          ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ = {
+          ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp = {
             ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm;
+            ﾊﾟｯｹｰｼﾞ = pkgs.llama-cpp-rocm;
             ﾌﾟｵﾗﾄ = 2027;
           };
-          NixKits.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm = {
+          NixKits.llama-cpp-rocm = {
             ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
             ﾕｰｻﾞｰ = "ｸｲｸｽ";
             ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
@@ -136,9 +136,9 @@
 
 ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄ-ｽｴﾄｽﾞ `LLAMA_CACHE` ﾄｩ `/home/<user>/.cache/huggingface/hub` ｱﾝﾄﾞ ﾙｲﾌﾄｽﾞ `/home` ｱﾝﾄﾞ `/proc` ｽｱﾝﾄﾞﾌﾞｵｸｽ ﾗｴｽﾄﾗｲｸｼｮﾝｽﾞ.
 
-> **ﾜｰﾆﾝｸﾞ: ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ ﾗﾏ-ｸﾌﾟﾌﾟ ｻｰﾋﾞｽ**
+> **ﾜｰﾆﾝｸﾞ: ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ llama-cpp ｻｰﾋﾞｽ**
 >
-> ｲﾌ ｴﾝｱﾌﾞﾙﾄﾞ ﾌﾞｲｱ ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ, ｱﾄﾞﾄﾞｲﾄｲｵﾝｱﾙ ﾕｰｻﾞｰ-ﾚﾍﾞﾙ ｽｱﾝﾄﾞﾌﾞｵｸｽｲﾝｸﾞ ﾒｲ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸﾞﾌﾟｳ ｱｸｾｽ (`/dev/dri` `/dev/kfd`). ﾌﾟﾗｴﾌｴﾗ ｼｽﾃﾑ-ﾚﾍﾞﾙ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ.
+> ｲﾌ ｴﾝｱﾌﾞﾙﾄﾞ ﾌﾞｲｱ ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ, ｱﾄﾞﾄﾞｲﾄｲｵﾝｱﾙ ﾕｰｻﾞｰ-ﾚﾍﾞﾙ ｽｱﾝﾄﾞﾌﾞｵｸｽｲﾝｸﾞ ﾒｲ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸﾞﾌﾟｳ ｱｸｾｽ (`/dev/dri` `/dev/kfd`). ﾌﾟﾗｴﾌｴﾗ system-ﾚﾍﾞﾙ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ.
 
 ## ﾑｲｸﾞﾗｱｼｮﾝ ｶﾞｲﾄﾞ
 
@@ -146,7 +146,7 @@
 
 | ｺﾝﾎﾟｰﾈﾝﾄ | ｱﾌﾌｴｸﾄﾄﾞ | ﾁｪﾝｼﾞ |
 |-----------|----------|--------|
-| ﾝｲｸｽﾌﾟｸｸﾞｽﾞ | ≥ 2026-06 (ﾑｱｽﾄｴﾗ) | `services.llama-cpp.modelsPreset` ﾗｴﾑｵﾌﾞﾄﾞ; `port` ﾗｴﾝｱﾑﾄﾞ ﾄｩ `host` |
+| nixpkgs | ≥ 2026-06 (ﾑｱｽﾄｴﾗ) | `services.llama-cpp.modelsPreset` ﾗｴﾑｵﾌﾞﾄﾞ; `port` ﾗｴﾝｱﾑﾄﾞ ﾄｩ `host` |
 | NixKits | ≥ `6f52ddf` (`modules/llama-cpp-rocm.nix`) | ﾝｱﾑｴｽﾌﾟｱｽｴ: `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
 | ｳﾌﾟｽﾄﾗｴｱﾑ ﾗﾏ.ｸﾌﾟﾌﾟ | ﾌﾞ9605 | `--models-preset` ｼｰｴﾙｱｲ ｱﾗｸﾞｳﾒﾝﾄ ﾗｴﾄｱｲﾝﾄﾞ |
 
@@ -154,16 +154,16 @@
 
 | ｵｰﾙﾄﾞ (ﾄﾞｴﾌﾟﾗｴｸｱﾄﾄﾞ) | ﾆｭｰ | ﾉｰﾂ |
 |------------------|-----|-------|
-| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | ﾗｴﾑｵﾌﾞﾄﾞ ﾌﾛﾑ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾗｴｽﾄｵﾗﾄﾞ ﾌﾞｲｱ NixKits |
+| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | ﾗｴﾑｵﾌﾞﾄﾞ ﾌﾛﾑ nixpkgs, ﾗｴｽﾄｵﾗﾄﾞ ﾌﾞｲｱ NixKits |
 | `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
 | `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
 | `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | ﾝｱﾑｴｽﾌﾟｱｽｴ ｳﾝｲﾌｲﾄﾞ |
-| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
-| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾝｱﾑｴ |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs ﾗｴﾝｱﾑｴ |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs ﾗｴﾝｱﾑｴ |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs ﾗｴﾝｱﾑｴ |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs ﾗｴﾝｱﾑｴ |
 | ﾏﾆｭｱﾙ `systemd.services.llama-cpp.serviceConfig` | ﾘﾑｰﾌﾞ | ﾎｱﾝﾄﾞﾙﾄﾞ ﾊﾞｲ NixKits ﾓｼﾞｭｰﾙ |
-| `services.llama-cpp.extraFlags` | ｱﾄﾞ ﾌﾗｸﾞｽﾞ ﾄｩ `services.llama-cpp.settings` | ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾗｴﾑｵﾌﾞｱﾙ |
+| `services.llama-cpp.extraFlags` | ｱﾄﾞ ﾌﾗｸﾞｽﾞ ﾄｩ `services.llama-cpp.settings` | nixpkgs ﾗｴﾑｵﾌﾞｱﾙ |
 
 ### ﾑｲｸﾞﾗｱｼｮﾝ ｴｸﾞｻﾞﾝﾌﾟﾙ
 
@@ -173,20 +173,20 @@
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ
-{ ﾓｼﾞｭｰﾙｽﾞ = [
-    # ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm  # ← ﾉｯﾄ ｲｴﾄ ｲﾑﾌﾟｵﾗﾄﾄﾞ
+{ modules = [
+    # nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.llama-cpp-rocm  # ← ﾉｯﾄ ｲｴﾄ ｲﾑﾌﾟｵﾗﾄﾄﾞ
 ];}
 
-# ﾗﾏ-ｸﾌﾟﾌﾟ.ﾆｯｸｽ
+# llama-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm = {
+  ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp-rocm = {
     ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
     ﾕｰｻﾞｰ = "ｸｲｸｽ";
     ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
   };
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ = {
+  ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp = {
     ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm;
+    ﾊﾟｯｹｰｼﾞ = pkgs.llama-cpp-rocm;
     ﾌﾟｵﾗﾄ = 2027;
     ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
       "ｸｳｴﾝ3-Coder-Next" = {
@@ -197,15 +197,15 @@
     };
   };
   # ﾏﾆｭｱﾙ ｽｲｽﾄｴﾑﾄﾞ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ = {
+  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ = {
     ﾄﾞｲﾝｱﾑｲｸｳｽｴﾗ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
     ﾌﾟﾗｲﾌﾞｱﾄｴｳｽｴﾗｽﾞ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
     ﾌﾟﾗｵﾄｴｸｽｵﾑｴ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
     ﾕｰｻﾞｰ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｸｲｸｽ";
     ｸﾞﾗｵｳﾌﾟ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ﾕｰｻﾞｰｽﾞ";
-    ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-      "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-      "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+    environment = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
+      "ﾗﾏ_CACHE=/home/kix/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
+      "ggml_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ﾌﾟﾗｵｸｽｳﾌﾞｽｴﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｵｰﾙ";
   };
@@ -216,22 +216,22 @@
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ (ﾆｭｰ)
-{ ﾓｼﾞｭｰﾙｽﾞ = [
-    ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm
+{ modules = [
+    nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.llama-cpp-rocm
 ];}
 
-# ﾗﾏ-ｸﾌﾟﾌﾟ.ﾆｯｸｽ
+# llama-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ = {
+  ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp = {
     ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm;
+    ﾊﾟｯｹｰｼﾞ = pkgs.llama-cpp-rocm;
     ｾｯﾃｨﾝｸﾞｽﾞ.ﾌﾟｵﾗﾄ = 2027;
   };
-  NixKits.ﾗﾏ-ｸﾌﾟﾌﾟ-rocm = {
+  NixKits.llama-cpp-rocm = {
     ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
     ﾕｰｻﾞｰ = "ｸｲｸｽ";
     ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-    ﾎﾌｸｱﾁｴﾄﾞｲﾗ = "/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ";
+    ﾎﾌｸｱﾁｴﾄﾞｲﾗ = "/home/kix/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ";
     ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
       "ｸｳｴﾝ3-Coder-Next" = {
         ﾎﾌ-ﾗｴﾌﾟｵ = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF";
@@ -241,9 +241,9 @@
     };
   };
   # ｴｸｽﾄﾗｱ ｴﾇﾌﾞｲ ﾌﾞｱﾗｽﾞ ﾉｯﾄ ｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ NixKits ｵﾌﾟｼｮﾝｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-ｸﾌﾟﾌﾟ.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ.ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-    "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-    "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.llama-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ.environment = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
+    "ﾗﾏ_CACHE=/home/kix/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
+    "ggml_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```
