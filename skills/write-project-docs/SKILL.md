@@ -76,8 +76,8 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - zh 子目录文件：`[中文](file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md)`
 - en 子目录文件：`[中文](../../zh/file.md) | [English](file.md) | [日本語](../../ja/file.md)`
 - ja 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](file.md)`
-- katalish 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | [ｶﾀﾘｯｼｭ](file.md)`
-- pcn 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | [偽中国語](file.md)`
+- katalish 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | [Katalish](file.md) | [Pseudo-Chinese](../pcn/file.md)`
+- pcn 子目录文件：`[中文](../../zh/file.md) | [English](../en/file.md) | [日本語](../ja/file.md) | [Katalish](../katalish/file.md) | Pseudo-Chinese`
 
 ### 技能文档模板
 
@@ -150,6 +150,10 @@ nix registry add <project> <remote-url>
 - **表格优先于段落** — 用 `基本信息` 表格展示元数据，用对照表展示选项
 - **代码块完整可运行** — 每个代码块应可直接复制粘贴执行
 - **技术术语保持英文** — 即使在中文和日文文档中
+- **语言切换器中的语言名称不作本地化** — 各语言入口保持固有名称：
+  `中文`、`English`、`日本語`、`Katalish`、`Pseudo-Chinese`。
+  不翻译为 `ｶﾀﾘｯｼｭ`、`偽中国語`、`Chinese`、`Japanese` 等形式。
+  当前语言自身不加链接（纯文本），其他语言均附相对路径链接
 - **警告使用引用块** — `> **⚠️ 警告**` 格式
 - **中文标题使用 2 或 4 字词** — 优先使用简洁、长度对称的词汇以保证视觉节奏
   （如 `组件` 而非 `软件包`，`基本信息` 而非 `基础配置信息`）。中文 README 中的分类标题应遵循此韵律。
@@ -223,7 +227,7 @@ mkdir -p docs/{zh,en,ja}/skills docs/{katalish,pcn}/skills  # ← 扩展语言
 
 每个模块创建 3 个文件（zh/en/ja）。先写主语言版本作为基准，再翻译。
 
-对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现语言扩展技能：
+对于追加语言翻译（如 Katalish、Pseudo-Chinese），按 `translate-*` 命名约定自动发现语言扩展技能：
 
 ```
 # 自动发现算法：
