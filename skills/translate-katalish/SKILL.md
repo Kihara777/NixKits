@@ -2,7 +2,7 @@
 name: translate-katalish
 description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，与现有文档体系并行使用。
 language_code: katalish
-display_name: ｶﾀﾘｯｼｭ
+display_name: Katalish
 base_language: en
 ---
 

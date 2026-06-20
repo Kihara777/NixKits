@@ -2,7 +2,7 @@
 name: translate-pseudocn
 description: 为文档撰写技能提供伪中国语（pcn）语言支持。以日语汉字词汇为基础、剥离平假名与片假名、转换日语语序为中文语序的伪本地化。可被 write-project-docs 自动发现调用。
 language_code: pcn
-display_name: 偽中国語
+display_name: Pseudo-Chinese
 base_language: ja
 ---
 

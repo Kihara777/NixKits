@@ -1,6 +1,6 @@
 # 维护日志
 
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [Katalish](docs/MAINTENANCE.katalish.md) | [Pseudo-Chinese](docs/MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
 
