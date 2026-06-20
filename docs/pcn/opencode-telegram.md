@@ -1,59 +1,59 @@
 # opencode-telegram
 
-[中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | 偽中国語
+[中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) 
 
-[OpenCode](https://opencode.ai) Telegram Bot 客户端
+[OpenCode](https://opencode.ai)  Telegram Bot クライアント。
 
 ## 基本情報
 
-|項目|値|
+| 項目 | 値 |
 |------|-----|
-|版本|0.21.2|
-||[grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot)|
+| バージョン | 0.21.2 |
+| アップストリーム | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## 使方
 
 ```bash
-# 初回
-opencode serve # opencode 服務器起動
-opencode-telegram config # 対話型 Telegram Bot 設定
+# 初回セットアップ
+opencode serve                           # opencode サーバー起動
+opencode-telegram config                 # 対話型 Telegram Bot 設定
 
 # 日常使用
-opencode-telegram start # 起動opencode 自動起動
-opencode-telegram status # 状態確認
-opencode-telegram stop # 停止
+opencode-telegram start                  # 起動(opencode 自動起動)
+opencode-telegram status                 # 状態確認
+opencode-telegram stop                   # 停止
 ```
 
-## 安裝
+## インストール
 
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
 
-# 默認 overlay → pkgs.opencode-telegram
+# デフォルト overlay → pkgs.opencode-telegram
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## Flake 模塊
+## Flake モジュール
 
 ```nix
 # flake.nix
 {
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-outputs = { nixpkgs, nix-kits, ... }: {
-nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
-modules = [
-nix-kits.nixosModules.opencode-telegram
-{
-services.opencode-telegram = {
-enable = true;
-user = "kix";
-group = "users";
-afterServices = [ "network-online.target" "llama-cpp.service" ];
-};
-}
-];
-};
-};
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.opencode-telegram
+        {
+          services.opencode-telegram = {
+            enable = true;
+            user = "kix";
+            group = "users";
+            afterServices = [ "network-online.target" "llama-cpp.service" ];
+          };
+        }
+      ];
+    };
+  };
 }
 ```

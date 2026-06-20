@@ -1,42 +1,42 @@
 # nixkits-check-updates (Skill)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | 偽中国語
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) 
 
-> NixKits 全軟件包上流更新自動文檔同期修正維護日誌記録
+> NixKits 全パッケージ上流更新チェック，自動アップグレード・ドキュメント同期，修正メンテナンスログ記録。
 
 ## 基本情報
 
-|項目|値|
+| 項目 | 値 |
 |------|-----|
-||Coding Agent Skill|
-||`skills/nixkits-check-updates/SKILL.md`|
+| タイプ | Coding Agent Skill |
+| パス | `skills/nixkits-check-updates/SKILL.md` |
 
 ## 機能
 
-- `flake.nix` 全外部軟件包自動検出最新 GitHub Release
-- 構建設定版本source hashnpmDepsHash更新
-- 全言語文檔版本番号同期
-- 更新後 `write-maintenance-log` 技能自動呼出維護記録作成
-- 安裝版本報告
-- 補丁文件内代碼版本識別確認手順提供
+- `flake.nix` 全外部パッケージ自動検出最新 GitHub Release チェック
+- ビルド設定(バージョン，source hash，npmDepsHash)更新
+- 全言語ドキュメントバージョン番号同期
+- 更新後 `write-maintenance-log` スキル自動呼出，メンテナンス記録作成
+- ローカルインストールバージョン報告
+- パッチファイル内ハードコードバージョン識別確認手順提供
 
 ## hash 注意点
 
-- SRI hash 標準 base64`+` `/` `=`使用URL-safe 変種`-` `_`不可
-- `fetchFromGitHub` source hash GitHub archive tarball **事前計算** — `nix build` hash mismatch 取得必要
-- `npmDepsHash` 空場合空文字列 `""` `lib.fakeHash` 使用
-- npm 軟件包 2 回 `nix build` 必要：1 回目 source hash2 回目 npmDepsHash
+- SRI hash 標準 base64(`+` `/` `=`)使用，URL-safe 変種(`-` `_`)不可
+- `fetchFromGitHub`  source hash  GitHub archive tarball **事前計算** — `nix build`  hash mismatch エラー取得必要
+- `npmDepsHash` 空場合空文字列 `""`  `lib.fakeHash` 使用
+- npm パッケージ 2 回 `nix build` 必要：1 回目 source hash，2 回目 npmDepsHash
 
-## 範囲
+## チェック範囲
 
-`flake.nix` → `packages` 動的読取以下除外：
-- 軟件包倉庫内
-- 動的版本追跡構建時最新取得
-- nixpkgs 追従補丁覆蓋層
-- 補丁内蔵版本手動確認例：`comfyui-strix-halo`
+`flake.nix` → `packages` 動的読取，以下除外：
+- セルフホストパッケージ(リポジトリ内ソース)
+- 動的バージョン追跡(ビルド時最新取得)
+- nixpkgs 追従(パッチオーバーレイ)
+- パッチ内蔵バージョン(手動確認，例：`comfyui-strix-halo`)
 
-残外部軟件包自動対象
+残外部パッケージ自動チェック対象。
 
 ## 使用
 
-更新軟件包版本更新依頼起動
+ユーザー「更新チェック」「パッケージバージョン更新」依頼起動。

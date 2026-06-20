@@ -1,25 +1,25 @@
 # obs-bilibili-stream
 
-[中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | 偽中国語
+[中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) 
 
-OBS Studio 用 Bilibili 配信插件
+OBS Studio 用 Bilibili ライブ配信プラグイン。
 
 ## 基本情報
 
-|項目|値|
+| 項目 | 値 |
 |------|-----|
-|版本|2.1.0|
-||[Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream)|
-||Linux|
+| バージョン | 2.1.0 |
+| アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| プラットフォーム | Linux  |
 
-## 安裝
+## インストール
 
-**推奨: NixOS 模塊**
+**推奨: NixOS モジュール**
 
 ```nix
 {
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
 }
 ```
 
@@ -27,11 +27,11 @@ imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
 
 ```nix
 {
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-programs.obs-studio = {
-enable = true;
-plugins = [ pkgs.obs-bilibili-stream ];
-};
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+  programs.obs-studio = {
+    enable = true;
+    plugins = [ pkgs.obs-bilibili-stream ];
+  };
 }
 ```
 
