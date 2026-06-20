@@ -1,6 +1,6 @@
 # ruyi-ﾆｯｸｽOS-compat
 
-[中文](../../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | Katalish | [Pseudo-Chinese](../pcn/ruyi-nixos-compat.md)
+[中文](../../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/ruyi-nixos-compat.md)
 
 ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi: ﾌﾟﾗｴ-ｸｵﾑﾌﾟｲﾙﾄﾞ ﾘｽｸ-ﾌﾞ ﾂｰﾙﾁｪｰﾝ ﾌﾞｲﾝｱﾗｲｽﾞ ｸｱﾝﾝｵﾄ ﾗﾝ ﾄﾞｲﾗｴｸﾄﾘｰ ｵﾝ NixOS ﾌﾞｴｸｱｳｽｴ ｻﾞ ｴｸｽﾍﾟｸﾃｨｯﾄﾞ ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` ﾄﾞｵｽﾞ ﾉｯﾄ ｴｸｽｲｽﾄ. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ ﾄﾗｱﾝｽﾌﾟｱﾗｴﾝﾄﾘｰ ｱﾄﾞﾄﾞﾗｴｽｽｽﾞ ﾃﾞｨｽ ﾌﾞｲｱ ｱ ﾊﾟｯﾁ.
 

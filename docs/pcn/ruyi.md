@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](../../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [Katalish](../katalish/ruyi.md) | Pseudo-Chinese
+[中文](../../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [Katalish](../katalish/ruyi.md) | 偽中国語
 
 [RuyiSDK](https://ruyisdk.org) 軟件包管理器RISC-V 開発環境工具安裝仮想環境管理設備軟件包倉庫操作提供
 

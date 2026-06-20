@@ -1,6 +1,6 @@
 # rcc-fix
 
-[中文](../../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | [Katalish](../katalish/rcc-fix.md) | Pseudo-Chinese
+[中文](../../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | [Katalish](../katalish/rcc-fix.md) | 偽中国語
 
 ASUS ROG Control Center 2-in-1 脱着式設備向補丁
 

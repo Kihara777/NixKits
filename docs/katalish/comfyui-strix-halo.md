@@ -1,6 +1,6 @@
 # ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo
 
-[中文](../../zh/comfyui-strix-halo.md) | [English](../en/comfyui-strix-halo.md) | [日本語](../ja/comfyui-strix-halo.md) | Katalish | [Pseudo-Chinese](../pcn/comfyui-strix-halo.md)
+[中文](../../zh/comfyui-strix-halo.md) | [English](../en/comfyui-strix-halo.md) | [日本語](../ja/comfyui-strix-halo.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/comfyui-strix-halo.md)
 
 ﾛｯｸｴﾑ-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ｶﾑﾌｨUI ｻﾎﾟｰﾄ ﾌｫｱ AMD ｽﾄﾘｯｸｽ ﾍｲﾛｰ (ｸﾞﾌｸｽ1151 / ﾗﾄﾞﾝｱ 3.5 ｱﾌﾟｳ).
 **ﾌﾞｴﾗｲﾌｲﾄﾞ** ｵﾝ ﾗｲｽﾞｴﾝ ｱｲ ﾑｱｸｽ+ 395 / ﾗｱﾄﾞｴｵﾝ 8060S.

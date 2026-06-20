@@ -1,6 +1,6 @@
 # ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli (ｽｷﾙ)
 
-[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/nixos-modern-cli.md)
+[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/nixos-modern-cli.md)
 
 > ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｵﾝ NixOS ｽｲｽﾄｴﾑｽﾞ. ｴﾝｽｳﾗｽﾞ ﾑｵﾄﾞｴﾗﾝ ﾆｯｸｽ ｼｰｴﾙｱｲ ﾕｰｾｰｼﾞ, ﾌﾙ ｼｪﾙ ｸｱﾌﾟｱﾌﾞｲﾙｲﾄｲ, ｱﾝﾄﾞ ｺﾚｸﾄ ﾒﾝﾃﾅﾝｽ ﾌﾟﾗｵｽｴﾄﾞｳﾗｽﾞ.
 

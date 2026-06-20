@@ -1,6 +1,6 @@
 # ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config (ｽｷﾙ)
 
-[中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/recover-nixos-config.md)
+[中文](../../zh/skills/recover-nixos-config.md) | [English](../../en/skills/recover-nixos-config.md) | [日本語](../../ja/skills/recover-nixos-config.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/recover-nixos-config.md)
 
 > ﾗｴｸｵﾌﾞｴﾗｽﾞ ｱｸｽｲﾄﾞｴﾝﾄｱﾙﾘｰ ﾄﾞｴﾙｴﾄﾄﾞ `/etc/nixos` ﾌｧｲﾙｽﾞ ﾌﾛﾑ ｻﾞ ﾆｯｸｽ ｽﾄｵﾗｴ.
 

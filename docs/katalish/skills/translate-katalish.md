@@ -1,6 +1,6 @@
 # ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ (ｽｷﾙ)
 
-[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/translate-katalish.md)
+[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/translate-katalish.md)
 
 > ｴｸｽﾄﾗｱ ﾝｱﾄｳﾗｱﾙ-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ.  ｱﾄﾞﾄﾞｽﾞ ｻﾞ ｶﾀﾘｯｼｭ (ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ) ﾗﾝｹﾞｰｼﾞ.
 

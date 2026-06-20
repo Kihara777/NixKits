@@ -1,6 +1,6 @@
 # ｶﾑﾌｨUI-ﾛｯｸｴﾑ-patch
 
-[中文](../../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | Katalish | [Pseudo-Chinese](../pcn/comfyui-rocm-patch.md)
+[中文](../../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/comfyui-rocm-patch.md)
 
 ﾛｯｸｴﾑ ｸｱﾌﾟｱﾌﾞｲﾙｲﾄｲ ﾊﾟｯﾁ ﾌｫｱ ｶﾑﾌｨUI.
 
