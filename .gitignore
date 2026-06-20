@@ -1,21 +1,21 @@
-# Nix build artifacts
-result
-flake.lock
-*.drv
-*.log
-*.o
-*.hi
-
-# Local reports
-BUILD_REPORT.md
-TESTING.md
-
-# Rust build artifacts
-packages/kitsfmt-src/target/
 
 # IDE
-/.vscode/
-.codewhale/
-*.swp
+# Local reports
+# Nix build artifacts
+# Rust build artifacts
+*.drv
+*.hi
+*.log
+*.o
 *.swo
+*.swp
+.codewhale/
+.deepseek
+/.vscode/
+BUILD_REPORT.md
+TESTING.md
+flake.lock
+packages/kitsfmt-src/target/
+result
 venv/
+.deepseek
