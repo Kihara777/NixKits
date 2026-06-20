@@ -30,9 +30,8 @@ in
     pname = "mihomo-alpha";
     version = "alpha-${commitHash}";
 
-    src = final.fetchurl {
+    src = builtins.fetchurl {
       url = gzAsset.browser_download_url;
-      sha256 = "sha256-2LJTnbu7KxI0nHtHN7G2Yp4twroRPjV0pJ0199xy0HU=";
     };
 
     nativeBuildInputs = [ final.gzip ];
