@@ -62,7 +62,8 @@ nix registry add nix-kits /home/kix/NixKits
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |
-| translate-katakana | ｶﾀﾘｯｼｭ 翻译（半角片假名逐词机械替换英文文档） | [docs/zh/skills/translate-katakana.md](docs/zh/skills/translate-katakana.md) |
+| translate-katalish | ｶﾀﾘｯｼｭ 翻译（半角片假名逐词机械替换英文文档） | [docs/zh/skills/translate-katalish.md](docs/zh/skills/translate-katalish.md) |
+| translate-pseudocn | 偽中国語 翻译（日语假名剥离 + 语序转换） | [docs/zh/skills/translate-pseudocn.md](docs/zh/skills/translate-pseudocn.md) |
 | write-maintenance-log | 按 NixKits 规范撰写维护日志（软件更新 + 错误修复） | [docs/zh/skills/write-maintenance-log.md](docs/zh/skills/write-maintenance-log.md) |
 | write-project-docs | 按 NixKits 风格为任意项目编写多语言文档系统 | [docs/zh/skills/write-project-docs.md](docs/zh/skills/write-project-docs.md) |
 

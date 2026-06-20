@@ -1,6 +1,6 @@
-# translate-katakana (スキル)
+# translate-katalish (スキル)
 
-[中文](../../zh/skills/translate-katakana.md) | [English](../../en/skills/translate-katakana.md) | [日本語](translate-katakana.md)
+[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](translate-katalish.md)
 
 > 文書作成スキルに追加の自然言語サポートを提供。ｶﾀﾘｯｼｭ（カタカナ英語）言語を追加。
 
@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | タイプ | コーディングエージェントスキル（言語バックエンド） |
-| パス | `skills/translate-katakana/SKILL.md` |
+| パス | `skills/translate-katalish/SKILL.md` |
 | 呼び出し元 | write-project-docs（主）、nixkits-check-updates（間接） |
 
 ## 機能

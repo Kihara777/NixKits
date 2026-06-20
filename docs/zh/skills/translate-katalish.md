@@ -1,6 +1,6 @@
-# translate-katakana (技能)
+# translate-katalish (技能)
 
-[中文](translate-katakana.md) | [English](../../en/skills/translate-katakana.md) | [日本語](../../ja/skills/translate-katakana.md)
+[中文](translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md)
 
 > 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言。
 
@@ -9,7 +9,7 @@
 | 项目 | 值 |
 |------|-----|
 | 类型 | 编码助手技能（语言后端） |
-| 路径 | `skills/translate-katakana/SKILL.md` |
+| 路径 | `skills/translate-katalish/SKILL.md` |
 | 调用者 | write-project-docs（主）、nixkits-check-updates（间接） |
 
 ## 功能

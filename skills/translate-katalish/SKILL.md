@@ -1,5 +1,5 @@
 ---
-name: translate-katakana
+name: translate-katalish
 description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，可与现有三语（zh/en/ja）文档体系并行使用。
 ---
 

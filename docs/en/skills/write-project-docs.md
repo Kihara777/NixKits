@@ -16,6 +16,7 @@
 - Assesses project metadata and extracts module information
 - Classifies modules by function (infra/services/proxy/skills)
 - Creates `docs/{zh,en,ja}/` directory structure
+- Auto-discovers language extensions via `translate-*` naming convention in `skills/translate-*/`
 - Writes categorized READMEs with language switchers
 - Writes per-module docs (info table + install + usage)
 - Writes skill docs using the unified template (Info → Features → Usage)

@@ -1,6 +1,6 @@
-# translate-katakana (Skill)
+# translate-katalish (Skill)
 
-[中文](../../zh/skills/translate-katakana.md) | [English](translate-katakana.md) | [日本語](../../ja/skills/translate-katakana.md)
+[中文](../../zh/skills/translate-katalish.md) | [English](translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md)
 
 > Extra natural-language support for the document-writing skill.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
 
@@ -9,7 +9,7 @@
 | Item | Value |
 |------|-------|
 | Type | Coding Agent Skill (language backend) |
-| Path | `skills/translate-katakana/SKILL.md` |
+| Path | `skills/translate-katalish/SKILL.md` |
 | Called by | write-project-docs (primary), nixkits-check-updates (indirect) |
 
 ## Features
