@@ -15,7 +15,7 @@
 ||Coding Agent Skill|
 ||`skills/write-maintenance-log/SKILL.md`|
 
-## 機能
+## 功能
 
 - 軟件更新記録作成概要 + ID 表 + 版本表
 - 修正記録作成概要 + ID 表

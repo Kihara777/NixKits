@@ -12,7 +12,7 @@
 |模塊|`nix-kits.nixosModules.comfyui-rocm-patch`|
 |依存|comfyui-strix-halo|
 
-## 機能
+## 功能
 
 - `services.comfyui.rocmGfxOverride` 選項 — `HSA_OVERRIDE_GFX_VERSION` 設定
 - `--disable-xformers` 注入ROCm xformers 非対応

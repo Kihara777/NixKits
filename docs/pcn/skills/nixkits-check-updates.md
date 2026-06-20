@@ -11,7 +11,7 @@
 ||Coding Agent Skill|
 ||`skills/nixkits-check-updates/SKILL.md`|
 
-## 機能
+## 功能
 
 - `flake.nix` 全外部軟件包自動検出最新 GitHub Release
 - 構建設定版本source hashnpmDepsHash更新

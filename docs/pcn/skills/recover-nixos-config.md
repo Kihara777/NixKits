@@ -11,7 +11,7 @@
 ||Coding Agent Skill|
 ||`skills/recover-nixos-config/SKILL.md`|
 
-## 機能
+## 功能
 
 - Nix store 内最新構建 flake 特定
 - 名 `*-source` 目錄検索
