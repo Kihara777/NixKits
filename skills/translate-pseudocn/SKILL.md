@@ -1,6 +1,6 @@
 ---
 name: translate-pseudocn
-description: 为文档撰写技能提供伪中国语（pcn）语言支持。以日语汉字词汇为基础、剥离假名与送假名、转换日语语序为中文语序的伪本地化。可被 write-project-docs 自动发现调用。
+description: 为文档撰写技能提供伪中国语（pcn）语言支持。以日语汉字词汇为基础、剥离平假名与片假名、转换日语语序为中文语序的伪本地化。可被 write-project-docs 自动发现调用。
 language_code: pcn
 display_name: 偽中国語
 base_language: ja
@@ -10,16 +10,35 @@ base_language: ja
 
 为 NixKits 文档体系提供 pcn（伪中国语）语言，通过日语→中文语序转换与假名剥离实现。设计目的为文档撰写技能的模块化语言后端。
 
+## 自动发现契约
+
+write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SKILL.md` frontmatter 自动发现本技能：
+
+| 字段 | 值 | 用途 |
+|------|-----|------|
+| `language_code` | `pcn` | 目录名 `docs/pcn/`、文件扩展名 `*.pcn.md`、for 循环迭代 |
+| `display_name` | `偽中国語` | 语言切换器标签 |
+| `base_language` | `ja` | 伪中国语转换的源语言（日语文本） |
+
 ## 触发场景
 
-- 由 write-project-docs 自动发现并调用（按 `translate-*` 命名约定扫描）
+- 由 write-project-docs 自动发现并调用（按 `translate-*` 命名约定扫描 `skills/translate-*/`）
+- 由 write-maintenance-log 自动发现并调用（维护日志多语同步）
 - 用户要求"生成伪中国语文档"时独立调用
+
+## 与其他技能的关系
+
+| 技能 | 关系 |
+|------|------|
+| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
+| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
+| nixkits-check-updates | 间接调用 — 更新文档时同步生成 偽中国語 版本 |
 
 ## 语言：pcn（伪中国语）
 
 ### 原理
 
-伪中国语是一种伪本地化技巧：取日语文本，剥离全部平假名/片假名/送假名，将日语句法（SOV）转换为中文语序（SVO），使用中文标点符号。结果视觉上近似中文但语法保持日语汉字结构。
+伪中国语是一种伪本地化技巧：取日语文本，剥离全部平假名/片假名，将日语句法（SOV）转换为中文语序（SVO），使用中文标点符号。结果视觉上近似中文但语法保持日语汉字结构。
 
 **示例**：
 ```
@@ -50,21 +69,21 @@ base_language: ja
 
 ### 内置词典（常见技术术语映射）
 
-| 日文 | 伪中国语 | 说明 |
-|------|---------|------|
-| ソフトウェア | 软件 | |
-| パッケージ | 包 | |
-| モジュール | 模块 | |
-| システム | 系统 | |
-| インストール | 安装 | |
-| 設定 | 设置 | |
-| 管理 | 管理 | |
-| 環境 | 环境 | |
-| 開発 | 开发 | |
-| 更新 | 更新 | |
-| 修正 | 修复 | |
-| 機能 | 功能 | |
-| 情報 | 信息 | |
+| 日文 | 偽中国語 |
+|------|---------|
+| ソフトウェア | 軟件 |
+| パッケージ | 軟件包 |
+| モジュール | 模塊 |
+| システム | 系統 |
+| インストール | 安裝 |
+| 設定 | 設置 |
+| 管理 | 管理 |
+| 環境 | 環境 |
+| 開発 | 開發 |
+| 更新 | 更新 |
+| 修正 | 修復 |
+| 機能 | 功能 |
+| 情報 | 情報 |
 
 ### 文件命名约定
 
@@ -74,29 +93,6 @@ pcn 文档：
 - `docs/MAINTENANCE.pcn.md` — 伪中国语维护记录
 
 语言切换器中：`[偽中国語](docs/README.pcn.md)`
-
-## 与其他技能的关系
-
-| 技能 | 关系 |
-|------|------|
-| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
-| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
-| nixkits-check-updates | 间接调用 — 更新文档时同步生成 偽中国語 版本 |
-
-### 自动发现契约
-
-write-project-docs 扫描 `skills/translate-*/`，读取本技能 frontmatter 的以下字段：
-
-| 字段 | 值 | 用途 |
-|------|-----|------|
-| `language_code` | `pcn` | 目录名 `docs/pcn/`、文件扩展名 `*.pcn.md`、for 循环迭代 |
-| `display_name` | `偽中国語` | 语言切换器标签 |
-| `base_language` | `ja` | 伪中国语转换的源语言 |
-
-```
-skills/translate-katalish/  → language_code: katalish → display_name: ｶﾀﾘｯｼｭ
-skills/translate-pseudocn/  → language_code: pcn      → display_name: 偽中国語
-```
 
 ## 注意事项
 

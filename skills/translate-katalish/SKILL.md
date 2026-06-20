@@ -1,6 +1,6 @@
 ---
 name: translate-katalish
-description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，可与现有三语（zh/en/ja）文档体系并行使用。
+description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，与现有文档体系并行使用。
 language_code: katalish
 display_name: ｶﾀﾘｯｼｭ
 base_language: en
@@ -8,13 +8,31 @@ base_language: en
 
 # 片假名英语翻译
 
-为 NixKits 文档体系提供 ｶﾀﾘｯｼｭ（片假名英语语言，通过半角片假名逐词机械替换英文实现。设计目的为模块化扩展文档撰写技能（write-project-docs）的语言支持能力。
+为 NixKits 文档体系提供 ｶﾀﾘｯｼｭ（片假名英语）语言，通过半角片假名逐词机械替换英文实现。设计目的为模块化扩展文档撰写技能（write-project-docs）的语言支持能力。
+
+## 自动发现契约
+
+write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SKILL.md` frontmatter 自动发现本技能：
+
+| 字段 | 值 | 用途 |
+|------|-----|------|
+| `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
+| `display_name` | `ｶﾀﾘｯｼｭ` | 语言切换器标签 |
+| `base_language` | `en` | 片假名英语的源语言（英文文本） |
 
 ## 触发场景
 
-- 由 write-project-docs 技能自动调用（作为文档编写流程的语言后端）
+- 由 write-project-docs 自动发现并调用（按 `translate-*` 命名约定扫描 `skills/translate-*/`）
+- 由 write-maintenance-log 自动发现并调用（维护日志多语同步）
 - 用户要求"生成片假名英语版本文档"时独立调用
-- 用户要求"新增一种文档语言"时作为参考实现
+
+## 与其他技能的关系
+
+| 技能 | 关系 |
+|------|------|
+| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
+| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
+| nixkits-check-updates | 间接调用 — 更新文档时同步生成 ｶﾀﾘｯｼｭ 版本 |
 
 ## 语言：ｶﾀﾘｯｼｭ（片假名英语/katalish）
 
@@ -50,29 +68,29 @@ NixKits — software, patches, NixOS modules and coding agent skills
 
 常用技术文档词汇的片假名映射：
 
-| 英文 | 半角片假名 | 说明 |
-|------|---------|------|
-| software | ｿﾌﾄｳｪｱ |  |
-| package | ﾊﾟｯｹｰｼﾞ |  |
-| module | ﾓｼﾞｭｰﾙ |  |
-| system | ｼｽﾃﾑ |  |
-| install | ｲﾝｽﾄｰﾙ |  |
-| configure | ｺﾝﾌｨｷﾞｭｱ |  |
-| build | ﾋﾞﾙﾄﾞ |  |
-| overlay | ｵｰﾊﾞｰﾚｲ |  |
-| patch | ﾊﾟｯﾁ |  |
-| skill | ｽｷﾙ |  |
-| agent | ｴｰｼﾞｪﾝﾄ |  |
-| service | ｻｰﾋﾞｽ |  |
-| dependency | ﾃﾞｨﾍﾟﾝﾃﾞﾝｼｰ |  |
-| version | ﾊﾞｰｼﾞｮﾝ |  |
-| license | ﾗｲｾﾝｽ |  |
-| repository | ﾘﾎﾟｼﾞﾄﾘ |  |
-| description | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |  |
-| template | ﾃﾝﾌﾟﾚｰﾄ |  |
-| maintenance | ﾒﾝﾃﾅﾝｽ |  |
-| documentation | ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ |  |
-| compatibility | ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ |  |
+| 英文 | 半角片假名 |
+|------|---------|
+| software | ｿﾌﾄｳｪｱ |
+| package | ﾊﾟｯｹｰｼﾞ |
+| module | ﾓｼﾞｭｰﾙ |
+| system | ｼｽﾃﾑ |
+| install | ｲﾝｽﾄｰﾙ |
+| configure | ｺﾝﾌｨｷﾞｭｱ |
+| build | ﾋﾞﾙﾄﾞ |
+| overlay | ｵｰﾊﾞｰﾚｲ |
+| patch | ﾊﾟｯﾁ |
+| skill | ｽｷﾙ |
+| agent | ｴｰｼﾞｪﾝﾄ |
+| service | ｻｰﾋﾞｽ |
+| dependency | ﾃﾞｨﾍﾟﾝﾃﾞﾝｼｰ |
+| version | ﾊﾞｰｼﾞｮﾝ |
+| license | ﾗｲｾﾝｽ |
+| repository | ﾘﾎﾟｼﾞﾄﾘ |
+| description | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+| template | ﾃﾝﾌﾟﾚｰﾄ |
+| maintenance | ﾒﾝﾃﾅﾝｽ |
+| documentation | ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ |
+| compatibility | ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ |
 
 ### 规则音译
 
@@ -91,17 +109,6 @@ NixKits — software, patches, NixOS modules and coding agent skills
 | o (短) | ｵ |
 | o (长) | ｵｰ |
 
-### 使用方式
-
-```python
-# 由 write-project-docs 调用
-from katakana_english import replace_to_katakana
-
-en_text = "Install the package with nix build"
-kata_text = replace_to_katakana(en_text)
-# → "ｲﾝｽﾄｰﾙ ｻﾞ ﾊﾟｯｹｰｼﾞ ｳｨｽﾞ ﾆｯｸｽ ﾋﾞﾙﾄﾞ"
-```
-
 ### 文件命名约定
 
 ｶﾀﾘｯｼｭ 文档：
@@ -110,24 +117,6 @@ kata_text = replace_to_katakana(en_text)
 - `docs/MAINTENANCE.katalish.md` — 片假名英语维护记录
 
 语言切换器中新增：`[ｶﾀﾘｯｼｭ](docs/README.katalish.md)`
-
-## 与其他技能的关系
-
-| 技能 | 关系 |
-|------|------|
-| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
-| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
-| nixkits-check-updates | 间接调用 — 更新文档时同步生成 ｶﾀﾘｯｼｭ 版本 |
-
-### 自动发现契约
-
-write-project-docs 扫描 `skills/translate-*/`，读取本技能 frontmatter：
-
-| 字段 | 值 | 用途 |
-|------|-----|------|
-| `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
-| `display_name` | `ｶﾀﾘｯｼｭ` | 语言切换器标签 |
-| `base_language` | `en` | 片假名英语的源语言 |
 
 ## 注意事项
 
