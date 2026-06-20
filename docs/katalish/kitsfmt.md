@@ -1,24 +1,24 @@
 # kitsfmt
 
-[中文](../zh/kitsfmt.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | [偽中国語](../pcn/kitsfmt.md)
+[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/kitsfmt.md)
 
 **Nix ﾌｫｰﾏｯﾀｰ** — AST-based ｳｨｽﾞ attribute sorting, comment preservation, ｱﾝﾄﾞ indentation normalization.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
 | Version | 0.5.0 |
 | Language | Rust |
-| Source | This repo `ﾊﾟｯｹｰｼﾞs/kitsfmt-src/` |
+| Source | This repo `packages/kitsfmt-src/` |
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-kitsfmt file.nix             # output ﾄｩ stdout
-kitsfmt --inplace file.nix   # ｲﾝ-place format
+kitsfmt file.nix             # output to stdout
+kitsfmt --inplace file.nix   # in-place format
 kitsfmt --check file.nix     # check formatting
-kitsfmt --ﾉｰ-best-practices  # ﾃﾞｨｽｴｲﾌﾞﾙ ｵｰﾄ-fixes
+kitsfmt --no-best-practices  # disable auto-fixes
 kitsfmt file1.nix file2.nix  # multiple files
 ```
 
@@ -38,12 +38,12 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
 # then: nix fmt
 ```
 
-## Features
+## ﾌｨｰﾁｬｰｽﾞ
 
 - Attribute sorting (including APC `a.b.c` collapse)
 - Comment preservation
 - Idempotent formatting
-- **Best-practice ｵｰﾄ-fixes** (ﾃﾞﾌｫﾙﾄ ｵﾝ, `-B` ﾄｩ ﾃﾞｨｽｴｲﾌﾞﾙ):
+- **Best-practice auto-fixes** (default on, `-B` to disable):
   - Bare URL quoting (RFC 45): `https://x.com` → `"https://x.com"`
-  - `rec` → `ﾙｴｯﾄ-ｲﾝ`: `rec { ｱ = 1; }` → `ﾙｴｯﾄ a=1; ｲﾝ { inherit a; }`
-  - `ｳｨｽﾞ` → `ﾌﾞｳｲﾙﾄins.attrValues`: `ｳｨｽﾞ pkgs; [ ｱ b ]` → `ﾌﾞｳｲﾙﾄins.attrValues { inherit (pkgs) ｱ b; }`
+  - `rec` → `let-in`: `rec { ｱ = 1; }` → `let a=1; in { inherit a; }`
+  - `ｳｨｽﾞ` → `builtins.attrValues`: `ｳｨｽﾞ pkgs; [ ｱ b ]` → `builtins.attrValues { inherit (pkgs) ｱ b; }`

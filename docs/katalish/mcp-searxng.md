@@ -1,15 +1,15 @@
 # mcp-searxng
 
-[中文](../zh/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
+[中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/mcp-searxng.md)
 
-[MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web search ﾌｫｱ AI ｱｽｽｲｽﾄｱﾝﾄs.
+[MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web search ﾌｫｱ AI assistants.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
 | Version | 1.7.1 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
+| Upstream | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -23,19 +23,19 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ## Full NixOS Setup
 
 ```nix
-{ ｺﾝﾌｨｸﾞ, ... }:
+{ config, ... }:
 let
   searxKey = "YOUR_SECRET_KEY";
-ｲﾝ
+in
 {
   services.searx = {
     enable = true;
     redisCreateLocally = true;
-    ｾｯﾃｨﾝｸﾞｽﾞ = {
+    settings = {
       search.formats = [ "html" "json" ];
       server = {
         bind_address = "127.0.0.1";
-        ﾎﾟｰﾄ = "42701";
+        port = "42701";
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
@@ -47,13 +47,13 @@ let
 
   services.lighttpd = {
     enable = true;
-    ﾎﾟｰﾄ = 4270;
+    port = 4270;
     enableModules = [ "mod_access" "mod_alias" "mod_proxy" "mod_setenv" ];
     extraConfig = ''
       proxy.server = ( "" => (
-        ( "host" => "127.0.0.1", "ﾎﾟｰﾄ" => 42701 )
+        ( "host" => "127.0.0.1", "port" => 42701 )
       ))
-      setenv.ｱﾄﾞ-request-header = (
+      setenv.add-request-header = (
         "X-Real-IP"       => "%{remote-addr}e",
         "X-Forwarded-For"  => "%{remote-addr}e",
         "X-Forwarded-Proto" => "http"
@@ -76,17 +76,17 @@ let
 }
 ```
 
-> SearXNG requires JSON format (configured ｱﾊﾞﾌﾞ ｲﾝ `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats`).
+> SearXNG requires JSON format (configured above in `settings.search.formats`).
 
 ## CodeWhale Config
 
-CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. After adding mcp-searxng, you **ﾑｽﾄ manually ｾｯﾄ `SEARXNG_URL`** — ｻﾞ `codewhale mcp ｱﾄﾞ` command ﾀﾞｽﾞ ﾉｯﾄ ｵｰﾄ-populate ｻﾞ `env` ﾌｨｰﾙﾄﾞ.
+CodeWhale stores MCP configuration in `~/.deepseek/mcp.json`. After adding mcp-searxng, you **must manually set `SEARXNG_URL`** — ｻﾞ `codewhale mcp ｱﾄﾞ` command does ﾉｯﾄ auto-populate ｻﾞ `env` field.
 
 ```json
 {
   "servers": {
     "SearXNG": {
-      "command": "/etc/profiles/ﾊﾟｰ-ﾕｰｻﾞｰ/kix/bin/mcp-searxng",
+      "command": "/etc/profiles/per-user/kix/bin/mcp-searxng",
       "args": [],
       "env": {
         "SEARXNG_URL": "http://127.0.0.1:42701"
@@ -96,16 +96,16 @@ CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek
 }
 ```
 
-> **⚠️ Common pitfall**: `codewhale mcp ｱﾄﾞ SearXNG --command /ﾊﾟｽ/ﾄｩ/mcp-searxng` leaves `env` ｱｽﾞ `{}`.
-> Without `SEARXNG_URL` ｻﾞ MCP ｻｰﾊﾞｰ fails silently — `codewhale mcp ﾘｽﾄ` shows `[enabled]` ﾌﾞｯﾄ calls return ﾉｰ results.
+> **⚠️ Common pitfall**: `codewhale mcp ｱﾄﾞ SearXNG --command /path/to/mcp-searxng` leaves `env` as `{}`.
+> Without `SEARXNG_URL` ｻﾞ MCP ｻｰﾊﾞｰ fails silently — `codewhale mcp list` shows `[enabled]` but calls return no results.
 
 ## Troubleshooting
 
 ### MCP ｻｰﾊﾞｰ unresponsive
 
 ```bash
-# Check registration ｱﾝﾄﾞ status
-codewhale mcp ﾘｽﾄ
+# Check registration and status
+codewhale mcp list
 
 # Verify environment variable
 cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
@@ -114,15 +114,15 @@ cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
 ### SearXNG backend connectivity
 
 ```bash
-# Verify SearXNG API ｲｽﾞ reachable
-curl -s http://127.0.0.1:42701/ｺﾝﾌｨｸﾞ | head -c 100
+# Verify SearXNG API is reachable
+curl -s http://127.0.0.1:42701/config | head -c 100
 
 # Manual MCP server test (should show MCP handshake)
 SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 ```
 
-### Search returns ﾉｰ results
+### Search returns no results
 
-- Ensure `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats` includes `"json"` (required ﾊﾞｲ MCP Server)
+- Ensure `settings.search.formats` includes `"json"` (required ﾊﾞｲ MCP Server)
 - Verify lighttpd reverse proxy forwards `X-Forwarded-For` header
-- Check logs: `journalctl -u searx --ﾉｰ-pager -n 30`
+- Check logs: `journalctl -u searx --no-pager -n 30`

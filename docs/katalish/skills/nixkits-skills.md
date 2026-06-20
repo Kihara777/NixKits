@@ -1,35 +1,35 @@
-# nixkits-ｽｷﾙs (Skill)
+# nixkits-skills (Skill)
 
-[中文](../../zh/ｽｷﾙs/nixkits-ｽｷﾙs.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [偽中国語](../../pcn/ｽｷﾙs/nixkits-ｽｷﾙs.md)
+[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
-> ｲﾝｽﾄｰﾙs ｵﾗ updates NixKits ｽｷﾙs ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, ｴｰｼﾞｪﾝﾄs).
+> Installs ｵﾗ updates NixKits skills ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, agents).
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | Coding Agent Skill |
-| Path | `ｽｷﾙs/nixkits-ｽｷﾙs/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `skills/nixkits-skills/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Auto-discovers ｿｰｽ ﾃﾞｨﾚｸﾄﾘ ｱﾝﾄﾞ git remote URL
-- Detects ｲﾝｽﾄｰﾙed ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ directories
-- Compares ﾛｰｶﾙ ｽｷﾙs ｱｹﾞﾝｽﾄ NixKits ｿｰｽ ﾌｫｱ differences
-- Supports ﾛｰｶﾙ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｿｰｽ) ｱﾝﾄﾞ ｵﾝﾙｲﾝ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｷﾞｯﾄﾊﾌﾞ clone)
-- Shows diff ﾋﾞﾌｫｱ applying ｱﾝﾄﾞ asks ﾌｫｱ ﾕｰｻﾞｰ confirmation
-- Verifies copy consistency ｱﾌﾀｰ ｲﾝｽﾄｰﾙ
+- Auto-discovers source directory ｱﾝﾄﾞ git remote URL
+- Detects installed ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ skill directories
+- Compares local skills against NixKits source ﾌｫｱ differences
+- Supports local ｲﾝｽﾄｰﾙ (ﾌﾛﾑ source) ｱﾝﾄﾞ online ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｷﾞｯﾄﾊﾌﾞ clone)
+- Shows diff before applying ｱﾝﾄﾞ asks ﾌｫｱ user confirmation
+- Verifies copy consistency after ｲﾝｽﾄｰﾙ
 
 ## Supported Agents
 
 | Agent | Directory |
 |-------|-----------|
-| OpenCode | `~/.opencode/ｽｷﾙs/` |
-| CodeWhale | `~/.codewhale/ｽｷﾙs/` |
-| Claude Code | `~/.claude/ｽｷﾙs/` |
-| OpenClaw | `~/.openclaw/ｽｷﾙs/` |
-| Generic | `~/.ｴｰｼﾞｪﾝﾄs/ｽｷﾙs/` |
+| OpenCode | `~/.opencode/skills/` |
+| CodeWhale | `~/.codewhale/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| OpenClaw | `~/.openclaw/skills/` |
+| Generic | `~/.agents/skills/` |
 
 ## ﾕｰｾｰｼﾞ
 
-Activated ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ asks ﾄｩ "ｲﾝｽﾄｰﾙ ｽｷﾙs" ｵﾗ "ｱｯﾌﾟﾃﾞｰﾄ NixKits ｽｷﾙs".
+Activated ｳｪﾝ ｻﾞ user asks to "ｲﾝｽﾄｰﾙ skills" ｵﾗ "update NixKits skills".

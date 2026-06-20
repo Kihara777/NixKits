@@ -1,33 +1,33 @@
 # ruyi
 
-[中文](../zh/ruyi.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/ruyi.md)
 
-Package ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｷｯﾄ ﾌﾟﾗｵﾌﾞｲﾃﾞｨﾝｸﾞ ﾂｰﾙﾁｪｰﾝ ｲﾝｽﾄｰﾙation, ﾊﾞｰﾁｬﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾑｱﾝｱｼﾞﾒﾝﾄ, ﾃﾞｨﾌﾞｱｲｽ provisioning, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｵﾍﾟﾗｴｰｼｮﾝｽﾞ.
+Package ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ toolkit providing toolchain installation, virtual ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ management, device provisioning, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ operations.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
 | Version | 0.51.0-alpha.20260616 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| ﾗｲｾﾝｽ | Apache 2.0 |
-| ﾉｰﾄ | Alpha-stage ｿﾌﾄｳｪｱ, APIs ﾒｲ change |
+| Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
+| License | Apache 2.0 |
+| Note | Alpha-stage ｿﾌﾄｳｪｱ, APIs may change |
 
 ## Dev Shell
 
 ```bash
-nix develop nix-kits#ruyi             # ｳｪﾝ nix-kits ｲｽﾞ already a flake input
-nix develop github:Kihara777/NixKits#ruyi  # zero-ｺﾝﾌｨｸﾞ one-shot
+nix develop nix-kits#ruyi             # when nix-kits is already a flake input
+nix develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
 ```
 
-Enters an ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ｳｨｽﾞ `ruyi` ｱﾌﾞｴｲﾗﾌﾞﾙ ｵﾝ `$PATH`.
+Enters an ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ｳｨｽﾞ `ruyi` ｱﾌﾞｴｲﾗﾌﾞﾙ on `$PATH`.
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.ruyi ];
 
-# Or ﾌﾞｲｱ overlay
+# Or via overlay
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
@@ -36,17 +36,17 @@ environment.systemPackages = [ pkgs.ruyi ];
 
 ```bash
 ruyi --help
-ruyi ﾘｽﾄ --ｵｰﾙ          # List ｵｰﾙ ｱﾌﾞｴｲﾗﾌﾞﾙ packages
-ruyi ｲﾝｽﾄｰﾙ <pkg>       # Install a ﾂｰﾙﾁｪｰﾝ
-ruyi venv --ﾂｰﾙﾁｪｰﾝ <t> # Create a ﾊﾞｰﾁｬﾙ environment
-ruyi ﾃﾞｨﾌﾞｱｲｽ provision    # Provision a ﾃﾞｨﾌﾞｱｲｽ
+ruyi list --all          # List all available packages
+ruyi install <pkg>       # Install a toolchain
+ruyi venv --toolchain <t> # Create a virtual environment
+ruyi device provision    # Provision a device
 ```
 
-> ruyi requires network access ﾄｩ clone ｻﾞ ﾊﾟｯｹｰｼﾞ index (`ﾊﾟｯｹｰｼﾞs-index`). This happens ｵｰﾄﾏﾃｨｯｸﾘｰ ｵﾝ ﾌｧｰｽﾄ `ruyi ﾘｽﾄ`.
+> ruyi requires network access to clone ｻﾞ ﾊﾟｯｹｰｼﾞ index (`packages-index`). This happens ｵｰﾄﾏﾃｨｯｸﾘｰ on ﾌｧｰｽﾄ `ruyi list`.
 
 ## Module
 
-Declarative NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ruyi ﾗﾝﾀｲﾑ ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ:
+Declarative NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ruyi ﾗﾝﾀｲﾑ configuration:
 
 ```nix
 # flake.nix
@@ -54,7 +54,7 @@ Declarative NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ruyi ﾗﾝﾀｲﾑ ｺﾝﾌｨ
 
 services.ruyi = {
   enable = true;
-  ｾｯﾃｨﾝｸﾞｽﾞ = {
+  settings = {
     packages.prereleases = false;
     repo.remote = "https://github.com/ruyisdk/packages-index.git";
     telemetry.mode = "local";
@@ -63,28 +63,28 @@ services.ruyi = {
 };
 ```
 
-Generates `/etc/xdg/ruyi/ｺﾝﾌｨｸﾞ.toml`, sets ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ variables, ｱﾝﾄﾞ ｵｰﾄ-updates ｻﾞ ﾊﾟｯｹｰｼﾞ index ｵﾝ activation.
+Generates `/etc/xdg/ruyi/config.toml`, sets ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ variables, ｱﾝﾄﾞ auto-updates ｻﾞ ﾊﾟｯｹｰｼﾞ index on activation.
 
-Supports declarative ﾊﾞｰﾁｬﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄs:
+Supports declarative virtual environments:
 
 ```nix
 services.ruyi.venvs.riscv = {
   profile = "gnu-plct";
-  ﾂｰﾙﾁｪｰﾝ = "gnu-plct";
-  dest = "/ﾎｰﾑ/kix/ruyi-venvs/riscv";
+  toolchain = "gnu-plct";
+  dest = "/home/kix/ruyi-venvs/riscv";
 };
 ```
 
 ## NixOS Compatibility
 
-The NixKits ruyi ﾋﾞﾙﾄﾞ includes `ﾊﾟｯﾁes/ruyi-nixos-compat.ﾊﾟｯﾁ`, transparently handling NixOS-specific issues:
+The NixKits ruyi ﾋﾞﾙﾄﾞ includes `patches/ruyi-nixos-compat.ﾊﾟｯﾁ`, transparently handling NixOS-specific issues:
 
-- **Dynamic linker ﾊﾟｽ**: Pre-compiled RISC-V ﾂｰﾙﾁｪｰﾝ binaries (GCC, QEMU, etc.) expect `/lib64/ld-linux-x86-64.so.2`, absent ｵﾝ NixOS. The ﾊﾟｯﾁ reroutes execution ｽﾙｰ ｻﾞ NixOS `ld.so`.
-- **Toolchain sub-ﾌﾟﾛｾｽ repair**: GCC-internal sub-processes ﾗｲｸ `cc1`, `as`, `collect2` bypass ruyi's mux; ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-fixes their ELF interpreter ﾌﾞｲｱ `ﾊﾟｯﾁelf`.
-- **Nix console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: Uses `RUYI_ARGV0` env var ﾄｩ ﾘｶﾊﾞｰ `exec -a` semantics lost ｲﾝ Nix wrappers.
+- **Dynamic linker path**: Pre-compiled RISC-V toolchain binaries (GCC, QEMU, etc.) expect `/lib64/ld-linux-x86-64.so.2`, absent on NixOS. The ﾊﾟｯﾁ reroutes execution through ｻﾞ NixOS `ld.so`.
+- **Toolchain sub-process repair**: GCC-internal sub-processes like `cc1`, `as`, `collect2` bypass ruyi's mux; ｻﾞ ﾊﾟｯﾁ auto-fixes their ELF interpreter via `patchelf`.
+- **Nix console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: Uses `RUYI_ARGV0` env var to recover `exec -a` semantics lost in Nix wrappers.
 
 ## Notes
 
 - Maintained ﾊﾞｲ [ISCAS](https://www.iscas.ac.cn) ﾌｫｱ RISC-V developers
-- Runtime dependencies (curl, gnutar, git, ﾊﾟｯﾁelf, etc.) ｱｰ injected ﾌﾞｲｱ wrapProgram
-- Test coverage: ruff lint, mypy ﾀｲﾌﾟ ﾁｪｯｸs, pytest unit (320), integration (52) — ｵｰﾙ passing
+- Runtime dependencies (curl, gnutar, git, patchelf, etc.) ｱｰ injected via wrapProgram
+- Test coverage: ruff lint, mypy type checks, pytest unit (320), integration (52) — ｵｰﾙ passing

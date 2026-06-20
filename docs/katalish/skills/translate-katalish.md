@@ -1,37 +1,37 @@
 # translate-katalish (Skill)
 
-[中文](../../zh/ｽｷﾙs/translate-katalish.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/translate-katalish.md) | [偽中国語](../../pcn/ｽｷﾙs/translate-katalish.md)
+[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-katalish.md)
 
-> Extra natural-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-writing ｽｷﾙ.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) ﾗﾝｹﾞｰｼﾞ.
+> Extra natural-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing skill.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) ﾗﾝｹﾞｰｼﾞ.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | Coding Agent Skill (ﾗﾝｹﾞｰｼﾞ backend) |
-| Path | `ｽｷﾙs/translate-katalish/SKILL.md` |
-| Called ﾊﾞｲ | write-project-docs (primary), nixkits-ﾁｪｯｸ-updates (indirect) |
+| Type | Coding Agent Skill (ﾗﾝｹﾞｰｼﾞ backend) |
+| Path | `skills/translate-katalish/SKILL.md` |
+| Called ﾊﾞｲ | write-project-docs (primary), nixkits-check-updates (indirect) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- New ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ English→halfwidth-katakana ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ
-- Built-ｲﾝ dictionary (~20 common tech-doc words)
-- Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ ｲﾝ ｻﾞ dictionary
-- Markdown syntax ｱﾝﾄﾞ ｺｰﾄﾞ blocks preserved
-- File naming ｺﾝﾌﾞｴﾝｼｮﾝ: `docs/katalish/<ﾈｰﾑ>.md`
+- New ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — mechanical word-level English→halfwidth-katakana substitution
+- Built-in dictionary (~20 common tech-doc words)
+- Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ in ｻﾞ dictionary
+- Markdown syntax ｱﾝﾄﾞ code blocks preserved
+- File naming convention: `docs/katalish/<name>.md`
 
 ## ﾕｰｾｰｼﾞ
 
-Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ ｵﾙｿ ﾋﾞｰ called directly:
+Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ ｵﾙｿ be called directly:
 
-- "Generate ｱ katakana-english ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ ﾄﾞｷｭﾒﾝﾄ"
+- "Generate ｱ katakana-english ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ document"
 - "Add ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ variant"
-- "Translate ﾄｩ katakana english"
+- "Translate to katakana english"
 
 ## Example
 
 ```
-NixKits — software, patches, NixOS modules ｱﾝﾄﾞ coding agent skills.
+NixKits — software, patches, NixOS modules and coding agent skills.
 ```
 →
 ```

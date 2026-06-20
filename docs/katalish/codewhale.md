@@ -1,16 +1,16 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
+[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/codewhale.md)
 
-ｱ ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾌﾞｳｲﾙﾄ ﾌｫｱ ﾄﾞｴｴﾌﾟｽｴｴｸ V4.
+A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ ﾄﾞｴｴﾌﾟｽｴｴｸ V4.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
 | Version | 0.8.62 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| ﾀｲﾌﾟ | Pre-ﾌﾞｳｲﾙﾄ binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
+| Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| Type | Pre-built binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -24,12 +24,12 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-codewhale                              # interactive ﾃｨｰﾕｰｱｲ
-codewhale "explain ﾃﾞｨｽ function"      # one-shot ﾌﾟﾗｵﾑﾌﾟﾄ
-codewhale --ﾓﾃﾞﾙ ｵｰﾄ "ﾌｨｯｸｽ ﾃﾞｨｽ ﾊﾞｸﾞ"  # ｵｰﾄ-ｾﾙｴｸﾄ ﾓﾃﾞﾙ
-codewhale --yolo                       # ｵｰﾄ-ｱﾌﾟﾙｰﾌﾞ ﾂｰﾙｽﾞ
-codewhale ﾄﾞｸﾀｰ                       # check ｾｯﾄｱｯﾌﾟ
-codewhale ｵｰｽ set --provider deepseek # ｾｰﾌﾞ API key
+codewhale                              # interactive TUI
+codewhale "explain this function"      # one-shot prompt
+codewhale --model auto "fix this bug"  # auto-select model
+codewhale --yolo                       # auto-approve tools
+codewhale doctor                       # check setup
+codewhale auth set --provider deepseek # save API key
 ```
 
-ﾘｸﾜｲｱｽﾞ ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.
+Requires ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.com/api_keys) on ﾌｧｰｽﾄ run.
