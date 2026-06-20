@@ -14,49 +14,49 @@
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ ];
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.mcp-searxng ];
 
 # ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
-ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
 ## ﾌﾙ NixOS ｾｯﾄｱｯﾌﾟ
 
 ```nix
-{ ｺﾝﾌｨｸﾞ, ... }:
-ﾙｴﾄ
-  ｽｴｱﾗｸｽｸｴｲ = "ｲｵｳﾗ_SECRET_KEY";
-ｲﾝ
+{ config, ... }:
+let
+  searxKey = "YOUR_SECRET_KEY";
+in
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ｽｴｱﾗｸｽ = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾗｴﾄﾞｲｽｸﾗｴｱﾄｴﾙｵｸｱﾙﾘｰ = ﾄﾗｳｴ;
-    ｾｯﾃｨﾝｸﾞｽﾞ = {
-      ｻｰﾁ.ﾌｵﾗﾑｱﾄｽﾞ = [ "html" "ｼﾞｪｲｿﾝ" ];
-      ｻｰﾊﾞｰ = {
-        ﾌﾞｲﾝﾄﾞ_address = "127.0.0.1";
-        ﾌﾟｵﾗﾄ = "42701";
-        ｽｴｸﾗｴﾄ_key = ｽｴｱﾗｸｽｸｴｲ;
-        ﾙｲﾑｲﾄｴﾗｽｴﾄﾄｲﾝｸﾞｽﾞ = {
-          ﾌﾞｵﾄﾄﾞｴﾄｴｸｼｮﾝ.ﾄﾗｳｽﾄﾄﾞ_proxies = [ "127.0.0.1/32" ];
-          ﾗｴｱﾙ_ip.ｸｽ_for = 1;
+  services.searx = {
+    enable = true;
+    redisCreateLocally = true;
+    settings = {
+      search.formats = [ "html" "json" ];
+      server = {
+        bind_address = "127.0.0.1";
+        port = "42701";
+        secret_key = searxKey;
+        limiterSettings = {
+          botdetection.trusted_proxies = [ "127.0.0.1/32" ];
+          real_ip.x_for = 1;
         };
       };
     };
   };
 
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾌﾟｵﾗﾄ = 4270;
-    ｴﾝｱﾌﾞﾙｴﾑｵﾄﾞｳﾙｽﾞ = [ "ﾑｵﾄﾞ_access" "ﾑｵﾄﾞ_alias" "ﾑｵﾄﾞ_proxy" "ﾑｵﾄﾞ_setenv" ];
-    ｴｸｽﾄﾗｱｸｵﾝﾌｲｸﾞ = ''
-      ﾌﾟﾗｵｸｽｲ.ｻｰﾊﾞｰ = ( "" => (
-        ( "ﾎｵｽﾄ" => "127.0.0.1", "ﾌﾟｵﾗﾄ" => 42701 )
+  services.lighttpd = {
+    enable = true;
+    port = 4270;
+    enableModules = [ "mod_access" "mod_alias" "mod_proxy" "mod_setenv" ];
+    extraConfig = ''
+      proxy.server = ( "" => (
+        ( "host" => "127.0.0.1", "port" => 42701 )
       ))
-      ｽｴﾄｴﾝﾌﾞ.ｱﾄﾞ-ﾗｴｸｴｽﾄ-header = (
-        "ｸｽ-ﾗｴｱﾙ-IP"       => "%{ﾘﾓｰﾄ-ｱﾄﾞﾄﾞﾗ}ｴ",
-        "ｸｽ-ﾌｵﾗｳｱﾗﾄﾞﾄﾞ-For"  => "%{ﾘﾓｰﾄ-ｱﾄﾞﾄﾞﾗ}ｴ",
-        "ｸｽ-ﾌｵﾗｳｱﾗﾄﾞﾄﾞ-Proto" => "ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ"
+      setenv.add-request-header = (
+        "X-Real-IP"       => "%{remote-addr}e",
+        "X-Forwarded-For"  => "%{remote-addr}e",
+        "X-Forwarded-Proto" => "http"
       )
     '';
   };
@@ -104,21 +104,21 @@ CodeWhale ｽﾄｵﾗｽﾞ ｴﾑｼｰﾋﾟｰ ｺﾝﾌｨｷﾞｭﾚｰ�
 ### ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ｳﾝﾗｴｽﾌﾟｵﾝｽｲﾌﾞｴ
 
 ```bash
-# ﾁｪｯｸ ﾗｴｼﾞｲｽﾄﾗｱｼｮﾝ ｱﾝﾄﾞ ｽﾄｱﾄｳｽﾞ
-codewhale ｴﾑｼｰﾋﾟｰ ﾘｽﾄ
+# Check registration and status
+codewhale mcp list
 
-# ﾍﾞﾘﾌｧｲ ｴﾝﾊﾞｲﾛﾒﾝﾄ ﾌﾞｱﾗｲｱﾌﾞﾙ
-ｸｱﾄ ~/.ﾄﾞｴｴﾌﾟｽｴｴｸ/ｴﾑｼｰﾋﾟｰ.ｼﾞｪｲｿﾝ | ｸﾞﾗｴﾌﾟ -ｱ3 ｻｰｸｽ_URL
+# Verify environment variable
+cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
 ```
 
 ### SearXNG ﾊﾞｯｸｴﾝﾄﾞ ｸｵﾝﾝｴｸﾄｲﾌﾞｲﾄｲ
 
 ```bash
-# ﾍﾞﾘﾌｧｲ SearXNG ｴｰﾋﾟｰｱｲ ｲｽﾞ ﾗｴｱﾁｱﾌﾞﾙ
-ｸｳﾗﾙ -ｽ http://127.0.0.1:42701/config | ﾍｯﾄﾞ -c 100
+# Verify SearXNG API is reachable
+curl -s http://127.0.0.1:42701/config | head -c 100
 
-# ﾏﾆｭｱﾙ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾃｽﾄ (ｼｭｯﾄﾞ ｼｵｳ ｴﾑｼｰﾋﾟｰ ﾎｱﾝﾄﾞｼｱｸｴ)
-ｻｰｸｽ_URL="http://127.0.0.1:42701" ﾄｲﾑｴｵｳﾄ 3 ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
+# Manual MCP server test (should show MCP handshake)
+SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 ```
 
 ### ｻｰﾁ ﾗｴﾄｳﾗﾝｽﾞ ﾉｰ ﾗｴｽｳﾙﾄｽﾞ

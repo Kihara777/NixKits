@@ -30,15 +30,15 @@ NixKits ﾓｼﾞｭｰﾙ (ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ):
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ — ﾘｸﾜｲｱｽﾞ ｱ ﾌﾟｱﾄﾁﾄﾞ ｶﾑﾌｨUI-ﾆｯｸｽ
 {
-  NixKits.ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-  ｽｴﾗﾌﾞｲｸｽﾞ.ｶﾑﾌｨUI.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+  nixkits.comfyui-strix-halo.enable = true;
+  services.comfyui.enable = true;
 }
 ```
 
 ｵｱ ｱﾌﾟﾗｲ ｻﾞ ﾊﾟｯﾁ ﾑｱﾝｳｱﾙﾘｰ:
 
 ```bash
-ｸﾄﾞ ｶﾑﾌｨUI-ﾆｯｸｽ && ﾊﾟｯﾁ -ﾌﾟ1 < ﾊﾟｯﾁｰｽﾞ/ｶﾑﾌｨUI-ﾆｯｸｽ-strix-halo.ﾊﾟｯﾁ
+cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
 ```
 
 ## ﾉｰﾂ

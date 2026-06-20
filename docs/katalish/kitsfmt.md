@@ -15,11 +15,11 @@
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-kitsfmt ﾌｧｲﾙ.ﾆｯｸｽ             # ｱｳﾄﾌﾟｯﾄ ﾄｩ ｽﾄﾄﾞｵｳﾄ
-kitsfmt --ｲﾝﾌﾟﾙｱｽｴ ﾌｧｲﾙ.ﾆｯｸｽ   # ｲﾝ-ﾌﾟﾙｱｽｴ ﾌｵﾗﾑｱﾄ
-kitsfmt --ﾁｪｯｸ ﾌｧｲﾙ.ﾆｯｸｽ     # ﾁｪｯｸ ﾌｫｰﾏｯﾃｨﾝｸﾞ
-kitsfmt --ﾉｰ-best-practices  # ﾃﾞｨｾｰﾌﾞﾙ ｵｰﾄ-ﾌｨｯｸｼｰｽﾞ
-kitsfmt ﾌｧｲﾙ1.ﾆｯｸｽ ﾌｧｲﾙ2.ﾆｯｸｽ  # ﾑｳﾙﾄｲﾌﾟﾙｴ ﾌｧｲﾙｽﾞ
+kitsfmt file.nix             # output to stdout
+kitsfmt --inplace file.nix   # in-place format
+kitsfmt --check file.nix     # check formatting
+kitsfmt --no-best-practices  # disable auto-fixes
+kitsfmt file1.nix file2.nix  # multiple files
 ```
 
 ｴﾇﾌﾞｲ ﾌﾞｱﾗｽﾞ: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
@@ -28,10 +28,10 @@ kitsfmt ﾌｧｲﾙ1.ﾆｯｸｽ ﾌｧｲﾙ2.ﾆｯｸｽ  # ﾑｳﾙﾄｲ
 
 ```nix
 # ﾀﾞｲﾚｸﾄ
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.kitsfmt ];
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
 
 # ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ (ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ)
-ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];  # → ﾌﾟｸｸﾞｽﾞ.kitsfmt
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
 
 # ｱｽﾞ ﾆｯｸｽ ﾌﾑﾄ ﾌｫｰﾏｯﾀｰ
 # ﾌｫｰﾏｯﾀｰ.${ｼｽﾃﾑ} = ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾌｫｰﾏｯﾀｰ.${ｼｽﾃﾑ};

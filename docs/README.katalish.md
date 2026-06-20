@@ -8,10 +8,10 @@ NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰ
 
 ```nix
 # ﾘﾓｰﾄ
-ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+inputs.nix-kits.url = "github:Kihara777/NixKits";
 
 # ﾛｰｶﾙ
-ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "/ﾎｰﾑ/ｸｲｸｽ/NixKits";
+inputs.nix-kits.url = "/home/kix/NixKits";
 ```
 
 ## ｿﾌﾄｳｪｱ
@@ -33,7 +33,7 @@ NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰ
 `nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-use ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
 
 ```bash
-ﾆｯｸｽ ﾚｼﾞｽﾄﾘ ｱﾄﾞ ﾆｯｸｽ-ｸｲﾄｽﾞ ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits
+nix registry add nix-kits github:Kihara777/NixKits
 ```
 
 | ﾊﾟｯｹｰｼﾞ | `nix develop` |

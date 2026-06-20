@@ -22,12 +22,12 @@
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+  nixpkgs.overlays = [ nix-kits.overlays.default ];
 }
 
-ｽｴﾗﾌﾞｲｸｽﾞ.ｶﾑﾌｨUI = {
-  ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-  ﾗｵｸﾑｸﾞﾌｸｽｵﾌﾞｴﾗﾗｲﾄﾞｴ = "11.5.1";
+services.comfyui = {
+  enable = true;
+  rocmGfxOverride = "11.5.1";
 };
 ```
 

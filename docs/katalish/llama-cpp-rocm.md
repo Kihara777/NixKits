@@ -16,8 +16,8 @@
 
 ```nix
 {
-  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾗﾏ-cpp-rocm ];
-  ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
 
@@ -30,100 +30,100 @@
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
+      modules = [
+        nix-kits.nixosModules.llama-cpp-rocm
         {
-          ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-            ﾌﾟｵﾗﾄ = 2027;
+          services.llama-cpp = {
+            enable = true;
+            package = pkgs.llama-cpp-rocm;
+            port = 2027;
           };
-          NixKits.ﾗﾏ-cpp-rocm = {
-            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-            ﾕｰｻﾞｰ = "ｸｲｸｽ";
-            ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-            ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
+          nixkits.llama-cpp-rocm = {
+            enable = true;
+            user = "kix";
+            group = "users";
+            modelsPreset = {
               "*" = {
-                ﾌﾟﾗｴｽｴﾝｽｴ-ﾌﾟｴﾝｱﾙﾄｲ = "0.0";
-                ﾗｴﾌﾟｴｱﾄ-ﾌﾟｴﾝｱﾙﾄｲ   = "1.0";
-                ﾌﾙｱｼ-ｱﾄﾄﾝ       = "ｵﾝ";
-                ﾝ-ｸﾞﾌﾟｳ-layers     = "99";
-                ｷｬｯｼｭ-ﾀｲﾌﾟ-k     = "ｸ4_0";
-                ｷｬｯｼｭ-ﾀｲﾌﾟ-v     = "ｸ4_0";
-                ｽﾗｴｱﾄﾞｽﾞ          = "32";
-                ﾑﾑｱﾌﾟ             = "ｵﾌﾌ";
-                ｳｱﾗﾑｳﾌﾟ           = "ｵﾝ";
-                ｼﾞｲﾝｼﾞｱ            = "ｵﾝ";
-                ﾌｲﾄ              = "ｵﾌﾌ";
-                ﾌﾟﾗｲｵ             = "3";
+                presence-penalty = "0.0";
+                repeat-penalty   = "1.0";
+                flash-attn       = "on";
+                n-gpu-layers     = "99";
+                cache-type-k     = "q4_0";
+                cache-type-v     = "q4_0";
+                threads          = "32";
+                mmap             = "off";
+                warmup           = "on";
+                jinja            = "on";
+                fit              = "off";
+                prio             = "3";
               };
-              "ｸｳｴﾝ3.6-27B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.6-27B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.6-27B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.6-27B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.6-27B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3.6-35B-A3B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.6-35B-A3B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.6-35B-A3B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.6-35B-A3B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.6-35B-A3B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.6-35B-A3B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3.5-122B-A10B-MTP" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ              = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3.5-122B-A10B-MTP-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ                = "ｸｳｴﾝ3.5-122B-A10B-MTP";
-                ﾄｴﾑﾌﾟ                 = "0.6";
-                ﾄｵﾌﾟ-ﾌﾟ                = "0.95";
-                ﾄｵﾌﾟ-ｸ                = "20";
-                ﾑｲﾝ-ﾌﾟ                = "0.00";
-                ｸﾄｸｽ-ｽｲｽﾞｴ             = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ         = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ           = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx        = "262144";
-                ｽﾌﾟｴｸ-ﾀｲﾌﾟ            = "ﾄﾞﾗｱﾌﾄ-ﾑﾄﾌﾟ";
-                ｽﾌﾟｴｸ-ﾄﾞﾗｱﾌﾄ-n-max     = "2";
+              "Qwen3.5-122B-A10B-MTP" = {
+                hf-repo              = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
+                alias                = "Qwen3.5-122B-A10B-MTP";
+                temp                 = "0.6";
+                top-p                = "0.95";
+                top-k                = "20";
+                min-p                = "0.00";
+                ctx-size             = "1048576";
+                rope-scaling         = "yarn";
+                rope-scale           = "4";
+                yarn-orig-ctx        = "262144";
+                spec-type            = "draft-mtp";
+                spec-draft-n-max     = "2";
               };
-              "ｸｳｴﾝ3-Coder-Next" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ       = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF:ｳﾄﾞ-ｸ4_K_XL";
-                ｱﾙｲｱｽﾞ         = "ｸｳｴﾝ3-Coder-Next";
-                ﾄｴﾑﾌﾟ          = "1.0";
-                ﾄｵﾌﾟ-ﾌﾟ         = "0.95";
-                ﾄｵﾌﾟ-ｸ         = "40";
-                ﾑｲﾝ-ﾌﾟ         = "0.01";
-                ｽｴﾄﾞ          = "3407";
-                ｸﾄｸｽ-ｽｲｽﾞｴ      = "1048576";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｲﾝｸﾞ  = "ｲｱﾗﾝ";
-                ﾗｵﾌﾟｴ-ｽｸｱﾙｴ    = "4";
-                ｲｱﾗﾝ-ｵﾗｲｸﾞ-ctx = "262144";
+              "Qwen3-Coder-Next" = {
+                hf-repo       = "unsloth/Qwen3-Coder-Next-GGUF:UD-Q4_K_XL";
+                alias         = "Qwen3-Coder-Next";
+                temp          = "1.0";
+                top-p         = "0.95";
+                top-k         = "40";
+                min-p         = "0.01";
+                seed          = "3407";
+                ctx-size      = "1048576";
+                rope-scaling  = "yarn";
+                rope-scale    = "4";
+                yarn-orig-ctx = "262144";
               };
-              "ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7" = {
-                ﾎﾌ-ﾗｴﾌﾟｵ  = "ｳﾝｽﾙｵｽ/ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7-GGUF:ｳﾄﾞ-ｸ2_K_XL";
-                ｱﾙｲｱｽﾞ    = "ﾑｲﾝｲﾑｱｸｽ-ﾑ2.7";
-                ﾄｴﾑﾌﾟ     = "1.0";
-                ﾄｵﾌﾟ-ﾌﾟ    = "0.95";
-                ﾄｵﾌﾟ-ｸ    = "40";
-                ﾑｲﾝ-ﾌﾟ    = "0.01";
-                ｸﾄｸｽ-ｽｲｽﾞｴ = "196608";
+              "MiniMax-M2.7" = {
+                hf-repo  = "unsloth/MiniMax-M2.7-GGUF:UD-Q2_K_XL";
+                alias    = "MiniMax-M2.7";
+                temp     = "1.0";
+                top-p    = "0.95";
+                top-k    = "40";
+                min-p    = "0.01";
+                ctx-size = "196608";
               };
             };
           };
@@ -173,41 +173,41 @@
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ
-{ ﾓｼﾞｭｰﾙｽﾞ = [
+{ modules = [
     # ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm  # ← ﾉｯﾄ ｲｴﾄ ｲﾑﾌﾟｵﾗﾄﾄﾞ
 ];}
 
 # ﾗﾏ-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp-rocm = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾕｰｻﾞｰ = "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
+  services.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
   };
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-    ﾌﾟｵﾗﾄ = 2027;
-    ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
-      "ｸｳｴﾝ3-Coder-Next" = {
-        ﾎﾌ-ﾗｴﾌﾟｵ = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF";
-        ﾎﾌ-ﾌｧｲﾙ = "ｸｳｴﾝ3-Coder-Next-UD-Q4_K_XL.ｸﾞｸﾞｳﾌ";
-        ﾄｴﾑﾌﾟ = "1.0";
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    port = 2027;
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
       };
     };
   };
   # ﾏﾆｭｱﾙ ｽｲｽﾄｴﾑﾄﾞ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ = {
-    ﾄﾞｲﾝｱﾑｲｸｳｽｴﾗ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾌﾟﾗｲﾌﾞｱﾄｴｳｽｴﾗｽﾞ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾌﾟﾗｵﾄｴｸｽｵﾑｴ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ ﾌｱﾙｽｴ;
-    ﾕｰｻﾞｰ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ﾕｰｻﾞｰｽﾞ";
-    ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-      "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-      "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  systemd.services.llama-cpp.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    PrivateUsers = lib.mkForce false;
+    ProtectHome = lib.mkForce false;
+    User = lib.mkForce "kix";
+    Group = lib.mkForce "users";
+    Environment = lib.mkForce [
+      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
-    ﾌﾟﾗｵｸｽｳﾌﾞｽｴﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ "ｵｰﾙ";
+    ProcSubset = lib.mkForce "all";
   };
 }
 ```
@@ -216,34 +216,34 @@
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ — ﾓｼﾞｭｰﾙ ﾘｽﾄ (ﾆｭｰ)
-{ ﾓｼﾞｭｰﾙｽﾞ = [
-    ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗﾏ-cpp-rocm
+{ modules = [
+    nix-kits.nixosModules.llama-cpp-rocm
 ];}
 
 # ﾗﾏ-cpp.ﾆｯｸｽ
 {
-  ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾊﾟｯｹｰｼﾞ = ﾌﾟｸｸﾞｽﾞ.ﾗﾏ-cpp-rocm;
-    ｾｯﾃｨﾝｸﾞｽﾞ.ﾌﾟｵﾗﾄ = 2027;
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-rocm;
+    settings.port = 2027;
   };
-  NixKits.ﾗﾏ-cpp-rocm = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾕｰｻﾞｰ = "ｸｲｸｽ";
-    ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
-    ﾎﾌｸｱﾁｴﾄﾞｲﾗ = "/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ";
-    ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ = {
-      "ｸｳｴﾝ3-Coder-Next" = {
-        ﾎﾌ-ﾗｴﾌﾟｵ = "ｳﾝｽﾙｵｽ/ｸｳｴﾝ3-Coder-Next-GGUF";
-        ﾎﾌ-ﾌｧｲﾙ = "ｸｳｴﾝ3-Coder-Next-UD-Q4_K_XL.ｸﾞｸﾞｳﾌ";
-        ﾄｴﾑﾌﾟ = "1.0";
+  nixkits.llama-cpp-rocm = {
+    enable = true;
+    user = "kix";
+    group = "users";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    modelsPreset = {
+      "Qwen3-Coder-Next" = {
+        hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
+        hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
+        temp = "1.0";
       };
     };
   };
   # ｴｸｽﾄﾗｱ ｴﾇﾌﾞｲ ﾌﾞｱﾗｽﾞ ﾉｯﾄ ｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ NixKits ｵﾌﾟｼｮﾝｽﾞ
-  ｽｲｽﾄｴﾑﾄﾞ.ｽｴﾗﾌﾞｲｸｽﾞ.ﾗﾏ-cpp.ｽｴﾗﾌﾞｲｽｴｸｵﾝﾌｲｸﾞ.ｴﾝﾊﾞｲﾛﾒﾝﾄ = ﾙｲﾌﾞ.ﾑｸﾌｵﾗｽｴ [
-    "ﾗﾏ_CACHE=/ﾎｰﾑ/ｸｲｸｽ/.ｷｬｯｼｭ/ﾎｳｸﾞｼﾞｲﾝｸﾞﾌｱｽｴ/ﾎｳﾌﾞ"
-    "ｸﾞｸﾞﾑﾙ_CUDA_ENABLE_UNIFIED_MEMORY=1"
+  systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
+    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

@@ -19,12 +19,12 @@
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
 {
-  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
+  inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
-    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｴｸﾞｻﾞﾝﾌﾟﾙ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
-      ﾓｼﾞｭｰﾙｽﾞ = [
-        { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ ]; }
+  outputs = { nixpkgs, nix-kits, ... }: {
+    nixosConfigurations.example = nixpkgs.lib.nixosSystem {
+      modules = [
+        { nixpkgs.overlays = [ nix-kits.overlays.mihomo-alpha ]; }
       ];
     };
   };
