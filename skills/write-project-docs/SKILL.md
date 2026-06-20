@@ -173,13 +173,26 @@ nix registry add <project> <remote-url>
 
 ### 第 2 步：模块分类
 
-按功能类别分组。常见模式：
+按功能类别分组。**优先从项目配置自动提取分类**，而非手动判断。
+
+对于 Nix flake 项目，通过以下入口自动发现类别：
+
+| 分类 | 发现方式 | 示例 |
+|------|---------|------|
+| 软件 | `packages/*.nix` 中的 `callPackage` 调用 | `packages/ruyi.nix` |
+| 模块 | `modules/*.nix` 中的 NixOS 模块定义 | `modules/ruyi.nix` |
+| 覆盖层 | `overlays/*.nix` 中的 overlay 函数 | `overlays/ruyi-nixos-compat.nix` |
+| 技能 | `skills/*/SKILL.md` 中的 frontmatter | `skills/write-project-docs/SKILL.md` |
+| 开发 | `devShells` 在 `flake.nix` 中的定义 | `devShells.ruyi` |
+
+对于非 Nix 项目，按目录/文件模式类推（如 `src/`、`services/`、`tools/`）。
+
+常见模式：
 - 基础设施 / 核心服务
 - 用户面服务
 - 代理 / 缓存
-- 导航 / 入口
 - 静态内容 / 链接
-- 开发 / devShell（提供 `nix develop` 环境的包）
+- 开发 / devShell
 - 技能 / 操作指南
 
 ### 第 3 步：创建目录结构

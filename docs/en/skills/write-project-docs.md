@@ -50,6 +50,18 @@ Column mapping: `基本信息` → `Info` / `基本情報` / `基本情報`, `�
 - Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
 - After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
 
+## Bidirectional Auto-Discovery
+
+This skill and `translate-*` translation skills discover each other via naming conventions:
+
+| Direction | Mechanism |
+|-----------|----------|
+| Doc generation → translate skill | Scans `skills/translate-*/`, reads `language_code`/`display_name`/`base_language` from each SKILL.md frontmatter |
+| Translate skill → This project | Each skill declares a "Relationship with other skills" table in its SKILL.md, specifying the call chain |
+| Language code → Path | `language_code` → directory naming, file extension; `display_name` → language switcher label |
+
+Translate skill docs themselves follow this template, closing the loop: doc generation → translation invocation → translate skill doc generation.
+
 ## Usage
 
 Activated when the user asks to "write documentation" or "generate docs in NixKits style".

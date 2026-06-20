@@ -1,6 +1,6 @@
 # write-project-docs (Skill)
 
-[中文](write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md)
+[中文](write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > 按 NixKits 风格为任意项目编写完整的多语言文档系统 — 中英日+ｶﾀﾘｯｼｭ四语、简洁、表驱动。
 
@@ -52,6 +52,18 @@ done
 - 根目录仅保留中文无后缀 `.md`，本地化版本（`*.en.md`、`*.ja.md`、`*.katalish.md`）移入 `docs/`
 - 所有语言必须包含基本信息表格（中文 `## 基本信息`、英文 `## Info`、日文 `## 基本情報`、各语言按 `translate-*` 技能定义的列名）
 - 补丁/模块源码变更后，「修正内容」/「功能」列表必须同步更新，每条 bullet 对应实际修改
+
+## 双向自动发现
+
+本技能与 `translate-*` 翻译技能之间通过命名约定实现双向发现：
+
+| 方向 | 机制 |
+|------|------|
+| 文档生成 → 翻译技能 | 扫描 `skills/translate-*/` 目录，读取各 SKILL.md 的 `language_code`/`display_name`/`base_language` |
+| 翻译技能 → 本项目 | 各技能在 SKILL.md 中声明「与其他技能的关系」表，明确调用链 |
+| 语言代码 → 路径 | `language_code` → 目录命名、文件扩展名；`display_name` → 语言切换器标签 |
+
+翻译技能文档自身也遵循本模板，形成闭环：文档生成 → 翻译调用 → 翻译技能文档生成。
 
 ## 使用
 
