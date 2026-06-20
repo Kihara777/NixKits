@@ -1,6 +1,6 @@
 # rog-control-center-fix
 
-[中文](../../zh/rog-control-center-fix.md) | [English](../../en/rog-control-center-fix.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/rog-control-center-fix.md) | [偽中国語](../../pcn/rog-control-center-fix.md)
+[中文](../../zh/rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | [Katalish](../katalish/rog-control-center-fix.md) | Pseudo-Chinese
 
 asusd 時 `asus-shutdown.service` 修正
 

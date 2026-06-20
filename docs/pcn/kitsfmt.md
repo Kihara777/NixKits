@@ -1,6 +1,6 @@
 # kitsfmt
 
-[中文](../../zh/kitsfmt.md) | [English](../../en/kitsfmt.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/kitsfmt.md) | [偽中国語](../../pcn/kitsfmt.md)
+[中文](../../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [Katalish](../katalish/kitsfmt.md) | Pseudo-Chinese
 
 **Nix 格式化器** — rnix AST 属性保持正規化
 
