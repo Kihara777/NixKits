@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| Version | 1.4.0 |
+| Version | 1.6.0 |
 | Upstream | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## Install
