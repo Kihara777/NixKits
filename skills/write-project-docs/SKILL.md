@@ -237,7 +237,7 @@ mkdir -p docs/{zh,en,ja}/skills docs/{katalish,pcn}/skills  # ← 扩展语言
 
 每个模块创建 3 个文件（zh/en/ja）。先写主语言版本作为基准，再翻译。
 
-对于追加语言翻译（如 Katalish、Pseudo-Chinese），按 `translate-*` 命名约定自动发现语言扩展技能：
+对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现语言扩展技能：
 
 ```
 # 自动发现算法：
@@ -260,7 +260,7 @@ done
 - **语言切换器**：所有语言入口标签统一使用该语言的 `display_name`（语言自称）。
   核心语言（zh/en/ja）的 display_name 即为 `中文` / `English` / `日本語`；
   扩展语言的 display_name 由各 `translate-*` 技能 frontmatter 声明
-  （如 katalish→`ｶﾀﾘｯｼｭ`、pcn→`偽中国語`）。
+  （如 `katalish`→`ｶﾀﾘｯｼｭ`、`pcn`→`偽中国語`）。
   - 根文件和多语言 README/MAINTENANCE 中：`[<display_name>](docs/README.<code>.md)`
   - 各子目录文件中：当前语言自身标签 = `<display_name>`（纯文本），
     其他语言 = `<display_name>`（链接）
@@ -382,7 +382,9 @@ done
 - 补丁/模块源码变更后，文档的「修正内容」/「功能」列表 **必须同步更新**，
   每条 bullet 应直接对应源码中的一处实际修改
 - 不要让文档与源码实际变更不同步 — 过时的 bullet 或重复条目会误导用户
-- **不要将语言扩展翻译应用到代码块内部** — 调用 translate-* 技能生成扩展语言文档时，
-  必须先用 ` ``` ` 边界提取所有代码块，仅对非代码块区域应用翻译规则。
-  代码块内标识符（`systemPackages`、`--model`）、URL、环境变量名完全不动。
-  反面教材：`environment.systemPackages` → `environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ`（严重违规）
+- **代码块翻译规则与 translate-* 技能保持一致** — 调用 translate-* 技能生成扩展语言文档时：
+  - 必须先用 ` ``` ` 边界提取所有代码块，仅对非代码块区域应用翻译规则
+  - Nix 代码块：仅翻译 `#` 注释，标识符完全不动
+  - Bash 代码块：全部内容保持原样（命令行参数、子命令均不翻译）
+  - 代码块内标识符（`systemPackages`、`--model`）、URL、环境变量名完全不动
+  - 反面教材：`environment.systemPackages` → `environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ`（严重违规）
