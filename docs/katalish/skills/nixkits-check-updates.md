@@ -1,6 +1,6 @@
 # NixKits-ﾁｪｯｸ-updates (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [ｲﾝｸﾞﾘｯｼｭ](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/nixkits-check-updates.md)
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/nixkits-check-updates.md)
 
 > ﾁｴｯｸｽﾞ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ﾌｫｱ ｵｰﾙ NixKits ﾊﾟｯｹｰｼﾞｰｽﾞ ｱﾝﾄﾞ ﾊﾟｯﾁｰｽﾞ. ｵｰﾄ-ｳﾌﾟｸﾞﾗｱﾄﾞｽﾞ, ｽｲﾝｸｽﾞ ﾄﾞｷｭｽﾞ, ｳﾗｲﾄｽﾞ ﾌｨｯｸｼｰｽﾞ ﾄｩ ﾒﾝﾃﾅﾝｽ ﾛｸﾞ.
 

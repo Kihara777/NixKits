@@ -1,6 +1,6 @@
 # ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ (ｽｷﾙ)
 
-[中文](../../zh/skills/translate-pseudocn.md) | [ｲﾝｸﾞﾘｯｼｭ](../../en/skills/translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/translate-pseudocn.md)
+[中文](../../zh/skills/translate-pseudocn.md) | [English](../../en/skills/translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md) | Katalish | [Pseudo-Chinese](../../pcn/skills/translate-pseudocn.md)
 
 > ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ. ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs.
 

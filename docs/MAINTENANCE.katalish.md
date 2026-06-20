@@ -1,6 +1,6 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
-[中文](../MAINTENANCE.md) | [ｲﾝｸﾞﾘｯｼｭ](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | Katalish | [Pseudo-Chinese](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | Katalish | [Pseudo-Chinese](MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
 
