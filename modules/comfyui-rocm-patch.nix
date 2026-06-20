@@ -1,14 +1,13 @@
-# NixKits module: comfyui-rocm-patch
+# ComfyUI ROCm Patch Module — extends upstream comfyui-nix without forking
 #
-# Extends upstream comfyui-nix NixOS module without forking.
-# Declares rocmGfxOverride option and applies ROCm-specific tweaks:
+# Applies the module-level changes from NixKits patches/comfyui-nix-strix-halo.patch:
 #   - rocmGfxOverride option (HSA_OVERRIDE_GFX_VERSION)
 #   - --disable-xformers in ROCm mode (nixpkgs xformers lacks ROCm backend)
 #   - C build toolchain (gcc, binutils, make) for custom node compilation
 #   - CC=gcc environment variable
 #
-# Companion module: comfyui-strix-halo.nix (uses rocmGfxOverride)
-# Companion overlay: overlays/comfyui-rocm-wheels.nix (optional ROCm 7.2 wheels)
+# Wheel version upgrades (ROCm 7.2 / PyTorch 2.12.0) are handled by
+# the accompanying patch applied to comfyui-nix via nixpkgs overlay.
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.comfyui;
@@ -36,6 +35,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Apply the Strix Halo patch to comfyui package
+    nixpkgs.overlays = [
+      (final: prev: {
+        comfyui = prev.comfyui.overrideAttrs (old: {
+          patches = (old.patches or []) ++ [
+            # ROCm 7.2 wheels + Strix Halo (gfx1151/RDNA3.5) support
+            ../patches/comfyui-nix-strix-halo.patch
+          ];
+        });
+      })
+    ];
+
     # Disable xformers in ROCm mode (nixpkgs xformers lacks ROCm backend)
     services.comfyui.extraArgs = lib.optionals useRocm [ "--disable-xformers" ];
 
