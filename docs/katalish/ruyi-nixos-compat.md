@@ -1,33 +1,33 @@
 # ruyi-nixos-compat
 
-[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [ruyi-nixos-compat] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [ruyi-nixos-compat] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [ruyi-nixos-compat] . md )
+[中文](../zh/ruyi-nixos-compat.md) | [English](ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md)
 
-[Provides] ﾆｯｸｽOS [runtime] ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ﾙｲｰ : [pre-compiled] RISC-V ﾂｰﾙﾁｪｰﾝ [binaries] [cannot] ﾗﾝ [directly] ｵﾝ ﾆｯｸｽOS [because] ｻﾞ [expected] ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/ [lib64] / [ld-linux-x86-64] . so . 2 ` [does] ﾉｯﾄ [exist] . ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ [transparently] [addresses] ﾃﾞｨｽ [via] ｱ ﾊﾟｯﾁ .
+ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ NixOS ﾗﾝﾀｲﾑ compatibility ﾌｫｱ ﾙｲｰ: pre-compiled RISC-V toolchain binaries cannot ﾗﾝ directly ｵﾝ NixOS because ｻﾞ ｴｸｽﾍﾟｸﾃｨｯﾄﾞ ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` does ﾉｯﾄ exist. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ transparently addresses ﾃﾞｨｽ via ｱ ﾊﾟｯﾁ.
 
 ## Scope
 
-[Required] ﾌｫｱ ﾆｯｸｽOS [users] ﾌｰ [download] ｱﾝﾄﾞ [execute] RISC-V [cross-compilation] [toolchains] ( ｼﾞｰｼｰｼｰ , ｷｭｰｴﾐｭｰ , [etc] .) [via] ﾙｲｰ . [Users] ﾉｯﾄ [working] ｳｨｽﾞ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do ﾉｯﾄ [need] ﾄｩ [enable] ｲｯﾄ .
+Required ﾌｫｱ NixOS ﾕｰｻﾞｰｽﾞ ﾌｰ download ｱﾝﾄﾞ execute RISC-V cross-compilation toolchains (GCC, QEMU, etc.) via ﾙｲｰ. ﾕｰｻﾞｰｽﾞ ﾉｯﾄ ﾜｰｷﾝｸﾞ ｳｨｽﾞ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do ﾉｯﾄ ﾆｰﾄﾞ ﾄｩ ｲﾈｰﾌﾞﾙ ｲｯﾄ.
 
-## Install
+## ｲﾝｽﾄｰﾙ
 
 ```nix
-[nixpkgs] . [overlays] = [
-[nix-kits] . [overlays] . [ruyi-nixos-compat] # [standalone] ｵｰﾊﾞｰﾚｲ
+nixpkgs.overlays = [
+  nix-kits.overlays.ruyi-nixos-compat  # standalone ｵｰﾊﾞｰﾚｲ
 ];
 ```
 
-## Features
+## ﾌｨｰﾁｬｰｽﾞ
 
-- ** ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ [reroute] [**:] [Replaces] [embedded] [FHS] [paths] ｳｨｽﾞ ｻﾞ ﾆｯｸｽOS ` ld . so `
-- ** ﾂｰﾙﾁｪｰﾝ [sub-process] [repair] [**:] [GCC-internal] [sub-processes] (` [cc1] `, ` ｱｽﾞ `, ` [collect2] `) ｱｰ [auto-fixed] [via] ` [patchelf] `
-- ** ﾆｯｸｽ [console_scripts] [compat] [**:] [Uses] ` [RUYI_ARGV0] ` ﾄｩ [recover] ` ｴｸﾞｾﾞｯｸ -a ` [semantics]
+- **ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ reroute**: Replaces embedded FHS paths ｳｨｽﾞ ｻﾞ NixOS `ld.so`
+- **Toolchain sub-process repair**: GCC-internal sub-processes (`cc1`, `as`, `collect2`) ｱｰ auto-fixed via `patchelf`
+- **ﾆｯｸｽ console_scripts compat**: ﾕｰｼｰｽﾞ `RUYI_ARGV0` ﾄｩ ﾘｶﾊﾞｰ `exec -a` semantics
 
 ## Design
 
-[Minimally] [invasive] : ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ [activates] [inside] ﾙｲｰ ｳｪﾝ ｱ ﾆｯｸｽOS ｴﾝﾊﾞｲﾛﾒﾝﾄ ｲｽﾞ [detected] ｱﾝﾄﾞ ｱ [pre-compiled] ﾂｰﾙﾁｪｰﾝ ｲｽﾞ [about] ﾄｩ ﾋﾞｰ ` [execv] ` 'd . ｵﾝ [non-NixOS] [systems] ｻﾞ ﾊﾟｯﾁ [logic] ｲｽﾞ [completely] [short-circuited] .
+Minimally invasive: ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ activates inside ﾙｲｰ ｳｪﾝ ｱ NixOS ｴﾝﾊﾞｲﾛﾒﾝﾄ ｲｽﾞ detected ｱﾝﾄﾞ ｱ pre-compiled toolchain ｲｽﾞ about ﾄｩ ﾋﾞｰ `execv`'d. ｵﾝ non-NixOS systems ｻﾞ ﾊﾟｯﾁ logic ｲｽﾞ completely short-circuited.
 
 ## Verification
 
 ```bash
-# check whether the nixos_compat module is loaded
-[find] / ﾆｯｸｽ / [store] /* [-ruyi-] */ ﾘﾌﾞ [-name] ['nixos_compat] . [py']
+# ﾁｪｯｸ whether ｻﾞ nixos_compat ﾓｼﾞｭｰﾙ ｲｽﾞ loaded
+find /ﾆｯｸｽ/store/*-ruyi-*/ﾘﾌﾞ -name 'nixos_compat.py'

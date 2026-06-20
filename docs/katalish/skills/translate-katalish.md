@@ -1,39 +1,39 @@
-# translate-katalish (Skill)
+# translate-katalish (ｽｷﾙ)
 
-[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [translate-katalish] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [translate-katalish] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [translate-katalish] . md )
+[中文](../../zh/skills/translate-katalish.md) | [English](translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md)
 
-> [Extra] [natural-language] ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ [document-writing] ｽｷﾙ . [Adds] ｻﾞ [ｶﾀﾘｯｼｭ] ( ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ ) ﾗﾝｹﾞｰｼﾞ .
+> Extra natural-language ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing ｽｷﾙ.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) ﾗﾝｹﾞｰｼﾞ.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ ( ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ )
-ﾊﾟｽ|` ｽｷﾙｽﾞ / translate - ｶﾀﾘｯｼｭ / ｽｷﾙ . md `
-Called ﾊﾞｲ|ﾗｲﾄ - ﾌﾟﾛｼﾞｪｸﾄ - ﾄﾞｷｭｽﾞ ( primary ) , nixkits - ﾁｪｯｸ - updates ( indirect )
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ (ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ) |
+| ﾊﾟｽ | `skills/translate-katalish/SKILL.md` |
+| ｺｰﾙﾄﾞ ﾊﾞｲ | write-project-docs (primary), nixkits-check-updates (indirect) |
 
-## Features
+## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾆｭｰ [ｶﾀﾘｯｼｭ] ﾗﾝｹﾞｰｼﾞ — [mechanical] [word-level] ｲﾝｸﾞﾘｯｼｭ → [halfwidth-katakana] [substitution]
-- [Built-in] [dictionary] (~ 20 [common] [tech-doc] [words] )
-- [Rule-based] [phonetic] [fallback] ﾌｫｱ [words] ﾉｯﾄ ｲﾝ ｻﾞ [dictionary]
-- [Markdown] [syntax] ｱﾝﾄﾞ ｺｰﾄﾞ [blocks] [preserved]
-- ﾌｧｲﾙ [naming] [convention] : ` ﾄﾞｷｭｽﾞ / ｶﾀﾘｯｼｭ /< ﾈｰﾑ >. md `
+- ﾆｭｰ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — mechanical word-level English→halfwidth-katakana substitution
+- Built-in dictionary (~20 common tech-doc words)
+- Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ ｲﾝ ｻﾞ dictionary
+- Markdown syntax ｱﾝﾄﾞ ｺｰﾄﾞ blocks preserved
+- ﾌｧｲﾙ naming convention: `docs/katalish/<name>.md`
 
-## Usage
+## ﾕｰｾｰｼﾞ
 
-[Automatically] [invoked] ﾊﾞｲ [write-project-docs] ｳｪﾝ [producing] [ｶﾀﾘｯｼｭ] [documents] ; ｷｬﾝ ｵﾙｿ ﾋﾞｰ [called] [directly] :
+Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ ﾄﾞｷｭﾒﾝﾄｽﾞ; ｷｬﾝ ｵﾙｿ ﾋﾞｰ ｺｰﾙﾄﾞ directly:
 
-- " [Generate] ｱ [katakana-english] ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ [document] "
-- " ｱﾄﾞ [ｶﾀﾘｯｼｭ] ﾗﾝｹﾞｰｼﾞ [variant] "
-- " [Translate] ﾄｩ ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ "
+- "ｼﾞｪﾈﾚｲﾄ ｱ katakana-english ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ ﾄﾞｷｭﾒﾝﾄ"
+- "ｱﾄﾞ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ variant"
+- "Translate ﾄｩ katakana english"
 
-## Example
+## ｴｸﾞｻﾞﾝﾌﾟﾙ
 
 ```
-NixKits — ｿﾌﾄｳｪｱ , ﾊﾟｯﾁｰｽﾞ , ﾆｯｸｽOS ﾓｼﾞｭｰﾙｽﾞ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙｽﾞ .
+NixKits — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS ﾓｼﾞｭｰﾙｽﾞ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙｽﾞ.
 ```
 →
 ```
-[ﾆｯｸｽｷｯﾄ] — [ｿﾌﾄｳｪｱ] , [ﾊﾟｯﾁｰｽﾞ] , [ﾆｯｸｽOS] [ﾓｼﾞｭｰﾙ] [ｱﾝﾄﾞ] [ｺｰﾃﾞｨﾝｸﾞ] [ｴｰｼﾞｪﾝﾄ] [ｽｷﾙ] .
+ﾆｯｸｽｷｯﾄ — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ.
 ```

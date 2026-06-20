@@ -1,35 +1,35 @@
 # codewhale
 
-[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [codewhale] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [codewhale] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [codewhale] . md )
+[中文](../zh/codewhale.md) | [English](codewhale.md) | [日本語](../ja/codewhale.md)
 
-ｱ [terminal] ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ [built] ﾌｫｱ [DeepSeek] V4 .
+ｱ ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ DeepSeek V4.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾊﾞｰｼﾞｮﾝ|0 . 8 . 60
-Upstream|[ Hmbown / CodeWhale ] ( https : / / github . com / Hmbown / CodeWhale )
-ﾀｲﾌﾟ|Pre - built binaries ( GitHub Releases )
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾊﾞｰｼﾞｮﾝ | 0.8.60 |
+| Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| ﾀｲﾌﾟ | Pre-built binaries (GitHub Releases) |
 
-## Install
+## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ . [systemPackages] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . ﾊﾟｯｹｰｼﾞｰｽﾞ [.${] [pkgs] . ｼｽﾃﾑ }. [codewhale] ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾊﾟｯｹｰｼﾞｰｽﾞ.${pkgs.ｼｽﾃﾑ}.codewhale ];
 
-# Default overlay → pkgs.codewhale
-[nixpkgs] . [overlays] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [overlays] . ﾃﾞﾌｫﾙﾄ ];
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.codewhale
+nixpkgs.overlays = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
 ```
 
-## Usage
+## ﾕｰｾｰｼﾞ
 
 ```bash
-[codewhale] # [interactive] [TUI]
-[codewhale] " [explain] ﾃﾞｨｽ [function] " # [one-shot] [prompt]
-[codewhale] [--model] ｵｰﾄ " ﾌｨｯｸｽ ﾃﾞｨｽ ﾊﾞｸﾞ " # [auto-select] ﾓﾃﾞﾙ
-[codewhale] [--yolo] # [auto-approve] ﾂｰﾙｽﾞ
-[codewhale] [doctor] # ﾁｪｯｸ [setup]
-[codewhale] [auth] [set] [--provider] [deepseek] # ｾｰﾌﾞ ｴｰﾋﾟｰｱｲ ｷｰ
+codewhale                              # interactive TUI
+codewhale "explain ﾃﾞｨｽ function"      # one-shot prompt
+codewhale --model ｵｰﾄ "ﾌｨｯｸｽ ﾃﾞｨｽ ﾊﾞｸﾞ"  # auto-select ﾓﾃﾞﾙ
+codewhale --yolo                       # auto-approve ﾂｰﾙｽﾞ
+codewhale doctor                       # ﾁｪｯｸ ｾｯﾄｱｯﾌﾟ
+codewhale auth set --provider deepseek # ｾｰﾌﾞ ｴｰﾋﾟｰｱｲ ｷｰ
 ```
 
-[Requires] ｱ [ [DeepSeek] ｴｰﾋﾟｰｱｲ ｷｰ ]( https [://] ﾌﾟﾗｯﾄﾌｫｰﾑ . [deepseek] . [com] / [api_keys] ) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ .
+ﾘｸﾜｲｱｽﾞ ｱ [DeepSeek API Key](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.

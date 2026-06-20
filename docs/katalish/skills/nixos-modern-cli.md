@@ -1,26 +1,26 @@
-# nixos-modern-cli (Skill)
+# nixos-modern-cli (ｽｷﾙ)
 
-[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [nixos-modern-cli] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [nixos-modern-cli] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [nixos-modern-cli] . md )
+[中文](../../zh/skills/nixos-modern-cli.md) | [English](nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md)
 
-> [Activated] ｵﾝ ﾆｯｸｽOS [systems] . [Ensures] [modern] ﾆｯｸｽ [CLI] ﾕｰｾｰｼﾞ , [full] ｼｪﾙ [capability] , ｱﾝﾄﾞ [correct] ﾒﾝﾃﾅﾝｽ [procedures] .
+> Activated ｵﾝ NixOS systems. Ensures modern ﾆｯｸｽ CLI ﾕｰｾｰｼﾞ, full ｼｪﾙ capability, ｱﾝﾄﾞ correct ﾒﾝﾃﾅﾝｽ procedures.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ
-ﾊﾟｽ|` ｽｷﾙｽﾞ / ﾆｯｸｽOS - modern - cli / ｽｷﾙ . md `
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
+| ﾊﾟｽ | `skills/nixos-modern-cli/SKILL.md` |
 
-## Features
+## ﾌｨｰﾁｬｰｽﾞ
 
-- [Corrects] AI [models] ｻﾞｯﾄ [mistake] ﾆｯｸｽOS ﾌｫｱ ｱ [traditional] [Linux] [distro]
-- [Provides] ｱ [modern] vs [traditional] [CLI] ｺﾏﾝﾄﾞ [reference] ﾃｰﾌﾞﾙ
-- [Guides] [running] [scripts] [requiring] POSIX ﾂｰﾙｽﾞ [via] ` ﾆｯｸｽ ｼｪﾙ [--command] `
-- [Includes] ｱ [common] POSIX ﾂｰﾙ → [nixpkgs] ﾊﾟｯｹｰｼﾞ [lookup] ﾃｰﾌﾞﾙ
-- [Covers] ｼｽﾃﾑ ﾒﾝﾃﾅﾝｽ , ﾛｸﾞ [viewing] , ｱﾝﾄﾞ [garbage] [collection]
-- [Lists] [NixOS-specific] [gotchas] ( ﾊﾟｽ , [nix-env] [persistence] , [etc] .)
-- [Diagnoses] ﾆｯｸｽ [Store] ﾊﾟｽ [traps] : [identifies] ｱﾝﾄﾞ ﾌｨｯｸｼｰｽﾞ [stale] `/ ﾆｯｸｽ / [store] /` [paths] ｲﾝ ｺﾝﾌｨｸﾞ ﾌｧｲﾙｽﾞ ( e . g . ` gh [auth] [setup-git] ` [credential] [helper] [breaking] ｱﾌﾀｰ GC )
+- Corrects AI models ｻﾞｯﾄ mistake NixOS ﾌｫｱ ｱ traditional Linux distro
+- ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ ｱ modern vs traditional CLI ｺﾏﾝﾄﾞ ﾘﾌｧﾚﾝｽ ﾃｰﾌﾞﾙ
+- Guides running scripts requiring POSIX ﾂｰﾙｽﾞ via `nix shell --command`
+- ｲﾝｸﾙｰﾄﾞｽﾞ ｱ common POSIX ﾂｰﾙ → nixpkgs ﾊﾟｯｹｰｼﾞ lookup ﾃｰﾌﾞﾙ
+- Covers ｼｽﾃﾑ ﾒﾝﾃﾅﾝｽ, ﾛｸﾞ viewing, ｱﾝﾄﾞ garbage collection
+- Lists NixOS-specific gotchas (ﾊﾟｽ, nix-env persistence, etc.)
+- Diagnoses ﾆｯｸｽ Store ﾊﾟｽ traps: identifies ｱﾝﾄﾞ ﾌｨｯｸｼｰｽﾞ stale `/nix/store/` paths ｲﾝ ｺﾝﾌｨｸﾞ ﾌｧｲﾙｽﾞ (e.g. `gh auth setup-git` credential helper breaking ｱﾌﾀｰ GC)
 
-## Usage
+## ﾕｰｾｰｼﾞ
 
-[Auto-activated] ｳｪﾝ ｻﾞ AI [detects] ｱ ﾆｯｸｽOS ｴﾝﾊﾞｲﾛﾒﾝﾄ , ｵｱ ｵﾝ [explicit] [request] ﾌｫｱ " [modern] ﾆｯｸｽ [commands] ".
+Auto-activated ｳｪﾝ ｻﾞ AI detects ｱ NixOS ｴﾝﾊﾞｲﾛﾒﾝﾄ, ｵｱ ｵﾝ explicit request ﾌｫｱ "modern ﾆｯｸｽ ｺﾏﾝﾄﾞｽﾞ".

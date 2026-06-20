@@ -1,128 +1,128 @@
 # mcp-searxng
 
-[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [mcp-searxng] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [mcp-searxng] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [mcp-searxng] . md )
+[中文](../zh/mcp-searxng.md) | [English](mcp-searxng.md) | [日本語](../ja/mcp-searxng.md)
 
-[ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ]( https [://] [modelcontextprotocol] . io ) ﾌｫｱ [ SearXNG ]( https [://] ﾄﾞｷｭｽﾞ . [searxng] . [org] ) — [web] ｻｰﾁ ﾌｫｱ AI [assistants] .
+[MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — ｳｪﾌﾞ ｻｰﾁ ﾌｫｱ AI assistants.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾊﾞｰｼﾞｮﾝ|1 . 4 . 0
-Upstream|[ ihor - sokoliuk / ｴﾑｼｰﾋﾟｰ - searxng ] ( https : / / github . com / ihor - sokoliuk / ｴﾑｼｰﾋﾟｰ - searxng )
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾊﾞｰｼﾞｮﾝ | 1.4.0 |
+| Upstream | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
-## Install
+## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ . [systemPackages] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . ﾊﾟｯｹｰｼﾞｰｽﾞ [.${] [pkgs] . ｼｽﾃﾑ }. [mcp-searxng] ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾊﾟｯｹｰｼﾞｰｽﾞ.${pkgs.ｼｽﾃﾑ}.mcp-searxng ];
 
-# Default overlay → pkgs.mcp-searxng
-[nixpkgs] . [overlays] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [overlays] . ﾃﾞﾌｫﾙﾄ ];
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.mcp-searxng
+nixpkgs.overlays = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
 ```
 
-## Full NixOS Setup
+## Full NixOS ｾｯﾄｱｯﾌﾟ
 
 ```nix
-{ ｺﾝﾌｨｸﾞ , ... }:
-[let]
-[searxKey] = " [YOUR_SECRET_KEY] ";
+{ ｺﾝﾌｨｸﾞ, ... }:
+let
+  searxKey = "YOUR_SECRET_KEY";
 ｲﾝ
 {
-[services] . [searx] = {
-[enable] = [true] ;
-[redisCreateLocally] = [true] ;
-ｾｯﾃｨﾝｸﾞｽﾞ = {
-ｻｰﾁ . [formats] = [ " [html] " " ｼﾞｪｲｿﾝ " ];
-ｻｰﾊﾞｰ = {
-[bind_address] = " 127 . 0 . 0 . 1 ";
-[port] = " 42701 ";
-[secret_key] = [searxKey] ;
-[limiterSettings] = {
-[botdetection] . [trusted_proxies] = [ " 127 . 0 . 0 . 1 / 32 " ];
-[real_ip] . [x_for] = 1 ;
-};
-};
-};
-};
+  services.searx = {
+    ｲﾈｰﾌﾞﾙ = true;
+    redisCreateLocally = true;
+    ｾｯﾃｨﾝｸﾞｽﾞ = {
+      ｻｰﾁ.formats = [ "html" "ｼﾞｪｲｿﾝ" ];
+      ｻｰﾊﾞｰ = {
+        bind_address = "127.0.0.1";
+        port = "42701";
+        secret_key = searxKey;
+        limiterSettings = {
+          botdetection.trusted_proxies = [ "127.0.0.1/32" ];
+          real_ip.x_for = 1;
+        };
+      };
+    };
+  };
 
-[services] . [lighttpd] = {
-[enable] = [true] ;
-[port] = 4270 ;
-[enableModules] = [ " [mod_access] " " [mod_alias] " " [mod_proxy] " " [mod_setenv] " ];
-[extraConfig] = ''
-[proxy] . ｻｰﾊﾞｰ = ( "" => (
-( " [host] " => " 127 . 0 . 0 . 1 ", " [port] " => 42701 )
-))
-[setenv] . [add-request-header] = (
-" [X-Real-IP] " => ["%{] [remote-addr] } e ",
-" [X-Forwarded-For] " => ["%{] [remote-addr] } e ",
-" [X-Forwarded-Proto] " => " ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ "
-)
-'' ;
-};
+  services.lighttpd = {
+    ｲﾈｰﾌﾞﾙ = true;
+    port = 4270;
+    enableModules = [ "mod_access" "mod_alias" "mod_proxy" "mod_setenv" ];
+    extraConfig = ''
+      proxy.ｻｰﾊﾞｰ = ( "" => (
+        ( "host" => "127.0.0.1", "port" => 42701 )
+      ))
+      setenv.add-request-header = (
+        "X-Real-IP"       => "%{remote-addr}e",
+        "X-Forwarded-For"  => "%{remote-addr}e",
+        "X-Forwarded-Proto" => "ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ"
+      )
+    '';
+  };
 }
 ```
 
-## MCP Client Config
+## ｴﾑｼｰﾋﾟｰ ｸﾗｲｱﾝﾄ ｺﾝﾌｨｸﾞ
 
 ```json
 {
-" [mcpServers] ": {
-" [searxng] ": {
-" ｺﾏﾝﾄﾞ ": " [mcp-searxng] ",
-" ｴﾇﾌﾞｲ ": { " [SEARXNG_URL] ": " ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ [://] 127 . 0 . 0 . 1 : 4270 " }
-}
-}
+  "mcpServers": {
+    "searxng": {
+      "ｺﾏﾝﾄﾞ": "mcp-searxng",
+      "ｴﾇﾌﾞｲ": { "SEARXNG_URL": "http://127.0.0.1:4270" }
+    }
+  }
 }
 ```
 
-> SearXNG [requires] ｼﾞｪｲｿﾝ ﾌｫｰﾏｯﾄ ( [configured] ｱﾊﾞﾌﾞ ｲﾝ ` ｾｯﾃｨﾝｸﾞｽﾞ . ｻｰﾁ . [formats] `).
+> SearXNG ﾘｸﾜｲｱｽﾞ ｼﾞｪｲｿﾝ ﾌｫｰﾏｯﾄ (configured above ｲﾝ `settings.search.formats`).
 
-## CodeWhale Config
+## CodeWhale ｺﾝﾌｨｸﾞ
 
-CodeWhale [stores] ｴﾑｼｰﾋﾟｰ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ ｲﾝ `~/. [deepseek] / ｴﾑｼｰﾋﾟｰ . ｼﾞｪｲｿﾝ `. ｱﾌﾀｰ [adding] [mcp-searxng] , [you] ** ﾏｽﾄ [manually] [set] ` [SEARXNG_URL] `** — ｻﾞ ` [codewhale] ｴﾑｼｰﾋﾟｰ ｱﾄﾞ ` ｺﾏﾝﾄﾞ [does] ﾉｯﾄ [auto-populate] ｻﾞ ` ｴﾇﾌﾞｲ ` [field] .
+CodeWhale stores ｴﾑｼｰﾋﾟｰ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. ｱﾌﾀｰ adding mcp-searxng, you **ﾏｽﾄ manually set `SEARXNG_URL`** — ｻﾞ `codewhale mcp add` ｺﾏﾝﾄﾞ does ﾉｯﾄ auto-populate ｻﾞ `env` field.
 
 ```json
 {
-" [servers] ": {
-" SearXNG ": {
-" ｺﾏﾝﾄﾞ ": "/ [etc] / [profiles] / [per-user] / [kix] / ﾋﾞﾝ / [mcp-searxng] ",
-" ｱｰｸﾞｽﾞ ": [],
-" ｴﾇﾌﾞｲ ": {
-" [SEARXNG_URL] ": " ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ [://] 127 . 0 . 0 . 1 : 42701 "
-}
-}
-}
+  "servers": {
+    "SearXNG": {
+      "ｺﾏﾝﾄﾞ": "/etc/profiles/per-user/kix/ﾋﾞﾝ/mcp-searxng",
+      "ｱｰｸﾞｽﾞ": [],
+      "ｴﾇﾌﾞｲ": {
+        "SEARXNG_URL": "http://127.0.0.1:42701"
+      }
+    }
+  }
 }
 ```
 
-> [**⚠️] [Common] [pitfall] [**:] ` [codewhale] ｴﾑｼｰﾋﾟｰ ｱﾄﾞ SearXNG [--command] / ﾊﾟｽ / ﾄｩ / [mcp-searxng] ` [leaves] ` ｴﾇﾌﾞｲ ` ｱｽﾞ `{}`.
-> [Without] ` [SEARXNG_URL] ` ｻﾞ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ [fails] [silently] — ` [codewhale] ｴﾑｼｰﾋﾟｰ ﾘｽﾄ ` [shows] `[ [enabled] ]` [but] [calls] [return] ﾉｰ [results] .
+> **⚠️ Common pitfall**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` leaves `env` ｱｽﾞ `{}`.
+> Without `SEARXNG_URL` ｻﾞ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ fails silently — `codewhale mcp list` shows `[enabled]` but calls return ﾉｰ results.
 
 ## Troubleshooting
 
-### MCP server unresponsive
+### ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ unresponsive
 
 ```bash
-# Check registration and status
-[codewhale] ｴﾑｼｰﾋﾟｰ ﾘｽﾄ
+# ﾁｪｯｸ registration ｱﾝﾄﾞ status
+codewhale ｴﾑｼｰﾋﾟｰ ﾘｽﾄ
 
-# Verify environment variable
-[cat] [~/.] [deepseek] / ｴﾑｼｰﾋﾟｰ . ｼﾞｪｲｿﾝ | [grep] [-A3] [SEARXNG_URL]
+# Verify ｴﾝﾊﾞｲﾛﾒﾝﾄ variable
+cat ~/.deepseek/ｴﾑｼｰﾋﾟｰ.ｼﾞｪｲｿﾝ | grep -A3 SEARXNG_URL
 ```
 
-### SearXNG backend connectivity
+### SearXNG ﾊﾞｯｸｴﾝﾄﾞ connectivity
 
 ```bash
-# Verify SearXNG API is reachable
-[curl] -s ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ [://] 127 . 0 . 0 . 1 : 42701 / ｺﾝﾌｨｸﾞ | ﾍｯﾄﾞ -c 100
+# Verify SearXNG ｴｰﾋﾟｰｱｲ ｲｽﾞ reachable
+curl -s http://127.0.0.1:42701/config | head -c 100
 
-# Manual MCP server test (should show MCP handshake)
-[SEARXNG_URL] =" ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ [://] 127 . 0 . 0 . 1 : 42701 " [timeout] 3 [mcp-searxng]
+# Manual ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾃｽﾄ (ｼｭｯﾄﾞ show ｴﾑｼｰﾋﾟｰ handshake)
+SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 ```
 
-### Search returns no results
+### ｻｰﾁ returns ﾉｰ results
 
-- [Ensure] ` ｾｯﾃｨﾝｸﾞｽﾞ . ｻｰﾁ . [formats] ` [includes] `" ｼﾞｪｲｿﾝ "` ( [required] ﾊﾞｲ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ )
-- [Verify] [lighttpd] [reverse] [proxy] [forwards] ` [X-Forwarded-For] ` ﾍｯﾀﾞｰ
-- ﾁｪｯｸ [logs] : ` [journalctl] -u [searx] [--no-pager] -n 30 `
+- Ensure `settings.search.formats` ｲﾝｸﾙｰﾄﾞｽﾞ `"json"` (required ﾊﾞｲ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ)
+- Verify lighttpd reverse proxy forwards `X-Forwarded-For` ﾍｯﾀﾞｰ
+- ﾁｪｯｸ logs: `journalctl -u searx --no-pager -n 30`

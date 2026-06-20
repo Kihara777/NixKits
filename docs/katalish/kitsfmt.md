@@ -1,49 +1,49 @@
 # kitsfmt
 
-[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [kitsfmt] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [kitsfmt] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [kitsfmt] . md )
+[中文](../zh/kitsfmt.md) | [English](kitsfmt.md) | [日本語](../ja/kitsfmt.md)
 
-** ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ ** — [AST-based] ｳｨｽﾞ [attribute] [sorting] , [comment] [preservation] , ｱﾝﾄﾞ [indentation] [normalization] .
+**ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ** — AST-based ｳｨｽﾞ attribute sorting, comment preservation, ｱﾝﾄﾞ indentation normalization.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾊﾞｰｼﾞｮﾝ|0 . 5 . 0
-ﾗﾝｹﾞｰｼﾞ|Rust
-ｿｰｽ|ﾃﾞｨｽ repo ` ﾊﾟｯｹｰｼﾞｰｽﾞ / kitsfmt - src / `
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾊﾞｰｼﾞｮﾝ | 0.5.0 |
+| ﾗﾝｹﾞｰｼﾞ | Rust |
+| ｿｰｽ | ﾃﾞｨｽ repo `packages/kitsfmt-src/` |
 
-## Usage
+## ﾕｰｾｰｼﾞ
 
 ```bash
-[kitsfmt] ﾌｧｲﾙ . ﾆｯｸｽ # ｱｳﾄﾌﾟｯﾄ ﾄｩ [stdout]
-[kitsfmt] [--inplace] ﾌｧｲﾙ . ﾆｯｸｽ # [in-place] ﾌｫｰﾏｯﾄ
-[kitsfmt] [--check] ﾌｧｲﾙ . ﾆｯｸｽ # ﾁｪｯｸ [formatting]
-[kitsfmt] [--no-best-practices] # [disable] [auto-fixes]
-[kitsfmt] [file1] . ﾆｯｸｽ [file2] . ﾆｯｸｽ # [multiple] ﾌｧｲﾙｽﾞ
+kitsfmt ﾌｧｲﾙ.ﾆｯｸｽ             # ｱｳﾄﾌﾟｯﾄ ﾄｩ stdout
+kitsfmt --inplace ﾌｧｲﾙ.ﾆｯｸｽ   # in-place ﾌｫｰﾏｯﾄ
+kitsfmt --check ﾌｧｲﾙ.ﾆｯｸｽ     # ﾁｪｯｸ ﾌｫｰﾏｯﾃｨﾝｸﾞ
+kitsfmt --no-best-practices  # ﾃﾞｨｾｰﾌﾞﾙ auto-fixes
+kitsfmt file1.ﾆｯｸｽ file2.ﾆｯｸｽ  # multiple ﾌｧｲﾙｽﾞ
 ```
 
-ｴﾇﾌﾞｲ [vars] : ` [KITSFMT_INPLACE] = 1 `, ` [KITSFMT_CHECK] = 1 `, ` [KITSFMT_BEST_PRACTICES] = 0 `
+ｴﾇﾌﾞｲ vars: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
 
-## Install
+## ｲﾝｽﾄｰﾙ
 
 ```nix
 # Direct
-ｴﾝﾊﾞｲﾛﾒﾝﾄ . [systemPackages] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . ﾊﾟｯｹｰｼﾞｰｽﾞ [.${] [pkgs] . ｼｽﾃﾑ }. [kitsfmt] ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾊﾟｯｹｰｼﾞｰｽﾞ.${pkgs.ｼｽﾃﾑ}.kitsfmt ];
 
-# Default overlay (recommended)
-[nixpkgs] . [overlays] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [overlays] . ﾃﾞﾌｫﾙﾄ ]; # → [pkgs] . [kitsfmt]
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ (recommended)
+nixpkgs.overlays = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];  # → pkgs.kitsfmt
 
-# As nix fmt formatter
-# formatter.${system} = inputs.nix-kits.formatter.${system};
-# then: nix fmt
+# ｱｽﾞ ﾆｯｸｽ fmt ﾌｫｰﾏｯﾀｰ
+# ﾌｫｰﾏｯﾀｰ.${ｼｽﾃﾑ} = ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾌｫｰﾏｯﾀｰ.${ｼｽﾃﾑ};
+# ｾﾞﾝ: ﾆｯｸｽ fmt
 ```
 
-## Features
+## ﾌｨｰﾁｬｰｽﾞ
 
-- [Attribute] [sorting] ( [including] [APC] ` ｱ . b . c ` [collapse] )
-- [Comment] [preservation]
-- [Idempotent] [formatting]
-- ** [Best-practice] [auto-fixes] ** ( ﾃﾞﾌｫﾙﾄ ｵﾝ , ` -B ` ﾄｩ [disable] ):
-- [Bare] ﾕｰｱｰﾙｴﾙ [quoting] ( [RFC] 45 ): ` https [://] x . [com] ` → `" https [://] x . [com] "`
-- ` [rec] ` → ` [let-in] `: ` [rec] { ｱ = 1 ; }` → ` [let] ｱ = 1 ; ｲﾝ { [inherit] ｱ ; }`
-- ` ｳｨｽﾞ ` → ` [builtins] . [attrValues] `: ` ｳｨｽﾞ [pkgs] ; [ ｱ b ]` → ` [builtins] . [attrValues] { [inherit] ( [pkgs] ) ｱ b ; }`
+- Attribute sorting (including APC `a.b.c` collapse)
+- Comment preservation
+- Idempotent ﾌｫｰﾏｯﾃｨﾝｸﾞ
+- **Best-practice auto-fixes** (ﾃﾞﾌｫﾙﾄ ｵﾝ, `-B` ﾄｩ ﾃﾞｨｾｰﾌﾞﾙ):
+  - Bare ﾕｰｱｰﾙｴﾙ quoting (RFC 45): `https://x.com` → `"https://x.com"`
+  - `rec` → `let-in`: `rec { a = 1; }` → `let a=1; in { inherit a; }`
+  - `with` → `builtins.attrValues`: `with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`

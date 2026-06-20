@@ -18,44 +18,44 @@ NixKits 软件更新维护日志。
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | codewhale | 0.8.60 | 0.8.61 |
-| 　 | cli ﾊｯｼｭ | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
-| 　 | tui ﾊｯｼｭ | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
+| 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
+| 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
 | mcp-searxng | 1.4.0 | 1.6.0 |
-| 　 | ｿｰｽ ﾊｯｼｭ | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
+| 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
 | 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
 
 ---
 
 ## 2026-06-18T09:03:48+09:00
 
-**摘要**：ﾙｲｰ — ﾆｯｸｽOS 兼容性补丁（`patches/ruyi-nixos-compat.ﾊﾟｯﾁ`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+**摘要**：ﾙｲｰ — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF ｲﾝﾀｰﾌﾟﾘﾀ 修复和 console_scripts argv0 问题
 
 | 提交 | 说明 |
 |------|------|
-| `d814550` | feat(ﾙｲｰ): add autoUpdate ｱﾝﾄﾞ declarative venvs ﾄｩ ﾓｼﾞｭｰﾙ |
+| `d814550` | feat(ﾙｲｰ): ｱﾄﾞ autoUpdate ｱﾝﾄﾞ declarative venvs ﾄｩ ﾓｼﾞｭｰﾙ |
 
 ---
 
 ## 2026-06-17T10:59:35+09:00
 
-**摘要**：ﾙｲｰ — ﾆｯｸｽOS 模块（`services.ﾙｲｰ`），声明式生成 `/etc/xdg/ﾙｲｰ/ｺﾝﾌｨｸﾞ.toml` 与环境变量
+**摘要**：ﾙｲｰ — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
 
 | 提交 | 说明 |
 |------|------|
-| `5cea307` | feat(ﾙｲｰ): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ declarative configuration |
+| `5cea307` | feat(ﾙｲｰ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ declarative ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ |
 | `ef377e4` | ﾌｨｯｸｽ(ﾙｲｰ): correct ｺﾝﾌｨｸﾞ ﾊﾟｽ ﾄｩ /etc/xdg/ﾙｲｰ (XDG spec) |
-| `8059526` | ﾌｨｯｸｽ(ﾙｲｰ): replace lib.generators.toToml ｳｨｽﾞ manual generation |
-| `cc396f8` | ﾌｨｯｸｽ(ﾙｲｰ): always generate ｺﾝﾌｨｸﾞ.toml when ﾓｼﾞｭｰﾙ enabled |
+| `8059526` | ﾌｨｯｸｽ(ﾙｲｰ): replace ﾘﾌﾞ.generators.toToml ｳｨｽﾞ manual ｼﾞｪﾈﾚｰｼｮﾝ |
+| `cc396f8` | ﾌｨｯｸｽ(ﾙｲｰ): always ｼﾞｪﾈﾚｲﾄ ｺﾝﾌｨｸﾞ.toml ｳｪﾝ ﾓｼﾞｭｰﾙ enabled |
 
 ---
 
 ## 2026-06-17T10:00:00+09:00
 
-**摘要**：ﾙｲｰ — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ﾙｲｰ` 即可进入环境
+**摘要**：ﾙｲｰ — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
 
 | 提交 | 说明 |
 |------|------|
-| `975295d` | refactor(flake): remove default ﾊﾟｯｹｰｼﾞ alias |
+| `975295d` | refactor(ﾌﾚｲｸ): ﾘﾑｰﾌﾞ ﾃﾞﾌｫﾙﾄ ﾊﾟｯｹｰｼﾞ alias |
 
 ---
 
@@ -65,7 +65,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `622a5e2` | feat(pkg): add ﾙｲｰ — RuyiSDK ﾊﾟｯｹｰｼﾞ manager |
+| `622a5e2` | feat(pkg): ｱﾄﾞ ﾙｲｰ — RuyiSDK ﾊﾟｯｹｰｼﾞ manager |
 
 | 软件名 | 新版本 |
 |--------|--------|
@@ -79,40 +79,40 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `fee1534` | docs(ｽｷﾙ): add translate-* support ｱﾝﾄﾞ docs-as-code mapping ﾄｩ write-maintenance-log |
-| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
-| `39906b9` | docs: purge remaining pcn references ﾌﾛﾑ zh write-project-docs |
-| `911052b` | refactor(docs): migrate pcn ﾃﾞｨﾚｸﾄﾘ ﾄｩ katalish |
-| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ ｱｽﾞ canonical ﾈｰﾑ |
-| `97b696c` | docs(ｽｷﾙ): purge pcn references ﾌﾛﾑ write-project-docs, add kata-en |
-| `f1904a1` | feat(ｽｷﾙ): add translate-katakana — katakana english mechanical substitution |
-| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
+| `fee1534` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ translate-* ｻﾎﾟｰﾄ ｱﾝﾄﾞ docs-as-code ﾏｯﾋﾟﾝｸﾞ ﾄｩ write-maintenance-log |
+| `177ad9b` | refactor: rename translate-katakana→translate-katalish, ｱﾄﾞ translate-pseudocn, auto-discovery |
+| `39906b9` | ﾄﾞｷｭｽﾞ: purge remaining pcn references ﾌﾛﾑ zh write-project-docs |
+| `911052b` | refactor(ﾄﾞｷｭｽﾞ): migrate pcn ﾃﾞｨﾚｸﾄﾘ ﾄｩ katalish |
+| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, ﾕｰｽﾞ ｶﾀﾘｯｼｭ ｱｽﾞ canonical ﾈｰﾑ |
+| `97b696c` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): purge pcn references ﾌﾛﾑ write-project-docs, ｱﾄﾞ kata-en |
+| `f1904a1` | feat(ｽｷﾙ): ｱﾄﾞ translate-katakana — katakana english mechanical substitution |
+| `c5fb218` | ﾄﾞｷｭｽﾞ: write-project-docs 英日文版同步更新四语(pcn)支持 |
 | `0588ee0` | ｽｷﾙ: write-project-docs 新增伪中国语(pcn)语言支持 |
 
 ---
 
 ## 2026-06-17T07:00:00+09:00
 
-**摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
+**摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；ﾌﾚｲｸ.ﾛｯｸ 同步 .gitignore 前置检测与三路分支逻辑
 
 | 提交 | 说明 |
 |------|------|
-| `b77170a` | docs(ｽｷﾙ): re-apply flake.lock sync ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ verification steps |
-| `be2239b` | docs(ｽｷﾙ): add .gitignore pre-check ﾄｩ flake.lock sync step |
-| `704ebe4` | docs(ｽｷﾙ): correct flake.lock pre-check — three-branch logic |
+| `b77170a` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): re-apply ﾌﾚｲｸ.ﾛｯｸ sync ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ verification ｽﾃｯﾌﾟｽﾞ |
+| `be2239b` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ .gitignore pre-check ﾄｩ ﾌﾚｲｸ.ﾛｯｸ sync ｽﾃｯﾌﾟ |
+| `704ebe4` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): correct ﾌﾚｲｸ.ﾛｯｸ pre-check — three-branch logic |
 | `359fe29` | feat(ｽｷﾙ): extract write-maintenance-log ｱｽﾞ standalone ｽｷﾙ |
-| `5187b07` | docs(ｽｷﾙ): optimize write-maintenance-log triggers ｱﾝﾄﾞ add audit entry |
+| `5187b07` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): optimize write-maintenance-log triggers ｱﾝﾄﾞ ｱﾄﾞ audit entry |
 
 ---
 
 ## 2026-06-17T06:50:00+09:00
 
-**摘要**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
+**摘要**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ 动态获取版本（已撤销，方案不可用）
 
 | 提交 | 说明 |
 |------|------|
-| `9e94305` | refactor(llama-cpp-rocm): replace flake input ｳｨｽﾞ builtins.fetchurl |
-| `b3d9c05` | ﾌｨｯｸｽ(llama-cpp-rocm): use bare builtins.fetchurl without ﾊｯｼｭ param |
+| `9e94305` | refactor(llama-cpp-rocm): replace ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｳｨｽﾞ builtins.fetchurl |
+| `b3d9c05` | ﾌｨｯｸｽ(llama-cpp-rocm): ﾕｰｽﾞ bare builtins.fetchurl without ﾊｯｼｭ param |
 
 ---
 
@@ -122,7 +122,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `d670e1e` | docs(mcp-searxng): add CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting |
+| `d670e1e` | ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting |
 
 ---
 
@@ -132,7 +132,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `bd42478` | docs(ｽｷﾙ): add ﾆｯｸｽ Store ﾊﾟｽ trap section ﾄｩ nixos-modern-cli |
+| `bd42478` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ Store ﾊﾟｽ trap ｾｸｼｮﾝ ﾄｩ nixos-modern-cli |
 
 ---
 
@@ -142,7 +142,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `c1fd014` | docs(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration mode ｱﾝﾄﾞ ﾌｧｲﾙ structure |
+| `c1fd014` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ structure |
 
 ---
 
@@ -153,7 +153,7 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `6f52ddf` | feat(llama-cpp-rocm): ﾘｽﾄｱ modelsPreset via nixkits namespace, migrate ﾌﾛﾑ services |
-| `56ff235` | docs(llama-cpp-rocm): add trilingual migration ｶﾞｲﾄﾞ |
+| `56ff235` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): ｱﾄﾞ trilingual migration ｶﾞｲﾄﾞ |
 
 ---
 
@@ -163,51 +163,51 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `7902bd1` | docs(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ timestamps ﾄｩ exact ｺﾐｯﾄ times |
-| `7680adf` | docs(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder |
-| `f92f9c4` | docs(ﾒﾝﾃﾅﾝｽ): use descriptive titles instead ｵﾌﾞ filename |
-| `07f347f` | docs(ｽｷﾙ): add descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
-| `487e18f` | docs(skills): sync descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾄｩ trilingual docs |
-| `3e9467f` | refactor(skills): generalize hardcoded content ﾄｩ auto-discovery |
-| `033d3b8` | docs(skills): sync auto-discovery generalizations ﾄｩ trilingual docs |
+| `7902bd1` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ timestamps ﾄｩ exact ｺﾐｯﾄ times |
+| `7680adf` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder |
+| `f92f9c4` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾕｰｽﾞ descriptive titles instead ｵﾌﾞ filename |
+| `07f347f` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
+| `487e18f` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
+| `3e9467f` | refactor(ｽｷﾙｽﾞ): generalize hardcoded content ﾄｩ auto-discovery |
+| `033d3b8` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync auto-discovery generalizations ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
 
 ---
 
 ## 2026-06-10T04:31:00+09:00
 
-**摘要**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
+**摘要**：opencode-telegram — KillMode 改为 ﾌﾟﾛｾｽ、添加 TimeoutStopSec 防止关机挂起
 
 | 提交 | 说明 |
 |------|------|
-| `fbcf15c` | ﾌｨｯｸｽ(opencode-telegram): add TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang |
-| `6cda338` | ﾌｨｯｸｽ(opencode-telegram): change KillMode ﾌﾛﾑ mixed ﾄｩ process |
+| `fbcf15c` | ﾌｨｯｸｽ(opencode-telegram): ｱﾄﾞ TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang |
+| `6cda338` | ﾌｨｯｸｽ(opencode-telegram): ﾁｪﾝｼﾞ KillMode ﾌﾛﾑ mixed ﾄｩ ﾌﾟﾛｾｽ |
 
 ---
 
 ## 2026-06-08T15:00:00+09:00
 
-**摘要**：文档重构 — 本地化文件移入 docs/ 目录；ﾒﾝﾃﾅﾝｽ.md 首次添加合列规则、纯表格格式、回填完整提交历史
+**摘要**：文档重构 — 本地化文件移入 ﾄﾞｷｭｽﾞ/ 目录；ﾒﾝﾃﾅﾝｽ.md 首次添加合列规则、纯表格格式、回填完整提交历史
 
 | 提交 | 说明 |
 |------|------|
-| `b3d7d0f` | docs: switch ﾒﾝﾃﾅﾝｽ.md ﾄｩ table-only ﾌｫｰﾏｯﾄ, drop trilingual prose |
-| `e4a3813` | docs: omit ﾋﾞﾙﾄﾞ status ｱﾝﾄﾞ unchanged hashes ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.md |
-| `4bf2d30` | docs(ｽｷﾙ): add first-time ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｫｰﾏｯﾄ ﾙｰﾙ |
-| `f7bb6ce` | docs(ｽｷﾙ): merge ﾊﾞｰｼﾞｮﾝ columns ﾌｫｱ first-time packages |
-| `1a28625` | docs(ﾒﾝﾃﾅﾝｽ): backfill full ﾊﾟｯｹｰｼﾞ history ﾌﾛﾑ repo creation |
-| `b4742ad` | docs(skills): sync refined ﾒﾝﾃﾅﾝｽ.md ﾌｫｰﾏｯﾄ ﾙｰﾙｽﾞ ﾄｩ trilingual docs |
-| `2f58ac5` | refactor: move localized README/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ into docs/ |
-| `551e6fd` | docs(skills): sync localized-file-in-docs/ ﾙｰﾙ ｱﾝﾄﾞ ﾊﾟｽ updates |
+| `b3d7d0f` | ﾄﾞｷｭｽﾞ: switch ﾒﾝﾃﾅﾝｽ.md ﾄｩ table-only ﾌｫｰﾏｯﾄ, drop trilingual prose |
+| `e4a3813` | ﾄﾞｷｭｽﾞ: omit ﾋﾞﾙﾄﾞ status ｱﾝﾄﾞ unchanged hashes ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.md |
+| `4bf2d30` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ first-time ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｫｰﾏｯﾄ ﾙｰﾙ |
+| `f7bb6ce` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾏｰｼﾞ ﾊﾞｰｼﾞｮﾝ columns ﾌｫｱ first-time ﾊﾟｯｹｰｼﾞｰｽﾞ |
+| `1a28625` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): backfill full ﾊﾟｯｹｰｼﾞ history ﾌﾛﾑ repo creation |
+| `b4742ad` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync refined ﾒﾝﾃﾅﾝｽ.md ﾌｫｰﾏｯﾄ ﾙｰﾙｽﾞ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
+| `2f58ac5` | refactor: move localized README/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ into ﾄﾞｷｭｽﾞ/ |
+| `551e6fd` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync localized-file-in-docs/ ﾙｰﾙ ｱﾝﾄﾞ ﾊﾟｽ ｱｯﾌﾟﾃﾞｰﾄｽﾞ |
 
 ---
 
 ## 2026-06-08T14:55:00+09:00
 
-**摘要**：rcc-fix — ﾆｯｸｽOS 模块（systemd 死锁修复）
+**摘要**：rcc-fix — NixOS 模块（systemd 死锁修复）
 
 | 提交 | 说明 |
 |------|------|
-| `141f4af` | feat(rcc-fix): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ |
+| `141f4af` | feat(rcc-fix): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ |
 
 ---
 
@@ -217,16 +217,16 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `7e22edd` | docs(ｽｷﾙ): add ｽｷﾙ doc ﾃﾝﾌﾟﾚｰﾄ, sync ﾙｰﾙｽﾞ, ｱﾝﾄﾞ staleness check |
-| `86fc7c2` | docs(skills): sync write-project-docs trilingual docs ｳｨｽﾞ ｽｷﾙ.md |
-| `454a4e4` | ﾌｨｯｸｽ(ｽｷﾙ): generalize 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ languages, ﾉｯﾄ just Japanese |
-| `28ec492` | docs(skills): sync generalized 基本情報 ﾙｰﾙ ﾄｩ trilingual docs |
-| `c79ffff` | docs(ｽｷﾙ): add SRI ﾊｯｼｭ ﾌｫｰﾏｯﾄ ｱﾝﾄﾞ nix ﾋﾞﾙﾄﾞ gotchas ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
-| `6dcbbfc` | docs(skills): sync ﾊｯｼｭ gotchas ﾄｩ nixkits-check-updates trilingual docs |
-| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param ｲｽﾞ set ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ hardware |
-| `2ba85d3` | docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc ﾄｩ changes ﾘｽﾄ |
-| `f5941ae` | docs(ｽｷﾙ): add anti-patterns ﾌｫｱ stale/unsynced doc bullets after ｿｰｽ changes |
-| `b8c2399` | docs(skills): sync source-change doc sync ﾙｰﾙ ﾄｩ trilingual docs |
+| `7e22edd` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽｷﾙ ﾄﾞｷｭ ﾃﾝﾌﾟﾚｰﾄ, sync ﾙｰﾙｽﾞ, ｱﾝﾄﾞ staleness ﾁｪｯｸ |
+| `86fc7c2` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync write-project-docs trilingual ﾄﾞｷｭｽﾞ ｳｨｽﾞ ｽｷﾙ.md |
+| `454a4e4` | ﾌｨｯｸｽ(ｽｷﾙ): generalize 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ, ﾉｯﾄ ｼﾞｬｽﾄ Japanese |
+| `28ec492` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync generalized 基本情報 ﾙｰﾙ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
+| `c79ffff` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ SRI ﾊｯｼｭ ﾌｫｰﾏｯﾄ ｱﾝﾄﾞ ﾆｯｸｽ ﾋﾞﾙﾄﾞ gotchas ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
+| `6dcbbfc` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync ﾊｯｼｭ gotchas ﾄｩ nixkits-check-updates trilingual ﾄﾞｷｭｽﾞ |
+| `58b06ea` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): clarify kernel param ｲｽﾞ set ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ hardware |
+| `2ba85d3` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱﾄﾞ C ﾋﾞﾙﾄﾞ toolchain + CC=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ |
+| `f5941ae` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ anti-patterns ﾌｫｱ stale/unsynced ﾄﾞｷｭ bullets ｱﾌﾀｰ ｿｰｽ ﾁｪﾝｼﾞｰｽﾞ |
+| `b8c2399` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync source-change ﾄﾞｷｭ sync ﾙｰﾙ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
 
 ---
 
@@ -236,18 +236,18 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `8aa65da` | docs(ｽｷﾙ): add trilingual symmetry checks ｱﾝﾄﾞ ja 基本情報 ﾙｰﾙ ﾄｩ write-project-docs |
-| `7dad578` | feat(skills): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs |
+| `8aa65da` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ trilingual symmetry checks ｱﾝﾄﾞ ja 基本情報 ﾙｰﾙ ﾄｩ write-project-docs |
+| `7dad578` | feat(ｽｷﾙｽﾞ): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs |
 
 ---
 
 ## 2026-06-02T00:00:00+09:00
 
-**摘要**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
+**摘要**：nixos-modern-cli 技能 — POSIX 工具指南与 ﾆｯｸｽ 二进制路径提示
 
 | 提交 | 说明 |
 |------|------|
-| `4b103e5` | docs(nixos-modern-cli): add POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ nix ﾊﾞｲﾅﾘ tip |
+| `4b103e5` | ﾄﾞｷｭｽﾞ(nixos-modern-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ tip |
 
 ---
 
@@ -257,21 +257,21 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `373da95` | feat(skills): add write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual docs |
+| `373da95` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual ﾄﾞｷｭｽﾞ |
 
 ---
 
 ## 2026-05-30T00:00:00+09:00
 
-**摘要**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 ｼｽﾃﾑ.nix 完整预设）；opencode-telegram 首次设置流程
+**摘要**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 ｼｽﾃﾑ.ﾆｯｸｽ 完整预设）；opencode-telegram 首次设置流程
 
 | 提交 | 说明 |
 |------|------|
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + ｺﾝﾌｨｸﾞ) |
-| `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset ﾌﾛﾑ ｼｽﾃﾑ.nix |
-| `15f956c` | docs(llama-cpp-rocm): replace ﾕｰｾｰｼﾞ ｳｨｽﾞ upstream reference |
-| `494f512` | docs(llama-cpp-rocm): remove inline upstream ﾘﾝｸ ﾌﾛﾑ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
-| `7e53e25` | docs(llama-cpp-rocm): remove inline ﾘﾝｸ ﾌﾛﾑ ﾕｰｾｰｼﾞ section too |
+| `2a8c41b` | ﾄﾞｷｭｽﾞ(opencode-telegram): ｱﾄﾞ first-time ｾｯﾄｱｯﾌﾟ flow (opencode serve + ｺﾝﾌｨｸﾞ) |
+| `aef12bc` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): ﾕｰｽﾞ complete modelsPreset ﾌﾛﾑ ｼｽﾃﾑ.ﾆｯｸｽ |
+| `15f956c` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): replace ﾕｰｾｰｼﾞ ｳｨｽﾞ upstream ﾘﾌｧﾚﾝｽ |
+| `494f512` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): ﾘﾑｰﾌﾞ inline upstream ﾘﾝｸ ﾌﾛﾑ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+| `7e53e25` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): ﾘﾑｰﾌﾞ inline ﾘﾝｸ ﾌﾛﾑ ﾕｰｾｰｼﾞ ｾｸｼｮﾝ too |
 | `df4074f` | ﾌｨｯｸｽ(codewhale): ﾌｨｯｸｽ stdenv typo causing ﾋﾞﾙﾄﾞ failure |
 
 ---
@@ -282,33 +282,33 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `6a42efd` | ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, output validation |
-| `1b7d0a9` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo root ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ |
+| `6a42efd` | ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, ｱｳﾄﾌﾟｯﾄ validation |
+| `1b7d0a9` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo ﾙｰﾄ ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ |
 | `2b237ff` | feat(kitsfmt): ｳｨｽﾞ→builtins.attrValues best-practice transformation |
-| `8497bf7` | feat(kitsfmt): add --stdin flag ﾌｫｱ explicit stdin mode |
+| `8497bf7` | feat(kitsfmt): ｱﾄﾞ --stdin ﾌﾗｸﾞ ﾌｫｱ explicit stdin ﾓｰﾄﾞ |
 | `a612af7` | feat(rcc-fix): rewrite ﾊﾟｯﾁ ﾌｫｱ asusctl 6.3.7 ｳｨｽﾞ hot-plug ｱﾝﾄﾞ boundary checks |
 | `e56f122` | ﾌｨｯｸｽ(rcc-fix): scope hotplug variable correctly ﾌｫｱ asusctl ﾋﾞﾙﾄﾞ |
 | `15a0104` | ﾌｨｯｸｽ(kitsfmt): ﾘｽﾄｱ vendor dir ﾌｫｱ offline builds |
-| `6ba43df` | ﾌｨｯｸｽ(rcc-fix): set keyboard_connected=false when ﾉｰ aura iface found |
-| `b7ebbfa` | ﾌｨｯｸｽ(rcc-fix): replace polling ｳｨｽﾞ D-Bus InterfacesAdded event |
+| `6ba43df` | ﾌｨｯｸｽ(rcc-fix): set keyboard_connected=false ｳｪﾝ ﾉｰ aura iface found |
+| `b7ebbfa` | ﾌｨｯｸｽ(rcc-fix): replace polling ｳｨｽﾞ D-Bus InterfacesAdded ｲﾍﾞﾝﾄ |
 
 ---
 
 ## 2026-05-28T00:00:00+09:00
 
-**摘要**：llama-cpp-rocm — ﾆｯｸｽOS 模块（systemd 沙箱覆盖）；opencode-telegram — ﾆｯｸｽOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
+**摘要**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
 
 | 提交 | 说明 |
 |------|------|
-| `3d2c38c` | docs(ｽｷﾙ): nixkits-check-updates — dynamic discovery, ﾉｯﾄ hardcoded ﾘｽﾄ |
-| `e5ee4ab` | docs(ｽｷﾙ): remove hardcoded count ﾌﾛﾑ features, add exclusion ﾉｰﾄ |
-| `814731e` | docs(ｽｷﾙ): sync ja doc ｳｨｽﾞ zh/en — dynamic discovery wording |
-| `713b693` | ﾌｨｯｸｽ(rcc-fix): use visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView |
-| `34d309b` | docs(skills): add ｲﾝｽﾄｰﾙ section ｳｨｽﾞ full 5-agent support ﾄｩ ｵｰﾙ skills |
-| `2db934e` | docs(zh): simplify Skills ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, remove semantic duplication |
-| `8fe0b3d` | feat(opencode-telegram): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ declarative ｺﾝﾌｨｸﾞ |
-| `941eb48` | feat(opencode-telegram): auto-install ﾊﾟｯｹｰｼﾞ when ﾓｼﾞｭｰﾙ enabled |
-| `bd9e1b9` | feat(llama-cpp-rocm): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides |
+| `3d2c38c` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): nixkits-check-updates — ﾀﾞｲﾅﾐｯｸ ﾃﾞｨｽｶﾊﾞﾘｰ, ﾉｯﾄ hardcoded ﾘｽﾄ |
+| `e5ee4ab` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾘﾑｰﾌﾞ hardcoded count ﾌﾛﾑ ﾌｨｰﾁｬｰｽﾞ, ｱﾄﾞ exclusion ﾉｰﾄ |
+| `814731e` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): sync ja ﾄﾞｷｭ ｳｨｽﾞ zh/en — ﾀﾞｲﾅﾐｯｸ ﾃﾞｨｽｶﾊﾞﾘｰ wording |
+| `713b693` | ﾌｨｯｸｽ(rcc-fix): ﾕｰｽﾞ visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView |
+| `34d309b` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｱﾄﾞ ｲﾝｽﾄｰﾙ ｾｸｼｮﾝ ｳｨｽﾞ full 5-agent ｻﾎﾟｰﾄ ﾄｩ ｵｰﾙ ｽｷﾙｽﾞ |
+| `2db934e` | ﾄﾞｷｭｽﾞ(zh): simplify ｽｷﾙｽﾞ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, ﾘﾑｰﾌﾞ semantic duplication |
+| `8fe0b3d` | feat(opencode-telegram): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ declarative ｺﾝﾌｨｸﾞ |
+| `941eb48` | feat(opencode-telegram): auto-install ﾊﾟｯｹｰｼﾞ ｳｪﾝ ﾓｼﾞｭｰﾙ enabled |
+| `bd9e1b9` | feat(llama-cpp-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides |
 
 ---
 
@@ -318,10 +318,10 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `327291a` | feat(skills): add nixos-modern-cli ｽｷﾙ ｳｨｽﾞ 3-language docs |
-| `f0e74d3` | feat(skills): add nixkits-skills installer ｳｨｽﾞ 3-language docs |
-| `fc7fa3d` | docs(llama-cpp-rocm): clarify dynamic release tracking purpose |
-| `627c9c5` | feat(skills): add nixkits-check-updates ｽｷﾙ ｳｨｽﾞ 3-language docs |
+| `327291a` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixos-modern-cli ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `f0e74d3` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixkits-skills installer ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `fc7fa3d` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): clarify ﾀﾞｲﾅﾐｯｸ release tracking purpose |
+| `627c9c5` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixkits-check-updates ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
 
 ---
 
@@ -331,27 +331,27 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
+| `d869279` | ﾄﾞｷｭｽﾞ(zh): rename ｾｸｼｮﾝｽﾞ 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
 
 ---
 
 ## 2026-05-24T00:00:00+09:00
 
-**摘要**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 ﾆｯｸｽOS 配置
+**摘要**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
 
 | 提交 | 说明 |
 |------|------|
-| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse ﾌﾟﾛｷｼ ｺﾝﾌｨｸﾞ |
+| `f3a6978` | ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ full SearXNG + lighttpd reverse proxy ｺﾝﾌｨｸﾞ |
 
 ---
 
 ## 2026-05-22T00:00:00+09:00
 
-**摘要**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
+**摘要**：llama-cpp-rocm — 移除 llama-cpp-ver ﾌﾚｲｸ 输入，使用 nixpkgs 默认版本
 
 | 提交 | 说明 |
 |------|------|
-| `9e7f8e2` | ﾌｨｯｸｽ(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
+| `9e7f8e2` | ﾌｨｯｸｽ(llama-cpp-rocm): ﾘﾑｰﾌﾞ llama-cpp-ver, ﾕｰｽﾞ nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
 
 ---
 
@@ -361,7 +361,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `e731eb7` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `e731eb7` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.ﾆｯｸｽ 中的 src 路径 |
 | `314732c` | ﾌｨｯｸｽ(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
 | `1667e1d` | ﾌｨｯｸｽ(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
@@ -369,13 +369,13 @@ NixKits 软件更新维护日志。
 
 ## 2026-05-15T00:00:00+09:00
 
-**摘要**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
+**摘要**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.ﾛｯｸ
 
 | 提交 | 说明 |
 |------|------|
 | `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
 | `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.ﾛｯｸ，更新 kitsfmt.ﾆｯｸｽ 使用 rnix AST 构建 |
 
 
 ## 2026-06-17T07:37:39+09:00
@@ -384,11 +384,11 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `b77170a` | docs(ｽｷﾙ): re-apply flake.lock sync ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ verification steps |
-| `be2239b` | docs(ｽｷﾙ): add .gitignore pre-check ﾄｩ flake.lock sync step |
-| `704ebe4` | docs(ｽｷﾙ): correct flake.lock pre-check — three-branch logic |
+| `b77170a` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): re-apply ﾌﾚｲｸ.ﾛｯｸ sync ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ verification ｽﾃｯﾌﾟｽﾞ |
+| `be2239b` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ .gitignore pre-check ﾄｩ ﾌﾚｲｸ.ﾛｯｸ sync ｽﾃｯﾌﾟ |
+| `704ebe4` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): correct ﾌﾚｲｸ.ﾛｯｸ pre-check — three-branch logic |
 | `359fe29` | feat(ｽｷﾙ): extract write-maintenance-log ｱｽﾞ standalone ｽｷﾙ |
-| `5187b07` | docs(ｽｷﾙ): optimize write-maintenance-log triggers ｱﾝﾄﾞ add audit entry |
+| `5187b07` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): optimize write-maintenance-log triggers ｱﾝﾄﾞ ｱﾄﾞ audit entry |
 
 ---
 
@@ -398,38 +398,38 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `9e94305` | refactor(llama-cpp-rocm): replace flake input ｳｨｽﾞ builtins.fetchurl |
-| `b3d9c05` | ﾌｨｯｸｽ(llama-cpp-rocm): use bare builtins.fetchurl without ﾊｯｼｭ param |
+| `9e94305` | refactor(llama-cpp-rocm): replace ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｳｨｽﾞ builtins.fetchurl |
+| `b3d9c05` | ﾌｨｯｸｽ(llama-cpp-rocm): ﾕｰｽﾞ bare builtins.fetchurl without ﾊｯｼｭ param |
 
 ---
 
 ## 2026-06-16T06:03:24+09:00
 
-**摘要**：docs(mcp-searxng): add CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting
+**摘要**：ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting
 
 | 提交 | 说明 |
 |------|------|
-| `d670e1e` | docs(mcp-searxng): add CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting |
+| `d670e1e` | ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, common pitfall, ｱﾝﾄﾞ troubleshooting |
 
 ---
 
 ## 2026-06-16T05:20:34+09:00
 
-**摘要**：docs(ｽｷﾙ): add ﾆｯｸｽ Store ﾊﾟｽ trap section ﾄｩ nixos-modern-cli
+**摘要**：ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ Store ﾊﾟｽ trap ｾｸｼｮﾝ ﾄｩ nixos-modern-cli
 
 | 提交 | 说明 |
 |------|------|
-| `bd42478` | docs(ｽｷﾙ): add ﾆｯｸｽ Store ﾊﾟｽ trap section ﾄｩ nixos-modern-cli |
+| `bd42478` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ Store ﾊﾟｽ trap ｾｸｼｮﾝ ﾄｩ nixos-modern-cli |
 
 ---
 
 ## 2026-06-14T08:11:16+09:00
 
-**摘要**：docs(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration mode ｱﾝﾄﾞ ﾌｧｲﾙ structure
+**摘要**：ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ structure
 
 | 提交 | 说明 |
 |------|------|
-| `c1fd014` | docs(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration mode ｱﾝﾄﾞ ﾌｧｲﾙ structure |
+| `c1fd014` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱｯﾌﾟﾃﾞｰﾄ integration ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ structure |
 
 ---
 
@@ -440,48 +440,48 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `6f52ddf` | feat(llama-cpp-rocm): ﾘｽﾄｱ modelsPreset via nixkits namespace, migrate ﾌﾛﾑ services |
-| `56ff235` | docs(llama-cpp-rocm): add trilingual migration ｶﾞｲﾄﾞ |
+| `56ff235` | ﾄﾞｷｭｽﾞ(llama-cpp-rocm): ｱﾄﾞ trilingual migration ｶﾞｲﾄﾞ |
 
 ---
 
 ## 2026-06-11T05:28:34+09:00
 
-**摘要**：refactor(skills): generalize hardcoded content ﾄｩ auto-discovery
+**摘要**：refactor(ｽｷﾙｽﾞ): generalize hardcoded content ﾄｩ auto-discovery
 
 | 提交 | 说明 |
 |------|------|
-| `3e9467f` | refactor(skills): generalize hardcoded content ﾄｩ auto-discovery |
+| `3e9467f` | refactor(ｽｷﾙｽﾞ): generalize hardcoded content ﾄｩ auto-discovery |
 
 ---
 
 ## 2026-06-11T05:13:39+09:00
 
-**摘要**：other — 2 项更新
+**摘要**：ｱｻﾞｰ — 2 项更新
 
 | 提交 | 说明 |
 |------|------|
-| `4876547` | docs: add missing rog-control-center-fix trilingual ﾓｼﾞｭｰﾙ docs |
-| `f891ad2` | docs: ﾌｨｯｸｽ DeepSeek V4 Pro casing ｲﾝ author credits |
+| `4876547` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ missing rog-control-center-fix trilingual ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ |
+| `f891ad2` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ DeepSeek V4 Pro casing ｲﾝ author credits |
 
 ---
 
 ## 2026-06-11T04:58:02+09:00
 
-**摘要**：docs(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder
+**摘要**：ﾄﾞｷｭｽﾞ(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder
 
 | 提交 | 说明 |
 |------|------|
-| `7680adf` | docs(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder |
+| `7680adf` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): enforce exact git ｺﾐｯﾄ timestamps, ban T00:00:00 placeholder |
 
 ---
 
 ## 2026-06-10T02:25:05+09:00
 
-**摘要**：ﾌｨｯｸｽ(opencode-telegram): add TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang
+**摘要**：ﾌｨｯｸｽ(opencode-telegram): ｱﾄﾞ TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang
 
 | 提交 | 说明 |
 |------|------|
-| `fbcf15c` | ﾌｨｯｸｽ(opencode-telegram): add TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang |
+| `fbcf15c` | ﾌｨｯｸｽ(opencode-telegram): ｱﾄﾞ TimeoutStopSec ｱﾝﾄﾞ KillMode ﾄｩ prevent shutdown hang |
 
 ---
 
@@ -491,18 +491,18 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `4bf2d30` | docs(ｽｷﾙ): add first-time ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｫｰﾏｯﾄ ﾙｰﾙ |
-| `f7bb6ce` | docs(ｽｷﾙ): merge ﾊﾞｰｼﾞｮﾝ columns ﾌｫｱ first-time packages |
+| `4bf2d30` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ first-time ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｫｰﾏｯﾄ ﾙｰﾙ |
+| `f7bb6ce` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾏｰｼﾞ ﾊﾞｰｼﾞｮﾝ columns ﾌｫｱ first-time ﾊﾟｯｹｰｼﾞｰｽﾞ |
 
 ---
 
 ## 2026-06-08T14:22:25+09:00
 
-**摘要**：feat(rcc-fix): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ
+**摘要**：feat(rcc-fix): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ
 
 | 提交 | 说明 |
 |------|------|
-| `141f4af` | feat(rcc-fix): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ |
+| `141f4af` | feat(rcc-fix): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ systemd deadlock ﾌｨｯｸｽ |
 
 ---
 
@@ -512,51 +512,51 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `8aa65da` | docs(ｽｷﾙ): add trilingual symmetry checks ｱﾝﾄﾞ ja 基本情報 ﾙｰﾙ ﾄｩ write-project-docs |
-| `7e22edd` | docs(ｽｷﾙ): add ｽｷﾙ doc ﾃﾝﾌﾟﾚｰﾄ, sync ﾙｰﾙｽﾞ, ｱﾝﾄﾞ staleness check |
-| `454a4e4` | ﾌｨｯｸｽ(ｽｷﾙ): generalize 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ languages, ﾉｯﾄ just Japanese |
-| `c79ffff` | docs(ｽｷﾙ): add SRI ﾊｯｼｭ ﾌｫｰﾏｯﾄ ｱﾝﾄﾞ nix ﾋﾞﾙﾄﾞ gotchas ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
-| `f5941ae` | docs(ｽｷﾙ): add anti-patterns ﾌｫｱ stale/unsynced doc bullets after ｿｰｽ changes |
+| `8aa65da` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ trilingual symmetry checks ｱﾝﾄﾞ ja 基本情報 ﾙｰﾙ ﾄｩ write-project-docs |
+| `7e22edd` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽｷﾙ ﾄﾞｷｭ ﾃﾝﾌﾟﾚｰﾄ, sync ﾙｰﾙｽﾞ, ｱﾝﾄﾞ staleness ﾁｪｯｸ |
+| `454a4e4` | ﾌｨｯｸｽ(ｽｷﾙ): generalize 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ, ﾉｯﾄ ｼﾞｬｽﾄ Japanese |
+| `c79ffff` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ SRI ﾊｯｼｭ ﾌｫｰﾏｯﾄ ｱﾝﾄﾞ ﾆｯｸｽ ﾋﾞﾙﾄﾞ gotchas ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
+| `f5941ae` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ anti-patterns ﾌｫｱ stale/unsynced ﾄﾞｷｭ bullets ｱﾌﾀｰ ｿｰｽ ﾁｪﾝｼﾞｰｽﾞ |
 
 ---
 
 ## 2026-06-06T15:15:31+09:00
 
-**摘要**：docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc ﾄｩ changes ﾘｽﾄ
+**摘要**：ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱﾄﾞ C ﾋﾞﾙﾄﾞ toolchain + CC=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ
 
 | 提交 | 说明 |
 |------|------|
-| `2ba85d3` | docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc ﾄｩ changes ﾘｽﾄ |
+| `2ba85d3` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): ｱﾄﾞ C ﾋﾞﾙﾄﾞ toolchain + CC=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ |
 
 ---
 
 ## 2026-06-06T13:07:30+09:00
 
-**摘要**：feat(skills): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs
+**摘要**：feat(ｽｷﾙｽﾞ): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs
 
 | 提交 | 说明 |
 |------|------|
-| `7dad578` | feat(skills): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs |
+| `7dad578` | feat(ｽｷﾙｽﾞ): localize ｵｰﾙ ｽｷﾙ.md ﾄｩ Chinese, declare ｲﾝ READMEs |
 
 ---
 
 ## 2026-06-05T03:42:25+09:00
 
-**摘要**：docs(nixos-modern-cli): add POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ nix ﾊﾞｲﾅﾘ tip
+**摘要**：ﾄﾞｷｭｽﾞ(nixos-modern-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ tip
 
 | 提交 | 说明 |
 |------|------|
-| `4b103e5` | docs(nixos-modern-cli): add POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ nix ﾊﾞｲﾅﾘ tip |
+| `4b103e5` | ﾄﾞｷｭｽﾞ(nixos-modern-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ tip |
 
 ---
 
 ## 2026-06-05T03:42:18+09:00
 
-**摘要**：feat(skills): add write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual docs
+**摘要**：feat(ｽｷﾙｽﾞ): ｱﾄﾞ write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual ﾄﾞｷｭｽﾞ
 
 | 提交 | 说明 |
 |------|------|
-| `373da95` | feat(skills): add write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual docs |
+| `373da95` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ write-project-docs ｽｷﾙ ｳｨｽﾞ trilingual ﾄﾞｷｭｽﾞ |
 
 ---
 
@@ -572,17 +572,17 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-02T10:15:53+09:00
 
-**摘要**：other — 7 项更新
+**摘要**：ｱｻﾞｰ — 7 项更新
 
 | 提交 | 说明 |
 |------|------|
-| `3be4889` | docs: add recover-nixos-config ｽｷﾙ ｳｨｽﾞ multi-language docs |
-| `fc5eca3` | docs: ﾌｨｯｸｽ Skills section titles ｱﾝﾄﾞ generic ｴｰｼﾞｪﾝﾄ descriptions |
-| `d2e071f` | docs: add quantization levels ﾄｩ local model names |
-| `22d206c` | docs: add UD- prefix ﾄｩ model quantization labels |
-| `f15db79` | docs: add MIT ﾗｲｾﾝｽ ﾌｧｲﾙ ｱﾝﾄﾞ ﾘﾝｸ ﾌﾛﾑ ｵｰﾙ READMEs |
-| `218aeca` | docs: add local flake input example alongside remote |
-| `4f0f968` | docs: ﾌｨｯｸｽ local flake input syntax ﾄｩ match actual ﾕｰｾｰｼﾞ |
+| `3be4889` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ recover-nixos-config ｽｷﾙ ｳｨｽﾞ multi-language ﾄﾞｷｭｽﾞ |
+| `fc5eca3` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ ｽｷﾙｽﾞ ｾｸｼｮﾝ titles ｱﾝﾄﾞ generic ｴｰｼﾞｪﾝﾄ descriptions |
+| `d2e071f` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ quantization levels ﾄｩ local ﾓﾃﾞﾙ ﾈｰﾑｽﾞ |
+| `22d206c` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ UD- prefix ﾄｩ ﾓﾃﾞﾙ quantization labels |
+| `f15db79` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ MIT ﾗｲｾﾝｽ ﾌｧｲﾙ ｱﾝﾄﾞ ﾘﾝｸ ﾌﾛﾑ ｵｰﾙ READMEs |
+| `218aeca` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ local ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｴｸﾞｻﾞﾝﾌﾟﾙ alongside remote |
+| `4f0f968` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ local ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ syntax ﾄｩ match actual ﾕｰｾｰｼﾞ |
 
 ---
 
@@ -592,24 +592,24 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `8fe0b3d` | feat(opencode-telegram): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ declarative ｺﾝﾌｨｸﾞ |
-| `8fe3fae` | docs(opencode-telegram): simplify ﾄｩ flake ﾓｼﾞｭｰﾙ ｺﾝﾌｨｸﾞ only, remove manual systemd |
-| `ee0a904` | docs(opencode-telegram): rename ﾆｯｸｽOS ﾓｼﾞｭｰﾙ → flake ﾓｼﾞｭｰﾙ |
-| `a38e426` | docs(opencode-telegram): use accurate section ﾈｰﾑ — ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ, ﾉｯﾄ ﾓｼﾞｭｰﾙ |
-| `dea4dc6` | docs(opencode-telegram): show full flake.nix context ｲﾝ ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ |
-| `44975ed` | docs(opencode-telegram): flake ﾓｼﾞｭｰﾙ ｱｽﾞ section ﾀｲﾄﾙ, consistent across langs |
-| `941eb48` | feat(opencode-telegram): auto-install ﾊﾟｯｹｰｼﾞ when ﾓｼﾞｭｰﾙ enabled |
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + ｺﾝﾌｨｸﾞ) |
+| `8fe0b3d` | feat(opencode-telegram): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ declarative ｺﾝﾌｨｸﾞ |
+| `8fe3fae` | ﾄﾞｷｭｽﾞ(opencode-telegram): simplify ﾄｩ ﾌﾚｲｸ ﾓｼﾞｭｰﾙ ｺﾝﾌｨｸﾞ ｵﾝﾘｰ, ﾘﾑｰﾌﾞ manual systemd |
+| `ee0a904` | ﾄﾞｷｭｽﾞ(opencode-telegram): rename NixOS ﾓｼﾞｭｰﾙ → ﾌﾚｲｸ ﾓｼﾞｭｰﾙ |
+| `a38e426` | ﾄﾞｷｭｽﾞ(opencode-telegram): ﾕｰｽﾞ accurate ｾｸｼｮﾝ ﾈｰﾑ — ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ, ﾉｯﾄ ﾓｼﾞｭｰﾙ |
+| `dea4dc6` | ﾄﾞｷｭｽﾞ(opencode-telegram): show full ﾌﾚｲｸ.ﾆｯｸｽ context ｲﾝ ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ |
+| `44975ed` | ﾄﾞｷｭｽﾞ(opencode-telegram): ﾌﾚｲｸ ﾓｼﾞｭｰﾙ ｱｽﾞ ｾｸｼｮﾝ ﾀｲﾄﾙ, consistent across langs |
+| `941eb48` | feat(opencode-telegram): auto-install ﾊﾟｯｹｰｼﾞ ｳｪﾝ ﾓｼﾞｭｰﾙ enabled |
+| `2a8c41b` | ﾄﾞｷｭｽﾞ(opencode-telegram): ｱﾄﾞ first-time ｾｯﾄｱｯﾌﾟ flow (opencode serve + ｺﾝﾌｨｸﾞ) |
 
 ---
 
 ## 2026-06-02T08:29:27+09:00
 
-**摘要**：feat(llama-cpp-rocm): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides
+**摘要**：feat(llama-cpp-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides
 
 | 提交 | 说明 |
 |------|------|
-| `bd9e1b9` | feat(llama-cpp-rocm): add ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides |
+| `bd9e1b9` | feat(llama-cpp-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ sandbox overrides |
 
 ---
 
@@ -619,61 +619,61 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
-| `2db934e` | docs(zh): simplify Skills ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, remove semantic duplication |
+| `d869279` | ﾄﾞｷｭｽﾞ(zh): rename ｾｸｼｮﾝｽﾞ 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
+| `2db934e` | ﾄﾞｷｭｽﾞ(zh): simplify ｽｷﾙｽﾞ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, ﾘﾑｰﾌﾞ semantic duplication |
 
 ---
 
 ## 2026-06-02T06:44:17+09:00
 
-**摘要**：ﾌｨｯｸｽ(rcc-fix): use visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView
+**摘要**：ﾌｨｯｸｽ(rcc-fix): ﾕｰｽﾞ visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView
 
 | 提交 | 说明 |
 |------|------|
-| `713b693` | ﾌｨｯｸｽ(rcc-fix): use visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView |
+| `713b693` | ﾌｨｯｸｽ(rcc-fix): ﾕｰｽﾞ visible: property instead ｵﾌﾞ if conditional ﾌｫｱ ScrollView |
 
 ---
 
 ## 2026-06-02T06:08:13+09:00
 
-**摘要**：skills — 3 项更新
+**摘要**：ｽｷﾙｽﾞ — 3 项更新
 
 | 提交 | 说明 |
 |------|------|
-| `327291a` | feat(skills): add nixos-modern-cli ｽｷﾙ ｳｨｽﾞ 3-language docs |
-| `f0e74d3` | feat(skills): add nixkits-skills installer ｳｨｽﾞ 3-language docs |
-| `627c9c5` | feat(skills): add nixkits-check-updates ｽｷﾙ ｳｨｽﾞ 3-language docs |
+| `327291a` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixos-modern-cli ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `f0e74d3` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixkits-skills installer ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `627c9c5` | feat(ｽｷﾙｽﾞ): ｱﾄﾞ nixkits-check-updates ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
 
 ---
 
 ## 2026-05-30T06:45:11+09:00
 
-**摘要**：ﾌｨｯｸｽ(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly
+**摘要**：ﾌｨｯｸｽ(llama-cpp-rocm): ﾘﾑｰﾌﾞ llama-cpp-ver, ﾕｰｽﾞ nixpkgs ﾊﾞｰｼﾞｮﾝ directly
 
 | 提交 | 说明 |
 |------|------|
-| `9e7f8e2` | ﾌｨｯｸｽ(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
+| `9e7f8e2` | ﾌｨｯｸｽ(llama-cpp-rocm): ﾘﾑｰﾌﾞ llama-cpp-ver, ﾕｰｽﾞ nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
 
 ---
 
 ## 2026-05-30T03:19:48+09:00
 
-**摘要**：other — 2 项更新
+**摘要**：ｱｻﾞｰ — 2 项更新
 
 | 提交 | 说明 |
 |------|------|
-| `358316c` | docs: add English ｱﾝﾄﾞ Japanese translations ｳｨｽﾞ I18n structure |
-| `bef3b4b` | docs: add English ｱﾝﾄﾞ Japanese README ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ switcher |
+| `358316c` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ English ｱﾝﾄﾞ Japanese translations ｳｨｽﾞ I18n structure |
+| `bef3b4b` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ English ｱﾝﾄﾞ Japanese README ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ switcher |
 
 ---
 
 ## 2026-05-30T03:01:02+09:00
 
-**摘要**：docs(mcp-searxng): add full SearXNG + lighttpd reverse ﾌﾟﾛｷｼ ｺﾝﾌｨｸﾞ
+**摘要**：ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ full SearXNG + lighttpd reverse proxy ｺﾝﾌｨｸﾞ
 
 | 提交 | 说明 |
 |------|------|
-| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse ﾌﾟﾛｷｼ ｺﾝﾌｨｸﾞ |
+| `f3a6978` | ﾄﾞｷｭｽﾞ(mcp-searxng): ｱﾄﾞ full SearXNG + lighttpd reverse proxy ｺﾝﾌｨｸﾞ |
 
 ---
 
@@ -685,8 +685,8 @@ NixKits 软件更新维护日志。
 |------|------|
 | `a612af7` | feat(rcc-fix): rewrite ﾊﾟｯﾁ ﾌｫｱ asusctl 6.3.7 ｳｨｽﾞ hot-plug ｱﾝﾄﾞ boundary checks |
 | `e56f122` | ﾌｨｯｸｽ(rcc-fix): scope hotplug variable correctly ﾌｫｱ asusctl ﾋﾞﾙﾄﾞ |
-| `6ba43df` | ﾌｨｯｸｽ(rcc-fix): set keyboard_connected=false when ﾉｰ aura iface found |
-| `b7ebbfa` | ﾌｨｯｸｽ(rcc-fix): replace polling ｳｨｽﾞ D-Bus InterfacesAdded event |
+| `6ba43df` | ﾌｨｯｸｽ(rcc-fix): set keyboard_connected=false ｳｪﾝ ﾉｰ aura iface found |
+| `b7ebbfa` | ﾌｨｯｸｽ(rcc-fix): replace polling ｳｨｽﾞ D-Bus InterfacesAdded ｲﾍﾞﾝﾄ |
 
 ---
 
@@ -697,38 +697,38 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `2b237ff` | feat(kitsfmt): ｳｨｽﾞ→builtins.attrValues best-practice transformation |
-| `8497bf7` | feat(kitsfmt): add --stdin flag ﾌｫｱ explicit stdin mode |
+| `8497bf7` | feat(kitsfmt): ｱﾄﾞ --stdin ﾌﾗｸﾞ ﾌｫｱ explicit stdin ﾓｰﾄﾞ |
 | `15a0104` | ﾌｨｯｸｽ(kitsfmt): ﾘｽﾄｱ vendor dir ﾌｫｱ offline builds |
 
 ---
 
 ## 2026-05-29T13:16:30+09:00
 
-**摘要**：docs: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, ﾉｯﾄ source-built)
+**摘要**：ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, ﾉｯﾄ source-built)
 
 | 提交 | 说明 |
 |------|------|
-| `14e060c` | docs: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, ﾉｯﾄ source-built) |
+| `14e060c` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, ﾉｯﾄ source-built) |
 
 ---
 
 ## 2026-05-29T05:57:55+09:00
 
-**摘要**：ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo root ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ
+**摘要**：ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo ﾙｰﾄ ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ
 
 | 提交 | 说明 |
 |------|------|
-| `1b7d0a9` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo root ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ |
+| `1b7d0a9` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore ﾄｩ repo ﾙｰﾄ ﾄｩ ﾉｯﾄ exclude vendored crate ﾌｧｲﾙｽﾞ |
 
 ---
 
 ## 2026-05-27T21:26:59+09:00
 
-**摘要**：ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, output validation
+**摘要**：ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, ｱｳﾄﾌﾟｯﾄ validation
 
 | 提交 | 说明 |
 |------|------|
-| `6a42efd` | ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, output validation |
+| `6a42efd` | ﾌｨｯｸｽ(kitsfmt): idempotency, inplace safety, ｱｳﾄﾌﾟｯﾄ validation |
 
 ---
 
@@ -740,8 +740,8 @@ NixKits 软件更新维护日志。
 |------|------|
 | `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
 | `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
-| `e731eb7` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.ﾛｯｸ，更新 kitsfmt.ﾆｯｸｽ 使用 rnix AST 构建 |
+| `e731eb7` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.ﾆｯｸｽ 中的 src 路径 |
 | `314732c` | ﾌｨｯｸｽ(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
 | `1667e1d` | ﾌｨｯｸｽ(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
@@ -754,13 +754,13 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `3b05a32` | docs(ﾒﾝﾃﾅﾝｽ): record 2026-06-16 ｱｯﾌﾟﾃﾞｰﾄ (opencode-telegram 0.21.2) |
+| `3b05a32` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): record 2026-06-16 ｱｯﾌﾟﾃﾞｰﾄ (opencode-telegram 0.21.2) |
 | `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | opencode-telegram | 0.21.1 | 0.21.2 |
-| 　 | ｿｰｽ ﾊｯｼｭ | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
+| 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
 | 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
 
 ---
@@ -771,24 +771,24 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `3cef0a8` | docs(ﾒﾝﾃﾅﾝｽ): record 2026-06-15 ｱｯﾌﾟﾃﾞｰﾄ (codewhale 0.8.60) |
+| `3cef0a8` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): record 2026-06-15 ｱｯﾌﾟﾃﾞｰﾄ (codewhale 0.8.60) |
 | `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | codewhale | 0.8.59 | 0.8.60 |
-| 　 | cli ﾊｯｼｭ | `sha256-ti/IBPZV...` → `sha256-JqlByElHoLcR2Mlwmx5Qczfj+EoAp+igdLCd/QUOsX4=` |
-| 　 | tui ﾊｯｼｭ | `sha256-3Lh80hTS...` → `sha256-LTf681cWVH9Cu3TQrFeMlJUNVVG+TWxO2oI6VXK+4zA=` |
+| 　 | cli hash | `sha256-ti/IBPZV...` → `sha256-JqlByElHoLcR2Mlwmx5Qczfj+EoAp+igdLCd/QUOsX4=` |
+| 　 | tui hash | `sha256-3Lh80hTS...` → `sha256-LTf681cWVH9Cu3TQrFeMlJUNVVG+TWxO2oI6VXK+4zA=` |
 
 ---
 
 ## 2026-06-14T07:56:11+09:00
 
-**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
+**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ 传输模式
 
 | 提交 | 说明 |
 |------|------|
-| `ec7d5ca` | docs(ﾒﾝﾃﾅﾝｽ): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
+| `ec7d5ca` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): record 2026-06-14 ｱｯﾌﾟﾃﾞｰﾄｽﾞ (codewhale 0.8.59, mcp-searxng 1.4.0) |
 | `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
 | `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
 
@@ -796,9 +796,9 @@ NixKits 软件更新维护日志。
 |--------|--------|--------|
 | codewhale | 0.8.58 | 0.8.59 |
 | mcp-searxng | 1.3.4 | 1.4.0 |
-| 　 | cli ﾊｯｼｭ | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
-| 　 | tui ﾊｯｼｭ | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
-| 　 | ｿｰｽ ﾊｯｼｭ | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
+| 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
+| 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
+| 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
 | 　 | npmDepsHash | `sha256-3hWshG0...` → `sha256-Lh1UoM8zSMFji/TkqDAOiRtFRrQ/jqn5TbONySj9ckg=` |
 
 ---
@@ -809,7 +809,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `716d98c` | docs(ﾒﾝﾃﾅﾝｽ): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
+| `716d98c` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): record 2026-06-12 ｱｯﾌﾟﾃﾞｰﾄｽﾞ (codewhale 0.8.58, mcp-searxng 1.3.4) |
 | `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
 | `b995798` | chore(pkgs): bump codewhale 0.8.58 |
 
@@ -817,9 +817,9 @@ NixKits 软件更新维护日志。
 |--------|--------|--------|
 | codewhale | 0.8.57 | 0.8.58 |
 | mcp-searxng | 1.3.2 | 1.3.4 |
-| 　 | cli ﾊｯｼｭ | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
-| 　 | tui ﾊｯｼｭ | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
-| 　 | ｿｰｽ ﾊｯｼｭ | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
+| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
+| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
+| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
 | 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
 
 ---
@@ -830,17 +830,17 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `07f347f` | docs(ｽｷﾙ): add descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
-| `f92f9c4` | docs(ﾒﾝﾃﾅﾝｽ): use descriptive titles instead ｵﾌﾞ filename |
-| `7902bd1` | docs(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ timestamps ﾄｩ exact ｺﾐｯﾄ times |
+| `07f347f` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ descriptive ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
+| `f92f9c4` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾕｰｽﾞ descriptive titles instead ｵﾌﾞ filename |
+| `7902bd1` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ timestamps ﾄｩ exact ｺﾐｯﾄ times |
 | `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | codewhale | 0.8.55 | 0.8.57 |
 | mcp-searxng | 1.3.1 | 1.3.2 |
-| 　 | cli ﾊｯｼｭ | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
-| 　 | tui ﾊｯｼｭ | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
+| 　 | cli hash | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
+| 　 | tui hash | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
 
 ---
 
@@ -856,8 +856,8 @@ NixKits 软件更新维护日志。
 |--------|--------|--------|
 | codewhale | 0.8.53 | 0.8.55 |
 | mcp-searxng | 1.2.1 | 1.3.1 |
-| 　 | cli ﾊｯｼｭ | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
-| 　 | tui ﾊｯｼｭ | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
+| 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
+| 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
 
 ---
 
@@ -867,18 +867,18 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `2f58ac5` | refactor: move localized README/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ into docs/ |
-| `e5e505e` | docs(skills): sync trilingual ﾒﾝﾃﾅﾝｽ ﾙｰﾙ ﾄｩ ｽｷﾙ docs |
-| `b34ed08` | docs: add trilingual ﾒﾝﾃﾅﾝｽ (en/ja) ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ switchers |
-| `b4742ad` | docs(skills): sync refined ﾒﾝﾃﾅﾝｽ.md ﾌｫｰﾏｯﾄ ﾙｰﾙｽﾞ ﾄｩ trilingual docs |
-| `1a28625` | docs(ﾒﾝﾃﾅﾝｽ): backfill full ﾊﾟｯｹｰｼﾞ history ﾌﾛﾑ repo creation |
-| `2cd9daf` | docs: drop doc-sync line ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ; only record substantive rewrites |
-| `e4a3813` | docs: omit ﾋﾞﾙﾄﾞ status ｱﾝﾄﾞ unchanged hashes ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.md |
-| `b3d7d0f` | docs: switch ﾒﾝﾃﾅﾝｽ.md ﾄｩ table-only ﾌｫｰﾏｯﾄ, drop trilingual prose |
-| `b8a98bc` | docs(ｽｷﾙ): skip ﾒﾝﾃﾅﾝｽ.md when ﾉｰ updates found |
-| `5ba1361` | docs(skills): sync ﾒﾝﾃﾅﾝｽ.md step ﾄｩ trilingual docs |
-| `d4cb81f` | docs(ｽｷﾙ): add Step 8 — ﾒﾝﾃﾅﾝｽ.md ｱｯﾌﾟﾃﾞｰﾄ workflow |
-| `db680df` | docs: add ﾒﾝﾃﾅﾝｽ.md — ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ changelog |
+| `2f58ac5` | refactor: move localized README/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ into ﾄﾞｷｭｽﾞ/ |
+| `e5e505e` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync trilingual ﾒﾝﾃﾅﾝｽ ﾙｰﾙ ﾄｩ ｽｷﾙ ﾄﾞｷｭｽﾞ |
+| `b34ed08` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ trilingual ﾒﾝﾃﾅﾝｽ (en/ja) ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ switchers |
+| `b4742ad` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync refined ﾒﾝﾃﾅﾝｽ.md ﾌｫｰﾏｯﾄ ﾙｰﾙｽﾞ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
+| `1a28625` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): backfill full ﾊﾟｯｹｰｼﾞ history ﾌﾛﾑ repo creation |
+| `2cd9daf` | ﾄﾞｷｭｽﾞ: drop doc-sync ﾗｲﾝ ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ; ｵﾝﾘｰ record substantive rewrites |
+| `e4a3813` | ﾄﾞｷｭｽﾞ: omit ﾋﾞﾙﾄﾞ status ｱﾝﾄﾞ unchanged hashes ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.md |
+| `b3d7d0f` | ﾄﾞｷｭｽﾞ: switch ﾒﾝﾃﾅﾝｽ.md ﾄｩ table-only ﾌｫｰﾏｯﾄ, drop trilingual prose |
+| `b8a98bc` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): skip ﾒﾝﾃﾅﾝｽ.md ｳｪﾝ ﾉｰ ｱｯﾌﾟﾃﾞｰﾄｽﾞ found |
+| `5ba1361` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): sync ﾒﾝﾃﾅﾝｽ.md ｽﾃｯﾌﾟ ﾄｩ trilingual ﾄﾞｷｭｽﾞ |
+| `d4cb81f` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽﾃｯﾌﾟ 8 — ﾒﾝﾃﾅﾝｽ.md ｱｯﾌﾟﾃﾞｰﾄ workflow |
+| `db680df` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾒﾝﾃﾅﾝｽ.md — ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ |
 | `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
 
 | 软件名 | 旧版本 | 新版本 |
@@ -900,31 +900,31 @@ NixKits 软件更新维护日志。
 | codewhale | 0.8.49 | 0.8.53 |
 | mcp-searxng | 1.0.4 | 1.1.0 |
 | opencode-telegram | 0.21.0 | 0.21.1 |
-| 　 | cli ﾊｯｼｭ | `sha256-97zk4L...` → `sha256-VxBNH2o4iEkk0PrnuZHDPECjvm+ARXR9T/BV8QqvYtw=` |
-| 　 | tui ﾊｯｼｭ | `sha256-tc/s3e...` → `sha256-DBiWk4c4QFh/BKPlG5a3KkH0ZTxNQgqZ7IWwH4OaEEw=` |
-| 　 | ｿｰｽ ﾊｯｼｭ | `sha256-ML5Hgle...` → `sha256-OVllsRMst6dWO/RagsmGyWN3muz1ATtffxfmLTfa0qU=` |
+| 　 | cli hash | `sha256-97zk4L...` → `sha256-VxBNH2o4iEkk0PrnuZHDPECjvm+ARXR9T/BV8QqvYtw=` |
+| 　 | tui hash | `sha256-tc/s3e...` → `sha256-DBiWk4c4QFh/BKPlG5a3KkH0ZTxNQgqZ7IWwH4OaEEw=` |
+| 　 | source hash | `sha256-ML5Hgle...` → `sha256-OVllsRMst6dWO/RagsmGyWN3muz1ATtffxfmLTfa0qU=` |
 | 　 | npmDepsHash(searx) | `sha256-xnefgQ...` → `sha256-LN9yDbwvlICoFl5KgQvzZjLGXflVM0QkSzaB2dJzR/w=` |
-| 　 | ｿｰｽ ﾊｯｼｭ(ﾃﾚｸﾞﾗﾑ) | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
-| 　 | npmDepsHash(ﾃﾚｸﾞﾗﾑ) | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
+| 　 | source hash(telegram) | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
+| 　 | npmDepsHash(telegram) | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
 
 ---
 
 ## 2026-06-06T12:51:46+09:00
 
-**摘要**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
+**摘要**：comfyui-strix-halo 补丁 — ﾛｯｸｴﾑ 7.2 wheels 内嵌支持
 
 | 提交 | 说明 |
 |------|------|
-| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param ｲｽﾞ set ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ hardware |
-| `468b89a` | feat(ｽｷﾙ): add patch-embedded ﾊﾞｰｼﾞｮﾝ check ﾌｫｱ comfyui-strix-halo |
-| `8f16f91` | docs(ｽｷﾙ): add length/structure ﾙｰﾙｽﾞ ﾌﾛﾑ comfyui-strix-halo doc ﾌｨｯｸｽ |
-| `ed25bb5` | docs(comfyui-strix-halo): rewrite trilingual docs ｲﾝ NixKits concise style |
-| `48d842f` | docs(ja): add 基本情報 section ﾄｩ comfyui-strix-halo |
-| `e11f899` | ﾌｨｯｸｽ(docs): add missing ja doc ｱﾝﾄﾞ en/ja README entries ﾌｫｱ comfyui-strix-halo |
+| `58b06ea` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): clarify kernel param ｲｽﾞ set ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ hardware |
+| `468b89a` | feat(ｽｷﾙ): ｱﾄﾞ patch-embedded ﾊﾞｰｼﾞｮﾝ ﾁｪｯｸ ﾌｫｱ comfyui-strix-halo |
+| `8f16f91` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ length/structure ﾙｰﾙｽﾞ ﾌﾛﾑ comfyui-strix-halo ﾄﾞｷｭ ﾌｨｯｸｽ |
+| `ed25bb5` | ﾄﾞｷｭｽﾞ(comfyui-strix-halo): rewrite trilingual ﾄﾞｷｭｽﾞ ｲﾝ NixKits concise style |
+| `48d842f` | ﾄﾞｷｭｽﾞ(ja): ｱﾄﾞ 基本情報 ｾｸｼｮﾝ ﾄｩ comfyui-strix-halo |
+| `e11f899` | ﾌｨｯｸｽ(ﾄﾞｷｭｽﾞ): ｱﾄﾞ missing ja ﾄﾞｷｭ ｱﾝﾄﾞ en/ja README entries ﾌｫｱ comfyui-strix-halo |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
-| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
+| comfyui-strix-halo | 补丁（ﾛｯｸｴﾑ 7.2 wheels 内嵌） |
 
 ---
 
@@ -938,12 +938,12 @@ NixKits 软件更新维护日志。
 | mcp-searxng | 1.0.3 | 1.0.4 |
 | obs-bilibili-stream | 2.0.12 | 2.1.0 |
 | opencode-telegram | 0.20.5 | 0.21.0 |
-| 　 | cli ﾊｯｼｭ | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
-| 　 | tui ﾊｯｼｭ | — → `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
-| 　 | ｿｰｽ ﾊｯｼｭ(searx) | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
+| 　 | cli hash | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
+| 　 | tui hash | — → `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
+| 　 | source hash(searx) | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
 | 　 | npmDepsHash(searx) | `sha256-...+` → `sha256-xnefgQnFuHVPSCWVSD8MWxjHmNSrKpWlbGaAtks5rkg=` |
-| 　 | ｿｰｽ ﾊｯｼｭ(ｵﾌﾞｴｽ) | — → `sha256-lbN73L3ey7qZftsgmRGb9wPcj8DmwlOUWR9gdEni29w=` |
-| 　 | ｿｰｽ ﾊｯｼｭ(tele) | `sha256-RKsZwK...` → `sha256-Al7CVol/HDgH3M0FwkdQWOze6xY/wvaWOskRsh9Abxo=` |
+| 　 | source hash(obs) | — → `sha256-lbN73L3ey7qZftsgmRGb9wPcj8DmwlOUWR9gdEni29w=` |
+| 　 | source hash(tele) | `sha256-RKsZwK...` → `sha256-Al7CVol/HDgH3M0FwkdQWOze6xY/wvaWOskRsh9Abxo=` |
 | 　 | npmDepsHash(tele) | `sha256-...+` → `sha256-ZOhS7lX5z2bRi0Cilm2QBUVKmacK41oRcUn9kRcfdOg=` |
 
 ---
@@ -954,8 +954,8 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `979b75c` | refactor(codewhale): switch ﾄｩ pre-built binaries, remove cargoHash |
-| `d5b1878` | feat: add codewhale (DeepSeek V4 TUI ｴｰｼﾞｪﾝﾄ) v0.8.47 |
+| `979b75c` | refactor(codewhale): switch ﾄｩ pre-built binaries, ﾘﾑｰﾌﾞ cargoHash |
+| `d5b1878` | feat: ｱﾄﾞ codewhale (DeepSeek V4 TUI ｴｰｼﾞｪﾝﾄ) v0.8.47 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
@@ -994,7 +994,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `2c917bd` | feat: Add kitsfmt ﾌｫｰﾏｯﾀｰ ｱﾝﾄﾞ modernize flake structure |
+| `2c917bd` | feat: ｱﾄﾞ kitsfmt ﾌｫｰﾏｯﾀｰ ｱﾝﾄﾞ modernize ﾌﾚｲｸ structure |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
@@ -1023,7 +1023,7 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `73a3b10` | ﾌｨｯｸｽ(mcp-searxng): use dist/cli.js ｱｽﾞ entry point instead ｵﾌﾞ dist/index.js |
+| `73a3b10` | ﾌｨｯｸｽ(mcp-searxng): ﾕｰｽﾞ dist/cli.js ｱｽﾞ entry point instead ｵﾌﾞ dist/index.js |
 
 ---
 
@@ -1035,11 +1035,11 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-10T04:31:20+09:00
 
-**摘要**：ﾌｨｯｸｽ(opencode-telegram): 修改 KillMode 为 process，添加 TimeoutStopSec 防止关机挂起
+**摘要**：ﾌｨｯｸｽ(opencode-telegram): 修改 KillMode 为 ﾌﾟﾛｾｽ，添加 TimeoutStopSec 防止关机挂起
 
 | 提交 | 说明 |
 |------|------|
-| `6cda338` | ﾌｨｯｸｽ(opencode-telegram): change KillMode ﾌﾛﾑ mixed ﾄｩ process |
+| `6cda338` | ﾌｨｯｸｽ(opencode-telegram): ﾁｪﾝｼﾞ KillMode ﾌﾛﾑ mixed ﾄｩ ﾌﾟﾛｾｽ |
 
 ---
 
@@ -1049,10 +1049,10 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `45f3c26` | feat(kitsfmt): rec→let-in conversion ｱﾝﾄﾞ multi-file support |
-| `3656154` | chore(kitsfmt): ｱｯﾌﾟﾃﾞｰﾄ Cargo.lock ﾌｫｱ v0.4.0 |
-| `d1ab491` | feat(kitsfmt): best-practice auto-corrections ｳｨｽﾞ ｴﾇﾌﾞｲ var support |
-| `f4b56ba` | ﾌｨｯｸｽ(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
+| `45f3c26` | feat(kitsfmt): rec→let-in conversion ｱﾝﾄﾞ multi-file ｻﾎﾟｰﾄ |
+| `3656154` | chore(kitsfmt): ｱｯﾌﾟﾃﾞｰﾄ Cargo.ﾛｯｸ ﾌｫｱ v0.4.0 |
+| `d1ab491` | feat(kitsfmt): best-practice auto-corrections ｳｨｽﾞ ｴﾇﾌﾞｲ var ｻﾎﾟｰﾄ |
+| `f4b56ba` | ﾌｨｯｸｽ(kitsfmt): inherit comma ﾊﾞｸﾞ, indented string corruption, lambda spacing |
 
 ---
 

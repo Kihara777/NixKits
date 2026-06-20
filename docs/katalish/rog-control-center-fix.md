@@ -1,28 +1,28 @@
 # rog-control-center-fix
 
-[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [rog-control-center-fix] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [rog-control-center-fix] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [rog-control-center-fix] . md )
+[中文](../zh/rog-control-center-fix.md) | [English](rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md)
 
-ﾌｨｯｸｼｰｽﾞ ｱ [systemd] [deadlock] [during] [shutdown] ｲﾝ ` [asus-shutdown] . ｻｰﾋﾞｽ `.
+ﾌｨｯｸｼｰｽﾞ ｱ systemd deadlock during shutdown ｲﾝ `asus-shutdown.service`.
 
-## Info
+## ｲﾝﾌｫ
 
-ｱｲﾃﾑ|ﾊﾞﾘｭｰ
-- - - - - -|- - - - - - -
-ﾊﾞｰｼﾞｮﾝ|Tracks nixpkgs
-ﾀｲﾌﾟ|ﾆｯｸｽOS ﾓｼﾞｭｰﾙ
-ﾊﾟｽ|` ﾓｼﾞｭｰﾙｽﾞ / rog - control - center - ﾌｨｯｸｽ . ﾆｯｸｽ `
-ﾄﾘｶﾞｰ|` services . asusd . enable = true `
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+|------|-------|
+| ﾊﾞｰｼﾞｮﾝ | Tracks nixpkgs |
+| ﾀｲﾌﾟ | NixOS ﾓｼﾞｭｰﾙ |
+| ﾊﾟｽ | `modules/rog-control-center-fix.nix` |
+| ﾄﾘｶﾞｰ | `services.asusd.enable = true` |
 
-## Fixes
+## ﾌｨｯｸｼｰｽﾞ
 
-- ** ﾘﾑｰﾌﾞ [PartOf] [**:] [Clears] ` [PartOf] ` ｵﾝ ` [asus-shutdown] . ｻｰﾋﾞｽ ` ﾄｩ [prevent] [cascading] ｽﾄｯﾌﾟ [deadlock] ｳｪﾝ [asusd] [restarts]
+- **ﾘﾑｰﾌﾞ PartOf**: Clears `PartOf` ｵﾝ `asus-shutdown.service` ﾄｩ prevent cascading ｽﾄｯﾌﾟ deadlock ｳｪﾝ asusd restarts
 
-## Install
+## ｲﾝｽﾄｰﾙ
 
 ```nix
 {
-[imports] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [nixosModules] . [rog-control-center-fix] ];
+  imports = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.nixosModules.rog-control-center-fix ];
 
-[services] . [asusd] . [enable] = [true] ;
+  services.asusd.ｲﾈｰﾌﾞﾙ = true;
 }
 ```
