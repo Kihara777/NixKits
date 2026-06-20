@@ -1,28 +1,28 @@
 # rog-control-center-fix
 
-[中文](../zh/rog-control-center-fix.md) | [English](rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md)
+[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [rog-control-center-fix] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [rog-control-center-fix] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [rog-control-center-fix] . md )
 
-Fixes a systemd deadlock during shutdown in `asus-shutdown.service`.
+ﾌｨｯｸｼｰｽﾞ ｱ [systemd] [deadlock] [during] [shutdown] ｲﾝ ` [asus-shutdown] . ｻｰﾋﾞｽ `.
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Version | Tracks nixpkgs |
-| Type | NixOS module |
-| Path | `modules/rog-control-center-fix.nix` |
-| Trigger | `services.asusd.enable = true` |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾊﾞｰｼﾞｮﾝ|Tracks nixpkgs
+ﾀｲﾌﾟ|ﾆｯｸｽOS ﾓｼﾞｭｰﾙ
+ﾊﾟｽ|` ﾓｼﾞｭｰﾙｽﾞ / rog - control - center - ﾌｨｯｸｽ . ﾆｯｸｽ `
+ﾄﾘｶﾞｰ|` services . asusd . enable = true `
 
 ## Fixes
 
-- **Remove PartOf**: Clears `PartOf` on `asus-shutdown.service` to prevent cascading stop deadlock when asusd restarts
+- ** ﾘﾑｰﾌﾞ [PartOf] [**:] [Clears] ` [PartOf] ` ｵﾝ ` [asus-shutdown] . ｻｰﾋﾞｽ ` ﾄｩ [prevent] [cascading] ｽﾄｯﾌﾟ [deadlock] ｳｪﾝ [asusd] [restarts]
 
 ## Install
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+[imports] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [nixosModules] . [rog-control-center-fix] ];
 
-  services.asusd.enable = true;
+[services] . [asusd] . [enable] = [true] ;
 }
 ```

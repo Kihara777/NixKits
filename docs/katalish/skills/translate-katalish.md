@@ -1,39 +1,39 @@
 # translate-katalish (Skill)
 
-[中文](../../zh/skills/translate-katalish.md) | [English](translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md)
+[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [translate-katalish] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [translate-katalish] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [translate-katalish] . md )
 
-> Extra natural-language support for the document-writing skill.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
+> [Extra] [natural-language] ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ [document-writing] ｽｷﾙ . [Adds] ｻﾞ [ｶﾀﾘｯｼｭ] ( ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ ) ﾗﾝｹﾞｰｼﾞ .
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Type | Coding Agent Skill (language backend) |
-| Path | `skills/translate-katalish/SKILL.md` |
-| Called by | write-project-docs (primary), nixkits-check-updates (indirect) |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ ( ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ )
+ﾊﾟｽ|` ｽｷﾙｽﾞ / translate - ｶﾀﾘｯｼｭ / ｽｷﾙ . md `
+Called ﾊﾞｲ|ﾗｲﾄ - ﾌﾟﾛｼﾞｪｸﾄ - ﾄﾞｷｭｽﾞ ( primary ) , nixkits - ﾁｪｯｸ - updates ( indirect )
 
 ## Features
 
-- New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
-- Built-in dictionary (~20 common tech-doc words)
-- Rule-based phonetic fallback for words not in the dictionary
-- Markdown syntax and code blocks preserved
-- File naming convention: `docs/katalish/<name>.md`
+- ﾆｭｰ [ｶﾀﾘｯｼｭ] ﾗﾝｹﾞｰｼﾞ — [mechanical] [word-level] ｲﾝｸﾞﾘｯｼｭ → [halfwidth-katakana] [substitution]
+- [Built-in] [dictionary] (~ 20 [common] [tech-doc] [words] )
+- [Rule-based] [phonetic] [fallback] ﾌｫｱ [words] ﾉｯﾄ ｲﾝ ｻﾞ [dictionary]
+- [Markdown] [syntax] ｱﾝﾄﾞ ｺｰﾄﾞ [blocks] [preserved]
+- ﾌｧｲﾙ [naming] [convention] : ` ﾄﾞｷｭｽﾞ / ｶﾀﾘｯｼｭ /< ﾈｰﾑ >. md `
 
 ## Usage
 
-Automatically invoked by write-project-docs when producing ｶﾀﾘｯｼｭ documents; can also be called directly:
+[Automatically] [invoked] ﾊﾞｲ [write-project-docs] ｳｪﾝ [producing] [ｶﾀﾘｯｼｭ] [documents] ; ｷｬﾝ ｵﾙｿ ﾋﾞｰ [called] [directly] :
 
-- "Generate a katakana-english version of the document"
-- "Add ｶﾀﾘｯｼｭ language variant"
-- "Translate to katakana english"
+- " [Generate] ｱ [katakana-english] ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ [document] "
+- " ｱﾄﾞ [ｶﾀﾘｯｼｭ] ﾗﾝｹﾞｰｼﾞ [variant] "
+- " [Translate] ﾄｩ ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ "
 
 ## Example
 
 ```
-NixKits — software, patches, NixOS modules and coding agent skills.
+NixKits — ｿﾌﾄｳｪｱ , ﾊﾟｯﾁｰｽﾞ , ﾆｯｸｽOS ﾓｼﾞｭｰﾙｽﾞ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙｽﾞ .
 ```
 →
 ```
-ﾆｯｸｽｷｯﾄ — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ.
+[ﾆｯｸｽｷｯﾄ] — [ｿﾌﾄｳｪｱ] , [ﾊﾟｯﾁｰｽﾞ] , [ﾆｯｸｽOS] [ﾓｼﾞｭｰﾙ] [ｱﾝﾄﾞ] [ｺｰﾃﾞｨﾝｸﾞ] [ｴｰｼﾞｪﾝﾄ] [ｽｷﾙ] .
 ```

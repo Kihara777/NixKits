@@ -1,29 +1,29 @@
 # write-maintenance-log (Skill)
 
-[中文](../../zh/skills/write-maintenance-log.md) | [English](write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)
+[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [write-maintenance-log] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [write-maintenance-log] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [write-maintenance-log] . md )
 
-> Write or update MAINTENANCE.md following NixKits conventions. Supports software update and bug fix record types.
+> ﾗｲﾄ ｵｱ ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ . md [following] NixKits [conventions] . [Supports] ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ ｱﾝﾄﾞ ﾊﾞｸﾞ ﾌｨｯｸｽ [record] [types] .
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Type | Coding Agent Skill |
-| Path | `skills/write-maintenance-log/SKILL.md` |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ
+ﾊﾟｽ|` ｽｷﾙｽﾞ / ﾗｲﾄ - ﾒﾝﾃﾅﾝｽ - ﾛｸﾞ / ｽｷﾙ . md `
 
 ## Features
 
-- Writes software update records (summary + commit ID table + version table)
-- Writes bug fix records (summary + commit ID table)
-- Trilingual sync (zh/en/ja) of maintenance logs
-- Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
-- Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
+- [Writes] ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ [records] ( ｻﾏﾘｰ + ｺﾐｯﾄ ID ﾃｰﾌﾞﾙ + ﾊﾞｰｼﾞｮﾝ ﾃｰﾌﾞﾙ )
+- [Writes] ﾊﾞｸﾞ ﾌｨｯｸｽ [records] ( ｻﾏﾘｰ + ｺﾐｯﾄ ID ﾃｰﾌﾞﾙ )
+- [Trilingual] [sync] ( ｾﾞｯﾄｴｲﾁ / ｴﾇ / ｼﾞｪｲｴｲ ) ｵﾌﾞ ﾒﾝﾃﾅﾝｽ [logs]
+- [Auto-extracts] ｻﾏﾘｰ ﾌﾛﾑ [preceding] ｽｷﾙ ( [nixkits-check-updates] ) ｵｱ [git] ｺﾐｯﾄ [message]
+- [Unified] ﾌｫｰﾏｯﾄ : [ISO] 8601 [precise] [time] , [LIFO] [order] , [omit] [unchanged] [hashes]
 
 ## Entry Points
 
-- **Record Fix**: auto-called after software updates, or on "record this fix" / "记入维护记录"
-- **Update Log**: on "update maintenance log" / "补全维护记录" — scans git history for missing records and backfills
+- ** [Record] ﾌｨｯｸｽ [**:] [auto-called] ｱﾌﾀｰ ｿﾌﾄｳｪｱ [updates] , ｵｱ ｵﾝ " [record] ﾃﾞｨｽ ﾌｨｯｸｽ " / " [记入维护记录] "
+- ** ｱｯﾌﾟﾃﾞｰﾄ ﾛｸﾞ [**:] ｵﾝ " ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ ﾛｸﾞ " / " [补全维护记录] " — [scans] [git] [history] ﾌｫｱ [missing] [records] ｱﾝﾄﾞ [backfills]
 
 ## Usage
 
-Activated automatically after software updates, or on user request to record a fix.
+[Activated] [automatically] ｱﾌﾀｰ ｿﾌﾄｳｪｱ [updates] , ｵｱ ｵﾝ ﾕｰｻﾞｰ [request] ﾄｩ [record] ｱ ﾌｨｯｸｽ .

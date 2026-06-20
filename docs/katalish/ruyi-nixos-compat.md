@@ -1,33 +1,33 @@
 # ruyi-nixos-compat
 
-[中文](../zh/ruyi-nixos-compat.md) | [English](ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md)
+[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [ruyi-nixos-compat] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [ruyi-nixos-compat] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [ruyi-nixos-compat] . md )
 
-Provides NixOS runtime compatibility for ruyi: pre-compiled RISC-V toolchain binaries cannot run directly on NixOS because the expected dynamic linker path `/lib64/ld-linux-x86-64.so.2` does not exist. This overlay transparently addresses this via a patch.
+[Provides] ﾆｯｸｽOS [runtime] ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ﾙｲｰ : [pre-compiled] RISC-V ﾂｰﾙﾁｪｰﾝ [binaries] [cannot] ﾗﾝ [directly] ｵﾝ ﾆｯｸｽOS [because] ｻﾞ [expected] ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/ [lib64] / [ld-linux-x86-64] . so . 2 ` [does] ﾉｯﾄ [exist] . ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ [transparently] [addresses] ﾃﾞｨｽ [via] ｱ ﾊﾟｯﾁ .
 
 ## Scope
 
-Required for NixOS users who download and execute RISC-V cross-compilation toolchains (GCC, QEMU, etc.) via ruyi. Users not working with RISC-V development do not need to enable it.
+[Required] ﾌｫｱ ﾆｯｸｽOS [users] ﾌｰ [download] ｱﾝﾄﾞ [execute] RISC-V [cross-compilation] [toolchains] ( ｼﾞｰｼｰｼｰ , ｷｭｰｴﾐｭｰ , [etc] .) [via] ﾙｲｰ . [Users] ﾉｯﾄ [working] ｳｨｽﾞ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do ﾉｯﾄ [need] ﾄｩ [enable] ｲｯﾄ .
 
 ## Install
 
 ```nix
-nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # standalone overlay
+[nixpkgs] . [overlays] = [
+[nix-kits] . [overlays] . [ruyi-nixos-compat] # [standalone] ｵｰﾊﾞｰﾚｲ
 ];
 ```
 
 ## Features
 
-- **Dynamic linker reroute**: Replaces embedded FHS paths with the NixOS `ld.so`
-- **Toolchain sub-process repair**: GCC-internal sub-processes (`cc1`, `as`, `collect2`) are auto-fixed via `patchelf`
-- **Nix console_scripts compat**: Uses `RUYI_ARGV0` to recover `exec -a` semantics
+- ** ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ [reroute] [**:] [Replaces] [embedded] [FHS] [paths] ｳｨｽﾞ ｻﾞ ﾆｯｸｽOS ` ld . so `
+- ** ﾂｰﾙﾁｪｰﾝ [sub-process] [repair] [**:] [GCC-internal] [sub-processes] (` [cc1] `, ` ｱｽﾞ `, ` [collect2] `) ｱｰ [auto-fixed] [via] ` [patchelf] `
+- ** ﾆｯｸｽ [console_scripts] [compat] [**:] [Uses] ` [RUYI_ARGV0] ` ﾄｩ [recover] ` ｴｸﾞｾﾞｯｸ -a ` [semantics]
 
 ## Design
 
-Minimally invasive: the patch only activates inside ruyi when a NixOS environment is detected and a pre-compiled toolchain is about to be `execv`'d. On non-NixOS systems the patch logic is completely short-circuited.
+[Minimally] [invasive] : ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ [activates] [inside] ﾙｲｰ ｳｪﾝ ｱ ﾆｯｸｽOS ｴﾝﾊﾞｲﾛﾒﾝﾄ ｲｽﾞ [detected] ｱﾝﾄﾞ ｱ [pre-compiled] ﾂｰﾙﾁｪｰﾝ ｲｽﾞ [about] ﾄｩ ﾋﾞｰ ` [execv] ` 'd . ｵﾝ [non-NixOS] [systems] ｻﾞ ﾊﾟｯﾁ [logic] ｲｽﾞ [completely] [short-circuited] .
 
 ## Verification
 
 ```bash
 # check whether the nixos_compat module is loaded
-find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
+[find] / ﾆｯｸｽ / [store] /* [-ruyi-] */ ﾘﾌﾞ [-name] ['nixos_compat] . [py']

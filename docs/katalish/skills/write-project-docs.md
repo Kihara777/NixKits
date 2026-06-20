@@ -1,55 +1,55 @@
 # write-project-docs (Skill)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)
+[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [write-project-docs] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [write-project-docs] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [write-project-docs] . md )
 
-> Generates complete multi-language documentation following the NixKits style — trilingual (zh/en/ja), concise, table-driven.
+> [Generates] [complete] [multi-language] ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ [following] ｻﾞ NixKits [style] — [trilingual] ( ｾﾞｯﾄｴｲﾁ / ｴﾇ / ｼﾞｪｲｴｲ ), [concise] , [table-driven] .
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Type | Coding Agent Skill |
-| Path | `skills/write-project-docs/SKILL.md` |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ
+ﾊﾟｽ|` ｽｷﾙｽﾞ / ﾗｲﾄ - ﾌﾟﾛｼﾞｪｸﾄ - ﾄﾞｷｭｽﾞ / ｽｷﾙ . md `
 
 ## Features
 
-- Assesses project metadata and extracts module information
-- Classifies modules by function (infra/services/proxy/skills)
-- Creates `docs/{zh,en,ja}/` directory structure
-- Auto-discovers language extensions via `translate-*` naming convention in `skills/translate-*/`
-- Writes categorized READMEs with language switchers
-- Writes per-module docs (info table + install + usage)
-- Writes skill docs using the unified template (Info → Features → Usage)
-- Supports sub-agent parallelization by module category
+- [Assesses] ﾌﾟﾛｼﾞｪｸﾄ [metadata] ｱﾝﾄﾞ [extracts] ﾓｼﾞｭｰﾙ [information]
+- [Classifies] ﾓｼﾞｭｰﾙｽﾞ ﾊﾞｲ [function] ( [infra] / [services] / [proxy] / ｽｷﾙｽﾞ )
+- [Creates] ` ﾄﾞｷｭｽﾞ /{ ｾﾞｯﾄｴｲﾁ , ｴﾇ , ｼﾞｪｲｴｲ }/` ﾃﾞｨﾚｸﾄﾘ [structure]
+- [Auto-discovers] ﾗﾝｹﾞｰｼﾞ [extensions] [via] ` [translate-] *` [naming] [convention] ｲﾝ ` ｽｷﾙｽﾞ / [translate-] */`
+- [Writes] [categorized] [READMEs] ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ [switchers]
+- [Writes] [per-module] ﾄﾞｷｭｽﾞ ( ｲﾝﾌｫ ﾃｰﾌﾞﾙ + ｲﾝｽﾄｰﾙ + ﾕｰｾｰｼﾞ )
+- [Writes] ｽｷﾙ ﾄﾞｷｭｽﾞ ﾕｰｼﾞﾝｸﾞ ｻﾞ [unified] ﾃﾝﾌﾟﾚｰﾄ ( ｲﾝﾌｫ → ﾌｨｰﾁｬｰｽﾞ → ﾕｰｾｰｼﾞ )
+- [Supports] [sub-agent] [parallelization] ﾊﾞｲ ﾓｼﾞｭｰﾙ [category]
 
 ## Skill Doc Sync Rules
 
-When `SKILL.md` changes, the corresponding quadrilingual docs must be updated.
-Use staleness check to locate outdated files:
+ｳｪﾝ ` ｽｷﾙ . md ` [changes] , ｻﾞ [corresponding] [quadrilingual] ﾄﾞｷｭｽﾞ ﾏｽﾄ ﾋﾞｰ [updated] .
+ﾕｰｽﾞ [staleness] ﾁｪｯｸ ﾄｩ [locate] [outdated] ﾌｧｲﾙｽﾞ :
 
 ```bash
-for lang in zh en ja; do
-  for skill in skills/*/SKILL.md; do
-    name=$(basename $(dirname $skill))
-    doc="docs/$lang/skills/$name.md"
-    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
-  done
-done
+ﾌｫｱ [lang] ｲﾝ ｾﾞｯﾄｴｲﾁ ｴﾇ ｼﾞｪｲｴｲ ; do
+ﾌｫｱ ｽｷﾙ ｲﾝ ｽｷﾙｽﾞ [/*/] ｽｷﾙ . md ; do
+ﾈｰﾑ [=$(] [basename] $( [dirname] $ ｽｷﾙ ))
+ﾄﾞｷｭ =" ﾄﾞｷｭｽﾞ /$ [lang] / ｽｷﾙｽﾞ /$ ﾈｰﾑ . md "
+[ "$ ｽｷﾙ " [-nt] "$ ﾄﾞｷｭ " ] && [echo] " [STALE] : $ [lang] /$ ﾈｰﾑ "
+[done]
+[done]
 ```
 
-Update order: Chinese baseline → English translation → Japanese translation → Pseudo-Chinese translation.
-Column mapping: `基本信息` → `Info` / `基本情報` / `基本情報`, `功能` → `Features` / `機能` / `機能`.
+ｱｯﾌﾟﾃﾞｰﾄ [order] : ﾁｬｲﾆｰｽﾞ [baseline] → ｲﾝｸﾞﾘｯｼｭ [translation] → ｼﾞｬﾊﾟﾆｰｽﾞ [translation] → [Pseudo-Chinese] [translation] .
+[Column] ﾏｯﾋﾟﾝｸﾞ : ` [基本信息] ` → ` ｲﾝﾌｫ ` / ` [基本情報] ` / ` [基本情報] `, ` 功能 ` → ` ﾌｨｰﾁｬｰｽﾞ ` / ` 機能 ` / ` 機能 `.
 
-- Zero fluff, tables over prose, copy-paste-ready code blocks
-- Technical terms stay in English; warnings use blockquote format
-- Chinese section titles use 2- or 4-character words for visual rhythm
-- Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
-- No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
-- All four READMEs must be updated together
-- Root dir only holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`) live under `docs/`
-- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)
-- After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
+- [Zero] [fluff] , [tables] [over] [prose] , [copy-paste-ready] ｺｰﾄﾞ [blocks]
+- [Technical] [terms] [stay] ｲﾝ ｲﾝｸﾞﾘｯｼｭ ; [warnings] ﾕｰｽﾞ [blockquote] ﾌｫｰﾏｯﾄ
+- ﾁｬｲﾆｰｽﾞ ｾｸｼｮﾝ [titles] ﾕｰｽﾞ 2- ｵｱ [4-character] [words] ﾌｫｱ [visual] [rhythm]
+- [Target] ~ [40-60] ﾗｲﾝｽﾞ ; ﾊﾟｯﾁ / ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ [follow] ｻﾞ [4-section] [standard] ( ｲﾝﾌｫ → [Changes] → ｲﾝｽﾄｰﾙ → ﾉｰﾂ )
+- ﾉｰ [standalone] [technical] [detail] , [troubleshooting] , ｵｱ [reference] [sections] — [compress] [into] `## ﾉｰﾂ ` [bullets]
+- ｵｰﾙ [four] [READMEs] ﾏｽﾄ ﾋﾞｰ [updated] [together]
+- ﾙｰﾄ [dir] ｵﾝﾘｰ [holds] ﾁｬｲﾆｰｽﾞ [suffix-less] `. md `; [localized] [versions] (`*. ｴﾇ . md `, `*. ｼﾞｪｲｴｲ . md `) [live] [under] ` ﾄﾞｷｭｽﾞ /`
+- [Every] ﾗﾝｹﾞｰｼﾞ ﾏｽﾄ [include] ｱ [basic] ｲﾝﾌｫ ｾｸｼｮﾝ : `## [基本信息] ` ( ｾﾞｯﾄｴｲﾁ ), `## ｲﾝﾌｫ ` ( ｴﾇ ), `## [基本情報] ` ( ｼﾞｪｲｴｲ )
+- ｱﾌﾀｰ ﾊﾟｯﾁ / ﾓｼﾞｭｰﾙ ｿｰｽ [changes] , ｻﾞ " [Changes] ["/"] ﾌｨｰﾁｬｰｽﾞ " ﾘｽﾄ ﾏｽﾄ ﾋﾞｰ [synced] — ｲｰﾁ [bullet] [maps] ﾄｩ ｱﾝ [actual] [change]
 
 ## Usage
 
-Activated when the user asks to "write documentation" or "generate docs in NixKits style".
+[Activated] ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ [asks] ﾄｩ " ﾗｲﾄ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ " ｵｱ " [generate] ﾄﾞｷｭｽﾞ ｲﾝ NixKits [style] ".

@@ -1,45 +1,45 @@
 # rcc-fix
 
-[中文](../zh/rcc-fix.md) | [English](rcc-fix.md) | [日本語](../ja/rcc-fix.md)
+[ 中文 [](../] ｾﾞｯﾄｴｲﾁ / [rcc-fix] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [rcc-fix] . md ) | [ [日本語] [](../] ｼﾞｪｲｴｲ / [rcc-fix] . md )
 
-Patches `asusctl` for better ASUS ROG Control Center on 2-in-1 detachable devices.
+ﾊﾟｯﾁｰｽﾞ ` [asusctl] ` ﾌｫｱ [better] [ASUS] [ROG] [Control] [Center] ｵﾝ [2-in-1] [detachable] [devices] .
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Version | Follows nixpkgs `asusctl` |
-| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| Patch | This repo `patches/rog-control-center-fix.patch` |
-| Module | `nixosModules.rog-control-center-fix` (systemd deadlock fix) |
-| Note | Overlay replaces `pkgs.asusctl`, no standalone package |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾊﾞｰｼﾞｮﾝ|Follows nixpkgs ` asusctl `
+Upstream|[ Asus - linux / asusctl ] ( https : / / github . com / Asus - linux / asusctl )
+ﾊﾟｯﾁ|ﾃﾞｨｽ repo ` ﾊﾟｯﾁｰｽﾞ / rog - control - center - ﾌｨｯｸｽ . ﾊﾟｯﾁ `
+ﾓｼﾞｭｰﾙ|` nixosModules . rog - control - center - ﾌｨｯｸｽ ` ( systemd deadlock ﾌｨｯｸｽ )
+ﾉｰﾄ|ｵｰﾊﾞｰﾚｲ replaces ` pkgs . asusctl ` , ﾉｰ standalone ﾊﾟｯｹｰｼﾞ
 
 ## Fixes
 
-- **Keyboard detection**: Shows multi-language overlay when keyboard disconnected, avoids crash
-- **Hot-plug recovery**: D-Bus event-driven — auto-restores Aura UI on reconnect
-- **Boundary checks**: PowerZone index guards for firmware-reported invalid zones
-- **systemd deadlock fix**: Removes `PartOf` from `asus-shutdown.service` to prevent cascading stop deadlock
+- ** [Keyboard] [detection] [**:] [Shows] [multi-language] ｵｰﾊﾞｰﾚｲ ｳｪﾝ [keyboard] [disconnected] , [avoids] [crash]
+- ** [Hot-plug] [recovery] [**:] D-Bus [event-driven] — [auto-restores] [Aura] UI ｵﾝ [reconnect]
+- ** [Boundary] [checks] [**:] [PowerZone] [index] [guards] ﾌｫｱ [firmware-reported] [invalid] [zones]
+- ** [systemd] [deadlock] ﾌｨｯｸｽ [**:] [Removes] ` [PartOf] ` ﾌﾛﾑ ` [asus-shutdown] . ｻｰﾋﾞｽ ` ﾄｩ [prevent] [cascading] ｽﾄｯﾌﾟ [deadlock]
 
 ## Install
 
-Overlay (code patch) + NixOS module (systemd fix), recommended together:
+ｵｰﾊﾞｰﾚｲ ( ｺｰﾄﾞ ﾊﾟｯﾁ ) + ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ( [systemd] ﾌｨｯｸｽ ), [recommended] [together] :
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+[nixpkgs] . [overlays] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [overlays] . [rcc-fix] ];
 
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+[imports] = [ ｲﾝﾌﾟｯﾄｽﾞ . [nix-kits] . [nixosModules] . [rog-control-center-fix] ];
 
-  services.asusctl = {
-    enable = true;
-    power-profile = true;
-    cpu-power-control = true;
-  };
+[services] . [asusctl] = {
+[enable] = [true] ;
+[power-profile] = [true] ;
+[cpu-power-control] = [true] ;
+};
 
-  programs.rog-control-center = {
-    enable = true;
-    autoStart = true;
-  };
+[programs] . [rog-control-center] = {
+[enable] = [true] ;
+[autoStart] = [true] ;
+};
 }
 ```

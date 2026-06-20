@@ -1,28 +1,28 @@
 # translate-pseudocn (Skill)
 
-[中文](../../zh/skills/translate-pseudocn.md) | [English](translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md)
+[ 中文 [](../../] ｾﾞｯﾄｴｲﾁ / ｽｷﾙｽﾞ / [translate-pseudocn] . md ) | [ ｲﾝｸﾞﾘｯｼｭ ]( [translate-pseudocn] . md ) | [ [日本語] [](../../] ｼﾞｪｲｴｲ / ｽｷﾙｽﾞ / [translate-pseudocn] . md )
 
-> Pseudo-Chinese (pcn) language support for the document-writing skill. Auto-discovered by write-project-docs.
+> [Pseudo-Chinese] ( ﾋﾟｰｼｰｴﾇ ) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ [document-writing] ｽｷﾙ . [Auto-discovered] ﾊﾞｲ [write-project-docs] .
 
 ## Info
 
-| Item | Value |
-|------|-------|
-| Type | Coding Agent Skill (language backend) |
-| Path | `skills/translate-pseudocn/SKILL.md` |
-| Language code | pcn |
-| Called by | write-project-docs (auto-discovered) |
+ｱｲﾃﾑ|ﾊﾞﾘｭｰ
+- - - - - -|- - - - - - -
+ﾀｲﾌﾟ|ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ ( ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ )
+ﾊﾟｽ|` ｽｷﾙｽﾞ / translate - pseudocn / ｽｷﾙ . md `
+ﾗﾝｹﾞｰｼﾞ ｺｰﾄﾞ|ﾋﾟｰｼｰｴﾇ
+Called ﾊﾞｲ|ﾗｲﾄ - ﾌﾟﾛｼﾞｪｸﾄ - ﾄﾞｷｭｽﾞ ( ｵｰﾄ - discovered )
 
 ## Features
 
-- Pseudo-Chinese (pcn) translation — strips kana, adjusts word order (SOV→SVO)
-- Particle replacement, punctuation conversion
-- Built-in ~13 term dictionary (JA→ZH mapping)
-- Code blocks, numbers, symbols preserved
+- [Pseudo-Chinese] ( ﾋﾟｰｼｰｴﾇ ) [translation] — [strips] [kana] , [adjusts] [word] [order] ( [SOV] → [SVO] )
+- [Particle] [replacement] , [punctuation] [conversion]
+- [Built-in] ~ 13 [term] [dictionary] ( ｼﾞｪｲｴｲ → ｾﾞｯﾄｴｲﾁ ﾏｯﾋﾟﾝｸﾞ )
+- ｺｰﾄﾞ [blocks] , [numbers] , [symbols] [preserved]
 
 ## Usage
 
-Auto-discovered by write-project-docs via `translate-*` naming convention:
+[Auto-discovered] ﾊﾞｲ [write-project-docs] [via] ` [translate-] *` [naming] [convention] :
 
-- "Generate pseudo-Chinese document"
-- "Add pcn language variant"
+- " [Generate] [pseudo-Chinese] [document] "
+- " ｱﾄﾞ ﾋﾟｰｼｰｴﾇ ﾗﾝｹﾞｰｼﾞ [variant] "
