@@ -73,6 +73,24 @@ NixKits 软件更新维护日志。
 
 ---
 
+## 2026-06-20T17:30:00+09:00
+
+**摘要**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+
+| 提交 | 说明 |
+|------|------|
+| `fee1534` | docs(skill): add translate-* support and docs-as-code mapping to write-maintenance-log |
+| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
+| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
+| `911052b` | refactor(docs): migrate pcn directory to katalish |
+| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
+| `97b696c` | docs(skill): purge pcn references from write-project-docs, add kata-en |
+| `f1904a1` | feat(skill): add translate-katakana — katakana english mechanical substitution |
+| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
+| `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
+
+---
+
 ## 2026-06-17T07:00:00+09:00
 
 **摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
