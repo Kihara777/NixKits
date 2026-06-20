@@ -49,7 +49,6 @@ Standalone overlays, not included in `default`:
 | llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md) |
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/zh/rcc-fix.md](rcc-fix.md) |
 | ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md) |
-| mihomo-alpha | Prerelease-Alpha tracking (proxy tool) | [docs/zh/mihomo-alpha.md](mihomo-alpha.md) |
 
 ## Skills
 
