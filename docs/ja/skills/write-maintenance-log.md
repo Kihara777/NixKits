@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> NixKits の統一規約に従って MAINTENANCE.md を執筆・更新。ソフトウェア更新とバグ修正の両方の記録タイプに対応。
+> NixKits 規約に基づく MAINTENANCE.md の執筆・更新。ソフトウェア更新とバグ修正の両方に対応し、5 言語同期。
 
 ## 基本情報
 

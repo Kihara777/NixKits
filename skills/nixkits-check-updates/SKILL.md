@@ -1,6 +1,6 @@
 ---
 name: nixkits-check-updates
-description: 检查 NixKits 所有软件包的上游版本更新并自动应用。检测新版本、更新构建配置（版本号、hash、meta）、更新文档、报告本地安装版本。
+description: 检查 NixKits 所有软件包的上游版本更新并自动应用；将本次修复记入维护日志。检测新版本、更新构建配置、更新文档、报告本地安装版本、撰写修复记录。
 ---
 
 # NixKits 软件包更新检查

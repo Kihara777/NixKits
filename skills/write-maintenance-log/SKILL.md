@@ -1,6 +1,6 @@
 ---
 name: write-maintenance-log
-description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支持软件更新记录和错误修复记录两种类型，自动关联 git commit、生成摘要、三语同步。
+description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支持软件更新记录和错误修复记录两种类型，自动关联 git commit、生成摘要、五语同步。
 ---
 
 # 维护日志撰写

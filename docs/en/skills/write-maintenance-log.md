@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-maintenance-log.md) | [English](write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> Write or update MAINTENANCE.md following NixKits conventions. Supports software update and bug fix record types.
+> Write or update MAINTENANCE.md per NixKits conventions. Supports software updates and bug fixes, synced across 5 languages.
 
 ## Info
 

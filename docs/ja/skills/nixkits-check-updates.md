@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
 
-> NixKits の全パッケージとパッチの上流更新をチェックし、バージョンアップとドキュメント同期を自動適用。
+> NixKits 全パッケージの上流更新チェック、自動アップグレード・ドキュメント同期、修正のメンテナンスログ記録。
 
 ## 基本情報
 

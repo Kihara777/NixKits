@@ -2,7 +2,7 @@
 
 [中文](nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
 
-> 检查 NixKits 所有软件包和补丁的上游版本更新，自动应用版本升级并更新文档。
+> 检查 NixKits 所有软件包和补丁的上游版本更新，自动升级并更新文档；将修复写入维护日志。
 
 ## 基本信息
 
