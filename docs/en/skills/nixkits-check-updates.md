@@ -1,6 +1,6 @@
 # nixkits-check-updates (Skill)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md)
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md)
 
 > Checks all NixKits packages and patches for upstream updates, applies version bumps and doc sync.
 

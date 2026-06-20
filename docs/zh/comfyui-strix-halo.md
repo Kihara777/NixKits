@@ -1,6 +1,6 @@
 # comfyui-strix-halo
 
-[中文](comfyui-strix-halo.md) | [English](../en/comfyui-strix-halo.md) | [日本語](../ja/comfyui-strix-halo.md)
+[中文](comfyui-strix-halo.md) | [English](../en/comfyui-strix-halo.md) | [日本語](../ja/comfyui-strix-halo.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-strix-halo.md)
 
 为 AMD Strix Halo（gfx1151 / RDNA 3.5 APU）提供 ComfyUI ROCm 加速支持。
 已在 **Ryzen AI MAX+ 395 / Radeon 8060S** 上实测验证。

@@ -1,6 +1,6 @@
 # nixkits-check-updates (Skill)
 
-[中文](nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md)
+[中文](nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md)
 
 > 检查 NixKits 所有软件包和补丁的上游版本更新，自动应用版本升级并更新文档。
 

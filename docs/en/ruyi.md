@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](../zh/ruyi.md) | [English](ruyi.md) | [日本語](../ja/ruyi.md)
+[中文](../../zh/ruyi.md) | [English](ruyi.md) | [日本語](../../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../../katalish/ruyi.md)
 
 Package manager for [RuyiSDK](https://ruyisdk.org) — RISC-V development toolkit providing toolchain installation, virtual environment management, device provisioning, and package repository operations.
 

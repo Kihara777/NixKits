@@ -1,6 +1,6 @@
 # write-maintenance-log (Skill)
 
-[中文](write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)
+[中文](write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md)
 
 > 按 NixKits 统一规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新和错误修复两种记录类型。
 

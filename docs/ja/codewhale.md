@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](codewhale.md)
+[中文](../../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md)
 
 DeepSeek V4 専用のターミナルコーディングエージェント。
 

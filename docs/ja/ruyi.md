@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](ruyi.md)
+[中文](../../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md)
 
 [RuyiSDK](https://ruyisdk.org) のパッケージマネージャー。RISC-V 開発環境のツールチェーンインストール、仮想環境管理、デバイスプロビジョニング、パッケージリポジトリ操作を提供。
 

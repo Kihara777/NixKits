@@ -1,6 +1,6 @@
 # mcp-searxng
 
-[中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](mcp-searxng.md)
+[中文](../../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md)
 
 [SearXNG](https://docs.searxng.org) 用 [MCP Server](https://modelcontextprotocol.io)。AI アシスタントにウェブ検索機能を提供します。
 

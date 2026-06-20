@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md)
+[中文](ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md)
 
 [RuyiSDK](https://ruyisdk.org) 的包管理器，用于 RISC-V 开发环境的工具链安装、虚拟环境管理、设备烧录与软件包仓库操作。
 

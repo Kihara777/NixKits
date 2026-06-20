@@ -1,6 +1,6 @@
 # translate-pseudocn (スキル)
 
-[中文](../../zh/skills/translate-pseudocn.md) | [English](../../en/skills/translate-pseudocn.md) | [日本語](translate-pseudocn.md)
+[中文](../../zh/skills/translate-pseudocn.md) | [English](../../en/skills/translate-pseudocn.md) | [日本語](translate-pseudocn.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-pseudocn.md)
 
 > 文書作成スキルに偽中国語（pcn）言語サポートを提供。write-project-docs から自動検出。
 
