@@ -1,54 +1,75 @@
+# Overlay: mihomo-alpha
+#
+# Tracks MetaCubeX/mihomo Prerelease-Alpha release.
+# Version is extracted from the release asset filename.
+# Package name remains `mihomo` (overrides nixpkgs mihomo).
 {
-  mihomo-ver,  # flake input: https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha
+  mihomo-ver,
 }:
-(final: prev: let
-  releaseInfo = builtins.fromJSON (builtins.readFile mihomo-ver);
 
-  # Format: mihomo-linux-amd64-alpha-<commit>.gz → extract commit
-  assets = releaseInfo.assets or [];
-  commitHash = let
-    amd64gz = builtins.filter
-      (a: prev.lib.hasPrefix "mihomo-linux-amd64-alpha-" (a.name or "")
-          && prev.lib.hasSuffix ".gz" (a.name or ""))
-      assets;
-    name = if builtins.length amd64gz > 0
-      then (builtins.elemAt amd64gz 0).name
-      else "";
-    m = builtins.match "mihomo-linux-amd64-alpha-(.+)\.gz" name;
-  in if m != null then prev.lib.elemAt m 0 else "unknown";
+final: prev:
 
-  version = "alpha-${commitHash}";
-in {
-  mihomo = prev.mihomo.overrideAttrs (old: {
+let
+  release = builtins.fromJSON (builtins.readFile mihomo-ver);
+  assets = release.assets or [];
+
+  # Find the amd64 .gz asset
+  isAmd64Gz = a:
+    let name = a.name or "";
+    in builtins.match "mihomo-linux-amd64-alpha-.*\.gz" name != null;
+
+  amd64Assets = builtins.filter isAmd64Gz assets;
+
+  # Extract version hash from the first matching asset name
+  firstAsset = if amd64Assets != [] then builtins.head amd64Assets else null;
+  assetName = if firstAsset != null then firstAsset.name else "unknown";
+  tags = if firstAsset != null then firstAsset.browser_download_url else "";
+  versionHash = builtins.head (builtins.match ".*mihomo-linux-amd64-alpha-(.+)\.gz" assetName);
+
+  # Full version string
+  version = "alpha-${versionHash}";
+
+in
+{
+  mihomo = prev.mihomo.overrideAttrs (oldAttrs: {
     inherit version;
 
-    src = prev.fetchurl {
-      url = "https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/mihomo-linux-amd64-alpha-${commitHash}.gz";
-      hash = "sha256-2LJTnbu7KxI0nHtHN7G2Yp4twroRPjV0pJ0199xy0HU=";
+    src = final.fetchurl {
+      url = "https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/mihomo-linux-amd64-alpha-${versionHash}.gz";
+      sha256 = "";  # impure fetch — set at build time
     };
 
-    sourceRoot = ".";
-
-    nativeBuildInputs = [ prev.gzip ];
-
+    # Override the unpackPhase to handle .gz (gzip-compressed, not tar)
     unpackPhase = ''
-      gzip -cd $src > mihomo
-      chmod +x mihomo
+      runHook preUnpack
+      mkdir -p mihomo
+      gzip -cd $src > mihomo/mihomo
+      chmod +x mihomo/mihomo
+      cd mihomo
+      runHook postUnpack
     '';
 
-    configurePhase = "true";
-    buildPhase = "true";
-
+    # Override the installPhase to install the binary
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
-      cp mihomo $out/bin/mihomo
+      cp mihomo $out/bin/
+      runHook postInstall
     '';
 
-    # Prebuilt binary from GitHub releases — no Go deps needed
-    vendorHash = null;
-    deleteVendor = true;
-    proxyVendor = true;
+    # No build, no source root
+    sourceRoot = ".";
+    dontBuild = true;
+    dontConfigure = true;
 
-    ldflags = [];
+    # Override source derivation properties
+    outputHashMode = "flat";
+    outputHashAlgo = "sha256";
+
+    meta = oldAttrs.meta // {
+      description = "Mihomo — Prerelease-Alpha (tracking upstream)";
+      version = version;
+    };
   });
-})
+}
+
