@@ -1,6 +1,6 @@
 # nixkits-check-updates (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
+[中文](../../zh/skills/nixkits-check-updates.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md) | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
 
 > Checks upstream updates for all NixKits packages and patches. Auto-upgrades, syncs docs, writes fixes to maintenance log.
 

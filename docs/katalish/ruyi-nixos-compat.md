@@ -1,6 +1,6 @@
 # ruyi-ﾆｯｸｽOS-compat
 
-[中文](../../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../../ja/ruyi-nixos-compat.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/ruyi-nixos-compat.md)
+[中文](../../zh/ruyi-nixos-compat.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) | [偽中国語](../pcn/ruyi-nixos-compat.md)
 
 Provides NixOS runtime compatibility ﾌｫｱ ruyi: pre-compiled ﾘｽｸ-V toolchain binaries cannot run directly ｵﾝ NixOS because ｻﾞ expected ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` does ﾉｯﾄ exist. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ transparently addresses ﾃﾞｨｽ via ｱ ﾊﾟｯﾁ.
 

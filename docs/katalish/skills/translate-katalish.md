@@ -1,6 +1,6 @@
 # translate-ｶﾀﾘｯｼｭ (ｽｷﾙ)
 
-[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-katalish.md)
+[中文](../../zh/skills/translate-katalish.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | [偽中国語](../../pcn/skills/translate-katalish.md)
 
 > Extra natural-language support for the document-writing skill.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
 

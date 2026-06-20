@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../../ja/codewhale.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/codewhale.md)
+[中文](../../zh/codewhale.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
 
 ｱ terminal ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ DeepSeek V4.
 

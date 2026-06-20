@@ -1,6 +1,6 @@
 # ﾗｲﾄ-maintenance-log (ｽｷﾙ)
 
-[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-maintenance-log.md)
+[中文](../../zh/skills/write-maintenance-log.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
 > Write or update MAINTENANCE.md per NixKits conventions. Supports software updates and bug fixes, sync across all available languages.
 

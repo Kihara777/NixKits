@@ -1,6 +1,6 @@
 # ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream
 
-[中文](../../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../../ja/obs-bilibili-stream.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/obs-bilibili-stream.md)
+[中文](../../zh/obs-bilibili-stream.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | [偽中国語](../pcn/obs-bilibili-stream.md)
 
 Bilibili live ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫｱ OBS Studio.
 

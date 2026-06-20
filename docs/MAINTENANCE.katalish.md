@@ -1,6 +1,6 @@
 # Maintenance Log
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
 

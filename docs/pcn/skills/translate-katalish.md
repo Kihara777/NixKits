@@ -1,6 +1,6 @@
 # translate-katalish (技能)
 
-[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | 偽中国語
+[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | [偽中国語](../../pcn/skills/translate-katalish.md)
 
 > 文書作成技能追加自然言語支持提供ｶﾀﾘｯｼｭ英語言語追加
 
