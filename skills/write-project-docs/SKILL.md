@@ -33,8 +33,8 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 │   └── ja/            # 日文文档
 ```
 
-> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本（`*.en.md`、`*.ja.md`）
-> 移入 `docs/` 目录，文件名保持不变。
+> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本（`*.en.md`、`*.ja.md`、`*.katalish.*`、`*.pcn.*`）
+> 移入 `docs/` 目录，文件名保持不变。扩展语言（`translate-*`）通过扫描 `skills/translate-*/SKILL.md` frontmatter 中的 `language_code` 自动发现。
 
 ### 模块文档模板
 
@@ -68,6 +68,8 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - zh 子目录文件：`[中文](file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md)`
 - en 子目录文件：`[中文](../../zh/file.md) | [English](file.md) | [日本語](../../ja/file.md)`
 - ja 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](file.md)`
+- katalish 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | [ｶﾀﾘｯｼｭ](file.md)`
+- pcn 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | [偽中国語](file.md)`
 
 ### 技能文档模板
 
@@ -170,7 +172,7 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 ### 第 3 步：创建目录结构
 
 ```bash
-mkdir -p docs/{zh,en,ja}/skills
+mkdir -p docs/{zh,en,ja}/skills docs/{katalish,pcn}/skills  # ← 扩展语言
 ```
 
 ### 第 4 步：编写 README（先写主语言版本）
