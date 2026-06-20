@@ -4,6 +4,10 @@
 
 > 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新和错误修复两种记录类型，五语同步。
 
+## 自动发现契约
+
+语言扩展技能通过 `translate-*` 命名约定被本技能发现：扫描 `skills/translate-*/` 目录，读取 frontmatter 中的 `language_code` / `display_name` / `base_language`，注册为多语同步流程中的可用语言。
+
 ## 基本信息
 
 | 项目 | 值 |

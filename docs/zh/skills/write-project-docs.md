@@ -4,6 +4,10 @@
 
 > 按 NixKits 风格为任意项目编写完整的多语言文档系统 — 中英日+ｶﾀﾘｯｼｭ四语、简洁、表驱动。
 
+## 自动发现契约
+
+语言扩展技能通过 `translate-*` 命名约定被本技能发现：扫描 `skills/translate-*/` 目录，读取各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段，注册为文档生成流程中的可用语言。
+
 ## 基本信息
 
 | 项目 | 值 |

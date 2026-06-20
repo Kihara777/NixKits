@@ -4,6 +4,10 @@
 
 > Generates complete multi-language documentation in the NixKits style — concise, table-driven.
 
+## Auto-Discovery Contract
+
+Language extension skills are discovered via the `translate-*` naming convention: scan `skills/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), and register them as available languages in the documentation generation pipeline.
+
 ## Info
 
 | Item | Value |

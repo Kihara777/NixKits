@@ -4,6 +4,10 @@
 
 > NixKits 規約に基づく MAINTENANCE.md の執筆・更新。ソフトウェア更新とバグ修正の両方に対応し、5 言語同期。
 
+## 自動発見契約
+
+`translate-*` 命名規則により言語拡張を検出：`skills/translate-*/` を走査し、各 SKILL.md の frontmatter フィールド（`language_code` / `display_name` / `base_language`）を読み取り、多言語同期パイプラインで利用可能な言語として登録。
+
 ## 基本情報
 
 | 項目 | 値 |

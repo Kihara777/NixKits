@@ -4,6 +4,10 @@
 
 > NixKits スタイルで完全な多言語ドキュメントを生成 — 中英日+偽中国語四言語、簡潔、表駆動。
 
+## 自動発見契約
+
+`translate-*` 命名規則により言語拡張を検出：`skills/translate-*/` を走査し、各 SKILL.md の frontmatter フィールド（`language_code` / `display_name` / `base_language`）を読み取り、文書生成パイプラインに利用可能な言語として登録。
+
 ## 基本情報
 
 | 項目 | 値 |
