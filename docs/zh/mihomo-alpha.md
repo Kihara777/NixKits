@@ -1,29 +1,32 @@
-# mihomo-alpha
+# mihomo-alpha（覆蓋層）
 
-[中文](mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
+[ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [中文](mihomo-alpha.md)
 
-> Prerelease-Alpha 追踪版（代理工具）——对上游 MetaCubeX/mihomo 的 Prerelease-Alpha 版本进行覆盖层注册，以便 NixOS 模块使用。
+`nix-kits.overlays.mihomo-alpha` — 追蹤 MetaCubeX/mihomo 的 Prerelease-Alpha 版本。
 
-## 基本信息
+## 適用對象
 
-| 项目 | 值 |
-|------|-----|
-| 类型 | 覆盖层 |
-| 覆盖层路径 | `nix-kits.overlays.mihomo-alpha` |
-| 包名 | `mihomo` |
-| 上游 | [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) |
-| 追踪版本 | Prerelease-Alpha |
+需要使用 mihomo 最新 alpha 功能的用戶。
 
-## 安装
+## 功能
+
+- 追蹤 Prerelease-Alpha tag，自動匹配最新 asset
+- 使用預編譯二進制，無需額外構建環境
+- 覆蓋 nixpkgs 中的 `pkgs.mihomo`
+
+## 註冊
+
+在系統 flake.nix 中添加：
 
 ```nix
-# flake.nix
 {
   inputs.nix-kits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
-    nixosConfigurations.example = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, nix-kits }:
+  {
+    nixosConfigurations.「 ホスト 」 = nixpkgs.lib.nixosSystem {
       modules = [
+        nix-kits.nixosModules.rog-control-center-fix
         { nixpkgs.overlays = [ nix-kits.overlays.mihomo-alpha ]; }
       ];
     };
@@ -31,13 +34,8 @@
 }
 ```
 
-## 功能
-
-- 追踪 MetaCubeX/mihomo Prerelease-Alpha 最新 Release
-- 使用预构建 Linux amd64 二进制
-- 覆盖 `pkgs.mihomo` 版本
-
 ## 注意
 
-- 更新方式同 llama-cpp-rocm：`nix flake update` 后重建即可
-- Prerelease-Alpha 是持续滚动更新的 tag，版本由 commit hash 确定
+- 首次添加覆蓋層後需執行 `nix flake update nix-kits` 以獲取 `mihomo-ver` input
+- `mihomo-ver` input 返回 GitHub API JSON，Nix 從中解析 asset URL 和檔案雜湊
+- 版本號格式：`alpha-<commit_hash>`（從 asset 檔名中提取）
