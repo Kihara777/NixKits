@@ -1,75 +1,58 @@
 # Overlay: mihomo-alpha
 #
-# Tracks MetaCubeX/mihomo Prerelease-Alpha release.
-# Version is extracted from the release asset filename.
-# Package name remains `mihomo` (overrides nixpkgs mihomo).
-{
-  mihomo-ver,
-}:
+# Replaces pkgs.mihomo with a prebuilt binary tracking the
+# Prerelease-Alpha release from MetaCubeX/mihomo.
+#
+# Usage (system flake.nix):
+#   nix-kits.overlays.mihomo-alpha
+#
+# flake input: mihomo-ver.url = "https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha";
+#              mihomo-ver.flake = false;
+
+{ mihomo-ver }:
 
 final: prev:
 
 let
+  # Parse version from the GitHub release API JSON.
   release = builtins.fromJSON (builtins.readFile mihomo-ver);
   assets = release.assets or [];
-
-  # Find the amd64 .gz asset
-  isAmd64Gz = a:
-    let name = a.name or "";
-    in builtins.match "mihomo-linux-amd64-alpha-.*\.gz" name != null;
-
-  amd64Assets = builtins.filter isAmd64Gz assets;
-
-  # Extract version hash from the first matching asset name
-  firstAsset = if amd64Assets != [] then builtins.head amd64Assets else null;
-  assetName = if firstAsset != null then firstAsset.name else "unknown";
-  tags = if firstAsset != null then firstAsset.browser_download_url else "";
-  versionHash = builtins.head (builtins.match ".*mihomo-linux-amd64-alpha-(.+)\.gz" assetName);
-
-  # Full version string
-  version = "alpha-${versionHash}";
-
+  amd64Gz = builtins.filter
+    (a: builtins.match "mihomo-linux-amd64-alpha-[0-9a-f]+\.gz" (a.name or "") != null)
+    assets;
+  gzAsset = builtins.head amd64Gz;
+  name = gzAsset.name;
+  commitHash = builtins.head
+    (builtins.match "mihomo-linux-amd64-alpha-([0-9a-f]+)\.gz" name);
 in
 {
-  mihomo = prev.mihomo.overrideAttrs (oldAttrs: {
-    inherit version;
+  mihomo = prev.stdenv.mkDerivation {
+    pname = "mihomo-alpha";
+    version = "alpha-${commitHash}";
 
     src = final.fetchurl {
-      url = "https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/mihomo-linux-amd64-alpha-${versionHash}.gz";
-      sha256 = "";  # impure fetch — set at build time
+      url = gzAsset.browser_download_url;
+      sha256 = gzAsset.sha256 or "";
     };
 
-    # Override the unpackPhase to handle .gz (gzip-compressed, not tar)
+    nativeBuildInputs = [ final.gzip ];
+
     unpackPhase = ''
       runHook preUnpack
       mkdir -p mihomo
       gzip -cd $src > mihomo/mihomo
-      chmod +x mihomo/mihomo
-      cd mihomo
       runHook postUnpack
     '';
 
-    # Override the installPhase to install the binary
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      cp mihomo $out/bin/
+      install -m 755 mihomo/mihomo $out/bin/mihomo
       runHook postInstall
     '';
 
-    # No build, no source root
-    sourceRoot = ".";
-    dontBuild = true;
-    dontConfigure = true;
-
-    # Override source derivation properties
-    outputHashMode = "flat";
-    outputHashAlgo = "sha256";
-
-    meta = oldAttrs.meta // {
-      description = "Mihomo — Prerelease-Alpha (tracking upstream)";
-      version = version;
+    meta = prev.mihomo.meta or {} // {
+      version = "alpha-${commitHash}";
     };
-  });
+  };
 }
-
