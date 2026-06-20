@@ -18,12 +18,12 @@ let
   release = builtins.fromJSON (builtins.readFile mihomo-ver);
   assets = release.assets or [];
   amd64Gz = builtins.filter
-    (a: builtins.match "mihomo-linux-amd64-alpha-[0-9a-f]+\.gz" (a.name or "") != null)
+    (a: builtins.match "mihomo-linux-amd64-.*\.gz" (a.name or "") != null)
     assets;
   gzAsset = builtins.head amd64Gz;
   name = gzAsset.name;
   commitHash = builtins.head
-    (builtins.match "mihomo-linux-amd64-alpha-([0-9a-f]+)\.gz" name);
+    (builtins.match "mihomo-linux-amd64-.*-([0-9a-f]+)\.gz" name);
 in
 {
   mihomo = prev.stdenv.mkDerivation {
@@ -33,8 +33,7 @@ in
     src = final.fetchurl {
       url = gzAsset.browser_download_url;
       sha256 = "sha256-2LJTnbu7KxI0nHtHN7G2Yp4twroRPjV0pJ0199xy0HU=";
-
-
+    };
 
     nativeBuildInputs = [ final.gzip ];
 
@@ -54,6 +53,6 @@ in
 
     meta = prev.mihomo.meta or {} // {
       version = "alpha-${commitHash}";
-
+    };
   };
 }
