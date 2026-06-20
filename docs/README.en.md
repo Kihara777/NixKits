@@ -25,6 +25,7 @@ Supported systems: all `lib.platforms.linux` (auto-syncs with nixpkgs)
 | mcp-searxng | MCP Server for SearXNG | [docs/en/mcp-searxng.md](docs/en/mcp-searxng.md) |
 | obs-bilibili-stream | Bilibili streaming plugin for OBS | [docs/en/obs-bilibili-stream.md](docs/en/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode Telegram Bot client | [docs/en/opencode-telegram.md](docs/en/opencode-telegram.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/zh/comfyui-strix-halo.md](docs/zh/comfyui-strix-halo.md) |
 
 ## Patches
 
@@ -32,7 +33,6 @@ Standalone overlays not included in `default`:
 
 | Patch | Description | Docs |
 |-------|-------------|------|
-| comfyui-strix-halo | ComfyUI ROCm support for AMD Strix Halo (gfx1151/RDNA 3.5) | [docs/en/comfyui-strix-halo.md](docs/en/comfyui-strix-halo.md) |
 | llama-cpp-rocm | ROCm-accelerated build tracking latest GitHub Release | [docs/en/llama-cpp-rocm.md](docs/en/llama-cpp-rocm.md) |
 | rcc-fix | Patched asusctl for 2-in-1 devices | [docs/en/rcc-fix.md](docs/en/rcc-fix.md) |
 

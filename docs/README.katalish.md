@@ -25,6 +25,7 @@ Supported systems: ｵｰﾙ `lib.platforms.linux` (auto-syncs ｳｨｽﾞ nixp
 | mcp-searxng | ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [docs/en/mcp-searxng.md](docs/en/mcp-searxng.md) |
 | obs-bilibili-stream | Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫｱ OBS | [docs/en/obs-bilibili-stream.md](docs/en/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode Telegram ﾎﾞｯﾄ ｸﾗｲｱﾝﾄ | [docs/en/opencode-telegram.md](docs/en/opencode-telegram.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ｶﾑﾌｨUI ﾛｯｸｴﾑ ｻﾎﾟｰﾄ | [docs/zh/comfyui-strix-halo.md](docs/zh/comfyui-strix-halo.md) |
 
 ## ﾊﾟｯﾁｰｽﾞ
 
@@ -32,7 +33,6 @@ Standalone overlays ﾉｯﾄ included ｲﾝ `default`:
 
 | ﾊﾟｯﾁ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |-------|-------------|------|
-| comfyui-strix-halo | ｶﾑﾌｨUI ﾛｯｸｴﾑ ｻﾎﾟｰﾄ ﾌｫｱ AMD Strix Halo (gfx1151/RDNA 3.5) | [docs/en/comfyui-strix-halo.md](docs/en/comfyui-strix-halo.md) |
 | llama-cpp-rocm | ROCm-accelerated ﾋﾞﾙﾄﾞ tracking latest GitHub Release | [docs/en/llama-cpp-rocm.md](docs/en/llama-cpp-rocm.md) |
 | rcc-fix | Patched asusctl ﾌｫｱ 2-in-1 devices | [docs/en/rcc-fix.md](docs/en/rcc-fix.md) |
 
