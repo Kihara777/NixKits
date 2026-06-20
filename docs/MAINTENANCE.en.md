@@ -1,22 +1,37 @@
 # Maintenance Log
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
+[中文](MAINTENANCE.md) | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
-NixKits package update changelog.
+NixKits 软件更新维护日志。
 
 ---
 
-## 2026-06-18T09:52:34+09:00
 
-**Summary**: codewhale 0.8.61 — upstream fix; mcp-searxng 1.6.0 — upstream fix
+## 2026-06-21T00:07:44+09:00
+
+**Summary**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale | 0.8.61 | 0.8.62 |
+| mcp-searxng | 1.6.0 | 1.7.1 |
+| 　 | cli hash | `sha256-3k0K/I/Nx...` → `sha256-ci3MokGW...` |
 
 | Commit | Description |
-|--------|-------------|
+|------|------|
+| `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
+
+## 2026-06-18T09:52:34+09:00
+
+**Summary**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
+
+| Commit | Description |
+|------|------|
 | `...` | chore(pkgs): bump codewhale 0.8.61 |
 | `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
 
 | Package | Old | New |
-|---------|-----|-----|
+|--------|--------|--------|
 | codewhale | 0.8.60 | 0.8.61 |
 | 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
 | 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
@@ -28,20 +43,20 @@ NixKits package update changelog.
 
 ## 2026-06-18T09:03:48+09:00
 
-**Summary**: ruyi — NixOS compatibility patch (`patches/ruyi-nixos-compat.patch`), transparently handles dynamic linker paths for pre-compiled RISC-V toolchains, GCC sub-process ELF interpreter repair, and console_scripts argv0 issue
+**Summary**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
 
 | Commit | Description |
-|--------|-------------|
+|------|------|
 | `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
 
 ---
 
 ## 2026-06-17T10:59:35+09:00
 
-**Summary**: ruyi — NixOS module (`services.ruyi`), declaratively generates `/etc/xdg/ruyi/config.toml` and environment variables
+**Summary**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
 
 | Commit | Description |
-|--------|-------------|
+|------|------|
 | `5cea307` | feat(ruyi): add NixOS module for declarative configuration |
 | `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
 | `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
@@ -51,25 +66,43 @@ NixKits package update changelog.
 
 ## 2026-06-17T10:00:00+09:00
 
-**Summary**: ruyi — add devShell support, `nix develop github:Kihara777/NixKits#ruyi` for instant environment
+**Summary**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
 
 | Commit | Description |
-|--------|-------------|
+|------|------|
 | `975295d` | refactor(flake): remove default package alias |
 
 ---
 
 ## 2026-06-17T09:48:33+09:00
 
-**Summary**: ruyi 0.51.0-alpha.20260616 — RuyiSDK package manager, new package (Python/Poetry, ruff + mypy + 320 unit + 52 integration tests all passing)
+**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
 
 | Commit | Description |
-|--------|-------------|
+|------|------|
 | `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
 
-| Package | New |
-|---------|-----|
+| 软件名 | 新版本 |
+|--------|--------|
 | ruyi | 0.51.0-alpha.20260616 |
+
+---
+
+## 2026-06-20T17:30:00+09:00
+
+**Summary**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+
+| Commit | Description |
+|------|------|
+| `fee1534` | docs(skill): add translate-* support and docs-as-code mapping to write-maintenance-log |
+| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
+| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
+| `911052b` | refactor(docs): migrate pcn directory to katalish |
+| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
+| `97b696c` | docs(skill): purge pcn references from write-project-docs, add kata-en |
+| `f1904a1` | feat(skill): add translate-katakana — katakana english mechanical substitution |
+| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
+| `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
 
 ---
 
