@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](../../zh/ruyi.md) | [English](ruyi.md) | [日本語](../../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../../katalish/ruyi.md) | [偽中国語](../../pcn/ruyi.md)
+[中文](../../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/ruyi.md)
 
 ﾊﾟｯｹｰｼﾞ manager ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — ﾘｽｸ-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ toolkit providing toolchain installation, virtual environment management, device provisioning, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ operations.
 

@@ -1,6 +1,6 @@
 # comfyui-strix-halo
 
-[中文](../../zh/comfyui-strix-halo.md) | [English](../en/comfyui-strix-halo.md) | [日本語](comfyui-strix-halo.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-strix-halo.md) | [偽中国語](../pcn/comfyui-strix-halo.md)
+[中文](../../zh/comfyui-strix-halo.md) | [English](../../en/comfyui-strix-halo.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/comfyui-strix-halo.md) | [偽中国語](../../pcn/comfyui-strix-halo.md)
 
 AMD Strix Halo（gfx1151 / RDNA 3.5 APU）向け ComfyUI ROCm アクセラレーション。
 **Ryzen AI MAX+ 395 / Radeon 8060S** で実機検証済み。

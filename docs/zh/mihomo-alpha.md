@@ -1,6 +1,6 @@
 # mihomo-alpha（覆蓋層）
 
-[ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [中文](mihomo-alpha.md)
+中文 | [English](../en/mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
 
 `nix-kits.overlays.mihomo-alpha` — 追蹤 MetaCubeX/mihomo 的 Prerelease-Alpha 版本。
 

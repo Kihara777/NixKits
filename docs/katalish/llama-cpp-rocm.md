@@ -1,6 +1,6 @@
 # llama-cpp-rocm
 
-[中文](../../zh/llama-cpp-rocm.md) | [English](llama-cpp-rocm.md) | [日本語](../../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../../katalish/llama-cpp-rocm.md) | [偽中国語](../../pcn/llama-cpp-rocm.md)
+[中文](../../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../../ja/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/llama-cpp-rocm.md)
 
 Upstream llama.cpp ｳｨｽﾞ ﾛｯｸｴﾑ GPU acceleration. Dynamically fetches ｻﾞ latest GitHub Release ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge ﾌｨｰﾁｬｰｽﾞ.
 

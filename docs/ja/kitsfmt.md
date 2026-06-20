@@ -1,6 +1,6 @@
 # kitsfmt
 
-[中文](../../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | [偽中国語](../pcn/kitsfmt.md)
+[中文](../../zh/kitsfmt.md) | [English](../../en/kitsfmt.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/kitsfmt.md) | [偽中国語](../../pcn/kitsfmt.md)
 
 **Nix フォーマッター** — rnix AST ベース、属性ソート・コメント保持・インデント正規化。
 

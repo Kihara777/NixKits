@@ -1,6 +1,6 @@
 # mihomo-alpha
 
-[中文](../zh/mihomo-alpha.md) | [English](mihomo-alpha.md) | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
+[中文](../../zh/mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](../../ja/mihomo-alpha.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/mihomo-alpha.md)
 
 > Prerelease-Alpha tracking (proxy tool) — overlay registration of MetaCubeX/mihomo's Prerelease-Alpha release for NixOS module use.
 

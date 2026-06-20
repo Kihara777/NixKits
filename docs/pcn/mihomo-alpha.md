@@ -1,6 +1,6 @@
 # mihomo-alpha
 
-[中文](../zh/mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
+[中文](../../zh/mihomo-alpha.md) | [English](../../en/mihomo-alpha.md) | [日本語](../../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../../katalish/mihomo-alpha.md) | 偽中国語
 
 > Prerelease-Alpha 追跡版工具— MetaCubeX/mihomo Prerelease-Alpha 發佈覆蓋層登録NixOS 模塊利用可能
 

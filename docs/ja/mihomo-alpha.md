@@ -1,6 +1,6 @@
 # mihomo-alpha
 
-[中文](../zh/mihomo-alpha.md) | [English](../en/mihomo-alpha.md) | [日本語](mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
+[中文](../../zh/mihomo-alpha.md) | [English](../../en/mihomo-alpha.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/mihomo-alpha.md) | [偽中国語](../../pcn/mihomo-alpha.md)
 
 > Prerelease-Alpha 追跡版（プロキシツール）— MetaCubeX/mihomo の Prerelease-Alpha リリースをオーバーレイ登録し、NixOS モジュールで利用可能に。
 

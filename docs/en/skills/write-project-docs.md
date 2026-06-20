@@ -1,6 +1,6 @@
 # write-project-docs (Skill)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | English | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > Generates complete multi-language documentation in the NixKits style — concise, table-driven.
 

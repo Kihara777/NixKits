@@ -1,6 +1,6 @@
 # ｴﾑｼｰﾋﾟｰ-searxng
 
-[中文](../../zh/mcp-searxng.md) | [English](mcp-searxng.md) | [日本語](../../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../../katalish/mcp-searxng.md) | [偽中国語](../../pcn/mcp-searxng.md)
+[中文](../../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../../ja/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/mcp-searxng.md)
 
 [ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web ｻｰﾁ ﾌｫｱ AI assistants.
 
