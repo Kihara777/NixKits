@@ -2,7 +2,7 @@
 
 [中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md) | [ｶﾀﾘｯｼｭ](docs/README.katalish.md) | [偽中国語](docs/README.pcn.md)
 
-NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
+NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。详细组件关系见 [项目文档](docs/zh/project.md)。
 
 ## 添加
 

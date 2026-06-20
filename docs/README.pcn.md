@@ -4,8 +4,6 @@
 
 NixKits — 軟件補丁NixOS 模塊AI 技能合集
 
-項目架構組件関係 [項目文書](../zh/project.md) 参照
-
 ## 追加
 
 ```nix
@@ -51,6 +49,7 @@ nix registry add nix-kits github:Kihara777/NixKits
 |llama-cpp-rocm|上流最新發佈追跡 ROCm 加速|[docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md)|
 |rcc-fix|asusctl 2-in-1 設備体験修正|[docs/zh/rcc-fix.md](rcc-fix.md)|
 |ruyi-nixos-compat|ruyi NixOS 運行時互換性ELF interpreter + GCC 子修正|[docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md)|
+|mihomo-alpha|Prerelease-Alpha 追跡版工具|[docs/zh/mihomo-alpha.md](mihomo-alpha.md)|
 
 ## 技能
 
