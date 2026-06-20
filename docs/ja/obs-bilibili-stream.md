@@ -1,6 +1,6 @@
 # obs-bilibili-stream
 
-[中文](../../zh/obs-bilibili-stream.md) | [English](../../en/obs-bilibili-stream.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/obs-bilibili-stream.md) | [偽中国語](../../pcn/obs-bilibili-stream.md)
+[中文](../../zh/obs-bilibili-stream.md) | [English](../../en/obs-bilibili-stream.md) | 日本語 | [Katalish](../../katalish/obs-bilibili-stream.md) | [Pseudo-Chinese](../../pcn/obs-bilibili-stream.md)
 
 OBS Studio 用 Bilibili ライブ配信プラグイン。
 

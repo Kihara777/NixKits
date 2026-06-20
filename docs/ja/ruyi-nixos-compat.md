@@ -1,6 +1,6 @@
 # ruyi-nixos-compat
 
-[中文](../../zh/ruyi-nixos-compat.md) | [English](../../en/ruyi-nixos-compat.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/ruyi-nixos-compat.md) | [偽中国語](../../pcn/ruyi-nixos-compat.md)
+[中文](../../zh/ruyi-nixos-compat.md) | [English](../../en/ruyi-nixos-compat.md) | 日本語 | [Katalish](../../katalish/ruyi-nixos-compat.md) | [Pseudo-Chinese](../../pcn/ruyi-nixos-compat.md)
 
 ruyi に NixOS ランタイム互換性を提供します：プリコンパイルされた RISC-V ツールチェーンバイナリは、期待する動的リンカパス `/lib64/ld-linux-x86-64.so.2` が NixOS に存在しないため、そのままでは実行できません。この overlay はパッチを通じてこの問題を透過的に処理します。
 
