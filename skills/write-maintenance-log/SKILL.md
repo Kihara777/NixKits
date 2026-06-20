@@ -7,6 +7,14 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 
 按 NixKits 统一规范撰写 `MAINTENANCE.md` 维护记录，确保格式一致、信息完整、多语同步。
 
+## 自动发现契约
+
+本技能通过纯自然语言约定发现语言扩展：
+
+1. **扫描** — 在 `skills/translate-*/` 目录下查找所有翻译技能
+2. **读取** — 解析各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段
+3. **注册** — 自动将发现的语言扩展纳入多语同步流程。各翻译技能的 SKILL.md 正文中定义翻译规则（词典、语序调整、假名剥离）和列名映射表（TITLE / SUBTITLE / SUMMARY 等五语对照）。
+
 ## 入口
 
 本技能提供两个独立入口，根据用户意图自动匹配。
@@ -159,12 +167,7 @@ git log --oneline --since="<时间范围>"
 
 ### 第 4 步：多语同步
 
-对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现翻译技能：
-
-```
-skills/translate-katalish/  → 语言代码 katalish → [ｶﾀﾘｯｼｭ]
-skills/translate-pseudocn/  → 语言代码 pcn      → [偽中国語]
-```
+对于追加语言翻译（如片假名英语、伪中国语），按 `translate-*` 命名约定自动发现语言扩展技能——扫描 `skills/translate-*/` 目录，读取各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段完成注册。
 
 ```bash
 # 更新中文 MAINTENANCE.md 后，同步 en / ja / katalish / pcn 版本

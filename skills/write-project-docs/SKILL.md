@@ -13,6 +13,14 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - 用户希望采用 NixKits 风格（简洁、多语言、表驱动）
 - 用户有含模块/包/服务的现有项目需要文档化
 
+## 自动发现契约
+
+本技能通过纯自然语言约定发现语言扩展：
+
+1. **扫描** — 在 `skills/translate-*/` 目录下查找所有翻译技能
+2. **读取** — 解析各 SKILL.md frontmatter 中的 `language_code`（目录名/文件扩展名）、`display_name`（语言切换器标签）、`base_language`（翻译源语言）三个字段
+3. **注册** — 自动将发现的语言扩展纳入目录结构、语言切换器、for 循环、列名映射等生成逻辑。各翻译技能的 SKILL.md 正文中定义转换规则和内容映射表。
+
 ## 规范（NixKits 风格）
 
 ### 目录结构
@@ -225,13 +233,7 @@ for dir in skills/translate-*/; do
 done
 ```
 
-各 translate-* 技能的 SKILL.md frontmatter 必须包含：
-
-```yaml
-language_code: katalish    # 语言代码（用于目录名 docs/<code>/）
-display_name: ｶﾀﾘｯｼｭ     # 语言切换器标签
-base_language: en          # 翻译源语言（zh/en/ja）
-```
+各 translate-* 技能的 SKILL.md frontmatter 中声明 `language_code`（目录名 / 文件扩展名）、`display_name`（语言切换器标签）、`base_language`（翻译源语言）三个字段。文档撰写技能按命名约定扫描 `skills/translate-*/` 自动注册所有语言扩展。
 
 自动发现后：
 - 目录结构扩展 `docs/<code>/` 和 `docs/<code>/skills/`
