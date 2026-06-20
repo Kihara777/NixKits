@@ -15,21 +15,21 @@
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.codewhale ];
 
 # ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
 ```
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-codewhale                              # interactive TUI
-codewhale "explain this function"      # one-shot prompt
-codewhale --model auto "fix this bug"  # auto-select model
-codewhale --yolo                       # auto-approve tools
-codewhale doctor                       # check setup
-codewhale auth set --provider deepseek # save API key
+codewhale                              # ｲﾝﾄｴﾗｱｸﾄｲﾌﾞｴ ﾃｨｰﾕｰｱｲ
+codewhale "ｴｸｽﾌﾟﾙｱｲﾝ ﾃﾞｨｽ ﾌｳﾝｸｼｮﾝ"      # ｵﾝｴ-ｼｵﾄ ﾌﾟﾗｵﾑﾌﾟﾄ
+codewhale --ﾓﾃﾞﾙ ｵｰﾄ "ﾌｨｯｸｽ ﾃﾞｨｽ ﾊﾞｸﾞ"  # ｵｰﾄ-ｽｴﾙｴｸﾄ ﾓﾃﾞﾙ
+codewhale --ｲｵﾙｵ                       # ｵｰﾄ-ｱﾌﾟﾌﾟﾗｵﾌﾞｴ ﾂｰﾙｽﾞ
+codewhale ﾄﾞｵｸﾄｵﾗ                       # ﾁｪｯｸ ｾｯﾄｱｯﾌﾟ
+codewhale ｱｳｽ ｾｯﾄ --ﾌﾟﾗｵﾌﾞｲﾄﾞｴﾗ ﾄﾞｴｴﾌﾟｽｴｴｸ # ｾｰﾌﾞ ｴｰﾋﾟｰｱｲ ｷｰ
 ```
 
 ﾘｸﾜｲｱｽﾞ ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ ｴｰﾋﾟｰｱｲ ｷｰ](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.

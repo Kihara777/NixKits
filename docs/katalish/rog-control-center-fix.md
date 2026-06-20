@@ -21,8 +21,8 @@
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ];
 
-  services.asusd.enable = true;
+  ｽｴﾗﾌﾞｲｸｽﾞ.ｱｽｳｽﾄﾞ.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
 }
 ```

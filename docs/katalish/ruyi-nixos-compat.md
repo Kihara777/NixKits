@@ -11,8 +11,8 @@
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # standalone overlay
+ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [
+  ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ruyi-ﾆｯｸｽOS-compat  # ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｵｰﾊﾞｰﾚｲ
 ];
 ```
 
@@ -29,5 +29,5 @@ nixpkgs.overlays = [
 ## ﾌﾞｴﾗｲﾌｲｸｱｼｮﾝ
 
 ```bash
-# check whether the nixos_compat module is loaded
-find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
+# ﾁｪｯｸ ﾎｴｽｴﾗ ｻﾞ ﾆｯｸｽOS_compat ﾓｼﾞｭｰﾙ ｲｽﾞ ﾙｵｱﾄﾞﾄﾞ
+ﾌｲﾝﾄﾞ /ﾆｯｸｽ/ｽﾄｵﾗｴ/*-ruyi-*/ﾙｲﾌﾞ -ﾈｰﾑ 'ﾆｯｸｽOS_compat.py'

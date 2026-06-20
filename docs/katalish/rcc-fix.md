@@ -27,19 +27,19 @@
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾗｸｸ-ﾌｨｯｸｽ ];
 
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ];
 
-  services.asusctl = {
-    enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+  ｽｴﾗﾌﾞｲｸｽﾞ.ｱｽｳｽｸﾄﾙ = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ﾌﾟｵｳｴﾗ-ﾌﾟﾛﾌｧｲﾙ = ﾄﾗｳｴ;
+    ｸﾌﾟｳ-ﾌﾟｵｳｴﾗ-control = ﾄﾗｳｴ;
   };
 
-  programs.rog-control-center = {
-    enable = true;
-    autoStart = true;
+  ﾌﾟﾗｵｸﾞﾗｱﾑｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ｱｳﾄｵｽﾄｱﾗﾄ = ﾄﾗｳｴ;
   };
 }
 ```

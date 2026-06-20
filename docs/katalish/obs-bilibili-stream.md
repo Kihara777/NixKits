@@ -18,8 +18,8 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
 }
 ```
 
@@ -27,10 +27,10 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-  programs.obs-studio = {
-    enable = true;
-    plugins = [ pkgs.obs-bilibili-stream ];
+  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+  ﾌﾟﾗｵｸﾞﾗｱﾑｽﾞ.ｵﾌﾞｴｽ-ｽﾄｳﾄﾞｲｵ = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ﾌﾟﾙｳｼﾞｲﾝｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
   };
 }
 ```
@@ -38,5 +38,5 @@ Bilibili ﾙｲﾌﾞｴ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫ�
 **ﾎｰﾑ ﾑｱﾝｱｼﾞｴﾗ**
 
 ```nix
-home.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+ﾎｰﾑ.ﾊﾟｯｹｰｼﾞｰｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ];
 ```

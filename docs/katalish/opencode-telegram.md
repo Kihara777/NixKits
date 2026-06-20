@@ -14,23 +14,23 @@
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-# First-time setup
-opencode serve                           # start opencode server
-opencode-telegram config                 # interactive Telegram Bot config
+# ﾌｧｰｽﾄ-ﾄｲﾑｴ ｾｯﾄｱｯﾌﾟ
+ｵｰﾌﾟﾝｺｰﾄﾞ ｽｴﾗﾌﾞｴ                           # ｽﾀｰﾄ ｵｰﾌﾟﾝｺｰﾄﾞ ｻｰﾊﾞｰ
+ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｺﾝﾌｨｸﾞ                 # ｲﾝﾄｴﾗｱｸﾄｲﾌﾞｴ ﾃﾚｸﾞﾗﾑ ﾎﾞｯﾄ ｺﾝﾌｨｸﾞ
 
-# Daily use
-opencode-telegram start                  # start (auto-launches opencode)
-opencode-telegram status                 # check status
-opencode-telegram stop                   # stop
+# ﾄﾞｱｲﾘｰ ﾕｰｽﾞ
+ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾀｰﾄ                  # ｽﾀｰﾄ (ｵｰﾄ-ﾙｱｳﾝﾁｽﾞ ｵｰﾌﾟﾝｺｰﾄﾞ)
+ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾄｱﾄｳｽﾞ                 # ﾁｪｯｸ ｽﾄｱﾄｳｽﾞ
+ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ｽﾄｯﾌﾟ                   # ｽﾄｯﾌﾟ
 ```
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ];
 
 # ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
 ```
 
 ## ﾌﾚｲｸ ﾓｼﾞｭｰﾙ
@@ -38,18 +38,18 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
-    nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
-      modules = [
-        nix-kits.nixosModules.opencode-telegram
+  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
+    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｲｵｳﾗ-ﾎｵｽﾄ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
+      ﾓｼﾞｭｰﾙｽﾞ = [
+        ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
         {
-          services.opencode-telegram = {
-            enable = true;
-            user = "kix";
-            group = "users";
-            afterServices = [ "network-online.target" "llama-cpp.service" ];
+          ｽｴﾗﾌﾞｲｸｽﾞ.ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ = {
+            ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+            ﾕｰｻﾞｰ = "ｸｲｸｽ";
+            ｸﾞﾗｵｳﾌﾟ = "ﾕｰｻﾞｰｽﾞ";
+            ｱﾌﾄｴﾗｽｴﾗﾌﾞｲｸｽﾞ = [ "ﾝｴﾄｳｵﾗｸ-ｵﾝﾙｲﾝｴ.ﾄｱﾗｼﾞｴﾄ" "ﾗﾏ-cpp.ｻｰﾋﾞｽ" ];
           };
         }
       ];

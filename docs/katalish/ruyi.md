@@ -16,8 +16,8 @@
 ## ﾃﾞﾌﾞ ｼｪﾙ
 
 ```bash
-nix develop nix-kits#ruyi             # when nix-kits is already a flake input
-nix develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
+ﾆｯｸｽ ﾄﾞｴﾌﾞｴﾙｵﾌﾟ ﾆｯｸｽ-ｸｲﾄｽﾞ#ruyi             # ｳｪﾝ ﾆｯｸｽ-ｸｲﾄｽﾞ ｲｽﾞ ｱﾙﾗｴｱﾄﾞｲ ｱ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ
+ﾆｯｸｽ ﾄﾞｴﾌﾞｴﾙｵﾌﾟ ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits#ruyi  # ｽﾞｴﾗｵ-ｺﾝﾌｨｸﾞ ｵﾝｴ-ｼｵﾄ
 ```
 
 ｴﾝﾄｴﾗｽﾞ ｱﾝ ｴﾝﾊﾞｲﾛﾒﾝﾄ ｳｨｽﾞ `ruyi` ｱﾍﾞｲﾗﾌﾞﾙ ｵﾝ `$PATH`.
@@ -25,21 +25,21 @@ nix develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.ruyi ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ruyi ];
 
 # ｵｱ ﾌﾞｲｱ ｵｰﾊﾞｰﾚｲ
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-environment.systemPackages = [ pkgs.ruyi ];
+ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ﾌﾟｸｸﾞｽﾞ.ruyi ];
 ```
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-ruyi --help
-ruyi list --all          # List all available packages
-ruyi install <pkg>       # Install a toolchain
-ruyi venv --toolchain <t> # Create a virtual environment
-ruyi device provision    # Provision a device
+ruyi --ﾎｴﾙﾌﾟ
+ruyi ﾘｽﾄ --ｵｰﾙ          # ﾘｽﾄ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾊﾟｯｹｰｼﾞｰｽﾞ
+ruyi ｲﾝｽﾄｰﾙ <ﾌﾟｸｸﾞ>       # ｲﾝｽﾄｰﾙ ｱ ﾂｰﾙﾁｪｰﾝ
+ruyi ﾌﾞｴﾝﾌﾞ --ﾂｰﾙﾁｪｰﾝ <ﾄ> # ｸﾘｴｲﾄ ｱ ﾊﾞｰﾁｬﾙ ｴﾝﾊﾞｲﾛﾒﾝﾄ
+ruyi ﾄﾞｴﾌﾞｲｽｴ ﾌﾟﾗｵﾌﾞｲｼﾞｮﾝ    # ﾌﾟﾗｵﾌﾞｲｼﾞｮﾝ ｱ ﾄﾞｴﾌﾞｲｽｴ
 ```
 
 > ruyi ﾘｸﾜｲｱｽﾞ ﾝｴﾄｳｵﾗｸ ｱｸｾｽ ﾄｩ ｸﾛｰﾝ ｻﾞ ﾊﾟｯｹｰｼﾞ ｲﾝﾄﾞｴｸｽ (`packages-index`). ﾃﾞｨｽ ﾎｱﾌﾟﾌﾟｴﾝｽﾞ ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ ｵﾝ ﾌｧｰｽﾄ `ruyi list`.
@@ -50,16 +50,16 @@ ruyi device provision    # Provision a device
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
-{ modules = [ nix-kits.nixosModules.ruyi ]; }
+{ ﾓｼﾞｭｰﾙｽﾞ = [ ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ruyi ]; }
 
-services.ruyi = {
-  enable = true;
-  settings = {
-    packages.prereleases = false;
-    repo.remote = "https://github.com/ruyisdk/packages-index.git";
-    telemetry.mode = "local";
+ｽｴﾗﾌﾞｲｸｽﾞ.ruyi = {
+  ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+  ｾｯﾃｨﾝｸﾞｽﾞ = {
+    ﾊﾟｯｹｰｼﾞｰｽﾞ.ﾌﾟﾗｴﾗｴﾙｴｱｽｽﾞ = ﾌｱﾙｽｴ;
+    ﾗｴﾌﾟｵ.ﾘﾓｰﾄ = "https://github.com/ruyisdk/packages-index.git";
+    ﾄｴﾙｴﾑｴﾄﾗｲ.ﾓｰﾄﾞ = "ﾛｰｶﾙ";
   };
-  telemetryOptout = true;  # RUYI_TELEMETRY_OPTOUT=1
+  ﾄｴﾙｴﾑｴﾄﾗｲｵﾌﾟﾄｵｳﾄ = ﾄﾗｳｴ;  # RUYI_TELEMETRY_OPTOUT=1
 };
 ```
 
@@ -68,10 +68,10 @@ services.ruyi = {
 ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ﾄﾞｴｸﾙｱﾗｱﾄｲﾌﾞｴ ﾊﾞｰﾁｬﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ:
 
 ```nix
-services.ruyi.venvs.riscv = {
-  profile = "gnu-plct";
-  toolchain = "gnu-plct";
-  dest = "/home/kix/ruyi-venvs/riscv";
+ｽｴﾗﾌﾞｲｸｽﾞ.ruyi.ﾌﾞｴﾝﾌﾞｽﾞ.ﾗｲｽｸﾌﾞ = {
+  ﾌﾟﾛﾌｧｲﾙ = "ｸﾞﾝｳ-ﾌﾟﾙｸﾄ";
+  ﾂｰﾙﾁｪｰﾝ = "ｸﾞﾝｳ-ﾌﾟﾙｸﾄ";
+  ﾄﾞｴｽﾄ = "/ﾎｰﾑ/ｸｲｸｽ/ruyi-ﾌﾞｴﾝﾌﾞｽﾞ/ﾗｲｽｸﾌﾞ";
 };
 ```
 
