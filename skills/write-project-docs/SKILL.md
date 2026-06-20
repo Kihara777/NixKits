@@ -74,9 +74,9 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - 根目录无后缀文件指向 `docs/` 内的本地化版本：
   `[中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)`
 - docs 内的本地化文件指向根目录：`[中文](../README.md) | ...`
-- zh 子目录文件：`[中文](file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md)`
-- en 子目录文件：`[中文](../../zh/file.md) | [English](file.md) | [日本語](../../ja/file.md)`
-- ja 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](file.md)`
+- zh 子目录文件：`[中文](file.md) | [English](../en/file.md) | [日本語](../ja/file.md)`
+- en 子目录文件：`[中文](../zh/file.md) | [English](file.md) | [日本語](../ja/file.md)`
+- ja 子目录文件：`[中文](../zh/file.md) | [English](../en/file.md) | [日本語](file.md)`
 - 扩展语言（`skills/translate-*/` 自动发现）子目录文件：
   语言切换器按以下规则生成，不硬编码特定语言：
   - 所有已注册语言按声明顺序排列（`zh` → `en` → `ja` → 各扩展语言按发现顺序）

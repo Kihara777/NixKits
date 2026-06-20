@@ -1,6 +1,6 @@
 # obs-bilibili-stream
 
-[中文](../../zh/obs-bilibili-stream.md) | English | [日本語](../ja/obs-bilibili-stream.md) | [Katalish](../katalish/obs-bilibili-stream.md) | [Pseudo-Chinese](../pcn/obs-bilibili-stream.md)
+[中文](../zh/obs-bilibili-stream.md) | English | [日本語](../ja/obs-bilibili-stream.md) | [Katalish](../katalish/obs-bilibili-stream.md) | [Pseudo-Chinese](../pcn/obs-bilibili-stream.md)
 
 Bilibili live streaming plugin for OBS Studio.
 

@@ -1,6 +1,6 @@
 # opencode-telegram
 
-[中文](../../zh/opencode-telegram.md) | English | [日本語](../ja/opencode-telegram.md) | [Katalish](../katalish/opencode-telegram.md) | [Pseudo-Chinese](../pcn/opencode-telegram.md)
+[中文](../zh/opencode-telegram.md) | English | [日本語](../ja/opencode-telegram.md) | [Katalish](../katalish/opencode-telegram.md) | [Pseudo-Chinese](../pcn/opencode-telegram.md)
 
 Telegram Bot client for [OpenCode](https://opencode.ai).
 

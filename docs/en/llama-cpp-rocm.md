@@ -1,6 +1,6 @@
 # llama-cpp-rocm
 
-[中文](../../zh/llama-cpp-rocm.md) | English | [日本語](../ja/llama-cpp-rocm.md) | [Katalish](../katalish/llama-cpp-rocm.md) | [Pseudo-Chinese](../pcn/llama-cpp-rocm.md)
+[中文](../zh/llama-cpp-rocm.md) | English | [日本語](../ja/llama-cpp-rocm.md) | [Katalish](../katalish/llama-cpp-rocm.md) | [Pseudo-Chinese](../pcn/llama-cpp-rocm.md)
 
 Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest GitHub Release version at build time for testing cutting-edge features.
 

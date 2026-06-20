@@ -1,6 +1,6 @@
 # rcc-fix
 
-[中文](../../zh/rcc-fix.md) | [English](../../en/rcc-fix.md) | 日本語 | [Katalish](../../katalish/rcc-fix.md) | [Pseudo-Chinese](../../pcn/rcc-fix.md)
+[中文](../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | 日本語 | [Katalish](../katalish/rcc-fix.md) | [Pseudo-Chinese](../pcn/rcc-fix.md)
 
 ASUS ROG Control Center を 2-in-1 脱着式キーボードデバイス向けにパッチ。
 
