@@ -1,8 +1,8 @@
 # write-project-docs (Skill)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | [English](write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
-> Generates complete multi-language documentation following the NixKits style — trilingual (zh/en/ja), concise, table-driven.
+> Generates complete multi-language documentation following the NixKits style — quadrilingual (zh/en/ja/pcn), concise, table-driven.
 
 ## Info
 
@@ -15,7 +15,7 @@
 
 - Assesses project metadata and extracts module information
 - Classifies modules by function (infra/services/proxy/skills)
-- Creates `docs/{zh,en,ja}/` directory structure
+- Creates `docs/{zh,en,ja,pcn}/` directory structure
 - Writes categorized READMEs with language switchers
 - Writes per-module docs (info table + install + usage)
 - Writes skill docs using the unified template (Info → Features → Usage)
@@ -23,11 +23,11 @@
 
 ## Skill Doc Sync Rules
 
-When `SKILL.md` changes, the corresponding trilingual docs must be updated.
+When `SKILL.md` changes, the corresponding quadrilingual docs must be updated.
 Use staleness check to locate outdated files:
 
 ```bash
-for lang in zh en ja; do
+for lang in zh en ja pcn; do
   for skill in skills/*/SKILL.md; do
     name=$(basename $(dirname $skill))
     doc="docs/$lang/skills/$name.md"
@@ -36,8 +36,9 @@ for lang in zh en ja; do
 done
 ```
 
-Update order: Chinese baseline → English translation → Japanese translation.
-Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Features` / `機能`.
+Update order: Chinese baseline → English translation → Japanese translation → Pseudo-Chinese translation.
+Column mapping: `基本信息` → `Info` / `基本情報` / `基本情報`, `功能` → `Features` / `機能` / `機能`.
+Pseudo-Chinese (pcn) rules: based on Japanese kanji vocabulary; strip all kana and okurigana; convert Japanese syntax to Chinese word order; use Chinese punctuation. Technical terms remain unchanged; English abbreviations and symbols are not translated.
 
 ## Writing Rules
 
@@ -46,9 +47,9 @@ Column mapping: `基本信息` → `Info` / `基本情報`, `功能` → `Featur
 - Chinese section titles use 2- or 4-character words for visual rhythm
 - Target ~40-60 lines; patch/module docs follow the 4-section standard (Info → Changes → Install → Notes)
 - No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
-- All three READMEs must be updated together
-- Root dir only holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`) live under `docs/`
-- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja)`
+- All four READMEs must be updated together
+- Root dir only holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`, `*.pcn.md`) live under `docs/`
+- Every language must include a basic info section: `## 基本信息` (zh), `## Info` (en), `## 基本情報` (ja/pcn)
 - After patch/module source changes, the "Changes"/"Features" list must be synced — each bullet maps to an actual change
 
 ## Usage

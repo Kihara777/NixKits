@@ -1,6 +1,6 @@
 # write-project-docs (Skill)
 
-[中文](write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)
+[中文](write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > 按 NixKits 风格为任意项目编写完整的多语言文档系统 — 中英日+伪中国语四语、简洁、表驱动。
 
