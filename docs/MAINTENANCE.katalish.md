@@ -1,52 +1,52 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](MAINTENANCE.pcn.md)
+中文 | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](MAINTENANCE.pcn.md)
 
-NixKits 软件更新维护日志。
+ﾆｯｸｽｷｯﾄ ﾊﾟｯｹｰｼﾞ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ。
 
 ---
 
 
 ## 2026-06-21T04:32:31+09:00
 
-**ｻﾏﾘｰ**：ﾗﾝｹﾞｰｼﾞ ｽｲｯﾁｬｰ ﾗﾍﾞﾙ ﾙｰﾙ ｼﾞｪﾈﾗｲｽﾞﾄﾞ — display_name ｾﾏﾝﾁｯｸｽ ｺﾚｸﾃｨｯﾄﾞ ﾄｩ ﾗﾝｹﾞｰｼﾞ ｾﾙﾌ-ﾈｰﾑ; ｱﾄﾞｯﾄﾞ ﾉｰ-ﾛｰｶﾗｲｽﾞｴｰｼｮﾝ ﾙｰﾙ ﾌｫｱ ﾗﾝｹﾞｰｼﾞ ｽｲｯﾁｬｰ ﾗﾍﾞﾙｽﾞ ﾄｩ write-project-docs / translate-katalish / translate-pseudocn; ﾌｨｯｸｽﾄﾞ ﾘｼﾞｭｱﾙ ﾛｰｶﾗｲｽﾞﾄﾞ ﾈｰﾑｽﾞ ｲﾝ ｵｰﾙ zh/katalish/pcn ﾄﾞｯｸ ｽｲｯﾁｬｰｽﾞ
+**ｻﾏﾘｰ**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `f5aee43` | docs(skill): write-project-docs — ｱﾄﾞ ﾉｰ-ﾛｰｶﾗｲｽﾞｴｰｼｮﾝ ﾙｰﾙ ﾌｫｱ ﾗﾝｹﾞｰｼﾞ ﾗﾍﾞﾙｽﾞ |
-| `7ba8c1d` | fix(katalish): ｲﾝｸﾞﾘｯｼｭ ｲﾝ ﾗﾝｹﾞｰｼﾞ ｽｲｯﾁｬｰ ﾑｽﾄ ﾉｯﾄ ﾋﾞｰ ﾛｰｶﾗｲｽﾞﾄﾞ ﾄｩ ｶﾀｶﾅ |
-| `5ce9f7d` | fix: ｺﾚｸﾄ display_name ｾﾏﾝﾁｯｸｽ — ｾﾙﾌ-ﾈｰﾑ vs ｽｲｯﾁｬｰ ﾗﾍﾞﾙｽﾞ |
-| `aa8634b` | fix(docs): ﾌｨｯｸｽ ﾘｼﾞｭｱﾙ ｵｰﾙﾄﾞ ﾗﾍﾞﾙｽﾞ ｲﾝ zh ﾄﾞｯｸｽ + MAINTENANCE ﾄﾗｱﾝｽﾙｱｼｮﾝ + translate-* ｼﾞｪﾈﾗｲｽﾞｴｰｼｮﾝ |
+| `f5aee43` | docs(ｽｷﾙ): write-project-docs — 添加语言名称不本地化规则 |
+| `7ba8c1d` | fix(katalish): 语言切换器中 English 不应本地化为片假名 |
+| `5ce9f7d` | fix: display_name 语义修正 — 语言自称与切换器标签分离 |
+| `aa8634b` | fix(docs): zh 文档切换器残留旧名称修正 + MAINTENANCE 翻译补全 + translate-* 技能泛化 |
 
 ## 2026-06-21T00:07:44+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.62 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.7.1 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.61 | 0.8.62 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.6.0 | 1.7.1 |
+| mcp-searxng | 1.6.0 | 1.7.1 |
 | 　 | cli hash | `sha256-3k0K/I/Nx...` → `sha256-ci3MokGW...` |
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `57f6a4a` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.62, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.7.1 |
+| `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
 
 ## 2026-06-18T09:52:34+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.61 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.6.0 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `...` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.61 |
-| `...` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.6.0 |
+| `...` | chore(pkgs): bump codewhale 0.8.61 |
+| `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.60 | 0.8.61 |
 | 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
 | 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.4.0 | 1.6.0 |
+| mcp-searxng | 1.4.0 | 1.6.0 |
 | 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
 | 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
 
@@ -54,41 +54,44 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-18T09:03:48+09:00
 
-**ｻﾏﾘｰ**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`
+**ｻﾏﾘｰ**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.ﾊﾟｯﾁ`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `5cea307` | ﾌｴｱﾄ(ruyi): ｱﾄﾞ ｱｳﾄｵｳﾌﾟﾄﾞｱﾄｴ ｱﾝﾄﾞ ﾄﾞｴｸﾙｱﾗｱﾄｲﾌﾞｴ ﾌﾞｴﾝﾌﾞｽﾞ ﾄｩ ﾓｼﾞｭｰﾙ |
+| `d814550` | feat(ruyi): add autoUpdate and declarative venvs to ﾓｼﾞｭｰﾙ |
 
 ---
 
 ## 2026-06-17T10:59:35+09:00
 
-**ｻﾏﾘｰ**：ruyi — NixOS 模块（`services.ruyi`
+**ｻﾏﾘｰ**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
+
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `8059526` | ﾌｴｱﾄ(ruyi): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ﾄﾞｴｸﾙｱﾗｱﾄｲﾌﾞｴ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ |
-| `cc396f8` | ﾌｨｯｸｽ(ruyi): ｺﾚｸﾄ ｺﾝﾌｨｸﾞ ﾊﾟｽ ﾄｩ /ｴﾄｸ/ｸｽﾄﾞｸﾞ/ruyi (ｸｽﾄﾞｸﾞ ｽﾌﾟｴｸ) |
-| `975295d` | ﾌｨｯｸｽ(ruyi): ﾗｴﾌﾟﾙｱｽｴ ﾙｲﾌﾞ.ｼﾞｴﾝｴﾗｱﾄｵﾗｽﾞ.ﾄｵﾄｵﾑﾙ ｳｨｽﾞ ﾏﾆｭｱﾙ ｼﾞｪﾈﾚｰｼｮﾝ |
-| `622a5e2` | ﾌｨｯｸｽ(ruyi): ｱﾙｳｱｲｽﾞ ｼﾞｪﾈﾚｲﾄ ｺﾝﾌｨｸﾞ.ﾄｵﾑﾙ ｳｪﾝ ﾓｼﾞｭｰﾙ ｴﾝｱﾌﾞﾙﾄﾞ |
+| `5cea307` | feat(ruyi): add NixOS ﾓｼﾞｭｰﾙ for declarative configuration |
+| `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
+| `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
+| `cc396f8` | fix(ruyi): always generate config.toml when ﾓｼﾞｭｰﾙ enabled |
 
 ---
 
 ## 2026-06-17T10:00:00+09:00
 
-**ｻﾏﾘｰ**：ruyi — 新增 ﾄﾞｴﾌﾞｼｴﾙﾙ 支持，`nix develop github:Kihara777/NixKits#ruyi`
+**ｻﾏﾘｰ**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
+
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `177ad9b` | ﾗｴﾌｱｸﾄｵﾗ(ﾌﾚｲｸ): ﾘﾑｰﾌﾞ ﾃﾞﾌｫﾙﾄ ﾊﾟｯｹｰｼﾞ ｱﾙｲｱｽﾞ |
+| `975295d` | refactor(flake): remove default ﾊﾟｯｹｰｼﾞ alias |
 
 ---
 
 ## 2026-06-17T09:48:33+09:00
 
-**ｻﾏﾘｰ**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ﾗｳﾌﾌ + ﾑｲﾌﾟｲ + 320 单元测试 + 52 集成测试全部通过）
+**ｻﾏﾘｰ**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `39906b9` | ﾌｴｱﾄ(ﾌﾟｸｸﾞ): ｱﾄﾞ ruyi — RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ |
+| `622a5e2` | feat(pkg): add ruyi — RuyiSDK ﾊﾟｯｹｰｼﾞ manager |
 
 | 软件名 | 新版本 |
 |--------|--------|
@@ -98,307 +101,307 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-20T17:30:00+09:00
 
-**ｻﾏﾘｰ**：技能系统重构 — ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀｶﾅ→ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ 重命名，新增 ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ（偽中国語），ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs 与 ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log 语言扩展自动发现，文档代码五语映射表
+**ｻﾏﾘｰ**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-ﾒﾝﾃﾅﾝｽ-log 语言扩展自动发现，文档代码五语映射表
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `911052b` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾄﾗｱﾝｽﾙｱﾄｴ-* ｻﾎﾟｰﾄ ｱﾝﾄﾞ ﾄﾞｷｭｽﾞ-ｱｽﾞ-code ﾏｯﾋﾟﾝｸﾞ ﾄｩ ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log |
-| `7caf343` | ﾗｴﾌｱｸﾄｵﾗ: ﾗｴﾝｱﾑｴ ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀｶﾅ→ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ, ｱﾄﾞ ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ, ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ |
-| `97b696c` | ﾄﾞｷｭｽﾞ: ﾌﾟｳﾗｼﾞｴ ﾗｴﾑｱｲﾝｲﾝｸﾞ ﾋﾟｰｼｰｴﾇ ﾗｴﾌｴﾗｴﾝｸｽﾞ ﾌﾛﾑ ｽﾞﾎ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs |
-| `f1904a1` | ﾗｴﾌｱｸﾄｵﾗ(ﾄﾞｷｭｽﾞ): ﾑｲｸﾞﾗｱﾄｴ ﾋﾟｰｼｰｴﾇ ﾃﾞｨﾚｸﾄﾘ ﾄｩ ｶﾀﾘｯｼｭ |
-| `c5fb218` | ﾗｴﾌｱｸﾄｵﾗ(ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀｶﾅ): ﾗｴﾝｱﾑｴ ｸｱﾄｱ-ｴﾝ → ｶﾀﾘｯｼｭ, ﾕｰｽﾞ ｶﾀﾘｯｼｭ ｱｽﾞ ｸｱﾝｵﾝｲｸｱﾙ ﾈｰﾑ |
-| `0588ee0` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾌﾟｳﾗｼﾞｴ ﾋﾟｰｼｰｴﾇ ﾗｴﾌｴﾗｴﾝｸｽﾞ ﾌﾛﾑ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs, ｱﾄﾞ ｸｱﾄｱ-ｴﾝ |
-| `b77170a` | ﾌｴｱﾄ(ｽｷﾙ): ｱﾄﾞ ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀｶﾅ — ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ ﾑｴﾁｱﾝｲｸｱﾙ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ |
-| `be2239b` | ﾄﾞｷｭｽﾞ: ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs 英日文版同步更新四语(ﾋﾟｰｼｰｴﾇ)支持 |
-| `704ebe4` | ｽｷﾙ: ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs 新增伪中国语(ﾋﾟｰｼｰｴﾇ)语言支持 |
+| `fee1534` | docs(ｽｷﾙ): add translate-* support and docs-as-code mapping to write-ﾒﾝﾃﾅﾝｽ-log |
+| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
+| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
+| `911052b` | refactor(docs): migrate pcn directory to katalish |
+| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
+| `97b696c` | docs(ｽｷﾙ): purge pcn references from write-project-docs, add kata-en |
+| `f1904a1` | feat(ｽｷﾙ): add translate-katakana — katakana english mechanical substitution |
+| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
+| `0588ee0` | ｽｷﾙ: write-project-docs 新增伪中国语(pcn)语言支持 |
 
 ---
 
 ## 2026-06-17T07:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log 技能 — 从 NixKits-ﾁｪｯｸ-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；ﾌﾚｲｸ.ﾛｯｸ 同步 .ｼﾞｲﾄｲｸﾞﾝｵﾗｴ 前置检测与三路分支逻辑
+**ｻﾏﾘｰ**：write-ﾒﾝﾃﾅﾝｽ-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `359fe29` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾗｴ-ｱﾌﾟﾗｲ ﾌﾚｲｸ.ﾛｯｸ ｽｲﾝｸ ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ ﾌﾞｴﾗｲﾌｲｸｱｼｮﾝ ｽﾃｯﾌﾟｽﾞ |
-| `5187b07` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ .ｼﾞｲﾄｲｸﾞﾝｵﾗｴ ﾌﾟﾗｴ-ﾁｪｯｸ ﾄｩ ﾌﾚｲｸ.ﾛｯｸ ｽｲﾝｸ ｽﾃｯﾌﾟ |
-| `9e94305` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｺﾚｸﾄ ﾌﾚｲｸ.ﾛｯｸ ﾌﾟﾗｴ-ﾁｪｯｸ — ｽﾗｴｴ-ﾌﾞﾗﾝﾁ ﾛｼﾞｯｸ |
-| `b3d9c05` | ﾌｴｱﾄ(ｽｷﾙ): ｴｸｽﾄﾗｱｸﾄ ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log ｱｽﾞ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｽｷﾙ |
-| `d670e1e` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｵﾌﾟﾄｲﾑｲｽﾞｴ ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log ﾄﾗｲｸﾞｼﾞｴﾗｽﾞ ｱﾝﾄﾞ ｱﾄﾞ ｱｳﾄﾞｲﾄ ｴﾝﾄﾘｰ |
+| `b77170a` | docs(ｽｷﾙ): re-apply flake.lock sync and ﾋﾞﾙﾄﾞ verification steps |
+| `be2239b` | docs(ｽｷﾙ): add .gitignore pre-check to flake.lock sync step |
+| `704ebe4` | docs(ｽｷﾙ): correct flake.lock pre-check — three-branch logic |
+| `359fe29` | feat(ｽｷﾙ): extract write-ﾒﾝﾃﾅﾝｽ-log as standalone ｽｷﾙ |
+| `5187b07` | docs(ｽｷﾙ): optimize write-ﾒﾝﾃﾅﾝｽ-log triggers and add audit entry |
 
 ---
 
 ## 2026-06-17T06:50:00+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — 尝试用 ﾋﾞﾙﾄｲﾝｽﾞ.ﾌｴﾄﾁｳﾗﾙ 替代 ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ 动态获取版本（已撤销，方案不可用）
+**ｻﾏﾘｰ**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `bd42478` | ﾗｴﾌｱｸﾄｵﾗ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾗｴﾌﾟﾙｱｽｴ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｳｨｽﾞ ﾋﾞﾙﾄｲﾝｽﾞ.ﾌｴﾄﾁｳﾗﾙ |
-| `c1fd014` | ﾌｨｯｸｽ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾕｰｽﾞ ﾍﾞｱ ﾋﾞﾙﾄｲﾝｽﾞ.ﾌｴﾄﾁｳﾗﾙ ｳｨｽﾞｱｳﾄ ﾊｯｼｭ ﾌﾟｱﾗｱﾑ |
+| `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
+| `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
 
 ---
 
 ## 2026-06-16T08:00:00+09:00
 
-**ｻﾏﾘｰ**：ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 文档 — CodeWhale ｴﾑｼｰﾋﾟｰ 配置指南、常见陷阱警告（ｴﾇﾌﾞｲ 默认为 {}）、故障排查章节
+**ｻﾏﾘｰ**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `6f52ddf` | ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, ｸｵﾑﾑｵﾝ ﾌﾟｲﾄﾌｱﾙﾙ, ｱﾝﾄﾞ ﾄﾗｵｳﾌﾞﾙｴｼｵｵﾄｲﾝｸﾞ |
+| `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
 
 ---
 
 ## 2026-06-16T07:50:00+09:00
 
-**ｻﾏﾘｰ**：ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli 技能 — ﾆｯｸｽ ｽﾄｵﾗｴ 路径陷阱章节（ｶﾞ ｱｳｽ ｾｯﾄｱｯﾌﾟ-ｼﾞｲﾄ 硬编码路径失效的诊断与通用修复模式）
+**ｻﾏﾘｰ**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `56ff235` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ ｽﾄｵﾗｴ ﾊﾟｽ ﾄﾗｱﾌﾟ ｾｸｼｮﾝ ﾄｩ ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli |
+| `bd42478` | docs(ｽｷﾙ): add Nix Store path trap section to nixos-modern-cli |
 
 ---
 
 ## 2026-06-14T07:50:00+09:00
 
-**ｻﾏﾘｰ**：ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo 文档 — 在线集成模式说明与文件结构图
+**ｻﾏﾘｰ**：comfyui-strix-halo 文档 — 在线集成模式说明与文件结构图
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `7902bd1` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱｯﾌﾟﾃﾞｰﾄ ｲﾝﾄｴｸﾞﾗｱｼｮﾝ ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ ｽﾄﾗｳｸﾄｳﾗｴ |
+| `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
 
 ---
 
 ## 2026-06-12T05:50:00+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm 模块 — 恢复 ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ 支持（ﾝｲｸｽﾌﾟｸｸﾞｽﾞ 已移除）、命名空间迁移至 NixKits、三语迁移指南
+**ｻﾏﾘｰ**：llama-cpp-rocm 模块 — 恢复 modelsPreset 支持（nixpkgs 已移除）、命名空间迁移至 nixkits、三语迁移指南
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `7680adf` | ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘｽﾄｱ ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ ﾌﾞｲｱ NixKits ﾝｱﾑｴｽﾌﾟｱｽｴ, ﾑｲｸﾞﾗｱﾄｴ ﾌﾛﾑ ｽｴﾗﾌﾞｲｸｽﾞ |
-| `f92f9c4` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｱﾄﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾑｲｸﾞﾗｱｼｮﾝ ｶﾞｲﾄﾞ |
+| `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
+| `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
 
 ---
 
 ## 2026-06-11T05:28:00+09:00
 
-**ｻﾏﾘｰ**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 ｼﾞｲﾄ ｺﾐｯﾄ 时间戳、禁止 ﾄ00:00:00 占位符）
+**ｻﾏﾘｰ**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `07f347f` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ ﾄｲﾑｴｽﾄｱﾑﾌﾟｽﾞ ﾄｩ ｴｸｽｱｸﾄ ｺﾐｯﾄ ﾄｲﾑｽﾞ |
-| `487e18f` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｴﾝﾌｵﾗｽｴ ｴｸｽｱｸﾄ ｼﾞｲﾄ ｺﾐｯﾄ ﾄｲﾑｴｽﾄｱﾑﾌﾟｽﾞ, ﾌﾞｱﾝ ﾄ00:00:00 ﾌﾟﾙｱｽｴﾎｵﾙﾄﾞｴﾗ |
-| `3e9467f` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾕｰｽﾞ ﾄﾞｴｽｸﾗｲﾌﾟﾄｲﾌﾞｴ ﾄｲﾄﾙｽﾞ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ﾌｲﾙｴﾝｱﾑｴ |
-| `033d3b8` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾄﾞｴｽｸﾗｲﾌﾟﾄｲﾌﾞｴ ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
-| `fbcf15c` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾄﾞｴｽｸﾗｲﾌﾟﾄｲﾌﾞｴ ﾀｲﾄﾙ ﾙｰﾙ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `6cda338` | ﾗｴﾌｱｸﾄｵﾗ(ｽｷﾙｽﾞ): ｼﾞｴﾝｴﾗｱﾙｲｽﾞｴ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ｺﾝﾃﾝﾂ ﾄｩ ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ |
-| `b3d7d0f` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ ｼﾞｴﾝｴﾗｱﾙｲｽﾞｱｼｮﾝｽﾞ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
+| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
+| `7680adf` | docs(ｽｷﾙ): enforce exact git commit timestamps, ban T00:00:00 placeholder |
+| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
+| `07f347f` | docs(ｽｷﾙ): add descriptive title rule for MAINTENANCE files |
+| `487e18f` | docs(skills): sync descriptive title rule to trilingual docs |
+| `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
+| `033d3b8` | docs(skills): sync auto-discovery generalizations to trilingual docs |
 
 ---
 
 ## 2026-06-10T04:31:00+09:00
 
-**ｻﾏﾘｰ**：ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ — ｸｲﾙﾙﾑｵﾄﾞｴ 改为 ﾌﾟﾛｾｽ、添加 ﾄｲﾑｴｵｳﾄｽﾄｵﾌﾟｽｴｸ 防止关机挂起
+**ｻﾏﾘｰ**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `e4a3813` | ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ ﾄｲﾑｴｵｳﾄｽﾄｵﾌﾟｽｴｸ ｱﾝﾄﾞ ｸｲﾙﾙﾑｵﾄﾞｴ ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｼｳﾄﾄﾞｵｳﾝ ﾎｱﾝｸﾞ |
-| `4bf2d30` | ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ﾁｪﾝｼﾞ ｸｲﾙﾙﾑｵﾄﾞｴ ﾌﾛﾑ ﾑｲｸｽﾄﾞ ﾄｩ ﾌﾟﾛｾｽ |
+| `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
+| `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
 
 ---
 
 ## 2026-06-08T15:00:00+09:00
 
-**ｻﾏﾘｰ**：文档重构 — 本地化文件移入 ﾄﾞｷｭｽﾞ/ 目录；ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ 首次添加合列规则、纯表格格式、回填完整提交历史
+**ｻﾏﾘｰ**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `f7bb6ce` | ﾄﾞｷｭｽﾞ: ｽｳｲﾄﾁ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾄｩ ﾃｰﾌﾞﾙ-ｵﾝﾘｰ ﾌｵﾗﾑｱﾄ, ﾄﾞﾗｵﾌﾟ ﾄﾗｲﾘﾝｶﾞﾙ ﾌﾟﾗｵｽｴ |
-| `1a28625` | ﾄﾞｷｭｽﾞ: ｵﾑｲﾄ ﾋﾞﾙﾄﾞ ｽﾄｱﾄｳｽﾞ ｱﾝﾄﾞ ｳﾝﾁｱﾝｸﾞﾄﾞ ﾎｱｼｽﾞ ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ |
-| `b4742ad` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾌｧｰｽﾄ-ﾄｲﾑｴ ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｵﾗﾑｱﾄ ﾙｰﾙ |
-| `2f58ac5` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾏｰｼﾞ ﾊﾞｰｼﾞｮﾝ ｸｵﾙｳﾑﾝｽﾞ ﾌｫｱ ﾌｧｰｽﾄ-ﾄｲﾑｴ ﾊﾟｯｹｰｼﾞｰｽﾞ |
-| `551e6fd` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌﾞｱｯｸﾌｲﾙﾙ ﾌﾙ ﾊﾟｯｹｰｼﾞ ﾋｽﾄﾘｰ ﾌﾛﾑ ﾗｴﾌﾟｵ ｸﾗｴｱｼｮﾝ |
-| `141f4af` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾗｴﾌｲﾝﾄﾞ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾌｵﾗﾑｱﾄ ﾙｰﾙｽﾞ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `7e22edd` | ﾗｴﾌｱｸﾄｵﾗ: ﾑｵﾌﾞｴ ﾙｵｸｱﾙｲｽﾞﾄﾞ ﾗｴｱﾄﾞﾑｴ/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ ｲﾝﾄｩ ﾄﾞｷｭｽﾞ/ |
-| `86fc7c2` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾙｵｸｱﾙｲｽﾞﾄﾞ-ﾌｧｲﾙ-in-docs/ ﾙｰﾙ ｱﾝﾄﾞ ﾊﾟｽ ｱｯﾌﾟﾃﾞｰﾄｽﾞ |
+| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
+| `e4a3813` | docs: omit ﾋﾞﾙﾄﾞ status and unchanged hashes from MAINTENANCE.md |
+| `4bf2d30` | docs(ｽｷﾙ): add first-time ﾊﾟｯｹｰｼﾞ table format rule |
+| `f7bb6ce` | docs(ｽｷﾙ): merge ﾊﾞｰｼﾞｮﾝ columns for first-time packages |
+| `1a28625` | docs(MAINTENANCE): backfill full ﾊﾟｯｹｰｼﾞ history from repo creation |
+| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
+| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
+| `551e6fd` | docs(skills): sync localized-file-in-docs/ rule and path updates |
 
 ---
 
 ## 2026-06-08T14:55:00+09:00
 
-**ｻﾏﾘｰ**：ﾗｸｸ-ﾌｨｯｸｽ — NixOS 模块（ｽｲｽﾄｴﾑﾄﾞ 死锁修复）
+**ｻﾏﾘｰ**：rcc-fix — NixOS 模块（systemd 死锁修复）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `454a4e4` | ﾌｴｱﾄ(ﾗｸｸ-ﾌｨｯｸｽ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ |
+| `141f4af` | feat(rcc-fix): add NixOS ﾓｼﾞｭｰﾙ for systemd deadlock fix |
 
 ---
 
 ## 2026-06-06T06:00:00+09:00
 
-**ｻﾏﾘｰ**：技能文档 — 源变更后文档同步规范；ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo ｸ 工具链说明；ﾊｯｼｭ 计算注意事项泛化；基本情報规则多语言统一
+**ｻﾏﾘｰ**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `28ec492` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽｷﾙ ﾄﾞｷｭ ﾃﾝﾌﾟﾚｰﾄ, ｽｲﾝｸ ﾙｰﾙｽﾞ, ｱﾝﾄﾞ ｽﾄｱﾙｴﾈｽ ﾁｪｯｸ |
-| `c79ffff` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ ｳｨｽﾞ ｽｷﾙ.ﾑﾄﾞ |
-| `6dcbbfc` | ﾌｨｯｸｽ(ｽｷﾙ): ｼﾞｴﾝｴﾗｱﾙｲｽﾞｴ 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ, ﾉｯﾄ ｼﾞｬｽﾄ ｼﾞｬﾊﾟﾆｰｽﾞ |
-| `58b06ea` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ｼﾞｴﾝｴﾗｱﾙｲｽﾞﾄﾞ 基本情報 ﾙｰﾙ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `2ba85d3` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽﾗｲ ﾊｯｼｭ ﾌｵﾗﾑｱﾄ ｱﾝﾄﾞ ﾆｯｸｽ ﾋﾞﾙﾄﾞ ｸﾞｵﾄﾁｱｽﾞ ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
-| `f5941ae` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾊｯｼｭ ｸﾞｵﾄﾁｱｽﾞ ﾄｩ NixKits-ﾁｪｯｸ-updates ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `b8c2399` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｸﾙｱﾗｲﾌｲ ｸｴﾗﾝｴﾙ ﾌﾟｱﾗｱﾑ ｲｽﾞ ｾｯﾄ ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ ﾊｰﾄﾞｳｪｱ |
-| `8aa65da` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱﾄﾞ ｸ ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ + ｸｸ=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ |
-| `7dad578` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｱﾝﾄｲ-ﾌﾟｱﾄﾄｴﾗﾝｽﾞ ﾌｫｱ ｽﾄｱﾙｴ/ｳﾝｽｲﾝｸﾄﾞ ﾄﾞｷｭ ﾌﾞｳﾙﾙｴﾄｽﾞ ｱﾌﾀｰ ｿｰｽ ﾁｪﾝｼﾞｰｽﾞ |
-| `4b103e5` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ｿｰｽ-ﾁｪﾝｼﾞ ﾄﾞｷｭ ｽｲﾝｸ ﾙｰﾙ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
+| `7e22edd` | docs(ｽｷﾙ): add ｽｷﾙ doc ﾃﾝﾌﾟﾚｰﾄ, sync rules, and staleness check |
+| `86fc7c2` | docs(skills): sync write-project-docs trilingual docs with SKILL.md |
+| `454a4e4` | fix(ｽｷﾙ): generalize 基本情報 rule to all languages, not just Japanese |
+| `28ec492` | docs(skills): sync generalized 基本情報 rule to trilingual docs |
+| `c79ffff` | docs(ｽｷﾙ): add SRI hash format and nix ﾋﾞﾙﾄﾞ gotchas to update ｽｷﾙ |
+| `6dcbbfc` | docs(skills): sync hash gotchas to nixkits-check-updates trilingual docs |
+| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by ﾓｼﾞｭｰﾙ, not hardware |
+| `2ba85d3` | docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc to changes list |
+| `f5941ae` | docs(ｽｷﾙ): add anti-patterns for stale/unsynced doc bullets after source changes |
+| `b8c2399` | docs(skills): sync source-change doc sync rule to trilingual docs |
 
 ---
 
 ## 2026-06-04T00:00:00+09:00
 
-**ｻﾏﾘｰ**：技能系统 — ｽｷﾙ.ﾑﾄﾞ 全面中文化；三语对称性检查规则
+**ｻﾏﾘｰ**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `373da95` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾄﾗｲﾘﾝｶﾞﾙ ｽｲﾑﾑｴﾄﾗｲ ﾁｴｯｸｽﾞ ｱﾝﾄﾞ ｼﾞｱ 基本情報 ﾙｰﾙ ﾄｩ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs |
-| `2a8c41b` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ﾙｵｸｱﾙｲｽﾞｴ ｵｰﾙ ｽｷﾙ.ﾑﾄﾞ ﾄｩ ﾁｬｲﾆｰｽﾞ, ﾄﾞｴｸﾙｱﾗｴ ｲﾝ ﾗｴｱﾄﾞﾑｽﾞ |
+| `8aa65da` | docs(ｽｷﾙ): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
+| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
 
 ---
 
 ## 2026-06-02T00:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli 技能 — POSIX 工具指南与 ﾆｯｸｽ 二进制路径提示
+**ｻﾏﾘｰ**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `aef12bc` | ﾄﾞｷｭｽﾞ(ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ ﾄｲﾌﾟ |
+| `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
 
 ---
 
 ## 2026-05-31T00:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
+**ｻﾏﾘｰ**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `15f956c` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ｽｷﾙ ｳｨｽﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
+| `373da95` | feat(skills): add write-project-docs ｽｷﾙ with trilingual docs |
 
 ---
 
 ## 2026-05-30T00:00:00+09:00
 
-**ｻﾏﾘｰ**：codewhale — ｽﾄﾄﾞｴﾝﾌﾞ 拼写修复；ﾗﾏ-ｸﾌﾟﾌﾟ-rocm 文档修正（移除内联链接、使用 ｼｽﾃﾑ.ﾆｯｸｽ 完整预设）；ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 首次设置流程
+**ｻﾏﾘｰ**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 ｼｽﾃﾑ.nix 完整预设）；opencode-telegram 首次设置流程
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `494f512` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ ﾌｧｰｽﾄ-ﾄｲﾑｴ ｾｯﾄｱｯﾌﾟ ﾌﾙｵｳ (ｵｰﾌﾟﾝｺｰﾄﾞ ｽｴﾗﾌﾞｴ + ｺﾝﾌｨｸﾞ) |
-| `7e53e25` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾕｰｽﾞ ｺﾝﾌﾟﾘｰﾄ ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ ﾌﾛﾑ ｼｽﾃﾑ.ﾆｯｸｽ |
-| `df4074f` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾗｴﾌﾟﾙｱｽｴ ﾕｰｾｰｼﾞ ｳｨｽﾞ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾌｧﾚﾝｽ |
-| `6a42efd` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘﾑｰﾌﾞ ｲﾝﾗｲﾝ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾝｸ ﾌﾛﾑ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
-| `1b7d0a9` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘﾑｰﾌﾞ ｲﾝﾗｲﾝ ﾘﾝｸ ﾌﾛﾑ ﾕｰｾｰｼﾞ ｾｸｼｮﾝ ﾄｵｵ |
-| `2b237ff` | ﾌｨｯｸｽ(codewhale): ﾌｨｯｸｽ ｽﾄﾄﾞｴﾝﾌﾞ ﾄｲﾌﾟｵ ｸｱｳｽｲﾝｸﾞ ﾋﾞﾙﾄﾞ ﾌｱｲﾙｳﾗｴ |
+| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
+| `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset from ｼｽﾃﾑ.nix |
+| `15f956c` | docs(llama-cpp-rocm): replace Usage with upstream reference |
+| `494f512` | docs(llama-cpp-rocm): remove inline upstream link from ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+| `7e53e25` | docs(llama-cpp-rocm): remove inline link from Usage section too |
+| `df4074f` | fix(codewhale): fix stdenv typo causing ﾋﾞﾙﾄﾞ failure |
 
 ---
 
 ## 2026-05-29T05:00:00+09:00
 
-**ｻﾏﾘｰ**：kitsfmt — 多项修复（ﾌﾞｴﾝﾄﾞｵﾗ 目录恢复、幂等性、原地安全性、ｳｨｽﾞ→ﾋﾞﾙﾄｲﾝｽﾞ.ｱﾄﾄﾗﾌﾞｱﾙｳｽﾞ 转换、--ｽﾄﾄﾞｲﾝ 标志）；ﾗｸｸ-ﾌｨｯｸｽ — 重写为 ﾄﾞ-ﾌﾞｳｽ 热插拔检测；ﾋﾞﾙﾄﾞ — .ﾌﾞｽｸｵﾄﾞｴ ｼﾞｲﾄｲｸﾞﾝｵﾗｴ 范围修正
+**ｻﾏﾘｰ**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；ﾋﾞﾙﾄﾞ — .vscode gitignore 范围修正
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `8497bf7` | ﾌｨｯｸｽ(kitsfmt): ｲﾄﾞｴﾑﾌﾟｵﾄｴﾝｽｲ, ｲﾝﾌﾟﾙｱｽｴ ｽｱﾌｴﾄｲ, ｱｳﾄﾌﾟｯﾄ ﾌﾞｱﾙｲﾄﾞｱｼｮﾝ |
-| `a612af7` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): ﾗｴｽﾄﾗｲｸﾄ .ﾌﾞｽｸｵﾄﾞｴ ｼﾞｲﾄｲｸﾞﾝｵﾗｴ ﾄｩ ﾗｴﾌﾟｵ ﾙｰﾄ ﾄｩ ﾉｯﾄ ｴｸｽｸﾙｳﾄﾞｴ ﾌﾞｴﾝﾄﾞｵﾗﾄﾞ ｸﾗｱﾄｴ ﾌｧｲﾙｽﾞ |
-| `e56f122` | ﾌｴｱﾄ(kitsfmt): ｳｨｽﾞ→ﾋﾞﾙﾄｲﾝｽﾞ.ｱﾄﾄﾗﾌﾞｱﾙｳｽﾞ ﾌﾞｴｽﾄ-ﾌﾟﾗｱｸﾄｲｽｴ ﾄﾗｱﾝｽﾌｵﾗﾑｱｼｮﾝ |
-| `15a0104` | ﾌｴｱﾄ(kitsfmt): ｱﾄﾞ --ｽﾄﾄﾞｲﾝ ﾌﾗｸﾞ ﾌｫｱ ｴｸｽﾌﾟﾙｲｽｲﾄ ｽﾄﾄﾞｲﾝ ﾓｰﾄﾞ |
-| `6ba43df` | ﾌｴｱﾄ(ﾗｸｸ-ﾌｨｯｸｽ): ﾗｴｳﾗｲﾄｴ ﾊﾟｯﾁ ﾌｫｱ ｱｽｳｽｸﾄﾙ 6.3.7 ｳｨｽﾞ ﾎｵﾄ-ﾌﾟﾙｳｸﾞ ｱﾝﾄﾞ ﾌﾞｵｳﾝﾄﾞｱﾗｲ ﾁｴｯｸｽﾞ |
-| `b7ebbfa` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ｽｺｰﾌﾟ ﾎｵﾄﾌﾟﾙｳｸﾞ ﾌﾞｱﾗｲｱﾌﾞﾙ ｸｵﾗﾗｴｸﾄﾘｰ ﾌｫｱ ｱｽｳｽｸﾄﾙ ﾋﾞﾙﾄﾞ |
-| `3d2c38c` | ﾌｨｯｸｽ(kitsfmt): ﾘｽﾄｱ ﾌﾞｴﾝﾄﾞｵﾗ ﾄﾞｲﾗ ﾌｫｱ ｵﾌﾌﾙｲﾝｴ ﾌﾞｳｲﾙﾄﾞｽﾞ |
-| `e5ee4ab` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ｾｯﾄ ｸｴｲﾌﾞｵｱﾗﾄﾞ_connected=ﾌｱﾙｽｴ ｳｪﾝ ﾉｰ ｱｳﾗｱ ｲﾌｱｽｴ ﾌｵｳﾝﾄﾞ |
-| `814731e` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ﾗｴﾌﾟﾙｱｽｴ ﾌﾟｵﾙﾙｲﾝｸﾞ ｳｨｽﾞ ﾄﾞ-ﾌﾞｳｽ ｲﾝﾄｴﾗﾌｱｽｴｽｱﾄﾞﾄﾞﾄﾞ ｲﾍﾞﾝﾄ |
+| `6a42efd` | fix(kitsfmt): idempotency, inplace safety, output validation |
+| `1b7d0a9` | fix(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore to repo root to not exclude vendored crate files |
+| `2b237ff` | feat(kitsfmt): with→builtins.attrValues best-practice transformation |
+| `8497bf7` | feat(kitsfmt): add --stdin flag for explicit stdin mode |
+| `a612af7` | feat(rcc-fix): rewrite ﾊﾟｯﾁ for asusctl 6.3.7 with hot-plug and boundary checks |
+| `e56f122` | fix(rcc-fix): scope hotplug variable correctly for asusctl ﾋﾞﾙﾄﾞ |
+| `15a0104` | fix(kitsfmt): restore vendor dir for offline builds |
+| `6ba43df` | fix(rcc-fix): set keyboard_connected=false when no aura iface found |
+| `b7ebbfa` | fix(rcc-fix): replace polling with D-Bus InterfacesAdded event |
 
 ---
 
 ## 2026-05-28T00:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — NixOS 模块（ｽｲｽﾄｴﾑﾄﾞ 沙箱覆盖）；ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ — NixOS 模块（声明式配置、自动安装）；ﾗｸｸ-ﾌｨｯｸｽ — ﾌﾞｲｽｲﾌﾞﾙｴ 属性修复；技能文档 — 动态发现措辞
+**ｻﾏﾘｰ**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `713b693` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): NixKits-ﾁｪｯｸ-updates — ﾀﾞｲﾅﾐｯｸ ﾃﾞｨｽｶﾊﾞﾘｰ, ﾉｯﾄ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ﾘｽﾄ |
-| `34d309b` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾘﾑｰﾌﾞ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ｸｵｳﾝﾄ ﾌﾛﾑ ﾌｨｰﾁｬｰｽﾞ, ｱﾄﾞ ｴｸｽｸﾙｳｼﾞｮﾝ ﾉｰﾄ |
-| `2db934e` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｽｲﾝｸ ｼﾞｱ ﾄﾞｷｭ ｳｨｽﾞ ｽﾞﾎ/ｴﾝ — ﾀﾞｲﾅﾐｯｸ ﾃﾞｨｽｶﾊﾞﾘｰ ｳｵﾗﾄﾞｲﾝｸﾞ |
-| `8fe0b3d` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ﾕｰｽﾞ ﾌﾞｲｽｲﾌﾞﾙｴ: ﾌﾟﾗｵﾌﾟｴﾗﾄｲ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ｲﾌ ｸｵﾝﾄﾞｲﾄｲｵﾝｱﾙ ﾌｫｱ ｽｸﾗｵﾙﾙﾌﾞｲｴｳ |
-| `941eb48` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｱﾄﾞ ｲﾝｽﾄｰﾙ ｾｸｼｮﾝ ｳｨｽﾞ ﾌﾙ 5-agent ｻﾎﾟｰﾄ ﾄｩ ｵｰﾙ ｽｷﾙｽﾞ |
-| `bd9e1b9` | ﾄﾞｷｭｽﾞ(ｽﾞﾎ): ｽｲﾑﾌﾟﾙｲﾌｲ ｽｷﾙｽﾞ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, ﾘﾑｰﾌﾞ ｽｴﾑｱﾝﾄｲｸ ﾄﾞｳﾌﾟﾙｲｸｱｼｮﾝ |
-| `327291a` | ﾌｴｱﾄ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ ﾄﾞｴｸﾙｱﾗｱﾄｲﾌﾞｴ ｺﾝﾌｨｸﾞ |
-| `f0e74d3` | ﾌｴｱﾄ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｵｰﾄ-ｲﾝｽﾄｰﾙ ﾊﾟｯｹｰｼﾞ ｳｪﾝ ﾓｼﾞｭｰﾙ ｴﾝｱﾌﾞﾙﾄﾞ |
-| `fc7fa3d` | ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ ｽｱﾝﾄﾞﾌﾞｵｸｽ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ |
+| `3d2c38c` | docs(ｽｷﾙ): nixkits-check-updates — dynamic discovery, not hardcoded list |
+| `e5ee4ab` | docs(ｽｷﾙ): remove hardcoded count from features, add exclusion note |
+| `814731e` | docs(ｽｷﾙ): sync ja doc with zh/en — dynamic discovery wording |
+| `713b693` | fix(rcc-fix): use visible: property instead of if conditional for ScrollView |
+| `34d309b` | docs(skills): add Install section with full 5-ｴｰｼﾞｪﾝﾄ support to all skills |
+| `2db934e` | docs(zh): simplify Skills ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, remove semantic duplication |
+| `8fe0b3d` | feat(opencode-telegram): add NixOS ﾓｼﾞｭｰﾙ with declarative config |
+| `941eb48` | feat(opencode-telegram): auto-ｲﾝｽﾄｰﾙ ﾊﾟｯｹｰｼﾞ when ﾓｼﾞｭｰﾙ enabled |
+| `bd9e1b9` | feat(llama-cpp-rocm): add NixOS ﾓｼﾞｭｰﾙ for ｻｰﾋﾞｽ sandbox overrides |
 
 ---
 
 ## 2026-05-27T00:00:00+09:00
 
-**ｻﾏﾘｰ**：技能系统 — NixKits-ﾁｪｯｸ-updates、NixKits-ｽｷﾙｽﾞ、ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli 三大技能同步上线；ﾗﾏ-ｸﾌﾟﾌﾟ-rocm 动态追踪说明
+**ｻﾏﾘｰ**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `627c9c5` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
-| `d869279` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ NixKits-ｽｷﾙｽﾞ ｲﾝｽﾄｱﾙﾙｴﾗ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
-| `f3a6978` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｸﾙｱﾗｲﾌｲ ﾀﾞｲﾅﾐｯｸ ﾘﾘｰｽ ﾄﾗｯｷﾝｸﾞ ﾌﾟｳﾗﾌﾟｵｽｴ |
-| `9e7f8e2` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ NixKits-ﾁｪｯｸ-updates ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `327291a` | feat(skills): add nixos-modern-cli ｽｷﾙ with 3-language docs |
+| `f0e74d3` | feat(skills): add nixkits-skills installer with 3-language docs |
+| `fc7fa3d` | docs(llama-cpp-rocm): clarify dynamic release tracking purpose |
+| `627c9c5` | feat(skills): add nixkits-check-updates ｽｷﾙ with 3-language docs |
 
 ---
 
 ## 2026-05-26T00:00:00+09:00
 
-**ｻﾏﾘｰ**：文档 — ﾗｴｱﾄﾞﾑｴ 节名重命名（快速开始→添加、包→软件、ﾗｲｾﾝｽ→许可）
+**ｻﾏﾘｰ**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `e731eb7` | ﾄﾞｷｭｽﾞ(ｽﾞﾎ): ﾗｴﾝｱﾑｴ ｾｸｼｮﾝｽﾞ 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
+| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
 
 ---
 
 ## 2026-05-24T00:00:00+09:00
 
-**ｻﾏﾘｰ**：ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 文档 — SearXNG + ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ 反向代理完整 NixOS 配置
+**ｻﾏﾘｰ**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `314732c` | ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ ﾌﾙ SearXNG + ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ ﾗｴﾌﾞｴﾗｽｴ ﾌﾟﾗｵｸｽｲ ｺﾝﾌｨｸﾞ |
+| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
 
 ---
 
 ## 2026-05-22T00:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — 移除 ﾗﾏ-ｸﾌﾟﾌﾟ-ver ﾌﾚｲｸ 输入，使用 ﾝｲｸｽﾌﾟｸｸﾞｽﾞ 默认版本
+**ｻﾏﾘｰ**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `1667e1d` | ﾌｨｯｸｽ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘﾑｰﾌﾞ ﾗﾏ-ｸﾌﾟﾌﾟ-ver, ﾕｰｽﾞ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾊﾞｰｼﾞｮﾝ ﾄﾞｲﾗｴｸﾄﾘｰ |
+| `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
 
 ---
 
 ## 2026-05-16T00:00:00+09:00
 
-**ｻﾏﾘｰ**：kitsfmt — 修复 ﾑｱﾄﾁ_ast! 宏语法错误、简化 ｸｵﾑﾒﾝﾄｽﾞ_before 函数、修正 ｽﾗｸ 路径
+**ｻﾏﾘｰ**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `495415f` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.ﾆｯｸｽ 中的 ｽﾗｸ 路径 |
-| `378e8bb` | ﾌｨｯｸｽ(kitsfmt): 修复 ﾑｱﾄﾁ_ast! 宏不支持通配符的问题 |
-| `a1d1d36` | ﾌｨｯｸｽ(kitsfmt): 修复 ﾑｱﾄﾁ_ast! 宏语法错误，简化 ｸｵﾑﾒﾝﾄｽﾞ_before 函数 |
+| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
+| `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
 ---
 
 ## 2026-05-15T00:00:00+09:00
 
-**ｻﾏﾘｰ**：kitsfmt — 基于 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 重写格式化引擎 ﾌﾞ0.3.0；生成 ｸｱﾗｸﾞｵ.ﾛｯｸ
+**ｻﾏﾘｰ**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `b77170a` | ﾗｴﾌｱｸﾄｵﾗ(kitsfmt): 基于 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 重写格式化引擎 ﾌﾞ0.3.0 |
-| `be2239b` | ﾗｴﾌｱｸﾄｵﾗ(kitsfmt): 基于 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 重写格式化引擎 ﾌﾞ0.3.0 |
-| `704ebe4` | ﾌｴｱﾄ(kitsfmt): 生成 ｸｱﾗｸﾞｵ.ﾛｯｸ，更新 kitsfmt.ﾆｯｸｽ 使用 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 构建 |
+| `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
 
 
 ## 2026-06-17T07:37:39+09:00
@@ -407,104 +410,104 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `359fe29` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾗｴ-ｱﾌﾟﾗｲ ﾌﾚｲｸ.ﾛｯｸ ｽｲﾝｸ ｱﾝﾄﾞ ﾋﾞﾙﾄﾞ ﾌﾞｴﾗｲﾌｲｸｱｼｮﾝ ｽﾃｯﾌﾟｽﾞ |
-| `5187b07` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ .ｼﾞｲﾄｲｸﾞﾝｵﾗｴ ﾌﾟﾗｴ-ﾁｪｯｸ ﾄｩ ﾌﾚｲｸ.ﾛｯｸ ｽｲﾝｸ ｽﾃｯﾌﾟ |
-| `9e94305` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｺﾚｸﾄ ﾌﾚｲｸ.ﾛｯｸ ﾌﾟﾗｴ-ﾁｪｯｸ — ｽﾗｴｴ-ﾌﾞﾗﾝﾁ ﾛｼﾞｯｸ |
-| `b3d9c05` | ﾌｴｱﾄ(ｽｷﾙ): ｴｸｽﾄﾗｱｸﾄ ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log ｱｽﾞ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｽｷﾙ |
-| `d670e1e` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｵﾌﾟﾄｲﾑｲｽﾞｴ ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log ﾄﾗｲｸﾞｼﾞｴﾗｽﾞ ｱﾝﾄﾞ ｱﾄﾞ ｱｳﾄﾞｲﾄ ｴﾝﾄﾘｰ |
+| `b77170a` | docs(ｽｷﾙ): re-apply flake.lock sync and ﾋﾞﾙﾄﾞ verification steps |
+| `be2239b` | docs(ｽｷﾙ): add .gitignore pre-check to flake.lock sync step |
+| `704ebe4` | docs(ｽｷﾙ): correct flake.lock pre-check — three-branch logic |
+| `359fe29` | feat(ｽｷﾙ): extract write-ﾒﾝﾃﾅﾝｽ-log as standalone ｽｷﾙ |
+| `5187b07` | docs(ｽｷﾙ): optimize write-ﾒﾝﾃﾅﾝｽ-log triggers and add audit entry |
 
 ---
 
 ## 2026-06-17T06:46:13+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — 2 项更新
+**ｻﾏﾘｰ**：llama-cpp-rocm — 2 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `bd42478` | ﾗｴﾌｱｸﾄｵﾗ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾗｴﾌﾟﾙｱｽｴ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｳｨｽﾞ ﾋﾞﾙﾄｲﾝｽﾞ.ﾌｴﾄﾁｳﾗﾙ |
-| `c1fd014` | ﾌｨｯｸｽ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾕｰｽﾞ ﾍﾞｱ ﾋﾞﾙﾄｲﾝｽﾞ.ﾌｴﾄﾁｳﾗﾙ ｳｨｽﾞｱｳﾄ ﾊｯｼｭ ﾌﾟｱﾗｱﾑ |
+| `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
+| `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
 
 ---
 
 ## 2026-06-16T06:03:24+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, ｸｵﾑﾑｵﾝ ﾌﾟｲﾄﾌｱﾙﾙ, ｱﾝﾄﾞ ﾄﾗｵｳﾌﾞﾙｴｼｵｵﾄｲﾝｸﾞ
+**ｻﾏﾘｰ**：docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `6f52ddf` | ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ CodeWhale ｺﾝﾌｨｸﾞ, ｸｵﾑﾑｵﾝ ﾌﾟｲﾄﾌｱﾙﾙ, ｱﾝﾄﾞ ﾄﾗｵｳﾌﾞﾙｴｼｵｵﾄｲﾝｸﾞ |
+| `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
 
 ---
 
 ## 2026-06-16T05:20:34+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ ｽﾄｵﾗｴ ﾊﾟｽ ﾄﾗｱﾌﾟ ｾｸｼｮﾝ ﾄｩ ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli
+**ｻﾏﾘｰ**：docs(ｽｷﾙ): add Nix Store path trap section to nixos-modern-cli
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `56ff235` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾆｯｸｽ ｽﾄｵﾗｴ ﾊﾟｽ ﾄﾗｱﾌﾟ ｾｸｼｮﾝ ﾄｩ ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli |
+| `bd42478` | docs(ｽｷﾙ): add Nix Store path trap section to nixos-modern-cli |
 
 ---
 
 ## 2026-06-14T08:11:16+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱｯﾌﾟﾃﾞｰﾄ ｲﾝﾄｴｸﾞﾗｱｼｮﾝ ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ ｽﾄﾗｳｸﾄｳﾗｴ
+**ｻﾏﾘｰ**：docs(comfyui-strix-halo): update integration mode and file structure
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `3e9467f` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱｯﾌﾟﾃﾞｰﾄ ｲﾝﾄｴｸﾞﾗｱｼｮﾝ ﾓｰﾄﾞ ｱﾝﾄﾞ ﾌｧｲﾙ ｽﾄﾗｳｸﾄｳﾗｴ |
+| `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
 
 ---
 
 ## 2026-06-12T18:17:52+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — 2 项更新
+**ｻﾏﾘｰ**：llama-cpp-rocm — 2 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `4876547` | ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘｽﾄｱ ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ ﾌﾞｲｱ NixKits ﾝｱﾑｴｽﾌﾟｱｽｴ, ﾑｲｸﾞﾗｱﾄｴ ﾌﾛﾑ ｽｴﾗﾌﾞｲｸｽﾞ |
-| `f891ad2` | ﾄﾞｷｭｽﾞ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｱﾄﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾑｲｸﾞﾗｱｼｮﾝ ｶﾞｲﾄﾞ |
+| `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
+| `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
 
 ---
 
 ## 2026-06-11T05:28:34+09:00
 
-**ｻﾏﾘｰ**：ﾗｴﾌｱｸﾄｵﾗ(ｽｷﾙｽﾞ): ｼﾞｴﾝｴﾗｱﾙｲｽﾞｴ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ｺﾝﾃﾝﾂ ﾄｩ ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ
+**ｻﾏﾘｰ**：refactor(skills): generalize hardcoded content to auto-discovery
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `7680adf` | ﾗｴﾌｱｸﾄｵﾗ(ｽｷﾙｽﾞ): ｼﾞｴﾝｴﾗｱﾙｲｽﾞｴ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ｺﾝﾃﾝﾂ ﾄｩ ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ |
+| `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
 
 ---
 
 ## 2026-06-11T05:13:39+09:00
 
-**ｻﾏﾘｰ**：ｱｻﾞｰ — 2 项更新
+**ｻﾏﾘｰ**：other — 2 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `fbcf15c` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾑｲｽｽｲﾝｸﾞ ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ﾄﾗｲﾘﾝｶﾞﾙ ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ |
-| `4bf2d30` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ ﾄﾞｴｴﾌﾟｽｴｴｸ ﾌﾞ4 ﾌﾟﾗｵ ｸｱｽｲﾝｸﾞ ｲﾝ ｱｳｽｵﾗ ｸﾚｼﾞｯﾄ |
+| `4876547` | docs: add missing rog-control-center-fix trilingual ﾓｼﾞｭｰﾙ docs |
+| `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
 
 ---
 
 ## 2026-06-11T04:58:02+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｴﾝﾌｵﾗｽｴ ｴｸｽｱｸﾄ ｼﾞｲﾄ ｺﾐｯﾄ ﾄｲﾑｴｽﾄｱﾑﾌﾟｽﾞ, ﾌﾞｱﾝ ﾄ00:00:00 ﾌﾟﾙｱｽｴﾎｵﾙﾄﾞｴﾗ
+**ｻﾏﾘｰ**：docs(ｽｷﾙ): enforce exact git commit timestamps, ban T00:00:00 placeholder
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `f7bb6ce` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｴﾝﾌｵﾗｽｴ ｴｸｽｱｸﾄ ｼﾞｲﾄ ｺﾐｯﾄ ﾄｲﾑｴｽﾄｱﾑﾌﾟｽﾞ, ﾌﾞｱﾝ ﾄ00:00:00 ﾌﾟﾙｱｽｴﾎｵﾙﾄﾞｴﾗ |
+| `7680adf` | docs(ｽｷﾙ): enforce exact git commit timestamps, ban T00:00:00 placeholder |
 
 ---
 
 ## 2026-06-10T02:25:05+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ ﾄｲﾑｴｵｳﾄｽﾄｵﾌﾟｽｴｸ ｱﾝﾄﾞ ｸｲﾙﾙﾑｵﾄﾞｴ ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｼｳﾄﾄﾞｵｳﾝ ﾎｱﾝｸﾞ
+**ｻﾏﾘｰ**：fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `141f4af` | ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ ﾄｲﾑｴｵｳﾄｽﾄｵﾌﾟｽｴｸ ｱﾝﾄﾞ ｸｲﾙﾙﾑｵﾄﾞｴ ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｼｳﾄﾄﾞｵｳﾝ ﾎｱﾝｸﾞ |
+| `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
 
 ---
 
@@ -514,18 +517,18 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `8aa65da` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾌｧｰｽﾄ-ﾄｲﾑｴ ﾊﾟｯｹｰｼﾞ ﾃｰﾌﾞﾙ ﾌｵﾗﾑｱﾄ ﾙｰﾙ |
-| `7e22edd` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ﾏｰｼﾞ ﾊﾞｰｼﾞｮﾝ ｸｵﾙｳﾑﾝｽﾞ ﾌｫｱ ﾌｧｰｽﾄ-ﾄｲﾑｴ ﾊﾟｯｹｰｼﾞｰｽﾞ |
+| `4bf2d30` | docs(ｽｷﾙ): add first-time ﾊﾟｯｹｰｼﾞ table format rule |
+| `f7bb6ce` | docs(ｽｷﾙ): merge ﾊﾞｰｼﾞｮﾝ columns for first-time packages |
 
 ---
 
 ## 2026-06-08T14:22:25+09:00
 
-**ｻﾏﾘｰ**：ﾌｴｱﾄ(ﾗｸｸ-ﾌｨｯｸｽ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ
+**ｻﾏﾘｰ**：feat(rcc-fix): add NixOS ﾓｼﾞｭｰﾙ for systemd deadlock fix
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `454a4e4` | ﾌｴｱﾄ(ﾗｸｸ-ﾌｨｯｸｽ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ |
+| `141f4af` | feat(rcc-fix): add NixOS ﾓｼﾞｭｰﾙ for systemd deadlock fix |
 
 ---
 
@@ -535,181 +538,181 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `c79ffff` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾄﾗｲﾘﾝｶﾞﾙ ｽｲﾑﾑｴﾄﾗｲ ﾁｴｯｸｽﾞ ｱﾝﾄﾞ ｼﾞｱ 基本情報 ﾙｰﾙ ﾄｩ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs |
-| `f5941ae` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽｷﾙ ﾄﾞｷｭ ﾃﾝﾌﾟﾚｰﾄ, ｽｲﾝｸ ﾙｰﾙｽﾞ, ｱﾝﾄﾞ ｽﾄｱﾙｴﾈｽ ﾁｪｯｸ |
-| `2ba85d3` | ﾌｨｯｸｽ(ｽｷﾙ): ｼﾞｴﾝｴﾗｱﾙｲｽﾞｴ 基本情報 ﾙｰﾙ ﾄｩ ｵｰﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ, ﾉｯﾄ ｼﾞｬｽﾄ ｼﾞｬﾊﾟﾆｰｽﾞ |
-| `7dad578` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽﾗｲ ﾊｯｼｭ ﾌｵﾗﾑｱﾄ ｱﾝﾄﾞ ﾆｯｸｽ ﾋﾞﾙﾄﾞ ｸﾞｵﾄﾁｱｽﾞ ﾄｩ ｱｯﾌﾟﾃﾞｰﾄ ｽｷﾙ |
-| `4b103e5` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｱﾝﾄｲ-ﾌﾟｱﾄﾄｴﾗﾝｽﾞ ﾌｫｱ ｽﾄｱﾙｴ/ｳﾝｽｲﾝｸﾄﾞ ﾄﾞｷｭ ﾌﾞｳﾙﾙｴﾄｽﾞ ｱﾌﾀｰ ｿｰｽ ﾁｪﾝｼﾞｰｽﾞ |
+| `8aa65da` | docs(ｽｷﾙ): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
+| `7e22edd` | docs(ｽｷﾙ): add ｽｷﾙ doc ﾃﾝﾌﾟﾚｰﾄ, sync rules, and staleness check |
+| `454a4e4` | fix(ｽｷﾙ): generalize 基本情報 rule to all languages, not just Japanese |
+| `c79ffff` | docs(ｽｷﾙ): add SRI hash format and nix ﾋﾞﾙﾄﾞ gotchas to update ｽｷﾙ |
+| `f5941ae` | docs(ｽｷﾙ): add anti-patterns for stale/unsynced doc bullets after source changes |
 
 ---
 
 ## 2026-06-06T15:15:31+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱﾄﾞ ｸ ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ + ｸｸ=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ
+**ｻﾏﾘｰ**：docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc to changes list
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `373da95` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｱﾄﾞ ｸ ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ + ｸｸ=ｼﾞｰｼｰｼｰ ﾄｩ ﾁｪﾝｼﾞｰｽﾞ ﾘｽﾄ |
+| `2ba85d3` | docs(comfyui-strix-halo): add C ﾋﾞﾙﾄﾞ toolchain + CC=gcc to changes list |
 
 ---
 
 ## 2026-06-06T13:07:30+09:00
 
-**ｻﾏﾘｰ**：ﾌｴｱﾄ(ｽｷﾙｽﾞ): ﾙｵｸｱﾙｲｽﾞｴ ｵｰﾙ ｽｷﾙ.ﾑﾄﾞ ﾄｩ ﾁｬｲﾆｰｽﾞ, ﾄﾞｴｸﾙｱﾗｴ ｲﾝ ﾗｴｱﾄﾞﾑｽﾞ
+**ｻﾏﾘｰ**：feat(skills): localize all SKILL.md to Chinese, declare in READMEs
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `df4074f` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ﾙｵｸｱﾙｲｽﾞｴ ｵｰﾙ ｽｷﾙ.ﾑﾄﾞ ﾄｩ ﾁｬｲﾆｰｽﾞ, ﾄﾞｴｸﾙｱﾗｴ ｲﾝ ﾗｴｱﾄﾞﾑｽﾞ |
+| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
 
 ---
 
 ## 2026-06-05T03:42:25+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ ﾄｲﾌﾟ
+**ｻﾏﾘｰ**：docs(nixos-modern-cli): add POSIX tool guide and nix binary tip
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `3be4889` | ﾄﾞｷｭｽﾞ(ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli): ｱﾄﾞ POSIX ﾂｰﾙ ｶﾞｲﾄﾞ ｱﾝﾄﾞ ﾆｯｸｽ ﾊﾞｲﾅﾘ ﾄｲﾌﾟ |
+| `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
 
 ---
 
 ## 2026-06-05T03:42:18+09:00
 
-**ｻﾏﾘｰ**：ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ｽｷﾙ ｳｨｽﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ
+**ｻﾏﾘｰ**：feat(skills): add write-project-docs ｽｷﾙ with trilingual docs
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `fc5eca3` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ｽｷﾙ ｳｨｽﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
+| `373da95` | feat(skills): add write-project-docs ｽｷﾙ with trilingual docs |
 
 ---
 
 ## 2026-06-05T03:42:14+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(codewhale): ﾌｨｯｸｽ ｽﾄﾄﾞｴﾝﾌﾞ ﾄｲﾌﾟｵ ｸｱｳｽｲﾝｸﾞ ﾋﾞﾙﾄﾞ ﾌｱｲﾙｳﾗｴ
+**ｻﾏﾘｰ**：fix(codewhale): fix stdenv typo causing ﾋﾞﾙﾄﾞ failure
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `d2e071f` | ﾌｨｯｸｽ(codewhale): ﾌｨｯｸｽ ｽﾄﾄﾞｴﾝﾌﾞ ﾄｲﾌﾟｵ ｸｱｳｽｲﾝｸﾞ ﾋﾞﾙﾄﾞ ﾌｱｲﾙｳﾗｴ |
+| `df4074f` | fix(codewhale): fix stdenv typo causing ﾋﾞﾙﾄﾞ failure |
 
 ---
 
 ## 2026-06-02T10:15:53+09:00
 
-**ｻﾏﾘｰ**：ｱｻﾞｰ — 7 项更新
+**ｻﾏﾘｰ**：other — 7 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `22d206c` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾘｶﾊﾞｰ-ﾆｯｸｽOS-config ｽｷﾙ ｳｨｽﾞ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ﾄﾞｷｭｽﾞ |
-| `f15db79` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ ｽｷﾙｽﾞ ｾｸｼｮﾝ ﾄｲﾄﾙｽﾞ ｱﾝﾄﾞ ｼﾞｴﾝｴﾗｲｸ ｴｰｼﾞｪﾝﾄ ﾄﾞｴｽｸﾗｲﾌﾟｼｮﾝｽﾞ |
-| `218aeca` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ｸｱﾝﾄｲｽﾞｱｼｮﾝ ﾙｴﾌﾞｴﾙｽﾞ ﾄｩ ﾛｰｶﾙ ﾓﾃﾞﾙ ﾈｰﾑｽﾞ |
-| `4f0f968` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ｳﾄﾞ- ﾌﾟﾗｴﾌｲｸｽ ﾄｩ ﾓﾃﾞﾙ ｸｱﾝﾄｲｽﾞｱｼｮﾝ ﾙｱﾌﾞｴﾙｽﾞ |
-| `8fe0b3d` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾑｲﾄ ﾗｲｾﾝｽ ﾌｧｲﾙ ｱﾝﾄﾞ ﾘﾝｸ ﾌﾛﾑ ｵｰﾙ ﾗｴｱﾄﾞﾑｽﾞ |
-| `8fe3fae` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾛｰｶﾙ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｴｸﾞｻﾞﾝﾌﾟﾙ ｱﾙｵﾝｸﾞｽｲﾄﾞｴ ﾘﾓｰﾄ |
-| `ee0a904` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ ﾛｰｶﾙ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ ｼﾝﾀｯｸｽ ﾄｩ ﾑｱﾄﾁ ｱｸﾄｳｱﾙ ﾕｰｾｰｼﾞ |
+| `3be4889` | docs: add recover-nixos-config ｽｷﾙ with multi-language docs |
+| `fc5eca3` | docs: fix Skills section titles and generic ｴｰｼﾞｪﾝﾄ descriptions |
+| `d2e071f` | docs: add quantization levels to local model names |
+| `22d206c` | docs: add UD- prefix to model quantization labels |
+| `f15db79` | docs: add MIT ﾗｲｾﾝｽ file and link from all READMEs |
+| `218aeca` | docs: add local flake input example alongside remote |
+| `4f0f968` | docs: fix local flake input syntax to match actual usage |
 
 ---
 
 ## 2026-06-02T08:49:47+09:00
 
-**ｻﾏﾘｰ**：ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ — 8 项更新
+**ｻﾏﾘｰ**：opencode-telegram — 8 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `a38e426` | ﾌｴｱﾄ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ｳｨｽﾞ ﾄﾞｴｸﾙｱﾗｱﾄｲﾌﾞｴ ｺﾝﾌｨｸﾞ |
-| `dea4dc6` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｽｲﾑﾌﾟﾙｲﾌｲ ﾄｩ ﾌﾚｲｸ ﾓｼﾞｭｰﾙ ｺﾝﾌｨｸﾞ ｵﾝﾘｰ, ﾘﾑｰﾌﾞ ﾏﾆｭｱﾙ ｽｲｽﾄｴﾑﾄﾞ |
-| `44975ed` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ﾗｴﾝｱﾑｴ NixOS ﾓｼﾞｭｰﾙ → ﾌﾚｲｸ ﾓｼﾞｭｰﾙ |
-| `941eb48` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ﾕｰｽﾞ ｱｸｸｳﾗｱﾄｴ ｾｸｼｮﾝ ﾈｰﾑ — ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ, ﾉｯﾄ ﾓｼﾞｭｰﾙ |
-| `2a8c41b` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｼｵｳ ﾌﾙ ﾌﾚｲｸ.ﾆｯｸｽ ｸｵﾝﾄｴｸｽﾄ ｲﾝ ｻｰﾋﾞｽ ｺﾝﾌｨｸﾞ |
-| `bd9e1b9` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ﾌﾚｲｸ ﾓｼﾞｭｰﾙ ｱｽﾞ ｾｸｼｮﾝ ﾀｲﾄﾙ, ｸｵﾝｽｲｽﾄｴﾝﾄ ｱｸﾛｽ ﾙｱﾝｸﾞｽﾞ |
-| `d869279` | ﾌｴｱﾄ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｵｰﾄ-ｲﾝｽﾄｰﾙ ﾊﾟｯｹｰｼﾞ ｳｪﾝ ﾓｼﾞｭｰﾙ ｴﾝｱﾌﾞﾙﾄﾞ |
-| `2db934e` | ﾄﾞｷｭｽﾞ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ｱﾄﾞ ﾌｧｰｽﾄ-ﾄｲﾑｴ ｾｯﾄｱｯﾌﾟ ﾌﾙｵｳ (ｵｰﾌﾟﾝｺｰﾄﾞ ｽｴﾗﾌﾞｴ + ｺﾝﾌｨｸﾞ) |
+| `8fe0b3d` | feat(opencode-telegram): add NixOS ﾓｼﾞｭｰﾙ with declarative config |
+| `8fe3fae` | docs(opencode-telegram): simplify to flake ﾓｼﾞｭｰﾙ config only, remove manual systemd |
+| `ee0a904` | docs(opencode-telegram): rename NixOS ﾓｼﾞｭｰﾙ → flake ﾓｼﾞｭｰﾙ |
+| `a38e426` | docs(opencode-telegram): use accurate section name — ｻｰﾋﾞｽ config, not ﾓｼﾞｭｰﾙ |
+| `dea4dc6` | docs(opencode-telegram): show full flake.nix context in ｻｰﾋﾞｽ config |
+| `44975ed` | docs(opencode-telegram): flake ﾓｼﾞｭｰﾙ as section title, consistent across langs |
+| `941eb48` | feat(opencode-telegram): auto-ｲﾝｽﾄｰﾙ ﾊﾟｯｹｰｼﾞ when ﾓｼﾞｭｰﾙ enabled |
+| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
 
 ---
 
 ## 2026-06-02T08:29:27+09:00
 
-**ｻﾏﾘｰ**：ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ ｽｱﾝﾄﾞﾌﾞｵｸｽ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ
+**ｻﾏﾘｰ**：feat(llama-cpp-rocm): add NixOS ﾓｼﾞｭｰﾙ for ｻｰﾋﾞｽ sandbox overrides
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `713b693` | ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ｱﾄﾞ NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ｻｰﾋﾞｽ ｽｱﾝﾄﾞﾌﾞｵｸｽ ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ |
+| `bd9e1b9` | feat(llama-cpp-rocm): add NixOS ﾓｼﾞｭｰﾙ for ｻｰﾋﾞｽ sandbox overrides |
 
 ---
 
 ## 2026-06-02T07:34:30+09:00
 
-**ｻﾏﾘｰ**：ｽﾞﾎ — 2 项更新
+**ｻﾏﾘｰ**：zh — 2 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `327291a` | ﾄﾞｷｭｽﾞ(ｽﾞﾎ): ﾗｴﾝｱﾑｴ ｾｸｼｮﾝｽﾞ 快速开始→添加 包→软件 ﾗｲｾﾝｽ→许可 |
-| `f0e74d3` | ﾄﾞｷｭｽﾞ(ｽﾞﾎ): ｽｲﾑﾌﾟﾙｲﾌｲ ｽｷﾙｽﾞ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, ﾘﾑｰﾌﾞ ｽｴﾑｱﾝﾄｲｸ ﾄﾞｳﾌﾟﾙｲｸｱｼｮﾝ |
+| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
+| `2db934e` | docs(zh): simplify Skills ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ, remove semantic duplication |
 
 ---
 
 ## 2026-06-02T06:44:17+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ﾕｰｽﾞ ﾌﾞｲｽｲﾌﾞﾙｴ: ﾌﾟﾗｵﾌﾟｴﾗﾄｲ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ｲﾌ ｸｵﾝﾄﾞｲﾄｲｵﾝｱﾙ ﾌｫｱ ｽｸﾗｵﾙﾙﾌﾞｲｴｳ
+**ｻﾏﾘｰ**：fix(rcc-fix): use visible: property instead of if conditional for ScrollView
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `627c9c5` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ﾕｰｽﾞ ﾌﾞｲｽｲﾌﾞﾙｴ: ﾌﾟﾗｵﾌﾟｴﾗﾄｲ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ｲﾌ ｸｵﾝﾄﾞｲﾄｲｵﾝｱﾙ ﾌｫｱ ｽｸﾗｵﾙﾙﾌﾞｲｴｳ |
+| `713b693` | fix(rcc-fix): use visible: property instead of if conditional for ScrollView |
 
 ---
 
 ## 2026-06-02T06:08:13+09:00
 
-**ｻﾏﾘｰ**：ｽｷﾙｽﾞ — 3 项更新
+**ｻﾏﾘｰ**：skills — 3 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `9e7f8e2` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
-| `358316c` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ NixKits-ｽｷﾙｽﾞ ｲﾝｽﾄｱﾙﾙｴﾗ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
-| `bef3b4b` | ﾌｴｱﾄ(ｽｷﾙｽﾞ): ｱﾄﾞ NixKits-ﾁｪｯｸ-updates ｽｷﾙ ｳｨｽﾞ 3-language ﾄﾞｷｭｽﾞ |
+| `327291a` | feat(skills): add nixos-modern-cli ｽｷﾙ with 3-language docs |
+| `f0e74d3` | feat(skills): add nixkits-skills installer with 3-language docs |
+| `627c9c5` | feat(skills): add nixkits-check-updates ｽｷﾙ with 3-language docs |
 
 ---
 
 ## 2026-05-30T06:45:11+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘﾑｰﾌﾞ ﾗﾏ-ｸﾌﾟﾌﾟ-ver, ﾕｰｽﾞ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾊﾞｰｼﾞｮﾝ ﾄﾞｲﾗｴｸﾄﾘｰ
+**ｻﾏﾘｰ**：fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `f3a6978` | ﾌｨｯｸｽ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): ﾘﾑｰﾌﾞ ﾗﾏ-ｸﾌﾟﾌﾟ-ver, ﾕｰｽﾞ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾊﾞｰｼﾞｮﾝ ﾄﾞｲﾗｴｸﾄﾘｰ |
+| `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs ﾊﾞｰｼﾞｮﾝ directly |
 
 ---
 
 ## 2026-05-30T03:19:48+09:00
 
-**ｻﾏﾘｰ**：ｱｻﾞｰ — 2 项更新
+**ｻﾏﾘｰ**：other — 2 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `a612af7` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ｲﾝｸﾞﾘｯｼｭ ｱﾝﾄﾞ ｼﾞｬﾊﾟﾆｰｽﾞ ﾄﾗｱﾝｽﾙｱｼｮﾝｽﾞ ｳｨｽﾞ ｲ18n ｽﾄﾗｳｸﾄｳﾗｴ |
-| `e56f122` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ｲﾝｸﾞﾘｯｼｭ ｱﾝﾄﾞ ｼﾞｬﾊﾟﾆｰｽﾞ ﾗｴｱﾄﾞﾑｴ ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ ｽｳｲﾄﾁｴﾗ |
+| `358316c` | docs: add English and Japanese translations with I18n structure |
+| `bef3b4b` | docs: add English and Japanese README with language switcher |
 
 ---
 
 ## 2026-05-30T03:01:02+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ ﾌﾙ SearXNG + ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ ﾗｴﾌﾞｴﾗｽｴ ﾌﾟﾗｵｸｽｲ ｺﾝﾌｨｸﾞ
+**ｻﾏﾘｰ**：docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `6ba43df` | ﾄﾞｷｭｽﾞ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ｱﾄﾞ ﾌﾙ SearXNG + ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ ﾗｴﾌﾞｴﾗｽｴ ﾌﾟﾗｵｸｽｲ ｺﾝﾌｨｸﾞ |
+| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
 
 ---
 
 ## 2026-05-29T15:25:12+09:00
 
-**ｻﾏﾘｰ**：ﾗｸｸ-ﾌｨｯｸｽ — 4 项更新
+**ｻﾏﾘｰ**：rcc-fix — 4 项更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `b7ebbfa` | ﾌｴｱﾄ(ﾗｸｸ-ﾌｨｯｸｽ): ﾗｴｳﾗｲﾄｴ ﾊﾟｯﾁ ﾌｫｱ ｱｽｳｽｸﾄﾙ 6.3.7 ｳｨｽﾞ ﾎｵﾄ-ﾌﾟﾙｳｸﾞ ｱﾝﾄﾞ ﾌﾞｵｳﾝﾄﾞｱﾗｲ ﾁｴｯｸｽﾞ |
-| `2b237ff` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ｽｺｰﾌﾟ ﾎｵﾄﾌﾟﾙｳｸﾞ ﾌﾞｱﾗｲｱﾌﾞﾙ ｸｵﾗﾗｴｸﾄﾘｰ ﾌｫｱ ｱｽｳｽｸﾄﾙ ﾋﾞﾙﾄﾞ |
-| `8497bf7` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ｾｯﾄ ｸｴｲﾌﾞｵｱﾗﾄﾞ_connected=ﾌｱﾙｽｴ ｳｪﾝ ﾉｰ ｱｳﾗｱ ｲﾌｱｽｴ ﾌｵｳﾝﾄﾞ |
-| `15a0104` | ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): ﾗｴﾌﾟﾙｱｽｴ ﾌﾟｵﾙﾙｲﾝｸﾞ ｳｨｽﾞ ﾄﾞ-ﾌﾞｳｽ ｲﾝﾄｴﾗﾌｱｽｴｽｱﾄﾞﾄﾞﾄﾞ ｲﾍﾞﾝﾄ |
+| `a612af7` | feat(rcc-fix): rewrite ﾊﾟｯﾁ for asusctl 6.3.7 with hot-plug and boundary checks |
+| `e56f122` | fix(rcc-fix): scope hotplug variable correctly for asusctl ﾋﾞﾙﾄﾞ |
+| `6ba43df` | fix(rcc-fix): set keyboard_connected=false when no aura iface found |
+| `b7ebbfa` | fix(rcc-fix): replace polling with D-Bus InterfacesAdded event |
 
 ---
 
@@ -719,39 +722,39 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `14e060c` | ﾌｴｱﾄ(kitsfmt): ｳｨｽﾞ→ﾋﾞﾙﾄｲﾝｽﾞ.ｱﾄﾄﾗﾌﾞｱﾙｳｽﾞ ﾌﾞｴｽﾄ-ﾌﾟﾗｱｸﾄｲｽｴ ﾄﾗｱﾝｽﾌｵﾗﾑｱｼｮﾝ |
-| `1b7d0a9` | ﾌｴｱﾄ(kitsfmt): ｱﾄﾞ --ｽﾄﾄﾞｲﾝ ﾌﾗｸﾞ ﾌｫｱ ｴｸｽﾌﾟﾙｲｽｲﾄ ｽﾄﾄﾞｲﾝ ﾓｰﾄﾞ |
-| `6a42efd` | ﾌｨｯｸｽ(kitsfmt): ﾘｽﾄｱ ﾌﾞｴﾝﾄﾞｵﾗ ﾄﾞｲﾗ ﾌｫｱ ｵﾌﾌﾙｲﾝｴ ﾌﾞｳｲﾙﾄﾞｽﾞ |
+| `2b237ff` | feat(kitsfmt): with→builtins.attrValues best-practice transformation |
+| `8497bf7` | feat(kitsfmt): add --stdin flag for explicit stdin mode |
+| `15a0104` | fix(kitsfmt): restore vendor dir for offline builds |
 
 ---
 
 ## 2026-05-29T13:16:30+09:00
 
-**ｻﾏﾘｰ**：ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ, ﾉｯﾄ ｿｰｽ-ﾌﾞｳｲﾙﾄ)
+**ｻﾏﾘｰ**：docs: fix codewhale type ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, not source-built)
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `495415f` | ﾄﾞｷｭｽﾞ: ﾌｨｯｸｽ codewhale ﾀｲﾌﾟ ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ, ﾉｯﾄ ｿｰｽ-ﾌﾞｳｲﾙﾄ) |
+| `14e060c` | docs: fix codewhale type ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ (pre-built, not source-built) |
 
 ---
 
 ## 2026-05-29T05:57:55+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): ﾗｴｽﾄﾗｲｸﾄ .ﾌﾞｽｸｵﾄﾞｴ ｼﾞｲﾄｲｸﾞﾝｵﾗｴ ﾄｩ ﾗｴﾌﾟｵ ﾙｰﾄ ﾄｩ ﾉｯﾄ ｴｸｽｸﾙｳﾄﾞｴ ﾌﾞｴﾝﾄﾞｵﾗﾄﾞ ｸﾗｱﾄｴ ﾌｧｲﾙｽﾞ
+**ｻﾏﾘｰ**：fix(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore to repo root to not exclude vendored crate files
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `378e8bb` | ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): ﾗｴｽﾄﾗｲｸﾄ .ﾌﾞｽｸｵﾄﾞｴ ｼﾞｲﾄｲｸﾞﾝｵﾗｴ ﾄｩ ﾗｴﾌﾟｵ ﾙｰﾄ ﾄｩ ﾉｯﾄ ｴｸｽｸﾙｳﾄﾞｴ ﾌﾞｴﾝﾄﾞｵﾗﾄﾞ ｸﾗｱﾄｴ ﾌｧｲﾙｽﾞ |
+| `1b7d0a9` | fix(ﾋﾞﾙﾄﾞ): restrict .vscode gitignore to repo root to not exclude vendored crate files |
 
 ---
 
 ## 2026-05-27T21:26:59+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(kitsfmt): ｲﾄﾞｴﾑﾌﾟｵﾄｴﾝｽｲ, ｲﾝﾌﾟﾙｱｽｴ ｽｱﾌｴﾄｲ, ｱｳﾄﾌﾟｯﾄ ﾌﾞｱﾙｲﾄﾞｱｼｮﾝ
+**ｻﾏﾘｰ**：fix(kitsfmt): idempotency, inplace safety, output validation
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `a1d1d36` | ﾌｨｯｸｽ(kitsfmt): ｲﾄﾞｴﾑﾌﾟｵﾄｴﾝｽｲ, ｲﾝﾌﾟﾙｱｽｴ ｽｱﾌｴﾄｲ, ｱｳﾄﾌﾟｯﾄ ﾌﾞｱﾙｲﾄﾞｱｼｮﾝ |
+| `6a42efd` | fix(kitsfmt): idempotency, inplace safety, output validation |
 
 ---
 
@@ -761,28 +764,28 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `e731eb7` | ﾗｴﾌｱｸﾄｵﾗ(kitsfmt): 基于 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 重写格式化引擎 ﾌﾞ0.3.0 |
-| `314732c` | ﾗｴﾌｱｸﾄｵﾗ(kitsfmt): 基于 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 重写格式化引擎 ﾌﾞ0.3.0 |
-| `1667e1d` | ﾌｴｱﾄ(kitsfmt): 生成 ｸｱﾗｸﾞｵ.ﾛｯｸ，更新 kitsfmt.ﾆｯｸｽ 使用 ﾗﾝｲｸｽ ｴｰｴｽﾃｨｰ 构建 |
-| `3b05a32` | ﾌｨｯｸｽ(kitsfmt): 修正 kitsfmt.ﾆｯｸｽ 中的 ｽﾗｸ 路径 |
-| `17252ea` | ﾌｨｯｸｽ(kitsfmt): 修复 ﾑｱﾄﾁ_ast! 宏不支持通配符的问题 |
-| `3cef0a8` | ﾌｨｯｸｽ(kitsfmt): 修复 ﾑｱﾄﾁ_ast! 宏语法错误，简化 ｸｵﾑﾒﾝﾄｽﾞ_before 函数 |
+| `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
+| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
+| `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
 ---
 
 
 ## 2026-06-16T04:56:06+09:00
 
-**ｻﾏﾘｰ**：ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.2 — 上游修复及依赖更新
+**ｻﾏﾘｰ**：opencode-telegram 0.21.2 — 上游修复及依赖更新
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `5c74dcf` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾚｺｰﾄﾞ 2026-06-16 ｱｯﾌﾟﾃﾞｰﾄ (ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.2) |
-| `ec7d5ca` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.2 |
+| `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
+| `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ | 0.21.1 | 0.21.2 |
+| opencode-telegram | 0.21.1 | 0.21.2 |
 | 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
 | 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
 
@@ -794,8 +797,8 @@ NixKits 软件更新维护日志。
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `e8f0299` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾚｺｰﾄﾞ 2026-06-15 ｱｯﾌﾟﾃﾞｰﾄ (codewhale 0.8.60) |
-| `a71aae7` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.60 |
+| `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
+| `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
@@ -807,18 +810,18 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-14T07:56:11+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.59 — 修复若干 ﾃｨｰﾕｰｱｲ 渲染问题；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.4.0 — 新增 ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ 传输模式
+**ｻﾏﾘｰ**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `716d98c` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾚｺｰﾄﾞ 2026-06-14 ｱｯﾌﾟﾃﾞｰﾄｽﾞ (codewhale 0.8.59, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.4.0) |
-| `ef9daae` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.4.0 |
-| `b995798` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.59 |
+| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
+| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
+| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.58 | 0.8.59 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.3.4 | 1.4.0 |
+| mcp-searxng | 1.3.4 | 1.4.0 |
 | 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
 | 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
 | 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
@@ -828,18 +831,18 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-12T10:51:31+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.58 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.4 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `07f347f` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾚｺｰﾄﾞ 2026-06-12 ｱｯﾌﾟﾃﾞｰﾄｽﾞ (codewhale 0.8.58, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.4) |
-| `f92f9c4` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.4 |
-| `7902bd1` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.58 |
+| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
+| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
+| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.57 | 0.8.58 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.3.2 | 1.3.4 |
+| mcp-searxng | 1.3.2 | 1.3.4 |
 | 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
 | 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
 | 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
@@ -849,19 +852,19 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-11T04:52:16+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.57 — ﾃｨｰﾕｰｱｲ 新增；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.2 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `543bcf9` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾄﾞｴｽｸﾗｲﾌﾟﾄｲﾌﾞｴ ﾀｲﾄﾙ ﾙｰﾙ ﾌｫｱ ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ |
-| `397e4ee` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾕｰｽﾞ ﾄﾞｴｽｸﾗｲﾌﾟﾄｲﾌﾞｴ ﾄｲﾄﾙｽﾞ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ﾌｲﾙｴﾝｱﾑｴ |
-| `2f58ac5` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌｨｯｸｽ ﾄｲﾑｴｽﾄｱﾑﾌﾟｽﾞ ﾄｩ ｴｸｽｱｸﾄ ｺﾐｯﾄ ﾄｲﾑｽﾞ |
-| `e5e505e` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.57, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.2 |
+| `07f347f` | docs(ｽｷﾙ): add descriptive title rule for MAINTENANCE files |
+| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
+| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
+| `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.55 | 0.8.57 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.3.1 | 1.3.2 |
+| mcp-searxng | 1.3.1 | 1.3.2 |
 | 　 | cli hash | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
 | 　 | tui hash | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
 
@@ -869,16 +872,16 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-10T02:28:10+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.55 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.1 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `b34ed08` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.55, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.3.1 |
+| `397e4ee` | chore(pkgs): bump codewhale 0.8.55, mcp-searxng 1.3.1 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.53 | 0.8.55 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.2.1 | 1.3.1 |
+| mcp-searxng | 1.2.1 | 1.3.1 |
 | 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
 | 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
 
@@ -886,43 +889,43 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-08T14:25:02+09:00
 
-**ｻﾏﾘｰ**：ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.2.1 — 上游修复
+**ｻﾏﾘｰ**：mcp-searxng 1.2.1 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `b4742ad` | ﾗｴﾌｱｸﾄｵﾗ: ﾑｵﾌﾞｴ ﾙｵｸｱﾙｲｽﾞﾄﾞ ﾗｴｱﾄﾞﾑｴ/ﾒﾝﾃﾅﾝｽ ﾌｧｲﾙｽﾞ ｲﾝﾄｩ ﾄﾞｷｭｽﾞ/ |
-| `1a28625` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾄﾗｲﾘﾝｶﾞﾙ ﾒﾝﾃﾅﾝｽ ﾙｰﾙ ﾄｩ ｽｷﾙ ﾄﾞｷｭｽﾞ |
-| `2cd9daf` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾄﾗｲﾘﾝｶﾞﾙ ﾒﾝﾃﾅﾝｽ (ｴﾝ/ｼﾞｱ) ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ ｽｳｲﾄﾁｴﾗｽﾞ |
-| `e4a3813` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾗｴﾌｲﾝﾄﾞ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾌｵﾗﾑｱﾄ ﾙｰﾙｽﾞ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `b3d7d0f` | ﾄﾞｷｭｽﾞ(ﾒﾝﾃﾅﾝｽ): ﾌﾞｱｯｸﾌｲﾙﾙ ﾌﾙ ﾊﾟｯｹｰｼﾞ ﾋｽﾄﾘｰ ﾌﾛﾑ ﾗｴﾌﾟｵ ｸﾗｴｱｼｮﾝ |
-| `b8a98bc` | ﾄﾞｷｭｽﾞ: ﾄﾞﾗｵﾌﾟ ﾄﾞｷｭ-ｽｲﾝｸ ﾗｲﾝ ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ; ｵﾝﾘｰ ﾚｺｰﾄﾞ ｽｳﾌﾞｽﾄｱﾝﾄｲﾌﾞｴ ﾗｴｳﾗｲﾄｽﾞ |
-| `5ba1361` | ﾄﾞｷｭｽﾞ: ｵﾑｲﾄ ﾋﾞﾙﾄﾞ ｽﾄｱﾄｳｽﾞ ｱﾝﾄﾞ ｳﾝﾁｱﾝｸﾞﾄﾞ ﾎｱｼｽﾞ ﾌﾛﾑ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ |
-| `d4cb81f` | ﾄﾞｷｭｽﾞ: ｽｳｲﾄﾁ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾄｩ ﾃｰﾌﾞﾙ-ｵﾝﾘｰ ﾌｵﾗﾑｱﾄ, ﾄﾞﾗｵﾌﾟ ﾄﾗｲﾘﾝｶﾞﾙ ﾌﾟﾗｵｽｴ |
-| `db680df` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｽｸｲﾌﾟ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ｳｪﾝ ﾉｰ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ﾌｵｳﾝﾄﾞ |
-| `07b1ee5` | ﾄﾞｷｭｽﾞ(ｽｷﾙｽﾞ): ｽｲﾝｸ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ｽﾃｯﾌﾟ ﾄｩ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ |
-| `300a9a6` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ｽﾃｯﾌﾟ 8 — ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ｱｯﾌﾟﾃﾞｰﾄ ﾜｰｸﾌﾛｰ |
-| `58b06ea` | ﾄﾞｷｭｽﾞ: ｱﾄﾞ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ — ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ |
-| `468b89a` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.1.0 → 1.2.1 |
+| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
+| `e5e505e` | docs(skills): sync trilingual MAINTENANCE rule to ｽｷﾙ docs |
+| `b34ed08` | docs: add trilingual MAINTENANCE (en/ja) with language switchers |
+| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
+| `1a28625` | docs(MAINTENANCE): backfill full ﾊﾟｯｹｰｼﾞ history from repo creation |
+| `2cd9daf` | docs: drop doc-sync line from MAINTENANCE; only record substantive rewrites |
+| `e4a3813` | docs: omit ﾋﾞﾙﾄﾞ status and unchanged hashes from MAINTENANCE.md |
+| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
+| `b8a98bc` | docs(ｽｷﾙ): skip MAINTENANCE.md when no updates found |
+| `5ba1361` | docs(skills): sync MAINTENANCE.md step to trilingual docs |
+| `d4cb81f` | docs(ｽｷﾙ): add Step 8 — MAINTENANCE.md update workflow |
+| `db680df` | docs: add MAINTENANCE.md — ｿﾌﾄｳｪｱ update changelog |
+| `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.1.0 | 1.2.1 |
+| mcp-searxng | 1.1.0 | 1.2.1 |
 
 ---
 
 ## 2026-06-06T13:58:47+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.53 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.1.0 — 上游修复；ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.1 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `8f16f91` | ﾁｵﾗｴ(ﾌﾟｸｸﾞｽﾞ): ﾌﾞｳﾑﾌﾟ codewhale 0.8.53, ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.1.0, ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.1 |
+| `300a9a6` | chore(pkgs): bump codewhale 0.8.53, mcp-searxng 1.1.0, opencode-telegram 0.21.1 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.49 | 0.8.53 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.0.4 | 1.1.0 |
-| ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ | 0.21.0 | 0.21.1 |
+| mcp-searxng | 1.0.4 | 1.1.0 |
+| opencode-telegram | 0.21.0 | 0.21.1 |
 | 　 | cli hash | `sha256-97zk4L...` → `sha256-VxBNH2o4iEkk0PrnuZHDPECjvm+ARXR9T/BV8QqvYtw=` |
 | 　 | tui hash | `sha256-tc/s3e...` → `sha256-DBiWk4c4QFh/BKPlG5a3KkH0ZTxNQgqZ7IWwH4OaEEw=` |
 | 　 | source hash | `sha256-ML5Hgle...` → `sha256-OVllsRMst6dWO/RagsmGyWN3muz1ATtffxfmLTfa0qU=` |
@@ -934,33 +937,33 @@ NixKits 软件更新维护日志。
 
 ## 2026-06-06T12:51:46+09:00
 
-**ｻﾏﾘｰ**：ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo 补丁 — ﾛｯｸｴﾑ 7.2 ﾎｴｴﾙｽﾞ 内嵌支持
+**ｻﾏﾘｰ**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `ed25bb5` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ｸﾙｱﾗｲﾌｲ ｸｴﾗﾝｴﾙ ﾌﾟｱﾗｱﾑ ｲｽﾞ ｾｯﾄ ﾊﾞｲ ﾓｼﾞｭｰﾙ, ﾉｯﾄ ﾊｰﾄﾞｳｪｱ |
-| `48d842f` | ﾌｴｱﾄ(ｽｷﾙ): ｱﾄﾞ ﾊﾟｯﾁ-ｴﾑﾌﾞｴﾄﾞﾄﾞﾄﾞ ﾊﾞｰｼﾞｮﾝ ﾁｪｯｸ ﾌｫｱ ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo |
-| `e11f899` | ﾄﾞｷｭｽﾞ(ｽｷﾙ): ｱﾄﾞ ﾙｴﾝｸﾞｽ/ｽﾄﾗｳｸﾄｳﾗｴ ﾙｰﾙｽﾞ ﾌﾛﾑ ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo ﾄﾞｷｭ ﾌｨｯｸｽ |
-| `979b75c` | ﾄﾞｷｭｽﾞ(ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo): ﾗｴｳﾗｲﾄｴ ﾄﾗｲﾘﾝｶﾞﾙ ﾄﾞｷｭｽﾞ ｲﾝ NixKits ｸｵﾝｽｲｽｴ ｽﾀｲﾙ |
-| `d5b1878` | ﾄﾞｷｭｽﾞ(ｼﾞｱ): ｱﾄﾞ 基本情報 ｾｸｼｮﾝ ﾄｩ ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo |
-| `9cb24a3` | ﾌｨｯｸｽ(ﾄﾞｷｭｽﾞ): ｱﾄﾞ ﾑｲｽｽｲﾝｸﾞ ｼﾞｱ ﾄﾞｷｭ ｱﾝﾄﾞ ｴﾝ/ｼﾞｱ ﾗｴｱﾄﾞﾑｴ ｴﾝﾄﾘｰｽﾞ ﾌｫｱ ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo |
+| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by ﾓｼﾞｭｰﾙ, not hardware |
+| `468b89a` | feat(ｽｷﾙ): add ﾊﾟｯﾁ-embedded ﾊﾞｰｼﾞｮﾝ check for comfyui-strix-halo |
+| `8f16f91` | docs(ｽｷﾙ): add length/structure rules from comfyui-strix-halo doc fix |
+| `ed25bb5` | docs(comfyui-strix-halo): rewrite trilingual docs in NixKits concise style |
+| `48d842f` | docs(ja): add 基本情報 section to comfyui-strix-halo |
+| `e11f899` | fix(docs): add missing ja doc and en/ja README entries for comfyui-strix-halo |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo | 补丁（ﾛｯｸｴﾑ 7.2 ﾎｴｴﾙｽﾞ 内嵌） |
+| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
 
 ---
 
 ## 2026-06-02T05:57:11+09:00
 
-**ｻﾏﾘｰ**：codewhale 0.8.49 — 上游修复；ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ 1.0.4 — 上游修复；ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream 2.1.0 — 上游修复；ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ 0.21.0 — 上游修复
+**ｻﾏﾘｰ**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
 | codewhale | 0.8.47 | 0.8.49 |
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | 1.0.3 | 1.0.4 |
-| ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream | 2.0.12 | 2.1.0 |
-| ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ | 0.20.5 | 0.21.0 |
+| mcp-searxng | 1.0.3 | 1.0.4 |
+| obs-bilibili-stream | 2.0.12 | 2.1.0 |
+| opencode-telegram | 0.20.5 | 0.21.0 |
 | 　 | cli hash | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
 | 　 | tui hash | — → `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
 | 　 | source hash(searx) | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
@@ -973,117 +976,119 @@ NixKits 软件更新维护日志。
 
 ## 2026-05-29T10:18:46+09:00
 
-**ｻﾏﾘｰ**：codewhale ﾌﾞ0.8.47 — 新包
+**ｻﾏﾘｰ**：codewhale v0.8.47 — 新包
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `2c917bd` | ﾗｴﾌｱｸﾄｵﾗ(codewhale): ｽｳｲﾄﾁ ﾄｩ ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ ﾌﾞｲﾝｱﾗｲｽﾞ, ﾘﾑｰﾌﾞ ｸｱﾗｸﾞｵﾎｱｼ |
-| `e2d09a2` | ﾌｴｱﾄ: ｱﾄﾞ codewhale (ﾄﾞｴｴﾌﾟｽｴｴｸ ﾌﾞ4 ﾃｨｰﾕｰｱｲ ｴｰｼﾞｪﾝﾄ) ﾌﾞ0.8.47 |
+| `979b75c` | refactor(codewhale): switch to pre-built binaries, remove cargoHash |
+| `d5b1878` | feat: add codewhale (DeepSeek V4 TUI ｴｰｼﾞｪﾝﾄ) v0.8.47 |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| codewhale | ﾌﾞ0.8.47 |
+| codewhale | v0.8.47 |
 
 ---
 
 ## 2026-05-21T16:35:02+09:00
 
-**ｻﾏﾘｰ**：ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ ﾌﾞ1.0.3 — 新包；ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ ﾌﾞ0.20.5 — 新包
+**ｻﾏﾘｰ**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ | ﾌﾞ1.0.3 |
-| ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ | ﾌﾞ0.20.5 |
+| mcp-searxng | v1.0.3 |
+| opencode-telegram | v0.20.5 |
 
 ---
 
 ## 2026-05-14T17:10:06+09:00
 
-**ｻﾏﾘｰ**：ﾗﾏ-ｸﾌﾟﾌﾟ-rocm — 新包（动态追踪上游最新 ﾘﾘｰｽ）
+**ｻﾏﾘｰ**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `73a3b10` | ﾗﾏ-ｸﾌﾟﾌﾟ ﾑﾄﾌﾟ |
+| `9cb24a3` | llama-cpp MTP |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ﾗﾏ-ｸﾌﾟﾌﾟ-rocm | 动态（构建时获取上游最新 ﾘﾘｰｽ） |
+| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
 
 ---
 
 ## 2026-05-14T07:38:08+09:00
 
-**ｻﾏﾘｰ**：kitsfmt — 新包（自建 ﾆｯｸｽ 格式化器）；ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream ﾌﾞ1.0.0 — 新包
+**ｻﾏﾘｰ**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `6cda338` | ﾌｴｱﾄ: ｱﾄﾞ kitsfmt ﾌｫｰﾏｯﾀｰ ｱﾝﾄﾞ ﾑｵﾄﾞｴﾗﾝｲｽﾞｴ ﾌﾚｲｸ ｽﾄﾗｳｸﾄｳﾗｴ |
+| `2c917bd` | feat: Add kitsfmt formatter and modernize flake structure |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| kitsfmt | 自建（`packages/kitsfmt-src/`| ｵﾌﾞｴｽ-ﾋﾞﾘﾋﾞﾘ-stream | ﾌﾞ1.0.0 |
+| kitsfmt | 自建（`packages/kitsfmt-src/`） |
+| obs-bilibili-stream | v1.0.0 |
 
 ---
 
 ## 2026-05-01T01:08:15+09:00
 
-**ｻﾏﾘｰ**：ﾗｸｸ-ﾌｨｯｸｽ — 新包（ｱｽｳｽｸﾄﾙ 补丁）
+**ｻﾏﾘｰ**：rcc-fix — 新包（asusctl 补丁）
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `3656154` | ﾗｸｸ-ﾌｨｯｸｽ |
+| `e2d09a2` | RCC-Fix |
 
 | ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
 |--------|--------|--------|
-| ﾗｸｸ-ﾌｨｯｸｽ | 跟随 ﾝｲｸｽﾌﾟｸｸﾞｽﾞ（ｵｰﾊﾞｰﾚｲ + ﾊﾟｯﾁ） |
+| rcc-fix | 跟随 nixpkgs（ｵｰﾊﾞｰﾚｲ + ﾊﾟｯﾁ） |
 
 ---
 
 ## 2026-06-17T06:48:47+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): 修复入口文件错误 — ﾄﾞｲｽﾄ/ｲﾝﾄﾞｴｸｽ.ｼﾞｽ → ﾄﾞｲｽﾄ/ｼｰｴﾙｱｲ.ｼﾞｽ，ｴﾑｼｰﾋﾟｰ 服务器可正常启动
+**ｻﾏﾘｰ**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `d1ab491` | ﾌｨｯｸｽ(ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ): ﾕｰｽﾞ ﾄﾞｲｽﾄ/ｼｰｴﾙｱｲ.ｼﾞｽ ｱｽﾞ ｴﾝﾄﾘｰ ﾌﾟｵｲﾝﾄ ｲﾝｽﾄｴｱﾄﾞ ｵﾌﾞ ﾄﾞｲｽﾄ/ｲﾝﾄﾞｴｸｽ.ｼﾞｽ |
+| `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point instead of dist/index.js |
 
 ---
 
 ## 2026-06-12T05:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾌｴｱﾄ(ﾗﾏ-ｸﾌﾟﾌﾟ-rocm): 恢复 ﾑｵﾄﾞｴﾙｽﾌﾟﾗｴｽｴﾄ 支持（ﾝｲｸｽﾌﾟｸｸﾞｽﾞ 已移除），命名空间迁移至 NixKits
+**ｻﾏﾘｰ**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
 
 ---
 
 ## 2026-06-10T04:31:20+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): 修改 ｸｲﾙﾙﾑｵﾄﾞｴ 为 ﾌﾟﾛｾｽ，添加 ﾄｲﾑｴｵｳﾄｽﾄｵﾌﾟｽｴｸ 防止关机挂起
+**ｻﾏﾘｰ**：fix(opencode-telegram): 修改 KillMode 为 process，添加 TimeoutStopSec 防止关机挂起
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `f4b56ba` | ﾌｨｯｸｽ(ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ): ﾁｪﾝｼﾞ ｸｲﾙﾙﾑｵﾄﾞｴ ﾌﾛﾑ ﾑｲｸｽﾄﾞ ﾄｩ ﾌﾟﾛｾｽ |
+| `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
 
 ---
 
 ## 2026-05-29T05:30:00+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(kitsfmt): 修复 ｲﾝﾎｴﾗｲﾄ 逗号、缩进字符串损坏、ﾙｱﾑﾌﾞﾄﾞｱ 空格等多个格式化问题；修复幂等性
+**ｻﾏﾘｰ**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
 
 | ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
 |------|------|
-| `45f3c26` | ﾌｴｱﾄ(kitsfmt): ﾗｴｸ→ﾙｴﾄ-ｲﾝ ｺﾝﾊﾞｰｼﾞｮﾝ ｱﾝﾄﾞ ﾑｳﾙﾄｲ-ﾌｧｲﾙ ｻﾎﾟｰﾄ |
-| `3656154` | ﾁｵﾗｴ(kitsfmt): ｱｯﾌﾟﾃﾞｰﾄ ｸｱﾗｸﾞｵ.ﾛｯｸ ﾌｫｱ ﾌﾞ0.4.0 |
-| `d1ab491` | ﾌｴｱﾄ(kitsfmt): ﾌﾞｴｽﾄ-ﾌﾟﾗｱｸﾄｲｽｴ ｵｰﾄ-ｸｵﾗﾗｴｸｼｮﾝｽﾞ ｳｨｽﾞ ｴﾇﾌﾞｲ ﾌﾞｱﾗ ｻﾎﾟｰﾄ |
-| `45f3c26` | ﾌｨｯｸｽ(kitsfmt): ｲﾝﾎｴﾗｲﾄ ｺﾝﾏ ﾊﾞｸﾞ, ｲﾝﾄﾞｴﾝﾄﾄﾞ ｽﾄﾗｲﾝｸﾞ ｸｵﾗﾗｳﾌﾟｼｮﾝ, ﾙｱﾑﾌﾞﾄﾞｱ ｽﾌﾟｱｸｲﾝｸﾞ |
+| `45f3c26` | feat(kitsfmt): rec→let-in conversion and multi-file support |
+| `3656154` | chore(kitsfmt): update Cargo.lock for v0.4.0 |
+| `d1ab491` | feat(kitsfmt): best-practice auto-corrections with env var support |
+| `f4b56ba` | fix(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
 
 ---
 
 ## 2026-05-29T05:00:00+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ﾗｸｸ-ﾌｨｯｸｽ): 用 ﾄﾞ-ﾌﾞｳｽ ｲﾝﾄｴﾗﾌｱｽｴｽｱﾄﾞﾄﾞﾄﾞ 事件替代轮询，优化二合一键盘热插拔检测
+**ｻﾏﾘｰ**：fix(rcc-fix): 用 D-Bus InterfacesAdded 事件替代轮询，优化二合一键盘热插拔检测
 
 ---
 
 ## 2026-05-29T04:50:00+09:00
 
-**ｻﾏﾘｰ**：ﾌｨｯｸｽ(ﾋﾞﾙﾄﾞ): 修复 .ﾌﾞｽｸｵﾄﾞｴ ｼﾞｲﾄｲｸﾞﾝｵﾗｴ 范围过宽导致 ﾌﾞｴﾝﾄﾞｵﾗﾄﾞ ｸﾗｱﾄｴ 文件被排除
+**ｻﾏﾘｰ**：fix(ﾋﾞﾙﾄﾞ): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
+
