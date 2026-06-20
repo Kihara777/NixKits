@@ -1,49 +1,49 @@
 # kitsfmt
 
-[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/kitsfmt.md)
+[中文](../zh/kitsfmt.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | [偽中国語](../pcn/kitsfmt.md)
 
-**ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ** — ｴｰｴｽﾃｨｰ-ﾍﾞｰｽﾄﾞ ｳｨｽﾞ ｱﾄﾘﾋﾞｭｰﾄ ｿｰﾃｨﾝｸﾞ, ｺﾒﾝﾄ ﾌﾟﾗｴｽｴﾗﾌﾞｱｼｮﾝ, ｱﾝﾄﾞ ｲﾝﾃﾞﾝﾃｰｼｮﾝ ﾝｵﾗﾑｱﾙｲｽﾞｱｼｮﾝ.
+**Nix ﾌｫｰﾏｯﾀｰ** — AST-based with attribute sorting, comment preservation, and indentation normalization.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | 0.5.0 |
-| ﾗﾝｹﾞｰｼﾞ | Rust |
-| ｿｰｽ | ﾃﾞｨｽ ﾗｴﾌﾟｵ `packages/kitsfmt-src/` |
+| Version | 0.5.0 |
+| Language | Rust |
+| Source | This repo `ﾊﾟｯｹｰｼﾞs/kitsfmt-src/` |
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-kitsfmt ﾌｧｲﾙ.ﾆｯｸｽ             # ｱｳﾄﾌﾟｯﾄ ﾄｩ ｽﾄﾄﾞｵｳﾄ
-kitsfmt --ｲﾝﾌﾟﾙｱｽｴ ﾌｧｲﾙ.ﾆｯｸｽ   # ｲﾝ-ﾌﾟﾙｱｽｴ ﾌｵﾗﾑｱﾄ
-kitsfmt --ﾁｪｯｸ ﾌｧｲﾙ.ﾆｯｸｽ     # ﾁｪｯｸ ﾌｫｰﾏｯﾃｨﾝｸﾞ
-kitsfmt --ﾉｰ-best-practices  # ﾃﾞｨｾｰﾌﾞﾙ ｵｰﾄ-ﾌｨｯｸｼｰｽﾞ
-kitsfmt ﾌｧｲﾙ1.ﾆｯｸｽ ﾌｧｲﾙ2.ﾆｯｸｽ  # ﾑｳﾙﾄｲﾌﾟﾙｴ ﾌｧｲﾙｽﾞ
+kitsfmt file.nix             # output to stdout
+kitsfmt --inplace file.nix   # in-place format
+kitsfmt --check file.nix     # check formatting
+kitsfmt --no-best-practices  # disable auto-fixes
+kitsfmt file1.nix file2.nix  # multiple files
 ```
 
-ｴﾇﾌﾞｲ ﾌﾞｱﾗｽﾞ: `KITSFMT_INPLACE=1` `KITSFMT_CHECK=1` `KITSFMT_BEST_PRACTICES=0`
+Env vars: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-# ﾀﾞｲﾚｸﾄ
-environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+# Direct
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
 
-# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ (ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ)
-nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];  # → pkgs.kitsfmt
+# Default overlay (recommended)
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
 
-# ｱｽﾞ ﾆｯｸｽ ﾌﾑﾄ ﾌｫｰﾏｯﾀｰ
-# ﾌｫｰﾏｯﾀｰ.${system} = inputs.nix-kits.ﾌｫｰﾏｯﾀｰ.${system};
-# ｾﾞﾝ: ﾆｯｸｽ ﾌﾑﾄ
+# As nix fmt formatter
+# formatter.${system} = inputs.nix-kits.formatter.${system};
+# then: nix fmt
 ```
 
-## ﾌｨｰﾁｬｰｽﾞ
+## Features
 
-- ｱﾄﾘﾋﾞｭｰﾄ ｿｰﾃｨﾝｸﾞ (ｲﾝｸﾙｳﾄﾞｲﾝｸﾞ ｱﾌﾟｸ `a.b.c` ｺﾗﾌﾟｽ)
-- ｺﾒﾝﾄ ﾌﾟﾗｴｽｴﾗﾌﾞｱｼｮﾝ
-- ｲﾃﾞﾝﾎﾟﾃﾝﾄ ﾌｫｰﾏｯﾃｨﾝｸﾞ
-- **ﾌﾞｴｽﾄ-ﾌﾟﾗｱｸﾄｲｽｴ ｵｰﾄ-ﾌｨｯｸｼｰｽﾞ** (ﾃﾞﾌｫﾙﾄ ｵﾝ, `-B` ﾄｩ ﾃﾞｨｾｰﾌﾞﾙ):
-  - ﾍﾞｱ ﾕｰｱｰﾙｴﾙ ｸｵﾄｲﾝｸﾞ (ﾗﾌｸ 45): `https://x.com` → `"https://x.com"`
-  - `rec` → `let-in` `rec { a = 1; }` → `let a=1; in { inherit a; }`
-  - `with` → `builtins.attrValues` `with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`
+- Attribute sorting (including APC `a.b.c` collapse)
+- Comment preservation
+- Idempotent formatting
+- **Best-practice auto-fixes** (ﾃﾞﾌｫﾙﾄ on, `-B` to disable):
+  - Bare URL quoting (RFC 45): `https://x.com` → `"https://x.com"`
+  - `rec` → `let-in`: `rec { a = 1; }` → `let a=1; in { inherit a; }`
+  - `with` → `ﾌﾞｳｲﾙﾄins.attrValues`: `with pkgs; [ a b ]` → `ﾌﾞｳｲﾙﾄins.attrValues { inherit (pkgs) a b; }`

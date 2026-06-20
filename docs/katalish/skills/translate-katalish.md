@@ -1,37 +1,37 @@
-# ﾄﾗｱﾝｽﾙｱﾄｴ-ｶﾀﾘｯｼｭ (ｽｷﾙ)
+# translate-katalish (Skill)
 
-[中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-katalish.md)
+[中文](../../zh/ｽｷﾙs/translate-katalish.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/translate-katalish.md) | [偽中国語](../../pcn/ｽｷﾙs/translate-katalish.md)
 
-> ｴｸｽﾄﾗｱ ﾝｱﾄｳﾗｱﾙ-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ.  ｱﾄﾞﾄﾞｽﾞ ｻﾞ ｶﾀﾘｯｼｭ (ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ) ﾗﾝｹﾞｰｼﾞ.
+> Extra natural-language ｻﾎﾟｰﾄ for the document-writing ｽｷﾙ.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ (ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ) |
-| ﾊﾟｽ | `skills/translate-katalish/SKILL.md` |
-| ｺｰﾙﾄﾞ ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ﾌﾟﾗｲﾑｱﾗｲ), NixKits-ﾁｪｯｸ-updates (ｲﾝﾄﾞｲﾗｴｸﾄ) |
+| Type | Coding Agent Skill (language backend) |
+| Path | `ｽｷﾙs/translate-katalish/SKILL.md` |
+| Called by | write-project-docs (primary), nixkits-ﾁｪｯｸ-updates (indirect) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾆｭｰ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｲﾝｸﾞﾘｯｼｭ→ﾎｱﾙﾌｳｲﾄﾞｽ-ｶﾀｶﾅ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ
-- ﾌﾞｳｲﾙﾄ-ｲﾝ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ (~20 ｸｵﾑﾑｵﾝ ﾄｴﾁ-ﾄﾞｷｭ ｳｵﾗﾄﾞｽﾞ)
-- ﾙｰﾙ-ﾍﾞｰｽﾄﾞ ﾌｵﾝｴﾄｲｸ ﾌｱﾙﾙﾌﾞｱｯｸ ﾌｫｱ ｳｵﾗﾄﾞｽﾞ ﾉｯﾄ ｲﾝ ｻﾞ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ
-- ﾑｱﾗｸﾄﾞｵｳﾝ ｼﾝﾀｯｸｽ ｱﾝﾄﾞ ｺｰﾄﾞ ﾌﾞﾙｵｯｸｽﾞ ﾌﾟﾗｴｽｴﾗﾌﾞﾄﾞ
-- ﾌｧｲﾙ ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ: `docs/katalish/<name>.md`
+- New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
+- Built-in dictionary (~20 common tech-doc words)
+- Rule-based phonetic fallback for words not in the dictionary
+- Markdown syntax and code blocks preserved
+- File naming convention: `docs/katalish/<name>.md`
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ ｲﾝﾌﾞｵｸﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ｳｪﾝ ﾌﾟﾗｵﾄﾞｳｸｲﾝｸﾞ ｶﾀﾘｯｼｭ ﾄﾞｷｭﾒﾝﾄｽﾞ; ｷｬﾝ ｵﾙｿ ﾋﾞｰ ｺｰﾙﾄﾞ ﾄﾞｲﾗｴｸﾄﾘｰ:
+Automatically invoked by write-project-docs when producing ｶﾀﾘｯｼｭ documents; can also be called directly:
 
-- "ｼﾞｪﾈﾚｲﾄ ｱ ｶﾀｶﾅ-ｲﾝｸﾞﾘｯｼｭ ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ ﾄﾞｷｭﾒﾝﾄ"
-- "ｱﾄﾞ ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ ﾌﾞｱﾗｲｱﾝﾄ"
-- "ﾄﾗｱﾝｽﾙｱﾄｴ ﾄｩ ｶﾀｶﾅ ｲﾝｸﾞﾘｯｼｭ"
+- "Generate a katakana-english ﾊﾞｰｼﾞｮﾝ of the document"
+- "Add ｶﾀﾘｯｼｭ language variant"
+- "Translate to katakana english"
 
-## ｴｸﾞｻﾞﾝﾌﾟﾙ
+## Example
 
 ```
-NixKits — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS modules ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙｽﾞ.
+NixKits — software, patches, NixOS modules and coding agent skills.
 ```
 →
 ```

@@ -1,35 +1,35 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/codewhale.md)
+[中文](../zh/codewhale.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
 
-ｱ ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾌﾞｳｲﾙﾄ ﾌｫｱ ﾄﾞｴｴﾌﾟｽｴｴｸ ﾌﾞ4.
+A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾌﾞｳｲﾙﾄ for DeepSeek V4.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | 0.8.62 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ﾎﾑﾌﾞｵｳﾝ/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| ﾀｲﾌﾟ | ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ ﾌﾞｲﾝｱﾗｲｽﾞ (GitHub ﾗｴﾙｴｱｽｽﾞ) |
+| Version | 0.8.62 |
+| Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| Type | Pre-ﾌﾞｳｲﾙﾄ binaries (GitHub Releases) |
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
 
-# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
+# Default overlay → pkgs.codewhale
+nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-codewhale                              # ｲﾝﾄｴﾗｱｸﾄｲﾌﾞｴ ﾃｨｰﾕｰｱｲ
-codewhale "ｴｸｽﾌﾟﾙｱｲﾝ ﾃﾞｨｽ ﾌｳﾝｸｼｮﾝ"      # ｵﾝｴ-ｼｵﾄ ﾌﾟﾗｵﾑﾌﾟﾄ
-codewhale --ﾓﾃﾞﾙ ｵｰﾄ "ﾌｨｯｸｽ ﾃﾞｨｽ ﾊﾞｸﾞ"  # ｵｰﾄ-ｽｴﾙｴｸﾄ ﾓﾃﾞﾙ
-codewhale --ｲｵﾙｵ                       # ｵｰﾄ-ｱﾌﾟﾌﾟﾗｵﾌﾞｴ ﾂｰﾙｽﾞ
-codewhale ﾄﾞｵｸﾄｵﾗ                       # ﾁｪｯｸ ｾｯﾄｱｯﾌﾟ
-codewhale ｱｳｽ ｾｯﾄ --ﾌﾟﾗｵﾌﾞｲﾄﾞｴﾗ ﾄﾞｴｴﾌﾟｽｴｴｸ # ｾｰﾌﾞ ｴｰﾋﾟｰｱｲ ｷｰ
+codewhale                              # interactive TUI
+codewhale "explain this function"      # one-shot prompt
+codewhale --model auto "fix this bug"  # auto-select model
+codewhale --yolo                       # auto-approve tools
+codewhale doctor                       # check setup
+codewhale auth set --provider deepseek # save API key
 ```
 
-ﾘｸﾜｲｱｽﾞ ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ ｴｰﾋﾟｰｱｲ ｷｰ](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.
+Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first run.

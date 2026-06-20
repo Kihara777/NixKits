@@ -1,71 +1,71 @@
-# ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ｽｷﾙ)
+# write-project-docs (Skill)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-project-docs.md)
+[中文](../../zh/ｽｷﾙs/write-project-docs.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/write-project-docs.md) | [偽中国語](../../pcn/ｽｷﾙs/write-project-docs.md)
 
-> ｼﾞｪﾈﾚｲﾂ ｺﾝﾌﾟﾘｰﾄ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｲﾝ ｻﾞ NixKits ｽﾀｲﾙ — ｸｵﾝｽｲｽｴ, ﾃｰﾌﾞﾙ-ﾄﾞﾗｲﾌﾞｴﾝ.
+> Generates complete multi-language ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ in the NixKits style — concise, table-driven.
 
-## ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ ｺﾝﾄﾗｸﾄ
+## Auto-Discovery Contract
 
-ﾗﾝｹﾞｰｼﾞ ｴｸｽﾃﾝｼｮﾝ ｽｷﾙｽﾞ ｱｰ ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾌﾞｲｱ ｻﾞ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ: ｽｸｱﾝ `skills/translate-*/` ﾘｰﾄﾞ ｲｰﾁ ｽｷﾙ.ﾑﾄﾞ'ｽ ﾌﾛﾝﾄﾏﾀｰ ﾌｨｰﾙﾄﾞｽﾞ (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ ﾗｴｼﾞｲｽﾄｴﾗ ｽｴﾑ ｱｽﾞ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ ｲﾝ ｻﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｼﾞｪﾈﾚｰｼｮﾝ ﾌﾟｲﾌﾟｴﾙｲﾝｴ.
+Language extension ｽｷﾙs are discovered via the `translate-*` naming convention: scan `ｽｷﾙs/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), and register them as available languages in the ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ generation pipeline.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
-| ﾊﾟｽ | `skills/write-project-docs/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `ｽｷﾙs/write-project-docs/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｱｽｽｴｽｽｽﾞ ﾌﾟﾛｼﾞｪｸﾄ ﾑｴﾄｱﾄﾞｱﾄｱ ｱﾝﾄﾞ ｴｸｽﾄﾗｱｸﾄｽﾞ ﾓｼﾞｭｰﾙ ｲﾝﾌｵﾗﾑｱｼｮﾝ
-- ｸﾙｱｽｽｲﾌｲｽﾞ modules ﾊﾞｲ ﾌｳﾝｸｼｮﾝ (ｲﾝﾌﾗｱ/ｽｴﾗﾌﾞｲｸｽﾞ/ﾌﾟﾗｵｸｽｲ/ｽｷﾙｽﾞ)
-- ｸﾗｴｱﾄｽﾞ `docs/{zh,en,ja}/` ﾃﾞｨﾚｸﾄﾘ ｽﾄﾗｳｸﾄｳﾗｴ
-- ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗｽﾞ ﾗﾝｹﾞｰｼﾞ ｴｸｽﾄｴﾝｼﾞｮﾝｽﾞ ﾌﾞｲｱ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ ｲﾝ `skills/translate-*/`
-- ｳﾗｲﾄｽﾞ ｸｱﾄｴｸﾞｵﾗｲｽﾞﾄﾞ ﾗｴｱﾄﾞﾑｽﾞ ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ ｽｳｲﾄﾁｴﾗｽﾞ
-- ｳﾗｲﾄｽﾞ ﾌﾟｴﾗ-ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ (ｲﾝﾌｫ ﾃｰﾌﾞﾙ + ｲﾝｽﾄｰﾙ + ﾕｰｾｰｼﾞ)
-- ｳﾗｲﾄｽﾞ ｽｷﾙ ﾄﾞｷｭｽﾞ ﾕｰｼﾞﾝｸﾞ ｻﾞ ｳﾝｲﾌｲﾄﾞ ﾃﾝﾌﾟﾚｰﾄ (ｲﾝﾌｫ → ﾌｨｰﾁｬｰｽﾞ → ﾕｰｾｰｼﾞ)
-- ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ｽｳﾌﾞ-ｴｰｼﾞｪﾝﾄ ﾌﾟｱﾗｱﾙﾙｴﾙｲｽﾞｱｼｮﾝ ﾊﾞｲ ﾓｼﾞｭｰﾙ ｶﾃｺﾞﾘｰ
+- Assesses project metadata and extracts ﾓｼﾞｭｰﾙ information
+- Classifies ﾓｼﾞｭｰﾙs by function (infra/ｻｰﾋﾞｽs/proxy/ｽｷﾙs)
+- Creates `docs/{zh,en,ja}/` directory structure
+- Auto-discovers language extensions via `translate-*` naming convention in `ｽｷﾙs/translate-*/`
+- Writes categorized READMEs with language switchers
+- Writes per-ﾓｼﾞｭｰﾙ docs (info table + ｲﾝｽﾄｰﾙ + usage)
+- Writes ｽｷﾙ docs using the unified ﾃﾝﾌﾟﾚｰﾄ (ｲﾝﾌｫ → ﾌｨｰﾁｬｰｽﾞ → ﾕｰｾｰｼﾞ)
+- Supports sub-ｴｰｼﾞｪﾝﾄ parallelization by ﾓｼﾞｭｰﾙ category
 
-## ｽｷﾙ ﾄﾞｷｭ ｽｲﾝｸ ﾙｰﾙｽﾞ
+## Skill Doc Sync Rules
 
-ｳｪﾝ `SKILL.md` ﾁｪﾝｼﾞｰｽﾞ, ｵｰﾙ ｸｵﾗﾗｴｽﾌﾟｵﾝﾄﾞｲﾝｸﾞ ﾗﾝｹﾞｰｼﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ ﾏｽﾄ ﾋﾞｰ ｳﾌﾟﾄﾞｱﾄﾄﾞ.
-ﾕｰｽﾞ ｽﾄｱﾙｴﾈｽ ﾁｪｯｸ ﾄｩ ﾙｵｸｱﾄｴ ｵｳﾄﾄﾞｱﾄﾄﾞ ﾌｧｲﾙｽﾞ:
+When `SKILL.md` changes, all corresponding language ﾊﾞｰｼﾞｮﾝs must be updated.
+Use staleness ﾁｪｯｸ to locate outdated files:
 
 ```bash
-ﾌｫｱ ﾙｱﾝｸﾞ ｲﾝ ｽﾞﾎ ｴﾝ ｼﾞｱ; ﾄﾞｵ
-  ﾌｫｱ ｽｷﾙ ｲﾝ ｽｷﾙｽﾞ/*/ｽｷﾙ.ﾑﾄﾞ; ﾄﾞｵ
-    ﾈｰﾑ=$(ﾌﾞｱｽｴﾝｱﾑｴ $(ﾄﾞｲﾗﾝｱﾑｴ $ｽｷﾙ)
-    ﾄﾞｷｭ="ﾄﾞｷｭｽﾞ/$ﾙｱﾝｸﾞ/ｽｷﾙｽﾞ/$ﾈｰﾑ.ﾑﾄﾞ"
-    [ "$ｽｷﾙ" -ﾝﾄ "$ﾄﾞｷｭ" ] && ｴﾁｵ "ｽﾄｱﾙｴ: $ﾙｱﾝｸﾞ/$ﾈｰﾑ"
-  ﾄﾞｵﾝｴ
-ﾄﾞｵﾝｴ
+for lang in zh en ja; do
+  for skill in skills/*/SKILL.md; do
+    name=$(basename $(dirname $skill))
+    doc="docs/$lang/skills/$name.md"
+    [ "$skill" -nt "$doc" ] && echo "STALE: $lang/$name"
+  done
+done
 ```
 
-ｱｯﾌﾟﾃﾞｰﾄ ｵﾗﾄﾞｴﾗ: ﾁｬｲﾆｰｽﾞ ﾌﾞｱｽｴﾙｲﾝｴ → ｲﾝｸﾞﾘｯｼｭ ﾄﾗｱﾝｽﾙｱｼｮﾝ → ｼﾞｬﾊﾟﾆｰｽﾞ ﾄﾗｱﾝｽﾙｱｼｮﾝ → ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ ﾄﾗｱﾝｽﾙｱｼｮﾝ.
-ｸｵﾙｳﾑﾝ ﾏｯﾋﾟﾝｸﾞ: `基本信息` → `Info` / `基本情報` / `基本情報` `功能` → `Features` / `機能` / `機能`
+Update order: Chinese baseline → English translation → Japanese translation → 偽中国語 translation.
+Column mapping: `基本信息` → `ｲﾝﾌｫ` / `基本情報` / `基本情報`, `功能` → `ﾌｨｰﾁｬｰｽﾞ` / `機能` / `機能`.
 
-- ｽﾞｴﾗｵ ﾌﾙｳﾌﾌ, ﾄｱﾌﾞﾙｽﾞ ｵｰﾊﾞｰ ﾌﾟﾗｵｽｴ, ｺﾋﾟｰ-ﾌﾟｱｽﾄｴ-ready ｺｰﾄﾞ ﾌﾞﾙｵｯｸｽﾞ
-- ﾄｴﾁﾝｲｸｱﾙ ﾄｴﾗﾑｽﾞ ｽﾄｱｲ ｲﾝ ｲﾝｸﾞﾘｯｼｭ; ｳｱﾗﾝｲﾝｸﾞｽﾞ ﾕｰｽﾞ ﾌﾞﾙｵｯｸｸｵﾄｴ ﾌｵﾗﾑｱﾄ
-- ﾁｬｲﾆｰｽﾞ ｾｸｼｮﾝ ﾄｲﾄﾙｽﾞ ﾕｰｽﾞ 2- ｵｱ 4-character ｳｵﾗﾄﾞｽﾞ ﾌｫｱ ﾌﾞｲｽｳｱﾙ ﾗﾎｲｽﾑ
-- ﾄｱﾗｼﾞｴﾄ ~40-60 ﾗｲﾝｽﾞ; ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ ﾄﾞｷｭｽﾞ ﾌｫﾛｰ ｻﾞ 4-section ｽﾄｱﾝﾄﾞｱﾗﾄﾞ (ｲﾝﾌｫ → ﾁｪﾝｼﾞｰｽﾞ → ｲﾝｽﾄｰﾙ → ﾉｰﾂ)
-- ﾉｰ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ﾄｴﾁﾝｲｸｱﾙ ﾄﾞｴﾄｱｲﾙ, ﾄﾗｵｳﾌﾞﾙｴｼｵｵﾄｲﾝｸﾞ, ｵｱ ﾘﾌｧﾚﾝｽ ｾｸｼｮﾝｽﾞ — ｸｵﾑﾌﾟﾗｴｽｽ ｲﾝﾄｩ `## Notes` ﾌﾞｳﾙﾙｴﾄｽﾞ
-- ｵｰﾙ ﾌｵｳﾗ ﾗｴｱﾄﾞﾑｽﾞ ﾏｽﾄ ﾋﾞｰ ｳﾌﾟﾄﾞｱﾄﾄﾞ ﾄｵｼﾞｴｽｴﾗ
-- ﾙｰﾄ ﾄﾞｲﾗ ｵﾝﾘｰ ﾎｵﾙﾄﾞｽﾞ ﾁｬｲﾆｰｽﾞ ｽｳﾌﾌｲｸｽ-ﾙｴｽｽ `.md` ﾙｵｸｱﾙｲｽﾞﾄﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ (`*.en.md` `*.ja.md`) ﾙｲﾌﾞｴ ｱﾝﾀﾞｰ `docs/`
-- ｴﾌﾞｴﾗｲ ﾗﾝｹﾞｰｼﾞ ﾏｽﾄ ｲﾝｸﾙｰﾄﾞ ｱ ﾌﾞｱｽｲｸ ｲﾝﾌｫ ｾｸｼｮﾝ: `## 基本信息` (ｽﾞﾎ), `## Info` (ｴﾝ), `## 基本情報` (ｼﾞｱ)
-- ｱﾌﾀｰ ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ ｿｰｽ ﾁｪﾝｼﾞｰｽﾞ, ｻﾞ "ﾁｪﾝｼﾞｰｽﾞ"/"ﾌｨｰﾁｬｰｽﾞ" ﾘｽﾄ ﾏｽﾄ ﾋﾞｰ ｽｲﾝｸﾄﾞ — ｲｰﾁ ﾌﾞｳﾙﾙｴﾄ ﾑｱﾌﾟｽﾞ ﾄｩ ｱﾝ ｱｸﾄｳｱﾙ ﾁｪﾝｼﾞ
+- Zero fluff, tables over prose, copy-paste-ready code blocks
+- Technical terms stay in English; warnings use blockquote format
+- Chinese section titles use 2- or 4-character words for visual rhythm
+- Target ~40-60 lines; ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ docs follow the 4-section standard (ｲﾝﾌｫ → Changes → ｲﾝｽﾄｰﾙ → Notes)
+- No standalone technical detail, troubleshooting, or reference sections — compress into `## Notes` bullets
+- All four READMEs must be updated together
+- Root dir only holds Chinese suffix-less `.md`; localized ﾊﾞｰｼﾞｮﾝs (`*.en.md`, `*.ja.md`) live under `docs/`
+- Every language must include a basic info section: `## 基本信息` (zh), `## ｲﾝﾌｫ` (en), `## 基本情報` (ja)
+- After ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ source changes, the "Changes"/"ﾌｨｰﾁｬｰｽﾞ" list must be synced — each bullet maps to an actual change
 
-## ﾌﾞｲﾄﾞｲﾗｴｸﾄｲｵﾝｱﾙ ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ
+## Bidirectional Auto-Discovery
 
-ﾃﾞｨｽ ｽｷﾙ ｱﾝﾄﾞ `translate-*` ﾄﾗｱﾝｽﾙｱｼｮﾝ ｽｷﾙｽﾞ ﾃﾞｨｽｶﾊﾞｰ ｲｰﾁ ｱｻﾞｰ ﾌﾞｲｱ ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝｽﾞ:
+This ｽｷﾙ and `translate-*` translation ｽｷﾙs discover each other via naming conventions:
 
-| ﾄﾞｲﾗｴｸｼｮﾝ | ﾑｴﾁｱﾝｲｽﾑ |
+| Direction | Mechanism |
 |-----------|----------|
-| ﾄﾞｷｭ ｼﾞｪﾈﾚｰｼｮﾝ → ﾄﾗｱﾝｽﾙｱﾄｴ ｽｷﾙ | ｽｸｱﾝｽﾞ `skills/translate-*/` ﾗｴｱﾄﾞｽﾞ `language_code` ﾌﾛﾑ ｲｰﾁ ｽｷﾙ.ﾑﾄﾞ ﾌﾛﾝﾄﾏﾀｰ |
-| ﾄﾗｱﾝｽﾙｱﾄｴ ｽｷﾙ → ﾃﾞｨｽ ﾌﾟﾛｼﾞｪｸﾄ | ｲｰﾁ ｽｷﾙ ﾄﾞｴｸﾙｱﾗｽﾞ ｱ "ﾘﾚｲｼｮﾝｼｯﾌﾟ ｳｨｽﾞ ｱｻﾞｰ ｽｷﾙｽﾞ" ﾃｰﾌﾞﾙ ｲﾝ ｲｯﾂ ｽｷﾙ.ﾑﾄﾞ, ｽﾌﾟｴｽｲﾌｲｲﾝｸﾞ ｻﾞ ｺｰﾙ ﾁｱｲﾝ |
-| ﾗﾝｹﾞｰｼﾞ ｺｰﾄﾞ → ﾊﾟｽ | `language_code` → ﾃﾞｨﾚｸﾄﾘ ﾝｱﾑｲﾝｸﾞ, ﾌｧｲﾙ ｴｸｽﾃﾝｼｮﾝ; `display_name` → ﾗﾝｹﾞｰｼﾞ ｽｳｲﾄﾁｴﾗ ﾙｱﾌﾞｴﾙ |
+| Doc generation → translate ｽｷﾙ | Scans `ｽｷﾙs/translate-*/`, reads `language_code`/`display_name`/`base_language` from each SKILL.md frontmatter |
+| Translate ｽｷﾙ → This project | Each ｽｷﾙ declares a "Relationship with other ｽｷﾙs" table in its SKILL.md, specifying the call chain |
+| Language code → Path | `language_code` → directory naming, file extension; `display_name` → language switcher label |
 
-ﾄﾗｱﾝｽﾙｱﾄｴ ｽｷﾙ ﾄﾞｷｭｽﾞ ｽｴﾑｽｴﾙﾌﾞｽﾞ ﾌｫﾛｰ ﾃﾞｨｽ ﾃﾝﾌﾟﾚｰﾄ, ｸﾙｵｽｲﾝｸﾞ ｻﾞ ﾙｵｵﾌﾟ: ﾄﾞｷｭ ｼﾞｪﾈﾚｰｼｮﾝ → ﾄﾗｱﾝｽﾙｱｼｮﾝ ｲﾝﾌﾞｵｸｱｼｮﾝ → ﾄﾗｱﾝｽﾙｱﾄｴ ｽｷﾙ ﾄﾞｷｭ ｼﾞｪﾈﾚｰｼｮﾝ.
+Translate ｽｷﾙ docs themselves follow this ﾃﾝﾌﾟﾚｰﾄ, closing the loop: doc generation → translation invocation → translate ｽｷﾙ doc generation.
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ ｱｽｸｽﾞ ﾄｩ "ﾗｲﾄ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ" ｵｱ "ｼﾞｪﾈﾚｲﾄ ﾄﾞｷｭｽﾞ ｲﾝ NixKits ｽﾀｲﾙ".
+Activated when the user asks to "write ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ" or "generate docs in NixKits style".

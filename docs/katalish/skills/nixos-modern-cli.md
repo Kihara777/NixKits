@@ -1,26 +1,26 @@
-# ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli (ｽｷﾙ)
+# nixos-modern-cli (Skill)
 
-[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixos-modern-cli.md)
+[中文](../../zh/ｽｷﾙs/nixos-modern-cli.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixos-modern-cli.md) | [偽中国語](../../pcn/ｽｷﾙs/nixos-modern-cli.md)
 
-> ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｵﾝ NixOS ｽｲｽﾄｴﾑｽﾞ. ｴﾝｽｳﾗｽﾞ ﾑｵﾄﾞｴﾗﾝ ﾆｯｸｽ ｼｰｴﾙｱｲ ﾕｰｾｰｼﾞ, ﾌﾙ ｼｪﾙ ｸｱﾌﾟｱﾌﾞｲﾙｲﾄｲ, ｱﾝﾄﾞ ｺﾚｸﾄ ﾒﾝﾃﾅﾝｽ ﾌﾟﾗｵｽｴﾄﾞｳﾗｽﾞ.
+> Activated on NixOS systems. Ensures modern Nix CLI usage, full shell capability, and correct ﾒﾝﾃﾅﾝｽ procedures.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
-| ﾊﾟｽ | `skills/nixos-modern-cli/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `ｽｷﾙs/nixos-modern-cli/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｸｵﾗﾗｴｸﾄｽﾞ ｱｲ ﾑｵﾄﾞｴﾙｽﾞ ｻﾞｯﾄ ﾑｲｽﾄｱｸｴ NixOS ﾌｫｱ ｱ ﾄﾗｱﾄﾞｲﾄｲｵﾝｱﾙ ﾙｲﾝｳｸｽ ﾄﾞｲｽﾄﾗｵ
-- ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ ｱ ﾑｵﾄﾞｴﾗﾝ ﾌﾞｽ ﾄﾗｱﾄﾞｲﾄｲｵﾝｱﾙ ｼｰｴﾙｱｲ ｸｵﾑﾑｱﾝﾄﾞ ﾘﾌｧﾚﾝｽ ﾃｰﾌﾞﾙ
-- ｸﾞｳｲﾄﾞｽﾞ ﾗｳﾝﾝｲﾝｸﾞ ｽｸﾗｲﾌﾟﾄｽﾞ ﾗｴｸｲﾗｲﾝｸﾞ POSIX ﾂｰﾙｽﾞ ﾌﾞｲｱ `nix shell --command`
-- ｲﾝｸﾙｰﾄﾞｽﾞ ｱ ｸｵﾑﾑｵﾝ POSIX ﾂｰﾙ → nixpkgs ﾊﾟｯｹｰｼﾞ ﾙｵｵｸｳﾌﾟ ﾃｰﾌﾞﾙ
-- ｸｵﾌﾞｴﾗｽﾞ system ﾒﾝﾃﾅﾝｽ, ﾛｸﾞ ﾌﾞｲｴｳｲﾝｸﾞ, ｱﾝﾄﾞ ｸﾞｱﾗﾌﾞｱｼﾞｴ ｺﾚｸｼｮﾝ
-- ﾙｲｽﾄｽﾞ NixOS-ｽﾌﾟｴｽｲﾌｲｸ ｸﾞｵﾄﾁｱｽﾞ (ﾊﾟｽ, ﾆｯｸｽ-ｴﾇﾌﾞｲ ﾌﾟｴﾗｽｲｽﾄｴﾝｽｴ, ｴﾄｸ.)
-- ﾄﾞｲｱｸﾞﾝｵｽｽﾞ ﾆｯｸｽ ｽﾄｵﾗｴ ﾊﾟｽ ﾄﾗｱﾌﾟｽﾞ: ｲﾄﾞｴﾝﾄｲﾌｲｽﾞ ｱﾝﾄﾞ ﾌｨｯｸｼｰｽﾞ ｽﾄｱﾙｴ `/nix/store/` ﾌﾟｱｽｽﾞ ｲﾝ ｺﾝﾌｨｸﾞ ﾌｧｲﾙｽﾞ (ｴ.ｸﾞ. `gh auth setup-git` ｸﾗｴﾄﾞｴﾝﾄｲｱﾙ ﾎｴﾙﾌﾟｴﾗ ﾌﾞﾗｴｱｸｲﾝｸﾞ ｱﾌﾀｰ ｸﾞｸ)
+- Corrects AI models that mistake NixOS for a traditional Linux distro
+- Provides a modern vs traditional CLI command reference table
+- Guides running scripts requiring POSIX tools via `nix shell --command`
+- Includes a common POSIX tool → nixpkgs ﾊﾟｯｹｰｼﾞ lookup table
+- Covers system ﾒﾝﾃﾅﾝｽ, log viewing, and garbage ｺﾚｸｼｮﾝ
+- Lists NixOS-specific gotchas (PATH, nix-env persistence, etc.)
+- Diagnoses Nix Store path traps: identifies and fixes stale `/nix/store/` paths in config files (e.g. `gh auth ｾｯﾄｱｯﾌﾟ-git` credential helper breaking after GC)
 
 ## ﾕｰｾｰｼﾞ
 
-ｵｰﾄ-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ｱｲ ﾄﾞｴﾄｴｸﾄｽﾞ ｱ NixOS environment, ｵｱ ｵﾝ ｴｸｽﾌﾟﾙｲｽｲﾄ ﾗｴｸｴｽﾄ ﾌｫｱ "ﾑｵﾄﾞｴﾗﾝ ﾆｯｸｽ ｸｵﾑﾑｱﾝﾄﾞｽﾞ".
+Auto-activated when the AI detects a NixOS environment, or on explicit request for "modern nix commands".

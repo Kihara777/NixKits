@@ -1,42 +1,42 @@
-# NixKits-ﾁｪｯｸ-updates (ｽｷﾙ)
+# nixkits-ﾁｪｯｸ-updates (Skill)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](../../en/skills/nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-check-updates.md)
+[中文](../../zh/ｽｷﾙs/nixkits-ﾁｪｯｸ-updates.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixkits-ﾁｪｯｸ-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixkits-ﾁｪｯｸ-updates.md) | [偽中国語](../../pcn/ｽｷﾙs/nixkits-ﾁｪｯｸ-updates.md)
 
-> ﾁｴｯｸｽﾞ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ﾌｫｱ ｵｰﾙ NixKits packages ｱﾝﾄﾞ ﾊﾟｯﾁｰｽﾞ. ｵｰﾄ-ｳﾌﾟｸﾞﾗｱﾄﾞｽﾞ, ｽｲﾝｸｽﾞ ﾄﾞｷｭｽﾞ, ｳﾗｲﾄｽﾞ ﾌｨｯｸｼｰｽﾞ ﾄｩ ﾒﾝﾃﾅﾝｽ ﾛｸﾞ.
+> Checks ｳﾌﾟｽﾄﾗｴｱﾑ updates for all NixKits ﾊﾟｯｹｰｼﾞs and ﾊﾟｯﾁes. Auto-upgrades, syncs docs, writes fixes to ﾒﾝﾃﾅﾝｽ log.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
-| ﾊﾟｽ | `skills/nixkits-check-updates/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `ｽｷﾙs/nixkits-ﾁｪｯｸ-updates/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗｽﾞ ｵｰﾙ ｴｸｽﾄｴﾗﾝｱﾙ packages ﾌﾛﾑ `flake.nix` ｱﾝﾄﾞ ﾁｴｯｸｽﾞ ﾙｱﾄｴｽﾄ GitHub ﾗｴﾙｴｱｽｽﾞ
-- ｱｯﾌﾟﾃﾞｰﾄｽﾞ ﾋﾞﾙﾄﾞ ｸｵﾝﾌｲｸﾞｽﾞ (ﾊﾞｰｼﾞｮﾝ, ｿｰｽ ﾊｯｼｭ, ﾝﾌﾟﾑﾄﾞｴﾌﾟｼｱｼ)
-- ｽｲﾝｸｽﾞ ﾊﾞｰｼﾞｮﾝ ﾝｳﾑﾌﾞｴﾗｽﾞ ｱｸﾛｽ ｵｰﾙ ﾗﾝｹﾞｰｼﾞ ﾄﾞｷｭｽﾞ
-- ｵｰﾄ-ｲﾝﾌﾞｵｸｽﾞ `write-maintenance-log` ｽｷﾙ ﾄｩ ﾗｲﾄ ﾒﾝﾃﾅﾝｽ ﾚｺｰﾄﾞｽﾞ ｱﾌﾀｰ ｱｯﾌﾟﾃﾞｰﾄｽﾞ
-- ﾗｴﾌﾟｵﾗﾄｽﾞ ﾙｵｸｱﾙﾘｰ ｲﾝｽﾄｱﾙﾙﾄﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ
-- ｲﾄﾞｴﾝﾄｲﾌｲｽﾞ ﾎｱﾗﾄﾞｸｵﾄﾞﾄﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ ｲﾝｽｲﾄﾞｴ ﾊﾟｯﾁ ﾌｧｲﾙｽﾞ ｱﾝﾄﾞ ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ ﾁｪｯｸ ｸﾞｳｲﾄﾞｱﾝｽｴ
+- Auto-discovers all external ﾊﾟｯｹｰｼﾞs from `flake.nix` and ﾁｪｯｸs latest GitHub Releases
+- Updates ﾋﾞﾙﾄﾞ configs (ﾊﾞｰｼﾞｮﾝ, source hash, npmDepsHash)
+- Syncs ﾊﾞｰｼﾞｮﾝ numbers across all language docs
+- Auto-invokes `write-ﾒﾝﾃﾅﾝｽ-log` ｽｷﾙ to write ﾒﾝﾃﾅﾝｽ records after updates
+- Reports locally ｲﾝｽﾄｰﾙed ﾊﾞｰｼﾞｮﾝs
+- Identifies hardcoded ﾊﾞｰｼﾞｮﾝs inside ﾊﾟｯﾁ files and provides ﾁｪｯｸ guidance
 
-## ﾊｯｼｭ ｸﾞｵﾄﾁｱｽﾞ
+## Hash Gotchas
 
-- ｽﾗｲ ﾊｯｼｭ ﾏｽﾄ ﾕｰｽﾞ ｽﾄｱﾝﾄﾞｱﾗﾄﾞ ﾍﾞｰｽ64 (`+` `/` `=`), ﾉｯﾄ ﾕｰｱｰﾙｴﾙ-ｽｱﾌｴ ﾌﾞｱﾗｲｱﾝﾄ (`-` `_`)
-- `fetchFromGitHub` ｿｰｽ ﾊｯｼｭ **ｸｱﾝﾝｵﾄ** ﾋﾞｰ ﾌﾟﾗｴｸｵﾑﾌﾟｳﾄﾄﾞ ﾌﾛﾑ ｻﾞ GitHub ｱﾗﾁｲﾌﾞｴ ﾄｱﾗﾌﾞｱﾙﾙ — ﾏｽﾄ ｸｵﾑｴ ﾌﾛﾑ `nix build` ﾊｯｼｭ ﾑｲｽﾑｱﾄﾁ ｴﾗｰ
-- ﾕｰｽﾞ `lib.fakeHash` ﾌｫｱ ｴﾝﾌﾟﾃｨ `npmDepsHash` ﾉｯﾄ ｻﾞ ｴﾝﾌﾟﾃｨ ｽﾄﾗｲﾝｸﾞ `""`
-- ﾝﾌﾟﾑ packages ﾆｰﾄﾞ ﾄｳｵ `nix build` ﾌﾟｱｽｽｽﾞ: ﾌｧｰｽﾄ ﾌｫｱ ｿｰｽ ﾊｯｼｭ, ｽｴｸｵﾝﾄﾞ ﾌｫｱ ﾝﾌﾟﾑﾄﾞｴﾌﾟｼｱｼ
+- SRI hash must use standard base64 (`+` `/` `=`), not URL-safe variant (`-` `_`)
+- `fetchFromGitHub` source hash **cannot** be precomputed from the GitHub archive tarball — must come from `nix ﾋﾞﾙﾄﾞ` hash mismatch error
+- Use `lib.fakeHash` for empty `npmDepsHash`, not the empty string `""`
+- npm ﾊﾟｯｹｰｼﾞs need two `nix ﾋﾞﾙﾄﾞ` passes: first for source hash, second for npmDepsHash
 
-## ｽｺｰﾌﾟ
+## Scope
 
-ﾗｴｱﾄﾞｽﾞ `flake.nix` → `packages` ｴｸｽｸﾙｳﾄﾞｲﾝｸﾞ:
-- ｽｴﾙﾌ-ﾎｵｽﾄﾄﾞ packages (ｿｰｽ ｲﾝ ﾗｴﾌﾟｵ)
-- ﾀﾞｲﾅﾐｯｸ ﾊﾞｰｼﾞｮﾝ ﾄﾗｯｷﾝｸﾞ (ﾌｴﾄﾁｽﾞ ﾙｱﾄｴｽﾄ ｱｯﾄ ﾋﾞﾙﾄﾞ ﾄｲﾑｴ)
-- nixpkgs-ﾌｫﾛｰｲﾝｸﾞ (ﾊﾟｯﾁ overlays)
-- ﾊﾟｯﾁ-ｴﾑﾌﾞｴﾄﾞﾄﾞﾄﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ (ﾏﾆｭｱﾙ ﾁｪｯｸ, ｴ.ｸﾞ. `comfyui-strix-halo`)
+Reads `flake.nix` → `ﾊﾟｯｹｰｼﾞs`, excluding:
+- Self-hosted ﾊﾟｯｹｰｼﾞs (source in repo)
+- Dynamic ﾊﾞｰｼﾞｮﾝ tracking (fetches latest at ﾋﾞﾙﾄﾞ time)
+- nixpkgs-following (ﾊﾟｯﾁ ｵｰﾊﾞｰﾚｲs)
+- Patch-embedded ﾊﾞｰｼﾞｮﾝs (manual ﾁｪｯｸ, e.g. `comfyui-strix-halo`)
 
-ｵｰﾙ ﾗｴﾑｱｲﾝｲﾝｸﾞ ｴｸｽﾄｴﾗﾝｱﾙ packages ｱｰ ﾁｴｯｸﾄﾞ ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ.
+All remaining external ﾊﾟｯｹｰｼﾞs are ﾁｪｯｸed automatically.
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ ｱｽｸｽﾞ ﾄｩ "ﾁｪｯｸ ﾌｫｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ" ｵｱ "ｱｯﾌﾟﾃﾞｰﾄ ﾊﾟｯｹｰｼﾞ ﾌﾞｴﾗｼﾞｮﾝｽﾞ".
+Activated when the user asks to "ﾁｪｯｸ for updates" or "update ﾊﾟｯｹｰｼﾞ ﾊﾞｰｼﾞｮﾝs".

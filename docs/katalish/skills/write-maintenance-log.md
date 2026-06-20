@@ -1,33 +1,33 @@
-# ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log (ｽｷﾙ)
+# write-ﾒﾝﾃﾅﾝｽ-log (Skill)
 
-[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-maintenance-log.md)
+[中文](../../zh/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | [偽中国語](../../pcn/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md)
 
-> ﾗｲﾄ ｵｱ ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾌﾟｴﾗ NixKits ｸｵﾝﾌﾞｴﾝｼｮﾝｽﾞ. ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ﾊﾞｸﾞ ﾌｨｯｸｼｰｽﾞ, ｽｲﾝｸ ｱｸﾛｽ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ.
+> Write or update MAINTENANCE.md per NixKits conventions. Supports ｿﾌﾄｳｪｱ updates and bug fixes, sync across all available languages.
 
-## ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ ｺﾝﾄﾗｸﾄ
+## Auto-Discovery Contract
 
-ﾗﾝｹﾞｰｼﾞ ｴｸｽﾃﾝｼｮﾝ ｽｷﾙｽﾞ ｱｰ ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾌﾞｲｱ ｻﾞ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ: ｽｸｱﾝ `skills/translate-*/` ﾘｰﾄﾞ ｲｰﾁ ｽｷﾙ.ﾑﾄﾞ'ｽ ﾌﾛﾝﾄﾏﾀｰ ﾌｨｰﾙﾄﾞｽﾞ (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ ﾗｴｼﾞｲｽﾄｴﾗ ｽｴﾑ ｱｽﾞ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ ｲﾝ ｻﾞ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ｽｲﾝｸ ﾌﾟｲﾌﾟｴﾙｲﾝｴ.
+Language extension ｽｷﾙs are discovered via the `translate-*` naming convention: scan `ｽｷﾙs/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), and register them as available languages in the multi-language sync pipeline.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
-| ﾊﾟｽ | `skills/write-maintenance-log/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｳﾗｲﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ ﾚｺｰﾄﾞｽﾞ (ｻﾏﾘｰ + ｺﾐｯﾄ ｲﾄﾞ ﾃｰﾌﾞﾙ + ﾊﾞｰｼﾞｮﾝ ﾃｰﾌﾞﾙ)
-- ｳﾗｲﾄｽﾞ ﾊﾞｸﾞ ﾌｨｯｸｽ ﾚｺｰﾄﾞｽﾞ (ｻﾏﾘｰ + ｺﾐｯﾄ ｲﾄﾞ ﾃｰﾌﾞﾙ)
-- ｽｲﾝｸ ｱｸﾛｽ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ (ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾌﾞｲｱ ﾄﾗｱﾝｽﾙｱﾄｴ-* ｽｷﾙｽﾞ)
-- ｵｰﾄ-ｴｸｽﾄﾗｱｸﾄｽﾞ ｻﾏﾘｰ ﾌﾛﾑ ﾌﾟﾗｴｽｴﾄﾞｲﾝｸﾞ ｽｷﾙ (NixKits-ﾁｪｯｸ-updates) ｵｱ ｼﾞｲﾄ ｺﾐｯﾄ ﾑｴｽｽｱｼﾞｴ
-- ｳﾝｲﾌｲﾄﾞ ﾌｵﾗﾑｱﾄ: ｲｽｵ 8601 ﾌﾟﾗｴｽｲｽｴ ﾄｲﾑｴ, ﾙｲﾌｵ ｵﾗﾄﾞｴﾗ, ｵﾑｲﾄ ｳﾝﾁｱﾝｸﾞﾄﾞ ﾎｱｼｽﾞ
+- Writes ｿﾌﾄｳｪｱ update records (summary + commit ID table + ﾊﾞｰｼﾞｮﾝ table)
+- Writes bug fix records (summary + commit ID table)
+- Sync across all available languages (auto-discovered via translate-* ｽｷﾙs)
+- Auto-extracts summary from preceding ｽｷﾙ (nixkits-ﾁｪｯｸ-updates) or git commit message
+- Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
-## ｴﾝﾄﾘｰ ﾌﾟｵｲﾝﾄｽﾞ
+## Entry Points
 
-- **ﾚｺｰﾄﾞ ﾌｨｯｸｽ**: ｵｰﾄ-ｺｰﾙﾄﾞ ｱﾌﾀｰ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ "ﾚｺｰﾄﾞ ﾃﾞｨｽ ﾌｨｯｸｽ" / "记入维护记录"
-- **ｱｯﾌﾟﾃﾞｰﾄ ﾛｸﾞ**: ｵﾝ "ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ ﾛｸﾞ" / "补全维护记录" — ｽｸｱﾝｽﾞ ｼﾞｲﾄ ﾋｽﾄﾘｰ ﾌｫｱ ﾑｲｽｽｲﾝｸﾞ ﾚｺｰﾄﾞｽﾞ ｱﾝﾄﾞ ﾌﾞｱｯｸﾌｲﾙﾙｽﾞ
+- **Record Fix**: auto-called after ｿﾌﾄｳｪｱ updates, or on "record this fix" / "记入维护记录"
+- **Update Log**: on "update ﾒﾝﾃﾅﾝｽ log" / "补全维护记录" — scans git history for missing records and backfills
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ ｱﾌﾀｰ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ ﾕｰｻﾞｰ ﾗｴｸｴｽﾄ ﾄｩ ﾚｺｰﾄﾞ ｱ ﾌｨｯｸｽ.
+Activated automatically after ｿﾌﾄｳｪｱ updates, or on user request to record a fix.

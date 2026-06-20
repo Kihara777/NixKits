@@ -1,45 +1,45 @@
-# ﾗｸｸ-ﾌｨｯｸｽ
+# rcc-fix
 
-[中文](../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/rcc-fix.md)
+[中文](../zh/rcc-fix.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/rcc-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rcc-fix.md) | [偽中国語](../pcn/rcc-fix.md)
 
-ﾊﾟｯﾁｰｽﾞ `asusctl` ﾌｫｱ ﾌﾞｴﾄﾄｴﾗ ｱｽｳｽﾞ ﾗｵｸﾞ ｸｵﾝﾄﾗｵﾙ ｽｴﾝﾄｴﾗ ｵﾝ 2-in-1 ﾄﾞｴﾄｱﾁｱﾌﾞﾙ ﾄﾞｴﾌﾞｲｸｽﾞ.
+ﾊﾟｯﾁｰｽﾞ `asusctl` for better ASUS ROG Control Center on 2-in-1 detachable devices.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | ﾌｫﾛｰｽﾞ nixpkgs `asusctl` |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｱｽｳｽﾞ-ﾙｲﾝｳｸｽ/ｱｽｳｽｸﾄﾙ](https://github.com/Asus-linux/asusctl) |
-| ﾊﾟｯﾁ | ﾃﾞｨｽ ﾗｴﾌﾟｵ `patches/rog-control-center-fix.patch` |
-| ﾓｼﾞｭｰﾙ | `nixosModules.rog-control-center-fix` (ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ) |
-| ﾉｰﾄ | ｵｰﾊﾞｰﾚｲ ﾗｴﾌﾟﾙｱｸｽﾞ `pkgs.asusctl` ﾉｰ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ﾊﾟｯｹｰｼﾞ |
+| Version | Follows nixpkgs `asusctl` |
+| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
+| Patch | This repo `ﾊﾟｯﾁes/rog-control-center-fix.ﾊﾟｯﾁ` |
+| Module | `nixosModules.rog-control-center-fix` (systemd deadlock fix) |
+| Note | Overlay replaces `pkgs.asusctl`, no standalone ﾊﾟｯｹｰｼﾞ |
 
-## ﾌｨｯｸｼｰｽﾞ
+## Fixes
 
-- **ｸｴｲﾌﾞｵｱﾗﾄﾞ ﾄﾞｴﾄｴｸｼｮﾝ**: ｼｵｳｽﾞ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ｵｰﾊﾞｰﾚｲ ｳｪﾝ ｸｴｲﾌﾞｵｱﾗﾄﾞ ﾄﾞｲｽｸｵﾝﾝｴｸﾄﾄﾞ, ｱﾌﾞｵｲﾄﾞｽﾞ ｸﾗｱｼ
-- **ﾎｵﾄ-ﾌﾟﾙｳｸﾞ ﾗｴｸｵﾌﾞｴﾗｲ**: ﾄﾞ-ﾌﾞｳｽ ｲﾍﾞﾝﾄ-ﾄﾞﾗｲﾌﾞｴﾝ — ｵｰﾄ-ﾗｴｽﾄｵﾗｽﾞ ｱｳﾗｱ ﾕｰｱｲ ｵﾝ ﾗｴｸｵﾝﾝｴｸﾄ
-- **ﾌﾞｵｳﾝﾄﾞｱﾗｲ ﾁｴｯｸｽﾞ**: ﾌﾟｵｳｴﾗｽﾞｵﾝｴ ｲﾝﾄﾞｴｸｽ ｸﾞｳｱﾗﾄﾞｽﾞ ﾌｫｱ ﾌｲﾗﾑｳｱﾗｴ-ﾗｴﾌﾟｵﾗﾄﾄﾞ ｲﾝﾌﾞｱﾙｲﾄﾞ ｽﾞｵﾝｽﾞ
-- **ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ**: ﾗｴﾑｵﾌﾞｽﾞ `PartOf` ﾌﾛﾑ `asus-shutdown.service` ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸｱｽｸｱﾄﾞｲﾝｸﾞ ｽﾄｯﾌﾟ ﾄﾞｴｱﾄﾞﾙｵｯｸ
+- **Keyboard detection**: Shows multi-language ｵｰﾊﾞｰﾚｲ when keyboard disconnected, avoids crash
+- **Hot-plug recovery**: D-Bus event-driven — auto-restores Aura UI on reconnect
+- **Boundary ﾁｪｯｸs**: PowerZone index guards for firmware-reported invalid zones
+- **systemd deadlock fix**: Removes `PartOf` from `asus-shutdown.ｻｰﾋﾞｽ` to prevent cascading stop deadlock
 
 ## ｲﾝｽﾄｰﾙ
 
-ｵｰﾊﾞｰﾚｲ (ｺｰﾄﾞ ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (ｽｲｽﾄｴﾑﾄﾞ ﾌｨｯｸｽ), ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ ﾄｵｼﾞｴｽｴﾗ:
+Overlay (code ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (systemd fix), recommended together:
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.ﾗｸｸ-ﾌｨｯｸｽ ];
+  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
 
-  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ inputs.nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ];
+  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
 
-  ｽｴﾗﾌﾞｲｸｽﾞ.ｱｽｳｽｸﾄﾙ = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ﾌﾟｵｳｴﾗ-ﾌﾟﾛﾌｧｲﾙ = ﾄﾗｳｴ;
-    ｸﾌﾟｳ-ﾌﾟｵｳｴﾗ-control = ﾄﾗｳｴ;
+  services.asusctl = {
+    enable = true;
+    power-profile = true;
+    cpu-power-control = true;
   };
 
-  ﾌﾟﾗｵｸﾞﾗｱﾑｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center = {
-    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
-    ｱｳﾄｵｽﾄｱﾗﾄ = ﾄﾗｳｴ;
+  programs.rog-control-center = {
+    enable = true;
+    autoStart = true;
   };
 }
 ```

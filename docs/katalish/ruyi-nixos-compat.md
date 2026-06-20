@@ -1,33 +1,33 @@
-# ruyi-ﾆｯｸｽOS-compat
+# ruyi-nixos-compat
 
-[中文](../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/ruyi-nixos-compat.md)
+[中文](../zh/ruyi-nixos-compat.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) | [偽中国語](../pcn/ruyi-nixos-compat.md)
 
-ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi: ﾌﾟﾗｴ-ｸｵﾑﾌﾟｲﾙﾄﾞ ﾘｽｸ-ﾌﾞ ﾂｰﾙﾁｪｰﾝ ﾌﾞｲﾝｱﾗｲｽﾞ ｸｱﾝﾝｵﾄ ﾗﾝ ﾄﾞｲﾗｴｸﾄﾘｰ ｵﾝ NixOS ﾌﾞｴｸｱｳｽｴ ｻﾞ ｴｸｽﾍﾟｸﾃｨｯﾄﾞ ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` ﾄﾞｵｽﾞ ﾉｯﾄ ｴｸｽｲｽﾄ. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ ﾄﾗｱﾝｽﾌﾟｱﾗｴﾝﾄﾘｰ ｱﾄﾞﾄﾞﾗｴｽｽｽﾞ ﾃﾞｨｽ ﾌﾞｲｱ ｱ ﾊﾟｯﾁ.
+Provides NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ for ruyi: pre-compiled RISC-V toolchain binaries cannot run directly on NixOS because the expected dynamic linker path `/lib64/ld-linux-x86-64.so.2` does not exist. This ｵｰﾊﾞｰﾚｲ transparently addresses this via a ﾊﾟｯﾁ.
 
-## ｽｺｰﾌﾟ
+## Scope
 
-ﾗｴｸｲﾗﾄﾞ ﾌｫｱ NixOS ﾕｰｻﾞｰｽﾞ ﾌｰ ﾄﾞｵｳﾝﾙｵｱﾄﾞ ｱﾝﾄﾞ ｴｸｽｴｸｳﾄｴ ﾘｽｸ-ﾌﾞ ｸﾗｵｽｽ-ｸｵﾑﾌﾟｲﾙｱｼｮﾝ ﾄｵｵﾙﾁｱｲﾝｽﾞ (GCC, QEMU, ｴﾄｸ.) ﾌﾞｲｱ ruyi. ﾕｰｻﾞｰｽﾞ ﾉｯﾄ ﾜｰｷﾝｸﾞ ｳｨｽﾞ ﾘｽｸ-ﾌﾞ ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾄﾞｵ ﾉｯﾄ ﾆｰﾄﾞ ﾄｩ ｲﾈｰﾌﾞﾙ ｲｯﾄ.
+Required for NixOS users who download and execute RISC-V cross-compilation toolchains (GCC, QEMU, etc.) via ruyi. Users not working with RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do not need to enable it.
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-ﾆｯｸｽOS-compat  # ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｵｰﾊﾞｰﾚｲ
+  nix-kits.overlays.ruyi-nixos-compat  # standalone overlay
 ];
 ```
 
-## ﾌｨｰﾁｬｰｽﾞ
+## Features
 
-- **ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾗｴﾗｵｳﾄｴ**: ﾗｴﾌﾟﾙｱｸｽﾞ ｴﾑﾌﾞｴﾄﾞﾄﾞﾄﾞ ﾌﾎｽ ﾌﾟｱｽｽﾞ ｳｨｽﾞ ｻﾞ NixOS `ld.so`
-- **ﾂｰﾙﾁｪｰﾝ ｽｳﾌﾞ-ﾌﾟﾛｾｽ ﾗｴﾌﾟｱｲﾗ**: GCC-ｲﾝﾄｴﾗﾝｱﾙ ｽｳﾌﾞ-ﾌﾟﾗｵｽｴｽｽｽﾞ (`cc1` `as` `collect2`) ｱｰ ｵｰﾄ-ﾌｲｸｽﾄﾞ ﾌﾞｲｱ `patchelf`
-- **ﾆｯｸｽ ｸｵﾝｽｵﾙｴ_scripts ｸｵﾑﾌﾟｱﾄ**: ﾕｰｼｰｽﾞ `RUYI_ARGV0` ﾄｩ ﾘｶﾊﾞｰ `exec -a` ｽｴﾑｱﾝﾄｲｸｽﾞ
+- **Dynamic linker reroute**: Replaces embedded FHS paths with the NixOS `ld.so`
+- **Toolchain sub-process repair**: GCC-internal sub-processes (`cc1`, `as`, `collect2`) are auto-fixed via `ﾊﾟｯﾁelf`
+- **Nix console_scripts compat**: Uses `RUYI_ARGV0` to recover `exec -a` semantics
 
-## ﾄﾞｴｽｲｸﾞﾝ
+## Design
 
-ﾑｲﾝｲﾑｱﾙﾘｰ ｲﾝﾌﾞｱｽｲﾌﾞｴ: ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ ｱｸﾄｲﾌﾞｱﾄｽﾞ ｲﾝｽｲﾄﾞｴ ruyi ｳｪﾝ ｱ NixOS environment ｲｽﾞ ﾄﾞｴﾄｴｸﾄﾄﾞ ｱﾝﾄﾞ ｱ ﾌﾟﾗｴ-ｸｵﾑﾌﾟｲﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ ｲｽﾞ ｱﾌﾞｵｳﾄ ﾄｩ ﾋﾞｰ `execv` ｵﾝ ﾝｵﾝ-NixOS ｽｲｽﾄｴﾑｽﾞ ｻﾞ ﾊﾟｯﾁ ﾛｼﾞｯｸ ｲｽﾞ ｸｵﾑﾌﾟﾙｴﾄｴﾘｰ ｼｵﾗﾄ-ｽｲﾗｸｳｲﾄﾄﾞ.
+Minimally invasive: the ﾊﾟｯﾁ only activates inside ruyi when a NixOS ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ is detected and a pre-compiled toolchain is about to be `execv`'d. On non-NixOS systems the ﾊﾟｯﾁ logic is completely short-circuited.
 
-## ﾌﾞｴﾗｲﾌｲｸｱｼｮﾝ
+## Verification
 
 ```bash
-# ﾁｪｯｸ ﾎｴｽｴﾗ ｻﾞ ﾆｯｸｽOS_compat ﾓｼﾞｭｰﾙ ｲｽﾞ ﾙｵｱﾄﾞﾄﾞ
-ﾌｲﾝﾄﾞ /ﾆｯｸｽ/ｽﾄｵﾗｴ/*-ruyi-*/ﾙｲﾌﾞ -ﾈｰﾑ 'ﾆｯｸｽOS_compat.ﾌﾟｲ'
+# check whether the nixos_compat module is loaded
+find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'

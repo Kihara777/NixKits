@@ -1,28 +1,28 @@
-# ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix
+# rog-control-center-fix
 
-[中文](../zh/rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/rog-control-center-fix.md)
+[中文](../zh/rog-control-center-fix.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-fix.md) | [偽中国語](../pcn/rog-control-center-fix.md)
 
-ﾌｨｯｸｼｰｽﾞ ｱ ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾃﾞｭｱﾘﾝｸﾞ ｼｳﾄﾄﾞｵｳﾝ ｲﾝ `asus-shutdown.service`
+Fixes a systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | ﾄﾗｱｯｸｽﾞ nixpkgs |
-| ﾀｲﾌﾟ | NixOS ﾓｼﾞｭｰﾙ |
-| ﾊﾟｽ | `modules/rog-control-center-fix.nix` |
-| ﾄﾘｶﾞｰ | `services.asusd.enable = true` |
+| Version | Tracks nixpkgs |
+| Type | NixOS ﾓｼﾞｭｰﾙ |
+| Path | `ﾓｼﾞｭｰﾙs/rog-control-center-fix.nix` |
+| Trigger | `ｻｰﾋﾞｽs.asusd.enable = true` |
 
-## ﾌｨｯｸｼｰｽﾞ
+## Fixes
 
-- **ﾘﾑｰﾌﾞ ﾌﾟｱﾗﾄｵﾌ**: ｸﾙｴｱﾗｽﾞ `PartOf` ｵﾝ `asus-shutdown.service` ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸｱｽｸｱﾄﾞｲﾝｸﾞ ｽﾄｯﾌﾟ ﾄﾞｴｱﾄﾞﾙｵｯｸ ｳｪﾝ ｱｽｳｽﾄﾞ ﾗｴｽﾄｱﾗﾄｽﾞ
+- **Remove PartOf**: Clears `PartOf` on `asus-shutdown.ｻｰﾋﾞｽ` to prevent cascading stop deadlock when asusd restarts
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
 {
-  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ inputs.nix-kits.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ];
+  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
 
-  ｽｴﾗﾌﾞｲｸｽﾞ.ｱｽｳｽﾄﾞ.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+  services.asusd.enable = true;
 }
 ```

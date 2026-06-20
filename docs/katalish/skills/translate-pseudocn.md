@@ -1,28 +1,28 @@
-# ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ (ｽｷﾙ)
+# translate-pseudocn (Skill)
 
-[中文](../../zh/skills/translate-pseudocn.md) | [English](../../en/skills/translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-pseudocn.md)
+[中文](../../zh/ｽｷﾙs/translate-pseudocn.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/translate-pseudocn.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/translate-pseudocn.md) | [偽中国語](../../pcn/ｽｷﾙs/translate-pseudocn.md)
 
-> ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ. ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs.
+> 偽中国語 (Pseudo-Chinese / pcn) language ｻﾎﾟｰﾄ for the document-writing ｽｷﾙ. Auto-discovered by write-project-docs.
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ (ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ) |
-| ﾊﾟｽ | `skills/translate-pseudocn/SKILL.md` |
-| ﾗﾝｹﾞｰｼﾞ ｺｰﾄﾞ | ﾋﾟｰｼｰｴﾇ |
-| ｺｰﾙﾄﾞ ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ) |
+| Type | Coding Agent Skill (language backend) |
+| Path | `ｽｷﾙs/translate-pseudocn/SKILL.md` |
+| Language code | pcn |
+| Called by | write-project-docs (auto-discovered) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾄﾗｱﾝｽﾙｱｼｮﾝ — ｽﾄﾗｲﾌﾟｽﾞ ｸｱﾝｱ, ｱﾄﾞｼﾞｳｽﾄｽﾞ ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ (ｽｵﾌﾞ→ｽﾌﾞｵ)
-- ﾌﾟｱﾗﾄｲｸﾙｴ ﾗｴﾌﾟﾙｱｽｴﾒﾝﾄ, ﾌﾟｳﾝｸﾄｳｱｼｮﾝ ｺﾝﾊﾞｰｼﾞｮﾝ
-- ﾌﾞｳｲﾙﾄ-ｲﾝ ~13 ﾄｴﾗﾑ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ (ｼﾞｱ→ｽﾞﾎ ﾏｯﾋﾟﾝｸﾞ)
-- ｺｰﾄﾞ ﾌﾞﾙｵｯｸｽﾞ, ﾝｳﾑﾌﾞｴﾗｽﾞ, ｽｲﾑﾌﾞｵﾙｽﾞ ﾌﾟﾗｴｽｴﾗﾌﾞﾄﾞ
+- 偽中国語 (Pseudo-Chinese) translation — strips kana, adjusts word order (SOV→SVO)
+- Particle replacement, punctuation conﾊﾞｰｼﾞｮﾝ
+- Built-in ~13 term dictionary (JA→ZH mapping)
+- Code blocks, numbers, symbols preserved
 
 ## ﾕｰｾｰｼﾞ
 
-ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ﾌﾞｲｱ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ:
+Auto-discovered by write-project-docs via `translate-*` naming convention:
 
-- "ｼﾞｪﾈﾚｲﾄ ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ ﾄﾞｷｭﾒﾝﾄ"
-- "ｱﾄﾞ ﾋﾟｰｼｰｴﾇ ﾗﾝｹﾞｰｼﾞ ﾌﾞｱﾗｲｱﾝﾄ"
+- "Generate pseudo-Chinese document"
+- "Add pcn language variant"

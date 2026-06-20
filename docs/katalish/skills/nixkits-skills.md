@@ -1,35 +1,35 @@
-# NixKits-ｽｷﾙｽﾞ (ｽｷﾙ)
+# nixkits-ｽｷﾙs (Skill)
 
-[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-skills.md)
+[中文](../../zh/ｽｷﾙs/nixkits-ｽｷﾙs.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [偽中国語](../../pcn/ｽｷﾙs/nixkits-ｽｷﾙs.md)
 
-> ｲﾝｽﾄｱﾙﾙｽﾞ ｵｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ NixKits ｽｷﾙｽﾞ ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ (ｵｰﾌﾟﾝｺｰﾄﾞ, codewhale, ｸﾙｱｳﾄﾞｴ, ｵﾌﾟｴﾝｸﾙｱｳ, ｱｼﾞｴﾝﾄｽﾞ).
+> ｲﾝｽﾄｰﾙs or updates NixKits ｽｷﾙs into ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, ｴｰｼﾞｪﾝﾄs).
 
 ## ｲﾝﾌｫ
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ |
-| ﾊﾟｽ | `skills/nixkits-skills/SKILL.md` |
+| Type | Coding Agent Skill |
+| Path | `ｽｷﾙs/nixkits-ｽｷﾙs/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗｽﾞ ｿｰｽ ﾃﾞｨﾚｸﾄﾘ ｱﾝﾄﾞ ｼﾞｲﾄ ﾘﾓｰﾄ ﾕｰｱｰﾙｴﾙ
-- ﾄﾞｴﾄｴｸﾄｽﾞ ｲﾝｽﾄｱﾙﾙﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ
-- ｸｵﾑﾌﾟｱﾗｽﾞ ﾛｰｶﾙ ｽｷﾙｽﾞ ｱｸﾞｱｲﾝｽﾄ NixKits ｿｰｽ ﾌｫｱ ﾄﾞｲﾌﾌｴﾗｴﾝｸｽﾞ
-- ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ﾛｰｶﾙ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｿｰｽ) ｱﾝﾄﾞ ｵﾝﾙｲﾝｴ ｲﾝｽﾄｰﾙ (ﾌﾛﾑ GitHub ｸﾛｰﾝ)
-- ｼｵｳｽﾞ ﾃﾞｨﾌ ﾋﾞﾌｫｱ ｱﾌﾟﾌﾟﾙｲｲﾝｸﾞ ｱﾝﾄﾞ ｱｽｸｽﾞ ﾌｫｱ ﾕｰｻﾞｰ ｸｵﾝﾌｲﾗﾑｱｼｮﾝ
-- ﾌﾞｴﾗｲﾌｲｽﾞ ｺﾋﾟｰ ｸｵﾝｽｲｽﾄｴﾝｽｲ ｱﾌﾀｰ ｲﾝｽﾄｰﾙ
+- Auto-discovers source directory and git remote URL
+- Detects ｲﾝｽﾄｰﾙed ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ directories
+- Compares local ｽｷﾙs against NixKits source for differences
+- Supports local ｲﾝｽﾄｰﾙ (from source) and online ｲﾝｽﾄｰﾙ (from GitHub clone)
+- Shows diff before applying and asks for user confirmation
+- Verifies copy consistency after ｲﾝｽﾄｰﾙ
 
-## ｽｳﾌﾟﾌﾟｵﾗﾄﾄﾞ ｱｼﾞｴﾝﾄｽﾞ
+## Supported Agents
 
-| ｴｰｼﾞｪﾝﾄ | ﾃﾞｨﾚｸﾄﾘ |
+| Agent | Directory |
 |-------|-----------|
-| OpenCode | `~/.opencode/skills/` |
-| CodeWhale | `~/.codewhale/skills/` |
-| ｸﾙｱｳﾄﾞｴ ｺｰﾄﾞ | `~/.claude/skills/` |
-| OpenClaw | `~/.openclaw/skills/` |
-| ｼﾞｴﾝｴﾗｲｸ | `~/.agents/skills/` |
+| OpenCode | `~/.opencode/ｽｷﾙs/` |
+| CodeWhale | `~/.codewhale/ｽｷﾙs/` |
+| Claude Code | `~/.claude/ｽｷﾙs/` |
+| OpenClaw | `~/.openclaw/ｽｷﾙs/` |
+| Generic | `~/.ｴｰｼﾞｪﾝﾄs/ｽｷﾙs/` |
 
 ## ﾕｰｾｰｼﾞ
 
-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ ｱｽｸｽﾞ ﾄｩ "ｲﾝｽﾄｰﾙ ｽｷﾙｽﾞ" ｵｱ "ｱｯﾌﾟﾃﾞｰﾄ NixKits ｽｷﾙｽﾞ".
+Activated when the user asks to "ｲﾝｽﾄｰﾙ ｽｷﾙs" or "update NixKits ｽｷﾙs".
