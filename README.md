@@ -4,8 +4,6 @@
 
 NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 
-完整项目架构与组件关系见 [项目文档](docs/zh/project.md)。
-
 ## 添加
 
 ```nix
