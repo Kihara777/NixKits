@@ -17,7 +17,7 @@ write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SK
 | 字段 | 值 | 用途 |
 |------|-----|------|
 | `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
-| `display_name` | `ｶﾀﾘｯｼｭ` | 语言切换器标签 |
+| `display_name` | `ｶﾀﾘｯｼｭ` | 语言自称（仅用于该语言文档中自身不加链接的纯文本标签） |
 | `base_language` | `en` | 片假名英语的源语言（英文文本） |
 
 ## 触发场景
@@ -59,6 +59,7 @@ NixKits — software, patches, NixOS modules and coding agent skills
    - 数字、URL、内联代码 `` `code` ``、Markdown 语法（`#`、`|`、`[]`、`]]` 等）原样保留
    - 中文/日文汉字不替换
    - 语言切换器中的目录名（`zh`、`en`、`ja`、`katalish`、`pcn`）和文件扩展名（`.md`）不替换
+   - 语言切换器中的语言名称不作本地化——`English` 保持 `English`（不音译为 `ｲﾝｸﾞﾘｯｼｭ`），`日本語` 保持 `日本語`
 
 3. **代码块特殊处理**
    - Nix 代码块（````nix ... ```）：
@@ -123,12 +124,15 @@ NixKits — software, patches, NixOS modules and coding agent skills
 - `docs/README.katalish.md` — 片假名英语 README
 - `docs/MAINTENANCE.katalish.md` — 片假名英语维护记录
 
-语言切换器中新增：`[ｶﾀﾘｯｼｭ](docs/README.katalish.md)`
+语言切换器规则：
+- 根文件/多语言 README 中：`[Katalish](docs/README.katalish.md)`（其他语言入口，使用固有名称加链接）
+- katalish 子目录文件中自身标签：`ｶﾀﾘｯｼｭ`（纯文本，使用 display_name 语言自称）
 
 ## 注意事项
 
 - 片假名英语不是人类可读的语言——视觉装饰/伪本地化；机械替换即可
 - 语言切换器中的目录名（`zh`/`en`/`ja`/`katalish`/`pcn`）和文件扩展名（`.md`）不可翻译
+- 语言切换器中的语言名称保持固有名称不作本地化（如 `English` 不音译为 `ｲﾝｸﾞﾘｯｼｭ`）
 - Nix 表达式保持原样，仅翻译 `#` 注释
 - 其他代码块（bash 等）全部内容不动
 - 内联代码 `` `...` `` 全部内容不动

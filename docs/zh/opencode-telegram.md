@@ -1,6 +1,6 @@
 # opencode-telegram
 
-中文 | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | [偽中国語](../pcn/opencode-telegram.md)
+中文 | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [Katalish](../katalish/opencode-telegram.md) | [Pseudo-Chinese](../pcn/opencode-telegram.md)
 
 [OpenCode](https://opencode.ai) 的 Telegram Bot 客户端。
 

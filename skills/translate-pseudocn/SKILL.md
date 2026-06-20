@@ -17,7 +17,7 @@ write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SK
 | 字段 | 值 | 用途 |
 |------|-----|------|
 | `language_code` | `pcn` | 目录名 `docs/pcn/`、文件扩展名 `*.pcn.md`、for 循环迭代 |
-| `display_name` | `偽中国語` | 语言切换器标签 |
+| `display_name` | `偽中国語` | 语言自称（仅用于该语言文档中自身不加链接的纯文本标签） |
 | `base_language` | `ja` | 伪中国语转换的源语言（日语文本） |
 
 ## 触发场景
@@ -91,10 +91,13 @@ pcn 文档：
 - `docs/README.pcn.md` — 伪中国语 README
 - `docs/MAINTENANCE.pcn.md` — 伪中国语维护记录
 
-语言切换器中：`[偽中国語](docs/README.pcn.md)`
+语言切换器规则：
+- 根文件/多语言 README 中：`[Pseudo-Chinese](docs/README.pcn.md)`（其他语言入口，使用固有名称加链接）
+- pcn 子目录文件中自身标签：`偽中国語`（纯文本，使用 display_name 语言自称）
 
 ## 注意事项
 
 - 伪中国语是视觉装饰性伪本地化，不追求翻译准确性
+- 语言切换器中的语言名称保持固有名称不作本地化（如 `English` 保持 `English`，`日本語` 保持 `日本語`）
 - 技术术语和代码块保持原样
 - Nix 表达式不进行转换

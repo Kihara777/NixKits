@@ -1,6 +1,6 @@
 # ruyi-nixos-compat
 
-中文 | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi-nixos-compat.md) | [偽中国語](../pcn/ruyi-nixos-compat.md)
+中文 | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | [Katalish](../katalish/ruyi-nixos-compat.md) | [Pseudo-Chinese](../pcn/ruyi-nixos-compat.md)
 
 为 ruyi 提供 NixOS 运行时兼容性：预编译的 RISC-V 工具链二进制文件在 NixOS 上无法直接运行，因为期望的动态链接器路径 `/lib64/ld-linux-x86-64.so.2` 不存在。本 overlay 通过 patch 透明化处理此问题。
 

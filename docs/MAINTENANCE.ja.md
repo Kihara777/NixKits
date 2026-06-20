@@ -2,7 +2,7 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [Katalish](MAINTENANCE.katalish.md) | [Pseudo-Chinese](MAINTENANCE.pcn.md)
 
-NixKits 软件更新维护日志。
+NixKits パッケージ更新履歴。
 
 ---
 
