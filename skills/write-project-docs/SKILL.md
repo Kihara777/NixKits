@@ -41,8 +41,9 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 │   └── ja/            # 日文文档
 ```
 
-> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本（`*.en.md`、`*.ja.md`、`*.katalish.*`、`*.pcn.*`）
-> 移入 `docs/` 目录，文件名保持不变。扩展语言（`translate-*`）通过扫描 `skills/translate-*/SKILL.md` frontmatter 中的 `language_code` 自动发现。
+> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本
+> （`*.en.md`、`*.ja.md`、及通过 `skills/translate-*/SKILL.md` frontmatter 中
+>  `language_code` 自动发现的 `*.<code>.md`）移入 `docs/` 目录，文件名保持不变。
 
 ### 模块文档模板
 
@@ -246,12 +247,18 @@ done
 
 各 translate-* 技能的 SKILL.md frontmatter 中声明 `language_code`（目录名 / 文件扩展名）、`display_name`（语言自称，用于该语言文档中自身不加链接的纯文本标签）、`base_language`（翻译源语言）三个字段。文档撰写技能按命名约定扫描 `skills/translate-*/` 自动注册所有语言扩展。
 
-自动发现后：
-- 目录结构扩展 `docs/<code>/` 和 `docs/<code>/skills/`
-- 语言切换器中该语言的入口使用固有名称（如 `Katalish`、`Pseudo-Chinese`），
+自动发现后，全部基于 `language_code` / `display_name` / `base_language` 三个字段构造：
+
+- **文件命名约定**（基于 `language_code`）：
+  - 模块文档：`docs/<code>/<module>.md`
+  - 技能文档：`docs/<code>/skills/<skill>.md`
+  - 多语言 README：`docs/README.<code>.md`
+  - 多语言 MAINTENANCE：`docs/MAINTENANCE.<code>.md`
+- **目录结构**：扩展 `docs/<code>/` 和 `docs/<code>/skills/`
+- **语言切换器**：该语言的入口使用固有名称（如 `Katalish`、`Pseudo-Chinese`），
   而非 `display_name`。`display_name` 仅用于该语言文档中自身不加链接的纯文本标签。
-- 根文件和多语言 README 中：`[<固有名称>](docs/README.<code>.md)`
-- 自身子目录文件中：自身标签 = `<display_name>`（纯文本），其他语言 = 固有名称
+  - 根文件和多语言 README 中：`[<固有名称>](docs/README.<code>.md)`
+  - 自身子目录文件中：自身标签 = `<display_name>`（纯文本），其他语言 = 固有名称
 - 语言 for 循环扩展为多语言遍历
 - 基本信息表格列名由各 translate-* 技能的规则定义
 

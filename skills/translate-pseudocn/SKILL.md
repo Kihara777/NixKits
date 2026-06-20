@@ -84,17 +84,6 @@ write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SK
 | 機能 | 功能 |
 | 情報 | 情報 |
 
-### 文件命名约定
-
-pcn 文档：
-- `docs/pcn/<module>.md` — 伪中国语版模块文档
-- `docs/README.pcn.md` — 伪中国语 README
-- `docs/MAINTENANCE.pcn.md` — 伪中国语维护记录
-
-语言切换器规则：
-- 根文件/多语言 README 中：`[Pseudo-Chinese](docs/README.pcn.md)`（其他语言入口，使用固有名称加链接）
-- pcn 子目录文件中自身标签：`偽中国語`（纯文本，使用 display_name 语言自称）
-
 ## 注意事项
 
 - 伪中国语是视觉装饰性伪本地化，不追求翻译准确性

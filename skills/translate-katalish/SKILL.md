@@ -117,17 +117,6 @@ NixKits — software, patches, NixOS modules and coding agent skills
 | o (短) | ｵ |
 | o (长) | ｵｰ |
 
-### 文件命名约定
-
-ｶﾀﾘｯｼｭ 文档：
-- `docs/katalish/<module>.md` — 片假名英语版模块文档
-- `docs/README.katalish.md` — 片假名英语 README
-- `docs/MAINTENANCE.katalish.md` — 片假名英语维护记录
-
-语言切换器规则：
-- 根文件/多语言 README 中：`[Katalish](docs/README.katalish.md)`（其他语言入口，使用固有名称加链接）
-- katalish 子目录文件中自身标签：`ｶﾀﾘｯｼｭ`（纯文本，使用 display_name 语言自称）
-
 ## 注意事项
 
 - 片假名英语不是人类可读的语言——视觉装饰/伪本地化；机械替换即可
