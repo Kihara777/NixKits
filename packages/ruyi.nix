@@ -75,7 +75,7 @@ python.pkgs.buildPythonApplication {
       cat >> ruyi/utils/nixos_compat.py << 'NCEOF'
 _BUILD_TOOLS = ("make", "cmake", "ninja", "meson")
 
-def expose_build_tools_in_venv(bindir: str) -> None:
+def expose_build_tools_in_venv(bindir) -> None:
     """Create symlinks in *bindir* for build tools found in ruyi's PATH."""
     import os as _os, shutil as _shutil
     _bindir = _os.path.abspath(bindir)
