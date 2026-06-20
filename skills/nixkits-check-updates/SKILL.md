@@ -136,10 +136,10 @@ git diff flake.lock
 
 ## 第 5 步：更新文档
 
-对每个更新的包，在三种语言文档中更新版本号：
+对每个更新的包，在所有语言文档中更新版本号：
 
 ```bash
-for lang in zh en ja; do
+for lang in zh en ja katalish pcn; do
   sed -i "s/$OLD_VER/$NEW_VER/g" docs/$lang/<pkg>.md
 done
 ```
@@ -160,7 +160,7 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 ## 第 8 步：调用维护日志技能
 
 软件更新完成后，自动调用 `write-maintenance-log` 技能撰写维护记录。
-详细格式规范、撰写流程、三语同步规则均由该技能定义。
+详细格式规范、撰写流程、多语同步规则均由该技能定义。
 
 ```
 → 触发技能: write-maintenance-log

@@ -15,7 +15,7 @@
 
 - 撰写软件版本更新记录（摘要 + 关联 commit ID 表 + 软件版本表）
 - 撰写错误修复记录（摘要 + 关联 commit ID 表）
-- 三语同步（zh/en/ja）维护日志
+- 五语同步（zh/en/ja/katalish/pcn）维护日志
 - 自动从前置技能（nixkits-check-updates）或 git commit message 提取摘要
 - 统一的格式规范：ISO 8601 精确时间、LIFO 顺序、hash 省略无变更项
 

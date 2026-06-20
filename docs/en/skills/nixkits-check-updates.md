@@ -15,7 +15,7 @@
 
 - Auto-discovers all external packages from `flake.nix` and checks latest GitHub Releases
 - Updates build configs (version, source hash, npmDepsHash)
-- Syncs version numbers across all 3 language docs
+- Syncs version numbers across all language docs
 - Auto-invokes `write-maintenance-log` skill to write maintenance records after updates
 - Reports locally installed versions
 - Identifies hardcoded versions inside patch files and provides check guidance

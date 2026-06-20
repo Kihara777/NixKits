@@ -15,7 +15,7 @@
 
 - 从 `flake.nix` 自动发现所有外部包并检查最新 GitHub Release
 - 更新构建配置（版本号、source hash、npmDepsHash）
-- 同步更新三语文档中的版本号
+- 同步更新多语文档中的版本号
 - 更新完成后自动调用 `write-maintenance-log` 技能撰写维护记录
 - 报告本地已安装版本
 - 识别补丁文件内的硬编码版本并提供检查指引

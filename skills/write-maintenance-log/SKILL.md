@@ -5,7 +5,7 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 
 # 维护日志撰写
 
-按 NixKits 统一规范撰写 `MAINTENANCE.md` 维护记录，确保格式一致、信息完整、三语同步。
+按 NixKits 统一规范撰写 `MAINTENANCE.md` 维护记录，确保格式一致、信息完整、多语同步。
 
 ## 入口
 
@@ -49,7 +49,7 @@ done
 #    b. 按 ±2h 窗口匹配未关联的提交
 #    c. 补充到对应记录的提交表中
 
-# 4. 三语同步并提交
+# 4. 多语同步并提交
 ```
 
 > 此入口**不修改软件版本表**中已记录的版本号与 hash 值，仅补充元数据。
@@ -157,7 +157,7 @@ git log --oneline --since="<时间范围>"
 
 按格式规范生成新条目，插入到 `MAINTENANCE.md` 顶部（第一个 `---` 分隔线之后）。
 
-### 第 4 步：三语同步
+### 第 4 步：多语同步
 
 对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现翻译技能：
 
@@ -186,7 +186,7 @@ skills/translate-pseudocn/  → 语言代码 pcn      → [偽中国語]
 ### 第 5 步：提交
 
 ```bash
-git add MAINTENANCE.md docs/MAINTENANCE.en.md docs/MAINTENANCE.ja.md
+git add MAINTENANCE.md docs/MAINTENANCE.en.md docs/MAINTENANCE.ja.md docs/MAINTENANCE.katalish.md docs/MAINTENANCE.pcn.md
 git commit -m "docs(MAINTENANCE): record <date> — <summary>"
 ```
 

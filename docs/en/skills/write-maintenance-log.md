@@ -15,7 +15,7 @@
 
 - Writes software update records (summary + commit ID table + version table)
 - Writes bug fix records (summary + commit ID table)
-- Trilingual sync (zh/en/ja) of maintenance logs
+- Sync across 5 languages (zh/en/ja/katalish/pcn)
 - Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
 - Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
