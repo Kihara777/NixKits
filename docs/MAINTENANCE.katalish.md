@@ -1,6 +1,6 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](MAINTENANCE.pcn.md)
 
 ﾆｯｸｽｷｯﾄ ﾊﾟｯｹｰｼﾞ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ。
 

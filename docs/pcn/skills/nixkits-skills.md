@@ -1,6 +1,6 @@
 # nixkits-skills (Skill)
 
-[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [Katalish](../../katalish/skills/nixkits-skills.md) | 偽中国語
+[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | 偽中国語
 
 > NixKits 技能目錄opencodecodewhaleclaudeopenclawagents安裝更新
 

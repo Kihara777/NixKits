@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [Katalish](README.katalish.md) | 偽中国語
+[中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [ｶﾀﾘｯｼｭ](README.katalish.md) | 偽中国語
 
 NixKits — 軟件補丁NixOS 模塊AI 技能合集
 

@@ -1,6 +1,6 @@
 # NixKits-ｽｷﾙｽﾞ (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/nixkits-skills.md)
+[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
 > ｲﾝｽﾄｱﾙﾙｽﾞ ｵｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ NixKits ｽｷﾙｽﾞ ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ﾄﾞｲﾗｴｸﾄｵﾗｲｽﾞ (ｵｰﾌﾟﾝｺｰﾄﾞ, codewhale, ｸﾙｱｳﾄﾞｴ, ｵﾌﾟｴﾝｸﾙｱｳ, ｱｼﾞｴﾝﾄｽﾞ).
 

@@ -156,12 +156,10 @@ nix registry add <project> <remote-url>
 - **代码块完整可运行** — 每个代码块应可直接复制粘贴执行
 - **技术术语保持英文** — 即使在中文和日文文档中
 - **语言切换器标签规则** —
-  - 其他语言的入口保持固有名称不作本地化：
-    `中文`、`English`、`日本語`、`Katalish`、`Pseudo-Chinese`。
-    不翻译为 `ｲﾝｸﾞﾘｯｼｭ`、`Chinese`、`Japanese` 等形式。
-  - 当前语言自身的标签使用该语言的 `display_name`（语言自称）：
-    katalish → `ｶﾀﾘｯｼｭ`、pcn → `偽中国語`。
-    自身标签不加链接（纯文本），其他语言均附相对路径链接
+  所有语言入口标签统一使用各语言的 `display_name`（语言自称）：
+  `中文`、`English`、`日本語`、`ｶﾀﾘｯｼｭ`、`偽中国語`。
+  自身标签不加链接（纯文本），其他语言均附相对路径链接。
+  不翻译为 `ｲﾝｸﾞﾘｯｼｭ`、`Chinese`、`Japanese` 等形式
 - **警告使用引用块** — `> **⚠️ 警告**` 格式
 - **中文标题使用 2 或 4 字词** — 优先使用简洁、长度对称的词汇以保证视觉节奏
   （如 `组件` 而非 `软件包`，`基本信息` 而非 `基础配置信息`）。中文 README 中的分类标题应遵循此韵律。
@@ -255,10 +253,13 @@ done
   - 多语言 README：`docs/README.<code>.md`
   - 多语言 MAINTENANCE：`docs/MAINTENANCE.<code>.md`
 - **目录结构**：扩展 `docs/<code>/` 和 `docs/<code>/skills/`
-- **语言切换器**：该语言的入口使用固有名称（如 `Katalish`、`Pseudo-Chinese`），
-  而非 `display_name`。`display_name` 仅用于该语言文档中自身不加链接的纯文本标签。
-  - 根文件和多语言 README 中：`[<固有名称>](docs/README.<code>.md)`
-  - 自身子目录文件中：自身标签 = `<display_name>`（纯文本），其他语言 = 固有名称
+- **语言切换器**：所有语言入口标签统一使用该语言的 `display_name`（语言自称）。
+  核心语言（zh/en/ja）的 display_name 即为 `中文` / `English` / `日本語`；
+  扩展语言的 display_name 由各 `translate-*` 技能 frontmatter 声明
+  （如 katalish→`ｶﾀﾘｯｼｭ`、pcn→`偽中国語`）。
+  - 根文件和多语言 README/MAINTENANCE 中：`[<display_name>](docs/README.<code>.md)`
+  - 各子目录文件中：当前语言自身标签 = `<display_name>`（纯文本），
+    其他语言 = `<display_name>`（链接）
 - 语言 for 循环扩展为多语言遍历
 - 基本信息表格列名由各 translate-* 技能的规则定义
 

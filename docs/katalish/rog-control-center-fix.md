@@ -1,6 +1,6 @@
 # ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix
 
-[中文](../zh/rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/rog-control-center-fix.md)
+[中文](../zh/rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/rog-control-center-fix.md)
 
 ﾌｨｯｸｼｰｽﾞ ｱ ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾃﾞｭｱﾘﾝｸﾞ ｼｳﾄﾄﾞｵｳﾝ ｲﾝ `asus-shutdown.service`
 

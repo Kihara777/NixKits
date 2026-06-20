@@ -1,6 +1,6 @@
 # nixos-modern-cli (Skill)
 
-[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | 日本語 | [Katalish](../../katalish/skills/nixos-modern-cli.md) | [Pseudo-Chinese](../../pcn/skills/nixos-modern-cli.md)
+[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | 日本語 | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md) | [偽中国語](../../pcn/skills/nixos-modern-cli.md)
 
 > NixOS システムで作業するときに起動。最新 Nix CLI、完全なシェル機能、正しいメンテナンス手順を保証。
 

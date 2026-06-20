@@ -1,6 +1,6 @@
 # ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log (ｽｷﾙ)
 
-[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/write-maintenance-log.md)
+[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
 > ﾗｲﾄ ｵｱ ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ.ﾑﾄﾞ ﾌﾟｴﾗ NixKits ｸｵﾝﾌﾞｴﾝｼｮﾝｽﾞ. ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ﾊﾞｸﾞ ﾌｨｯｸｼｰｽﾞ, ｽｲﾝｸ ｱｸﾛｽ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ.
 

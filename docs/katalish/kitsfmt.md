@@ -1,6 +1,6 @@
 # kitsfmt
 
-[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/kitsfmt.md)
+[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/kitsfmt.md)
 
 **ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ** — ｴｰｴｽﾃｨｰ-ﾍﾞｰｽﾄﾞ ｳｨｽﾞ ｱﾄﾘﾋﾞｭｰﾄ ｿｰﾃｨﾝｸﾞ, ｺﾒﾝﾄ ﾌﾟﾗｴｽｴﾗﾌﾞｱｼｮﾝ, ｱﾝﾄﾞ ｲﾝﾃﾞﾝﾃｰｼｮﾝ ﾝｵﾗﾑｱﾙｲｽﾞｱｼｮﾝ.
 

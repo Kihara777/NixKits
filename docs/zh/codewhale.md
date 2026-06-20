@@ -1,6 +1,6 @@
 # codewhale
 
-中文 | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [Katalish](../katalish/codewhale.md) | [Pseudo-Chinese](../pcn/codewhale.md)
+中文 | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
 
 DeepSeek V4 专用的终端编码代理（TUI 工具）。
 

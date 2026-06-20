@@ -1,6 +1,6 @@
 # llama-cpp-rocm
 
-中文 | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [Katalish](../katalish/llama-cpp-rocm.md) | [Pseudo-Chinese](../pcn/llama-cpp-rocm.md)
+中文 | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | [偽中国語](../pcn/llama-cpp-rocm.md)
 
 基于 llama.cpp 上游，构建时动态获取 GitHub 最新 Release 版本号，启用 ROCm GPU 加速，用于测试最新特性和前沿功能。
 

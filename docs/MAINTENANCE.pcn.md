@@ -1,6 +1,6 @@
 # 維護記録
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [Katalish](MAINTENANCE.katalish.md) | 偽中国語
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | 偽中国語
 
 NixKits 軟件更新維護記録
 

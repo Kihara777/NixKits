@@ -1,6 +1,6 @@
 # obs-bilibili-stream
 
-中文 | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [Katalish](../katalish/obs-bilibili-stream.md) | [Pseudo-Chinese](../pcn/obs-bilibili-stream.md)
+中文 | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | [偽中国語](../pcn/obs-bilibili-stream.md)
 
 OBS Studio 的 Bilibili 直播推流插件。
 

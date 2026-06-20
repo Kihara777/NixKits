@@ -1,6 +1,6 @@
 # Maintenance Log
 
-[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [Katalish](MAINTENANCE.katalish.md) | [Pseudo-Chinese](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 NixKits package update changelog.
 

@@ -1,6 +1,6 @@
 # ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ｽｷﾙ)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../../pcn/skills/write-project-docs.md)
+[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > ｼﾞｪﾈﾚｲﾂ ｺﾝﾌﾟﾘｰﾄ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｲﾝ ｻﾞ NixKits ｽﾀｲﾙ — ｸｵﾝｽｲｽｴ, ﾃｰﾌﾞﾙ-ﾄﾞﾗｲﾌﾞｴﾝ.
 

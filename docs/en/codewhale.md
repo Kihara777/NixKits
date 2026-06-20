@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | English | [日本語](../ja/codewhale.md) | [Katalish](../katalish/codewhale.md) | [Pseudo-Chinese](../pcn/codewhale.md)
+[中文](../zh/codewhale.md) | English | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
 
 A terminal coding agent built for DeepSeek V4.
 

@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [Katalish](../katalish/codewhale.md) | 偽中国語
+[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | 偽中国語
 
 DeepSeek V4 専用
 

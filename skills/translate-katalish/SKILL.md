@@ -17,7 +17,7 @@ write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SK
 | 字段 | 值 | 用途 |
 |------|-----|------|
 | `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
-| `display_name` | `ｶﾀﾘｯｼｭ` | 语言自称（仅用于该语言文档中自身不加链接的纯文本标签） |
+| `display_name` | `ｶﾀﾘｯｼｭ` | 语言自称（统一用于所有文档中该语言的入口标签） |
 | `base_language` | `en` | 片假名英语的源语言（英文文本） |
 
 ## 触发场景
@@ -121,7 +121,7 @@ NixKits — software, patches, NixOS modules and coding agent skills
 
 - 片假名英语不是人类可读的语言——视觉装饰/伪本地化；机械替换即可
 - 语言切换器中的目录名（`zh`/`en`/`ja`/`katalish`/`pcn`）和文件扩展名（`.md`）不可翻译
-- 语言切换器中的语言名称保持固有名称不作本地化（如 `English` 不音译为 `ｲﾝｸﾞﾘｯｼｭ`）
+- 语言切换器中的语言名称不作本地化——各语言使用自身 display_name，不翻译（如 `English` 不音译为 `ｲﾝｸﾞﾘｯｼｭ`）
 - Nix 表达式保持原样，仅翻译 `#` 注释
 - 其他代码块（bash 等）全部内容不动
 - 内联代码 `` `...` `` 全部内容不动
