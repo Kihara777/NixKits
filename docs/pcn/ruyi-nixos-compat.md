@@ -1,6 +1,6 @@
 # ruyi-nixos-compat
 
-[中文](../../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | [Katalish](../katalish/ruyi-nixos-compat.md) | 偽中国語
+[中文](../zh/ruyi-nixos-compat.md) | [English](../en/ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md) | [Katalish](../katalish/ruyi-nixos-compat.md) | 偽中国語
 
 ruyi NixOS 運行時互換性提供： RISC-V 工具期待動的 `/lib64/ld-linux-x86-64.so.2` NixOS 存在実行 overlay 補丁通問題透過的処理
 

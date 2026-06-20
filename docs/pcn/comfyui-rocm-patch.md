@@ -1,6 +1,6 @@
 # comfyui-rocm-patch
 
-[中文](../../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [Katalish](../katalish/comfyui-rocm-patch.md) | 偽中国語
+[中文](../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [Katalish](../katalish/comfyui-rocm-patch.md) | 偽中国語
 
 ComfyUI ROCm 機能補丁提供
 

@@ -1,6 +1,6 @@
 # ｵｰﾌﾟﾝｺｰﾄﾞ-ﾃﾚｸﾞﾗﾑ
 
-[中文](../../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/opencode-telegram.md)
+[中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/opencode-telegram.md)
 
 ﾃﾚｸﾞﾗﾑ ﾎﾞｯﾄ ｸﾗｲｱﾝﾄ ﾌｫｱ [OpenCode](https://opencode.ai)).
 

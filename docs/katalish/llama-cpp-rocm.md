@@ -1,6 +1,6 @@
 # ﾗﾏ-ｸﾌﾟﾌﾟ-rocm
 
-[中文](../../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/llama-cpp-rocm.md)
+[中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/llama-cpp-rocm.md)
 
 ｳﾌﾟｽﾄﾗｴｱﾑ ﾗﾏ.ｸﾌﾟﾌﾟ ｳｨｽﾞ ﾛｯｸｴﾑ ｸﾞﾌﾟｳ ｱｸｽｴﾙｴﾗｱｼｮﾝ. ﾄﾞｲﾝｱﾑｲｸｱﾙﾘｰ ﾌｴﾄﾁｽﾞ ｻﾞ ﾙｱﾄｴｽﾄ GitHub ﾘﾘｰｽ ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ ﾄｲﾑｴ ﾌｫｱ ﾄｴｽﾄｲﾝｸﾞ ｸｳﾄﾄｲﾝｸﾞ-ｴﾄﾞｼﾞｴ ﾌｨｰﾁｬｰｽﾞ.
 

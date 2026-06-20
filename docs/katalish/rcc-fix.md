@@ -1,6 +1,6 @@
 # ﾗｸｸ-ﾌｨｯｸｽ
 
-[中文](../../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/rcc-fix.md)
+[中文](../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/rcc-fix.md)
 
 ﾊﾟｯﾁｰｽﾞ `asusctl` ﾌｫｱ ﾌﾞｴﾄﾄｴﾗ ｱｽｳｽﾞ ﾗｵｸﾞ ｸｵﾝﾄﾗｵﾙ ｽｴﾝﾄｴﾗ ｵﾝ 2-in-1 ﾄﾞｴﾄｱﾁｱﾌﾞﾙ ﾄﾞｴﾌﾞｲｸｽﾞ.
 

@@ -1,6 +1,6 @@
 # ruyi
 
-[中文](../../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/ruyi.md)
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/ruyi.md)
 
 ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — ﾘｽｸ-ﾌﾞ ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾄｵｵﾙｸｲﾄ ﾌﾟﾗｵﾌﾞｲﾄﾞｲﾝｸﾞ ﾂｰﾙﾁｪｰﾝ ｲﾝｽﾄｱﾙﾙｱｼｮﾝ, ﾊﾞｰﾁｬﾙ ｴﾝﾊﾞｲﾛﾒﾝﾄ ﾑｱﾝｱｼﾞｴﾒﾝﾄ, ﾄﾞｴﾌﾞｲｽｴ ﾌﾟﾗｵﾌﾞｲｼﾞｮﾝｲﾝｸﾞ, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｵﾌﾟｴﾗｱｼｮﾝｽﾞ.
 

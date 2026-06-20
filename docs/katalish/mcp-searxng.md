@@ -1,6 +1,6 @@
 # ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
 
-[中文](../../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/mcp-searxng.md)
+[中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/mcp-searxng.md)
 
 [ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — ｳｪﾌﾞ ｻｰﾁ ﾌｫｱ ｱｲ ｱｽｽｲｽﾄｱﾝﾄｽﾞ.
 

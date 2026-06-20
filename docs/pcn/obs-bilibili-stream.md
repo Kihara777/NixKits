@@ -1,6 +1,6 @@
 # obs-bilibili-stream
 
-[中文](../../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [Katalish](../katalish/obs-bilibili-stream.md) | 偽中国語
+[中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [Katalish](../katalish/obs-bilibili-stream.md) | 偽中国語
 
 OBS Studio 用 Bilibili 配信插件
 
