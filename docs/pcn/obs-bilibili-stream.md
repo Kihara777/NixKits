@@ -2,19 +2,19 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | 偽中国語
 
-OBS Studio 用 Bilibili ライブ配信プラグイン。
+OBS Studio 用 Bilibili 配信插件。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 2.1.0 |
-| アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| プラットフォーム | Linux  |
+| 版本 | 2.1.0 |
+| 上游 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| | Linux |
 
-## インストール
+## 安裝
 
-**推奨: NixOS モジュール**
+**推奨: NixOS 模塊**
 
 ```nix
 {

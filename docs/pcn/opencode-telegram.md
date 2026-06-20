@@ -2,29 +2,29 @@
 
 [中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | 偽中国語
 
-[OpenCode](https://opencode.ai)  Telegram Bot クライアント。
+[OpenCode](https://opencode.ai) Telegram Bot 客户端。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.21.2 |
-| アップストリーム | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
+| 版本 | 0.21.2 |
+| 上游 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## 使方
 
 ```bash
 # 初回セットアップ
-opencode serve                           # opencode サーバー起動
+opencode serve                           # opencode サーバーを起動
 opencode-telegram config                 # 対話型 Telegram Bot 設定
 
 # 日常使用
-opencode-telegram start                  # 起動(opencode 自動起動)
+opencode-telegram start                  # 起動（opencode を自動起動）
 opencode-telegram status                 # 状態確認
 opencode-telegram stop                   # 停止
 ```
 
-## インストール
+## 安裝
 
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
@@ -33,7 +33,7 @@ environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-
 nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```
 
-## Flake モジュール
+## Flake 模塊
 
 ```nix
 # flake.nix

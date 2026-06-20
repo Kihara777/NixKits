@@ -2,25 +2,25 @@
 
 [中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md) | 偽中国語
 
-> NixOS システム作業起動。最新 Nix CLI，完全シェル機能，正メンテナンス手順保証。
+> NixOS 系統作業起動。最新 Nix CLI，完全功能，正手順保証。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | Coding Agent Skill |
-| パス | `skills/nixos-modern-cli/SKILL.md` |
+| 類型 | Coding Agent Skill |
+| | `skills/nixos-modern-cli/SKILL.md` |
 
-## 機能
+## 功能
 
-- NixOS 従来 Linux ディストリビューション誤認 AI モデル矯正
-- 最新 vs 従来 CLI コマンド対照表提供
-- `nix shell --command` 使用 POSIX ツール実行ガイド
-- 一般的 POSIX ツール → nixpkgs パッケージ対応表搭載
-- システムメンテナンス，ログ確認，ガベージコレクション網羅
+- NixOS 従来 Linux 誤認 AI 模型矯正
+- 最新 vs 従来 CLI 対照表提供
+- `nix shell --command` 使用 POSIX 工具実行
+- 一般的 POSIX 工具 → nixpkgs 軟件包対応表搭載
+- 系統，確認，網羅
 - NixOS 固有注意点(PATH，nix-env 永続性)列挙
-- Nix Store パス罠診断：GC 回収無効化 `/nix/store/` パス特定・修正(例：`gh auth setup-git` 認証ヘルパー)
+- Nix Store 罠診断：GC 回収無効化 `/nix/store/` 特定・修復(例：`gh auth setup-git` 認証)
 
 ## 使用
 
-AI  NixOS 環境検出自動起動。「最新 nix コマンド」明示的要求起動。
+AI NixOS 環境検出自動起動。「最新 nix 」明示的要求起動。

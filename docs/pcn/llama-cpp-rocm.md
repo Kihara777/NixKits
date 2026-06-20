@@ -2,17 +2,17 @@
 
 [中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | 偽中国語
 
-llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub 最新リリースバージョン動的取得，最先端機能テスト使用。
+llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最先端功能使用。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | アップストリーム最新リリース自動追跡 |
-| アップストリーム | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
-| 注意 | overlay 提供，単独パッケージ出力 |
+| 版本 | 上游最新自動追跡 |
+| 上游 | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
+| 注意 | overlay 提供，単独軟件包出力 |
 
-## インストール
+## 安裝
 
 ```nix
 {
@@ -23,9 +23,9 @@ llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub �
 
 ## 使方
 
-アップストリーム llama.cpp ドキュメント参照。
+上游 llama.cpp 参照。
 
-## Flake モジュール
+## Flake 模塊
 
 ```nix
 # flake.nix
@@ -134,40 +134,40 @@ llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub �
 }
 ```
 
-モジュール `LLAMA_CACHE`  `/home/<user>/.cache/huggingface/hub` 自動設定，`/home`  `/proc` サンドボックス制限解除。
+模塊 `LLAMA_CACHE` `/home/<user>/.cache/huggingface/hub` 自動設置，`/home` `/proc` 制限解除。
 
-> **警告: Home Manager  llama-cpp サービス**
+> **警告: Home Manager llama-cpp 服務**
 >
-> Home Manager 経由有効場合，追加ユーザーレベルサンドボックス GPU アクセス(`/dev/dri`，`/dev/kfd`)ブロック可能性。システムレベル設定推奨。
+> Home Manager 経由有効場合，追加 GPU (`/dev/dri`，`/dev/kfd`)可能性。系統設置推奨。
 
-## 移行ガイド
+## 移行
 
-### 影響受バージョン
+### 影響受版本
 
-| コンポーネント | 影響範囲 | 変更内容 |
+| | 影響範囲 | 変更内容 |
 |-------------|---------|---------|
-| nixpkgs | 2026-06 以降(master) | `services.llama-cpp.modelsPreset` 削除，`port`/`host`/`model`/`modelsDir`  `settings.port`/`settings.host`/… リネーム |
+| nixpkgs | 2026-06 以降(master) | `services.llama-cpp.modelsPreset` 削除，`port`/`host`/`model`/`modelsDir` `settings.port`/`settings.host`/… |
 | NixKits | `6f52ddf` 以降(`modules/llama-cpp-rocm.nix`) | 名前空間 `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` 移行 |
-| アップストリーム llama.cpp | b9605 | `--models-preset` CLI 引数維持 |
+| 上游 llama.cpp | b9605 | `--models-preset` CLI 引数維持 |
 
-### 設定項目対応表
+### 設置項目対応表
 
-| 旧設定(非推奨) | 新設定 | 備考 |
+| 旧設置(非推奨) | 新設置 | 備考 |
 |-----------------|--------|------|
 | `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | nixpkgs 削除，NixKits 復元 |
 | `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | 名前空間統一 |
 | `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | 同上 |
 | `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | 同上 |
-| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs リネーム |
-| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs リネーム |
-| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs リネーム |
-| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs リネーム |
-| 手動 `systemd.services.llama-cpp.serviceConfig` | 削除 | NixKits モジュール自動処理 |
-| `services.llama-cpp.extraFlags` | `services.llama-cpp.settings` 対応フラグ追加 | nixpkgs 削除 |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs |
+| 手動 `systemd.services.llama-cpp.serviceConfig` | 削除 | NixKits 模塊自動処理 |
+| `services.llama-cpp.extraFlags` | `services.llama-cpp.settings` 対応追加 | nixpkgs 削除 |
 
 ### 移行例
 
-> **⚠️ ステップ 1**: `flake.nix` モジュールリスト `nix-kits.nixosModules.llama-cpp-rocm` 追加
+> **⚠️ 1**: `flake.nix` 模塊 `nix-kits.nixosModules.llama-cpp-rocm` 追加
 
 **移行前**:
 
@@ -215,7 +215,7 @@ llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub �
 **移行後**:
 
 ```nix
-# flake.nix — モジュールリスト(追加)
+# flake.nix — モジュールリスト（追加）
 { modules = [
     nix-kits.nixosModules.llama-cpp-rocm
 ];}
@@ -240,7 +240,7 @@ llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub �
       };
     };
   };
-  # NixKits オプションカバー環境変数
+  # NixKits オプションでカバーされない環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"

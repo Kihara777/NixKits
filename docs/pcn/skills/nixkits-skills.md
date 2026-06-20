@@ -2,27 +2,27 @@
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | 偽中国語
 
-> NixKits スキルコーディングエージェントディレクトリ(opencode，codewhale，claude，openclaw，agents)インストール更新。
+> NixKits 編碼代理(opencode，codewhale，claude，openclaw，agents)安裝更新。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイプ | Coding Agent Skill |
-| パス | `skills/nixkits-skills/SKILL.md` |
+| 類型 | Coding Agent Skill |
+| | `skills/nixkits-skills/SKILL.md` |
 
-## 機能
+## 功能
 
-- ソースディレクトリ git remote URL 自動検出
-- インストール済エージェントスキルディレクトリ検出
-- ローカルスキル NixKits ソース比較差異表示
-- ローカルインストール(ソース)オンラインインストール(GitHub クローン)対応
-- 適用前差分表示ユーザー確認要求
-- インストール後コピー一貫性検証
+- git remote URL 自動検出
+- 安裝済代理検出
+- NixKits 比較差異表示
+- 安裝()安裝(GitHub )対応
+- 適用前差分表示確認要求
+- 安裝後一貫性検証
 
-## 対応エージェント
+## 対応代理
 
-| エージェント | ディレクトリ |
+| 代理 | |
 |-------------|-------------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
@@ -32,4 +32,4 @@
 
 ## 使用
 
-ユーザー「スキルインストール」「NixKits スキル更新」依頼起動。
+「安裝」「NixKits 更新」依頼起動。

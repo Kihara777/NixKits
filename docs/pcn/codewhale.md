@@ -2,17 +2,17 @@
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | 偽中国語
 
-DeepSeek V4 専用ターミナルコーディングエージェント。
+DeepSeek V4 専用終端編碼代理。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.8.62 |
-| アップストリーム | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| タイプ | ビルド済バイナリ(GitHub Releases) |
+| 版本 | 0.8.62 |
+| 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| 類型 | 構建済(GitHub Releases) |
 
-## インストール
+## 安裝
 
 ```nix
 environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
@@ -32,4 +32,4 @@ codewhale doctor                       # セットアップ確認
 codewhale auth set --provider deepseek # API キー保存
 ```
 
-初回実行時 [DeepSeek API キー](https://platform.deepseek.com/api_keys) 必要。
+初回実行時 [DeepSeek API ](https://platform.deepseek.com/api_keys) 必要。
