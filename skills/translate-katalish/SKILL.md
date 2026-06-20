@@ -77,6 +77,8 @@ NixKits — software, patches, NixOS modules and coding agent skills
 4. **专有名词处理**
    - `NixOS` → `ﾆｯｸｽOS`（混合：专名音译 + 保留 `OS`）
    - `GitHub` → `ｷﾞｯﾄﾊﾌﾞ`（整个词音译）
+    - `DeepSeek` → `ﾄﾞｴｴﾌﾟｽｴｴｸ`（整个词音译）
+    - `Nix` → `ﾆｯｸｽ`（专名音译）
    - 包名/模块名保持原样（如 `mcp-searxng` 不替换）
 
 ### 内置替换词典（节选）
@@ -106,6 +108,60 @@ NixKits — software, patches, NixOS modules and coding agent skills
 | maintenance | ﾒﾝﾃﾅﾝｽ |
 | documentation | ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ |
 | compatibility | ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ |
+| collection | ｺﾚｸｼｮﾝ |
+| terminal | ﾀｰﾐﾅﾙ |
+| coding | ｺｰﾃﾞｨﾝｸﾞ |
+| formatter | ﾌｫｰﾏｯﾀｰ |
+| server | ｻｰﾊﾞｰ |
+| streaming | ｽﾄﾘｰﾐﾝｸﾞ |
+| plugin | ﾌﾟﾗｸﾞｲﾝ |
+| client | ｸﾗｲｱﾝﾄ |
+| manager | ﾑｱﾝｱｼﾞｴﾗ |
+| development | ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ |
+| support | ｻﾎﾟｰﾄ |
+| accelerated | ｱｸｾﾗﾚｲﾃｨｯﾄﾞ |
+| tracking | ﾄﾗｯｷﾝｸﾞ |
+| upstream | ｳﾌﾟｽﾄﾗｴｱﾑ |
+| release | ﾘﾘｰｽ |
+| runtime | ﾗﾝﾀｲﾑ |
+| translation | ﾄﾗｱﾝｽﾙｱｼｮﾝ |
+| language | ﾗﾝｹﾞｰｼﾞ |
+| model | ﾓﾃﾞﾙ |
+| hardware | ﾊｰﾄﾞｳｪｱ |
+| inference | ｲﾝﾌｧﾚﾝｽ |
+| infrastructure | ｲﾝﾌﾗｽﾄﾗｸﾁｬｰ |
+| environment | ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ |
+| available | ｱﾌﾞｴｲﾗﾌﾞﾙ |
+| for | ﾌｫｱ |
+| the | ｻﾞ |
+| and | ｱﾝﾄﾞ |
+| with | ｳｨｽﾞ |
+| from | ﾌﾛﾑ |
+| not | ﾉｯﾄ |
+| can | ｷｬﾝ |
+| use | ﾕｰｽﾞ |
+| new | ﾆｭｰ |
+| add | ｱﾄﾞ |
+| or | ｵﾗ |
+| is | ｲｽﾞ |
+| are | ｱｰ |
+| by | ﾊﾞｲ |
+| has | ﾊｽﾞ |
+| this | ﾃﾞｨｽ |
+| when | ｳｪﾝ |
+| also | ｵﾙｿ |
+| only | ｵﾝﾘｰ |
+| any | ｴﾆｰ |
+| per | ﾊﾟｰ |
+| into | ｲﾝﾄｩ |
+| automatically | ｵｰﾄﾏﾃｨｯｸﾘｰ |
+| provide | ﾌﾟﾗｵﾌﾞｲﾄﾞ |
+| include | ｲﾝｸﾙｰﾄﾞ |
+| follow | ﾌｫﾛｰ |
+| create | ｸﾘｴｲﾄ |
+| require | ﾘｸﾜｲｱ |
+| allow | ｱﾗｳ |
+| enable | ｲﾈｰﾌﾞﾙ |
 
 ### 规则音译
 
