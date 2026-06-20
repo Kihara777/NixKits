@@ -159,20 +159,29 @@ git log --oneline --since="<时间范围>"
 
 ### 第 4 步：三语同步
 
+对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现翻译技能：
+
+```
+skills/translate-katalish/  → 语言代码 katalish → [ｶﾀﾘｯｼｭ]
+skills/translate-pseudocn/  → 语言代码 pcn      → [偽中国語]
+```
+
 ```bash
-# 更新中文 MAINTENANCE.md 后，同步 en 和 ja 版本
+# 更新中文 MAINTENANCE.md 后，同步 en / ja / katalish / pcn 版本
 # 翻译规则：仅翻译标题行、表头、摘要前缀；包名和版本号保持原文
 ```
 
-使用以下翻译映射：
+使用以下**作为代码的文档**映射表：
 
-| zh | en | ja |
-|----|----|-----|
-| `# 维护日志` | `# Maintenance Log` | `# メンテナンスログ` |
-| `**摘要**` | `**Summary**` | `**概要**` |
-| `| 提交 | 说明 |` | `| Commit | Description |` | `| コミット | 説明 |` |
-| `| 软件名 | 旧版本 | 新版本 |` | `| Package | Old | New |` | `| パッケージ | 旧 | 新 |` |
-| `NixKits 软件更新维护日志。` | `NixKits package update changelog.` | `NixKits パッケージ更新履歴。` |
+| 代码 | zh | en | ja | katalish | pcn |
+|------|----|----|-----|---------|-----|
+| `TITLE` | `# 维护日志` | `# Maintenance Log` | `# メンテナンスログ` | `# ﾒﾝﾃﾅﾝｽ ﾛｸﾞ` | `# 維護記録` |
+| `SUBTITLE` | `NixKits 软件更新维护日志。` | `NixKits package update changelog.` | `NixKits パッケージ更新履歴。` | `ﾆｯｸｽｷｯﾄ ﾊﾟｯｹｰｼﾞ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ。` | `NixKits 軟件更新維護記録。` |
+| `SUMMARY` | `**摘要**` | `**Summary**` | `**概要**` | `**ｻﾏﾘｰ**` | `**摘要**` |
+| `COMMIT_HDR` | `\| 提交 \| 说明 \|` | `\| Commit \| Description \|` | `\| コミット \| 説明 \|` | `\| ｺﾐｯﾄ \| ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ \|` | `\| 提交 \| 説明 \|` |
+| `SW_TABLE_HDR` | `\| 软件名 \| 旧版本 \| 新版本 \|` | `\| Package \| Old \| New \|` | `\| パッケージ \| 旧 \| 新 \|` | `\| ﾊﾟｯｹｰｼﾞ \| ｵｰﾙﾄﾞ \| ﾆｭｰ \|` | `\| 軟件名 \| 舊版本 \| 新版本 \|` |
+
+> **规则**：所有 `translate-*` 技能的 SKILL.md 中定义语言代码、语言名称和转换规则。维护日志撰写时按需调用对应技能生成各语言版本。
 
 ### 第 5 步：提交
 
