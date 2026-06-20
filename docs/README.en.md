@@ -4,6 +4,8 @@
 
 NixKits — a collection of software, patches, NixOS modules, and AI coding assistant skills.
 
+Full project architecture and component relationships: [Project Docs](../zh/project.md).
+
 ## Quick Start
 
 ```nix
