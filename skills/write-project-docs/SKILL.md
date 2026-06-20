@@ -115,6 +115,18 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 
 ...
 
+## 开发
+
+提供 `nix develop` 即用环境。首先添加 registry：
+
+```bash
+nix registry add <project> <remote-url>
+```
+
+| 包 | `nix develop` |
+|-----|---------------|
+| <pkg> | `nix develop <project>#<pkg>` |
+
 ## 作者
 
 <作者信息>
@@ -167,6 +179,7 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - 代理 / 缓存
 - 导航 / 入口
 - 静态内容 / 链接
+- 开发 / devShell（提供 `nix develop` 环境的包）
 - 技能 / 操作指南
 
 ### 第 3 步：创建目录结构
