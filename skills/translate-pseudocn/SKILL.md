@@ -75,9 +75,13 @@ pcn 文档：
 
 语言切换器中：`[偽中国語](docs/README.pcn.md)`
 
-## 与 write-project-docs 的关系
+## 与其他技能的关系
 
-本技能通过 `translate-*` 命名约定被 write-project-docs 自动发现。
+| 技能 | 关系 |
+|------|------|
+| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
+| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
+| nixkits-check-updates | 间接调用 — 更新文档时同步生成 偽中国語 版本 |
 
 ### 自动发现契约
 
