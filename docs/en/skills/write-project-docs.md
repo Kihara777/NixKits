@@ -41,7 +41,7 @@ for lang in zh en ja; do
 done
 ```
 
-Update order: Chinese baseline → English translation → Japanese translation → Pseudo-Chinese translation.
+Update order: Chinese baseline → English translation → Japanese translation → 偽中国語 translation.
 Column mapping: `基本信息` → `Info` / `基本情報` / `基本情報`, `功能` → `Features` / `機能` / `機能`.
 
 - Zero fluff, tables over prose, copy-paste-ready code blocks
