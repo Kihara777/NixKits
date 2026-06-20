@@ -8,7 +8,7 @@ DeepSeek V4 専用
 
 |項目|値|
 |------|-----|
-|版本|0.8.61|
+|版本|0.8.62|
 ||[Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale)|
 ||構建済GitHub Releases|
 

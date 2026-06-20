@@ -8,7 +8,7 @@
 
 |項目|値|
 |------|-----|
-|版本|1.6.0|
+|版本|1.7.1|
 ||[ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng)|
 
 ## 安裝
