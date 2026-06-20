@@ -13,7 +13,7 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 
 1. **扫描** — 在 `skills/translate-*/` 目录下查找所有翻译技能
 2. **读取** — 解析各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段
-3. **注册** — 自动将发现的语言扩展纳入多语同步流程。各翻译技能的 SKILL.md 正文中定义翻译规则（词典、语序调整、假名剥离）和列名映射表（TITLE / SUBTITLE / SUMMARY 等五语对照）。
+3. **注册** — 自动将发现的语言扩展纳入多语同步流程。各翻译技能的 SKILL.md 正文中定义翻译规则（词典、语序调整、假名剥离）和列名映射表（TITLE / SUBTITLE / SUMMARY 等多语对照）。
 
 ## 入口
 

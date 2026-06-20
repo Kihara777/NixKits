@@ -2,7 +2,7 @@
 
 [中文](write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新和错误修复两种记录类型，五语同步。
+> 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新和错误修复两种记录类型，自动发现语言扩展。
 
 ## 自动发现契约
 
@@ -19,7 +19,7 @@
 
 - 撰写软件版本更新记录（摘要 + 关联 commit ID 表 + 软件版本表）
 - 撰写错误修复记录（摘要 + 关联 commit ID 表）
-- 五语同步（zh/en/ja/katalish/pcn）维护日志
+- 自动发现语言扩展（通过 translate-* 技能），全语言同步维护日志
 - 自动从前置技能（nixkits-check-updates）或 git commit message 提取摘要
 - 统一的格式规范：ISO 8601 精确时间、LIFO 顺序、hash 省略无变更项
 

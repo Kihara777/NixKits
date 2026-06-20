@@ -28,7 +28,7 @@ Language extension skills are discovered via the `translate-*` naming convention
 
 ## Skill Doc Sync Rules
 
-When `SKILL.md` changes, the corresponding quadrilingual docs must be updated.
+When `SKILL.md` changes, all corresponding language versions must be updated.
 Use staleness check to locate outdated files:
 
 ```bash

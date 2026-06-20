@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-maintenance-log.md) | [English](write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> Write or update MAINTENANCE.md per NixKits conventions. Supports software updates and bug fixes, synced across 5 languages.
+> Write or update MAINTENANCE.md per NixKits conventions. Supports software updates and bug fixes, sync across all available languages.
 
 ## Auto-Discovery Contract
 
@@ -19,7 +19,7 @@ Language extension skills are discovered via the `translate-*` naming convention
 
 - Writes software update records (summary + commit ID table + version table)
 - Writes bug fix records (summary + commit ID table)
-- Sync across 5 languages (zh/en/ja/katalish/pcn)
+- Sync across all available languages (auto-discovered via translate-* skills)
 - Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
 - Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
