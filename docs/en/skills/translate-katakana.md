@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/translate-katakana.md) | [English](translate-katakana.md) | [日本語](../../ja/skills/translate-katakana.md)
 
-> Extra natural-language support for the document-writing skill.  Adds the kata-en (Katakana English) language.
+> Extra natural-language support for the document-writing skill.  Adds the ｶﾀﾘｯｼｭ (Katakana English) language.
 
 ## Info
 
@@ -14,18 +14,18 @@
 
 ## Features
 
-- New kata-en language — mechanical word-level English→halfwidth-katakana substitution
+- New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
 - Built-in dictionary (~20 common tech-doc words)
 - Rule-based phonetic fallback for words not in the dictionary
 - Markdown syntax and code blocks preserved
-- File naming convention: `docs/kata/<name>.md`
+- File naming convention: `docs/katalish/<name>.md`
 
 ## Usage
 
-Automatically invoked by write-project-docs when producing kata-en documents; can also be called directly:
+Automatically invoked by write-project-docs when producing ｶﾀﾘｯｼｭ documents; can also be called directly:
 
 - "Generate a katakana-english version of the document"
-- "Add kata-en language variant"
+- "Add ｶﾀﾘｯｼｭ language variant"
 - "Translate to katakana english"
 
 ## Example

@@ -1,11 +1,11 @@
 ---
 name: translate-katakana
-description: 为文档撰写技能提供额外的自然语言支持。新增 kata-en（片假名英语）语言——半角片假名逐词机械替换英文文本，可与现有三语（zh/en/ja）文档体系并行使用。
+description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，可与现有三语（zh/en/ja）文档体系并行使用。
 ---
 
 # 片假名英语翻译
 
-为 NixKits 文档体系提供 kata-en（片假名英语）语言，通过半角片假名逐词机械替换英文实现。设计目的为模块化扩展文档撰写技能（write-project-docs）的语言支持能力。
+为 NixKits 文档体系提供 ｶﾀﾘｯｼｭ（片假名英语语言，通过半角片假名逐词机械替换英文实现。设计目的为模块化扩展文档撰写技能（write-project-docs）的语言支持能力。
 
 ## 触发场景
 
@@ -13,7 +13,7 @@ description: 为文档撰写技能提供额外的自然语言支持。新增 kat
 - 用户要求"生成片假名英语版本文档"时独立调用
 - 用户要求"新增一种文档语言"时作为参考实现
 
-## 语言：kata-en（片假名英语）
+## 语言：ｶﾀﾘｯｼｭ（片假名英语/katalish）
 
 ### 原理
 
@@ -101,19 +101,19 @@ kata_text = replace_to_katakana(en_text)
 
 ### 文件命名约定
 
-kata-en 文档：
-- `docs/kata/<module>.md` — 片假名英语版模块文档
-- `docs/README.kata.md` — 片假名英语 README
-- `docs/MAINTENANCE.kata.md` — 片假名英语维护记录
+ｶﾀﾘｯｼｭ 文档：
+- `docs/katalish/<module>.md` — 片假名英语版模块文档
+- `docs/README.katalish.md` — 片假名英语 README
+- `docs/MAINTENANCE.katalish.md` — 片假名英语维护记录
 
-语言切换器中新增：`[ｶﾀｶﾅE](docs/README.kata.md)`
+语言切换器中新增：`[ｶﾀﾘｯｼｭ](docs/README.katalish.md)`
 
 ## 与其他技能的关系
 
 | 技能 | 关系 |
 |------|------|
-| write-project-docs | 主调用者 — 文档编写流程的第 5 步"编写各模块文档"中调用本技能生成 kata-en 版本 |
-| nixkits-check-updates | 间接调用 — 更新文档时同步生成 kata-en 版本 |
+| write-project-docs | 主调用者 — 文档编写流程的第 5 步"编写各模块文档"中调用本技能生成 ｶﾀﾘｯｼｭ 版本 |
+| nixkits-check-updates | 间接调用 — 更新文档时同步生成 ｶﾀﾘｯｼｭ 版本 |
 
 ## 注意事项
 

@@ -187,7 +187,7 @@ mkdir -p docs/{zh,en,ja}/skills
 
 每个模块创建 3 个文件（zh/en/ja）。先写主语言版本作为基准，再翻译。
 
-对于追加 kata-en（片假名英语）翻译，调用 `translate-katakana` 技能：
+对于追加 ｶﾀﾘｯｼｭ（片假名英语）翻译，调用 `translate-katakana` 技能：
 ```
 → 触发技能: translate-katakana
 ```

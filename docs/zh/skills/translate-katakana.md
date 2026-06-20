@@ -2,7 +2,7 @@
 
 [中文](translate-katakana.md) | [English](../../en/skills/translate-katakana.md) | [日本語](../../ja/skills/translate-katakana.md)
 
-> 为文档撰写技能提供额外的自然语言支持。新增 kata-en（片假名英语）语言。
+> 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言。
 
 ## 基本信息
 
@@ -14,18 +14,18 @@
 
 ## 功能
 
-- 新增 kata-en 语言——半角片假名逐词机械替换英文
+- 新增 ｶﾀﾘｯｼｭ 语言——半角片假名逐词机械替换英文
 - 内置 ~20 条常用技术文档词汇替换词典
 - 规则音译引擎（未命中词典时逐音节转换）
 - 保留 Markdown 语法和代码块
-- 文件命名约定：`docs/kata/<name>.md`
+- 文件命名约定：`docs/katalish/<name>.md`
 
 ## 使用
 
-写入 kata-en 文档时由 write-project-docs 自动触发，亦可通过用户指令独立调用：
+写入 ｶﾀﾘｯｼｭ 文档时由 write-project-docs 自动触发，亦可通过用户指令独立调用：
 
 - "生成为片假名英语版本文档"
-- "追加 kata-en 语言版本"
+- "追加 ｶﾀﾘｯｼｭ 语言版本"
 - "translate to katakana english"
 
 ## 示例

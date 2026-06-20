@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/translate-katakana.md) | [English](../../en/skills/translate-katakana.md) | [日本語](translate-katakana.md)
 
-> 文書作成スキルに追加の自然言語サポートを提供。kata-en（カタカナ英語）言語を追加。
+> 文書作成スキルに追加の自然言語サポートを提供。ｶﾀﾘｯｼｭ（カタカナ英語）言語を追加。
 
 ## 基本情報
 
@@ -14,18 +14,18 @@
 
 ## 機能
 
-- kata-en 言語の追加 — 英単語を半角カタカナに機械的に置換
+- ｶﾀﾘｯｼｭ 言語の追加 — 英単語を半角カタカナに機械的に置換
 - 内蔵辞書（約 20 語の技術文書用語）
 - 辞書未登録語のルールベース音訳
 - Markdown 構文とコードブロックを保持
-- ファイル命名規則：`docs/kata/<name>.md`
+- ファイル命名規則：`docs/katalish/<name>.md`
 
 ## 使用
 
-write-project-docs が kata-en 文書を生成する際に自動呼び出し。直接呼び出しも可能：
+write-project-docs が ｶﾀﾘｯｼｭ 文書を生成する際に自動呼び出し。直接呼び出しも可能：
 
 - "カタカナ英語版の文書を生成"
-- "kata-en 言語版を追加"
+- "ｶﾀﾘｯｼｭ 言語版を追加"
 - "translate to katakana english"
 
 ## 例
