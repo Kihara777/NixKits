@@ -4,6 +4,10 @@
 
 > NixKits 完全多言語文檔生成 — 中英日+偽中国語四言語簡潔表駆動
 
+## 自動発見契約
+
+`translate-*` 命名規則言語拡張検出：`skills/translate-*/` 走査各 SKILL.md frontmatter `language_code` / `display_name` / `base_language`読取文書生成利用可能言語登録
+
 ## 基本情報
 
 |項目|値|

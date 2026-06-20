@@ -4,6 +4,10 @@
 
 > NixKits 規約基 MAINTENANCE.md 執筆更新軟件更新修正両方対応5 言語同期
 
+## 自動発見契約
+
+`translate-*` 命名規則言語拡張検出：`skills/translate-*/` 走査各 SKILL.md frontmatter `language_code` / `display_name` / `base_language`読取多言語同期利用可能言語登録
+
 ## 基本情報
 
 |項目|値|
