@@ -11,7 +11,7 @@
 ||Coding Agent Skill|
 ||`skills/nixkits-skills/SKILL.md`|
 
-## 功能
+## 機能
 
 - 目錄 git remote URL 自動検出
 - 安裝済技能目錄検出

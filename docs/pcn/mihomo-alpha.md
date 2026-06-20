@@ -31,7 +31,7 @@ modules = [
 }
 ```
 
-## 功能
+## 機能
 
 - MetaCubeX/mihomo Prerelease-Alpha 最新發佈追跡
 - 構建済 Linux amd64 使用

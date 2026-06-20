@@ -11,7 +11,7 @@
 ||Coding Agent Skill|
 ||`skills/nixos-modern-cli/SKILL.md`|
 
-## 功能
+## 機能
 
 - NixOS 従来 Linux 誤認 AI 矯正
 - 最新 vs 従来 CLI 命令対照表提供

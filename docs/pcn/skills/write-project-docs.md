@@ -15,7 +15,7 @@
 ||Coding Agent Skill|
 ||`skills/write-project-docs/SKILL.md`|
 
-## 功能
+## 機能
 
 - 項目數據評価模塊情報抽出
 - 機能別模塊分類基礎設施/服務//技能

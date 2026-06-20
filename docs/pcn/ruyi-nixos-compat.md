@@ -16,7 +16,7 @@ nix-kits.overlays.ruyi-nixos-compat # 単独 overlay
 ];
 ```
 
-## 功能
+## 機能
 
 - **動的**：埋込 FHS NixOS `ld.so` 置換
 - **工具修復**：GCC 内部 `cc1``as``collect2` 等 `patchelf` 自動修復

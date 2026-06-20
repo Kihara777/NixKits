@@ -38,7 +38,7 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ]; # → pkgs.kitsfmt
 # 後: nix fmt
 ```
 
-## 功能
+## 機能
 
 - 属性APC `a.b.c` 折対応
 - 保持
