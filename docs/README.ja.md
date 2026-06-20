@@ -49,6 +49,7 @@ nix registry add nix-kits github:Kihara777/NixKits
 | llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md) |
 | rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/zh/rcc-fix.md](rcc-fix.md) |
 | ruyi-nixos-compat | ruyi の NixOS ランタイム互換性（ELF interpreter リダイレクト + GCC 子プロセス修正） | [docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md) |
+| mihomo-alpha | Prerelease-Alpha 追跡版（プロキシツール） | [docs/zh/mihomo-alpha.md](mihomo-alpha.md) |
 
 ## スキル
 
