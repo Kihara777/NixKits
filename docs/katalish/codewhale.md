@@ -1,6 +1,6 @@
 # codewhale
 
-[中文](../zh/codewhale.md) | [English](codewhale.md) | [日本語](../ja/codewhale.md)
+[中文](../../zh/codewhale.md) | [English](codewhale.md) | [日本語](../../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../../katalish/codewhale.md)
 
 ｱ ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ DeepSeek V4.
 

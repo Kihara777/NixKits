@@ -1,6 +1,6 @@
 # rog-control-center-fix
 
-[中文](../zh/rog-control-center-fix.md) | [English](rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md)
+[中文](../../zh/rog-control-center-fix.md) | [English](rog-control-center-fix.md) | [日本語](../../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../../katalish/rog-control-center-fix.md)
 
 ﾌｨｯｸｼｰｽﾞ ｱ systemd deadlock during shutdown ｲﾝ `asus-shutdown.service`.
 

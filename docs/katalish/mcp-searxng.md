@@ -1,6 +1,6 @@
 # mcp-searxng
 
-[中文](../zh/mcp-searxng.md) | [English](mcp-searxng.md) | [日本語](../ja/mcp-searxng.md)
+[中文](../../zh/mcp-searxng.md) | [English](mcp-searxng.md) | [日本語](../../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../../katalish/mcp-searxng.md)
 
 [MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — ｳｪﾌﾞ ｻｰﾁ ﾌｫｱ AI assistants.
 
@@ -115,7 +115,7 @@ cat ~/.deepseek/ｴﾑｼｰﾋﾟｰ.ｼﾞｪｲｿﾝ | grep -A3 SEARXNG_URL
 
 ```bash
 # Verify SearXNG ｴｰﾋﾟｰｱｲ ｲｽﾞ reachable
-curl -s http://127.0.0.1:42701/config | head -c 100
+curl -s http://127.0.0.1:42701/config | ﾍｯﾄﾞ -c 100
 
 # Manual ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾃｽﾄ (ｼｭｯﾄﾞ show ｴﾑｼｰﾋﾟｰ handshake)
 SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng

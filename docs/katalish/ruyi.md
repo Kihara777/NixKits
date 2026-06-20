@@ -1,6 +1,6 @@
-# ﾙｲｰ
+# ruyi
 
-[中文](../zh/ruyi.md) | [English](ruyi.md) | [日本語](../ja/ruyi.md)
+[中文](../../zh/ruyi.md) | [English](ruyi.md) | [日本語](../../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../../katalish/ruyi.md)
 
 ﾊﾟｯｹｰｼﾞ manager ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ toolkit providing toolchain ｲﾝｽﾄﾚｰｼｮﾝ, virtual ｴﾝﾊﾞｲﾛﾒﾝﾄ management, device provisioning, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ operations.
 
@@ -16,8 +16,8 @@
 ## ﾃﾞﾌﾞ ｼｪﾙ
 
 ```bash
-ﾆｯｸｽ develop nix-kits#ﾙｲｰ             # ｳｪﾝ nix-kits ｲｽﾞ already ｱ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ
-ﾆｯｸｽ develop github:Kihara777/NixKits#ﾙｲｰ  # zero-config one-shot
+ﾆｯｸｽ develop nix-kits#ruyi             # ｳｪﾝ nix-kits ｲｽﾞ already ｱ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ
+ﾆｯｸｽ develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
 ```
 
 Enters ｱﾝ ｴﾝﾊﾞｲﾛﾒﾝﾄ ｳｨｽﾞ `ruyi` available ｵﾝ `$PATH`.
@@ -25,34 +25,34 @@ Enters ｱﾝ ｴﾝﾊﾞｲﾛﾒﾝﾄ ｳｨｽﾞ `ruyi` available ｵﾝ `
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾊﾟｯｹｰｼﾞｰｽﾞ.${pkgs.ｼｽﾃﾑ}.ﾙｲｰ ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.ﾊﾟｯｹｰｼﾞｰｽﾞ.${pkgs.ｼｽﾃﾑ}.ruyi ];
 
 # ｵｱ via ｵｰﾊﾞｰﾚｲ
 nixpkgs.overlays = [ ｲﾝﾌﾟｯﾄｽﾞ.nix-kits.overlays.ﾃﾞﾌｫﾙﾄ ];
-ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ pkgs.ﾙｲｰ ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.systemPackages = [ pkgs.ruyi ];
 ```
 
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-ﾙｲｰ --help
-ﾙｲｰ ﾘｽﾄ --all          # ﾘｽﾄ ｵｰﾙ available ﾊﾟｯｹｰｼﾞｰｽﾞ
-ﾙｲｰ ｲﾝｽﾄｰﾙ <pkg>       # ｲﾝｽﾄｰﾙ ｱ toolchain
-ﾙｲｰ venv --toolchain <t> # ｸﾘｴｲﾄ ｱ virtual ｴﾝﾊﾞｲﾛﾒﾝﾄ
-ﾙｲｰ device provision    # Provision ｱ device
+ruyi --help
+ruyi ﾘｽﾄ --all          # ﾘｽﾄ ｵｰﾙ available ﾊﾟｯｹｰｼﾞｰｽﾞ
+ruyi ｲﾝｽﾄｰﾙ <pkg>       # ｲﾝｽﾄｰﾙ ｱ toolchain
+ruyi venv --toolchain <t> # ｸﾘｴｲﾄ ｱ virtual ｴﾝﾊﾞｲﾛﾒﾝﾄ
+ruyi device provision    # Provision ｱ device
 ```
 
-> ﾙｲｰ ﾘｸﾜｲｱｽﾞ network access ﾄｩ ｸﾛｰﾝ ｻﾞ ﾊﾟｯｹｰｼﾞ index (`packages-index`). ﾃﾞｨｽ happens automatically ｵﾝ ﾌｧｰｽﾄ `ruyi list`.
+> ruyi ﾘｸﾜｲｱｽﾞ network access ﾄｩ ｸﾛｰﾝ ｻﾞ ﾊﾟｯｹｰｼﾞ index (`packages-index`). ﾃﾞｨｽ happens automatically ｵﾝ ﾌｧｰｽﾄ `ruyi list`.
 
 ## ﾓｼﾞｭｰﾙ
 
-Declarative NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ﾙｲｰ ﾗﾝﾀｲﾑ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ:
+Declarative NixOS ﾓｼﾞｭｰﾙ ﾌｫｱ ruyi ﾗﾝﾀｲﾑ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ:
 
 ```nix
 # ﾌﾚｲｸ.ﾆｯｸｽ
-{ ﾓｼﾞｭｰﾙｽﾞ = [ nix-kits.nixosModules.ﾙｲｰ ]; }
+{ ﾓｼﾞｭｰﾙｽﾞ = [ nix-kits.nixosModules.ruyi ]; }
 
-services.ﾙｲｰ = {
+services.ruyi = {
   ｲﾈｰﾌﾞﾙ = true;
   ｾｯﾃｨﾝｸﾞｽﾞ = {
     ﾊﾟｯｹｰｼﾞｰｽﾞ.prereleases = false;
@@ -68,7 +68,7 @@ services.ﾙｲｰ = {
 Supports declarative virtual environments:
 
 ```nix
-services.ﾙｲｰ.venvs.riscv = {
+services.ruyi.venvs.riscv = {
   profile = "gnu-plct";
   toolchain = "gnu-plct";
   dest = "/ﾎｰﾑ/kix/ruyi-venvs/riscv";
@@ -77,7 +77,7 @@ services.ﾙｲｰ.venvs.riscv = {
 
 ## NixOS Compatibility
 
-ｻﾞ NixKits ﾙｲｰ ﾋﾞﾙﾄﾞ ｲﾝｸﾙｰﾄﾞｽﾞ `patches/ruyi-nixos-compat.patch`, transparently handling NixOS-specific issues:
+ｻﾞ NixKits ruyi ﾋﾞﾙﾄﾞ ｲﾝｸﾙｰﾄﾞｽﾞ `patches/ruyi-nixos-compat.patch`, transparently handling NixOS-specific issues:
 
 - **ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ**: Pre-compiled RISC-V toolchain binaries (GCC, QEMU, etc.) expect `/lib64/ld-linux-x86-64.so.2`, absent ｵﾝ NixOS. ｻﾞ ﾊﾟｯﾁ reroutes execution through ｻﾞ NixOS `ld.so`.
 - **Toolchain sub-process repair**: GCC-internal sub-processes ﾗｲｸ `cc1`, `as`, `collect2` bypass ruyi's ﾏｯｸｽ; ｻﾞ ﾊﾟｯﾁ auto-fixes their ELF ｲﾝﾀｰﾌﾟﾘﾀ via `patchelf`.

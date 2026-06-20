@@ -1,6 +1,6 @@
 # nixos-modern-cli (ｽｷﾙ)
 
-[中文](../../zh/skills/nixos-modern-cli.md) | [English](nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md)
+[中文](../../zh/skills/nixos-modern-cli.md) | [English](nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md)
 
 > Activated ｵﾝ NixOS systems. Ensures modern ﾆｯｸｽ CLI ﾕｰｾｰｼﾞ, full ｼｪﾙ capability, ｱﾝﾄﾞ correct ﾒﾝﾃﾅﾝｽ procedures.
 

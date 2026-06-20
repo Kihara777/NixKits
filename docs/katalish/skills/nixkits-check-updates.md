@@ -1,6 +1,6 @@
 # nixkits-check-updates (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-check-updates.md) | [English](nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md)
+[中文](../../zh/skills/nixkits-check-updates.md) | [English](nixkits-check-updates.md) | [日本語](../../ja/skills/nixkits-check-updates.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-check-updates.md)
 
 > Checks ｵｰﾙ NixKits ﾊﾟｯｹｰｼﾞｰｽﾞ ｱﾝﾄﾞ ﾊﾟｯﾁｰｽﾞ ﾌｫｱ upstream ｱｯﾌﾟﾃﾞｰﾄｽﾞ, applies ﾊﾞｰｼﾞｮﾝ bumps ｱﾝﾄﾞ ﾄﾞｷｭ sync.
 

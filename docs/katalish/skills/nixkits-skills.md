@@ -1,6 +1,6 @@
 # nixkits-skills (ｽｷﾙ)
 
-[中文](../../zh/skills/nixkits-skills.md) | [English](nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md)
+[中文](../../zh/skills/nixkits-skills.md) | [English](nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md)
 
 > Installs ｵｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ NixKits ｽｷﾙｽﾞ into ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, agents).
 

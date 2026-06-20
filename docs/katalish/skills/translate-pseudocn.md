@@ -1,6 +1,6 @@
 # translate-pseudocn (ｽｷﾙ)
 
-[中文](../../zh/skills/translate-pseudocn.md) | [English](translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md)
+[中文](../../zh/skills/translate-pseudocn.md) | [English](translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-pseudocn.md)
 
 > Pseudo-Chinese (pcn) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing ｽｷﾙ. Auto-discovered ﾊﾞｲ write-project-docs.
 

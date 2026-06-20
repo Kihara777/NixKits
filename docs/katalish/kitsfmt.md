@@ -1,6 +1,6 @@
 # kitsfmt
 
-[中文](../zh/kitsfmt.md) | [English](kitsfmt.md) | [日本語](../ja/kitsfmt.md)
+[中文](../../zh/kitsfmt.md) | [English](kitsfmt.md) | [日本語](../../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../../katalish/kitsfmt.md)
 
 **ﾆｯｸｽ ﾌｫｰﾏｯﾀｰ** — AST-based ｳｨｽﾞ attribute sorting, comment preservation, ｱﾝﾄﾞ indentation normalization.
 

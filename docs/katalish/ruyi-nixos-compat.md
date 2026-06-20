@@ -1,12 +1,12 @@
 # ruyi-nixos-compat
 
-[中文](../zh/ruyi-nixos-compat.md) | [English](ruyi-nixos-compat.md) | [日本語](../ja/ruyi-nixos-compat.md)
+[中文](../../zh/ruyi-nixos-compat.md) | [English](ruyi-nixos-compat.md) | [日本語](../../ja/ruyi-nixos-compat.md) | [ｶﾀﾘｯｼｭ](../../katalish/ruyi-nixos-compat.md)
 
-ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ NixOS ﾗﾝﾀｲﾑ compatibility ﾌｫｱ ﾙｲｰ: pre-compiled RISC-V toolchain binaries cannot ﾗﾝ directly ｵﾝ NixOS because ｻﾞ ｴｸｽﾍﾟｸﾃｨｯﾄﾞ ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` does ﾉｯﾄ exist. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ transparently addresses ﾃﾞｨｽ via ｱ ﾊﾟｯﾁ.
+ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ NixOS ﾗﾝﾀｲﾑ compatibility ﾌｫｱ ruyi: pre-compiled RISC-V toolchain binaries cannot ﾗﾝ directly ｵﾝ NixOS because ｻﾞ ｴｸｽﾍﾟｸﾃｨｯﾄﾞ ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾊﾟｽ `/lib64/ld-linux-x86-64.so.2` does ﾉｯﾄ exist. ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ transparently addresses ﾃﾞｨｽ via ｱ ﾊﾟｯﾁ.
 
 ## Scope
 
-Required ﾌｫｱ NixOS ﾕｰｻﾞｰｽﾞ ﾌｰ download ｱﾝﾄﾞ execute RISC-V cross-compilation toolchains (GCC, QEMU, etc.) via ﾙｲｰ. ﾕｰｻﾞｰｽﾞ ﾉｯﾄ ﾜｰｷﾝｸﾞ ｳｨｽﾞ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do ﾉｯﾄ ﾆｰﾄﾞ ﾄｩ ｲﾈｰﾌﾞﾙ ｲｯﾄ.
+Required ﾌｫｱ NixOS ﾕｰｻﾞｰｽﾞ ﾌｰ download ｱﾝﾄﾞ execute RISC-V cross-compilation toolchains (GCC, QEMU, etc.) via ruyi. ﾕｰｻﾞｰｽﾞ ﾉｯﾄ ﾜｰｷﾝｸﾞ ｳｨｽﾞ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ do ﾉｯﾄ ﾆｰﾄﾞ ﾄｩ ｲﾈｰﾌﾞﾙ ｲｯﾄ.
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -24,7 +24,7 @@ nixpkgs.overlays = [
 
 ## Design
 
-Minimally invasive: ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ activates inside ﾙｲｰ ｳｪﾝ ｱ NixOS ｴﾝﾊﾞｲﾛﾒﾝﾄ ｲｽﾞ detected ｱﾝﾄﾞ ｱ pre-compiled toolchain ｲｽﾞ about ﾄｩ ﾋﾞｰ `execv`'d. ｵﾝ non-NixOS systems ｻﾞ ﾊﾟｯﾁ logic ｲｽﾞ completely short-circuited.
+Minimally invasive: ｻﾞ ﾊﾟｯﾁ ｵﾝﾘｰ activates inside ruyi ｳｪﾝ ｱ NixOS ｴﾝﾊﾞｲﾛﾒﾝﾄ ｲｽﾞ detected ｱﾝﾄﾞ ｱ pre-compiled toolchain ｲｽﾞ about ﾄｩ ﾋﾞｰ `execv`'d. ｵﾝ non-NixOS systems ｻﾞ ﾊﾟｯﾁ logic ｲｽﾞ completely short-circuited.
 
 ## Verification
 
