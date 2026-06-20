@@ -32,8 +32,9 @@ in
 
     src = final.fetchurl {
       url = gzAsset.browser_download_url;
-      sha256 = gzAsset.sha256 or "";
-    };
+      sha256 = "sha256-2LJTnbu7KxI0nHtHN7G2Yp4twroRPjV0pJ0199xy0HU=";
+
+
 
     nativeBuildInputs = [ final.gzip ];
 
@@ -53,6 +54,6 @@ in
 
     meta = prev.mihomo.meta or {} // {
       version = "alpha-${commitHash}";
-    };
+
   };
 }
