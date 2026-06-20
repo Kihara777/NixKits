@@ -2,7 +2,7 @@
 
 [中文](../../zh/ｽｷﾙs/nixkits-ｽｷﾙs.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixkits-ｽｷﾙs.md) | [偽中国語](../../pcn/ｽｷﾙs/nixkits-ｽｷﾙs.md)
 
-> ｲﾝｽﾄｰﾙs or updates NixKits ｽｷﾙs into ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, ｴｰｼﾞｪﾝﾄs).
+> ｲﾝｽﾄｰﾙs ｵﾗ updates NixKits ｽｷﾙs into ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, ｴｰｼﾞｪﾝﾄs).
 
 ## ｲﾝﾌｫ
 
@@ -13,11 +13,11 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Auto-discovers source directory and git remote URL
+- Auto-discovers source directory ｱﾝﾄﾞ git remote URL
 - Detects ｲﾝｽﾄｰﾙed ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ directories
-- Compares local ｽｷﾙs against NixKits source for differences
-- Supports local ｲﾝｽﾄｰﾙ (from source) and online ｲﾝｽﾄｰﾙ (from GitHub clone)
-- Shows diff before applying and asks for user confirmation
+- Compares local ｽｷﾙs against NixKits source ﾌｫｱ differences
+- Supports local ｲﾝｽﾄｰﾙ (ﾌﾛﾑ source) ｱﾝﾄﾞ online ｲﾝｽﾄｰﾙ (ﾌﾛﾑ ｷﾞｯﾄﾊﾌﾞ clone)
+- Shows diff before applying ｱﾝﾄﾞ asks ﾌｫｱ ﾕｰｻﾞｰ confirmation
 - Verifies copy consistency after ｲﾝｽﾄｰﾙ
 
 ## Supported Agents
@@ -32,4 +32,4 @@
 
 ## ﾕｰｾｰｼﾞ
 
-Activated when the user asks to "ｲﾝｽﾄｰﾙ ｽｷﾙs" or "update NixKits ｽｷﾙs".
+Activated ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ asks ﾄｩ "ｲﾝｽﾄｰﾙ ｽｷﾙs" ｵﾗ "update NixKits ｽｷﾙs".

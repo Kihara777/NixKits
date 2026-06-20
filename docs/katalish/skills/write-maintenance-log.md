@@ -2,11 +2,11 @@
 
 [中文](../../zh/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md) | [偽中国語](../../pcn/ｽｷﾙs/write-ﾒﾝﾃﾅﾝｽ-log.md)
 
-> Write or update MAINTENANCE.md per NixKits conventions. Supports ｿﾌﾄｳｪｱ updates and bug fixes, sync across all available languages.
+> Write ｵﾗ update MAINTENANCE.md ﾊﾟｰ NixKits conventions. Supports ｿﾌﾄｳｪｱ updates ｱﾝﾄﾞ ﾊﾞｸﾞ fixes, sync across ｵｰﾙ ｱﾌﾞｴｲﾗﾌﾞﾙ languages.
 
 ## Auto-Discovery Contract
 
-Language extension ｽｷﾙs are discovered via the `translate-*` naming convention: scan `ｽｷﾙs/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), and register them as available languages in the multi-language sync pipeline.
+Language extension ｽｷﾙs are discovered ﾌﾞｲｱ ｻﾞ `translate-*` naming convention: scan `ｽｷﾙs/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ register them as ｱﾌﾞｴｲﾗﾌﾞﾙ languages ｲﾝ ｻﾞ multi-language sync pipeline.
 
 ## ｲﾝﾌｫ
 
@@ -18,16 +18,16 @@ Language extension ｽｷﾙs are discovered via the `translate-*` naming conven
 ## ﾌｨｰﾁｬｰｽﾞ
 
 - Writes ｿﾌﾄｳｪｱ update records (summary + commit ID table + ﾊﾞｰｼﾞｮﾝ table)
-- Writes bug fix records (summary + commit ID table)
-- Sync across all available languages (auto-discovered via translate-* ｽｷﾙs)
-- Auto-extracts summary from preceding ｽｷﾙ (nixkits-ﾁｪｯｸ-updates) or git commit message
+- Writes ﾊﾞｸﾞ ﾌｨｯｸｽ records (summary + commit ID table)
+- Sync across ｵｰﾙ ｱﾌﾞｴｲﾗﾌﾞﾙ languages (ｵｰﾄ-discovered ﾌﾞｲｱ translate-* ｽｷﾙs)
+- Auto-extracts summary ﾌﾛﾑ preceding ｽｷﾙ (nixkits-ﾁｪｯｸ-updates) ｵﾗ git commit message
 - Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
 ## Entry Points
 
-- **Record Fix**: auto-called after ｿﾌﾄｳｪｱ updates, or on "record this fix" / "记入维护记录"
-- **Update Log**: on "update ﾒﾝﾃﾅﾝｽ log" / "补全维护记录" — scans git history for missing records and backfills
+- **Record Fix**: ｵｰﾄ-called after ｿﾌﾄｳｪｱ updates, ｵﾗ ｵﾝ "record ﾃﾞｨｽ ﾌｨｯｸｽ" / "记入维护记录"
+- **Update Log**: ｵﾝ "update ﾒﾝﾃﾅﾝｽ log" / "补全维护记录" — scans git history ﾌｫｱ missing records ｱﾝﾄﾞ backfills
 
 ## ﾕｰｾｰｼﾞ
 
-Activated automatically after ｿﾌﾄｳｪｱ updates, or on user request to record a fix.
+Activated automatically after ｿﾌﾄｳｪｱ updates, ｵﾗ ｵﾝ ﾕｰｻﾞｰ request ﾄｩ record a ﾌｨｯｸｽ.

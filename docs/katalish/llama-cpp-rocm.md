@@ -2,7 +2,7 @@
 
 [中文](../zh/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | [偽中国語](../pcn/llama-cpp-rocm.md)
 
-Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest GitHub Release ﾊﾞｰｼﾞｮﾝ at ﾋﾞﾙﾄﾞ time for testing cutting-edge features.
+Upstream llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻﾞ latest ｷﾞｯﾄﾊﾌﾞ Release ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge features.
 
 ## ｲﾝﾌｫ
 
@@ -10,7 +10,7 @@ Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest Gi
 |------|-------|
 | Version | Auto-tracks ｳﾌﾟｽﾄﾗｴｱﾑ |
 | Upstream | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
-| Note | Overlay-only, no standalone ﾊﾟｯｹｰｼﾞ output |
+| Note | Overlay-only, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ output |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -40,24 +40,24 @@ See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
           services.llama-cpp = {
             enable = true;
             package = pkgs.llama-cpp-rocm;
-            port = 2027;
+            ﾎﾟｰﾄ = 2027;
           };
           nixkits.llama-cpp-rocm = {
             enable = true;
-            user = "kix";
-            group = "users";
+            ﾕｰｻﾞｰ = "kix";
+            ｸﾞﾙｰﾌﾟ = "users";
             modelsPreset = {
               "*" = {
                 presence-penalty = "0.0";
                 repeat-penalty   = "1.0";
-                flash-attn       = "on";
+                flash-attn       = "ｵﾝ";
                 n-gpu-layers     = "99";
-                cache-type-k     = "q4_0";
-                cache-type-v     = "q4_0";
+                cache-ﾀｲﾌﾟ-k     = "q4_0";
+                cache-ﾀｲﾌﾟ-v     = "q4_0";
                 threads          = "32";
                 mmap             = "off";
-                warmup           = "on";
-                jinja            = "on";
+                warmup           = "ｵﾝ";
+                jinja            = "ｵﾝ";
                 fit              = "off";
                 prio             = "3";
               };
@@ -72,7 +72,7 @@ See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
                 rope-scaling         = "yarn";
                 rope-scale           = "4";
                 yarn-orig-ctx        = "262144";
-                spec-type            = "draft-mtp";
+                spec-ﾀｲﾌﾟ            = "draft-mtp";
                 spec-draft-n-max     = "2";
               };
               "Qwen3.6-35B-A3B-MTP" = {
@@ -86,7 +86,7 @@ See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
                 rope-scaling         = "yarn";
                 rope-scale           = "4";
                 yarn-orig-ctx        = "262144";
-                spec-type            = "draft-mtp";
+                spec-ﾀｲﾌﾟ            = "draft-mtp";
                 spec-draft-n-max     = "2";
               };
               "Qwen3.5-122B-A10B-MTP" = {
@@ -100,7 +100,7 @@ See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
                 rope-scaling         = "yarn";
                 rope-scale           = "4";
                 yarn-orig-ctx        = "262144";
-                spec-type            = "draft-mtp";
+                spec-ﾀｲﾌﾟ            = "draft-mtp";
                 spec-draft-n-max     = "2";
               };
               "Qwen3-Coder-Next" = {
@@ -134,11 +134,11 @@ See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
 }
 ```
 
-The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and lifts `/home` and `/proc` sandbox restrictions.
+The ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `LLAMA_CACHE` ﾄｩ `/ﾎｰﾑ/<ﾕｰｻﾞｰ>/.cache/huggingface/hub` ｱﾝﾄﾞ lifts `/ﾎｰﾑ` ｱﾝﾄﾞ `/proc` sandbox restrictions.
 
 > **Warning: Home Manager llama-cpp ｻｰﾋﾞｽ**
 >
-> If enabled via Home Manager, additional user-level sandboxing may prevent GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ.
+> If enabled ﾌﾞｲｱ Home Manager, additional ﾕｰｻﾞｰ-level sandboxing may ﾌﾟﾗｴﾌﾞｴﾝﾄ GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ.
 
 ## Migration Guide
 
@@ -146,48 +146,48 @@ The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingfa
 
 | Component | Affected | Change |
 |-----------|----------|--------|
-| nixpkgs | ≥ 2026-06 (master) | `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` removed; `port`/`host`/`model`/`modelsDir` renamed to `settings.port`/`settings.host`/… |
+| nixpkgs | ≥ 2026-06 (master) | `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` removed; `ﾎﾟｰﾄ`/`host`/`ﾓﾃﾞﾙ`/`modelsDir` renamed ﾄｩ `ｾｯﾃｨﾝｸﾞｽﾞ.ﾎﾟｰﾄ`/`ｾｯﾃｨﾝｸﾞｽﾞ.host`/… |
 | NixKits | ≥ `6f52ddf` (`ﾓｼﾞｭｰﾙs/llama-cpp-rocm.nix`) | Namespace: `ｻｰﾋﾞｽs.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
-| Upstream llama.cpp | b9605 | `--models-preset` CLI argument retained |
+| Upstream llama.cpp | b9605 | `--models-preset` ｼｰｴﾙｱｲ argument retained |
 
 ### Config Key Mapping
 
 | Old (deprecated) | New | Notes |
 |------------------|-----|-------|
-| `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | Removed from nixpkgs, restored via NixKits |
+| `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | Removed ﾌﾛﾑ nixpkgs, restored ﾌﾞｲｱ NixKits |
 | `ｻｰﾋﾞｽs.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | Namespace unified |
-| `ｻｰﾋﾞｽs.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | Namespace unified |
-| `ｻｰﾋﾞｽs.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | Namespace unified |
-| `ｻｰﾋﾞｽs.llama-cpp.port` | `ｻｰﾋﾞｽs.llama-cpp.settings.port` | nixpkgs rename |
-| `ｻｰﾋﾞｽs.llama-cpp.host` | `ｻｰﾋﾞｽs.llama-cpp.settings.host` | nixpkgs rename |
-| `ｻｰﾋﾞｽs.llama-cpp.model` | `ｻｰﾋﾞｽs.llama-cpp.settings.model` | nixpkgs rename |
-| `ｻｰﾋﾞｽs.llama-cpp.modelsDir` | `ｻｰﾋﾞｽs.llama-cpp.settings.models-dir` | nixpkgs rename |
-| Manual `systemd.ｻｰﾋﾞｽs.llama-cpp.ｻｰﾋﾞｽConfig` | Remove | Handled by NixKits ﾓｼﾞｭｰﾙ |
-| `ｻｰﾋﾞｽs.llama-cpp.extraFlags` | Add flags to `ｻｰﾋﾞｽs.llama-cpp.settings` | nixpkgs removal |
+| `ｻｰﾋﾞｽs.llama-cpp-rocm.ﾕｰｻﾞｰ` | `nixkits.llama-cpp-rocm.ﾕｰｻﾞｰ` | Namespace unified |
+| `ｻｰﾋﾞｽs.llama-cpp-rocm.ｸﾞﾙｰﾌﾟ` | `nixkits.llama-cpp-rocm.ｸﾞﾙｰﾌﾟ` | Namespace unified |
+| `ｻｰﾋﾞｽs.llama-cpp.ﾎﾟｰﾄ` | `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ.ﾎﾟｰﾄ` | nixpkgs rename |
+| `ｻｰﾋﾞｽs.llama-cpp.host` | `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ.host` | nixpkgs rename |
+| `ｻｰﾋﾞｽs.llama-cpp.ﾓﾃﾞﾙ` | `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ.ﾓﾃﾞﾙ` | nixpkgs rename |
+| `ｻｰﾋﾞｽs.llama-cpp.modelsDir` | `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ.models-dir` | nixpkgs rename |
+| Manual `systemd.ｻｰﾋﾞｽs.llama-cpp.ｻｰﾋﾞｽConfig` | Remove | Handled ﾊﾞｲ NixKits ﾓｼﾞｭｰﾙ |
+| `ｻｰﾋﾞｽs.llama-cpp.extraFlags` | Add flags ﾄｩ `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ` | nixpkgs removal |
 
 ### Migration Example
 
-> **⚠️ Step 1**: Add `nix-kits.nixosModules.llama-cpp-rocm` to your flake ﾓｼﾞｭｰﾙ list.
+> **⚠️ Step 1**: Add `nix-kits.nixosModules.llama-cpp-rocm` ﾄｩ your flake ﾓｼﾞｭｰﾙ ﾘｽﾄ.
 
 **Before**:
 
 ```nix
-# flake.nix — module list
+# flake.nix — module ﾘｽﾄ
 { modules = [
-    # nix-kits.nixosModules.llama-cpp-rocm  # ← not yet imported
+    # nix-kits.nixosModules.llama-cpp-rocm  # ← ﾉｯﾄ yet imported
 ];}
 
 # llama-cpp.nix
 {
   services.llama-cpp-rocm = {
     enable = true;
-    user = "kix";
-    group = "users";
+    ﾕｰｻﾞｰ = "kix";
+    ｸﾞﾙｰﾌﾟ = "users";
   };
   services.llama-cpp = {
     enable = true;
     package = pkgs.llama-cpp-rocm;
-    port = 2027;
+    ﾎﾟｰﾄ = 2027;
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -204,10 +204,10 @@ The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingfa
     User = lib.mkForce "kix";
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
-      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "LLAMA_CACHE=/ﾎｰﾑ/kix/.cache/huggingface/hub"
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
-    ProcSubset = lib.mkForce "all";
+    ProcSubset = lib.mkForce "ｵｰﾙ";
   };
 }
 ```
@@ -215,7 +215,7 @@ The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingfa
 **After**:
 
 ```nix
-# flake.nix — module list (new)
+# flake.nix — module ﾘｽﾄ (ﾆｭｰ)
 { modules = [
     nix-kits.nixosModules.llama-cpp-rocm
 ];}
@@ -225,13 +225,13 @@ The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingfa
   services.llama-cpp = {
     enable = true;
     package = pkgs.llama-cpp-rocm;
-    settings.port = 2027;
+    ｾｯﾃｨﾝｸﾞｽﾞ.ﾎﾟｰﾄ = 2027;
   };
   nixkits.llama-cpp-rocm = {
     enable = true;
-    user = "kix";
-    group = "users";
-    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    ﾕｰｻﾞｰ = "kix";
+    ｸﾞﾙｰﾌﾟ = "users";
+    hfCacheDir = "/ﾎｰﾑ/kix/.cache/huggingface/hub";
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -240,9 +240,9 @@ The ﾓｼﾞｭｰﾙ auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingfa
       };
     };
   };
-  # Extra env vars not covered by NixKits options
+  # Extra env vars ﾉｯﾄ covered ﾊﾞｲ NixKits options
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
-    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "LLAMA_CACHE=/ﾎｰﾑ/kix/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }

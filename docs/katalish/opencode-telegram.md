@@ -2,7 +2,7 @@
 
 [中文](../zh/opencode-telegram.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | [偽中国語](../pcn/opencode-telegram.md)
 
-Telegram Bot ｸﾗｲｱﾝﾄ for [OpenCode](https://opencode.ai).
+Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ [OpenCode](https://opencode.ai).
 
 ## ｲﾝﾌｫ
 
@@ -14,12 +14,12 @@ Telegram Bot ｸﾗｲｱﾝﾄ for [OpenCode](https://opencode.ai).
 ## ﾕｰｾｰｼﾞ
 
 ```bash
-# First-time setup
+# First-time ｾｯﾄｱｯﾌﾟ
 opencode serve                           # start opencode server
-opencode-telegram config                 # interactive Telegram Bot config
+opencode-telegram ｺﾝﾌｨｸﾞ                 # interactive Telegram Bot ｺﾝﾌｨｸﾞ
 
-# Daily use
-opencode-telegram start                  # start (auto-launches opencode)
+# Daily ﾕｰｽﾞ
+opencode-telegram start                  # start (ｵｰﾄ-launches opencode)
 opencode-telegram status                 # check status
 opencode-telegram stop                   # stop
 ```
@@ -47,8 +47,8 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
         {
           services.opencode-telegram = {
             enable = true;
-            user = "kix";
-            group = "users";
+            ﾕｰｻﾞｰ = "kix";
+            ｸﾞﾙｰﾌﾟ = "users";
             afterServices = [ "network-online.target" "llama-cpp.service" ];
           };
         }

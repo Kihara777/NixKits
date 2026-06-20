@@ -1,8 +1,8 @@
-# rog-control-center-fix
+# rog-control-center-ﾌｨｯｸｽ
 
-[中文](../zh/rog-control-center-fix.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-fix.md) | [偽中国語](../pcn/rog-control-center-fix.md)
+[中文](../zh/rog-control-center-ﾌｨｯｸｽ.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/rog-control-center-ﾌｨｯｸｽ.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-ﾌｨｯｸｽ.md) | [偽中国語](../pcn/rog-control-center-ﾌｨｯｸｽ.md)
 
-Fixes a systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
+Fixes a systemd ﾃﾞｯﾄﾞﾛｯｸ during ｼｬｯﾄﾀﾞｳﾝ ｲﾝ `asus-ｼｬｯﾄﾀﾞｳﾝ.ｻｰﾋﾞｽ`.
 
 ## ｲﾝﾌｫ
 
@@ -10,18 +10,18 @@ Fixes a systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
 |------|-------|
 | Version | Tracks nixpkgs |
 | Type | NixOS ﾓｼﾞｭｰﾙ |
-| Path | `ﾓｼﾞｭｰﾙs/rog-control-center-fix.nix` |
+| Path | `ﾓｼﾞｭｰﾙs/rog-control-center-ﾌｨｯｸｽ.nix` |
 | Trigger | `ｻｰﾋﾞｽs.asusd.enable = true` |
 
 ## Fixes
 
-- **Remove PartOf**: Clears `PartOf` on `asus-shutdown.ｻｰﾋﾞｽ` to prevent cascading stop deadlock when asusd restarts
+- **Remove PartOf**: Clears `PartOf` ｵﾝ `asus-ｼｬｯﾄﾀﾞｳﾝ.ｻｰﾋﾞｽ` ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ cascading stop ﾃﾞｯﾄﾞﾛｯｸ ｳｪﾝ asusd restarts
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nix-kits.nixosModules.rog-control-center-ﾌｨｯｸｽ ];
 
   services.asusd.enable = true;
 }

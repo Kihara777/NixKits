@@ -1,24 +1,24 @@
-# recover-nixos-config (Skill)
+# recover-nixos-ｺﾝﾌｨｸﾞ (Skill)
 
-[中文](../../zh/ｽｷﾙs/recover-nixos-config.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/recover-nixos-config.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/recover-nixos-config.md) | [偽中国語](../../pcn/ｽｷﾙs/recover-nixos-config.md)
+[中文](../../zh/ｽｷﾙs/recover-nixos-ｺﾝﾌｨｸﾞ.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/recover-nixos-ｺﾝﾌｨｸﾞ.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/recover-nixos-ｺﾝﾌｨｸﾞ.md) | [偽中国語](../../pcn/ｽｷﾙs/recover-nixos-ｺﾝﾌｨｸﾞ.md)
 
-> Recovers accidentally deleted `/etc/nixos` files from the Nix store.
+> Recovers accidentally deleted `/etc/nixos` files ﾌﾛﾑ ｻﾞ Nix store.
 
 ## ｲﾝﾌｫ
 
 | Item | Value |
 |------|-------|
 | Type | Coding Agent Skill |
-| Path | `ｽｷﾙs/recover-nixos-config/SKILL.md` |
+| Path | `ｽｷﾙs/recover-nixos-ｺﾝﾌｨｸﾞ/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Locates the flake source snapshot from the most recent successful ﾋﾞﾙﾄﾞ in the Nix store
-- Searches `*-source` directories by hostname
-- Identifies the correct source matching the latest generation
+- Locates ｻﾞ flake source snapshot ﾌﾛﾑ ｻﾞ most recent successful ﾋﾞﾙﾄﾞ ｲﾝ ｻﾞ Nix store
+- Searches `*-source` directories ﾊﾞｲ hostname
+- Identifies ｻﾞ correct source matching ｻﾞ latest generation
 - Restores specified files (flake.nix, flake.lock, individual ﾓｼﾞｭｰﾙs)
-- Validates the restored config with `nix flake ﾁｪｯｸ`
+- Validates ｻﾞ restored ｺﾝﾌｨｸﾞ ｳｨｽﾞ `nix flake ﾁｪｯｸ`
 
 ## ﾕｰｾｰｼﾞ
 
-Activated when the user reports accidentally deleting files under `/etc/nixos`.
+Activated ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ reports accidentally deleting files under `/etc/nixos`.

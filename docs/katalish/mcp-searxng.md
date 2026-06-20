@@ -2,7 +2,7 @@
 
 [中文](../zh/mcp-searxng.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
 
-[MCP Server](https://modelcontextprotocol.io) for [SearXNG](https://docs.searxng.org) — web search for AI ｱｽｽｲｽﾄｱﾝﾄs.
+[MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web search ﾌｫｱ AI ｱｽｽｲｽﾄｱﾝﾄs.
 
 ## ｲﾝﾌｫ
 
@@ -23,19 +23,19 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ## Full NixOS Setup
 
 ```nix
-{ config, ... }:
+{ ｺﾝﾌｨｸﾞ, ... }:
 let
   searxKey = "YOUR_SECRET_KEY";
-in
+ｲﾝ
 {
   services.searx = {
     enable = true;
     redisCreateLocally = true;
-    settings = {
+    ｾｯﾃｨﾝｸﾞｽﾞ = {
       search.formats = [ "html" "json" ];
       server = {
         bind_address = "127.0.0.1";
-        port = "42701";
+        ﾎﾟｰﾄ = "42701";
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
@@ -47,13 +47,13 @@ in
 
   services.lighttpd = {
     enable = true;
-    port = 4270;
+    ﾎﾟｰﾄ = 4270;
     enableModules = [ "mod_access" "mod_alias" "mod_proxy" "mod_setenv" ];
     extraConfig = ''
       proxy.server = ( "" => (
-        ( "host" => "127.0.0.1", "port" => 42701 )
+        ( "host" => "127.0.0.1", "ﾎﾟｰﾄ" => 42701 )
       ))
-      setenv.add-request-header = (
+      setenv.ｱﾄﾞ-request-header = (
         "X-Real-IP"       => "%{remote-addr}e",
         "X-Forwarded-For"  => "%{remote-addr}e",
         "X-Forwarded-Proto" => "http"
@@ -76,17 +76,17 @@ in
 }
 ```
 
-> SearXNG requires JSON format (configured above in `settings.search.formats`).
+> SearXNG requires JSON format (configured above ｲﾝ `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats`).
 
 ## CodeWhale Config
 
-CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ in `~/.deepseek/mcp.json`. After adding mcp-searxng, you **must manually set `SEARXNG_URL`** — the `codewhale mcp add` command does not auto-populate the `env` field.
+CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. After adding mcp-searxng, you **must manually set `SEARXNG_URL`** — ｻﾞ `codewhale mcp ｱﾄﾞ` command does ﾉｯﾄ ｵｰﾄ-populate ｻﾞ `env` field.
 
 ```json
 {
   "servers": {
     "SearXNG": {
-      "command": "/etc/profiles/per-user/kix/bin/mcp-searxng",
+      "command": "/etc/profiles/ﾊﾟｰ-ﾕｰｻﾞｰ/kix/bin/mcp-searxng",
       "args": [],
       "env": {
         "SEARXNG_URL": "http://127.0.0.1:42701"
@@ -96,16 +96,16 @@ CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ in `~/.deepseek/mcp
 }
 ```
 
-> **⚠️ Common pitfall**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` leaves `env` as `{}`.
-> Without `SEARXNG_URL` the MCP server fails silently — `codewhale mcp list` shows `[enabled]` but calls return no results.
+> **⚠️ Common pitfall**: `codewhale mcp ｱﾄﾞ SearXNG --command /path/ﾄｩ/mcp-searxng` leaves `env` as `{}`.
+> Without `SEARXNG_URL` ｻﾞ MCP server fails silently — `codewhale mcp ﾘｽﾄ` shows `[enabled]` ﾌﾞｯﾄ calls return ﾉｰ results.
 
 ## Troubleshooting
 
 ### MCP server unresponsive
 
 ```bash
-# Check registration and status
-codewhale mcp list
+# Check registration ｱﾝﾄﾞ status
+codewhale mcp ﾘｽﾄ
 
 # Verify environment variable
 cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
@@ -114,15 +114,15 @@ cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
 ### SearXNG backend connectivity
 
 ```bash
-# Verify SearXNG API is reachable
-curl -s http://127.0.0.1:42701/config | head -c 100
+# Verify SearXNG API ｲｽﾞ reachable
+curl -s http://127.0.0.1:42701/ｺﾝﾌｨｸﾞ | head -c 100
 
 # Manual MCP server test (should show MCP handshake)
 SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 ```
 
-### Search returns no results
+### Search returns ﾉｰ results
 
-- Ensure `settings.search.formats` includes `"json"` (required by MCP Server)
+- Ensure `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats` includes `"json"` (required ﾊﾞｲ MCP Server)
 - Verify lighttpd reverse proxy forwards `X-Forwarded-For` header
-- Check logs: `journalctl -u searx --no-pager -n 30`
+- Check logs: `journalctl -u searx --ﾉｰ-pager -n 30`
