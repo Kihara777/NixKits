@@ -2,15 +2,15 @@
 
 [中文](../zh/llama-cpp-rocm.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | [偽中国語](../pcn/llama-cpp-rocm.md)
 
-Upstream llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻﾞ latest ｷﾞｯﾄﾊﾌﾞ Release ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge features.
+ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻﾞ latest ｷﾞｯﾄﾊﾌﾞ Release ﾊﾞｰｼﾞｮﾝ ｱｯﾄ ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge features.
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | Auto-tracks ｳﾌﾟｽﾄﾗｴｱﾑ |
-| Upstream | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
-| Note | Overlay-only, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ output |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
+| ﾉｰﾄ | Overlay-ｵﾝﾘｰ, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ ｱｳﾄﾌﾟｯﾄ |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -138,7 +138,7 @@ The ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `LLAMA_CACHE` ﾄｩ `/ﾎｰﾑ/<ﾕｰ�
 
 > **Warning: Home Manager llama-cpp ｻｰﾋﾞｽ**
 >
-> If enabled ﾌﾞｲｱ Home Manager, additional ﾕｰｻﾞｰ-level sandboxing may ﾌﾟﾗｴﾌﾞｴﾝﾄ GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ.
+> If enabled ﾌﾞｲｱ Home Manager, additional ﾕｰｻﾞｰ-ﾚﾍﾞﾙ sandboxing ﾒｲ ﾌﾟﾗｴﾌﾞｴﾝﾄ GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-ﾚﾍﾞﾙ ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ.
 
 ## Migration Guide
 
@@ -148,14 +148,14 @@ The ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `LLAMA_CACHE` ﾄｩ `/ﾎｰﾑ/<ﾕｰ�
 |-----------|----------|--------|
 | nixpkgs | ≥ 2026-06 (master) | `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` removed; `ﾎﾟｰﾄ`/`host`/`ﾓﾃﾞﾙ`/`modelsDir` renamed ﾄｩ `ｾｯﾃｨﾝｸﾞｽﾞ.ﾎﾟｰﾄ`/`ｾｯﾃｨﾝｸﾞｽﾞ.host`/… |
 | NixKits | ≥ `6f52ddf` (`ﾓｼﾞｭｰﾙs/llama-cpp-rocm.nix`) | Namespace: `ｻｰﾋﾞｽs.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` |
-| Upstream llama.cpp | b9605 | `--models-preset` ｼｰｴﾙｱｲ argument retained |
+| ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp | b9605 | `--models-preset` ｼｰｴﾙｱｲ argument retained |
 
 ### Config Key Mapping
 
 | Old (deprecated) | New | Notes |
 |------------------|-----|-------|
 | `ｻｰﾋﾞｽs.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | Removed ﾌﾛﾑ nixpkgs, restored ﾌﾞｲｱ NixKits |
-| `ｻｰﾋﾞｽs.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | Namespace unified |
+| `ｻｰﾋﾞｽs.llama-cpp-rocm.ｲﾈｰﾌﾞﾙ` | `nixkits.llama-cpp-rocm.ｲﾈｰﾌﾞﾙ` | Namespace unified |
 | `ｻｰﾋﾞｽs.llama-cpp-rocm.ﾕｰｻﾞｰ` | `nixkits.llama-cpp-rocm.ﾕｰｻﾞｰ` | Namespace unified |
 | `ｻｰﾋﾞｽs.llama-cpp-rocm.ｸﾞﾙｰﾌﾟ` | `nixkits.llama-cpp-rocm.ｸﾞﾙｰﾌﾟ` | Namespace unified |
 | `ｻｰﾋﾞｽs.llama-cpp.ﾎﾟｰﾄ` | `ｻｰﾋﾞｽs.llama-cpp.ｾｯﾃｨﾝｸﾞｽﾞ.ﾎﾟｰﾄ` | nixpkgs rename |

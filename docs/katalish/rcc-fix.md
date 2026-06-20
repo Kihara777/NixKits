@@ -6,24 +6,24 @@
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | Follows nixpkgs `asusctl` |
-| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
 | Patch | This repo `ﾊﾟｯﾁes/rog-control-center-ﾌｨｯｸｽ.ﾊﾟｯﾁ` |
 | Module | `nixosModules.rog-control-center-ﾌｨｯｸｽ` (systemd ﾃﾞｯﾄﾞﾛｯｸ ﾌｨｯｸｽ) |
-| Note | Overlay replaces `pkgs.asusctl`, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ |
+| ﾉｰﾄ | Overlay replaces `pkgs.asusctl`, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ |
 
 ## Fixes
 
-- **Keyboard detection**: Shows multi-language ｵｰﾊﾞｰﾚｲ ｳｪﾝ keyboard disconnected, avoids crash
+- **Keyboard detection**: Shows multi-ﾗﾝｹﾞｰｼﾞ ｵｰﾊﾞｰﾚｲ ｳｪﾝ keyboard disconnected, avoids crash
 - **Hot-plug recovery**: D-Bus event-driven — ｵｰﾄ-restores Aura UI ｵﾝ reconnect
 - **Boundary ﾁｪｯｸs**: PowerZone index guards ﾌｫｱ firmware-reported invalid zones
 - **systemd ﾃﾞｯﾄﾞﾛｯｸ ﾌｨｯｸｽ**: Removes `PartOf` ﾌﾛﾑ `asus-ｼｬｯﾄﾀﾞｳﾝ.ｻｰﾋﾞｽ` ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ cascading stop ﾃﾞｯﾄﾞﾛｯｸ
 
 ## ｲﾝｽﾄｰﾙ
 
-Overlay (code ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (systemd ﾌｨｯｸｽ), recommended together:
+Overlay (ｺｰﾄﾞ ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (systemd ﾌｨｯｸｽ), recommended together:
 
 ```nix
 {

@@ -6,10 +6,10 @@
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 1.7.1 |
-| Upstream | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -76,11 +76,11 @@ let
 }
 ```
 
-> SearXNG requires JSON format (configured above ｲﾝ `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats`).
+> SearXNG requires JSON format (configured ｱﾊﾞﾌﾞ ｲﾝ `ｾｯﾃｨﾝｸﾞｽﾞ.search.formats`).
 
 ## CodeWhale Config
 
-CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. After adding mcp-searxng, you **must manually set `SEARXNG_URL`** — ｻﾞ `codewhale mcp ｱﾄﾞ` command does ﾉｯﾄ ｵｰﾄ-populate ｻﾞ `env` field.
+CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. After adding mcp-searxng, you **ﾑｽﾄ manually ｾｯﾄ `SEARXNG_URL`** — ｻﾞ `codewhale mcp ｱﾄﾞ` command ﾀﾞｽﾞ ﾉｯﾄ ｵｰﾄ-populate ｻﾞ `env` ﾌｨｰﾙﾄﾞ.
 
 ```json
 {
@@ -96,12 +96,12 @@ CodeWhale stores MCP ｺﾝﾌｨｷﾞｭﾗｴｰｼｮﾝ ｲﾝ `~/.deepseek
 }
 ```
 
-> **⚠️ Common pitfall**: `codewhale mcp ｱﾄﾞ SearXNG --command /path/ﾄｩ/mcp-searxng` leaves `env` as `{}`.
-> Without `SEARXNG_URL` ｻﾞ MCP server fails silently — `codewhale mcp ﾘｽﾄ` shows `[enabled]` ﾌﾞｯﾄ calls return ﾉｰ results.
+> **⚠️ Common pitfall**: `codewhale mcp ｱﾄﾞ SearXNG --command /ﾊﾟｽ/ﾄｩ/mcp-searxng` leaves `env` ｱｽﾞ `{}`.
+> Without `SEARXNG_URL` ｻﾞ MCP ｻｰﾊﾞｰ fails silently — `codewhale mcp ﾘｽﾄ` shows `[enabled]` ﾌﾞｯﾄ calls return ﾉｰ results.
 
 ## Troubleshooting
 
-### MCP server unresponsive
+### MCP ｻｰﾊﾞｰ unresponsive
 
 ```bash
 # Check registration ｱﾝﾄﾞ status

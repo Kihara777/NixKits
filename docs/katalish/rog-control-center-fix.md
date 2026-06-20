@@ -2,16 +2,16 @@
 
 [中文](../zh/rog-control-center-ﾌｨｯｸｽ.md) | ｶﾀﾘｯｼｭ | [日本語](../ja/rog-control-center-ﾌｨｯｸｽ.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-ﾌｨｯｸｽ.md) | [偽中国語](../pcn/rog-control-center-ﾌｨｯｸｽ.md)
 
-Fixes a systemd ﾃﾞｯﾄﾞﾛｯｸ during ｼｬｯﾄﾀﾞｳﾝ ｲﾝ `asus-ｼｬｯﾄﾀﾞｳﾝ.ｻｰﾋﾞｽ`.
+Fixes ｱ systemd ﾃﾞｯﾄﾞﾛｯｸ ﾃﾞｭｱﾘﾝｸﾞ ｼｬｯﾄﾀﾞｳﾝ ｲﾝ `asus-ｼｬｯﾄﾀﾞｳﾝ.ｻｰﾋﾞｽ`.
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | Tracks nixpkgs |
-| Type | NixOS ﾓｼﾞｭｰﾙ |
+| ﾀｲﾌﾟ | NixOS ﾓｼﾞｭｰﾙ |
 | Path | `ﾓｼﾞｭｰﾙs/rog-control-center-ﾌｨｯｸｽ.nix` |
-| Trigger | `ｻｰﾋﾞｽs.asusd.enable = true` |
+| Trigger | `ｻｰﾋﾞｽs.asusd.ｲﾈｰﾌﾞﾙ = ﾄｩﾙｰ` |
 
 ## Fixes
 

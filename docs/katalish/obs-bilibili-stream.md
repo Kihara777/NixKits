@@ -6,11 +6,11 @@ Bilibili live ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫｱ OBS Studi
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 2.1.0 |
-| Upstream | [Zarosmm/obs-bilibili-ｽﾄﾘｰﾑ](https://github.com/Zarosmm/obs-bilibili-ｽﾄﾘｰﾑ) |
-| Platform | Linux only |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [Zarosmm/obs-bilibili-ｽﾄﾘｰﾑ](https://github.com/Zarosmm/obs-bilibili-ｽﾄﾘｰﾑ) |
+| Platform | Linux ｵﾝﾘｰ |
 
 ## ｲﾝｽﾄｰﾙ
 

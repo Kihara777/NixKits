@@ -6,10 +6,10 @@ Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ [OpenCode](https://opencode.ai).
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 0.21.2 |
-| Upstream | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## ﾕｰｾｰｼﾞ
 

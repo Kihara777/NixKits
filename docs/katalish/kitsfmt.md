@@ -6,7 +6,7 @@
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 0.5.0 |
 | Language | Rust |
@@ -45,5 +45,5 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
 - Idempotent formatting
 - **Best-practice ｵｰﾄ-fixes** (ﾃﾞﾌｫﾙﾄ ｵﾝ, `-B` ﾄｩ ﾃﾞｨｽｴｲﾌﾞﾙ):
   - Bare URL quoting (RFC 45): `https://x.com` → `"https://x.com"`
-  - `rec` → `let-ｲﾝ`: `rec { a = 1; }` → `let a=1; ｲﾝ { inherit a; }`
-  - `ｳｨｽﾞ` → `ﾌﾞｳｲﾙﾄins.attrValues`: `ｳｨｽﾞ pkgs; [ a b ]` → `ﾌﾞｳｲﾙﾄins.attrValues { inherit (pkgs) a b; }`
+  - `rec` → `ﾙｴｯﾄ-ｲﾝ`: `rec { ｱ = 1; }` → `ﾙｴｯﾄ a=1; ｲﾝ { inherit a; }`
+  - `ｳｨｽﾞ` → `ﾌﾞｳｲﾙﾄins.attrValues`: `ｳｨｽﾞ pkgs; [ ｱ b ]` → `ﾌﾞｳｲﾙﾄins.attrValues { inherit (pkgs) ｱ b; }`

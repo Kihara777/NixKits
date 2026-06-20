@@ -2,33 +2,33 @@
 
 [中文](../../zh/ｽｷﾙs/write-project-docs.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/write-project-docs.md) | [偽中国語](../../pcn/ｽｷﾙs/write-project-docs.md)
 
-> Generates complete multi-language ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｲﾝ ｻﾞ NixKits style — concise, table-driven.
+> Generates complete multi-ﾗﾝｹﾞｰｼﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｲﾝ ｻﾞ NixKits style — concise, table-driven.
 
 ## Auto-Discovery Contract
 
-Language extension ｽｷﾙs are discovered ﾌﾞｲｱ ｻﾞ `translate-*` naming convention: scan `ｽｷﾙs/translate-*/`, read each SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ register them as ｱﾌﾞｴｲﾗﾌﾞﾙ languages ｲﾝ ｻﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ generation pipeline.
+Language ｴｸｽﾃﾝｼｮﾝ ｽｷﾙs ｱｰ discovered ﾌﾞｲｱ ｻﾞ `translate-*` naming ｺﾝﾌﾞｴﾝｼｮﾝ: scan `ｽｷﾙs/translate-*/`, read ｲｰﾁ SKILL.md's frontmatter fields (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ register ｾﾞﾑ ｱｽﾞ ｱﾌﾞｴｲﾗﾌﾞﾙ languages ｲﾝ ｻﾞ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ｼﾞｪﾈﾗｴｰｼｮﾝ pipeline.
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| Type | Coding Agent Skill |
+| ﾀｲﾌﾟ | Coding Agent Skill |
 | Path | `ｽｷﾙs/write-project-docs/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
 - Assesses project metadata ｱﾝﾄﾞ extracts ﾓｼﾞｭｰﾙ information
-- Classifies ﾓｼﾞｭｰﾙs ﾊﾞｲ function (infra/ｻｰﾋﾞｽs/proxy/ｽｷﾙs)
-- Creates `docs/{zh,en,ja}/` directory structure
-- Auto-discovers language extensions ﾌﾞｲｱ `translate-*` naming convention ｲﾝ `ｽｷﾙs/translate-*/`
-- Writes categorized READMEs ｳｨｽﾞ language switchers
+- Classifies ﾓｼﾞｭｰﾙs ﾊﾞｲ ﾌｧﾝｸｼｮﾝ (infra/ｻｰﾋﾞｽs/proxy/ｽｷﾙs)
+- Creates `docs/{zh,en,ja}/` ﾃﾞｨﾚｸﾄﾘ ｽﾄﾗｸﾁｬｰ
+- Auto-discovers ﾗﾝｹﾞｰｼﾞ extensions ﾌﾞｲｱ `translate-*` naming ｺﾝﾌﾞｴﾝｼｮﾝ ｲﾝ `ｽｷﾙs/translate-*/`
+- Writes categorized READMEs ｳｨｽﾞ ﾗﾝｹﾞｰｼﾞ switchers
 - Writes ﾊﾟｰ-ﾓｼﾞｭｰﾙ docs (info table + ｲﾝｽﾄｰﾙ + usage)
 - Writes ｽｷﾙ docs using ｻﾞ unified ﾃﾝﾌﾟﾚｰﾄ (ｲﾝﾌｫ → ﾌｨｰﾁｬｰｽﾞ → ﾕｰｾｰｼﾞ)
 - Supports sub-ｴｰｼﾞｪﾝﾄ parallelization ﾊﾞｲ ﾓｼﾞｭｰﾙ category
 
 ## Skill Doc Sync Rules
 
-When `SKILL.md` changes, ｵｰﾙ corresponding language ﾊﾞｰｼﾞｮﾝs must be updated.
+When `SKILL.md` changes, ｵｰﾙ corresponding ﾗﾝｹﾞｰｼﾞ ﾊﾞｰｼﾞｮﾝs ﾑｽﾄ ﾋﾞｰ updated.
 Use staleness ﾁｪｯｸ ﾄｩ locate outdated files:
 
 ```bash
@@ -41,30 +41,30 @@ Use staleness ﾁｪｯｸ ﾄｩ locate outdated files:
 done
 ```
 
-Update order: Chinese baseline → English translation → Japanese translation → 偽中国語 translation.
-Column mapping: `基本信息` → `ｲﾝﾌｫ` / `基本情報` / `基本情報`, `功能` → `ﾌｨｰﾁｬｰｽﾞ` / `機能` / `機能`.
+Update ｵﾗﾄﾞｴﾗ: Chinese baseline → English ﾄﾗｱﾝｽﾙｱｼｮﾝ → Japanese ﾄﾗｱﾝｽﾙｱｼｮﾝ → 偽中国語 ﾄﾗｱﾝｽﾙｱｼｮﾝ.
+Column ﾏｯﾋﾟﾝｸﾞ: `基本信息` → `ｲﾝﾌｫ` / `基本情報` / `基本情報`, `功能` → `ﾌｨｰﾁｬｰｽﾞ` / `機能` / `機能`.
 
-- Zero fluff, tables over prose, copy-paste-ready code blocks
+- Zero fluff, tables over prose, copy-paste-ready ｺｰﾄﾞ blocks
 - Technical terms stay ｲﾝ English; warnings ﾕｰｽﾞ blockquote format
 - Chinese section titles ﾕｰｽﾞ 2- ｵﾗ 4-character words ﾌｫｱ visual rhythm
-- Target ~40-60 lines; ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ docs follow ｻﾞ 4-section standard (ｲﾝﾌｫ → Changes → ｲﾝｽﾄｰﾙ → Notes)
-- No standalone technical detail, troubleshooting, ｵﾗ reference sections — compress into `## Notes` bullets
-- All four READMEs must be updated together
-- Root dir only holds Chinese suffix-less `.md`; localized ﾊﾞｰｼﾞｮﾝs (`*.en.md`, `*.ja.md`) live under `docs/`
-- Every language must include a basic info section: `## 基本信息` (zh), `## ｲﾝﾌｫ` (en), `## 基本情報` (ja)
-- After ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ source changes, ｻﾞ "Changes"/"ﾌｨｰﾁｬｰｽﾞ" ﾘｽﾄ must be synced — each bullet maps ﾄｩ an actual change
+- Target ~40-60 lines; ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ docs ﾌｫﾛｰ ｻﾞ 4-section standard (ｲﾝﾌｫ → Changes → ｲﾝｽﾄｰﾙ → Notes)
+- No standalone technical detail, troubleshooting, ｵﾗ reference sections — compress ｲﾝﾄｩ `## Notes` bullets
+- All four READMEs ﾑｽﾄ ﾋﾞｰ updated together
+- Root dir ｵﾝﾘｰ holds Chinese suffix-less `.md`; localized ﾊﾞｰｼﾞｮﾝs (`*.en.md`, `*.ja.md`) live ｱﾝﾀﾞｰ `docs/`
+- Every ﾗﾝｹﾞｰｼﾞ ﾑｽﾄ ｲﾝｸﾙｰﾄﾞ ｱ basic info section: `## 基本信息` (zh), `## ｲﾝﾌｫ` (en), `## 基本情報` (ja)
+- After ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ ｿｰｽ changes, ｻﾞ "Changes"/"ﾌｨｰﾁｬｰｽﾞ" ﾘｽﾄ ﾑｽﾄ ﾋﾞｰ synced — ｲｰﾁ bullet maps ﾄｩ an actual change
 
 ## Bidirectional Auto-Discovery
 
-This ｽｷﾙ ｱﾝﾄﾞ `translate-*` translation ｽｷﾙs discover each other ﾌﾞｲｱ naming conventions:
+This ｽｷﾙ ｱﾝﾄﾞ `translate-*` ﾄﾗｱﾝｽﾙｱｼｮﾝ ｽｷﾙs discover ｲｰﾁ ｱｻﾞｰ ﾌﾞｲｱ naming conventions:
 
 | Direction | Mechanism |
 |-----------|----------|
-| Doc generation → translate ｽｷﾙ | Scans `ｽｷﾙs/translate-*/`, reads `language_code`/`display_name`/`base_language` ﾌﾛﾑ each SKILL.md frontmatter |
-| Translate ｽｷﾙ → This project | Each ｽｷﾙ declares a "Relationship ｳｨｽﾞ other ｽｷﾙs" table ｲﾝ its SKILL.md, specifying ｻﾞ call chain |
-| Language code → Path | `language_code` → directory naming, file extension; `display_name` → language switcher label |
+| Doc ｼﾞｪﾈﾗｴｰｼｮﾝ → translate ｽｷﾙ | Scans `ｽｷﾙs/translate-*/`, reads `language_code`/`display_name`/`base_language` ﾌﾛﾑ ｲｰﾁ SKILL.md frontmatter |
+| Translate ｽｷﾙ → This project | Each ｽｷﾙ declares ｱ "Relationship ｳｨｽﾞ ｱｻﾞｰ ｽｷﾙs" table ｲﾝ its SKILL.md, specifying ｻﾞ ｺｰﾙ chain |
+| Language ｺｰﾄﾞ → Path | `language_code` → ﾃﾞｨﾚｸﾄﾘ naming, ﾌｧｲﾙ ｴｸｽﾃﾝｼｮﾝ; `display_name` → ﾗﾝｹﾞｰｼﾞ switcher label |
 
-Translate ｽｷﾙ docs themselves follow ﾃﾞｨｽ ﾃﾝﾌﾟﾚｰﾄ, closing ｻﾞ loop: doc generation → translation invocation → translate ｽｷﾙ doc generation.
+Translate ｽｷﾙ docs themselves ﾌｫﾛｰ ﾃﾞｨｽ ﾃﾝﾌﾟﾚｰﾄ, closing ｻﾞ loop: doc ｼﾞｪﾈﾗｴｰｼｮﾝ → ﾄﾗｱﾝｽﾙｱｼｮﾝ invocation → translate ｽｷﾙ doc ｼﾞｪﾈﾗｴｰｼｮﾝ.
 
 ## ﾕｰｾｰｼﾞ
 

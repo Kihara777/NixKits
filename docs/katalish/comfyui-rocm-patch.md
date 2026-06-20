@@ -6,7 +6,7 @@ ROCm capability ﾊﾟｯﾁ ﾌｫｱ ComfyUI.
 
 ## ｲﾝﾌｫ
 
-- **Feature**: ﾊﾟｯﾁｰｽﾞ ComfyUI ROCm ｻﾎﾟｰﾄ, enables ｶｽﾀﾑ node ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ (ﾌﾞｲｱ `gfxOverride` ﾌｫｱ ｶｽﾀﾑ GPU target)
+- **Feature**: ﾊﾟｯﾁｰｽﾞ ComfyUI ROCm ｻﾎﾟｰﾄ, enables ｶｽﾀﾑ node ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ (ﾌﾞｲｱ `gfxOverride` ﾌｫｱ ｶｽﾀﾑ GPU ﾀｰｹﾞｯﾄ)
 - **Location**: `ﾓｼﾞｭｰﾙs/comfyui-rocm-ﾊﾟｯﾁ.nix`
 
 ## ﾕｰｾｰｼﾞ
@@ -17,4 +17,4 @@ ROCm capability ﾊﾟｯﾁ ﾌｫｱ ComfyUI.
 }
 ```
 
-When `rocmGfxOverride` ｲｽﾞ set, ｻﾞ ﾓｼﾞｭｰﾙ injects `HSA_OVERRIDE_GFX_VERSION` into ｻﾞ ComfyUI ｻｰﾋﾞｽ.
+When `rocmGfxOverride` ｲｽﾞ ｾｯﾄ, ｻﾞ ﾓｼﾞｭｰﾙ injects `HSA_OVERRIDE_GFX_VERSION` ｲﾝﾄｩ ｻﾞ ComfyUI ｻｰﾋﾞｽ.

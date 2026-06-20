@@ -7,10 +7,10 @@ ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ComfyUI ｻﾎﾟｰﾄ ﾌｫｱ AMD Str
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | Tracks comfyui-nix |
-| Upstream | [utensils/comfyui-nix](https://github.com/utensils/comfyui-nix) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [utensils/comfyui-nix](https://github.com/utensils/comfyui-nix) |
 | Patch | This repo `ﾊﾟｯﾁes/comfyui-nix-strix-halo.ﾊﾟｯﾁ` |
 | Target GPU | gfx1151 (Strix Halo) — natively ｻﾎﾟｰﾄed ｲﾝ ROCm 7.2 |
 
@@ -18,8 +18,8 @@ ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ComfyUI ｻﾎﾟｰﾄ ﾌｫｱ AMD Str
 
 - **ROCm 7.2 stable wheels**: adds torch 2.12.0 / torchvision 0.27.0 / torchaudio 2.11.0
 - **Auto ﾊﾞｰｼﾞｮﾝ selection**: prefers 7.2 ｳｪﾝ rocm72 definitions exist, falls back ﾄｩ 7.1
-- **rocmGfxOverride option**: override ﾌｫｱ unrecognized GPU architectures (`HSA_OVERRIDE_GFX_VERSION`)
-- **Auto --ﾃﾞｨｽｴｲﾌﾞﾙ-xformers**: nixpkgs xformers lacks a ROCm backend
+- **rocmGfxOverride ｵﾌﾟｼｮﾝ**: override ﾌｫｱ unrecognized GPU architectures (`HSA_OVERRIDE_GFX_VERSION`)
+- **Auto --ﾃﾞｨｽｴｲﾌﾞﾙ-xformers**: nixpkgs xformers lacks ｱ ROCm backend
 - **C ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ**: injects `stdenv.cc`, `binutils`, `gnumake`, sets `CC=gcc` ﾌｫｱ ComfyUI Manager ｶｽﾀﾑ node compilation
 
 
@@ -45,6 +45,6 @@ cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
 
 - ROCm 7.2 natively ｻﾎﾟｰﾄs gfx1151 — ﾉｰ `HSA_OVERRIDE_GFX_VERSION` needed
 - If GPU ｲｽﾞ ﾉｯﾄ detected, try `rocmGfxOverride = "11.0.0"`
-- Missing ROCm ﾗﾝﾀｲﾑ: `hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
+- Missing ROCm ﾗﾝﾀｲﾑ: `ﾊｰﾄﾞｳｪｱ.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
 - xformers errors: ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-adds `--ﾃﾞｨｽｴｲﾌﾞﾙ-xformers`
 - The ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `amdgpu.gttsize=131072` ﾌｫｱ Strix Halo UMA

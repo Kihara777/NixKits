@@ -6,37 +6,37 @@
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| Type | Coding Agent Skill |
+| ﾀｲﾌﾟ | Coding Agent Skill |
 | Path | `ｽｷﾙs/nixkits-ﾁｪｯｸ-updates/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
 - Auto-discovers ｵｰﾙ external ﾊﾟｯｹｰｼﾞs ﾌﾛﾑ `flake.nix` ｱﾝﾄﾞ ﾁｪｯｸs latest ｷﾞｯﾄﾊﾌﾞ Releases
-- Updates ﾋﾞﾙﾄﾞ configs (ﾊﾞｰｼﾞｮﾝ, source hash, npmDepsHash)
-- Syncs ﾊﾞｰｼﾞｮﾝ numbers across ｵｰﾙ language docs
-- Auto-invokes `write-ﾒﾝﾃﾅﾝｽ-log` ｽｷﾙ ﾄｩ write ﾒﾝﾃﾅﾝｽ records after updates
+- Updates ﾋﾞﾙﾄﾞ configs (ﾊﾞｰｼﾞｮﾝ, ｿｰｽ hash, npmDepsHash)
+- Syncs ﾊﾞｰｼﾞｮﾝ numbers ｱｸﾛｽ ｵｰﾙ ﾗﾝｹﾞｰｼﾞ docs
+- Auto-invokes `write-ﾒﾝﾃﾅﾝｽ-log` ｽｷﾙ ﾄｩ write ﾒﾝﾃﾅﾝｽ records ｱﾌﾀｰ updates
 - Reports locally ｲﾝｽﾄｰﾙed ﾊﾞｰｼﾞｮﾝs
 - Identifies hardcoded ﾊﾞｰｼﾞｮﾝs inside ﾊﾟｯﾁ files ｱﾝﾄﾞ ﾌﾟﾗｵﾌﾞｲﾃﾞｽﾞ ﾁｪｯｸ guidance
 
 ## Hash Gotchas
 
-- SRI hash must ﾕｰｽﾞ standard base64 (`+` `/` `=`), ﾉｯﾄ URL-safe variant (`-` `_`)
-- `fetchFromGitHub` source hash **cannot** be precomputed ﾌﾛﾑ ｻﾞ ｷﾞｯﾄﾊﾌﾞ archive tarball — must come ﾌﾛﾑ `nix ﾋﾞﾙﾄﾞ` hash mismatch error
+- SRI hash ﾑｽﾄ ﾕｰｽﾞ standard base64 (`+` `/` `=`), ﾉｯﾄ URL-safe variant (`-` `_`)
+- `fetchFromGitHub` ｿｰｽ hash **cannot** ﾋﾞｰ precomputed ﾌﾛﾑ ｻﾞ ｷﾞｯﾄﾊﾌﾞ archive tarball — ﾑｽﾄ ｶﾑ ﾌﾛﾑ `nix ﾋﾞﾙﾄﾞ` hash mismatch error
 - Use `lib.fakeHash` ﾌｫｱ empty `npmDepsHash`, ﾉｯﾄ ｻﾞ empty string `""`
-- npm ﾊﾟｯｹｰｼﾞs need two `nix ﾋﾞﾙﾄﾞ` passes: ﾌｧｰｽﾄ ﾌｫｱ source hash, second ﾌｫｱ npmDepsHash
+- npm ﾊﾟｯｹｰｼﾞs ﾆｰﾄﾞ two `nix ﾋﾞﾙﾄﾞ` passes: ﾌｧｰｽﾄ ﾌｫｱ ｿｰｽ hash, second ﾌｫｱ npmDepsHash
 
 ## Scope
 
 Reads `flake.nix` → `ﾊﾟｯｹｰｼﾞs`, excluding:
-- Self-hosted ﾊﾟｯｹｰｼﾞs (source ｲﾝ repo)
+- Self-hosted ﾊﾟｯｹｰｼﾞs (ｿｰｽ ｲﾝ repo)
 - Dynamic ﾊﾞｰｼﾞｮﾝ tracking (fetches latest ｱｯﾄ ﾋﾞﾙﾄﾞ time)
 - nixpkgs-following (ﾊﾟｯﾁ ｵｰﾊﾞｰﾚｲs)
 - Patch-embedded ﾊﾞｰｼﾞｮﾝs (manual ﾁｪｯｸ, e.g. `comfyui-strix-halo`)
 
-All remaining external ﾊﾟｯｹｰｼﾞs are ﾁｪｯｸed automatically.
+All remaining external ﾊﾟｯｹｰｼﾞs ｱｰ ﾁｪｯｸed ｵｰﾄﾏﾃｨｯｸﾘｰ.
 
 ## ﾕｰｾｰｼﾞ
 
-Activated ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ asks ﾄｩ "ﾁｪｯｸ ﾌｫｱ updates" ｵﾗ "update ﾊﾟｯｹｰｼﾞ ﾊﾞｰｼﾞｮﾝs".
+Activated ｳｪﾝ ｻﾞ ﾕｰｻﾞｰ asks ﾄｩ "ﾁｪｯｸ ﾌｫｱ updates" ｵﾗ "ｱｯﾌﾟﾃﾞｰﾄ ﾊﾟｯｹｰｼﾞ ﾊﾞｰｼﾞｮﾝs".

@@ -1,26 +1,26 @@
-# nixos-modern-cli (Skill)
+# nixos-ﾑｵﾄﾞｴﾗﾝ-cli (Skill)
 
-[中文](../../zh/ｽｷﾙs/nixos-modern-cli.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixos-modern-cli.md) | [偽中国語](../../pcn/ｽｷﾙs/nixos-modern-cli.md)
+[中文](../../zh/ｽｷﾙs/nixos-ﾑｵﾄﾞｴﾗﾝ-cli.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/nixos-ﾑｵﾄﾞｴﾗﾝ-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/nixos-ﾑｵﾄﾞｴﾗﾝ-cli.md) | [偽中国語](../../pcn/ｽｷﾙs/nixos-ﾑｵﾄﾞｴﾗﾝ-cli.md)
 
-> Activated ｵﾝ NixOS systems. Ensures modern Nix ｼｰｴﾙｱｲ usage, full shell capability, ｱﾝﾄﾞ correct ﾒﾝﾃﾅﾝｽ procedures.
+> Activated ｵﾝ NixOS systems. Ensures ﾑｵﾄﾞｴﾗﾝ Nix ｼｰｴﾙｱｲ usage, full shell capability, ｱﾝﾄﾞ correct ﾒﾝﾃﾅﾝｽ procedures.
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| Type | Coding Agent Skill |
-| Path | `ｽｷﾙs/nixos-modern-cli/SKILL.md` |
+| ﾀｲﾌﾟ | Coding Agent Skill |
+| Path | `ｽｷﾙs/nixos-ﾑｵﾄﾞｴﾗﾝ-cli/SKILL.md` |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Corrects AI models that mistake NixOS ﾌｫｱ a traditional Linux distro
-- Provides a modern vs traditional ｼｰｴﾙｱｲ command reference table
+- Corrects AI models ｻﾞｯﾄ mistake NixOS ﾌｫｱ ｱ traditional Linux distro
+- Provides ｱ ﾑｵﾄﾞｴﾗﾝ vs traditional ｼｰｴﾙｱｲ command reference table
 - Guides running scripts requiring POSIX ﾂｰﾙｽﾞ ﾌﾞｲｱ `nix shell --command`
-- Includes a common POSIX tool → nixpkgs ﾊﾟｯｹｰｼﾞ lookup table
+- Includes ｱ common POSIX tool → nixpkgs ﾊﾟｯｹｰｼﾞ lookup table
 - Covers system ﾒﾝﾃﾅﾝｽ, log viewing, ｱﾝﾄﾞ garbage ｺﾚｸｼｮﾝ
 - Lists NixOS-specific gotchas (PATH, nix-env persistence, etc.)
-- Diagnoses Nix Store path traps: identifies ｱﾝﾄﾞ fixes stale `/nix/store/` paths ｲﾝ ｺﾝﾌｨｸﾞ files (e.g. `gh ｵｰｽ ｾｯﾄｱｯﾌﾟ-git` credential helper breaking after GC)
+- Diagnoses Nix Store ﾊﾟｽ traps: identifies ｱﾝﾄﾞ fixes stale `/nix/ｽﾄｴﾗ/` paths ｲﾝ ｺﾝﾌｨｸﾞ files (e.g. `gh ｵｰｽ ｾｯﾄｱｯﾌﾟ-git` credential helper breaking ｱﾌﾀｰ GC)
 
 ## ﾕｰｾｰｼﾞ
 
-Auto-activated ｳｪﾝ ｻﾞ AI detects a NixOS environment, ｵﾗ ｵﾝ explicit request ﾌｫｱ "modern nix commands".
+Auto-activated ｳｪﾝ ｻﾞ AI detects ｱ NixOS ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ, ｵﾗ ｵﾝ explicit request ﾌｫｱ "ﾑｵﾄﾞｴﾗﾝ nix commands".

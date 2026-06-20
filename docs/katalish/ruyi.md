@@ -6,12 +6,12 @@ Package ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org) — RI
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 0.51.0-alpha.20260616 |
-| Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | ﾗｲｾﾝｽ | Apache 2.0 |
-| Note | Alpha-stage ｿﾌﾄｳｪｱ, APIs may change |
+| ﾉｰﾄ | Alpha-stage ｿﾌﾄｳｪｱ, APIs ﾒｲ change |
 
 ## Dev Shell
 
@@ -42,7 +42,7 @@ ruyi venv --ﾂｰﾙﾁｪｰﾝ <t> # Create a ﾊﾞｰﾁｬﾙ environment
 ruyi ﾃﾞｨﾌﾞｱｲｽ provision    # Provision a ﾃﾞｨﾌﾞｱｲｽ
 ```
 
-> ruyi requires network access ﾄｩ clone ｻﾞ ﾊﾟｯｹｰｼﾞ index (`ﾊﾟｯｹｰｼﾞs-index`). This happens automatically ｵﾝ ﾌｧｰｽﾄ `ruyi ﾘｽﾄ`.
+> ruyi requires network access ﾄｩ clone ｻﾞ ﾊﾟｯｹｰｼﾞ index (`ﾊﾟｯｹｰｼﾞs-index`). This happens ｵｰﾄﾏﾃｨｯｸﾘｰ ｵﾝ ﾌｧｰｽﾄ `ruyi ﾘｽﾄ`.
 
 ## Module
 
@@ -79,12 +79,12 @@ services.ruyi.venvs.riscv = {
 
 The NixKits ruyi ﾋﾞﾙﾄﾞ includes `ﾊﾟｯﾁes/ruyi-nixos-compat.ﾊﾟｯﾁ`, transparently handling NixOS-specific issues:
 
-- **Dynamic linker path**: Pre-compiled RISC-V ﾂｰﾙﾁｪｰﾝ binaries (GCC, QEMU, etc.) expect `/lib64/ld-linux-x86-64.so.2`, absent ｵﾝ NixOS. The ﾊﾟｯﾁ reroutes execution through ｻﾞ NixOS `ld.so`.
-- **Toolchain sub-process repair**: GCC-internal sub-processes like `cc1`, `as`, `collect2` bypass ruyi's mux; ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-fixes their ELF interpreter ﾌﾞｲｱ `ﾊﾟｯﾁelf`.
-- **Nix console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: Uses `RUYI_ARGV0` env var ﾄｩ recover `exec -a` semantics lost ｲﾝ Nix wrappers.
+- **Dynamic linker ﾊﾟｽ**: Pre-compiled RISC-V ﾂｰﾙﾁｪｰﾝ binaries (GCC, QEMU, etc.) expect `/lib64/ld-linux-x86-64.so.2`, absent ｵﾝ NixOS. The ﾊﾟｯﾁ reroutes execution ｽﾙｰ ｻﾞ NixOS `ld.so`.
+- **Toolchain sub-ﾌﾟﾛｾｽ repair**: GCC-internal sub-processes ﾗｲｸ `cc1`, `as`, `collect2` bypass ruyi's mux; ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-fixes their ELF interpreter ﾌﾞｲｱ `ﾊﾟｯﾁelf`.
+- **Nix console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: Uses `RUYI_ARGV0` env var ﾄｩ ﾘｶﾊﾞｰ `exec -a` semantics lost ｲﾝ Nix wrappers.
 
 ## Notes
 
 - Maintained ﾊﾞｲ [ISCAS](https://www.iscas.ac.cn) ﾌｫｱ RISC-V developers
-- Runtime dependencies (curl, gnutar, git, ﾊﾟｯﾁelf, etc.) are injected ﾌﾞｲｱ wrapProgram
+- Runtime dependencies (curl, gnutar, git, ﾊﾟｯﾁelf, etc.) ｱｰ injected ﾌﾞｲｱ wrapProgram
 - Test coverage: ruff lint, mypy ﾀｲﾌﾟ ﾁｪｯｸs, pytest unit (320), integration (52) — ｵｰﾙ passing

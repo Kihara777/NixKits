@@ -6,11 +6,11 @@
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | Version | 0.8.62 |
-| Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| Type | Pre-ﾌﾞｳｲﾙﾄ binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| ﾀｲﾌﾟ | Pre-ﾌﾞｳｲﾙﾄ binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -32,4 +32,4 @@ codewhale ﾄﾞｸﾀｰ                       # check ｾｯﾄｱｯﾌﾟ
 codewhale ｵｰｽ set --provider deepseek # ｾｰﾌﾞ API key
 ```
 
-ﾘｸﾜｲｱｽﾞ a [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.
+ﾘｸﾜｲｱｽﾞ ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.com/api_keys) ｵﾝ ﾌｧｰｽﾄ ﾗﾝ.

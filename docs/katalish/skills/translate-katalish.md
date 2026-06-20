@@ -2,30 +2,30 @@
 
 [中文](../../zh/ｽｷﾙs/translate-katalish.md) | ｶﾀﾘｯｼｭ | [日本語](../../ja/ｽｷﾙs/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/ｽｷﾙs/translate-katalish.md) | [偽中国語](../../pcn/ｽｷﾙs/translate-katalish.md)
 
-> Extra natural-language ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing ｽｷﾙ.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) language.
+> Extra natural-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-writing ｽｷﾙ.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) ﾗﾝｹﾞｰｼﾞ.
 
 ## ｲﾝﾌｫ
 
-| Item | Value |
+| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| Type | Coding Agent Skill (language backend) |
+| ﾀｲﾌﾟ | Coding Agent Skill (ﾗﾝｹﾞｰｼﾞ backend) |
 | Path | `ｽｷﾙs/translate-katalish/SKILL.md` |
 | Called ﾊﾞｲ | write-project-docs (primary), nixkits-ﾁｪｯｸ-updates (indirect) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
+- New ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ English→halfwidth-katakana ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ
 - Built-ｲﾝ dictionary (~20 common tech-doc words)
 - Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ ｲﾝ ｻﾞ dictionary
-- Markdown syntax ｱﾝﾄﾞ code blocks preserved
-- File naming convention: `docs/katalish/<ﾈｰﾑ>.md`
+- Markdown syntax ｱﾝﾄﾞ ｺｰﾄﾞ blocks preserved
+- File naming ｺﾝﾌﾞｴﾝｼｮﾝ: `docs/katalish/<ﾈｰﾑ>.md`
 
 ## ﾕｰｾｰｼﾞ
 
-Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ also be called directly:
+Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ ｵﾙｿ ﾋﾞｰ called directly:
 
-- "Generate a katakana-english ﾊﾞｰｼﾞｮﾝ of ｻﾞ document"
-- "Add ｶﾀﾘｯｼｭ language variant"
+- "Generate ｱ katakana-english ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ ﾄﾞｷｭﾒﾝﾄ"
+- "Add ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ variant"
 - "Translate ﾄｩ katakana english"
 
 ## Example
