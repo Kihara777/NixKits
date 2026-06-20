@@ -1,6 +1,6 @@
 ---
 name: write-project-docs
-description: 按 NixKits 风格为任意项目编写或重新生成完整的多语言文档 — 中英日三语、简洁、表驱动、含语言切换器标题和模块分类 README。覆盖 README、各模块文档及技能文档。
+description: 按 NixKits 风格为任意项目编写或重新生成完整的多语言文档 — 简洁、表驱动、含语言切换器标题和模块分类 README。覆盖 README、各模块文档及技能文档。
 ---
 
 # 项目文档编写（NixKits 风格）
@@ -236,7 +236,7 @@ base_language: en          # 翻译源语言（zh/en/ja）
 自动发现后：
 - 目录结构扩展 `docs/<code>/` 和 `docs/<code>/skills/`
 - 语言切换器追加 `[<display_name>](docs/README.<code>.md)`
-- 三语 for 循环扩展为多语言遍历
+- 语言 for 循环扩展为多语言遍历
 - 基本信息表格列名由各 translate-* 技能的规则定义
 
 核心段：
@@ -273,11 +273,11 @@ bullet list — 技能的关键能力
 
 #### 技能文档同步规则
 
-当 `SKILL.md` 发生变更时，对应的三语文档 **必须同步更新**。
+当 `SKILL.md` 发生变更时，对应的多语文档 **必须同步更新**。
 用时间戳快速定位过时文档：
 
 ```bash
-# 对比 SKILL.md 与三语文档的修改时间
+# 对比 SKILL.md 与多语文档的修改时间
 for lang in zh en ja; do
   for skill in skills/*/SKILL.md; do
     name=$(basename $(dirname $skill))
@@ -288,7 +288,7 @@ for lang in zh en ja; do
 done
 ```
 
-过时文档更新时，保持三语结构一致：中文为基准翻译，英文和日文沿用各自列名
+过时文档更新时，保持多语结构一致：中文为基准翻译，各语言沿用各自列名
 （`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能` 等）。
 
 ### 第 7 步：验证
@@ -302,7 +302,7 @@ done
 
 - 运行 staleness check 确保所有 `docs/{zh,en,ja}/skills/*.md` 未被对应的 `SKILL.md` 超过
 - 过时文档按技能文档模板更新：中文基准 → 英文翻译 → 日文翻译
-- 三语列名映射：`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能`
+- 各语言列名映射：`基本信息` → `Info` / `基本情報`、`功能` → `Features` / `機能`
 
 #### 基本信息节完整性检查
 

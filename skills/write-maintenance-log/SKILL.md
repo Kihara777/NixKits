@@ -62,10 +62,10 @@ done
 |------|---------|------|
 | **软件** | 版本更新或 bug 修复 | `chore(pkgs): bump codewhale` `fix(mcp-searxng): ...` |
 | **技能** | 新增技能、重大章节添加、bug 修复、重大重构 | `feat(skill): extract write-maintenance-log` `fix(skill): generalize 基本情報 rule` `refactor(skills): generalize hardcoded content` |
-| **文档** | 模块/包文档的实质性更新（新增章节、配置指南、故障排查、迁移指南） | `docs(mcp-searxng): add CodeWhale config` `docs(llama-cpp-rocm): add trilingual migration guide` |
+| **文档** | 模块/包文档的实质性更新（新增章节、配置指南、故障排查、迁移指南） | `docs(mcp-searxng): add CodeWhale config` `docs(llama-cpp-rocm): add multilingual migration guide` |
 | **模块** | 新增模块或重大功能添加 | `feat(rcc-fix): add NixOS module` `feat(llama-cpp-rocm): restore modelsPreset` |
 
-**不记录**：纯机械性 trilingual sync（`docs(skills): sync ... to trilingual docs`）、仅涉及维护日志本身的提交（`docs(MAINTENANCE): ...`）。
+**不记录**：纯机械性多语 sync（`docs(skills): sync ... to multilingual docs`）、仅涉及维护日志本身的提交（`docs(MAINTENANCE): ...`）。
 
 ## 记录类型
 
