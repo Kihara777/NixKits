@@ -2,36 +2,19 @@
 
 [中文](comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-rocm-patch.md) | [偽中国語](../pcn/comfyui-rocm-patch.md)
 
-> 为 `services.comfyui` 添加 `rocmGfxOverride` 选项和 ROCm 环境变量注入，使 ComfyUI 可在 NixOS 上使用 AMD ROCm GPU 运行。
+为 ComfyUI 提供 ROCm 功能补丁。
 
 ## 基本信息
 
-| 项目 | 值 |
-|------|-----|
-| 类型 | NixOS 模块 |
-| 模块路径 | `nix-kits.nixosModules.comfyui-rocm-patch` |
-| 依赖 | comfyui-strix-halo |
+- **功能**：修补 ComfyUI 的 ROCm 支持，启用自定义节点构建工具链（通过 `gfxOverride` 指定自定义 GPU 目标版本）
+- **位置**：`modules/comfyui-rocm-patch.nix`
 
-## 功能
-
-- `services.comfyui.rocmGfxOverride` 选项 — 设置 `HSA_OVERRIDE_GFX_VERSION`
-- 注入 `--disable-xformers` 标志（ROCm 不支持 xformers）
-- 添加 C 构建工具链（gcc、binutils、make）用于自定义节点编译
-
-## 安装
+## 使用
 
 ```nix
 {
-  nixpkgs.overlays = [ nix-kits.overlays.default ];
+  services.comfyui.rocmGfxOverride = "gfx1100";  # 自定义 GPU 目标版本
 }
-
-services.comfyui = {
-  enable = true;
-  rocmGfxOverride = "11.5.1";
-};
 ```
 
-## 注意
-
-- `rocmGfxOverride` 默认为 `null`（不设置 HSA_OVERRIDE_GFX_VERSION）
-- 由 `comfyui-strix-halo` 模块通过 `nixkits.comfyui-strix-halo.gfxOverride` 自动配置
+设置 `rocmGfxOverride` 后，该模块会将 `HSA_OVERRIDE_GFX_VERSION` 环境变量注入 ComfyUI 服务。
