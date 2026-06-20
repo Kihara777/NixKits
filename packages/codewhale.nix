@@ -7,10 +7,10 @@
 }:
 
 let
-  version = "0.8.61";
+  version = "0.8.62";
   codewhale-cli = fetchurl {
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-x64";
-    hash = "sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=";
+    hash = "sha256-ci3MokGWoyDv/F0Syr3VH+GWaq9UNqTQs0ZOyruIV2E=";
   };
   codewhale-tui = fetchurl {
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-x64";
