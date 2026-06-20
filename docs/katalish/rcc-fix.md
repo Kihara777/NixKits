@@ -1,45 +1,45 @@
-# rcc-fix
+# ﾗｸｸ-ﾌｨｯｸｽ
 
 [中文](../../zh/rcc-fix.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/rcc-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rcc-fix.md) | [偽中国語](../pcn/rcc-fix.md)
 
-ﾊﾟｯﾁｰｽﾞ `asusctl` ﾌｫｱ better ASUS ROG Control Center ｵﾝ 2-in-1 detachable devices.
+ﾊﾟｯﾁｰｽﾞ `asusctl` ﾌｫｱ ﾌﾞｴﾄﾄｴﾗ ｱｽｳｽﾞ ﾗｵｸﾞ ｸｵﾝﾄﾗｵﾙ ｽｴﾝﾄｴﾗ ｵﾝ 2-in-1 ﾄﾞｴﾄｱﾁｱﾌﾞﾙ ﾄﾞｴﾌﾞｲｸｽﾞ.
 
 ## ｲﾝﾌｫ
 
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | Follows nixpkgs `asusctl` |
-| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| ﾊﾟｯﾁ | ﾃﾞｨｽ repo `patches/rog-control-center-fix.patch` |
-| ﾓｼﾞｭｰﾙ | `nixosModules.rog-control-center-fix` (systemd deadlock fix) |
-| Note | ｵｰﾊﾞｰﾚｲ replaces `pkgs.asusctl`, ﾉｰ standalone ﾊﾟｯｹｰｼﾞ |
+| ﾊﾞｰｼﾞｮﾝ | ﾌｫﾛｰｽﾞ ﾝｲｸｽﾌﾟｸｸﾞｽﾞ `asusctl` |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｱｽｳｽﾞ-ﾙｲﾝｳｸｽ/ｱｽｳｽｸﾄﾙ](https://github.com/Asus-linux/asusctl) |
+| ﾊﾟｯﾁ | ﾃﾞｨｽ ﾗｴﾌﾟｵ `patches/rog-control-center-fix.patch` |
+| ﾓｼﾞｭｰﾙ | `nixosModules.rog-control-center-fix` (ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ) |
+| ﾉｰﾄ | ｵｰﾊﾞｰﾚｲ ﾗｴﾌﾟﾙｱｸｽﾞ `pkgs.asusctl`, ﾉｰ ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ﾊﾟｯｹｰｼﾞ |
 
-## Fixes
+## ﾌｨｯｸｼｰｽﾞ
 
-- **Keyboard detection**: Shows multi-ﾗﾝｹﾞｰｼﾞ ｵｰﾊﾞｰﾚｲ when keyboard disconnected, avoids crash
-- **Hot-plug recovery**: D-Bus ｲﾍﾞﾝﾄ-driven — ｵｰﾄ-restores Aura UI ｵﾝ reconnect
-- **Boundary checks**: PowerZone index guards ﾌｫｱ firmware-reported invalid zones
-- **systemd deadlock fix**: ﾘﾑｰﾌﾞｽﾞ `PartOf` ﾌﾛﾑ `asus-shutdown.service` ﾄｩ prevent cascading ｽﾄｯﾌﾟ deadlock
+- **ｸｴｲﾌﾞｵｱﾗﾄﾞ ﾄﾞｴﾄｴｸｼｮﾝ**: ｼｵｳｽﾞ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ｵｰﾊﾞｰﾚｲ ｳｪﾝ ｸｴｲﾌﾞｵｱﾗﾄﾞ ﾄﾞｲｽｸｵﾝﾝｴｸﾄﾄﾞ, ｱﾌﾞｵｲﾄﾞｽﾞ ｸﾗｱｼ
+- **ﾎｵﾄ-ﾌﾟﾙｳｸﾞ ﾗｴｸｵﾌﾞｴﾗｲ**: ﾄﾞ-ﾌﾞｳｽ ｲﾍﾞﾝﾄ-ﾄﾞﾗｲﾌﾞｴﾝ — ｵｰﾄ-ﾗｴｽﾄｵﾗｽﾞ ｱｳﾗｱ ﾕｰｱｲ ｵﾝ ﾗｴｸｵﾝﾝｴｸﾄ
+- **ﾌﾞｵｳﾝﾄﾞｱﾗｲ ﾁｴｯｸｽﾞ**: ﾌﾟｵｳｴﾗｽﾞｵﾝｴ ｲﾝﾄﾞｴｸｽ ｸﾞｳｱﾗﾄﾞｽﾞ ﾌｫｱ ﾌｲﾗﾑｳｱﾗｴ-ﾗｴﾌﾟｵﾗﾄﾄﾞ ｲﾝﾌﾞｱﾙｲﾄﾞ ｽﾞｵﾝｽﾞ
+- **ｽｲｽﾄｴﾑﾄﾞ ﾄﾞｴｱﾄﾞﾙｵｯｸ ﾌｨｯｸｽ**: ﾗｴﾑｵﾌﾞｽﾞ `PartOf` ﾌﾛﾑ `asus-shutdown.service` ﾄｩ ﾌﾟﾗｴﾌﾞｴﾝﾄ ｸｱｽｸｱﾄﾞｲﾝｸﾞ ｽﾄｯﾌﾟ ﾄﾞｴｱﾄﾞﾙｵｯｸ
 
 ## ｲﾝｽﾄｰﾙ
 
-ｵｰﾊﾞｰﾚｲ (ｺｰﾄﾞ ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (systemd fix), recommended together:
+ｵｰﾊﾞｰﾚｲ (ｺｰﾄﾞ ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (ｽｲｽﾄｴﾑﾄﾞ ﾌｨｯｸｽ), ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ ﾄｵｼﾞｴｽｴﾗ:
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+  ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾗｸｸ-ﾌｨｯｸｽ ];
 
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  ｲﾑﾌﾟｵﾗﾄｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾝｲｸｽｵｽﾑｵﾄﾞｳﾙｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center-fix ];
 
-  services.asusctl = {
-    enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+  ｽｴﾗﾌﾞｲｸｽﾞ.ｱｽｳｽｸﾄﾙ = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ﾌﾟｵｳｴﾗ-ﾌﾟﾛﾌｧｲﾙ = ﾄﾗｳｴ;
+    ｸﾌﾟｳ-ﾌﾟｵｳｴﾗ-control = ﾄﾗｳｴ;
   };
 
-  programs.rog-control-center = {
-    enable = true;
-    autoStart = true;
+  ﾌﾟﾗｵｸﾞﾗｱﾑｽﾞ.ﾗｵｸﾞ-ｸｵﾝﾄﾗｵﾙ-center = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ｱｳﾄｵｽﾄｱﾗﾄ = ﾄﾗｳｴ;
   };
 }
 ```

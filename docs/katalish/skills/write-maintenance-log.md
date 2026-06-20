@@ -1,12 +1,12 @@
-# ﾗｲﾄ-maintenance-log (ｽｷﾙ)
+# ﾗｲﾄ-ﾒﾝﾃﾅﾝｽ-log (ｽｷﾙ)
 
 [中文](../../zh/skills/write-maintenance-log.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> Write or update MAINTENANCE.md per NixKits conventions. Supports software updates and bug fixes, sync across all available languages.
+> ﾗｲﾄ ｵｱ ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ.md ﾌﾟｴﾗ NixKits ｸｵﾝﾌﾞｴﾝｼｮﾝｽﾞ. ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ﾊﾞｸﾞ ﾌｨｯｸｼｰｽﾞ, ｽｲﾝｸ ｱｸﾛｽ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ.
 
 ## ｵｰﾄ-ﾃﾞｨｽｶﾊﾞﾘｰ ｺﾝﾄﾗｸﾄ
 
-ﾗﾝｹﾞｰｼﾞ ｴｸｽﾃﾝｼｮﾝ ｽｷﾙｽﾞ ｱｰ ﾃﾞｨｽｶﾊﾞｰﾄﾞ via ｻﾞ `translate-*` naming convention: scan `skills/translate-*/`, ﾘｰﾄﾞ ｲｰﾁ ｽｷﾙ.md's ﾌﾛﾝﾄﾏﾀｰ fields (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ register them ｱｽﾞ available ﾗﾝｹﾞｰｼﾞｽﾞ ｲﾝ ｻﾞ multi-ﾗﾝｹﾞｰｼﾞ sync pipeline.
+ﾗﾝｹﾞｰｼﾞ ｴｸｽﾃﾝｼｮﾝ ｽｷﾙｽﾞ ｱｰ ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾌﾞｲｱ ｻﾞ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ: ｽｸｱﾝ `skills/translate-*/`, ﾘｰﾄﾞ ｲｰﾁ ｽｷﾙ.md'ｽ ﾌﾛﾝﾄﾏﾀｰ ﾌｨｰﾙﾄﾞｽﾞ (`language_code` / `display_name` / `base_language`), ｱﾝﾄﾞ ﾗｴｼﾞｲｽﾄｴﾗ ｽｴﾑ ｱｽﾞ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ ｲﾝ ｻﾞ ﾑｳﾙﾄｲ-ﾗﾝｹﾞｰｼﾞ ｽｲﾝｸ ﾌﾟｲﾌﾟｴﾙｲﾝｴ.
 
 ## ｲﾝﾌｫ
 
@@ -17,17 +17,17 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- ﾗｲﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ records (ｻﾏﾘｰ + ｺﾐｯﾄ ID ﾃｰﾌﾞﾙ + ﾊﾞｰｼﾞｮﾝ ﾃｰﾌﾞﾙ)
-- ﾗｲﾄｽﾞ bug fix records (ｻﾏﾘｰ + ｺﾐｯﾄ ID ﾃｰﾌﾞﾙ)
-- Sync across ｵｰﾙ available ﾗﾝｹﾞｰｼﾞｽﾞ (ｵｰﾄ-ﾃﾞｨｽｶﾊﾞｰﾄﾞ via translate-* ｽｷﾙｽﾞ)
-- ｵｰﾄ-extracts ｻﾏﾘｰ ﾌﾛﾑ preceding ｽｷﾙ (nixkits-check-updates) ｵｱ git ｺﾐｯﾄ message
-- Unified ﾌｫｰﾏｯﾄ: ISO 8601 precise time, LIFO order, omit unchanged hashes
+- ｳﾗｲﾄｽﾞ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄ ﾚｺｰﾄﾞｽﾞ (ｻﾏﾘｰ + ｺﾐｯﾄ ｲﾄﾞ ﾃｰﾌﾞﾙ + ﾊﾞｰｼﾞｮﾝ ﾃｰﾌﾞﾙ)
+- ｳﾗｲﾄｽﾞ ﾊﾞｸﾞ ﾌｨｯｸｽ ﾚｺｰﾄﾞｽﾞ (ｻﾏﾘｰ + ｺﾐｯﾄ ｲﾄﾞ ﾃｰﾌﾞﾙ)
+- ｽｲﾝｸ ｱｸﾛｽ ｵｰﾙ ｱﾍﾞｲﾗﾌﾞﾙ ﾗﾝｹﾞｰｼﾞｰｽﾞ (ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾌﾞｲｱ ﾄﾗｱﾝｽﾙｱﾄｴ-* ｽｷﾙｽﾞ)
+- ｵｰﾄ-ｴｸｽﾄﾗｱｸﾄｽﾞ ｻﾏﾘｰ ﾌﾛﾑ ﾌﾟﾗｴｽｴﾄﾞｲﾝｸﾞ ｽｷﾙ (NixKits-ﾁｪｯｸ-updates) ｵｱ git ｺﾐｯﾄ ﾑｴｽｽｱｼﾞｴ
+- ｳﾝｲﾌｲﾄﾞ ﾌｵﾗﾑｱﾄ: ｲｽｵ 8601 ﾌﾟﾗｴｽｲｽｴ ﾄｲﾑｴ, ﾙｲﾌｵ ｵﾗﾄﾞｴﾗ, ｵﾑｲﾄ ｳﾝﾁｱﾝｸﾞﾄﾞ ﾎｱｼｽﾞ
 
-## Entry Points
+## ｴﾝﾄﾘｰ ﾌﾟｵｲﾝﾄｽﾞ
 
-- **Record Fix**: ｵｰﾄ-called after ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ "record ﾃﾞｨｽ fix" / "记入维护记录"
-- **ｱｯﾌﾟﾃﾞｰﾄ Log**: ｵﾝ "ｱｯﾌﾟﾃﾞｰﾄ maintenance log" / "补全维护记录" — scans git history ﾌｫｱ missing records ｱﾝﾄﾞ backfills
+- **ﾚｺｰﾄﾞ ﾌｨｯｸｽ**: ｵｰﾄ-ｺｰﾙﾄﾞ ｱﾌﾀｰ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ "ﾚｺｰﾄﾞ ﾃﾞｨｽ ﾌｨｯｸｽ" / "记入维护记录"
+- **ｱｯﾌﾟﾃﾞｰﾄ ﾛｸﾞ**: ｵﾝ "ｱｯﾌﾟﾃﾞｰﾄ ﾒﾝﾃﾅﾝｽ ﾛｸﾞ" / "补全维护记录" — ｽｸｱﾝｽﾞ git ﾋｽﾄﾘｰ ﾌｫｱ ﾑｲｽｽｲﾝｸﾞ ﾚｺｰﾄﾞｽﾞ ｱﾝﾄﾞ ﾌﾞｱｯｸﾌｲﾙﾙｽﾞ
 
 ## ﾕｰｾｰｼﾞ
 
-Activated automatically after ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ ﾕｰｻﾞｰ request ﾄｩ record ｱ fix.
+ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ ｱﾌﾀｰ ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ, ｵｱ ｵﾝ ﾕｰｻﾞｰ ﾗｴｸｴｽﾄ ﾄｩ ﾚｺｰﾄﾞ ｱ ﾌｨｯｸｽ.

@@ -1,8 +1,8 @@
-# mihomo-alpha
+# ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ
 
 [中文](../../zh/mihomo-alpha.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/mihomo-alpha.md) | [ｶﾀﾘｯｼｭ](../katalish/mihomo-alpha.md) | [偽中国語](../pcn/mihomo-alpha.md)
 
-> Prerelease-Alpha tracking (proxy tool) — overlay registration of MetaCubeX/mihomo's Prerelease-Alpha release for NixOS module use.
+> ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾄﾗｯｷﾝｸﾞ (ﾌﾟﾗｵｸｽｲ ﾂｰﾙ) — ｵｰﾊﾞｰﾚｲ ﾗｴｼﾞｲｽﾄﾗｱｼｮﾝ ｵﾌﾞ ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ'ｽ ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾘﾘｰｽ ﾌｫｱ NixOS ﾓｼﾞｭｰﾙ ﾕｰｽﾞ.
 
 ## ｲﾝﾌｫ
 
@@ -10,21 +10,21 @@
 |------|------|
 | ﾀｲﾌﾟ | ｵｰﾊﾞｰﾚｲ |
 | ｵｰﾊﾞｰﾚｲ ﾊﾟｽ | `nix-kits.overlays.mihomo-alpha` |
-| ﾊﾟｯｹｰｼﾞ name | `mihomo` |
-| Upstream | [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) |
-| Tracked ﾊﾞｰｼﾞｮﾝ | Prerelease-Alpha |
+| ﾊﾟｯｹｰｼﾞ ﾈｰﾑ | `mihomo` |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ](https://github.com/MetaCubeX/mihomo) |
+| ﾄﾗｱｯｸﾄﾞ ﾊﾞｰｼﾞｮﾝ | ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ |
 
-## Installation
+## ｲﾝｽﾄｱﾙﾙｱｼｮﾝ
 
 ```nix
-# flake.ﾆｯｸｽ
+# ﾌﾚｲｸ.ﾆｯｸｽ
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾕｰｱｰﾙｴﾙ = "ｼﾞｲｽｳﾌﾞ:ｸｲﾎｱﾗｱ777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
-    nixosConfigurations.example = nixpkgs.lib.nixosSystem {
-      modules = [
-        { nixpkgs.overlays = [ nix-kits.overlays.mihomo-alpha ]; }
+  ｵｳﾄﾌﾟｳﾄｽﾞ = { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ, ﾆｯｸｽ-ｸｲﾄｽﾞ, ... }: {
+    ﾝｲｸｽｵｽｸｵﾝﾌｲｸﾞｳﾗｱｼｮﾝｽﾞ.ｴｸﾞｻﾞﾝﾌﾟﾙ = ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ﾙｲﾌﾞ.ﾝｲｸｽｵｽｽｲｽﾄｴﾑ {
+      ﾓｼﾞｭｰﾙｽﾞ = [
+        { ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾑｲﾎｵﾑｵ-ｱﾙﾌｱ ]; }
       ];
     };
   };
@@ -33,11 +33,11 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Tracks latest MetaCubeX/mihomo Prerelease-Alpha release
-- Uses pre-built Linux amd64 binary
-- Overrides `pkgs.mihomo` ﾊﾞｰｼﾞｮﾝ
+- ﾄﾗｱｯｸｽﾞ ﾙｱﾄｴｽﾄ ﾑｴﾄｱｸｳﾌﾞｴｸｽ/ﾑｲﾎｵﾑｵ ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ﾘﾘｰｽ
+- ﾕｰｼｰｽﾞ ﾌﾟﾗｴ-ﾌﾞｳｲﾙﾄ ﾙｲﾝｳｸｽ AMD64 ﾊﾞｲﾅﾘ
+- ｵﾌﾞｴﾗﾗｲﾄﾞｽﾞ `pkgs.mihomo` ﾊﾞｰｼﾞｮﾝ
 
-## Notes
+## ﾉｰﾂ
 
-- Same ｱｯﾌﾟﾃﾞｰﾄ workflow ｱｽﾞ llama-cpp-rocm: `nix flake update` then rebuild
-- Prerelease-Alpha ｲｽﾞ ｱ rolling tag; ﾊﾞｰｼﾞｮﾝ ｲｽﾞ identified ﾊﾞｲ ｺﾐｯﾄ hash
+- ｾｲﾑ ｱｯﾌﾟﾃﾞｰﾄ ﾜｰｸﾌﾛｰ ｱｽﾞ ﾗﾏ-cpp-rocm: `nix flake update` ｾﾞﾝ ﾗｴﾌﾞｳｲﾙﾄﾞ
+- ﾌﾟﾗｴﾗｴﾙｴｱｽｴ-ｱﾙﾌｱ ｲｽﾞ ｱ ﾗｵﾙﾙｲﾝｸﾞ ﾄｱｸﾞ; ﾊﾞｰｼﾞｮﾝ ｲｽﾞ ｲﾄﾞｴﾝﾄｲﾌｲﾄﾞ ﾊﾞｲ ｺﾐｯﾄ ﾊｯｼｭ

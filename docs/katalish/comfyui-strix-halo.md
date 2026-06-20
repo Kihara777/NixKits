@@ -1,50 +1,50 @@
-# ｶﾑﾌｨUI-strix-halo
+# ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo
 
 [中文](../../zh/comfyui-strix-halo.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/comfyui-strix-halo.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-strix-halo.md) | [偽中国語](../pcn/comfyui-strix-halo.md)
 
-ﾛｯｸｴﾑ-accelerated ｶﾑﾌｨUI ｻﾎﾟｰﾄ ﾌｫｱ AMD Strix Halo (gfx1151 / RDNA 3.5 APU).
-**Verified** ｵﾝ Ryzen AI MAX+ 395 / Radeon 8060S.
+ﾛｯｸｴﾑ-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ｶﾑﾌｨUI ｻﾎﾟｰﾄ ﾌｫｱ AMD ｽﾄﾘｯｸｽ ﾍｲﾛｰ (ｸﾞﾌｸｽ1151 / ﾗﾄﾞﾝｱ 3.5 ｱﾌﾟｳ).
+**ﾌﾞｴﾗｲﾌｲﾄﾞ** ｵﾝ ﾗｲｽﾞｴﾝ ｱｲ ﾑｱｸｽ+ 395 / ﾗｱﾄﾞｴｵﾝ 8060S.
 
 ## ｲﾝﾌｫ
 
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | Tracks ｶﾑﾌｨUI-ﾆｯｸｽ |
-| Upstream | [utensils/ｶﾑﾌｨUI-ﾆｯｸｽ](https://github.com/utensils/comfyui-nix) |
-| ﾊﾟｯﾁ | ﾃﾞｨｽ repo `patches/comfyui-nix-strix-halo.patch` |
-| Target GPU | gfx1151 (Strix Halo) — natively ｻﾎﾟｰﾄﾄﾞ ｲﾝ ﾛｯｸｴﾑ 7.2 |
+| ﾊﾞｰｼﾞｮﾝ | ﾄﾗｱｯｸｽﾞ ｶﾑﾌｨUI-ﾆｯｸｽ |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｳﾄｴﾝｽｲﾙｽﾞ/ｶﾑﾌｨUI-ﾆｯｸｽ](https://github.com/utensils/comfyui-nix) |
+| ﾊﾟｯﾁ | ﾃﾞｨｽ ﾗｴﾌﾟｵ `patches/comfyui-nix-strix-halo.patch` |
+| ﾄｱﾗｼﾞｴﾄ ｸﾞﾌﾟｳ | ｸﾞﾌｸｽ1151 (ｽﾄﾘｯｸｽ ﾍｲﾛｰ) — ﾝｱﾄｲﾌﾞｴﾘｰ ｽｳﾌﾟﾌﾟｵﾗﾄﾄﾞ ｲﾝ ﾛｯｸｴﾑ 7.2 |
 
-## Changes
+## ﾁｪﾝｼﾞｰｽﾞ
 
-- **ﾛｯｸｴﾑ 7.2 stable wheels**: ｱﾄﾞｽﾞ torch 2.12.0 / torchvision 0.27.0 / torchaudio 2.11.0
-- **ｵｰﾄ ﾊﾞｰｼﾞｮﾝ selection**: prefers 7.2 when ﾛｯｸｴﾑ72 definitions exist, falls back ﾄｩ 7.1
-- **rocmGfxOverride option**: override ﾌｫｱ unrecognized GPU architectures (`HSA_OVERRIDE_GFX_VERSION`)
-- **ｵｰﾄ --disable-xformers**: nixpkgs xformers lacks ｱ ﾛｯｸｴﾑ ﾊﾞｯｸｴﾝﾄﾞ
-- **c ﾋﾞﾙﾄﾞ toolchain**: injects `stdenv.cc`, `binutils`, `gnumake`, sets `CC=gcc` ﾌｫｱ ｶﾑﾌｨUI Manager ｶｽﾀﾑ node compilation
+- **ﾛｯｸｴﾑ 7.2 ｽﾄｱﾌﾞﾙ ﾎｴｴﾙｽﾞ**: ｱﾄﾞﾄﾞｽﾞ ﾄｵﾗﾁ 2.12.0 / ﾄｵﾗﾁﾌﾞｲｼﾞｮﾝ 0.27.0 / ﾄｵﾗﾁｱｳﾄﾞｲｵ 2.11.0
+- **ｵｰﾄ ﾊﾞｰｼﾞｮﾝ ｽｴﾙｴｸｼｮﾝ**: ﾌﾟﾗｴﾌｴﾗｽﾞ 7.2 ｳｪﾝ ﾛｯｸｴﾑ72 ﾄﾞｴﾌｲﾝｲｼｮﾝｽﾞ ｴｸｽｲｽﾄ, ﾌｱﾙﾙｽﾞ ﾌﾞｱｯｸ ﾄｩ 7.1
+- **ﾗｵｸﾑｸﾞﾌｸｽｵﾌﾞｴﾗﾗｲﾄﾞｴ ｵﾌﾟｼｮﾝ**: ｵｰﾊﾞｰﾗｲﾄﾞ ﾌｫｱ ｳﾝﾗｴｸｵｸﾞﾝｲｽﾞﾄﾞ ｸﾞﾌﾟｳ ｱﾗﾁｲﾄｴｸﾄｳﾗｽﾞ (`HSA_OVERRIDE_GFX_VERSION`)
+- **ｵｰﾄ --ﾃﾞｨｾｰﾌﾞﾙ-xformers**: ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ｸｽﾌｵﾗﾑｴﾗｽﾞ ﾙｱｯｸｽﾞ ｱ ﾛｯｸｴﾑ ﾊﾞｯｸｴﾝﾄﾞ
+- **c ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ**: ｲﾝｼﾞｴｸﾄｽﾞ `stdenv.cc`, `binutils`, `gnumake`, ｽｴﾄｽﾞ `CC=gcc` ﾌｫｱ ｶﾑﾌｨUI ﾑｱﾝｱｼﾞｴﾗ ｶｽﾀﾑ ﾝｵﾄﾞｴ ｸｵﾑﾌﾟｲﾙｱｼｮﾝ
 
 
 ## ｲﾝｽﾄｰﾙ
 
-NixKits ﾓｼﾞｭｰﾙ (recommended):
+NixKits ﾓｼﾞｭｰﾙ (ﾗｴｸｵﾑﾑｴﾝﾄﾞﾄﾞ):
 
 ```nix
-# flake.ﾆｯｸｽ — requires ｱ ﾊﾟｯﾁﾄﾞ ｶﾑﾌｨUI-ﾆｯｸｽ
+# ﾌﾚｲｸ.ﾆｯｸｽ — ﾘｸﾜｲｱｽﾞ ｱ ﾌﾟｱﾄﾁﾄﾞ ｶﾑﾌｨUI-ﾆｯｸｽ
 {
-  nixkits.comfyui-strix-halo.enable = true;
-  services.comfyui.enable = true;
+  NixKits.ｶﾑﾌｨUI-ｽﾄﾘｯｸｽ-halo.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+  ｽｴﾗﾌﾞｲｸｽﾞ.ｶﾑﾌｨUI.ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
 }
 ```
 
-ｵｱ apply ｻﾞ ﾊﾟｯﾁ manually:
+ｵｱ ｱﾌﾟﾗｲ ｻﾞ ﾊﾟｯﾁ ﾑｱﾝｳｱﾙﾘｰ:
 
 ```bash
-cd comfyui-nix && patch -p1 < patches/comfyui-nix-strix-halo.patch
+ｸﾄﾞ ｶﾑﾌｨUI-ﾆｯｸｽ && ﾊﾟｯﾁ -ﾌﾟ1 < ﾊﾟｯﾁｰｽﾞ/ｶﾑﾌｨUI-ﾆｯｸｽ-strix-halo.ﾊﾟｯﾁ
 ```
 
-## Notes
+## ﾉｰﾂ
 
-- ﾛｯｸｴﾑ 7.2 natively ｻﾎﾟｰﾄｽﾞ gfx1151 — ﾉｰ `HSA_OVERRIDE_GFX_VERSION` needed
-- If GPU ｲｽﾞ ﾉｯﾄ detected, try `rocmGfxOverride = "11.0.0"`
-- Missing ﾛｯｸｴﾑ runtime: `hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
-- xformers errors: ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-ｱﾄﾞｽﾞ `--disable-xformers`
-- ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄ-sets `amdgpu.gttsize=131072` ﾌｫｱ Strix Halo UMA
+- ﾛｯｸｴﾑ 7.2 ﾝｱﾄｲﾌﾞｴﾘｰ ｽｳﾌﾟﾌﾟｵﾗﾄｽﾞ ｸﾞﾌｸｽ1151 — ﾉｰ `HSA_OVERRIDE_GFX_VERSION` ﾝｴｴﾄﾞﾄﾞ
+- ｲﾌ ｸﾞﾌﾟｳ ｲｽﾞ ﾉｯﾄ ﾄﾞｴﾄｴｸﾄﾄﾞ, ﾄﾗｲ `rocmGfxOverride = "11.0.0"`
+- ﾑｲｽｽｲﾝｸﾞ ﾛｯｸｴﾑ ﾗﾝﾀｲﾑ: `hardware.graphics.extraPackages = [ rocmPackages.clr rocmPackages.rocminfo ]`
+- ｸｽﾌｵﾗﾑｴﾗｽﾞ ｴﾗｰｽﾞ: ｻﾞ ﾊﾟｯﾁ ｵｰﾄ-ｱﾄﾞﾄﾞｽﾞ `--disable-xformers`
+- ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄ-ｽｴﾄｽﾞ `amdgpu.gttsize=131072` ﾌｫｱ ｽﾄﾘｯｸｽ ﾍｲﾛｰ ｳﾑｱ

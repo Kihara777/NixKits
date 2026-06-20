@@ -1,8 +1,8 @@
-# ﾆｯｸｽOS-modern-cli (ｽｷﾙ)
+# ﾆｯｸｽOS-ﾑｵﾄﾞｴﾗﾝ-cli (ｽｷﾙ)
 
 [中文](../../zh/skills/nixos-modern-cli.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md) | [偽中国語](../../pcn/skills/nixos-modern-cli.md)
 
-> Activated on NixOS systems. Ensures modern Nix CLI usage, full shell capability, and correct maintenance procedures.
+> ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｵﾝ NixOS ｽｲｽﾄｴﾑｽﾞ. ｴﾝｽｳﾗｽﾞ ﾑｵﾄﾞｴﾗﾝ ﾆｯｸｽ ｼｰｴﾙｱｲ ﾕｰｾｰｼﾞ, ﾌﾙ ｼｪﾙ ｸｱﾌﾟｱﾌﾞｲﾙｲﾄｲ, ｱﾝﾄﾞ ｺﾚｸﾄ ﾒﾝﾃﾅﾝｽ ﾌﾟﾗｵｽｴﾄﾞｳﾗｽﾞ.
 
 ## ｲﾝﾌｫ
 
@@ -13,14 +13,14 @@
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Corrects AI ﾓﾃﾞﾙｽﾞ ｻﾞｯﾄ mistake NixOS ﾌｫｱ ｱ traditional Linux distro
-- Provides ｱ modern vs traditional CLI ｺﾏﾝﾄﾞ reference ﾃｰﾌﾞﾙ
-- ｶﾞｲﾄﾞｽﾞ running scripts requiring POSIX ﾂｰﾙｽﾞ via `nix shell --command`
-- Includes ｱ common POSIX ﾂｰﾙ → nixpkgs ﾊﾟｯｹｰｼﾞ lookup ﾃｰﾌﾞﾙ
-- Covers ｼｽﾃﾑ maintenance, log viewing, ｱﾝﾄﾞ garbage collection
-- ﾘｽﾄｽﾞ NixOS-specific gotchas (ﾊﾟｽ, ﾆｯｸｽ-env persistence, etc.)
-- Diagnoses ﾆｯｸｽ Store ﾊﾟｽ traps: identifies ｱﾝﾄﾞ fixes stale `/nix/store/` ﾊﾟｽｽﾞ ｲﾝ ｺﾝﾌｨｸﾞ files (e.g. `gh auth setup-git` credential helper breaking after GC)
+- ｸｵﾗﾗｴｸﾄｽﾞ ｱｲ ﾑｵﾄﾞｴﾙｽﾞ ｻﾞｯﾄ ﾑｲｽﾄｱｸｴ NixOS ﾌｫｱ ｱ ﾄﾗｱﾄﾞｲﾄｲｵﾝｱﾙ ﾙｲﾝｳｸｽ ﾄﾞｲｽﾄﾗｵ
+- ﾌﾟﾛﾊﾞｲﾄﾞｽﾞ ｱ ﾑｵﾄﾞｴﾗﾝ ﾌﾞｽ ﾄﾗｱﾄﾞｲﾄｲｵﾝｱﾙ ｼｰｴﾙｱｲ ｸｵﾑﾑｱﾝﾄﾞ ﾘﾌｧﾚﾝｽ ﾃｰﾌﾞﾙ
+- ｸﾞｳｲﾄﾞｽﾞ ﾗｳﾝﾝｲﾝｸﾞ ｽｸﾗｲﾌﾟﾄｽﾞ ﾗｴｸｲﾗｲﾝｸﾞ POSIX ﾂｰﾙｽﾞ ﾌﾞｲｱ `nix shell --command`
+- ｲﾝｸﾙｰﾄﾞｽﾞ ｱ ｸｵﾑﾑｵﾝ POSIX ﾂｰﾙ → ﾝｲｸｽﾌﾟｸｸﾞｽﾞ ﾊﾟｯｹｰｼﾞ ﾙｵｵｸｳﾌﾟ ﾃｰﾌﾞﾙ
+- ｸｵﾌﾞｴﾗｽﾞ ｼｽﾃﾑ ﾒﾝﾃﾅﾝｽ, ﾛｸﾞ ﾌﾞｲｴｳｲﾝｸﾞ, ｱﾝﾄﾞ ｸﾞｱﾗﾌﾞｱｼﾞｴ ｺﾚｸｼｮﾝ
+- ﾙｲｽﾄｽﾞ NixOS-ｽﾌﾟｴｽｲﾌｲｸ ｸﾞｵﾄﾁｱｽﾞ (ﾊﾟｽ, ﾆｯｸｽ-ｴﾇﾌﾞｲ ﾌﾟｴﾗｽｲｽﾄｴﾝｽｴ, ｴﾄｸ.)
+- ﾄﾞｲｱｸﾞﾝｵｽｽﾞ ﾆｯｸｽ ｽﾄｵﾗｴ ﾊﾟｽ ﾄﾗｱﾌﾟｽﾞ: ｲﾄﾞｴﾝﾄｲﾌｲｽﾞ ｱﾝﾄﾞ ﾌｨｯｸｼｰｽﾞ ｽﾄｱﾙｴ `/nix/store/` ﾌﾟｱｽｽﾞ ｲﾝ ｺﾝﾌｨｸﾞ ﾌｧｲﾙｽﾞ (ｴ.ｸﾞ. `gh auth setup-git` ｸﾗｴﾄﾞｴﾝﾄｲｱﾙ ﾎｴﾙﾌﾟｴﾗ ﾌﾞﾗｴｱｸｲﾝｸﾞ ｱﾌﾀｰ ｸﾞｸ)
 
 ## ﾕｰｾｰｼﾞ
 
-ｵｰﾄ-activated when ｻﾞ AI detects ｱ NixOS environment, ｵｱ ｵﾝ explicit request ﾌｫｱ "modern ﾆｯｸｽ ｺﾏﾝﾄﾞｽﾞ".
+ｵｰﾄ-ｱｸﾄｲﾌﾞｱﾄﾄﾞ ｳｪﾝ ｻﾞ ｱｲ ﾄﾞｴﾄｴｸﾄｽﾞ ｱ NixOS ｴﾝﾊﾞｲﾛﾒﾝﾄ, ｵｱ ｵﾝ ｴｸｽﾌﾟﾙｲｽｲﾄ ﾗｴｸｴｽﾄ ﾌｫｱ "ﾑｵﾄﾞｴﾗﾝ ﾆｯｸｽ ｸｵﾑﾑｱﾝﾄﾞｽﾞ".

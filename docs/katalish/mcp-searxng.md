@@ -1,62 +1,62 @@
-# ｴﾑｼｰﾋﾟｰ-searxng
+# ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
 
 [中文](../../zh/mcp-searxng.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
 
-[ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web ｻｰﾁ ﾌｫｱ AI assistants.
+[ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — ｳｪﾌﾞ ｻｰﾁ ﾌｫｱ ｱｲ ｱｽｽｲｽﾄｱﾝﾄｽﾞ.
 
 ## ｲﾝﾌｫ
 
 | ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
 |------|-------|
 | ﾊﾞｰｼﾞｮﾝ | 1.7.1 |
-| Upstream | [ihor-sokoliuk/ｴﾑｼｰﾋﾟｰ-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [ｲﾎｵﾗ-ｽｵｸｵﾙｲｳｸ/ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.mcp-searxng ];
+ｴﾝﾊﾞｲﾛﾒﾝﾄ.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ﾊﾟｯｹｰｼﾞｰｽﾞ.${ﾌﾟｸｸﾞｽﾞ.ｼｽﾃﾑ}.ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ ];
 
-# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → pkgs.ｴﾑｼｰﾋﾟｰ-searxng
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+# ﾃﾞﾌｫﾙﾄ ｵｰﾊﾞｰﾚｲ → ﾌﾟｸｸﾞｽﾞ.ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
+ﾝｲｸｽﾌﾟｸｸﾞｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ = [ ｲﾝﾌﾟｯﾄｽﾞ.ﾆｯｸｽ-ｸｲﾄｽﾞ.ｵﾌﾞｴﾗﾙｱｲｽﾞ.ﾃﾞﾌｫﾙﾄ ];
 ```
 
-## Full NixOS Setup
+## ﾌﾙ NixOS ｾｯﾄｱｯﾌﾟ
 
 ```nix
-{ config, ... }:
-let
-  searxKey = "YOUR_SECRET_KEY";
-in
+{ ｺﾝﾌｨｸﾞ, ... }:
+ﾙｴﾄ
+  ｽｴｱﾗｸｽｸｴｲ = "ｲｵｳﾗ_SECRET_KEY";
+ｲﾝ
 {
-  services.searx = {
-    enable = true;
-    redisCreateLocally = true;
-    settings = {
-      search.formats = [ "html" "json" ];
-      server = {
-        bind_address = "127.0.0.1";
-        port = "42701";
-        secret_key = searxKey;
-        limiterSettings = {
-          botdetection.trusted_proxies = [ "127.0.0.1/32" ];
-          real_ip.x_for = 1;
+  ｽｴﾗﾌﾞｲｸｽﾞ.ｽｴｱﾗｸｽ = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ﾗｴﾄﾞｲｽｸﾗｴｱﾄｴﾙｵｸｱﾙﾘｰ = ﾄﾗｳｴ;
+    ｾｯﾃｨﾝｸﾞｽﾞ = {
+      ｻｰﾁ.ﾌｵﾗﾑｱﾄｽﾞ = [ "html" "ｼﾞｪｲｿﾝ" ];
+      ｻｰﾊﾞｰ = {
+        ﾌﾞｲﾝﾄﾞ_address = "127.0.0.1";
+        ﾌﾟｵﾗﾄ = "42701";
+        ｽｴｸﾗｴﾄ_key = ｽｴｱﾗｸｽｸｴｲ;
+        ﾙｲﾑｲﾄｴﾗｽｴﾄﾄｲﾝｸﾞｽﾞ = {
+          ﾌﾞｵﾄﾄﾞｴﾄｴｸｼｮﾝ.ﾄﾗｳｽﾄﾄﾞ_proxies = [ "127.0.0.1/32" ];
+          ﾗｴｱﾙ_ip.ｸｽ_for = 1;
         };
       };
     };
   };
 
-  services.lighttpd = {
-    enable = true;
-    port = 4270;
-    enableModules = [ "mod_access" "mod_alias" "mod_proxy" "mod_setenv" ];
-    extraConfig = ''
-      proxy.server = ( "" => (
-        ( "host" => "127.0.0.1", "port" => 42701 )
+  ｽｴﾗﾌﾞｲｸｽﾞ.ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ = {
+    ｲﾈｰﾌﾞﾙ = ﾄﾗｳｴ;
+    ﾌﾟｵﾗﾄ = 4270;
+    ｴﾝｱﾌﾞﾙｴﾑｵﾄﾞｳﾙｽﾞ = [ "ﾑｵﾄﾞ_access" "ﾑｵﾄﾞ_alias" "ﾑｵﾄﾞ_proxy" "ﾑｵﾄﾞ_setenv" ];
+    ｴｸｽﾄﾗｱｸｵﾝﾌｲｸﾞ = ''
+      ﾌﾟﾗｵｸｽｲ.ｻｰﾊﾞｰ = ( "" => (
+        ( "ﾎｵｽﾄ" => "127.0.0.1", "ﾌﾟｵﾗﾄ" => 42701 )
       ))
-      setenv.add-request-header = (
-        "X-Real-IP"       => "%{remote-addr}e",
-        "X-Forwarded-For"  => "%{remote-addr}e",
-        "X-Forwarded-Proto" => "http"
+      ｽｴﾄｴﾝﾌﾞ.ｱﾄﾞ-ﾗｴｸｴｽﾄ-header = (
+        "ｸｽ-ﾗｴｱﾙ-IP"       => "%{ﾘﾓｰﾄ-ｱﾄﾞﾄﾞﾗ}ｴ",
+        "ｸｽ-ﾌｵﾗｳｱﾗﾄﾞﾄﾞ-For"  => "%{ﾘﾓｰﾄ-ｱﾄﾞﾄﾞﾗ}ｴ",
+        "ｸｽ-ﾌｵﾗｳｱﾗﾄﾞﾄﾞ-Proto" => "ｴｲﾁﾃｨｰﾃｨｰﾋﾟｰ"
       )
     '';
   };
@@ -67,62 +67,62 @@ in
 
 ```json
 {
-  "mcpServers": {
-    "searxng": {
-      "ｺﾏﾝﾄﾞ": "ｴﾑｼｰﾋﾟｰ-searxng",
-      "env": { "SEARXNG_URL": "http://127.0.0.1:4270" }
+  "ﾑｸﾌﾟｽｴﾗﾌﾞｴﾗｽﾞ": {
+    "ｻｰｸｽ": {
+      "ｸｵﾑﾑｱﾝﾄﾞ": "ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ",
+      "ｴﾇﾌﾞｲ": { "ｻｰｸｽ_URL": "http://127.0.0.1:4270" }
     }
   }
 }
 ```
 
-> SearXNG requires JSON format (configured above in `settings.search.formats`).
+> SearXNG ﾘｸﾜｲｱｽﾞ ｼﾞｪｲｿﾝ ﾌｵﾗﾑｱﾄ (ｸｵﾝﾌｲｸﾞｳﾗﾄﾞ ｱﾊﾞﾌﾞ ｲﾝ `settings.search.formats`).
 
 ## CodeWhale ｺﾝﾌｨｸﾞ
 
-CodeWhale stores ｴﾑｼｰﾋﾟｰ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. After ｱﾄﾞｲﾝｸﾞ ｴﾑｼｰﾋﾟｰ-searxng, you **ﾏｽﾄ manually set `SEARXNG_URL`** — ｻﾞ `codewhale mcp add` ｺﾏﾝﾄﾞ does ﾉｯﾄ ｵｰﾄ-populate ｻﾞ `env` field.
+CodeWhale ｽﾄｵﾗｽﾞ ｴﾑｼｰﾋﾟｰ ｺﾝﾌｨｷﾞｭﾚｰｼｮﾝ ｲﾝ `~/.deepseek/mcp.json`. ｱﾌﾀｰ ｱﾄﾞﾄﾞｲﾝｸﾞ ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ, ｲｵｳ **ﾏｽﾄ ﾑｱﾝｳｱﾙﾘｰ ｾｯﾄ `SEARXNG_URL`** — ｻﾞ `codewhale mcp add` ｸｵﾑﾑｱﾝﾄﾞ ﾄﾞｵｽﾞ ﾉｯﾄ ｵｰﾄ-ﾌﾟｵﾌﾟｳﾙｱﾄｴ ｻﾞ `env` ﾌｨｰﾙﾄﾞ.
 
 ```json
 {
-  "ｻｰﾊﾞｰｽﾞ": {
+  "ｽｴﾗﾌﾞｴﾗｽﾞ": {
     "SearXNG": {
-      "ｺﾏﾝﾄﾞ": "/etc/profiles/per-ﾕｰｻﾞｰ/kix/bin/ｴﾑｼｰﾋﾟｰ-searxng",
-      "args": [],
-      "env": {
-        "SEARXNG_URL": "http://127.0.0.1:42701"
+      "ｸｵﾑﾑｱﾝﾄﾞ": "/ｴﾄｸ/ﾌﾟﾗｵﾌｲﾙｽﾞ/ﾌﾟｴﾗ-ﾕｰｻﾞｰ/ｸｲｸｽ/bin/ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ",
+      "ｱﾗｸﾞｽﾞ": [],
+      "ｴﾇﾌﾞｲ": {
+        "ｻｰｸｽ_URL": "http://127.0.0.1:42701"
       }
     }
   }
 }
 ```
 
-> **⚠️ Common pitfall**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` leaves `env` as `{}`.
-> Without `SEARXNG_URL` the MCP server fails silently — `codewhale mcp list` shows `[enabled]` but calls return no results.
+> **⚠️ ｸｵﾑﾑｵﾝ ﾌﾟｲﾄﾌｱﾙﾙ**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` ﾙｴｱﾌﾞｽﾞ `env` ｱｽﾞ `{}`.
+> ｳｨｽﾞｱｳﾄ `SEARXNG_URL` ｻﾞ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾌｱｲﾙｽﾞ ｽｲﾙｴﾝﾄﾘｰ — `codewhale mcp list` ｼｵｳｽﾞ `[enabled]` ﾌﾞｳﾄ ｸｱﾙﾙｽﾞ ﾗｴﾄｳﾗﾝ ﾉｰ ﾗｴｽｳﾙﾄｽﾞ.
 
-## Troubleshooting
+## ﾄﾗｵｳﾌﾞﾙｴｼｵｵﾄｲﾝｸﾞ
 
-### ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ unresponsive
-
-```bash
-# Check registration and status
-codewhale mcp list
-
-# Verify environment variable
-cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
-```
-
-### SearXNG ﾊﾞｯｸｴﾝﾄﾞ connectivity
+### ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ｳﾝﾗｴｽﾌﾟｵﾝｽｲﾌﾞｴ
 
 ```bash
-# Verify SearXNG API is reachable
-curl -s http://127.0.0.1:42701/config | head -c 100
+# ﾁｪｯｸ ﾗｴｼﾞｲｽﾄﾗｱｼｮﾝ ｱﾝﾄﾞ ｽﾄｱﾄｳｽﾞ
+codewhale ｴﾑｼｰﾋﾟｰ ﾘｽﾄ
 
-# Manual MCP server test (should show MCP handshake)
-SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
+# ﾍﾞﾘﾌｧｲ ｴﾝﾊﾞｲﾛﾒﾝﾄ ﾌﾞｱﾗｲｱﾌﾞﾙ
+ｸｱﾄ ~/.ﾄﾞｴｴﾌﾟｽｴｴｸ/ｴﾑｼｰﾋﾟｰ.ｼﾞｪｲｿﾝ | ｸﾞﾗｴﾌﾟ -ｱ3 ｻｰｸｽ_URL
 ```
 
-### ｻｰﾁ returns ﾉｰ results
+### SearXNG ﾊﾞｯｸｴﾝﾄﾞ ｸｵﾝﾝｴｸﾄｲﾌﾞｲﾄｲ
 
-- Ensure `settings.search.formats` includes `"json"` (required ﾊﾞｲ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ)
-- Verify lighttpd reverse proxy forwards `X-Forwarded-For` ﾍｯﾀﾞｰ
-- Check logs: `journalctl -u searx --no-pager -n 30`
+```bash
+# ﾍﾞﾘﾌｧｲ SearXNG ｴｰﾋﾟｰｱｲ ｲｽﾞ ﾗｴｱﾁｱﾌﾞﾙ
+ｸｳﾗﾙ -ｽ http://127.0.0.1:42701/config | ﾍｯﾄﾞ -c 100
+
+# ﾏﾆｭｱﾙ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ ﾃｽﾄ (ｼｭｯﾄﾞ ｼｵｳ ｴﾑｼｰﾋﾟｰ ﾎｱﾝﾄﾞｼｱｸｴ)
+ｻｰｸｽ_URL="http://127.0.0.1:42701" ﾄｲﾑｴｵｳﾄ 3 ｴﾑｼｰﾋﾟｰ-ｻｰｸｽ
+```
+
+### ｻｰﾁ ﾗｴﾄｳﾗﾝｽﾞ ﾉｰ ﾗｴｽｳﾙﾄｽﾞ
+
+- ｴﾝｽｳﾗｴ `settings.search.formats` ｲﾝｸﾙｰﾄﾞｽﾞ `"json"` (ﾗｴｸｲﾗﾄﾞ ﾊﾞｲ ｴﾑｼｰﾋﾟｰ ｻｰﾊﾞｰ)
+- ﾍﾞﾘﾌｧｲ ﾙｲｶﾞﾄﾄﾌﾟﾄﾞ ﾗｴﾌﾞｴﾗｽｴ ﾌﾟﾗｵｸｽｲ ﾌｵﾗｳｱﾗﾄﾞｽﾞ `X-Forwarded-For` ﾍｯﾀﾞｰ
+- ﾁｪｯｸ ﾛｸﾞｽﾞ: `journalctl -u searx --no-pager -n 30`

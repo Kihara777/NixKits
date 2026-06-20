@@ -1,8 +1,8 @@
-# translate-pseudocn (ｽｷﾙ)
+# ﾄﾗｱﾝｽﾙｱﾄｴ-ｽｰﾄﾞｼｰｴﾇ (ｽｷﾙ)
 
 [中文](../../zh/skills/translate-pseudocn.md) | ｲﾝｸﾞﾘｯｼｭ | [日本語](../../ja/skills/translate-pseudocn.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-pseudocn.md) | [偽中国語](../../pcn/skills/translate-pseudocn.md)
 
-> Pseudo-Chinese (pcn) language support for the document-writing skill. Auto-discovered by write-project-docs.
+> ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ ﾄﾞｷｭﾒﾝﾄ-ｳﾗｲﾄｲﾝｸﾞ ｽｷﾙ. ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs.
 
 ## ｲﾝﾌｫ
 
@@ -11,18 +11,18 @@
 | ﾀｲﾌﾟ | ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ (ﾗﾝｹﾞｰｼﾞ ﾊﾞｯｸｴﾝﾄﾞ) |
 | ﾊﾟｽ | `skills/translate-pseudocn/SKILL.md` |
 | ﾗﾝｹﾞｰｼﾞ ｺｰﾄﾞ | ﾋﾟｰｼｰｴﾇ |
-| Called ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ｵｰﾄ-ﾃﾞｨｽｶﾊﾞｰﾄﾞ) |
+| ｺｰﾙﾄﾞ ﾊﾞｲ | ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs (ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ) |
 
 ## ﾌｨｰﾁｬｰｽﾞ
 
-- Pseudo-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾄﾗﾝｽﾚｰｼｮﾝ — strips kana, adjusts word order (SOV→SVO)
-- Particle replacement, punctuation conversion
-- Built-ｲﾝ ~13 term dictionary (ｼﾞｪｲｴｲ→ｾﾞｯﾄｴｲﾁ ﾏｯﾋﾟﾝｸﾞ)
-- ｺｰﾄﾞ blocks, ﾅﾝﾊﾞｰｽﾞ, symbols preserved
+- ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ (ﾋﾟｰｼｰｴﾇ) ﾄﾗｱﾝｽﾙｱｼｮﾝ — ｽﾄﾗｲﾌﾟｽﾞ ｸｱﾝｱ, ｱﾄﾞｼﾞｳｽﾄｽﾞ ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ (ｽｵﾌﾞ→ｽﾌﾞｵ)
+- ﾌﾟｱﾗﾄｲｸﾙｴ ﾗｴﾌﾟﾙｱｽｴﾒﾝﾄ, ﾌﾟｳﾝｸﾄｳｱｼｮﾝ ｺﾝﾊﾞｰｼﾞｮﾝ
+- ﾌﾞｳｲﾙﾄ-ｲﾝ ~13 ﾄｴﾗﾑ ﾄﾞｲｸﾄｲｵﾝｱﾗｲ (ja→zh ﾏｯﾋﾟﾝｸﾞ)
+- ｺｰﾄﾞ ﾌﾞﾙｵｯｸｽﾞ, ﾝｳﾑﾌﾞｴﾗｽﾞ, ｽｲﾑﾌﾞｵﾙｽﾞ ﾌﾟﾗｴｽｴﾗﾌﾞﾄﾞ
 
 ## ﾕｰｾｰｼﾞ
 
-ｵｰﾄ-ﾃﾞｨｽｶﾊﾞｰﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs via `translate-*` naming convention:
+ｵｰﾄ-ﾄﾞｲｽｸｵﾌﾞｴﾗﾄﾞ ﾊﾞｲ ﾗｲﾄ-ﾌﾟﾛｼﾞｪｸﾄ-docs ﾌﾞｲｱ `translate-*` ﾝｱﾑｲﾝｸﾞ ｸｵﾝﾌﾞｴﾝｼｮﾝ:
 
-- "Generate pseudo-ﾁｬｲﾆｰｽﾞ document"
-- "ｱﾄﾞ ﾋﾟｰｼｰｴﾇ ﾗﾝｹﾞｰｼﾞ variant"
+- "ｼﾞｪﾈﾚｲﾄ ﾌﾟｽｴｳﾄﾞｵ-ﾁｬｲﾆｰｽﾞ ﾄﾞｷｭﾒﾝﾄ"
+- "ｱﾄﾞ ﾋﾟｰｼｰｴﾇ ﾗﾝｹﾞｰｼﾞ ﾌﾞｱﾗｲｱﾝﾄ"
