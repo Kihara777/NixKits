@@ -188,3 +188,8 @@ NixKits — software, patches, NixOS modules and coding agent skills
 - Nix 表达式保持原样，仅翻译 `#` 注释
 - 其他代码块（bash 等）全部内容不动
 - 内联代码 `` `...` `` 全部内容不动
+- **katalish 文档切换器生成规则**（从英文源）：
+  - `[中文]`/`[日本語]`/`[Pseudo-Chinese]`→保留链接（标签改用 display_name）
+  - `English`（纯文本）→ `ｶﾀﾘｯｼｭ`（纯文本，自身标签）
+  - `[Katalish](katalish路径)`→ 删除（自链接，katalish 文档中无需）
+  - **必须用脚本从英文源提取路径后逐个精确构造**
