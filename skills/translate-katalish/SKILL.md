@@ -1,6 +1,9 @@
 ---
 name: translate-katalish
 description: 为文档撰写技能提供额外的自然语言支持。新增 ｶﾀﾘｯｼｭ（片假名英语）语言——半角片假名逐词机械替换英文文本，可与现有三语（zh/en/ja）文档体系并行使用。
+language_code: katalish
+display_name: ｶﾀﾘｯｼｭ
+base_language: en
 ---
 
 # 片假名英语翻译
@@ -112,8 +115,19 @@ kata_text = replace_to_katakana(en_text)
 
 | 技能 | 关系 |
 |------|------|
-| write-project-docs | 主调用者 — 文档编写流程的第 5 步"编写各模块文档"中调用本技能生成 ｶﾀﾘｯｼｭ 版本 |
+| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
+| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
 | nixkits-check-updates | 间接调用 — 更新文档时同步生成 ｶﾀﾘｯｼｭ 版本 |
+
+### 自动发现契约
+
+write-project-docs 扫描 `skills/translate-*/`，读取本技能 frontmatter：
+
+| 字段 | 值 | 用途 |
+|------|-----|------|
+| `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
+| `display_name` | `ｶﾀﾘｯｼｭ` | 语言切换器标签 |
+| `base_language` | `en` | 片假名英语的源语言 |
 
 ## 注意事项
 

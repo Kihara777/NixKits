@@ -1,6 +1,9 @@
 ---
 name: translate-pseudocn
 description: 为文档撰写技能提供伪中国语（pcn）语言支持。以日语汉字词汇为基础、剥离假名与送假名、转换日语语序为中文语序的伪本地化。可被 write-project-docs 自动发现调用。
+language_code: pcn
+display_name: 偽中国語
+base_language: ja
 ---
 
 # 伪中国语翻译
@@ -74,14 +77,22 @@ pcn 文档：
 
 ## 与 write-project-docs 的关系
 
-本技能通过 `translate-*` 命名约定被 write-project-docs 自动发现。write-project-docs 扫描 `skills/translate-*/` 目录，将每个目录视为支持的语言扩展：
+本技能通过 `translate-*` 命名约定被 write-project-docs 自动发现。
+
+### 自动发现契约
+
+write-project-docs 扫描 `skills/translate-*/`，读取本技能 frontmatter 的以下字段：
+
+| 字段 | 值 | 用途 |
+|------|-----|------|
+| `language_code` | `pcn` | 目录名 `docs/pcn/`、文件扩展名 `*.pcn.md`、for 循环迭代 |
+| `display_name` | `偽中国語` | 语言切换器标签 |
+| `base_language` | `ja` | 伪中国语转换的源语言 |
 
 ```
-skills/translate-katalish/  → 语言代码 katalish → `[ｶﾀﾘｯｼｭ]`
-skills/translate-pseudocn/  → 语言代码 pcn      → `[偽中国語]`
+skills/translate-katalish/  → language_code: katalish → display_name: ｶﾀﾘｯｼｭ
+skills/translate-pseudocn/  → language_code: pcn      → display_name: 偽中国語
 ```
-
-技能 `name` 字段中的语言名称用于语言切换器标签，目录名中的语言代码用于路径生成。
 
 ## 注意事项
 

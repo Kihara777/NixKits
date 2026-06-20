@@ -187,7 +187,29 @@ mkdir -p docs/{zh,en,ja}/skills
 
 每个模块创建 3 个文件（zh/en/ja）。先写主语言版本作为基准，再翻译。
 
-对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现语言扩展技能 — 扫描 `skills/translate-*/` 目录，读取各技能的 `name` 和语言定义。
+对于追加语言翻译（如 ｶﾀﾘｯｼｭ、偽中国語），按 `translate-*` 命名约定自动发现语言扩展技能：
+
+```
+# 自动发现算法：
+for dir in skills/translate-*/; do
+  # 读取 SKILL.md frontmatter 中的 language_code / display_name / base_language
+  # → 注册为可用语言，纳入文档生成流程
+done
+```
+
+各 translate-* 技能的 SKILL.md frontmatter 必须包含：
+
+```yaml
+language_code: katalish    # 语言代码（用于目录名 docs/<code>/）
+display_name: ｶﾀﾘｯｼｭ     # 语言切换器标签
+base_language: en          # 翻译源语言（zh/en/ja）
+```
+
+自动发现后：
+- 目录结构扩展 `docs/<code>/` 和 `docs/<code>/skills/`
+- 语言切换器追加 `[<display_name>](docs/README.<code>.md)`
+- 三语 for 循环扩展为多语言遍历
+- 基本信息表格列名由各 translate-* 技能的规则定义
 
 核心段：
 1. **基本信息** 表格 — 类型、关键属性
