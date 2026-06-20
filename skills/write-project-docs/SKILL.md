@@ -76,8 +76,12 @@ description: 按 NixKits 风格为任意项目编写或重新生成完整的多�
 - zh 子目录文件：`[中文](file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md)`
 - en 子目录文件：`[中文](../../zh/file.md) | [English](file.md) | [日本語](../../ja/file.md)`
 - ja 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](file.md)`
-- katalish 子目录文件：`[中文](../../zh/file.md) | [English](../../en/file.md) | [日本語](../../ja/file.md) | ｶﾀﾘｯｼｭ | [Pseudo-Chinese](../pcn/file.md)`
-- pcn 子目录文件：`[中文](../../zh/file.md) | [English](../en/file.md) | [日本語](../ja/file.md) | [Katalish](../katalish/file.md) | 偽中国語`
+- 扩展语言（`skills/translate-*/` 自动发现）子目录文件：
+  语言切换器按以下规则生成，不硬编码特定语言：
+  - 所有已注册语言按声明顺序排列（`zh` → `en` → `ja` → 各扩展语言按发现顺序）
+  - 其他语言的标签使用**固有名称**加对应相对路径链接
+  - 当前语言自身的标签使用该语言的 `display_name`（语言自称），纯文本不加链接
+  - 相对路径根据目录层级自动计算（同级 `../<lang>/`、上级 `../../<lang>/` 等）
 
 ### 技能文档模板
 
