@@ -63,5 +63,10 @@
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
     };
 
+  } // {
+    nixConfig = {
+      extra-substituters = [ "https://nixkits.cachix.org" ];
+      extra-trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+    };
   };
 }

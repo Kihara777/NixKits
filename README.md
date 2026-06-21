@@ -28,7 +28,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 > nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
 > ```
 >
-> 缓存覆盖全部 6 个软件包（x86_64-linux），由 CI 自动构建推送。
+> 缓存由 CI 自动构建推送（x86_64-linux）。aarch64 / riscv64 暂不支持 CI 构建，可通过本地 `cachix push` 手动推送。
 >
 ## 软件
 

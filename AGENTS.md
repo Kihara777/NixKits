@@ -84,4 +84,4 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ## 缓存
 
-`cachix use nixkits`。缓存由 CI 自动维护。aarch64 / riscv64 暂不支持 CI 构建（需 ARM 硬件或 QEMU 模拟）。
+`cachix use nixkits`。缓存由 CI 自动维护。aarch64 / riscv64 暂不支持 CI 构建（需 ARM 硬件或 QEMU 模拟）。flake 通过 `nixConfig` 自动声明缓存端点，消费者无需手动配置。
