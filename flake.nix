@@ -7,9 +7,6 @@
 
     llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
     llama-cpp-ver.flake = false;
-
-    mihomo-ver.url = "https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha";
-    mihomo-ver.flake = false;
   };
 
   outputs = {
@@ -17,7 +14,6 @@
     nixpkgs,
     flake-utils,
     llama-cpp-ver,
-    mihomo-ver,
   } @ inputs:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = nixpkgs.legacyPackages.${system};
@@ -65,7 +61,6 @@
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
-      mihomo-alpha      = import ./overlays/mihomo-alpha.nix { inherit mihomo-ver; };
     };
 
   };
