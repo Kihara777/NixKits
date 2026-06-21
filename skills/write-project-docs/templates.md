@@ -166,13 +166,17 @@ nix registry add <project> <remote-url>
 
 ## 包文档 CI 徽章
 
-在每个包文档的标题后、语言切换器前，添加双架构构建状态徽章：
+在每个包文档的标题后、语言切换器前，添加双架构构建状态徽章（每架构独立一行，末尾与语言切换器间保留空行）：
 
 ```markdown
-[![x86_64](https://img.shields.io/github/actions/workflow/status/<org>/<repo>/<workflow>.yml?branch=main&label=x86_64&job=<encoded>)](...)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/<org>/<repo>/<workflow>.yml?branch=main&label=aarch64&job=<encoded>)](...)
+# <package-name>
+
+[![x86_64](...)](...)
+[![aarch64](...)](...)
+
+[中文](...) | [English](...) | ...
 ```
 
 Job name 必须 URL 编码（空格→`%20`、括号→`%28`/`%29`、逗号→`%2C`）。
 
-仅当 CI workflow 含矩阵 `runs-on` 维度且至少两个架构时添加。
+
