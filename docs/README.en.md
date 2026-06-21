@@ -20,13 +20,13 @@ Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
 
 | Software | Description | Docs |
 |---|------|------|
-| codewhale | DeepSeek V4 terminal coding agent | [docs/zh/codewhale.md](zh/codewhale.md) |
-| kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/zh/kitsfmt.md](zh/kitsfmt.md) |
-| mcp-searxng | MCP server for SearXNG | [docs/zh/mcp-searxng.md](zh/mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/zh/obs-bilibili-stream.md](zh/obs-bilibili-stream.md) |
-| opencode-telegram | Telegram Bot client for OpenCode | [docs/zh/opencode-telegram.md](zh/opencode-telegram.md) |
-| ruyi | RuyiSDK package manager (RISC-V development tools) | [docs/zh/ruyi.md](zh/ruyi.md) |
-| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/zh/comfyui-strix-halo.md](zh/comfyui-strix-halo.md) |
+| codewhale | DeepSeek V4 terminal coding agent | [docs/zh/codewhale.md](en/codewhale.md) |
+| kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/zh/kitsfmt.md](en/kitsfmt.md) |
+| mcp-searxng | MCP server for SearXNG | [docs/zh/mcp-searxng.md](en/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/zh/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
+| opencode-telegram | Telegram Bot client for OpenCode | [docs/zh/opencode-telegram.md](en/opencode-telegram.md) |
+| ruyi | RuyiSDK package manager (RISC-V development tools) | [docs/zh/ruyi.md](en/ruyi.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/zh/comfyui-strix-halo.md](en/comfyui-strix-halo.md) |
 
 ## Development
 
@@ -46,11 +46,11 @@ Standalone overlays, not included in `default`:
 
 | Patch | Description | Docs |
 |------|------|------|
-| llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
-| rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
-| ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
-| comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/zh/comfyui-rocm-patch.md](zh/comfyui-rocm-patch.md) |
-| rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/zh/rog-control-center-fix.md](zh/rog-control-center-fix.md) |
+| llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/zh/llama-cpp-rocm.md](en/llama-cpp-rocm.md) |
+| rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/zh/rcc-fix.md](en/rcc-fix.md) |
+| ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/zh/ruyi-nixos-compat.md](en/ruyi-nixos-compat.md) |
+| comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/zh/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
+| rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/zh/rog-control-center-fix.md](en/rog-control-center-fix.md) |
 
 ## Skills
 
@@ -60,14 +60,14 @@ For AI coding assistants:
 
 | Skill | Description | Docs |
 |------|------|------|
-| nixkits-check-updates | Check for upstream updates and auto-upgrade | [docs/zh/skills/nixkits-check-updates.md](zh/skills/nixkits-check-updates.md) |
-| nixkits-skills | NixKits skill installer (local/online) | [docs/zh/skills/nixkits-skills.md](zh/skills/nixkits-skills.md) |
-| nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/zh/skills/nixos-modern-cli.md](zh/skills/nixos-modern-cli.md) |
-| recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/zh/skills/recover-nixos-config.md](zh/skills/recover-nixos-config.md) |
-| translate-katalish | Katakana English translation (mechanical word-level substitution of English docs) | [docs/zh/skills/translate-katalish.md](zh/skills/translate-katalish.md) |
-| translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/zh/skills/translate-pseudocn.md](zh/skills/translate-pseudocn.md) |
-| write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/zh/skills/write-maintenance-log.md](zh/skills/write-maintenance-log.md) |
-| write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/zh/skills/write-project-docs.md](zh/skills/write-project-docs.md) |
+| nixkits-check-updates | Check for upstream updates and auto-upgrade | [docs/zh/skills/nixkits-check-updates.md](en/skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits skill installer (local/online) | [docs/zh/skills/nixkits-skills.md](en/skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/zh/skills/nixos-modern-cli.md](en/skills/nixos-modern-cli.md) |
+| recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/zh/skills/recover-nixos-config.md](en/skills/recover-nixos-config.md) |
+| translate-katalish | Katakana English translation (mechanical word-level substitution of English docs) | [docs/zh/skills/translate-katalish.md](en/skills/translate-katalish.md) |
+| translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/zh/skills/translate-pseudocn.md](en/skills/translate-pseudocn.md) |
+| write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/zh/skills/write-maintenance-log.md](en/skills/write-maintenance-log.md) |
+| write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/zh/skills/write-project-docs.md](en/skills/write-project-docs.md) |
 
 ## Credits
 
