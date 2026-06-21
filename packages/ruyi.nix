@@ -14,7 +14,6 @@
   git,
   gnumake,
   patchelf,
-  stdenv,
 }:
 
 let
@@ -68,18 +67,8 @@ python.pkgs.buildPythonApplication {
   # every venv's bin/ directory as symlinks so that `make` works after
   # `source ruyi-activate` even though NixOS does not have make globally.
   postPatch = ''
-    # 1. Append expose_build_tools_in_venv to nixos_compat.py
-    # (the file may already exist from ruyi-nixos-compat.patch)
-    # Replace Nix store path placeholders from the patch
-    substituteInPlace ruyi/utils/nixos_compat.py \
-      --replace-fail '@nixLdSo@'     '${stdenv.cc.bintools.dynamicLinker}' \
-      --replace-fail '@nixGlibcLib@' '${stdenv.cc.libc}/lib'
-
-    # Inject import for ensure_toolchain_nixos_compat into runtime.py
-    # (the patch adds the call site but the import lives in a different scope)
-    sed -i '/def _maybe_fix_toolchain_sub_binaries/,/ensure_toolchain_nixos_compat/{
-      /ensure_toolchain_nixos_compat/i\    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
-    }' ruyi/mux/runtime.py
+    # Append expose_build_tools_in_venv to nixos_compat.py
+    # (the file is created by the overlay patch — ruyi-nixos-compat.patch)
 
     mkdir -p ruyi/utils
     touch ruyi/utils/__init__.py
