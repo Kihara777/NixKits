@@ -1,5 +1,7 @@
 # NixKits
 
+[![CI](https://github.com/Kihara777/NixKits/actions/workflows/check.yml/badge.svg)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+
 中文 | [English](docs/README.en.md) | [日本語](docs/README.ja.md) | [ｶﾀﾘｯｼｭ](docs/README.katalish.md) | [偽中国語](docs/README.pcn.md)
 
 NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
@@ -8,15 +10,26 @@ NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 
 ```nix
 # 远程
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 本地
-inputs.nix-kits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/kix/NixKits";
 ```
+
+> **二进制缓存**（避免本地编译）
+>
+> ```bash
+> cachix use nixkits       # 首次使用需安装 cachix：nix profile install nixpkgs#cachix
+> ```
+>
+> 缓存覆盖全部 6 个软件包（x86_64-linux），由 CI 自动构建推送。
+>
+> [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits)
+> [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
 
 ## 软件
 
-支持系统：所有 `lib.platforms.linux`（自动跟随 nixpkgs）
+支持系统：`lib.platforms.linux`（codewhale 限 x86_64 / aarch64 / riscv64，其余自动跟随 nixpkgs）
 
 | 软件 | 说明 | 文档 |
 |---|------|------|
@@ -33,12 +46,12 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 提供 `nix develop` 即用环境。首先添加 registry：
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nixkits github:Kihara777/NixKits
 ```
 
 | 包 | `nix develop` |
 |------|---------------|
-| ruyi | `nix develop nix-kits#ruyi` |
+| ruyi | `nix develop nixkits#ruyi` |
 
 ## 补丁
 
