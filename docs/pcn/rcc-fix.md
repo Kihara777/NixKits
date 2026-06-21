@@ -27,9 +27,11 @@ overlay()+ NixOS 模塊(systemd 修復)，併用推奨：
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.rcc-fix ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.rcc-fix ];
 
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
+
+  nixkits.rog-control-center-fix.enable = true;
 
   services.asusctl = {
     enable = true;

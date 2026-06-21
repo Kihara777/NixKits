@@ -16,7 +16,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.llama-cpp-rocm ];
   environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
@@ -30,12 +30,12 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 ```nix
 # flake.nix
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nixkits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
+  outputs = { nixpkgs, nixkits, ... }: {
     nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
       modules = [
-        nix-kits.nixosModules.llama-cpp-rocm
+        nixkits.nixosModules.llama-cpp-rocm
         {
           services.llama-cpp = {
             enable = true;
@@ -167,14 +167,14 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 
 ### 移行例
 
-> **⚠️ ステップ 1**: `flake.nix` のモジュールリストに `nix-kits.nixosModules.llama-cpp-rocm` を追加
+> **⚠️ ステップ 1**: `flake.nix` のモジュールリストに `nixkits.nixosModules.llama-cpp-rocm` を追加
 
 **移行前**:
 
 ```nix
 # flake.nix — モジュールリスト
 { modules = [
-    # nix-kits.nixosModules.llama-cpp-rocm  # ← 未インポート
+    # nixkits.nixosModules.llama-cpp-rocm  # ← 未インポート
 ];}
 
 # llama-cpp.nix
@@ -217,7 +217,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 ```nix
 # flake.nix — モジュールリスト（追加）
 { modules = [
-    nix-kits.nixosModules.llama-cpp-rocm
+    nixkits.nixosModules.llama-cpp-rocm
 ];}
 
 # llama-cpp.nix

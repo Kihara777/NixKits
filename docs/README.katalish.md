@@ -8,10 +8,10 @@ NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰ
 
 ```nix
 # Remote
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # Local
-inputs.nix-kits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
 ## ｿﾌﾄｳｪｱ
@@ -33,12 +33,12 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 `nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-ﾕｰｽﾞ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nixkits github:Kihara777/NixKits
 ```
 
 | ﾊﾟｯｹｰｼﾞ | `nix develop` |
 |---------|---------------|
-| ruyi | `nix develop nix-kits#ruyi` |
+| ruyi | `nix develop nixkits#ruyi` |
 
 ## ﾊﾟｯﾁｰｽﾞ
 

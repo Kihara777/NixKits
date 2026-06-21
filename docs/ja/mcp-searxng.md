@@ -14,10 +14,10 @@
 ## インストール
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.mcp-searxng ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.mcp-searxng ];
 
 # デフォルト overlay → pkgs.mcp-searxng
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## NixOS 完全設定（SearXNG + lighttpd）

@@ -12,7 +12,7 @@ ruyi 経由で RISC-V クロスコンパイルツールチェーン（GCC、QEMU
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # 単独 overlay
+  nixkits.overlays.ruyi-nixos-compat  # 単独 overlay
 ];
 ```
 

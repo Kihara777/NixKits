@@ -8,10 +8,10 @@ NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コー�
 
 ```nix
 # リモート
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # ローカル
-inputs.nix-kits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
 ## ソフトウェア
@@ -33,12 +33,12 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 `nix develop` で即利用可能。まずレジストリを追加：
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nixkits github:Kihara777/NixKits
 ```
 
 | パッケージ | `nix develop` |
 |-----------|---------------|
-| ruyi | `nix develop nix-kits#ruyi` |
+| ruyi | `nix develop nixkits#ruyi` |
 
 ## パッチ
 

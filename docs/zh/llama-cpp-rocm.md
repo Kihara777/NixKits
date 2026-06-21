@@ -16,7 +16,7 @@
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.llama-cpp-rocm ];
   environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
@@ -30,12 +30,12 @@
 ```nix
 # flake.nix
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nixkits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
+  outputs = { nixpkgs, nixkits, ... }: {
     nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
       modules = [
-        nix-kits.nixosModules.llama-cpp-rocm
+        nixkits.nixosModules.llama-cpp-rocm
         {
           services.llama-cpp = {
             enable = true;
@@ -171,14 +171,14 @@
 
 ### 迁移示例
 
-> **⚠️ 第 1 步**：在 `flake.nix` 模块列表中添加 `nix-kits.nixosModules.llama-cpp-rocm`
+> **⚠️ 第 1 步**：在 `flake.nix` 模块列表中添加 `nixkits.nixosModules.llama-cpp-rocm`
 
 **迁移前**：
 
 ```nix
 # flake.nix — 模块列表
 { modules = [
-    # nix-kits.nixosModules.llama-cpp-rocm  # ← 尚未导入
+    # nixkits.nixosModules.llama-cpp-rocm  # ← 尚未导入
 ];}
 
 # llama-cpp.nix
@@ -221,7 +221,7 @@
 ```nix
 # flake.nix — 模块列表（新增）
 { modules = [
-    nix-kits.nixosModules.llama-cpp-rocm
+    nixkits.nixosModules.llama-cpp-rocm
 ];}
 
 # llama-cpp.nix

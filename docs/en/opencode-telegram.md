@@ -27,10 +27,10 @@ opencode-telegram stop                   # stop
 ## Install
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.opencode-telegram ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.opencode-telegram ];
 
 # Default overlay → pkgs.opencode-telegram
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## Flake Module
@@ -38,14 +38,14 @@ nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
 ```nix
 # flake.nix
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nixkits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
+  outputs = { nixpkgs, nixkits, ... }: {
     nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
       modules = [
-        nix-kits.nixosModules.opencode-telegram
+        nixkits.nixosModules.opencode-telegram
         {
-          services.opencode-telegram = {
+          nixkits.opencode-telegram = {
             enable = true;
             user = "kix";
             group = "users";

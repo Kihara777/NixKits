@@ -28,13 +28,13 @@ kitsfmt file1.nix file2.nix  # 複数ファイル
 
 ```nix
 # 直接
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 
 # デフォルト overlay（推奨）
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
 # nix fmt フォーマッターとして
-# formatter.${system} = inputs.nix-kits.formatter.${system};
+# formatter.${system} = inputs.nixkits.formatter.${system};
 # その後: nix fmt
 ```
 

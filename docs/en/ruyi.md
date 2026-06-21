@@ -16,7 +16,7 @@ Package manager for [RuyiSDK](https://ruyisdk.org) — RISC-V development toolki
 ## Dev Shell
 
 ```bash
-nix develop nix-kits#ruyi             # when nix-kits is already a flake input
+nix develop nixkits#ruyi             # when nixkits is already a flake input
 nix develop github:Kihara777/NixKits#ruyi  # zero-config one-shot
 ```
 
@@ -25,10 +25,10 @@ Enters an environment with `ruyi` available on `$PATH`.
 ## Install
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.ruyi ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
 # Or via overlay
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
@@ -50,9 +50,9 @@ Declarative NixOS module for ruyi runtime configuration:
 
 ```nix
 # flake.nix
-{ modules = [ nix-kits.nixosModules.ruyi ]; }
+{ modules = [ nixkits.nixosModules.ruyi ]; }
 
-services.ruyi = {
+nixkits.ruyi = {
   enable = true;
   settings = {
     packages.prereleases = false;
@@ -68,7 +68,7 @@ Generates `/etc/xdg/ruyi/config.toml`, sets environment variables, and auto-upda
 Supports declarative virtual environments:
 
 ```nix
-services.ruyi.venvs.riscv = {
+nixkits.ruyi.venvs.riscv = {
   profile = "gnu-plct";
   toolchain = "gnu-plct";
   dest = "/home/kix/ruyi-venvs/riscv";

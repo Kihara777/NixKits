@@ -8,10 +8,10 @@ NixKits — 軟件補丁NixOS 模塊AI 技能合集
 
 ```nix
 # 
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 
-inputs.nix-kits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
 ## 軟件
@@ -33,12 +33,12 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 `nix develop` 即利用可能註冊表追加：
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nixkits github:Kihara777/NixKits
 ```
 
 |軟件包|`nix develop`|
 |-----------|---------------|
-|ruyi|`nix develop nix-kits#ruyi`|
+|ruyi|`nix develop nixkits#ruyi`|
 
 ## 補丁
 

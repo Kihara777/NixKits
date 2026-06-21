@@ -15,10 +15,10 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 ## 引用
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
 # Default overlay → pkgs.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## 使用

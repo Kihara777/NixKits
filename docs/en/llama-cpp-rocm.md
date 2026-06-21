@@ -16,7 +16,7 @@ Upstream llama.cpp with ROCm GPU acceleration. Dynamically fetches the latest Gi
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.llama-cpp-rocm ];
   environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
@@ -30,12 +30,12 @@ See upstream llama.cpp docs.
 ```nix
 # flake.nix
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nixkits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
+  outputs = { nixpkgs, nixkits, ... }: {
     nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
       modules = [
-        nix-kits.nixosModules.llama-cpp-rocm
+        nixkits.nixosModules.llama-cpp-rocm
         {
           services.llama-cpp = {
             enable = true;
@@ -167,14 +167,14 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
 
 ### Migration Example
 
-> **⚠️ Step 1**: Add `nix-kits.nixosModules.llama-cpp-rocm` to your flake module list.
+> **⚠️ Step 1**: Add `nixkits.nixosModules.llama-cpp-rocm` to your flake module list.
 
 **Before**:
 
 ```nix
 # flake.nix — module list
 { modules = [
-    # nix-kits.nixosModules.llama-cpp-rocm  # ← not yet imported
+    # nixkits.nixosModules.llama-cpp-rocm  # ← not yet imported
 ];}
 
 # llama-cpp.nix
@@ -217,7 +217,7 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
 ```nix
 # flake.nix — module list (new)
 { modules = [
-    nix-kits.nixosModules.llama-cpp-rocm
+    nixkits.nixosModules.llama-cpp-rocm
 ];}
 
 # llama-cpp.nix

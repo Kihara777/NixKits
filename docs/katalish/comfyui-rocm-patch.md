@@ -1,20 +1,25 @@
-# comfyui-rocm-ﾊﾟｯﾁ
+# comfyui-rocm-patch
 
 [中文](../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/comfyui-rocm-patch.md)
 
-ROCm capability ﾊﾟｯﾁ ﾌｫｱ ComfyUI.
+ComfyUI ﾆ ROCm 機能ﾊﾟｯﾁ ｦ 提供ｼﾏｽ。
 
-## ｲﾝﾌｫ
+## 基本ｼﾞｮｳﾎｳ
 
-- **Feature**: ﾊﾟｯﾁｰｽﾞ ComfyUI ROCm ｻﾎﾟｰﾄ, enables custom node ﾋﾞﾙﾄﾞ toolchain (via `gfxOverride` ﾌｫｱ custom GPU target)
-- **Location**: `modules/comfyui-rocm-ﾊﾟｯﾁ.nix`
+| ｺｳﾓｸ | ｱﾀｲ |
+|------|-----|
+| ｵﾌﾟｼｮﾝ | `nixkits.comfyui-rocm-patch.enable` |
+| ﾌｧｲﾙ | `modules/comfyui-rocm-patch.nix` |
 
-## ﾕｰｾｰｼﾞ
+## ｼﾖｳﾎｳﾎｳ
 
 ```nix
 {
-  services.comfyui.rocmGfxOverride = "gfx1100";  # custom GPU target version
+  imports = [ inputs.nixkits.nixosModules.comfyui-rocm-patch ];
+
+  nixkits.comfyui-rocm-patch.enable = true;
+  services.comfyui.rocmGfxOverride = "11.0.0";  # ｵﾌﾟｼｮﾅﾙ：ｶｽﾀﾑ GPU ﾀｰｹﾞｯﾄ
 }
 ```
 
-When `rocmGfxOverride` ｲｽﾞ set, ｻﾞ ﾓｼﾞｭｰﾙ injects `HSA_OVERRIDE_GFX_VERSION` ｲﾝﾄｩ ｻﾞ ComfyUI ｻｰﾋﾞｽ.
+`rocmGfxOverride` ｦ 設定ｽﾙﾄ、`HSA_OVERRIDE_GFX_VERSION` 環境変数 ｶﾞ ComfyUI ｻｰﾋﾞｽ ﾆ 注入ｻﾚﾏｽ。ﾏﾀ xformers ｦ 自動無効化（nixpkgs 版 ﾊ ROCm ﾊﾞｯｸｴﾝﾄﾞ 非対応）ｼ、C ﾋﾞﾙﾄﾞ ﾂｰﾙﾁｪｰﾝ ｦ 注入ｼﾏｽ。

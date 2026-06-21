@@ -16,7 +16,7 @@
 ## Dev Shell
 
 ```bash
-nix develop nix-kits#ruyi             # nix-kits を flake input に追加済みの場合
+nix develop nixkits#ruyi             # nixkits を flake input に追加済みの場合
 nix develop github:Kihara777/NixKits#ruyi  # 事前設定不要のワンショット
 ```
 
@@ -25,10 +25,10 @@ nix develop github:Kihara777/NixKits#ruyi  # 事前設定不要のワンショ�
 ## 安裝
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.ruyi ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
 # または overlay 経由
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
@@ -50,9 +50,9 @@ NixOS 模塊 ruyi 運行時設置宣言的構成：
 
 ```nix
 # flake.nix
-{ modules = [ nix-kits.nixosModules.ruyi ]; }
+{ modules = [ nixkits.nixosModules.ruyi ]; }
 
-services.ruyi = {
+nixkits.ruyi = {
   enable = true;
   settings = {
     packages.prereleases = false;
@@ -68,7 +68,7 @@ services.ruyi = {
 宣言的仮想環境支持：
 
 ```nix
-services.ruyi.venvs.riscv = {
+nixkits.ruyi.venvs.riscv = {
   profile = "gnu-plct";
   toolchain = "gnu-plct";
   dest = "/home/kix/ruyi-venvs/riscv";

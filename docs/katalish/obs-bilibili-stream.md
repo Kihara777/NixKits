@@ -2,32 +2,35 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/obs-bilibili-stream.md)
 
-Bilibili live ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫｱ OBS Studio.
+OBS Studio の Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ。
 
-## ｲﾝﾌｫ
+## 基本ｼﾞｮｳﾎｳ
 
-| Item | Value |
-|------|-------|
-| Version | 2.1.0 |
-| Upstream | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| Platform | Linux ｵﾝﾘｰ |
+| ｺｳﾓｸ | ｱﾀｲ |
+|------|-----|
+| ﾊﾞｰｼﾞｮﾝ | 2.1.0 |
+| ｱｯﾌﾟｽﾄﾘｰﾑ | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| ﾌﾟﾗｯﾄﾌｫｰﾑ | Linux only |
 
-## ｲﾝｽﾄｰﾙ
+## ｻﾝｼｮｳ
 
-**Recommended: NixOS ﾓｼﾞｭｰﾙ**
+**推奨：NixOS ﾓｼﾞｭｰﾙ**
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
+  imports = [ inputs.nixkits.nixosModules.obs-bilibili-stream ];
+
+  nixkits.obs-bilibili-stream.enable = true;
+  programs.obs-studio.enable = true;
 }
 ```
 
-**Manual**
+**手動**
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-bilibili-stream ];
@@ -38,5 +41,5 @@ Bilibili live ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ ﾌｫｱ OBS Studi
 **Home Manager**
 
 ```nix
-home.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```

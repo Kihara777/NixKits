@@ -21,7 +21,7 @@ Fixes ｱ systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
 
   services.asusd.enable = true;
 }

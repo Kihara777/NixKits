@@ -12,7 +12,7 @@
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # 独立 overlay
+  nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
 ];
 ```
 

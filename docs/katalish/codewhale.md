@@ -15,10 +15,10 @@ A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ
 ## ｲﾝｽﾄｰﾙ
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
 # Default overlay → pkgs.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## ﾕｰｾｰｼﾞ

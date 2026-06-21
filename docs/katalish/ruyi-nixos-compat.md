@@ -12,7 +12,7 @@ Required ﾌｫｱ NixOS users who download ｱﾝﾄﾞ execute RISC-V cross-co
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # standalone overlay
+  nixkits.overlays.ruyi-nixos-compat  # standalone overlay
 ];
 ```
 

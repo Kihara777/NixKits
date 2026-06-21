@@ -2,24 +2,27 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | 偽中国語
 
-OBS Studio 用 Bilibili 配信插件。
+OBS Studio 用 Bilibili 生放送配信插件。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
 | 版本 | 2.1.0 |
-| 上游 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| | Linux |
+| 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| 平台 | Linux 限定 |
 
-## 安裝
+## 参照
 
-**推奨: NixOS 模塊**
+**推奨：NixOS 模块**
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
+  imports = [ inputs.nixkits.nixosModules.obs-bilibili-stream ];
+
+  nixkits.obs-bilibili-stream.enable = true;
+  programs.obs-studio.enable = true;
 }
 ```
 
@@ -27,7 +30,7 @@ OBS Studio 用 Bilibili 配信插件。
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-bilibili-stream ];
@@ -38,5 +41,5 @@ OBS Studio 用 Bilibili 配信插件。
 **Home Manager**
 
 ```nix
-home.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```

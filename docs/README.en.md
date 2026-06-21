@@ -8,10 +8,10 @@ NixKits — a collection of software, patches, NixOS modules, and AI coding assi
 
 ```nix
 # Remote
-inputs.nix-kits.url = "github:Kihara777/NixKits";
+inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # Local
-inputs.nix-kits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
 ## Software
@@ -33,12 +33,12 @@ Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
 `nix develop` ready-to-use environments. First, add the registry:
 
 ```bash
-nix registry add nix-kits github:Kihara777/NixKits
+nix registry add nixkits github:Kihara777/NixKits
 ```
 
 | Package | `nix develop` |
 |---------|---------------|
-| ruyi | `nix develop nix-kits#ruyi` |
+| ruyi | `nix develop nixkits#ruyi` |
 
 ## Patches
 

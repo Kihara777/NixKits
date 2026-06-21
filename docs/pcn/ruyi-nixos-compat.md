@@ -12,7 +12,7 @@ ruyi 経由 RISC-V 工具(GCC，QEMU 等)・実行 NixOS 必要。RISC-V 開發�
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # 単独 overlay
+  nixkits.overlays.ruyi-nixos-compat  # 単独 overlay
 ];
 ```
 

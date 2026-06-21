@@ -16,10 +16,10 @@
 ## 安装
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.ruyi ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
 # 或通过 overlay
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
@@ -41,9 +41,9 @@ ruyi device provision    # 设备烧录
 
 ```nix
 # flake.nix
-{ modules = [ nix-kits.nixosModules.ruyi ]; }
+{ modules = [ nixkits.nixosModules.ruyi ]; }
 
-services.ruyi = {
+nixkits.ruyi = {
   enable = true;
   settings = {
     packages.prereleases = false;
@@ -59,7 +59,7 @@ services.ruyi = {
 支持声明式虚拟环境：
 
 ```nix
-services.ruyi.venvs.riscv = {
+nixkits.ruyi.venvs.riscv = {
   profile = "gnu-plct";
   toolchain = "gnu-plct";
   dest = "/home/kix/ruyi-venvs/riscv";

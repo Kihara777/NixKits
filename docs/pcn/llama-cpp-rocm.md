@@ -16,7 +16,7 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.llama-cpp-rocm ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.llama-cpp-rocm ];
   environment.systemPackages = [ pkgs.llama-cpp-rocm ];
 }
 ```
@@ -30,12 +30,12 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 ```nix
 # flake.nix
 {
-  inputs.nix-kits.url = "github:Kihara777/NixKits";
+  inputs.nixkits.url = "github:Kihara777/NixKits";
 
-  outputs = { nixpkgs, nix-kits, ... }: {
+  outputs = { nixpkgs, nixkits, ... }: {
     nixosConfigurations.your-host = nixpkgs.lib.nixosSystem {
       modules = [
-        nix-kits.nixosModules.llama-cpp-rocm
+        nixkits.nixosModules.llama-cpp-rocm
         {
           services.llama-cpp = {
             enable = true;
@@ -167,14 +167,14 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 
 ### 移行例
 
-> **⚠️ 1**: `flake.nix` 模塊 `nix-kits.nixosModules.llama-cpp-rocm` 追加
+> **⚠️ 1**: `flake.nix` 模塊 `nixkits.nixosModules.llama-cpp-rocm` 追加
 
 **移行前**:
 
 ```nix
 # flake.nix — モジュールリスト
 { modules = [
-    # nix-kits.nixosModules.llama-cpp-rocm  # ← 未インポート
+    # nixkits.nixosModules.llama-cpp-rocm  # ← 未インポート
 ];}
 
 # llama-cpp.nix
@@ -217,7 +217,7 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 ```nix
 # flake.nix — モジュールリスト（追加）
 { modules = [
-    nix-kits.nixosModules.llama-cpp-rocm
+    nixkits.nixosModules.llama-cpp-rocm
 ];}
 
 # llama-cpp.nix

@@ -18,8 +18,11 @@ Bilibili live streaming plugin for OBS Studio.
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
-  imports = [ inputs.nix-kits.nixosModules.obs-bilibili-stream ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
+  imports = [ inputs.nixkits.nixosModules.obs-bilibili-stream ];
+
+  nixkits.obs-bilibili-stream.enable = true;
+  programs.obs-studio.enable = true;
 }
 ```
 
@@ -27,7 +30,7 @@ Bilibili live streaming plugin for OBS Studio.
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-bilibili-stream ];
@@ -38,5 +41,5 @@ Bilibili live streaming plugin for OBS Studio.
 **Home Manager**
 
 ```nix
-home.packages = [ inputs.nix-kits.packages.${pkgs.system}.obs-bilibili-stream ];
+home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```

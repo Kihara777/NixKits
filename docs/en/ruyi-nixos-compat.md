@@ -12,7 +12,7 @@ Required for NixOS users who download and execute RISC-V cross-compilation toolc
 
 ```nix
 nixpkgs.overlays = [
-  nix-kits.overlays.ruyi-nixos-compat  # standalone overlay
+  nixkits.overlays.ruyi-nixos-compat  # standalone overlay
 ];
 ```
 

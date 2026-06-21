@@ -28,13 +28,13 @@ Env vars: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
 
 ```nix
 # Direct
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 
 # Default overlay (recommended)
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
 # As nix fmt formatter
-# formatter.${system} = inputs.nix-kits.formatter.${system};
+# formatter.${system} = inputs.nixkits.formatter.${system};
 # then: nix fmt
 ```
 

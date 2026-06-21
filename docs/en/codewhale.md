@@ -15,10 +15,10 @@ A terminal coding agent built for DeepSeek V4.
 ## Install
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
 # Default overlay → pkgs.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## Usage

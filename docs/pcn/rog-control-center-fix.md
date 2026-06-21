@@ -21,7 +21,7 @@ asusd 時 `asus-shutdown.service` 修復。
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
 
   services.asusd.enable = true;
 }

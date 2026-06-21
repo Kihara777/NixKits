@@ -34,15 +34,15 @@ NixKits 模块（`nixkits.comfyui-strix-halo`）一站式启用所有优化。
 {
   inputs = {
     comfyui-nix.url = "github:utensils/comfyui-nix";  # 在线版，无需 fork
-    nix-kits.url = "/home/kix/NixKits";               # 或 github
+    nixkits.url = "/home/kix/NixKits";               # 或 github
     # ...
   };
 
-  outputs = { nix-kits, comfyui-nix, ... }:
+  outputs = { nixkits, comfyui-nix, ... }:
     nixpkgs.lib.nixosSystem {
       modules = [
         comfyui-nix.nixosModules.default        # 上游模块
-        nix-kits.nixosModules.comfyui-strix-halo # Strix Halo 优化
+        nixkits.nixosModules.comfyui-strix-halo # Strix Halo 优化
         ./system/software/comfyui-rocm-patch.nix # 本地补丁（rocmGfxOverride 等）
         {
           nixkits.comfyui-strix-halo.enable = true;

@@ -28,15 +28,15 @@ kitsfmt file1.nix file2.nix  # 多文件
 
 ```nix
 # 直接引用
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.kitsfmt ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 
 # Default overlay (推荐)
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];  # → pkgs.kitsfmt
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
 # 作为 nix fmt 的 formatter
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 # flake.nix:
-#   formatter.${system} = inputs.nix-kits.formatter.${system};
+#   formatter.${system} = inputs.nixkits.formatter.${system};
 # 然后运行: nix fmt
 ```
 

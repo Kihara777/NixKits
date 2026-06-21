@@ -75,7 +75,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-17T10:00:00+09:00
+## 2026-06-17T10:03:05+09:00
 
 **摘要**：ruyi — 新規 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入環境
 
@@ -99,7 +99,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-20T17:30:00+09:00
+## 2026-06-20T18:36:33+09:00
 
 **摘要**：技能系統再構成 — translate-katakana→translate-katalish 改名，新規 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 語言扩展自動发现，文檔代码五语映射表
 
@@ -117,7 +117,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-17T07:00:00+09:00
+## 2026-06-17T07:37:39+09:00
 
 **摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥離为独立技能，双入口設計（记入維護記録 + 更新維護記録）；flake.lock 同期 .gitignore 前置检测与三路分支逻辑
 
@@ -131,7 +131,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-17T06:50:00+09:00
+## 2026-06-17T06:46:13+09:00
 
 **摘要**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 動態获取版本（已撤销，方案不可用）
 
@@ -142,7 +142,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-16T08:00:00+09:00
+## 2026-06-16T06:03:24+09:00
 
 **摘要**：mcp-searxng 文檔 — CodeWhale MCP 設置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
 
@@ -152,7 +152,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-16T07:50:00+09:00
+## 2026-06-16T05:20:34+09:00
 
 **摘要**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修復模式）
 
@@ -162,7 +162,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-14T07:50:00+09:00
+## 2026-06-14T08:11:16+09:00
 
 **摘要**：comfyui-strix-halo 文檔 — 在线集成模式说明与文件结构图
 
@@ -172,7 +172,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-12T05:50:00+09:00
+## 2026-06-12T18:17:52+09:00
 
 **摘要**：llama-cpp-rocm 模塊 — 恢复 modelsPreset 支持（nixpkgs 已削除）、命名空间迁移至 nixkits、三语迁移指南
 
@@ -183,7 +183,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-11T05:28:00+09:00
+## 2026-06-11T05:28:59+09:00
 
 **摘要**：技能文檔 — 維護日志格式規則系列（自動发现汎化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
 
@@ -199,7 +199,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-10T04:31:00+09:00
+## 2026-06-10T04:31:20+09:00
 
 **摘要**：opencode-telegram — KillMode 改为 process、追加 TimeoutStopSec 防止關機挂起
 
@@ -210,7 +210,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-08T15:00:00+09:00
+## 2026-06-08T15:12:39+09:00
 
 **摘要**：文檔再構成 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次追加合列規則、纯表格格式、回填完整提交历史
 
@@ -227,7 +227,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-08T14:55:00+09:00
+## 2026-06-08T14:22:25+09:00
 
 **摘要**：rcc-fix — NixOS 模塊（systemd 死鎖修復）
 
@@ -237,7 +237,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-06T06:00:00+09:00
+## 2026-06-06T15:17:11+09:00
 
 **摘要**：技能文檔 — 源变更后文檔同期规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项汎化；基本情報規則多語言統一
 
@@ -256,7 +256,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-04T00:00:00+09:00
+## 2026-06-04T13:07:30+09:00
 
 **摘要**：技能系統 — SKILL.md 全面中文化；三语对称性検査規則
 
@@ -267,7 +267,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-02T00:00:00+09:00
+## 2026-06-02T03:42:25+09:00
 
 **摘要**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
 
@@ -277,7 +277,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-31T00:00:00+09:00
+## 2026-05-31T03:42:18+09:00
 
 **摘要**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多語言文檔系統）
 
@@ -287,7 +287,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-30T00:00:00+09:00
+## 2026-05-30T03:42:14+09:00
 
 **摘要**：codewhale — stdenv 拼写修復；llama-cpp-rocm 文檔修正（削除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
 
@@ -302,7 +302,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-29T05:00:00+09:00
+## 2026-05-29T15:25:12+09:00
 
 **摘要**：kitsfmt — 多项修復（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
 
@@ -320,7 +320,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-28T00:00:00+09:00
+## 2026-05-28T08:29:27+09:00
 
 **摘要**：llama-cpp-rocm — NixOS 模塊（systemd 沙箱覆盖）；opencode-telegram — NixOS 模塊（声明式設置、自動安裝）；rcc-fix — visible 属性修復；技能文檔 — 動態发现措辞
 
@@ -338,7 +338,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-27T00:00:00+09:00
+## 2026-05-27T06:08:13+09:00
 
 **摘要**：技能系統 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同期上线；llama-cpp-rocm 動態追跡说明
 
@@ -351,7 +351,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-26T00:00:00+09:00
+## 2026-05-26T05:30:58+09:00
 
 **摘要**：文檔 — README 节名改名（快速开始→追加、包→軟件、License→许可）
 
@@ -361,7 +361,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-24T00:00:00+09:00
+## 2026-05-24T03:01:02+09:00
 
 **摘要**：mcp-searxng 文檔 — SearXNG + lighttpd 反向代理完整 NixOS 設置
 
@@ -371,7 +371,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-22T00:00:00+09:00
+## 2026-05-22T06:45:11+09:00
 
 **摘要**：llama-cpp-rocm — 削除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
 
@@ -381,7 +381,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-16T00:00:00+09:00
+## 2026-05-16T19:07:54+09:00
 
 **摘要**：kitsfmt — 修復 match_ast! 宏语法錯誤、简化 comments_before 函数、修正 src 路径
 
@@ -393,7 +393,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-15T00:00:00+09:00
+## 2026-05-15T16:59:28+09:00
 
 **摘要**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
 
@@ -404,82 +404,6 @@ NixKits 軟件更新維護記録
 | `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 構建 |
 
 
-## 2026-06-17T07:37:39+09:00
-
-**摘要**：skill — 5 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `b77170a` | docs(skill): re-apply flake.lock sync and build verification steps |
-| `be2239b` | docs(skill): add .gitignore pre-check to flake.lock sync step |
-| `704ebe4` | docs(skill): correct flake.lock pre-check — three-branch logic |
-| `359fe29` | feat(skill): extract write-maintenance-log as standalone skill |
-| `5187b07` | docs(skill): optimize write-maintenance-log triggers and add audit entry |
-
----
-
-## 2026-06-17T06:46:13+09:00
-
-**摘要**：llama-cpp-rocm — 2 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
-| `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
-
----
-
-## 2026-06-16T06:03:24+09:00
-
-**摘要**：docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting
-
-| 提交 | 説明 |
-|------|------|
-| `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
-
----
-
-## 2026-06-16T05:20:34+09:00
-
-**摘要**：docs(skill): add Nix Store path trap section to nixos-modern-cli
-
-| 提交 | 説明 |
-|------|------|
-| `bd42478` | docs(skill): add Nix Store path trap section to nixos-modern-cli |
-
----
-
-## 2026-06-14T08:11:16+09:00
-
-**摘要**：docs(comfyui-strix-halo): update integration mode and file structure
-
-| 提交 | 説明 |
-|------|------|
-| `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
-
----
-
-## 2026-06-12T18:17:52+09:00
-
-**摘要**：llama-cpp-rocm — 2 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
-| `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
-
----
-
-## 2026-06-11T05:28:34+09:00
-
-**摘要**：refactor(skills): generalize hardcoded content to auto-discovery
-
-| 提交 | 説明 |
-|------|------|
-| `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
-
----
-
 ## 2026-06-11T05:13:39+09:00
 
 **摘要**：other — 2 项更新
@@ -488,111 +412,6 @@ NixKits 軟件更新維護記録
 |------|------|
 | `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
 | `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
-
----
-
-## 2026-06-11T04:58:02+09:00
-
-**摘要**：docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder
-
-| 提交 | 説明 |
-|------|------|
-| `7680adf` | docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder |
-
----
-
-## 2026-06-10T02:25:05+09:00
-
-**摘要**：fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang
-
-| 提交 | 説明 |
-|------|------|
-| `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
-
----
-
-## 2026-06-08T14:58:59+09:00
-
-**摘要**：skill — 2 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `4bf2d30` | docs(skill): add first-time package table format rule |
-| `f7bb6ce` | docs(skill): merge version columns for first-time packages |
-
----
-
-## 2026-06-08T14:22:25+09:00
-
-**摘要**：feat(rcc-fix): add NixOS module for systemd deadlock fix
-
-| 提交 | 説明 |
-|------|------|
-| `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |
-
----
-
-## 2026-06-06T15:16:53+09:00
-
-**摘要**：skill — 5 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
-| `7e22edd` | docs(skill): add skill doc template, sync rules, and staleness check |
-| `454a4e4` | fix(skill): generalize 基本情報 rule to all languages, not just Japanese |
-| `c79ffff` | docs(skill): add SRI hash format and nix build gotchas to update skill |
-| `f5941ae` | docs(skill): add anti-patterns for stale/unsynced doc bullets after source changes |
-
----
-
-## 2026-06-06T15:15:31+09:00
-
-**摘要**：docs(comfyui-strix-halo): add C build toolchain + CC=gcc to changes list
-
-| 提交 | 説明 |
-|------|------|
-| `2ba85d3` | docs(comfyui-strix-halo): add C build toolchain + CC=gcc to changes list |
-
----
-
-## 2026-06-06T13:07:30+09:00
-
-**摘要**：feat(skills): localize all SKILL.md to Chinese, declare in READMEs
-
-| 提交 | 説明 |
-|------|------|
-| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
-
----
-
-## 2026-06-05T03:42:25+09:00
-
-**摘要**：docs(nixos-modern-cli): add POSIX tool guide and nix binary tip
-
-| 提交 | 説明 |
-|------|------|
-| `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
-
----
-
-## 2026-06-05T03:42:18+09:00
-
-**摘要**：feat(skills): add write-project-docs skill with trilingual docs
-
-| 提交 | 説明 |
-|------|------|
-| `373da95` | feat(skills): add write-project-docs skill with trilingual docs |
-
----
-
-## 2026-06-05T03:42:14+09:00
-
-**摘要**：fix(codewhale): fix stdenv typo causing build failure
-
-| 提交 | 説明 |
-|------|------|
-| `df4074f` | fix(codewhale): fix stdenv typo causing build failure |
 
 ---
 
@@ -629,59 +448,6 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-02T08:29:27+09:00
-
-**摘要**：feat(llama-cpp-rocm): add NixOS module for service sandbox overrides
-
-| 提交 | 説明 |
-|------|------|
-| `bd9e1b9` | feat(llama-cpp-rocm): add NixOS module for service sandbox overrides |
-
----
-
-## 2026-06-02T07:34:30+09:00
-
-**摘要**：zh — 2 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `d869279` | docs(zh): rename sections 快速开始→追加 包→軟件 License→许可 |
-| `2db934e` | docs(zh): simplify Skills description, remove semantic duplication |
-
----
-
-## 2026-06-02T06:44:17+09:00
-
-**摘要**：fix(rcc-fix): use visible: property instead of if conditional for ScrollView
-
-| 提交 | 説明 |
-|------|------|
-| `713b693` | fix(rcc-fix): use visible: property instead of if conditional for ScrollView |
-
----
-
-## 2026-06-02T06:08:13+09:00
-
-**摘要**：skills — 3 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `327291a` | feat(skills): add nixos-modern-cli skill with 3-language docs |
-| `f0e74d3` | feat(skills): add nixkits-skills installer with 3-language docs |
-| `627c9c5` | feat(skills): add nixkits-check-updates skill with 3-language docs |
-
----
-
-## 2026-05-30T06:45:11+09:00
-
-**摘要**：fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly
-
-| 提交 | 説明 |
-|------|------|
-| `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly |
-
----
-
 ## 2026-05-30T03:19:48+09:00
 
 **摘要**：other — 2 项更新
@@ -690,41 +456,6 @@ NixKits 軟件更新維護記録
 |------|------|
 | `358316c` | docs: add English and Japanese translations with I18n structure |
 | `bef3b4b` | docs: add English and Japanese README with language switcher |
-
----
-
-## 2026-05-30T03:01:02+09:00
-
-**摘要**：docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config
-
-| 提交 | 説明 |
-|------|------|
-| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
-
----
-
-## 2026-05-29T15:25:12+09:00
-
-**摘要**：rcc-fix — 4 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `a612af7` | feat(rcc-fix): rewrite patch for asusctl 6.3.7 with hot-plug and boundary checks |
-| `e56f122` | fix(rcc-fix): scope hotplug variable correctly for asusctl build |
-| `6ba43df` | fix(rcc-fix): set keyboard_connected=false when no aura iface found |
-| `b7ebbfa` | fix(rcc-fix): replace polling with D-Bus InterfacesAdded event |
-
----
-
-## 2026-05-29T14:27:17+09:00
-
-**摘要**：kitsfmt — 3 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `2b237ff` | feat(kitsfmt): with→builtins.attrValues best-practice transformation |
-| `8497bf7` | feat(kitsfmt): add --stdin flag for explicit stdin mode |
-| `15a0104` | fix(kitsfmt): restore vendor dir for offline builds |
 
 ---
 
@@ -737,42 +468,6 @@ NixKits 軟件更新維護記録
 | `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
 
 ---
-
-## 2026-05-29T05:57:55+09:00
-
-**摘要**：fix(build): restrict .vscode gitignore to repo root to not exclude vendored crate files
-
-| 提交 | 説明 |
-|------|------|
-| `1b7d0a9` | fix(build): restrict .vscode gitignore to repo root to not exclude vendored crate files |
-
----
-
-## 2026-05-27T21:26:59+09:00
-
-**摘要**：fix(kitsfmt): idempotency, inplace safety, output validation
-
-| 提交 | 説明 |
-|------|------|
-| `6a42efd` | fix(kitsfmt): idempotency, inplace safety, output validation |
-
----
-
-## 2026-05-16T19:07:54+09:00
-
-**摘要**：kitsfmt — 6 项更新
-
-| 提交 | 説明 |
-|------|------|
-| `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 構建 |
-| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
-| `314732c` | fix(kitsfmt): 修復 match_ast! 宏不支持通配符的問題 |
-| `1667e1d` | fix(kitsfmt): 修復 match_ast! 宏语法錯誤，简化 comments_before 函数 |
-
----
-
 
 ## 2026-06-16T04:56:06+09:00
 
@@ -1053,23 +748,13 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-06-12T05:00:00+09:00
+## 2026-06-12T17:29:59+09:00
 
 **摘要**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已削除），命名空间迁移至 nixkits
 
 ---
 
-## 2026-06-10T04:31:20+09:00
-
-**摘要**：fix(opencode-telegram): 修改 KillMode 为 process，追加 TimeoutStopSec 防止關機挂起
-
-| 提交 | 説明 |
-|------|------|
-| `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
-
----
-
-## 2026-05-29T05:30:00+09:00
+## 2026-05-29T06:28:50+09:00
 
 **摘要**：fix(kitsfmt): 修復 inherit 逗号、缩进字符串損壞、lambda 空格等多个格式化問題；修復幂等性
 
@@ -1082,13 +767,7 @@ NixKits 軟件更新維護記録
 
 ---
 
-## 2026-05-29T05:00:00+09:00
-
-**摘要**：fix(rcc-fix): 用 D-Bus InterfacesAdded 事件替代轮询，优化二合一键盘热插拔检测
-
----
-
-## 2026-05-29T04:50:00+09:00
+## 2026-05-29T05:57:55+09:00
 
 **摘要**：fix(build): 修復 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
 

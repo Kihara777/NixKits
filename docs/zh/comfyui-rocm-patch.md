@@ -6,15 +6,20 @@
 
 ## 基本信息
 
-- **功能**：修补 ComfyUI 的 ROCm 支持，启用自定义节点构建工具链（通过 `gfxOverride` 指定自定义 GPU 目标版本）
-- **位置**：`modules/comfyui-rocm-patch.nix`
+| 项目 | 值 |
+|------|-----|
+| 选项 | `nixkits.comfyui-rocm-patch.enable` |
+| 位置 | `modules/comfyui-rocm-patch.nix` |
 
 ## 使用
 
 ```nix
 {
-  services.comfyui.rocmGfxOverride = "gfx1100";  # 自定义 GPU 目标版本
+  imports = [ inputs.nixkits.nixosModules.comfyui-rocm-patch ];
+
+  nixkits.comfyui-rocm-patch.enable = true;
+  services.comfyui.rocmGfxOverride = "11.0.0";  # 可选：自定义 GPU 目标版本
 }
 ```
 
-设置 `rocmGfxOverride` 后，该模块会将 `HSA_OVERRIDE_GFX_VERSION` 环境变量注入 ComfyUI 服务。
+设置 `rocmGfxOverride` 后，该模块会将 `HSA_OVERRIDE_GFX_VERSION` 环境变量注入 ComfyUI 服务。同时自动禁用 xformers（nixpkgs 版本缺少 ROCm 后端）并注入 C 构建工具链。

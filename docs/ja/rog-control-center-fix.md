@@ -21,7 +21,7 @@ asusd シャットダウン時の `asus-shutdown.service` デッドロックを�
 
 ```nix
 {
-  imports = [ inputs.nix-kits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
 
   services.asusd.enable = true;
 }

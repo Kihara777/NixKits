@@ -15,10 +15,10 @@ DeepSeek V4 専用終端編碼代理。
 ## 安裝
 
 ```nix
-environment.systemPackages = [ inputs.nix-kits.packages.${pkgs.system}.codewhale ];
+environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
 # デフォルト overlay → pkgs.codewhale
-nixpkgs.overlays = [ inputs.nix-kits.overlays.default ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
 ## 使方
