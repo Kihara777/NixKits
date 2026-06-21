@@ -1,5 +1,6 @@
 # mcp-searxng
 
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20mcp-searxng%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml) [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20mcp-searxng%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
 
 [SearXNG](https://docs.searxng.org) 用 [MCP Server](https://modelcontextprotocol.io)。AI アシスタントにウェブ検索機能を提供します。
