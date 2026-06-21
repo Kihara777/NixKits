@@ -20,13 +20,13 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|
-| codewhale | DeepSeek V4 端末コーディングエージェント | [docs/zh/codewhale.md](codewhale.md) |
-| kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/zh/kitsfmt.md](kitsfmt.md) |
-| mcp-searxng | SearXNG 向け MCP サーバー | [docs/zh/mcp-searxng.md](mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/zh/obs-bilibili-stream.md](obs-bilibili-stream.md) |
-| opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/zh/opencode-telegram.md](opencode-telegram.md) |
-| ruyi | RuyiSDK パッケージマネージャー（RISC-V 開発ツール） | [docs/zh/ruyi.md](ruyi.md) |
-| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm サポート | [docs/zh/comfyui-strix-halo.md](comfyui-strix-halo.md) |
+| codewhale | DeepSeek V4 端末コーディングエージェント | [docs/zh/codewhale.md](zh/codewhale.md) |
+| kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/zh/kitsfmt.md](zh/kitsfmt.md) |
+| mcp-searxng | SearXNG 向け MCP サーバー | [docs/zh/mcp-searxng.md](zh/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/zh/obs-bilibili-stream.md](zh/obs-bilibili-stream.md) |
+| opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/zh/opencode-telegram.md](zh/opencode-telegram.md) |
+| ruyi | RuyiSDK パッケージマネージャー（RISC-V 開発ツール） | [docs/zh/ruyi.md](zh/ruyi.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm サポート | [docs/zh/comfyui-strix-halo.md](zh/comfyui-strix-halo.md) |
 
 ## 開発
 
@@ -46,10 +46,9 @@ nix registry add nix-kits github:Kihara777/NixKits
 
 | パッチ | 説明 | ドキュメント |
 |------|------|------|
-| llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md) |
-| rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/zh/rcc-fix.md](rcc-fix.md) |
-| ruyi-nixos-compat | ruyi の NixOS ランタイム互換性（ELF interpreter リダイレクト + GCC 子プロセス修正） | [docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md) |
-| mihomo-alpha | Prerelease-Alpha 追跡版（プロキシツール） | [docs/zh/mihomo-alpha.md](mihomo-alpha.md) |
+| llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
+| rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
+| ruyi-nixos-compat | ruyi の NixOS ランタイム互換性（ELF interpreter リダイレクト + GCC 子プロセス修正） | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
 
 ## スキル
 
@@ -59,14 +58,14 @@ AI コーディングアシスタント向け：
 
 | スキル | 説明 | ドキュメント |
 |------|------|------|
-| nixkits-check-updates | 上流アップデートをチェックして自動更新 | [docs/zh/skills/nixkits-check-updates.md](skills/nixkits-check-updates.md) |
-| nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/zh/skills/nixkits-skills.md](skills/nixkits-skills.md) |
-| nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/zh/skills/nixos-modern-cli.md](skills/nixos-modern-cli.md) |
-| recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/zh/skills/recover-nixos-config.md](skills/recover-nixos-config.md) |
-| translate-katalish | カタカナ英語翻訳（英単語→半角カタカナ機械置換） | [docs/zh/skills/translate-katalish.md](skills/translate-katalish.md) |
-| translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/zh/skills/translate-pseudocn.md](skills/translate-pseudocn.md) |
-| write-maintenance-log | NixKits 仕様に沿った MAINTENANCE.md エントリの作成（ソフトウェア更新 + バグ修正） | [docs/zh/skills/write-maintenance-log.md](skills/write-maintenance-log.md) |
-| write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを作成 | [docs/zh/skills/write-project-docs.md](skills/write-project-docs.md) |
+| nixkits-check-updates | 上流アップデートをチェックして自動更新 | [docs/zh/skills/nixkits-check-updates.md](zh/skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/zh/skills/nixkits-skills.md](zh/skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/zh/skills/nixos-modern-cli.md](zh/skills/nixos-modern-cli.md) |
+| recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/zh/skills/recover-nixos-config.md](zh/skills/recover-nixos-config.md) |
+| translate-katalish | カタカナ英語翻訳（英単語→半角カタカナ機械置換） | [docs/zh/skills/translate-katalish.md](zh/skills/translate-katalish.md) |
+| translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/zh/skills/translate-pseudocn.md](zh/skills/translate-pseudocn.md) |
+| write-maintenance-log | NixKits 仕様に沿った MAINTENANCE.md エントリの作成（ソフトウェア更新 + バグ修正） | [docs/zh/skills/write-maintenance-log.md](zh/skills/write-maintenance-log.md) |
+| write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを作成 | [docs/zh/skills/write-project-docs.md](zh/skills/write-project-docs.md) |
 
 ## クレジット
 

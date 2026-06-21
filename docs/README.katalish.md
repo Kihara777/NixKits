@@ -20,13 +20,13 @@ inputs.nix-kits.url = "/home/kix/NixKits";
 
 | ｿﾌﾄｳｪｱ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |---|------|------|
-| codewhale | ﾄﾞｴｴﾌﾟｽｴｴｸ V4 ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [docs/zh/codewhale.md](codewhale.md) |
-| kitsfmt | Nix ﾌｫｰﾏｯﾀｰ (AST sorting + best-practice ｵｰﾄ-ﾌｨｯｸｽｽﾞ) | [docs/zh/kitsfmt.md](kitsfmt.md) |
-| mcp-searxng | MCP ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [docs/zh/mcp-searxng.md](mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ | [docs/zh/obs-bilibili-stream.md](obs-bilibili-stream.md) |
-| opencode-telegram | Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ OpenCode | [docs/zh/opencode-telegram.md](opencode-telegram.md) |
-| ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ) | [docs/zh/ruyi.md](ruyi.md) |
-| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm ｻﾎﾟｰﾄ | [docs/zh/comfyui-strix-halo.md](comfyui-strix-halo.md) |
+| codewhale | ﾄﾞｴｴﾌﾟｽｴｴｸ V4 ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [docs/zh/codewhale.md](zh/codewhale.md) |
+| kitsfmt | Nix ﾌｫｰﾏｯﾀｰ (AST sorting + best-practice ｵｰﾄ-ﾌｨｯｸｽｽﾞ) | [docs/zh/kitsfmt.md](zh/kitsfmt.md) |
+| mcp-searxng | MCP ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [docs/zh/mcp-searxng.md](zh/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ | [docs/zh/obs-bilibili-stream.md](zh/obs-bilibili-stream.md) |
+| opencode-telegram | Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ OpenCode | [docs/zh/opencode-telegram.md](zh/opencode-telegram.md) |
+| ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ) | [docs/zh/ruyi.md](zh/ruyi.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm ｻﾎﾟｰﾄ | [docs/zh/comfyui-strix-halo.md](zh/comfyui-strix-halo.md) |
 
 ## ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ
 
@@ -46,9 +46,9 @@ nix registry add nix-kits github:Kihara777/NixKits
 
 | ﾊﾟｯﾁ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |------|------|------|
-| llama-cpp-rocm | ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ﾌﾞｳｲﾙﾄﾞｽﾞ ﾄﾗｯｷﾝｸﾞ ﾙｱﾄｴｽﾄ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾘｰｽ | [docs/zh/llama-cpp-rocm.md](llama-cpp-rocm.md) |
-| rcc-fix | ﾌｨｯｸｽｽﾞ 2-ｲﾝ-1 ﾃﾞｨﾌﾞｱｲｽ ｴｸｽﾌﾟｴﾗｲｴﾝｽ ﾌｫｱ asusctl | [docs/zh/rcc-fix.md](rcc-fix.md) |
-| ruyi-nixos-compat | NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi (ELF interpreter redirect + GCC subprocess ﾌｨｯｸｽ) | [docs/zh/ruyi-nixos-compat.md](ruyi-nixos-compat.md) |
+| llama-cpp-rocm | ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ﾌﾞｳｲﾙﾄﾞｽﾞ ﾄﾗｯｷﾝｸﾞ ﾙｱﾄｴｽﾄ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾘｰｽ | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
+| rcc-fix | ﾌｨｯｸｽｽﾞ 2-ｲﾝ-1 ﾃﾞｨﾌﾞｱｲｽ ｴｸｽﾌﾟｴﾗｲｴﾝｽ ﾌｫｱ asusctl | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
+| ruyi-nixos-compat | NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi (ELF interpreter redirect + GCC subprocess ﾌｨｯｸｽ) | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
 
 ## ｽｷﾙｽﾞ
 
@@ -58,14 +58,14 @@ nix registry add nix-kits github:Kihara777/NixKits
 
 | ｽｷﾙ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |------|------|------|
-| nixkits-check-updates | ﾁｪｯｸ ﾌｫｱ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ｵｰﾄ-ｱｯﾌﾟｸﾞﾚｰﾄﾞ | [docs/zh/skills/nixkits-check-updates.md](skills/nixkits-check-updates.md) |
-| nixkits-skills | NixKits ｽｷﾙ ｲﾝｽﾄｱﾙﾙｱ (ﾛｰｶﾙ/ｵﾝﾙｲﾝ) | [docs/zh/skills/nixkits-skills.md](skills/nixkits-skills.md) |
-| nixos-modern-cli | NixOS ﾑｵﾄﾞｴﾗﾝ CLI ｶﾞｲﾄﾞ (ﾌｫｱ AI ﾑｵﾄﾞｴﾙｽﾞ) | [docs/zh/skills/nixos-modern-cli.md](skills/nixos-modern-cli.md) |
-| recover-nixos-config | ﾘｶﾊﾞｰ ﾃﾞｨﾘｰﾃｯﾄﾞ /etc/nixos ｺﾝﾌｨｸﾞ ﾌﾛﾑ Nix ｽﾄｴﾗ | [docs/zh/skills/recover-nixos-config.md](skills/recover-nixos-config.md) |
-| translate-katalish | Katakana ｲﾝｸﾞﾘｯｼｭ ﾄﾗｱﾝｽﾙｱｼｮﾝ (ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ ｵﾌﾞ ｲﾝｸﾞﾘｯｼｭ ﾄﾞｷｭｽﾞ) | [docs/zh/skills/translate-katalish.md](skills/translate-katalish.md) |
-| translate-pseudocn | Pseudo-Chinese ﾄﾗｱﾝｽﾙｱｼｮﾝ (kana ｽﾄﾘｯﾋﾟﾝｸﾞ + ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ ｺﾝﾊﾞｰｼﾞｮﾝ ﾌﾛﾑ ｼﾞｬﾊﾟﾆｰｽﾞ) | [docs/zh/skills/translate-pseudocn.md](skills/translate-pseudocn.md) |
-| write-maintenance-log | Write MAINTENANCE.md ｴﾝﾄﾘｰｽﾞ ﾊﾟｰ NixKits ｽﾌﾟｴｸ (ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ + ﾊﾞｸﾞ ﾌｨｯｸｽｽﾞ) | [docs/zh/skills/write-maintenance-log.md](skills/write-maintenance-log.md) |
-| write-project-docs | Write ﾏﾙﾁﾘﾝｶﾞﾙ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ﾌｫｱ ｴﾆｰ ﾌﾟﾛｼﾞｪｸﾄ ｲﾝ NixKits ｽﾀｲﾙ | [docs/zh/skills/write-project-docs.md](skills/write-project-docs.md) |
+| nixkits-check-updates | ﾁｪｯｸ ﾌｫｱ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ｵｰﾄ-ｱｯﾌﾟｸﾞﾚｰﾄﾞ | [docs/zh/skills/nixkits-check-updates.md](zh/skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits ｽｷﾙ ｲﾝｽﾄｱﾙﾙｱ (ﾛｰｶﾙ/ｵﾝﾙｲﾝ) | [docs/zh/skills/nixkits-skills.md](zh/skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS ﾑｵﾄﾞｴﾗﾝ CLI ｶﾞｲﾄﾞ (ﾌｫｱ AI ﾑｵﾄﾞｴﾙｽﾞ) | [docs/zh/skills/nixos-modern-cli.md](zh/skills/nixos-modern-cli.md) |
+| recover-nixos-config | ﾘｶﾊﾞｰ ﾃﾞｨﾘｰﾃｯﾄﾞ /etc/nixos ｺﾝﾌｨｸﾞ ﾌﾛﾑ Nix ｽﾄｴﾗ | [docs/zh/skills/recover-nixos-config.md](zh/skills/recover-nixos-config.md) |
+| translate-katalish | Katakana ｲﾝｸﾞﾘｯｼｭ ﾄﾗｱﾝｽﾙｱｼｮﾝ (ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ ｵﾌﾞ ｲﾝｸﾞﾘｯｼｭ ﾄﾞｷｭｽﾞ) | [docs/zh/skills/translate-katalish.md](zh/skills/translate-katalish.md) |
+| translate-pseudocn | Pseudo-Chinese ﾄﾗｱﾝｽﾙｱｼｮﾝ (kana ｽﾄﾘｯﾋﾟﾝｸﾞ + ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ ｺﾝﾊﾞｰｼﾞｮﾝ ﾌﾛﾑ ｼﾞｬﾊﾟﾆｰｽﾞ) | [docs/zh/skills/translate-pseudocn.md](zh/skills/translate-pseudocn.md) |
+| write-maintenance-log | Write MAINTENANCE.md ｴﾝﾄﾘｰｽﾞ ﾊﾟｰ NixKits ｽﾌﾟｴｸ (ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ + ﾊﾞｸﾞ ﾌｨｯｸｽｽﾞ) | [docs/zh/skills/write-maintenance-log.md](zh/skills/write-maintenance-log.md) |
+| write-project-docs | Write ﾏﾙﾁﾘﾝｶﾞﾙ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ﾌｫｱ ｴﾆｰ ﾌﾟﾛｼﾞｪｸﾄ ｲﾝ NixKits ｽﾀｲﾙ | [docs/zh/skills/write-project-docs.md](zh/skills/write-project-docs.md) |
 
 ## ｸﾚｼﾞｯﾄ
 

@@ -1,6 +1,6 @@
 # write-ﾒﾝﾃﾅﾝｽ-log (Skill)
 
-[中文](../../zh/skills/write-ﾒﾝﾃﾅﾝｽ-log.md) | [English](../../en/skills/write-ﾒﾝﾃﾅﾝｽ-log.md) | [日本語](../../ja/skills/write-ﾒﾝﾃﾅﾝｽ-log.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-ﾒﾝﾃﾅﾝｽ-log.md)
+[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
 > Write ｵﾗ update MAINTENANCE.md ﾊﾟｰ NixKits conventions. Supports ｿﾌﾄｳｪｱ updates ｱﾝﾄﾞ bug fixes, sync across ｵｰﾙ ｱﾌﾞｴｲﾗﾌﾞﾙ languages.
 

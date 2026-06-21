@@ -1,6 +1,6 @@
 # comfyui-rocm-ﾊﾟｯﾁ
 
-[中文](../zh/comfyui-rocm-ﾊﾟｯﾁ.md) | [English](../en/comfyui-rocm-ﾊﾟｯﾁ.md) | [日本語](../ja/comfyui-rocm-ﾊﾟｯﾁ.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/comfyui-rocm-ﾊﾟｯﾁ.md)
+[中文](../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/comfyui-rocm-patch.md)
 
 ROCm capability ﾊﾟｯﾁ ﾌｫｱ ComfyUI.
 
