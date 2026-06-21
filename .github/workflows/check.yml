@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         runs-on: [ubuntu-latest, ubuntu-24.04-arm]
-    strategy:
-      matrix:
         package:
           - codewhale
           - kitsfmt
@@ -22,6 +20,7 @@ jobs:
           - obs-bilibili-stream
           - opencode-telegram
           - ruyi
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
