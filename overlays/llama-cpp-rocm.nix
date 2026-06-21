@@ -1,3 +1,7 @@
+# This overlay dynamically tracks the latest llama.cpp release tag via a
+# flake input (llama-cpp-ver). The curried form `{ llama-cpp-ver }: (final: prev: ...)`
+# is deliberate — use it through the flake (`nixkits.overlays.llama-cpp-rocm`),
+# not directly in `nixpkgs.overlays`.
 { llama-cpp-ver }:
 (final: prev: let
   fetchedTag = builtins.tryEval (
