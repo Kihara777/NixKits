@@ -28,6 +28,8 @@ inputs.nixkits.url = "/home/kix/NixKits";
 |ruyi|RuyiSDK 軟件包管理器RISC-V 開発工具|[docs/pcn/ruyi.md](pcn/ruyi.md)|
 |comfyui-strix-halo|AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm 支持|[docs/pcn/comfyui-strix-halo.md](pcn/comfyui-strix-halo.md)|
 
+> ⚠️ comfyui-strix-halo 為模塊+補丁、非独立軟件包、不在二進制緩存中。
+
 ## 開発
 
 `nix develop` 即利用可能註冊表追加：
@@ -51,6 +53,8 @@ nix registry add nixkits github:Kihara777/NixKits
 |ruyi-nixos-compat|ruyi NixOS 運行時互換性ELF interpreter + GCC 子修正|[docs/pcn/ruyi-nixos-compat.md](pcn/ruyi-nixos-compat.md)|
 | comfyui-rocm-patch | ComfyUI ROCm 機能補丁提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
 | rog-control-center-fix | fix asusd shutdown 時死鎖修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
+
+> ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
 
 ## 技能
 

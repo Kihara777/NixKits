@@ -28,6 +28,8 @@ Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
 | ruyi | RuyiSDK package manager (RISC-V development tools) | [docs/en/ruyi.md](en/ruyi.md) |
 | comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/en/comfyui-strix-halo.md](en/comfyui-strix-halo.md) |
 
+> ⚠️ comfyui-strix-halo is a module+patch, not a standalone package, and is not in the binary cache.
+
 ## Development
 
 `nix develop` ready-to-use environments. First, add the registry:
@@ -51,6 +53,8 @@ Standalone overlays, not included in `default`:
 | ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/en/ruyi-nixos-compat.md](en/ruyi-nixos-compat.md) |
 | comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
 | rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/en/rog-control-center-fix.md](en/rog-control-center-fix.md) |
+
+> ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 
 ## Skills
 

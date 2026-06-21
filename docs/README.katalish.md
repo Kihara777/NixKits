@@ -28,6 +28,8 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ) | [docs/katalish/ruyi.md](katalish/ruyi.md) |
 | comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm ｻﾎﾟｰﾄ | [docs/katalish/comfyui-strix-halo.md](katalish/comfyui-strix-halo.md) |
 
+> ⚠️ comfyui-strix-halo ﾊ ﾓｼﾞｭｰﾙ+ﾊﾟｯﾁ ﾃﾞ、独立ｼﾀ ﾊﾟｯｹｰｼﾞ ﾃﾞ ﾊ ﾅｲ ﾀﾒ、ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。
+
 ## ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ
 
 `nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-ﾕｰｽﾞ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
@@ -51,6 +53,8 @@ nix registry add nixkits github:Kihara777/NixKits
 | ruyi-nixos-compat | NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi (ELF interpreter redirect + GCC subprocess ﾌｨｯｸｽ) | [docs/katalish/ruyi-nixos-compat.md](katalish/ruyi-nixos-compat.md) |
 | comfyui-rocm-patch | ComfyUI ROCm ﾌｧﾝｸｼｮﾅﾙ ﾊﾟｯﾁ | [docs/katalish/comfyui-rocm-patch.md](katalish/comfyui-rocm-patch.md) |
 | rog-control-center-fix | ﾌｨｯｸｽｽﾞ asusd ﾃﾞｯﾄﾞﾛｯｸ on ｼｬｯﾄﾀﾞｳﾝ | [docs/katalish/rog-control-center-fix.md](katalish/rog-control-center-fix.md) |
+
+> ⚠️ ﾊﾟｯﾁ ﾊ overlay ﾃﾞ、上流 ﾉ nixpkgs ﾊﾟｯｹｰｼﾞ ｦ 変更ｽﾙ ﾓﾉ ﾃﾞ、独立ｼﾀ ﾋﾞﾙﾄﾞ ﾃﾞ ﾊ ｱﾘﾏｾﾝ。ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。動的 ﾊﾞｰｼﾞｮﾝ 追跡 ﾌﾟﾛｼﾞｪｸﾄ（llama-cpp-rocm 等）ﾊ ﾊｯｼｭ ｶﾞ 上流 ﾘﾘｰｽ 毎 ﾆ 変化ｼ、ｷｬｯｼｭ 固定不可 ﾃﾞｽ。
 
 ## ｽｷﾙｽﾞ
 
