@@ -49,6 +49,8 @@ nix registry add nix-kits github:Kihara777/NixKits
 | llama-cpp-rocm | ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ﾌﾞｳｲﾙﾄﾞｽﾞ ﾄﾗｯｷﾝｸﾞ ﾙｱﾄｴｽﾄ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾘｰｽ | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
 | rcc-fix | ﾌｨｯｸｽｽﾞ 2-ｲﾝ-1 ﾃﾞｨﾌﾞｱｲｽ ｴｸｽﾌﾟｴﾗｲｴﾝｽ ﾌｫｱ asusctl | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
 | ruyi-nixos-compat | NixOS ﾗﾝﾀｲﾑ ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ ﾌｫｱ ruyi (ELF interpreter redirect + GCC subprocess ﾌｨｯｸｽ) | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
+| comfyui-rocm-patch | ComfyUI ROCm ﾌｧﾝｸｼｮﾅﾙ ﾊﾟｯﾁ | [docs/zh/comfyui-rocm-patch.md](zh/comfyui-rocm-patch.md) |
+| rog-control-center-fix | ﾌｨｯｸｽｽﾞ asusd ﾃﾞｯﾄﾞﾛｯｸ on ｼｬｯﾄﾀﾞｳﾝ | [docs/zh/rog-control-center-fix.md](zh/rog-control-center-fix.md) |
 
 ## ｽｷﾙｽﾞ
 

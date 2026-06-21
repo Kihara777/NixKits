@@ -49,6 +49,8 @@ Standalone overlays, not included in `default`:
 | llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
 | ruyi-nixos-compat | NixOS runtime compatibility for ruyi (ELF interpreter redirect + GCC subprocess fix) | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
+| comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/zh/comfyui-rocm-patch.md](zh/comfyui-rocm-patch.md) |
+| rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/zh/rog-control-center-fix.md](zh/rog-control-center-fix.md) |
 
 ## Skills
 

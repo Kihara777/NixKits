@@ -49,6 +49,8 @@ nix registry add nix-kits github:Kihara777/NixKits
 | llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/zh/llama-cpp-rocm.md](zh/llama-cpp-rocm.md) |
 | rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/zh/rcc-fix.md](zh/rcc-fix.md) |
 | ruyi-nixos-compat | ruyi の NixOS ランタイム互換性（ELF interpreter リダイレクト + GCC 子プロセス修正） | [docs/zh/ruyi-nixos-compat.md](zh/ruyi-nixos-compat.md) |
+| comfyui-rocm-patch | ComfyUI に ROCm 機能パッチを提供 | [docs/zh/comfyui-rocm-patch.md](zh/comfyui-rocm-patch.md) |
+| rog-control-center-fix | シャットダウン時の asusd デッドロックを修正 | [docs/zh/rog-control-center-fix.md](zh/rog-control-center-fix.md) |
 
 ## スキル
 
