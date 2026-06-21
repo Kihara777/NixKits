@@ -1,6 +1,6 @@
 # NixKits
 
-[![CI](https://github.com/Kihara777/NixKits/actions/workflows/check.yml/badge.svg)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![CI](https://github.com/Kihara777/NixKits/actions/workflows/check.yml/badge.svg)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml) [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits) [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
 
 中文 | [English](docs/README.en.md) | [日本語](docs/README.ja.md) | [ｶﾀﾘｯｼｭ](docs/README.katalish.md) | [偽中国語](docs/README.pcn.md)
 
@@ -16,17 +16,20 @@ inputs.nixkits.url = "github:Kihara777/NixKits";
 inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
-> **二进制缓存**（避免本地编译）
+> **二进制缓存**（避免本地编译）：
 >
 > ```bash
 > cachix use nixkits       # 首次使用需安装 cachix：nix profile install nixpkgs#cachix
 > ```
 >
+> 或 NixOS 配置：
+> ```nix
+> nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+> nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+> ```
+>
 > 缓存覆盖全部 6 个软件包（x86_64-linux），由 CI 自动构建推送。
 >
-> [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits)
-> [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
-
 ## 软件
 
 支持系统：`lib.platforms.linux`（codewhale 限 x86_64 / aarch64 / riscv64，其余自动跟随 nixpkgs）

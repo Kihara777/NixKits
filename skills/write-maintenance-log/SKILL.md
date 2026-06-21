@@ -107,6 +107,30 @@ done
 
 > **判断标准**：`feat(skill):` `refactor(skill):` `docs(skill):`（新增章节）`fix(skill):` 应记录。`docs(skills): sync` 机械性同步不记录。
 
+### 类型 4：CI/CD 与二进制缓存变更
+
+当项目的 CI/CD 工作流或二进制缓存配置发生变更时，记录：
+
+- 日期时间
+- 一句话摘要（如「添加 CI/CD 工作流与 Cachix 二进制缓存」）
+- 关联提交表
+- CI 配置表（可选，记录工作流变更概要）
+
+记录示例：
+
+```markdown
+## <timestamp>
+
+**摘要**：CI/CD 与二进制缓存 — 添加 GitHub Actions 构建矩阵 + Cachix 推送，README 加入缓存徽章与 NixOS 配置方案
+
+| 提交 | 说明 |
+|------|------|
+| `<sha7>` | feat: add CI/CD workflow, binary cache, and AGENTS.md |
+| `<sha7>` | docs: add cache badge and NixOS config instructions |
+```
+
+> **判断标准**：`feat:` `fix(ci):` 或新增 `.github/workflows/`、缓存配置变更时应记录。
+
 ## 格式规范
 
 ### 章节标题

@@ -77,7 +77,7 @@ NixKits 风格的完整文档模板集。正文参考 [`SKILL.md`](SKILL.md) 中
 ```markdown
 # <Project Name>
 
-[![CI](https://github.com/<org>/<repo>/actions/workflows/check.yml/badge.svg)](https://github.com/<org>/<repo>/actions/workflows/check.yml)
+[![CI](https://github.com/<org>/<repo>/actions/workflows/check.yml/badge.svg)](https://github.com/<org>/<repo>/actions/workflows/check.yml) [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/<project>) [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
 
 [中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)
 
@@ -92,10 +92,16 @@ inputs.<project>.url = "github:<org>/<repo>";
 > **二进制缓存**（避免本地编译）：
 >
 > ```bash
-> cachix use <project>
+> cachix use <project>       # 或 nix profile install nixpkgs#cachix 后执行
 > ```
 >
-> 缓存由 CI 自动构建推送。
+> 或 NixOS 配置：
+> ```nix
+> nix.settings.substituters = [ "https://<project>.cachix.org" ];
+> nix.settings.trusted-public-keys = [ "<project>.cachix.org-1:<key>" ];
+> ```
+>
+> 缓存覆盖全部 <N> 个软件包（x86_64-linux），由 CI 自动构建推送。
 
 ## <分类 1>
 
