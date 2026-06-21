@@ -8,167 +8,55 @@ base_language: en
 
 # 片假名英语翻译
 
-为 NixKits 文档体系提供 ｶﾀﾘｯｼｭ（片假名英语）语言，通过半角片假名逐词机械替换英文实现。设计目的为模块化扩展文档撰写技能（write-project-docs）的语言支持能力。
+为 NixKits 文档体系提供 ｶﾀﾘｯｼｭ（片假名英语）语言。
 
 ## 自动发现契约
 
-write-project-docs 和 write-maintenance-log 通过扫描 `skills/translate-*/SKILL.md` frontmatter 自动发现本技能：
+write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKILL.md` frontmatter 自动发现：
 
 | 字段 | 值 | 用途 |
 |------|-----|------|
-| `language_code` | `katalish` | 目录名 `docs/katalish/`、文件扩展名 `*.katalish.md`、for 循环迭代 |
-| `display_name` | `ｶﾀﾘｯｼｭ` | 语言自称（统一用于所有文档中该语言的入口标签） |
-| `base_language` | `en` | 片假名英语的源语言（英文文本） |
+| `language_code` | `katalish` | 目录名、文件扩展名、for 循环迭代 |
+| `display_name` | `ｶﾀﾘｯｼｭ` | 语言切换器标签 |
+| `base_language` | `en` | 源语言 |
 
 ## 触发场景
 
-- 由 write-project-docs 自动发现并调用（按 `translate-*` 命名约定扫描 `skills/translate-*/`）
-- 由 write-maintenance-log 自动发现并调用（维护日志多语同步）
-- 用户要求"生成片假名英语版本文档"时独立调用
+- 由 write-project-docs / write-maintenance-log 自动发现调用
+- 用户要求"生成片假名英语版本"时独立调用
 
-## 与其他技能的关系
+## 替换规则
 
-| 技能 | 关系 |
+### 1. 优先级
+
+**词典匹配（`dictionary.md`） > 规则音译**
+
+### 2. 保留不译
+
+- 数字、URL、内联代码 `` `code` ``、Markdown 语法原样保留
+- 中文/日文汉字不替换
+- 语言切换器中的目录名（`zh`、`en`等）和文件扩展名（`.md`）不替换
+- 语言名称不作本地化（`English` 保持 `English`）
+
+### 3. 代码块保护（⚠️ 关键）
+
+- **Nix 代码块**：仅翻译 `#` 注释，标识符/属性路径/关键字不动
+- **Bash 代码块**：全部不动
+- 执行层面：先按 ` ``` ` 边界提取代码块，仅对非代码块区域替换
+
+### 4. 专有名词
+
+| 原文 | 音译 |
 |------|------|
-| write-project-docs | 主调用者 — 通过 `translate-*` 自动发现机制加载 frontmatter 字段 |
-| write-maintenance-log | 间接调用 — 维护日志撰写时按 `translate-*` 发现机制生成各语言版本 |
-| nixkits-check-updates | 间接调用 — 更新文档时同步生成 ｶﾀﾘｯｼｭ 版本 |
+| NixOS | ﾆｯｸｽOS |
+| GitHub | ｷﾞｯﾄﾊﾌﾞ |
+| DeepSeek | ﾄﾞｴｴﾌﾟｽｴｴｸ |
+| Nix | ﾆｯｸｽ |
 
-## 语言：ｶﾀﾘｯｼｭ（片假名英语/katalish）
+### 5. 规则音译（词典未命中时）
 
-### 原理
-
-将英文文本的每个单词按发音映射为半角片假名序列，形成视觉上近似日文但实际是英语发音的伪本地化文本。
-
-**示例**：
-```
-NixKits — software, patches, NixOS modules and coding agent skills
-```
-→
-```
-ﾆｯｸｽｷｯﾄ — ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, ﾆｯｸｽOS ﾓｼﾞｭｰﾙ ｱﾝﾄﾞ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ ｽｷﾙ
-```
-
-### 替换规则
-
-1. **优先级：词典匹配 > 规则替换**
-   - 先查内置替换词典（覆盖常见技术术语和不规则发音）
-   - 未命中时使用规则音译（分段匹配最长音节）
-
-2. **保留不译内容**
-   - 数字、URL、内联代码 `` `code` ``、Markdown 语法（`#`、`|`、`[]`、`]]` 等）原样保留
-   - 中文/日文汉字不替换
-   - 语言切换器中的目录名（`zh`、`en`、`ja`、`katalish`、`pcn`）和文件扩展名（`.md`）不替换
-   - 语言切换器中的语言名称不作本地化——`English` 保持 `English`（不音译为 `ｲﾝｸﾞﾘｯｼｭ`），`日本語` 保持 `日本語`
-
-3. **代码块特殊处理**（⚠️ 关键——必须用块边界 ` ``` ` 精确识别）
-    - Nix 代码块（````nix ... ```）：
-      **仅翻译 `#` 注释**（`# 安装` → `# ｲﾝｽﾄｰﾙ`），Nix 表达式/标识符完全不动。
-      包括：属性路径（`services.llama-cpp`）、标识符（`systemPackages`）、
-      关键字（`enable`、`true`）、变量（`pkgs`、`inputs`）均不替换。
-      即使标识符含词典词汇（如 `system`、`services`）也绝不拆分替换。
-    - Bash/其他代码块：**全部内容**保持原样，包括命令行参数（`--model`）、
-      子命令（`doctor`）、选项值（`deepseek`）均不翻译。
-    - 环境变量名（如 `ggml_CUDA_ENABLE_UNIFIED_MEMORY`）不替换。
-    - 内联代码 `` `...` ``：全部保持原样。
-    - **执行层面**：翻译引擎必须先提取所有代码块（按 ` ``` ` 边界），
-      仅对非代码块区域应用词典/规则替换。禁止按行匹配后遗漏块边界。
-
-4. **专有名词处理**
-   - `NixOS` → `ﾆｯｸｽOS`（混合：专名音译 + 保留 `OS`）
-   - `GitHub` → `ｷﾞｯﾄﾊﾌﾞ`（整个词音译）
-    - `DeepSeek` → `ﾄﾞｴｴﾌﾟｽｴｴｸ`（整个词音译）
-    - `Nix` → `ﾆｯｸｽ`（专名音译）
-   - 包名/模块名保持原样（如 `mcp-searxng` 不替换）
-
-### 内置替换词典（节选）
-
-常用技术文档词汇的片假名映射：
-
-| 英文 | 半角片假名 |
-|------|---------|
-| software | ｿﾌﾄｳｪｱ |
-| package | ﾊﾟｯｹｰｼﾞ |
-| module | ﾓｼﾞｭｰﾙ |
-| system | ｼｽﾃﾑ |
-| install | ｲﾝｽﾄｰﾙ |
-| configure | ｺﾝﾌｨｷﾞｭｱ |
-| build | ﾋﾞﾙﾄﾞ |
-| overlay | ｵｰﾊﾞｰﾚｲ |
-| patch | ﾊﾟｯﾁ |
-| skill | ｽｷﾙ |
-| agent | ｴｰｼﾞｪﾝﾄ |
-| service | ｻｰﾋﾞｽ |
-| dependency | ﾃﾞｨﾍﾟﾝﾃﾞﾝｼｰ |
-| version | ﾊﾞｰｼﾞｮﾝ |
-| license | ﾗｲｾﾝｽ |
-| repository | ﾘﾎﾟｼﾞﾄﾘ |
-| description | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
-| template | ﾃﾝﾌﾟﾚｰﾄ |
-| maintenance | ﾒﾝﾃﾅﾝｽ |
-| documentation | ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ |
-| compatibility | ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ |
-| collection | ｺﾚｸｼｮﾝ |
-| terminal | ﾀｰﾐﾅﾙ |
-| coding | ｺｰﾃﾞｨﾝｸﾞ |
-| formatter | ﾌｫｰﾏｯﾀｰ |
-| server | ｻｰﾊﾞｰ |
-| streaming | ｽﾄﾘｰﾐﾝｸﾞ |
-| plugin | ﾌﾟﾗｸﾞｲﾝ |
-| client | ｸﾗｲｱﾝﾄ |
-| manager | ﾑｱﾝｱｼﾞｴﾗ |
-| development | ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ |
-| support | ｻﾎﾟｰﾄ |
-| accelerated | ｱｸｾﾗﾚｲﾃｨｯﾄﾞ |
-| tracking | ﾄﾗｯｷﾝｸﾞ |
-| upstream | ｳﾌﾟｽﾄﾗｴｱﾑ |
-| release | ﾘﾘｰｽ |
-| runtime | ﾗﾝﾀｲﾑ |
-| translation | ﾄﾗｱﾝｽﾙｱｼｮﾝ |
-| language | ﾗﾝｹﾞｰｼﾞ |
-| model | ﾓﾃﾞﾙ |
-| hardware | ﾊｰﾄﾞｳｪｱ |
-| inference | ｲﾝﾌｧﾚﾝｽ |
-| infrastructure | ｲﾝﾌﾗｽﾄﾗｸﾁｬｰ |
-| environment | ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ |
-| available | ｱﾌﾞｴｲﾗﾌﾞﾙ |
-| for | ﾌｫｱ |
-| the | ｻﾞ |
-| and | ｱﾝﾄﾞ |
-| with | ｳｨｽﾞ |
-| from | ﾌﾛﾑ |
-| not | ﾉｯﾄ |
-| can | ｷｬﾝ |
-| use | ﾕｰｽﾞ |
-| new | ﾆｭｰ |
-| add | ｱﾄﾞ |
-| or | ｵﾗ |
-| is | ｲｽﾞ |
-| are | ｱｰ |
-| by | ﾊﾞｲ |
-| has | ﾊｽﾞ |
-| this | ﾃﾞｨｽ |
-| when | ｳｪﾝ |
-| also | ｵﾙｿ |
-| only | ｵﾝﾘｰ |
-| any | ｴﾆｰ |
-| per | ﾊﾟｰ |
-| into | ｲﾝﾄｩ |
-| automatically | ｵｰﾄﾏﾃｨｯｸﾘｰ |
-| provide | ﾌﾟﾗｵﾌﾞｲﾄﾞ |
-| include | ｲﾝｸﾙｰﾄﾞ |
-| follow | ﾌｫﾛｰ |
-| create | ｸﾘｴｲﾄ |
-| require | ﾘｸﾜｲｱ |
-| allow | ｱﾗｳ |
-| enable | ｲﾈｰﾌﾞﾙ |
-
-### 规则音译
-
-未在词典中注册的英文单词，按以下规则逐音节转换：
-
-| 英文音节 | 半角片假名 |
-|---------|---------|
+| 英文音节 | 片假名 |
+|---------|--------|
 | a (短) | ｱ |
 | a (长) | ｴｲ |
 | i (短) | ｲ |
@@ -180,16 +68,12 @@ NixKits — software, patches, NixOS modules and coding agent skills
 | o (短) | ｵ |
 | o (长) | ｵｰ |
 
+## 词典
+
+完整替换词典见 [`dictionary.md`](dictionary.md)（66 条映射）。
+
 ## 注意事项
 
-- 片假名英语不是人类可读的语言——视觉装饰/伪本地化；机械替换即可
-- 语言切换器中的目录名（`zh`/`en`/`ja`/`katalish`/`pcn`）和文件扩展名（`.md`）不可翻译
-- 语言切换器中的语言名称不作本地化——各语言使用自身 display_name，不翻译（如 `English` 不音译为 `ｲﾝｸﾞﾘｯｼｭ`）
-- Nix 表达式保持原样，仅翻译 `#` 注释
-- 其他代码块（bash 等）全部内容不动
-- 内联代码 `` `...` `` 全部内容不动
-- **katalish 文档切换器生成规则**（从英文源）：
-  - `[中文]`/`[日本語]`/`[Pseudo-Chinese]`→保留链接（标签改用 display_name）
-  - `English`（纯文本）→ `ｶﾀﾘｯｼｭ`（纯文本，自身标签）
-  - `[Katalish](katalish路径)`→ 删除（自链接，katalish 文档中无需）
-  - **必须用脚本从英文源提取路径后逐个精确构造**
+- 片假名英语不是人类可读的语言——视觉伪本地化，机械替换即可
+- 语言切换器生成规则：从英文源提取路径，逐个精确构造（禁止 sed 模式匹配）
+- 包名/模块名保持原样（如 `mcp-searxng`）
