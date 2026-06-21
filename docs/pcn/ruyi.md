@@ -88,3 +88,18 @@ NixKits ruyi 構建 `patches/ruyi-nixos-compat.patch` 含，NixOS 固有問題�
 - [ISCAS](https://www.iscas.ac.cn) RISC-V 開發者向
 - 運行時依存(curl，gnutar，git，patchelf ) wrapProgram 注入
 - ：ruff lint，mypy 型，pytest (320)，統合(52)— 通過
+
+## 緩存
+
+NixKits 二進制緩存可用、回避本地編譯：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

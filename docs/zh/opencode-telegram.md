@@ -57,3 +57,18 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   };
 }
 ```
+
+## 缓存
+
+可通过 NixKits 二进制缓存获取，避免本地编译：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 配置添加：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

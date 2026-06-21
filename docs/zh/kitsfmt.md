@@ -49,3 +49,18 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   - 裸 URL 引号化（RFC 45）：`https://x.com` → `"https://x.com"`
   - `rec` → `let-in`：`rec { a = 1; b = a + 2; }` → `let a=1; b=a+2; in { inherit a b; }`
   - `with` → `builtins.attrValues`：`with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`
+
+## 缓存
+
+可通过 NixKits 二进制缓存获取，避免本地编译：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 配置添加：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

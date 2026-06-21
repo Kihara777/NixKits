@@ -126,3 +126,18 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 - Ensure `settings.search.formats` includes `"json"` (required by MCP Server)
 - Verify lighttpd reverse proxy forwards `X-Forwarded-For` header
 - Check logs: `journalctl -u searx --no-pager -n 30`
+
+## Cache
+
+Available via the NixKits binary cache, avoiding local compilation:
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

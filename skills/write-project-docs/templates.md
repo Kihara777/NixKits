@@ -41,6 +41,21 @@ NixKits 风格的完整文档模板集。正文参考 [`SKILL.md`](SKILL.md) 中
 ## 安装
 
 <install>
+
+## 缓存
+
+可通过 <project> 二进制缓存获取，避免本地编译：
+
+```bash
+cachix use <project>
+```
+
+或 NixOS 配置添加：
+
+```nix
+nix.settings.substituters = [ "https://<project>.cachix.org" ];
+nix.settings.trusted-public-keys = [ "<project>.cachix.org-1:<key>" ];
+```
 ```
 
 - 语言切换器路径按各语言目录计算

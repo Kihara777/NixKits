@@ -88,3 +88,18 @@ The NixKits ruyi build includes `patches/ruyi-nixos-compat.patch`, transparently
 - Maintained by [ISCAS](https://www.iscas.ac.cn) for RISC-V developers
 - Runtime dependencies (curl, gnutar, git, patchelf, etc.) are injected via wrapProgram
 - Test coverage: ruff lint, mypy type checks, pytest unit (320), integration (52) — all passing
+
+## Cache
+
+Available via the NixKits binary cache, avoiding local compilation:
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

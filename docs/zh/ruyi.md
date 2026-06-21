@@ -79,3 +79,18 @@ NixKits 打包的 ruyi 包含 `patches/ruyi-nixos-compat.patch`，在 NixOS 上�
 - 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
 - 二进制通过 wrapProgram 注入了 curl、gnutar、git、patchelf 等运行时依赖
 - 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（320 项）、集成测试（52 项）——全部通过
+
+## 缓存
+
+可通过 NixKits 二进制缓存获取，避免本地编译：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 配置添加：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

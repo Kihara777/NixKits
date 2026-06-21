@@ -47,3 +47,18 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
  - 裸 URL 引用符化(RFC 45)
  - `rec` → `let-in` 変換
  - `with` → `builtins.attrValues` 変換
+
+## 緩存
+
+NixKits 二進制緩存可用、回避本地編譯：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

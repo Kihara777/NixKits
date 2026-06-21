@@ -126,3 +126,18 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 - `settings.search.formats` `"json"` 含確認(MCP Server 要件)
 - lighttpd `X-Forwarded-For` 転送確認
 - 確認: `journalctl -u searx --no-pager -n 30`
+
+## 緩存
+
+NixKits 二進制緩存可用、回避本地編譯：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

@@ -126,3 +126,18 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 - `settings.search.formats` に `"json"` が含まれているか確認（MCP Server の要件）
 - lighttpd リバースプロキシが `X-Forwarded-For` ヘッダーを転送しているか確認
 - ログを確認: `journalctl -u searx --no-pager -n 30`
+
+## キャッシュ
+
+NixKits バイナリキャッシュから取得可能、ローカルコンパイル不要：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

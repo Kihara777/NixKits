@@ -88,3 +88,18 @@ The NixKits ruyi ﾋﾞﾙﾄﾞ includes `patches/ruyi-nixos-compat.ﾊﾟｯ�
 - Maintained ﾊﾞｲ [ISCAS](https://www.iscas.ac.cn) ﾌｫｱ RISC-V developers
 - Runtime dependencies (curl, gnutar, git, patchelf, etc.) ｱｰ injected via wrapProgram
 - Test coverage: ruff lint, mypy type checks, pytest unit (320), integration (52) — ｵｰﾙ passing
+
+## ｷｬｯｼｭ
+
+NixKits ﾊﾞｲﾅﾘ ｷｬｯｼｭ ｶﾗ ｱﾌﾞｴｲﾗﾌﾞﾙ、ﾛｰｶﾙ ｺﾝﾊﾟｲﾙ 回避：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

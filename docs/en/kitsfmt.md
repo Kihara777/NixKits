@@ -47,3 +47,18 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
   - Bare URL quoting (RFC 45): `https://x.com` → `"https://x.com"`
   - `rec` → `let-in`: `rec { a = 1; }` → `let a=1; in { inherit a; }`
   - `with` → `builtins.attrValues`: `with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`
+
+## Cache
+
+Available via the NixKits binary cache, avoiding local compilation:
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

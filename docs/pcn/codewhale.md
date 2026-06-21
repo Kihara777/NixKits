@@ -33,3 +33,18 @@ codewhale auth set --provider deepseek # API キー保存
 ```
 
 初回実行時 [DeepSeek API ](https://platform.deepseek.com/api_keys) 必要。
+
+## 緩存
+
+NixKits 二進制緩存可用、回避本地編譯：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

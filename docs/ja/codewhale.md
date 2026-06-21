@@ -33,3 +33,18 @@ codewhale auth set --provider deepseek # API キー保存
 ```
 
 初回実行時に [DeepSeek API キー](https://platform.deepseek.com/api_keys) が必要です。
+
+## キャッシュ
+
+NixKits バイナリキャッシュから取得可能、ローカルコンパイル不要：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```

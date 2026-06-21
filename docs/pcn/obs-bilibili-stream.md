@@ -43,3 +43,18 @@ OBS Studio 用 Bilibili 生放送配信插件。
 ```nix
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
+
+## 緩存
+
+NixKits 二進制緩存可用、回避本地編譯：
+
+```bash
+cachix use nixkits
+```
+
+或 NixOS 設定：
+
+```nix
+nix.settings.substituters = [ "https://nixkits.cachix.org" ];
+nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
+```
