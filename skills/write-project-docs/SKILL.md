@@ -388,3 +388,9 @@ done
   - Bash 代码块：全部内容保持原样（命令行参数、子命令均不翻译）
   - 代码块内标识符（`systemPackages`、`--model`）、URL、环境变量名完全不动
   - 反面教材：`environment.systemPackages` → `environment.ｽｲｽﾄｴﾑﾌﾟｱｯｸｱｸﾞｽﾞ`（严重违规）
+- **新增文档后必须同步所有 README 表格** — 在 `docs/zh/` 下添加新文档时，
+  必须同时在 README.md 及全部多语言 README 的对应分类表中添加行。
+  遗漏会导致文档孤立（存在但无入口），反面教材：comfyui-rocm-patch/rog-control-center-fix
+- **翻译后验证所有链接目标存在** — 生成扩展语言文档后，
+  必须遍历所有 `](...)` 相对路径链接，确认目标文件存在。
+  常见损坏模式：路径音译、缺少子目录前缀、表格链接目标错误
