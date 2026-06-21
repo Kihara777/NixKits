@@ -8,33 +8,44 @@
 #
 # Wheel version upgrades (ROCm 7.2 / PyTorch 2.12.0) are handled by
 # the accompanying patch applied to comfyui-nix via nixpkgs overlay.
+#
+# This module extends services.comfyui; enable both:
+#
+#   nixkits.comfyui-rocm-patch.enable = true;
+#   services.comfyui.enable = true;
+#
 { config, lib, pkgs, ... }:
 let
-  cfg = config.services.comfyui;
-  useRocm = cfg.gpuSupport == "rocm";
+  comfyCfg = config.services.comfyui;
+  cfg = config.nixkits.comfyui-rocm-patch;
+  useRocm = comfyCfg.gpuSupport == "rocm";
 in
 {
-  options.services.comfyui.rocmGfxOverride = lib.mkOption {
-    type = lib.types.nullOr lib.types.str;
-    default = null;
-    example = "11.0.0";
-    description = ''
-      Override the GPU architecture version reported to the ROCm runtime via
-      the HSA_OVERRIDE_GFX_VERSION environment variable.
+  options = {
+    services.comfyui.rocmGfxOverride = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "11.0.0";
+      description = ''
+        Override the GPU architecture version reported to the ROCm runtime via
+        the HSA_OVERRIDE_GFX_VERSION environment variable.
 
-      This is useful for newer AMD GPUs that are not yet in the ROCm support
-      matrix but are binary-compatible with an existing architecture.
+        This is useful for newer AMD GPUs that are not yet in the ROCm support
+        matrix but are binary-compatible with an existing architecture.
 
-      Common values:
-      - "11.0.0": gfx1100 (RDNA 3) — recommended for gfx1151 (Strix Halo)
-      - "11.5.1": gfx1151 native — may work if runtime recognizes it
-      - "10.3.0": gfx1030 (RDNA 2) — fallback for older RDNA cards
+        Common values:
+        - "11.0.0": gfx1100 (RDNA 3) — recommended for gfx1151 (Strix Halo)
+        - "11.5.1": gfx1151 native — may work if runtime recognizes it
+        - "10.3.0": gfx1030 (RDNA 2) — fallback for older RDNA cards
 
-      Only takes effect when gpuSupport = "rocm".
-    '';
+        Only takes effect when gpuSupport = "rocm".
+      '';
+    };
+
+    nixkits.comfyui-rocm-patch.enable = lib.mkEnableOption "ComfyUI ROCm patch (GFX override, xformers bypass, C toolchain)";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && comfyCfg.enable) {
     # Apply the Strix Halo patch to comfyui package
     nixpkgs.overlays = [
       (final: prev: {
@@ -52,8 +63,8 @@ in
 
     # Environment: GFX override + C compiler for custom node builds
     services.comfyui.environment = lib.mkMerge [
-      (lib.mkIf (useRocm && cfg.rocmGfxOverride != null) {
-        HSA_OVERRIDE_GFX_VERSION = cfg.rocmGfxOverride;
+      (lib.mkIf (useRocm && comfyCfg.rocmGfxOverride != null) {
+        HSA_OVERRIDE_GFX_VERSION = comfyCfg.rocmGfxOverride;
       })
       {
         CC = "gcc";

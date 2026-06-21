@@ -26,8 +26,8 @@ in
 
     hfCacheDir = lib.mkOption {
       type = lib.types.str;
-      default = "/home/${cfg.user}/.cache/huggingface/hub";
-      defaultText = "/home/\${user}/.cache/huggingface/hub";
+      default = "${config.users.users.${cfg.user}.home}/.cache/huggingface/hub";
+      defaultText = "\${config.users.users.\${user}.home}/.cache/huggingface/hub";
       description = "HuggingFace cache directory for model files.";
     };
 

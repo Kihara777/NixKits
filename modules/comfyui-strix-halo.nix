@@ -44,6 +44,16 @@
   };
 
   config = lib.mkIf config.nixkits.comfyui-strix-halo.enable {
+    assertions = [
+      {
+        assertion = config.services ? comfyui;
+        message = ''
+          nixkits.comfyui-strix-halo requires services.comfyui, but it was
+          not found. Import the comfyui-nix module in your flake first.
+        '';
+      }
+    ];
+
     # Configure comfyui service for Strix Halo
     services.comfyui = {
       gpuSupport = lib.mkDefault "rocm";
