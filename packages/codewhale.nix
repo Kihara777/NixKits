@@ -7,14 +7,34 @@
 }:
 
 let
-  version = "0.8.62";
+  version = "0.8.63";
+
+  # Prebuilt binaries from GitHub Releases support three Linux architectures.
+  archSuffix = {
+    "x86_64-linux"  = "x64";
+    "aarch64-linux" = "arm64";
+    "riscv64-linux" = "riscv64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+
+  cliHashes = {
+    x64     = "sha256-SMaOUHs9VYFfyu0OHmU0vFtUGMFZGEgSDdLWt0qmZ6M=";
+    arm64   = "sha256-gGv2T4BS4OybeKAEtLIX2zHFZSF1S8qp75Dtyw1dGM8=";
+    riscv64 = "sha256-qSVNmsgB3FaUC4Jgnhjowgi9Z/T8UxNuHgzOd/PnCMg=";
+  };
+
+  tuiHashes = {
+    x64     = "sha256-UA66uCdJUlR6/+acV+cf/Jvfe5MfNdWFIsjnsf8zjyM=";
+    arm64   = "sha256-m24T1TPdg5JhJTXtQyo72EMlorhDvRlqxHv09oMui1g=";
+    riscv64 = "sha256-l1tgSn6TrLxucAUmJKRvuTof0Sie5UCNrABeddG0nKw=";
+  };
+
   codewhale-cli = fetchurl {
-    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-x64";
-    hash = "sha256-ci3MokGWoyDv/F0Syr3VH+GWaq9UNqTQs0ZOyruIV2E=";
+    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-${archSuffix}";
+    hash = cliHashes.${archSuffix};
   };
   codewhale-tui = fetchurl {
-    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-x64";
-      hash = "sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=";
+    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-${archSuffix}";
+    hash = tuiHashes.${archSuffix};
   };
 in
 stdenv.mkDerivation {
@@ -46,7 +66,7 @@ stdenv.mkDerivation {
     changelog = "https://github.com/Hmbown/CodeWhale/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "codewhale";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ];
     maintainers = [ ];
   };
 }

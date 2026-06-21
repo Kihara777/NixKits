@@ -14,6 +14,7 @@
   git,
   gnumake,
   patchelf,
+  stdenv,
 }:
 
 let
@@ -69,6 +70,17 @@ python.pkgs.buildPythonApplication {
   postPatch = ''
     # 1. Append expose_build_tools_in_venv to nixos_compat.py
     # (the file may already exist from ruyi-nixos-compat.patch)
+    # Replace Nix store path placeholders from the patch
+    substituteInPlace ruyi/utils/nixos_compat.py \
+      --replace-fail '@nixLdSo@'     '${stdenv.cc.bintools.dynamicLinker}' \
+      --replace-fail '@nixGlibcLib@' '${stdenv.cc.libc}/lib'
+
+    # Inject import for ensure_toolchain_nixos_compat into runtime.py
+    # (the patch adds the call site but the import lives in a different scope)
+    sed -i '/def _maybe_fix_toolchain_sub_binaries/,/ensure_toolchain_nixos_compat/{
+      /ensure_toolchain_nixos_compat/i\    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
+    }' ruyi/mux/runtime.py
+
     mkdir -p ruyi/utils
     touch ruyi/utils/__init__.py
     if ! grep -q 'expose_build_tools_in_venv' ruyi/utils/nixos_compat.py 2>/dev/null; then

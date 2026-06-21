@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
     changelog = "https://github.com/Zarosmm/obs-bilibili-stream/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "obs-bilibili-stream";
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

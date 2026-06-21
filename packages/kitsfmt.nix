@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage {
     description = "A Nix configuration formatter with AST-based sorting, merging, and comment preservation";
     homepage = "https://github.com/Kihara777/NixKits";
     license = lib.licenses.mit;
+    mainProgram = "kitsfmt";
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
