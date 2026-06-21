@@ -46,15 +46,4 @@ home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 
 ## ｷｬｯｼｭ
 
-NixKits ﾊﾞｲﾅﾘ ｷｬｯｼｭ ｶﾗ ｱﾌﾞｴｲﾗﾌﾞﾙ、ﾛｰｶﾙ ｺﾝﾊﾟｲﾙ 回避：
-
-```bash
-cachix use nixkits
-```
-
-或 NixOS 設定：
-
-```nix
-nix.settings.substituters = [ "https://nixkits.cachix.org" ];
-nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-```
+`cachix use nixkits`（flake ﾊ `nixConfig` ﾃﾞ 自動宣言、flake input 使用時 ﾆ 自動案内）。

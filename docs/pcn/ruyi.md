@@ -91,15 +91,4 @@ NixKits ruyi 構建 `patches/ruyi-nixos-compat.patch` 含，NixOS 固有問題�
 
 ## 緩存
 
-NixKits 二進制緩存可用、回避本地編譯：
-
-```bash
-cachix use nixkits
-```
-
-或 NixOS 設定：
-
-```nix
-nix.settings.substituters = [ "https://nixkits.cachix.org" ];
-nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-```
+`cachix use nixkits`（flake 已自 `nixConfig` 自動宣言、直以 flake input 使用時自動提示）。

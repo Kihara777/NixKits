@@ -10,7 +10,9 @@ jobs:
 
   build:
     needs: check
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, ubuntu-24.04-arm]
     strategy:
       matrix:
         package:

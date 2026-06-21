@@ -80,8 +80,22 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
-构建 job 通过矩阵并行构建 6 个软件包（仅 x86_64-linux），完成后推送到 Cachix 二进制缓存。
+构建 job 通过矩阵并行构建 6 个软件包（x86_64-linux / aarch64-linux），完成后推送到 Cachix 二进制缓存。
 
 ## 缓存
 
-`cachix use nixkits`。缓存由 CI 自动维护。aarch64 / riscv64 暂不支持 CI 构建（需 ARM 硬件或 QEMU 模拟）。flake 通过 `nixConfig` 自动声明缓存端点，消费者无需手动配置。
+`cachix use nixkits`。flake 通过 `nixConfig` 自动声明缓存端点，消费者无需手动配置。
+
+## 多架构缓存
+
+当 `nixkits-check-updates` 技能检测到操作者在仓库目录内、且对仓库有推送权限时，
+应在版本更新后执行多架构构建与推送：
+
+1. 检测 `gh auth status` 验证身份
+2. 检测推送权限：`gh api repos/Kihara777/NixKits/collaborators/$USER/permission | jq -r .permission` 为 `admin` 或 `write`
+3. 尝试本地多架构构建：
+   ```
+   nix build ".#<pkg>" --system aarch64-linux  # 需 binfmt 或 ARM runner
+   cachix push nixkits <result>
+   ```
+4. CI 已通过 `ubuntu-24.04-arm` runner 自动覆盖 aarch64-linux

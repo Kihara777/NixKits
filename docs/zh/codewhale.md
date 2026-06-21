@@ -36,15 +36,4 @@ codewhale auth set --provider deepseek # 保存 API key
 
 ## 缓存
 
-可通过 NixKits 二进制缓存获取，避免本地编译：
-
-```bash
-cachix use nixkits
-```
-
-或 NixOS 配置添加：
-
-```nix
-nix.settings.substituters = [ "https://nixkits.cachix.org" ];
-nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-```
+`cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。

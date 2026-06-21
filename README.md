@@ -16,19 +16,7 @@ inputs.nixkits.url = "github:Kihara777/NixKits";
 inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
-> **二进制缓存**（避免本地编译）：
->
-> ```bash
-> cachix use nixkits       # 首次使用需安装 cachix：nix profile install nixpkgs#cachix
-> ```
->
-> 或 NixOS 配置：
-> ```nix
-> nix.settings.substituters = [ "https://nixkits.cachix.org" ];
-> nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-> ```
->
-> 缓存由 CI 自动构建推送（x86_64-linux）。aarch64 / riscv64 暂不支持 CI 构建，可通过本地 `cachix push` 手动推送。
+> **二进制缓存**：flake 已通过 `nixConfig` 自动声明。直接使用 flake input 时 Nix 自动提示。手动：`cachix use nixkits`。
 >
 ## 软件
 

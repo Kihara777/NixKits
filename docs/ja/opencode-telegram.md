@@ -60,15 +60,4 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 
 ## キャッシュ
 
-NixKits バイナリキャッシュから取得可能、ローカルコンパイル不要：
-
-```bash
-cachix use nixkits
-```
-
-或 NixOS 設定：
-
-```nix
-nix.settings.substituters = [ "https://nixkits.cachix.org" ];
-nix.settings.trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-```
+`cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。
