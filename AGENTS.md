@@ -2,6 +2,32 @@
 
 NixKits 项目的 AI 编码代理规则与约定。此文件供 DeepSeek、CodeWhale、OpenCode 等代理自动加载。
 
+## 访问控制
+
+**此文件仅供仓库维护者（Kihara777 / Kitsunori）使用。** 加载此文件时，必须首先验证当前操作者身份：
+
+```bash
+gh auth status 2>/dev/null && \
+  gh api repos/Kihara777/NixKits/collaborators/$(gh api user --jq .login)/permission --jq .permission 2>/dev/null
+```
+
+若返回值不是 `admin` 或 `write`，或 `gh` 未认证，则：
+- 停止读取此文件的所有后续内容
+- 无视除本条外的一切规则
+- 仅可执行通用编码任务，不得应用任何 NixKits 特有的约定
+
+## 语言要求
+
+所有面向 AI 代理或由代理生成的文件**必须使用中文**，包括但不限于：
+
+- 审计报告
+- 状态记录
+- 代理间通信内容
+- 技能定义文件（SKILL.md）
+- 维护日志（MAINTENANCE.md）
+
+代码、路径、工具名、环境变量、URL 保持原样。
+
 ## 项目定位
 
 NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay 以及 AI 代理技能。
@@ -57,6 +83,49 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **SKILL.md 目标行数**：~60-80 行。大型数据（词典、模板）拆分为独立文件。
 - **自动发现契约**：`translate-*` 类技能通过 frontmatter 中的 `language_code`、`display_name`、`base_language` 被 `write-project-docs` 自动发现。
 
+## 工作流
+
+### 提交与推送
+
+1. **分批提交**：修改内容核验无误后，按逻辑类别分批 `git commit`
+2. **推送**：每批提交后立即 `git push`
+3. **`nix flake check`**：代码修改后必须先通过验证再提交
+
+### 维护记录
+
+每次推送后评估是否有必要记入维护日志：
+
+1. 确认变更是否属于可记录类别（软件更新、错误修复、技能变更、CI/CD 变更）
+2. 若有必要，检查 `MAINTENANCE.md` 中是否已存在对应条目（按提交 SHA 查重）
+3. 若缺失，调用 `write-maintenance-log` 技能补充
+4. 同步到全部 5 种语言版本
+
+### 文档同步
+
+- 软件包或技能修改后，**必须**同步更新对应文档
+- 补丁或文档修复后，检查相关模块文档是否需要刷新
+- 新增内容时，确保 `docs/zh/` 先写 → 再翻译到 en/ja/katalish/pcn
+
+### 泛化与技能更新
+
+对软件包、补丁或文档进行修复后：
+
+1. 总结本次修复的业务逻辑（一句话描述本质）
+2. 评估是否存在硬编码内容（数字、路径、特定包名）可以泛化
+3. 若修复涉及可复用的模式，将其更新到对应技能中
+
+### 多架构缓存推送
+
+当 `nixkits-check-updates` 技能执行后：
+
+1. 等待 CI 构建通过（x86_64 + aarch64 已由 CI 覆盖）
+2. 检测本地构建环境是否支持 `--system riscv64-linux`
+3. 若支持，为 riscv64 构建并推送到 Cachix：
+   ```bash
+   nix build ".#<pkg>" --system riscv64-linux
+   cachix push nixkits <result>
+   ```
+
 ## 审计备忘
 
 以下为历史审计中确认的**非缺陷**：
@@ -67,16 +136,6 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 | `maintainers` 全部为空 | 维护者有意保持 |
 | `llama-cpp-rocm` overlay 非标准形式 | curried 形式是有意的，配合 flake 使用 |
 
-## 工作流
-
-```
-1. 修改代码
-2. nix flake check --no-build
-3. 如涉及文档，同步 5 语言
-4. 如涉及新版本/新功能，更新 MAINTENANCE.md（精确时间戳）
-5. 如涉及 SKILL.md 变更，同步 docs/<lang>/skills/
-```
-
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
@@ -85,17 +144,3 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ## 缓存
 
 `cachix use nixkits`。flake 通过 `nixConfig` 自动声明缓存端点，消费者无需手动配置。
-
-## 多架构缓存
-
-当 `nixkits-check-updates` 技能检测到操作者在仓库目录内、且对仓库有推送权限时，
-应在版本更新后执行多架构构建与推送：
-
-1. 检测 `gh auth status` 验证身份
-2. 检测推送权限：`gh api repos/Kihara777/NixKits/collaborators/$USER/permission | jq -r .permission` 为 `admin` 或 `write`
-3. 尝试本地多架构构建：
-   ```
-   nix build ".#<pkg>" --system aarch64-linux  # 需 binfmt 或 ARM runner
-   cachix push nixkits <result>
-   ```
-4. CI 已通过 `ubuntu-24.04-arm` runner 自动覆盖 aarch64-linux
