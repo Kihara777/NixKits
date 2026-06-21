@@ -16,10 +16,10 @@ buildNpmPackage (finalAttrs: {
     owner = "ihor-sokoliuk";
     repo = "MCP-searxng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=";
+    hash = "sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=";
   };
 
-  npmDepsHash = "sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=";
+  npmDepsHash = "sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=";
   npmBuildScript = "build";
 
   nativeBuildInputs = [
