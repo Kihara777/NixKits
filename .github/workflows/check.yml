@@ -3,10 +3,13 @@ on: [push, pull_request]
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix flake check
+      - name: Check
+        run: nix flake check
 
   build:
     needs: check
@@ -21,9 +24,16 @@ jobs:
           - opencode-telegram
           - ruyi
     runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          extra-conf: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v17
         with:
           name: nixkits
