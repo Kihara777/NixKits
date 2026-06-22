@@ -1,8 +1,18 @@
 # 维护日志
 
+## 2026-06-23T04:04:32+09:00
 
+**摘要**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
+
+| 提交 | 说明 |
+|------|------|
+| `771cd1c` | docs(AGENTS): remove hardcoded counts, merge audit memo, rewrite cache as actionable guide, use auto-discovered languages only |
+| `c7b8662` | docs(AGENTS): remove user-facing subsection, rename to 缓存操作 |
+| `44f3667` | docs(AGENTS): remove redundant cache section, merge into single 二进制缓存 |
 
 ## 2026-06-22T23:22:00+09:00
+
+
 
 **摘要**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
 
