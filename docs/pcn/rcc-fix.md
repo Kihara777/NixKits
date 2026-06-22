@@ -2,7 +2,7 @@
 
 [中文](../zh/rcc-fix.md) | [English](../en/rcc-fix.md) | [日本語](../ja/rcc-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rcc-fix.md) | 偽中国語
 
-ASUS ROG Control Center 2-in-1 脱着式キボド機器向パッチ。
+ASUS ROG Control Center 2-in-1 脱着式鍵盤機器向修正。
 
 ## 基本情報
 
@@ -10,20 +10,20 @@ ASUS ROG Control Center 2-in-1 脱着式キボド機器向パッチ。
 |------|-----|
 | 版 | nixpkgs `asusctl` 追従 |
 | 上流 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| パッチ | 本倉庫 `patches/rog-control-center-fix.patch` |
-| 部品 | `nixosModules.rog-control-center-fix`（systemd デッドロック修正） |
-| 注意 | overlay `pkgs.asusctl` 置換、単独包 |
+| 修正 | 本倉庫 `patches/rog-control-center-fix.patch` |
+| 部品 | `nixosModules.rog-control-center-fix`（systemd 膠着修正） |
+| 注意 | 上乗以 `pkgs.asusctl` 置換、単独包無 |
 
 ## 修正内容
 
-- **キボド検出**: 脱着式キボド未接続時多言語メッセジ表示、クラッシュ防止
-- **ホットプラグ復旧**: D-Bus イベント駆動 — 再接続時 Aura UI 自動復元
-- **境界チェック**: ファムウェア報告之無効 PowerZone 安全フィルタリング
-- **systemd デッドロック修正**: `asus-shutdown.service` `PartOf` 除去、asusd 停止時之連鎖停止防止
+- **鍵盤検出**: 脱着式鍵盤未接続時多言語消息表示、崩壊防止
+- **熱挿抜復旧**: D-Bus 事象駆動 — 再接続時 Aura UI 自動復元
+- **境界検査**: 固件報告無効 PowerZone 安全濾過
+- **systemd 膠着修正**: `asus-shutdown.service` 自 `PartOf` 除去、asusd 停止時連鎖停止防止
 
 ## 導入
 
-overlay（コドパッチ）+ NixOS 部品（systemd 修正）、併用推奨：
+上乗（符号修正）+ NixOS 部品（systemd 修正）、併用推奨：
 
 ```nix
 {

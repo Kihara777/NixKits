@@ -2,7 +2,7 @@
 
 [中文](../zh/rog-control-center-fix.md) | [English](../en/rog-control-center-fix.md) | [日本語](../ja/rog-control-center-fix.md) | [ｶﾀﾘｯｼｭ](../katalish/rog-control-center-fix.md) | 偽中国語
 
-asusd シャットダウン時之 `asus-shutdown.service` デッドロック修正。
+asusd 停止時 `asus-shutdown.service` 膠着修正。
 
 ## 基本情報
 
@@ -10,12 +10,12 @@ asusd シャットダウン時之 `asus-shutdown.service` デッドロック修�
 |------|-----|
 | 版 | nixpkgs 追従 |
 | 種別 | NixOS 部品 |
-| パス | `modules/rog-control-center-fix.nix` |
-| トリガ | `services.asusd.enable = true` |
+| 路 | `modules/rog-control-center-fix.nix` |
+| 引金 | `services.asusd.enable = true` |
 
 ## 修正内容
 
-- **PartOf 除去**: `asus-shutdown.service` 之 `PartOf` 空、asusd 停止時之連鎖停止デッドロック防止
+- **PartOf 除去**: `asus-shutdown.service` `PartOf` 空化、asusd 停止時連鎖停止膠着防止
 
 ## 導入
 

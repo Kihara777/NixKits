@@ -5,7 +5,7 @@
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | 偽中国語
 
-DeepSeek V4 専用之端末符号化代理。
+DeepSeek V4 専用端末符号化代理。
 
 ## 基本情報
 
@@ -20,23 +20,23 @@ DeepSeek V4 専用之端末符号化代理。
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
-# デフォルト overlay → pkgs.codewhale
+# 既定上乗 → pkgs.codewhale
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
-## 使方
+## 使用法
 
 ```bash
 codewhale                              # 対話型 TUI
-codewhale "explain this function"      # ワンショットプロンプト
-codewhale --model auto "fix this bug"  # 自動モデル選択
-codewhale --yolo                       # 自動承認モード
-codewhale doctor                       # セットアップ確認
-codewhale auth set --provider deepseek # API キー保存
+codewhale "explain this function"      # 単発指示
+codewhale --model auto "fix this bug"  # 自動模型選択
+codewhale --yolo                       # 自動承認模式
+codewhale doctor                       # 準備確認
+codewhale auth set --provider deepseek # API 鍵保存
 ```
 
-初回実行時 [DeepSeek API キ](https://platform.deepseek.com/api_keys) 必要。
+初回実行時 [DeepSeek API 鍵](https://platform.deepseek.com/api_keys) 必要。
 
 ## 緩衝
 
-`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 以自動宣言、flake input 使用時自動案内）。

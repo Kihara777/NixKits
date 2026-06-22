@@ -5,7 +5,7 @@
 
 [中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | 偽中国語
 
-[OpenCode](https://opencode.ai) 之 Telegram Bot 依頼者。
+[OpenCode](https://opencode.ai) Telegram Bot 依頼者。
 
 ## 基本情報
 
@@ -14,15 +14,15 @@
 | 版 | 0.21.2 |
 | 上流 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
-## 使方
+## 使用法
 
 ```bash
-# 初回セットアップ
-opencode serve                           # opencode サーバーを起動
+# 初回準備
+opencode serve                           # opencode 伺服器起動
 opencode-telegram config                 # 対話型 Telegram Bot 設定
 
 # 日常使用
-opencode-telegram start                  # 起動（opencode を自動起動）
+opencode-telegram start                  # 起動（opencode 自動起動）
 opencode-telegram status                 # 状態確認
 opencode-telegram stop                   # 停止
 ```
@@ -32,7 +32,7 @@ opencode-telegram stop                   # 停止
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.opencode-telegram ];
 
-# デフォルト overlay → pkgs.opencode-telegram
+# 既定上乗 → pkgs.opencode-telegram
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
@@ -63,4 +63,4 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 
 ## 緩衝
 
-`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 以自動宣言、flake input 使用時自動案内）。

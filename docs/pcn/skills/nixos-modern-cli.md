@@ -1,26 +1,26 @@
-# nixos-modern-cli (Skill)
+# nixos-modern-cli (技能)
 
 [中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md) | 偽中国語
 
-> NixOS 体系作業起動。最新 Nix CLI、完全シェル機能、正メンテナンス手順保証。
+> NixOS 体系作業時起動。最新 Nix CLI、完全殻機能、正確保守手順保証。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 種別 | Coding Agent Skill |
-| パス | `skills/nixos-modern-cli/SKILL.md` |
+| 種別 | 符号化代理技能 |
+| 路 | `skills/nixos-modern-cli/SKILL.md` |
 
 ## 機能
 
-- NixOS 従来之 Linux ディストリビュション誤認 AI 模型矯正
-- 最新 vs 従来 CLI 指令之対照表提供
-- `nix shell --command` 使用 POSIX 道具実行ガイド
-- 一般的 POSIX 道具 → nixpkgs 包対応表搭載
-- 体系メンテナンス、ログ確認、ガベジコレクション網羅
-- NixOS 固有之注意点（PATH、nix-env 之永続性）列挙
-- Nix Store パス之罠診断：GC 回収無効化 `/nix/store/` パス特定・修正（例：`gh auth setup-git` 之認証ヘルパ）
+- NixOS 従来 Linux 配布誤認 AI 模型矯正
+- 最新 vs 従来 CLI 指令対照表提供
+- `nix shell --command` 使用 POSIX 道具実行手引
+- 一般 POSIX 道具 → nixpkgs 包対応表搭載
+- 体系保守、記録確認、塵集回收網羅
+- NixOS 固有注意点（PATH、nix-env 永続性等）列挙
+- Nix Store 路罠診断：GC 回收以無効化 `/nix/store/` 路特定・修正（例：`gh auth setup-git` 認証補助器）
 
 ## 使用
 
-AI NixOS 環境検出自動起動。「最新之 nix 指令」之明示的要求起動。
+AI NixOS 環境検出時自動起動。又「最新 nix 指令」明示的要求以起動。
