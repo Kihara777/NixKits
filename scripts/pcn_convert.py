@@ -148,10 +148,16 @@ def is_bash_code_block(info_string):
 
 
 def is_language_switcher(line):
-    """Detect if a line is a language switcher (multiple language links separated by |)."""
-    # Pattern: has at least 3 pipe-separated segments with markdown links or bare language labels
+    """Detect if a line is a language switcher (multiple language links separated by |).
+    
+    Excludes markdown table rows (which start with |) to avoid false positives.
+    """
     stripped = line.strip()
+    # Must contain |
     if '|' not in stripped:
+        return False
+    # Must NOT be a table row (starts with |)
+    if stripped.startswith('|'):
         return False
     # Check for common language label patterns
     langs = ['中文', 'English', '日本語', '偽中国語']
