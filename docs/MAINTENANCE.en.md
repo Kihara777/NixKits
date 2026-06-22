@@ -1,8 +1,18 @@
 # Maintenance Log
 
+## 2026-06-23T04:04:32+09:00
 
+**Summary**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
+
+| Commit | Description |
+|------|------|
+| `771cd1c` | docs(AGENTS): remove hardcoded counts, merge audit memo, rewrite cache as actionable guide, use auto-discovered languages only |
+| `c7b8662` | docs(AGENTS): remove user-facing subsection, rename to 缓存操作 |
+| `44f3667` | docs(AGENTS): remove redundant cache section, merge into single 二进制缓存 |
 
 ## 2026-06-22T23:22:00+09:00
+
+
 
 **Summary**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
 
@@ -158,7 +168,7 @@
 | 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
 
 
-[中文] | English(docs/MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 NixKits package update changelog.
 
