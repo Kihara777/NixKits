@@ -2,27 +2,27 @@
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | 偽中国語
 
-> NixKits 符号化代理（opencode、codewhale、claude、openclaw、agents）導入更新。
+> NixKits スキルスキル符号化スキルコディング代理ディレクトリ（opencode、codewhale、claude、openclaw、agents）導入更新。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
 | 種別 | Coding Agent Skill |
-| | `skills/nixkits-skills/SKILL.md` |
+| パス | `skills/nixkits-skills/SKILL.md` |
 
 ## 機能
 
-- git remote URL 自動検出
-- 導入済代理之検出
-- NixKits 比較差異表示
-- 導入（）導入（GitHub）対応
-- 適用前差分表示確認要求
-- 導入後之一貫性検証
+- ソスディレクトリ git remote URL 自動検出
+- 導入済代理之スキルディレクトリ検出
+- ロカルスキル NixKits ソス比較差異表示
+- ロカルロカル導入（ソス）オンラインオンライン導入（GitHub クロン）対応
+- 適用前差分表示ユザ確認要求
+- 導入後コピ之一貫性検証
 
 ## 対応代理
 
-| 代理 | |
+| 代理 | ディレクトリ |
 |-------------|-------------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
@@ -32,4 +32,4 @@
 
 ## 使用
 
-「導入」「NixKits 更新」依頼起動。
+ユザ「スキルスキル導入」「NixKits スキル更新」依頼起動。

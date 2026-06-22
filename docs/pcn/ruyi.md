@@ -5,7 +5,7 @@
 
 [中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語
 
-[RuyiSDK](https://ruyisdk.org) 之包管理者。RISC-V 開発環境之道具導入、仮想環境管理、包倉庫操作提供。
+[RuyiSDK](https://ruyisdk.org) 之包パッケジ管理者。RISC-V 開発環境之道具チェンツルチェン導入、仮想環境管理、デバイスプロビジョニング、包パッケジ倉庫操作提供。
 
 ## 基本情報
 
@@ -14,7 +14,7 @@
 | 版 | 0.51.0-alpha.20260616 |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | 許諾 | Apache 2.0 |
-| 注意 | 段階之軟体、API 変更之可能性 |
+| 注意 | アルファ段階之軟体、API 変更之可能性 |
 
 ## Dev Shell
 
@@ -30,7 +30,7 @@ nix develop github:Kihara777/NixKits#ruyi  # 事前設定不要のワンショ�
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
-#  overlay 経由
+# または overlay 経由
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
@@ -45,7 +45,7 @@ ruyi venv --toolchain <t> # 仮想環境を作成
 ruyi device provision    # デバイスをプロビジョニング
 ```
 
-> ruyi 包（`packages-index`）之網絡接続必要。初回 `ruyi list` 時自動行。
+> ruyi 包インデックス（`packages-index`）之クロンクロン網絡接続必要。初回 `ruyi list` 時自動行。
 
 ## 部品
 
@@ -66,7 +66,7 @@ nixkits.ruyi = {
 };
 ```
 
-`/etc/xdg/ruyi/config.toml` 自動生成、環境変数設定、体系時包自動更新。
+`/etc/xdg/ruyi/config.toml` 自動生成、環境変数設定、体系アクティベション時包インデックス自動更新。
 
 宣言的仮想環境支援：
 
@@ -82,16 +82,16 @@ nixkits.ruyi.venvs.riscv = {
 
 NixKits 之 ruyi 構築 `patches/ruyi-nixos-compat.patch` 含、NixOS 固有之問題透過的処理：
 
-- **動的**： RISC-V 道具（GCC、QEMU 等） `/lib64/ld-linux-x86-64.so.2` 期待 NixOS 存在。 NixOS 之 `ld.so` 経由実行。
-- **道具修復**：GCC 内部之 `cc1`、`as`、`collect2` 等之 ruyi 之 mux。 `patchelf` ELF interpreter 自動修復。
-- **Nix console_scripts 互換性**：`RUYI_ARGV0` 環境変数 Nix 失 `exec -a` 之動作回復。
+- **動的リンカパス**：プリコンパイル RISC-V 道具チェンバイナリ（GCC、QEMU 等） `/lib64/ld-linux-x86-64.so.2` 期待 NixOS 存在。パッチ NixOS 之 `ld.so` 経由実行リダイレクト。
+- **道具チェンサブプロセス修復**：GCC 内部之 `cc1`、`as`、`collect2` 等之サブプロセス ruyi 之 mux バイパス。パッチ `patchelf` ELF interpreter 自動修復。
+- **Nix console_scripts 互換性**：`RUYI_ARGV0` 環境変数 Nix ラッパ失 `exec -a` 之動作回復。
 
 ## 注意
 
-- [ISCAS](https://www.iscas.ac.cn) RISC-V 開発者向
+- [ISCAS](https://www.iscas.ac.cn) RISC-V 開発者向メンテナンス
 - 実行時依存（curl、gnutar、git、patchelf） wrapProgram 注入
--：ruff lint、mypy 型、pytest （320）、統合（52）— 通過
+- テストカバレッジ：ruff lint、mypy 型チェック、pytest 通過 ユニット（320）、統合（52）—
 
-## 
+## キャッシュ
 
 `cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

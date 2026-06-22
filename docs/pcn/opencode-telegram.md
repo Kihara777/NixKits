@@ -32,7 +32,7 @@ opencode-telegram stop                   # 停止
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.opencode-telegram ];
 
-# 既定 overlay → pkgs.opencode-telegram
+# デフォルト overlay → pkgs.opencode-telegram
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
@@ -61,6 +61,6 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 }
 ```
 
-## 
+## キャッシュ
 
 `cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

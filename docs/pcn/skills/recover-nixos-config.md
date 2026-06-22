@@ -9,16 +9,16 @@
 | 項目 | 値 |
 |------|-----|
 | 種別 | Coding Agent Skill |
-| | `skills/recover-nixos-config/SKILL.md` |
+| パス | `skills/recover-nixos-config/SKILL.md` |
 
 ## 機能
 
-- Nix store 内之最新構築之 flake 特定
-- 名 `*-source` 検索
-- 最新 generation 対応正識別
+- Nix store 内之最新構築之 flake ソススナップショット特定
+- ホスト名 `*-source` ディレクトリ検索
+- 最新 generation 対応正ソス識別
 - 指定書類（flake.nix、flake.lock、各部品）復元
 - `nix flake check` 復元設定検証
 
 ## 使用
 
-「/etc/nixos 之書類誤削除」報告起動。
+ユザ「/etc/nixos 之書類誤削除」報告起動。
