@@ -61,6 +61,6 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 }
 ```
 
-## キャッシュ
+## 緩衝
 
 `cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

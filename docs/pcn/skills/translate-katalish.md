@@ -1,14 +1,14 @@
-# translate-katalish (スキル)
+# translate-katalish (技能)
 
 [中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/translate-katalish.md) | 偽中国語
 
-> 文書作成スキル追加之自然言語支援提供。ｶﾀﾘｯｼｭ（カタカナ英語）言語追加。
+> 文書作成技能追加之自然言語支援提供。ｶﾀﾘｯｼｭ（カタカナ英語）言語追加。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 種別 | 符号化コディング代理スキル（言語バックエンド） |
+| 種別 | 符号化代理技能（言語バックエンド） |
 | パス | `skills/translate-katalish/SKILL.md` |
 | 呼出元 | write-project-docs（主）、nixkits-check-updates（間接） |
 

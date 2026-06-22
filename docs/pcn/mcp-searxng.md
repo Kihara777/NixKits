@@ -83,7 +83,7 @@ in
 
 ## CodeWhale 設定
 
-CodeWhale 之 MCP 設定書類 `~/.deepseek/mcp.json`。mcp-searxng 追加後、**必手動 `SEARXNG_URL` 設定** — `codewhale mcp add` コマンド `env` フィルド自動入力。
+CodeWhale 之 MCP 設定書類 `~/.deepseek/mcp.json`。mcp-searxng 追加後、**必手動 `SEARXNG_URL` 設定** — `codewhale mcp add` 指令 `env` フィルド自動入力。
 
 ```json
 {
@@ -130,6 +130,6 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 - lighttpd リバスプロキシ `X-Forwarded-For` ヘッダ転送確認
 - ログ確認: `journalctl -u searx --no-pager -n 30`
 
-## キャッシュ
+## 緩衝
 
 `cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

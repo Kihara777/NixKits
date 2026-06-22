@@ -2,7 +2,7 @@
 
 ## 2026-06-23T04:04:32+09:00
 
-**Summary**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
+**Summary**：AGENTS.md — 去硬符号化、除去冗長監査備忘、貯蔵節書換代理操作指南、除去利用者側記述、言語体系自動発見化
 
 | Commit | Description |
 |------|------|
@@ -12,9 +12,7 @@
 
 ## 2026-06-22T23:22:00+09:00
 
-
-
-**Summary**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
+**Summary**：AGENTS.md — 新增初回起動監査規則、接続制御移動至頂部
 
 | Commit | Description |
 |------|------|
@@ -23,7 +21,7 @@
 
 ## 2026-06-22T07:20:50+09:00
 
-**Summary**：docs — README 重复行修复，write-project-docs 反模式补充
+**Summary**：docs — README 重複行修正、write-project-docs 反模式補充
 
 | Commit | Description |
 |------|------|
@@ -32,7 +30,7 @@
 
 ## 2026-06-22T06:41:50+09:00
 
-**Summary**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
+**Summary**：AGENTS.md — 新增接続制御、言語要件、委託規範、保守記録検査、文書同期、汎化、多架構貯蔵規則
 
 | Commit | Description |
 |------|------|
@@ -40,7 +38,7 @@
 
 ## 2026-06-22T06:21:11+09:00
 
-**Summary**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
+**Summary**：docs — 毎包文書追加双架構 CI 徽章、技能雛形同期
 
 | Commit | Description |
 |------|------|
@@ -51,7 +49,7 @@
 
 ## 2026-06-22T06:05:49+09:00
 
-**Summary**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
+**Summary**：CI — 追加 ARM runner 多架構構築、修正 flake.lock 並行競合（--no-write-lock-file）
 
 | Commit | Description |
 |------|------|
@@ -62,7 +60,7 @@
 
 ## 2026-06-22T05:48:23+09:00
 
-**Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
+**Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 回移（修正書類依存）
 
 | Commit | Description |
 |------|------|
@@ -71,7 +69,7 @@
 
 ## 2026-06-22T05:39:33+09:00
 
-**Summary**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
+**Summary**：docs — 追加貯蔵除外警告（上乗與部品+修正条目）、README 貯蔵説明圧縮、flake.nix 追加 nixConfig 自動宣言
 
 | Commit | Description |
 |------|------|
@@ -80,7 +78,7 @@
 
 ## 2026-06-22T05:27:50+09:00
 
-**Summary**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
+**Summary**：docs — 全部 30 篇包文書追加 `## 貯蔵` 節、CI badge 配置改善、技能同期
 
 | Commit | Description |
 |------|------|
@@ -89,7 +87,7 @@
 
 ## 2026-06-22T05:13:45+09:00
 
-**Summary**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
+**Summary**：CI/CD — 追加 GitHub Actions 構築行列（Cachix 推送）、二進法貯蔵、AGENTS.md
 
 | Commit | Description |
 |------|------|
@@ -97,7 +95,7 @@
 
 ## 2026-06-22T05:13:40+09:00
 
-**Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
+**Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 分割辞典與雛形、SKILL.md 圧縮至 60-80 行
 
 | Commit | Description |
 |------|------|
@@ -105,7 +103,7 @@
 
 ## 2026-06-22T05:13:36+09:00
 
-**Summary**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
+**Summary**：docs — MAINTENANCE 時刻精確化（29 節）、30 重複節削除（SHA 去重）、nix-kits→nixkits 全量置換（183 箇所）、部品文書同期
 
 | Commit | Description |
 |------|------|
@@ -113,7 +111,7 @@
 
 ## 2026-06-22T05:13:31+09:00
 
-**Summary**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
+**Summary**：patches — ruyi-nixos-compat.patch 基清浄複製再構築（1223→426 行）、清除 flake.lock 自参照 artifact
 
 | Commit | Description |
 |------|------|
@@ -121,7 +119,7 @@
 
 ## 2026-06-22T05:13:26+09:00
 
-**Summary**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
+**Summary**：overlays — patches 表 lib.unique 去重、ruyi-nixos-compat 精簡、llama-cpp-rocm 追加 curried 形式注釈
 
 | Commit | Description |
 |------|------|
@@ -129,7 +127,7 @@
 
 ## 2026-06-22T05:13:22+09:00
 
-**Summary**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
+**Summary**：modules — 4 部品追加 enable 選項、comfyui-strix-halo 追加 assertions、名前空間統一至 nixkits.*（含後方互換）、llama-cpp-rocm hfCacheDir 動的導出
 
 | Commit | Description |
 |------|------|
@@ -137,7 +135,7 @@
 
 ## 2026-06-22T05:13:16+09:00
 
-**Summary**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
+**Summary**：codewhale 0.8.63 — 多架構予編訳二進法（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合併入包；meta 欄補完
 
 | Commit | Description |
 |------|------|
@@ -145,17 +143,16 @@
 
 ## 2026-06-22T05:13:11+09:00
 
-**Summary**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
+**Summary**：flake — 除去 mihomo-alpha 幽霊輸入與上乗（書類未存在）
 
 | Commit | Description |
 |------|------|
 | `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
 
 
-
 ## 2026-06-22T23:49:00+09:00
 
-**Summary**：mcp-searxng 1.7.2 — 上游修复
+**Summary**：mcp-searxng 1.7.2 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -174,10 +171,9 @@ NixKits package update changelog.
 
 ---
 
-
 ## 2026-06-21T04:32:31+09:00
 
-**Summary**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
+**Summary**：言語切替器札規則汎化 — display_name 意味修正為言語自称、追加言語名称非局所化規則至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全文書切替器中残留局所化名称
 
 | Commit | Description |
 |------|------|
@@ -188,7 +184,7 @@ NixKits package update changelog.
 
 ## 2026-06-21T00:07:44+09:00
 
-**Summary**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
+**Summary**：codewhale 0.8.62 — 上流修正；mcp-searxng 1.7.1 — 上流修正
 
 | Package | Old | New |
 |--------|--------|--------|
@@ -202,7 +198,7 @@ NixKits package update changelog.
 
 ## 2026-06-18T09:52:34+09:00
 
-**Summary**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
+**Summary**：codewhale 0.8.61 — 上流修正；mcp-searxng 1.6.0 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -222,7 +218,7 @@ NixKits package update changelog.
 
 ## 2026-06-18T09:03:48+09:00
 
-**Summary**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+**Summary**：ruyi — NixOS 互換性修正（`patches/ruyi-nixos-compat.patch`）、透過的処理予編訳 RISC-V 道具連之動的連結器経路、GCC 子過程 ELF interpreter 修復與 console_scripts argv0 問題
 
 | Commit | Description |
 |------|------|
@@ -232,7 +228,7 @@ NixKits package update changelog.
 
 ## 2026-06-17T10:59:35+09:00
 
-**Summary**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
+**Summary**：ruyi — NixOS 部品（`services.ruyi`）、宣言的生成 `/etc/xdg/ruyi/config.toml` 與環境変数
 
 | Commit | Description |
 |------|------|
@@ -245,7 +241,7 @@ NixKits package update changelog.
 
 ## 2026-06-17T10:03:05+09:00
 
-**Summary**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
+**Summary**：ruyi — 新增 devShell 支援、`nix develop github:Kihara777/NixKits#ruyi` 即入環境
 
 | Commit | Description |
 |------|------|
@@ -255,13 +251,13 @@ NixKits package update changelog.
 
 ## 2026-06-17T09:48:33+09:00
 
-**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
+**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理者、新包（Python / Poetry 構築、ruff + mypy + 320 単元試験 + 52 統合試験全通過）
 
 | Commit | Description |
 |------|------|
 | `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
 
-| 软件名 | 新版本 |
+| 軟体名 | 新版 |
 |--------|--------|
 | ruyi | 0.51.0-alpha.20260616 |
 
@@ -269,7 +265,7 @@ NixKits package update changelog.
 
 ## 2026-06-20T18:36:33+09:00
 
-**Summary**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+**Summary**：技能体系再構築 — translate-katakana→translate-katalish 改名、新增 translate-pseudocn（偽中国語）、write-project-docs 與 write-maintenance-log 言語拡張自動発見、文書手順五語写像表
 
 | Commit | Description |
 |------|------|
@@ -287,7 +283,7 @@ NixKits package update changelog.
 
 ## 2026-06-17T07:37:39+09:00
 
-**Summary**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
+**Summary**：write-maintenance-log 技能 — 自 nixkits-check-updates 剥離為独立技能、双入口設計（記入维护记录 + 更新维护记录）；flake.lock 同期 .gitignore 前置検出與三路分岐論理
 
 | Commit | Description |
 |------|------|
@@ -301,7 +297,7 @@ NixKits package update changelog.
 
 ## 2026-06-17T06:46:13+09:00
 
-**Summary**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
+**Summary**：llama-cpp-rocm — 試行以 builtins.fetchurl 替代 flake input 動的取得版（已撤銷、方案不可用）
 
 | Commit | Description |
 |------|------|
@@ -312,7 +308,7 @@ NixKits package update changelog.
 
 ## 2026-06-16T06:03:24+09:00
 
-**Summary**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
+**Summary**：mcp-searxng 文書 — CodeWhale MCP 設定指南、常有陥穽警告（env 既定 {}）、故障修理節
 
 | Commit | Description |
 |------|------|
@@ -322,7 +318,7 @@ NixKits package update changelog.
 
 ## 2026-06-16T05:20:34+09:00
 
-**Summary**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
+**Summary**：nixos-modern-cli 技能 — Nix Store 経路罠節（gh auth setup-git 硬符号化経路失效之診断與汎用修正模式）
 
 | Commit | Description |
 |------|------|
@@ -332,7 +328,7 @@ NixKits package update changelog.
 
 ## 2026-06-14T08:11:16+09:00
 
-**Summary**：comfyui-strix-halo 文档 — 在线集成模式说明与文件结构图
+**Summary**：comfyui-strix-halo 文書 — 線上統合模式説明與書類構造図
 
 | Commit | Description |
 |------|------|
@@ -342,7 +338,7 @@ NixKits package update changelog.
 
 ## 2026-06-12T18:17:52+09:00
 
-**Summary**：llama-cpp-rocm 模块 — 恢复 modelsPreset 支持（nixpkgs 已移除）、命名空间迁移至 nixkits、三语迁移指南
+**Summary**：llama-cpp-rocm 部品 — 回復 modelsPreset 支援（nixpkgs 已除去）、名前空間移行至 nixkits、三語移行指南
 
 | Commit | Description |
 |------|------|
@@ -353,7 +349,7 @@ NixKits package update changelog.
 
 ## 2026-06-11T05:28:59+09:00
 
-**Summary**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
+**Summary**：技能文書 — 保守記録書式規則系列（自動発見汎化、記述的題名、精確 git commit 時刻、禁止 T00:00:00 占位符）
 
 | Commit | Description |
 |------|------|
@@ -369,7 +365,7 @@ NixKits package update changelog.
 
 ## 2026-06-10T04:31:20+09:00
 
-**Summary**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
+**Summary**：opencode-telegram — KillMode 変更為 process、追加 TimeoutStopSec 防止関機掛起
 
 | Commit | Description |
 |------|------|
@@ -380,7 +376,7 @@ NixKits package update changelog.
 
 ## 2026-06-08T15:12:39+09:00
 
-**Summary**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
+**Summary**：文書再構築 — 局所化書類移入 docs/ 目録；MAINTENANCE.md 初回追加合列規則、純表格書式、回填完全委託歴史
 
 | Commit | Description |
 |------|------|
@@ -397,7 +393,7 @@ NixKits package update changelog.
 
 ## 2026-06-08T14:22:25+09:00
 
-**Summary**：rcc-fix — NixOS 模块（systemd 死锁修复）
+**Summary**：rcc-fix — NixOS 部品（systemd 死活修正）
 
 | Commit | Description |
 |------|------|
@@ -407,7 +403,7 @@ NixKits package update changelog.
 
 ## 2026-06-06T15:17:11+09:00
 
-**Summary**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
+**Summary**：技能文書 — 源変更後文書同期規範；comfyui-strix-halo C 道具連説明；hash 計算注意事項汎化；基本情報規則多言語統一
 
 | Commit | Description |
 |------|------|
@@ -426,7 +422,7 @@ NixKits package update changelog.
 
 ## 2026-06-04T13:07:30+09:00
 
-**Summary**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
+**Summary**：技能体系 — SKILL.md 全面中国語化；三語対称性検査規則
 
 | Commit | Description |
 |------|------|
@@ -437,7 +433,7 @@ NixKits package update changelog.
 
 ## 2026-06-02T03:42:25+09:00
 
-**Summary**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
+**Summary**：nixos-modern-cli 技能 — POSIX 道具指南與 nix 二進法経路提示
 
 | Commit | Description |
 |------|------|
@@ -447,7 +443,7 @@ NixKits package update changelog.
 
 ## 2026-05-31T03:42:18+09:00
 
-**Summary**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
+**Summary**：write-project-docs — 新技能（NixKits 様式以任意計画編寫多言語文書体系）
 
 | Commit | Description |
 |------|------|
@@ -457,7 +453,7 @@ NixKits package update changelog.
 
 ## 2026-05-30T03:42:14+09:00
 
-**Summary**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
+**Summary**：codewhale — stdenv 綴修正；llama-cpp-rocm 文書修正（除去内聯連結、使用 system.nix 完全予設）；opencode-telegram 初回設定流程
 
 | Commit | Description |
 |------|------|
@@ -472,7 +468,7 @@ NixKits package update changelog.
 
 ## 2026-05-29T15:25:12+09:00
 
-**Summary**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
+**Summary**：kitsfmt — 多項修正（vendor 目録回復、冪等性、其場安全、with→builtins.attrValues 変換、--stdin 旗）；rcc-fix — 書換為 D-Bus 熱挿抜検出；build — .vscode gitignore 範囲修正
 
 | Commit | Description |
 |------|------|
@@ -490,7 +486,7 @@ NixKits package update changelog.
 
 ## 2026-05-28T08:29:27+09:00
 
-**Summary**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
+**Summary**：llama-cpp-rocm — NixOS 部品（systemd 砂箱上書）；opencode-telegram — NixOS 部品（宣言的設定、自動導入）；rcc-fix — visible 属性修正；技能文書 — 動的発見措辞
 
 | Commit | Description |
 |------|------|
@@ -508,7 +504,7 @@ NixKits package update changelog.
 
 ## 2026-05-27T06:08:13+09:00
 
-**Summary**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
+**Summary**：技能体系 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同期上線；llama-cpp-rocm 動的追跡説明
 
 | Commit | Description |
 |------|------|
@@ -521,7 +517,7 @@ NixKits package update changelog.
 
 ## 2026-05-26T05:30:58+09:00
 
-**Summary**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
+**Summary**：文書 — README 節名改名（快速开始→添加、包→软件、License→许可）
 
 | Commit | Description |
 |------|------|
@@ -531,7 +527,7 @@ NixKits package update changelog.
 
 ## 2026-05-24T03:01:02+09:00
 
-**Summary**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
+**Summary**：mcp-searxng 文書 — SearXNG + lighttpd 逆代理完全 NixOS 設定
 
 | Commit | Description |
 |------|------|
@@ -541,7 +537,7 @@ NixKits package update changelog.
 
 ## 2026-05-22T06:45:11+09:00
 
-**Summary**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
+**Summary**：llama-cpp-rocm — 除去 llama-cpp-ver flake 輸入、使用 nixpkgs 既定版
 
 | Commit | Description |
 |------|------|
@@ -551,7 +547,7 @@ NixKits package update changelog.
 
 ## 2026-05-16T19:07:54+09:00
 
-**Summary**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
+**Summary**：kitsfmt — 修正 match_ast! 巨集構文誤、簡化 comments_before 函数、修正 src 経路
 
 | Commit | Description |
 |------|------|
@@ -563,7 +559,7 @@ NixKits package update changelog.
 
 ## 2026-05-15T16:59:28+09:00
 
-**Summary**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
+**Summary**：kitsfmt — 基 rnix AST 書換整形引擎 v0.3.0；生成 Cargo.lock
 
 | Commit | Description |
 |------|------|
@@ -574,7 +570,7 @@ NixKits package update changelog.
 
 ## 2026-06-11T05:13:39+09:00
 
-**Summary**：other — 2 项更新
+**Summary**：other — 2 項更新
 
 | Commit | Description |
 |------|------|
@@ -585,7 +581,7 @@ NixKits package update changelog.
 
 ## 2026-06-02T10:15:53+09:00
 
-**Summary**：other — 7 项更新
+**Summary**：other — 7 項更新
 
 | Commit | Description |
 |------|------|
@@ -601,7 +597,7 @@ NixKits package update changelog.
 
 ## 2026-06-02T08:49:47+09:00
 
-**Summary**：opencode-telegram — 8 项更新
+**Summary**：opencode-telegram — 8 項更新
 
 | Commit | Description |
 |------|------|
@@ -618,7 +614,7 @@ NixKits package update changelog.
 
 ## 2026-05-30T03:19:48+09:00
 
-**Summary**：other — 2 项更新
+**Summary**：other — 2 項更新
 
 | Commit | Description |
 |------|------|
@@ -639,7 +635,7 @@ NixKits package update changelog.
 
 ## 2026-06-16T04:56:06+09:00
 
-**Summary**：opencode-telegram 0.21.2 — 上游修复及依赖更新
+**Summary**：opencode-telegram 0.21.2 — 上流修正及依存更新
 
 | Commit | Description |
 |------|------|
@@ -656,7 +652,7 @@ NixKits package update changelog.
 
 ## 2026-06-15T17:32:16+09:00
 
-**Summary**：codewhale 0.8.60 — 上游修复
+**Summary**：codewhale 0.8.60 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -673,7 +669,7 @@ NixKits package update changelog.
 
 ## 2026-06-14T07:56:11+09:00
 
-**Summary**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
+**Summary**：codewhale 0.8.59 — 修正若干端末描画問題；mcp-searxng 1.4.0 — 新增 HTTP 伝送模式
 
 | Commit | Description |
 |------|------|
@@ -694,7 +690,7 @@ NixKits package update changelog.
 
 ## 2026-06-12T10:51:31+09:00
 
-**Summary**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
+**Summary**：codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -715,7 +711,7 @@ NixKits package update changelog.
 
 ## 2026-06-11T04:52:16+09:00
 
-**Summary**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
+**Summary**：codewhale 0.8.57 — 端末新增；mcp-searxng 1.3.2 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -735,7 +731,7 @@ NixKits package update changelog.
 
 ## 2026-06-10T02:28:10+09:00
 
-**Summary**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
+**Summary**：codewhale 0.8.55 — 上流修正；mcp-searxng 1.3.1 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -752,7 +748,7 @@ NixKits package update changelog.
 
 ## 2026-06-08T14:25:02+09:00
 
-**Summary**：mcp-searxng 1.2.1 — 上游修复
+**Summary**：mcp-searxng 1.2.1 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -778,7 +774,7 @@ NixKits package update changelog.
 
 ## 2026-06-06T13:58:47+09:00
 
-**Summary**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
+**Summary**：codewhale 0.8.53 — 上流修正；mcp-searxng 1.1.0 — 上流修正；opencode-telegram 0.21.1 — 上流修正
 
 | Commit | Description |
 |------|------|
@@ -800,7 +796,7 @@ NixKits package update changelog.
 
 ## 2026-06-06T12:51:46+09:00
 
-**Summary**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
+**Summary**：comfyui-strix-halo 修正 — ROCm 7.2 wheels 内蔵支援
 
 | Commit | Description |
 |------|------|
@@ -813,13 +809,13 @@ NixKits package update changelog.
 
 | Package | Old | New |
 |--------|--------|--------|
-| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
+| comfyui-strix-halo | 修正（ROCm 7.2 wheels 内蔵） |
 
 ---
 
 ## 2026-06-02T05:57:11+09:00
 
-**Summary**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
+**Summary**：codewhale 0.8.49 — 上流修正；mcp-searxng 1.0.4 — 上流修正；obs-bilibili-stream 2.1.0 — 上流修正；opencode-telegram 0.21.0 — 上流修正
 
 | Package | Old | New |
 |--------|--------|--------|
@@ -865,7 +861,7 @@ NixKits package update changelog.
 
 ## 2026-05-14T17:10:06+09:00
 
-**Summary**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
+**Summary**：llama-cpp-rocm — 新包（動的追跡上流最新 Release）
 
 | Commit | Description |
 |------|------|
@@ -873,13 +869,13 @@ NixKits package update changelog.
 
 | Package | Old | New |
 |--------|--------|--------|
-| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
+| llama-cpp-rocm | 動的（構築時取得上流最新 Release） |
 
 ---
 
 ## 2026-05-14T07:38:08+09:00
 
-**Summary**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
+**Summary**：kitsfmt — 新包（自建 Nix 整形器）；obs-bilibili-stream v1.0.0 — 新包
 
 | Commit | Description |
 |------|------|
@@ -894,7 +890,7 @@ NixKits package update changelog.
 
 ## 2026-05-01T01:08:15+09:00
 
-**Summary**：rcc-fix — 新包（asusctl 补丁）
+**Summary**：rcc-fix — 新包（asusctl 修正）
 
 | Commit | Description |
 |------|------|
@@ -902,13 +898,13 @@ NixKits package update changelog.
 
 | Package | Old | New |
 |--------|--------|--------|
-| rcc-fix | 跟随 nixpkgs（overlay + patch） |
+| rcc-fix | 追従 nixpkgs（上乗 + patch） |
 
 ---
 
 ## 2026-06-17T06:48:47+09:00
 
-**Summary**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
+**Summary**：fix(mcp-searxng): 修正入口書類誤 — dist/index.js → dist/cli.js、MCP 伺服器正常起動可
 
 | Commit | Description |
 |------|------|
@@ -918,13 +914,13 @@ NixKits package update changelog.
 
 ## 2026-06-12T17:29:59+09:00
 
-**Summary**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
+**Summary**：feat(llama-cpp-rocm): 回復 modelsPreset 支援（nixpkgs 已除去）、名前空間移行至 nixkits
 
 ---
 
 ## 2026-05-29T06:28:50+09:00
 
-**Summary**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
+**Summary**：fix(kitsfmt): 修正 inherit 逗号、縮進文字列破壊、lambda 空白等多項整形問題；修正冪等性
 
 | Commit | Description |
 |------|------|
@@ -937,5 +933,4 @@ NixKits package update changelog.
 
 ## 2026-05-29T05:57:55+09:00
 
-**Summary**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
-
+**Summary**：fix(build): 修正 .vscode gitignore 範囲過広導致 vendored crate 書類被排除

@@ -5,7 +5,7 @@
 
 [中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | 偽中国語
 
-**Nix 整形器** — rnix AST 基盤、属性整列・注釈保持・縮進正規化。
+**Nix 整形器** — rnix AST ベス、属性ソト・コメント保持・インデント正規化。
 
 ## 基本情報
 
@@ -13,16 +13,16 @@
 |------|-----|
 | 版 | 0.5.0 |
 | 言語 | Rust |
-| 源 | 本倉庫 `packages/kitsfmt-src/` |
+| ソス | 本倉庫 `packages/kitsfmt-src/` |
 
-## 使用方法
+## 使方
 
 ```bash
-kitsfmt file.nix             # stdout 出力
-kitsfmt --inplace file.nix   # 上書整形
-kitsfmt --check file.nix     # 整形確認
-kitsfmt --no-best-practices  # 自動修正無効
-kitsfmt file1.nix file2.nix  # 複数書類
+kitsfmt file.nix             # stdout に出力
+kitsfmt --inplace file.nix   # 上書きフォーマット
+kitsfmt --check file.nix     # フォーマット確認
+kitsfmt --no-best-practices  # 自動修正オフ
+kitsfmt file1.nix file2.nix  # 複数ファイル
 ```
 
 環境変数: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
@@ -33,24 +33,24 @@ kitsfmt file1.nix file2.nix  # 複数書類
 # 直接
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 
-# 既定上乗（推奨）
+# デフォルト overlay（推奨）
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
-# nix fmt 整形器
+# nix fmt フォーマッターとして
 # formatter.${system} = inputs.nixkits.formatter.${system};
-# 以後: nix fmt
+# その後: nix fmt
 ```
 
 ## 機能
 
-- 属性整列（APC `a.b.c` 折畳対応）
-- 注釈保持
-- 冪等整形
-- **最良実践自動修正**（既定有効、`-B` 以無効）:
-  - 裸 URL 引用符化（RFC 45）
-  - `rec` → `let-in` 変換
-  - `with` → `builtins.attrValues` 変換
+- 属性ソト（APC `a.b.c` 折対応）
+- コメント保持
+- 冪等フォマット
+- **ベストプラクティス自動修正**（既定有効、`-B` 無効）:
+- 裸 URL 引用符化（RFC 45）
+- `rec` → `let-in` 変換
+- `with` → `builtins.attrValues` 変換
 
-## 貯蔵
+## 緩衝
 
-`cachix use nixkits`（flake、`nixConfig` 以自動宣言、flake input 使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

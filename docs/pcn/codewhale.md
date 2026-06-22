@@ -13,30 +13,30 @@ DeepSeek V4 専用之端末符号化代理。
 |------|-----|
 | 版 | 0.8.62 |
 | 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| 種別 | 構築済二進法（GitHub Releases） |
+| 種別 | 構築済二進（GitHub Releases） |
 
 ## 導入
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
-# 既定上乗 → pkgs.codewhale
+# デフォルト overlay → pkgs.codewhale
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
-## 使用方法
+## 使方
 
 ```bash
-codewhale                              # 対話型端末
-codewhale "explain this function"      # 単発提示
-codewhale --model auto "fix this bug"  # 自動模型選択
-codewhale --yolo                       # 自動承認模式
-codewhale doctor                       # 準備確認
-codewhale auth set --provider deepseek # API 鍵保存
+codewhale                              # 対話型 TUI
+codewhale "explain this function"      # ワンショットプロンプト
+codewhale --model auto "fix this bug"  # 自動モデル選択
+codewhale --yolo                       # 自動承認モード
+codewhale doctor                       # セットアップ確認
+codewhale auth set --provider deepseek # API キー保存
 ```
 
-初回実行時、[DeepSeek API 鍵](https://platform.deepseek.com/api_keys)必要。
+初回実行時 [DeepSeek API キ](https://platform.deepseek.com/api_keys) 必要。
 
-## 貯蔵
+## 緩衝
 
-`cachix use nixkits`（flake、`nixConfig` 以自動宣言、flake input 使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

@@ -2,7 +2,7 @@
 
 [中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | 偽中国語
 
-llama.cpp ROCm GPU アクセラレション有効化。構築時 GitHub 最新リリスリリス版動的取得、最先端機能之テスト使用。
+llama.cpp ROCm GPU アクセラレション有効化。構築時 GitHub 最新リリス版動的取得、最先端機能之テスト使用。
 
 ## 基本情報
 
