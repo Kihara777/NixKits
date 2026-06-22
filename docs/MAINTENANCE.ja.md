@@ -1,6 +1,164 @@
 # メンテナンスログ
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
+
+
+## 2026-06-22T23:22:00+09:00
+
+**概要**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
+
+| コミット | 説明 |
+|------|------|
+| `135d347` | docs(AGENTS): add new-session audit rule |
+| `5192e2c` | docs(AGENTS): move new-session audit rule after access control |
+
+## 2026-06-22T07:20:50+09:00
+
+**概要**：docs — README 重复行修复，write-project-docs 反模式补充
+
+| コミット | 説明 |
+|------|------|
+| `091290b` | fix(docs): remove duplicate "提供 nix develop" line in README.md |
+| `922b1d8` | fix(skill): add anti-pattern — check for duplicate content before insert |
+
+## 2026-06-22T06:41:50+09:00
+
+**概要**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
+
+| コミット | 説明 |
+|------|------|
+| `ac6081c` | docs(AGENTS): add access control, language req, commit discipline, maintenance check, doc sync, generalization, multi-arch cache rules |
+
+## 2026-06-22T06:21:11+09:00
+
+**概要**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
+
+| コミット | 説明 |
+|------|------|
+| `8e50035` | feat(docs): add per-package dual-arch CI badges to all 30 docs |
+| `d3b3827` | fix(docs): split dual-arch badges to separate lines |
+| `6b8a283` | fix(docs): add blank line between CI badges and language switcher |
+| `0751500` | docs(skill): update CI badge template — one per line + blank gap |
+
+## 2026-06-22T06:05:49+09:00
+
+**概要**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
+
+| コミット | 説明 |
+|------|------|
+| `97f2ea4` | docs: compress cache sections, add ARM CI runner, update AGENTS.md |
+| `6d581ac` | fix(ci): fix YAML syntax - merge duplicate strategy keys, add runs-on |
+| `126cf2c` | fix(ci): add GitHub token for llama-cpp-ver API access |
+| `0022f50` | fix(ci): add --no-write-lock-file to prevent llama-cpp-ver fetch race |
+
+## 2026-06-22T05:48:23+09:00
+
+**概要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
+
+| コミット | 説明 |
+|------|------|
+| `89f5441` | fix(pkgs): update mcp-searxng source hash + npmDepsHash |
+| `303b1fa` | fix(pkgs): update mcp-searxng hash, restore ruyi overlay postPatch |
+
+## 2026-06-22T05:39:33+09:00
+
+**概要**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
+
+| コミット | 説明 |
+|------|------|
+| `6be660e` | fix: add nixConfig auto-discovery, remove hardcoded package count, clarify arch support |
+| `b28c126` | docs: add cache-exclusion warnings for overlays and module+patch entries |
+
+## 2026-06-22T05:27:50+09:00
+
+**概要**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
+
+| コミット | 説明 |
+|------|------|
+| `7071893` | docs: improve CI badge layout, add cache config options, update skills |
+| `02b355c` | docs: add binary cache section to all 30 package docs + template sync |
+
+## 2026-06-22T05:13:45+09:00
+
+**概要**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
+
+| コミット | 説明 |
+|------|------|
+| `6956af1` | feat: add CI/CD workflow, binary cache, and AGENTS.md |
+
+## 2026-06-22T05:13:40+09:00
+
+**概要**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
+
+| コミット | 説明 |
+|------|------|
+| `5367452` | refactor(skills): split dictionaries, compress SKILL.md to ~60-80 lines |
+
+## 2026-06-22T05:13:36+09:00
+
+**概要**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
+
+| コミット | 説明 |
+|------|------|
+| `61cc470` | docs: fix MAINTENANCE timestamps, dedup 30 sections, rename nix-kits→nixkits |
+
+## 2026-06-22T05:13:31+09:00
+
+**概要**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
+
+| コミット | 説明 |
+|------|------|
+| `1be2e84` | fix(patches): rebuild ruyi-nixos-compat.patch from clean clone (1223→426 lines) |
+
+## 2026-06-22T05:13:26+09:00
+
+**概要**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
+
+| コミット | 説明 |
+|------|------|
+| `81bb2ef` | fix(overlays): lib.unique dedup on patches, simplify ruyi-nixos-compat, add llama-cpp-rocm comment |
+
+## 2026-06-22T05:13:22+09:00
+
+**概要**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
+
+| コミット | 説明 |
+|------|------|
+| `d21db2a` | refactor(modules): add enable options, assertions, migrate to nixkits.* namespace |
+
+## 2026-06-22T05:13:16+09:00
+
+**概要**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
+
+| コミット | 説明 |
+|------|------|
+| `c9e7fc5` | feat(pkgs): codewhale multi-arch + 0.8.63, meta fixes, ruyi postPatch merge |
+
+## 2026-06-22T05:13:11+09:00
+
+**概要**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
+
+| コミット | 説明 |
+|------|------|
+| `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
+
+
+
+## 2026-06-22T23:49:00+09:00
+
+**概要**：mcp-searxng 1.7.2 — 上游修复
+
+| コミット | 説明 |
+|------|------|
+| `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| mcp-searxng | 1.7.1 | 1.7.2 |
+| 　 | source hash | `sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=` → `sha256-6N1YFMMgrEfGJaVYw4dffIGR58Nq0Ji4Q9epTmiKDBs=` |
+| 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
+
+
+[中文] | [English](docs/MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 NixKits パッケージ更新履歴。
 
@@ -9,18 +167,18 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-21T04:32:31+09:00
 
-**概要**：言語切替ラベル規則の汎化 — display_name の意味を言語自称に修正、言語名非ローカライズ規則を write-project-docs / translate-katalish / translate-pseudocn に追加；zh/katalish/pcn 全文書切替部の残留ローカライズ名を修正
+**概要**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
 
 | コミット | 説明 |
 |------|------|
-| `f5aee43` | docs(skill): write-project-docs — 言語名非ローカライズ規則を追加 |
-| `7ba8c1d` | fix(katalish): 言語切替部の English を片仮名に変換しないよう修正 |
-| `5ce9f7d` | fix: display_name の意味を言語自称に修正 — 切替ラベルと分離 |
-| `aa8634b` | fix(docs): zh 文書切替部の残留旧名称修正 + MAINTENANCE 翻訳補完 + translate-* 汎化 |
+| `f5aee43` | docs(skill): write-project-docs — 添加语言名称不本地化规则 |
+| `7ba8c1d` | fix(katalish): 语言切换器中 English 不应本地化为片假名 |
+| `5ce9f7d` | fix: display_name 语义修正 — 语言自称与切换器标签分离 |
+| `aa8634b` | fix(docs): zh 文档切换器残留旧名称修正 + MAINTENANCE 翻译补全 + translate-* 技能泛化 |
 
 ## 2026-06-21T00:07:44+09:00
 
-**概要**：codewhale 0.8.62 — 上流修正；mcp-searxng 1.7.1 — 上流修正
+**概要**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
@@ -34,7 +192,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-18T09:52:34+09:00
 
-**概要**：codewhale 0.8.61 — 上流修正；mcp-searxng 1.6.0 — 上流修正
+**概要**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -54,7 +212,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-18T09:03:48+09:00
 
-**概要**：ruyi — NixOS 互換性パッチ（`patches/ruyi-nixos-compat.patch`），プリビルド RISC-V ツールチェーンの動的リンカパスを透過処理、GCC 子プロセス ELF interpreter 修正和 console_scripts argv0 問題
+**概要**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
 
 | コミット | 説明 |
 |------|------|
@@ -64,7 +222,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-17T10:59:35+09:00
 
-**概要**：ruyi — NixOS モジュール（`services.ruyi`），宣言的生成 `/etc/xdg/ruyi/config.toml` と環境変数
+**概要**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
 
 | コミット | 説明 |
 |------|------|
@@ -77,7 +235,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-17T10:03:05+09:00
 
-**概要**：ruyi — devShell サポート追加，`nix develop github:Kihara777/NixKits#ruyi` 即時利用可能
+**概要**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
 
 | コミット | 説明 |
 |------|------|
@@ -87,7 +245,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-17T09:48:33+09:00
 
-**概要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK パッケージマネージャ 新規パッケージ（Python / Poetry ビルド，ruff + mypy + 320 単体テスト + 52 統合テスト全通過）
+**概要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
 
 | コミット | 説明 |
 |------|------|
@@ -101,7 +259,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-20T18:36:33+09:00
 
-**概要**：スキルシステム再構成 — translate-katakana→translate-katalish リネーム，追加 translate-pseudocn（疑似中国語），write-project-docs と write-maintenance-log 言語拡張自動発見，文書五言語マッピング表
+**概要**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
 
 | コミット | 説明 |
 |------|------|
@@ -119,7 +277,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-17T07:37:39+09:00
 
-**概要**：write-maintenance-log 技能 — nixkits-check-updates から独立スキルとして分離，デュアルエントリ設計（メンテナンス記録を記入 + メンテナンス記録を更新）；flake.lock 同期と .gitignore 事前検出および三分岐ロジック
+**概要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
 
 | コミット | 説明 |
 |------|------|
@@ -154,7 +312,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-16T05:20:34+09:00
 
-**概要**：nixos-modern-cli 技能 — Nix Store パス落とし穴章（gh auth setup-git ハードコードパス障害の診断と汎用修正パターン）
+**概要**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
 
 | コミット | 説明 |
 |------|------|
@@ -185,7 +343,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-11T05:28:59+09:00
 
-**概要**：スキル文書 — メンテナンスログ形式規則シリーズ（自動発見汎化、記述的タイトル、正確な git commit タイムスタンプ、T00:00:00 プレースホルダ禁止）
+**概要**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
 
 | コミット | 説明 |
 |------|------|
@@ -201,7 +359,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-10T04:31:20+09:00
 
-**概要**：opencode-telegram — KillMode を process に変更、TimeoutStopSec 追加でシャットダウンハング防止
+**概要**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
 
 | コミット | 説明 |
 |------|------|
@@ -212,7 +370,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-08T15:12:39+09:00
 
-**概要**：文書再構成 — ローカライズファイルを docs/ ディレクトリに移動；MAINTENANCE.md 初回合列ルール追加、純テーブル形式、全コミット履歴を埋め戻し
+**概要**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
 
 | コミット | 説明 |
 |------|------|
@@ -229,7 +387,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-08T14:22:25+09:00
 
-**概要**：rcc-fix — NixOS モジュール（systemd デッドロック修正）
+**概要**：rcc-fix — NixOS 模块（systemd 死锁修复）
 
 | コミット | 説明 |
 |------|------|
@@ -239,7 +397,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-06T15:17:11+09:00
 
-**概要**：スキル文書 — ソース変更後の文書同期規範；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
+**概要**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
 
 | コミット | 説明 |
 |------|------|
@@ -258,7 +416,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-04T13:07:30+09:00
 
-**概要**：スキルシステム — SKILL.md 全面中国語化；三言語対称性チェック規則
+**概要**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
 
 | コミット | 説明 |
 |------|------|
@@ -269,7 +427,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-02T03:42:25+09:00
 
-**概要**：nixos-modern-cli 技能 — POSIX ツールガイドと nix バイナリパスヒント
+**概要**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
 
 | コミット | 説明 |
 |------|------|
@@ -279,7 +437,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-31T03:42:18+09:00
 
-**概要**：write-project-docs — 新技能（NixKits スタイルで任意プロジェクトの多言語文書を生成）
+**概要**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
 
 | コミット | 説明 |
 |------|------|
@@ -322,7 +480,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-28T08:29:27+09:00
 
-**概要**：llama-cpp-rocm — NixOS モジュール（systemd 沙箱覆盖）；opencode-telegram — NixOS モジュール（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
+**概要**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
 
 | コミット | 説明 |
 |------|------|
@@ -340,7 +498,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-27T06:08:13+09:00
 
-**概要**：スキルシステム — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三スキル同時公開；llama-cpp-rocm 動的追跡説明
+**概要**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
 
 | コミット | 説明 |
 |------|------|
@@ -353,7 +511,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-26T05:30:58+09:00
 
-**概要**：文書 — README 节名リネーム（快速开始→添加、包→软件、License→许可）
+**概要**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
 
 | コミット | 説明 |
 |------|------|
@@ -363,7 +521,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-24T03:01:02+09:00
 
-**概要**：mcp-searxng 文档 — SearXNG + lighttpd リバースプロキシ完全 NixOS 設定
+**概要**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
 
 | コミット | 説明 |
 |------|------|
@@ -401,12 +559,12 @@ NixKits パッケージ更新履歴。
 |------|------|
 | `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
 | `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST ビルド |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
 
 
 ## 2026-06-11T05:13:39+09:00
 
-**概要**：other — 2 件更新
+**概要**：other — 2 项更新
 
 | コミット | 説明 |
 |------|------|
@@ -417,7 +575,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-02T10:15:53+09:00
 
-**概要**：other — 7 件更新
+**概要**：other — 7 项更新
 
 | コミット | 説明 |
 |------|------|
@@ -433,7 +591,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-02T08:49:47+09:00
 
-**概要**：opencode-telegram — 8 件更新
+**概要**：opencode-telegram — 8 项更新
 
 | コミット | 説明 |
 |------|------|
@@ -450,7 +608,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-30T03:19:48+09:00
 
-**概要**：other — 2 件更新
+**概要**：other — 2 项更新
 
 | コミット | 説明 |
 |------|------|
@@ -471,7 +629,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-16T04:56:06+09:00
 
-**概要**：opencode-telegram 0.21.2 — 上流修正及依赖更新
+**概要**：opencode-telegram 0.21.2 — 上游修复及依赖更新
 
 | コミット | 説明 |
 |------|------|
@@ -488,7 +646,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-15T17:32:16+09:00
 
-**概要**：codewhale 0.8.60 — 上流修正
+**概要**：codewhale 0.8.60 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -505,7 +663,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-14T07:56:11+09:00
 
-**概要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 追加 HTTP 传输模式
+**概要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
 
 | コミット | 説明 |
 |------|------|
@@ -526,7 +684,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-12T10:51:31+09:00
 
-**概要**：codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
+**概要**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -547,7 +705,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-11T04:52:16+09:00
 
-**概要**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上流修正
+**概要**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -567,7 +725,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-10T02:28:10+09:00
 
-**概要**：codewhale 0.8.55 — 上流修正；mcp-searxng 1.3.1 — 上流修正
+**概要**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -584,7 +742,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-08T14:25:02+09:00
 
-**概要**：mcp-searxng 1.2.1 — 上流修正
+**概要**：mcp-searxng 1.2.1 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -610,7 +768,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-06T13:58:47+09:00
 
-**概要**：codewhale 0.8.53 — 上流修正；mcp-searxng 1.1.0 — 上流修正；opencode-telegram 0.21.1 — 上流修正
+**概要**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
 
 | コミット | 説明 |
 |------|------|
@@ -651,7 +809,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-06-02T05:57:11+09:00
 
-**概要**：codewhale 0.8.49 — 上流修正；mcp-searxng 1.0.4 — 上流修正；obs-bilibili-stream 2.1.0 — 上流修正；opencode-telegram 0.21.0 — 上流修正
+**概要**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
@@ -671,7 +829,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-29T10:18:46+09:00
 
-**概要**：codewhale v0.8.47 — 新規パッケージ
+**概要**：codewhale v0.8.47 — 新包
 
 | コミット | 説明 |
 |------|------|
@@ -686,7 +844,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-21T16:35:02+09:00
 
-**概要**：mcp-searxng v1.0.3 — 新規パッケージ；opencode-telegram v0.20.5 — 新規パッケージ
+**概要**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
@@ -697,7 +855,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-14T17:10:06+09:00
 
-**概要**：llama-cpp-rocm — 新規パッケージ（动态追踪上游最新 Release）
+**概要**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
 
 | コミット | 説明 |
 |------|------|
@@ -705,13 +863,13 @@ NixKits パッケージ更新履歴。
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
-| llama-cpp-rocm | 动态（ビルド时获取上游最新 Release） |
+| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
 
 ---
 
 ## 2026-05-14T07:38:08+09:00
 
-**概要**：kitsfmt — 新規パッケージ（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新規パッケージ
+**概要**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
 
 | コミット | 説明 |
 |------|------|
@@ -726,7 +884,7 @@ NixKits パッケージ更新履歴。
 
 ## 2026-05-01T01:08:15+09:00
 
-**概要**：rcc-fix — 新規パッケージ（asusctl 补丁）
+**概要**：rcc-fix — 新包（asusctl 补丁）
 
 | コミット | 説明 |
 |------|------|
