@@ -15,7 +15,9 @@
     flake-utils,
     llama-cpp-ver,
   } @ inputs:
-  flake-utils.lib.eachDefaultSystem (system: let
+  let
+    allSystems = flake-utils.lib.defaultSystems ++ [ "riscv64-linux" ];
+  in flake-utils.lib.eachSystem allSystems (system: let
     pkgs = nixpkgs.legacyPackages.${system};
     kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
