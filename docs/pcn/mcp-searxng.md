@@ -5,7 +5,7 @@
 
 [中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | 偽中国語
 
-[SearXNG](https://docs.searxng.org) 用 [MCP Server](https://modelcontextprotocol.io)。AI アシスタントウェブ検索機能提供。
+[SearXNG](https://docs.searxng.org) 用 [MCP Server](https://modelcontextprotocol.io)。AI 検索機能提供。
 
 ## 基本情報
 
@@ -66,7 +66,7 @@ in
 }
 ```
 
-## MCP クライアント設定
+## MCP 依頼者設定
 
 ```json
 {
@@ -79,11 +79,11 @@ in
 }
 ```
 
-> SearXNG  JSON 形式有効必要（上記 `settings.search.formats` 設定済）。
+> SearXNG JSON 形式有効必要（上記 `settings.search.formats` 設定済）。
 
 ## CodeWhale 設定
 
-CodeWhale 之 MCP 設定ファイル `~/.deepseek/mcp.json` 。mcp-searxng 追加後、**必手動 `SEARXNG_URL` 設定** — `codewhale mcp add` コマンド `env` フィールド自動入力。
+CodeWhale 之 MCP 設定書類 `~/.deepseek/mcp.json`。mcp-searxng 追加後、**必手動 `SEARXNG_URL` 設定** — `codewhale mcp add` `env` 自動入力。
 
 ```json
 {
@@ -99,12 +99,12 @@ CodeWhale 之 MCP 設定ファイル `~/.deepseek/mcp.json` 。mcp-searxng 追�
 }
 ```
 
-> **⚠️ 落與穴**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` 実行與 `env`  `{}` 之。
-> `SEARXNG_URL` 場合、MCP サーバーサイレント失敗 — `codewhale mcp list`  `[enabled]` 與表示、呼出結果返。
+> **⚠️ 落穴**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` 実行 `env` `{}` 之。
+> `SEARXNG_URL` 場合、MCP 伺服器失敗 — `codewhale mcp list` `[enabled]` 表示、呼出結果返。
 
-## トラブルシュティング
+## 
 
-### MCP サーバー応答
+### MCP 伺服器応答
 
 ```bash
 # 登録とステータスを確認
@@ -114,7 +114,7 @@ codewhale mcp list
 cat ~/.deepseek/mcp.json | grep -A3 SEARXNG_URL
 ```
 
-### SearXNG バックエンド接続
+### SearXNG 接続
 
 ```bash
 # SearXNG API が到達可能か確認
@@ -126,10 +126,10 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 
 ### 検索結果返
 
-- `settings.search.formats`  `"json"` 含確認（MCP Server 之要件）
-- lighttpd リバースプロキシ `X-Forwarded-For` ヘッダー転送確認
-- ログ確認: `journalctl -u searx --no-pager -n 30`
+- `settings.search.formats` `"json"` 含確認（MCP Server 之要件）
+- lighttpd `X-Forwarded-For` 転送確認
+- 確認: `journalctl -u searx --no-pager -n 30`
 
-## キャッシュ
+## 
 
-`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

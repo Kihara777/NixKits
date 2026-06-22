@@ -5,7 +5,7 @@
 
 [中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | 偽中国語
 
-**Nix フォーマッター** — rnix AST ベース、属性ソート・コメント保持・インデント正規化。
+**Nix 整形器** — rnix AST、属性保持正規化。
 
 ## 基本情報
 
@@ -13,7 +13,7 @@
 |------|-----|
 | 版 | 0.5.0 |
 | 言語 | Rust |
-| ソース | 本リポジトリ `packages/kitsfmt-src/` |
+| | 本倉庫 `packages/kitsfmt-src/` |
 
 ## 使方
 
@@ -36,21 +36,21 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 # 既定 overlay（推奨）
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
-# nix fmt フォーマッター與
+# nix fmt 整形器
 # formatter.${system} = inputs.nixkits.formatter.${system};
 # 之後: nix fmt
 ```
 
 ## 機能
 
-- 属性ソート（APC `a.b.c` 折対応）
-- コメント保持
-- 冪等フォーマット
-- **ベストプラクティス自動修正**（既定有効、`-B` 無効）:
-  - 裸 URL 引用符化（RFC 45）
-  - `rec` → `let-in` 変換
-  - `with` → `builtins.attrValues` 変換
+- 属性（APC `a.b.c` 折対応）
+- 保持
+- 冪等
+- **自動修正**（既定有効、`-B` 無効）:
+ - 裸 URL 引用符化（RFC 45）
+ - `rec` → `let-in` 変換
+ - `with` → `builtins.attrValues` 変換
 
-## キャッシュ
+## 
 
-`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

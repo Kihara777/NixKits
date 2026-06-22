@@ -5,7 +5,7 @@
 
 [中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md) | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | 偽中国語
 
-[OpenCode](https://opencode.ai) 之 Telegram Bot クライアント。
+[OpenCode](https://opencode.ai) 之 Telegram Bot 依頼者。
 
 ## 基本情報
 
@@ -36,7 +36,7 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.opencode-t
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
-## Flake モジュル
+## Flake 部品
 
 ```nix
 # flake.nix
@@ -61,6 +61,6 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 }
 ```
 
-## キャッシュ
+## 
 
-`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。
+`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。

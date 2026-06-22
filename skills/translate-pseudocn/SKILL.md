@@ -24,8 +24,8 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 
 伪中国语是**日语文本剥离假名后的视觉结果**，不是中文翻译。
 
-- 保留日语语序（SOV），不转换为中文语序
-- 日文汉字名词保持原样，不做替换
+- 语序转换为中文语序（SOV → SVO）
+- 日文汉字名词保持原样
 - 片假名外来语优先查词典映射为日本汉字，未命中则剥离
 - **禁止使用简体中文或繁体中文汉字**（如「软件」「安装」「模块」）
 
@@ -53,7 +53,7 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 
 ### 3. 保留日语语序
 
-SOV 语序保持不变。中文读者可从汉字推断含义，无需调整为主-动-宾。
+日语 SOV 语序转换为中文 SVO 语序（主-动-宾）。
 
 ### 4. 助词转换（最小化）
 
