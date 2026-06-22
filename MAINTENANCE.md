@@ -1,5 +1,163 @@
 # 维护日志
 
+
+
+## 2026-06-22T23:22:00+09:00
+
+**摘要**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
+
+| 提交 | 说明 |
+|------|------|
+| `135d347` | docs(AGENTS): add new-session audit rule |
+| `5192e2c` | docs(AGENTS): move new-session audit rule after access control |
+
+## 2026-06-22T07:20:50+09:00
+
+**摘要**：docs — README 重复行修复，write-project-docs 反模式补充
+
+| 提交 | 说明 |
+|------|------|
+| `091290b` | fix(docs): remove duplicate "提供 nix develop" line in README.md |
+| `922b1d8` | fix(skill): add anti-pattern — check for duplicate content before insert |
+
+## 2026-06-22T06:41:50+09:00
+
+**摘要**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
+
+| 提交 | 说明 |
+|------|------|
+| `ac6081c` | docs(AGENTS): add access control, language req, commit discipline, maintenance check, doc sync, generalization, multi-arch cache rules |
+
+## 2026-06-22T06:21:11+09:00
+
+**摘要**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
+
+| 提交 | 说明 |
+|------|------|
+| `8e50035` | feat(docs): add per-package dual-arch CI badges to all 30 docs |
+| `d3b3827` | fix(docs): split dual-arch badges to separate lines |
+| `6b8a283` | fix(docs): add blank line between CI badges and language switcher |
+| `0751500` | docs(skill): update CI badge template — one per line + blank gap |
+
+## 2026-06-22T06:05:49+09:00
+
+**摘要**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
+
+| 提交 | 说明 |
+|------|------|
+| `97f2ea4` | docs: compress cache sections, add ARM CI runner, update AGENTS.md |
+| `6d581ac` | fix(ci): fix YAML syntax - merge duplicate strategy keys, add runs-on |
+| `126cf2c` | fix(ci): add GitHub token for llama-cpp-ver API access |
+| `0022f50` | fix(ci): add --no-write-lock-file to prevent llama-cpp-ver fetch race |
+
+## 2026-06-22T05:48:23+09:00
+
+**摘要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
+
+| 提交 | 说明 |
+|------|------|
+| `89f5441` | fix(pkgs): update mcp-searxng source hash + npmDepsHash |
+| `303b1fa` | fix(pkgs): update mcp-searxng hash, restore ruyi overlay postPatch |
+
+## 2026-06-22T05:39:33+09:00
+
+**摘要**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
+
+| 提交 | 说明 |
+|------|------|
+| `6be660e` | fix: add nixConfig auto-discovery, remove hardcoded package count, clarify arch support |
+| `b28c126` | docs: add cache-exclusion warnings for overlays and module+patch entries |
+
+## 2026-06-22T05:27:50+09:00
+
+**摘要**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
+
+| 提交 | 说明 |
+|------|------|
+| `7071893` | docs: improve CI badge layout, add cache config options, update skills |
+| `02b355c` | docs: add binary cache section to all 30 package docs + template sync |
+
+## 2026-06-22T05:13:45+09:00
+
+**摘要**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
+
+| 提交 | 说明 |
+|------|------|
+| `6956af1` | feat: add CI/CD workflow, binary cache, and AGENTS.md |
+
+## 2026-06-22T05:13:40+09:00
+
+**摘要**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
+
+| 提交 | 说明 |
+|------|------|
+| `5367452` | refactor(skills): split dictionaries, compress SKILL.md to ~60-80 lines |
+
+## 2026-06-22T05:13:36+09:00
+
+**摘要**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
+
+| 提交 | 说明 |
+|------|------|
+| `61cc470` | docs: fix MAINTENANCE timestamps, dedup 30 sections, rename nix-kits→nixkits |
+
+## 2026-06-22T05:13:31+09:00
+
+**摘要**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
+
+| 提交 | 说明 |
+|------|------|
+| `1be2e84` | fix(patches): rebuild ruyi-nixos-compat.patch from clean clone (1223→426 lines) |
+
+## 2026-06-22T05:13:26+09:00
+
+**摘要**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
+
+| 提交 | 说明 |
+|------|------|
+| `81bb2ef` | fix(overlays): lib.unique dedup on patches, simplify ruyi-nixos-compat, add llama-cpp-rocm comment |
+
+## 2026-06-22T05:13:22+09:00
+
+**摘要**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
+
+| 提交 | 说明 |
+|------|------|
+| `d21db2a` | refactor(modules): add enable options, assertions, migrate to nixkits.* namespace |
+
+## 2026-06-22T05:13:16+09:00
+
+**摘要**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
+
+| 提交 | 说明 |
+|------|------|
+| `c9e7fc5` | feat(pkgs): codewhale multi-arch + 0.8.63, meta fixes, ruyi postPatch merge |
+
+## 2026-06-22T05:13:11+09:00
+
+**摘要**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
+
+| 提交 | 说明 |
+|------|------|
+| `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
+
+
+
+## 2026-06-22T23:49:00+09:00
+
+**摘要**：mcp-searxng 1.7.2 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | 1.7.1 | 1.7.2 |
+| 　 | source hash | `sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=` → `sha256-6N1YFMMgrEfGJaVYw4dffIGR58Nq0Ji4Q9epTmiKDBs=` |
+| 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
+
+
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
