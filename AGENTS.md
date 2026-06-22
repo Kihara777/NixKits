@@ -38,7 +38,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 - 仓库：`github:Kihara777/NixKits`
 - 许可：MIT
-- 文档语言：zh（基准）→ en / ja / katalish / pcn
+- 文档语言：zh（基准）→ en / ja → 扩展语言（通过 `skills/translate-*/` 自动发现）
 
 ## 核心规则
 
@@ -67,14 +67,14 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ### 文档
 
-- **5 语言体系**：zh（根目录无后缀）→ en / ja → katalish / pcn。本地化文件均在 `docs/` 下。
+- **多语言体系**：zh（基准）→ en / ja。扩展语言通过 `skills/translate-*/` 自动发现，禁止硬编码扩展语言列表或数量。
 - **文档模板**：参见 `skills/write-project-docs/templates.md`。
 - **语言切换器**：各语言使用自身 `display_name`，当前语言不加链接。
 - **`nixkits` 为示例 flake input 名**（已从 `nix-kits` 全局替换）。
 - **MAINTENANCE.md**：
   - 基于提交 SHA 全局去重（每个 SHA 只出现一次）。
   - 节标题时间戳必须精确到秒（git 提交时间），禁止 `T00:00:00` 占位符。
-  - 5 语言同步更新。
+  - 所有已注册语言同步更新。
 
 ### 补丁
 
@@ -102,13 +102,13 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 1. 确认变更是否属于可记录类别（软件更新、错误修复、技能变更、CI/CD 变更）
 2. 若有必要，检查 `MAINTENANCE.md` 中是否已存在对应条目（按提交 SHA 查重）
 3. 若缺失，调用 `write-maintenance-log` 技能补充
-4. 同步到全部 5 种语言版本
+4. 同步到全部已注册语言版本
 
 ### 文档同步
 
 - 软件包或技能修改后，**必须**同步更新对应文档
 - 补丁或文档修复后，检查相关模块文档是否需要刷新
-- 新增内容时，确保 `docs/zh/` 先写 → 再翻译到 en/ja/katalish/pcn
+- 新增内容时，确保 `docs/zh/` 先写 → 再翻译到其他语言
 
 ### 泛化与技能更新
 
@@ -118,33 +118,25 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 2. 评估是否存在硬编码内容（数字、路径、特定包名）可以泛化
 3. 若修复涉及可复用的模式，将其更新到对应技能中
 
-### 多架构缓存推送
-
-当 `nixkits-check-updates` 技能执行后：
-
-1. 等待 CI 构建通过（x86_64 + aarch64 已由 CI 覆盖）
-2. 检测本地构建环境是否支持 `--system riscv64-linux`
-3. 若支持，为 riscv64 构建并推送到 Cachix：
-   ```bash
-   nix build ".#<pkg>" --system riscv64-linux
-   cachix push nixkits <result>
-   ```
-
-## 审计备忘
-
-以下为历史审计中确认的**非缺陷**：
-
-| 项目 | 说明 |
-|------|------|
-| `flake.lock` 不在版本控制 | 浮动输入 `llama-cpp-ver` 决定 |
-| `maintainers` 全部为空 | 维护者有意保持 |
-| `llama-cpp-rocm` overlay 非标准形式 | curried 形式是有意的，配合 flake 使用 |
-
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
-构建 job 通过矩阵并行构建 6 个软件包（x86_64-linux / aarch64-linux），完成后推送到 Cachix 二进制缓存。
+构建 job 通过矩阵并行构建全部软件包（x86_64-linux / aarch64-linux），完成后推送到 Cachix 二进制缓存。
 
-## 缓存
+## 二进制缓存
 
-`cachix use nixkits`。flake 通过 `nixConfig` 自动声明缓存端点，消费者无需手动配置。
+### 用户侧
+
+flake 已通过 `nixConfig` 自动声明缓存端点。手动：`cachix use nixkits`。
+
+### AI 代理操作侧
+
+当 `nixkits-check-updates` 技能执行后，需检查 CI 未覆盖的架构：
+
+1. **等待 CI 通过** — 确认 x86_64 和 aarch64 构建成功
+2. **检测本地能力** — 检查本地构建环境是否支持 CI 未覆盖的系统（如 `--system riscv64-linux`）
+3. **本地构建** — 若支持，为每个未覆盖架构构建全部软件包
+4. **推送缓存** — 构建成功后立即 `cachix push nixkits <result>`
+5. **记录结果** — 将构建状态记入维护日志
+
+此流程仅当操作者有仓库推送权限时执行。
