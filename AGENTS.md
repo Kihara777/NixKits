@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## 初次启动
+
+每个新 session 启动时，首先执行完整的项目审计与评估，汇报发现。审计范围包括：所有组件状态（包、模块、overlay、补丁、技能）、文档一致性、CI/CD 状态，以及未提交变更。
+
 NixKits 项目的 AI 编码代理规则与约定。此文件供 DeepSeek、CodeWhale、OpenCode 等代理自动加载。
 
 ## 访问控制
