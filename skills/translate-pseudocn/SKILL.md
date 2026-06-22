@@ -72,7 +72,6 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 | が | (剥离) | 主语标记，无实义 |
 | を | (剥离) | 宾语标记，无实义 |
 
-### 5. 标点
 
 ### 5. 标点
 
@@ -84,6 +83,24 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 - Bash 代码块：全部不动
 - 先按 ` ``` ` 边界提取代码块，仅对非代码区域应用规则
 
+## 验证
+
+翻译完成后，使用以下脚本检查输出文件是否残留假名：
+
+```python
+import re
+
+def check_kana(path):
+    with open(path) as f:
+        text = f.read()
+    blocks = re.split(r'```', text)
+    outside = ''.join(blocks[i] for i in range(0, len(blocks), 2))
+    kata = re.findall(r'[\u30A0-\u30FF]{2,}', outside)
+    hira = re.findall(r'[\u3040-\u309F]{2,}', outside)
+    if kata: print(f'残片假名: {kata}')
+    if hira: print(f'残平假名: {hira}')
+```
+
 ## 词典
 
 片假名→日本汉字映射见 [`dictionary.md`](dictionary.md)。仅包含有对应日本汉字词的片假名外来语。
@@ -94,3 +111,4 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 - 禁止使用简体中文汉字（如「软件」「安装」「模块」「设置」）
 - 语言切换器生成：从日文源提取路径逐个精确构造
 - `日本語`→`[日本語]`（加链接），自身标签 `偽中国語`（纯文本）
+- 验证发现的残留片假名应立即翻译并加入 [`dictionary.md`](dictionary.md)，然后重新生成所有 pcn 文档
