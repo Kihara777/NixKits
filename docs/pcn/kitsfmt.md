@@ -5,15 +5,15 @@
 
 [中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | 偽中国語
 
-**Nix ** — rnix AST ，属性・保持・正規化。
+**Nix フォーマッター** — rnix AST ベース、属性ソート・コメント保持・インデント正規化。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 版本 | 0.5.0 |
+| 版 | 0.5.0 |
 | 言語 | Rust |
-| | 本倉庫 `packages/kitsfmt-src/` |
+| ソース | 本リポジトリ `packages/kitsfmt-src/` |
 
 ## 使方
 
@@ -27,30 +27,30 @@ kitsfmt file1.nix file2.nix  # 複数ファイル
 
 環境変数: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
 
-## 安裝
+## 導入
 
 ```nix
 # 直接
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.kitsfmt ];
 
-# デフォルト overlay（推奨）
+# 既定 overlay（推奨）
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 
-# nix fmt フォーマッターとして
+# nix fmt フォーマッター與
 # formatter.${system} = inputs.nixkits.formatter.${system};
-# その後: nix fmt
+# 之後: nix fmt
 ```
 
-## 功能
+## 機能
 
-- 属性(APC `a.b.c` 折対応)
-- 保持
-- 冪等
-- **自動修復**(默認有効，`-B` 無効):
- - 裸 URL 引用符化(RFC 45)
- - `rec` → `let-in` 変換
- - `with` → `builtins.attrValues` 変換
+- 属性ソート（APC `a.b.c` 折対応）
+- コメント保持
+- 冪等フォーマット
+- **ベストプラクティス自動修正**（既定有効、`-B` 無効）:
+  - 裸 URL 引用符化（RFC 45）
+  - `rec` → `let-in` 変換
+  - `with` → `builtins.attrValues` 変換
 
-## 緩存
+## キャッシュ
 
-`cachix use nixkits`（flake 已自 `nixConfig` 自動宣言、直以 flake input 使用時自動提示）。
+`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。

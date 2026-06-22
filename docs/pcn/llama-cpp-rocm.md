@@ -2,17 +2,17 @@
 
 [中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | 偽中国語
 
-llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最先端功能使用。
+llama.cpp  ROCm GPU アクセラレーション有効化。ビルド時 GitHub 最新リリース版動的取得、最先端機能之テスト使用。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 版本 | 上游最新自動追跡 |
-| 上游 | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
-| 注意 | overlay 提供，単独軟件包出力 |
+| 版 | 上流最新リリース自動追跡 |
+| 上流 | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
+| 注意 | overlay 之提供、単独パッケージ出力 |
 
-## 安裝
+## 導入
 
 ```nix
 {
@@ -23,9 +23,9 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 
 ## 使方
 
-上游 llama.cpp 参照。
+上流 llama.cpp 之ドキュメント参照。
 
-## Flake 模塊
+## Flake モジュル
 
 ```nix
 # flake.nix
@@ -134,45 +134,45 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 }
 ```
 
-模塊 `LLAMA_CACHE` `/home/<user>/.cache/huggingface/hub` 自動設置，`/home` `/proc` 制限解除。
+モジュル `LLAMA_CACHE`  `/home/<user>/.cache/huggingface/hub` 自動設定、`/home` 與 `/proc` 之サンドボックス制限解除。
 
-> **警告: Home Manager llama-cpp 服務**
+> **警告: Home Manager 之 llama-cpp サービス**
 >
-> Home Manager 経由有効場合，追加 GPU (`/dev/dri`，`/dev/kfd`)可能性。系統設置推奨。
+> Home Manager 経由有効場合、追加之ユーザーレベルサンドボックス GPU アクセス（`/dev/dri`、`/dev/kfd`）ブロック可能性。システムレベル之設定推奨。
 
-## 移行
+## 移行ガイド
 
-### 影響受版本
+### 影響受版
 
-| | 影響範囲 | 変更内容 |
+| コンポーネント | 影響範囲 | 変更内容 |
 |-------------|---------|---------|
-| nixpkgs | 2026-06 以降(master) | `services.llama-cpp.modelsPreset` 削除，`port`/`host`/`model`/`modelsDir` `settings.port`/`settings.host`/… |
-| NixKits | `6f52ddf` 以降(`modules/llama-cpp-rocm.nix`) | 名前空間 `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` 移行 |
-| 上游 llama.cpp | b9605 | `--models-preset` CLI 引数維持 |
+| nixpkgs | 2026-06 以降（master） | `services.llama-cpp.modelsPreset` 削除、`port`/`host`/`model`/`modelsDir`  `settings.port`/`settings.host`/… リネーム |
+| NixKits | `6f52ddf` 以降（`modules/llama-cpp-rocm.nix`） | 名前空間 `services.llama-cpp-rocm` → `nixkits.llama-cpp-rocm` 移行 |
+| 上流 llama.cpp | b9605 | `--models-preset` CLI 引数維持 |
 
-### 設置項目対応表
+### 設定項目之対応表
 
-| 旧設置(非推奨) | 新設置 | 備考 |
+| 旧設定（非推奨） | 新設定 | 備考 |
 |-----------------|--------|------|
-| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | nixpkgs 削除，NixKits 復元 |
+| `services.llama-cpp.modelsPreset` | `nixkits.llama-cpp-rocm.modelsPreset` | nixpkgs 削除、NixKits 復元 |
 | `services.llama-cpp-rocm.enable` | `nixkits.llama-cpp-rocm.enable` | 名前空間統一 |
 | `services.llama-cpp-rocm.user` | `nixkits.llama-cpp-rocm.user` | 同上 |
 | `services.llama-cpp-rocm.group` | `nixkits.llama-cpp-rocm.group` | 同上 |
-| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs |
-| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs |
-| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs |
-| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs |
-| 手動 `systemd.services.llama-cpp.serviceConfig` | 削除 | NixKits 模塊自動処理 |
-| `services.llama-cpp.extraFlags` | `services.llama-cpp.settings` 対応追加 | nixpkgs 削除 |
+| `services.llama-cpp.port` | `services.llama-cpp.settings.port` | nixpkgs リネーム |
+| `services.llama-cpp.host` | `services.llama-cpp.settings.host` | nixpkgs リネーム |
+| `services.llama-cpp.model` | `services.llama-cpp.settings.model` | nixpkgs リネーム |
+| `services.llama-cpp.modelsDir` | `services.llama-cpp.settings.models-dir` | nixpkgs リネーム |
+| 手動 `systemd.services.llama-cpp.serviceConfig` | 削除 | NixKits モジュル自動処理 |
+| `services.llama-cpp.extraFlags` | `services.llama-cpp.settings` 対応フラグ追加 | nixpkgs 削除 |
 
 ### 移行例
 
-> **⚠️ 1**: `flake.nix` 模塊 `nixkits.nixosModules.llama-cpp-rocm` 追加
+> **⚠️ ステップ 1**: `flake.nix` 之モジュルリスト `nixkits.nixosModules.llama-cpp-rocm` 追加
 
 **移行前**:
 
 ```nix
-# flake.nix — モジュールリスト
+# flake.nix — モジュルリスト
 { modules = [
     # nixkits.nixosModules.llama-cpp-rocm  # ← 未インポート
 ];}
@@ -215,7 +215,7 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
 **移行後**:
 
 ```nix
-# flake.nix — モジュールリスト（追加）
+# flake.nix — モジュルリスト（追加）
 { modules = [
     nixkits.nixosModules.llama-cpp-rocm
 ];}
@@ -240,7 +240,7 @@ llama.cpp ROCm GPU 有効化。構建時 GitHub 最新版本動的取得，最�
       };
     };
   };
-  # NixKits オプションでカバーされない環境変数
+  # NixKits オプションカバー環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"

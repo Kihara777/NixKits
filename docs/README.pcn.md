@@ -2,83 +2,83 @@
 
 [中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [ｶﾀﾘｯｼｭ](README.katalish.md) | 偽中国語
 
-NixKits — 軟件補丁NixOS 模塊AI 技能合集
+NixKits — ソフトウェア、パッチ、NixOS モジュル、AI コーディングアシスタントスキル之コレクション。
 
 ## 追加
 
 ```nix
-# 
+# リモート
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
-# 
+# ローカル
 inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
-## 軟件
+## ソフトウェア
 
-`lib.platforms.linux` 対応 — nixpkgs 自動追従
+之 `lib.platforms.linux` 対応 — nixpkgs 自動追従。
 
-|軟件|説明|文檔|
+| ソフトウェア | 説明 | ドキュメント |
 |---|------|------|
-|codewhale|DeepSeek V4 端末|[docs/pcn/codewhale.md](pcn/codewhale.md)|
-|kitsfmt|Nix 格式化器AST + 自動修正|[docs/pcn/kitsfmt.md](pcn/kitsfmt.md)|
-|mcp-searxng|SearXNG 向 MCP 服務器|[docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md)|
-|obs-bilibili-stream|OBS Bilibili 配信插件|[docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md)|
-|opencode-telegram|OpenCode 向 Telegram Bot 客户端|[docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md)|
-|ruyi|RuyiSDK 軟件包管理器RISC-V 開発工具|[docs/pcn/ruyi.md](pcn/ruyi.md)|
-|comfyui-strix-halo|AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm 支持|[docs/pcn/comfyui-strix-halo.md](pcn/comfyui-strix-halo.md)|
+| codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
+| kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
+| mcp-searxng | SearXNG 向 MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
+| opencode-telegram | OpenCode 向 Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
+| ruyi | RuyiSDK パッケージマネージャ（RISC-V 開発ツール） | [docs/ja/ruyi.md](ja/ruyi.md) |
+| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm サポート | [docs/ja/comfyui-strix-halo.md](ja/comfyui-strix-halo.md) |
 
-> ⚠️ comfyui-strix-halo 為模塊+補丁、非独立軟件包、不在二進制緩存中。
+> ⚠️ comfyui-strix-halo モジュル+パッチ、独立パッケージ、バイナリキャッシュ含。
 
 ## 開発
 
-`nix develop` 即利用可能註冊表追加：
+`nix develop` 即利用可能。レジストリ追加：
 
 ```bash
 nix registry add nixkits github:Kihara777/NixKits
 ```
 
-|軟件包|`nix develop`|
+| パッケージ | `nix develop` |
 |-----------|---------------|
-|ruyi|`nix develop nixkits#ruyi`|
+| ruyi | `nix develop nixkits#ruyi` |
 
-## 補丁
+## パッチ
 
-覆蓋層`default` 含：
+スタンドアロンオーバーレイ。`default` 含：
 
-|補丁|説明|文檔|
+| パッチ | 説明 | ドキュメント |
 |------|------|------|
-|llama-cpp-rocm|上流最新發佈追跡 ROCm 加速|[docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md)|
-|rcc-fix|asusctl 2-in-1 設備体験修正|[docs/pcn/rcc-fix.md](pcn/rcc-fix.md)|
-|ruyi-nixos-compat|ruyi NixOS 運行時互換性ELF interpreter + GCC 子修正|[docs/pcn/ruyi-nixos-compat.md](pcn/ruyi-nixos-compat.md)|
-| comfyui-rocm-patch | ComfyUI ROCm 機能補丁提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
-| rog-control-center-fix | fix asusd shutdown 時死鎖修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
+| llama-cpp-rocm | 上流最新リリース追跡 ROCm アクセラレーション | [docs/ja/llama-cpp-rocm.md](ja/llama-cpp-rocm.md) |
+| rcc-fix | asusctl 之 2-in-1 デバイス体験修正 | [docs/ja/rcc-fix.md](ja/rcc-fix.md) |
+| ruyi-nixos-compat | ruyi 之 NixOS ランタイム互換性（ELF interpreter リダイレクト + GCC 子プロセス修正） | [docs/ja/ruyi-nixos-compat.md](ja/ruyi-nixos-compat.md) |
+| comfyui-rocm-patch | ComfyUI  ROCm 機能パッチ提供 | [docs/ja/comfyui-rocm-patch.md](ja/comfyui-rocm-patch.md) |
+| rog-control-center-fix | シャットダウン時之 asusd デッドロック修正 | [docs/ja/rog-control-center-fix.md](ja/rog-control-center-fix.md) |
 
-> ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
+> ⚠️ パッチ overlay 、上流之 nixpkgs パッケージ変更之、独立ビルド。之バイナリキャッシュ含。動的版追跡プロジェクト（llama-cpp-rocm ）ハッシュ上流リリース與変化、キャッシュ固定不可。
 
-## 技能
+## スキル
 
-AI 向：
+AI コーディングアシスタント向：
 
-> 本項目技能主中国語中国対象 SKILL.md 中国語記述
+> 本プロジェクト之スキル主中国語ユーザー與中国之オープンソースモデル対象與。之 SKILL.md 中国語記述。
 
-|技能|説明|文檔|
+| スキル | 説明 | ドキュメント |
 |------|------|------|
-|nixkits-check-updates|上流更新自動更新|[docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md)|
-|nixkits-skills|NixKits 技能安裝器/|[docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md)|
-|nixos-modern-cli|NixOS CLI 指南AI 向|[docs/pcn/skills/nixos-modern-cli.md](pcn/skills/nixos-modern-cli.md)|
-|recover-nixos-config|削除 /etc/nixos 設定 Nix store 復元|[docs/pcn/skills/recover-nixos-config.md](pcn/skills/recover-nixos-config.md)|
-|translate-katalish|英語翻訳英単語→半角機械置換|[docs/pcn/skills/translate-katalish.md](pcn/skills/translate-katalish.md)|
-|translate-pseudocn|偽中国語翻訳日本語→仮名除去＋語順変換|[docs/pcn/skills/translate-pseudocn.md](pcn/skills/translate-pseudocn.md)|
-|write-maintenance-log|NixKits 仕様沿 MAINTENANCE.md 作成軟件更新 + 修正|[docs/pcn/skills/write-maintenance-log.md](pcn/skills/write-maintenance-log.md)|
-|write-project-docs|任意項目 NixKits 多言語文檔作成|[docs/pcn/skills/write-project-docs.md](pcn/skills/write-project-docs.md)|
+| nixkits-check-updates | 上流アップデートチェック自動更新 | [docs/ja/skills/nixkits-check-updates.md](ja/skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |
+| recover-nixos-config | 削除 /etc/nixos 設定 Nix store 復元 | [docs/ja/skills/recover-nixos-config.md](ja/skills/recover-nixos-config.md) |
+| translate-katalish | カタカナ英語翻訳（英単語→半角カタカナ機械置換） | [docs/ja/skills/translate-katalish.md](ja/skills/translate-katalish.md) |
+| translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/ja/skills/translate-pseudocn.md](ja/skills/translate-pseudocn.md) |
+| write-maintenance-log | NixKits 仕様沿 MAINTENANCE.md エントリ之作成（ソフトウェア更新 + バグ修正） | [docs/ja/skills/write-maintenance-log.md](ja/skills/write-maintenance-log.md) |
+| write-project-docs | 任意之プロジェクト NixKits スタイル之多言語ドキュメント作成 | [docs/ja/skills/write-project-docs.md](ja/skills/write-project-docs.md) |
 
-## 作者
+## クレジット
 
-- **狐莉 ()** — 作成保守
-- **小爪 ()** — 設計開発 feat. DeepSeek V4 Pro (Max)
-- **小小爪 ()** — 推論基礎設施 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+- **狐莉 (キツ之)** — 作成與保守
+- **小爪 (キツ之)** — 設計・開発 feat. DeepSeek V4 Pro (Max)
+- **小小爪 (キツ之)** — ハードウェア推論インフラ feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
-## 許可
+## 許諾
 
 [MIT](../LICENSE)

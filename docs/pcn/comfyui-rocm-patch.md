@@ -2,14 +2,14 @@
 
 [中文](../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md) | [ｶﾀﾘｯｼｭ](../katalish/comfyui-rocm-patch.md) | 偽中国語
 
-ComfyUI 用 ROCm 機能補丁。
+ComfyUI  ROCm 機能パッチ提供。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 選項 | `nixkits.comfyui-rocm-patch.enable` |
-| 位置 | `modules/comfyui-rocm-patch.nix` |
+| オプション | `nixkits.comfyui-rocm-patch.enable` |
+| ファイル | `modules/comfyui-rocm-patch.nix` |
 
 ## 使用方法
 
@@ -18,8 +18,8 @@ ComfyUI 用 ROCm 機能補丁。
   imports = [ inputs.nixkits.nixosModules.comfyui-rocm-patch ];
 
   nixkits.comfyui-rocm-patch.enable = true;
-  services.comfyui.rocmGfxOverride = "11.0.0";  # 任意：自定 GPU 目標
+  services.comfyui.rocmGfxOverride = "11.0.0";  # 任意：カスタム GPU ターゲット
 }
 ```
 
-設定 `rocmGfxOverride` 則 `HSA_OVERRIDE_GFX_VERSION` 環境変数注入 ComfyUI 服務。又 xformers 自動無効化（nixpkgs 版欠 ROCm 後端）並注入 C 構築工具鎖。
+`rocmGfxOverride` 設定與、`HSA_OVERRIDE_GFX_VERSION` 環境変数 ComfyUI サービス注入。 xformers 自動無効化（nixpkgs 版 ROCm バックエンド非対応）、C ビルドツールチェーン注入。

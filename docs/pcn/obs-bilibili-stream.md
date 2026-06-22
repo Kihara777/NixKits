@@ -5,19 +5,19 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | 偽中国語
 
-OBS Studio 用 Bilibili 生放送配信插件。
+OBS Studio 之 Bilibili ライブ配信プラグイン。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 版本 | 2.1.0 |
+| 版 | 2.1.0 |
 | 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| 平台 | Linux 限定 |
+| プラットフォーム | Linux only |
 
 ## 参照
 
-**推奨：NixOS 模块**
+**推奨：NixOS モジュル**
 
 ```nix
 {
@@ -47,6 +47,6 @@ OBS Studio 用 Bilibili 生放送配信插件。
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
 
-## 緩存
+## キャッシュ
 
-`cachix use nixkits`（flake 已自 `nixConfig` 自動宣言、直以 flake input 使用時自動提示）。
+`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。

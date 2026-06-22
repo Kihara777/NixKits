@@ -5,22 +5,22 @@
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md) | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | 偽中国語
 
-DeepSeek V4 専用終端編碼代理。
+DeepSeek V4 専用之ターミナルコーディングエージェント。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 版本 | 0.8.62 |
-| 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| 類型 | 構建済(GitHub Releases) |
+| 版 | 0.8.62 |
+| 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| 種別 | ビルド済バイナリ（GitHub Releases） |
 
-## 安裝
+## 導入
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
 
-# デフォルト overlay → pkgs.codewhale
+# 既定 overlay → pkgs.codewhale
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
@@ -35,8 +35,8 @@ codewhale doctor                       # セットアップ確認
 codewhale auth set --provider deepseek # API キー保存
 ```
 
-初回実行時 [DeepSeek API ](https://platform.deepseek.com/api_keys) 必要。
+初回実行時 [DeepSeek API キー](https://platform.deepseek.com/api_keys) 必要。
 
-## 緩存
+## キャッシュ
 
-`cachix use nixkits`（flake 已自 `nixConfig` 自動宣言、直以 flake input 使用時自動提示）。
+`cachix use nixkits`（flake  `nixConfig` 自動宣言、flake input 與使用時自動案内）。
