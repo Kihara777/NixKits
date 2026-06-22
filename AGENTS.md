@@ -125,11 +125,10 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ## 二进制缓存
 
-### 用户侧
+flake 已通过 `nixConfig` 自动声明缓存端点。消费者通过 flake input 使用时 Nix 自动提示。
+手动配置：`cachix use nixkits`。
 
-flake 已通过 `nixConfig` 自动声明缓存端点。手动：`cachix use nixkits`。
-
-### AI 代理操作侧
+## 缓存操作
 
 当 `nixkits-check-updates` 技能执行后，需检查 CI 未覆盖的架构：
 
