@@ -19,3 +19,5 @@ packages/kitsfmt-src/target/
 result
 venv/
 .deepseek
+docs/pcn/MAINTENANCE.md
+docs/pcn/README.md
