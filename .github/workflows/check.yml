@@ -16,13 +16,6 @@ jobs:
     strategy:
       matrix:
         runs-on: [ubuntu-latest, ubuntu-24.04-arm]
-        package:
-          - codewhale
-          - kitsfmt
-          - mcp-searxng
-          - obs-bilibili-stream
-          - opencode-telegram
-          - ruyi
     runs-on: ${{ matrix.runs-on }}
     permissions:
       contents: read
@@ -33,5 +26,8 @@ jobs:
         with:
           name: nixkits
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Build package
-        run: nix build --print-build-logs --no-write-lock-file ".#${{ matrix.package }}"
+      - name: Build packages
+        run: |
+          for pkg in codewhale kitsfmt mcp-searxng obs-bilibili-stream opencode-telegram ruyi; do
+            nix build --print-build-logs ".#$pkg"
+          done
