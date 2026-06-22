@@ -5,7 +5,7 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | [ｶﾀﾘｯｼｭ](../katalish/obs-bilibili-stream.md) | 偽中国語
 
-OBS Studio 之 Bilibili ライブ配信拡張。
+OBS Studio 之 Bilibili 直播拡張。
 
 ## 基本情報
 
@@ -13,7 +13,7 @@ OBS Studio 之 Bilibili ライブ配信拡張。
 |------|-----|
 | 版 | 2.1.0 |
 | 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| プラットフォム | Linux only |
+| 平台 | Linux 専用 |
 
 ## 参照
 
@@ -47,6 +47,6 @@ OBS Studio 之 Bilibili ライブ配信拡張。
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
 
-## キャッシュ
+## 貯蔵
 
-`cachix use nixkits`（flake `nixConfig` 自動宣言、flake input 使用時自動案内）。
+`cachix use nixkits`（flake、`nixConfig` 以自動宣言、flake input 使用時自動案内）。
