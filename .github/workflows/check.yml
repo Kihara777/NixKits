@@ -52,6 +52,6 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Cross-compile for riscv64
         run: |
-          for pkg in codewhale kitsfmt mcp-searxng obs-bilibili-stream opencode-telegram ruyi; do
+          for pkg in codewhale kitsfmt mcp-searxng opencode-telegram ruyi; do
             nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/$pkg.nix { }"
           done
