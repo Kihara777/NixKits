@@ -3,44 +3,44 @@
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20ruyi%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20ruyi%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語 [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
 
-[RuyiSDK](https://ruyisdk.org) 的包管理器，用于 RISC-V 开发环境的工具链安装、虚拟环境管理、设备烧录与软件包仓库操作。
+[RuyiSDK](https://ruyisdk.org) のパッケージマネージャー。RISC-V 開発環境のツールチェーンインストール、仮想環境管理、デバイスプロビジョニング、リポジトリ操作を提供。
 
-## 基本信息
+## 基本情報
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 版本 | 0.51.0-alpha.20260616 |
-| 上游 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| 许可 | Apache 2.0 |
-| 注意 | Alpha 阶段软件，API 可能变动 |
+| バージョン | 0.51.0-alpha.20260616 |
+| 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
+| ライセンス | Apache 2.0 |
+| 注意 | アルファ段階のソフトウェア。API は変更される可能性があります |
 
-## 安装
+## インストール
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
-# 或通过 overlay
+# または overlay 経由
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
-## 使用
+## 使用方法
 
 ```bash
 ruyi --help
-ruyi list --all          # 列出所有可用软件包
-ruyi install <pkg>       # 安装工具链
-ruyi venv --toolchain <t> # 创建虚拟环境
-ruyi device provision    # 设备烧录
+ruyi list --all          # 利用可能な全パッケージを一覧表示
+ruyi install <pkg>       # ツールチェーンをインストール
+ruyi venv --toolchain <t> # 仮想環境を作成
+ruyi device provision    # デバイスプロビジョニング
 ```
 
-> ruyi 需要网络连接以克隆软件包仓库（`packages-index`），首次运行 `ruyi list` 时会自动下载。
+> ruyi はパッケージインデックスリポジトリのクローンにネットワーク接続が必要です。初回実行時に `ruyi list` が自動的にダウンロードします。
 
-## 模块
+## モジュール
 
-声明式配置 ruyi 的运行时行为：
+ruyi ランタイム動作の宣言的設定:
 
 ```nix
 # flake.nix
@@ -57,9 +57,9 @@ nixkits.ruyi = {
 };
 ```
 
-模块自动生成 `/etc/xdg/ruyi/config.toml`、设置环境变量，并在系统激活时自动更新包仓库索引。
+モジュールは自動的に `/etc/xdg/ruyi/config.toml` を生成し、環境変数を設定し、システムアクティベーション時にパッケージリポジトリインデックスを更新します。
 
-支持声明式虚拟环境：
+宣言的仮想環境:
 
 ```nix
 nixkits.ruyi.venvs.riscv = {
@@ -69,35 +69,35 @@ nixkits.ruyi.venvs.riscv = {
 };
 ```
 
-## NixOS 兼容性
+## NixOS 互換性
 
-NixKits 打包版本包含 overlay `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`），在 NixOS 下透明处理运行时不兼容：
+NixKits ビルドには `ruyi-nixos-compat` overlay（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）が含まれており、NixOS 上で透過的なランタイム互換性を提供します：
 
-**添加**
+**有効化**
 ```nix
 nixpkgs.overlays = [
   nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
 ];
 ```
 
-**功能**
-- **动态链接器重定向**：预编译 RISC-V 工具链二进制期望 `/lib64/ld-linux-x86-64.so.2`，NixOS 不存在该路径。补丁自动以 NixOS `ld.so` 重定向执行。
-- **GCC 子进程修复**：`cc1`、`as`、`collect2` 等子进程绕过 ruyi mux，补丁通过 `patchelf` 修复 ELF interpreter。
-- **Nix console_scripts 兼容**：`RUYI_ARGV0` 环境变量恢复 Nix wrapper 丢失的 `exec -a` 语义。
+**機能**
+- **動的リンカリダイレクト**: プリビルドの RISC-V ツールチェーンバイナリは `/lib64/ld-linux-x86-64.so.2` を期待しますが、NixOS には存在しません。パッチは NixOS の `ld.so` を介して透過的にリダイレクトします。
+- **GCC サブプロセス修正**: `cc1`、`as`、`collect2` などが ruyi mux をバイパスするため、パッチは `patchelf` で ELF interpreter を修正します。
+- **Nix console_scripts 互換**: `RUYI_ARGV0` 環境変数が Nix wrapper で失われた `exec -a` セマンティクスを復元します。
 
-**验证**
+**検証**
 ```bash
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> 仅 NixOS 环境启用此 overlay。非 NixOS 下补丁逻辑完全短路，不干扰其他发行版。对使用 ruyi 下载执行 RISC-V 交叉编译工具链的用户必需。
+> この overlay は NixOS でのみ有効にしてください。他のディストリビューションではパッチロジックは完全に短絡します。ruyi 経由で RISC-V クロスコンパイルツールチェーンをダウンロード・実行するユーザーに必須です。
 
 ## 注意
 
-- 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
-- 二进制通过 wrapProgram 注入了 curl、gnutar、git、patchelf 等运行时依赖
-- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（320 项）、集成测试（52 项）——全部通过
+- [ISCAS](https://www.iscas.ac.cn) がメンテナンスする RISC-V 開発者ツール
+- ランタイム依存（curl、gnutar、git、patchelf）は wrapProgram で注入
+- テストカバレッジ: ruff lint、mypy 型チェック、pytest ユニット（320 件）、統合（52 件）— すべて通過
 
-## 缓存
+## キャッシュ
 
-`cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
+`cachix use nixkits`（flake input として使用時に `nixConfig` で自動宣言）。

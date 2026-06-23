@@ -3,48 +3,48 @@
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20ruyi%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20ruyi%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/ruyi.md)
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ(../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
 
-[RuyiSDK](https://ruyisdk.org) 的包管理器，用于 RISC-V 开发环境的工具链安装、虚拟环境管理、设备烧录与软件包仓库操作。
+The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain installation, virtual environment management, device provisioning, and package repository operations in RISC-V development environments.
 
-## 基本信息
+## Basic Information
 
-| 项目 | 值 |
-|------|-----|
-| 版本 | 0.51.0-alpha.20260616 |
-| 上游 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| 许可 | Apache 2.0 |
-| 注意 | Alpha 阶段软件，API 可能变动 |
+| Item | Value |
+|------|-------|
+| 版 | 0.51.0-alpha.20260616 |
+| 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
+| ﾗｲｾﾝｽ | Apache 2.0 |
+| Note | Alpha-stage software; API may change |
 
-## 安装
+## ｲﾝｽﾄｰﾙ
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
-# 或通过 overlay
+# or via overlay
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
-## 使用
+## 使用法
 
 ```bash
 ruyi --help
-ruyi list --all          # 列出所有可用软件包
-ruyi install <pkg>       # 安装工具链
-ruyi venv --toolchain <t> # 创建虚拟环境
-ruyi device provision    # 设备烧录
+ruyi list --all          # list all available packages
+ruyi install <pkg>       # install a toolchain
+ruyi venv --toolchain <t> # create a virtual environment
+ruyi device provision    # device provisioning
 ```
 
-> ruyi 需要网络连接以克隆软件包仓库（`packages-index`），首次运行 `ruyi list` 时会自动下载。
+> ruyi requires network access to clone the package repository (`packages-index`); running `ruyi list` for the first time downloads it automatically.
 
-## 模块
+## ﾓｼﾞｭｰﾙ
 
-声明式配置 ruyi 的运行时行为：
+Declarative configuration of ruyi's runtime behavior:
 
 ```nix
 # flake.nix
-{ modules = [ nixkits.nixosModules.ruyi ]; }
+{ modules = [ nixkits.nixosﾓｼﾞｭｰﾙs.ruyi ]; }
 
 nixkits.ruyi = {
   enable = true;
@@ -57,9 +57,9 @@ nixkits.ruyi = {
 };
 ```
 
-模块自动生成 `/etc/xdg/ruyi/config.toml`、设置环境变量，并在系统激活时自动更新包仓库索引。
+The module auto-generates `/etc/xdg/ruyi/config.toml`, sets environment variables, and automatically updates the package repository index on system activation.
 
-支持声明式虚拟环境：
+Declarative virtual environments are supported:
 
 ```nix
 nixkits.ruyi.venvs.riscv = {
@@ -69,35 +69,35 @@ nixkits.ruyi.venvs.riscv = {
 };
 ```
 
-## NixOS 兼容性
+## NixOS 互換性
 
-NixKits 打包版本包含 overlay `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`），在 NixOS 下透明处理运行时不兼容：
+The NixKits packaged version includes the overlay `ruyi-nixos-compat` (`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`), which transparently handles runtime incompatibilities on NixOS:
 
-**添加**
+**Adding**
 ```nix
 nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
+  nixkits.overlays.ruyi-nixos-compat  # standalone overlay
 ];
 ```
 
-**功能**
-- **动态链接器重定向**：预编译 RISC-V 工具链二进制期望 `/lib64/ld-linux-x86-64.so.2`，NixOS 不存在该路径。补丁自动以 NixOS `ld.so` 重定向执行。
-- **GCC 子进程修复**：`cc1`、`as`、`collect2` 等子进程绕过 ruyi mux，补丁通过 `patchelf` 修复 ELF interpreter。
-- **Nix console_scripts 兼容**：`RUYI_ARGV0` 环境变量恢复 Nix wrapper 丢失的 `exec -a` 语义。
+**Features**
+- **Dynamic linker redirection**: Prebuilt RISC-V toolchain binaries expect `/lib64/ld-linux-x86-64.so.2`, which does not exist on NixOS. The patch automatically redirects execution via NixOS's `ld.so`.
+- **GCC subprocess fix**: Subprocesses like `cc1`, `as`, `collect2` bypass the ruyi mux; the patch fixes their ELF interpreter via `patchelf`.
+- **Nix console_scripts compatibility**: The `RUYI_ARGV0` environment variable restores `exec -a` semantics lost by the Nix wrapper.
 
-**验证**
+**Verification**
 ```bash
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> 仅 NixOS 环境启用此 overlay。非 NixOS 下补丁逻辑完全短路，不干扰其他发行版。对使用 ruyi 下载执行 RISC-V 交叉编译工具链的用户必需。
+> This overlay is only enabled on NixOS. On non-NixOS systems the patch logic is fully short-circuited and does not interfere with other distributions. Required for users who use ruyi to download and execute RISC-V cross-compilation toolchains.
 
 ## 注意
 
-- 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
-- 二进制通过 wrapProgram 注入了 curl、gnutar、git、patchelf 等运行时依赖
-- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（320 项）、集成测试（52 项）——全部通过
+- 上流 is a RISC-V developer tool maintained by [ISCAS](https://www.iscas.ac.cn)
+- Binaries have runtime dependencies (curl, gnutar, git, patchelf) injected via wrapProgram
+- Test coverage: ruff lint, mypy type checking, pytest unit tests (320 items), integration tests (52 items) — all passing
 
-## 缓存
+## ｷｬｯｼｭ
 
-`cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
+`cachix use nixkits` (the flake automatically declares this via `nixConfig`; prompted automatically when using the flake input).
