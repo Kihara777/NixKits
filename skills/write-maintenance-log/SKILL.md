@@ -16,6 +16,7 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 3. **注册** — 自动将发现的语言扩展纳入多语同步流程。各翻译技能的 SKILL.md 正文中定义翻译规则（词典、语序调整、假名剥离）和列名映射表（TITLE / SUBTITLE / SUMMARY 等多语对照）。
 
 ## 入口
+本技能由 AGENTS.md 规则强制触发：每次 `git push` 后必须执行入口 1 的 SHA 查重流程。
 
 本技能提供两个独立入口，根据用户意图自动匹配。
 

@@ -97,12 +97,14 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ### 维护记录
 
-每次推送后评估是否有必要记入维护日志：
+**推送后必须执行**，不允许跳过：
 
-1. 确认变更是否属于可记录类别（软件更新、错误修复、技能变更、CI/CD 变更）
-2. 若有必要，检查 `MAINTENANCE.md` 中是否已存在对应条目（按提交 SHA 查重）
-3. 若缺失，调用 `write-maintenance-log` 技能补充
+1. 获取本次推送的所有新 commit SHA：`git log --format='%h' origin/main..HEAD`
+2. 逐一检查 `MAINTENANCE.md` 中是否已存在（`grep -c $sha MAINTENANCE.md`）
+3. 若缺失，按 `write-maintenance-log` 技能补充条目
 4. 同步到全部已注册语言版本
+
+> 以下类型变更**必须记录**：软件版本更新、错误修复、技能新增/重构、CI/CD 配置变更、文档架构调整。
 
 ### 文档同步
 
