@@ -101,6 +101,23 @@ sed -i "/^\[中文\]\|^\[English\]\|^\[日本語\]/s|$| \| [新标签](path/file
 sed -i "2s|$| ...|" docs/*/xxx.md
 ```
 
+**子代理陷阱**：子代理生成新语言文件时，容易只输出 **3 条目切换器**（仅含源语言），缺少其他已安装的扩展语言。父代理接收子代理输出后，必须用以下脚本验证补全：
+
+```bash
+# 验证所有语言目录下切换器完整性
+for d in docs/zh docs/en docs/ja docs/katalish docs/pcn; do
+  for f in $d/*.md; do
+    l=$(grep '^\[中文\]' "$f"); s=0
+    echo "$l"|grep -q '中文' && s=$((s+1))
+    echo "$l"|grep -q 'English' && s=$((s+1))
+    echo "$l"|grep -q '日本語' && s=$((s+1))
+    echo "$l"|grep -q 'ｶﾀﾘｯｼｭ' && s=$((s+1))
+    echo "$l"|grep -q '偽中国語' && s=$((s+1))
+    [ $s -lt 5 ] && echo "INCOMPLETE ($s/5): $f"
+  done
+done
+```
+
 ### 第 9 步：README 展示表同步
 
 新增磁贴/模块后，**所有语言版本**的 README 展示表都需要更新。检查清单：

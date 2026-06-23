@@ -97,3 +97,18 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 ### 4. 代码块保护
 
 先按 ` ``` ` 边界提取代码块，仅对非代码块区域替换。在代码块内误替换会导致语法错误。
+
+### 5. 子代理生成文件的切换器必须包含全部语言
+
+子代理生成新语言文件时，容易只输出 **3 条目切换器**（如 `[中文] | [ｶﾀﾘｯｼｭ] | [日本語]`），缺少其他已安装的扩展语言链接。父代理在接收子代理输出后，**必须验证并补全**切换器至所有已发现语言（通过 `translate-*/SKILL.md` frontmatter 的 `language_code` 字段确定）。
+
+验证命令：
+```bash
+# 检查切换器是否包含全部 5 语言
+for f in docs/katalish/*.md; do
+  line=$(grep '^\[中文\]' "$f")
+  for expected in '\[中文\]' 'English' '日本語' 'ｶﾀﾘｯｼｭ' '偽中国語'; do
+    echo "$line" | grep -q "$expected" || echo "MISSING $expected in $f"
+  done
+done
+```
