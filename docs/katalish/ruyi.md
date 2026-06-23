@@ -5,18 +5,18 @@
 
 [中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/ruyi.md)
 
-ｻﾞ ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org), ﾕｰｽﾞﾄﾞ ﾌｫｱ ﾄｩｰﾙﾁｪｲﾝ ｲﾝｽﾄｰﾙ, ﾊﾞｰﾁｭｱﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾑｱﾝｱｼﾞｴﾗ, ﾃﾞｨﾊﾞｲｽ ﾌﾟﾛﾋﾞｼﾞｮﾆﾝｸﾞ, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｵﾍﾟﾚｰｼｮﾝｽﾞ ｲﾝ RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ.
+The ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ ﾌｫｱ [RuyiSDK](https://ruyisdk.org), ﾕｰｽﾞﾄﾞ ﾌｫｱ ﾂｰﾙﾁｪｲﾝ ｲﾝｽﾄｰﾚｲｼｮﾝ, ﾊﾞｰﾁｬﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾑｱﾈｼﾞﾒﾝﾄ, ﾃﾞｨﾊﾞｲｽ ﾌﾟﾗｵﾋﾞｼﾞｮﾆﾝｸﾞ, ｱﾝﾄﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｵﾍﾟﾚｲｼｮﾝｽﾞ in RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ.
 
-## ﾍﾞｲｼｯｸ ｲﾝﾌｫﾒｰｼｮﾝ
+## Basic Information
 
-| ｱｲﾃﾑ | ﾊﾞﾘｭｰ |
+| Item | Value |
 |------|-------|
-| ﾊﾞｰｼﾞｮﾝ | 0.51.0-alpha.20260616 |
-| ｳﾌﾟｽﾄﾗｴｱﾑ | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| ﾗｲｾﾝｽ | Apache 2.0 |
-| ﾉｰﾄ | ｱﾙﾌｧ-ｽﾃｰｼﾞ ｿﾌﾄｳｪｱ; API ﾒｲ ﾁｪﾝｼﾞ |
+| Version | 0.51.0-ｱﾙﾌｧ.20260616 |
+| Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
+| License | Apache 2.0 |
+| Note | Alpha-ｽﾃｰｼﾞ ｿﾌﾄｳｪｱ; API ﾒｲ ﾁｪｲﾝｼﾞ |
 
-## ｲﾝｽﾄｰﾙ
+## Installation
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
@@ -26,24 +26,24 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
 
-## ﾕｰｾﾞｰｼﾞ
+## Usage
 
 ```bash
 ruyi --help
-ruyi list --all          # ﾘｽﾄ ｵﾙ ｱﾌﾞｴｲﾗﾌﾞﾙ ﾊﾟｯｹｰｼﾞｽﾞ
-ruyi install <pkg>       # ｲﾝｽﾄｰﾙ ｱ ﾄｩｰﾙﾁｪｲﾝ
-ruyi venv --toolchain <t> # ｸﾘｴｲﾄ ｱ ﾊﾞｰﾁｭｱﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ
-ruyi device provision    # ﾃﾞｨﾊﾞｲｽ ﾌﾟﾛﾋﾞｼﾞｮﾆﾝｸﾞ
+ruyi list --all          # list all available packages
+ruyi install <pkg>       # install a toolchain
+ruyi venv --toolchain <t> # create a virtual environment
+ruyi device provision    # device provisioning
 ```
 
-> ruyi ﾘｸﾜｲｱｽﾞ ﾈｯﾄﾜｰｸ ｱｸｾｽ ﾄｩ ｸﾛｰﾝ ｻﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ (`packages-index`); ﾗﾝﾆﾝｸﾞ `ruyi list` ﾌｫｱ ｻﾞ ﾌｧｰｽﾄ ﾀｲﾑ ﾀﾞｳﾝﾛｰﾄﾞｽﾞ ｲｯﾄ ｵｰﾄﾏﾃｨｯｸﾘｰ.
+> ruyi requires ﾈｯﾄﾜｰｸ ｱｸｾｽ to ｸﾛｰﾝ ｻﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ (`packages-index`); ﾗﾝﾆﾝｸﾞ `ruyi list` ﾌｫｱ ｻﾞ ﾌｧｰｽﾄ ﾀｲﾑ ﾀﾞｳﾝﾛｰﾄﾞｽﾞ it ｵｰﾄﾏﾃｨｯｸﾘｰ.
 
-## ﾓｼﾞｭｰﾙ
+## Module
 
-ﾃﾞｨｸﾗﾗﾃｨﾌﾞ ｺﾝﾌｨｷﾞｭｱ ﾌｫｱ ruyi'ｽﾞ ﾗﾝﾀｲﾑ ﾋﾞﾍｲﾋﾞｨｱ:
+Declarative ｺﾝﾌｨｷﾞｭﾚｲｼｮﾝ of ruyi's ﾗﾝﾀｲﾑ ﾋﾞﾍｲｳﾞｨｵｱ:
 
 ```nix
-# flake.nix
+# ﾌﾚｲｸ.nix
 { modules = [ nixkits.nixosModules.ruyi ]; }
 
 nixkits.ruyi = {
@@ -57,9 +57,9 @@ nixkits.ruyi = {
 };
 ```
 
-ｻﾞ ﾓｼﾞｭｰﾙ ｵｰﾄｰｼﾞｪﾈﾚｲﾄ `/etc/xdg/ruyi/config.toml`, ｾｯﾄｽﾞ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾊﾞﾘｱﾌﾞﾙｽﾞ, ｱﾝﾄﾞ ｵｰﾄﾏﾃｨｯｸﾘｰ ｱｯﾌﾟﾃﾞｲﾄ ｻﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｲﾝﾃﾞｯｸｽ ｵﾝ ｼｽﾃﾑ ｱｸﾃｨﾍﾞｰｼｮﾝ.
+The ﾓｼﾞｭｰﾙ ｵｰﾄ-ｼﾞｪﾈﾚｲﾂ `/etc/xdg/ruyi/config.toml`, ｾｯﾂ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾊﾞﾘｱﾌﾞﾙｽﾞ, ｱﾝﾄﾞ ｵｰﾄﾏﾃｨｯｸﾘｰ ｱｯﾌﾟﾃﾞｲﾂ ｻﾞ ﾊﾟｯｹｰｼﾞ ﾘﾎﾟｼﾞﾄﾘ ｲﾝﾃﾞｯｸｽ on ｼｽﾃﾑ ｱｸﾃｨﾍﾞｲｼｮﾝ.
 
-ﾃﾞｨｸﾗﾗﾃｨﾌﾞ ﾊﾞｰﾁｭｱﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ ｱｰ ｻﾎﾟｰﾄ:
+Declarative ﾊﾞｰﾁｬﾙ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ ｱｰ ｻﾎﾟｰﾃｯﾄﾞ:
 
 ```nix
 nixkits.ruyi.venvs.riscv = {
@@ -69,35 +69,35 @@ nixkits.ruyi.venvs.riscv = {
 };
 ```
 
-## ﾆｯｸｽOS ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ
+## ﾆｯｸｽOS Compatibility
 
-ｻﾞ NixKits ﾊﾟｯｹｰｼﾞﾄﾞ ﾊﾞｰｼﾞｮﾝ ｲﾝｸﾙｰﾄﾞ ｻﾞ ｵｰﾊﾞｰﾚｲ `ruyi-nixos-compat` (`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`), ｳｨｯﾁ ﾄﾗｱﾝｽﾍﾟｱﾚﾝﾄﾘｰ ﾊﾝﾄﾞﾙｽﾞ ﾗﾝﾀｲﾑ ｲﾝｺﾝﾊﾟﾁﾋﾞﾘﾃｨｰｽﾞ ｵﾝ ﾆｯｸｽOS:
+The NixKits packaged ﾊﾞｰｼﾞｮﾝ ｲﾝｸﾙｰﾄﾞｽﾞ ｻﾞ ｵｰﾊﾞｰﾚｲ `ruyi-nixos-compat` (`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`), ｳｨｯﾁ ﾄﾗｱﾝｽﾍﾟｱﾚﾝﾄﾘｰ ﾊﾝﾄﾞﾙｽﾞ ﾗﾝﾀｲﾑ ｲﾝｺﾝﾊﾟﾁﾋﾞﾘﾃｨｰｽﾞ on ﾆｯｸｽOS:
 
-**ｱﾄﾞ**
+**Adding**
 ```nix
 nixpkgs.overlays = [
   nixkits.overlays.ruyi-nixos-compat  # ｽﾀﾝﾄﾞｱﾛｰﾝ ｵｰﾊﾞｰﾚｲ
 ];
 ```
 
-**ﾌｨｰﾁｬｰｽﾞ**
-- **ﾀﾞｲﾅﾐｯｸ ﾘﾝｶｰ ﾘﾀﾞｲﾚｸｼｮﾝ**: ﾌﾟﾘﾋﾞﾙﾄ RISC-V ﾄｩｰﾙﾁｪｲﾝ ﾊﾞｲﾅﾘｰｽﾞ ｴｸｽﾍﾟｸﾄ `/lib64/ld-linux-x86-64.so.2`, ｳｨｯﾁ ﾀﾞｽﾞ ﾉｯﾄ ｴｸﾞｼﾞｽﾄ ｵﾝ ﾆｯｸｽOS. ｻﾞ ﾊﾟｯﾁ ｵｰﾄﾏﾃｨｯｸﾘｰ ﾘﾀﾞｲﾚｸﾄｽﾞ ｴｸﾞｾﾞｷｭｰｼｮﾝ ﾊﾞｲｱ ﾆｯｸｽOS'ｽﾞ `ld.so`.
-- **GCC ｻﾌﾞﾌﾟﾛｾｽ ﾌｨｯｸｽ**: ｻﾌﾞﾌﾟﾛｾｯｾｽﾞ ﾗｲｸ `cc1`, `as`, `collect2` ﾊﾞｲﾊﾟｽ ｻﾞ ruyi ﾏｯｸｽ; ｻﾞ ﾊﾟｯﾁ ﾌｨｯｸｾｽﾞ ｾﾞｱ ELF ｲﾝﾀｰﾌﾟﾘﾀｰ ﾊﾞｲｱ `patchelf`.
-- **ﾆｯｸｽ console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: ｻﾞ `RUYI_ARGV0` ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ ﾊﾞﾘｱﾌﾞﾙ ﾘｽﾄｱ `exec -a` ｾﾏﾝﾃｨｯｸｽ ﾛｽﾄ ﾊﾞｲ ｻﾞ ﾆｯｸｽ ﾗｯﾊﾟｰ.
+**Features**
+- **Dynamic ﾘﾝｶｰ ﾘﾃﾞｨﾚｸｼｮﾝ**: Prebuilt RISC-V ﾂｰﾙﾁｪｲﾝ ﾊﾞｲﾅﾘｰｽﾞ ｴｸｽﾍﾟｸﾄ `/lib64/ld-linux-x86-64.so.2`, ｳｨｯﾁ ﾀﾞｽﾞ ﾉｯﾄ ｴｸﾞｼﾞｽﾄ on ﾆｯｸｽOS. The ﾊﾟｯﾁ ｵｰﾄﾏﾃｨｯｸﾘｰ ﾘﾀﾞｲﾚｸﾂ ｴｸｾｷｭｰｼｮﾝ ﾊﾞｲｱ ﾆｯｸｽOS's `ld.so`.
+- **GCC ｻﾌﾞﾌﾟﾛｾｽ ﾌｨｯｸｽ**: Subprocesses ﾗｲｸ `cc1`, `as`, `collect2` ﾊﾞｲﾊﾟｽ ｻﾞ ruyi mux; ｻﾞ ﾊﾟｯﾁ ﾌｨｯｸｽｽﾞ ｾﾞｱ ELF ｲﾝﾀｰﾌﾟﾘﾀｰ ﾊﾞｲｱ `patchelf`.
+- **ﾆｯｸｽ console_scripts ｺﾝﾊﾟﾁﾋﾞﾘﾃｨ**: The `RUYI_ARGV0` ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄ variable ﾘｽﾄｱｽﾞ `exec -a` ｾﾑｱﾝﾃｨｸｽ ﾛｽﾄ ﾊﾞｲ ｻﾞ ﾆｯｸｽ ﾗｯﾊﾟｰ.
 
-**ﾍﾞﾘﾌｨｹｰｼｮﾝ**
+**Verification**
 ```bash
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> ﾃﾞｨｽ ｵｰﾊﾞｰﾚｲ ｲｽﾞ ｵﾝﾘｰ ｲﾈｰﾌﾞﾙﾄﾞ ｵﾝ ﾆｯｸｽOS. ｵﾝ ﾉﾝ-ﾆｯｸｽOS ｼｽﾃﾑｽﾞ ｻﾞ ﾊﾟｯﾁ ﾛｼﾞｯｸ ｲｽﾞ ﾌﾘｰ ｼｮｰﾄ-ｻｰｷｯﾃｨｯﾄﾞ ｱﾝﾄﾞ ﾀﾞｽﾞ ﾉｯﾄ ｲﾝﾀｰﾌｨｱ ｳｨｽﾞ ｱｻﾞｰ ﾃﾞｨｽﾄﾘﾋﾞｭｰｼｮﾝｽﾞ. ﾘｸﾜｲｱ ﾌｫｱ ﾕｰｻﾞｰｽﾞ ﾌｰ ﾕｰｽﾞ ruyi ﾄｩ ﾀﾞｳﾝﾛｰﾄﾞ ｱﾝﾄﾞ ｴｸﾞｾﾞｷｭｰﾄ RISC-V ｸﾛｽ-ｺﾝﾊﾟｲﾙ ﾄｩｰﾙﾁｪｲﾝｽﾞ.
+> This ｵｰﾊﾞｰﾚｲ ｲｽﾞ ｵﾝﾘｰ ｲﾈｰﾌﾞﾙﾄﾞ on ﾆｯｸｽOS. On non-ﾆｯｸｽOS ｼｽﾃﾑｽﾞ ｻﾞ ﾊﾟｯﾁ logic ｲｽﾞ ﾌﾘｰ ｼｮｰﾄ-ｻｰｷｯﾃｯﾄﾞ ｱﾝﾄﾞ ﾀﾞｽﾞ ﾉｯﾄ ｲﾝﾀｰﾌｨｱ ｳｨｽﾞ ｱｻﾞｰ ﾃﾞｨｽﾄﾘﾋﾞｭｰｼｮﾝｽﾞ. Required ﾌｫｱ ﾕｰｻﾞｰｽﾞ ﾌｰ ﾕｰｽﾞ ruyi to ﾀﾞｳﾝﾛｰﾄﾞ ｱﾝﾄﾞ ｴｸｾｷｭｰﾄ RISC-V ｸﾛｽ-ｺﾝﾋﾟﾚｲｼｮﾝ ﾂｰﾙﾁｪｲﾝｽﾞ.
 
-## ﾉｰﾂ
+## Notes
 
-- ｳﾌﾟｽﾄﾗｴｱﾑ ｲｽﾞ ｱ RISC-V ﾃﾞｨﾍﾞﾛｯﾊﾟｰ ﾄｩｰﾙ ﾒﾝﾃﾅﾝｽ ﾊﾞｲ [ISCAS](https://www.iscas.ac.cn)
-- ﾊﾞｲﾅﾘｰｽﾞ ﾊｽﾞ ﾗﾝﾀｲﾑ ﾃﾞｨﾍﾟﾝﾃﾞﾝｼｰｽﾞ (curl, gnutar, git, patchelf) ｲﾝｼﾞｪｸﾃｨｯﾄﾞ ﾊﾞｲｱ wrapProgram
-- ﾃｽﾄ ｶﾊﾞﾚｯｼﾞ: ruff ﾘﾝﾄ, mypy ﾀｲﾌﾟ ﾁｪｯｷﾝｸﾞ, pytest ﾕﾆｯﾄ ﾃｽﾄｽﾞ (320 ｱｲﾃﾑｽﾞ), ｲﾝﾃｸﾞﾚｰｼｮﾝ ﾃｽﾄｽﾞ (52 ｱｲﾃﾑｽﾞ) — ｵﾙ ﾊﾟｯｼﾝｸﾞ
+- Upstream ｲｽﾞ a RISC-V developer ﾂｰﾙ ﾒｲﾝﾃｲﾝﾄﾞ ﾊﾞｲ [ISCAS](https://www.iscas.ac.cn)
+- Binaries have ﾗﾝﾀｲﾑ ﾃﾞｨﾍﾟﾝﾃﾞﾝｼｰｽﾞ (curl, gnutar, git, ﾊﾟｯﾁELF) ｲﾝｼﾞｪｸﾃｯﾄﾞ ﾊﾞｲｱ wrapProgram
+- Test ｶﾊﾞﾚｯｼﾞ: ruff ﾘﾝﾄ, mypy ﾀｲﾌﾟ ﾁｪｯｷﾝｸﾞ, pytest ﾕﾆｯﾄ ﾃｽﾂ (320 ｱｲﾃﾑｽﾞ), ｲﾝﾃｸﾞﾚｲｼｮﾝ ﾃｽﾂ (52 ｱｲﾃﾑｽﾞ) — ｵｰﾙ ﾊﾟｯｼﾝｸﾞ
 
-## ｷｬｯｼｭ
+## Cache
 
-`cachix use nixkits` (ｻﾞ ﾌﾚｲｸ ｵｰﾄﾏﾃｨｯｸﾘｰ ﾃﾞｨｸﾚｱ ｻﾞ ﾃﾞｨｽ ﾊﾞｲｱ `nixConfig`; ﾌﾟﾛﾝﾌﾟﾃｨｯﾄﾞ ｵｰﾄﾏﾃｨｯｸﾘｰ ｳｪﾝ ﾕｰｼﾞﾝｸﾞ ｻﾞ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ).
+`cachix use nixkits` (ｻﾞ ﾌﾚｲｸ ｵｰﾄﾏﾃｨｯｸﾘｰ ﾃﾞｨｸﾚｱｽﾞ ﾃﾞｨｽ ﾊﾞｲｱ `nixConfig`; ﾌﾟﾛﾝﾌﾟﾃｯﾄﾞ ｵｰﾄﾏﾃｨｯｸﾘｰ ｳｪﾝ ﾕｰｽﾞｨﾝｸﾞ ｻﾞ ﾌﾚｲｸ ｲﾝﾌﾟｯﾄ).
