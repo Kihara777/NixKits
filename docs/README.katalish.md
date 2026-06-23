@@ -26,7 +26,6 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | obs-bilibili-stream | OBS Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ | [docs/katalish/obs-bilibili-stream.md](katalish/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ OpenCode | [docs/katalish/opencode-telegram.md](katalish/opencode-telegram.md) |
 | ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ) | [docs/katalish/ruyi.md](katalish/ruyi.md) |
-| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm ｻﾎﾟｰﾄ | [docs/katalish/comfyui-strix-halo.md](katalish/comfyui-strix-halo.md) |
 
 > ⚠️ comfyui-strix-halo ﾊ ﾓｼﾞｭｰﾙ+ﾊﾟｯﾁ ﾃﾞ、独立ｼﾀ ﾊﾟｯｹｰｼﾞ ﾃﾞ ﾊ ﾅｲ ﾀﾒ、ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。
 

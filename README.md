@@ -30,9 +30,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具） | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
-| comfyui-strix-halo | 为 AMD Strix Halo (gfx1151/RDNA3.5) 提供 ComfyUI ROCm 支持 | [docs/zh/comfyui-strix-halo.md](docs/zh/comfyui-strix-halo.md) |
 
-> ⚠️ comfyui-strix-halo 为模块+补丁，非独立软件包，不在二进制缓存中。
 
 ## 开发
 

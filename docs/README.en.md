@@ -26,7 +26,6 @@ Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | ruyi | RuyiSDK package manager (RISC-V development tools) | [docs/en/ruyi.md](en/ruyi.md) |
-| comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm support | [docs/en/comfyui-strix-halo.md](en/comfyui-strix-halo.md) |
 
 > ⚠️ comfyui-strix-halo is a module+patch, not a standalone package, and is not in the binary cache.
 
