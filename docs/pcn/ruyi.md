@@ -5,23 +5,23 @@
 
 [中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語
 
-[RuyiSDK](https://ruyisdk.org) のパッケージマネージャー。RISC-V 開発環境のツールチェーンインストール、仮想環境管理、デバイスプロビジョニング、リポジトリ操作を提供。
+[RuyiSDK](https://ruyisdk.org) 之包管理者。提供 RISC-V 開発環境之道具導入、仮想環境管理、機器配備、倉庫操作。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.51.0-alpha.20260616 |
+| 版 | 0.51.0-alpha.20260616 |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| ライセンス | Apache 2.0 |
-| 注意 | アルファ段階のソフトウェア。API は変更される可能性があります |
+| 許諾 | Apache 2.0 |
+| 注意 | 段階之軟体。API 変更可能性有 |
 
-## インストール
+## 導入
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
-# または overlay 経由
+# 又 上乗 経由
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
@@ -30,17 +30,17 @@ environment.systemPackages = [ pkgs.ruyi ];
 
 ```bash
 ruyi --help
-ruyi list --all          # 利用可能な全パッケージを一覧表示
-ruyi install <pkg>       # ツールチェーンをインストール
-ruyi venv --toolchain <t> # 仮想環境を作成
-ruyi device provision    # デバイスプロビジョニング
+ruyi list --all          # 一覧表示 利用可能全包
+ruyi install <pkg>       # 導入 道具
+ruyi venv --toolchain <t> # 作成 仮想環境
+ruyi device provision    # 機器配備
 ```
 
-> ruyi はパッケージインデックスリポジトリのクローンにネットワーク接続が必要です。初回実行時に `ruyi list` が自動的にダウンロードします。
+> ruyi 要 網絡接続 複製 包索引倉庫。初回実行時 `ruyi list` 自動取得。
 
-## モジュール
+## 部品
 
-ruyi ランタイム動作の宣言的設定:
+ruyi 実行時動作之宣言的設定:
 
 ```nix
 # flake.nix
@@ -57,9 +57,9 @@ nixkits.ruyi = {
 };
 ```
 
-モジュールは自動的に `/etc/xdg/ruyi/config.toml` を生成し、環境変数を設定し、システムアクティベーション時にパッケージリポジトリインデックスを更新します。
+部品 自動生成 `/etc/xdg/ruyi/config.toml`、設定環境変数、更新 包倉庫索引 系統活性化時。
 
-宣言的仮想環境:
+支援 宣言的仮想環境:
 
 ```nix
 nixkits.ruyi.venvs.riscv = {
@@ -71,33 +71,33 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS 互換性
 
-NixKits ビルドには `ruyi-nixos-compat` overlay（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）が含まれており、NixOS 上で透過的なランタイム互換性を提供します：
+NixKits 構築 包含 `ruyi-nixos-compat` 上乗（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）、提供 NixOS 上透過的実行時互換性：
 
 **有効化**
 ```nix
 nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
+  nixkits.overlays.ruyi-nixos-compat  # 独立 上乗
 ];
 ```
 
 **機能**
-- **動的リンカリダイレクト**: プリビルドの RISC-V ツールチェーンバイナリは `/lib64/ld-linux-x86-64.so.2` を期待しますが、NixOS には存在しません。パッチは NixOS の `ld.so` を介して透過的にリダイレクトします。
-- **GCC サブプロセス修正**: `cc1`、`as`、`collect2` などが ruyi mux をバイパスするため、パッチは `patchelf` で ELF interpreter を修正します。
-- **Nix console_scripts 互換**: `RUYI_ARGV0` 環境変数が Nix wrapper で失われた `exec -a` セマンティクスを復元します。
+- **動的連結器転送**: 事前構築 RISC-V 道具二進 期待 `/lib64/ld-linux-x86-64.so.2`、NixOS 不存在。修正 透過的転送 経由 NixOS `ld.so`。
+- **GCC 副工程修正**: `cc1`、`as`、`collect2` 等 迂回 ruyi 多重化、修正 `patchelf` 以 ELF 接続修正。
+- **Nix console_scripts 互換**: `RUYI_ARGV0` 環境変数 復元 Nix 包装器喪失 `exec -a` 意味。
 
 **検証**
 ```bash
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> この overlay は NixOS でのみ有効にしてください。他のディストリビューションではパッチロジックは完全に短絡します。ruyi 経由で RISC-V クロスコンパイルツールチェーンをダウンロード・実行するユーザーに必須です。
+> 此上乗 有効 限 NixOS。他配布版 修正論理 完全短絡。必須 ruyi 経由取得実行 RISC-V 交叉編集道具之使用者。
 
 ## 注意
 
-- [ISCAS](https://www.iscas.ac.cn) がメンテナンスする RISC-V 開発者ツール
-- ランタイム依存（curl、gnutar、git、patchelf）は wrapProgram で注入
-- テストカバレッジ: ruff lint、mypy 型チェック、pytest ユニット（320 件）、統合（52 件）— すべて通過
+- [ISCAS](https://www.iscas.ac.cn) 維持 RISC-V 開発者道具
+- 実行時依存（curl、gnutar、git、patchelf）注入 以 wrapProgram
+- 試験網羅: ruff 整形確認、mypy 種別確認、pytest 単体（320 件）、統合（52 件）— 全通過
 
-## キャッシュ
+## 緩衝
 
-`cachix use nixkits`（flake input として使用時に `nixConfig` で自動宣言）。
+`cachix use nixkits`（flake input 使用時 `nixConfig` 以自動宣言）。
