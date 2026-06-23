@@ -116,7 +116,7 @@ inputs.<project>.url = "github:<org>/<repo>";
 > nix.settings.trusted-public-keys = [ "<project>.cachix.org-1:<key>" ];
 > ```
 >
-> 缓存由 CI 自动构建推送（x86_64-linux）。aarch64 / riscv64 暂不支持 CI 构建，可通过本地 `cachix push` 手动推送。
+> 缓存由 CI 自动构建推送（x86_64 / aarch64 / riscv64）。
 
 ## <分类 1>
 

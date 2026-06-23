@@ -121,16 +121,8 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
-构建 job 通过矩阵并行构建全部软件包（x86_64-linux / aarch64-linux），完成后推送到 Cachix 二进制缓存。
+构建 job 通过矩阵并行构建全部软件包（x86_64-linux / aarch64-linux / riscv64-linux），完成后推送到 Cachix 二进制缓存。
 
 ## 二进制缓存
 
-当 `nixkits-check-updates` 技能执行后，需检查 CI 未覆盖的架构：
-
-1. **等待 CI 通过** — 确认 x86_64 和 aarch64 构建成功
-2. **检测本地能力** — 检查本地构建环境是否支持 CI 未覆盖的系统（如 `--system riscv64-linux`）
-3. **本地构建** — 若支持，为每个未覆盖架构构建全部软件包
-4. **推送缓存** — 构建成功后立即 `cachix push nixkits <result>`
-5. **记录结果** — 将构建状态记入维护日志
-
-此流程仅当操作者有仓库推送权限时执行。
+CI 自动构建全部三个架构（x86_64 / aarch64 / riscv64）并推送到 Cachix。`nixkits-check-updates` 技能执行后，确认 CI 通过即可，无需本地额外操作。
