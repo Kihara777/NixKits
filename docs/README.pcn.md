@@ -28,6 +28,8 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | ruyi | RuyiSDK 包管理者（RISC-V 開発道具） | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 | comfyui-strix-halo | AMD Strix Halo (gfx1151/RDNA3.5) ComfyUI ROCm 支援 | [docs/pcn/comfyui-strix-halo.md](pcn/comfyui-strix-halo.md) |
 
+> ⚠️ comfyui-strix-halo 為模塊+補丁、非独立軟件包、不在二進制緩存中。
+
 > ⚠️ comfyui-strix-halo 部品+修正、独立包非、故二進緩衝未含。
 
 ## 開発
@@ -53,6 +55,8 @@ nix registry add nixkits github:Kihara777/NixKits
 | ruyi-nixos-compat | ruyi NixOS 実行時互換性（ELF interpreter 転送 + GCC 子工程修正） | [docs/pcn/ruyi-nixos-compat.md](pcn/ruyi-nixos-compat.md) |
 | comfyui-rocm-patch | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
 | rog-control-center-fix | 停止時 asusd 膠着修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
+
+> ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
 
 > ⚠️ 修正上乗、上流 nixpkgs 包変更、独立構築非。故二進緩衝未含。動的版追跡計画（llama-cpp-rocm 等）摘要毎上流版変化、緩衝固定不可。
 
