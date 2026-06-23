@@ -1,5 +1,41 @@
 # 维护日志
 
+## 2026-06-24T03:15:37+09:00
+
+**摘要**：docs — 移除过时的本地 riscv64 构建指令，CI 现已覆盖三架构
+
+| 提交 | 说明 |
+|------|------|
+| `698400a` | docs: remove stale manual riscv64 build instructions — CI now covers all 3 architectures |
+
+## 2026-06-24T03:06:20+09:00
+
+**摘要**：codewhale 0.8.64 — 上游更新
+
+| 提交 | 说明 |
+|------|------|
+| `0bde292` | chore(pkgs): bump codewhale 0.8.64 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.63 | 0.8.64 |
+| 　 | x64 cli hash | `sha256-SMaOUH...Z6M=` → `sha256-sKvJm6...XY=` |
+| 　 | arm64 cli hash | `sha256-gGv2T4...M8=` → `sha256-gYofCL...jk=` |
+| 　 | riscv64 cli hash | `sha256-qSVNms...g=` → `sha256-TOkojm...A=` |
+| 　 | x64 tui hash | `sha256-UA66uC...M=` → `sha256-Q3wRQ5...M=` |
+| 　 | arm64 tui hash | `sha256-m24T1T...g=` → `sha256-CSKaNh...M=` |
+| 　 | riscv64 tui hash | `sha256-l1tgSn...w=` → `sha256-mAARZq...Y=` |
+
+## 2026-06-24T02:30:21+09:00
+
+**摘要**：CI — 添加 riscv64 交叉编译 pipeline，三架构 CI 全量覆盖（x86_64 / aarch64 / riscv64）；每包文档添加 riscv64 徽章
+
+| 提交 | 说明 |
+|------|------|
+| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
+| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
+| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
+| `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
 ## 2026-06-23T05:20:00+09:00
 
 **摘要**：translate-pseudocn — 基于网络研究扩充词典（7→46 条），语序改为 SVO，全量重新生成 pcn 文档
