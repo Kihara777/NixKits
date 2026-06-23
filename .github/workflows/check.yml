@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Check
-        run: nix flake check
+        run: nix flake check --no-write-lock-file
 
   build:
     needs: check
@@ -29,5 +29,5 @@ jobs:
       - name: Build packages
         run: |
           for pkg in codewhale kitsfmt mcp-searxng obs-bilibili-stream opencode-telegram ruyi; do
-            nix build --print-build-logs ".#$pkg"
+            nix build --print-build-logs ".#$pkg" --no-write-lock-file
           done
