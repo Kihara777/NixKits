@@ -156,3 +156,6 @@ for f in docs/pcn/*.md; do
   done
 done
 ```
+### 6. 本地化文档内链必须指向同语言版本
+
+模块文档表格中的链接指向源语言文档。转换为 pcn 后必须改为指向 pcn 版。例如 `](ja/nginx.md)` → `](./nginx.md)`。同时注意顶层文档的跨深度链接调整（`../LICENSE` → `../../LICENSE`）。
