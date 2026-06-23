@@ -141,3 +141,7 @@ grep '\[中文\](\.\./README' docs/katalish/README.md
 ### 8. 词形变化覆盖不足
 
 sed 的 `\<word\>` 词边界匹配无法覆盖派生词/复数形式。如词典有 `module` 但不会匹配 `modules`、`providing` 不匹配 `provide`。解决方案：词典中同时加入复数（`modules`→`ﾓｼﾞｭｰﾙｽﾞ`）和常见屈折形式（`providing`→`ﾌﾟﾗｵﾌﾞｲﾃﾞｨﾝｸﾞ`、`installed`→`ｲﾝｽﾄｰﾙﾄﾞ`）。
+
+### 9. 本地化文档内链必须指向同语言版本
+
+模块文档表格中的链接（如 README 服务列表）指向源语言文档。转换为 katalish 后必须改为指向 katalish 版。例如 `](../en/nginx.md)` → `](./nginx.md)`。易被「不修改链接目标」的指令掩盖——该指令仅适用于防止链接目标内的单词被翻译，不适用于路径的语言调整。
