@@ -112,3 +112,30 @@ for f in docs/katalish/*.md; do
   done
 done
 ```
+
+### 6. 路径深度陷阱（模块文档 vs 顶层文档）
+
+子代理生成文件时，从 `docs/katalish/` 到其他语言目录的相对路径取决于文件层级：
+
+| 文件位置 | 到 `docs/zh/` | 正确路径 |
+|---------|-------------|---------|
+| `docs/katalish/home.md`（模块） | `docs/zh/` | `../zh/home.md` |
+| `docs/katalish/README.md`（顶层） | `../../README.md`（根级中文） | `../../README.md` |
+
+常见错误：模块文档写成 `../../zh/`（多一层），顶层文档写成 `../zh/`（少一层）。验证方法：
+```bash
+# 模块文档路径应为 ../zh/、../en/、../ja/、../pcn/
+grep -l '../../zh/' docs/katalish/*.md | grep -v README | grep -v MAINTENANCE | grep -v NOTICE
+# 顶层文档路径应为 ../../README.md 等
+grep '\[中文\](\.\./README' docs/katalish/README.md
+```
+
+### 7. 专有名词与链接目标保护
+
+**必须保留原样的词**：Docker, Redis, nginx, GitHub, Git, Cloudflare, API, JSON, JS, CSS, HTML, YAML, TLS, SSL, HTTP, DNS, URL, MIT, G41, Metro, WP, KITS, MailKits, NixKits, G41KiTS, Node.js, Bilibili, Attic, Hysteria2, WebDAV, WebUI, BitTorrent, AdGuard, Transmission, Aria2, Hexo, ZeroSSL, Resend。
+
+**链接目标绝对不可翻译**：`[text](path.md)` 中 `path.md` 内的英文单词不能替换。sed 替换时需排除 `](...)` 内部的文本。
+
+### 8. 词形变化覆盖不足
+
+sed 的 `\<word\>` 词边界匹配无法覆盖派生词/复数形式。如词典有 `module` 但不会匹配 `modules`、`providing` 不匹配 `provide`。解决方案：词典中同时加入复数（`modules`→`ﾓｼﾞｭｰﾙｽﾞ`）和常见屈折形式（`providing`→`ﾌﾟﾗｵﾌﾞｲﾃﾞｨﾝｸﾞ`、`installed`→`ｲﾝｽﾄｰﾙﾄﾞ`）。
