@@ -118,6 +118,44 @@ for d in docs/zh docs/en docs/ja docs/katalish docs/pcn; do
 done
 ```
 
+### 第 8.1 步：根目录与跨层级文件检查（⚠️ 三阶遗漏）
+
+语言切换器更新的常见遗漏呈**三阶递进**模式，每轮修复只覆盖到更深一层：
+
+| 阶 | 遗漏范围 | 原因 |
+|----|---------|------|
+| 1 | 子代理生成的新文件自身 | 只生成 3 条目，未含扩展语言 |
+| 2 | 现有 `docs/{zh,en,ja}/*.md` | sed 已覆盖，但 katalish/pcn 自身需额外补全 |
+| 3 | **根目录 + `docs/*.xx.md` 模式** | sed glob `docs/zh/*.md` 不匹配根级文件 |
+
+**第三阶遗漏文件清单**（极易漏检）：
+
+```
+README.md                          # 项目根
+MAINTENANCE.md                     # 项目根
+NOTICE.md                          # 项目根
+kits/README.md                     # 子目录根
+docs/README.en.md                  # docs/ 根级（非 docs/en/ 内）
+docs/README.ja.md
+docs/MAINTENANCE.en.md
+docs/MAINTENANCE.ja.md
+docs/NOTICE.en.md
+docs/NOTICE.ja.md
+```
+
+**验证命令（覆盖全部层级）**：
+
+```bash
+# 全项目切换器完整性检查（不遗漏根目录）
+for f in README.md MAINTENANCE.md NOTICE.md kits/README.md \
+         $(find docs -maxdepth 2 -name '*.md'); do
+  l=$(grep '\[中文\]\|\[English\]\|\[日本語\]' "$f" 2>/dev/null | head -1)
+  [ -z "$l" ] && continue
+  echo "$l" | grep -q 'ｶﾀﾘｯｼｭ' || echo "MISSING katalish: $f"
+  echo "$l" | grep -q '偽中国語' || echo "MISSING pcn: $f"
+done
+```
+
 ### 第 9 步：README 展示表同步
 
 新增磁贴/模块后，**所有语言版本**的 README 展示表都需要更新。检查清单：
