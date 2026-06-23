@@ -136,6 +136,8 @@ grep '\[中文\](\.\./README' docs/katalish/README.md
 
 **链接目标绝对不可翻译**：`[text](path.md)` 中 `path.md` 内的英文单词不能替换。sed 替换时需排除 `](...)` 内部的文本。
 
+**⚠️ 跨深度复制时链接目标必须调整层级**：从 `docs/README.en.md`（深度 1）复制到 `docs/katalish/README.md`（深度 2）时，原文中的 `../LICENSE` 需要变为 `../../LICENSE`、`NOTICE.en.md` 需要变为 `../NOTICE.en.md`。**仅「不翻译单词」是不够的——必须加一层 `../`。**
+
 ### 8. 词形变化覆盖不足
 
 sed 的 `\<word\>` 词边界匹配无法覆盖派生词/复数形式。如词典有 `module` 但不会匹配 `modules`、`providing` 不匹配 `provide`。解决方案：词典中同时加入复数（`modules`→`ﾓｼﾞｭｰﾙｽﾞ`）和常见屈折形式（`providing`→`ﾌﾟﾗｵﾌﾞｲﾃﾞｨﾝｸﾞ`、`installed`→`ｲﾝｽﾄｰﾙﾄﾞ`）。
