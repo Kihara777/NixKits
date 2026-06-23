@@ -1,5 +1,12 @@
 # 维护日志
 
+## 2026-06-24T03:19:30+09:00
+
+**摘要**：workflow — 维护日志更新规则强制化（AGENTS.md + write-maintenance-log 技能）
+
+| 提交 | 说明 |
+|------|------|
+| `2e719df` | fix: make maintenance log update mandatory after every push |
 ## 2026-06-24T03:15:37+09:00
 
 **摘要**：docs — 移除过时的本地 riscv64 构建指令，CI 现已覆盖三架构
