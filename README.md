@@ -20,7 +20,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 >
 ## 软件
 
-支持系统：`lib.platforms.linux`（codewhale 限 x86_64 / aarch64 / riscv64，其余自动跟随 nixpkgs）
+支持系统：`lib.platforms.linux`。codewhale 使用上游预编译二进制（x86_64 / aarch64 / riscv64）。obs-bilibili-stream 受限于上游 OBS 架构支持。其余包通过 Nix 自动跟随 nixpkgs 平台。
 
 | 软件 | 说明 | 文档 |
 |---|------|------|
