@@ -5,30 +5,30 @@
 
 [中文](../zh/comfyui-rocm-patch.md) | [English](../en/comfyui-rocm-patch.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/comfyui-rocm-patch.md) | [偽中国語](../pcn/comfyui-rocm-patch.md)
 
-为 ComfyUI 提供 ROCm 功能补丁。
+ComfyUI 向け ROCm 機能パッチ。
 
-含 **Strix Halo（gfx1151 / RDNA 3.5 APU）专属优化**，已在 Ryzen AI MAX+ 395 / Radeon 8060S 上实测验证。
+**Strix Halo（gfx1151 / RDNA 3.5 APU）専用最適化**を含み、Ryzen AI MAX+ 395 / Radeon 8060S で実機検証済み。
 
-## 基本信息
+## 基本情報
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 类型 | overlay + NixOS 模块 |
-| 选项 | `nixkits.comfyui-rocm-patch.enable` |
+| 種類 | overlay + NixOS モジュール |
+| オプション | `nixkits.comfyui-rocm-patch.enable` |
 | 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` |
-| 适用 GPU | gfx1151（Strix Halo）— ROCm 7.1 原生识别 |
+| 対応 GPU | gfx1151（Strix Halo）— ROCm 7.1 でネイティブ認識 |
 
-## 功能
+## 機能
 
-- **rocmGfxOverride 选项**：声明 `services.comfyui.rocmGfxOverride`，设置 `HSA_OVERRIDE_GFX_VERSION`
-- **xformers 自动禁用**：`--disable-xformers`（nixpkgs 的 xformers 不含 ROCm 后端）
-- **C 编译工具链**：PATH 注入 `gcc`、`binutils`、`gnumake`，设置 `CC=gcc`
-- **ROCm 运行时自动安装**：`hardware.graphics.extraPackages`（clr + rocminfo）
-- **Strix Halo 内核参数**：`amdgpu.gttsize=131072`
-- **服务加固**：GPU 设备访问权限（`/dev/kfd`、`/dev/dri/renderD128`）
-- **PyTorch 7.2 wheel 可选升级**
+- **rocmGfxOverride オプション**: `services.comfyui.rocmGfxOverride` を宣言し、`HSA_OVERRIDE_GFX_VERSION` を設定
+- **xformers 自動無効化**: `--disable-xformers`（nixpkgs の xformers は ROCm バックエンド非対応）
+- **C ビルドツールチェーン**: `gcc`、`binutils`、`gnumake` を PATH に注入、`CC=gcc` を設定
+- **ROCm ランタイム自動インストール**: `hardware.graphics.extraPackages`（clr + rocminfo）
+- **Strix Halo カーネルパラメータ**: `amdgpu.gttsize=131072`
+- **サービス堅牢化**: GPU デバイスアクセス権限（`/dev/kfd`、`/dev/dri/renderD128`）
+- **PyTorch 7.2 wheel オプションアップグレード**
 
-## 使用
+## 使用方法
 
 ```nix
 {
@@ -37,20 +37,20 @@
   nixkits.comfyui-rocm-patch.enable = true;
   services.comfyui = {
     enable = true;
-    rocmGfxOverride = "11.0.0";  # 可选：自定义 GPU 目标版本
+    rocmGfxOverride = "11.0.0";  # オプション：GPU ターゲットバージョンをカスタム
   };
 }
 ```
 
-## 安装（在线集成模式）
+## インストール（オンライン統合モード）
 
-直接使用上游 flake，由本地模块补丁覆盖（推荐）：
+上流 flake を直接使用し、ローカルモジュールパッチで上書き（推奨）：
 
 ```nix
 # flake.nix
 {
   inputs = {
-    comfyui-nix.url = "github:utensils/comfyui-nix";  # 在线版，无需 fork
+    comfyui-nix.url = "github:utensils/comfyui-nix";  # オンライン版、フォーク不要
     nixkits.url = "github:Kihara777/NixKits";
   };
 
@@ -68,16 +68,16 @@
 }
 ```
 
-## 缓存
+## キャッシュ
 
-`cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
+`cachix use nixkits`（flake input として使用時に `nixConfig` で自動宣言）。
 
-> ⚠️ 本条目为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。
+> ⚠️ 本エントリは overlay であり、独立したビルドではなく上流 nixpkgs パッケージを変更するため、バイナリキャッシュに含まれません。
 
 ## 注意
 
-- ROCm 7.1 已可原生识别 gfx1151，无需 `HSA_OVERRIDE_GFX_VERSION`
-- GPU 未识别时可尝试 `services.comfyui.rocmGfxOverride = "11.0.0"`
-- xformers 报错时：模块已自动 `--disable-xformers`
-- 模块自动设置 `amdgpu.gttsize=131072`（适配 Strix Halo 统一内存架构）
-- C 工具链注入后，ComfyUI Manager 可在线编译自定义节点依赖
+- ROCm 7.1 は gfx1151 をネイティブ認識するため、`HSA_OVERRIDE_GFX_VERSION` は不要
+- GPU が認識されない場合は `services.comfyui.rocmGfxOverride = "11.0.0"` を試す
+- xformers エラー時：モジュールが自動的に `--disable-xformers` で無効化
+- モジュールは自動的に `amdgpu.gttsize=131072` を設定（Strix Halo UMA 向け最適化）
+- C ツールチェーン注入後、ComfyUI Manager でカスタムノード依存をオンラインコンパイル可能
