@@ -128,6 +128,21 @@ done
 | 2 | 现有 `docs/{zh,en,ja}/*.md` | sed 已覆盖，但 katalish/pcn 自身需额外补全 |
 | 3 | **根目录 + `docs/*.xx.md` 模式** | sed glob `docs/zh/*.md` 不匹配根级文件 |
 
+**为什么顶层文档被系统性忽略——两种文件组织模式的结构性冲突：**
+
+项目文档存在两种互不重叠的组织模式：
+
+| 模式 | 路径格式 | 示例 | 子代理扫描方式 |
+|------|---------|------|---------------|
+| 模块文档（多数） | `docs/<语言>/<模块>.md` | `docs/en/home.md` | `ls docs/en/` 可发现 |
+| 顶层文档（少数） | `docs/<文件名>.<语言>.md` 或根级 | `docs/README.en.md`、`README.md` | `ls docs/en/` **不可发现** |
+
+子代理被分派任务「转换 `docs/en/` 下所有文件」时，`ls docs/en/` 只返回模块文档（如 `home.md`），**完全不可见** `docs/README.en.md` 和 `README.md`——因为这些文件不在 `docs/en/` 子目录中。
+
+父代理验证循环同样只遍历 `docs/{zh,en,ja,katalish,pcn}/` 目录，也不会命中 `docs/` 根级文件。
+
+**结论：基于目录遍历的文件发现逻辑，对「后缀式」组织的顶层文档存在盲区。**
+
 **第三阶遗漏文件清单**（极易漏检）：
 
 ```
@@ -157,6 +172,30 @@ done
 ```
 
 **⚠️ 先建文件再加链接**：向现有文件的切换器追加新语言链接前，必须确保目标文件已存在。否则产生死链（HTTP 404）。新增语言的顶层文档（README / MAINTENANCE / NOTICE）极易在此环节遗漏。
+
+**正确的本地化分派方式——两种模式并行覆盖：**
+
+向子代理分派翻译任务时，不能只给 `ls docs/en/` 的目录清单。必须同时指定两种模式的文件：
+
+```markdown
+## SCOPE (Katalish 示例)
+Convert TWO sets of files:
+1. Module docs: all .md files in /home/kix/G41KiTS/docs/en/
+2. Top-level docs:
+   - /home/kix/G41KiTS/docs/README.en.md
+   - /home/kix/G41KiTS/docs/MAINTENANCE.en.md
+   - /home/kix/G41KiTS/docs/NOTICE.en.md
+   (Also check for any other *.en.md files at docs/ root level)
+```
+
+父代理接收子代理输出后，必须执行全文件覆盖验证：
+```bash
+# 源文件 × 目标文件 一一对应检查
+for src in docs/en/*.md docs/README.en.md docs/MAINTENANCE.en.md docs/NOTICE.en.md; do
+  name=$(basename "$src" | sed 's/\.en\.md$/.md/')
+  [ -f "docs/katalish/$name" ] || echo "MISSING TARGET: docs/katalish/$name"
+done
+```
 
 ### 第 9 步：README 展示表同步
 
