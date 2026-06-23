@@ -71,11 +71,26 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS 兼容性
 
-NixKits 打包的 ruyi 包含 `patches/ruyi-nixos-compat.patch`，在 NixOS 上透明处理以下兼容性问题：
+NixKits 打包版本包含 overlay `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`），在 NixOS 下透明处理运行时不兼容：
 
-- **动态链接器路径**：预编译的 RISC-V 工具链二进制文件（GCC、QEMU 等）期望 `/lib64/ld-linux-x86-64.so.2`，在 NixOS 上不存在。补丁自动通过 NixOS 的 `ld.so` 重定向执行。
-- **工具链子进程修复**：GCC 内部启动的 `cc1`、`as`、`collect2` 等子进程绕过 ruyi mux，补丁通过 `patchelf` 自动修复其 ELF interpreter。
-- **Nix console_scripts 兼容**：通过 `RUYI_ARGV0` 环境变量解决 Nix wrapper 中 `exec -a` 丢失的问题。
+**添加**
+```nix
+nixpkgs.overlays = [
+  nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
+];
+```
+
+**功能**
+- **动态链接器重定向**：预编译 RISC-V 工具链二进制期望 `/lib64/ld-linux-x86-64.so.2`，NixOS 不存在该路径。补丁自动以 NixOS `ld.so` 重定向执行。
+- **GCC 子进程修复**：`cc1`、`as`、`collect2` 等子进程绕过 ruyi mux，补丁通过 `patchelf` 修复 ELF interpreter。
+- **Nix console_scripts 兼容**：`RUYI_ARGV0` 环境变量恢复 Nix wrapper 丢失的 `exec -a` 语义。
+
+**验证**
+```bash
+find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
+```
+
+> 仅 NixOS 环境启用此 overlay。非 NixOS 下补丁逻辑完全短路，不干扰其他发行版。对使用 ruyi 下载执行 RISC-V 交叉编译工具链的用户必需。
 
 ## 注意
 

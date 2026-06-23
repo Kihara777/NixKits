@@ -51,7 +51,6 @@ nix registry add nixkits github:Kihara777/NixKits
 |------|------|------|
 | llama-cpp-rocm | 上流最新版追跡 ROCm 加速 | [docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md) |
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
-| ruyi-nixos-compat | ruyi NixOS 実行時互換性（ELF interpreter 転送 + GCC 子工程修正） | [docs/pcn/ruyi-nixos-compat.md](pcn/ruyi-nixos-compat.md) |
 | comfyui-rocm-patch | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
 | rog-control-center-fix | 停止時 asusd 膠着修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
 
