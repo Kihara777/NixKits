@@ -156,6 +156,8 @@ for f in README.md MAINTENANCE.md NOTICE.md kits/README.md \
 done
 ```
 
+**⚠️ 先建文件再加链接**：向现有文件的切换器追加新语言链接前，必须确保目标文件已存在。否则产生死链（HTTP 404）。新增语言的顶层文档（README / MAINTENANCE / NOTICE）极易在此环节遗漏。
+
 ### 第 9 步：README 展示表同步
 
 新增磁贴/模块后，**所有语言版本**的 README 展示表都需要更新。检查清单：
