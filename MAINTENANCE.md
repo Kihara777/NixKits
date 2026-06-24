@@ -1,5 +1,12 @@
 # 维护日志
 
+## 2026-06-25T05:35:00+09:00
+
+**摘要**：docs — 全部 5 语言 README 添加 ruyi-beta / ruyi-alpha devShell 条目
+
+| 提交 | 说明 |
+|------|------|
+| `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
 ## 2026-06-25T05:28:12+09:00
 
 **摘要**：ruyi — 重构包目录结构（packages/ruyi/），beta/alpha 为 thin wrapper；新增 devShells
