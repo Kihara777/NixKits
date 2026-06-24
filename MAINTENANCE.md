@@ -1,5 +1,18 @@
 # 维护日志
 
+## 2026-06-25T04:58:36+09:00
+
+**摘要**：ruyi — 三通道版本体系（stable/beta/alpha），基础包切至 0.50.0 稳定版，beta/alpha 通过 overlay 覆盖
+
+| 提交 | 说明 |
+|------|------|
+| `a9f8baa` | feat(pkgs): ruyi 3-channel (stable/beta/alpha) via overlays |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| ruyi | 0.51.0-alpha.20260616 | 0.50.0（稳定） |
+| 　 | 新增 ruyi-beta overlay | 0.50.0-beta.20260623 |
+| 　 | 新增 ruyi-alpha overlay | 0.51.0-alpha.20260616 |
 ## 2026-06-24T03:19:30+09:00
 
 **摘要**：workflow — 维护日志更新规则强制化（AGENTS.md + write-maintenance-log 技能）
