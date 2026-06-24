@@ -38,6 +38,8 @@
 
     devShells = let
       ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
+      ruyiBetaDrv = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
+      ruyiAlphaDrv = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
       # Apply ruyi-nixos-compat overlay so devShell also gets NixOS compat
       ruyiOverlay = import ./overlays/ruyi-nixos-compat.nix;
       ruyiWithCompat = (ruyiOverlay (pkgs // { ruyi = ruyiDrv; }) (pkgs // { ruyi = ruyiDrv; })).ruyi;
@@ -49,6 +51,9 @@
           echo "RuyiSDK $(ruyi --version 2>/dev/null | head -1)"
         '';
       };
+
+      ruyi-beta = pkgs.mkShell { name = "ruyi-beta-dev"; packages = [ ruyiBetaDrv ]; };
+      ruyi-alpha = pkgs.mkShell { name = "ruyi-alpha-dev"; packages = [ ruyiAlphaDrv ]; };
     };
   }) // {
 
