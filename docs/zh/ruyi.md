@@ -31,23 +31,19 @@ environment.systemPackages = [ pkgs.ruyi ];
 
 ## 版本通道
 
-ruyi 提供三个版本通道，通过 overlay 切换：
+ruyi 提供三个独立软件包：
 
-| 通道 | overlay | 用途 |
+| 包名 | 版本 | 用途 |
 |------|------|------|
-| 稳定版（默认）| 无需 overlay | 生产环境 |
-| beta 版 | `nixkits.overlays.ruyi-beta` | 尝鲜测试 |
-| alpha 版 | `nixkits.overlays.ruyi-alpha` | 前沿开发 |
+| `ruyi` | 0.50.0（稳定）| 生产环境 |
+| `ruyi-beta` | 0.50.0-beta.20260623 | 尝鲜测试 |
+| `ruyi-alpha` | 0.51.0-alpha.20260616 | 前沿开发 |
 
 ```nix
-# 切换到 beta 通道
-nixpkgs.overlays = [
-  inputs.nixkits.overlays.ruyi-beta
-  inputs.nixkits.overlays.ruyi-nixos-compat  # NixOS 兼容（可选）
+environment.systemPackages = [
+  inputs.nixkits.packages.${pkgs.system}.ruyi-beta  # 使用 beta 版
 ];
 ```
-
-## 使用
 
 ```bash
 ruyi --help

@@ -28,6 +28,14 @@
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
       obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       ruyi                 = pkgs.callPackage ./packages/ruyi.nix { };
+      ruyi-beta = pkgs.callPackage ./packages/ruyi.nix {
+        version = "0.50.0-beta.20260623";
+        hash = "sha256-6TSPifSgyo/jNGthz6uFZ/oBSl5P1Py16sQTYQ0yJfc=";
+      };
+      ruyi-alpha = pkgs.callPackage ./packages/ruyi.nix {
+        version = "0.51.0-alpha.20260616";
+        hash = "sha256-A7/Ca/H0NG+dGeQkGXal+b/q9s5KAkKI6s8BteeoKRg=";
+      };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
@@ -63,8 +71,6 @@
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
-      ruyi-beta         = import ./overlays/ruyi-beta.nix;
-      ruyi-alpha        = import ./overlays/ruyi-alpha.nix;
     };
 
   } // {

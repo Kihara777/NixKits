@@ -14,17 +14,19 @@
   git,
   gnumake,
   patchelf,
+  # version/hash overridden for beta/alpha channels
+  version ? "0.50.0",
+  hash ? "sha256-mZS0rBPENJtaq0St01CvpzJ4O4XqXv5fRCwcNCT9h+Y=",
 }:
 
 let
-  version = "0.50.0";
   pname = "ruyi";
 
   src = fetchFromGitHub {
     owner = "ruyisdk";
     repo = "ruyi";
     rev = version;
-    hash = "sha256-mZS0rBPENJtaq0St01CvpzJ4O4XqXv5fRCwcNCT9h+Y=";
+    inherit hash;
   };
 
   python = python3;
