@@ -12,10 +12,10 @@
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.51.0-alpha.20260616 |
+| バージョン | 0.50.0（安定版） |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | ライセンス | Apache 2.0 |
-| 注意 | アルファ段階のソフトウェアであり、APIが変更される可能性があります |
+| チャンネル | 安定版 | beta 版 | alpha 版 |
 
 ## インストール
 
@@ -25,6 +25,22 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 # またはoverlay経由
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
+```
+
+## バージョンチャンネル
+
+ruyi は 3 つの独立したパッケージを提供します：
+
+| パッケージ | バージョン | 用途 |
+|------|------|------|
+| `ruyi` | 0.50.0（安定版）| 本番環境 |
+| `ruyi-beta` | 0.50.0-beta.20260623 | プレビュー |
+| `ruyi-alpha` | 0.51.0-alpha.20260616 | 先行開発 |
+
+```nix
+environment.systemPackages = [
+  inputs.nixkits.packages.${pkgs.system}.ruyi-beta
+];
 ```
 
 ## 使用方法

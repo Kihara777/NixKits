@@ -12,10 +12,10 @@ The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain insta
 
 | Item | Value |
 |------|-------|
-| Version | 0.51.0-alpha.20260616 |
+| Version | 0.50.0 (stable) |
 | Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | License | Apache 2.0 |
-| Note | Alpha-stage software; API may change |
+| Channel | stable | beta | alpha |
 
 ## Installation
 
@@ -25,6 +25,22 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 # or via overlay
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
+```
+
+## Version Channels
+
+ruyi provides three independent packages:
+
+| Package | Version | Purpose |
+|------|------|------|
+| `ruyi` | 0.50.0 (stable) | Production |
+| `ruyi-beta` | 0.50.0-beta.20260623 | Preview |
+| `ruyi-alpha` | 0.51.0-alpha.20260616 | Bleeding edge |
+
+```nix
+environment.systemPackages = [
+  inputs.nixkits.packages.${pkgs.system}.ruyi-beta
+];
 ```
 
 ## Usage
