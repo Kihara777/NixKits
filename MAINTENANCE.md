@@ -1,5 +1,12 @@
 # 维护日志
 
+## 2026-06-25T05:13:34+09:00
+
+**摘要**：ruyi — 版本通道改为独立软件包（ruyi / ruyi-beta / ruyi-alpha），移除独立 overlay
+
+| 提交 | 说明 |
+|------|------|
+| `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
 ## 2026-06-25T04:58:36+09:00
 
 **摘要**：ruyi — 三通道版本体系（stable/beta/alpha），基础包切至 0.50.0 稳定版，beta/alpha 通过 overlay 覆盖
