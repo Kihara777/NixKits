@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "0.51.0-alpha.20260616";
+  version = "0.50.0";
   pname = "ruyi";
 
   src = fetchFromGitHub {
     owner = "ruyisdk";
     repo = "ruyi";
     rev = version;
-    hash = "sha256-A7/Ca/H0NG+dGeQkGXal+b/q9s5KAkKI6s8BteeoKRg=";
+    hash = "sha256-mZS0rBPENJtaq0St01CvpzJ4O4XqXv5fRCwcNCT9h+Y=";
   };
 
   python = python3;

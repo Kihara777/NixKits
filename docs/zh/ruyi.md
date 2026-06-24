@@ -12,10 +12,10 @@
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 0.51.0-alpha.20260616 |
+| 版本 | 0.50.0（稳定） |
 | 上游 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | 许可 | Apache 2.0 |
-| 注意 | Alpha 阶段软件，API 可能变动 |
+| 通道 | 稳定版 | beta 版 | alpha 版 |
 
 ## 安装
 
@@ -23,8 +23,28 @@
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
 # 或通过 overlay
+
+> 需要 beta 或 alpha 版本？见下方 [版本通道](#版本通道)。
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
+```
+
+## 版本通道
+
+ruyi 提供三个版本通道，通过 overlay 切换：
+
+| 通道 | overlay | 用途 |
+|------|------|------|
+| 稳定版（默认）| 无需 overlay | 生产环境 |
+| beta 版 | `nixkits.overlays.ruyi-beta` | 尝鲜测试 |
+| alpha 版 | `nixkits.overlays.ruyi-alpha` | 前沿开发 |
+
+```nix
+# 切换到 beta 通道
+nixpkgs.overlays = [
+  inputs.nixkits.overlays.ruyi-beta
+  inputs.nixkits.overlays.ruyi-nixos-compat  # NixOS 兼容（可选）
+];
 ```
 
 ## 使用
