@@ -36,9 +36,12 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build packages
         run: |
-          for pkg in codewhale kitsfmt mcp-searxng ruyi obs-bilibili-stream opencode-telegram; do
-            nix build --print-build-logs ".#$pkg" --no-write-lock-file
-          done
+          nix build --print-build-logs --no-write-lock-file ".#codewhale"
+          nix build --print-build-logs --no-write-lock-file ".#kitsfmt"
+          nix build --print-build-logs --no-write-lock-file ".#mcp-searxng"
+          nix build --print-build-logs --no-write-lock-file ".#ruyi"
+          nix build --print-build-logs --no-write-lock-file ".#obs-bilibili-stream"
+          nix build --print-build-logs --no-write-lock-file ".#opencode-telegram"
 
   riscv64-cross:
     needs: check
@@ -58,7 +61,8 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Cross-compile for riscv64
         run: |
-          for pkg in codewhale kitsfmt mcp-searxng opencode-telegram; do
-            nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/\$pkg.nix { }"
-          done
-          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake 'github:NixOS/nixpkgs/nixos-unstable').legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/ruyi/ruyi.nix { }"
+          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/codewhale.nix { }"
+          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/kitsfmt.nix { }"
+          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/mcp-searxng.nix { }"
+          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/opencode-telegram.nix { }"
+          nix build --no-link --print-build-logs --impure --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/ruyi/ruyi.nix { }"
