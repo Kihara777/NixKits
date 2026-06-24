@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-25T05:28:12+09:00
+
+**摘要**：ruyi — 重构包目录结构（packages/ruyi/），beta/alpha 为 thin wrapper；新增 devShells
+
+| 提交 | 说明 |
+|------|------|
+| `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
+| `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
 ## 2026-06-25T05:13:34+09:00
 
 **摘要**：ruyi — 版本通道改为独立软件包（ruyi / ruyi-beta / ruyi-alpha），移除独立 overlay
