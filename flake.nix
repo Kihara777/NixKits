@@ -27,15 +27,9 @@
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
       obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
-      ruyi                 = pkgs.callPackage ./packages/ruyi.nix { };
-      ruyi-beta = pkgs.callPackage ./packages/ruyi.nix {
-        version = "0.50.0-beta.20260623";
-        hash = "sha256-6TSPifSgyo/jNGthz6uFZ/oBSl5P1Py16sQTYQ0yJfc=";
-      };
-      ruyi-alpha = pkgs.callPackage ./packages/ruyi.nix {
-        version = "0.51.0-alpha.20260616";
-        hash = "sha256-A7/Ca/H0NG+dGeQkGXal+b/q9s5KAkKI6s8BteeoKRg=";
-      };
+      ruyi                 = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
+      ruyi-beta            = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
+      ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
@@ -43,7 +37,7 @@
     '';
 
     devShells = let
-      ruyiDrv = pkgs.callPackage ./packages/ruyi.nix { };
+      ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       # Apply ruyi-nixos-compat overlay so devShell also gets NixOS compat
       ruyiOverlay = import ./overlays/ruyi-nixos-compat.nix;
       ruyiWithCompat = (ruyiOverlay (pkgs // { ruyi = ruyiDrv; }) (pkgs // { ruyi = ruyiDrv; })).ruyi;

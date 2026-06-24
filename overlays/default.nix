@@ -4,5 +4,5 @@ final: prev: {
   opencode-telegram    = final.callPackage ../packages/opencode-telegram.nix { };
   mcp-searxng          = final.callPackage ../packages/mcp-searxng.nix { };
   obs-bilibili-stream  = final.callPackage ../packages/obs-bilibili-stream.nix { };
-  ruyi                 = final.callPackage ../packages/ruyi.nix { };
+  ruyi                 = final.callPackage ../packages/ruyi/ruyi.nix { };
 }
