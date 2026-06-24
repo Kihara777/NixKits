@@ -4,44 +4,60 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20ruyi%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=riscv64&job=riscv64-cross)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | 偽中国語 | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | 偽中国語
 
-[RuyiSDK](https://ruyisdk.org) 包管理者。使用 RISC-V 開発環境道具鎖導入、仮想環境管理、機器配備、包倉庫操作。
+[RuyiSDK](https://ruyisdk.org)のパッケージマネージャー。RISC-V開発環境向けのツールチェーンインストール、仮想環境管理、デバイスプロビジョニング、パッケージリポジトリ操作に使用する。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.51.0-alpha.20260616 |
+| バージョン | 0.50.0（安定版） |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
-| 許諾 | Apache 2.0 |
-| 注意 | 段階軟体、API 変更可能性有 |
+| ライセンス | Apache 2.0 |
+| チャンネル | 安定版 | beta 版 | alpha 版 |
 
-## 導入
+## インストール
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
-# 上乗経由
+# またはoverlay経由
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
+```
+
+## バージョンチャンネル
+
+ruyi は 3 つの独立したパッケージを提供します：
+
+| パッケージ | バージョン | 用途 |
+|------|------|------|
+| `ruyi` | 0.50.0（安定版）| 本番環境 |
+| `ruyi-beta` | 0.50.0-beta.20260623 | プレビュー |
+| `ruyi-alpha` | 0.51.0-alpha.20260616 | 先行開発 |
+
+```nix
+environment.systemPackages = [
+  inputs.nixkits.packages.${pkgs.system}.ruyi-beta
+];
 ```
 
 ## 使用方法
 
 ```bash
 ruyi --help
-ruyi list --all          # 全利用可能包一覧表示
-ruyi install <pkg>       # 道具鎖導入
-ruyi venv --toolchain <t> # 仮想環境作成
-ruyi device provision    # 機器配備
+ruyi list --all          # 利用可能な全パッケージを一覧表示
+ruyi install <pkg>       # ツールチェーンをインストール
+ruyi venv --toolchain <t> # 仮想環境を作成
+ruyi device provision    # デバイスプロビジョニング
 ```
 
-> ruyi 必要網絡接続、包倉庫（`packages-index`）複製之為。初回 `ruyi list` 実行時自動取得。
+> ruyiはパッケージリポジトリ（`packages-index`）のクローンにネットワーク接続が必要です。初回の`ruyi list`実行時に自動的にダウンロードされます。
 
-## 部品
+## モジュール
 
-宣言的設定 ruyi 実行時動作：
+ruyiのランタイム動作を宣言的に設定：
 
 ```nix
 # flake.nix
@@ -58,9 +74,9 @@ nixkits.ruyi = {
 };
 ```
 
-部品自動生成 `/etc/xdg/ruyi/config.toml`、設定環境変数、体系活性化時自動更新包倉庫索引。
+モジュールは`/etc/xdg/ruyi/config.toml`を自動生成し、環境変数を設定し、システムアクティベーション時にパッケージリポジトリインデックスを自動更新する。
 
-支援宣言的仮想環境：
+宣言的仮想環境をサポート：
 
 ```nix
 nixkits.ruyi.venvs.riscv = {
@@ -70,35 +86,35 @@ nixkits.ruyi.venvs.riscv = {
 };
 ```
 
-## NixOS 互換性
+## NixOS互換性
 
-NixKits 包版包含上乗 `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）、透過的処理 NixOS 上実行時非互換性：
+NixKitsのパッケージバージョンにはoverlay`ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）が含まれており、NixOS上でのランタイム非互換性を透過的に処理する：
 
 **追加**
 ```nix
 nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立上乗
+  nixkits.overlays.ruyi-nixos-compat  # 独立したoverlay
 ];
 ```
 
 **機能**
-- **動的転送**：構築済 RISC-V 道具鎖二進期待 `/lib64/ld-linux-x86-64.so.2`、NixOS 不存在該。修正自動的転送実行、NixOS `ld.so` 介。
-- **GCC 工程修正**：`cc1`、`as`、`collect2` 等工程迂回 ruyi mux、修正 `patchelf` 修正 ELF 解釈器。
-- **Nix console_scripts 互換性**：`RUYI_ARGV0` 環境変数復元 `exec -a` 意味論、Nix 包装失。
+- **動的リンカーリダイレクト**：プリビルドのRISC-Vツールチェーンバイナリは`/lib64/ld-linux-x86-64.so.2`を期待するが、NixOSにはこのパスが存在しない。パッチはNixOSの`ld.so`を介して実行を自動的にリダイレクトする。
+- **GCCサブプロセス修正**：`cc1`、`as`、`collect2`などのサブプロセスがruyi muxをバイパスするため、パッチは`patchelf`でELFインタプリタを修正する。
+- **Nix console_scripts互換性**：`RUYI_ARGV0`環境変数がNixラッパーで失われた`exec -a`セマンティクスを復元する。
 
 **検証**
 ```bash
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> 此上乗 NixOS 限定有効。非 NixOS 環境修正論理完全短絡、不干渉他配布。使用 ruyi 取得実行 RISC-V 交叉編集道具鎖利用者必須。
+> このoverlayはNixOSでのみ有効。非NixOS環境ではパッチロジックが完全に短絡され、他のディストリビューションに干渉しない。ruyiを使用してRISC-Vクロスコンパイルツールチェーンをダウンロード・実行するユーザーに必須。
 
 ## 注意事項
 
-- 上流 [ISCAS](https://www.iscas.ac.cn) 維持 RISC-V 開発者道具
-- 二進 wrapProgram 経由注入実行時依存（curl、gnutar、git、patchelf）
-- 試験被覆：ruff lint、mypy 型確認、pytest 単位試験（320 項目）、統合試験（52 項目）——全通過
+- 上流は[ISCAS](https://www.iscas.ac.cn)がメンテナンスするRISC-V開発者ツール
+- バイナリにはwrapProgram経由でcurl、gnutar、git、patchelfなどのランタイム依存が注入されている
+- テストカバレッジ：ruff lint、mypy型チェック、pytestユニットテスト（320項目）、統合テスト（52項目）——すべて通過
 
-## 緩衝
+## キャッシュ
 
-`cachix use nixkits`（flake `nixConfig` 自動宣言済、flake input 使用時自動提示）。
+`cachix use nixkits`（flakeは`nixConfig`で自動宣言済み。flake input使用時に自動的にプロンプトが表示される）。
