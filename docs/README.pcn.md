@@ -25,7 +25,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
-| ruyi | RuyiSDK 包管理者（RISC-V 開発道具） | [docs/pcn/ruyi.md](pcn/ruyi.md) |
+| ruyi | RuyiSDK 包管理者（RISC-V 開発道具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 
 > ⚠️ comfyui-strix-halo 為模塊+補丁、非独立軟件包、不在二進制緩存中。
 
