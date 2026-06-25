@@ -1,5 +1,14 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T09:09:26+09:00
+
+**ｻﾏﾘｰ**: CI — ruyi riscv64-cross ｦ除外；overlays — default overlay ﾆ ruyi-beta/ruyi-alpha ｦ追加＋nixConfig ｦ flake ﾄｯﾌﾟレベルﾆ移行；docs — README ﾃｰﾌﾞﾙﾆ ruyi 3ﾁｬﾝﾀﾞﾙ ﾊﾞｰｼﾞｮﾝ表示
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
+| `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
+| `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
 ## 2026-06-23T04:04:32+09:00
 
 **ｻﾏﾘｰ**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现

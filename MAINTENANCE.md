@@ -1,5 +1,14 @@
 # 维护日志
 
+## 2026-06-25T09:09:26+09:00
+
+**摘要**：CI — 移除 ruyi riscv64-cross；overlays — default overlay 添加 ruyi-beta/ruyi-alpha + nixConfig 提升至 flake 顶层；docs — README 软件表展示 ruyi 三通道版本号
+
+| 提交 | 说明 |
+|------|------|
+| `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
+| `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
+| `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
 ## 2026-06-25T05:35:00+09:00
 
 **摘要**：docs — 全部 5 语言 README 添加 ruyi-beta / ruyi-alpha devShell 条目

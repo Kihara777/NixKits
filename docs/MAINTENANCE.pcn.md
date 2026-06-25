@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-25T09:09:26+09:00
+
+**Summary**: CI — ruyi を riscv64-cross 除外；overlays — default overlay に ruyi-beta/ruyi-alpha 追加＋nixConfig を flake 最上位層移行；docs — README 表に ruyi 3路版本表示
+
+| Commit | Description |
+|------|------|
+| `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
+| `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
+| `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
 ## 2026-06-23T04:04:32+09:00
 
 **Summary**：AGENTS.md — 硬符号除去、冗長監査備忘削除、緩衝章代理操作手引書換、利用者側記述削除、言語体系自動発見変更
