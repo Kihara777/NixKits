@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-26T08:00:00+09:00
+
+**摘要**: docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅
+
+| Commit | Description |
+|------|------|
+| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
+
+
 ## 2026-06-26T07:35:00+09:00
 
 **摘要**: docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）

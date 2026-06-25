@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-26T08:00:00+09:00
+
+**摘要**：docs(MAINTENANCE): pcn 补全 28 条历史缺失维护日志条目，覆盖 zh 基准全部 93 条
+
+| 提交 | 说明 |
+|------|------|
+| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
+
 ## 2026-06-26T07:35:00+09:00
 
 **摘要**：docs(MAINTENANCE): en/ja/katalish 补全 10 条历史缺失维护日志条目，三语言全部对齐 zh 基准（92/92）；pcn 部分补全（66/92）

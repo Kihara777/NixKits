@@ -1,5 +1,14 @@
 # メンテナンスログ
 
+## 2026-06-26T08:00:00+09:00
+
+**概要**: docs(MAINTENANCE): pcn 欠落していた28件の履歴エントリを補完、zh基準全93エントリを網羅
+
+| コミット | 説明 |
+|------|------|
+| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
+
+
 ## 2026-06-26T07:35:00+09:00
 
 **概要**: docs(MAINTENANCE): en/ja/katalish 欠落していた10件の履歴エントリを補完、3言語すべてzh基準（92/92）に一致；pcn 一部補完（66/92）
