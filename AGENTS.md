@@ -84,7 +84,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ### 技能
 
 - **技能目录结构**：`skills/<name>/SKILL.md` + 可选配套文件（`dictionary.md`、`templates.md`）。
-- **SKILL.md 目标行数**：~60-80 行。大型数据（词典、模板）拆分为独立文件。
+- **SKILL.md 保持聚焦**：仅包含 AI 执行所需的最小上下文。词典、模板、检查清单等独立数据拆为配套文件；纯执行流程不强制拆分，允许适当长度。
 - **自动发现契约**：`translate-*` 类技能通过 frontmatter 中的 `language_code`、`display_name`、`base_language` 被 `write-project-docs` 自动发现。
 
 ## 工作流
