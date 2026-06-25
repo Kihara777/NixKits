@@ -15,7 +15,7 @@ The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain insta
 | Version | 0.50.0 (stable) |
 | Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | License | Apache 2.0 |
-| Channel | stable | beta | alpha |
+| Channel | stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 |
 
 ## Installation
 

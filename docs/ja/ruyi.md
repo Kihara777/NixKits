@@ -15,7 +15,7 @@
 | バージョン | 0.50.0（安定版） |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | ライセンス | Apache 2.0 |
-| チャンネル | 安定版 | beta 版 | alpha 版 |
+| チャンネル | stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 |
 
 ## インストール
 
