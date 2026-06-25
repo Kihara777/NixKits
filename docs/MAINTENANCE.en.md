@@ -1,5 +1,22 @@
 # Maintenance Log
 
+## 2026-06-26T06:19:21+09:00
+
+**Summary**: audit fixes — remove stale scripts/ directory and dead .gitignore rule (translate_pcn.py); relax AGENTS.md SKILL.md constraint from hard line count to qualitative guidance
+
+| Commit | Description |
+|------|------|
+| `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
+| `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
+
+## 2026-06-26T07:18:56+09:00
+
+**Summary**: fix(skill): rewrite write-maintenance-log step 4 "multi-lang sync" from 5-line stub to executable flow (4a discover languages → 4b per-lang translate & write → 4c verify entry count); strengthen AGENTS.md step 4 with verification gate
+
+| Commit | Description |
+|------|------|
+| `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
+
 ## 2026-06-25T11:02:38+09:00
 
 **Summary**: ruyi — fix cross-compilation (postPatch uses python.pythonOnBuildForHost); CI — restore ruyi* to riscv64-cross; docs — restore precise riscv64 job filters

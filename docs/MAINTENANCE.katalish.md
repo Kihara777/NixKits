@@ -1,5 +1,22 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-26T06:19:21+09:00
+
+**ｻﾏﾘｰ**: audit fixes — remove stale scripts/ directory and dead .gitignore rule (translate_pcn.py); relax AGENTS.md SKILL.md constraint from hard line count to qualitative guidance
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
+| `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
+
+## 2026-06-26T07:18:56+09:00
+
+**ｻﾏﾘｰ**: fix(skill): ﾘﾗｲﾄ write-maintenance-log step 4 "multi-lang sync" ﾌﾛﾑ 5-line stub ﾄｩ executable flow (4a discover languages → 4b per-lang translate & write → 4c verify entry count); strengthen AGENTS.md step 4 with verification gate
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
+
 ## 2026-06-25T11:02:38+09:00
 
 **ｻﾏﾘｰ**: ruyi — ｸﾛｽｺﾝﾊﾟｲﾙ修正（postPatch ﾆ python.pythonOnBuildForHost 使用）；CI — ruyi* ｦ riscv64-cross ﾆ復帰；docs — riscv64 badge job filter 復元

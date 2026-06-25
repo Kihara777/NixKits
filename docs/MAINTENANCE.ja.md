@@ -1,5 +1,22 @@
 # メンテナンスログ
 
+## 2026-06-26T06:19:21+09:00
+
+**概要**: 監査修正 — 空の scripts/ ディレクトリと .gitignore の死んだルール（translate_pcn.py）を削除；AGENTS.md の SKILL.md 行数制約をハードリミットから定性的ガイダンスに緩和
+
+| コミット | 説明 |
+|------|------|
+| `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
+| `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
+
+## 2026-06-26T07:18:56+09:00
+
+**概要**: fix(skill): write-maintenance-log 第4ステップ「多言語同期」を5行のスタブから実行可能なフローに書き直し（4a 言語発見 → 4b 言語別翻訳書込 → 4c エントリ数一致検証）；AGENTS.md 第4ステップに検証チェックを強化
+
+| コミット | 説明 |
+|------|------|
+| `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
+
 ## 2026-06-25T11:02:38+09:00
 
 **概要**: ruyi — クロスコンパイル修正（postPatch に python.pythonOnBuildForHost 使用）；CI — ruyi* を riscv64-cross に復帰；docs — riscv64 バッジの正確な job filter を復元

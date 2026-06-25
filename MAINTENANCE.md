@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-26T07:18:56+09:00
+
+**摘要**：fix(skill): write-maintenance-log 第 4 步「多语同步」从 5 行空壳重写为可执行流程（4a 发现语言 → 4b 逐语言翻译写入 → 4c 验证条目数一致）；AGENTS.md 第 4 步加强验证检查
+
+| 提交 | 说明 |
+|------|------|
+| `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
+
 ## 2026-06-26T06:19:21+09:00
 
 **摘要**：审计修复 — 清理 scripts/ 空目录与 .gitignore 死规则（translate_pcn.py）；AGENTS.md SKILL.md 约束从硬性行数目标改为定性描述

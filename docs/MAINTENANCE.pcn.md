@@ -1,5 +1,22 @@
 # Maintenance Log
 
+## 2026-06-26T06:19:21+09:00
+
+**摘要**: 監査修正 — 空 scripts/ 目録削除 .gitignore 死規則（translate_pcn.py）削除；AGENTS.md SKILL.md 行数制約硬性数値定性案内緩和
+
+| Commit | Description |
+|------|------|
+| `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
+| `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
+
+## 2026-06-26T07:18:56+09:00
+
+**摘要**: fix(skill): write-maintenance-log 第4段階「多言語同期」雛形実行可能流書直（4a 言語発見 → 4b 言語別翻訳書込 → 4c 項目数一致検証）；AGENTS.md 第4段階検証確認強化
+
+| Commit | Description |
+|------|------|
+| `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
+
 ## 2026-06-25T11:02:38+09:00
 
 **Summary**: ruyi — 交叉編訳修正（postPatch 使用 python.pythonOnBuildForHost）；CI — ruyi* riscv64-cross 復帰；docs — riscv64 徽章正確 job filter 復元
