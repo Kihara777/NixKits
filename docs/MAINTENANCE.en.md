@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:24:43+09:00
+
+**Summary**: CI — add ruyi-beta / ruyi-alpha build steps to the build job; docs — include beta/alpha version numbers in ruyi Basic Info channel row
+
+| Commit | Description |
+|------|------|
+| `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
+| `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
 ## 2026-06-25T09:09:26+09:00
 
 **Summary**: CI — exclude ruyi from riscv64-cross; overlays — add ruyi-beta/ruyi-alpha to default overlay + lift nixConfig to flake top-level; docs — show ruyi 3-channel versions in README tables

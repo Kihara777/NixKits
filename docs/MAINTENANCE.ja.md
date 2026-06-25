@@ -1,5 +1,13 @@
 # メンテナンスログ
 
+## 2026-06-25T09:24:43+09:00
+
+**概要**: CI — build job に ruyi-beta / ruyi-alpha のビルドステップを追加；docs — ruyi 基本情報テーブルのチャンネル行に beta/alpha バージョン番号を追加
+
+| コミット | 説明 |
+|------|------|
+| `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
+| `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
 ## 2026-06-25T09:09:26+09:00
 
 **概要**: CI — ruyi を riscv64-cross から除外；overlays — default overlay に ruyi-beta/ruyi-alpha を追加＋nixConfig を flake トップレベルに移行；docs — README テーブルに ruyi 3チャンネルバージョンを表示

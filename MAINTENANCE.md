@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-25T09:24:43+09:00
+
+**摘要**：CI — build job 添加 ruyi-beta / ruyi-alpha 构建步骤；docs — ruyi 基本信息表格通道行加入 beta/alpha 版本号
+
+| 提交 | 说明 |
+|------|------|
+| `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
+| `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
 ## 2026-06-25T09:09:26+09:00
 
 **摘要**：CI — 移除 ruyi riscv64-cross；overlays — default overlay 添加 ruyi-beta/ruyi-alpha + nixConfig 提升至 flake 顶层；docs — README 软件表展示 ruyi 三通道版本号

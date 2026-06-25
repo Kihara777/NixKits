@@ -1,5 +1,13 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T09:24:43+09:00
+
+**ｻﾏﾘｰ**: CI — build job ﾆ ruyi-beta / ruyi-alpha ﾋﾞﾙﾄﾞ ｽﾃｯﾌﾟ追加；docs — ruyi 基本情報 ﾁｬﾝﾀﾞﾙ 行ﾆ beta/alpha ﾊﾞｰｼﾞｮﾝ追加
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
+| `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
 ## 2026-06-25T09:09:26+09:00
 
 **ｻﾏﾘｰ**: CI — ruyi riscv64-cross ｦ除外；overlays — default overlay ﾆ ruyi-beta/ruyi-alpha ｦ追加＋nixConfig ｦ flake ﾄｯﾌﾟレベルﾆ移行；docs — README ﾃｰﾌﾞﾙﾆ ruyi 3ﾁｬﾝﾀﾞﾙ ﾊﾞｰｼﾞｮﾝ表示

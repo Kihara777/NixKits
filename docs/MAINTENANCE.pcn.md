@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:24:43+09:00
+
+**Summary**: CI — build job に ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行に beta/alpha 版本番号追加
+
+| Commit | Description |
+|------|------|
+| `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
+| `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
 ## 2026-06-25T09:09:26+09:00
 
 **Summary**: CI — ruyi を riscv64-cross 除外；overlays — default overlay に ruyi-beta/ruyi-alpha 追加＋nixConfig を flake 最上位層移行；docs — README 表に ruyi 3路版本表示
