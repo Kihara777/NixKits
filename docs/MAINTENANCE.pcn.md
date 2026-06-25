@@ -492,6 +492,318 @@ NixKits 包更新変更記録。
 
 ---
 
+
+## 2026-05-15T16:59:28+09:00
+
+**摘要**: kitsfmt — rnix AST 基盤格式化 engine v0.3.0 書換；Cargo.lock 生成
+
+| Commit | Description |
+|------|------|
+| `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
+| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
+
+## 2026-05-16T19:07:54+09:00
+
+**摘要**: kitsfmt — match_ast! 宏構文誤修正、comments_before 関数簡略化、src 路修正
+
+| Commit | Description |
+|------|------|
+| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
+| `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
+
+## 2026-05-22T06:45:11+09:00
+
+**摘要**: llama-cpp-rocm — llama-cpp-ver flake 入力削除、nixpkgs 既定版使用
+
+| Commit | Description |
+|------|------|
+| `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly |
+
+## 2026-05-24T03:01:02+09:00
+
+**摘要**: mcp-searxng 文書 — SearXNG + lighttpd 逆代理完全 NixOS 構成
+
+| Commit | Description |
+|------|------|
+| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
+
+## 2026-05-26T05:30:58+09:00
+
+**摘要**: 文書 — README 節名改名（快速開始→追加、包→軟件、License→許可）
+
+| Commit | Description |
+|------|------|
+| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
+
+## 2026-05-29T13:16:30+09:00
+
+**摘要**: docs: codewhale 種別説明修正（事前構築済、非原始碼構築）
+
+| Commit | Description |
+|------|------|
+| `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
+
+## 2026-05-30T03:19:48+09:00
+
+**摘要**: other — 2件更新
+
+| Commit | Description |
+|------|------|
+| `358316c` | docs: add English and Japanese translations with I18n structure |
+| `bef3b4b` | docs: add English and Japanese README with language switcher |
+
+## 2026-05-30T03:42:14+09:00
+
+**摘要**: codewhale — stdenv 綴修正；llama-cpp-rocm 文書修正（内line連結削除、system.nix 完全 preset 使用）；opencode-telegram 初回設定流
+
+| Commit | Description |
+|------|------|
+| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
+| `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset from system.nix |
+| `15f956c` | docs(llama-cpp-rocm): replace Usage with upstream reference |
+| `494f512` | docs(llama-cpp-rocm): remove inline upstream link from description |
+| `7e53e25` | docs(llama-cpp-rocm): remove inline link from Usage section too |
+| `df4074f` | fix(codewhale): fix stdenv typo causing build failure |
+
+## 2026-05-31T03:42:18+09:00
+
+**摘要**: write-project-docs — 新技能（NixKits 風任意 project 多語言文書体系作成）
+
+| Commit | Description |
+|------|------|
+| `373da95` | feat(skills): add write-project-docs skill with trilingual docs |
+
+## 2026-06-02T03:42:25+09:00
+
+**摘要**: nixos-modern-cli 技能 — POSIX 道具指南 nix 二進路提示
+
+| Commit | Description |
+|------|------|
+| `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
+
+## 2026-06-02T08:49:47+09:00
+
+**摘要**: opencode-telegram — 8件更新
+
+| Commit | Description |
+|------|------|
+| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
+| `8fe3fae` | docs(opencode-telegram): simplify to flake module config only, remove manual systemd |
+| `ee0a904` | docs(opencode-telegram): rename NixOS module → flake module |
+| `a38e426` | docs(opencode-telegram): use accurate section name — service config, not module |
+| `dea4dc6` | docs(opencode-telegram): show full flake.nix context in service config |
+| `44975ed` | docs(opencode-telegram): flake module as section title, consistent across langs |
+| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
+| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
+
+## 2026-06-02T10:15:53+09:00
+
+**摘要**: other — 7件更新
+
+| Commit | Description |
+|------|------|
+| `3be4889` | docs: add recover-nixos-config skill with multi-language docs |
+| `fc5eca3` | docs: fix Skills section titles and generic agent descriptions |
+| `d2e071f` | docs: add quantization levels to local model names |
+| `22d206c` | docs: add UD- prefix to model quantization labels |
+| `f15db79` | docs: add MIT license file and link from all READMEs |
+| `218aeca` | docs: add local flake input example alongside remote |
+| `4f0f968` | docs: fix local flake input syntax to match actual usage |
+
+## 2026-06-04T13:07:30+09:00
+
+**摘要**: 技能体系 — SKILL.md 全面中国語化；三言語対称性確認規則
+
+| Commit | Description |
+|------|------|
+| `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
+| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
+
+## 2026-06-06T15:17:11+09:00
+
+**摘要**: 技能文書 — 源変更後文書同期規範；comfyui-strix-halo C 道具鎖説明；hash 計算注意事項汎化；基本情報規則多言語統一
+
+| Commit | Description |
+|------|------|
+| `7e22edd` | docs(skill): add skill doc template, sync rules, and staleness check |
+| `86fc7c2` | docs(skills): sync write-project-docs trilingual docs with SKILL.md |
+| `454a4e4` | fix(skill): generalize 基本情報 rule to all languages, not just Japanese |
+| `28ec492` | docs(skills): sync generalized 基本情報 rule to trilingual docs |
+| `c79ffff` | docs(skill): add SRI hash format and nix build gotchas to update skill |
+| `6dcbbfc` | docs(skills): sync hash gotchas to nixkits-check-updates trilingual docs |
+| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by module, not hardware |
+| `2ba85d3` | docs(comfyui-strix-halo): add C build toolchain + CC=gcc to changes list |
+| `f5941ae` | docs(skill): add anti-patterns for stale/unsynced doc bullets after source changes |
+| `b8c2399` | docs(skills): sync source-change doc sync rule to trilingual docs |
+
+## 2026-06-08T14:22:25+09:00
+
+**摘要**: rcc-fix — NixOS 模块（systemd 死鎖修正）
+
+| Commit | Description |
+|------|------|
+| `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |
+
+## 2026-06-08T15:12:39+09:00
+
+**摘要**: 文書再構 — 地域化文件 docs/ 目録移入；MAINTENANCE.md 初回合列規則追加、純表格形式、完全提交歴史逆填
+
+| Commit | Description |
+|------|------|
+| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
+| `e4a3813` | docs: omit build status and unchanged hashes from MAINTENANCE.md |
+| `4bf2d30` | docs(skill): add first-time package table format rule |
+| `f7bb6ce` | docs(skill): merge version columns for first-time packages |
+| `1a28625` | docs(MAINTENANCE): backfill full package history from repo creation |
+| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
+| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
+| `551e6fd` | docs(skills): sync localized-file-in-docs/ rule and path updates |
+
+## 2026-06-10T04:31:20+09:00
+
+**摘要**: opencode-telegram — KillMode process変更、TimeoutStopSec 追加防止 shutdown 掛起
+
+| Commit | Description |
+|------|------|
+| `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
+| `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
+
+## 2026-06-11T05:13:39+09:00
+
+**摘要**: other — 2件更新
+
+| Commit | Description |
+|------|------|
+| `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
+| `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
+
+## 2026-06-11T05:28:59+09:00
+
+**摘要**: 技能文書 — 維護記録格式規則系列（自動発見汎化、記述的標題、正確git commit時間印、禁止T00:00:00占位符）
+
+| Commit | Description |
+|------|------|
+| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
+| `7680adf` | docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder |
+| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
+| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
+| `487e18f` | docs(skills): sync descriptive title rule to trilingual docs |
+| `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
+| `033d3b8` | docs(skills): sync auto-discovery generalizations to trilingual docs |
+
+## 2026-06-12T10:51:31+09:00
+
+**摘要**: codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
+
+| Commit | Description |
+|------|------|
+| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
+| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
+| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.57 | 0.8.58 |
+| mcp-searxng | 1.3.2 | 1.3.4 |
+| 　 | cli hash | `...` → `...` |
+| 　 | tui hash | `...` → `...` |
+| 　 | source hash | `...` → `...` |
+| 　 | npmDepsHash | `...` → `...` |
+
+## 2026-06-12T18:17:52+09:00
+
+**摘要**: llama-cpp-rocm 模块 — modelsPreset 支持復旧（nixpkgs 既削除）、名前空間 nixkits 移行、三言語移行指南
+
+| Commit | Description |
+|------|------|
+| `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
+| `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
+
+## 2026-06-14T07:56:11+09:00
+
+**摘要**: codewhale 0.8.59 — 若干 TUI 描画問題修正；mcp-searxng 1.4.0 — HTTP 伝送 mode 新規
+
+| Commit | Description |
+|------|------|
+| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
+| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
+| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.58 | 0.8.59 |
+| mcp-searxng | 1.3.4 | 1.4.0 |
+| 　 | cli hash | `...` → `...` |
+| 　 | tui hash | `...` → `...` |
+| 　 | source hash | `...` → `...` |
+| 　 | npmDepsHash | `...` → `...` |
+
+## 2026-06-14T08:11:16+09:00
+
+**摘要**: comfyui-strix-halo 文書 — 線上統合 mode 説明 文件構造図
+
+| Commit | Description |
+|------|------|
+| `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
+
+## 2026-06-15T17:32:16+09:00
+
+**摘要**: codewhale 0.8.60 — 上流修正
+
+| Commit | Description |
+|------|------|
+| `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
+| `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.59 | 0.8.60 |
+| 　 | cli hash | `...` → `...` |
+| 　 | tui hash | `...` → `...` |
+
+## 2026-06-16T04:56:06+09:00
+
+**摘要**: opencode-telegram 0.21.2 — 上流修正及依存更新
+
+| Commit | Description |
+|------|------|
+| `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
+| `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.21.1 | 0.21.2 |
+| 　 | source hash | `...` → `...` |
+| 　 | npmDepsHash | `...` → `...` |
+
+## 2026-06-16T05:20:34+09:00
+
+**摘要**: nixos-modern-cli 技能 — Nix Store 路罠章節（gh auth setup-git 硬碼路失效診断汎用修正pattern）
+
+| Commit | Description |
+|------|------|
+| `bd42478` | docs(skill): add Nix Store path trap section to nixos-modern-cli |
+
+## 2026-06-16T06:03:24+09:00
+
+**摘要**: mcp-searxng 文書 — CodeWhale MCP 構成指南、常見罠警告（env 既定{}）、故障排查章節
+
+| Commit | Description |
+|------|------|
+| `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
+
+## 2026-06-17T06:46:13+09:00
+
+**摘要**: llama-cpp-rocm — builtins.fetchurl 代替 flake input 動的版取得試行（既撤回、方案不可用）
+
+| Commit | Description |
+|------|------|
+| `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
+| `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
+
+
 ## 2026-06-12T10:29:00+09:00
 
 **Summary**：codewhale 0.8.58 — 上流修復；mcp-searxng 1.3.4 — 上流修復
