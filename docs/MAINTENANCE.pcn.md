@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-25T11:02:38+09:00
+
+**Summary**: ruyi — 交叉編訳修正（postPatch 使用 python.pythonOnBuildForHost）；CI — ruyi* riscv64-cross 復帰；docs — riscv64 徽章正確 job filter 復元
+
+| Commit | Description |
+|------|------|
+| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
+| `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
+| `b1837c1` | docs(ruyi): restore precise riscv64 job filters — cross-compilation now fixed |
 ## 2026-06-25T10:12:02+09:00
 
 **Summary**: CI — riscv64-cross 恒久除去 ruyi*（Python postPatch 交叉編訳不可）；docs — riscv64 徽章 * 標記回落復帰 + 注記

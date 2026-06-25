@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-25T11:02:38+09:00
+
+**Summary**: ruyi — fix cross-compilation (postPatch uses python.pythonOnBuildForHost); CI — restore ruyi* to riscv64-cross; docs — restore precise riscv64 job filters
+
+| Commit | Description |
+|------|------|
+| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
+| `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
+| `b1837c1` | docs(ruyi): restore precise riscv64 job filters — cross-compilation now fixed |
 ## 2026-06-25T10:12:02+09:00
 
 **Summary**: CI — permanently remove ruyi* from riscv64-cross (Python postPatch cannot cross-compile); docs — revert riscv64 badges to fallback with * mark + note

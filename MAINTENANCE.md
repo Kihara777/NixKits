@@ -1,5 +1,14 @@
 # 维护日志
 
+## 2026-06-25T11:02:38+09:00
+
+**摘要**：ruyi — 修复交叉编译（postPatch 改用 python.pythonOnBuildForHost）；CI — ruyi 系列回归 riscv64-cross；docs — riscv64 badge 恢复精确 job filter
+
+| 提交 | 说明 |
+|------|------|
+| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
+| `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
+| `b1837c1` | docs(ruyi): restore precise riscv64 job filters — cross-compilation now fixed |
 ## 2026-06-25T10:12:02+09:00
 
 **摘要**：CI — riscv64-cross 永久移除 ruyi 系列（Python postPatch 交叉编译不可行）；docs — riscv64 badge 恢复 * 标记 + 注释说明

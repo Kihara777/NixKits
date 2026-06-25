@@ -1,5 +1,14 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T11:02:38+09:00
+
+**ｻﾏﾘｰ**: ruyi — ｸﾛｽｺﾝﾊﾟｲﾙ修正（postPatch ﾆ python.pythonOnBuildForHost 使用）；CI — ruyi* ｦ riscv64-cross ﾆ復帰；docs — riscv64 badge job filter 復元
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
+| `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
+| `b1837c1` | docs(ruyi): restore precise riscv64 job filters — cross-compilation now fixed |
 ## 2026-06-25T10:12:02+09:00
 
 **ｻﾏﾘｰ**: CI — riscv64-cross ｶﾗ ruyi* ｦ恒久的ﾆ除去（Python postPatch ｸﾛｽｺﾝﾊﾟｲﾙ不可）；docs — riscv64 badge * 付 fallback ﾆ戻ｽ + note
