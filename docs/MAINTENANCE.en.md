@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T10:12:02+09:00
+
+**Summary**: CI — permanently remove ruyi* from riscv64-cross (Python postPatch cannot cross-compile); docs — revert riscv64 badges to fallback with * mark + note
+
+| Commit | Description |
+|------|------|
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+| `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 ## 2026-06-25T10:04:30+09:00
 
 **Summary**: CI — fix access-tokens overwrite causing GitHub API rate-limit (merge into single line); cap riscv64-cross concurrency at 4

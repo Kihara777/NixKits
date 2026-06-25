@@ -1,5 +1,13 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T10:12:02+09:00
+
+**ｻﾏﾘｰ**: CI — riscv64-cross ｶﾗ ruyi* ｦ恒久的ﾆ除去（Python postPatch ｸﾛｽｺﾝﾊﾟｲﾙ不可）；docs — riscv64 badge * 付 fallback ﾆ戻ｽ + note
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+| `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 ## 2026-06-25T10:04:30+09:00
 
 **ｻﾏﾘｰ**: CI — access-tokens 上書ｷ ﾆﾖﾙ GitHub API rate-limit 修正（1行統合）；riscv64-cross 並列上限ｦ 4 ﾆ設定

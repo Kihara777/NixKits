@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-25T10:12:02+09:00
+
+**摘要**：CI — riscv64-cross 永久移除 ruyi 系列（Python postPatch 交叉编译不可行）；docs — riscv64 badge 恢复 * 标记 + 注释说明
+
+| 提交 | 说明 |
+|------|------|
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+| `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 ## 2026-06-25T10:04:30+09:00
 
 **摘要**：CI — 修复 access-tokens 被覆盖导致 GitHub API rate limit 超限（合并双行为一行），riscv64-cross 并发上限 4

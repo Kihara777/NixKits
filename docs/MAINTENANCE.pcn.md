@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T10:12:02+09:00
+
+**Summary**: CI — riscv64-cross 恒久除去 ruyi*（Python postPatch 交叉編訳不可）；docs — riscv64 徽章 * 標記回落復帰 + 注記
+
+| Commit | Description |
+|------|------|
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+| `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 ## 2026-06-25T10:04:30+09:00
 
 **Summary**: CI — access-tokens 覆写 修正、GitHub API 速率限界超過解消（一行統合）；riscv64-cross 並列上限 4 設定

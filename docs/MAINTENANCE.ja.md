@@ -1,5 +1,13 @@
 # メンテナンスログ
 
+## 2026-06-25T10:12:02+09:00
+
+**概要**: CI — riscv64-cross から ruyi* を恒久的に除去（Python postPatch のクロスコンパイル不可）；docs — riscv64 バッジを * マーク付きフォールバックに戻し + 注記
+
+| コミット | 説明 |
+|------|------|
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+| `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 ## 2026-06-25T10:04:30+09:00
 
 **概要**: CI — access-tokens の上書きによる GitHub API レート制限超過を修正（1行に統合）；riscv64-cross の並列上限を 4 に設定
