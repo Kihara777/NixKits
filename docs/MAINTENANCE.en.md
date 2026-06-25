@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:44:44+09:00
+
+**Summary**: CI — add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with path mapping; docs — simplify badge labels + precise riscv64 job filters
+
+| Commit | Description |
+|------|------|
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+| `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 ## 2026-06-25T09:29:43+09:00
 
 **Summary**: CI — split build / riscv64-cross into per-package matrix for independent badges; docs — expand ruyi badges to 9 (3 versions × 3 archs)

@@ -1,5 +1,13 @@
 # メンテナンスログ
 
+## 2026-06-25T09:44:44+09:00
+
+**概要**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha を復帰（パスマッピング）；docs — バッジラベル簡略化 + riscv64 job 精密フィルター
+
+| コミット | 説明 |
+|------|------|
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+| `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 ## 2026-06-25T09:29:43+09:00
 
 **概要**: CI — build / riscv64-cross をパッケージ単位の matrix に分割、独立バッジ対応；docs — ruyi バッジを 9 枚（3バージョン×3アーキテクチャ）に拡張

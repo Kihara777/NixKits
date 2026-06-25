@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-25T09:44:44+09:00
+
+**摘要**：CI — riscv64-cross 加回 ruyi/ruyi-beta/ruyi-alpha（路径映射）；docs — badge 标签简化（- 取代 --）+ riscv64 job 精确过滤
+
+| 提交 | 说明 |
+|------|------|
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+| `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 ## 2026-06-25T09:29:43+09:00
 
 **摘要**：CI — build / riscv64-cross job 按包拆分 matrix，支持独立 per-package badge；docs — ruyi 文档 badge 扩展为 3版本×3架构 = 9枚

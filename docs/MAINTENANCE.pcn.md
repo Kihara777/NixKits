@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:44:44+09:00
+
+**Summary**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
+
+| Commit | Description |
+|------|------|
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+| `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 ## 2026-06-25T09:29:43+09:00
 
 **Summary**: CI — build / riscv64-cross を包別 matrix 分割、独立徽章対応；docs — ruyi 徽章を 9 枚（3版本×3架構）拡張

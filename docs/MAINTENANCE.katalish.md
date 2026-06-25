@@ -1,5 +1,13 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T09:44:44+09:00
+
+**ｻﾏﾘｰ**: CI — riscv64-cross ﾆ ruyi/ruyi-beta/ruyi-alpha 復帰（path mapping）；docs — badge label 簡略化 + riscv64 job 精密 filter
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+| `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 ## 2026-06-25T09:29:43+09:00
 
 **ｻﾏﾘｰ**: CI — build / riscv64-cross ｦ per-package matrix ﾆ分割、独立 badge 対応；docs — ruyi badge ｦ9枚（3ﾊﾞｰｼﾞｮﾝ×3ｱｰｷﾃｸﾁｬ）ﾆ拡張
