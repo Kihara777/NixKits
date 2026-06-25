@@ -2,15 +2,13 @@
 
 [![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi%20x86_64&job=build%20(ubuntu-latest,%20ruyi))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi%20aarch64&job=build%20(ubuntu-24.04-arm,%20ruyi))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi riscv64*](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi%20riscv64%2A)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi%20riscv64&job=riscv64-cross%20(ruyi))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-beta%20x86_64&job=build%20(ubuntu-latest,%20ruyi-beta))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-beta%20aarch64&job=build%20(ubuntu-24.04-arm,%20ruyi-beta))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta riscv64*](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-beta%20riscv64%2A)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-beta%20riscv64&job=riscv64-cross%20(ruyi-beta))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-alpha%20x86_64&job=build%20(ubuntu-latest,%20ruyi-alpha))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-alpha%20aarch64&job=build%20(ubuntu-24.04-arm,%20ruyi-alpha))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-alpha riscv64*](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-alpha%20riscv64%2A)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-
-> \* ruyi 无法交叉编译（Python postPatch 需执行目标平台二进制 + C 扩展依赖），NixKits CI 不提供 riscv64 缓存包。riscv64 用户请在原生机器上 `nix build` 自行构建。badge 显示 workflow 全局状态。
+[![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=ruyi-alpha%20riscv64&job=riscv64-cross%20(ruyi-alpha))](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 中文 | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
 
