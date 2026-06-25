@@ -54,6 +54,9 @@ jobs:
           - kitsfmt
           - mcp-searxng
           - opencode-telegram
+          - ruyi
+          - ruyi-beta
+          - ruyi-alpha
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -69,5 +72,11 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Cross-compile ${{ matrix.package }}
         run: |
+          case "${{ matrix.package }}" in
+            ruyi)       PKG=./packages/ruyi/ruyi.nix ;;
+            ruyi-beta)  PKG=./packages/ruyi/ruyi-beta.nix ;;
+            ruyi-alpha) PKG=./packages/ruyi/ruyi-alpha.nix ;;
+            *)          PKG=./packages/${{ matrix.package }}.nix ;;
+          esac
           nix build --no-link --print-build-logs --impure \
-            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ./packages/${{ matrix.package }}.nix { }"
+            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG { }"
