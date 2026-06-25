@@ -192,14 +192,51 @@ git log --oneline --since="<时间范围>"
 
 ### 第 4 步：多语同步
 
-对于追加语言翻译（如片假名英语、伪中国语），按 `translate-*` 命名约定自动发现语言扩展技能——扫描 `skills/translate-*/` 目录，读取各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段完成注册。
+**必须执行，不可跳过。** MAINTENANCE.md（zh 基准）写入后，立即同步到全部已注册语言版本。
+
+#### 4a. 发现已注册语言
 
 ```bash
-# 更新中文 MAINTENANCE.md 后，同步 en / ja / katalish / pcn 版本
-# 翻译规则：仅翻译标题行、表头、摘要前缀；包名和版本号保持原文
+# 基准语言 + 基础扩展
+BASE_LANGS="zh en ja"
+
+# 自动发现 translate-* 扩展语言（katalish、pcn 等）
+for skill in skills/translate-*/SKILL.md; do
+  lang=$(sed -n '/^language_code:/s/.*: *//p' "$skill")
+  EXTRA_LANGS="$EXTRA_LANGS $lang"
+done
 ```
 
-使用以下**作为代码的文档**映射表：
+#### 4b. 逐语言翻译并写入
+
+对每个非 zh 语言，以 zh 基准 MAINTENANCE.md 为蓝本：
+
+1. **复制结构**：保留所有 `## <timestamp>` 条目、提交表、软件版本表的骨架
+2. **替换固定标记**：按映射表替换标题（`# 维护日志`）、摘要前缀（`**摘要**`）、表头
+3. **翻译摘要正文**：`**摘要**` / `**Summary**` 后的自然语言正文必须翻译为目标语言
+   - en → AI 直译
+   - ja → AI 直译
+   - katalish → 按 `skills/translate-katalish/SKILL.md` 规则机械替换
+   - pcn → 按 `skills/translate-pseudocn/SKILL.md` 规则假名剥离 + 语序保持
+4. **保持原文**：commit SHA、包名、版本号、hash 值、命令、路径**不翻译**
+5. **写入**对应 `docs/MAINTENANCE.<lang>.md`
+
+#### 4c. 验证同步完整性
+
+```bash
+# 各语言版本条目数必须一致
+zh_count=$(grep -c '^## 20' MAINTENANCE.md)
+for f in docs/MAINTENANCE.*.md; do
+  count=$(grep -c '^## 20' "$f")
+  if [ "$count" -ne "$zh_count" ]; then
+    echo "MISMATCH: $f has $count entries, expected $zh_count"
+  fi
+done
+```
+
+条目数不一致时**必须修复后再进入第 5 步提交**。
+
+#### 多语映射表
 
 | 代码 | zh | en | ja | katalish | pcn |
 |------|----|----|-----|---------|-----|
@@ -208,8 +245,6 @@ git log --oneline --since="<时间范围>"
 | `SUMMARY` | `**摘要**` | `**Summary**` | `**概要**` | `**ｻﾏﾘｰ**` | `**摘要**` |
 | `COMMIT_HDR` | `\| 提交 \| 说明 \|` | `\| Commit \| Description \|` | `\| コミット \| 説明 \|` | `\| ｺﾐｯﾄ \| ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ \|` | `\| 提交 \| 説明 \|` |
 | `SW_TABLE_HDR` | `\| 软件名 \| 旧版本 \| 新版本 \|` | `\| Package \| Old \| New \|` | `\| パッケージ \| 旧 \| 新 \|` | `\| ﾊﾟｯｹｰｼﾞ \| ｵｰﾙﾄﾞ \| ﾆｭｰ \|` | `\| 軟件名 \| 舊版本 \| 新版本 \|` |
-
-> **规则**：所有 `translate-*` 技能的 SKILL.md 中定义语言代码、语言名称和转换规则。维护日志撰写时按需调用对应技能生成各语言版本。
 
 ### 第 5 步：提交
 

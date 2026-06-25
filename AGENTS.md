@@ -102,7 +102,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 1. 获取本次推送的所有新 commit SHA：`git log --format='%h' origin/main..HEAD`
 2. 逐一检查 `MAINTENANCE.md` 中是否已存在（`grep -c $sha MAINTENANCE.md`）
 3. 若缺失，按 `write-maintenance-log` 技能补充条目
-4. 同步到全部已注册语言版本
+4. 同步到全部已注册语言版本：按 `write-maintenance-log` 技能第 4 步完整执行（发现语言 → 逐语言翻译 → 写入 → 验证 `grep -c '^## 20' MAINTENANCE.md docs/MAINTENANCE.*.md` 条目数一致）
 
 > 以下类型变更**必须记录**：软件版本更新、错误修复、技能新增/重构、CI/CD 配置变更、文档架构调整。
 
