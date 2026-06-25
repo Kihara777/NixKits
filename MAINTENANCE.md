@@ -1,5 +1,14 @@
 # 维护日志
 
+## 2026-06-26T06:19:21+09:00
+
+**摘要**：审计修复 — 清理 scripts/ 空目录与 .gitignore 死规则（translate_pcn.py）；AGENTS.md SKILL.md 约束从硬性行数目标改为定性描述
+
+| 提交 | 说明 |
+|------|------|
+| `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
+| `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
+
 ## 2026-06-25T11:02:38+09:00
 
 **摘要**：ruyi — 修复交叉编译（postPatch 改用 python.pythonOnBuildForHost）；CI — ruyi 系列回归 riscv64-cross；docs — riscv64 badge 恢复精确 job filter
