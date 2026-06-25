@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:29:43+09:00
+
+**Summary**: CI — split build / riscv64-cross into per-package matrix for independent badges; docs — expand ruyi badges to 9 (3 versions × 3 archs)
+
+| Commit | Description |
+|------|------|
+| `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
+| `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
 ## 2026-06-25T09:24:43+09:00
 
 **Summary**: CI — add ruyi-beta / ruyi-alpha build steps to the build job; docs — include beta/alpha version numbers in ruyi Basic Info channel row

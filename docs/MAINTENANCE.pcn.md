@@ -1,5 +1,13 @@
 # Maintenance Log
 
+## 2026-06-25T09:29:43+09:00
+
+**Summary**: CI — build / riscv64-cross を包別 matrix 分割、独立徽章対応；docs — ruyi 徽章を 9 枚（3版本×3架構）拡張
+
+| Commit | Description |
+|------|------|
+| `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
+| `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
 ## 2026-06-25T09:24:43+09:00
 
 **Summary**: CI — build job に ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行に beta/alpha 版本番号追加

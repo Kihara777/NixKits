@@ -1,5 +1,13 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T09:29:43+09:00
+
+**ｻﾏﾘｰ**: CI — build / riscv64-cross ｦ per-package matrix ﾆ分割、独立 badge 対応；docs — ruyi badge ｦ9枚（3ﾊﾞｰｼﾞｮﾝ×3ｱｰｷﾃｸﾁｬ）ﾆ拡張
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
+| `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
 ## 2026-06-25T09:24:43+09:00
 
 **ｻﾏﾘｰ**: CI — build job ﾆ ruyi-beta / ruyi-alpha ﾋﾞﾙﾄﾞ ｽﾃｯﾌﾟ追加；docs — ruyi 基本情報 ﾁｬﾝﾀﾞﾙ 行ﾆ beta/alpha ﾊﾞｰｼﾞｮﾝ追加

@@ -1,5 +1,13 @@
 # メンテナンスログ
 
+## 2026-06-25T09:29:43+09:00
+
+**概要**: CI — build / riscv64-cross をパッケージ単位の matrix に分割、独立バッジ対応；docs — ruyi バッジを 9 枚（3バージョン×3アーキテクチャ）に拡張
+
+| コミット | 説明 |
+|------|------|
+| `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
+| `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
 ## 2026-06-25T09:24:43+09:00
 
 **概要**: CI — build job に ruyi-beta / ruyi-alpha のビルドステップを追加；docs — ruyi 基本情報テーブルのチャンネル行に beta/alpha バージョン番号を追加

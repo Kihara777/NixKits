@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-25T09:29:43+09:00
+
+**摘要**：CI — build / riscv64-cross job 按包拆分 matrix，支持独立 per-package badge；docs — ruyi 文档 badge 扩展为 3版本×3架构 = 9枚
+
+| 提交 | 说明 |
+|------|------|
+| `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
+| `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
 ## 2026-06-25T09:24:43+09:00
 
 **摘要**：CI — build job 添加 ruyi-beta / ruyi-alpha 构建步骤；docs — ruyi 基本信息表格通道行加入 beta/alpha 版本号
