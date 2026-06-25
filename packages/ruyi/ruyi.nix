@@ -116,7 +116,7 @@ content = content.replace(marker, marker + insert)
 with open('ruyi/mux/venv/maker.py', 'w') as f:
     f.write(content)
 PYEOF
-    ${python}/bin/python _inject_build_tools.py
+    ${python.pythonOnBuildForHost}/bin/python _inject_build_tools.py
     rm _inject_build_tools.py
     fi
   '';
