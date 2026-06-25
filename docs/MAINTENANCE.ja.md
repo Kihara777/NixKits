@@ -1,5 +1,14 @@
 # メンテナンスログ
 
+## 2026-06-26T07:35:00+09:00
+
+**概要**: docs(MAINTENANCE): en/ja/katalish 欠落していた10件の履歴エントリを補完、3言語すべてzh基準（92/92）に一致；pcn 一部補完（66/92）
+
+| コミット | 説明 |
+|------|------|
+| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
+
+
 ## 2026-06-26T06:19:21+09:00
 
 **概要**: 監査修正 — 空の scripts/ ディレクトリと .gitignore の死んだルール（translate_pcn.py）を削除；AGENTS.md の SKILL.md 行数制約をハードリミットから定性的ガイダンスに緩和
@@ -1114,4 +1123,3 @@ NixKits package update changelog.
 ## 2026-05-29T05:57:55+09:00
 
 **Summary**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
-

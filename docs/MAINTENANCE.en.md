@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-26T07:35:00+09:00
+
+**Summary**: docs(MAINTENANCE): backfill 10 missing historical entries to en/ja/katalish, all three now aligned with zh baseline (92/92); pcn partially backfilled (66/92)
+
+| Commit | Description |
+|------|------|
+| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
+
+
 ## 2026-06-26T06:19:21+09:00
 
 **Summary**: audit fixes — remove stale scripts/ directory and dead .gitignore rule (translate_pcn.py); relax AGENTS.md SKILL.md constraint from hard line count to qualitative guidance
@@ -1114,4 +1123,3 @@ NixKits package update changelog.
 ## 2026-05-29T05:57:55+09:00
 
 **Summary**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
-

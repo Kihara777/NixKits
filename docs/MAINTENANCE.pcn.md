@@ -1,5 +1,14 @@
 # Maintenance Log
 
+## 2026-06-26T07:35:00+09:00
+
+**摘要**: docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）
+
+| Commit | Description |
+|------|------|
+| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
+
+
 ## 2026-06-26T06:19:21+09:00
 
 **摘要**: 監査修正 — 空 scripts/ 目録削除 .gitignore 死規則（translate_pcn.py）削除；AGENTS.md SKILL.md 行数制約硬性数値定性案内緩和

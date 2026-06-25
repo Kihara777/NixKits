@@ -1,5 +1,13 @@
 # 维护日志
 
+## 2026-06-26T07:35:00+09:00
+
+**摘要**：docs(MAINTENANCE): en/ja/katalish 补全 10 条历史缺失维护日志条目，三语言全部对齐 zh 基准（92/92）；pcn 部分补全（66/92）
+
+| 提交 | 说明 |
+|------|------|
+| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
+
 ## 2026-06-26T07:18:56+09:00
 
 **摘要**：fix(skill): write-maintenance-log 第 4 步「多语同步」从 5 行空壳重写为可执行流程（4a 发现语言 → 4b 逐语言翻译写入 → 4c 验证条目数一致）；AGENTS.md 第 4 步加强验证检查
