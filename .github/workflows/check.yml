@@ -10,8 +10,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
         with:
           extra-conf: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            access-tokens = api.github.com=${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Check
         run: nix flake check --no-write-lock-file
 
@@ -37,8 +36,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
         with:
           extra-conf: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            access-tokens = api.github.com=${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v17
         with:
           name: nixkits
@@ -49,6 +47,7 @@ jobs:
   riscv64-cross:
     needs: check
     strategy:
+      max-parallel: 4
       matrix:
         package:
           - codewhale
@@ -66,8 +65,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
         with:
           extra-conf: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            access-tokens = api.github.com=${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v17
         with:
           name: nixkits
