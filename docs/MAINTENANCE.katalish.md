@@ -1,5 +1,12 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-25T10:04:30+09:00
+
+**ｻﾏﾘｰ**: CI — access-tokens 上書ｷ ﾆﾖﾙ GitHub API rate-limit 修正（1行統合）；riscv64-cross 並列上限ｦ 4 ﾆ設定
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
 ## 2026-06-25T09:44:44+09:00
 
 **ｻﾏﾘｰ**: CI — riscv64-cross ﾆ ruyi/ruyi-beta/ruyi-alpha 復帰（path mapping）；docs — badge label 簡略化 + riscv64 job 精密 filter

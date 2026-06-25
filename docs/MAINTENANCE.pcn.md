@@ -1,5 +1,12 @@
 # Maintenance Log
 
+## 2026-06-25T10:04:30+09:00
+
+**Summary**: CI — access-tokens 覆写 修正、GitHub API 速率限界超過解消（一行統合）；riscv64-cross 並列上限 4 設定
+
+| Commit | Description |
+|------|------|
+| `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
 ## 2026-06-25T09:44:44+09:00
 
 **Summary**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾

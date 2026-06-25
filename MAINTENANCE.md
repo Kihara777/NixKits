@@ -1,5 +1,12 @@
 # 维护日志
 
+## 2026-06-25T10:04:30+09:00
+
+**摘要**：CI — 修复 access-tokens 被覆盖导致 GitHub API rate limit 超限（合并双行为一行），riscv64-cross 并发上限 4
+
+| 提交 | 说明 |
+|------|------|
+| `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
 ## 2026-06-25T09:44:44+09:00
 
 **摘要**：CI — riscv64-cross 加回 ruyi/ruyi-beta/ruyi-alpha（路径映射）；docs — badge 标签简化（- 取代 --）+ riscv64 job 精确过滤

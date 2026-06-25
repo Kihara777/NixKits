@@ -1,5 +1,12 @@
 # Maintenance Log
 
+## 2026-06-25T10:04:30+09:00
+
+**Summary**: CI — fix access-tokens overwrite causing GitHub API rate-limit (merge into single line); cap riscv64-cross concurrency at 4
+
+| Commit | Description |
+|------|------|
+| `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
 ## 2026-06-25T09:44:44+09:00
 
 **Summary**: CI — add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with path mapping; docs — simplify badge labels + precise riscv64 job filters
