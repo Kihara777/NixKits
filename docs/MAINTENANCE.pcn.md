@@ -74,6 +74,109 @@
 | `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
 | `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
 | `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
+
+
+## 2026-06-25T05:35:00+09:00
+
+**摘要**: docs — 全5言語README ruyi-beta / ruyi-alpha devShell 項目追加
+
+| Commit | Description |
+|------|------|
+| `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
+
+## 2026-06-25T05:28:12+09:00
+
+**摘要**: ruyi — 包装目録構造再編（packages/ruyi/）、beta/alpha thin wrapper化；devShells 追加
+
+| Commit | Description |
+|------|------|
+| `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
+| `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
+
+## 2026-06-25T05:13:34+09:00
+
+**摘要**: ruyi — 版通道独立包装化（ruyi / ruyi-beta / ruyi-alpha）、独立overlay削除
+
+| Commit | Description |
+|------|------|
+| `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
+
+## 2026-06-25T04:58:36+09:00
+
+**摘要**: ruyi — 3通道版体系（stable/beta/alpha）、基本包装0.50.0安定版切替、beta/alpha overlay上書
+
+| Commit | Description |
+|------|------|
+| `a9f8baa` | feat(pkgs): ruyi 3-channel (stable/beta/alpha) via overlays |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| ruyi | 0.51.0-alpha.20260616 | 0.50.0（安定版） |
+| 　 | 新規 ruyi-beta overlay | 0.50.0-beta.20260623 |
+| 　 | 新規 ruyi-alpha overlay | 0.51.0-alpha.20260616 |
+
+## 2026-06-24T03:19:30+09:00
+
+**摘要**: workflow — 維護記録更新規則必須化（AGENTS.md + write-maintenance-log 技能）
+
+| Commit | Description |
+|------|------|
+| `2e719df` | fix: make maintenance log update mandatory after every push |
+
+## 2026-06-24T03:15:37+09:00
+
+**摘要**: docs — 古手動riscv64構築手順削除、CI 3架構網羅済
+
+| Commit | Description |
+|------|------|
+| `698400a` | docs: remove stale manual riscv64 build instructions — CI now covers all 3 architectures |
+
+## 2026-06-24T03:06:20+09:00
+
+**摘要**: codewhale 0.8.64 — 上流更新
+
+| Commit | Description |
+|------|------|
+| `0bde292` | chore(pkgs): bump codewhale 0.8.64 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.63 | 0.8.64 |
+| 　 | x64 cli hash | `...` → `...` |
+| 　 | arm64 cli hash | `...` → `...` |
+| 　 | riscv64 cli hash | `...` → `...` |
+| 　 | x64 tui hash | `...` → `...` |
+| 　 | arm64 tui hash | `...` → `...` |
+| 　 | riscv64 tui hash | `...` → `...` |
+
+## 2026-06-24T02:30:21+09:00
+
+**摘要**: CI — riscv64交叉編訳管追加、3架構CI全量網羅（x86_64 / aarch64 / riscv64）；包装毎riscv64徽章追加
+
+| Commit | Description |
+|------|------|
+| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
+| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
+| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
+| `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
+
+## 2026-06-23T05:20:00+09:00
+
+**摘要**: translate-pseudocn — Web調査基辞書拡充（7→46項目）、SVO語順変更、全pcn文書再生成
+
+| Commit | Description |
+|------|------|
+| `4fbf387` | feat(pcn): expand dictionary 7→46 entries, add IT terminology from research |
+| `ec38b7e` | feat(pcn): convert to SVO word order, expand dictionary, regenerate all 22 docs |
+
+## 2026-06-23T04:19:16+09:00
+
+**摘要**: translate-pseudocn技能再構築 — 疑似中国語「日本語仮名剥視覚結果」再定義、中国語変換廃止。日本語漢字保持（簡体字化）、SOV語順維持、辞書40→7項目縮小（片仮名→日本語漢字）。全22件pcn文書再生成
+
+| Commit | Description |
+|------|------|
+| `be0780b` | refactor(pcn): redesign pseudo-Chinese skill — Japanese-native kanji, SOV order, no Chinese chars |
+
 ## 2026-06-23T04:04:32+09:00
 
 **Summary**：AGENTS.md — 硬符号除去、冗長監査備忘削除、緩衝章代理操作手引書換、利用者側記述削除、言語体系自動発見変更

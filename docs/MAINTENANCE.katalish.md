@@ -74,6 +74,108 @@
 | `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
 | `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
 | `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
+
+## 2026-06-25T05:35:00+09:00
+
+**ｻﾏﾘｰ**: docs — add ruyi-beta / ruyi-alpha devShell entries to all 5-language READMEs
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
+
+## 2026-06-25T05:28:12+09:00
+
+**ｻﾏﾘｰ**: ruyi — restructure package directory (packages/ruyi/), beta/alpha as thin wrappers; add devShells
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
+| `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
+
+## 2026-06-25T05:13:34+09:00
+
+**ｻﾏﾘｰ**: ruyi — convert version channels to independent packages (ruyi / ruyi-beta / ruyi-alpha), remove standalone overlays
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
+
+## 2026-06-25T04:58:36+09:00
+
+**ｻﾏﾘｰ**: ruyi — three-channel version system (stable/beta/alpha), base package set to 0.50.0 stable, beta/alpha via overlay overrides
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `a9f8baa` | feat(pkgs): ruyi 3-channel (stable/beta/alpha) via overlays |
+
+| ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
+|--------|--------|--------|
+| ruyi | 0.51.0-alpha.20260616 | 0.50.0 (stable) |
+| 　 | new ruyi-beta overlay | 0.50.0-beta.20260623 |
+| 　 | new ruyi-alpha overlay | 0.51.0-alpha.20260616 |
+
+## 2026-06-24T03:19:30+09:00
+
+**ｻﾏﾘｰ**: workflow — make maintenance log update rule mandatory (AGENTS.md + write-maintenance-log skill)
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `2e719df` | fix: make maintenance log update mandatory after every push |
+
+## 2026-06-24T03:15:37+09:00
+
+**ｻﾏﾘｰ**: docs — remove stale manual riscv64 build instructions, CI now covers all 3 architectures
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `698400a` | docs: remove stale manual riscv64 build instructions — CI now covers all 3 architectures |
+
+## 2026-06-24T03:06:20+09:00
+
+**ｻﾏﾘｰ**: codewhale 0.8.64 — upstream update
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `0bde292` | chore(pkgs): bump codewhale 0.8.64 |
+
+| ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
+|--------|--------|--------|
+| codewhale | 0.8.63 | 0.8.64 |
+| 　 | x64 cli hash | `...` → `...` |
+| 　 | arm64 cli hash | `...` → `...` |
+| 　 | riscv64 cli hash | `...` → `...` |
+| 　 | x64 tui hash | `...` → `...` |
+| 　 | arm64 tui hash | `...` → `...` |
+| 　 | riscv64 tui hash | `...` → `...` |
+
+## 2026-06-24T02:30:21+09:00
+
+**ｻﾏﾘｰ**: CI — add riscv64 cross-compilation pipeline, full 3-arch CI coverage (x86_64 / aarch64 / riscv64); per-package riscv64 badges
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
+| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
+| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
+| `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
+
+## 2026-06-23T05:20:00+09:00
+
+**ｻﾏﾘｰ**: translate-pseudocn — expand dictionary based on web research (7→46 entries), convert to SVO word order, regenerate all pcn docs
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `4fbf387` | feat(pcn): expand dictionary 7→46 entries, add IT terminology from research |
+| `ec38b7e` | feat(pcn): convert to SVO word order, expand dictionary, regenerate all 22 docs |
+
+## 2026-06-23T04:19:16+09:00
+
+**ｻﾏﾘｰ**: translate-pseudocn skill refactor — redefine pseudo-Chinese as "visual result of Japanese after stripping kana", no longer convert to Chinese; preserve original Japanese kanji (not simplified), retain SOV word order, reduce dictionary from 40→7 entries (katakana→Japanese kanji only); regenerate all 22 pcn docs
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `be0780b` | refactor(pcn): redesign pseudo-Chinese skill — Japanese-native kanji, SOV order, no Chinese chars |
+
 ## 2026-06-23T04:04:32+09:00
 
 **ｻﾏﾘｰ**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现

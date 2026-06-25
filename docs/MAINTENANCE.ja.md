@@ -74,6 +74,108 @@
 | `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
 | `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
 | `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
+
+## 2026-06-25T05:35:00+09:00
+
+**概要**: docs — 全5言語のREADMEにruyi-beta / ruyi-alpha devShellエントリを追加
+
+| コミット | 説明 |
+|------|------|
+| `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
+
+## 2026-06-25T05:28:12+09:00
+
+**概要**: ruyi — パッケージディレクトリ構造を再編（packages/ruyi/）、beta/alphaをthin wrapperに；devShellsを追加
+
+| コミット | 説明 |
+|------|------|
+| `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
+| `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
+
+## 2026-06-25T05:13:34+09:00
+
+**概要**: ruyi — バージョンチャンネルを独立パッケージ化（ruyi / ruyi-beta / ruyi-alpha）、独立overlayを削除
+
+| コミット | 説明 |
+|------|------|
+| `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
+
+## 2026-06-25T04:58:36+09:00
+
+**概要**: ruyi — 3チャンネルバージョン体系（stable/beta/alpha）、ベースパッケージを0.50.0安定版に切替、beta/alphaはoverlayで上書き
+
+| コミット | 説明 |
+|------|------|
+| `a9f8baa` | feat(pkgs): ruyi 3-channel (stable/beta/alpha) via overlays |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| ruyi | 0.51.0-alpha.20260616 | 0.50.0（安定版） |
+| 　 | 新規 ruyi-beta overlay | 0.50.0-beta.20260623 |
+| 　 | 新規 ruyi-alpha overlay | 0.51.0-alpha.20260616 |
+
+## 2026-06-24T03:19:30+09:00
+
+**概要**: workflow — メンテナンスログ更新ルールを必須化（AGENTS.md + write-maintenance-logスキル）
+
+| コミット | 説明 |
+|------|------|
+| `2e719df` | fix: make maintenance log update mandatory after every push |
+
+## 2026-06-24T03:15:37+09:00
+
+**概要**: docs — 古い手動riscv64ビルド手順を削除、CIが3アーキテクチャをカバー済み
+
+| コミット | 説明 |
+|------|------|
+| `698400a` | docs: remove stale manual riscv64 build instructions — CI now covers all 3 architectures |
+
+## 2026-06-24T03:06:20+09:00
+
+**概要**: codewhale 0.8.64 — アップストリーム更新
+
+| コミット | 説明 |
+|------|------|
+| `0bde292` | chore(pkgs): bump codewhale 0.8.64 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| codewhale | 0.8.63 | 0.8.64 |
+| 　 | x64 cli hash | `sha256-SMaOUH...Z6M=` → `sha256-sKvJm6...XY=` |
+| 　 | arm64 cli hash | `sha256-gGv2T4...M8=` → `sha256-gYofCL...jk=` |
+| 　 | riscv64 cli hash | `sha256-qSVNms...g=` → `sha256-TOkojm...A=` |
+| 　 | x64 tui hash | `sha256-UA66uC...M=` → `sha256-Q3wRQ5...M=` |
+| 　 | arm64 tui hash | `sha256-m24T1T...g=` → `sha256-CSKaNh...M=` |
+| 　 | riscv64 tui hash | `sha256-l1tgSn...w=` → `sha256-mAARZq...Y=` |
+
+## 2026-06-24T02:30:21+09:00
+
+**概要**: CI — riscv64クロスコンパイルパイプライン追加、3アーキテクチャCI全量カバー（x86_64 / aarch64 / riscv64）；パッケージ毎にriscv64バッジ追加
+
+| コミット | 説明 |
+|------|------|
+| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
+| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
+| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
+| `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
+
+## 2026-06-23T05:20:00+09:00
+
+**概要**: translate-pseudocn — Webリサーチに基づき辞書を拡充（7→46エントリ）、SVO語順に変更、全pcnドキュメントを再生成
+
+| コミット | 説明 |
+|------|------|
+| `4fbf387` | feat(pcn): expand dictionary 7→46 entries, add IT terminology from research |
+| `ec38b7e` | feat(pcn): convert to SVO word order, expand dictionary, regenerate all 22 docs |
+
+## 2026-06-23T04:19:16+09:00
+
+**概要**: translate-pseudocnスキル再構築 — 疑似中国語を「日本語から仮名を剥がした視覚結果」と再定義、中国語への変換を廃止。日本語漢字をそのまま保持（簡体字化しない）、SOV語順を維持、辞書を40→7エントリに縮小（カタカナ→日本語漢字のみ）。全22件のpcnドキュメントを再生成
+
+| コミット | 説明 |
+|------|------|
+| `be0780b` | refactor(pcn): redesign pseudo-Chinese skill — Japanese-native kanji, SOV order, no Chinese chars |
+
 ## 2026-06-23T04:04:32+09:00
 
 **Summary**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
