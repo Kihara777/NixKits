@@ -22,6 +22,6 @@ venv/
 docs/pcn/MAINTENANCE.md
 docs/pcn/README.md
 __pycache__/
-translate_pcn.py
+
 __pycache__/
 *.pyc
