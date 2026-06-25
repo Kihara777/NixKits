@@ -40,6 +40,8 @@ jobs:
           nix build --print-build-logs --no-write-lock-file ".#kitsfmt"
           nix build --print-build-logs --no-write-lock-file ".#mcp-searxng"
           nix build --print-build-logs --no-write-lock-file ".#ruyi"
+          nix build --print-build-logs --no-write-lock-file ".#ruyi-beta"
+          nix build --print-build-logs --no-write-lock-file ".#ruyi-alpha"
           nix build --print-build-logs --no-write-lock-file ".#obs-bilibili-stream"
           nix build --print-build-logs --no-write-lock-file ".#opencode-telegram"
 
