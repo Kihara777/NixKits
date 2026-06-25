@@ -72,10 +72,13 @@
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
     };
 
-  } // {
-    nixConfig = {
-      extra-substituters = [ "https://nixkits.cachix.org" ];
-      extra-trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
-    };
+  };
+
+  # Cachix binary cache configuration.
+  # Placed at flake top level (not inside `outputs`) to avoid
+  # `nix flake check` warning about unknown flake output.
+  nixConfig = {
+    extra-substituters = [ "https://nixkits.cachix.org" ];
+    extra-trusted-public-keys = [ "nixkits.cachix.org-1:ycmoZnAnvjGsSzIMdGNmFdc65LeRW/GZ7GdN7KkRL8c=" ];
   };
 }
