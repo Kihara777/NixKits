@@ -42,7 +42,14 @@ jobs:
           name: nixkits
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build ${{ matrix.package }}
-        run: nix build --print-build-logs --no-write-lock-file ".#${{ matrix.package }}"
+        run: |
+          # llama-cpp-ver is a flake=false input that hits api.github.com on every
+          # flake evaluation.  Build-matrix packages do not depend on it, so override
+          # with a local placeholder to avoid rate-limit errors on unauthenticated IPs.
+          echo '{"tag_name":"b0"}' > /tmp/llama-cpp-ver.json
+          nix build --print-build-logs --no-write-lock-file \
+            --override-input llama-cpp-ver /tmp/llama-cpp-ver.json \
+            ".#${{ matrix.package }}"
 
   riscv64-cross:
     needs: check
@@ -72,6 +79,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Cross-compile ${{ matrix.package }}
         run: |
+          echo '{"tag_name":"b0"}' > /tmp/llama-cpp-ver.json
           case "${{ matrix.package }}" in
             ruyi)       PKG=./packages/ruyi/ruyi.nix ;;
             ruyi-beta)  PKG=./packages/ruyi/ruyi-beta.nix ;;
