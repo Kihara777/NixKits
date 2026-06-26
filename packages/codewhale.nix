@@ -19,7 +19,7 @@ let
   cliHashes = {
     x64     = "sha256-JD69uCNhO27crUBLUHqphQdfAJqrAPOIrq65TN2uHFE=";
     arm64   = "sha256-SLQOxi48XavfwUE0W4Gy/Na+whuu2sR56vXXHTJmwUs=";
-    riscv64 = "sha256-dCxRYcMbbOFxMaGZkUAoVPxk0QOCh4hRS35f/0ew0Ck=";
+    riscv64 = "sha256-dCxRYcMbbOFxMaGZkUAoVPxk0QOCh4hRS35f0/ew0Ck=";
   };
 
   tuiHashes = {
