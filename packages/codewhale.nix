@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.8.64";
+  version = "0.8.65";
 
   # Prebuilt binaries from GitHub Releases support three Linux architectures.
   archSuffix = {
@@ -17,15 +17,15 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   cliHashes = {
-    x64     = "sha256-sKvJm6xJSDIZjN7iXsq5BMay7Am4mivhzWmYorpg7XY=";
-    arm64   = "sha256-gYofCLHQ2DQb54UfT/tG0p2FE41CWZ8F71b65oQGNjk=";
-    riscv64 = "sha256-TOkojmi6PfO+Lwj2NZ1mHQoBKsnW3+XzMeXQpvCPISA=";
+    x64     = "sha256-JD69uCNhO27crUBLUHqphQdfAJqrAPOIrq65TN2uHFE=";
+    arm64   = "sha256-SLQOxi48XavfwUE0W4Gy/Na+whuu2sR56vXXHTJmwUs=";
+    riscv64 = "sha256-dCxRYcMbbOFxMaGZkUAoVPxk0QOCh4hRS35f/0ew0Ck=";
   };
 
   tuiHashes = {
-    x64     = "sha256-Q3wRQ5EEpQWZh8gFWhd0jjRAVTiz/oDtVVKQZ6H0JkM=";
-    arm64   = "sha256-CSKaNhrJGOn3gW7ge0GuNNeCs4LFckaxF66pB7b244M=";
-    riscv64 = "sha256-mAARZqXUdwSUrzJR/ztb8ct8+kHONky7ixhvDdZ9TtY=";
+    x64     = "sha256-U1sDRoUkAJ5n+4bqZ9JrAx1R9RXS2ZIFukTFeVFaT/g=";
+    arm64   = "sha256-jPcoG28M/kZreU86NXW0OX2BBsTT27Sd9WjOAqemp1w=";
+    riscv64 = "sha256-bh3Qq/OA4fopjSFaleA1X2FwzhfvTfbSPq8jkO7+p+o=";
   };
 
   codewhale-cli = fetchurl {
