@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 1.7.1 |
+| バージョン | 1.8.0 |
 | アップストリーム | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## インストール
