@@ -39,6 +39,18 @@ in
         default = { };
         description = "Environment variables for the service";
       };
+
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.opencode ]";
+        description = ''
+          Extra packages whose `/bin` directories are prepended to the
+          service's `PATH`. Use this when the bot needs to locate
+          companion tools such as `opencode` that are not installed
+          system-wide.
+        '';
+      };
     };
 
     # Deprecated: services.opencode-telegram (moved to nixkits)
@@ -87,8 +99,12 @@ in
           KillMode = "process";
           User = cfg.user;
           Group = cfg.group;
-        } // lib.optionalAttrs (cfg.environment != { }) {
-          Environment = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
+        }
+        // lib.optionalAttrs (cfg.extraPackages != [ ] || cfg.environment != { }) {
+          Environment =
+            (lib.optional (cfg.extraPackages != [ ])
+              "PATH=${lib.makeBinPath cfg.extraPackages}:/run/current-system/sw/bin")
+            ++ (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment);
         };
       };
     })

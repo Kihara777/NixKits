@@ -54,6 +54,8 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
             user = "kix";
             group = "users";
             afterServices = [ "network-online.target" "llama-cpp.service" ];
+            # opencode がサービス PATH に含まれるように（home-manager 等で導入時）
+            extraPackages = [ pkgs.opencode ];
           };
         }
       ];
