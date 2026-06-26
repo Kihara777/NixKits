@@ -1,5 +1,24 @@
 # メンテナンスログ
 
+## 2026-06-26T10:55:41+09:00
+
+**概要**: codewhale 0.8.65 — アップストリーム更新（cliバイナリ名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — アップストリーム更新（マルチインスタンスフェイルオーバー/並列ファンアウト、能力発見集約、safesearch修正）
+
+| コミット | 説明 |
+|------|------|
+| `57620d4` | chore(pkgs): bump codewhale 0.8.65 + mcp-searxng 1.8.0 |
+| `94ac1e4` | docs: bump codewhale 0.8.65 + mcp-searxng 1.8.0 version numbers in all 5-language docs |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| codewhale | 0.8.64 | 0.8.65 |
+| mcp-searxng | 1.7.2 | 1.8.0 |
+| 　 | codewhale cli hash (×3) | all updated (incl. URL change) |
+| 　 | codewhale tui hash (×3) | all updated |
+| 　 | mcp-searxng source hash | `...` → `...` |
+| 　 | mcp-searxng npmDepsHash | `...` → `...` |
+
+
 ## 2026-06-26T08:00:00+09:00
 
 **概要**: docs(MAINTENANCE): pcn 欠落していた28件の履歴エントリを補完、zh基準全93エントリを網羅

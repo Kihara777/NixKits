@@ -1,5 +1,24 @@
 # Maintenance Log
 
+## 2026-06-26T10:55:41+09:00
+
+**摘要**: codewhale 0.8.65 — 上流更新（cli二進名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — 上流更新（多実例故障転送/並列扇出、能力発見集約、safesearch修正）
+
+| Commit | Description |
+|------|------|
+| `57620d4` | chore(pkgs): bump codewhale 0.8.65 + mcp-searxng 1.8.0 |
+| `94ac1e4` | docs: bump codewhale 0.8.65 + mcp-searxng 1.8.0 version numbers in all 5-language docs |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.64 | 0.8.65 |
+| mcp-searxng | 1.7.2 | 1.8.0 |
+| 　 | codewhale cli hash (×3) | all updated (incl. URL change) |
+| 　 | codewhale tui hash (×3) | all updated |
+| 　 | mcp-searxng source hash | `...` → `...` |
+| 　 | mcp-searxng npmDepsHash | `...` → `...` |
+
+
 ## 2026-06-26T08:00:00+09:00
 
 **摘要**: docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅

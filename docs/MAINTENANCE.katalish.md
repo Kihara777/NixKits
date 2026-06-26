@@ -1,5 +1,24 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-26T10:55:41+09:00
+
+**ｻﾏﾘｰ**: codewhale 0.8.65 — upstream update (cli binary renamed: codewhale-cli-linux → codewhale-linux); mcp-searxng 1.8.0 — upstream update (multi-instance failover/parallel fanout, capability discovery aggregation, safesearch fix)
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `57620d4` | chore(pkgs): bump codewhale 0.8.65 + mcp-searxng 1.8.0 |
+| `94ac1e4` | docs: bump codewhale 0.8.65 + mcp-searxng 1.8.0 version numbers in all 5-language docs |
+
+| ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
+|--------|--------|--------|
+| codewhale | 0.8.64 | 0.8.65 |
+| mcp-searxng | 1.7.2 | 1.8.0 |
+| 　 | codewhale cli hash (×3) | all updated (incl. URL change) |
+| 　 | codewhale tui hash (×3) | all updated |
+| 　 | mcp-searxng source hash | `...` → `...` |
+| 　 | mcp-searxng npmDepsHash | `...` → `...` |
+
+
 ## 2026-06-26T08:00:00+09:00
 
 **ｻﾏﾘｰ**: docs(MAINTENANCE): backfill 28 missing historical entries to pcn, full zh baseline (93 entries) now covered
