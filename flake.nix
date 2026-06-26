@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
+    llama-cpp-ver.url = "path:./ci/llama-cpp-ver.json";
     llama-cpp-ver.flake = false;
   };
 
