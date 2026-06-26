@@ -528,15 +528,6 @@ NixKits 包更新変更記録。
 
 ---
 
-## 2026-06-17T06:59:00+09:00
-
-**Summary**：nixkits-check-updates — 動的包発見、hash 注意点、確認範囲明確化；llama-cpp-rocm — 技能及文書削除動的追跡重複；flake — default 包別名除去
-
-| Commit | Description |
-|------|------|
-| `b118858` | fix(skill): nixkits-check-updates — dynamic discovery, not hardcoded list |
-| `12e51b8` | docs(skill): add hash pitfalls and check scope to nixkits-check-updates |
-
 ---
 
 
@@ -850,25 +841,6 @@ NixKits 包更新変更記録。
 | `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
 | `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
 
-
-## 2026-06-12T10:29:00+09:00
-
-**Summary**：codewhale 0.8.58 — 上流修復；mcp-searxng 1.3.4 — 上流修復
-
-| Commit | Description |
-|------|------|
-| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
-| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
-| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
-
-| Package | Old | New |
-|--------|--------|--------|
-| codewhale | 0.8.57 | 0.8.58 |
-| mcp-searxng | 1.3.2 | 1.3.4 |
-| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
-| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
-| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
-| 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
 
 ---
 
