@@ -54,8 +54,11 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
             user = "kix";
             group = "users";
             afterServices = [ "network-online.target" "llama-cpp.service" ];
-            # Ensure opencode is in the service PATH
-            extraPackages = [ pkgs.opencode ];
+            # Ensure opencode is in the service PATH (pick one):
+            # Option A:
+            #   extraPackages = [ pkgs.opencode ];
+            # Option B — home-manager path:
+            extraBinPaths = [ "/etc/profiles/per-user/kix/bin" ];
           };
         }
       ];

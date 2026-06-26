@@ -51,6 +51,18 @@ in
           system-wide.
         '';
       };
+
+      extraBinPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "/etc/profiles/per-user/kix/bin" ];
+        description = ''
+          Extra directory paths prepended to the service `PATH`.
+          Useful for tools installed via home-manager whose `/bin`
+          directories are not available through a Nix package
+          reference.
+        '';
+      };
     };
 
     # Deprecated: services.opencode-telegram (moved to nixkits)
@@ -100,10 +112,15 @@ in
           User = cfg.user;
           Group = cfg.group;
         }
-        // lib.optionalAttrs (cfg.extraPackages != [ ] || cfg.environment != { }) {
-          Environment =
-            (lib.optional (cfg.extraPackages != [ ])
-              "PATH=${lib.makeBinPath cfg.extraPackages}:/run/current-system/sw/bin")
+        // lib.optionalAttrs (cfg.extraPackages != [ ] || cfg.extraBinPaths != [ ] || cfg.environment != { }) {
+          Environment = let
+            pathParts =
+              (lib.optional (cfg.extraPackages != [ ]) (lib.makeBinPath cfg.extraPackages))
+              ++ cfg.extraBinPaths
+              ++ [ "/run/current-system/sw/bin" ];
+          in
+            (lib.optional (pathParts != [ "/run/current-system/sw/bin" ] || cfg.extraBinPaths != [ ])
+              "PATH=${lib.concatStringsSep ":" (builtins.filter (s: s != "") pathParts)}")
             ++ (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment);
         };
       };
