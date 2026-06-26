@@ -1,5 +1,24 @@
 # メンテナンスログ
 
+## 2026-06-26T13:00:00+09:00
+
+**概要**: CI — llama-cpp-ver をローカルファイル（ci/llama-cpp-ver.json）に変更、全CIジョブからGitHub API呼出を排除しrate limitによる全ビルド失敗を恒久修正；docs — riscv64バッジをパッケージ別に精密化（codewhale/kitsfmt/mcp-searxng/opencode-telegram）
+
+| コミット | 説明 |
+|------|------|
+| `8b3a3be` | fix(ci): use local path for llama-cpp-ver input, eliminate GitHub API calls from all CI jobs |
+| `5db4852` | fix(docs): add per-package job filter to riscv64 badges |
+
+## 2026-06-26T12:30:00+09:00
+
+**概要**: feat(opencode-telegram): サービスPATHにシステムパッケージを注入するextraPackagesオプションとhome-managerパスを注入するextraBinPathsオプションを追加、opencodeがサービスPATHで見つからない問題を修正；5言語ドキュメント更新
+
+| コミット | 説明 |
+|------|------|
+| `7c98694` | feat(opencode-telegram): add extraPackages option to inject companion tools into service PATH |
+| `45b7c57` | feat(opencode-telegram): add extraBinPaths option for home-manager users |
+
+
 ## 2026-06-26T10:55:41+09:00
 
 **概要**: codewhale 0.8.65 — アップストリーム更新（cliバイナリ名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — アップストリーム更新（マルチインスタンスフェイルオーバー/並列ファンアウト、能力発見集約、safesearch修正）

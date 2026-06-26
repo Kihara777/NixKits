@@ -1,5 +1,24 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-26T13:00:00+09:00
+
+**ｻﾏﾘｰ**: CI — llama-cpp-ver switched to local file (ci/llama-cpp-ver.json), eliminating all GitHub API calls from CI jobs; docs — riscv64 badges now per-package
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `8b3a3be` | fix(ci): use local path for llama-cpp-ver input, eliminate GitHub API calls from all CI jobs |
+| `5db4852` | fix(docs): add per-package job filter to riscv64 badges |
+
+## 2026-06-26T12:30:00+09:00
+
+**ｻﾏﾘｰ**: feat(opencode-telegram): add extraPackages + extraBinPaths options for service PATH
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `7c98694` | feat(opencode-telegram): add extraPackages option to inject companion tools into service PATH |
+| `45b7c57` | feat(opencode-telegram): add extraBinPaths option for home-manager users |
+
+
 ## 2026-06-26T10:55:41+09:00
 
 **ｻﾏﾘｰ**: codewhale 0.8.65 — upstream update (cli binary renamed: codewhale-cli-linux → codewhale-linux); mcp-searxng 1.8.0 — upstream update (multi-instance failover/parallel fanout, capability discovery aggregation, safesearch fix)

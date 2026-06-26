@@ -1,5 +1,24 @@
 # Maintenance Log
 
+## 2026-06-26T13:00:00+09:00
+
+**摘要**: CI — llama-cpp-ver 本地文件切替（ci/llama-cpp-ver.json）、全CI作業GitHub API呼出排除rate limit全局構築失敗恒久修正；docs — riscv64徽章包装別精密化
+
+| Commit | Description |
+|------|------|
+| `8b3a3be` | fix(ci): use local path for llama-cpp-ver input, eliminate GitHub API calls from all CI jobs |
+| `5db4852` | fix(docs): add per-package job filter to riscv64 badges |
+
+## 2026-06-26T12:30:00+09:00
+
+**摘要**: feat(opencode-telegram): 服務PATH系包装注入extraPackages選択肢home-manager路注入extraBinPaths選択肢追加、opencode不在服務PATH問題修正；5言語文書更新
+
+| Commit | Description |
+|------|------|
+| `7c98694` | feat(opencode-telegram): add extraPackages option to inject companion tools into service PATH |
+| `45b7c57` | feat(opencode-telegram): add extraBinPaths option for home-manager users |
+
+
 ## 2026-06-26T10:55:41+09:00
 
 **摘要**: codewhale 0.8.65 — 上流更新（cli二進名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — 上流更新（多実例故障転送/並列扇出、能力発見集約、safesearch修正）
