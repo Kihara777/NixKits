@@ -12,7 +12,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 0.21.2 |
+| 版本 | 0.22.0 |
 | 上游 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## 使用
