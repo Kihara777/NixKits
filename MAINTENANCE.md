@@ -1,5 +1,20 @@
 # 维护日志
 
+## 2026-06-28T06:30:00+09:00
+
+**摘要**：opencode-telegram 0.22.0 — 上游更新（三模式 TTS + thinking 显示 + 紧凑输出 + /settings 命令 + session 启动修复）
+
+| 提交 | 说明 |
+|------|------|
+| `b189d0a` | chore(pkgs): bump opencode-telegram 0.22.0 |
+| `a61f444` | docs: bump opencode-telegram 0.22.0 version numbers in all 5-language docs |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.21.2 | 0.22.0 |
+| 　 | source hash | `sha256-NEaQ2...` → `sha256-FnLRc...` |
+| 　 | npmDepsHash | `sha256-z9trD...` → `sha256-nQq94...` |
+
 ## 2026-06-26T13:00:00+09:00
 
 **摘要**：CI — llama-cpp-ver 改为本地文件（`ci/llama-cpp-ver.json`），消除所有 CI job 的 GitHub API 调用，彻底解决 rate limit 导致的全局构建失败；docs — riscv64 badge 精确到包级别（codewhale/kitsfmt/mcp-searxng/opencode-telegram）

@@ -1,5 +1,21 @@
 # メンテナンスログ
 
+## 2026-06-28T06:30:00+09:00
+
+**概要**: opencode-telegram 0.22.0 — アップストリーム更新（3モードTTS + thinking表示 + コンパクト出力 + /settingsコマンド + セッション起動修正）
+
+| コミット | 説明 |
+|------|------|
+| `b189d0a` | chore(pkgs): bump opencode-telegram 0.22.0 |
+| `a61f444` | docs: bump opencode-telegram 0.22.0 version numbers in all 5-language docs |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| opencode-telegram | 0.21.2 | 0.22.0 |
+| 　 | source hash | `...` → `...` |
+| 　 | npmDepsHash | `...` → `...` |
+
+
 ## 2026-06-26T13:00:00+09:00
 
 **概要**: CI — llama-cpp-ver をローカルファイル（ci/llama-cpp-ver.json）に変更、全CIジョブからGitHub API呼出を排除しrate limitによる全ビルド失敗を恒久修正；docs — riscv64バッジをパッケージ別に精密化（codewhale/kitsfmt/mcp-searxng/opencode-telegram）

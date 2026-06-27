@@ -1,5 +1,21 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-06-28T06:30:00+09:00
+
+**ｻﾏﾘｰ**: opencode-telegram 0.22.0 — upstream update (tri-mode TTS + thinking display + compact output + /settings command + session startup fix)
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `b189d0a` | chore(pkgs): bump opencode-telegram 0.22.0 |
+| `a61f444` | docs: bump opencode-telegram 0.22.0 version numbers in all 5-language docs |
+
+| ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
+|--------|--------|--------|
+| opencode-telegram | 0.21.2 | 0.22.0 |
+| 　 | source hash | `...` → `...` |
+| 　 | npmDepsHash | `...` → `...` |
+
+
 ## 2026-06-26T13:00:00+09:00
 
 **ｻﾏﾘｰ**: CI — llama-cpp-ver switched to local file (ci/llama-cpp-ver.json), eliminating all GitHub API calls from CI jobs; docs — riscv64 badges now per-package
