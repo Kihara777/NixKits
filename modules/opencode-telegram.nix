@@ -108,7 +108,7 @@ in
           Restart = "on-failure";
           RestartSec = 10;
           TimeoutStopSec = 30;
-          KillMode = "process";
+          KillMode = "mixed";
           User = cfg.user;
           Group = cfg.group;
         }
