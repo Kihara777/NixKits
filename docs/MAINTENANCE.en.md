@@ -1,5 +1,21 @@
 # Maintenance Log
 
+## 2026-07-02T04:00:00+09:00
+
+**Summary**: codewhale 0.8.66 — upstream update (TUI layout fixes, approval honesty labels, performance fixes)
+
+| Commit | Description |
+|------|------|
+| `c00a5e6` | chore(pkgs): bump codewhale 0.8.66 |
+| `c61d458` | docs: bump codewhale 0.8.66 version numbers in all 5-language docs |
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale | 0.8.65 | 0.8.66 |
+| 　 | cli hash (×3) | all updated |
+| 　 | tui hash (×3) | all updated |
+
+
 ## 2026-06-28T06:30:00+09:00
 
 **Summary**: opencode-telegram 0.22.0 — upstream update (tri-mode TTS + thinking display + compact output + /settings command + session startup fix)

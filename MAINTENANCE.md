@@ -1,5 +1,20 @@
 # 维护日志
 
+## 2026-07-02T04:00:00+09:00
+
+**摘要**：codewhale 0.8.66 — 上游更新（TUI 布局修复、审批诚实度标签、性能修复若干）
+
+| 提交 | 说明 |
+|------|------|
+| `c00a5e6` | chore(pkgs): bump codewhale 0.8.66 |
+| `c61d458` | docs: bump codewhale 0.8.66 version numbers in all 5-language docs |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.65 | 0.8.66 |
+| 　 | cli hash (×3) | 全部更新 |
+| 　 | tui hash (×3) | 全部更新 |
+
 ## 2026-06-28T06:30:00+09:00
 
 **摘要**：opencode-telegram 0.22.0 — 上游更新（三模式 TTS + thinking 显示 + 紧凑输出 + /settings 命令 + session 启动修复）

@@ -1,5 +1,21 @@
 # Maintenance Log
 
+## 2026-07-02T04:00:00+09:00
+
+**摘要**: codewhale 0.8.66 — 上流更新
+
+| Commit | Description |
+|------|------|
+| `c00a5e6` | chore(pkgs): bump codewhale 0.8.66 |
+| `c61d458` | docs: bump codewhale 0.8.66 version numbers in all 5-language docs |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.65 | 0.8.66 |
+| 　 | cli hash (×3) | all updated |
+| 　 | tui hash (×3) | all updated |
+
+
 ## 2026-06-28T06:30:00+09:00
 
 **摘要**: opencode-telegram 0.22.0 — 上流更新（三模式TTS + thinking表示 + 緊湊出力 + /settings命令 + session起動修正）

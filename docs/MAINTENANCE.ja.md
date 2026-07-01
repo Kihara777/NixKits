@@ -1,5 +1,21 @@
 # メンテナンスログ
 
+## 2026-07-02T04:00:00+09:00
+
+**概要**: codewhale 0.8.66 — アップストリーム更新（TUIレイアウト修正、承認ラベル改善、パフォーマンス修正）
+
+| コミット | 説明 |
+|------|------|
+| `c00a5e6` | chore(pkgs): bump codewhale 0.8.66 |
+| `c61d458` | docs: bump codewhale 0.8.66 version numbers in all 5-language docs |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| codewhale | 0.8.65 | 0.8.66 |
+| 　 | cli hash (×3) | all updated |
+| 　 | tui hash (×3) | all updated |
+
+
 ## 2026-06-28T06:30:00+09:00
 
 **概要**: opencode-telegram 0.22.0 — アップストリーム更新（3モードTTS + thinking表示 + コンパクト出力 + /settingsコマンド + セッション起動修正）
