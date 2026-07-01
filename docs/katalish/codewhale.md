@@ -12,7 +12,7 @@ A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ
 
 | Item | Value |
 |------|-------|
-| Version | 0.8.65 |
+| Version | 0.8.66 |
 | Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | Type | Pre-built binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
 

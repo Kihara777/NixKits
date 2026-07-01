@@ -12,7 +12,7 @@ DeepSeek V4 専用端末符号化代理。
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.8.65 |
+| 版 | 0.8.66 |
 | 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 種別 | 構築済二進（GitHub Releases） |
 

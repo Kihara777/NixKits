@@ -12,7 +12,7 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 0.8.65 |
+| 版本 | 0.8.66 |
 | 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 类型 | 预编译二进制（GitHub Releases） |
 
