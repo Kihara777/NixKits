@@ -1,5 +1,7 @@
 # 维护日志
 
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+
 ## 2026-07-04T06:41:28+09:00
 
 **摘要**：blender-mcp 1.0.0 — 新增 Blender MCP Server 包（Python 构建，22 个 MCP 工具，含 Blender add-on 配套文件）

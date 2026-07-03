@@ -1,5 +1,7 @@
 # Maintenance Log
 
+[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
+
 ## 2026-07-04T06:41:28+09:00
 
 **Summary**: blender-mcp 1.0.0 — new Blender MCP Server package (Python build, 22 MCP tools, includes Blender add-on)

@@ -1,5 +1,7 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](MAINTENANCE.pcn.md)
+
 ## 2026-07-04T06:41:28+09:00
 
 **ｻﾏﾘｰ**: blender-mcp 1.0.0 — new Blender MCP Server ﾊﾟｯｹｰｼﾞ (Python ﾋﾞﾙﾄﾞ, 22 MCP tools, includes Blender add-on)
