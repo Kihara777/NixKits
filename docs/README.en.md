@@ -20,6 +20,7 @@ Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
 
 | Software | Description | Docs |
 |---|------|------|
+| blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |

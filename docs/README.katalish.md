@@ -20,6 +20,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 | ｿﾌﾄｳｪｱ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |---|------|------|
+| blender-mcp | MCP ｻｰﾊﾞｰ ﾌｫｱ Blender (natural ﾗﾝｹﾞｰｼﾞ control ｵﾌﾞ Blender) | [docs/katalish/blender-mcp.md](katalish/blender-mcp.md) |
 | codewhale | ﾄﾞｴｴﾌﾟｽｴｴｸ V4 ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [docs/katalish/codewhale.md](katalish/codewhale.md) |
 | kitsfmt | Nix ﾌｫｰﾏｯﾀｰ (AST sorting + best-practice ｵｰﾄ-ﾌｨｯｸｽｽﾞ) | [docs/katalish/kitsfmt.md](katalish/kitsfmt.md) |
 | mcp-searxng | MCP ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [docs/katalish/mcp-searxng.md](katalish/mcp-searxng.md) |

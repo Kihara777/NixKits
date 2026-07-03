@@ -22,6 +22,7 @@
     kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
     packages = rec {
+      blender-mcp          = pkgs.callPackage ./packages/blender-mcp.nix { };
       codewhale            = pkgs.callPackage ./packages/codewhale.nix { };
       kitsfmt              = kitsfmtDrv;
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
@@ -37,6 +38,7 @@
     '';
 
     devShells = let
+      blenderMcpDrv = pkgs.callPackage ./packages/blender-mcp.nix { };
       ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       ruyiBetaDrv = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyiAlphaDrv = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
@@ -49,6 +51,20 @@
         packages = [ ruyiWithCompat ];
         shellHook = ''
           echo "RuyiSDK $(ruyi --version 2>/dev/null | head -1)"
+        '';
+      };
+
+      blender-mcp = pkgs.mkShell {
+        name = "blender-mcp-dev";
+        packages = [
+          blenderMcpDrv
+          pkgs.blender
+          pkgs.python3
+        ];
+        shellHook = ''
+          export BLENDER_PATH="${pkgs.blender}/bin/blender"
+          echo "blender-mcp $(blender-mcp --help 2>&1 | head -1)"
+          echo "BLENDER_PATH=$BLENDER_PATH"
         '';
       };
 

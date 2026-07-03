@@ -1,5 +1,17 @@
 # 维护日志
 
+## 2026-07-04T06:41:28+09:00
+
+**摘要**：blender-mcp 1.0.0 — 新增 Blender MCP Server 包（Python 构建，22 个 MCP 工具，含 Blender add-on 配套文件）
+
+| 提交 | 说明 |
+|------|------|
+| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | — | 1.0.0 |
+
 ## 2026-07-02T04:00:00+09:00
 
 **摘要**：codewhale 0.8.66 — 上游更新（TUI 布局修复、审批诚实度标签、性能修复若干）

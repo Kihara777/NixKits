@@ -1,5 +1,17 @@
 # Maintenance Log
 
+## 2026-07-04T06:41:28+09:00
+
+**Summary**: blender-mcp 1.0.0 — new Blender MCP Server package (Python build, 22 MCP tools, includes Blender add-on)
+
+| Commit | Description |
+|------|------|
+| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+
+| Package | Old | New |
+|--------|--------|--------|
+| blender-mcp | — | 1.0.0 |
+
 ## 2026-07-02T04:00:00+09:00
 
 **Summary**: codewhale 0.8.66 — upstream update (TUI layout fixes, approval honesty labels, performance fixes)

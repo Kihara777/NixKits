@@ -1,5 +1,17 @@
 # Maintenance Log
 
+## 2026-07-04T06:41:28+09:00
+
+**摘要**: blender-mcp 1.0.0 — 新規 Blender MCP 伺服器包（Python 構築、22 MCP 道具、Blender 拡張含）
+
+| Commit | Description |
+|------|------|
+| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | — | 1.0.0 |
+
 ## 2026-07-02T04:00:00+09:00
 
 **摘要**: codewhale 0.8.66 — 上流更新

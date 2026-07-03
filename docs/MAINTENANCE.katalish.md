@@ -1,5 +1,17 @@
 # ﾒﾝﾃﾅﾝｽ ﾛｸﾞ
 
+## 2026-07-04T06:41:28+09:00
+
+**ｻﾏﾘｰ**: blender-mcp 1.0.0 — new Blender MCP Server ﾊﾟｯｹｰｼﾞ (Python ﾋﾞﾙﾄﾞ, 22 MCP tools, includes Blender add-on)
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+
+| ﾊﾟｯｹｰｼﾞ | ｵｰﾙﾄﾞ | ﾆｭｰ |
+|--------|--------|--------|
+| blender-mcp | — | 1.0.0 |
+
 ## 2026-07-02T04:00:00+09:00
 
 **ｻﾏﾘｰ**: codewhale 0.8.66 — upstream update

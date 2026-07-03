@@ -20,6 +20,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 | 軟体 | 説明 | 文書 |
 |---|------|------|
+| blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
