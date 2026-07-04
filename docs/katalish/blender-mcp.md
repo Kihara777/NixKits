@@ -15,6 +15,7 @@ An MCP (Model Context Protocol) ｻｰﾊﾞｰ ﾌｫｱ Blender — providing 
 | ｳﾌﾟｽﾄﾗｴｱﾑ | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | Type | Python ﾊﾟｯｹｰｼﾞ (setuptools) |
 | ﾗｲｾﾝｽ | GPL-3.0-or-later |
+| Platform | x86_64 / aarch64 (riscv64 unsupported: dependency chain cross-compilation defect) |
 
 ## Architecture
 

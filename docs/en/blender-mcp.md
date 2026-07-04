@@ -15,6 +15,7 @@ An MCP (Model Context Protocol) server for Blender, providing AI assistants with
 | Upstream | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | Type | Python package (setuptools) |
 | License | GPL-3.0-or-later |
+| Platform | x86_64 / aarch64 (riscv64 unsupported: dependency chain cross-compilation defect) |
 
 ## Architecture
 

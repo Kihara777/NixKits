@@ -15,6 +15,7 @@ Blender 的 MCP (Model Context Protocol) 服务器，为 AI 助手提供 Blender
 | 上游 | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | 类型 | Python 包（setuptools） |
 | 许可 | GPL-3.0-or-later |
+| 平台 | x86_64 / aarch64（riscv64 不支持：依赖链交叉编译缺陷） |
 
 ## 架构
 

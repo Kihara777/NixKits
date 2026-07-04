@@ -15,6 +15,7 @@ Blender 用 MCP (Model Context Protocol) 伺服器。AI 代理対自然言語接
 | 上流 | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | 種別 | Python 包（setuptools） |
 | 許諾 | GPL-3.0-or-later |
+| Platform | x86_64 / aarch64 (riscv64 unsupported: dependency chain cross-compilation defect) |
 
 ## 構成
 
