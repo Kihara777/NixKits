@@ -2,6 +2,25 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-05T04:41:23+09:00
+
+**概要**: fix(ci) — blender-mcp riscv64-cross 修正経緯（4 コミット）。`callPackage` が非互換 `blender` を自動解決したことによる初回失敗、Nix/Bash エスケープ問題、最終的に上流 nixpkgs の `sse-starlette` クロスコンパイル欠陥により blender-mcp を riscv64-cross から除外。x86_64 / aarch64 は影響なし。
+
+| コミット | 説明 |
+|------|------|
+| `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
+| `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
+| `cd839d1` | fix(ci): remove stray Nix indented-string marker from riscv64-cross expr |
+| `78afb9e` | fix(ci): pass blender=null for blender-mcp riscv64-cross (Blender unsupported on riscv64) |
+
+## 2026-07-04T07:33:07+09:00
+
+**概要**: docs(MAINTENANCE) — 全 6 MAINTENANCE ファイル（zh/en/ja/katalish/pcn）に言語切替を追加
+
+| コミット | 説明 |
+|------|------|
+| `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
+
 ## 2026-07-04T06:41:28+09:00
 
 **概要**: blender-mcp 1.0.0 — 新規 Blender MCP Server パッケージ（Python ビルド、22 MCP ツール、Blender add-on 付属）
