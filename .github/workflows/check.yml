@@ -51,7 +51,6 @@ jobs:
       max-parallel: 4
       matrix:
         package:
-          - blender-mcp
           - codewhale
           - kitsfmt
           - mcp-searxng
@@ -75,12 +74,10 @@ jobs:
       - name: Cross-compile ${{ matrix.package }}
         run: |
           PKG=./packages/${{ matrix.package }}.nix
-          EXTRA_ARGS='{ }'
           case "${{ matrix.package }}" in
             ruyi)         PKG=./packages/ruyi/ruyi.nix ;;
             ruyi-beta)    PKG=./packages/ruyi/ruyi-beta.nix ;;
             ruyi-alpha)   PKG=./packages/ruyi/ruyi-alpha.nix ;;
-            blender-mcp)  EXTRA_ARGS='{ blender = null; }' ;;
           esac
           nix build --no-link --print-build-logs --impure \
-            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG ${EXTRA_ARGS}"
+            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG { }"
