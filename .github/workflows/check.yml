@@ -82,4 +82,4 @@ jobs:
             *)            PKG=./packages/${{ matrix.package }}.nix ;;
           esac
           nix build --no-link --print-build-logs --impure \
-            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG ''${EXTRA_ARGS:-{ }}"
+            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG ${EXTRA_ARGS:-{ }}"
