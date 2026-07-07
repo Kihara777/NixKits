@@ -133,4 +133,4 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 
 ## ｷｬｯｼｭ
 
-`cachix use nixkits`（flake ﾊ `nixConfig` ﾃﾞ 自動宣言、flake input 使用時 ﾆ 自動案内）。
+`cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).

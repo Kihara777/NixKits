@@ -5,19 +5,19 @@
 
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | [日本語](../ja/obs-bilibili-stream.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/obs-bilibili-stream.md)
 
-OBS Studio の Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ。
+OBS Studio Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ.
 
-## 基本ｼﾞｮｳﾎｳ
+## ｲﾝﾌｫ
 
-| ｺｳﾓｸ | ｱﾀｲ |
+| Item | Value |
 |------|-----|
 | ﾊﾞｰｼﾞｮﾝ | 2.1.0 |
-| ｱｯﾌﾟｽﾄﾘｰﾑ | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| ﾌﾟﾗｯﾄﾌｫｰﾑ | Linux only |
+| ｳﾌﾟｽﾄﾗｴｱﾑ | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| Platform | Linux only |
 
-## ｻﾝｼｮｳ
+## Usage
 
-**推奨：NixOS ﾓｼﾞｭｰﾙ**
+**Recommended: NixOS ﾓｼﾞｭｰﾙ**
 
 ```nix
 {
@@ -29,7 +29,7 @@ OBS Studio の Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲ
 }
 ```
 
-**手動**
+**Manual**
 
 ```nix
 {
@@ -47,6 +47,6 @@ OBS Studio の Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲ
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
 
-## ｷｬｯｼｭ
+## Cache
 
-`cachix use nixkits`（flake ﾊ `nixConfig` ﾃﾞ 自動宣言、flake input 使用時 ﾆ 自動案内）。
+`cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).
