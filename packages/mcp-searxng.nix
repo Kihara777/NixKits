@@ -10,16 +10,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-searxng";
-  version = "1.8.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "ihor-sokoliuk";
     repo = "MCP-searxng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xyNjBJ268JqJVhKOC/wLQ4SqKqTI+TgQEgbSdYLGid0=";
+    hash = "sha256-xiIYkzWlff9RdoYyEWqYB85RLkZjACumGaCsw3WgN+Q=";
   };
 
-  npmDepsHash = "sha256-dVFX5wmYTd28e9FsmwkuuF09do9Z8+Du9osxAFEx4/4=";
+  npmDepsHash = "sha256-aebwhDKEo383P3ylKGQQQ1+3l8O0jYMBBBtZBt0dQOY=";
   npmBuildScript = "build";
 
   nativeBuildInputs = [

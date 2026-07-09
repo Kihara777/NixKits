@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.22.0 |
+| 版 | 0.22.1 |
 | 上流 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## 使用法

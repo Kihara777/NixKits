@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 1.8.0 |
+| 版 | 1.11.0 |
 | 上流 | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## 導入

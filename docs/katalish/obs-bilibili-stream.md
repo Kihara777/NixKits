@@ -11,7 +11,7 @@ OBS Studio Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ.
 
 | Item | Value |
 |------|-----|
-| ﾊﾞｰｼﾞｮﾝ | 2.1.0 |
+| ﾊﾞｰｼﾞｮﾝ | 2.1.1 |
 | ｳﾌﾟｽﾄﾗｴｱﾑ | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | Platform | Linux only |
 
