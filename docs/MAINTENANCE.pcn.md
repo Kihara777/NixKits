@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | 偽中国語
 
+## 2026-07-09T01:22:00+09:00
+
+**摘要**: revert(ci) — `ci/` 削除、`llama-cpp-ver` input 上流 API 復元。上乗既 `tryEval` + fallback 備、局所緩衝不要。
+
+| Commit | Description |
+|------|------|
+| `dbdd937` | revert: restore llama-cpp-ver to upstream API, remove ci/ |
+
 ## 2026-07-09T01:14:34+09:00
 
 **摘要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上流更新（codewhale 跳過：v0.8.67 riscv64 二進欠落）

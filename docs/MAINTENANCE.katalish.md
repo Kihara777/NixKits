@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-09T01:22:00+09:00
+
+**ｻﾏﾘｰ**: revert(ci) — removed `ci/` dir, restored `llama-cpp-ver` input to upstream API. Overlay already has `tryEval` + fallback; local cache unnecessary.
+
+| ｺﾐｯﾄ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ |
+|------|------|
+| `dbdd937` | revert: restore llama-cpp-ver to upstream API, remove ci/ |
+
 ## 2026-07-09T01:14:34+09:00
 
 **ｻﾏﾘｰ**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — upstream updates (codewhale skipped: v0.8.67 missing riscv64 binaries)

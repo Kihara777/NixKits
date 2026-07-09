@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-09T01:22:00+09:00
+
+**概要**: revert(ci) — `ci/` ディレクトリを削除、`llama-cpp-ver` input を上流 API（`ggml-org/llama.cpp` releases/latest）に復元。overlay に `tryEval` + `prev.llama-cpp.version` フォールバックが既に存在し、ローカルキャッシュ不要。
+
+| コミット | 説明 |
+|------|------|
+| `dbdd937` | revert: restore llama-cpp-ver to upstream API, remove ci/ |
+
 ## 2026-07-09T01:14:34+09:00
 
 **概要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — アップストリーム更新（codewhale スキップ：v0.8.67 に riscv64 バイナリなし）
