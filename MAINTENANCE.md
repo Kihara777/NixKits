@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-09T01:14:34+09:00
+
+**摘要**：obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上游更新（codewhale 跳过：v0.8.67 缺少 riscv64 预编译二进制）
+
+| 提交 | 说明 |
+|------|------|
+| `73dc576` | chore(pkgs): bump obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| obs-bilibili-stream | 2.1.0 | 2.1.1 |
+| mcp-searxng | 1.8.0 | 1.11.0 |
+| opencode-telegram | 0.22.0 | 0.22.1 |
+| codewhale | 0.8.66 | (跳过 — 上游 riscv64 二进制缺失) |
+
 ## 2026-07-05T04:41:23+09:00
 
 **摘要**：fix(ci) — blender-mcp riscv64-cross 修复历程（4 次提交）：最初因 `callPackage` 自动解析不兼容的 `blender` 参数失败，后因 Nix/Bash 转义问题反复，最终因上游 nixpkgs 的 `sse-starlette` 交叉编译缺陷而移除 blender-mcp 的 riscv64-cross 构建。x86_64 / aarch64 不受影响。

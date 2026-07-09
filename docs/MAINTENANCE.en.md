@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-09T01:14:34+09:00
+
+**Summary**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — upstream updates (codewhale skipped: v0.8.67 missing riscv64 prebuilt binaries)
+
+| Commit | Description |
+|------|------|
+| `73dc576` | chore(pkgs): bump obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| obs-bilibili-stream | 2.1.0 | 2.1.1 |
+| mcp-searxng | 1.8.0 | 1.11.0 |
+| opencode-telegram | 0.22.0 | 0.22.1 |
+| codewhale | 0.8.66 | (skipped — upstream riscv64 binaries missing) |
+
 ## 2026-07-05T04:41:23+09:00
 
 **Summary**: fix(ci) — blender-mcp riscv64-cross saga (4 commits): initial failure from `callPackage` auto-resolving incompatible `blender`, followed by Nix/Bash escaping issues, and finally removed blender-mcp from riscv64-cross due to upstream nixpkgs `sse-starlette` cross-compilation defect. x86_64 / aarch64 unaffected.

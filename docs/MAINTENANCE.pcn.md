@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | 偽中国語
 
+## 2026-07-09T01:14:34+09:00
+
+**摘要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上流更新（codewhale 跳過：v0.8.67 riscv64 二進欠落）
+
+| Commit | Description |
+|------|------|
+| `73dc576` | chore(pkgs): bump obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| obs-bilibili-stream | 2.1.0 | 2.1.1 |
+| mcp-searxng | 1.8.0 | 1.11.0 |
+| opencode-telegram | 0.22.0 | 0.22.1 |
+| codewhale | 0.8.66 | (跳過 — 上流 riscv64 二進欠落) |
+
 ## 2026-07-05T04:41:23+09:00
 
 **摘要**: fix(ci) — blender-mcp riscv64-cross 修正経緯（4 回）。初 `callPackage` 自動解決非互換 `blender` 失敗、Nix/Bash 逸脱問題、最終上流 nixpkgs `sse-starlette` 交叉編集欠陥故 blender-mcp 除外。x86_64 / aarch64 無影響。
