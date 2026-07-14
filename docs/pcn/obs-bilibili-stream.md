@@ -11,7 +11,7 @@ OBS Studio Bilibili 生配信拡張。
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 2.1.1 |
+| 版 | 2.1.2 |
 | 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | 基盤 | Linux only |
 

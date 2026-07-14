@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.22.1 |
+| バージョン | 0.22.2 |
 | アップストリーム | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
 ## 使い方

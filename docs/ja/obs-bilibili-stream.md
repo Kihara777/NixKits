@@ -11,7 +11,7 @@ OBS Studio の Bilibili ライブ配信プラグイン。
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 2.1.1 |
+| バージョン | 2.1.2 |
 | アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
 | プラットフォーム | Linux only |
 

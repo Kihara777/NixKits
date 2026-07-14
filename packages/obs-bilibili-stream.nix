@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-bilibili-stream";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "Zarosmm";
     repo = "obs-bilibili-stream";
     tag = finalAttrs.version;
-    hash = "sha256-1vH/QTJKX5AlWtABsUmT9p7jHriJiCHJZ2SamfmVwbM=";
+    hash = "sha256-QCoseCiZvsoNvJAwM6dB7npY/B1TsqMvEhpvKon+DT4=";
   };
 
   nativeBuildInputs = [
