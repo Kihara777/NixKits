@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-15T00:00:00+09:00
+
+**Summary**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — upstream updates (codewhale skipped: v0.8.67 still missing riscv64 binaries)
+
+| Commit | Description |
+|------|------|
+| `48414d4` | chore(pkgs): bump mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| mcp-searxng | 1.11.0 | 1.11.1 |
+| opencode-telegram | 0.22.1 | 0.22.2 |
+| obs-bilibili-stream | 2.1.1 | 2.1.2 |
+| codewhale | 0.8.66 | (skipped — upstream v0.8.67 still missing riscv64 binaries) |
+
 ## 2026-07-09T01:22:00+09:00
 
 **ｻﾏﾘｰ**: revert(ci) — removed `ci/` dir, restored `llama-cpp-ver` input to upstream API. Overlay already has `tryEval` + fallback; local cache unnecessary.

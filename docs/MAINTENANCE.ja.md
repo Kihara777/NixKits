@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-15T00:00:00+09:00
+
+**概要**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — アップストリーム更新（codewhale スキップ：v0.8.67 依然 riscv64 バイナリなし）
+
+| コミット | 説明 |
+|------|------|
+| `48414d4` | chore(pkgs): bump mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| mcp-searxng | 1.11.0 | 1.11.1 |
+| opencode-telegram | 0.22.1 | 0.22.2 |
+| obs-bilibili-stream | 2.1.1 | 2.1.2 |
+| codewhale | 0.8.66 | (スキップ — 上流 v0.8.67 依然 riscv64 バイナリ欠落) |
+
 ## 2026-07-09T01:22:00+09:00
 
 **概要**: revert(ci) — `ci/` ディレクトリを削除、`llama-cpp-ver` input を上流 API（`ggml-org/llama.cpp` releases/latest）に復元。overlay に `tryEval` + `prev.llama-cpp.version` フォールバックが既に存在し、ローカルキャッシュ不要。
