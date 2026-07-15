@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | 偽中国語
 
+## 2026-07-16T04:54:55+09:00
+
+**Summary**: docs(nixkits-skills) — renamed 'Known Removals' to 'Risk Advisory' across 5-language skill docs.
+
+| Commit | Description |
+|------|------|
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+
 ## 2026-07-16T04:46:54+09:00
 
 **Summary**: skill(nixkits-skills) — removed Claude Code support (nationality inference via user data mining crosses security boundary), added Codex detection and install support.

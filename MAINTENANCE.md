@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:54:55+09:00
+
+**摘要**：docs(nixkits-skills) —「已知移除」章节改名为「风险警示」，5 语言技能文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+
 ## 2026-07-16T04:46:54+09:00
 
 **摘要**：skill(nixkits-skills) — 移除 Claude Code 支持（其软件内基于用户数据挖掘的国籍判断逻辑跨越安全边界）、添加 Codex 检测与安装支持。

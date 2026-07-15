@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:54:55+09:00
+
+**概要**: docs(nixkits-skills) —「既知の削除」を「リスク警告」に改名、5 言語スキル文書同期。
+
+| コミット | 説明 |
+|------|------|
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+
 ## 2026-07-16T04:46:54+09:00
 
 **概要**: skill(nixkits-skills) — Claude Code サポートを削除（ユーザーデータマイニングに基づく国籍推論がセキュリティ境界を越える）、Codex 検出・インストールサポートを追加。
