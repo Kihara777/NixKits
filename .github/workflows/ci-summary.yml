@@ -2,10 +2,6 @@ name: CI Summary
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows:
-      - "Build *"
-    types:
       - completed
 
 concurrency: ci-summary
@@ -16,7 +12,8 @@ permissions:
 
 jobs:
   summary:
-    runs-on: ubuntu-latest
+    runs-on:
+  workflow_dispatch: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +27,8 @@ jobs:
           FAILED=""
 
           # Single API call: fetch all workflow runs, pick latest per workflow
-          curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
+          curl -sS -H "Authorization:
+  workflow_dispatch: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed" \
             | jq -r '
