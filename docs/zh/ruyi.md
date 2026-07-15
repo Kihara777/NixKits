@@ -10,7 +10,7 @@
 [![ruyi-alpha aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-aarch64.yml?branch=main&label=ruyi-alpha%20aarch64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-中文 | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
+中文 | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md)  | [偽中国語](../pcn/ruyi.md)
 
 [RuyiSDK](https://ruyisdk.org) 的包管理器，用于 RISC-V 开发环境的工具链安装、虚拟环境管理、设备烧录与软件包仓库操作。
 

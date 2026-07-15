@@ -1,6 +1,6 @@
 # llama-cpp-rocm
 
-[中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md) | [ｶﾀﾘｯｼｭ](../katalish/llama-cpp-rocm.md) | 偽中国語
+[中文](../zh/llama-cpp-rocm.md) | [English](../en/llama-cpp-rocm.md) | [日本語](../ja/llama-cpp-rocm.md)  | 偽中国語
 
 llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、最先端機能試験使用。
 

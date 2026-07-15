@@ -1,6 +1,6 @@
 # 维护日志
 
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 ## 2026-07-16T04:54:55+09:00
 
@@ -527,7 +527,7 @@
 | 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
 
 
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
 
@@ -1455,7 +1455,7 @@ NixKits 软件更新维护日志。
 | 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
 
 
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 NixKits 软件更新维护日志。
 

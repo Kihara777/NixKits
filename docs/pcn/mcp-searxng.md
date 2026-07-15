@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-aarch64.yml?branch=main&label=aarch64%20v1.11.1)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-riscv64.yml?branch=main&label=riscv64%20v1.11.1)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | 偽中国語
+[中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md)  | 偽中国語
 
 [SearXNG](https://docs.searxng.org) 用 [MCP Server](https://modelcontextprotocol.io)。AI 代理網検索機能提供。
 

@@ -1,6 +1,6 @@
 # nixos-modern-cli (技能)
 
-[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixos-modern-cli.md) | 偽中国語
+[中文](../../zh/skills/nixos-modern-cli.md) | [English](../../en/skills/nixos-modern-cli.md) | [日本語](../../ja/skills/nixos-modern-cli.md)  | 偽中国語
 
 > NixOS 体系作業時起動。最新 Nix CLI、完全殻機能、正確保守手順保証。
 

@@ -11,7 +11,7 @@
 [![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 
-[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
+[中文](../zh/ruyi.md) | [English](../en/ruyi.md) | 日本語  | [偽中国語](../pcn/ruyi.md)
 
 [RuyiSDK](https://ruyisdk.org)のパッケージマネージャー。RISC-V開発環境向けのツールチェーンインストール、仮想環境管理、デバイスプロビジョニング、パッケージリポジトリ操作に使用する。
 

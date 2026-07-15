@@ -3,7 +3,7 @@
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-x86_64.yml?branch=main&label=x86_64%20v1.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-aarch64.yml?branch=main&label=aarch64%20v1.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/blender-mcp.md) | [English](../en/blender-mcp.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/blender-mcp.md) | [偽中国語](../pcn/blender-mcp.md)
+[中文](../zh/blender-mcp.md) | [English](../en/blender-mcp.md) | 日本語  | [偽中国語](../pcn/blender-mcp.md)
 
 Blender 向け MCP (Model Context Protocol) サーバー。AI アシスタントに Blender Python API への自然言語インターフェースを提供します。
 

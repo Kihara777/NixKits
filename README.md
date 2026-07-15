@@ -2,7 +2,7 @@
 
 [![CI](https://img.shields.io/endpoint?url=https://kihara777.github.io/NixKits/ci-status.json)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml) [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits) [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
 
-中文 | [English](docs/README.en.md) | [日本語](docs/README.ja.md) | [ｶﾀﾘｯｼｭ](docs/README.katalish.md) | [偽中国語](docs/README.pcn.md)
+中文 | [English](docs/README.en.md) | [日本語](docs/README.ja.md)  | [偽中国語](docs/README.pcn.md)
 
 NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 
@@ -73,7 +73,6 @@ nix registry add nixkits github:Kihara777/NixKits
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |
-| translate-katalish | ｶﾀﾘｯｼｭ 翻译（半角片假名逐词机械替换英文文档） | [docs/zh/skills/translate-katalish.md](docs/zh/skills/translate-katalish.md) |
 | translate-pseudocn | 偽中国語翻译（日语假名剥离 + 语序转换） | [docs/zh/skills/translate-pseudocn.md](docs/zh/skills/translate-pseudocn.md) |
 | write-maintenance-log | 按 NixKits 规范撰写维护日志（软件更新 + 错误修复） | [docs/zh/skills/write-maintenance-log.md](docs/zh/skills/write-maintenance-log.md) |
 | write-project-docs | 按 NixKits 风格为任意项目编写多语言文档系统 | [docs/zh/skills/write-project-docs.md](docs/zh/skills/write-project-docs.md) |

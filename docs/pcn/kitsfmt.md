@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-aarch64.yml?branch=main&label=aarch64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-riscv64.yml?branch=main&label=riscv64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | 偽中国語
+[中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md)  | 偽中国語
 
 **Nix 整形器** — rnix AST 基盤、属性整序・注釈保持・字下正規化。
 

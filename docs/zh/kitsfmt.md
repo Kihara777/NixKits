@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-aarch64.yml?branch=main&label=aarch64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-riscv64.yml?branch=main&label=riscv64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-中文 | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | [偽中国語](../pcn/kitsfmt.md)
+中文 | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md)  | [偽中国語](../pcn/kitsfmt.md)
 
 **Nix 格式化器** — 基于 rnix AST，支持属性排序、注释保留、缩进规范化。
 

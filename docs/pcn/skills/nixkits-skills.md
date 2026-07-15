@@ -1,6 +1,6 @@
 # nixkits-skills (技能)
 
-[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | 偽中国語
+[中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md)  | 偽中国語
 
 > NixKits 技能符号化代理目録（opencode、codewhale、codex、openclaw、agents）導入又更新。
 

@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/codewhale.md) | [偽中国語](../pcn/codewhale.md)
+[中文](../zh/codewhale.md) | [English](../en/codewhale.md) | 日本語  | [偽中国語](../pcn/codewhale.md)
 
 DeepSeek V4 専用のターミナルコーディングエージェント。
 

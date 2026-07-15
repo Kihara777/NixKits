@@ -1,6 +1,6 @@
 # write-project-docs (技能)
 
-[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | 偽中国語
+[中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)  | 偽中国語
 
 > NixKits 式完全多言語文書生成 — 中英日+偽中国語四言語、簡潔、表駆動。
 

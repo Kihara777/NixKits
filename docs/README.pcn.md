@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [ｶﾀﾘｯｼｭ](README.katalish.md) | 偽中国語
+[中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md)  | 偽中国語
 
 NixKits — 軟体、修正、NixOS 部品、AI 符号化代理技能之蒐集。
 
@@ -74,7 +74,6 @@ AI 符号化代理向：
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 現代 CLI 手引（AI 模型向） | [docs/pcn/skills/nixos-modern-cli.md](pcn/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 削除済 /etc/nixos 設定 Nix store 自復元 | [docs/pcn/skills/recover-nixos-config.md](pcn/skills/recover-nixos-config.md) |
-| translate-katalish | 片仮名英語翻訳（英単語→半角片仮名機械置換） | [docs/pcn/skills/translate-katalish.md](pcn/skills/translate-katalish.md) |
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/pcn/skills/translate-pseudocn.md](pcn/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様沿 MAINTENANCE.md 条目作成（軟体更新 + 誤修正） | [docs/pcn/skills/write-maintenance-log.md](pcn/skills/write-maintenance-log.md) |
 | write-project-docs | 任意計画 NixKits 式多言語文書作成 | [docs/pcn/skills/write-project-docs.md](pcn/skills/write-project-docs.md) |

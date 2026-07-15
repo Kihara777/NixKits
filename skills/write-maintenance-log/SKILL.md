@@ -227,7 +227,6 @@ git log --oneline --since="<时间范围>"
 # 基准语言 + 基础扩展
 BASE_LANGS="zh en ja"
 
-# 自动发现 translate-* 扩展语言（katalish、pcn 等）
 for skill in skills/translate-*/SKILL.md; do
   lang=$(sed -n '/^language_code:/s/.*: *//p' "$skill")
   EXTRA_LANGS="$EXTRA_LANGS $lang"
@@ -243,7 +242,6 @@ done
 3. **翻译摘要正文**：`**摘要**` / `**Summary**` 后的自然语言正文必须翻译为目标语言
    - en → AI 直译
    - ja → AI 直译
-   - katalish → 按 `skills/translate-katalish/SKILL.md` 规则机械替换
    - pcn → 按 `skills/translate-pseudocn/SKILL.md` 规则假名剥离 + 语序保持
 4. **保持原文**：commit SHA、包名、版本号、hash 值、命令、路径**不翻译**
 5. **写入**对应 `docs/MAINTENANCE.<lang>.md`
@@ -265,7 +263,6 @@ done
 
 #### 多语映射表
 
-| 代码 | zh | en | ja | katalish | pcn |
 |------|----|----|-----|---------|-----|
 | `TITLE` | `# 维护日志` | `# Maintenance Log` | `# メンテナンスログ` | `# ﾒﾝﾃﾅﾝｽ ﾛｸﾞ` | `# 維護記録` |
 | `SUBTITLE` | `NixKits 软件更新维护日志。` | `NixKits package update changelog.` | `NixKits パッケージ更新履歴。` | `ﾆｯｸｽｷｯﾄ ﾊﾟｯｹｰｼﾞ ｱｯﾌﾟﾃﾞｰﾄ ﾁｪﾝｼﾞﾛｸﾞ。` | `NixKits 軟件更新維護記録。` |
@@ -276,7 +273,6 @@ done
 ### 第 5 步：提交
 
 ```bash
-git add MAINTENANCE.md docs/MAINTENANCE.en.md docs/MAINTENANCE.ja.md docs/MAINTENANCE.katalish.md docs/MAINTENANCE.pcn.md
 git commit -m "docs(MAINTENANCE): record <date> — <summary>"
 ```
 

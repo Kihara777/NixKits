@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-aarch64.yml?branch=main&label=aarch64%20v1.11.1)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-riscv64.yml?branch=main&label=riscv64%20v1.11.1)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/mcp-searxng.md) | English | [日本語](../ja/mcp-searxng.md) | [ｶﾀﾘｯｼｭ](../katalish/mcp-searxng.md) | [偽中国語](../pcn/mcp-searxng.md)
+[中文](../zh/mcp-searxng.md) | English | [日本語](../ja/mcp-searxng.md)  | [偽中国語](../pcn/mcp-searxng.md)
 
 [MCP Server](https://modelcontextprotocol.io) for [SearXNG](https://docs.searxng.org) — web search for AI assistants.
 

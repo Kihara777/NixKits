@@ -107,13 +107,12 @@ sed -i "2s|$| ...|" docs/*/xxx.md
 
 ```bash
 # 验证所有语言目录下切换器完整性
-for d in docs/zh docs/en docs/ja docs/katalish docs/pcn; do
+for d in docs/zh docs/en docs/ja docs/pcn; do
   for f in $d/*.md; do
     l=$(grep '^\[中文\]' "$f"); s=0
     echo "$l"|grep -q '中文' && s=$((s+1))
     echo "$l"|grep -q 'English' && s=$((s+1))
     echo "$l"|grep -q '日本語' && s=$((s+1))
-    echo "$l"|grep -q 'ｶﾀﾘｯｼｭ' && s=$((s+1))
     echo "$l"|grep -q '偽中国語' && s=$((s+1))
     [ $s -lt 5 ] && echo "INCOMPLETE ($s/5): $f"
   done
@@ -127,7 +126,6 @@ done
 | 阶 | 遗漏范围 | 原因 |
 |----|---------|------|
 | 1 | 子代理生成的新文件自身 | 只生成 3 条目，未含扩展语言 |
-| 2 | 现有 `docs/{zh,en,ja}/*.md` | sed 已覆盖，但 katalish/pcn 自身需额外补全 |
 | 3 | **根目录 + `docs/*.xx.md` 模式** | sed glob `docs/zh/*.md` 不匹配根级文件 |
 
 **为什么顶层文档被系统性忽略——两种文件组织模式的结构性冲突：**
@@ -141,7 +139,6 @@ done
 
 子代理被分派任务「转换 `docs/en/` 下所有文件」时，`ls docs/en/` 只返回模块文档（如 `home.md`），**完全不可见** `docs/README.en.md` 和 `README.md`——因为这些文件不在 `docs/en/` 子目录中。
 
-父代理验证循环同样只遍历 `docs/{zh,en,ja,katalish,pcn}/` 目录，也不会命中 `docs/` 根级文件。
 
 **结论：基于目录遍历的文件发现逻辑，对「后缀式」组织的顶层文档存在盲区。**
 
@@ -168,7 +165,6 @@ for f in README.md MAINTENANCE.md NOTICE.md kits/README.md \
          $(find docs -maxdepth 2 -name '*.md'); do
   l=$(grep '\[中文\]\|\[English\]\|\[日本語\]' "$f" 2>/dev/null | head -1)
   [ -z "$l" ] && continue
-  echo "$l" | grep -q 'ｶﾀﾘｯｼｭ' || echo "MISSING katalish: $f"
   echo "$l" | grep -q '偽中国語' || echo "MISSING pcn: $f"
 done
 ```
@@ -195,7 +191,6 @@ Convert TWO sets of files:
 # 源文件 × 目标文件 一一对应检查
 for src in docs/en/*.md docs/README.en.md docs/MAINTENANCE.en.md docs/NOTICE.en.md; do
   name=$(basename "$src" | sed 's/\.en\.md$/.md/')
-  [ -f "docs/katalish/$name" ] || echo "MISSING TARGET: docs/katalish/$name"
 done
 ```
 
@@ -222,6 +217,5 @@ done
 - 顶层文档（README/MAINTENANCE/NOTICE）的 body 链接需跨深度调整
 - 模块文档表格中的链接必须指向同语言版本而非源语言
 
-**漏翻检查** — katalish/pcn 等伪本地化的 body 文本应有密集的目标语言词汇，不应残留大段源语言。
 
 **结构一致性** — 所有语言版本的 README 应有相同的节结构（新增/移除节时所有语言同步）。

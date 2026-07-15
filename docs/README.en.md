@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](../README.md) | English | [日本語](README.ja.md) | [ｶﾀﾘｯｼｭ](README.katalish.md) | [偽中国語](README.pcn.md)
+[中文](../README.md) | English | [日本語](README.ja.md)  | [偽中国語](README.pcn.md)
 
 NixKits — a collection of software, patches, NixOS modules, and AI coding assistant skills.
 
@@ -74,7 +74,6 @@ For AI coding assistants:
 | nixkits-skills | NixKits skill installer (local/online) | [docs/en/skills/nixkits-skills.md](en/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/en/skills/nixos-modern-cli.md](en/skills/nixos-modern-cli.md) |
 | recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/en/skills/recover-nixos-config.md](en/skills/recover-nixos-config.md) |
-| translate-katalish | Katakana English translation (mechanical word-level substitution of English docs) | [docs/en/skills/translate-katalish.md](en/skills/translate-katalish.md) |
 | translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/en/skills/translate-pseudocn.md](en/skills/translate-pseudocn.md) |
 | write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/en/skills/write-maintenance-log.md](en/skills/write-maintenance-log.md) |
 | write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/en/skills/write-project-docs.md](en/skills/write-project-docs.md) |

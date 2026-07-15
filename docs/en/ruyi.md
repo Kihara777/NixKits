@@ -11,7 +11,7 @@
 [![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 
-[中文](../zh/ruyi.md) | English | [日本語](../ja/ruyi.md) | [ｶﾀﾘｯｼｭ](../katalish/ruyi.md) | [偽中国語](../pcn/ruyi.md)
+[中文](../zh/ruyi.md) | English | [日本語](../ja/ruyi.md)  | [偽中国語](../pcn/ruyi.md)
 
 The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain installation, virtual environment management, device provisioning, and package repository operations in RISC-V development environments.
 

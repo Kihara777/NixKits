@@ -139,7 +139,7 @@ git diff flake.lock
 对每个更新的包，在所有语言文档中更新版本号：
 
 ```bash
-for lang in zh en ja katalish pcn; do
+for lang in zh en ja pcn; do
   sed -i "s/$OLD_VER/$NEW_VER/g" docs/$lang/<pkg>.md
 done
 ```

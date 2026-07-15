@@ -1,6 +1,6 @@
 # write-maintenance-log (技能)
 
-[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-maintenance-log.md) | 偽中国語
+[中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)  | 偽中国語
 
 > NixKits 規約基 MAINTENANCE.md 執筆・更新。軟体更新及誤修正両対応、全言語同期。
 
@@ -19,7 +19,7 @@
 
 - 軟体更新記録作成（概要 + 送信 ID 表 + 版表）
 - 誤修正記録作成（概要 + 送信 ID 表）
-- 保守記録全言語同期（zh/en/ja/katalish/pcn）
+- 保守記録全言語同期（zh/en/ja/pcn）
 - 先行技能（nixkits-check-updates）及 git commit 消息自概要自動抽出
 - 統一書式：ISO 8601 精密時刻、LIFO 順序、未変更 hash 省略
 

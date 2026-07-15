@@ -1,6 +1,6 @@
 # write-project-docs (Skill)
 
-中文 | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/write-project-docs.md) | [偽中国語](../../pcn/skills/write-project-docs.md)
+中文 | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)  | [偽中国語](../../pcn/skills/write-project-docs.md)
 
 > 按 NixKits 风格为任意项目编写完整的多语言文档系统 — 中英日及各语言扩展（自动发现）、简洁、表驱动。
 
@@ -32,7 +32,7 @@
 用 staleness check 定位过时文件：
 
 ```bash
-for lang in zh en ja katalish; do
+for lang in zh en ja; do
   for skill in skills/*/SKILL.md; do
     name=$(basename $(dirname $skill))
     doc="docs/$lang/skills/$name.md"
@@ -53,7 +53,7 @@ done
 - 目标行数 ~40-60 行，补丁/模块文档以四段式为标准（基本信息 → 修正内容 → 安装 → 注意）
 - 禁止独立的技术细节、问题排查、参考章节 — 压缩为 `## 注意` bullet
 - 三个 README 必须同步更新表行
-- 根目录仅保留中文无后缀 `.md`，本地化版本（`*.en.md`、`*.ja.md`、`*.katalish.md`）移入 `docs/`
+- 根目录仅保留中文无后缀 `.md`，本地化版本（`*.en.md`、`*.ja.md`、``）移入 `docs/`
 - 所有语言必须包含基本信息表格（中文 `## 基本信息`、英文 `## Info`、日文 `## 基本情報`、各语言按 `translate-*` 技能定义的列名）
 - 补丁/模块源码变更后，「修正内容」/「功能」列表必须同步更新，每条 bullet 对应实际修改
 

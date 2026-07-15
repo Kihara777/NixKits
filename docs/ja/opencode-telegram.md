@@ -4,7 +4,7 @@
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.22.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.22.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | 日本語 | [ｶﾀﾘｯｼｭ](../katalish/opencode-telegram.md) | [偽中国語](../pcn/opencode-telegram.md)
+[中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | 日本語  | [偽中国語](../pcn/opencode-telegram.md)
 
 [OpenCode](https://opencode.ai) の Telegram Bot クライアント。
 

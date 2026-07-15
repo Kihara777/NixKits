@@ -1,6 +1,6 @@
 # NixKits
 
-[中文](../README.md) | [English](README.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](README.katalish.md) | [偽中国語](README.pcn.md)
+[中文](../README.md) | [English](README.en.md) | 日本語  | [偽中国語](README.pcn.md)
 
 NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コーディングアシスタントスキルのコレクション。
 
@@ -74,7 +74,6 @@ AI コーディングアシスタント向け：
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/ja/skills/recover-nixos-config.md](ja/skills/recover-nixos-config.md) |
-| translate-katalish | カタカナ英語翻訳（英単語→半角カタカナ機械置換） | [docs/ja/skills/translate-katalish.md](ja/skills/translate-katalish.md) |
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/ja/skills/translate-pseudocn.md](ja/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様に沿った MAINTENANCE.md エントリの作成（ソフトウェア更新 + バグ修正） | [docs/ja/skills/write-maintenance-log.md](ja/skills/write-maintenance-log.md) |
 | write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを作成 | [docs/ja/skills/write-project-docs.md](ja/skills/write-project-docs.md) |
