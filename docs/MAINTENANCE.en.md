@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:46:54+09:00
+
+**Summary**: skill(nixkits-skills) — removed Claude Code support (nationality inference via user data mining crosses security boundary), added Codex detection and install support.
+
+| Commit | Description |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex in nixkits-skills, add removal notice |
+
 ## 2026-07-16T04:35:20+09:00
 
 **Summary**: skill(write-maintenance-log) — strengthened timestamp rules: mandatory `git log` for commit times, ban `T00:00:00` placeholders, add post-generation verification step. Generalized from the MAINTENANCE placeholder timestamp fix (`968df0e`).

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:46:54+09:00
+
+**概要**: skill(nixkits-skills) — Claude Code サポートを削除（ユーザーデータマイニングに基づく国籍推論がセキュリティ境界を越える）、Codex 検出・インストールサポートを追加。
+
+| コミット | 説明 |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex in nixkits-skills, add removal notice |
+
 ## 2026-07-16T04:35:20+09:00
 
 **概要**: skill(write-maintenance-log) — タイムスタンプ規則強化：`git log` によるコミット時刻の強制取得、`T00:00:00` プレースホルダ禁止、生成後検証ステップ追加。MAINTENANCE プレースホルダタイムスタンプ修正（`968df0e`）から汎化。

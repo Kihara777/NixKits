@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:46:54+09:00
+
+**摘要**：skill(nixkits-skills) — 移除 Claude Code 支持（其软件内基于用户数据挖掘的国籍判断逻辑跨越安全边界）、添加 Codex 检测与安装支持。
+
+| 提交 | 说明 |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex in nixkits-skills, add removal notice |
+
 ## 2026-07-16T04:35:20+09:00
 
 **摘要**：skill(write-maintenance-log) — 强化时间戳规则：强制使用 `git log` 获取 commit 时间、禁止 `T00:00:00` 占位符、新增生成后验证步骤。泛化自维护日志占位时间修复经验（`968df0e`）。
