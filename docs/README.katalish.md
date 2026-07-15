@@ -16,7 +16,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 ## ｿﾌﾄｳｪｱ
 
-ｸｵﾑﾌﾟｱﾄｲﾌﾞﾙｴ ｳｨｽﾞ ｵｰﾙ `lib.platforms.linux` — ﾌｫﾛｰｽﾞ nixpkgs ｱｳﾄｵﾑｱﾄｲｸｱﾙﾘｰ.
+All packages ﾌｫﾛｰ nixpkgs platform support by default (`lib.platforms.linux`). Some packages have architecture restrictions due to upstream — see build badges in each package documentation.
 
 | ｿﾌﾄｳｪｱ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |---|------|------|

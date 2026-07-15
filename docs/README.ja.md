@@ -16,7 +16,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 ## ソフトウェア
 
-すべての `lib.platforms.linux` に対応 — nixpkgs に自動追従。
+全パッケージはデフォルトで nixpkgs プラットフォーム対応（`lib.platforms.linux`）。一部パッケージのアーキテクチャ対応は上流の影響を受ける — 各パッケージ文書のビルドバッジを参照。
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|

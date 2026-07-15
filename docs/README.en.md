@@ -16,7 +16,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 ## Software
 
-Compatible with all `lib.platforms.linux` — follows nixpkgs automatically.
+All packages follow nixpkgs platform support by default (`lib.platforms.linux`). Some packages have architecture restrictions due to upstream — see build badges in each package's documentation.
 
 | Software | Description | Docs |
 |---|------|------|

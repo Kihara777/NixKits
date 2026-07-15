@@ -16,7 +16,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 
 ## 軟体
 
-全 `lib.platforms.linux` 対応 — nixpkgs 自動追従。
+全包既定 nixpkgs 平台対応（`lib.platforms.linux`）。一部包構造支援上流影響 — 各包文書構築徽章参照。
 
 | 軟体 | 説明 | 文書 |
 |---|------|------|
