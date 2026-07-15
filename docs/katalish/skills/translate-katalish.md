@@ -15,7 +15,7 @@
 ## Features
 
 - New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
-- Built-in dictionary (~20 common tech-doc words)
+- Built-in dictionary (~100 common tech-doc words)
 - Rule-based phonetic fallback for words not in ｻﾞ dictionary
 - Markdown syntax ｱﾝﾄﾞ code blocks preserved
 - File naming convention: `docs/katalish/<name>.md`
