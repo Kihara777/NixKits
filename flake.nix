@@ -23,7 +23,10 @@
   in {
     packages = rec {
       blender-mcp          = pkgs.callPackage ./packages/blender-mcp.nix { };
-      codewhale            = pkgs.callPackage ./packages/codewhale.nix { };
+      codewhale            =
+        if pkgs.stdenv.hostPlatform.isRiscV
+        then pkgs.callPackage ./packages/codewhale-src.nix { }
+        else pkgs.callPackage ./packages/codewhale.nix { };
       kitsfmt              = kitsfmtDrv;
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };

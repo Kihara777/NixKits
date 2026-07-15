@@ -7,25 +7,24 @@
 }:
 
 let
-  version = "0.8.66";
+  version = "0.8.67";
 
-  # Prebuilt binaries from GitHub Releases support three Linux architectures.
+  # Prebuilt binaries from GitHub Releases — x86_64 and aarch64 only.
+  # riscv64 is built from source (see codewhale-src.nix).
   archSuffix = {
     "x86_64-linux"  = "x64";
     "aarch64-linux" = "arm64";
-    "riscv64-linux" = "riscv64";
+    "riscv64-linux" = throw "codewhale: riscv64 must be built from source via codewhale-src.nix";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   cliHashes = {
-    x64     = "sha256-94f2j1X15EdOR9+o1HJfcfA/X7wRdUjVlwA9BFmC+R8=";
-    arm64   = "sha256-fxyC7kUJzQ2xysqpP9pF6bSz6L+5kru6MsVD8I7fS7Q=";
-    riscv64 = "sha256-mzaW2ywlq9yyoxm1YBWqSi619aYIo1vC5D4qac4teZI=";
+    x64     = "sha256-xl02Q6a1/+XI+YdfHDDfgZl2W2TLna9muDg9Rdn8q0s=";
+    arm64   = "sha256-6dexeyBHj0F7Pmoad0FKsyw8Uo6SscMX510YLeh0sXk=";
   };
 
   tuiHashes = {
-    x64     = "sha256-0CoHU/9Pin7UrhmyxFI12R83KvPh6nptW8Kculsxio0=";
-    arm64   = "sha256-HJst2hOvieI7QKnxc17D4cqjG4pWmIkqgd3bxbWJPUY=";
-    riscv64 = "sha256-NY+CQT2zzbT1sOjXMksaDLwqHdPWJeoY6PisZJmuYq4=";
+    x64     = "sha256-JkUeBFM/dennS6l0pi7mgbPQA3eTOUcYDhEydOGXBBs=";
+    arm64   = "sha256-8DqnQ1K97wK4gDwGuXu+zXqbnuZz7Gh895R7oFq9KQI=";
   };
 
   codewhale-cli = fetchurl {
