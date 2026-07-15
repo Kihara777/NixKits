@@ -1,14 +1,14 @@
 # ruyi
 
-[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-alpha x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-x86_64.yml?branch=main&label=ruyi-alpha%20x86_64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-alpha aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-aarch64.yml?branch=main&label=ruyi-alpha%20aarch64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.50.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.50.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.50.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64%20v0.50.0-beta.20260623)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64%20v0.50.0-beta.20260623)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64%20v0.50.0-beta.20260623)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-alpha x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-x86_64.yml?branch=main&label=ruyi-alpha%20x86_64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-alpha aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-aarch64.yml?branch=main&label=ruyi-alpha%20aarch64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64%20v0.51.0-alpha.20260616)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 
 [中文](../zh/ruyi.md) | [English](../en/ruyi.md) | [日本語](../ja/ruyi.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/ruyi.md)

@@ -1,8 +1,8 @@
 # kitsfmt
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-x86_64.yml?branch=main&label=x86_64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-aarch64.yml?branch=main&label=aarch64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-riscv64.yml?branch=main&label=riscv64)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-x86_64.yml?branch=main&label=x86_64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-aarch64.yml?branch=main&label=aarch64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-kitsfmt-riscv64.yml?branch=main&label=riscv64%20v0.5.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/kitsfmt.md) | [English](../en/kitsfmt.md) | [日本語](../ja/kitsfmt.md) | [ｶﾀﾘｯｼｭ](../katalish/kitsfmt.md) | 偽中国語
 
