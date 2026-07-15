@@ -2,6 +2,68 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-07-16T06:08:43+09:00
+
+**摘要**: fix(ci) — ci-summary workflow `gh run list` 逐 workflow API 呼出 HTTP 403 rate limit 修正。2 回一括 `gh api` 呼出並列制御変更。
+
+| Commit | Description |
+|------|------|
+| `9f6a4ac` | fix(ci): fix ci-summary API rate limit — batch workflow fetch, add concurrency control |
+
+## 2026-07-16T05:57:35+09:00
+
+**摘要**: revert(skill) — katalish（半角片仮名機械翻訳）全内容削除：19 文書、技能（SKILL.md + 102 条辞書）、全言語切替連結。翻訳不安定（英文残留又文書構造破壊）生産環境不適。
+
+| Commit | Description |
+|------|------|
+| `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
+
+## 2026-07-16T04:46:54+09:00
+
+**摘要**: skill(nixkits-skills) — Claude Code 導入対象削除（利用者資料基国籍推論安全境界越）、Codex 支援追加。SKILL.md「危険警告」節追記、原文声明含。
+
+| Commit | Description |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale |
+| `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
+
+## 2026-07-16T04:30:55+09:00
+
+**摘要**: feat(ci) — CI 集計端点徽章追加。主文書 CI 徽章 shields.io endpoint 経由 `gh-pages/ci-status.json` 読取、失敗時失敗包名表示。
+
+| Commit | Description |
+|------|------|
+| `6465260` | feat(ci): add CI summary workflow with endpoint badge |
+| `b489890` | docs(README): switch main CI badge to endpoint |
+
+## 2026-07-16T04:09:46+09:00
+
+**摘要**: refactor(ci) — CI 単一 check.yml 25 独立 workflow 書類分割（包×構造毎）、徽章相互影響完全解消。再利用可能 `build-package.yml` 追加。
+
+| Commit | Description |
+|------|------|
+| `bc42e6f` | refactor(ci): split single check.yml into 25 isolated per-package-per-arch workflows |
+| `1dfc1ee` | docs: update ruyi badge URLs to new isolated workflow files |
+| `f235edc` | docs: embed version numbers in CI badge labels |
+
+## 2026-07-16T04:00:46+09:00
+
+**摘要**: fix(codewhale) — 源構築 riscv64 交叉編集修正：ring crate `-m64` 誤 cc crate 継承 host CFLAGS 起因、per-target CFLAGS 清空修正。
+
+| Commit | Description |
+|------|------|
+| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 |
+| `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
+
+## 2026-07-07T12:01:12+09:00
+
+**摘要**: fix(docs) — katalish/pcn 現地化修正：katalish/ruyi.md pcn/ruyi.md 言語切替破損（連結欠落又重複言語名）修正、pcn/ruyi.md 全文日本語偽中国語書換。
+
+| Commit | Description |
+|------|------|
+| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
+| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported |
 ## 2026-07-16T04:54:55+09:00
 
 **Summary**: docs(nixkits-skills) — renamed 'Known Removals' to 'Risk Advisory' across 5-language skill docs.

@@ -2,6 +2,68 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T06:08:43+09:00
+
+**Summary**: fix(ci) — ci-summary workflow was failing with HTTP 403 rate limit from calling `gh run list` per-workflow (25 calls). Fixed with 2 batched `gh api` calls + concurrency guard.
+
+| Commit | Description |
+|------|------|
+| `9f6a4ac` | fix(ci): fix ci-summary API rate limit — batch workflow fetch, add concurrency control |
+
+## 2026-07-16T05:57:35+09:00
+
+**Summary**: revert(skill) — removed all katalish (halfwidth-katakana mechanical translation) content: 19 docs, skill (SKILL.md + 102-entry dictionary), all lang switcher links. The approach proved unstable (leaving English residue or destroying doc structure).
+
+| Commit | Description |
+|------|------|
+| `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
+
+## 2026-07-16T04:46:54+09:00
+
+**Summary**: skill(nixkits-skills) — removed Claude Code install target (nationality inference via user data mining crosses security boundary), added Codex support. Added "Risk Advisory" section with original verbatim rationale to SKILL.md.
+
+| Commit | Description |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+| `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
+
+## 2026-07-16T04:30:55+09:00
+
+**Summary**: feat(ci) — new CI summary endpoint badge. Main README CI badge now reads from `gh-pages/ci-status.json` via shields.io endpoint, showing failing package names on failure.
+
+| Commit | Description |
+|------|------|
+| `6465260` | feat(ci): add CI summary workflow with endpoint badge |
+| `b489890` | docs(README): switch main CI badge to endpoint |
+
+## 2026-07-16T04:09:46+09:00
+
+**Summary**: refactor(ci) — split single check.yml into 25 isolated workflow files (one per package×architecture), eliminating badge cross-contamination. Added reusable `build-package.yml`.
+
+| Commit | Description |
+|------|------|
+| `bc42e6f` | refactor(ci): split single check.yml into 25 isolated per-package-per-arch workflows |
+| `1dfc1ee` | docs: update ruyi badge URLs to new isolated workflow files |
+| `f235edc` | docs: embed version numbers in CI badge labels |
+
+## 2026-07-16T04:00:46+09:00
+
+**Summary**: fix(codewhale) — riscv64 cross-compile fix for source-built codewhale: ring crate `-m64` error caused by cc crate inheriting host CFLAGS; fixed by clearing per-target CFLAGS.
+
+| Commit | Description |
+|------|------|
+| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 on riscv64 cross-compile |
+| `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
+
+## 2026-07-07T12:01:12+09:00
+
+**Summary**: fix(docs) — katalish/pcn localization fixes: broken lang switchers in katalish/ruyi.md and pcn/ruyi.md (missing links, duplicate lang names), pcn/ruyi.md full rewrite from raw Japanese to pseudocn.
+
+| Commit | Description |
+|------|------|
+| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
+| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported (5-lang sync) |
 ## 2026-07-16T04:54:55+09:00
 
 **Summary**: docs(nixkits-skills) — renamed 'Known Removals' to 'Risk Advisory' across 5-language skill docs.
@@ -102,7 +164,7 @@
 
 | Commit | Description |
 |------|------|
-| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+| `a1cf458` | packages: add blender-mcp (MCP server for Blender) |
 
 | Package | Old | New |
 |--------|--------|--------|

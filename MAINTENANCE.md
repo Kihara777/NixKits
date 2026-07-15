@@ -2,6 +2,68 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-16T06:08:43+09:00
+
+**摘要**：fix(ci) — 修复 ci-summary workflow 因 `gh run list` 逐 workflow 调用 API 触发 rate limit（HTTP 403）导致主文档 CI badge 无法更新。改为 2 次批量 `gh api` 调用 + 并发控制。
+
+| 提交 | 说明 |
+|------|------|
+| `9f6a4ac` | fix(ci): fix ci-summary API rate limit — batch workflow fetch, add concurrency control |
+
+## 2026-07-16T05:57:35+09:00
+
+**摘要**：revert(skill) — 移除 katalish（半角片假名机械翻译）全部内容：19 个文档、技能（SKILL.md + dictionary.md 102 条）、所有语言切换器链接。该方案因翻译不稳定（残留英文或破坏文档结构）不适合生产环境。
+
+| 提交 | 说明 |
+|------|------|
+| `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
+
+## 2026-07-16T04:46:54+09:00
+
+**摘要**：skill(nixkits-skills) — 移除 Claude Code 安装目标（软件内基于用户数据挖掘的国籍推断跨越安全边界），添加 Codex 支持。SKILL.md 新增「风险警示」章节包含原始声明文本。
+
+| 提交 | 说明 |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+| `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
+
+## 2026-07-16T04:30:55+09:00
+
+**摘要**：feat(ci) — 新增 CI summary endpoint badge。主文档 CI 徽章改为 shields.io endpoint 读取 `gh-pages/ci-status.json`，失败时显示失败包名和架构。
+
+| 提交 | 说明 |
+|------|------|
+| `6465260` | feat(ci): add CI summary workflow with endpoint badge |
+| `b489890` | docs(README): switch main CI badge to endpoint |
+
+## 2026-07-16T04:09:46+09:00
+
+**摘要**：refactor(ci) — CI 从单个 check.yml 拆分为 25 个独立 workflow 文件（每个包×架构一个），彻底消除 badge 间互相影响。新增 reusable workflow `build-package.yml`。
+
+| 提交 | 说明 |
+|------|------|
+| `bc42e6f` | refactor(ci): split single check.yml into 25 isolated per-package-per-arch workflows |
+| `1dfc1ee` | docs: update ruyi badge URLs to new isolated workflow files |
+| `f235edc` | docs: embed version numbers in CI badge labels |
+
+## 2026-07-16T04:00:46+09:00
+
+**摘要**：fix(codewhale) — codewhale 源码构建 riscv64 交叉编译修复：ring crate 的 `-m64` 错误因 cc crate 继承 host CFLAGS 导致，通过清空 per-target CFLAGS 修复。
+
+| 提交 | 说明 |
+|------|------|
+| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 on riscv64 cross-compile |
+| `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
+
+## 2026-07-07T12:01:12+09:00
+
+**摘要**：fix(docs) — katalish/pcn 本地化修复：katalish/ruyi.md 和 pcn/ruyi.md 语言切换器错误（缺少链接或重复语言名）修复，pcn/ruyi.md 全文从日文重写为伪中国语。
+
+| 提交 | 说明 |
+|------|------|
+| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
+| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported (5-lang sync) |
 ## 2026-07-16T04:54:55+09:00
 
 **摘要**：docs(nixkits-skills) —「已知移除」章节改名为「风险警示」，5 语言技能文档同步。
@@ -102,7 +164,7 @@
 
 | 提交 | 说明 |
 |------|------|
-| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
+| `a1cf458` | packages: add blender-mcp (MCP server for Blender) |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|

@@ -2,6 +2,68 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T06:08:43+09:00
+
+**概要**: fix(ci) — ci-summary workflow が `gh run list` をワークフロー毎に呼び出し HTTP 403 rate limit で失敗していた問題を修正。2 回の一括 `gh api` 呼出に変更し並行制御を追加。
+
+| コミット | 説明 |
+|------|------|
+| `9f6a4ac` | fix(ci): fix ci-summary API rate limit — batch workflow fetch, add concurrency control |
+
+## 2026-07-16T05:57:35+09:00
+
+**概要**: revert(skill) — katalish（半角カタカナ機械翻訳）の全コンテンツを削除：19 文書、スキル（SKILL.md + 102 項目辞書）、全言語切替リンク。翻訳の不安定さ（英文残留や文書構造破壊）により本番環境不適と判断。
+
+| コミット | 説明 |
+|------|------|
+| `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
+
+## 2026-07-16T04:46:54+09:00
+
+**概要**: skill(nixkits-skills) — Claude Code インストール対象を削除（ユーザーデータに基づく国籍推論がセキュリティ境界を越える）、Codex サポートを追加。SKILL.md に「リスク警告」節と原文声明を追加。
+
+| コミット | 説明 |
+|------|------|
+| `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale |
+| `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
+
+## 2026-07-16T04:30:55+09:00
+
+**概要**: feat(ci) — CI サマリーエンドポイントバッジを追加。メイン README CI バッジを shields.io endpoint 経由で `gh-pages/ci-status.json` を読み取る方式に変更、失敗時に失敗パッケージ名を表示。
+
+| コミット | 説明 |
+|------|------|
+| `6465260` | feat(ci): add CI summary workflow with endpoint badge |
+| `b489890` | docs(README): switch main CI badge to endpoint |
+
+## 2026-07-16T04:09:46+09:00
+
+**概要**: refactor(ci) — CI を単一 check.yml から 25 の独立 workflow ファイルに分割（パッケージ×アーキテクチャ毎）、バッジの相互影響を完全に解消。再利用可能な `build-package.yml` を追加。
+
+| コミット | 説明 |
+|------|------|
+| `bc42e6f` | refactor(ci): split single check.yml into 25 isolated per-package-per-arch workflows |
+| `1dfc1ee` | docs: update ruyi badge URLs to new isolated workflow files |
+| `f235edc` | docs: embed version numbers in CI badge labels |
+
+## 2026-07-16T04:00:46+09:00
+
+**概要**: fix(codewhale) — ソースビルド riscv64 クロスコンパイル修正：ring crate の `-m64` エラーが cc crate の host CFLAGS 継承に起因、per-target CFLAGS をクリアして修正。
+
+| コミット | 説明 |
+|------|------|
+| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 |
+| `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
+
+## 2026-07-07T12:01:12+09:00
+
+**概要**: fix(docs) — katalish/pcn ローカライズ修正：katalish/ruyi.md と pcn/ruyi.md の言語切替破損（リンク欠落や重複言語名）を修正、pcn/ruyi.md を日本語から偽中国語に全文書換。
+
+| コミット | 説明 |
+|------|------|
+| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
+| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported |
 ## 2026-07-16T04:54:55+09:00
 
 **概要**: docs(nixkits-skills) —「既知の削除」を「リスク警告」に改名、5 言語スキル文書同期。
