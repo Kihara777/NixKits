@@ -33,3 +33,9 @@
 ## ﾕｰｾｰｼﾞ
 
 Activated ｳｪﾝ ｻﾞ user asks to "ｲﾝｽﾄｰﾙ skills" ｵﾗ "update NixKits skills".
+
+## Known Removals
+
+**Claude Code** removed 2026-07:
+
+> Claude Code embedded nationality-inference business logic via user data mining, crossing security model boundary and breaking fundamental user trust. This repository strongly advises reassessment and workflow migration where possible. Repository assumes no liability for Anthropic account anomalies or losses from use of this content.

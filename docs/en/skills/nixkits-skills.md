@@ -33,3 +33,11 @@
 ## Usage
 
 Activated when the user asks to "install skills" or "update NixKits skills".
+
+## Known Removals
+
+**Claude Code** was removed in 2026-07 for the following reason:
+
+> While Claude Code, as a company, has the right to KYC and to choose which users and regions to serve, the act of embedding business logic that infers user nationality from data mining—regardless of purpose or justification—has severely crossed the security model boundary and broken fundamental user trust.
+>
+> For this reason, this repository strongly advises any user of that software to reassess its necessity and consider migrating their workflow where possible. This repository fully respects the diversity of user needs and individual choice, but has an obligation to inform users of this risk. Should any anomaly or loss occur to your Anthropic account as a result of using this repository's content, you acknowledge that this event is unrelated to this repository.
