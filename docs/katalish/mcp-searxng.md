@@ -8,14 +8,14 @@
 
 [MCP Server](https://modelcontextprotocol.io) ﾌｫｱ [SearXNG](https://docs.searxng.org) — web search ﾌｫｱ AI assistants.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
 | Version | 1.11.1 |
 | Upstream | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.mcp-searxng ];
@@ -131,6 +131,6 @@ SEARXNG_URL="http://127.0.0.1:42701" timeout 3 mcp-searxng
 - Verify lighttpd reverse proxy forwards `X-Forwarded-For` header
 - Check logs: `journalctl -u searx --no-pager -n 30`
 
-## ｷｬｯｼｭ
+## Cache
 
 `cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).

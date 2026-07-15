@@ -5,16 +5,16 @@
 
 [中文](../zh/blender-mcp.md) | [English](../en/blender-mcp.md) | [日本語](../ja/blender-mcp.md) | ｶﾀﾘｯｼｭ | [偽中国語](../pcn/blender-mcp.md)
 
-An MCP (Model Context Protocol) ｻｰﾊﾞｰ ﾌｫｱ Blender — providing AI assistants ｳｨｽﾞ a natural ﾗﾝｹﾞｰｼﾞ interface to Blender's Python API.
+An MCP (Model Context Protocol) server for Blender, providing AI assistants with a natural language interface to Blender's Python API.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
 | ﾊﾞｰｼﾞｮﾝ | 1.0.0 |
 | ｳﾌﾟｽﾄﾗｴｱﾑ | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | Type | Python ﾊﾟｯｹｰｼﾞ (setuptools) |
-| ﾗｲｾﾝｽ | GPL-3.0-or-later |
+| License | GPL-3.0-or-later |
 | Platform | x86_64 / aarch64 (riscv64 unsupported: dependency chain cross-compilation defect) |
 
 ## Architecture
@@ -54,7 +54,7 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 
 > Tools ｳｨｽﾞ `_for_cli` suffix work on any .blend file without a running Blender instance (via a background Blender process).
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.blender-mcp ];
@@ -91,6 +91,6 @@ cp -r /nix/store/*-blender-mcp-*/share/blender/scripts/addons/blender_mcp_addon 
 
 In Blender: Edit → Preferences → Add-ons → search "Blender MCP" → enable.
 
-## ｷｬｯｼｭ
+## Cache
 
-`cachix use nixkits`（declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use）.
+`cachix use nixkits`(declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).

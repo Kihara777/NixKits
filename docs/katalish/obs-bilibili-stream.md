@@ -7,7 +7,7 @@
 
 OBS Studio Bilibili ﾗｲﾌﾞ ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-----|

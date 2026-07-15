@@ -4,7 +4,7 @@
 
 ﾊﾟｯﾁｰｽﾞ `asusctl` ﾌｫｱ better ASUS ROG Control Center on 2-in-1 detachable devices.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
@@ -21,7 +21,7 @@
 - **Boundary checks**: PowerZone index guards ﾌｫｱ firmware-reported invalid zones
 - **systemd deadlock fix**: Removes `PartOf` ﾌﾛﾑ `asus-shutdown.ｻｰﾋﾞｽ` to prevent cascading stop deadlock
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 Overlay (code ﾊﾟｯﾁ) + NixOS ﾓｼﾞｭｰﾙ (systemd fix), recommended together:
 

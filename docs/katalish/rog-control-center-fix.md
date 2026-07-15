@@ -4,7 +4,7 @@
 
 Fixes ｱ systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
@@ -17,7 +17,7 @@ Fixes ｱ systemd deadlock during shutdown in `asus-shutdown.ｻｰﾋﾞｽ`.
 
 - **Remove PartOf**: Clears `PartOf` on `asus-shutdown.ｻｰﾋﾞｽ` to prevent cascading stop deadlock ｳｪﾝ asusd restarts
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 {

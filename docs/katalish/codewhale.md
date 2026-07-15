@@ -8,7 +8,7 @@
 
 A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ ﾄﾞｴｴﾌﾟｽｴｴｸ V4.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
@@ -17,7 +17,7 @@ A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ
 | Type | Pre-built binaries (x86_64 / aarch64); source-built (riscv64) |
 | Platform | x86_64 / aarch64 / riscv64 |
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale ];
@@ -26,7 +26,7 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale 
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
 ```bash
 codewhale                              # interactive TUI
@@ -43,6 +43,6 @@ Requires ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.
 
 > ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.8.67. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental.
 
-## ｷｬｯｼｭ
+## Cache
 
 `cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).

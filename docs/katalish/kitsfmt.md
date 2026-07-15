@@ -8,7 +8,7 @@
 
 **Nix ﾌｫｰﾏｯﾀｰ** — AST-based ｳｨｽﾞ attribute sorting, comment preservation, ｱﾝﾄﾞ indentation normalization.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
@@ -16,7 +16,7 @@
 | Language | Rust |
 | Source | This repo `packages/kitsfmt-src/` |
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
 ```bash
 kitsfmt file.nix             # output to stdout
@@ -28,7 +28,7 @@ kitsfmt file1.nix file2.nix  # multiple files
 
 Env vars: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 # Direct
@@ -42,7 +42,7 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 # then: nix fmt
 ```
 
-## ﾌｨｰﾁｬｰｽﾞ
+## Features
 
 - Attribute sorting (including APC `a.b.c` collapse)
 - Comment preservation
@@ -52,6 +52,6 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
   - `rec` → `let-in`: `rec { ｱ = 1; }` → `let a=1; in { inherit a; }`
   - `ｳｨｽﾞ` → `builtins.attrValues`: `ｳｨｽﾞ pkgs; [ ｱ b ]` → `builtins.attrValues { inherit (pkgs) ｱ b; }`
 
-## ｷｬｯｼｭ
+## Cache
 
 `cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).

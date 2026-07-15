@@ -4,7 +4,7 @@
 
 Upstream llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻﾞ latest ｷﾞｯﾄﾊﾌﾞ Release ﾊﾞｰｼﾞｮﾝ at ﾋﾞﾙﾄﾞ time ﾌｫｱ testing cutting-edge features.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
@@ -12,7 +12,7 @@ Upstream llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻ�
 | Upstream | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
 | Note | Overlay-ｵﾝﾘｰ, no standalone ﾊﾟｯｹｰｼﾞ output |
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 {
@@ -21,7 +21,7 @@ Upstream llama.cpp ｳｨｽﾞ ROCm GPU acceleration. Dynamically fetches ｻ�
 }
 ```
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
 See ｳﾌﾟｽﾄﾗｴｱﾑ llama.cpp docs.
 

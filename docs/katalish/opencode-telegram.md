@@ -8,14 +8,14 @@
 
 Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ [OpenCode](https://opencode.ai).
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
 | Version | 0.22.2 |
 | Upstream | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
 ```bash
 # First-time setup
@@ -28,7 +28,7 @@ opencode-telegram status                 # check status
 opencode-telegram stop                   # stop
 ```
 
-## ｲﾝｽﾄｰﾙ
+## Install
 
 ```nix
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.opencode-telegram ];
@@ -67,6 +67,6 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 }
 ```
 
-## ｷｬｯｼｭ
+## Cache
 
 `cachix use nixkits` (declared automatically via `nixConfig` in ｻﾞ flake; prompted on first use).
