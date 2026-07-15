@@ -7,8 +7,11 @@ on:
     types:
       - completed
 
+concurrency: ci-summary
+
 permissions:
   contents: write
+  actions: read
 
 jobs:
   summary:
@@ -18,38 +21,37 @@ jobs:
         with:
           ref: gh-pages
 
-      - uses: actions/checkout@v4
-        with:
-          path: repo
-          sparse-checkout: .github/workflows
-
       - name: Generate CI status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
           FAILED=""
-          for wf in repo/.github/workflows/build-*.yml; do
-            name=$(basename "$wf" .yml)
-            # Only process caller workflows, skip reusable build-package.yml
-            echo "$name" | grep -q '^build-\(blender\|codewhale\|kitsfmt\|mcp-searxng\|obs-bilibili\|opencode-telegram\|ruyi\)' || continue
-            status=$(gh run list -w "$name.yml" -L 1 --json conclusion -R "$REPO" \
-              --jq '.[0].conclusion // "unknown"')
-            if [ "$status" = "failure" ]; then
-              # Extract short name: build-codewhale-riscv64 → codewhale riscv64
-              short=$(echo "$name" | sed 's/^build-//')
+          # Batch-fetch all workflow run conclusions in a single API call
+          # List all workflow files whose name starts with "Build "
+          workflows=$(gh api "repos/$REPO/actions/workflows" --jq '.workflows[] | select(.name | startswith("Build ")) | .name + ":" + .path')
+
+          while IFS=':' read -r wf_name wf_path; do
+            [ -z "$wf_path" ] && continue
+            # Get latest run conclusion for this workflow
+            conclusion=$(gh api "repos/$REPO/actions/workflows/$wf_path/runs?per_page=1" --jq '.workflow_runs[0].conclusion // "unknown"')
+            if [ "$conclusion" = "failure" ]; then
+              # Extract short name: Build codewhale (riscv64) → codewhale-riscv64
+              short=$(echo "$wf_name" | sed 's/^Build //' | sed 's/ (/ /g' | sed 's/)//g' | tr ' ' '-')
               FAILED="$FAILED $short"
             fi
-          done
+          done <<< "$workflows"
+
           FAILED=$(echo "$FAILED" | xargs)
 
           if [ -z "$FAILED" ]; then
             echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
           else
+            # Trim to fit badge width (max ~10 failed items)
             echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"$FAILED\",\"color\":\"critical\"}" > ci-status.json
           fi
 
           cat ci-status.json
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
 
       - name: Push to gh-pages
         run: |
