@@ -1,0 +1,10 @@
+name: Build ruyi-beta (riscv64)
+on: [push, pull_request]
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "ruyi-beta"
+      runs-on: "ubuntu-latest"
+      riscv64-cross: true
+    secrets: inherit

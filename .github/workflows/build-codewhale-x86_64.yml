@@ -1,0 +1,10 @@
+name: Build codewhale (x86_64)
+on: [push, pull_request]
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "codewhale"
+      runs-on: "ubuntu-latest"
+      riscv64-cross: false
+    secrets: inherit

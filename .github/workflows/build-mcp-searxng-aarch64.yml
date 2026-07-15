@@ -1,0 +1,10 @@
+name: Build mcp-searxng (aarch64)
+on: [push, pull_request]
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "mcp-searxng"
+      runs-on: "ubuntu-24.04-arm"
+      riscv64-cross: false
+    secrets: inherit
