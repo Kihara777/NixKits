@@ -35,11 +35,10 @@ jobs:
             "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed" \
             | jq -r '
               .workflow_runs
-              | map(select(.name | startswith("Build ")))
+              | map(select(.name | startswith("Build ") and .conclusion == "failure"))
               | group_by(.workflow_id)
-              | map(max_by(.run_number))
+              | map(sort_by(.run_number) | .[-1] // empty)
               | .[]
-              | select(.conclusion == "failure")
               | (.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
             ' | while read -r short; do
               FAILED="$FAILED $short"
