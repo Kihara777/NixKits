@@ -1,0 +1,60 @@
+name: CI Summary
+
+on:
+  workflow_run:
+    workflows:
+      - "Build *"
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - uses: actions/checkout@v4
+        with:
+          path: repo
+          sparse-checkout: .github/workflows
+
+      - name: Generate CI status
+        run: |
+          FAILED=""
+          for wf in repo/.github/workflows/build-*.yml; do
+            name=$(basename "$wf" .yml)
+            # Only process caller workflows, skip reusable build-package.yml
+            echo "$name" | grep -q '^build-\(blender\|codewhale\|kitsfmt\|mcp-searxng\|obs-bilibili\|opencode-telegram\|ruyi\)' || continue
+            status=$(gh run list -w "$name.yml" -L 1 --json conclusion -R "$REPO" \
+              --jq '.[0].conclusion // "unknown"')
+            if [ "$status" = "failure" ]; then
+              # Extract short name: build-codewhale-riscv64 → codewhale riscv64
+              short=$(echo "$name" | sed 's/^build-//')
+              FAILED="$FAILED $short"
+            fi
+          done
+          FAILED=$(echo "$FAILED" | xargs)
+
+          if [ -z "$FAILED" ]; then
+            echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
+          else
+            echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"$FAILED\",\"color\":\"critical\"}" > ci-status.json
+          fi
+
+          cat ci-status.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+
+      - name: Push to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ci-status.json
+          git diff --cached --quiet || git commit -m "ci: update status $(date -Iseconds)"
+          git push origin gh-pages
