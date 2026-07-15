@@ -70,7 +70,7 @@ write-project-docs / write-maintenance-log 通过扫描 `skills/translate-*/SKIL
 
 ## 词典
 
-完整替换词典见 [`dictionary.md`](dictionary.md)（66 条映射）。
+完整替换词典见 [`dictionary.md`](dictionary.md)（102 条映射，含 2026-07 手动全文档重写时新增的 25 条词汇）。
 
 ## 注意事项
 
