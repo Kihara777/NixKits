@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:35:20+09:00
+
+**Summary**: skill(write-maintenance-log) — strengthened timestamp rules: mandatory `git log` for commit times, ban `T00:00:00` placeholders, add post-generation verification step. Generalized from the MAINTENANCE placeholder timestamp fix (`968df0e`).
+
+| Commit | Description |
+|------|------|
+| `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
+| `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
+
 ## 2026-07-16T01:18:16+09:00
 
 **Summary**: codewhale 0.8.67 — dual-path build (prebuilt x86_64/aarch64 + source-built riscv64). Upstream removed riscv64 binaries from v0.8.67 release; riscv64 now built via rustPlatform.buildRustPackage from vendored Cargo.lock.

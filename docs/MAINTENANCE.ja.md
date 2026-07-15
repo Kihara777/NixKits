@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:35:20+09:00
+
+**概要**: skill(write-maintenance-log) — タイムスタンプ規則強化：`git log` によるコミット時刻の強制取得、`T00:00:00` プレースホルダ禁止、生成後検証ステップ追加。MAINTENANCE プレースホルダタイムスタンプ修正（`968df0e`）から汎化。
+
+| コミット | 説明 |
+|------|------|
+| `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
+| `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
+
 ## 2026-07-16T01:18:16+09:00
 
 **概要**: codewhale 0.8.67 — デュアルパスビルド（プリビルド x86_64/aarch64 + ソースビルド riscv64）。上流が v0.8.67 から riscv64 バイナリを削除したため、riscv64 は rustPlatform.buildRustPackage で Cargo.lock からビルド。

@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-16T04:35:20+09:00
+
+**摘要**：skill(write-maintenance-log) — 强化时间戳规则：强制使用 `git log` 获取 commit 时间、禁止 `T00:00:00` 占位符、新增生成后验证步骤。泛化自维护日志占位时间修复经验（`968df0e`）。
+
+| 提交 | 说明 |
+|------|------|
+| `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
+| `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
+
 ## 2026-07-16T01:18:16+09:00
 
 **摘要**：codewhale 0.8.67 — 双路径构建（预编译 x86_64/aarch64 + 源码构建 riscv64）。上游从 v0.8.67 起移除 riscv64 预编译二进制；riscv64 现通过 rustPlatform.buildRustPackage 从本地 Cargo.lock 构建。
