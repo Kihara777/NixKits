@@ -2,27 +2,27 @@
 
 [中文](../../zh/skills/translate-pseudocn.md) | [English](../../en/skills/translate-pseudocn.md) | [日本語](../../ja/skills/translate-pseudocn.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-pseudocn.md)
 
-> 偽中国語 (Pseudo-Chinese / pcn) ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing skill. Auto-discovered ﾊﾞｲ write-project-docs.
+> 偽中国語 (Pseudo-Chinese / pcn) language support for ｻﾞ document-writing skill. Auto-discovered by write-project-docs.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
-| Type | Coding Agent Skill (ﾗﾝｹﾞｰｼﾞ backend) |
+| Type | Coding Agent Skill (language backend) |
 | Path | `skills/translate-pseudocn/SKILL.md` |
 | Language code | pcn |
-| Called ﾊﾞｲ | write-project-docs (auto-discovered) |
+| Called by | write-project-docs (auto-discovered) |
 
-## ﾌｨｰﾁｬｰｽﾞ
+## Features
 
-- 偽中国語 (Pseudo-Chinese) ﾄﾗｱﾝｽﾙｱｼｮﾝ — strips kana, adjusts word order (SOV→SVO)
+- 偽中国語 (Pseudo-Chinese) translation — strips kana, adjusts word order (SOV→SVO)
 - Particle replacement, punctuation conversion
 - Built-in ~13 term dictionary (JA→ZH mapping)
 - Code blocks, numbers, symbols preserved
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
-Auto-discovered ﾊﾞｲ write-project-docs via `translate-*` naming convention:
+Auto-discovered by write-project-docs via `translate-*` naming convention:
 
 - "Generate pseudo-Chinese document"
-- "Add pcn ﾗﾝｹﾞｰｼﾞ variant"
+- "Add pcn language variant"

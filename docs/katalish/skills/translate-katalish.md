@@ -2,30 +2,30 @@
 
 [中文](../../zh/skills/translate-katalish.md) | [English](../../en/skills/translate-katalish.md) | [日本語](../../ja/skills/translate-katalish.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/translate-katalish.md)
 
-> Extra natural-ﾗﾝｹﾞｰｼﾞ ｻﾎﾟｰﾄ ﾌｫｱ ｻﾞ document-writing skill.  Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) ﾗﾝｹﾞｰｼﾞ.
+> Extra natural-language support for ｻﾞ document-writing skill. Adds ｻﾞ ｶﾀﾘｯｼｭ (Katakana English) language.
 
-## ｲﾝﾌｫ
+## Info
 
 | Item | Value |
 |------|-------|
-| Type | Coding Agent Skill (ﾗﾝｹﾞｰｼﾞ backend) |
+| Type | Coding Agent Skill (language backend) |
 | Path | `skills/translate-katalish/SKILL.md` |
-| Called ﾊﾞｲ | write-project-docs (primary), nixkits-check-updates (indirect) |
+| Called by | write-project-docs (primary), nixkits-check-updates (indirect) |
 
-## ﾌｨｰﾁｬｰｽﾞ
+## Features
 
-- New ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ — mechanical word-level English→halfwidth-katakana substitution
+- New ｶﾀﾘｯｼｭ language — mechanical word-level English→halfwidth-katakana substitution
 - Built-in dictionary (~20 common tech-doc words)
-- Rule-based phonetic fallback ﾌｫｱ words ﾉｯﾄ in ｻﾞ dictionary
+- Rule-based phonetic fallback for words not in ｻﾞ dictionary
 - Markdown syntax ｱﾝﾄﾞ code blocks preserved
 - File naming convention: `docs/katalish/<name>.md`
 
-## ﾕｰｾｰｼﾞ
+## Usage
 
-Automatically invoked ﾊﾞｲ write-project-docs ｳｪﾝ producing ｶﾀﾘｯｼｭ documents; ｷｬﾝ ｵﾙｿ be called directly:
+Automatically invoked by write-project-docs when producing ｶﾀﾘｯｼｭ documents; can also be called directly:
 
-- "Generate ｱ katakana-english ﾊﾞｰｼﾞｮﾝ ｵﾌﾞ ｻﾞ document"
-- "Add ｶﾀﾘｯｼｭ ﾗﾝｹﾞｰｼﾞ variant"
+- "Generate a katakana-english version of ｻﾞ document"
+- "Add ｶﾀﾘｯｼｭ language variant"
 - "Translate to katakana english"
 
 ## Example
