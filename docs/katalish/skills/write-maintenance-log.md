@@ -25,8 +25,8 @@ Language extension skills ｱｰ discovered via ｻﾞ `translate-*` naming conv
 
 ## Entry Points
 
-- **Record Fix**: auto-called after ｿﾌﾄｳｪｱ updates, ｵﾗ on "record ﾃﾞｨｽ fix" / "记入维护记录"
-- **Update Log**: on "update ﾒﾝﾃﾅﾝｽ log" / "补全维护记录" — scans git history ﾌｫｱ missing records ｱﾝﾄﾞ backfills
+- **Record Fix**: auto-called after ｿﾌﾄｳｪｱ updates, ｵﾗ on "record fix"
+- **Update Log**: on "update maintenance log" — scans git history ﾌｫｱ missing records ｱﾝﾄﾞ backfills
 
 ## ﾕｰｾｰｼﾞ
 

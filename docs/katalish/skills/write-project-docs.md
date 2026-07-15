@@ -42,7 +42,7 @@ done
 ```
 
 Update order: Chinese baseline → English ﾄﾗｱﾝｽﾙｱｼｮﾝ → Japanese ﾄﾗｱﾝｽﾙｱｼｮﾝ → 偽中国語 ﾄﾗｱﾝｽﾙｱｼｮﾝ.
-Column mapping: `基本信息` → `ｲﾝﾌｫ` / `基本情報` / `基本情報`, `功能` → `ﾌｨｰﾁｬｰｽﾞ` / `機能` / `機能`.
+Column mapping (section titles): Basic Info → `ｲﾝﾌｫ`, Features → `ﾌｨｰﾁｬｰｽﾞ`.
 
 - Zero fluff, tables over prose, copy-paste-ready code blocks
 - Technical terms stay in English; warnings ﾕｰｽﾞ blockquote format
@@ -51,7 +51,7 @@ Column mapping: `基本信息` → `ｲﾝﾌｫ` / `基本情報` / `基本情�
 - No standalone technical detail, troubleshooting, ｵﾗ reference sections — compress ｲﾝﾄｩ `## Notes` bullets
 - All four READMEs must be updated together
 - Root dir ｵﾝﾘｰ holds Chinese suffix-less `.md`; localized versions (`*.en.md`, `*.ja.md`) live under `docs/`
-- Every ﾗﾝｹﾞｰｼﾞ must ｲﾝｸﾙｰﾄﾞ ｱ basic info section: `## 基本信息` (zh), `## ｲﾝﾌｫ` (en), `## 基本情報` (ja)
+- Every ﾗﾝｹﾞｰｼﾞ must ｲﾝｸﾙｰﾄﾞ ｱ basic info section: `## ｲﾝﾌｫ` (en), with equivalent title in each ﾗﾝｹﾞｰｼﾞ
 - After ﾊﾟｯﾁ/ﾓｼﾞｭｰﾙ source changes, ｻﾞ "Changes"/"ﾌｨｰﾁｬｰｽﾞ" list must be synced — each bullet maps to an actual change
 
 ## Bidirectional Auto-Discovery
