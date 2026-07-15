@@ -2,9 +2,9 @@
 
 [中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md) | ｶﾀﾘｯｼｭ | [偽中国語](README.pcn.md)
 
-NixKits — ｱ ｺﾚｸｼｮﾝ ｵﾌﾞ ｿﾌﾄｳｪｱ, ﾊﾟｯﾁｰｽﾞ, NixOS ﾓｼﾞｭｰﾙｽﾞ, ｱﾝﾄﾞ AI ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄ ｽｷﾙｽﾞ.
+NixKits — ｱ ｺﾚｸｼｮﾝ of ｿﾌﾄｳｪｱ, patches, NixOS ﾓｼﾞｭｰﾙs, ｱﾝﾄﾞ AI ｺｰﾃﾞｨﾝｸﾞ ｱｼｽﾀﾝﾄ skills.
 
-## ｸｲｯｸ ｽﾀｰﾄ
+## Quick Start
 
 ```nix
 # Remote
@@ -14,77 +14,74 @@ inputs.nixkits.url = "github:Kihara777/NixKits";
 inputs.nixkits.url = "/home/kix/NixKits";
 ```
 
-## ｿﾌﾄｳｪｱ
+## Software
 
-All packages ﾌｫﾛｰ nixpkgs platform support by default (`lib.platforms.linux`). Some packages have architecture restrictions due to upstream — see build badges in each package documentation.
+All packages follow nixpkgs platform ｻﾎﾟｰﾄ by default (`lib.platforms.linux`). Some packages have architecture restrictions due to ｳﾌﾟｽﾄﾗｴｱﾑ — see build badges in each package's ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ.
 
-| ｿﾌﾄｳｪｱ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
+| Software | Description | Docs |
 |---|------|------|
-| blender-mcp | MCP ｻｰﾊﾞｰ ﾌｫｱ Blender (natural ﾗﾝｹﾞｰｼﾞ control ｵﾌﾞ Blender) | [docs/katalish/blender-mcp.md](katalish/blender-mcp.md) |
-| codewhale | ﾄﾞｴｴﾌﾟｽｴｴｸ V4 ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [docs/katalish/codewhale.md](katalish/codewhale.md) |
-| kitsfmt | Nix ﾌｫｰﾏｯﾀｰ (AST sorting + best-practice ｵｰﾄ-ﾌｨｯｸｽｽﾞ) | [docs/katalish/kitsfmt.md](katalish/kitsfmt.md) |
-| mcp-searxng | MCP ｻｰﾊﾞｰ ﾌｫｱ SearXNG | [docs/katalish/mcp-searxng.md](katalish/mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili ｽﾄﾘｰﾐﾝｸﾞ ﾌﾟﾗｸﾞｲﾝ | [docs/katalish/obs-bilibili-stream.md](katalish/obs-bilibili-stream.md) |
-| opencode-telegram | Telegram Bot ｸﾗｲｱﾝﾄ ﾌｫｱ OpenCode | [docs/katalish/opencode-telegram.md](katalish/opencode-telegram.md) |
-| ruyi | RuyiSDK ﾊﾟｯｹｰｼﾞ ﾑｱﾝｱｼﾞｴﾗ (RISC-V ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ ﾂｰﾙｽﾞ)<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/katalish/ruyi.md](katalish/ruyi.md) |
+| blender-mcp | MCP ｻｰﾊﾞｰ for Blender (natural language control of Blender) | [docs/katalish/blender-mcp.md](katalish/blender-mcp.md) |
+| codewhale | DeepSeek V4 terminal ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ | [docs/katalish/codewhale.md](katalish/codewhale.md) |
+| kitsfmt | Nix ﾌｫｰﾏｯﾀｰ (AST sorting + best-practice auto-fixes) | [docs/katalish/kitsfmt.md](katalish/kitsfmt.md) |
+| mcp-searxng | MCP ｻｰﾊﾞｰ for SearXNG | [docs/katalish/mcp-searxng.md](katalish/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili streaming ﾌﾟﾗｸﾞｲﾝ | [docs/katalish/obs-bilibili-stream.md](katalish/obs-bilibili-stream.md) |
+| opencode-telegram | Telegram Bot client for OpenCode | [docs/katalish/opencode-telegram.md](katalish/opencode-telegram.md) |
+| ruyi | RuyiSDK package ﾑｱﾝｱｼﾞｴﾗ (RISC-V development tools)<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/katalish/ruyi.md](katalish/ruyi.md) |
 
-> ⚠️ comfyui-strix-halo ﾊ ﾓｼﾞｭｰﾙ+ﾊﾟｯﾁ ﾃﾞ、独立ｼﾀ ﾊﾟｯｹｰｼﾞ ﾃﾞ ﾊ ﾅｲ ﾀﾒ、ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。
+> ⚠️ comfyui-strix-halo is a ﾓｼﾞｭｰﾙ+patch, not a standalone package, ｱﾝﾄﾞ is not in ｻﾞ binary cache.
 
-> ⚠️ comfyui-strix-halo ﾊ ﾓｼﾞｭｰﾙ+ﾊﾟｯﾁ ﾃﾞ、独立ｼﾀ ﾊﾟｯｹｰｼﾞ ﾃﾞ ﾊ ﾅｲ ﾀﾒ、ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。
+## Development
 
-## ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ
-
-`nix develop` ﾗｴｱﾄﾞｲ-ﾄｩ-ﾕｰｽﾞ ｴﾝﾌﾞｲﾗｵﾝﾒﾝﾄｽﾞ. ﾌｧｰｽﾄ, ｱﾄﾞ ｻﾞ ﾚｼﾞｽﾄﾘ:
+`nix develop` ready-to-use environments. First, add ｻﾞ registry:
 
 ```bash
 nix registry add nixkits github:Kihara777/NixKits
 ```
 
-| ﾊﾟｯｹｰｼﾞ | `nix develop` |
+| Package | `nix develop` |
 |---------|---------------|
 | ruyi | `nix develop nixkits#ruyi` |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |
 | ruyi-alpha | `nix develop nixkits#ruyi-alpha` |
 
-## ﾊﾟｯﾁｰｽﾞ
+## Patches
 
-ｽﾄｱﾝﾄﾞｱﾙｵﾝｴ ｵﾌﾞｴﾗﾙｱｲｽﾞ, ﾉｯﾄ ｲﾝｸﾙｳﾄﾞﾄﾞ ｲﾝ `default`:
+Standalone overlays, not included in `default`:
 
-| ﾊﾟｯﾁ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
+| Patch | Description | Docs |
 |------|------|------|
-| llama-cpp-rocm | ROCm-ｱｸｾﾗﾚｲﾃｨｯﾄﾞ ﾌﾞｳｲﾙﾄﾞｽﾞ ﾄﾗｯｷﾝｸﾞ ﾙｱﾄｴｽﾄ ｳﾌﾟｽﾄﾗｴｱﾑ ﾘﾘｰｽ | [docs/katalish/llama-cpp-rocm.md](katalish/llama-cpp-rocm.md) |
-| rcc-fix | ﾌｨｯｸｽｽﾞ 2-ｲﾝ-1 ﾃﾞｨﾌﾞｱｲｽ ｴｸｽﾌﾟｴﾗｲｴﾝｽ ﾌｫｱ asusctl | [docs/katalish/rcc-fix.md](katalish/rcc-fix.md) |
-| comfyui-rocm-patch | ComfyUI ROCm ﾌｧﾝｸｼｮﾅﾙ ﾊﾟｯﾁ | [docs/katalish/comfyui-rocm-patch.md](katalish/comfyui-rocm-patch.md) |
-| rog-control-center-fix | ﾌｨｯｸｽｽﾞ asusd ﾃﾞｯﾄﾞﾛｯｸ on ｼｬｯﾄﾀﾞｳﾝ | [docs/katalish/rog-control-center-fix.md](katalish/rog-control-center-fix.md) |
+| llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/katalish/llama-cpp-rocm.md](katalish/llama-cpp-rocm.md) |
+| rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/katalish/rcc-fix.md](katalish/rcc-fix.md) |
+| comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/katalish/comfyui-rocm-patch.md](katalish/comfyui-rocm-patch.md) |
+| rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/katalish/rog-control-center-fix.md](katalish/rog-control-center-fix.md) |
 
-> ⚠️ ﾊﾟｯﾁ ﾊ overlay ﾃﾞ、上流 ﾉ nixpkgs ﾊﾟｯｹｰｼﾞ ｦ 変更ｽﾙ ﾓﾉ ﾃﾞ、独立ｼﾀ ﾋﾞﾙﾄﾞ ﾃﾞ ﾊ ｱﾘﾏｾﾝ。ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。動的 ﾊﾞｰｼﾞｮﾝ 追跡 ﾌﾟﾛｼﾞｪｸﾄ（llama-cpp-rocm 等）ﾊ ﾊｯｼｭ ｶﾞ 上流 ﾘﾘｰｽ 毎 ﾆ 変化ｼ、ｷｬｯｼｭ 固定不可 ﾃﾞｽ。
+> ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, ｱﾝﾄﾞ are not in ｻﾞ binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change ｳｨｽﾞ upstream releases ｱﾝﾄﾞ cannot be cached.
 
-> ⚠️ ﾊﾟｯﾁ ﾊ overlay ﾃﾞ、上流 ﾉ nixpkgs ﾊﾟｯｹｰｼﾞ ｦ 変更ｽﾙ ﾓﾉ ﾃﾞ、独立ｼﾀ ﾋﾞﾙﾄﾞ ﾃﾞ ﾊ ｱﾘﾏｾﾝ。ﾊﾞｲﾅﾘ ｷｬｯｼｭ ﾆ 含ﾏﾚﾏｾﾝ。動的 ﾊﾞｰｼﾞｮﾝ 追跡 ﾌﾟﾛｼﾞｪｸﾄ（llama-cpp-rocm 等）ﾊ ﾊｯｼｭ ｶﾞ 上流 ﾘﾘｰｽ 毎 ﾆ 変化ｼ、ｷｬｯｼｭ 固定不可 ﾃﾞｽ。
+## Skills
 
-## ｽｷﾙｽﾞ
+For AI ｺｰﾃﾞｨﾝｸﾞ assistants:
 
-ﾌｫｱ AI ｺｰﾃﾞｨﾝｸﾞ ｱｽｽｲｽﾄｱﾝﾄｽﾞ:
+> Skills in this project are primarily aimed at Chinese-speaking users ｱﾝﾄﾞ Chinese open-source models. All SKILL.md files are written in Chinese.
 
-> ｽｷﾙｽﾞ ｲﾝ ﾃﾞｨｽ ﾌﾟﾛｼﾞｪｸﾄ ｱｰ ﾌﾟﾗｲﾑｱﾗｲﾘｰ ｱｲﾑﾄﾞ ｱｯﾄ ﾁｬｲﾆｰｽﾞ-ｽﾌﾟｴｱｸｲﾝｸﾞ ﾕｰｻﾞｰｽﾞ ｱﾝﾄﾞ ﾁｬｲﾆｰｽﾞ ｵｰﾌﾟﾝ-ｿｰｽ ﾑｵﾄﾞｴﾙｽﾞ. ｵｰﾙ SKILL.md ﾌｧｲﾙｽﾞ ｱｰ ｳﾗｲﾄﾄｴﾝ ｲﾝ ﾁｬｲﾆｰｽﾞ.
+> ⚠️ **Claude Code** has been removed from nixkits-skills install targets. The software implements nationality inference based on user data, crossing a security boundary. See [nixkits-skills docs](katalish/skills/nixkits-skills.md).
 
-| ｽｷﾙ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
+| Skill | Description | Docs |
 |------|------|------|
-> ⚠️ **Claude Code** removed from nixkits-skills install targets. Implements nationality inference via user data. See [nixkits-skills docs](katalish/skills/nixkits-skills.md).
-| nixkits-check-updates | ﾁｪｯｸ ﾌｫｱ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ｵｰﾄ-ｱｯﾌﾟｸﾞﾚｰﾄﾞ | [docs/katalish/skills/nixkits-check-updates.md](katalish/skills/nixkits-check-updates.md) |
-| nixkits-skills | NixKits ｽｷﾙ ｲﾝｽﾄｱﾙﾙｱ (ﾛｰｶﾙ/ｵﾝﾙｲﾝ) | [docs/katalish/skills/nixkits-skills.md](katalish/skills/nixkits-skills.md) |
-| nixos-modern-cli | NixOS ﾑｵﾄﾞｴﾗﾝ CLI ｶﾞｲﾄﾞ (ﾌｫｱ AI ﾑｵﾄﾞｴﾙｽﾞ) | [docs/katalish/skills/nixos-modern-cli.md](katalish/skills/nixos-modern-cli.md) |
-| recover-nixos-config | ﾘｶﾊﾞｰ ﾃﾞｨﾘｰﾃｯﾄﾞ /etc/nixos ｺﾝﾌｨｸﾞ ﾌﾛﾑ Nix ｽﾄｴﾗ | [docs/katalish/skills/recover-nixos-config.md](katalish/skills/recover-nixos-config.md) |
-| translate-katalish | Katakana ｲﾝｸﾞﾘｯｼｭ ﾄﾗｱﾝｽﾙｱｼｮﾝ (ﾑｴﾁｱﾝｲｸｱﾙ ﾜｰﾄﾞ-ﾚﾍﾞﾙ ｻﾌﾞｽﾃｨﾃｭｰｼｮﾝ ｵﾌﾞ ｲﾝｸﾞﾘｯｼｭ ﾄﾞｷｭｽﾞ) | [docs/katalish/skills/translate-katalish.md](katalish/skills/translate-katalish.md) |
-| translate-pseudocn | Pseudo-Chinese ﾄﾗｱﾝｽﾙｱｼｮﾝ (kana ｽﾄﾘｯﾋﾟﾝｸﾞ + ﾜｰﾄﾞ ｵﾗﾄﾞｴﾗ ｺﾝﾊﾞｰｼﾞｮﾝ ﾌﾛﾑ ｼﾞｬﾊﾟﾆｰｽﾞ) | [docs/katalish/skills/translate-pseudocn.md](katalish/skills/translate-pseudocn.md) |
-| write-maintenance-log | Write MAINTENANCE.md ｴﾝﾄﾘｰｽﾞ ﾊﾟｰ NixKits ｽﾌﾟｴｸ (ｿﾌﾄｳｪｱ ｱｯﾌﾟﾃﾞｰﾄｽﾞ + ﾊﾞｸﾞ ﾌｨｯｸｽｽﾞ) | [docs/katalish/skills/write-maintenance-log.md](katalish/skills/write-maintenance-log.md) |
-| write-project-docs | Write ﾏﾙﾁﾘﾝｶﾞﾙ ﾄﾞｷｭﾒﾝﾃｰｼｮﾝ ﾌｫｱ ｴﾆｰ ﾌﾟﾛｼﾞｪｸﾄ ｲﾝ NixKits ｽﾀｲﾙ | [docs/katalish/skills/write-project-docs.md](katalish/skills/write-project-docs.md) |
+| nixkits-check-updates | Check for upstream updates ｱﾝﾄﾞ auto-upgrade | [docs/katalish/skills/nixkits-check-updates.md](katalish/skills/nixkits-check-updates.md) |
+| nixkits-skills | NixKits skill installer (local/online) | [docs/katalish/skills/nixkits-skills.md](katalish/skills/nixkits-skills.md) |
+| nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/katalish/skills/nixos-modern-cli.md](katalish/skills/nixos-modern-cli.md) |
+| recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/katalish/skills/recover-nixos-config.md](katalish/skills/recover-nixos-config.md) |
+| translate-katalish | Katakana English translation (mechanical word-level substitution of English docs) | [docs/katalish/skills/translate-katalish.md](katalish/skills/translate-katalish.md) |
+| translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/katalish/skills/translate-pseudocn.md](katalish/skills/translate-pseudocn.md) |
+| write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/katalish/skills/write-maintenance-log.md](katalish/skills/write-maintenance-log.md) |
+| write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/katalish/skills/write-project-docs.md](katalish/skills/write-project-docs.md) |
 
-## ｸﾚｼﾞｯﾄ
+## Credits
 
-^- **狐莉 (キツのり)** — ｸﾗｴｱﾄｵﾗ ｱﾝﾄﾞ ﾑｱｲﾝﾄｱｲﾝｴﾗ
-- **小爪 (キツのめ)** — ﾄﾞｴｽｲｸﾞﾝ, ﾃﾞｨﾍﾞﾛｯﾌﾟﾒﾝﾄ feat. ﾄﾞｴｴﾌﾟｽｴｴｸ V4 Pro (Max)
-- **小小爪 (キツのめ)** — ﾊｰﾄﾞｳｪｱ ｲﾝﾌｧﾚﾝｽ ｲﾝﾌﾗｽﾄﾗｸﾁｬｰ feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+- **狐莉 (ｷﾂﾉﾘ)** — creator ｱﾝﾄﾞ maintainer
+- **小爪 (ｷﾂﾉﾒ)** — design, development feat. DeepSeek V4 Pro (Max)
+- **小小爪 (ｷﾂﾉﾒ)** — hardware inference infrastructure feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
-## ﾗｲｾﾝｽ
+## License
 
 [MIT](../LICENSE)
