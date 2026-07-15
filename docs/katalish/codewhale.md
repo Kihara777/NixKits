@@ -14,7 +14,8 @@ A ﾀｰﾐﾅﾙ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ built ﾌｫｱ
 |------|-------|
 | Version | 0.8.67 |
 | Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| Type | Pre-built binaries (ｷﾞｯﾄﾊﾌﾞ Releases) |
+| Type | Pre-built binaries (x86_64 / aarch64); source-built (riscv64) |
+| Platform | x86_64 / aarch64 / riscv64 |
 
 ## ｲﾝｽﾄｰﾙ
 
@@ -37,6 +38,10 @@ codewhale auth set --provider deepseek # save API key
 ```
 
 Requires ｱ [ﾄﾞｴｴﾌﾟｽｴｴｸ API Key](https://platform.deepseek.com/api_keys) on ﾌｧｰｽﾄ run.
+
+## Known Issues
+
+> ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.8.67. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental.
 
 ## ｷｬｯｼｭ
 

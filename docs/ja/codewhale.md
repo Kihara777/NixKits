@@ -38,6 +38,10 @@ codewhale auth set --provider deepseek # API キー保存
 
 初回実行時に [DeepSeek API キー](https://platform.deepseek.com/api_keys) が必要です。
 
+## 既知の問題
+
+> ⚠️ **riscv64 ソースビルド**: 上流が v0.8.67 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
+
 ## キャッシュ
 
 `cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。

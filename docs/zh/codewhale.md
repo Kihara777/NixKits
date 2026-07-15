@@ -14,7 +14,8 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 |------|-----|
 | 版本 | 0.8.67 |
 | 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| 类型 | 预编译二进制（GitHub Releases） |
+| 类型 | 预编译二进制（x86_64 / aarch64）；源码构建（riscv64） |
+| 平台 | x86_64 / aarch64 / riscv64 |
 
 ## 引用
 
@@ -37,6 +38,10 @@ codewhale auth set --provider deepseek # 保存 API key
 ```
 
 首次运行需配置 [DeepSeek API Key](https://platform.deepseek.com/api_keys)。
+
+## 已知问题
+
+> ⚠️ **riscv64 源码构建**：上游从 v0.8.67 起移除了 riscv64 预编译二进制。NixKits 通过 `rustPlatform.buildRustPackage` 从源码交叉编译提供 riscv64 支持。此项为实验性功能，首次 CI 构建可能因依赖 hash 不匹配失败——我们会在后续 CI 运行中验证并修复。
 
 ## 缓存
 

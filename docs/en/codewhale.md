@@ -14,7 +14,8 @@ A terminal coding agent built for DeepSeek V4.
 |------|-------|
 | Version | 0.8.67 |
 | Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
-| Type | Pre-built binaries (GitHub Releases) |
+| Type | Pre-built binaries (x86_64 / aarch64); source-built (riscv64) |
+| Platform | x86_64 / aarch64 / riscv64 |
 
 ## Install
 
@@ -37,6 +38,10 @@ codewhale auth set --provider deepseek # save API key
 ```
 
 Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first run.
+
+## Known Issues
+
+> ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.8.67. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental — first CI run may fail on dependency hash mismatch; we will verify and fix in subsequent CI runs.
 
 ## Cache
 
