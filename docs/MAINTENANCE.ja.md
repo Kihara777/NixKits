@@ -2,7 +2,7 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [ｶﾀﾘｯｼｭ](MAINTENANCE.katalish.md) | [偽中国語](MAINTENANCE.pcn.md)
 
-## 2026-07-16T00:00:00+09:00
+## 2026-07-16T01:18:16+09:00
 
 **概要**: codewhale 0.8.67 — デュアルパスビルド（プリビルド x86_64/aarch64 + ソースビルド riscv64）。上流が v0.8.67 から riscv64 バイナリを削除したため、riscv64 は rustPlatform.buildRustPackage で Cargo.lock からビルド。
 
@@ -14,7 +14,7 @@
 |--------|--------|--------|
 | codewhale | 0.8.66（プリビルド×3） | 0.8.67（プリビルド×2 + ソース riscv64） |
 
-## 2026-07-15T00:00:00+09:00
+## 2026-07-15T08:32:13+09:00
 
 **概要**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — アップストリーム更新（codewhale スキップ：v0.8.67 依然 riscv64 バイナリなし）
 

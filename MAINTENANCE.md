@@ -2,7 +2,7 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [ｶﾀﾘｯｼｭ](docs/MAINTENANCE.katalish.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
-## 2026-07-16T00:00:00+09:00
+## 2026-07-16T01:18:16+09:00
 
 **摘要**：codewhale 0.8.67 — 双路径构建（预编译 x86_64/aarch64 + 源码构建 riscv64）。上游从 v0.8.67 起移除 riscv64 预编译二进制；riscv64 现通过 rustPlatform.buildRustPackage 从本地 Cargo.lock 构建。
 
@@ -14,7 +14,7 @@
 |--------|--------|--------|
 | codewhale | 0.8.66（预编译×3） | 0.8.67（预编译×2 + 源码 riscv64） |
 
-## 2026-07-15T00:00:00+09:00
+## 2026-07-15T08:32:13+09:00
 
 **摘要**：mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — 上游更新（codewhale 跳过：v0.8.67 仍缺 riscv64 二进制）
 
