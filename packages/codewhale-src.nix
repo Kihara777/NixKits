@@ -38,6 +38,13 @@ rustPlatform.buildRustPackage rec {
   # Only build CLI and TUI (default workspace members)
   buildAndTestSubdir = "crates/cli";
 
+  # ring/cc crate passes -m64 (x86_64 host flag) to riscv64 cross-compiler.
+  # Clear per-target CFLAGS so cc-rs uses target-appropriate flags only.
+  env = lib.optionalAttrs stdenv.hostPlatform.isRiscV {
+    CFLAGS_riscv64_unknown_linux_gnu = "";
+    CXXFLAGS_riscv64_unknown_linux_gnu = "";
+  };
+
   # Skip tests during build (they require network access)
   doCheck = false;
 
