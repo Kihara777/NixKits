@@ -69,6 +69,7 @@ AI 符号化代理向：
 
 | 技能 | 説明 | 文書 |
 |------|------|------|
+> ⚠️ **Claude Code** nixkits-skills 導入対象削除。利用者資料基国籍推論実装、安全境界越。参照 [nixkits-skills 文書](pcn/skills/nixkits-skills.md)。
 | nixkits-check-updates | 上流更新確認自動更新 | [docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 現代 CLI 手引（AI 模型向） | [docs/pcn/skills/nixos-modern-cli.md](pcn/skills/nixos-modern-cli.md) |

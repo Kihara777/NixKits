@@ -65,6 +65,8 @@ nix registry add nixkits github:Kihara777/NixKits
 
 > 本项目的技能主要面向中文用户和中国开源模型，所有 SKILL.md 均使用中文编写。
 
+> ⚠️ **Claude Code** 已从 nixkits-skills 安装目标中移除。该软件实施了基于用户数据的国籍判断逻辑，跨越了安全模型边界。详见 [nixkits-skills 文档](docs/zh/skills/nixkits-skills.md)。
+
 | 技能 | 说明 | 文档 |
 |------|------|------|
 | nixkits-check-updates | 检查上游软件更新并自动升级 | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |

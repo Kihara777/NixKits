@@ -69,6 +69,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | ｽｷﾙ | ﾃﾞｨｽｸﾘﾌﾟｼｮﾝ | ﾄﾞｷｭｽﾞ |
 |------|------|------|
+> ⚠️ **Claude Code** removed from nixkits-skills install targets. Implements nationality inference via user data. See [nixkits-skills docs](katalish/skills/nixkits-skills.md).
 | nixkits-check-updates | ﾁｪｯｸ ﾌｫｱ ｳﾌﾟｽﾄﾗｴｱﾑ ｱｯﾌﾟﾃﾞｰﾄｽﾞ ｱﾝﾄﾞ ｵｰﾄ-ｱｯﾌﾟｸﾞﾚｰﾄﾞ | [docs/katalish/skills/nixkits-check-updates.md](katalish/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits ｽｷﾙ ｲﾝｽﾄｱﾙﾙｱ (ﾛｰｶﾙ/ｵﾝﾙｲﾝ) | [docs/katalish/skills/nixkits-skills.md](katalish/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS ﾑｵﾄﾞｴﾗﾝ CLI ｶﾞｲﾄﾞ (ﾌｫｱ AI ﾑｵﾄﾞｴﾙｽﾞ) | [docs/katalish/skills/nixos-modern-cli.md](katalish/skills/nixos-modern-cli.md) |
