@@ -24,31 +24,32 @@ jobs:
 
       - name: Generate CI status
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
           FAILED=""
-          # Batch-fetch all workflow run conclusions in a single API call
-          # List all workflow files whose name starts with "Build "
-          workflows=$(gh api "repos/$REPO/actions/workflows" --jq '.workflows[] | select(.name | startswith("Build ")) | .name + ":" + .path')
 
-          while IFS=':' read -r wf_name wf_path; do
-            [ -z "$wf_path" ] && continue
-            # Get latest run conclusion for this workflow
-            conclusion=$(gh api "repos/$REPO/actions/workflows/$wf_path/runs?per_page=1" --jq '.workflow_runs[0].conclusion // "unknown"')
-            if [ "$conclusion" = "failure" ]; then
-              # Extract short name: Build codewhale (riscv64) → codewhale-riscv64
-              short=$(echo "$wf_name" | sed 's/^Build //' | sed 's/ (/ /g' | sed 's/)//g' | tr ' ' '-')
+          # Single API call: fetch all workflow runs, pick latest per workflow
+          curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed" \
+            | jq -r '
+              .workflow_runs
+              | map(select(.name | startswith("Build ")))
+              | group_by(.workflow_id)
+              | map(max_by(.run_number))
+              | .[]
+              | select(.conclusion == "failure")
+              | (.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
+            ' | while read -r short; do
               FAILED="$FAILED $short"
-            fi
-          done <<< "$workflows"
+            done
 
           FAILED=$(echo "$FAILED" | xargs)
 
           if [ -z "$FAILED" ]; then
             echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
           else
-            # Trim to fit badge width (max ~10 failed items)
             echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"$FAILED\",\"color\":\"critical\"}" > ci-status.json
           fi
 
