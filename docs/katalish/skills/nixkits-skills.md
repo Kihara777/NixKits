@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | ｶﾀﾘｯｼｭ | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
-> Installs ｵﾗ updates NixKits skills ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, claude, openclaw, agents).
+> Installs ｵﾗ updates NixKits skills ｲﾝﾄｩ ｺｰﾃﾞｨﾝｸﾞ ｴｰｼﾞｪﾝﾄ directories (opencode, codewhale, codex, openclaw, agents).
 
 ## ｲﾝﾌｫ
 
@@ -26,7 +26,7 @@
 |-------|-----------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
-| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
 | Generic | `~/.agents/skills/` |
 

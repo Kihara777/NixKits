@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | [偽中国語](../../pcn/skills/nixkits-skills.md)
 
-> 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、claude、openclaw、agents）。
+> 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、codex、openclaw、agents）。
 
 ## 基本信息
 
@@ -26,7 +26,7 @@
 |------|------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
-| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
 | 通用 | `~/.agents/skills/` |
 

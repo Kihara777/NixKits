@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-skills.md) | [English](../../en/skills/nixkits-skills.md) | [日本語](../../ja/skills/nixkits-skills.md) | [ｶﾀﾘｯｼｭ](../../katalish/skills/nixkits-skills.md) | 偽中国語
 
-> NixKits 技能符号化代理目録（opencode、codewhale、claude、openclaw、agents）導入又更新。
+> NixKits 技能符号化代理目録（opencode、codewhale、codex、openclaw、agents）導入又更新。
 
 ## 基本情報
 
@@ -26,7 +26,7 @@
 |-------------|-------------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
-| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
 | 汎用 | `~/.agents/skills/` |
 

@@ -1,6 +1,6 @@
 ---
 name: nixkits-skills
-description: 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、claude、openclaw、agents）。支持本地和在线两种安装模式。
+description: 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、codex、openclaw、agents）。支持本地和在线两种安装模式。
 ---
 
 # NixKits 技能安装器
@@ -13,7 +13,7 @@ description: 将 NixKits 技能安装或更新到编码助手目录（opencode�
 |------|---------|
 | OpenCode | `~/.opencode/skills/` |
 | CodeWhale | `~/.codewhale/skills/` |
-| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
 | 通用 | `~/.agents/skills/` |
 
@@ -44,7 +44,7 @@ NIXKITS_DIR=$(pwd)
 [ -z "$NIXKITS_DIR" ] && NIXKITS_DIR=$(dirname "$(readlink -f flake.nix)" 2>/dev/null)
 
 # 将技能复制到各已存在的助手目录
-for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
+for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$NIXKITS_DIR/skills/"* "$dir/"
     echo "Installed to $dir"
@@ -64,7 +64,7 @@ TMPDIR=$(mktemp -d)
 git clone ${REPO_URL:-https://github.com/Kihara777/NixKits.git} "$TMPDIR"
 
 # 从克隆的源码安装
-for dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
+for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$TMPDIR/skills/"* "$dir/"
     echo "Installed to $dir"
@@ -83,7 +83,7 @@ rm -rf "$TMPDIR"
 NIXKITS_DIR=$(pwd)
 for skill_dir in "$NIXKITS_DIR/skills/"*/; do
   skill_name=$(basename "$skill_dir")
-  for agent_dir in ~/.opencode/skills ~/.codewhale/skills ~/.claude/skills ~/.openclaw/skills ~/.agents/skills; do
+  for agent_dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
     if [ -d "$agent_dir/$skill_name" ]; then
       if ! diff -rq "$skill_dir" "$agent_dir/$skill_name" > /dev/null 2>&1; then
         echo "Update available: $skill_name in $(basename $(dirname $agent_dir))"
@@ -103,3 +103,11 @@ done
 4. **选择模式** — 在 NixKits 源码内则本地模式，否则在线模式
 5. **安装** — 将技能复制到各检测到的助手目录
 6. **验证** — 确认安装成功
+
+## 已知移除
+
+**Claude Code** 已于 2026-07 移除支持，原因如下：
+
+> Claude Code 在其软件内实施了基于用户数据挖掘的国籍判断逻辑。该行为不论出于何种目的，已跨越安全模型边界，破坏了最基础的用户信任。
+>
+> 本仓库建议使用该软件的用户重新评估必要性并在可能的情况下考虑迁移工作流。因使用本仓库内容导致 Anthropic 账户产生任何异常或损失的，本仓库不承担责任。
