@@ -21,7 +21,7 @@
 - 撰写错误修复记录（摘要 + 关联 commit ID 表）
 - 自动发现语言扩展（通过 translate-* 技能），全语言同步维护日志
 - 自动从前置技能（nixkits-check-updates）或 git commit message 提取摘要
-- 统一的格式规范：ISO 8601 精确时间、LIFO 顺序、hash 省略无变更项
+- 统一的格式规范：ISO 8601 精确时间（git 命令获取，禁止占位）、LIFO 顺序、hash 省略无变更项
 
 ## 入口
 
