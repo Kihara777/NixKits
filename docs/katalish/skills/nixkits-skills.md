@@ -36,8 +36,8 @@ Activated ｳｪﾝ ｻﾞ user asks to "ｲﾝｽﾄｰﾙ skills" ｵﾗ "upda
 
 ## Risk Advisory
 
-**Claude Code** was removed in 2026-07 ﾌｫｱ ｻﾞ following reason:
+**Claude Code** removed 2026-07:
 
-> While Claude Code, as a company, has the right to KYC and to choose which users and regions to serve, the act of embedding business logic that infers user nationality from data mining—regardless of purpose or justification—has severely crossed the security model boundary and broken fundamental user trust.
+> Claude Code, as a company, has KYC rights ｱﾝﾄﾞ rights to choose service regions — but embedding nationality-inference business logic via user data mining, regardless of purpose, has severely crossed ｻﾞ security model boundary ｱﾝﾄﾞ broken fundamental user trust.
 >
-> For this reason, this repository strongly advises any user of that software to reassess its necessity and consider migrating their workflow where possible. This repository fully respects the diversity of user needs and individual choice, but has an obligation to inform users of this risk. Should any anomaly or loss occur to your Anthropic account as a result of using this repository's content, you acknowledge that this event is unrelated to this repository.
+> This repository strongly advises reassessing necessity ｱﾝﾄﾞ considering workflow migration. This repository respects user diversity ｱﾝﾄﾞ individual choice, but has an obligation to inform of this risk. Should any anomaly or loss occur to your Anthropic account ﾌﾛﾑ use of this content, you acknowledge this event is unrelated to this repository.
