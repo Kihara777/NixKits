@@ -34,7 +34,7 @@
 
 Activated ｳｪﾝ ｻﾞ user asks to "ｲﾝｽﾄｰﾙ skills" ｵﾗ "update NixKits skills".
 
-## Known Removals
+## Risk Advisory
 
 **Claude Code** removed 2026-07:
 

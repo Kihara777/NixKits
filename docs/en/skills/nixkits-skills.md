@@ -34,7 +34,7 @@
 
 Activated when the user asks to "install skills" or "update NixKits skills".
 
-## Known Removals
+## Risk Advisory
 
 **Claude Code** was removed in 2026-07 for the following reason:
 
