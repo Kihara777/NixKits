@@ -31,23 +31,3 @@ nix develop nixkits#opencode
 
 **初回起動**：`shellHook` `~/.config/opencode/mcp.json` 不存在時自動生成 MCP 設定、SearXNG、Blender、Godot 三 MCP 伺服器登録。
 
-## ruyi
-
-RuyiSDK 包管理開発環境（安定 / β / α 三通道共文書）：
-
-```bash
-nix develop nixkits#ruyi       # 安定
-nix develop nixkits#ruyi-beta   # β 通道
-nix develop nixkits#ruyi-alpha  # α 通道
-```
-
-**主要命令**：
-
-```bash
-ruyi update          # 包管理器更新
-ruyi list            # 利用可能包一覧
-ruyi install <pkg>   # 包導入
-ruyi device provision # RISC-V 装置環境設定
-```
-
-版詳細 [ruyi 軟件文書参照](../zh/ruyi.md)。

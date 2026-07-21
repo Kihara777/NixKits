@@ -31,23 +31,3 @@ nix develop nixkits#opencode
 
 **初回起動**：`shellHook` が `~/.config/opencode/mcp.json` に SearXNG、Blender、Godot の MCP サーバー設定を自動生成します（ファイルが存在しない場合）。
 
-## ruyi
-
-RuyiSDK パッケージマネージャ開発環境（stable / beta / alpha 共通）：
-
-```bash
-nix develop nixkits#ruyi       # stable
-nix develop nixkits#ruyi-beta   # beta channel
-nix develop nixkits#ruyi-alpha  # alpha channel
-```
-
-**主要コマンド**：
-
-```bash
-ruyi update          # パッケージマネージャの更新
-ruyi list            # 利用可能パッケージ一覧
-ruyi install <pkg>   # パッケージのインストール
-ruyi device provision # RISC-V デバイス環境のセットアップ
-```
-
-バージョン詳細は [ruyi パッケージ文書](../zh/ruyi.md) を参照。

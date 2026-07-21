@@ -45,6 +45,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | opencode | `nix develop nixkits#opencode` | [pcn/opencode-devshell.md](pcn/opencode-devshell.md) |
 | ruyi | `nix develop nixkits#ruyi` | [pcn/ruyi-devshell.md](pcn/ruyi-devshell.md) |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |  |
+| ruyi-alpha | `nix develop nixkits#ruyi-alpha` | |
 
 ## 修正
 

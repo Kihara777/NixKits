@@ -31,23 +31,3 @@ nix develop nixkits#opencode
 
 **First run**: `shellHook` auto-generates `~/.config/opencode/mcp.json` with SearXNG, Blender, and Godot MCP server registration if the file doesn't exist.
 
-## ruyi
-
-RuyiSDK package manager dev environment (stable / beta / alpha share one doc):
-
-```bash
-nix develop nixkits#ruyi       # stable
-nix develop nixkits#ruyi-beta   # beta channel
-nix develop nixkits#ruyi-alpha  # alpha channel
-```
-
-**Key commands**:
-
-```bash
-ruyi update          # update package manager
-ruyi list            # list available packages
-ruyi install <pkg>   # install a package
-ruyi device provision # set up RISC-V device environment
-```
-
-See [ruyi package docs](../zh/ruyi.md) for version details.
