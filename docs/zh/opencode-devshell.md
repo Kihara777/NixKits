@@ -2,8 +2,6 @@
 
 中文 | [English](../en/opencode-devshell.md) | [日本語](../ja/opencode-devshell.md)  | [偽中国語](../pcn/opencode-devshell.md)
 
-
-
 完整的 AI 编码辅助开发环境：
 
 ```bash
@@ -11,23 +9,39 @@ nix registry add nixkits github:Kihara777/NixKits
 nix develop nixkits#opencode
 ```
 
-**内置组件**：
+## 内置组件
 
 | 组件 | 包 | 路径 / 端口 |
 |------|------|------------|
 | opencode | `opencode` | `opencode`（CLI） |
 | opencode-telegram | `opencode-telegram` | `opencode-telegram`（Telegram Bot） |
+| blender | `blender` | `${BLENDER_PATH}` |
+| blender-mcp | `blender-mcp` | `blender-mcp`（MCP，stdio） |
+| godot | `godot` | `${GODOT_PATH}` |
+| godot-mcp | `nixpkgs#godot-mcp` | `godot-mcp`（MCP，stdio） |
 | SearXNG | `searxng` | `http://127.0.0.1:4270`（lighttpd 反代 → searxng:42701） |
-| Redis | `redis` | unix socket（SearXNG 用） |
-| lighttpd | `lighttpd` | 反向代理（4270 → 42701，注入 X-Forwarded-For） |
-| blender-mcp | `blender-mcp` | `blender-mcp`（MCP 协议，stdio） |
-| godot-mcp | `nixpkgs#godot-mcp` | `godot-mcp`（MCP 协议，stdio） |
+| mcp-searxng | `mcp-searxng` | `mcp-searxng`（MCP，stdio） |
+| Redis | `redis` | unix socket |
+| lighttpd | `lighttpd` | 反向代理（4270 → 42701） |
 
-**环境变量**：
+## 环境变量
 
-- `BLENDER_PATH` — Blender 可执行路径
-- `GODOT_PATH` — Godot 可执行路径
-- `SEARXNG_URL` — SearXNG 接口地址（`http://127.0.0.1:4270`）
+| 变量 | 值 |
+|------|-----|
+| `BLENDER_PATH` | `${pkgs.blender}/bin/blender` |
+| `GODOT_PATH` | `${pkgs.godot}/bin/godot` |
+| `SEARXNG_URL` | `http://127.0.0.1:4270` |
 
-**首次使用**：`shellHook` 会在 `~/.config/opencode/mcp.json` 不存在时自动生成 MCP 配置文件，注册 SearXNG、Blender、Godot 三个 MCP 服务器。
+## MCP 自动注册
 
+首次进入 devShell 时，`~/.config/opencode/mcp.json` 不存在则自动生成，注册以下 3 个 MCP 服务器：
+
+| 服务器 | 命令 | 依赖环境变量 |
+|--------|------|------------|
+| SearXNG | `mcp-searxng` | `SEARXNG_URL` |
+| Blender | `blender-mcp` | `BLENDER_PATH` |
+| Godot | `godot-mcp` | `GODOT_PATH` |
+
+## 技能自动安装
+
+首次进入时，若 `~/.opencode/skills/` 目录为空，自动从本地 `~/NixKits/skills/`（或 GitHub）安装所有 NixKits 技能。
