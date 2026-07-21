@@ -69,10 +69,12 @@
           pkgs.blender
           pkgs.python3
           mcpSearxngDrv
-        ];
+        ] ++ (if (builtins.tryEval pkgs.godot-mcp).success
+             then [ pkgs.godot-mcp pkgs.godot_4 ]
+             else [ ]);
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          echo "opencode + mcp-searxng + blender-mcp ready"
+          echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
         '';
       };
 
