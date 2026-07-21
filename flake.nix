@@ -76,6 +76,7 @@
         name = "opencode-telegram-dev";
         packages = [
           opencodeTelegramDrv
+          pkgs.opencode
           pkgs.nodejs
         ];
         shellHook = ''
