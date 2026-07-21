@@ -208,7 +208,7 @@
     User = lib.mkForce "kix";
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
-      "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+      "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";
@@ -235,7 +235,7 @@
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "/home/kix/.cache/huggingface/hub";
+    hfCacheDir = "/home/your-user/.cache/huggingface/hub";
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -246,7 +246,7 @@
   };
   # NixKits 模块未覆盖的环境变量
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
-    "LLAMA_CACHE=/home/kix/.cache/huggingface/hub"
+    "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }

@@ -11,7 +11,7 @@ NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コー�
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # ローカル
-inputs.nixkits.url = "/home/kix/NixKits";
+inputs.nixkits.url = "/home/$${USER}/NixKits";
 ```
 
 ## ソフトウェア

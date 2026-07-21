@@ -89,7 +89,7 @@ nixkits.ruyi = {
 nixkits.ruyi.venvs.riscv = {
   profile = "gnu-plct";
   toolchain = "gnu-plct";
-  dest = "/home/kix/ruyi-venvs/riscv";
+  dest = "~/ruyi-venvs/riscv";
 };
 ```
 

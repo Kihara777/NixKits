@@ -178,11 +178,11 @@ done
 ```markdown
 ## SCOPE (Katalish 示例)
 Convert TWO sets of files:
-1. Module docs: all .md files in /home/kix/G41KiTS/docs/en/
+1. Module docs: all .md files in /home/user/project/docs/en/
 2. Top-level docs:
-   - /home/kix/G41KiTS/docs/README.en.md
-   - /home/kix/G41KiTS/docs/MAINTENANCE.en.md
-   - /home/kix/G41KiTS/docs/NOTICE.en.md
+   - /home/user/project/docs/README.en.md
+   - /home/user/project/docs/MAINTENANCE.en.md
+   - /home/user/project/docs/NOTICE.en.md
    (Also check for any other *.en.md files at docs/ root level)
 ```
 
