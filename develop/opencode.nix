@@ -19,6 +19,7 @@ pkgs.mkShell {
     mcp-searxng
     pkgs.searxng
     pkgs.redis
+    pkgs.lighttpd
   ] ++ (if (builtins.tryEval pkgs.godot-mcp).success
        then [ pkgs.godot-mcp pkgs.godot_4 ]
        else [ ]);
@@ -48,7 +49,24 @@ YML
       searxng-run &
     disown
     sleep 2
-    export SEARXNG_URL="http://127.0.0.1:42999"
+    # lighttpd reverse proxy → sets X-Forwarded-For / X-Real-IP headers
+    LIGHTTPD_DIR="''${XDG_RUNTIME_DIR:-/tmp}/lighttpd-$$"
+    mkdir -p "$LIGHTTPD_DIR"
+    cat > "$LIGHTTPD_DIR/lighttpd.conf" << 'LTCONF'
+server.document-root = "/dev/null"
+server.port = 42899
+server.modules = ( "mod_proxy", "mod_setenv" )
+proxy.server = ( "" => ( ( "host" => "127.0.0.1", "port" => 42999 ) ) )
+setenv.add-request-header = (
+  "X-Real-IP"       => "%{remote-addr}e",
+  "X-Forwarded-For"  => "%{remote-addr}e",
+  "X-Forwarded-Proto" => "http"
+)
+LTCONF
+    lighttpd -f "$LIGHTTPD_DIR/lighttpd.conf" &
+    disown
+    sleep 1
+    export SEARXNG_URL="http://127.0.0.1:42899"
   '' + (if (builtins.tryEval pkgs.godot-mcp).success
        then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
        else "") + ''
@@ -61,7 +79,7 @@ YML
   "servers": {
     "SearXNG": {
       "command": "mcp-searxng",
-      "env": { "SEARXNG_URL": "http://127.0.0.1:42999" }
+      "env": { "SEARXNG_URL": "http://127.0.0.1:42899" }
     },
     "Blender": {
       "command": "blender-mcp",
