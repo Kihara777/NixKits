@@ -1,6 +1,6 @@
 # devShell
 
-中文 | [English](../en/opencode-devshell.md) | [日本語](../ja/opencode-devshell.md)  | [偽中国語](../pcn/opencode-devshell.md)
+中文 | [English](../en/opencode.md) | [日本語](../ja/opencode.md)  | [偽中国語](../pcn/opencode.md)
 
 NixKits 为开发环境提供 `nix develop` 即用入口。
 
