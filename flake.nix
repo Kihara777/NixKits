@@ -42,6 +42,7 @@
 
     devShells = let
       blenderMcpDrv = pkgs.callPackage ./packages/blender-mcp.nix { };
+      mcpSearxngDrv = pkgs.callPackage ./packages/mcp-searxng.nix { };
       opencodeTelegramDrv = pkgs.callPackage ./packages/opencode-telegram.nix { };
       ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       ruyiBetaDrv = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
@@ -67,13 +68,11 @@
           blenderMcpDrv
           pkgs.blender
           pkgs.python3
-          pkgs.callPackage ./packages/mcp-searxng.nix { }
-          pkgs.godot-mcp
-          pkgs.godot_4
+          mcpSearxngDrv
         ];
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
+          echo "opencode + mcp-searxng + blender-mcp ready"
         '';
       };
 
