@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-22T03:14:27+09:00
+
+**Summary**: feat(shells) — opencode devShell iteration: SearXNG + lighttpd (matching system NixOS config) + blender-mcp + godot-mcp + godot + opencode + opencode-telegram. Auto-registers MCP config on first entry. Removed tryEval guards from godot packages.
+
+| Commit | Description |
+|------|------|
+| `8d2f65b` | fix(shells): s/godot_4/godot/ |
+| `f8943ff` | refactor(shells): remove tryEval for godot-mcp |
+| `c316c97` | feat(shells): add lighttpd reverse proxy |
+| `6a6537d` | fix(shells): add limiterSettings/trusted_proxies |
+| `9d67fd8` | feat(shells): auto-register opencode MCP servers on first entry |
+| `e0ead5a` | refactor(shells): extract devShells from flake.nix to develop/ |
+| `3652030` | feat(shells): add self-contained SearXNG + Redis |
+| `47e43b3` | fix(shells): set SEARXNG_URL |
+| `60a065e` | fix(shells): add GODOT_PATH |
+
 ## 2026-07-22T03:40:50+09:00
 
 **Summary**: docs — unified all user home directory paths across the repo to `~/` prefix (replaced hardcoded `/home/kix` and `/home/<user>` variants), covering 13 files.
