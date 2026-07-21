@@ -40,7 +40,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 nix registry add nixkits github:Kihara777/NixKits
 ```
 
-| Package | `nix develop` | Doc |
+| Environment | Command | Doc |
 |---------|---------------|-----|
 | opencode | `nix develop nixkits#opencode` | [en/opencode-devshell.md](en/opencode-devshell.md) |
 | ruyi | `nix develop nixkits#ruyi`<br>`nix develop nixkits#ruyi-beta`<br>`nix develop nixkits#ruyi-alpha` | [en/ruyi.md](en/ruyi.md) |
