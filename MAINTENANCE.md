@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T05:39:31+09:0000
+
+**摘要**：docs(devshell) — 新增 devShell 文档（4 语言），描述 opencode（MCP 全栈）和 ruyi（三通道合并）开发环境。README devShell 表添加文档链接列。
+
+| 提交 | 说明 |
+|------|------|
+| `cbe9e72` | docs(README): add devShell doc column, merge ruyi 3 channels |
+| `7bfe3e3` | docs: add devShell documentation — 4 lang |
+
 ## 2026-07-22T03:40:50+09:00
 
 **摘要**：docs — 统一全仓库文档中的用户目录路径为 `~/` 前缀（替换硬编码 `/home/kix` 及 `/home/<user>` 等变体），涉及 13 文件。

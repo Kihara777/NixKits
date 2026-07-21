@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-22T05:39:31+09:0000
+
+**Summary**: docs(devshell) — new devShell documentation (4 languages), describing opencode (full MCP stack) and ruyi (3 channels merged) environments. README devShell table now includes doc links.
+
+| Commit | Description |
+|------|------|
+| `cbe9e72` | docs(README): add devShell doc column, merge ruyi 3 channels |
+| `7bfe3e3` | docs: add devShell documentation — 4 lang |
+
 ## 2026-07-22T03:14:27+09:00
 
 **Summary**: feat(shells) — opencode devShell iteration: SearXNG + lighttpd (matching system NixOS config) + blender-mcp + godot-mcp + godot + opencode + opencode-telegram. Auto-registers MCP config on first entry. Removed tryEval guards from godot packages.
