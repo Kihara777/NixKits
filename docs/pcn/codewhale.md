@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md)  | 偽中国語
 
@@ -12,7 +12,7 @@ DeepSeek V4 専用端末符号化代理。
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.8.67 |
+| 版 | 0.9.0 |
 | 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 種別 | 構築済二進（GitHub Releases） |
 
@@ -40,7 +40,7 @@ codewhale auth set --provider deepseek # API 鍵保存
 
 ## 既知問題
 
-> ⚠️ **riscv64 源構築**: 上流 v0.8.67 以降 riscv64 予構築二進削除。NixKits `rustPlatform.buildRustPackage` 経由源交叉編輯提供。此実験的機能、初回 CI 依存 hash 不一致可能 — 後続 CI 検証修正予定。
+> ⚠️ **riscv64 源構築**: 上流 v0.9.0 以降 riscv64 予構築二進削除。NixKits `rustPlatform.buildRustPackage` 経由源交叉編輯提供。此実験的機能、初回 CI 依存 hash 不一致可能 — 後続 CI 検証修正予定。
 
 ## 緩衝
 

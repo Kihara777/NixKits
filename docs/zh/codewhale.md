@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 中文 | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md)  | [偽中国語](../pcn/codewhale.md)
 
@@ -12,7 +12,7 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 0.8.67 |
+| 版本 | 0.9.0 |
 | 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 类型 | 预编译二进制（x86_64 / aarch64）；源码构建（riscv64） |
 | 平台 | x86_64 / aarch64 / riscv64 |
@@ -41,7 +41,7 @@ codewhale auth set --provider deepseek # 保存 API key
 
 ## 已知问题
 
-> ⚠️ **riscv64 源码构建**：上游从 v0.8.67 起移除了 riscv64 预编译二进制。NixKits 通过 `rustPlatform.buildRustPackage` 从源码交叉编译提供 riscv64 支持。此项为实验性功能，首次 CI 构建可能因依赖 hash 不匹配失败——我们会在后续 CI 运行中验证并修复。
+> ⚠️ **riscv64 源码构建**：上游从 v0.9.0 起移除了 riscv64 预编译二进制。NixKits 通过 `rustPlatform.buildRustPackage` 从源码交叉编译提供 riscv64 支持。此项为实验性功能，首次 CI 构建可能因依赖 hash 不匹配失败——我们会在后续 CI 运行中验证并修复。
 
 ## 缓存
 

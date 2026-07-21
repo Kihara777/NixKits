@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.8.67)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | 日本語  | [偽中国語](../pcn/codewhale.md)
 
@@ -12,7 +12,7 @@ DeepSeek V4 専用のターミナルコーディングエージェント。
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.8.67 |
+| バージョン | 0.9.0 |
 | アップストリーム | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | タイプ | ビルド済みバイナリ（GitHub Releases） |
 
@@ -40,7 +40,7 @@ codewhale auth set --provider deepseek # API キー保存
 
 ## 既知の問題
 
-> ⚠️ **riscv64 ソースビルド**: 上流が v0.8.67 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
+> ⚠️ **riscv64 ソースビルド**: 上流が v0.9.0 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
 
 ## キャッシュ
 

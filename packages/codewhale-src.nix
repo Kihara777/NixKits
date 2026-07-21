@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.8.67";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Hmbown";
