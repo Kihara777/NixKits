@@ -1,6 +1,6 @@
 # opencode (devShell)
 
-中文 | [English](../en/opencode.md) | [日本語](../ja/opencode.md)  | [偽中国語](../pcn/opencode.md)
+中文 | [English](../en/opencode-devshell.md) | [日本語](../ja/opencode-devshell.md)  | [偽中国語](../pcn/opencode-devshell.md)
 
 
 
