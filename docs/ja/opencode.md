@@ -1,10 +1,8 @@
-# devShell
+# opencode (devShell)
 
 [中文](../zh/opencode.md) | [English](devshell.en.md) | 日本語  | [偽中国語](devshell.pcn.md)
 
-NixKits は開発用の `nix develop` 即時環境を提供します。
 
-## opencode
 
 完全な AI コーディングアシスタント開発環境：
 

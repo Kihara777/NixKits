@@ -1,10 +1,8 @@
-# devShell
+# opencode (devShell)
 
 [中文](../zh/opencode.md) | English | [日本語](devshell.ja.md)  | [偽中国語](devshell.pcn.md)
 
-NixKits provides ready-to-use `nix develop` environments for development.
 
-## opencode
 
 Full AI coding assistant dev environment:
 

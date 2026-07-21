@@ -1,10 +1,8 @@
-# devShell
+# opencode (devShell)
 
 中文 | [English](../en/opencode.md) | [日本語](../ja/opencode.md)  | [偽中国語](../pcn/opencode.md)
 
-NixKits 为开发环境提供 `nix develop` 即用入口。
 
-## opencode
 
 完整的 AI 编码辅助开发环境：
 
