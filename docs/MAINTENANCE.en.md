@@ -2,6 +2,31 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-22T02:43:51+09:00
+
+**Summary**: feat(overlays) — new efl-cross-fix overlay, fixing efl cross-compilation failures on riscv64/riscv64-musl/aarch64 caused by missing native code-gen tools (eolian_gen, eet). Includes 4-language docs.
+
+| Commit | Description |
+|------|------|
+| `7d1e0e4` | feat(overlays): add efl-cross-fix |
+
+## 2026-07-21T10:28:31+09:00
+
+**Summary**: codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — upstream updates (codewhale v0.9.0 still no riscv64 prebuilt binaries, continues source-build path)
+
+| Commit | Description |
+|------|------|
+| `4df8df2` | chore(pkgs): bump codewhale 0.9.0 |
+| `6046594` | chore(pkgs): bump ruyi 0.51.0 + beta + alpha |
+| `deca3e8` | chore(pkgs): bump opencode-telegram 0.22.3 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale | 0.8.67 | 0.9.0 |
+| ruyi | 0.50.0 | 0.51.0 |
+| ruyi-beta | 0.50.0-beta.20260623 | 0.51.0-beta.20260714 |
+| ruyi-alpha | 0.51.0-alpha.20260616 | 0.52.0-alpha.20260714 |
+| opencode-telegram | 0.22.2 | 0.22.3 |
 ## 2026-07-16T06:08:43+09:00
 
 **Summary**: fix(ci) — ci-summary workflow was failing with HTTP 403 rate limit from calling `gh run list` per-workflow (25 calls). Fixed with 2 batched `gh api` calls + concurrency guard.

@@ -2,6 +2,31 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T02:43:51+09:00
+
+**摘要**：feat(overlays) — 新增 efl-cross-fix overlay，修复 efl（Enlightenment Foundation Libraries）在 riscv64/riscv64-musl/aarch64 交叉编译时因缺少原生代码生成工具（eolian_gen、eet）导致的构建失败。含 4 语言文档。
+
+| 提交 | 说明 |
+|------|------|
+| `7d1e0e4` | feat(overlays): add efl-cross-fix |
+
+## 2026-07-21T10:28:31+09:00
+
+**摘要**：codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — 上游更新（codewhale v0.9.0 仍无 riscv64 预编译二进制，继续源码构建路径）
+
+| 提交 | 说明 |
+|------|------|
+| `4df8df2` | chore(pkgs): bump codewhale 0.9.0 |
+| `6046594` | chore(pkgs): bump ruyi 0.51.0 + beta 0.51.0-beta.20260714 + alpha 0.52.0-alpha.20260714 |
+| `deca3e8` | chore(pkgs): bump opencode-telegram 0.22.3 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.67 | 0.9.0 |
+| ruyi | 0.50.0 | 0.51.0 |
+| ruyi-beta | 0.50.0-beta.20260623 | 0.51.0-beta.20260714 |
+| ruyi-alpha | 0.51.0-alpha.20260616 | 0.52.0-alpha.20260714 |
+| opencode-telegram | 0.22.2 | 0.22.3 |
 ## 2026-07-16T06:08:43+09:00
 
 **摘要**：fix(ci) — 修复 ci-summary workflow 因 `gh run list` 逐 workflow 调用 API 触发 rate limit（HTTP 403）导致主文档 CI badge 无法更新。改为 2 次批量 `gh api` 调用 + 并发控制。
