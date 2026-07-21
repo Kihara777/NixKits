@@ -58,30 +58,20 @@
         '';
       };
 
-      blender-mcp = pkgs.mkShell {
-        name = "blender-mcp-dev";
-        packages = [
-          blenderMcpDrv
-          pkgs.blender
-          pkgs.python3
-        ];
-        shellHook = ''
-          export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          echo "blender-mcp $(blender-mcp --help 2>&1 | head -1)"
-          echo "BLENDER_PATH=$BLENDER_PATH"
-        '';
-      };
-
       opencode-telegram = pkgs.mkShell {
         name = "opencode-telegram-dev";
         packages = [
           opencodeTelegramDrv
           pkgs.opencode
           pkgs.nodejs
+          blenderMcpDrv
+          pkgs.blender
+          pkgs.python3
+          pkgs.callPackage ./packages/mcp-searxng.nix { }
         ];
         shellHook = ''
-          echo "opencode-telegram ready"
-          echo "run: opencode-telegram"
+          export BLENDER_PATH="${pkgs.blender}/bin/blender"
+          echo "opencode-telegram + mcp-searxng + blender-mcp ready"
         '';
       };
 
