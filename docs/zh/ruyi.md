@@ -54,9 +54,9 @@ environment.systemPackages = [
 ```bash
 ruyi --help
 ruyi list --all          # 列出所有可用软件包
-ruyi install <pkg>       # 安装工具链
-ruyi venv --toolchain <t> # 创建虚拟环境
-ruyi device provision    # 设备烧录
+ruyi install <pkg>       # 安装软件包
+ruyi venv --toolchain <t> # 用指定 toolchain 创建 Python virtualenv
+ruyi device provision    # 创建 RISC-V 设备虚拟环境
 ```
 
 > ruyi 需要网络连接以克隆软件包仓库（`packages-index`），首次运行 `ruyi list` 时会自动下载。

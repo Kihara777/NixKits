@@ -55,9 +55,9 @@ environment.systemPackages = [
 ```bash
 ruyi --help
 ruyi list --all          # list all available packages
-ruyi install <pkg>       # install a toolchain
-ruyi venv --toolchain <t> # create a virtual environment
-ruyi device provision    # device provisioning
+ruyi install <pkg>       # install a package
+ruyi venv --toolchain <t> # create Python virtualenv with given toolchain
+ruyi device provision    # create RISC-V device virtual environment
 ```
 
 > ruyi requires network access to clone the package repository (`packages-index`); running `ruyi list` for the first time downloads it automatically.

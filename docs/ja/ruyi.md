@@ -55,9 +55,9 @@ environment.systemPackages = [
 ```bash
 ruyi --help
 ruyi list --all          # 利用可能な全パッケージを一覧表示
-ruyi install <pkg>       # ツールチェーンをインストール
-ruyi venv --toolchain <t> # 仮想環境を作成
-ruyi device provision    # デバイスプロビジョニング
+ruyi install <pkg>       # ソフトウェアパッケージをインストール
+ruyi venv --toolchain <t> # 指定 toolchain で Python virtualenv を作成
+ruyi device provision    # RISC-V デバイス仮想環境を作成
 ```
 
 > ruyiはパッケージリポジトリ（`packages-index`）のクローンにネットワーク接続が必要です。初回の`ruyi list`実行時に自動的にダウンロードされます。

@@ -55,9 +55,9 @@ environment.systemPackages = [
 ```bash
 ruyi --help
 ruyi list --all          # 利用可能全包一覧表示
-ruyi install <pkg>       # 工具鎖導入
-ruyi venv --toolchain <t> # 仮想環境作成
-ruyi device provision    # 機器配備
+ruyi install <pkg>       # 軟件包導入
+ruyi venv --toolchain <t> # 指定 toolchain 以 Python virtualenv 作成
+ruyi device provision    # 機器仮想環境作成
 ```
 
 > ruyi 包倉庫（`packages-index`）複製連接必要。初回 `ruyi list` 実行時自動取得。
