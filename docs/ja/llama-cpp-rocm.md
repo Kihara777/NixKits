@@ -134,7 +134,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 }
 ```
 
-モジュールは `LLAMA_CACHE` を `/home/<user>/.cache/huggingface/hub` に自動設定し、`/home` と `/proc` のサンドボックス制限を解除します。
+モジュールは `LLAMA_CACHE` を `~/.cache/huggingface/hub` に自動設定し、`/home` と `/proc` のサンドボックス制限を解除します。
 
 > **警告: Home Manager の llama-cpp サービス**
 >
@@ -204,7 +204,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
     User = lib.mkForce "kix";
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
-      "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+      "LLAMA_CACHE=~/.cache/huggingface/hub"
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";
@@ -231,7 +231,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "/home/your-user/.cache/huggingface/hub";
+    hfCacheDir = "~/.cache/huggingface/hub";
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -242,7 +242,7 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
   };
   # NixKits オプションでカバーされない環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
-    "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+    "LLAMA_CACHE=~/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }

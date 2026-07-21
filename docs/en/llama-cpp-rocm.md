@@ -134,7 +134,7 @@ See upstream llama.cpp docs.
 }
 ```
 
-The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and lifts `/home` and `/proc` sandbox restrictions.
+The module auto-sets `LLAMA_CACHE` to `~/.cache/huggingface/hub` and lifts `/home` and `/proc` sandbox restrictions.
 
 > **Warning: Home Manager llama-cpp service**
 >
@@ -204,7 +204,7 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
     User = lib.mkForce "kix";
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
-      "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+      "LLAMA_CACHE=~/.cache/huggingface/hub"
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";
@@ -231,7 +231,7 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "/home/your-user/.cache/huggingface/hub";
+    hfCacheDir = "~/.cache/huggingface/hub";
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -242,7 +242,7 @@ The module auto-sets `LLAMA_CACHE` to `/home/<user>/.cache/huggingface/hub` and 
   };
   # Extra env vars not covered by NixKits options
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
-    "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+    "LLAMA_CACHE=~/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }

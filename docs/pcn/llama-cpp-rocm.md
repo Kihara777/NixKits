@@ -134,7 +134,7 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
 }
 ```
 
-部品 `LLAMA_CACHE` `/home/<user>/.cache/huggingface/hub` 自動設定、`/home` 與 `/proc` 砂箱制限解除。
+部品 `LLAMA_CACHE` `~/.cache/huggingface/hub` 自動設定、`/home` 與 `/proc` 砂箱制限解除。
 
 > **警告: Home Manager llama-cpp 服務**
 >
@@ -204,7 +204,7 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
     User = lib.mkForce "kix";
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
-      "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+      "LLAMA_CACHE=~/.cache/huggingface/hub"
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";
@@ -231,7 +231,7 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "/home/your-user/.cache/huggingface/hub";
+    hfCacheDir = "~/.cache/huggingface/hub";
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
@@ -242,7 +242,7 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
   };
   # NixKits 選項以覆非環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
-    "LLAMA_CACHE=/home/your-user/.cache/huggingface/hub"
+    "LLAMA_CACHE=~/.cache/huggingface/hub"
     "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }

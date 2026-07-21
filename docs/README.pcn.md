@@ -11,7 +11,7 @@ NixKits — 軟体、修正、NixOS 部品、AI 符号化代理技能之蒐集�
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 局所
-inputs.nixkits.url = "/home/$${USER}/NixKits";
+inputs.nixkits.url = "~/NixKits";
 ```
 
 ## 軟体

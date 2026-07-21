@@ -13,7 +13,7 @@ NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 本地
-inputs.nixkits.url = "/home/$${USER}/NixKits";
+inputs.nixkits.url = "~/NixKits";
 ```
 
 > **二进制缓存**：flake 已通过 `nixConfig` 自动声明。直接使用 flake input 时 Nix 自动提示。手动：`cachix use nixkits`。
