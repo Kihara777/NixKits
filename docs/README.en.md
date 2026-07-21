@@ -26,7 +26,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
-| ruyi | RuyiSDK package manager (RISC-V development tools)<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/en/ruyi.md](docs/en/ruyi.md) |
+| ruyi | RuyiSDK package manager (RISC-V development tools)<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/en/ruyi-devshell.md](docs/en/ruyi-devshell.md) |
 
 > ⚠️ comfyui-strix-halo is a module+patch, not a standalone package, and is not in the binary cache.
 
@@ -43,8 +43,8 @@ nix registry add nixkits github:Kihara777/NixKits
 | Environment | Command | Doc |
 |---------|---------------|-----|
 | opencode | `nix develop nixkits#opencode` | [en/opencode.md](en/opencode.md) |
-| ruyi | `nix develop nixkits#ruyi` | [en/ruyi.md](en/ruyi.md) |
-| ruyi-beta | `nix develop nixkits#ruyi-beta` | [en/ruyi.md](en/ruyi.md) |
+| ruyi | `nix develop nixkits#ruyi` | [en/ruyi-devshell.md](en/ruyi-devshell.md) |
+| ruyi-beta | `nix develop nixkits#ruyi-beta` | [en/ruyi-devshell.md](en/ruyi-devshell.md) |
 
 ## Patches
 

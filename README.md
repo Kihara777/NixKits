@@ -30,7 +30,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
-| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
+| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
 
 
 ## 开发
@@ -43,9 +43,9 @@ nix registry add nixkits github:Kihara777/NixKits
 | 环境 | 命令 | 文档 |
 |------|------|------|
 | opencode | `nix develop nixkits#opencode` | [docs/zh/opencode.md](docs/zh/opencode.md) |
-| ruyi | `nix develop nixkits#ruyi` | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
-| ruyi-beta | `nix develop nixkits#ruyi-beta` | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
-| ruyi-alpha | `nix develop nixkits#ruyi-alpha` | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
+| ruyi | `nix develop nixkits#ruyi` | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
+| ruyi-beta | `nix develop nixkits#ruyi-beta` | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
+| ruyi-alpha | `nix develop nixkits#ruyi-alpha` | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
 
 ## 补丁
 
