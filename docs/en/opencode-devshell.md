@@ -31,3 +31,17 @@ nix develop nixkits#opencode
 
 **First run**: `shellHook` auto-generates `~/.config/opencode/mcp.json` with SearXNG, Blender, and Godot MCP server registration if the file doesn't exist.
 
+
+## MCP Auto-Registration
+
+On first entry, if `~/.config/opencode/mcp.json` does not exist, it is auto-generated:
+
+| Server | Command | Env |
+|--------|--------|-----|
+| SearXNG | `mcp-searxng` | `SEARXNG_URL` |
+| Blender | `blender-mcp` | `BLENDER_PATH` |
+| Godot | `godot-mcp` | `GODOT_PATH` |
+
+## Skill Auto-Install
+
+On first entry, if `~/.opencode/skills/` is empty, all NixKits skills are auto-installed from `~/NixKits/skills/` (or GitHub).
