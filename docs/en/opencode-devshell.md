@@ -1,6 +1,6 @@
 # devShell
 
-[中文](../zh/devshell.md) | English | [日本語](devshell.ja.md)  | [偽中国語](devshell.pcn.md)
+[中文](../zh/opencode-devshell.md) | English | [日本語](devshell.ja.md)  | [偽中国語](devshell.pcn.md)
 
 NixKits provides ready-to-use `nix develop` environments for development.
 
