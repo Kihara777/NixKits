@@ -17,8 +17,8 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # パッケージマネージャの更新
 ruyi list             # 利用可能パッケージ一覧
 ruyi install <pkg>    # パッケージのインストール
-ruyi extract <file>  # RISC-V ビルド生成物を展開
-ruyi venv <name>      # Python 仮想環境を作成
+ruyi extract <file>  # RISC-V AppImage を展開（root 不要）
+ruyi venv <name>      # 対応 RISC-V toolchain で Python virtualenv を作成
 ruyi device provision # RISC-V デバイス環境のセットアップ
 ```
 

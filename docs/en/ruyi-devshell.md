@@ -17,8 +17,8 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # update package manager
 ruyi list             # list available packages
 ruyi install <pkg>    # install a package
-ruyi extract <file>  # unpack RISC-V build artifacts
-ruyi venv <name>      # create Python venv
+ruyi extract <file>  # unpack RISC-V AppImage (no root)
+ruyi venv <name>      # create Python virtualenv with paired RISC-V toolchain
 ruyi device provision # set up RISC-V device environment
 ```
 
