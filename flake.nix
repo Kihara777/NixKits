@@ -69,12 +69,33 @@
           pkgs.blender
           pkgs.python3
           mcpSearxngDrv
+          pkgs.searxng
+          pkgs.redis
         ] ++ (if (builtins.tryEval pkgs.godot-mcp).success
              then [ pkgs.godot-mcp pkgs.godot_4 ]
              else [ ]);
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          export SEARXNG_URL="http://127.0.0.1:42701"
+          export SEARXNG_SETTINGS_DIR="''${XDG_RUNTIME_DIR:-/tmp}/searxng-$$"
+          mkdir -p "$SEARXNG_SETTINGS_DIR"
+          cat > "$SEARXNG_SETTINGS_DIR/settings.yml" << YML
+use_default_settings: true
+search:
+  formats:
+    - html
+    - json
+server:
+  bind_address: "127.0.0.1"
+  port: 42999
+  secret_key: "opencode-devshell-searxng-key"
+YML
+          redis-server --port 0 --unixsocket /tmp/searxng-redis-$$.sock --daemonize yes 2>/dev/null
+          SEARXNG_SETTINGS_PATH="$SEARXNG_SETTINGS_DIR/settings.yml" \
+            searxng-run &
+          SEARXNG_PID=$!
+          disown
+          sleep 2
+          export SEARXNG_URL="http://127.0.0.1:42999"
         '' + (if (builtins.tryEval pkgs.godot-mcp).success
              then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
              else "") + ''
