@@ -14,12 +14,12 @@ nix develop nixkits#ruyi-alpha  # α
 ## 主要命令
 
 ```bash
-ruyi update           # 包管理器更新
+ruyi update           # 局所包索引更新
 ruyi list             # 利用可能包一覧
-ruyi install <pkg>    # 包導入
+ruyi install <pkg>    # 軟件包導入
 ruyi extract <file>  # RISC-V AppImage 解凍（root 不要）
 ruyi venv <name>      # 対応 RISC-V toolchain 以 Python virtualenv 作成
-ruyi device provision # RISC-V 装置環境設定
+ruyi device provision # RISC-V 装置仮想環境作成
 ```
 
 版詳細 [ruyi 軟件包文書参照](../zh/ruyi.md)。

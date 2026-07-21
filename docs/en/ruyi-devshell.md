@@ -14,12 +14,12 @@ nix develop nixkits#ruyi-alpha  # alpha
 ## Key Commands
 
 ```bash
-ruyi update           # update package manager
+ruyi update           # update local package index
 ruyi list             # list available packages
 ruyi install <pkg>    # install a package
 ruyi extract <file>  # unpack RISC-V AppImage (no root)
 ruyi venv <name>      # create Python virtualenv with paired RISC-V toolchain
-ruyi device provision # set up RISC-V device environment
+ruyi device provision # create RISC-V device virtual environment
 ```
 
 See [ruyi package docs](../zh/ruyi.md) for version details.
