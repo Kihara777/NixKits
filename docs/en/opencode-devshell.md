@@ -1,40 +1,40 @@
 # opencode (devShell)
 
-[中文](../zh/opencode-devshell.md) | English | [日本語](devshell.ja.md)  | [偽中国語](devshell.pcn.md)
+[中文](../zh/opencode-devshell.md) | English | [日本語](opencode-devshell.ja.md)  | [偽中国語](opencode-devshell.pcn.md)
 
-
-
-Full AI coding assistant dev environment:
+Full AI coding assistant development environment:
 
 ```bash
 nix registry add nixkits github:Kihara777/NixKits
 nix develop nixkits#opencode
 ```
 
-**Bundled components**:
+## Built-in Components
 
 | Component | Package | Path / Port |
-|----------|---------|------------|
+|------|------|------------|
 | opencode | `opencode` | `opencode` (CLI) |
 | opencode-telegram | `opencode-telegram` | `opencode-telegram` (Telegram Bot) |
+| blender | `blender` | `${BLENDER_PATH}` |
+| blender-mcp | `blender-mcp` | `blender-mcp` (MCP, stdio) |
+| godot | `godot` | `${GODOT_PATH}` |
+| godot-mcp | `nixpkgs#godot-mcp` | `godot-mcp` (MCP, stdio) |
 | SearXNG | `searxng` | `http://127.0.0.1:4270` (lighttpd proxy → searxng:42701) |
-| Redis | `redis` | unix socket (for SearXNG) |
-| lighttpd | `lighttpd` | reverse proxy (4270 → 42701, injects X-Forwarded-For) |
-| blender-mcp | `blender-mcp` (MCP protocol, stdio) |
-| godot-mcp | `godot-mcp` (MCP protocol, stdio) |
+| mcp-searxng | `mcp-searxng` | `mcp-searxng` (MCP, stdio) |
+| Redis | `redis` | unix socket |
+| lighttpd | `lighttpd` | reverse proxy (4270 → 42701) |
 
-**Environment variables**:
+## Environment Variables
 
-- `BLENDER_PATH` — blender executable path
-- `GODOT_PATH` — godot executable path
-- `SEARXNG_URL` — SearXNG endpoint (`http://127.0.0.1:4270`)
-
-**First run**: `shellHook` auto-generates `~/.config/opencode/mcp.json` with SearXNG, Blender, and Godot MCP server registration if the file doesn't exist.
-
+| Variable | Value |
+|------|-----|
+| `BLENDER_PATH` | `${pkgs.blender}/bin/blender` |
+| `GODOT_PATH` | `${pkgs.godot}/bin/godot` |
+| `SEARXNG_URL` | `http://127.0.0.1:4270` |
 
 ## MCP Auto-Registration
 
-On first entry, if `~/.config/opencode/mcp.json` does not exist, it is auto-generated:
+On first entry, if `~/.config/opencode/mcp.json` does not exist, it is auto-generated with 3 MCP servers:
 
 | Server | Command | Env |
 |--------|--------|-----|

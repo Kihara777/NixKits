@@ -1,8 +1,6 @@
 # opencode (devShell)
 
-[中文](../zh/opencode-devshell.md) | [English](devshell.en.md) | [日本語](devshell.ja.md)  | 偽中国語
-
-
+[中文](../zh/opencode-devshell.md) | [English](opencode-devshell.en.md) | [日本語](opencode-devshell.ja.md)  | 偽中国語
 
 完全 AI 符号化補助開発環境：
 
@@ -11,37 +9,39 @@ nix registry add nixkits github:Kihara777/NixKits
 nix develop nixkits#opencode
 ```
 
-**内蔵部品**：
+## 内蔵部品
 
-| 部品 | 径路 / 端口 |
-|------|------------|
-| opencode | `opencode`（CLI） |
-| opencode-telegram | `opencode-telegram`（電報 Bot） |
-| SearXNG | `http://127.0.0.1:4270`（lighttpd 逆代行 → searxng:42701） |
-| Redis | unix socket（SearXNG 用） |
-| lighttpd | 逆代行（4270 → 42701、X-Forwarded-For 注入） |
-| blender-mcp | `blender-mcp`（MCP 協議、stdio） |
-| godot-mcp | `godot-mcp`（MCP 協議、stdio） |
+| 部品 | 包 | 径路 / 端口 |
+|------|------|------------|
+| opencode | `opencode` | `opencode`（CLI） |
+| opencode-telegram | `opencode-telegram` | `opencode-telegram`（電報 Bot） |
+| blender | `blender` | `${BLENDER_PATH}` |
+| blender-mcp | `blender-mcp` | `blender-mcp`（MCP、stdio） |
+| godot | `godot` | `${GODOT_PATH}` |
+| godot-mcp | `nixpkgs#godot-mcp` | `godot-mcp`（MCP、stdio） |
+| SearXNG | `searxng` | `http://127.0.0.1:4270`（lighttpd 逆代行 → searxng:42701） |
+| mcp-searxng | `mcp-searxng` | `mcp-searxng`（MCP、stdio） |
+| Redis | `redis` | unix socket |
+| lighttpd | `lighttpd` | 逆代行（4270 → 42701） |
 
-**環境変数**：
+## 環境変数
 
-- `BLENDER_PATH` — Blender 実行可能径路
-- `GODOT_PATH` — Godot 実行可能径路
-- `SEARXNG_URL` — SearXNG 端点（`http://127.0.0.1:4270`）
+| 変数 | 値 |
+|------|-----|
+| `BLENDER_PATH` | `${pkgs.blender}/bin/blender` |
+| `GODOT_PATH` | `${pkgs.godot}/bin/godot` |
+| `SEARXNG_URL` | `http://127.0.0.1:4270` |
 
-**初回起動**：`shellHook` `~/.config/opencode/mcp.json` 不存在時自動生成 MCP 設定、SearXNG、Blender、Godot 三 MCP 伺服器登録。
+## MCP 自動登録
 
+初回起動時、`~/.config/opencode/mcp.json` 不存在時、3 MCP 伺服器自動登録：
 
-## MCP Auto-Registration
-
-On first entry, if `~/.config/opencode/mcp.json` does not exist, it is auto-generated:
-
-| Server | Command | Env |
+| 伺服器 | 命令 | 環境変数 |
 |--------|--------|-----|
 | SearXNG | `mcp-searxng` | `SEARXNG_URL` |
 | Blender | `blender-mcp` | `BLENDER_PATH` |
 | Godot | `godot-mcp` | `GODOT_PATH` |
 
-## Skill Auto-Install
+## 技能自動導入
 
-On first entry, if `~/.opencode/skills/` is empty, all NixKits skills are auto-installed from `~/NixKits/skills/` (or GitHub).
+初回起動時、`~/.opencode/skills/` 空時、全 NixKits 技能 `~/NixKits/skills/`（又 GitHub）自動導入。
