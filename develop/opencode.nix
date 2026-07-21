@@ -46,6 +46,30 @@ YML
   '' + (if (builtins.tryEval pkgs.godot-mcp).success
        then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
        else "") + ''
+    OPENCODE_MCP_DIR="$HOME/.config/opencode"
+    OPENCODE_MCP_FILE="$OPENCODE_MCP_DIR/mcp.json"
+    if [ ! -f "$OPENCODE_MCP_FILE" ]; then
+      mkdir -p "$OPENCODE_MCP_DIR"
+      cat > "$OPENCODE_MCP_FILE" << 'MCPJSON'
+{
+  "servers": {
+    "SearXNG": {
+      "command": "mcp-searxng",
+      "env": { "SEARXNG_URL": "http://127.0.0.1:42999" }
+    },
+    "Blender": {
+      "command": "blender-mcp",
+      "env": { "BLENDER_PATH": "/etc/profiles/per-user/kix/bin/blender" }
+    },
+    "Godot": {
+      "command": "godot-mcp",
+      "env": { "GODOT_PATH": "/etc/profiles/per-user/kix/bin/godot" }
+    }
+  }
+}
+MCPJSON
+      echo "opencode mcp.json initialized at $OPENCODE_MCP_FILE"
+    fi
     echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
   '';
 }
