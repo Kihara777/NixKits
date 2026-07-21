@@ -20,9 +20,9 @@ pkgs.mkShell {
     pkgs.searxng
     pkgs.redis
     pkgs.lighttpd
-  ] ++ (if (builtins.tryEval pkgs.godot-mcp).success
-       then [ pkgs.godot-mcp pkgs.godot_4 ]
-       else [ ]);
+    pkgs.godot-mcp
+    pkgs.godot_4
+  ];
   shellHook = ''
     export BLENDER_PATH="${pkgs.blender}/bin/blender"
     export SEARXNG_SETTINGS_DIR="''${XDG_RUNTIME_DIR:-/tmp}/searxng-$$"
@@ -67,9 +67,8 @@ LTCONF
     disown
     sleep 1
     export SEARXNG_URL="http://127.0.0.1:42899"
-  '' + (if (builtins.tryEval pkgs.godot-mcp).success
-       then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
-       else "") + ''
+    export GODOT_PATH="${pkgs.godot_4}/bin/godot"
+  '' + ''
     OPENCODE_MCP_DIR="$HOME/.config/opencode"
     OPENCODE_MCP_FILE="$OPENCODE_MCP_DIR/mcp.json"
     if [ ! -f "$OPENCODE_MCP_FILE" ]; then
