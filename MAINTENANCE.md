@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T03:40:50+09:00
+
+**摘要**：docs — 统一全仓库文档中的用户目录路径为 `~/` 前缀（替换硬编码 `/home/kix` 及 `/home/<user>` 等变体），涉及 13 文件。
+
+| 提交 | 说明 |
+|------|------|
+| `bb65b77` | docs: unify all user home paths to ~/ prefix |
+| `f597b9a` | docs: generalize hardcoded /home/kix paths |
+
 ## 2026-07-22T03:14:27+09:00
 
 **摘要**：feat(shells) — 新增 opencode devShell（原名 opencode-telegram），合并 opencode + nodejs + blender-mcp + blender + python3 + mcp-searxng + godot-mcp + godot_4；移除独立 blender-mcp devShell。codewhale 文档补充 nix run 用法。

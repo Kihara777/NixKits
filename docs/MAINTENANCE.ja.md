@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-22T03:40:50+09:00
+
+**Summary**: docs — unified all user home directory paths across the repo to `~/` prefix (replaced hardcoded `/home/kix` and `/home/<user>` variants), covering 13 files.
+
+| Commit | Description |
+|------|------|
+| `bb65b77` | docs: unify all user home paths to ~/ prefix |
+| `f597b9a` | docs: generalize hardcoded /home/kix paths |
+
 ## 2026-07-22T03:14:27+09:00
 
 **Summary**: feat(shells) — new opencode devShell (formerly opencode-telegram), bundling opencode + nodejs + blender-mcp + blender + python3 + mcp-searxng + godot-mcp + godot_4; removed standalone blender-mcp devShell. Added nix run usage to codewhale docs.
