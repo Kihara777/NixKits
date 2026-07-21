@@ -1,4 +1,3 @@
-
 # IDE
 # Local reports
 # Nix build artifacts
@@ -16,13 +15,7 @@ BUILD_REPORT.md
 TESTING.md
 flake.lock
 packages/kitsfmt-src/target/
-result
+result*
 venv/
-.deepseek
-docs/pcn/MAINTENANCE.md
-docs/pcn/README.md
-__pycache__/
-
 __pycache__/
 *.pyc
-result
