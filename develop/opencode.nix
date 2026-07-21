@@ -21,7 +21,7 @@ pkgs.mkShell {
     pkgs.redis
     pkgs.lighttpd
     pkgs.godot-mcp
-    pkgs.godot_4
+    pkgs.godot
   ];
   shellHook = ''
     export BLENDER_PATH="${pkgs.blender}/bin/blender"
@@ -67,7 +67,7 @@ LTCONF
     disown
     sleep 1
     export SEARXNG_URL="http://127.0.0.1:42899"
-    export GODOT_PATH="${pkgs.godot_4}/bin/godot"
+    export GODOT_PATH="${pkgs.godot}/bin/godot"
   '' + ''
     OPENCODE_MCP_DIR="$HOME/.config/opencode"
     OPENCODE_MCP_FILE="$OPENCODE_MCP_DIR/mcp.json"
