@@ -74,6 +74,9 @@
              else [ ]);
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
+        '' + (if (builtins.tryEval pkgs.godot-mcp).success
+             then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
+             else "") + ''
           echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
         '';
       };
