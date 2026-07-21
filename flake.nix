@@ -42,6 +42,7 @@
 
     devShells = let
       blenderMcpDrv = pkgs.callPackage ./packages/blender-mcp.nix { };
+      opencodeTelegramDrv = pkgs.callPackage ./packages/opencode-telegram.nix { };
       ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       ruyiBetaDrv = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyiAlphaDrv = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
@@ -68,6 +69,18 @@
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
           echo "blender-mcp $(blender-mcp --help 2>&1 | head -1)"
           echo "BLENDER_PATH=$BLENDER_PATH"
+        '';
+      };
+
+      opencode-telegram = pkgs.mkShell {
+        name = "opencode-telegram-dev";
+        packages = [
+          opencodeTelegramDrv
+          pkgs.nodejs
+        ];
+        shellHook = ''
+          echo "opencode-telegram ready"
+          echo "run: opencode-telegram"
         '';
       };
 

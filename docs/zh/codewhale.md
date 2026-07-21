@@ -26,6 +26,12 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale 
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
+无需安装即可直接运行：
+
+```bash
+nix run github:Kihara777/NixKits#codewhale
+```
+
 ## 使用
 
 ```bash

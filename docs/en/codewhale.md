@@ -26,6 +26,12 @@ environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.codewhale 
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ```
 
+Run without installing:
+
+```bash
+nix run github:Kihara777/NixKits#codewhale
+```
+
 ## Usage
 
 ```bash
