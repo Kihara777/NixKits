@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-07-22T03:14:27+09:00
+
+**Summary**: feat(shells) — new opencode devShell (formerly opencode-telegram), bundling opencode + nodejs + blender-mcp + blender + python3 + mcp-searxng + godot-mcp + godot_4; removed standalone blender-mcp devShell. Added nix run usage to codewhale docs.
+
+| Commit | Description |
+|------|------|
+| `c5a57a6` | refactor(shells): rename opencode, add godot-mcp + godot_4 |
+| `e83982d` | refactor(shells): merge blender-mcp + mcp-searxng |
+| `2b8f676` | fix(shells): add opencode to opencode-telegram devShell |
+| `35cc4e8` | feat(shells): add opencode-telegram devShell + nix run doc |
+
 ## 2026-07-22T02:43:51+09:00
 
 **Summary**: feat(overlays) — new efl-cross-fix overlay, fixing efl cross-compilation failures on riscv64/riscv64-musl/aarch64 caused by missing native code-gen tools (eolian_gen, eet). Includes 4-language docs.

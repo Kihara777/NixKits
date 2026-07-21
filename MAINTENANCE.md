@@ -2,6 +2,17 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T03:14:27+09:00
+
+**摘要**：feat(shells) — 新增 opencode devShell（原名 opencode-telegram），合并 opencode + nodejs + blender-mcp + blender + python3 + mcp-searxng + godot-mcp + godot_4；移除独立 blender-mcp devShell。codewhale 文档补充 nix run 用法。
+
+| 提交 | 说明 |
+|------|------|
+| `c5a57a6` | refactor(shells): rename opencode, add godot-mcp + godot_4 |
+| `e83982d` | refactor(shells): merge blender-mcp + mcp-searxng |
+| `2b8f676` | fix(shells): add opencode to opencode-telegram devShell |
+| `35cc4e8` | feat(shells): add opencode-telegram devShell + nix run doc |
+
 ## 2026-07-22T02:43:51+09:00
 
 **摘要**：feat(overlays) — 新增 efl-cross-fix overlay，修复 efl（Enlightenment Foundation Libraries）在 riscv64/riscv64-musl/aarch64 交叉编译时因缺少原生代码生成工具（eolian_gen、eet）导致的构建失败。含 4 语言文档。
