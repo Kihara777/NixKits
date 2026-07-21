@@ -68,12 +68,32 @@ LTCONF
     sleep 1
     export SEARXNG_URL="http://127.0.0.1:42899"
     export GODOT_PATH="${pkgs.godot}/bin/godot"
+    # Install NixKits skills if opencode skills dir is empty
+    SKILLS_DIR="$HOME/.opencode/skills"
+    if [ ! -d "$SKILLS_DIR" ] || [ -z "$(ls -A "$SKILLS_DIR" 2>/dev/null)" ]; then
+      mkdir -p "$SKILLS_DIR"
+      NIXKITS_SRC="$HOME/NixKits"
+      if [ -d "$NIXKITS_SRC/skills" ]; then
+        for skill in "$NIXKITS_SRC/skills"/*/; do
+          cp -r "$skill" "$SKILLS_DIR/$(basename "$skill")"
+        done
+        echo "Installed opencode skills from $NIXKITS_SRC"
+      else
+        TMP=$(mktemp -d)
+        git clone --depth 1 https://github.com/Kihara777/NixKits.git "$TMP" 2>/dev/null
+        for skill in "$TMP/skills"/*/; do
+          cp -r "$skill" "$SKILLS_DIR/$(basename "$skill")"
+        done
+        rm -rf "$TMP"
+        echo "Installed opencode skills (online)"
+      fi
+    fi
   '' + ''
     OPENCODE_MCP_DIR="$HOME/.config/opencode"
     OPENCODE_MCP_FILE="$OPENCODE_MCP_DIR/mcp.json"
     if [ ! -f "$OPENCODE_MCP_FILE" ]; then
       mkdir -p "$OPENCODE_MCP_DIR"
-      cat > "$OPENCODE_MCP_FILE" << 'MCPJSON'
+      cat > "$OPENCODE_MCP_FILE" << MCPJSON
 {
   "servers": {
     "SearXNG": {
@@ -82,11 +102,11 @@ LTCONF
     },
     "Blender": {
       "command": "blender-mcp",
-      "env": { "BLENDER_PATH": "/etc/profiles/per-user/kix/bin/blender" }
+      "env": { "BLENDER_PATH": "${pkgs.blender}/bin/blender" }
     },
     "Godot": {
       "command": "godot-mcp",
-      "env": { "GODOT_PATH": "/etc/profiles/per-user/kix/bin/godot" }
+      "env": { "GODOT_PATH": "${pkgs.godot}/bin/godot" }
     }
   }
 }
