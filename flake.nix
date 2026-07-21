@@ -41,70 +41,12 @@
     '';
 
     devShells = let
-      blenderMcpDrv = pkgs.callPackage ./packages/blender-mcp.nix { };
-      mcpSearxngDrv = pkgs.callPackage ./packages/mcp-searxng.nix { };
-      opencodeTelegramDrv = pkgs.callPackage ./packages/opencode-telegram.nix { };
-      ruyiDrv = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
-      ruyiBetaDrv = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
-      ruyiAlphaDrv = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
-      # Apply ruyi-nixos-compat overlay so devShell also gets NixOS compat
-      ruyiOverlay = import ./overlays/ruyi-nixos-compat.nix;
-      ruyiWithCompat = (ruyiOverlay (pkgs // { ruyi = ruyiDrv; }) (pkgs // { ruyi = ruyiDrv; })).ruyi;
+      inherit (self.packages.${system}) blender-mcp mcp-searxng opencode-telegram ruyi ruyi-beta ruyi-alpha;
     in {
-      ruyi = pkgs.mkShell {
-        name = "ruyi-dev";
-        packages = [ ruyiWithCompat ];
-        shellHook = ''
-          echo "RuyiSDK $(ruyi --version 2>/dev/null | head -1)"
-        '';
-      };
-
-      opencode = pkgs.mkShell {
-        name = "opencode-dev";
-        packages = [
-          opencodeTelegramDrv
-          pkgs.opencode
-          pkgs.nodejs
-          blenderMcpDrv
-          pkgs.blender
-          pkgs.python3
-          mcpSearxngDrv
-          pkgs.searxng
-          pkgs.redis
-        ] ++ (if (builtins.tryEval pkgs.godot-mcp).success
-             then [ pkgs.godot-mcp pkgs.godot_4 ]
-             else [ ]);
-        shellHook = ''
-          export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          export SEARXNG_SETTINGS_DIR="''${XDG_RUNTIME_DIR:-/tmp}/searxng-$$"
-          mkdir -p "$SEARXNG_SETTINGS_DIR"
-          cat > "$SEARXNG_SETTINGS_DIR/settings.yml" << YML
-use_default_settings: true
-search:
-  formats:
-    - html
-    - json
-server:
-  bind_address: "127.0.0.1"
-  port: 42999
-  secret_key: "opencode-devshell-searxng-key"
-YML
-          redis-server --port 0 --unixsocket /tmp/searxng-redis-$$.sock --daemonize yes 2>/dev/null
-          SEARXNG_SETTINGS_PATH="$SEARXNG_SETTINGS_DIR/settings.yml" \
-            searxng-run &
-          SEARXNG_PID=$!
-          disown
-          sleep 2
-          export SEARXNG_URL="http://127.0.0.1:42999"
-        '' + (if (builtins.tryEval pkgs.godot-mcp).success
-             then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
-             else "") + ''
-          echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
-        '';
-      };
-
-      ruyi-beta = pkgs.mkShell { name = "ruyi-beta-dev"; packages = [ ruyiBetaDrv ]; };
-      ruyi-alpha = pkgs.mkShell { name = "ruyi-alpha-dev"; packages = [ ruyiAlphaDrv ]; };
+      opencode   = pkgs.callPackage ./develop/opencode.nix   { inherit blender-mcp mcp-searxng opencode-telegram; };
+      ruyi       = pkgs.callPackage ./develop/ruyi.nix       { inherit ruyi; };
+      ruyi-beta  = pkgs.callPackage ./develop/ruyi-beta.nix  { inherit ruyi-beta; };
+      ruyi-alpha = pkgs.callPackage ./develop/ruyi-alpha.nix { inherit ruyi-alpha; };
     };
   }) // {
 
