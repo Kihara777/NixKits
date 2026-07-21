@@ -74,6 +74,7 @@
              else [ ]);
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
+          export SEARXNG_URL="http://127.0.0.1:42701"
         '' + (if (builtins.tryEval pkgs.godot-mcp).success
              then "export GODOT_PATH=\"${pkgs.godot_4}/bin/godot\"\n"
              else "") + ''
