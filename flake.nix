@@ -58,8 +58,8 @@
         '';
       };
 
-      opencode-telegram = pkgs.mkShell {
-        name = "opencode-telegram-dev";
+      opencode = pkgs.mkShell {
+        name = "opencode-dev";
         packages = [
           opencodeTelegramDrv
           pkgs.opencode
@@ -68,10 +68,12 @@
           pkgs.blender
           pkgs.python3
           pkgs.callPackage ./packages/mcp-searxng.nix { }
+          pkgs.godot-mcp
+          pkgs.godot_4
         ];
         shellHook = ''
           export BLENDER_PATH="${pkgs.blender}/bin/blender"
-          echo "opencode-telegram + mcp-searxng + blender-mcp ready"
+          echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
         '';
       };
 

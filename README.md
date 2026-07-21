@@ -29,7 +29,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
-| opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
+| opencode | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
 
@@ -42,7 +42,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | 包 | `nix develop` |
 |------|---------------|
-| opencode-telegram | `nix develop nixkits#opencode-telegram` |
+| opencode | `nix develop nixkits#opencode-telegram` |
 | ruyi | `nix develop nixkits#ruyi` |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |
 | ruyi-alpha | `nix develop nixkits#ruyi-alpha` |

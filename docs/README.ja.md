@@ -25,7 +25,7 @@ inputs.nixkits.url = "/home/kix/NixKits";
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
-| opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
+| opencode | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
 | ruyi | RuyiSDK パッケージマネージャー（RISC-V 開発ツール）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
 > ⚠️ comfyui-strix-halo はモジュール+パッチであり、独立したパッケージではないため、バイナリキャッシュに含まれません。
@@ -42,7 +42,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | パッケージ | `nix develop` |
 |-----------|---------------|
-| opencode-telegram | `nix develop nixkits#opencode-telegram` |
+| opencode | `nix develop nixkits#opencode-telegram` |
 | ruyi | `nix develop nixkits#ruyi` |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |
 | ruyi-alpha | `nix develop nixkits#ruyi-alpha` |
