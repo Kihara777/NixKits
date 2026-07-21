@@ -55,6 +55,7 @@ Standalone overlays, not included in `default`:
 | llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/en/llama-cpp-rocm.md](en/llama-cpp-rocm.md) |
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/en/rcc-fix.md](en/rcc-fix.md) |
 | comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
+| efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/en/rog-control-center-fix.md](en/rog-control-center-fix.md) |
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.

@@ -55,6 +55,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/ja/llama-cpp-rocm.md](ja/llama-cpp-rocm.md) |
 | rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/ja/rcc-fix.md](ja/rcc-fix.md) |
 | comfyui-rocm-patch | ComfyUI に ROCm 機能パッチを提供 | [docs/ja/comfyui-rocm-patch.md](ja/comfyui-rocm-patch.md) |
+| efl-cross-fix | efl クロスコンパイルのコード生成ツール不足を修正 | [docs/ja/efl-cross-fix.md](ja/efl-cross-fix.md) |
 | rog-control-center-fix | シャットダウン時の asusd デッドロックを修正 | [docs/ja/rog-control-center-fix.md](ja/rog-control-center-fix.md) |
 
 > ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。動的バージョン追跡プロジェクト（llama-cpp-rocm など）はハッシュが上流リリースごとに変化し、キャッシュ固定不可です。
