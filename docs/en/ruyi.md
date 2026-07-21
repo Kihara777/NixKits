@@ -19,10 +19,10 @@ The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain insta
 
 | Item | Value |
 |------|-------|
-| Version | 0.50.0 (stable) |
+| Version | 0.51.0 (stable) |
 | Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | License | Apache 2.0 |
-| Channel | stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 |
+| Channel | stable 0.51.0 · beta 0.51.0-beta.20260714 · alpha 0.52.0-alpha.20260714 |
 
 ## Installation
 
@@ -40,7 +40,7 @@ ruyi provides three independent packages:
 
 | Package | Version | Purpose |
 |------|------|------|
-| `ruyi` | 0.50.0 (stable) | Production |
+| `ruyi` | 0.51.0 (stable) | Production |
 | `ruyi-beta` | 0.50.0-beta.20260623 | Preview |
 | `ruyi-alpha` | 0.51.0-alpha.20260616 | Bleeding edge |
 

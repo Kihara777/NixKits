@@ -21,7 +21,7 @@
 | 版本 | 0.50.0（稳定） |
 | 上游 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | 许可 | Apache 2.0 |
-| 通道 | stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 |
+| 通道 | stable 0.51.0 · beta 0.51.0-beta.20260714 · alpha 0.52.0-alpha.20260714 |
 
 ## 安装
 
