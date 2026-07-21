@@ -40,12 +40,10 @@ inputs.nixkits.url = "~/NixKits";
 nix registry add nixkits github:Kihara777/NixKits
 ```
 
-| 包 | `nix develop` |
-|------|---------------|
-| opencode | `nix develop nixkits#opencode` |
-| ruyi | `nix develop nixkits#ruyi` |
-| ruyi-beta | `nix develop nixkits#ruyi-beta` |
-| ruyi-alpha | `nix develop nixkits#ruyi-alpha` |
+| 包 | `nix develop` | 文档 |
+|------|---------------|------|
+| opencode | `nix develop nixkits#opencode` | [devshell](docs/zh/devshell.md) |
+| ruyi | `nix develop nixkits#ruyi`<br>`nix develop nixkits#ruyi-beta`<br>`nix develop nixkits#ruyi-alpha` | [ruyi](docs/zh/ruyi.md) |
 
 ## 补丁
 
