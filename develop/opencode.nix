@@ -35,7 +35,7 @@ search:
     - json
 server:
   bind_address: "127.0.0.1"
-  port: 42999
+  port: 42701
   secret_key: "opencode-devshell-searxng-key"
   limiterSettings:
     botdetection:
@@ -54,9 +54,9 @@ YML
     mkdir -p "$LIGHTTPD_DIR"
     cat > "$LIGHTTPD_DIR/lighttpd.conf" << 'LTCONF'
 server.document-root = "/dev/null"
-server.port = 42899
+server.port = 4270
 server.modules = ( "mod_proxy", "mod_setenv" )
-proxy.server = ( "" => ( ( "host" => "127.0.0.1", "port" => 42999 ) ) )
+proxy.server = ( "" => ( ( "host" => "127.0.0.1", "port" => 42701 ) ) )
 setenv.add-request-header = (
   "X-Real-IP"       => "%{remote-addr}e",
   "X-Forwarded-For"  => "%{remote-addr}e",
@@ -66,7 +66,7 @@ LTCONF
     lighttpd -f "$LIGHTTPD_DIR/lighttpd.conf" &
     disown
     sleep 1
-    export SEARXNG_URL="http://127.0.0.1:42899"
+    export SEARXNG_URL="http://127.0.0.1:4270"
     export GODOT_PATH="${pkgs.godot}/bin/godot"
     # Install NixKits skills if opencode skills dir is empty
     SKILLS_DIR="$HOME/.opencode/skills"
@@ -98,7 +98,7 @@ LTCONF
   "servers": {
     "SearXNG": {
       "command": "mcp-searxng",
-      "env": { "SEARXNG_URL": "http://127.0.0.1:42899" }
+      "env": { "SEARXNG_URL": "http://127.0.0.1:4270" }
     },
     "Blender": {
       "command": "blender-mcp",
