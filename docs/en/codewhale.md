@@ -47,22 +47,13 @@ Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first r
 
 ## Known Issues
 
-## Troubleshooting
-
-> ⚠️ **sudo not working**: codewhale runs commands via PTY; `sudo` needs an interactive terminal for password. Workarounds:
->
-> 1. Passwordless sudo (recommended):
->    ```nix
->    security.sudo.extraRules = [{
->      users = ["your-user"];
->      commands = [{ command = "ALL"; options = ["SETENV"]; }];
->    }];
->    ```
-> 2. Use `sudo -A` with `SUDO_ASKPASS` (e.g. `ssh-askpass`)
-> 3. Use alternatives like `nixos-rebuild` that do not require sudo
-
 > ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.9.0. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental — first CI run may fail on dependency hash mismatch; we will verify and fix in subsequent CI runs.
 
 ## Cache
 
 `cachix use nixkits` (the flake auto-declares the cache via `nixConfig` when used as a flake input).
+
+## Known Issues
+
+> ⚠️ **v0.9.0 sudo broken**: `no_new_privs` flag introduced in v0.9.0 blocks sudo entirely (not a password issue; Wheel NOPASSWD does not help). Upstream issue reported — awaiting fix.
+

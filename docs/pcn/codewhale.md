@@ -46,22 +46,13 @@ codewhale auth set --provider deepseek # API 鍵保存
 
 ## 既知問題
 
-## 故障排除
-
-> ⚠️ **sudo 不可用**: codewhale PTY 経由命令実行、`sudo` 需対話端末入力暗号。対策：
->
-> 1. 免暗号 sudo（推奨）：
->    ```nix
->    security.sudo.extraRules = [{
->      users = ["your-user"];
->      commands = [{ command = "ALL"; options = ["SETENV"]; }];
->    }];
->    ```
-> 2. `sudo -A` + `SUDO_ASKPASS`（例: `ssh-askpass`）
-> 3. `nixos-rebuild` 等 sudo 不要代替手段利用
-
 > ⚠️ **riscv64 源構築**: 上流 v0.9.0 以降 riscv64 予構築二進削除。NixKits `rustPlatform.buildRustPackage` 経由源交叉編輯提供。此実験的機能、初回 CI 依存 hash 不一致可能 — 後続 CI 検証修正予定。
 
 ## 緩衝
 
 `cachix use nixkits`（flake `nixConfig` 以自動宣言、flake input 使用時自動案内）。
+
+## 既知問題
+
+> ⚠️ **v0.9.0 sudo 不能**: `no_new_privs` 標幟完全遮断 sudo（非暗号問題、Wheel NOPASSWD 無効）。上流報告済 — 修正待。
+

@@ -46,22 +46,13 @@ codewhale auth set --provider deepseek # API キー保存
 
 ## 既知の問題
 
-## トラブルシューティング
-
-> ⚠️ **sudo が使えない**: codewhale は PTY 経由でコマンドを実行。`sudo` はパスワード入力に対話的端末が必要。対策：
->
-> 1. パスワード無し sudo（推奨）：
->    ```nix
->    security.sudo.extraRules = [{
->      users = ["your-user"];
->      commands = [{ command = "ALL"; options = ["SETENV"]; }];
->    }];
->    ```
-> 2. `sudo -A` + `SUDO_ASKPASS`（例: `ssh-askpass`）
-> 3. `nixos-rebuild` 等 sudo 不要の代替手段を使用
-
 > ⚠️ **riscv64 ソースビルド**: 上流が v0.9.0 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
 
 ## キャッシュ
 
 `cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。
+
+## 既知の問題
+
+> ⚠️ **v0.9.0 sudo 使用不可**: `no_new_privs` フラグにより sudo が完全にブロック（パスワード問題ではなく、Wheel NOPASSWD でも回避不可）。上流に報告済み — 修正待ち。
+

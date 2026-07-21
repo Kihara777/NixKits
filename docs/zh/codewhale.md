@@ -49,20 +49,11 @@ codewhale auth set --provider deepseek # 保存 API key
 
 > ⚠️ **riscv64 源码构建**：上游从 v0.9.0 起移除了 riscv64 预编译二进制。NixKits 通过 `rustPlatform.buildRustPackage` 从源码交叉编译提供 riscv64 支持。此项为实验性功能，首次 CI 构建可能因依赖 hash 不匹配失败——我们会在后续 CI 运行中验证并修复。
 
-## 故障排除
-
-> ⚠️ **sudo 无法使用**：codewhale 通过 PTY 执行命令，`sudo` 需要交互式终端输入密码。解决方法：
->
-> 1. 为常用命令配置免密 sudo（推荐）：
->    ```nix
->    security.sudo.extraRules = [{
->      users = ["kix"];
->      commands = [{ command = "ALL"; options = ["SETENV"]; }];
->    }];
->    ```
-> 2. 使用 `sudo -A` 配合 `SUDO_ASKPASS` 程序（如 `ssh-askpass`）
-> 3. 改用 `nixos-rebuild` 等无需 sudo 的替代方案
-
 ## 缓存
 
 `cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
+
+## 已知问题
+
+> ⚠️ **v0.9.0 无法使用 sudo**：更新引入的 `no_new_privs` 标志阻止了 sudo 执行（非密码问题，Wheel 免密配置无效）。上游已有报告，等待修复。
+

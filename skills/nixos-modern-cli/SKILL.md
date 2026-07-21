@@ -13,7 +13,7 @@ NixOS 是一个声明式、不可变的 Linux 发行版。关键区别：
 - **没有 `apt`、`yum`、`pacman`** — 使用 `nix` 命令或编辑 `/etc/nixos/configuration.nix`（或 flake）
 - **没有 `/etc/default/grub`、`/etc/fstab`** — 这些由 NixOS 配置生成
 - **Shell PATH 默认不含常用工具** — 使用 `nix shell nixpkgs#<pkg>` 获取临时工具
-- **`sudo` 需要密码或免密配置** — codewhale 等编码代理通过 PTY 执行命令，`sudo` 无法交互式输入密码。若 `sudo` 失败，引导用户配置免密 sudo（`security.sudo.extraRules`），勿反复尝试
+- **`sudo` 正常工作**，`systemctl` 行为与预期一致
 - **必须用 `nixos-rebuild`** 应用配置变更
 
 ## 第一步：检查 CLI 能力
