@@ -42,6 +42,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | 包 | `nix develop` |
 |------|---------------|
+| blender-mcp | `nix develop nixkits#blender-mcp` |
 | ruyi | `nix develop nixkits#ruyi` |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |
 | ruyi-alpha | `nix develop nixkits#ruyi-alpha` |
