@@ -17,6 +17,8 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # 更新包管理器
 ruyi list             # 列出可用包
 ruyi install <pkg>    # 安装指定包
+ruyi extract <file>  # 解压 RISC-V 构建产物
+ruyi venv <name>      # 创建 Python 虚拟环境
 ruyi device provision # 为 RISC-V 设备配置环境
 ```
 
