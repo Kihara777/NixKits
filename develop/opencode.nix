@@ -36,6 +36,12 @@ server:
   bind_address: "127.0.0.1"
   port: 42999
   secret_key: "opencode-devshell-searxng-key"
+  limiterSettings:
+    botdetection:
+      trusted_proxies:
+        - "127.0.0.1/32"
+    real_ip:
+      x_for: 1
 YML
     redis-server --port 0 --unixsocket /tmp/searxng-redis-$$.sock --daemonize yes 2>/dev/null
     SEARXNG_SETTINGS_PATH="$SEARXNG_SETTINGS_DIR/settings.yml" \
