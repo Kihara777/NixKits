@@ -56,6 +56,7 @@ Standalone overlays, not included in `default`:
 | comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/en/rog-control-center-fix.md](en/rog-control-center-fix.md) |
+| breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
 | codewhale-sudo | Restore sudo under codewhale v0.9.0 (LD_PRELOAD shim) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
