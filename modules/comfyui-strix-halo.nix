@@ -52,6 +52,14 @@
           not found. Import the comfyui-nix module in your flake first.
         '';
       }
+      {
+        assertion = builtins.compareVersions pkgs.glibc.version "2.42" >= 0;
+        message = ''
+          comfyui-strix-halo: ROCm 7.2 requires glibc >= 2.42 for GPU support
+          (hsa-runtime needs GLIBC_ABI_GNU2_TLS symbol). Current glibc:
+          ${pkgs.glibc.version}. Update your nixpkgs input.
+        '';
+      }
     ];
 
     # Configure comfyui service for Strix Halo
