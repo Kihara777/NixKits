@@ -1,23 +1,16 @@
 # NixKits
 
 [中文](../README.md) | [English](README.en.md) | [日本語](README.ja.md)  | 偽中国語
-
 NixKits — 軟体、修正、NixOS 部品、AI 符号化代理技能之蒐集。
-
 ## 追加
-
 ```nix
 # 遠隔
 inputs.nixkits.url = "github:Kihara777/NixKits";
-
 # 局所
 inputs.nixkits.url = "~/NixKits";
 ```
-
 ## 軟体
-
 全包既定 nixpkgs 平台対応（`lib.platforms.linux`）。一部包構造支援上流影響 — 各包文書構築徽章参照。
-
 | 軟体 | 説明 | 文書 |
 |---|------|------|
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
@@ -27,47 +20,33 @@ inputs.nixkits.url = "~/NixKits";
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/pcn/ruyi-devshell.md](docs/pcn/ruyi-devshell.md) |
-
 > ⚠️ comfyui-strix-halo 部品+修正、独立包非、故二進緩衝未含。
-
 ## 開発
-
 `nix develop` 以即利用可能。先登録追加：
-
 ```bash
 nix registry add nixkits github:Kihara777/NixKits
-```
-
 | 環境 | 命令 | 文書 |
 |------|------|------|
 | opencode | `nix develop nixkits#opencode` | [pcn/opencode-devshell.md](pcn/opencode-devshell.md) |
 | ruyi | `nix develop nixkits#ruyi` | [pcn/ruyi-devshell.md](pcn/ruyi-devshell.md) |
 | ruyi-beta | `nix develop nixkits#ruyi-beta` |  |
 | ruyi-alpha | `nix develop nixkits#ruyi-alpha` | |
-
 ## 修正
-
 独立上乗。`default` 未含：
-
 | 修正 | 説明 | 文書 |
-|------|------|------|
 | llama-cpp-rocm | 上流最新版追跡 ROCm 加速 | [docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md) |
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
 | comfyui-rocm-patch | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
 | rog-control-center-fix | 停止時 asusd 膠着修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
-
+| efl-cross-fix | efl 交叉編譯符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
+| codewhale-sudo | codewhale v0.9.0 sudo 機能復元（LD_PRELOAD shim） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
+| breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
-
 > ⚠️ 修正上乗、上流 nixpkgs 包変更、独立構築非。故二進緩衝未含。動的版追跡計画（llama-cpp-rocm 等）摘要毎上流版変化、緩衝固定不可。
-
 ## 技能
-
 AI 符号化代理向：
-
 > 本計画技能主中国語利用者及中国開源模型対象。全 SKILL.md 中国語記述。
-
 | 技能 | 説明 | 文書 |
-|------|------|------|
 > ⚠️ **Claude Code** nixkits-skills 導入対象削除。利用者資料基国籍推論実装、安全境界越。参照 [nixkits-skills 文書](pcn/skills/nixkits-skills.md)。
 | nixkits-check-updates | 上流更新確認自動更新 | [docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |
@@ -76,13 +55,9 @@ AI 符号化代理向：
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/pcn/skills/translate-pseudocn.md](pcn/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様沿 MAINTENANCE.md 条目作成（軟体更新 + 誤修正） | [docs/pcn/skills/write-maintenance-log.md](pcn/skills/write-maintenance-log.md) |
 | write-project-docs | 任意計画 NixKits 式多言語文書作成 | [docs/pcn/skills/write-project-docs.md](pcn/skills/write-project-docs.md) |
-
 ## 銘記
-
 - **狐莉 (Kitsunori)** — 作成及保守
 - **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Pro (Max)
 - **小小爪 (Kitsunome)** — 硬体推論基盤 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
-
 ## 許諾
-
 [MIT](../LICENSE)
