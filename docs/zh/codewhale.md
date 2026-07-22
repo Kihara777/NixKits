@@ -38,7 +38,7 @@ nix run github:Kihara777/NixKits#codewhale
 codewhale                              # 交互 TUI
 codewhale "explain this function"      # 单次提示
 codewhale --model auto "fix this bug"  # 自动选择模型
-codewhale --yolo                       # 自动批准工具
+codewhale --sandbox danger-full-access   # 扩大沙箱权限
 codewhale doctor                       # 检查配置
 codewhale auth set --provider deepseek # 保存 API key
 ```
