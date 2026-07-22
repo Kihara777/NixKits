@@ -32,7 +32,6 @@ users.users.you = {
 };
 ```
 
-> See `/etc/nixos` for the actual configuration.
 
 ## Caveats
 

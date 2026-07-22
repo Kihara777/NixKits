@@ -47,14 +47,7 @@ codewhale auth set --provider deepseek # 保存 API key
 
 ## 启用 sudo
 
-codewhale v0.9.0 默认禁用了 `prctl(PR_SET_NO_NEW_PRIVS)`（防御纵深），阻止 `sudo` 执行。使用 `allowSudo` 参数启用 `LD_PRELOAD` shim 绕过：
-
-```nix
-# 覆盖参数
-(inputs.nixkits.packages.${pkgs.system}.codewhale.override { allowSudo = true; })
-```
-
-> 此选项降低沙箱安全性，仅在需要 `sudo` 的开发环境中使用。
+codewhale v0.9.0 默认阻止 `sudo` 执行。解决方案见 [codewhale-sudo 补丁文档](../zh/codewhale-sudo.md)。
 
 ## 已知问题
 

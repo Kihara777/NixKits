@@ -45,6 +45,10 @@ codewhale auth set --provider deepseek # save API key
 
 Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first run.
 
+## Enabling sudo
+
+codewhale v0.9.0 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
+
 ## Known Issues
 
 > ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.9.0. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental — first CI run may fail on dependency hash mismatch; we will verify and fix in subsequent CI runs.
@@ -52,6 +56,10 @@ Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first r
 ## Cache
 
 `cachix use nixkits` (the flake auto-declares the cache via `nixConfig` when used as a flake input).
+
+## Enabling sudo
+
+codewhale v0.9.0 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
 
 ## Known Issues
 

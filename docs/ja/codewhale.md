@@ -44,6 +44,10 @@ codewhale auth set --provider deepseek # API キー保存
 
 初回実行時に [DeepSeek API キー](https://platform.deepseek.com/api_keys) が必要です。
 
+## sudo の有効化
+
+codewhale v0.9.0 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
+
 ## 既知の問題
 
 > ⚠️ **riscv64 ソースビルド**: 上流が v0.9.0 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
@@ -51,6 +55,10 @@ codewhale auth set --provider deepseek # API キー保存
 ## キャッシュ
 
 `cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。
+
+## sudo の有効化
+
+codewhale v0.9.0 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
 
 ## 既知の問題
 

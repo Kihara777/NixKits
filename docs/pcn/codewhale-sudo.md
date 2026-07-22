@@ -32,7 +32,6 @@ users.users.you = {
 };
 ```
 
-> `/etc/nixos` 実際設定参照。
 
 ## 注意点
 

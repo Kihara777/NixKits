@@ -27,12 +27,11 @@ security.sudo = {
   enable = true;
   wheelNeedsPassword = false;  # wheel 组免密 sudo
 };
-users.users.kix = {
+users.users.your-user = {
   extraGroups = [ "wheel" ];
 };
 ```
 
-> 参考 `/etc/nixos` 中的实际配置。
 
 ## 关注点
 
