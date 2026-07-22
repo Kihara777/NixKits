@@ -25,7 +25,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
-| opencode | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
+| opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/en/ruyi-devshell.md](docs/en/ruyi-devshell.md) |
 
 > ⚠️ comfyui-strix-halo is a module+patch, not a standalone package, and is not in the binary cache.
@@ -56,6 +56,7 @@ Standalone overlays, not included in `default`:
 | comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/en/rog-control-center-fix.md](en/rog-control-center-fix.md) |
+| codewhale-sudo | Restore sudo under codewhale v0.9.0 (LD_PRELOAD shim) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 

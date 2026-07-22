@@ -29,7 +29,7 @@ inputs.nixkits.url = "~/NixKits";
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
-| opencode | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
+| opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
 
 
@@ -56,6 +56,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm-patch | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm-patch.md](docs/zh/comfyui-rocm-patch.md) |
 | efl-cross-fix | 修复 efl 交叉编译代码生成器缺失 | [docs/zh/efl-cross-fix.md](docs/zh/efl-cross-fix.md) |
 | rog-control-center-fix | 修复 asusd 关机时的死锁问题 | [docs/zh/rog-control-center-fix.md](docs/zh/rog-control-center-fix.md) |
+| codewhale-sudo | 恢复 codewhale v0.9.0 的 sudo 功能（LD_PRELOAD shim） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
 
 > ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。动态追踪版本的项目（如 llama-cpp-rocm）其 hash 随上游发布变化，无法被缓存固定。
 

@@ -25,7 +25,7 @@ inputs.nixkits.url = "~/NixKits";
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
-| opencode | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
+| opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/pcn/ruyi-devshell.md](docs/pcn/ruyi-devshell.md) |
 
 > ⚠️ comfyui-strix-halo 部品+修正、独立包非、故二進緩衝未含。

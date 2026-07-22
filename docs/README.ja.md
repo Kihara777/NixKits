@@ -25,7 +25,7 @@ inputs.nixkits.url = "~/NixKits";
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
-| opencode | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
+| opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/ja/ruyi-devshell.md](docs/ja/ruyi-devshell.md) |
 
 > ⚠️ comfyui-strix-halo はモジュール+パッチであり、独立したパッケージではないため、バイナリキャッシュに含まれません。
@@ -56,6 +56,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm-patch | ComfyUI に ROCm 機能パッチを提供 | [docs/ja/comfyui-rocm-patch.md](ja/comfyui-rocm-patch.md) |
 | efl-cross-fix | efl クロスコンパイルのコード生成ツール不足を修正 | [docs/ja/efl-cross-fix.md](ja/efl-cross-fix.md) |
 | rog-control-center-fix | シャットダウン時の asusd デッドロックを修正 | [docs/ja/rog-control-center-fix.md](ja/rog-control-center-fix.md) |
+| codewhale-sudo | codewhale v0.9.0 の sudo 機能を復元（LD_PRELOAD shim） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
 
 > ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。動的バージョン追跡プロジェクト（llama-cpp-rocm など）はハッシュが上流リリースごとに変化し、キャッシュ固定不可です。
 
