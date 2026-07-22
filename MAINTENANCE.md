@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T09:00:00+09:00
+
+**摘要**：feat(overlays) — 新增 breeze-black overlay，为 Plasma 6 提供高对比度 Breeze Black 无障碍主题（全局 look-and-feel + GTK + 配色方案）。含 4 语言文档。
+
+| 提交 | 说明 |
+|------|------|
+| `226c828` | feat(overlays): add breeze-black |
+
 ## 2026-07-22T16:31:26+09:0000
 
 **摘要**：fix(modules) — rog-control-center-fix 添加 SendSIGKILL=yes + TimeoutStopSec=30s 解决 asus-shutdown 旧进程残留阻塞 systemd-switch。comfyui-strix-halo 添加 glibc >= 2.42 assertion（ROCm 7.2 需要 GLIBC_ABI_GNU2_TLS）。
