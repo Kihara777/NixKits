@@ -64,6 +64,7 @@
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
+      "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
     };
 
   };
