@@ -18,4 +18,4 @@ packages/kitsfmt-src/target/
 result*
 venv/
 __pycache__/
-*.pyc
+*.pycdump.rdb
