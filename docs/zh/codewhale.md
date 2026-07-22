@@ -45,6 +45,17 @@ codewhale auth set --provider deepseek # 保存 API key
 
 首次运行需配置 [DeepSeek API Key](https://platform.deepseek.com/api_keys)。
 
+## 启用 sudo
+
+codewhale v0.9.0 默认禁用了 `prctl(PR_SET_NO_NEW_PRIVS)`（防御纵深），阻止 `sudo` 执行。使用 `allowSudo` 参数启用 `LD_PRELOAD` shim 绕过：
+
+```nix
+# 覆盖参数
+(inputs.nixkits.packages.${pkgs.system}.codewhale.override { allowSudo = true; })
+```
+
+> 此选项降低沙箱安全性，仅在需要 `sudo` 的开发环境中使用。
+
 ## 已知问题
 
 > ⚠️ **riscv64 源码构建**：上游从 v0.9.0 起移除了 riscv64 预编译二进制。NixKits 通过 `rustPlatform.buildRustPackage` 从源码交叉编译提供 riscv64 支持。此项为实验性功能，首次 CI 构建可能因依赖 hash 不匹配失败——我们会在后续 CI 运行中验证并修复。
@@ -52,8 +63,4 @@ codewhale auth set --provider deepseek # 保存 API key
 ## 缓存
 
 `cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
-
-## 已知问题
-
-> ⚠️ **v0.9.0 无法使用 sudo**：更新引入的 `no_new_privs` 标志阻止了 sudo 执行（非密码问题，Wheel 免密配置无效）。上游已有报告，等待修复。
 

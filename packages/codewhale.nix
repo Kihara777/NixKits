@@ -3,7 +3,9 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeWrapper,
   dbus,
+  allowSudo ? false,
 }:
 
 let
@@ -35,6 +37,19 @@ let
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-${archSuffix}";
     hash = tuiHashes.${archSuffix};
   };
+
+  # LD_PRELOAD shim to intercept prctl(PR_SET_NO_NEW_PRIVS) and prctl(PR_SET_SECCOMP)
+  sudoShim = stdenv.mkDerivation {
+    name = "codewhale-sudo-shim";
+    src = ./codewhale-sudo-shim.c;
+    buildPhase = ''
+      $CC -shared -fPIC -o libcodewhale-sudo-shim.so $src -ldl
+    '';
+    installPhase = ''
+      mkdir -p $out/lib
+      cp libcodewhale-sudo-shim.so $out/lib/
+    '';
+  };
 in
 stdenv.mkDerivation {
   pname = "codewhale";
@@ -44,6 +59,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+  ] ++ lib.optionals allowSudo [
+    makeWrapper
   ];
 
   buildInputs = [
@@ -54,8 +71,19 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -Dm755 ${codewhale-cli} $out/bin/codewhale
-    install -Dm755 ${codewhale-tui} $out/bin/codewhale-tui
+    install -Dm755 ${codewhale-cli} $out/bin/.codewhale-wrapped
+    install -Dm755 ${codewhale-tui} $out/bin/.codewhale-tui-wrapped
+  '' + lib.optionalString allowSudo ''
+    makeWrapper $out/bin/.codewhale-wrapped $out/bin/codewhale \
+      --prefix LD_PRELOAD : ${sudoShim}/lib/libcodewhale-sudo-shim.so \
+      --set-default CODEWHALE_ALLOW_SUDO 1
+    makeWrapper $out/bin/.codewhale-tui-wrapped $out/bin/codewhale-tui \
+      --prefix LD_PRELOAD : ${sudoShim}/lib/libcodewhale-sudo-shim.so \
+      --set-default CODEWHALE_ALLOW_SUDO 1
+  '' + lib.optionalString (!allowSudo) ''
+    mv $out/bin/.codewhale-wrapped $out/bin/codewhale
+    mv $out/bin/.codewhale-tui-wrapped $out/bin/codewhale-tui
+  '' + ''
     runHook postInstall
   '';
 
