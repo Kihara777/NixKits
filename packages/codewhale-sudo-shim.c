@@ -2,6 +2,7 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <sys/prctl.h>
 #include <unistd.h>
 
