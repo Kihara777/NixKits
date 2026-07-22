@@ -42,8 +42,10 @@ let
   sudoShim = stdenv.mkDerivation {
     name = "codewhale-sudo-shim";
     src = ./codewhale-sudo-shim.c;
+    dontUnpack = true;
     buildPhase = ''
-      $CC -shared -fPIC -o libcodewhale-sudo-shim.so $src -ldl
+      cp $src codewhale-sudo-shim.c
+      $CC -shared -fPIC -o libcodewhale-sudo-shim.so codewhale-sudo-shim.c -ldl
     '';
     installPhase = ''
       mkdir -p $out/lib
