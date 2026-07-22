@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-22T16:31:26+09:0000
+
+**摘要**：fix(modules) — rog-control-center-fix 添加 SendSIGKILL=yes + TimeoutStopSec=30s 解决 asus-shutdown 旧进程残留阻塞 systemd-switch。comfyui-strix-halo 添加 glibc >= 2.42 assertion（ROCm 7.2 需要 GLIBC_ABI_GNU2_TLS）。
+
+| 提交 | 说明 |
+|------|------|
+| `4c314e8` | fix(modules): fix asus-shutdown SendSIGKILL + comfyui glibc assertion |
+
 ## 2026-07-22T05:39:31+09:0000
 
 **摘要**：docs(devshell) — 新增 devShell 文档（4 语言），描述 opencode（MCP 全栈）和 ruyi（三通道合并）开发环境。README devShell 表添加文档链接列。

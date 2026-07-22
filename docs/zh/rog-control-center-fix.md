@@ -16,6 +16,7 @@
 ## 修正内容
 
 - **移除 PartOf 依赖**：将 `asus-shutdown.service` 的 `PartOf` 设为空列表，防止 asusd 停止时连带停止导致死锁
+- **允许 SIGKILL**：强制 `SendSIGKILL=yes` + `TimeoutStopSec=30s`，解决旧进程残留时新实例无法启动的问题（上游 `SendSIGKILL=no` + `KillMode=control-group` 导致 systemd-switch 失败）
 
 ## 安装
 
