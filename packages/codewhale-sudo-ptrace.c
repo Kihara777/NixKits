@@ -93,11 +93,14 @@ static int trace_child(pid_t child) {
   if (!WIFSTOPPED(status) || WSTOPSIG(status) != SIGSTOP)
     errx(1, "unexpected initial child status: %d", status);
 
-  /* Set ptrace options: follow forks and clones so sub-processes
-   * (shells spawned by codewhale) also get traced. */
+  /* Set ptrace options: only trace the main process.
+   * PTRACE_O_TRACESYSGOOD distinguishes syscall stops from regular
+   * SIGTRAPs; PTRACE_O_TRACEEXEC prevents the kernel sending a
+   * killing SIGTRAP after exec.  We intentionally do NOT set
+   * TRACEFORK/TRACEVFORK/TRACECLONE — child processes spawned by
+   * codewhale (shells, sub-commands) must run untraced. */
   if (ptrace(PTRACE_SETOPTIONS, child, NULL,
-      PTRACE_O_TRACEFORK | PTRACE_O_TRACEVFORK | PTRACE_O_TRACECLONE |
-      PTRACE_O_TRACESYSGOOD) == -1)
+      PTRACE_O_TRACESYSGOOD | PTRACE_O_TRACEEXEC) == -1)
     warn("PTRACE_SETOPTIONS");
 
   sig = 0;
@@ -123,10 +126,11 @@ static int trace_child(pid_t child) {
     if (WIFSTOPPED(status)) {
       int stopsig = WSTOPSIG(status);
 
-      /* PTRACE_EVENT for fork/clone — deliver signal to child and continue */
+      /* PTRACE_EVENT for fork/clone/exec — suppress and continue */
       if (status >> 8 == (SIGTRAP | (PTRACE_EVENT_FORK << 8)) ||
           status >> 8 == (SIGTRAP | (PTRACE_EVENT_VFORK << 8)) ||
-          status >> 8 == (SIGTRAP | (PTRACE_EVENT_CLONE << 8))) {
+          status >> 8 == (SIGTRAP | (PTRACE_EVENT_CLONE << 8)) ||
+          status >> 8 == (SIGTRAP | (PTRACE_EVENT_EXEC << 8))) {
         sig = 0;
         continue;
       }
