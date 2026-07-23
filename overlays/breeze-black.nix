@@ -3,14 +3,13 @@
 in {
   kdePackages = prev.kdePackages // {
     breeze = prev.kdePackages.breeze.overrideAttrs (old: {
-      patches = (old.patches or [ ]) ++ [
-        (prev.fetchpatch {
-          name = "breeze-black.patch";
-          url = "https://injx.sbs/breeze-black/breeze-black.patch";
-          hash = "sha256-SV4xkqq9nK7lCXnBI59uGB3XwKp4umq5t2v63IbKYog=";
-        })
-      ];
+      # The original breeze-black.patch hosted at injx.sbs / GitHub injx/breeze-black
+      # is no longer available. Since the user only needs the BreezeBlack color scheme
+      # (not the full look-and-feel theme), we drop the external patch and rely on
+      # postPatch to install the .colors file. KDE Plasma auto-discovers color schemes
+      # from share/color-schemes/.
       postPatch = (old.postPatch or "") + ''
+        mkdir -p $out/share/color-schemes
         cp ${breezeBlackColors} $out/share/color-schemes/BreezeBlack.colors
       '';
     });
@@ -28,13 +27,10 @@ in {
     });
   };
 
+  # plasma-framework no longer needs a patch — the BreezeBlack color scheme is
+  # auto-discovered by KDE from share/color-schemes/. The original fetchpatch
+  # URL (injx.sbs) is permanently unavailable.
   plasma-framework = prev.plasma-framework.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      (prev.fetchpatch {
-        name = "breeze-black.patch";
-        url = "https://injx.sbs/breeze-black/breeze-black.patch";
-        hash = "sha256-y8kwRlcNbLgbCS6yC/L8HfzLVFUhYItBKPAG+1W4WW4=";
-      })
-    ];
+    # No patches needed
   });
 })
