@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-23T12:08:13+09:00
+
+**摘要**：fix(codewhale-sudo): 将 LD_PRELOAD shim 替换为 ptrace 系统调用拦截器 — codewhale 是静态链接的，LD_PRELOAD 无法拦截 prctl(PR_SET_NO_NEW_PRIVS)；改用 ptrace(2) 在内核边界拦截，兼容静态和动态二进制。
+
+| 提交 | 说明 |
+|------|------|
+| `6446364` | fix(codewhale-sudo): replace LD_PRELOAD shim with ptrace syscall interceptor |
+
 ## 2026-07-23T11:24:15+09:00
 
 **摘要**：fix(overlays): breeze-black — 替换已失效的 fetchpatch URL（injx.sbs 域名永久不可用），改为纯本地 colors 文件安装方式。KDE Plasma 自动发现 share/color-schemes/ 中的配色方案。
