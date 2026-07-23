@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-23T12:56:53+09:00
+
+**摘要**：fix(codewhale-sudo): 修复 ptrace wrapper — 移除子进程跟踪（避免 codewhale 子 shell 被 SIGTRAP 杀死），添加 PTRACE_EVENT_EXEC 处理。同步更新 4 语言文档（LD_PRELOAD → ptrace 描述）。
+
+| 提交 | 说明 |
+|------|------|
+| `c77cadc` | fix(codewhale-sudo): stop tracing child processes, handle PTRACE_EVENT_EXEC |
+| `480658e` | docs(codewhale-sudo): update mechanism description LD_PRELOAD → ptrace |
+
 ## 2026-07-23T12:08:13+09:00
 
 **摘要**：fix(codewhale-sudo): 将 LD_PRELOAD shim 替换为 ptrace 系统调用拦截器 — codewhale 是静态链接的，LD_PRELOAD 无法拦截 prctl(PR_SET_NO_NEW_PRIVS)；改用 ptrace(2) 在内核边界拦截，兼容静态和动态二进制。

@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-23T12:56:53+09:00
+
+**概要**：fix(codewhale-sudo): ptrace wrapper 修正 — 子プロセス追跡を削除（codewhale のサブシェルが SIGTRAP で kill されるのを防止）、PTRACE_EVENT_EXEC 処理を追加。4 言語ドキュメント同期更新（LD_PRELOAD → ptrace 記述）。
+
+| コミット | 説明 |
+|------|------|
+| `c77cadc` | fix(codewhale-sudo): stop tracing child processes, handle PTRACE_EVENT_EXEC |
+| `480658e` | docs(codewhale-sudo): update mechanism description LD_PRELOAD → ptrace |
+
 ## 2026-07-23T12:08:13+09:00
 
 **概要**：fix(codewhale-sudo): LD_PRELOAD shim を ptrace システムコールインターセプターに置き換え — Codewhale は静的リンクのため LD_PRELOAD では prctl(PR_SET_NO_NEW_PRIVS) を捕捉できず、ptrace(2) でカーネル境界にて捕捉する方式に変更。静的・動的バイナリ両対応。
