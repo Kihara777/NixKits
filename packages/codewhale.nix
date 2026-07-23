@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  makeWrapper,
   dbus,
   allowSudo ? false,
 }:
@@ -38,18 +37,21 @@ let
     hash = tuiHashes.${archSuffix};
   };
 
-  # LD_PRELOAD shim to intercept prctl(PR_SET_NO_NEW_PRIVS) and prctl(PR_SET_SECCOMP)
-  sudoShim = stdenv.mkDerivation {
-    name = "codewhale-sudo-shim";
-    src = ./codewhale-sudo-shim.c;
+  # ptrace-based syscall interceptor for statically-linked codewhale binaries.
+  # Codewhale is statically linked so LD_PRELOAD cannot work; we use ptrace
+  # to intercept prctl(PR_SET_NO_NEW_PRIVS) and prctl(PR_SET_SECCOMP) at the
+  # kernel boundary.
+  sudoPtrace = stdenv.mkDerivation {
+    name = "codewhale-sudo-ptrace";
+    src = ./codewhale-sudo-ptrace.c;
     dontUnpack = true;
     buildPhase = ''
-      cp $src codewhale-sudo-shim.c
-      $CC -shared -fPIC -o libcodewhale-sudo-shim.so codewhale-sudo-shim.c -ldl
+      cp $src codewhale-sudo-ptrace.c
+      $CC -std=c99 -Wall -Wextra -O2 -o codewhale-sudo-ptrace codewhale-sudo-ptrace.c
     '';
     installPhase = ''
-      mkdir -p $out/lib
-      cp libcodewhale-sudo-shim.so $out/lib/
+      mkdir -p $out/bin
+      cp codewhale-sudo-ptrace $out/bin/
     '';
   };
 in
@@ -61,8 +63,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-  ] ++ lib.optionals allowSudo [
-    makeWrapper
   ];
 
   buildInputs = [
@@ -76,12 +76,22 @@ stdenv.mkDerivation {
     install -Dm755 ${codewhale-cli} $out/bin/.codewhale-wrapped
     install -Dm755 ${codewhale-tui} $out/bin/.codewhale-tui-wrapped
   '' + lib.optionalString allowSudo ''
-    makeWrapper $out/bin/.codewhale-wrapped $out/bin/codewhale \
-      --prefix LD_PRELOAD : ${sudoShim}/lib/libcodewhale-sudo-shim.so \
-      --set-default CODEWHALE_ALLOW_SUDO 1
-    makeWrapper $out/bin/.codewhale-tui-wrapped $out/bin/codewhale-tui \
-      --prefix LD_PRELOAD : ${sudoShim}/lib/libcodewhale-sudo-shim.so \
-      --set-default CODEWHALE_ALLOW_SUDO 1
+    # ptrace-based sudo intercept: launch codewhale through the ptrace wrapper
+    # which intercepts prctl(PR_SET_NO_NEW_PRIVS) and prctl(PR_SET_SECCOMP)
+    # at the kernel boundary.
+    cat > $out/bin/codewhale << WRAPEOF
+#!${stdenv.shell}
+export CODEWHALE_ALLOW_SUDO=1
+exec ${sudoPtrace}/bin/codewhale-sudo-ptrace ${placeholder "out"}/bin/.codewhale-wrapped "\$@"
+WRAPEOF
+    chmod +x $out/bin/codewhale
+
+    cat > $out/bin/codewhale-tui << WRAPEOF
+#!${stdenv.shell}
+export CODEWHALE_ALLOW_SUDO=1
+exec ${sudoPtrace}/bin/codewhale-sudo-ptrace ${placeholder "out"}/bin/.codewhale-tui-wrapped "\$@"
+WRAPEOF
+    chmod +x $out/bin/codewhale-tui
   '' + lib.optionalString (!allowSudo) ''
     mv $out/bin/.codewhale-wrapped $out/bin/codewhale
     mv $out/bin/.codewhale-tui-wrapped $out/bin/codewhale-tui
