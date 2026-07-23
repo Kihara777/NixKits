@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-07-23T11:24:15+09:00
+
+**摘要**：fix(overlays): breeze-black — 無効化 fetchpatch URL（injx.sbs 永久不可用）、純粋 局所 colors 手動入替。KDE Plasma 配色自動検出 share/color-schemes/ 経由。
+
+| 提交 | 説明 |
+|------|------|
+| `547d6a0` | fix(overlays): replace dead breeze-black fetchpatch with local copy |
+
 ## 2026-07-22T09:00:00+09:00
 
 **Summary**：feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
