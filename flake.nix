@@ -65,6 +65,7 @@
       rcc-fix           = import ./overlays/rog-control-center-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
+      breeze-black       = import ./overlays/breeze-black.nix;
     };
 
   };

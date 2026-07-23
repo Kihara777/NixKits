@@ -56,7 +56,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm-patch | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm-patch.md](pcn/comfyui-rocm-patch.md) |
 | rog-control-center-fix | 停止時 asusd 膠着修正 | [docs/pcn/rog-control-center-fix.md](pcn/rog-control-center-fix.md) |
 | efl-cross-fix | efl 交叉编译符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
-| codewhale-sudo | codewhale v0.9.0 sudo 机能复元（LD_PRELOAD shim） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.0 sudo 机能复元（LD_PRELOAD shim） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
 | breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
