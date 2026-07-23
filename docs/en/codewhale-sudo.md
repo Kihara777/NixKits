@@ -2,7 +2,7 @@
 
 [中文](../zh/codewhale-sudo.md) | English | [日本語](codewhale-sudo.ja.md)  | [偽中国語](codewhale-sudo.pcn.md)
 
-codewhale v0.9.0 enables `prctl(PR_SET_NO_NEW_PRIVS)` defense-in-depth by default, blocking `sudo`. This patch intercepts the prctl call via `LD_PRELOAD` shim, restoring sudo functionality.
+codewhale v0.9.0 enables `prctl(PR_SET_NO_NEW_PRIVS)` defense-in-depth by default, blocking `sudo`. Codewhale is statically linked, so `LD_PRELOAD` cannot work. This patch intercepts the prctl call via a ptrace-based syscall interceptor at the kernel boundary, restoring sudo functionality.
 
 ## Info
 

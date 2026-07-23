@@ -2,7 +2,7 @@
 
 中文 | [English](../en/codewhale-sudo.md) | [日本語](../ja/codewhale-sudo.md)  | [偽中国語](../pcn/codewhale-sudo.md)
 
-codewhale v0.9.0 默认启用 `prctl(PR_SET_NO_NEW_PRIVS)` 深度防御，阻止 `sudo` 执行。此补丁通过 `LD_PRELOAD` shim 拦截该 prctl 调用，恢复 sudo 功能。
+codewhale v0.9.0 默认启用 `prctl(PR_SET_NO_NEW_PRIVS)` 深度防御，阻止 `sudo` 执行。codewhale 是静态链接的二进制，`LD_PRELOAD` 对其无效。此补丁通过 ptrace 系统调用拦截器在内核边界重写 prctl 调用，恢复 sudo 功能。
 
 ## 基本信息
 
