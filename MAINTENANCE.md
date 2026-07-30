@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-31T04:07:23+09:00
+
+**摘要**：fix(ci): 修复 ci-summary.yml 语法错误（YAML runs-on 与 workflow_dispatch 混排、硬编码 token），改用 push/schedule 触发 + GITHUB_TOKEN。README badge 从 check.yml（仅 flake 求值）改为 shields.io endpoint（反映全部 Build workflow 实际状态）。
+
+| 提交 | 说明 |
+|------|------|
+| `c0e52a5` | fix(ci): fix ci-summary.yml syntax, switch README badge to endpoint |
+
 ## 2026-07-31T03:34:15+09:00
 
 **摘要**：fix(ci): 注入 GITHUB_TOKEN 作为 Nix access-token — `llama-cpp-ver` input 需要 GitHub API 请求，未认证访问仅 60 次/小时，多 job 并行时频繁触发 403 限流。改用 `${{ secrets.GITHUB_TOKEN }}` 认证。

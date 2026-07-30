@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-31T04:07:23+09:00
+
+**概要**：fix(ci): ci-summary.yml 構文修正（YAML 破損、固定 token）、push/schedule 起動 + GITHUB_TOKEN に切替。README badge を check.yml（flake 評価のみ）から shields.io endpoint（全 Build workflow 実状態反映）に変更。
+
+| コミット | 説明 |
+|------|------|
+| `c0e52a5` | fix(ci): fix ci-summary.yml syntax, switch README badge to endpoint |
+
 ## 2026-07-31T03:34:15+09:00
 
 **概要**：fix(ci): Nix access-token に GITHUB_TOKEN を注入 — llama-cpp-ver input が GitHub API 呼出を必要とし、未認証では 60 回/時間に制限され並列 CI で HTTP 403 が頻発。`${{ secrets.GITHUB_TOKEN }}` を使用。
