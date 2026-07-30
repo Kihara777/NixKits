@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-31T03:34:15+09:00
+
+**概要**：fix(ci): Nix access-token に GITHUB_TOKEN を注入 — llama-cpp-ver input が GitHub API 呼出を必要とし、未認証では 60 回/時間に制限され並列 CI で HTTP 403 が頻発。`${{ secrets.GITHUB_TOKEN }}` を使用。
+
+| Commit | Description |
+|------|------|
+| `41a8a8b` | fix(ci): inject GITHUB_TOKEN as Nix access-token for llama-cpp-ver API |
+
+
 ## 2026-07-31T03:00:12+09:00
 
 **概要**：fix(codewhale-src): riscv64 クロスコンパイル修正 — `ring` クレートの `cc` ビルドが汎用 CFLAGS から `-m64` を継承し riscv64-gcc エラー発生。per-target 変数に加え汎用 CFLAGS/CXXFLAGS もクリア。

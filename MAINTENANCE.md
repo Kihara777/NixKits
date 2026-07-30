@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-31T03:34:15+09:00
+
+**摘要**：fix(ci): 注入 GITHUB_TOKEN 作为 Nix access-token — `llama-cpp-ver` input 需要 GitHub API 请求，未认证访问仅 60 次/小时，多 job 并行时频繁触发 403 限流。改用 `${{ secrets.GITHUB_TOKEN }}` 认证。
+
+| 提交 | 说明 |
+|------|------|
+| `41a8a8b` | fix(ci): inject GITHUB_TOKEN as Nix access-token for llama-cpp-ver API |
+
 ## 2026-07-31T03:00:12+09:00
 
 **摘要**：fix(codewhale-src): 修复 riscv64 交叉编译 — `ring` crate 通过 `cc` crate 继承了通用 CFLAGS 中的 `-m64`（x86_64 标志），导致 riscv64-gcc 报错。在清除 per-target CFLAGS 基础上进一步清除通用 CFLAGS/CXXFLAGS。
