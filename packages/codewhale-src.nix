@@ -39,10 +39,15 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = "crates/cli";
 
   # ring/cc crate passes -m64 (x86_64 host flag) to riscv64 cross-compiler.
-  # Clear per-target CFLAGS so cc-rs uses target-appropriate flags only.
+  # The fix from commit 7160431 cleared per-target CFLAGS but the cc crate
+  # also picks up the generic CFLAGS from the build environment.  Clear both
+  # per-target and generic CFLAGS/CXXFLAGS so that cc-rs receives a clean
+  # flag set for the target architecture.
   env = lib.optionalAttrs stdenv.hostPlatform.isRiscV {
     CFLAGS_riscv64_unknown_linux_gnu = "";
     CXXFLAGS_riscv64_unknown_linux_gnu = "";
+    CFLAGS = "";
+    CXXFLAGS = "";
   };
 
   # Skip tests during build (they require network access)
