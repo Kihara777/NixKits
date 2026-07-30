@@ -31,17 +31,18 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed")
 
-          # Find failed "Build *" workflows (latest run per workflow)
+          # Find failed "Build *" workflows (latest run per workflow).
+          # Filter out non-object entries (API may return error strings interleaved).
           FAILED=$(echo "$RUNS" | jq -r '
-            .workflow_runs
-            | map(select(.name | startswith("Build ") and .conclusion == "failure"))
+            [.workflow_runs[]? | select(type == "object")]
+            | map(select(.name? | startswith("Build ")) | select(.conclusion? == "failure"))
             | group_by(.workflow_id)
             | map(sort_by(.run_number) | .[-1] // empty)
             | map(.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
             | join(" ")
-          ')
+          ' 2>/dev/null || true)
 
-          if [ -z "$FAILED" ] || [ "$FAILED" = "null" ]; then
+          if [ -z "$FAILED" ] || [ "$FAILED" = "null" ] || [ "$FAILED" = "" ]; then
             echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
           else
             echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"failing\",\"color\":\"critical\"}" > ci-status.json
