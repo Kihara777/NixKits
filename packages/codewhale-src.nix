@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage rec {
     CXXFLAGS_riscv64_unknown_linux_gnu = "";
     CFLAGS = "";
     CXXFLAGS = "";
+    # cc-rs also inherits from Nix's internal flag variables; clear those too
+    # so -m64 (x86_64-only) doesn't leak into the riscv64 cross-compiler.
+    NIX_CFLAGS_COMPILE = "";
+    NIX_CXXFLAGS_COMPILE = "";
   };
 
   # Skip tests during build (they require network access)
