@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-07-31T03:00:12+09:00
+
+**摘要**：fix(codewhale-src): 修复 riscv64 交叉编译 — `ring` crate 通过 `cc` crate 继承了通用 CFLAGS 中的 `-m64`（x86_64 标志），导致 riscv64-gcc 报错。在清除 per-target CFLAGS 基础上进一步清除通用 CFLAGS/CXXFLAGS。
+
+| 提交 | 说明 |
+|------|------|
+| `29c780a` | fix(codewhale-src): clear generic CFLAGS/CXXFLAGS for riscv64 cross-compile |
+
 ## 2026-07-30T17:56:11+09:00
 
 **摘要**：codewhale 0.9.1 — 上游 bug 修复；mcp-searxng 1.12.1 — 上游功能更新；opencode-telegram 0.22.5 — 上游维护更新

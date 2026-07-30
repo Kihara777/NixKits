@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-31T03:00:12+09:00
+
+**概要**：fix(codewhale-src): riscv64 クロスコンパイル修正 — `ring` クレートの `cc` ビルドが汎用 CFLAGS から `-m64` を継承し riscv64-gcc エラー発生。per-target 変数に加え汎用 CFLAGS/CXXFLAGS もクリア。
+
+| コミット | 説明 |
+|------|------|
+| `29c780a` | fix(codewhale-src): clear generic CFLAGS/CXXFLAGS for riscv64 cross-compile |
+
 ## 2026-07-30T17:56:11+09:00
 
 **概要**：codewhale 0.9.1 — 上流バグ修正；mcp-searxng 1.12.1 — 上流機能更新；opencode-telegram 0.22.5 — 上流メンテナンス
