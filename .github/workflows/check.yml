@@ -10,6 +10,6 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
         with:
           extra-conf: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Check
         run: nix flake check --no-write-lock-file
