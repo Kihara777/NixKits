@@ -1,6 +1,6 @@
 # NixKits
 
-[![CI](https://github.com/Kihara777/NixKits/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml) [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits) [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
+[![CI](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Kihara777/NixKits/gh-pages/ci-status.json)](https://github.com/Kihara777/NixKits/actions) [![Cache](https://img.shields.io/badge/cache-cachix-blue)](https://app.cachix.org/cache/nixkits) [![NixOS](https://img.shields.io/badge/NixOS-unstable-blue?logo=nixos)](https://nixos.org)
 
 中文 | [English](docs/README.en.md) | [日本語](docs/README.ja.md)  | [偽中国語](docs/README.pcn.md)
 

@@ -1,8 +1,11 @@
 name: CI Summary
 
 on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 * * * *'  # hourly fallback
   workflow_dispatch:
-      - completed
 
 concurrency: ci-summary
 
@@ -12,8 +15,7 @@ permissions:
 
 jobs:
   summary:
-    runs-on:
-  workflow_dispatch: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,33 +23,28 @@ jobs:
 
       - name: Generate CI status
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          FAILED=""
-
-          # Single API call: fetch all workflow runs, pick latest per workflow
-          curl -sS -H "Authorization:
-  workflow_dispatch: Bearer $GITHUB_TOKEN" \
+          # Fetch all completed workflow runs, pick the latest per workflow
+          RUNS=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed" \
-            | jq -r '
-              .workflow_runs
-              | map(select(.name | startswith("Build ") and .conclusion == "failure"))
-              | group_by(.workflow_id)
-              | map(sort_by(.run_number) | .[-1] // empty)
-              | .[]
-              | (.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
-            ' | while read -r short; do
-              FAILED="$FAILED $short"
-            done
+            "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed")
 
-          FAILED=$(echo "$FAILED" | xargs)
+          # Find failed "Build *" workflows (latest run per workflow)
+          FAILED=$(echo "$RUNS" | jq -r '
+            .workflow_runs
+            | map(select(.name | startswith("Build ") and .conclusion == "failure"))
+            | group_by(.workflow_id)
+            | map(sort_by(.run_number) | .[-1] // empty)
+            | map(.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
+            | join(" ")
+          ')
 
-          if [ -z "$FAILED" ]; then
+          if [ -z "$FAILED" ] || [ "$FAILED" = "null" ]; then
             echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
           else
-            echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"$FAILED\",\"color\":\"critical\"}" > ci-status.json
+            echo "{\"schemaVersion\":1,\"label\":\"CI\",\"message\":\"failing\",\"color\":\"critical\"}" > ci-status.json
           fi
 
           cat ci-status.json
@@ -57,5 +54,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ci-status.json
-          git diff --cached --quiet || git commit -m "ci: update status $(date -Iseconds)"
-          git push origin gh-pages
+          if git diff --cached --quiet; then
+            echo "No changes, skipping push"
+          else
+            git commit -m "ci: update status $(date -Iseconds)"
+            git push origin gh-pages
+          fi
