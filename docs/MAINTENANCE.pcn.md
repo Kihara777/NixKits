@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-07-30T17:56:11+09:00
+
+**摘要**：codewhale 0.9.1 — 上流修正；mcp-searxng 1.12.1 — 上流機能追加；opencode-telegram 0.22.5 — 上流保守
+
+| 提交 | 説明 |
+|------|------|
+| `1110c7a` | chore(pkgs): bump codewhale 0.9.0 → 0.9.1 |
+| `3dcb65a` | chore(pkgs): bump mcp-searxng 1.11.1 → 1.12.1 |
+| `98abe96` | chore(pkgs): bump opencode-telegram 0.22.3 → 0.22.5 |
+| `a94dea8` | docs: sync version numbers |
+
+| 軟件名 | 舊 | 新 |
+|------|------|------|
+| codewhale | 0.9.0 | 0.9.1 |
+| mcp-searxng | 1.11.1 | 1.12.1 |
+| opencode-telegram | 0.22.3 | 0.22.5 |
+
 ## 2026-07-23T12:56:53+09:00
 
 **摘要**：fix(codewhale-sudo): ptrace wrapper 修正 — 子追跡削除（sub-shell SIGTRAP kill 防止）、PTRACE_EVENT_EXEC 追加。4 言語文書同期更新。

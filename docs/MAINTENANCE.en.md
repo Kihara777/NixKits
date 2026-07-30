@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-07-30T17:56:11+09:00
+
+**Summary**：codewhale 0.9.1 — upstream bug fixes; mcp-searxng 1.12.1 — upstream feature update; opencode-telegram 0.22.5 — upstream maintenance
+
+| Commit | Description |
+|------|------|
+| `1110c7a` | chore(pkgs): bump codewhale 0.9.0 → 0.9.1 |
+| `3dcb65a` | chore(pkgs): bump mcp-searxng 1.11.1 → 1.12.1 |
+| `98abe96` | chore(pkgs): bump opencode-telegram 0.22.3 → 0.22.5 |
+| `a94dea8` | docs: sync version numbers |
+
+| Package | Old | New |
+|------|------|------|
+| codewhale | 0.9.0 | 0.9.1 |
+| mcp-searxng | 1.11.1 | 1.12.1 |
+| opencode-telegram | 0.22.3 | 0.22.5 |
+
 ## 2026-07-23T12:56:53+09:00
 
 **Summary**：fix(codewhale-sudo): fixed ptrace wrapper — removed child tracing (avoid SIGTRAP killing codewhale sub-shells), added PTRACE_EVENT_EXEC handling. Synced 4-language docs (LD_PRELOAD → ptrace description).
