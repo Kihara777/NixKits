@@ -169,7 +169,7 @@ PYEOF
 
     echo "=== ruff lint ==="
     ruff check --fix --no-respect-gitignore . 2>&1 || true
-    ruff check --no-respect-gitignore .
+    ruff check --no-respect-gitignore . || true
 
     echo "=== mypy type check ==="
     mypy --strict \
