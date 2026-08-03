@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-04T01:15:52+09:00
+
+**摘要**：codewhale 0.9.3 — 上流修正；mcp-searxng 1.14.0 — 上流機能追加
+
+| 提交 | 説明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| 軟件名 | 舊 | 新 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
+
 ## 2026-07-31T04:07:23+09:00
 
 **摘要**：fix(ci): ci-summary.yml 構文修正（YAML 混在、固定 token）、push/schedule + GITHUB_TOKEN 移行。README badge shields.io endpoint 全 Build 実状態反映変更。
@@ -752,6 +767,21 @@
 | 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
 
 [中文](docs/MAINTENANCE.md) | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | 偽中国語
+
+## 2026-08-04T01:15:52+09:00
+
+**摘要**：codewhale 0.9.3 — 上流修正；mcp-searxng 1.14.0 — 上流機能追加
+
+| 提交 | 説明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| 軟件名 | 舊 | 新 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
 
 NixKits 包更新変更記録。
 

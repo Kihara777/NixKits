@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-04T01:15:52+09:00
+
+**Summary**：codewhale 0.9.3 — upstream bug fixes; mcp-searxng 1.14.0 — upstream feature update
+
+| Commit | Description |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| Package | Old | New |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
+
 ## 2026-07-31T04:07:23+09:00
 
 **Summary**：fix(ci): fixed ci-summary.yml syntax errors (broken YAML, hardcoded token), switched to push/schedule triggers with GITHUB_TOKEN. README badge now uses shields.io endpoint reflecting actual Build workflow status instead of bare flake evaluation.

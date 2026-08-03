@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-04T01:15:52+09:00
+
+**摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
+
+| 提交 | 说明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| 软件名 | 旧版本 | 新版本 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
+
 ## 2026-07-31T04:07:23+09:00
 
 **摘要**：fix(ci): 修复 ci-summary.yml 语法错误（YAML runs-on 与 workflow_dispatch 混排、硬编码 token），改用 push/schedule 触发 + GITHUB_TOKEN。README badge 从 check.yml（仅 flake 求值）改为 shields.io endpoint（反映全部 Build workflow 实际状态）。
@@ -726,6 +741,21 @@
 
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+
+## 2026-08-04T01:15:52+09:00
+
+**摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
+
+| 提交 | 说明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| 软件名 | 旧版本 | 新版本 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
 
 NixKits 软件更新维护日志。
 
@@ -1654,6 +1684,21 @@ NixKits 软件更新维护日志。
 
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+
+## 2026-08-04T01:15:52+09:00
+
+**摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
+
+| 提交 | 说明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| 软件名 | 旧版本 | 新版本 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
 
 NixKits 软件更新维护日志。
 

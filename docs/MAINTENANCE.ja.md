@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-04T01:15:52+09:00
+
+**概要**：codewhale 0.9.3 — 上流バグ修正；mcp-searxng 1.14.0 — 上流機能更新
+
+| コミット | 説明 |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
+| パッケージ | 旧 | 新 |
+|------|------|------|
+| codewhale | 0.9.1 | 0.9.3 |
+| mcp-searxng | 1.12.1 | 1.14.0 |
+
 ## 2026-07-31T04:07:23+09:00
 
 **概要**：fix(ci): ci-summary.yml 構文修正（YAML 破損、固定 token）、push/schedule 起動 + GITHUB_TOKEN に切替。README badge を check.yml（flake 評価のみ）から shields.io endpoint（全 Build workflow 実状態反映）に変更。
