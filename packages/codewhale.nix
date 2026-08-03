@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.9.1";
+  version = "0.9.3";
 
   # Prebuilt binaries from GitHub Releases — x86_64 and aarch64 only.
   # riscv64 is built from source (see codewhale-src.nix).
@@ -19,13 +19,13 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   cliHashes = {
-    x64     = "sha256-1LwtGQinjFy+aXSm4WyooGaQd15FTnO39rVUjwM7W8I=";
-    arm64   = "sha256-ClH1hQ4ngofyXw+DUt1RX6U4lsz0seCDw+9ZTMYDNXk=";
+    x64     = "sha256-4BKtelZoEP2a2WwQCLWUNBIP36uyX+7opjlPmpEztdw=";
+    arm64   = "sha256-km98cx6tqoDqX5w9wBjQkQgABxzawIopxDnZ6M41D44=";
   };
 
   tuiHashes = {
-    x64     = "sha256-4eIVNp40ZoJAy7re3JEhnOYCYhilUnsqvvn659y4ugU=";
-    arm64   = "sha256-qA+rRbIUXNh9r/cgYzrpQtyOQiDxgzKJfHk43Ie5SnU=";
+    x64     = "sha256-+UpKA2e04VAQEBnn6KbROMU8h7IIhenkVkwSAsEl518=";
+    arm64   = "sha256-VR/GBU8u6EUb19jY0rTYstxoOlyEkh2rBd2FtXeDRdw=";
   };
 
   codewhale-cli = fetchurl {
