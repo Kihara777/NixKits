@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-04T02:15:00+09:00
+
+**Summary**: fix(ruyi): tolerate ruff lint failures in checkPhase — the second ruff check (without --fix) was blocking builds on 139 upstream violations after nixpkgs ruff update.
+
+| 提交 | 说明 |
+|------|------|
+| `1175df2` | fix(ruyi): tolerate ruff lint failures in checkPhase |
+
 ## 2026-08-04T01:15:52+09:00
 
 **Summary**：codewhale 0.9.3 — upstream bug fixes; mcp-searxng 1.14.0 — upstream feature update

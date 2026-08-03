@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-04T02:15:00+09:00
+
+**摘要**: fix(ruyi): 容忍 ruff lint 失败 — 第二条 ruff check（不带 --fix）在 nixpkgs ruff 更新后因 139 条上游违规阻塞构建。
+
+| 提交 | 说明 |
+|------|------|
+| `1175df2` | fix(ruyi): tolerate ruff lint failures in checkPhase |
+
 ## 2026-08-04T01:15:52+09:00
 
 **摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
