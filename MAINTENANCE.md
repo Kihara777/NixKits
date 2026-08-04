@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-05T01:30:00+09:00
+
+**摘要**：refactor(skill) — nixkits-check-updates 新增 Rust 包（buildRustPackage）更新流程，泛化 codewhale-src 的 Cargo.lock 同步经验（版本 + source hash + Cargo.lock 三处同步、上游 lock 下载与条目数验证、交叉编译超时回退）。
+
+| 提交 | 说明 |
+|------|------|
+| `6e6bef6` | refactor(skill): add Rust package (buildRustPackage) update flow to nixkits-check-updates |
+
 ## 2026-08-04T02:15:00+09:00
 
 **摘要**: fix(ruyi): 容忍 ruff lint 失败 — 第二条 ruff check（不带 --fix）在 nixpkgs ruff 更新后因 139 条上游违规阻塞构建。

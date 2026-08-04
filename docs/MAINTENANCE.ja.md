@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-05T01:30:00+09:00
+
+**概要**: refactor(skill) — nixkits-check-updates に Rust パッケージ（buildRustPackage）更新フローを追加。codewhale-src の Cargo.lock 同期経験を汎化（version + source hash + Cargo.lock の三点同期、上流 lock 取得とエントリ数検証、クロスコンパイルタイムアウト時のフォールバック）。
+
+| コミット | 説明 |
+|------|------|
+| `6e6bef6` | refactor(skill): add Rust package (buildRustPackage) update flow to nixkits-check-updates |
+
 ## 2026-08-04T02:15:00+09:00
 
 **概要**: fix(ruyi): checkPhase の ruff lint 失敗を許容 — 2番目の ruff check（--fix無し）が nixpkgs ruff 更新後の139件の上流違反でビルドをブロックしていた。
