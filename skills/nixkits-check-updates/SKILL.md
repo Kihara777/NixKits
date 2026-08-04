@@ -88,6 +88,29 @@ check() {
 4. 更新 hash
 5. 运行 `nix build .#<pkg>` 验证构建成功
 
+### Rust 包（buildRustPackage）
+
+`rustPlatform.buildRustPackage` 通过 `cargoLock.lockFile` 声明式锁定依赖，不会自动生成 lock 文件。**版本升级必须同步三处**：
+
+1. 更新 `version` 字符串
+2. 将 `fetchFromGitHub` 的 `hash` 置空，`nix build` 获取正确 hash 后更新
+3. **同步 Cargo.lock**（最容易遗漏）：
+   - 上游发布新 tag 时，源码中的 `Cargo.lock` 依赖集可能变化
+   - 从上游仓库下载对应 tag 的 lock 文件覆盖本地副本：
+     ```bash
+     curl -sL "https://raw.githubusercontent.com/<owner>/<repo>/v<version>/Cargo.lock" \
+       -o <local-lock-file>
+     ```
+   - 验证条目数是否变化（`grep -c '^name = '`），变化即说明依赖集更新，必须同步
+   - 本地 lock 副本名通常形如 `<pkg>-src-Cargo.lock`，与上游内容不一致时构建报
+     `lock file ... needs to be updated` 或 hash 校验失败
+4. 运行 `nix build .#<pkg>` 验证构建成功
+
+> **交叉编译注意**：riscv64 等交叉构建 eval 可能超时。若 `nix build .#packages.<arch>.<pkg>`
+> 无法在合理时间内获取 hash，可用 `nix-prefetch-url --type sha256` 预取
+> `https://github.com/<owner>/<repo>/archive/v<version>.tar.gz` 计算 source hash
+> （fetchFromGitHub 默认即下载该 archive tarball，hash 一致）。
+
 ### 预编译二进制包（fetchurl）
 
 1. 更新 `version` 字符串及所有下载 URL
