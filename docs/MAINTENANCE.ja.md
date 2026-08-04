@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-05T07:24:56+09:00
+
+**概要**: chore(pkgs) — codewhale-src を 0.9.3 に同期（riscv64 ソースビルドがプレビルト版より 3 バージョン遅れていた）。version・fetchFromGitHub hash・Cargo.lock（711 → 763 エントリ）を同期。
+
+| コミット | 説明 |
+|------|------|
+| `563eea2` | chore(pkgs): sync codewhale-src to 0.9.3 — version, hash, Cargo.lock |
+
 ## 2026-08-05T01:30:00+09:00
 
 **概要**: refactor(skill) — nixkits-check-updates に Rust パッケージ（buildRustPackage）更新フローを追加。codewhale-src の Cargo.lock 同期経験を汎化（version + source hash + Cargo.lock の三点同期、上流 lock 取得とエントリ数検証、クロスコンパイルタイムアウト時のフォールバック）。

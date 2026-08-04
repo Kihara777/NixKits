@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-05T07:24:56+09:00
+
+**Summary**: chore(pkgs) — codewhale-src synced to 0.9.3 (riscv64 source build was 3 patch versions behind the prebuilt package). Synced version, fetchFromGitHub hash, Cargo.lock (711 → 763 entries).
+
+| Commit | Description |
+|------|------|
+| `563eea2` | chore(pkgs): sync codewhale-src to 0.9.3 — version, hash, Cargo.lock |
+
 ## 2026-08-05T01:30:00+09:00
 
 **Summary**: refactor(skill) — nixkits-check-updates gains a Rust package (buildRustPackage) update flow, generalizing the codewhale-src Cargo.lock sync lesson (three-way sync of version + source hash + Cargo.lock, upstream lock download with entry-count verification, cross-compile timeout fallback).
