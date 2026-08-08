@@ -65,6 +65,20 @@ in
         }
       '';
     };
+
+    sleepIdleSeconds = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
+      default = null;
+      description = ''
+        Number of seconds of idleness after which llama-server will
+        sleep and unload the model from memory.
+
+        Passed as `--sleep-idle-seconds` to llama-server.
+        Set to `null` (default) to leave the server default (-1, disabled).
+        A typical value is `600` (10 minutes).
+      '';
+      example = 600;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -74,6 +88,11 @@ in
     services.llama-cpp.settings = lib.mkIf (modelsPresetIni != null) {
       models-preset = toString modelsPresetIni;
     };
+
+    # ── sleep-idle-seconds → settings ─────────────────────────────────
+    # nixpkgs removed services.llama-cpp.extraFlags; pass via freeform settings.
+    services.llama-cpp.settings."sleep-idle-seconds" = lib.mkIf (cfg.sleepIdleSeconds != null)
+      (toString cfg.sleepIdleSeconds);
 
     # ── systemd hardening overrides ──────────────────────────────────────
     systemd.services.llama-cpp.serviceConfig = {
