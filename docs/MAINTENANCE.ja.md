@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-08T22:50:33+09:00
+
+**概要**: fix(codewhale-src): 0.9.4 に同期し source hash を修正 — 従来の nix-prefetch-url archive tarball hash が fetchFromGitHub（git プロトコル）と不一致で riscv64 CI が連続失敗。fetchFromGitHub ビルドで正しい hash を取得、Cargo.lock 同期、技能の誤った助言も修正。
+
+| コミット | 説明 |
+|------|------|
+| `08b04a2` | fix(codewhale-src): sync to 0.9.4 with correct fetchFromGitHub hash |
+| `ab2a624` | fix(skill): correct fetchFromGitHub hash advice — archive tarball trap |
+
 ## 2026-08-08T22:20:21+09:00
 
 **概要**: codewhale 0.9.4 — 上流バグ修正；mcp-searxng 1.14.1 — 上流メンテナンス；opencode-telegram 0.23.1 — 上流機能更新
