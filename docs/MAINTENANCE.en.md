@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-08T22:20:21+09:00
+
+**Summary**: codewhale 0.9.4 — upstream bug fixes; mcp-searxng 1.14.1 — upstream maintenance; opencode-telegram 0.23.1 — upstream feature update
+
+| Commit | Description |
+|------|------|
+| `f184fdb` | chore(pkgs): bump codewhale 0.9.3 → 0.9.4 |
+| `9b877e1` | chore(pkgs): bump mcp-searxng 1.14.0 → 1.14.1 |
+| `9b17590` | chore(pkgs): bump opencode-telegram 0.22.5 → 0.23.1 |
+| `59ac74a` | docs: sync version numbers |
+
+| Package | Old | New |
+|------|------|------|
+| codewhale | 0.9.3 | 0.9.4 |
+| mcp-searxng | 1.14.0 | 1.14.1 |
+| opencode-telegram | 0.22.5 | 0.23.1 |
+
 ## 2026-08-05T07:24:56+09:00
 
 **Summary**: chore(pkgs) — codewhale-src synced to 0.9.3 (riscv64 source build was 3 patch versions behind the prebuilt package). Synced version, fetchFromGitHub hash, Cargo.lock (711 → 763 entries).

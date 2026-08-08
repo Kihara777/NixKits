@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-08T22:20:21+09:00
+
+**摘要**：codewhale 0.9.4 — 上游 bug 修复；mcp-searxng 1.14.1 — 上游维护更新；opencode-telegram 0.23.1 — 上游功能更新
+
+| 提交 | 说明 |
+|------|------|
+| `f184fdb` | chore(pkgs): bump codewhale 0.9.3 → 0.9.4 |
+| `9b877e1` | chore(pkgs): bump mcp-searxng 1.14.0 → 1.14.1 |
+| `9b17590` | chore(pkgs): bump opencode-telegram 0.22.5 → 0.23.1 |
+| `59ac74a` | docs: sync version numbers |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.9.3 | 0.9.4 |
+| mcp-searxng | 1.14.0 | 1.14.1 |
+| opencode-telegram | 0.22.5 | 0.23.1 |
+
 ## 2026-08-05T07:24:56+09:00
 
 **摘要**：chore(pkgs) — codewhale-src 同步至 0.9.3（riscv64 源码构建落后预编译包 3 个版号）。同步 version、fetchFromGitHub hash、Cargo.lock（711 → 763 条目）。

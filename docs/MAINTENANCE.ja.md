@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-08T22:20:21+09:00
+
+**概要**: codewhale 0.9.4 — 上流バグ修正；mcp-searxng 1.14.1 — 上流メンテナンス；opencode-telegram 0.23.1 — 上流機能更新
+
+| コミット | 説明 |
+|------|------|
+| `f184fdb` | chore(pkgs): bump codewhale 0.9.3 → 0.9.4 |
+| `9b877e1` | chore(pkgs): bump mcp-searxng 1.14.0 → 1.14.1 |
+| `9b17590` | chore(pkgs): bump opencode-telegram 0.22.5 → 0.23.1 |
+| `59ac74a` | docs: sync version numbers |
+
+| パッケージ | 旧 | 新 |
+|------|------|------|
+| codewhale | 0.9.3 | 0.9.4 |
+| mcp-searxng | 1.14.0 | 1.14.1 |
+| opencode-telegram | 0.22.5 | 0.23.1 |
+
 ## 2026-08-05T07:24:56+09:00
 
 **概要**: chore(pkgs) — codewhale-src を 0.9.3 に同期（riscv64 ソースビルドがプレビルト版より 3 バージョン遅れていた）。version・fetchFromGitHub hash・Cargo.lock（711 → 763 エントリ）を同期。
