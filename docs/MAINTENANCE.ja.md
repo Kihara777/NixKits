@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-08T23:07:40+09:00
+
+**概要**: fix(breeze-black): look-and-feel グローバルテーマ復元と GTK リネーム修正 — 7/23 外部パッチ除去後の2つのリグレッション：① org.kde.breezeblack.desktop 欠落で BreezeBlack が設定のテーマ選択から消えたため、look-and-feel をローカル内蔵で復元；② preFixup の Breeze* グロブが Breeze と Breeze-Dark 両方に一致し GTK テーマがネスト化、Breeze のみリネームに修正。
+
+| コミット | 説明 |
+|------|------|
+| `114b9c2` | fix(breeze-black): restore look-and-feel global theme + fix GTK rename |
+
 ## 2026-08-08T22:50:33+09:00
 
 **概要**: fix(codewhale-src): 0.9.4 に同期し source hash を修正 — 従来の nix-prefetch-url archive tarball hash が fetchFromGitHub（git プロトコル）と不一致で riscv64 CI が連続失敗。fetchFromGitHub ビルドで正しい hash を取得、Cargo.lock 同期、技能の誤った助言も修正。
