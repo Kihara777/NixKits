@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | 日本語  | [偽中国語](../pcn/codewhale.md)
 
@@ -46,11 +46,11 @@ codewhale auth set --provider deepseek # API キー保存
 
 ## sudo の有効化
 
-codewhale v0.9.3 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
+codewhale v0.9.4 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
 
 ## 既知の問題
 
-> ⚠️ **riscv64 ソースビルド**: 上流が v0.9.3 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
+> ⚠️ **riscv64 ソースビルド**: 上流が v0.9.4 から riscv64 プリビルドバイナリを削除。NixKits は `rustPlatform.buildRustPackage` でソースからクロスコンパイルして riscv64 を提供。これは実験的機能であり、初回 CI で依存 hash 不一致により失敗する可能性があります — 後続の CI で検証・修正します。
 
 ## キャッシュ
 
@@ -58,9 +58,9 @@ codewhale v0.9.3 はデフォルトで `sudo` をブロックします。 [codew
 
 ## sudo の有効化
 
-codewhale v0.9.3 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
+codewhale v0.9.4 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
 
 ## 既知の問題
 
-> ⚠️ **v0.9.3 sudo 使用不可**: `no_new_privs` フラグにより sudo が完全にブロック（パスワード問題ではなく、Wheel NOPASSWD でも回避不可）。上流に報告済み — 修正待ち。
+> ⚠️ **v0.9.4 sudo 使用不可**: `no_new_privs` フラグにより sudo が完全にブロック（パスワード問題ではなく、Wheel NOPASSWD でも回避不可）。上流に報告済み — 修正待ち。
 
