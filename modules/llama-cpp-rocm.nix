@@ -82,17 +82,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # ── modelsPreset → INI → settings.models-preset ──────────────────────
+    # ── modelsPreset + sleep-idle-seconds → settings ────────────────────
     # Works with nixpkgs post-refactor where services.llama-cpp.settings
     # is a freeform attrset passed to llama-server as CLI arguments.
-    services.llama-cpp.settings = lib.mkIf (modelsPresetIni != null) {
-      models-preset = toString modelsPresetIni;
-    };
-
-    # ── sleep-idle-seconds → settings ─────────────────────────────────
     # nixpkgs removed services.llama-cpp.extraFlags; pass via freeform settings.
-    services.llama-cpp.settings."sleep-idle-seconds" = lib.mkIf (cfg.sleepIdleSeconds != null)
-      (toString cfg.sleepIdleSeconds);
+    services.llama-cpp.settings = lib.mkMerge [
+      (lib.mkIf (modelsPresetIni != null) {
+        models-preset = toString modelsPresetIni;
+      })
+      (lib.mkIf (cfg.sleepIdleSeconds != null) {
+        "sleep-idle-seconds" = toString cfg.sleepIdleSeconds;
+      })
+    ];
 
     # ── systemd hardening overrides ──────────────────────────────────────
     systemd.services.llama-cpp.serviceConfig = {
