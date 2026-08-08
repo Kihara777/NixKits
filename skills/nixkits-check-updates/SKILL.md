@@ -106,10 +106,19 @@ check() {
      `lock file ... needs to be updated` 或 hash 校验失败
 4. 运行 `nix build .#<pkg>` 验证构建成功
 
-> **交叉编译注意**：riscv64 等交叉构建 eval 可能超时。若 `nix build .#packages.<arch>.<pkg>`
-> 无法在合理时间内获取 hash，可用 `nix-prefetch-url --type sha256` 预取
-> `https://github.com/<owner>/<repo>/archive/v<version>.tar.gz` 计算 source hash
-> （fetchFromGitHub 默认即下载该 archive tarball，hash 一致）。
+> **交叉编译注意**：riscv64 等交叉构建 eval 可能超时。获取 `fetchFromGitHub` source hash
+> 的正确姿势：
+> - **禁止**用 `nix-prefetch-url` 预取 `https://github.com/<owner>/<repo>/archive/v<version>.tar.gz`
+>   的 hash —— archive tarball 与 `fetchFromGitHub`（git 协议）hash **不一致**，会导致 CI
+>   构建失败（`hash mismatch ... got:` 与本地预取值不同）。曾因该错误建议导致
+>   codewhale-riscv64 CI 连续失败。
+> - 正确方法：用任意 nixpkgs 的 `fetchFromGitHub` + 占位 hash 构建一次，从报错中获取 got 值：
+>   ```bash
+>   nix build --impure --expr '
+>   let pkgs = import (builtins.getFlake "/path/to/flake").inputs.nixpkgs.legacyPackages.x86_64-linux;
+>   in pkgs.fetchFromGitHub { owner = "<owner>"; repo = "<repo>"; rev = "v<version>"; hash = lib.fakeHash; }
+>   ' 2>&1 | grep got:
+>   ```
 
 ### 预编译二进制包（fetchurl）
 
