@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "Hmbown";
     repo = "CodeWhale";
     rev = "v${version}";
-    hash = "sha256-tcJzRYLN+ZaYPuE/ymNCZTOxndD0Gi0uXDqqWbxT5wg=";
+    hash = "sha256-6qzJ5h6tWfRwYzsk1xX9S0wbQmch6Db1ppGrNcjE6/Q=";
   };
 
   # Cargo.lock is in workspace root
