@@ -35,6 +35,16 @@
 |------|------|
 | `6e6bef6` | refactor(skill): add Rust package (buildRustPackage) update flow to nixkits-check-updates |
 
+## 2026-08-04T01:15:52+09:00
+
+**Summary**: codewhale 0.9.3 — upstream bug fixes; mcp-searxng 1.14.0 — upstream feature update
+
+| Commit | Description |
+|------|------|
+| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
+| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
+| `d778b1b` | docs: sync version numbers |
+
 ## 2026-08-04T02:15:00+09:00
 
 **Summary**: fix(ruyi): tolerate ruff lint failures in checkPhase — the second ruff check (without --fix) was blocking builds on 139 upstream violations after nixpkgs ruff update.
