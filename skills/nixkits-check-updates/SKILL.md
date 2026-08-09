@@ -243,3 +243,28 @@ nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
 
 > **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的构建测试。
 > 涉及 GPU/硬件相关补丁时，需在目标硬件上实测验证。
+
+## 常见陷阱（2026-08-09 comfyui 事故教训）
+
+更新后若用户系统切换（`nixos-rebuild switch`）失败，优先排查以下三个 nixpkgs 漂移陷阱：
+
+### 1. 恢复旧 generation / flake.lock 时必须核对 `inputs.*.follows`
+
+只复制旧 `flake.lock` 而忽略 `flake.nix` 会丢失 `inputs.<x>.follows` 配置，导致子 flake
+重新用独立锁定的旧 nixpkgs（如 glibc 2.40）→ 运行时 `GLIBC_ABI_GNU2_TLS` 崩溃。
+恢复时需同时核对 `flake.nix` 中子 flake 的 follows/url 定义，并验证 eval 出的实际 nixpkgs rev。
+
+### 2. python 包跳过测试用 `doInstallCheck = false`，不是 `doCheck = false`
+
+`pytestCheckHook` 把 pytest 套件跑在 **installCheckPhase**，`doCheck=false` 无效（测试仍执行）。
+跳过测试必须设置 `doInstallCheck = false`。
+
+### 3. nixpkgs ≥ 2026-08-05 的 `pythonRuntimeDepsCheckHook` 破坏 wheel 构建
+
+新版 nixpkgs 引入 `pythonRuntimeDepsCheckHook`：wheel 的 METADATA 声明了运行时依赖
+（如 comfyui 场景下 opencv-python/tqdm/setuptools 由运行环境提供）时构建失败。
+对策：在 vendored wheel 的 mkWheel 中加 `dontCheckRuntimeDeps = true`。
+相关包逐个添加 `doInstallCheck = false`（jupyter-server/scipy/fastapi/einops 等）后，comfyui 恢复。
+
+> 判断方法：报错含 `pythonRuntimeDepsCheckHook` / `not installed` / `GLIBC_ABI_GNU2_TLS`
+> 且位于 python 包构建阶段 → 命中陷阱 2 或 3；位于服务启动阶段 → 命中陷阱 1。
