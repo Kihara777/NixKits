@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-09T19:05:53+09:00
+
+**Summary**: refactor(skill): nixkits-check-updates gains a nixpkgs-drift troubleshooting section — ① restoring old flake.lock requires verifying follows in flake.nix (lost → glibc 2.40 → GLIBC_ABI_GNU2_TLS); ② pytest packages need doInstallCheck=false (pytestCheckHook runs in installCheckPhase); ③ pythonRuntimeDepsCheckHook (nixpkgs ≥ 8/5) breaks wheel builds, fix with dontCheckRuntimeDeps=true.
+
+| Commit | Description |
+|------|------|
+| `e88fd98` | refactor(skill): add nixpkgs-drift troubleshooting section to check-updates |
+
 ## 2026-08-09T04:21:09+09:00
 
 **Summary**: fix(module): llama-cpp — ① services.llama-cpp.extraFlags is deprecated, switch to settings for --sleep-idle-seconds; ② freeform settings cannot have separate definitions, merge via lib.mkMerge.

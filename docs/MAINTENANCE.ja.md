@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-09T19:05:53+09:00
+
+**概要**: refactor(skill): nixkits-check-updates に nixpkgs ドリフト故障診断セクション追加 — ① 旧 flake.lock 復元時は flake.nix の follows を要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest パッケージは doInstallCheck=false（pytestCheckHook は installCheckPhase で実行）；③ pythonRuntimeDepsCheckHook（nixpkgs ≥ 8/5）が wheel 構築を破壊、dontCheckRuntimeDeps=true で修復。
+
+| コミット | 説明 |
+|------|------|
+| `e88fd98` | refactor(skill): add nixpkgs-drift troubleshooting section to check-updates |
+
 ## 2026-08-09T04:21:09+09:00
 
 **概要**: fix(module): llama-cpp — ① services.llama-cpp.extraFlags は非推奨のため settings で --sleep-idle-seconds を渡すよう変更；② freeform settings は分離定義不可のため lib.mkMerge で models-preset と sleep-idle-seconds を統合。
