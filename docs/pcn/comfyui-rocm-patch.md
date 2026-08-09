@@ -15,7 +15,7 @@
 |------|-----|
 | 種類 | overlay + NixOS 部品 |
 | 選項 | `nixkits.comfyui-rocm-patch.enable` |
-| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` |
+| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | 対応 GPU | gfx1151（Strix Halo）— ROCm 7.1 於原生認識 |
 
 ## 機能
@@ -27,6 +27,15 @@
 - **Strix Halo 核心媒介**: `amdgpu.gttsize=131072`
 - **服務堅牢化**: GPU 機器接続権限（`/dev/kfd`、`/dev/dri/renderD128`）
 - **PyTorch 7.2 wheel 選項昇級**
+
+## 互換性補丁（nixpkgs ≥ 2026-08-05）
+
+附属補丁 `patches/comfyui-nix-nixpkgs-compat.patch` 解決 nixpkgs 漂移致構建失敗：
+
+- **`pythonRuntimeDepsCheckHook`**: vendored wheel METADATA 宣言実行時依頼 comfyui pythonRuntime 提供、構建時検査失敗 → mkWheel 加 `dontCheckRuntimeDeps = true`
+- **flaky 測試**: jupyter-server / scipy / fastapi / einops 等沙箱失敗 → `doInstallCheck = false`（pytestCheckHook installCheckPhase 実行、`doCheck = false` 無効）
+
+nixpkgs ≥ 2026-08-05 使用時需適用此補丁。
 
 ## 使用法
 

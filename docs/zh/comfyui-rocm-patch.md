@@ -15,7 +15,7 @@
 |------|-----|
 | 类型 | overlay + NixOS 模块 |
 | 选项 | `nixkits.comfyui-rocm-patch.enable` |
-| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` |
+| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | 适用 GPU | gfx1151（Strix Halo）— ROCm 7.1 原生识别 |
 
 ## 功能
@@ -27,6 +27,15 @@
 - **Strix Halo 内核参数**：`amdgpu.gttsize=131072`
 - **服务加固**：GPU 设备访问权限（`/dev/kfd`、`/dev/dri/renderD128`）
 - **PyTorch 7.2 wheel 可选升级**
+
+## 兼容性补丁（nixpkgs ≥ 2026-08-05）
+
+配套补丁 `patches/comfyui-nix-nixpkgs-compat.patch` 解决 nixpkgs 漂移导致的构建失败：
+
+- **`pythonRuntimeDepsCheckHook`**：vendored wheel 的 METADATA 声明的运行时依赖由 comfyui pythonRuntime 提供，构建时检查会失败 → mkWheel 加 `dontCheckRuntimeDeps = true`
+- **flaky 测试**：jupyter-server / scipy / fastapi / einops 等测试在沙箱中失败 → `doInstallCheck = false`（pytestCheckHook 跑在 installCheckPhase，`doCheck = false` 无效）
+
+使用 nixpkgs ≥ 2026-08-05 时需应用此补丁。
 
 ## 使用
 

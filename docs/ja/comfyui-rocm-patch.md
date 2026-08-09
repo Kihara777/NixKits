@@ -15,7 +15,7 @@ ComfyUI 向け ROCm 機能パッチ。
 |------|-----|
 | 種類 | overlay + NixOS モジュール |
 | オプション | `nixkits.comfyui-rocm-patch.enable` |
-| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` |
+| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | 対応 GPU | gfx1151（Strix Halo）— ROCm 7.1 でネイティブ認識 |
 
 ## 機能
@@ -27,6 +27,15 @@ ComfyUI 向け ROCm 機能パッチ。
 - **Strix Halo カーネルパラメータ**: `amdgpu.gttsize=131072`
 - **サービス堅牢化**: GPU デバイスアクセス権限（`/dev/kfd`、`/dev/dri/renderD128`）
 - **PyTorch 7.2 wheel オプションアップグレード**
+
+## 互換性パッチ（nixpkgs ≥ 2026-08-05）
+
+付属パッチ `patches/comfyui-nix-nixpkgs-compat.patch` は nixpkgs ドリフトによるビルド失敗を解決します：
+
+- **`pythonRuntimeDepsCheckHook`**: vendored wheel の METADATA が宣言するランタイム依存は comfyui pythonRuntime が提供するため、ビルド時のチェックが失敗 → mkWheel に `dontCheckRuntimeDeps = true` を追加
+- **flaky テスト**: jupyter-server / scipy / fastapi / einops 等のテストがサンドボックスで失敗 → `doInstallCheck = false`（pytestCheckHook は installCheckPhase で実行されるため `doCheck = false` は無効）
+
+nixpkgs ≥ 2026-08-05 を使用する場合はこのパッチの適用が必要です。
 
 ## 使用方法
 

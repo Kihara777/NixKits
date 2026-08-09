@@ -15,7 +15,7 @@ Includes **Strix Halo (gfx1151 / RDNA 3.5 APU) exclusive optimizations**, tested
 |------|-----|
 | Type | overlay + NixOS module |
 | Option | `nixkits.comfyui-rocm-patch.enable` |
-| Location | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` |
+| Location | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | Supported GPU | gfx1151 (Strix Halo) — natively recognized by ROCm 7.1 |
 
 ## Features
@@ -27,6 +27,15 @@ Includes **Strix Halo (gfx1151 / RDNA 3.5 APU) exclusive optimizations**, tested
 - **Strix Halo kernel params**: `amdgpu.gttsize=131072`
 - **Service hardening**: GPU device access permissions (`/dev/kfd`, `/dev/dri/renderD128`)
 - **PyTorch 7.2 wheel optional upgrade**
+
+## Compatibility patch (nixpkgs ≥ 2026-08-05)
+
+Companion patch `patches/comfyui-nix-nixpkgs-compat.patch` fixes build failures caused by nixpkgs drift:
+
+- **`pythonRuntimeDepsCheckHook`**: vendored wheel METADATA declares runtime deps provided by comfyui pythonRuntime at runtime; build-time check fails → mkWheel adds `dontCheckRuntimeDeps = true`
+- **Flaky tests**: jupyter-server / scipy / fastapi / einops tests fail in sandbox → `doInstallCheck = false` (pytestCheckHook runs in installCheckPhase; `doCheck = false` has no effect)
+
+Required when using nixpkgs ≥ 2026-08-05.
 
 ## Usage
 
