@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-09T19:40:21+09:00
+
+**摘要**：feat(patches): 将本地 comfyui-nix 构建修复转正为补丁文件 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook，nixpkgs ≥ 8/5）；② flaky 套件 doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib 运行时依赖跳过。更新模块注释 + 4 语言文档。
+
+| 提交 | 说明 |
+|------|------|
+| `a8ad11e` | feat(patches): add comfyui-nix nixpkgs-compat patch + module doc |
+| `faefa5b` | docs(comfyui-rocm-patch): document nixpkgs-compat patch (4 langs) |
+
 ## 2026-08-09T19:05:53+09:00
 
 **摘要**：refactor(skill): nixkits-check-updates 新增 nixpkgs 漂移故障排查小节 — ① 恢复旧 flake.lock 需核对 flake.nix 的 follows 配置（丢失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest 包跳过测试用 doInstallCheck=false（pytestCheckHook 跑在 installCheckPhase）；③ pythonRuntimeDepsCheckHook（nixpkgs ≥ 8/5）破坏 wheel 构建，用 dontCheckRuntimeDeps=true 修复。

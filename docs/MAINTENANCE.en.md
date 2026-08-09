@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-09T19:40:21+09:00
+
+**Summary**: feat(patches): vendored local comfyui-nix build fixes as a patch file — ① mkWheel dontCheckRuntimeDeps (pythonRuntimeDepsCheckHook, nixpkgs ≥ 8/5); ② doInstallCheck=false for flaky suites (jupyter-server/scipy/fastapi/einops/mss/inline-snapshot); ③ torch/facexlib runtime-deps skip. Updated module comment + 4-language docs.
+
+| Commit | Description |
+|------|------|
+| `a8ad11e` | feat(patches): add comfyui-nix nixpkgs-compat patch + module doc |
+| `faefa5b` | docs(comfyui-rocm-patch): document nixpkgs-compat patch (4 langs) |
+
 ## 2026-08-09T19:05:53+09:00
 
 **Summary**: refactor(skill): nixkits-check-updates gains a nixpkgs-drift troubleshooting section — ① restoring old flake.lock requires verifying follows in flake.nix (lost → glibc 2.40 → GLIBC_ABI_GNU2_TLS); ② pytest packages need doInstallCheck=false (pytestCheckHook runs in installCheckPhase); ③ pythonRuntimeDepsCheckHook (nixpkgs ≥ 8/5) breaks wheel builds, fix with dontCheckRuntimeDeps=true.

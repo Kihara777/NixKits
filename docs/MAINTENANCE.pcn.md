@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-09T19:40:21+09:00
+
+**摘要**: feat(patches): 本地 comfyui-nix build 修正 patch 正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook ≥ 8/5）；② flaky 套件 doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib runtime 依頼 skip。module 注釈 + 4 言語文書更新。
+
+| 提交 | 説明 |
+|------|------|
+| `a8ad11e` | feat(patches): add comfyui-nix nixpkgs-compat patch + module doc |
+| `faefa5b` | docs(comfyui-rocm-patch): document nixpkgs-compat patch (4 langs) |
+
 ## 2026-08-09T19:05:53+09:00
 
 **摘要**: refactor(skill): nixkits-check-updates nixpkgs 漂移診断節追加 — ① 旧 flake.lock 復元 follows 要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest 包 doInstallCheck=false 使用；③ pythonRuntimeDepsCheckHook（≥ 8/5）wheel 構築破壊、dontCheckRuntimeDeps=true 修復。
