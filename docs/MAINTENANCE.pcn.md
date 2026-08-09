@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-09T04:21:09+09:00
+
+**摘要**: fix(module): llama-cpp — ① services.llama-cpp.extraFlags 非推奨、settings 採用；② freeform settings 分離定義不可、lib.mkMerge 統合。
+
+| 提交 | 説明 |
+|------|------|
+| `8026d8e` | fix(module): replace deprecated services.llama-cpp.extraFlags with settings |
+| `0ec7760` | fix(module): merge llama-cpp settings via mkMerge |
+
 ## 2026-08-08T23:07:40+09:00
 
 **摘要**: fix(breeze-black): look-and-feel 全局主題復元 + GTK 改名修正 — 7/23 外部補丁除去後 2 種後退：① org.kde.breezeblack.desktop 欠落 BreezeBlack 設定主題選択消失、local 内蔵復元；② preFixup Breeze* 同時匹配 Breeze/Breeze-Dark GTK 主題嵌套、Breeze 単独改名修正。

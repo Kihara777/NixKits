@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-09T04:21:09+09:00
+
+**摘要**：fix(module): llama-cpp — ① services.llama-cpp.extraFlags 已废弃，改用 settings 传递 --sleep-idle-seconds；② freeform settings 无法分离定义，改用 lib.mkMerge 合并 models-preset 与 sleep-idle-seconds。
+
+| 提交 | 说明 |
+|------|------|
+| `8026d8e` | fix(module): replace deprecated services.llama-cpp.extraFlags with settings |
+| `0ec7760` | fix(module): merge llama-cpp settings via mkMerge |
+
 ## 2026-08-08T23:07:40+09:00
 
 **摘要**：fix(breeze-black): 恢复 look-and-feel 全局主题并修复 GTK 重命名 — 7/23 移除外部补丁后两个回归：① org.kde.breezeblack.desktop 全局主题缺失导致 BreezeBlack 从系统设置主题选择页消失，本地内置 look-and-feel 包恢复；② preFixup 的 Breeze* 通配同时匹配 Breeze 与 Breeze-Dark，导致 GTK 主题嵌套失效，改为仅重命名 Breeze。
