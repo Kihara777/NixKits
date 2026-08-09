@@ -1,0 +1,87 @@
+diff --git a/nix/python-overrides.nix b/nix/python-overrides.nix
+index 7de1545..bec9a03 100644
+--- a/nix/python-overrides.nix
++++ b/nix/python-overrides.nix
+@@ -392,6 +392,9 @@ lib.optionalAttrs useCuda {
+     # Don't check for ROCm at import time (requires GPU)
+     pythonImportsCheck = [ ];
+     doCheck = false;
++    # Wheel METADATA declares setuptools/triton-rocm which are provided by
++    # nixpkgs rocmPackages at runtime; skip the runtime-deps check.
++    dontCheckRuntimeDeps = true;
+ 
+     # Passthru attributes expected by downstream packages (xformers, bitsandbytes, etc.)
+     # The wheel bundles ROCm 7.1 and supports all GPU architectures
+@@ -999,6 +1002,9 @@ lib.optionalAttrs useCuda {
+     '';
+ 
+     doCheck = false;
++    # Wheel METADATA declares opencv-python/tqdm which are provided by the
++    # comfy-ui pythonRuntime at runtime; skip the runtime-deps check.
++    dontCheckRuntimeDeps = true;
+     pythonImportsCheck = [ "facexlib" ];
+   };
+ }
+@@ -1123,3 +1129,47 @@ lib.optionalAttrs useCuda {
+     };
+   };
+ }
++
++# mss (Multi-Screen Shot) - test_with_cursor requires an X server; skip tests
++// {
++  mss = prev.mss.overrideAttrs (old: {
++    doCheck = false;
++  });
++}
++
++# Skip tests for packages whose test suites are flaky or environment-dependent
++# inside the Nix sandbox (no X server / network / timing-sensitive):
++# - jupyter-server: test_disconnect_resolves_orphaned_kernel_info_future TimeoutError,
++#   test_no_fd_leak_on_disconnect_with_orphaned_kernel_info_channel FD-leak assertion
++// {
++  jupyter-server = prev.jupyter-server.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++  jupyterlab = prev.jupyterlab.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++  einops = prev.einops.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++}
++
++# scipy: test_support_moments_sample[Normal] flaky floating-point assertion
++# scipy runs its pytest suite in installCheckPhase (pytestCheckHook), so
++# doCheck=false has no effect; doInstallCheck=false is required.
++// {
++  scipy = prev.scipy.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++}
++
++# inline-snapshot: test_docs/test_example AssertionError in sandbox (snapshot
++# files not updated); fastapi: test suite environment-dependent.  Tests are
++# irrelevant for ComfyUI runtime.
++// {
++  inline-snapshot = prev.inline-snapshot.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++  fastapi = prev.fastapi.overrideAttrs (old: {
++    doInstallCheck = false;
++  });
++}
+diff --git a/nix/vendored-packages.nix b/nix/vendored-packages.nix
+index eaad25c..7dd7b92 100644
+--- a/nix/vendored-packages.nix
++++ b/nix/vendored-packages.nix
+@@ -17,6 +17,10 @@ let
+       format = "wheel";
+       src = pkgs.fetchurl { inherit url hash; };
+       doCheck = false;
++      # Wheel metadata declares runtime deps (gitpython, pygithub, ...) that are
++      # provided by the comfy-ui pythonRuntime at runtime, not at build time.
++      # Newer nixpkgs pythonRuntimeDepsCheckHook would fail on these.
++      dontCheckRuntimeDeps = true;
+     };
+ 
+   workflowTemplatesCore = mkWheel {

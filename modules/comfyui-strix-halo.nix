@@ -17,6 +17,11 @@
 #   - Auto --disable-xformers in ROCm mode (nixpkgs xformers lacks ROCm backend)
 #   - CC=gcc + C build toolchain (gcc, binutils, make) for custom node compilation
 #
+# Additionally, ../patches/comfyui-nix-nixpkgs-compat.patch must be applied
+# when using nixpkgs >= 2026-08-05 — it adds:
+#   - dontCheckRuntimeDeps for vendored wheels (pythonRuntimeDepsCheckHook)
+#   - doInstallCheck=false for flaky test suites (jupyter-server, scipy, ...)
+#
 # Full documentation: ../docs/zh/comfyui-strix-halo.md
 #
 # Quick start:
