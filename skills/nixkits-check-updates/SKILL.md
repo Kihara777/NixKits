@@ -268,3 +268,16 @@ nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
 
 > 判断方法：报错含 `pythonRuntimeDepsCheckHook` / `not installed` / `GLIBC_ABI_GNU2_TLS`
 > 且位于 python 包构建阶段 → 命中陷阱 2 或 3；位于服务启动阶段 → 命中陷阱 1。
+
+### 4. 无参数 `nix flake lock` 会刷新所有浮动 input（nixpkgs 漂移重演）
+
+`nix flake lock`（不带参数）会把所有浮动引用的 input（如 `nixpkgs.url = ".../nixos-unstable"`）
+更新到最新版本。恢复旧 generation / 固定依赖后若需重新 lock：
+
+- ✅ 用 `nix flake lock --update-input <name>` 只更新目标 input
+- ✅ 或直接在 `flake.nix` 中把 nixpkgs 固定到已验证 rev（`github:nixos/nixpkgs/<full-rev>`）
+- ❌ 避免无参数 `nix flake lock`——会把 nixpkgs 漂移到新版本，触发新的
+  `pythonRuntimeDepsCheckHook` / flaky 测试失败（如 diffusers 缺 httpx）
+
+> 2026-08-09 实例：comfyui 修复后执行无参数 lock，nixpkgs 从 6438090（8/2）漂移到
+> f13ff45（8/7），`diffusers-0.38.0` 立即构建失败。固定 nixpkgs 到 6438090 后恢复。
