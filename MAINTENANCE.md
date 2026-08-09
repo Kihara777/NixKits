@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-09T22:43:43+09:00
+
+**摘要**：refactor(skill): 常见陷阱新增第 4 条 — 无参数 `nix flake lock` 会刷新所有浮动 input（nixpkgs 漂移重演，diffusers/httpx 在 8/7 nixpkgs 失败）。应使用 --update-input 或固定 nixpkgs rev。
+
+| 提交 | 说明 |
+|------|------|
+| `ec5e589` | refactor(skill): add trap 4 — bare nix flake lock refreshes floating inputs |
+
 ## 2026-08-09T19:40:21+09:00
 
 **摘要**：feat(patches): 将本地 comfyui-nix 构建修复转正为补丁文件 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook，nixpkgs ≥ 8/5）；② flaky 套件 doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib 运行时依赖跳过。更新模块注释 + 4 语言文档。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-09T22:43:43+09:00
+
+**Summary**: refactor(skill): add trap 4 — bare `nix flake lock` refreshes all floating inputs (nixpkgs drift re-triggers diffusers/httpx failure on 8/7 nixpkgs). Use --update-input or pin nixpkgs rev instead.
+
+| Commit | Description |
+|------|------|
+| `ec5e589` | refactor(skill): add trap 4 — bare nix flake lock refreshes floating inputs |
+
 ## 2026-08-09T19:40:21+09:00
 
 **Summary**: feat(patches): vendored local comfyui-nix build fixes as a patch file — ① mkWheel dontCheckRuntimeDeps (pythonRuntimeDepsCheckHook, nixpkgs ≥ 8/5); ② doInstallCheck=false for flaky suites (jupyter-server/scipy/fastapi/einops/mss/inline-snapshot); ③ torch/facexlib runtime-deps skip. Updated module comment + 4-language docs.

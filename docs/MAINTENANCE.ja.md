@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-09T22:43:43+09:00
+
+**概要**: refactor(skill): トラップ4追加 — 無引数 `nix flake lock` は全フローティング input を更新（nixpkgs ドリフト再発、8/7 nixpkgs で diffusers/httpx 失敗）。--update-input または nixpkgs rev 固定を使用。
+
+| コミット | 説明 |
+|------|------|
+| `ec5e589` | refactor(skill): add trap 4 — bare nix flake lock refreshes floating inputs |
+
 ## 2026-08-09T19:40:21+09:00
 
 **概要**: feat(patches): ローカル comfyui-nix ビルド修正をパッチファイルとして正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook、nixpkgs ≥ 8/5）；② flaky スイート doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib ランタイム依存スキップ。モジュールコメント + 4 言語ドキュメント更新。
