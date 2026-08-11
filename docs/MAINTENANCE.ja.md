@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T18:49:54+09:00
+
+**概要**: fix(breeze-black): Edge/Chromium 用 純黒背景 + 純白前景 — sed 再マップ拡張：背景 #292c30 → #000000（ボタン/ツールバー/無効化）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、灰色残りゼロ。
+
+| コミット | 説明 |
+|------|------|
+| `4e5c558` | fix(breeze-black): pure black bg + pure white fg for Edge/Chromium |
+
 ## 2026-08-11T18:41:14+09:00
 
 **概要**: fix(breeze-black): 背景変数を真っ黒 #000000 にマップ — Breeze-Dark の基本色は #202326（濃灰、純黒でない）。CSS コピー後、主背景/base を #000000 に再マップ（ボタンは #292c30 を維持し区別を確保）、gtk-dark.css は自己完結化（gtk.css のコピー）し灰色 import を廃止。

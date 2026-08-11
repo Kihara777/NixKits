@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T18:49:54+09:00
+
+**Summary**: fix(breeze-black): pure black bg + pure white fg for Edge/Chromium — extended sed remap: backgrounds #292c30 → #000000 (buttons/toolbars/insensitive), foregrounds #fcfcfc/#a1a9b1 → #ffffff. gtk-3.0/4.0 verified: 15× #000000, 14× #ffffff, zero gray residues.
+
+| Commit | Description |
+|------|------|
+| `4e5c558` | fix(breeze-black): pure black bg + pure white fg for Edge/Chromium |
+
 ## 2026-08-11T18:41:14+09:00
 
 **Summary**: fix(breeze-black): map background variables to true black #000000 — Breeze-Dark base is #202326 (dark gray, not pure black). Remap main background/base to #000000 after copying (buttons keep #292c30 for distinction), make gtk-dark.css self-contained (copy of gtk.css), dropping the gray import.
