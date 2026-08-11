@@ -54,10 +54,10 @@ in {
               cp -f "$out/share/themes/Breeze-Dark/gtk-$v/$f" "$out/share/themes/BreezeBlack/gtk-$v/$f"
             fi
           done
-          # True-black: Breeze-Dark's base bg is #202326 (dark gray), not
-          # pure black.  Map the main background/base variables to #000000,
-          # keeping slightly-lighter grays only for raised elements (buttons,
-          # toolbars) so widgets remain visually distinct.
+          # True-black + true-white: Breeze-Dark uses dark-gray backgrounds
+          # (#202326) and near-white foregrounds (#fcfcfc).  User wants the
+          # whole background (incl. buttons/toolbars/insensitive) pure black
+          # and every foreground (buttons/icons/text) pure white.
           if [ -f "$out/share/themes/BreezeBlack/gtk-$v/gtk.css" ]; then
             sed -i \
               -e 's/#202326/#000000/g' \
@@ -65,6 +65,9 @@ in {
               -e 's/#121416/#000000/g' \
               -e 's/#1d2023/#000000/g' \
               -e 's/#202428/#000000/g' \
+              -e 's/#292c30/#000000/g' \
+              -e 's/#fcfcfc/#ffffff/g' \
+              -e 's/#a1a9b1/#ffffff/g' \
               "$out/share/themes/BreezeBlack/gtk-$v/gtk.css"
             # gtk-dark.css: make self-contained (copy of gtk.css) so it no
             # longer depends on Breeze-Dark's gray import.
