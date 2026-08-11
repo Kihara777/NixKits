@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-12T07:07:27+09:00
+
+**Summary**: feat(godot-ai): new godot-ai 3.1.5 package + fastmcp 3.4.7 overlay. godot-ai is a production-grade MCP server connecting clients to a running Godot editor. fastmcp bumped 3.3.1→3.4.7 (godot-ai needs >=3.4.0, 3.3.x has circular-import bug), with cascading fastmcp-slim + py-key-value-aio 0.4.5 upgrades. devshell godot-mcp→godot-ai.
+
+| Commit | Description |
+|------|------|
+| `23a5b8d` | feat(godot-ai): add godot-ai 3.1.5 package + fastmcp 3.4.7 overlay |
+
 ## 2026-08-11T18:49:54+09:00
 
 **Summary**: fix(breeze-black): pure black bg + pure white fg for Edge/Chromium — extended sed remap: backgrounds #292c30 → #000000 (buttons/toolbars/insensitive), foregrounds #fcfcfc/#a1a9b1 → #ffffff. gtk-3.0/4.0 verified: 15× #000000, 14× #ffffff, zero gray residues.

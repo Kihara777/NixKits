@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-12T07:07:27+09:00
+
+**概要**: feat(godot-ai): godot-ai 3.1.5 パッケージ新規追加 + fastmcp 3.4.7 overlay。godot-ai は MCP クライアントを実行中 Godot エディタに接続する本格 MCP server。fastmcp 3.3.1→3.4.7（godot-ai が >=3.4.0 を要求、3.3.x に循環 import バグ）、fastmcp-slim + py-key-value-aio 0.4.5 も連動アップグレード。devshell godot-mcp→godot-ai。
+
+| コミット | 説明 |
+|------|------|
+| `23a5b8d` | feat(godot-ai): add godot-ai 3.1.5 package + fastmcp 3.4.7 overlay |
+
 ## 2026-08-11T18:49:54+09:00
 
 **概要**: fix(breeze-black): Edge/Chromium 用 純黒背景 + 純白前景 — sed 再マップ拡張：背景 #292c30 → #000000（ボタン/ツールバー/無効化）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、灰色残りゼロ。

@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-12T07:07:27+09:00
+
+**摘要**：feat(godot-ai): 新增 godot-ai 3.1.5 包 + fastmcp 3.4.7 overlay。godot-ai（hi-godot/godot-ai）是 Production-grade MCP server，连接 MCP 客户端到运行中的 Godot 编辑器（43 工具 / 120+ 操作）。fastmcp 从 nixpkgs 3.3.1 升级到 3.4.7（godot-ai 要求 >=3.4.0，排除 3.3.x 的 circular-import bug），联动升级 fastmcp-slim + py-key-value-aio 0.4.5。devshell godot-mcp → godot-ai。
+
+| 提交 | 说明 |
+|------|------|
+| `23a5b8d` | feat(godot-ai): add godot-ai 3.1.5 package + fastmcp 3.4.7 overlay |
+
 ## 2026-08-11T18:49:54+09:00
 
 **摘要**：fix(breeze-black): Edge/Chromium 纯黑背景 + 纯白前景 — 扩展 sed 重映射：背景 #292c30 → #000000（按钮/工具栏/禁用），前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 验证：15× #000000、14× #ffffff、零灰残留。
