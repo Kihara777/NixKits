@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:19:49+09:00
+
+**Summary**: fix(breeze-black): overwrite gtk.css body with Breeze-Dark dark scheme — Chromium-based apps (Edge/Chrome) ignore prefer-dark and load gtk.css directly; BreezeBlack (renamed from light Breeze) still had light variables (#eff0f1) so Edge rendered gray. Overwrite gtk-{3,4}.0 gtk.css(+.map) with dark (#202326).
+
+| Commit | Description |
+|------|------|
+| `25e23e0` | fix(breeze-black): overwrite gtk.css body with Breeze-Dark dark scheme |
+
 ## 2026-08-11T16:02:39+09:00
 
 **Summary**: fix(breeze-black): keep Breeze-Dark — BreezeBlack gtk-dark.css imports it for the real dark scheme (#202326); deleting it in preFixup broke the import and GTK fell back to light (the "not black enough" symptom).

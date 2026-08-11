@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:19:49+09:00
+
+**摘要**：fix(breeze-black): 用 Breeze-Dark 深色方案覆盖 gtk.css 本体 — Chromium 系（Edge/Chrome）不遵循 prefer-dark，直接加载 gtk.css；BreezeBlack（浅色 Breeze 重命名）仍带浅色变量（#eff0f1），导致 Edge 显示灰色。覆盖 gtk-{3,4}.0 的 gtk.css(+.map) 为深色（#202326）。
+
+| 提交 | 说明 |
+|------|------|
+| `25e23e0` | fix(breeze-black): overwrite gtk.css body with Breeze-Dark dark scheme |
+
 ## 2026-08-11T16:02:39+09:00
 
 **摘要**：fix(breeze-black): 保留 Breeze-Dark — BreezeBlack 的 gtk-dark.css 通过 `@import ../../Breeze-Dark/...` 获取真正的深色配色（#202326），preFixup 中删除 Breeze-Dark 导致 import 断裂、GTK 回退浅色（「不够黑」症状）。

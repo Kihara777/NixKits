@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:19:49+09:00
+
+**概要**: fix(breeze-black): gtk.css 本体を Breeze-Dark のダーク配色で上書き — Chromium 系（Edge/Chrome）は prefer-dark を無視して gtk.css を直接読み込む；BreezeBlack（ライト Breeze からの改名）にライト変数（#eff0f1）が残り Edge がグレー表示。gtk-{3,4}.0 の gtk.css(+.map) をダーク（#202326）に上書き。
+
+| コミット | 説明 |
+|------|------|
+| `25e23e0` | fix(breeze-black): overwrite gtk.css body with Breeze-Dark dark scheme |
+
 ## 2026-08-11T16:02:39+09:00
 
 **概要**: fix(breeze-black): Breeze-Dark を保持 — BreezeBlack の gtk-dark.css が `@import ../../Breeze-Dark/...` で本物のダーク配色（#202326）を取得。preFixup での削除で import が切れ GTK がライトにフォールバック（「黒くない」症状）。
