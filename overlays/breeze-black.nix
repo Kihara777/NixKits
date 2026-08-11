@@ -31,11 +31,16 @@ in {
       # dark via the assets→assets-dark substitution above).  Do NOT glob
       # Breeze* — that would also match Breeze-Dark and nest it inside
       # BreezeBlack, breaking GTK theme detection.
+      #
+      # Keep Breeze-Dark: BreezeBlack/gtk-{3,4}.0/gtk-dark.css contains
+      #   @import url("../../Breeze-Dark/gtk-3.0/gtk.css")
+      # which provides the actual dark color scheme (#202326 bg).  Deleting
+      # Breeze-Dark breaks that import and GTK falls back to the light
+      # theme — the "not black enough" symptom.
       preFixup = (old.preFixup or "") + ''
         if [ -d "$out/share/themes/Breeze" ]; then
           mv "$out/share/themes/Breeze" "$out/share/themes/BreezeBlack"
         fi
-        rm -rf "$out/share/themes/Breeze-Dark"
       '';
     });
   };
