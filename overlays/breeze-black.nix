@@ -37,10 +37,24 @@ in {
       # which provides the actual dark color scheme (#202326 bg).  Deleting
       # Breeze-Dark breaks that import and GTK falls back to the light
       # theme — the "not black enough" symptom.
+      #
+      # Chromium-based apps (Edge/Chrome) do NOT honor gtk-application-
+      # prefer-dark-theme; they load gtk.css directly.  BreezeBlack was
+      # renamed from the light "Breeze", so its gtk.css still carries light
+      # variables (#eff0f1).  Overwrite the CSS bodies with Breeze-Dark's
+      # dark ones so every loader (GTK dark-pref, plain GTK, Chromium, ...)
+      # gets the dark scheme.
       preFixup = (old.preFixup or "") + ''
         if [ -d "$out/share/themes/Breeze" ]; then
           mv "$out/share/themes/Breeze" "$out/share/themes/BreezeBlack"
         fi
+        for v in 3.0 4.0; do
+          for f in gtk.css gtk.css.map; do
+            if [ -f "$out/share/themes/Breeze-Dark/gtk-$v/$f" ]; then
+              cp -f "$out/share/themes/Breeze-Dark/gtk-$v/$f" "$out/share/themes/BreezeBlack/gtk-$v/$f"
+            fi
+          done
+        done
       '';
     });
   };
