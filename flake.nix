@@ -19,6 +19,8 @@
     allSystems = flake-utils.lib.defaultSystems ++ [ "riscv64-linux" ];
   in flake-utils.lib.eachSystem allSystems (system: let
     pkgs = nixpkgs.legacyPackages.${system};
+    # godot-ai needs fastmcp >= 3.4 (3.3.x has circular-import bug)
+    godotPkgs = pkgs.extend self.overlays.fastmcp;
     kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
     packages = rec {
@@ -34,6 +36,7 @@
       ruyi                 = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       ruyi-beta            = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
+      godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
@@ -41,9 +44,9 @@
     '';
 
     devShells = let
-      inherit (self.packages.${system}) blender-mcp mcp-searxng opencode-telegram ruyi ruyi-beta ruyi-alpha;
+      inherit (self.packages.${system}) blender-mcp mcp-searxng opencode-telegram ruyi ruyi-beta ruyi-alpha godot-ai;
     in {
-      opencode   = pkgs.callPackage ./develop/opencode.nix   { inherit blender-mcp mcp-searxng opencode-telegram; };
+      opencode   = pkgs.callPackage ./develop/opencode.nix   { inherit blender-mcp mcp-searxng opencode-telegram godot-ai; };
       ruyi       = pkgs.callPackage ./develop/ruyi.nix       { inherit ruyi; };
       ruyi-beta  = pkgs.callPackage ./develop/ruyi-beta.nix  { inherit ruyi-beta; };
       ruyi-alpha = pkgs.callPackage ./develop/ruyi-alpha.nix { inherit ruyi-alpha; };
@@ -66,6 +69,7 @@
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
       breeze-black       = import ./overlays/breeze-black.nix;
+      fastmcp            = import ./overlays/fastmcp.nix;
     };
 
   };

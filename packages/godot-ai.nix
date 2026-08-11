@@ -1,0 +1,42 @@
+{
+  lib,
+  fetchFromGitHub,
+  python312,
+}:
+
+python312.pkgs.buildPythonApplication rec {
+  pname = "godot-ai";
+  version = "3.1.5";
+
+  src = fetchFromGitHub {
+    owner = "hi-godot";
+    repo = "godot-ai";
+    tag = "v${version}";
+    hash = "sha256-zqZnKk0NZlK5AYuCduoytifRPZCl22nO6rDgdIewEi4=";
+  };
+
+  pyproject = true;
+
+  dependencies = with python312.pkgs; [
+    fastmcp
+    websockets
+    pydantic
+    httpx
+    uvicorn
+    starlette
+  ];
+
+  # Tests split into unit/ and integration/; integration tests require a
+  # live Godot editor instance, unavailable in the sandbox.
+  doCheck = false;
+
+  meta = {
+    description = "Production-grade MCP server and AI tools for the Godot engine";
+    homepage = "https://github.com/hi-godot/godot-ai";
+    changelog = "https://github.com/hi-godot/godot-ai/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    mainProgram = "godot-ai";
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+  };
+}

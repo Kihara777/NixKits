@@ -1,7 +1,8 @@
 # opencode devShell — OpenAI Code CLI + Telegram bot + MCP servers
-# Includes: opencode, opencode-telegram, blender-mcp, mcp-searxng, godot-mcp
+# Includes: opencode, opencode-telegram, blender-mcp, mcp-searxng, godot-ai
 {
   pkgs,
+  godot-ai,
   blender-mcp,
   opencode-telegram,
   mcp-searxng,
@@ -20,7 +21,7 @@ pkgs.mkShell {
     pkgs.searxng
     pkgs.redis
     pkgs.lighttpd
-    pkgs.godot-mcp
+    godot-ai
     pkgs.godot
   ];
   shellHook = ''
@@ -105,7 +106,7 @@ LTCONF
       "env": { "BLENDER_PATH": "${pkgs.blender}/bin/blender" }
     },
     "Godot": {
-      "command": "godot-mcp",
+      "command": "godot-ai",
       "env": { "GODOT_PATH": "${pkgs.godot}/bin/godot" }
     }
   }
@@ -113,6 +114,6 @@ LTCONF
 MCPJSON
       echo "opencode mcp.json initialized at $OPENCODE_MCP_FILE"
     fi
-    echo "opencode + mcp-searxng + blender-mcp + godot-mcp ready"
+    echo "opencode + mcp-searxng + blender-mcp + godot-ai ready"
   '';
 }

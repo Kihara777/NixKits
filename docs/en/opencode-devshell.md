@@ -18,7 +18,7 @@ nix develop nixkits#opencode
 | blender | `blender` | `${BLENDER_PATH}` |
 | blender-mcp | `blender-mcp` | `blender-mcp` (MCP, stdio) |
 | godot | `godot` | `${GODOT_PATH}` |
-| godot-mcp | `nixpkgs#godot-mcp` | `godot-mcp` (MCP, stdio) |
+| godot-ai | `nixkits#godot-ai` | `godot-ai` (MCP, stdio) |
 | SearXNG | `searxng` | `http://127.0.0.1:4270` (lighttpd proxy → searxng:42701) |
 | mcp-searxng | `mcp-searxng` | `mcp-searxng` (MCP, stdio) |
 | Redis | `redis` | unix socket |
@@ -40,7 +40,7 @@ On first entry, if `~/.config/opencode/mcp.json` does not exist, it is auto-gene
 |--------|--------|-----|
 | SearXNG | `mcp-searxng` | `SEARXNG_URL` |
 | Blender | `blender-mcp` | `BLENDER_PATH` |
-| Godot | `godot-mcp` | `GODOT_PATH` |
+| Godot | `godot-ai` | `GODOT_PATH` |
 
 ## Skill Auto-Install
 

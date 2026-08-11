@@ -45,7 +45,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ### flake 相关
 
 - **`flake.lock` 不提交**：`.gitignore` 中保留 `flake.lock`。原因是 `llama-cpp-ver` 为浮动输入，锁定后随上游发布而过期。
-- **本地操作前先移除 `flake.lock`**：执行 `nix build`、`nix develop`、`nix flake check` 等命令前，先执行 `rm -f flake.lock`。锁定的 nixpkgs snapshot 可能缺少部分包（如 `godot-mcp`），移除后 Nix 重新解析输入确保使用最新可用版本。CI 中无需此操作——CI 按 `check.yml` 配置独立解析。
+- **本地操作前先移除 `flake.lock`**：执行 `nix build`、`nix develop`、`nix flake check` 等命令前，先执行 `rm -f flake.lock`。锁定的 nixpkgs snapshot 可能缺少部分包（如自建包 `godot-ai`），移除后 Nix 重新解析输入确保使用最新可用版本。CI 中无需此操作——CI 按 `check.yml` 配置独立解析。
 - **`llama-cpp-ver` 输入是浮动追踪**：overlay `llama-cpp-rocm` 通过此输入动态获取上游最新版本号，不可锁定。
 - **overlay `llama-cpp-rocm` 的 curried 形式是有意的**：`{ llama-cpp-ver }: (final: prev: ...)` — 勿改为标准 overlay。
 - **新模块/包/overlay 加入 `flake.nix` 后必须 `nix flake check` 验证**。
