@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:02:39+09:00
+
+**摘要**：fix(breeze-black): 保留 Breeze-Dark — BreezeBlack 的 gtk-dark.css 通过 `@import ../../Breeze-Dark/...` 获取真正的深色配色（#202326），preFixup 中删除 Breeze-Dark 导致 import 断裂、GTK 回退浅色（「不够黑」症状）。
+
+| 提交 | 说明 |
+|------|------|
+| `0433eee` | fix(breeze-black): keep Breeze-Dark — gtk-dark.css imports it for dark mode |
+
 ## 2026-08-09T22:43:43+09:00
 
 **摘要**：refactor(skill): 常见陷阱新增第 4 条 — 无参数 `nix flake lock` 会刷新所有浮动 input（nixpkgs 漂移重演，diffusers/httpx 在 8/7 nixpkgs 失败）。应使用 --update-input 或固定 nixpkgs rev。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:02:39+09:00
+
+**概要**: fix(breeze-black): Breeze-Dark を保持 — BreezeBlack の gtk-dark.css が `@import ../../Breeze-Dark/...` で本物のダーク配色（#202326）を取得。preFixup での削除で import が切れ GTK がライトにフォールバック（「黒くない」症状）。
+
+| コミット | 説明 |
+|------|------|
+| `0433eee` | fix(breeze-black): keep Breeze-Dark — gtk-dark.css imports it for dark mode |
+
 ## 2026-08-09T22:43:43+09:00
 
 **概要**: refactor(skill): トラップ4追加 — 無引数 `nix flake lock` は全フローティング input を更新（nixpkgs ドリフト再発、8/7 nixpkgs で diffusers/httpx 失敗）。--update-input または nixpkgs rev 固定を使用。

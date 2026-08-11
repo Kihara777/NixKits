@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T16:02:39+09:00
+
+**Summary**: fix(breeze-black): keep Breeze-Dark — BreezeBlack gtk-dark.css imports it for the real dark scheme (#202326); deleting it in preFixup broke the import and GTK fell back to light (the "not black enough" symptom).
+
+| Commit | Description |
+|------|------|
+| `0433eee` | fix(breeze-black): keep Breeze-Dark — gtk-dark.css imports it for dark mode |
+
 ## 2026-08-09T22:43:43+09:00
 
 **Summary**: refactor(skill): add trap 4 — bare `nix flake lock` refreshes all floating inputs (nixpkgs drift re-triggers diffusers/httpx failure on 8/7 nixpkgs). Use --update-input or pin nixpkgs rev instead.
