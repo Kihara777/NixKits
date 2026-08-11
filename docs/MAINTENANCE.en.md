@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T18:41:14+09:00
+
+**Summary**: fix(breeze-black): map background variables to true black #000000 — Breeze-Dark base is #202326 (dark gray, not pure black). Remap main background/base to #000000 after copying (buttons keep #292c30 for distinction), make gtk-dark.css self-contained (copy of gtk.css), dropping the gray import.
+
+| Commit | Description |
+|------|------|
+| `2ee1ba6` | fix(breeze-black): map background variables to true black #000000 |
+
 ## 2026-08-11T16:19:49+09:00
 
 **Summary**: fix(breeze-black): overwrite gtk.css body with Breeze-Dark dark scheme — Chromium-based apps (Edge/Chrome) ignore prefer-dark and load gtk.css directly; BreezeBlack (renamed from light Breeze) still had light variables (#eff0f1) so Edge rendered gray. Overwrite gtk-{3,4}.0 gtk.css(+.map) with dark (#202326).

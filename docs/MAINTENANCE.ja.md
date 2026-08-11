@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-11T18:41:14+09:00
+
+**概要**: fix(breeze-black): 背景変数を真っ黒 #000000 にマップ — Breeze-Dark の基本色は #202326（濃灰、純黒でない）。CSS コピー後、主背景/base を #000000 に再マップ（ボタンは #292c30 を維持し区別を確保）、gtk-dark.css は自己完結化（gtk.css のコピー）し灰色 import を廃止。
+
+| コミット | 説明 |
+|------|------|
+| `2ee1ba6` | fix(breeze-black): map background variables to true black #000000 |
+
 ## 2026-08-11T16:19:49+09:00
 
 **概要**: fix(breeze-black): gtk.css 本体を Breeze-Dark のダーク配色で上書き — Chromium 系（Edge/Chrome）は prefer-dark を無視して gtk.css を直接読み込む；BreezeBlack（ライト Breeze からの改名）にライト変数（#eff0f1）が残り Edge がグレー表示。gtk-{3,4}.0 の gtk.css(+.map) をダーク（#202326）に上書き。

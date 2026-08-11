@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-11T18:41:14+09:00
+
+**摘要**：fix(breeze-black): 背景变量映射为纯黑 #000000 — Breeze-Dark 基础色是 #202326（深灰非纯黑）。复制 CSS 后重映射主背景/base 为 #000000（按钮保留 #292c30 保持层次），gtk-dark.css 改为自包含（复制 gtk.css）不再依赖灰色 import。
+
+| 提交 | 说明 |
+|------|------|
+| `2ee1ba6` | fix(breeze-black): map background variables to true black #000000 |
+
 ## 2026-08-11T16:19:49+09:00
 
 **摘要**：fix(breeze-black): 用 Breeze-Dark 深色方案覆盖 gtk.css 本体 — Chromium 系（Edge/Chrome）不遵循 prefer-dark，直接加载 gtk.css；BreezeBlack（浅色 Breeze 重命名）仍带浅色变量（#eff0f1），导致 Edge 显示灰色。覆盖 gtk-{3,4}.0 的 gtk.css(+.map) 为深色（#202326）。
