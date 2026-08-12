@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-12T10:00:00+09:00
+
+**概要**: fix(default-overlay): godot-ai を登録 — flake packages には存在するが デフォルト overlay から漏れており、下流（/etc/nixos）から pkgs.godot-ai として見えなかった。
+
+| コミット | 説明 |
+|------|------|
+| `093565c` | fix(default-overlay): register godot-ai so pkgs.godot-ai is available |
+
 ## 2026-08-12T09:18:26+09:00
 
 **概要**: docs(godot-ai): 4言語ドキュメント新規追加（72行）— アーキテクチャ図、依存表（fastmcp 3.4 含む）、システムインストール + MCP 設定 + 前提条件ガイド。
