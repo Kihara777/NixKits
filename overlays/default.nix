@@ -8,5 +8,8 @@ final: prev: {
   ruyi                 = final.callPackage ../packages/ruyi/ruyi.nix { };
   ruyi-beta            = final.callPackage ../packages/ruyi/ruyi-beta.nix { };
   ruyi-alpha           = final.callPackage ../packages/ruyi/ruyi-alpha.nix { };
-  godot-ai             = final.callPackage ../packages/godot-ai.nix { };
+  # godot-ai needs fastmcp >= 3.4.0 (nixpkgs pins 3.3.1, which has a
+  # circular-import bug).  Build it with the fastmcp overlay applied so its
+  # dependencies resolve to 3.4.7.
+  godot-ai             = (prev.extend (import ./fastmcp.nix)).callPackage ../packages/godot-ai.nix { };
 }
