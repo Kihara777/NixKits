@@ -8,4 +8,5 @@ final: prev: {
   ruyi                 = final.callPackage ../packages/ruyi/ruyi.nix { };
   ruyi-beta            = final.callPackage ../packages/ruyi/ruyi-beta.nix { };
   ruyi-alpha           = final.callPackage ../packages/ruyi/ruyi-alpha.nix { };
+  godot-ai             = final.callPackage ./packages/godot-ai.nix { };
 }
