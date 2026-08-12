@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-12T09:18:26+09:00
+
+**摘要**: docs(godot-ai): 4言語文書新規追加（72行）— 架構図、依存表（fastmcp 3.4 含）、系統導入 + MCP 設定 + 前提條件指南。
+
+| 提交 | 説明 |
+|------|------|
+| `76c39c8` | docs(godot-ai): add 4-language documentation |
+
 ## 2026-08-12T07:07:27+09:00
 
 **摘要**: feat(godot-ai): godot-ai 3.1.5 新包 + fastmcp 3.4.7 overlay。godot-ai MCP client Godot editor 接続本格 MCP server。fastmcp 3.3.1→3.4.7（必要 >=3.4.0、3.3.x 循環 import bug）、fastmcp-slim + py-key-value-aio 0.4.5 連動。devshell godot-mcp→godot-ai。

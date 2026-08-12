@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-12T09:18:26+09:00
+
+**Summary**: docs(godot-ai): new 4-language docs (72 lines) — architecture diagram, dependency table (with fastmcp 3.4 note), system install + MCP config + prerequisite guide.
+
+| Commit | Description |
+|------|------|
+| `76c39c8` | docs(godot-ai): add 4-language documentation |
+
 ## 2026-08-12T07:07:27+09:00
 
 **Summary**: feat(godot-ai): new godot-ai 3.1.5 package + fastmcp 3.4.7 overlay. godot-ai is a production-grade MCP server connecting clients to a running Godot editor. fastmcp bumped 3.3.1→3.4.7 (godot-ai needs >=3.4.0, 3.3.x has circular-import bug), with cascading fastmcp-slim + py-key-value-aio 0.4.5 upgrades. devshell godot-mcp→godot-ai.

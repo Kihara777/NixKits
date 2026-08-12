@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-12T09:18:26+09:00
+
+**摘要**：docs(godot-ai): 新增 4 语言文档（72 行）— 架构图、依赖表（含 fastmcp 3.4 说明）、系统安装 + MCP 配置 + 前置条件指南。
+
+| 提交 | 说明 |
+|------|------|
+| `76c39c8` | docs(godot-ai): add 4-language documentation |
+
 ## 2026-08-12T07:07:27+09:00
 
 **摘要**：feat(godot-ai): 新增 godot-ai 3.1.5 包 + fastmcp 3.4.7 overlay。godot-ai（hi-godot/godot-ai）是 Production-grade MCP server，连接 MCP 客户端到运行中的 Godot 编辑器（43 工具 / 120+ 操作）。fastmcp 从 nixpkgs 3.3.1 升级到 3.4.7（godot-ai 要求 >=3.4.0，排除 3.3.x 的 circular-import bug），联动升级 fastmcp-slim + py-key-value-aio 0.4.5。devshell godot-mcp → godot-ai。
