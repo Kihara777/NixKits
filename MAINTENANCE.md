@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-13T01:20:29+09:00
+
+**摘要**：fix(default-overlay): godot-ai 应用 fastmcp overlay 构建 — default overlay 的 final.callPackage 将 fastmcp 解析为 nixpkgs 3.3.1（circular-import bug），改用 (prev.extend (import ./fastmcp.nix)) 使依赖解析为 3.4.7。
+
+| 提交 | 说明 |
+|------|------|
+| `94d49b5` | fix(default-overlay): build godot-ai with fastmcp overlay applied |
+
 ## 2026-08-12T10:05:00+09:00
 
 **摘要**：fix(default-overlay): 修正 godot-ai 包路径 — `overlays/default.nix` 中 `callPackage` 路径应为 `../packages/`（overlay 在子目录），误写为 `./packages/` 导致路径解析到不存在的 `overlays/packages/`。

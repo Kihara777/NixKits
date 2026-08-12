@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-13T01:20:29+09:00
+
+**概要**: fix(default-overlay): godot-ai を fastmcp overlay 適用で構築 — default overlay の final.callPackage が fastmcp を nixpkgs 3.3.1（循環 import バグ）に解決。 (prev.extend (import ./fastmcp.nix)) で依存を 3.4.7 に解決。
+
+| コミット | 説明 |
+|------|------|
+| `94d49b5` | fix(default-overlay): build godot-ai with fastmcp overlay applied |
+
 ## 2026-08-12T10:05:00+09:00
 
 **概要**: fix(default-overlay): godot-ai パス修正 — default overlay の callPackage は `../packages/`（overlay がサブディレクトリのため）であり、`./packages/` では存在しない `overlays/packages/` に解決された。

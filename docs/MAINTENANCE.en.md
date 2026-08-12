@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-13T01:20:29+09:00
+
+**Summary**: fix(default-overlay): build godot-ai with fastmcp overlay — default overlay final.callPackage resolved fastmcp to nixpkgs 3.3.1 (circular-import bug); use (prev.extend (import ./fastmcp.nix)) so deps resolve to 3.4.7.
+
+| Commit | Description |
+|------|------|
+| `94d49b5` | fix(default-overlay): build godot-ai with fastmcp overlay applied |
+
 ## 2026-08-12T10:05:00+09:00
 
 **Summary**: fix(default-overlay): correct godot-ai path — callPackage in default overlay needs ../packages/ (overlay is in a subdirectory), not ./packages/ which resolved to the non-existent overlays/packages/.
