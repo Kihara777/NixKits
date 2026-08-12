@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-12T10:05:00+09:00
+
+**摘要**：fix(default-overlay): 修正 godot-ai 包路径 — `overlays/default.nix` 中 `callPackage` 路径应为 `../packages/`（overlay 在子目录），误写为 `./packages/` 导致路径解析到不存在的 `overlays/packages/`。
+
+| 提交 | 说明 |
+|------|------|
+| `0144283` | fix(default-overlay): correct godot-ai path — ./packages → ../packages |
+
 ## 2026-08-12T10:00:00+09:00
 
 **摘要**：fix(default-overlay): 注册 godot-ai — godot-ai 在 flake packages 中存在但遗漏于默认 overlay，下游（/etc/nixos）通过 pkgs.godot-ai 不可见。

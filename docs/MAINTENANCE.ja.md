@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-12T10:05:00+09:00
+
+**概要**: fix(default-overlay): godot-ai パス修正 — default overlay の callPackage は `../packages/`（overlay がサブディレクトリのため）であり、`./packages/` では存在しない `overlays/packages/` に解決された。
+
+| コミット | 説明 |
+|------|------|
+| `0144283` | fix(default-overlay): correct godot-ai path — ./packages → ../packages |
+
 ## 2026-08-12T10:00:00+09:00
 
 **概要**: fix(default-overlay): godot-ai を登録 — flake packages には存在するが デフォルト overlay から漏れており、下流（/etc/nixos）から pkgs.godot-ai として見えなかった。

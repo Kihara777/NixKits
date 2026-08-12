@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-12T10:05:00+09:00
+
+**摘要**: fix(default-overlay): godot-ai 路径修正 — default overlay callPackage `../packages/` 要（overlay 子目録）、`./packages/` 誤無存 `overlays/packages/` 解決。
+
+| 提交 | 説明 |
+|------|------|
+| `0144283` | fix(default-overlay): correct godot-ai path — ./packages → ../packages |
+
 ## 2026-08-12T10:00:00+09:00
 
 **摘要**: fix(default-overlay): godot-ai 登録 — flake packages 存在 default overlay 遺漏、下流 pkgs.godot-ai 不可視。
