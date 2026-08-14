@@ -17,6 +17,14 @@ python312.pkgs.buildPythonApplication rec {
 
   pyproject = true;
 
+  # godot-ai's pyproject.toml uses setuptools.build_meta (requires
+  # setuptools>=75.0); buildPythonApplication must declare it via build-system
+  # or the pypa build phase fails with "Backend 'setuptools.build_meta' is
+  # not available".
+  build-system = with python312.pkgs; [
+    setuptools
+  ];
+
   dependencies = with python312.pkgs; [
     fastmcp
     websockets
