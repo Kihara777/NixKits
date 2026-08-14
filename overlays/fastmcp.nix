@@ -57,10 +57,15 @@ in {
           src = fastmcpSrc;
         });
 
-      py-key-value-aio = pyPrev.py-key-value-aio.overridePythonAttrs (old: {
-        version = "0.4.5";
-        src = pyKvSrc;
-      });
+      py-key-value-aio = pyPrev.py-key-value-aio.overridePythonAttrs (old:
+        (noTests old) // {
+          version = "0.4.5";
+          src = pyKvSrc;
+        });
+
+      # fastapi's own nativeCheckInputs pull inline-snapshot → … → scipy.
+      # Override it too, and point py-key-value-aio's propagated fastapi at it.
+      fastapi = pyPrev.fastapi.overridePythonAttrs (old: noTests old);
     };
   };
 })
