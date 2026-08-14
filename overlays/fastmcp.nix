@@ -18,36 +18,48 @@
     tag = "0.4.5";
     hash = "sha256-N+bqgKkSVGEKW/BEWgcFiHEuFjGbgIn/j33Vd0YoJ7s=";
   };
+
+  # True if a package is (or pulls in) one of the flaky test-suite packages
+  # whose tests fail on recent nixpkgs.  Used to detect mcp-like deps.
+  nameOf = p: if builtins.isString p then p else (p.pname or p.name or "");
 in {
   python312 = prev.python312.override {
-    packageOverrides = pyFinal: pyPrev: {
+    packageOverrides = pyFinal: pyPrev: let
       # Use overridePythonAttrs (not overrideAttrs) — nativeCheckInputs is an
       # excludeDrvArgNames entry in mk-python-derivation, so plain overrideAttrs
       # cannot clear it; extendDrvArgs rebuilds nativeInstallCheckInputs from
       # the original value.  overridePythonAttrs handles the passthru layers
       # correctly so nativeCheckInputs = [] actually takes effect.
-      fastmcp = pyPrev.fastmcp.overridePythonAttrs (old: {
-        version = "3.4.7";
-        src = fastmcpSrc;
+      #
+      # Also: overridePythonAttrs does NOT rewrite references inside other
+      # packages' propagatedBuildInputs.  fastmcp propagates `mcp`, whose own
+      # nativeCheckInputs pull inline-snapshot → … → scipy.  We override `mcp`
+      # separately AND point fastmcp's propagated mcp at pyFinal.mcp so the
+      # skip actually applies.
+      noTests = old: {
         doCheck = false;
         nativeCheckInputs = [ ];
-      });
-      fastmcp-slim = pyPrev.fastmcp-slim.overridePythonAttrs (old: {
-        version = "3.4.7";
-        src = fastmcpSrc;
-        doCheck = false;
-        nativeCheckInputs = [ ];
-      });
+      };
+      swapMcp = p: if nameOf p == "mcp" then pyFinal.mcp else p;
+    in {
+      mcp = pyPrev.mcp.overridePythonAttrs (old: noTests old);
+
+      fastmcp = pyPrev.fastmcp.overridePythonAttrs (old:
+        (noTests old) // {
+          version = "3.4.7";
+          src = fastmcpSrc;
+          propagatedBuildInputs = map swapMcp (old.propagatedBuildInputs or [ ]);
+        });
+
+      fastmcp-slim = pyPrev.fastmcp-slim.overridePythonAttrs (old:
+        (noTests old) // {
+          version = "3.4.7";
+          src = fastmcpSrc;
+        });
+
       py-key-value-aio = pyPrev.py-key-value-aio.overridePythonAttrs (old: {
         version = "0.4.5";
         src = pyKvSrc;
-      });
-      # mcp is a runtime dependency of fastmcp; its nativeCheckInputs pull in
-      # inline-snapshot → isort → pylama → … → scipy, whose flaky tests fail
-      # on recent nixpkgs.  Skip its tests too.
-      mcp = pyPrev.mcp.overridePythonAttrs (old: {
-        doCheck = false;
-        nativeCheckInputs = [ ];
       });
     };
   };
