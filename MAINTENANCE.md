@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-15T08:31:32+09:00
+
+**摘要**：feat(dsh): 新增 deepseek-harness 0.1.0-rc.6 包 + 4 语言文档。DSH（DeepSeek Harness）— 万物皆插件。预构建 npm 包（@deepseek-ai/dsh，bin dsh → lib/bin.js），vendor package-lock.json（npm tarball 不含 lock），dontNpmBuild 跳过 build。同时 godot-ai 与 dsh 列入 README（4 语言）。
+
+| 提交 | 说明 |
+|------|------|
+| `0194460` | feat(dsh): add deepseek-harness 0.1.0-rc.6 package + 4-language docs |
+
 ## 2026-08-15T08:07:33+09:00
 
 **摘要**：refactor: 合并 rog-control-center-fix 到 rcc-fix — 两者实为同一 ROG 控制中心修复项目（overlay asusctl 补丁 + module systemd 死锁修复）。统一为单一 rcc-fix：overlays/rog-control-center-fix.nix → rcc-fix.nix，modules/rog-control-center-fix.nix → rcc-fix.nix，选项 nixkits.rog-control-center-fix → nixkits.rcc-fix，删除独立 rog-control-center-fix 文档（内容并入 rcc-fix.md）。

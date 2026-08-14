@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-15T08:31:32+09:00
+
+**Summary**: feat(dsh): new deepseek-harness 0.1.0-rc.6 package + 4-language docs. DSH (DeepSeek Harness) — Everything is a Plugin. Prebuilt npm package (@deepseek-ai/dsh, bin dsh → lib/bin.js); vendored package-lock.json (npm tarballs ship none), dontNpmBuild to skip build. godot-ai and dsh listed in README (4 languages).
+
+| Commit | Description |
+|------|------|
+| `0194460` | feat(dsh): add deepseek-harness 0.1.0-rc.6 package + 4-language docs |
+
 ## 2026-08-15T08:07:33+09:00
 
 **Summary**: refactor: merge rog-control-center-fix into rcc-fix — both referred to the same ROG Control Center fix (overlay asusctl patch + module systemd deadlock fix). Unified to a single rcc-fix: overlays/rog-control-center-fix.nix → rcc-fix.nix, modules/rog-control-center-fix.nix → rcc-fix.nix, option nixkits.rog-control-center-fix → nixkits.rcc-fix, removed standalone docs (folded into rcc-fix.md).
