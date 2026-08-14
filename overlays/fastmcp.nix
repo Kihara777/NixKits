@@ -25,11 +25,17 @@ in {
         version = "3.4.7";
         src = fastmcpSrc;
         doCheck = false;
+        # nativeCheckInputs pulls in inline-snapshot → isort → pylama →
+        # vulture → pint → uncertainties → scipy, whose flaky float tests
+        # fail on recent nixpkgs.  godot-ai only needs fastmcp at runtime;
+        # drop the check inputs entirely so they are not built.
+        nativeCheckInputs = [ ];
       });
       fastmcp-slim = pyPrev.fastmcp-slim.overrideAttrs (old: {
         version = "3.4.7";
         src = fastmcpSrc;
         doCheck = false;
+        nativeCheckInputs = [ ];
       });
       py-key-value-aio = pyPrev.py-key-value-aio.overrideAttrs (old: {
         version = "0.4.5";
@@ -38,4 +44,3 @@ in {
     };
   };
 })
-
