@@ -70,11 +70,25 @@ in {
           src = fastmcpSrc;
         });
 
+      # 0.4.5 moved to a src/ layout with pyproject at the repo root, and
+      # its deps became beartype + typing-extensions (0.3.0 used beartype +
+      # py-key-value-shared).  nixpkgs' 0.3.0 derivation hardcodes
+      # sourceRoot = source/key-value/key-value-aio and a postPatch targeting
+      # uv_build>=0.8.2,<0.9.0 — both wrong for 0.4.5.
       py-key-value-aio = pyPrev.py-key-value-aio.overridePythonAttrs (old:
         (noTests old) // {
           version = "0.4.5";
           src = pyKvSrc;
-          propagatedBuildInputs = map swapFastapi (old.propagatedBuildInputs or [ ]);
+          sourceRoot = "source";
+          dependencies = with pyFinal; [ beartype typing-extensions ];
+          postPatch = ''
+            substituteInPlace pyproject.toml \
+              --replace-fail "uv_build>=0.11.4,<0.12" "uv_build"
+            substituteInPlace pyproject.toml \
+              --replace-fail '"-n=auto",' ""
+            substituteInPlace pyproject.toml \
+              --replace-fail '"--dist=loadfile",' ""
+          '';
         });
     };
   };
