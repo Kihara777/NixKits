@@ -32,17 +32,30 @@ in {
       # correctly so nativeCheckInputs = [] actually takes effect.
       #
       # Also: overridePythonAttrs does NOT rewrite references inside other
-      # packages' propagatedBuildInputs.  fastmcp propagates `mcp`, whose own
-      # nativeCheckInputs pull inline-snapshot → … → scipy.  We override `mcp`
-      # separately AND point fastmcp's propagated mcp at pyFinal.mcp so the
-      # skip actually applies.
+      # packages' propagatedBuildInputs.  fastmcp propagates `mcp`; mcp and
+      # py-key-value-aio propagate `fastapi`; their own nativeCheckInputs pull
+      # inline-snapshot → … → scipy whose flaky tests fail on recent nixpkgs.
+      # We override each such package separately AND swap its propagated
+      # reference to the overridden one so the skip actually applies.
       noTests = old: {
         doCheck = false;
         nativeCheckInputs = [ ];
       };
-      swapMcp = p: if nameOf p == "mcp" then pyFinal.mcp else p;
+      swap = pred: repl: p: if pred p then repl else p;
+      swapMcp     = swap (p: nameOf p == "mcp") pyFinal.mcp;
+      swapFastapi = swap (p: nameOf p == "fastapi") pyFinal.fastapi;
     in {
-      mcp = pyPrev.mcp.overridePythonAttrs (old: noTests old);
+      # Leaf test-suite packages whose own tests are flaky in the sandbox.
+      # Overriding them (doCheck=false) stops the scipy chain at its source.
+      scipy          = pyPrev.scipy.overridePythonAttrs (old: noTests old);
+      uncertainties  = pyPrev.uncertainties.overridePythonAttrs (old: noTests old);
+      pint           = pyPrev.pint.overridePythonAttrs (old: noTests old);
+      vulture        = pyPrev.vulture.overridePythonAttrs (old: noTests old);
+      pylama         = pyPrev.pylama.overridePythonAttrs (old: noTests old);
+      isort          = pyPrev.isort.overridePythonAttrs (old: noTests old);
+      inline-snapshot = pyPrev.inline-snapshot.overridePythonAttrs (old: noTests old);
+      fastapi        = pyPrev.fastapi.overridePythonAttrs (old: noTests old);
+      mcp            = pyPrev.mcp.overridePythonAttrs (old: noTests old);
 
       fastmcp = pyPrev.fastmcp.overridePythonAttrs (old:
         (noTests old) // {
@@ -61,11 +74,8 @@ in {
         (noTests old) // {
           version = "0.4.5";
           src = pyKvSrc;
+          propagatedBuildInputs = map swapFastapi (old.propagatedBuildInputs or [ ]);
         });
-
-      # fastapi's own nativeCheckInputs pull inline-snapshot → … → scipy.
-      # Override it too, and point py-key-value-aio's propagated fastapi at it.
-      fastapi = pyPrev.fastapi.overridePythonAttrs (old: noTests old);
     };
   };
 })
