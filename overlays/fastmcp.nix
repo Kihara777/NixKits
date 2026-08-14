@@ -42,6 +42,13 @@ in {
         version = "0.4.5";
         src = pyKvSrc;
       });
+      # mcp is a runtime dependency of fastmcp; its nativeCheckInputs pull in
+      # inline-snapshot → isort → pylama → … → scipy, whose flaky tests fail
+      # on recent nixpkgs.  Skip its tests too.
+      mcp = pyPrev.mcp.overridePythonAttrs (old: {
+        doCheck = false;
+        nativeCheckInputs = [ ];
+      });
     };
   };
 })
