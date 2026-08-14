@@ -55,7 +55,6 @@ Standalone overlays, not included in `default`:
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/en/rcc-fix.md](en/rcc-fix.md) |
 | comfyui-rocm-patch | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm-patch.md](en/comfyui-rocm-patch.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
-| rog-control-center-fix | Fixes asusd deadlock on shutdown | [docs/en/rog-control-center-fix.md](en/rog-control-center-fix.md) |
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
 | codewhale-sudo | overlay — restore sudo under codewhale v0.9.0 (LD_PRELOAD shim) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 

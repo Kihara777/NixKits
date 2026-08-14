@@ -11,7 +11,7 @@ ASUS ROG Control Center 2-in-1 脱着式鍵盤機器向修正。
 | 版 | nixpkgs `asusctl` 追従 |
 | 上流 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
 | 修正 | 本倉庫 `patches/rog-control-center-fix.patch` |
-| 部品 | `nixosModules.rog-control-center-fix`（systemd 膠着修正） |
+| 部品 | `nixosModules.rcc-fix`（systemd 膠着修正） |
 | 注意 | 上乗以 `pkgs.asusctl` 置換、単独包無 |
 
 ## 修正内容
@@ -29,9 +29,9 @@ ASUS ROG Control Center 2-in-1 脱着式鍵盤機器向修正。
 {
   nixpkgs.overlays = [ inputs.nixkits.overlays.rcc-fix ];
 
-  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rcc-fix ];
 
-  nixkits.rog-control-center-fix.enable = true;
+  nixkits.rcc-fix.enable = true;
 
   services.asusctl = {
     enable = true;

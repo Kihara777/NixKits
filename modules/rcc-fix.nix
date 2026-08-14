@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.nixkits.rog-control-center-fix;
+  cfg = config.nixkits.rcc-fix;
 in
 {
-  options.nixkits.rog-control-center-fix = {
-    enable = lib.mkEnableOption "rog-control-center fix — prevent shutdown deadlock when asusd stops asus-shutdown.service";
+  options.nixkits.rcc-fix = {
+    enable = lib.mkEnableOption "rcc fix — ROG Control Center fix — prevent shutdown deadlock when asusd stops asus-shutdown.service";
   };
 
   config = lib.mkIf (cfg.enable && config.services.asusd.enable) {

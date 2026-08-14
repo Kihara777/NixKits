@@ -58,14 +58,14 @@
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
     nixosModules.comfyui-rocm-patch    = import ./modules/comfyui-rocm-patch.nix;
     nixosModules.comfyui-strix-halo    = import ./modules/comfyui-strix-halo.nix;
-    nixosModules.rog-control-center-fix = import ./modules/rog-control-center-fix.nix;
+    nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.ruyi                 = import ./modules/ruyi.nix;
 
     overlays = {
       default           = import ./overlays/default.nix;
       efl-cross-fix     = import ./overlays/efl-cross-fix.nix;
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
-      rcc-fix           = import ./overlays/rog-control-center-fix.nix;
+      rcc-fix           = import ./overlays/rcc-fix.nix;
       ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
       breeze-black       = import ./overlays/breeze-black.nix;

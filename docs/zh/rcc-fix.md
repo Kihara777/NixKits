@@ -11,7 +11,7 @@
 | 版本 | 跟随 nixpkgs `asusctl` |
 | 上游 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
 | 补丁 | 本仓库 `patches/rog-control-center-fix.patch` |
-| 模块 | `nixosModules.rog-control-center-fix`（systemd 死锁修复） |
+| 模块 | `nixosModules.rcc-fix`（systemd 死锁修复） |
 | 注意 | overlay 替换 `pkgs.asusctl`，无独立 package 输出 |
 
 ## 修正内容
@@ -29,9 +29,9 @@ overlay（代码补丁）+ NixOS 模块（systemd 修复），推荐组合使用
 {
   nixpkgs.overlays = [ inputs.nixkits.overlays.rcc-fix ];
 
-  imports = [ inputs.nixkits.nixosModules.rog-control-center-fix ];
+  imports = [ inputs.nixkits.nixosModules.rcc-fix ];
 
-  nixkits.rog-control-center-fix.enable = true;
+  nixkits.rcc-fix.enable = true;
 
   services.asusctl = {
     enable = true;
