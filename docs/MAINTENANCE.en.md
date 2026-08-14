@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-15T08:07:33+09:00
+
+**Summary**: refactor: merge rog-control-center-fix into rcc-fix — both referred to the same ROG Control Center fix (overlay asusctl patch + module systemd deadlock fix). Unified to a single rcc-fix: overlays/rog-control-center-fix.nix → rcc-fix.nix, modules/rog-control-center-fix.nix → rcc-fix.nix, option nixkits.rog-control-center-fix → nixkits.rcc-fix, removed standalone docs (folded into rcc-fix.md).
+
+| Commit | Description |
+|------|------|
+| `376eacf` | refactor: merge rog-control-center-fix into rcc-fix |
+
 ## 2026-08-13T01:20:29+09:00
 
 **Summary**: fix(default-overlay): build godot-ai with fastmcp overlay — default overlay final.callPackage resolved fastmcp to nixpkgs 3.3.1 (circular-import bug); use (prev.extend (import ./fastmcp.nix)) so deps resolve to 3.4.7.

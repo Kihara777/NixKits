@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-15T08:07:33+09:00
+
+**概要**: refactor: rog-control-center-fix を rcc-fix に統合 — 両者は同一の ROG Control Center 修正プロジェクト（overlay asusctl パッチ + module systemd デッドロック修正）。単一の rcc-fix に統一：overlays/rog-control-center-fix.nix → rcc-fix.nix、modules/rog-control-center-fix.nix → rcc-fix.nix、オプション nixkits.rog-control-center-fix → nixkits.rcc-fix、独立ドキュメント削除（rcc-fix.md に統合）。
+
+| コミット | 説明 |
+|------|------|
+| `376eacf` | refactor: merge rog-control-center-fix into rcc-fix |
+
 ## 2026-08-13T01:20:29+09:00
 
 **概要**: fix(default-overlay): godot-ai を fastmcp overlay 適用で構築 — default overlay の final.callPackage が fastmcp を nixpkgs 3.3.1（循環 import バグ）に解決。 (prev.extend (import ./fastmcp.nix)) で依存を 3.4.7 に解決。
