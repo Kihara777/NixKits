@@ -12,4 +12,5 @@ final: prev: {
   # circular-import bug).  Build it with the fastmcp overlay applied so its
   # dependencies resolve to 3.4.7.
   godot-ai             = (prev.extend (import ./fastmcp.nix)).callPackage ../packages/godot-ai.nix { };
+  dsh                  = final.callPackage ../packages/dsh.nix { };
 }

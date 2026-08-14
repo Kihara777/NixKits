@@ -22,6 +22,7 @@ inputs.nixkits.url = "~/NixKits";
 |---|------|------|
 | blender-mcp | Blender 向け MCP サーバー（自然言語による Blender 操作） | [docs/ja/blender-mcp.md](ja/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
+| dsh | DeepSeek Harness（DSH）— すべてがプラグイン | [docs/ja/dsh.md](ja/dsh.md) |
 | godot-ai | Godot エンジン向けの MCP サーバーと AI ツール | [docs/ja/godot-ai.md](ja/godot-ai.md) |
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |

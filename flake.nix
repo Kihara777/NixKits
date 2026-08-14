@@ -37,6 +37,7 @@
       ruyi-beta            = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
       godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
+      dsh                  = pkgs.callPackage ./packages/dsh.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
