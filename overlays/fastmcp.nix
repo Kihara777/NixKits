@@ -18,6 +18,31 @@
     tag = "0.4.5";
     hash = "sha256-N+bqgKkSVGEKW/BEWgcFiHEuFjGbgIn/j33Vd0YoJ7s=";
   };
+
+  # nixpkgs' buildPythonPackage merges nativeCheckInputs into nativeBuildInputs
+  # even when doCheck=false, so the test-only tools (and their dependency
+  # chains) are still built.  inline-snapshot drags in
+  # isort→pylama→vulture→pint→uncertainties→scipy, whose flaky float tests
+  # fail on recent nixpkgs.  Strip every test-only tool from nativeBuildInputs.
+  #
+  # NOTE: old.nativeBuildInputs items are raw store-path STRINGS (already
+  # merged), not packages — so p.pname would throw on a string.  Match on
+  # baseNameOf(path) instead.
+  stripTestTools = inputs:
+    prev.lib.filter
+      (p: let
+        n = if builtins.isString p
+            then builtins.baseNameOf (prev.lib.removeSuffix "-dist" p)
+            else (p.pname or p.name or "");
+      in
+        !(prev.lib.hasInfix "pytest" n
+          || prev.lib.hasInfix "inline-snapshot" n
+          || prev.lib.hasInfix "dirty-equals" n
+          || prev.lib.hasInfix "fastapi" n
+          || prev.lib.hasInfix "opentelemetry-sdk" n
+          || prev.lib.hasInfix "psutil" n
+          || prev.lib.hasInfix "writable-tmpdir" n))
+      inputs;
 in {
   python312 = prev.python312.override {
     packageOverrides = pyFinal: pyPrev: {
@@ -25,17 +50,15 @@ in {
         version = "3.4.7";
         src = fastmcpSrc;
         doCheck = false;
-        # nativeCheckInputs pulls in inline-snapshot → isort → pylama →
-        # vulture → pint → uncertainties → scipy, whose flaky float tests
-        # fail on recent nixpkgs.  godot-ai only needs fastmcp at runtime;
-        # drop the check inputs entirely so they are not built.
         nativeCheckInputs = [ ];
+        nativeBuildInputs = stripTestTools (old.nativeBuildInputs or [ ]);
       });
       fastmcp-slim = pyPrev.fastmcp-slim.overrideAttrs (old: {
         version = "3.4.7";
         src = fastmcpSrc;
         doCheck = false;
         nativeCheckInputs = [ ];
+        nativeBuildInputs = stripTestTools (old.nativeBuildInputs or [ ]);
       });
       py-key-value-aio = pyPrev.py-key-value-aio.overrideAttrs (old: {
         version = "0.4.5";
