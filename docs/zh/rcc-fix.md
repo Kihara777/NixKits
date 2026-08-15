@@ -10,7 +10,7 @@
 |------|-----|
 | 版本 | 跟随 nixpkgs `asusctl` |
 | 上游 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| 补丁 | 本仓库 `patches/rog-control-center-fix.patch` |
+| 补丁 | 本仓库 `patches/rcc-fix.patch` |
 | 模块 | `nixosModules.rcc-fix`（systemd 死锁修复） |
 | 注意 | overlay 替换 `pkgs.asusctl`，无独立 package 输出 |
 

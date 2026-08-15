@@ -10,7 +10,7 @@ ASUS ROG Control Center を 2-in-1 脱着式キーボードデバイス向けに
 |------|-----|
 | バージョン | nixpkgs `asusctl` に追従 |
 | アップストリーム | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| パッチ | 本リポジトリ `patches/rog-control-center-fix.patch` |
+| パッチ | 本リポジトリ `patches/rcc-fix.patch` |
 | モジュール | `nixosModules.rcc-fix`（systemd デッドロック修正） |
 | 注意 | overlay で `pkgs.asusctl` を置き換え、単独パッケージなし |
 

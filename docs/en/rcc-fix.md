@@ -10,7 +10,7 @@ Patches `asusctl` for better ASUS ROG Control Center on 2-in-1 detachable device
 |------|-------|
 | Version | Follows nixpkgs `asusctl` |
 | Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) |
-| Patch | This repo `patches/rog-control-center-fix.patch` |
+| Patch | This repo `patches/rcc-fix.patch` |
 | Module | `nixosModules.rcc-fix` (systemd deadlock fix) |
 | Note | Overlay replaces `pkgs.asusctl`, no standalone package |
 
