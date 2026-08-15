@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-15T09:23:15+09:00
+
+**概要**: refactor: パッチファイル rog-control-center-fix.patch → rcc-fix.patch に改名し、rcc-fix 統一命名の仕上げ。overlays/rcc-fix.nix と 4言語 rcc-fix.md の参照を更新。
+
+| コミット | 説明 |
+|------|------|
+| `b350cfd` | refactor: rename rog-control-center-fix.patch to rcc-fix.patch |
+
 ## 2026-08-15T08:31:32+09:00
 
 **概要**: feat(dsh): deepseek-harness 0.1.0-rc.6 パッケージ新規追加 + 4言語ドキュメント。DSH（DeepSeek Harness）— すべてがプラグイン。プリビルト npm パッケージ（@deepseek-ai/dsh、bin dsh → lib/bin.js）、package-lock.json を同梱（npm tarball に lock なし）、dontNpmBuild で build スキップ。godot-ai と dsh を README に掲載（4言語）。
