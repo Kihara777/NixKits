@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-15T10:04:37+09:00
+
+**摘要**：refactor: 合并 comfyui-rocm-patch + comfyui-strix-halo 为单一 comfyui-rocm — 两模块分别处理 ComfyUI ROCm 支持的不同部分（补丁层 vs Strix Halo 硬件优化），合并为 nixkits.comfyui-rocm 模块（enable 选项），覆盖 ROCm 补丁挂载、GFX 覆盖、xformers 绕过、C 工具链、Strix Halo 硬件配置（ROCm runtime/DeviceAllow/kernelParams）。文档与 README 同步。
+
+| 提交 | 说明 |
+|------|------|
+| `d473991` | refactor: merge comfyui-rocm-patch + comfyui-strix-halo into comfyui-rocm |
+
 ## 2026-08-15T09:23:15+09:00
 
 **摘要**：refactor: 补丁文件 rog-control-center-fix.patch → rcc-fix.patch，完成 rcc-fix 统一命名的收尾。更新 overlays/rcc-fix.nix 与 4 语言 rcc-fix.md 文档中的引用。
