@@ -1,9 +1,9 @@
-# comfyui-rocm-patch
+# comfyui-rocm
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui-rocm-patch%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui-rocm-patch%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui-rocm%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui-rocm%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-[中文](../zh/comfyui-rocm-patch.md) | English | [日本語](../ja/comfyui-rocm-patch.md)  | [偽中国語](../pcn/comfyui-rocm-patch.md)
+[中文](../zh/comfyui-rocm.md) | English | [日本語](../ja/comfyui-rocm.md)  | [偽中国語](../pcn/comfyui-rocm.md)
 
 ROCm feature patch for ComfyUI.
 
@@ -14,8 +14,8 @@ Includes **Strix Halo (gfx1151 / RDNA 3.5 APU) exclusive optimizations**, tested
 | Item | Value |
 |------|-----|
 | Type | overlay + NixOS module |
-| Option | `nixkits.comfyui-rocm-patch.enable` |
-| Location | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
+| Option | `nixkits.comfyui-rocm.enable` |
+| Location | `modules/comfyui-rocm.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | Supported GPU | gfx1151 (Strix Halo) — natively recognized by ROCm 7.1 |
 
 ## Features
@@ -41,9 +41,9 @@ Required when using nixpkgs ≥ 2026-08-05.
 
 ```nix
 {
-  imports = [ inputs.nixkits.nixosModules.comfyui-rocm-patch ];
+  imports = [ inputs.nixkits.nixosModules.comfyui-rocm ];
 
-  nixkits.comfyui-rocm-patch.enable = true;
+  nixkits.comfyui-rocm.enable = true;
   services.comfyui = {
     enable = true;
     rocmGfxOverride = "11.0.0";  # Optional: custom GPU target version
@@ -67,9 +67,9 @@ Use upstream flake directly, overridden by local module patch (recommended):
     nixpkgs.lib.nixosSystem {
       modules = [
         comfyui-nix.nixosModules.default
-        nixkits.nixosModules.comfyui-rocm-patch
+        nixkits.nixosModules.comfyui-rocm
         {
-          nixkits.comfyui-rocm-patch.enable = true;
+          nixkits.comfyui-rocm.enable = true;
           services.comfyui.enable = true;
         }
       ];

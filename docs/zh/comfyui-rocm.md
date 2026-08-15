@@ -1,9 +1,9 @@
-# comfyui-rocm-patch
+# comfyui-rocm
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui-rocm-patch%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui-rocm-patch%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui-rocm%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui-rocm%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
-中文 | [English](../en/comfyui-rocm-patch.md) | [日本語](../ja/comfyui-rocm-patch.md)  | [偽中国語](../pcn/comfyui-rocm-patch.md)
+中文 | [English](../en/comfyui-rocm.md) | [日本語](../ja/comfyui-rocm.md)  | [偽中国語](../pcn/comfyui-rocm.md)
 
 为 ComfyUI 提供 ROCm 功能补丁。
 
@@ -14,8 +14,8 @@
 | 项目 | 值 |
 |------|-----|
 | 类型 | overlay + NixOS 模块 |
-| 选项 | `nixkits.comfyui-rocm-patch.enable` |
-| 位置 | `modules/comfyui-rocm-patch.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
+| 选项 | `nixkits.comfyui-rocm.enable` |
+| 位置 | `modules/comfyui-rocm.nix` + `patches/comfyui-nix-strix-halo.patch` + `patches/comfyui-nix-nixpkgs-compat.patch` |
 | 适用 GPU | gfx1151（Strix Halo）— ROCm 7.1 原生识别 |
 
 ## 功能
@@ -41,9 +41,9 @@
 
 ```nix
 {
-  imports = [ inputs.nixkits.nixosModules.comfyui-rocm-patch ];
+  imports = [ inputs.nixkits.nixosModules.comfyui-rocm ];
 
-  nixkits.comfyui-rocm-patch.enable = true;
+  nixkits.comfyui-rocm.enable = true;
   services.comfyui = {
     enable = true;
     rocmGfxOverride = "11.0.0";  # 可选：自定义 GPU 目标版本
@@ -67,9 +67,9 @@
     nixpkgs.lib.nixosSystem {
       modules = [
         comfyui-nix.nixosModules.default
-        nixkits.nixosModules.comfyui-rocm-patch
+        nixkits.nixosModules.comfyui-rocm
         {
-          nixkits.comfyui-rocm-patch.enable = true;
+          nixkits.comfyui-rocm.enable = true;
           services.comfyui.enable = true;
         }
       ];

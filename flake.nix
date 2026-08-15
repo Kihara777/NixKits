@@ -57,8 +57,7 @@
     nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
-    nixosModules.comfyui-rocm-patch    = import ./modules/comfyui-rocm-patch.nix;
-    nixosModules.comfyui-strix-halo    = import ./modules/comfyui-strix-halo.nix;
+    nixosModules.comfyui-rocm          = import ./modules/comfyui-rocm.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.ruyi                 = import ./modules/ruyi.nix;
 

@@ -55,7 +55,7 @@ nix registry add nixkits github:Kihara777/NixKits
 |------|------|------|
 | llama-cpp-rocm | 动态追踪上游最新 Release 的 ROCm 加速构建 | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
-| comfyui-rocm-patch | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm-patch.md](docs/zh/comfyui-rocm-patch.md) |
+| comfyui-rocm | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm.md](docs/zh/comfyui-rocm.md) |
 | efl-cross-fix | 修复 efl 交叉编译代码生成器缺失 | [docs/zh/efl-cross-fix.md](docs/zh/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高对比度 Breeze Black 无障碍主题 | [docs/zh/breeze-black.md](docs/zh/breeze-black.md) |
 | codewhale-sudo | overlay — 恢复 codewhale v0.9.0 的 sudo 功能（LD_PRELOAD shim） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
