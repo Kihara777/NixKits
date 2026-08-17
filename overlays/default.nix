@@ -1,6 +1,8 @@
 final: prev: {
   blender-mcp          = final.callPackage ../packages/blender-mcp.nix { };
-  codewhale            = final.callPackage ../packages/codewhale.nix { };
+  codewhale            = if final.stdenv.hostPlatform.isRiscV
+    then final.callPackage ../packages/codewhale-src.nix { }
+    else final.callPackage ../packages/codewhale.nix { };
   kitsfmt              = final.callPackage ../packages/kitsfmt.nix { };
   opencode-telegram    = final.callPackage ../packages/opencode-telegram.nix { };
   mcp-searxng          = final.callPackage ../packages/mcp-searxng.nix { };
