@@ -28,7 +28,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/pcn/ruyi.md](docs/pcn/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.51.0 · beta 0.51.0-beta.20260714 · alpha 0.52.0-alpha.20260714 | [docs/pcn/ruyi.md](docs/pcn/ruyi.md) |
 
 
 ## 開発
