@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T08:42:40+09:00
+
+**摘要**：docs: 同步 ruyi 通道版本（stable 0.50.0 → 0.51.0、beta/alpha 日期）并补齐 en/ja/pcn README 中 ruyi 描述列（原本为空 `<br><br>`，现填入 RuyiSDK 描述 + 三通道版本，与 zh 对齐）。
+
+| 提交 | 说明 |
+|------|------|
+| `86ae30b` | docs: sync ruyi channel versions + fill empty ruyi descriptions in en/ja/pcn README |
+
 ## 2026-08-18T07:19:30+09:00
 
 **摘要**：审计修复 — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 版本更新；② comfyui-rocm 模块补回 services.comfyui assertion 并澄清 nixpkgs-compat 补丁目标；③ overlay codewhale 按架构回退源码构建（riscv64）；④ 文档版本号 + ruyi 链接 + codewhale-sudo 描述同步；⑤ write-maintenance-log 技能补表头 + 删 katalish 列。

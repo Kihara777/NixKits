@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T08:42:40+09:00
+
+**Summary**: docs: sync ruyi channel versions (stable 0.50.0 → 0.51.0, beta/alpha dates) and fill empty ruyi description column in en/ja/pcn README (was <br><br>; now RuyiSDK description + three channel versions, matching zh).
+
+| Commit | Description |
+|------|------|
+| `86ae30b` | docs: sync ruyi channel versions + fill empty ruyi descriptions in en/ja/pcn README |
+
 ## 2026-08-18T07:19:30+09:00
 
 **Summary**: audit fixes — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 bumps; ② comfyui-rocm module restored services.comfyui assertion + clarified nixpkgs-compat patch target; ③ overlay codewhale arch-based source-build fallback (riscv64); ④ doc version/link/description sync; ⑤ write-maintenance-log skill header + drop katalish column.
