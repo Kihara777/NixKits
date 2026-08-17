@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T07:19:30+09:00
+
+**Summary**: audit fixes — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 bumps; ② comfyui-rocm module restored services.comfyui assertion + clarified nixpkgs-compat patch target; ③ overlay codewhale arch-based source-build fallback (riscv64); ④ doc version/link/description sync; ⑤ write-maintenance-log skill header + drop katalish column.
+
+| Commit | Description |
+|------|------|
+| `0ffa734` | fix(comfyui-rocm): clarify nixpkgs-compat patch target + restore assertion |
+| `cb4e250` | fix(default-overlay): codewhale riscv64 fallback to source build |
+| `c65d740` | chore(pkgs): bump codewhale 0.9.4 → 0.9.8 |
+| `04e95da` | chore(pkgs): bump mcp-searxng 1.14.1 → 1.15.0 |
+| `4531bf6` | chore(pkgs): bump opencode-telegram 0.23.1 → 0.24.0 |
+| `7f14633` | chore(pkgs): bump obs-bilibili-stream 2.1.2 → 2.1.3 |
+| `685864e` | docs: sync version numbers + ruyi link + codewhale-sudo description |
+| `cc768d0` | fix(skill): write-maintenance-log table header + drop katalish |
+
 ## 2026-08-15T10:04:37+09:00
 
 **Summary**: refactor: merge comfyui-rocm-patch + comfyui-strix-halo into single comfyui-rocm — two modules handled different halves of ComfyUI ROCm support (patch layer vs Strix Halo hardware optimizations); unified as nixkits.comfyui-rocm (enable option) covering patch mount, GFX override, xformers bypass, C toolchain, Strix Halo config (ROCm runtime/DeviceAllow/kernelParams). Docs and README synced.
