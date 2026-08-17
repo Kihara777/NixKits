@@ -37,6 +37,8 @@ Companion patch `patches/comfyui-nix-nixpkgs-compat.patch` fixes build failures 
 
 Required when using nixpkgs ≥ 2026-08-05.
 
+> **How to apply**: this patch targets the comfyui-nix repository itself (`nix/python-overrides.nix` + `nix/vendored-packages.nix`), NOT nixpkgs, so this module cannot mount it automatically. Fork comfyui-nix → apply the patch → point your flake `comfyui-nix` input at your fork (e.g. `url = "path:/path/to/patched"`).
+
 ## Usage
 
 ```nix

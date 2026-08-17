@@ -37,6 +37,8 @@
 
 使用 nixpkgs ≥ 2026-08-05 时需应用此补丁。
 
+> **应用方式**：此补丁目标是 comfyui-nix 仓库本身（`nix/python-overrides.nix` + `nix/vendored-packages.nix`），**非 nixpkgs**，无法由本模块自动挂载。请 fork comfyui-nix → 应用此补丁 → 在 flake 中将 `comfyui-nix` input 指向你的 fork（如 `url = "path:/path/to/patched"`）。
+
 ## 使用
 
 ```nix

@@ -37,6 +37,8 @@ ComfyUI 向け ROCm 機能パッチ。
 
 nixpkgs ≥ 2026-08-05 を使用する場合はこのパッチの適用が必要です。
 
+> **適用方法**: このパッチは comfyui-nix リポジトリ自体（`nix/python-overrides.nix` + `nix/vendored-packages.nix`）が対象であり、nixpkgs ではないため、本モジュールから自動マウントできない。comfyui-nix をフォーク → パッチ適用 → flake の `comfyui-nix` input をフォークに向ける（例 `url = "path:/path/to/patched"`）。
+
 ## 使用方法
 
 ```nix

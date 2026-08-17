@@ -9,11 +9,20 @@
 #   - Strix Halo ROCm runtime (clr, rocminfo) via hardware.graphics
 #   - GPU device access (DeviceAllow) + amdgpu.gttsize kernel param
 #
-# Wheel version upgrades (ROCm 7.2 / PyTorch 2.12.0) are handled by the
-# accompanying patch applied to comfyui-nix via nixpkgs overlay:
-#   ../patches/comfyui-nix-strix-halo.patch
-# and, for nixpkgs >= 2026-08-05:
-#   ../patches/comfyui-nix-nixpkgs-compat.patch
+# Wheel version upgrades (ROCm 7.2 / PyTorch 2.12.0) are handled by two
+# patches, applied to DIFFERENT targets:
+#
+#   1. ../patches/comfyui-nix-strix-halo.patch
+#        — applied to nixpkgs' `comfyui` package via the nixpkgs.overlays
+#          below (Strix Halo gfx1151 / ROCm 7.2 wheel upgrades).
+#
+#   2. ../patches/comfyui-nix-nixpkgs-compat.patch
+#        — applied to the comfyui-nix REPOSITORY itself
+#          (nix/python-overrides.nix + nix/vendored-packages.nix), NOT to
+#          nixpkgs.  Required when comfyui-nix resolves nixpkgs >= 2026-08-05
+#          (pythonRuntimeDepsCheckHook).  Apply it user-side: fork
+#          comfyui-nix, apply this patch, and point your flake's comfyui-nix
+#          input at the fork (e.g. url = "path:/path/to/patched").
 #
 # This module extends services.comfyui; enable with:
 #
@@ -22,9 +31,9 @@
 #
 { config, lib, pkgs, ... }:
 let
-  comfyCfg = config.services.comfyui;
+  comfyCfg = config.services.comfyui or null;
   cfg = config.nixkits.comfyui-rocm;
-  useRocm = comfyCfg.gpuSupport == "rocm";
+  useRocm = comfyCfg != null && comfyCfg.gpuSupport == "rocm";
 in
 {
   options = {
@@ -63,8 +72,15 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && comfyCfg.enable) {
+  config = lib.mkIf (cfg.enable && (comfyCfg != null && comfyCfg.enable)) {
     assertions = [
+      {
+        assertion = config.services ? comfyui;
+        message = ''
+          nixkits.comfyui-rocm requires services.comfyui, but it was
+          not found. Import the comfyui-nix module in your flake first.
+        '';
+      }
       {
         assertion = builtins.compareVersions pkgs.glibc.version "2.42" >= 0;
         message = ''
