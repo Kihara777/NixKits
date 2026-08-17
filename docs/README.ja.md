@@ -28,7 +28,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/ja/ruyi-devshell.md](docs/ja/ruyi-devshell.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/ja/ruyi.md](docs/ja/ruyi.md) |
 
 
 ## 開発
@@ -57,7 +57,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm | ComfyUI に ROCm 機能パッチを提供 | [docs/ja/comfyui-rocm.md](ja/comfyui-rocm.md) |
 | efl-cross-fix | efl クロスコンパイルのコード生成ツール不足を修正 | [docs/ja/efl-cross-fix.md](ja/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高コントラスト Breeze Black アクセシビリティテーマ | [docs/ja/breeze-black.md](ja/breeze-black.md) |
-| codewhale-sudo | overlay — codewhale v0.9.0 の sudo 機能を復元（LD_PRELOAD shim） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.8 の sudo 機能を復元（ptrace インターセプター） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
 
 > ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。動的バージョン追跡プロジェクト（llama-cpp-rocm など）はハッシュが上流リリースごとに変化し、キャッシュ固定不可です。
 

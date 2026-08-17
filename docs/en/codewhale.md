@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.4)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | English | [日本語](../ja/codewhale.md)  | [偽中国語](../pcn/codewhale.md)
 
@@ -12,7 +12,7 @@ A terminal coding agent built for DeepSeek V4.
 
 | Item | Value |
 |------|-------|
-| Version | 0.9.0 |
+| Version | 0.9.8 |
 | Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | Type | Pre-built binaries (x86_64 / aarch64); source-built (riscv64) |
 | Platform | x86_64 / aarch64 / riscv64 |
@@ -47,11 +47,11 @@ Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first r
 
 ## Enabling sudo
 
-codewhale v0.9.4 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
+codewhale v0.9.8 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
 
 ## Known Issues
 
-> ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.9.4. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental — first CI run may fail on dependency hash mismatch; we will verify and fix in subsequent CI runs.
+> ⚠️ **riscv64 source build**: Upstream removed riscv64 prebuilt binaries from v0.9.8. NixKits builds riscv64 from source via `rustPlatform.buildRustPackage`. This is experimental — first CI run may fail on dependency hash mismatch; we will verify and fix in subsequent CI runs.
 
 ## Cache
 
@@ -59,9 +59,9 @@ codewhale v0.9.4 blocks `sudo` by default. See [codewhale-sudo patch doc](codewh
 
 ## Enabling sudo
 
-codewhale v0.9.4 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
+codewhale v0.9.8 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
 
 ## Known Issues
 
-> ⚠️ **v0.9.4 sudo broken**: `no_new_privs` flag introduced in v0.9.4 blocks sudo entirely (not a password issue; Wheel NOPASSWD does not help). Upstream issue reported — awaiting fix.
+> ⚠️ **v0.9.8 sudo broken**: `no_new_privs` flag introduced in v0.9.8 blocks sudo entirely (not a password issue; Wheel NOPASSWD does not help). Upstream issue reported — awaiting fix.
 

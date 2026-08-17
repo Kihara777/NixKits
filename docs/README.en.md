@@ -28,7 +28,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/en/ruyi-devshell.md](docs/en/ruyi-devshell.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | <br><br> | [docs/en/ruyi.md](docs/en/ruyi.md) |
 
 
 ## Development
@@ -57,7 +57,7 @@ Standalone overlays, not included in `default`:
 | comfyui-rocm | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm.md](en/comfyui-rocm.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
-| codewhale-sudo | overlay — restore sudo under codewhale v0.9.0 (LD_PRELOAD shim) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
+| codewhale-sudo | overlay — restore sudo under codewhale v0.9.8 (ptrace interceptor) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 

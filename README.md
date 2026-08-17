@@ -32,7 +32,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
-| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.50.0 · beta 0.50.0-beta.20260623 · alpha 0.51.0-alpha.20260616 | [docs/zh/ruyi-devshell.md](docs/zh/ruyi-devshell.md) |
+| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.51.0 · beta 0.51.0-beta.20260714 · alpha 0.52.0-alpha.20260714 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
 
 ## 开发
@@ -58,7 +58,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm.md](docs/zh/comfyui-rocm.md) |
 | efl-cross-fix | 修复 efl 交叉编译代码生成器缺失 | [docs/zh/efl-cross-fix.md](docs/zh/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高对比度 Breeze Black 无障碍主题 | [docs/zh/breeze-black.md](docs/zh/breeze-black.md) |
-| codewhale-sudo | overlay — 恢复 codewhale v0.9.0 的 sudo 功能（LD_PRELOAD shim） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
+| codewhale-sudo | overlay — 恢复 codewhale v0.9.8 的 sudo 功能（ptrace 拦截器） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
 
 > ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。动态追踪版本的项目（如 llama-cpp-rocm）其 hash 随上游发布变化，无法被缓存固定。
 
