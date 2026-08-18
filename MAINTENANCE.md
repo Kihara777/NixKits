@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T18:45:00+09:00
+
+**摘要**：docs(dsh) + refactor(skill): 插件清单同步 — docs/dsh.md 4 语言新增「插件清单」章节（131 个内置插件 entry id，id -> 包名），作为 nixkits.dsh.plugins.disabled 的取值参考。nixkits-check-updates 技能第 5 步新增 dsh 特有说明：升级 dsh 时从新包提取 dsh-*/cordis.patch.yml 的插件清单同步到文档。
+
+| 提交 | 说明 |
+|------|------|
+| `06d0e28` | docs(dsh): plugin inventory + check-updates skill sync |
+
 ## 2026-08-18T18:20:00+09:00
 
 **摘要**：feat(module): nixkits.dsh.plugins — 声明式插件启停与配置。dsh 插件经 cordis.patch.yml 运行时热加载，模块新增 plugins.disabled（禁用 entry id）、plugins.settings（config 覆盖）、plugins.extraPatch（手写片段如 MCP）。系统配置迁移 MCP 到 extraPatch、API key 改用 kix.credentials 声明式、示例禁用 session-telemetry-otel + session-stats。部署验证：cordis.patch.yml 正确生成、插件禁用无 absent 警告。

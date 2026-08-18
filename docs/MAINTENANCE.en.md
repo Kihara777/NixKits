@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T18:45:00+09:00
+
+**Summary**: docs(dsh) + refactor(skill): plugin inventory sync — docs/dsh.md (4 langs) gains a Plugin inventory section (131 built-in entry ids, id -> package) as reference for nixkits.dsh.plugins.disabled. The check-updates skill step 5 gains a dsh note: on bump, extract the inventory from the freshly built package dsh-*/cordis.patch.yml and sync it into docs.
+
+| Commit | Description |
+|------|------|
+| `06d0e28` | docs(dsh): plugin inventory + check-updates skill sync |
+
 ## 2026-08-18T18:20:00+09:00
 
 **Summary**: feat(module): nixkits.dsh.plugins — declarative plugin on/off + config. dsh plugins hot-reload via cordis.patch.yml; the module adds plugins.disabled (entry ids), plugins.settings (config overrides), plugins.extraPatch (raw fragments like MCP). System config migrated MCP to extraPatch, API key to kix.credentials, and disables session-telemetry-otel + session-stats as an example. Verified: cordis.patch.yml renders correctly, no absent-id warning.
