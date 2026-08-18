@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T10:29:46+09:00
+
+**概要**: feat/fix(dsh): dsh サービス配備 + MCP/skills 設定 — ① モジュール修正：dsh システムユーザー HOME=/var/empty（読取専用）で EPERM、書込可能な /var/lib/dsh home + StateDirectory に変更；② HMR サービスが --expose-internals を要求（NODE_OPTIONS 禁止・CLI 非認識）、node --expose-internals で bin.js を直接起動；③ MCP サービスを cordis.patch.yml の `insert:` 構文（id-targeted override でなく）で SearXNG + Godot 設定；④ skills を /var/lib/dsh/skills/（.agent-presets サブディレクトリでなく）に複製；⑤ nixkits-skills のディレクトリを ~/.dsh/skills に修正。
+
+| コミット | 説明 |
+|------|------|
+| `b17e5bf` | fix(module): dsh writable HOME + StateDirectory |
+| `ee24563` | fix(skill): correct dsh skills directory — ~/.dsh/skills |
+
 ## 2026-08-18T08:42:40+09:00
 
 **概要**: docs: ruyi チャンネル版数を同期（stable 0.50.0 → 0.51.0、beta/alpha 日付）し、en/ja/pcn README の ruyi 説明列を補完（空 `<br><br>` → RuyiSDK 説明 + 3 チャンネル版数、zh と一致）。

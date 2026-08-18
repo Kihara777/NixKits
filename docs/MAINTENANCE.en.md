@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T10:29:46+09:00
+
+**Summary**: feat/fix(dsh): deploy dsh service + configure MCP/skills — ① module fix: dsh system user HOME=/var/empty (read-only) caused EPERM, use writable /var/lib/dsh home + StateDirectory; ② HMR service needs --expose-internals (forbidden by NODE_OPTIONS, unknown to CLI), launch bin.js via node --expose-internals; ③ MCP services configured via cordis.patch.yml `insert:` syntax (not id-targeted override) for SearXNG + Godot; ④ skills copied to /var/lib/dsh/skills/ (not .agent-presets subdir); ⑤ nixkits-skills directory corrected to ~/.dsh/skills.
+
+| Commit | Description |
+|------|------|
+| `b17e5bf` | fix(module): dsh writable HOME + StateDirectory |
+| `ee24563` | fix(skill): correct dsh skills directory — ~/.dsh/skills |
+
 ## 2026-08-18T08:42:40+09:00
 
 **Summary**: docs: sync ruyi channel versions (stable 0.50.0 → 0.51.0, beta/alpha dates) and fill empty ruyi description column in en/ja/pcn README (was <br><br>; now RuyiSDK description + three channel versions, matching zh).

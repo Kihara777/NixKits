@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T10:29:46+09:00
+
+**摘要**: feat/fix(dsh): dsh 服務配備 + MCP/skills 設定 — ① module 修正：dsh system user HOME=/var/empty（読取専用）EPERM、書込可 /var/lib/dsh home + StateDirectory 変更；② HMR 需 --expose-internals（NODE_OPTIONS 禁止・CLI 非認識）、node --expose-internals bin.js 直起動；③ MCP cordis.patch.yml `insert:` 構文（id-targeted override 非）SearXNG + Godot 設定；④ skills /var/lib/dsh/skills/（.agent-presets 子目録非）複製；⑤ nixkits-skills 目録 ~/.dsh/skills 修正。
+
+| 提交 | 説明 |
+|------|------|
+| `b17e5bf` | fix(module): dsh writable HOME + StateDirectory |
+| `ee24563` | fix(skill): correct dsh skills directory — ~/.dsh/skills |
+
 ## 2026-08-18T08:42:40+09:00
 
 **摘要**: docs: ruyi 通道版本同期（stable 0.50.0 → 0.51.0、beta/alpha 日期）+ en/ja/pcn README ruyi 説明列補完（空 `<br><br>` → RuyiSDK 説明 + 3 通道版本、zh 一致）。
