@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T14:38:26+09:00
+
+**Summary**: feat(module): dsh reverseProxy via lighttpd — dsh rejects non-loopback hosts (RCE safety); a lighttpd `$SERVER["socket"]` block on 0.0.0.0:8626 proxies to dsh loopback 8625 (reusing the SearXNG lighttpd instance; extraConfig is types.lines, merges cleanly). Firewall opens 8626.
+
+| Commit | Description |
+|------|------|
+| `12e11af` | feat(module): add nixkits.dsh.reverseProxy via lighttpd |
+
 ## 2026-08-18T10:29:46+09:00
 
 **Summary**: feat/fix(dsh): deploy dsh service + configure MCP/skills — ① module fix: dsh system user HOME=/var/empty (read-only) caused EPERM, use writable /var/lib/dsh home + StateDirectory; ② HMR service needs --expose-internals (forbidden by NODE_OPTIONS, unknown to CLI), launch bin.js via node --expose-internals; ③ MCP services configured via cordis.patch.yml `insert:` syntax (not id-targeted override) for SearXNG + Godot; ④ skills copied to /var/lib/dsh/skills/ (not .agent-presets subdir); ⑤ nixkits-skills directory corrected to ~/.dsh/skills.

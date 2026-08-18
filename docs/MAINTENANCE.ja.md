@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T14:38:26+09:00
+
+**概要**: feat(module): dsh reverseProxy via lighttpd — dsh が非 loopback host を拒否するため（RCE 安全）、lighttpd の `$SERVER["socket"]` ブロックで 0.0.0.0:8626 を dsh loopback 8625 にリバースプロキシ（SearXNG の lighttpd インスタンスを再利用、extraConfig は types.lines でクリーンにマージ）。対外 8626 をファイアウォール開放。
+
+| コミット | 説明 |
+|------|------|
+| `12e11af` | feat(module): add nixkits.dsh.reverseProxy via lighttpd |
+
 ## 2026-08-18T10:29:46+09:00
 
 **概要**: feat/fix(dsh): dsh サービス配備 + MCP/skills 設定 — ① モジュール修正：dsh システムユーザー HOME=/var/empty（読取専用）で EPERM、書込可能な /var/lib/dsh home + StateDirectory に変更；② HMR サービスが --expose-internals を要求（NODE_OPTIONS 禁止・CLI 非認識）、node --expose-internals で bin.js を直接起動；③ MCP サービスを cordis.patch.yml の `insert:` 構文（id-targeted override でなく）で SearXNG + Godot 設定；④ skills を /var/lib/dsh/skills/（.agent-presets サブディレクトリでなく）に複製；⑤ nixkits-skills のディレクトリを ~/.dsh/skills に修正。

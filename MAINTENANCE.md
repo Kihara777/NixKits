@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T14:38:26+09:00
+
+**摘要**：feat(module): dsh reverseProxy via lighttpd — dsh 拒绝非 loopback host（RCE 安全），通过 lighttpd `$SERVER["socket"]` 条件块在 0.0.0.0:8626 反代到 dsh loopback 8625（复用 SearXNG 的 lighttpd 实例，extraConfig 是 types.lines 可合并）。对外 8626 开放防火墙。
+
+| 提交 | 说明 |
+|------|------|
+| `12e11af` | feat(module): add nixkits.dsh.reverseProxy via lighttpd |
+
 ## 2026-08-18T10:29:46+09:00
 
 **摘要**：feat/fix(dsh): 部署 dsh 服务并配置 MCP + skills — ① 模块修复：dsh 系统用户 HOME=/var/empty（只读）导致 EPERM，改 /var/lib/dsh 可写 home + StateDirectory；② HMR 服务需 --expose-internals（NODE_OPTIONS 禁止、CLI 不识别），改 node --expose-internals 直接启动 bin.js；③ MCP 服务用 cordis.patch.yml 的 `insert:` 语法（非 id-targeted override）配置 SearXNG + Godot；④ skills 复制到 /var/lib/dsh/skills/（非 .agent-presets 子目录）；⑤ nixkits-skills 目录修正为 ~/.dsh/skills。
