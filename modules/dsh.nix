@@ -53,6 +53,8 @@ in
       dsh = {
         isSystemUser = true;
         group = cfg.group;
+        home = "/var/lib/dsh";
+        createHome = true;
       };
     };
 
@@ -73,9 +75,11 @@ in
         TimeoutStopSec = 30;
         User = cfg.user;
         Group = cfg.group;
-      }
-      // lib.optionalAttrs (cfg.environment != { }) {
-        Environment = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
+        StateDirectory = "dsh";
+        # HOME/DSH_HOME must be writable (system user default /var/empty is not);
+        # merge with user-provided environment instead of overwriting.
+        Environment = [ "HOME=/var/lib/dsh" "DSH_HOME=/var/lib/dsh" ]
+          ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
       };
     };
   };
