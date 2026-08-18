@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T17:30:00+09:00
+
+**Summary**: fix(module): dsh trustedHosts option — all /api calls returned 403 behind the proxy. dsh validates the Host header on /api requests (isTrustedApiRequest: Host must be loopback or trusted, and the browser Origin must match). Via lighttpd the Host arrives as the LAN hostname/IP, so everything was 403 forbidden. Add nixkits.dsh.trustedHosts (mapped to repeatable --trusted-host); system config sets harukax.lan + 192.168.31.241 and the API recovered.
+
+| Commit | Description |
+|------|------|
+| `3755935` | fix(module): dsh trustedHosts option — Host-header 403 behind reverse proxy |
+
 ## 2026-08-18T16:20:05+09:00
 
 **Summary**: fix(dsh): patch browser client bundles — crypto.randomUUID fallback. crypto.randomUUID() is unavailable in non-secure contexts (HTTP on LAN IP, i.e. via the lighttpd reverse proxy), breaking the webui with "crypto.randomUUID is not a function". postInstall replaces it in dsh-client-connection + dsh-client-ui-conversation with a __dshUuid helper falling back to crypto.getRandomValues (available everywhere). Server-side index.js uses Node crypto, untouched.

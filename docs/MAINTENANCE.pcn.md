@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T17:30:00+09:00
+
+**摘要**: fix(module): dsh trustedHosts 選項 — 反代後全 /api 403。dsh /api 要求 Host header 検証（isTrustedApiRequest：Host loopback 或信頼必須、Origin 同一生成元）。lighttpd 経由 Host LAN 域名/IP 化、全 403 forbidden。nixkits.dsh.trustedHosts 追加（repeatable --trusted-host 映射）、系統設定 harukax.lan + 192.168.31.241 信頼後 API 復旧。
+
+| 提交 | 説明 |
+|------|------|
+| `3755935` | fix(module): dsh trustedHosts option — Host-header 403 behind reverse proxy |
+
 ## 2026-08-18T16:20:05+09:00
 
 **摘要**: fix(dsh): 瀏覧器 client bundle patch — crypto.randomUUID fallback。crypto.randomUUID() 非安全上下文（HTTP LAN IP、lighttpd 反代）不可用、webui "crypto.randomUUID is not a function" 失敗。postInstall dsh-client-connection + dsh-client-ui-conversation 置換 __dshUuid helper（crypto.getRandomValues fallback、全上下文可）。server index.js Node crypto 使用、変更不要。

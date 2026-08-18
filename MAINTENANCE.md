@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T17:30:00+09:00
+
+**摘要**：fix(module): dsh trustedHosts 选项 — 反代后 API 全 403。dsh 对 /api 请求校验 Host header（isTrustedApiRequest：Host 必须 loopback 或在信任列表，且浏览器 Origin 需同源）。经 lighttpd 反代后 Host 变为局域网域名/IP，所有 /api 调用返回 403 forbidden。新增 nixkits.dsh.trustedHosts（映射为 repeatable --trusted-host），系统配置 harukax.lan + 192.168.31.241 后 API 恢复。
+
+| 提交 | 说明 |
+|------|------|
+| `3755935` | fix(module): dsh trustedHosts option — Host-header 403 behind reverse proxy |
+
 ## 2026-08-18T16:20:05+09:00
 
 **摘要**：fix(dsh): patch 浏览器端 client bundle — crypto.randomUUID fallback。crypto.randomUUID() 在非安全上下文（HTTP 局域网 IP，即 lighttpd 反代）不可用，导致 webui 报 "crypto.randomUUID is not a function"。postInstall 替换 dsh-client-connection + dsh-client-ui-conversation 的 crypto.randomUUID 为 __dshUuid helper（fallback 到 crypto.getRandomValues，全上下文可用）。服务端 index.js 用 Node crypto，无需处理。

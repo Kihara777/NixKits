@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T17:30:00+09:00
+
+**概要**: fix(module): dsh trustedHosts オプション — リバースプロキシ経由で全 /api が 403。dsh は /api リクエストの Host header を検証（isTrustedApiRequest：Host は loopback か信頼リスト必須、ブラウザ Origin も同一生成元）。lighttpd 経由で Host が LAN ホスト名/IP になり全 403 forbidden。nixkits.dsh.trustedHosts を追加（repeatable --trusted-host にマップ）、システム設定で harukax.lan + 192.168.31.241 を信頼し API 復旧。
+
+| コミット | 説明 |
+|------|------|
+| `3755935` | fix(module): dsh trustedHosts option — Host-header 403 behind reverse proxy |
+
 ## 2026-08-18T16:20:05+09:00
 
 **概要**: fix(dsh): ブラウザ側 client bundle パッチ — crypto.randomUUID fallback。crypto.randomUUID() は非セキュアコンテキスト（LAN IP への HTTP、つまり lighttpd リバースプロキシ経由）で使用不可となり、webui が "crypto.randomUUID is not a function" で失敗。postInstall で dsh-client-connection + dsh-client-ui-conversation の crypto.randomUUID を __dshUuid ヘルパー（crypto.getRandomValues にフォールバック、全コンテキストで利用可）に置換。サーバー側 index.js は Node の crypto を使用、変更不要。
