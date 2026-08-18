@@ -42,6 +42,15 @@ in
       default = { };
       description = "Environment variables for the service (e.g. DEEPSEEK_API_KEY)";
     };
+
+    reverseProxy = {
+      enable = lib.mkEnableOption "lighttpd reverse proxy to expose dsh on a non-loopback port";
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8626;
+        description = "Public port for the lighttpd reverse proxy";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -81,5 +90,28 @@ in
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
       };
     };
+
+    # dsh rejects non-loopback hosts (RCE safety), so expose it via a lighttpd
+    # reverse proxy.  Reuses the lighttpd instance enabled by SearXNG (or the
+    # user); lighttpd's extraConfig is types.lines so it merges cleanly.
+    assertions = lib.mkIf cfg.reverseProxy.enable [
+      {
+        assertion = config.services.lighttpd.enable;
+        message = "nixkits.dsh.reverseProxy requires services.lighttpd.enable = true";
+      }
+    ];
+
+    services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
+      $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
+        proxy.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
+        setenv.add-request-header = (
+          "X-Real-IP" => "%{remote-addr}e",
+          "X-Forwarded-For" => "%{remote-addr}e",
+          "X-Forwarded-Proto" => "http"
+        )
+      }
+    '';
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.reverseProxy.enable [ cfg.reverseProxy.port ];
   };
 }
