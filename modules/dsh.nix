@@ -11,6 +11,12 @@ let
     ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
     ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
   '';
+
+  # Generated settings.yaml: declarative per-namespace dsh settings, JSON
+  # (valid YAML).  Written to $DSH_HOME/settings.yaml by preStart; dsh
+  # hot-reloads it.  Empty ({} or missing) resolves every namespace to
+  # schema defaults.
+  settingsDoc = pkgs.writeText "settings.yaml" (builtins.toJSON cfg.settings);
 in
 {
   options.nixkits.dsh = {
@@ -100,6 +106,17 @@ in
         '';
       };
     };
+
+    settings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.attrs;
+      default = { };
+      description = ''
+        Declarative dsh settings (namespace -> section), rendered as
+        \$DSH_HOME/settings.yaml.  The document is JSON (valid YAML) so it
+        survives dsh's js-yaml parser; namespaces map to the settings UI
+        sections and dsh hot-reloads external edits.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -126,6 +143,7 @@ in
       preStart = ''
         mkdir -p /var/lib/dsh/profiles/web
         cp ${cordisPatch} /var/lib/dsh/profiles/web/cordis.patch.yml
+        cp ${settingsDoc} /var/lib/dsh/settings.yaml
       '';
       serviceConfig = {
         Type = "simple";
