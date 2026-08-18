@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T19:30:00+09:00
+
+**概要**: feat(module): nixkits.dsh.settings — 宣言的設定。dsh 設定メニュー項目は $DSH_HOME/settings.yaml（ファイルバックアップ、ホットリロード、namespace 別セクション）に格納。settings オプション（attrsOf attrs、namespace → section）を追加し JSON（合法 YAML）として preStart で書き込み。実測：web-search-deepseek.maxTokens を既定 4096 → 8192 に宣言的オーバーライド。4言語ドキュメントに設定節を追加。
+
+| コミット | 説明 |
+|------|------|
+| `f2981e6` | feat(module): nixkits.dsh.settings — declarative settings |
+
 ## 2026-08-18T18:45:00+09:00
 
 **概要**: docs(dsh) + refactor(skill): プラグイン一覧同期 — docs/dsh.md 4言語に「プラグイン一覧」節（131 内蔵 entry id、id -> パッケージ）を追加、nixkits.dsh.plugins.disabled の参照に。check-updates スキル第5ステップに dsh 特有説明を追加：更新時に新パッケージの dsh-*/cordis.patch.yml から一覧を抽出して docs に同期。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T19:30:00+09:00
+
+**Summary**: feat(module): nixkits.dsh.settings — declarative settings. dsh settings-menu options live in $DSH_HOME/settings.yaml (file-backed, hot-reloaded, per-namespace sections). New settings option (attrsOf attrs, namespace → section) rendered as JSON (valid YAML) written by preStart. Verified: web-search-deepseek.maxTokens declaratively overrides default 4096 → 8192. 4-language docs gain a settings section.
+
+| Commit | Description |
+|------|------|
+| `f2981e6` | feat(module): nixkits.dsh.settings — declarative settings |
+
 ## 2026-08-18T18:45:00+09:00
 
 **Summary**: docs(dsh) + refactor(skill): plugin inventory sync — docs/dsh.md (4 langs) gains a Plugin inventory section (131 built-in entry ids, id -> package) as reference for nixkits.dsh.plugins.disabled. The check-updates skill step 5 gains a dsh note: on bump, extract the inventory from the freshly built package dsh-*/cordis.patch.yml and sync it into docs.

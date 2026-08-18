@@ -204,3 +204,25 @@ dsh 0.1.0-rc.6 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   workflow-worker-thread -> @deepseek-ai/dsh-workflow-worker-thread
   workspace -> @deepseek-ai/dsh-workspace
 ```
+
+## 设置声明式配置
+
+dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加载。`nixkits.dsh.settings` 提供声明式配置（namespace → section）：
+
+```nix
+{
+  nixkits.dsh.settings = {
+    "web-search-deepseek" = {
+      model = "deepseek-v4-flash";
+      maxTokens = 8192;
+    };
+    "llm-deepseek" = {
+      timeout = 10000;
+    };
+  };
+}
+```
+
+- namespace 对应设置 UI 的分区（如 `web-search-deepseek`、`llm-deepseek`、`ui-onboarding`）
+- 值必须是 JSON 兼容数据（string/number/boolean/list/object）
+- 生成 JSON（合法 YAML），dsh 热加载；空 `{}` 或缺失回退到 schema 默认值

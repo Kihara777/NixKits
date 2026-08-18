@@ -204,3 +204,25 @@ Built-in plugin entry ids for dsh 0.1.0-rc.6 (valid values for `nixkits.dsh.plug
   workflow-worker-thread -> @deepseek-ai/dsh-workflow-worker-thread
   workspace -> @deepseek-ai/dsh-workspace
 ```
+
+## Declarative settings
+
+dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-reloaded). `nixkits.dsh.settings` provides declarative config (namespace → section):
+
+```nix
+{
+  nixkits.dsh.settings = {
+    "web-search-deepseek" = {
+      model = "deepseek-v4-flash";
+      maxTokens = 8192;
+    };
+    "llm-deepseek" = {
+      timeout = 10000;
+    };
+  };
+}
+```
+
+- namespace maps to a settings-UI section (e.g. `web-search-deepseek`, `llm-deepseek`, `ui-onboarding`)
+- values must be JSON-compatible (string/number/boolean/list/object)
+- rendered as JSON (valid YAML), hot-reloaded; empty `{}` or missing falls back to schema defaults

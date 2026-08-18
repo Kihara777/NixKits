@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T19:30:00+09:00
+
+**摘要**：feat(module): nixkits.dsh.settings — 声明式设置配置。dsh 设置菜单选项存储于 $DSH_HOME/settings.yaml（文件备份 + 热加载，per-namespace section）。新增 settings 选项（attrsOf attrs，namespace → section），渲染为 JSON（合法 YAML）由 preStart 写入。部署验证：web-search-deepseek.maxTokens 声明式覆盖默认 4096 → 8192 生效。文档 4 语言补设置配置章节。
+
+| 提交 | 说明 |
+|------|------|
+| `f2981e6` | feat(module): nixkits.dsh.settings — declarative settings |
+
 ## 2026-08-18T18:45:00+09:00
 
 **摘要**：docs(dsh) + refactor(skill): 插件清单同步 — docs/dsh.md 4 语言新增「插件清单」章节（131 个内置插件 entry id，id -> 包名），作为 nixkits.dsh.plugins.disabled 的取值参考。nixkits-check-updates 技能第 5 步新增 dsh 特有说明：升级 dsh 时从新包提取 dsh-*/cordis.patch.yml 的插件清单同步到文档。

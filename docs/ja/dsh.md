@@ -204,3 +204,25 @@ dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   workflow-worker-thread -> @deepseek-ai/dsh-workflow-worker-thread
   workspace -> @deepseek-ai/dsh-workspace
 ```
+
+## 設定の宣言的構成
+
+dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバックアップ、ホットリロード）に格納される。`nixkits.dsh.settings` で宣言的構成が可能（namespace → section）：
+
+```nix
+{
+  nixkits.dsh.settings = {
+    "web-search-deepseek" = {
+      model = "deepseek-v4-flash";
+      maxTokens = 8192;
+    };
+    "llm-deepseek" = {
+      timeout = 10000;
+    };
+  };
+}
+```
+
+- namespace は設定 UI のセクションに対応（`web-search-deepseek`、`llm-deepseek`、`ui-onboarding` など）
+- 値は JSON 互換データ（string/number/boolean/list/object）必須
+- JSON（合法 YAML）として描画、ホットリロード；空 `{}` または欠落時はスキーマ既定値にフォールバック

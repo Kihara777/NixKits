@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T19:30:00+09:00
+
+**摘要**: feat(module): nixkits.dsh.settings — 宣言設定。dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件备份、hot reload、namespace 別 section）格納。settings 選項（attrsOf attrs、namespace → section）追加 JSON（合法 YAML）preStart 写入。実測：web-search-deepseek.maxTokens 既定 4096 → 8192 宣言覆写。4言語文書設定節追加。
+
+| 提交 | 説明 |
+|------|------|
+| `f2981e6` | feat(module): nixkits.dsh.settings — declarative settings |
+
 ## 2026-08-18T18:45:00+09:00
 
 **摘要**: docs(dsh) + refactor(skill): 插件清單同期 — docs/dsh.md 4言語「插件清單」節（131 内建 entry id、id -> 包名）追加、nixkits.dsh.plugins.disabled 参照。check-updates 技能第5步 dsh 特説明追加：更新時新包 dsh-*/cordis.patch.yml 清單抽出 docs 同期。
