@@ -67,7 +67,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} web --host ${cfg.host} --port ${toString cfg.port} --expose-internals";
+        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port}";
+        WorkingDirectory = "/var/lib/dsh";
         Restart = "on-failure";
         RestartSec = 10;
         TimeoutStopSec = 30;
