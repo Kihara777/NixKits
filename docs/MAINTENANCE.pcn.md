@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T17:55:00+09:00
+
+**摘要**: fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 与 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。
+
+| 提交 | 説明 |
+|------|------|
+| `a33b414` | fix(module): rewrite Host/Origin to loopback in lighttpd reverse proxy |
+
 ## 2026-08-18T17:30:00+09:00
 
 **摘要**: fix(module): dsh trustedHosts 選項 — 反代後全 /api 403。dsh /api 要求 Host header 検証（isTrustedApiRequest：Host loopback 或信頼必須、Origin 同一生成元）。lighttpd 経由 Host LAN 域名/IP 化、全 403 forbidden。nixkits.dsh.trustedHosts 追加（repeatable --trusted-host 映射）、系統設定 harukax.lan + 192.168.31.241 信頼後 API 復旧。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T17:55:00+09:00
+
+**Summary**: fix(module): lighttpd rewrites Host/Origin to loopback — supersedes the trustedHosts approach. dsh isTrustedApiRequest then sees loopback and passes, with no per-deployment trustedHosts and no LAN hostname/IP leaked to the backend. Origin must be rewritten alongside Host or the same-origin check fails. Verified: after dropping trustedHosts, proxied API (harukax.lan / 192.168.31.241) returns ok:true.
+
+| Commit | Description |
+|------|------|
+| `a33b414` | fix(module): rewrite Host/Origin to loopback in lighttpd reverse proxy |
+
 ## 2026-08-18T17:30:00+09:00
 
 **Summary**: fix(module): dsh trustedHosts option — all /api calls returned 403 behind the proxy. dsh validates the Host header on /api requests (isTrustedApiRequest: Host must be loopback or trusted, and the browser Origin must match). Via lighttpd the Host arrives as the LAN hostname/IP, so everything was 403 forbidden. Add nixkits.dsh.trustedHosts (mapped to repeatable --trusted-host); system config sets harukax.lan + 192.168.31.241 and the API recovered.

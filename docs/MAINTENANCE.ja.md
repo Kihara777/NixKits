@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T17:55:00+09:00
+
+**概要**: fix(module): lighttpd が Host/Origin を loopback に書き換え — trustedHosts 方式を置換。dsh の isTrustedApiRequest が loopback を見て通過、per-deployment trustedHosts 不要、かつ LAN ホスト名/IP をバックエンドに漏洩しない。Origin は Host と同時に書き換え必須（同一生成元チェック失敗を避けるため）。実測：trustedHosts 削除後も反代 API（harukax.lan / 192.168.31.241）が ok:true。
+
+| コミット | 説明 |
+|------|------|
+| `a33b414` | fix(module): rewrite Host/Origin to loopback in lighttpd reverse proxy |
+
 ## 2026-08-18T17:30:00+09:00
 
 **概要**: fix(module): dsh trustedHosts オプション — リバースプロキシ経由で全 /api が 403。dsh は /api リクエストの Host header を検証（isTrustedApiRequest：Host は loopback か信頼リスト必須、ブラウザ Origin も同一生成元）。lighttpd 経由で Host が LAN ホスト名/IP になり全 403 forbidden。nixkits.dsh.trustedHosts を追加（repeatable --trusted-host にマップ）、システム設定で harukax.lan + 192.168.31.241 を信頼し API 復旧。
