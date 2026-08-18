@@ -153,6 +153,10 @@ in
       preStart = ''
         mkdir -p ${cfg.dshHome}/profiles/web
         chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}
+        # dsh's settings-file rewrites settings.yaml as owner-only/read-only;
+        # preStart runs as the service user, so rm first (rm works on the
+        # owning user's dir) then cp recreates a writable file.
+        rm -f ${cfg.dshHome}/profiles/web/cordis.patch.yml ${cfg.dshHome}/settings.yaml
         cp ${cordisPatch} ${cfg.dshHome}/profiles/web/cordis.patch.yml
         cp ${settingsDoc} ${cfg.dshHome}/settings.yaml
       '';
