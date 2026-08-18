@@ -30,14 +30,18 @@ dsh web   # 瀏覧器 UI 起動
 
 ## 服務設定
 
-常駐 web 服務実行 `nixkits.dsh` module 使用（預設端口 `8625`、防火牆自動開放）：
+常駐 web 服務実行 `nixkits.dsh` module 使用。dsh RCE 安全 loopback のみ（`127.0.0.1:8615`）監聽、lighttpd 反代对外端口 `8625` 公開（防火牆自動開放）：
 
 ```nix
 {
   nixkits.dsh = {
     enable = true;
-    port = 8625;
-    host = "0.0.0.0";
+    host = "127.0.0.1";   # 固定：dsh 拒否非 loopback
+    port = 8615;          # 内部 loopback 端口
+    reverseProxy = {
+      enable = true;
+      port = 8625;        # lighttpd 对外端口
+    };
     environment.DEEPSEEK_API_KEY = "sk-...";
   };
 }

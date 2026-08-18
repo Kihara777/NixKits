@@ -30,14 +30,18 @@ dsh web   # launch the browser UI
 
 ## Service
 
-Run as a resident web service via the `nixkits.dsh` module (default port `8625`, firewall auto-opened):
+Run as a resident web service via the `nixkits.dsh` module. dsh listens loopback-only (`127.0.0.1:8615`) for RCE safety, exposed to the outside via a lighttpd reverse proxy on port `8625` (firewall auto-opened):
 
 ```nix
 {
   nixkits.dsh = {
     enable = true;
-    port = 8625;
-    host = "0.0.0.0";
+    host = "127.0.0.1";   # fixed: dsh rejects non-loopback
+    port = 8615;          # internal loopback port
+    reverseProxy = {
+      enable = true;
+      port = 8625;        # public lighttpd port
+    };
     environment.DEEPSEEK_API_KEY = "sk-...";
   };
 }

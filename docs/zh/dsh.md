@@ -30,14 +30,18 @@ dsh web   # 启动浏览器 UI
 
 ## 服务配置
 
-作为常驻 web 服务运行，使用 `nixkits.dsh` 模块（默认端口 `8625`，自动开放防火墙）：
+作为常驻 web 服务运行，使用 `nixkits.dsh` 模块。dsh 出于 RCE 安全只监听 loopback（`127.0.0.1:8615`），通过 lighttpd 反向代理暴露到对外端口 `8625`（自动开放防火墙）：
 
 ```nix
 {
   nixkits.dsh = {
     enable = true;
-    port = 8625;
-    host = "0.0.0.0";
+    host = "127.0.0.1";   # 固定：dsh 拒绝非 loopback
+    port = 8615;          # 内部 loopback 端口
+    reverseProxy = {
+      enable = true;
+      port = 8625;        # lighttpd 对外端口
+    };
     environment.DEEPSEEK_API_KEY = "sk-...";
   };
 }
