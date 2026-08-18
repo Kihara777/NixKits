@@ -58,6 +58,7 @@
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
     nixosModules.comfyui-rocm          = import ./modules/comfyui-rocm.nix;
+    nixosModules.dsh                   = import ./modules/dsh.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.ruyi                 = import ./modules/ruyi.nix;
 

@@ -27,3 +27,18 @@ nixkits.extraPackages = [ nixkits.dsh ];
 dsh --help
 dsh web   # 瀏覧器 UI 起動
 ```
+
+## 服務設定
+
+常駐 web 服務実行 `nixkits.dsh` module 使用（預設端口 `8625`、防火牆自動開放）：
+
+```nix
+{
+  nixkits.dsh = {
+    enable = true;
+    port = 8625;
+    host = "0.0.0.0";
+    environment.DEEPSEEK_API_KEY = "sk-...";
+  };
+}
+```

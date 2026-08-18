@@ -27,3 +27,18 @@ nixkits.extraPackages = [ nixkits.dsh ];
 dsh --help
 dsh web   # ブラウザ UI を起動
 ```
+
+## サービス設定
+
+常駐 web サービスとして実行するには `nixkits.dsh` モジュールを使用（デフォルトポート `8625`、ファイアウォール自動開放）：
+
+```nix
+{
+  nixkits.dsh = {
+    enable = true;
+    port = 8625;
+    host = "0.0.0.0";
+    environment.DEEPSEEK_API_KEY = "sk-...";
+  };
+}
+```
