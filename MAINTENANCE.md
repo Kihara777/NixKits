@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T16:20:05+09:00
+
+**摘要**：fix(dsh): patch 浏览器端 client bundle — crypto.randomUUID fallback。crypto.randomUUID() 在非安全上下文（HTTP 局域网 IP，即 lighttpd 反代）不可用，导致 webui 报 "crypto.randomUUID is not a function"。postInstall 替换 dsh-client-connection + dsh-client-ui-conversation 的 crypto.randomUUID 为 __dshUuid helper（fallback 到 crypto.getRandomValues，全上下文可用）。服务端 index.js 用 Node crypto，无需处理。
+
+| 提交 | 说明 |
+|------|------|
+| `5d1cfa8` | fix(dsh): patch browser client bundles — crypto.randomUUID fallback |
+
 ## 2026-08-18T15:29:14+09:00
 
 **摘要**：fix/docs(dsh): lighttpd 反代方案定稿 — dsh 内部 loopback 端口 8615（对齐 SearXNG 的 42701 惯例），lighttpd 对外端口 8625（对齐 4270），防火墙开放 lighttpd 对外端口（非 dsh 内部端口）。4 语言文档同步最终方案。

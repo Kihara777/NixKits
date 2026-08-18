@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T16:20:05+09:00
+
+**概要**: fix(dsh): ブラウザ側 client bundle パッチ — crypto.randomUUID fallback。crypto.randomUUID() は非セキュアコンテキスト（LAN IP への HTTP、つまり lighttpd リバースプロキシ経由）で使用不可となり、webui が "crypto.randomUUID is not a function" で失敗。postInstall で dsh-client-connection + dsh-client-ui-conversation の crypto.randomUUID を __dshUuid ヘルパー（crypto.getRandomValues にフォールバック、全コンテキストで利用可）に置換。サーバー側 index.js は Node の crypto を使用、変更不要。
+
+| コミット | 説明 |
+|------|------|
+| `5d1cfa8` | fix(dsh): patch browser client bundles — crypto.randomUUID fallback |
+
 ## 2026-08-18T15:29:14+09:00
 
 **概要**: fix/docs(dsh): lighttpd リバースプロキシ定稿 — dsh 内部 loopback ポート 8615（SearXNG 42701 に合わせる）、lighttpd 对外ポート 8625（4270 に合わせる）、ファイアウォールは lighttpd 对外ポートを開放（dsh 内部ポートでなく）。4 言語ドキュメント同期。
