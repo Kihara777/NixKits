@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T15:29:14+09:00
+
+**Summary**: fix/docs(dsh): finalize lighttpd reverse proxy — dsh internal loopback port 8615 (mirroring SearXNG 42701), lighttpd public port 8625 (mirroring 4270); firewall opens the lighttpd public port, not dsh internal. 4-language docs synced.
+
+| Commit | Description |
+|------|------|
+| `4a78d54` | fix(module): dsh internal port 8615, public reverseProxy port 8625 |
+| `5452a3e` | docs(dsh): sync service section to loopback 8615 + lighttpd reverseProxy 8625 |
+
 ## 2026-08-18T14:38:26+09:00
 
 **Summary**: feat(module): dsh reverseProxy via lighttpd — dsh rejects non-loopback hosts (RCE safety); a lighttpd `$SERVER["socket"]` block on 0.0.0.0:8626 proxies to dsh loopback 8625 (reusing the SearXNG lighttpd instance; extraConfig is types.lines, merges cleanly). Firewall opens 8626.

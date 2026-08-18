@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T15:29:14+09:00
+
+**摘要**: fix/docs(dsh): lighttpd 反代定稿 — dsh 内部 loopback 端口 8615（SearXNG 42701 对齐）、lighttpd 对外端口 8625（4270 对齐）、防火牆開放 lighttpd 对外端口（非 dsh 内部）。4 語言文書同期。
+
+| 提交 | 説明 |
+|------|------|
+| `4a78d54` | fix(module): dsh internal port 8615, public reverseProxy port 8625 |
+| `5452a3e` | docs(dsh): sync service section to loopback 8615 + lighttpd reverseProxy 8625 |
+
 ## 2026-08-18T14:38:26+09:00
 
 **摘要**: feat(module): dsh reverseProxy via lighttpd — dsh 拒否 non loopback（RCE 安全）、lighttpd `$SERVER["socket"]` block 0.0.0.0:8626 dsh loopback 8625 反代（SearXNG lighttpd 实例再利用、extraConfig types.lines 合併）。对外 8626 firewall 開放。
