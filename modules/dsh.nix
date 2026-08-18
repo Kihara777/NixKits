@@ -21,7 +21,7 @@ in
 
     port = lib.mkOption {
       type = lib.types.port;
-      default = 8625;
+      default = 8615;
       description = "Port for the dsh web service";
     };
 
@@ -47,7 +47,7 @@ in
       enable = lib.mkEnableOption "lighttpd reverse proxy to expose dsh on a non-loopback port";
       port = lib.mkOption {
         type = lib.types.port;
-        default = 8626;
+        default = 8625;
         description = "Public port for the lighttpd reverse proxy";
       };
     };
