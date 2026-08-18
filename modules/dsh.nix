@@ -19,6 +19,18 @@ in
       description = "Listen address for the dsh web service (dsh rejects non-loopback for safety — RCE)";
     };
 
+    trustedHosts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Non-loopback hostnames/IPs trusted for /api access, passed as
+        repeatable --trusted-host flags.  Required when exposing dsh via a
+        reverse proxy: dsh validates the request Host header against
+        loopback + this list (exact host:port, or port-less host matching
+        any port), and same-origin checks the browser Origin.
+      '';
+    };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 8615;
@@ -76,7 +88,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port}";
+        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
         WorkingDirectory = "/var/lib/dsh";
         Restart = "on-failure";
         RestartSec = 10;
