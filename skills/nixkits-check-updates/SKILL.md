@@ -178,6 +178,22 @@ done
 
 同时检查并更新 `.nix` 文件中的 `meta.changelog` URL。
 
+### dsh 插件清单同步
+
+更新 dsh 时，除版本号外还必须同步内置插件清单——dsh 的
+cordis.patch.yml entry id 是 `nixkits.dsh.plugins.disabled` 的取值来源，
+版本升级后插件可能增删。提取并写入 4 语言文档的「插件清单」章节：
+
+```bash
+DSH=$(nix build .#dsh --print-out-paths --no-link)
+LIST=$(for f in "$DSH/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/"dsh-*/cordis.patch.yml; do
+  awk '/^    - id: /{id=$3} /^      name: /{name=$2; gsub(/[.,\047]/, "", name); print id" -> "name}' "$f"
+done | sort -u)
+```
+
+将提取的 `id -> name` 列表替换文档中「插件清单」代码块的内容
+（标题保留各语言本地化，清单正文 id/name 跨语言一致）。
+
 ## 第 6 步：检查本地安装版本
 
 ```bash
