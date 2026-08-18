@@ -55,13 +55,23 @@ in
     user = lib.mkOption {
       type = lib.types.str;
       default = "dsh";
-      description = "User to run the service as";
+      description = "User to run the service as (set to a normal user for full /home access)";
     };
 
     group = lib.mkOption {
       type = lib.types.str;
       default = "dsh";
       description = "Group to run the service as";
+    };
+
+    dshHome = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/dsh";
+      description = ''
+        DSH_HOME directory (settings.yaml, profiles, skills).  Defaults to
+        /var/lib/dsh for the isolated system user; set to the user's own
+        path (e.g. /home/<user>/.dsh) when running as a normal user.
+      '';
     };
 
     environment = lib.mkOption {
@@ -126,7 +136,7 @@ in
       dsh = {
         isSystemUser = true;
         group = cfg.group;
-        home = "/var/lib/dsh";
+        home = cfg.dshHome;
         createHome = true;
       };
     };
@@ -141,23 +151,23 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        mkdir -p /var/lib/dsh/profiles/web
-        cp ${cordisPatch} /var/lib/dsh/profiles/web/cordis.patch.yml
-        cp ${settingsDoc} /var/lib/dsh/settings.yaml
+        mkdir -p ${cfg.dshHome}/profiles/web
+        chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}
+        cp ${cordisPatch} ${cfg.dshHome}/profiles/web/cordis.patch.yml
+        cp ${settingsDoc} ${cfg.dshHome}/settings.yaml
       '';
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
-        WorkingDirectory = "/var/lib/dsh";
+        WorkingDirectory = cfg.dshHome;
         Restart = "on-failure";
         RestartSec = 10;
         TimeoutStopSec = 30;
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "dsh";
         # HOME/DSH_HOME must be writable (system user default /var/empty is not);
         # merge with user-provided environment instead of overwriting.
-        Environment = [ "HOME=/var/lib/dsh" "DSH_HOME=/var/lib/dsh" ]
+        Environment = [ "HOME=${cfg.dshHome}" "DSH_HOME=${cfg.dshHome}" ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
       };
     };
