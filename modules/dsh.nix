@@ -67,7 +67,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} web --host ${cfg.host} --port ${toString cfg.port}";
+        ExecStart = "${lib.getExe cfg.package} web --host ${cfg.host} --port ${toString cfg.port} --expose-internals";
         Restart = "on-failure";
         RestartSec = 10;
         TimeoutStopSec = 30;
