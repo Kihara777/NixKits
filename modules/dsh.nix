@@ -15,8 +15,8 @@ in
 
     host = lib.mkOption {
       type = lib.types.str;
-      default = "0.0.0.0";
-      description = "Listen address for the dsh web service";
+      default = "127.0.0.1";
+      description = "Listen address for the dsh web service (dsh rejects non-loopback for safety — RCE)";
     };
 
     port = lib.mkOption {
@@ -46,8 +46,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
 
     users.users = lib.mkIf (cfg.user == "dsh") {
       dsh = {
