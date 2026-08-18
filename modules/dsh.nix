@@ -2,6 +2,15 @@
 
 let
   cfg = config.nixkits.dsh;
+
+  # Generated cordis.patch.yml: user's extraPatch + declarative plugin
+  # off-switches (disabled) and config overrides (settings).  Written to
+  # $DSH_HOME/profiles/web by preStart; dsh hot-reloads it at runtime.
+  cordisPatch = pkgs.writeText "cordis.patch.yml" ''
+    ${cfg.plugins.extraPatch}
+    ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
+    ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
+  '';
 in
 {
   options.nixkits.dsh = {
@@ -63,6 +72,34 @@ in
         description = "Public port for the lighttpd reverse proxy";
       };
     };
+
+    plugins = {
+      disabled = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Plugin entry ids to disable (declarative off-switch).  Rendered as
+          `- id: <id> / disabled: true` in the generated cordis.patch.yml.
+        '';
+      };
+      settings = lib.mkOption {
+        type = lib.types.attrsOf lib.types.attrs;
+        default = { };
+        description = ''
+          Plugin config overrides, keyed by entry id.  Rendered as
+          `- id: <id> / config: { ... }` (JSON in YAML flow style) in the
+          generated cordis.patch.yml.
+        '';
+      };
+      extraPatch = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = ''
+          Raw cordis.patch.yml fragment appended to the generated patch —
+          for hand-written entries such as MCP servers (insert lists).
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -86,6 +123,10 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      preStart = ''
+        mkdir -p /var/lib/dsh/profiles/web
+        cp ${cordisPatch} /var/lib/dsh/profiles/web/cordis.patch.yml
+      '';
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
