@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T18:20:00+09:00
+
+**Summary**: feat(module): nixkits.dsh.plugins — declarative plugin on/off + config. dsh plugins hot-reload via cordis.patch.yml; the module adds plugins.disabled (entry ids), plugins.settings (config overrides), plugins.extraPatch (raw fragments like MCP). System config migrated MCP to extraPatch, API key to kix.credentials, and disables session-telemetry-otel + session-stats as an example. Verified: cordis.patch.yml renders correctly, no absent-id warning.
+
+| Commit | Description |
+|------|------|
+| `0e4fe58` | feat(module): nixkits.dsh.plugins — declarative plugin on/off + config |
+
 ## 2026-08-18T17:55:00+09:00
 
 **Summary**: fix(module): lighttpd rewrites Host/Origin to loopback — supersedes the trustedHosts approach. dsh isTrustedApiRequest then sees loopback and passes, with no per-deployment trustedHosts and no LAN hostname/IP leaked to the backend. Origin must be rewritten alongside Host or the same-origin check fails. Verified: after dropping trustedHosts, proxied API (harukax.lan / 192.168.31.241) returns ok:true.

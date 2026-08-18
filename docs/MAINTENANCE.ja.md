@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T18:20:00+09:00
+
+**概要**: feat(module): nixkits.dsh.plugins — 宣言的プラグインオン/オフと設定。dsh プラグインは cordis.patch.yml でランタイムホットリロード、モジュールに plugins.disabled（entry id）、plugins.settings（config 上書き）、plugins.extraPatch（MCP などの生フラグメント）を追加。システム設定は MCP を extraPatch に移行、API key を kix.credentials に宣言化、session-telemetry-otel + session-stats を無効化例として設定。実測：cordis.patch.yml 正しく生成、absent-id 警告なし。
+
+| コミット | 説明 |
+|------|------|
+| `0e4fe58` | feat(module): nixkits.dsh.plugins — declarative plugin on/off + config |
+
 ## 2026-08-18T17:55:00+09:00
 
 **概要**: fix(module): lighttpd が Host/Origin を loopback に書き換え — trustedHosts 方式を置換。dsh の isTrustedApiRequest が loopback を見て通過、per-deployment trustedHosts 不要、かつ LAN ホスト名/IP をバックエンドに漏洩しない。Origin は Host と同時に書き換え必須（同一生成元チェック失敗を避けるため）。実測：trustedHosts 削除後も反代 API（harukax.lan / 192.168.31.241）が ok:true。

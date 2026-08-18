@@ -46,3 +46,23 @@ dsh web   # ブラウザ UI を起動
   };
 }
 ```
+
+## プラグイン宣言的管理
+
+dsh のプラグインは `cordis.patch.yml` からランタイムにホットリロードされる（再起動不要）。`nixkits.dsh.plugins` で宣言的なオン/オフと設定が可能：
+
+```nix
+{
+  nixkits.dsh.plugins = {
+    disabled = [ "session-telemetry-otel" "session-stats" ];  # 無効化
+    settings."dsh-web-app" = { printUrl = false; };           # 設定上書き
+    extraPatch = "...";  # 生フラグメント（MCP insert リストなど）
+  };
+}
+```
+
+| オプション | 説明 |
+|------|------|
+| `disabled` | 無効化するプラグイン entry id、`- id: <id> / disabled: true` に描画 |
+| `settings` | プラグイン config 上書き（id → JSON、YAML flow style） |
+| `extraPatch` | 生 cordis.patch.yml フラグメント（MCP サーバーなど） |

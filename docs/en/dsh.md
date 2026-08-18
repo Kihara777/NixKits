@@ -46,3 +46,23 @@ Run as a resident web service via the `nixkits.dsh` module. dsh listens loopback
   };
 }
 ```
+
+## Declarative plugin management
+
+dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits.dsh.plugins` provides declarative on/off and config:
+
+```nix
+{
+  nixkits.dsh.plugins = {
+    disabled = [ "session-telemetry-otel" "session-stats" ];  # disable plugins
+    settings."dsh-web-app" = { printUrl = false; };           # config overrides
+    extraPatch = "...";  # raw fragment (e.g. MCP insert list)
+  };
+}
+```
+
+| Option | Meaning |
+|------|------|
+| `disabled` | plugin entry ids to disable, rendered as `- id: <id> / disabled: true` |
+| `settings` | plugin config overrides (id → JSON, YAML flow style) |
+| `extraPatch` | raw cordis.patch.yml fragment (e.g. MCP servers) |

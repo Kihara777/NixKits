@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T18:20:00+09:00
+
+**摘要**: feat(module): nixkits.dsh.plugins — 宣言插件 on/off 与設定。dsh 插件 cordis.patch.yml runtime hot reload、module plugins.disabled（entry id）、plugins.settings（config 覆写）、plugins.extraPatch（MCP 等生片段）追加。系統設定 MCP extraPatch 移行、API key kix.credentials 宣言化、session-telemetry-otel + session-stats 無効化例。実測：cordis.patch.yml 正生成、absent-id 警告無。
+
+| 提交 | 説明 |
+|------|------|
+| `0e4fe58` | feat(module): nixkits.dsh.plugins — declarative plugin on/off + config |
+
 ## 2026-08-18T17:55:00+09:00
 
 **摘要**: fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 与 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。

@@ -46,3 +46,23 @@ dsh web   # 瀏覧器 UI 起動
   };
 }
 ```
+
+## 插件宣言管理
+
+dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits.dsh.plugins` 宣言 on/off 与設定：
+
+```nix
+{
+  nixkits.dsh.plugins = {
+    disabled = [ "session-telemetry-otel" "session-stats" ];  # 無効化
+    settings."dsh-web-app" = { printUrl = false; };           # 設定覆写
+    extraPatch = "...";  # 生片段（MCP insert 列表等）
+  };
+}
+```
+
+| 選項 | 説明 |
+|------|------|
+| `disabled` | 無効化 plugin entry id、`- id: <id> / disabled: true` 描画 |
+| `settings` | plugin config 覆写（id → JSON、YAML flow style） |
+| `extraPatch` | 生 cordis.patch.yml 片段（MCP server 等） |

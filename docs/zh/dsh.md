@@ -46,3 +46,23 @@ dsh web   # 启动浏览器 UI
   };
 }
 ```
+
+## 插件声明式管理
+
+dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`nixkits.dsh.plugins` 提供声明式启停与配置：
+
+```nix
+{
+  nixkits.dsh.plugins = {
+    disabled = [ "session-telemetry-otel" "session-stats" ];  # 禁用插件
+    settings."dsh-web-app" = { printUrl = false; };           # 配置覆盖
+    extraPatch = "...";  # 手写片段（如 MCP 服务 insert 列表）
+  };
+}
+```
+
+| 选项 | 说明 |
+|------|------|
+| `disabled` | 禁用的插件 entry id，渲染为 `- id: <id> / disabled: true` |
+| `settings` | 插件 config 覆盖（id → JSON，YAML flow style） |
+| `extraPatch` | 手写 cordis.patch.yml 片段（如 MCP 服务） |
