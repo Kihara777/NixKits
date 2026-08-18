@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T20:00:00+09:00
+
+**Summary**: fix(module): dsh supports normal-user operation — running as the isolated system user (home /var/lib/dsh) it could not read /home/<user> (mode 700), so the agent could not touch the working tree. Add dshHome; route HOME/DSH_HOME/WorkingDirectory/preStart through it, replace StateDirectory with preStart mkdir + chown. Local config uses user="kix" + dshHome="/home/kix/.dsh", so dsh runs as kix and reaches /home/kix.
+
+| Commit | Description |
+|------|------|
+| `584c764` | fix(module): dsh dshHome option + support normal-user operation |
+
 ## 2026-08-18T19:30:00+09:00
 
 **Summary**: feat(module): nixkits.dsh.settings — declarative settings. dsh settings-menu options live in $DSH_HOME/settings.yaml (file-backed, hot-reloaded, per-namespace sections). New settings option (attrsOf attrs, namespace → section) rendered as JSON (valid YAML) written by preStart. Verified: web-search-deepseek.maxTokens declaratively overrides default 4096 → 8192. 4-language docs gain a settings section.

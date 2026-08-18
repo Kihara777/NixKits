@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-18T20:00:00+09:00
+
+**摘要**：fix(module): dsh 支持普通用户运行 — dsh 以隔离系统用户（home /var/lib/dsh）运行无法访问 /home/<user>（700 权限），agent 无法操作用户工作目录。新增 dshHome 选项，HOME/DSH_HOME/WorkingDirectory/preStart 统一走该路径，StateDirectory 改为 preStart mkdir + chown。本机配置 user="kix" + dshHome="/home/kix/.dsh"，dsh 以 kix 身份运行，可访问 /home/kix。
+
+| 提交 | 说明 |
+|------|------|
+| `584c764` | fix(module): dsh dshHome option + support normal-user operation |
+
 ## 2026-08-18T19:30:00+09:00
 
 **摘要**：feat(module): nixkits.dsh.settings — 声明式设置配置。dsh 设置菜单选项存储于 $DSH_HOME/settings.yaml（文件备份 + 热加载，per-namespace section）。新增 settings 选项（attrsOf attrs，namespace → section），渲染为 JSON（合法 YAML）由 preStart 写入。部署验证：web-search-deepseek.maxTokens 声明式覆盖默认 4096 → 8192 生效。文档 4 语言补设置配置章节。

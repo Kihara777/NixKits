@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-18T20:00:00+09:00
+
+**摘要**: fix(module): dsh 通常用户実行対応 — 隔離 system user（home /var/lib/dsh）無法 /home/<user>（700）訪問、agent 作業目録操作不能。dshHome 選項追加、HOME/DSH_HOME/WorkingDirectory/preStart 統一、StateDirectory preStart mkdir + chown 置換。本機 user="kix" + dshHome="/home/kix/.dsh"、dsh kix 身份実行 /home/kix 到達。
+
+| 提交 | 説明 |
+|------|------|
+| `584c764` | fix(module): dsh dshHome option + support normal-user operation |
+
 ## 2026-08-18T19:30:00+09:00
 
 **摘要**: feat(module): nixkits.dsh.settings — 宣言設定。dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件备份、hot reload、namespace 別 section）格納。settings 選項（attrsOf attrs、namespace → section）追加 JSON（合法 YAML）preStart 写入。実測：web-search-deepseek.maxTokens 既定 4096 → 8192 宣言覆写。4言語文書設定節追加。

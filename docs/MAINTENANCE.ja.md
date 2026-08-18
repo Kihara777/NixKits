@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-18T20:00:00+09:00
+
+**概要**: fix(module): dsh 通常ユーザー実行対応 — 隔離システムユーザー（home /var/lib/dsh）では /home/<user>（700 権限）にアクセスできず、agent が作業ディレクトリを操作できなかった。dshHome オプションを追加し、HOME/DSH_HOME/WorkingDirectory/preStart を統一ルート化、StateDirectory を preStart mkdir + chown に置換。ローカル設定は user="kix" + dshHome="/home/kix/.dsh" で、dsh が kix として実行され /home/kix に到達。
+
+| コミット | 説明 |
+|------|------|
+| `584c764` | fix(module): dsh dshHome option + support normal-user operation |
+
 ## 2026-08-18T19:30:00+09:00
 
 **概要**: feat(module): nixkits.dsh.settings — 宣言的設定。dsh 設定メニュー項目は $DSH_HOME/settings.yaml（ファイルバックアップ、ホットリロード、namespace 別セクション）に格納。settings オプション（attrsOf attrs、namespace → section）を追加し JSON（合法 YAML）として preStart で書き込み。実測：web-search-deepseek.maxTokens を既定 4096 → 8192 に宣言的オーバーライド。4言語ドキュメントに設定節を追加。
