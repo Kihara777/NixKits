@@ -121,6 +121,14 @@ in
           "X-Forwarded-For" => "%{remote-addr}e",
           "X-Forwarded-Proto" => "http"
         )
+        # Rewrite Host + Origin to the loopback backend so dsh's
+        # isTrustedApiRequest sees loopback (no trustedHosts needed) and the
+        # LAN hostname/IP is not leaked to the backend.  Origin must be
+        # rewritten together with Host, otherwise the same-origin check fails.
+        setenv.set-request-header = (
+          "Host" => "127.0.0.1:${toString cfg.port}",
+          "Origin" => "http://127.0.0.1:${toString cfg.port}"
+        )
       }
     '';
 
