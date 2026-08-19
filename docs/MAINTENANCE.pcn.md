@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T08:12:57+09:00
+
+**摘要**：fix(rcc-fix): desktop 条目改名互換 — asusctl 6.4.0 desktop 条目 org.opengamingcollective.rog-control-center.desktop 改名、nixpkgs programs.rog-control-center autoStart（makeAutostartItem）旧名 rog-control-center.desktop 複製続、系統構築失敗（cp cannot stat）。rcc-fix overlay asusctl postInstall 旧名符号連結提供。検証：本機釘 nixpkgs rev（0ae2bc1）makeAutostartItem { name = "rog-control-center"; package = asusctl } 構築成功（EXIT=0）。
+
+| 提交 | 説明 |
+|------|------|
+| `650f6f7` | fix(rcc-fix): compat symlink for renamed desktop entry — nixpkgs programs.rog-control-center autoStart copies the pre-6.4.0 filename |
+
 ## 2026-08-20T07:41:45+09:00
 
 **摘要**：fix(rcc-fix): asusctl 6.4.0 向補丁再基 — nixpkgs 前進 asusctl 6.3.7 → 6.4.0、rcc-fix.patch 第 4 hunk 失敗（系統構築失敗）。上流該領域再構築（`if dev.is_old_laptop() { pow3r.retain(...) }` 旧 push 塊置換、else 分岐 PowerZones::None 過濾上流吸収）。補丁境界検査置換（`names[(*z) as usize]` → filter_map 境界検査 + warn）保持。他 hunk 変更不要。検証：6.4.0 源 git apply --check 全 hunk 通過、本機釘 nixpkgs rev（0ae2bc1）asusctl 構築成功（EXIT=0）。

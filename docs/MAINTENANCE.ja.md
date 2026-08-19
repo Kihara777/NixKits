@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T08:12:57+09:00
+
+**概要**：fix(rcc-fix): デスクトップエントリ改名互換 — asusctl 6.4.0 がデスクトップエントリを org.opengamingcollective.rog-control-center.desktop へ改名した一方、nixpkgs の programs.rog-control-center autoStart（makeAutostartItem）は旧名 rog-control-center.desktop をコピーし続け、システムビルドが失敗（cp cannot stat）。rcc-fix overlay が asusctl の postInstall で旧名をシンボリックリンクとして提供。検証：本機ピン留め nixpkgs rev（0ae2bc1）で makeAutostartItem { name = "rog-control-center"; package = asusctl } のビルド成功（EXIT=0）。
+
+| コミット | 説明 |
+|------|------|
+| `650f6f7` | fix(rcc-fix): compat symlink for renamed desktop entry — nixpkgs programs.rog-control-center autoStart copies the pre-6.4.0 filename |
+
 ## 2026-08-20T07:41:45+09:00
 
 **概要**：fix(rcc-fix): asusctl 6.4.0 向けパッチ再ベース — nixpkgs 前進で asusctl が 6.3.7 → 6.4.0 となり、rcc-fix.patch の 4 番目の hunk が失敗（システムビルド失敗）。上流が該当領域を再構築（`if dev.is_old_laptop() { pow3r.retain(...) }` が旧 push ブロックを置換、else 分岐の PowerZones::None フィルタは上流に吸収）。パッチは境界チェック置換（`names[(*z) as usize]` → filter_map による境界チェック + warn）のみを保持。他 hunk は変更不要。検証：6.4.0 ソースへの git apply --check が全 hunk 通過、本機ピン留め nixpkgs rev（0ae2bc1）で asusctl ビルド成功（EXIT=0）。

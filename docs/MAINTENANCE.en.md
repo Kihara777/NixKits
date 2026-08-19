@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T08:12:57+09:00
+
+**Summary**: fix(rcc-fix): desktop entry rename compat — asusctl 6.4.0 renamed its desktop entry to org.opengamingcollective.rog-control-center.desktop, while nixpkgs' programs.rog-control-center autoStart (makeAutostartItem) still copies the old rog-control-center.desktop name, breaking the system build (cp cannot stat). The rcc-fix overlay now ships the old name as a symlink in asusctl's postInstall. Verified: makeAutostartItem { name = "rog-control-center"; package = asusctl } builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).
+
+| Commit | Description |
+|------|------|
+| `650f6f7` | fix(rcc-fix): compat symlink for renamed desktop entry — nixpkgs programs.rog-control-center autoStart copies the pre-6.4.0 filename |
+
 ## 2026-08-20T07:41:45+09:00
 
 **Summary**: fix(rcc-fix): patch rebased for asusctl 6.4.0 — after nixpkgs advanced, asusctl moved 6.3.7 → 6.4.0 and hunk 4 of rcc-fix.patch failed (system build broke). Upstream restructured the region: `if dev.is_old_laptop() { pow3r.retain(...) }` replaced the old push block, and the PowerZones::None filter in the else branch was absorbed upstream; the patch now keeps only the bounds-check replacement (`names[(*z) as usize]` → filter_map with bounds check + warn). The other hunks needed no change. Verified: git apply --check passes all hunks against the 6.4.0 source; asusctl builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).

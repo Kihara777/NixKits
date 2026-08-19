@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T08:12:57+09:00
+
+**摘要**：fix(rcc-fix): desktop 条目重命名兼容 — asusctl 6.4.0 将桌面条目重命名为 org.opengamingcollective.rog-control-center.desktop，nixpkgs 的 programs.rog-control-center autoStart（makeAutostartItem）仍复制旧文件名 rog-control-center.desktop，导致系统构建失败（cp cannot stat）。rcc-fix overlay 在 asusctl 的 postInstall 中以符号链接提供旧文件名。验证：以本机 nixpkgs 修订（0ae2bc1）构建 makeAutostartItem { name = "rog-control-center"; package = asusctl } 成功（EXIT=0）。
+
+| 提交 | 说明 |
+|------|------|
+| `650f6f7` | fix(rcc-fix): compat symlink for renamed desktop entry — nixpkgs programs.rog-control-center autoStart copies the pre-6.4.0 filename |
+
 ## 2026-08-20T07:41:45+09:00
 
 **摘要**：fix(rcc-fix): 补丁重基适配 asusctl 6.4.0 — nixpkgs 前进后 asusctl 6.3.7 → 6.4.0，rcc-fix.patch 第 4 hunk 失效（系统构建失败）。上游重构了该区域：`if dev.is_old_laptop() { pow3r.retain(...) }` 替代原 push 块，else 分支的 PowerZones::None 过滤已吸收上游；补丁仅保留越界防护替换（`names[(*z) as usize]` → filter_map 边界检查 + warn）。其余 hunk 无需变更。验证：git apply --check 对 6.4.0 源码全 hunk 通过；以本机系统 nixpkgs 修订（0ae2bc1）构建 asusctl 成功（EXIT=0）。
