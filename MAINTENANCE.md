@@ -8,6 +8,8 @@
 
 | 提交 | 说明 |
 |------|------|
+| `51d9435` | fix(module): dsh WebSocket reverse proxy via mod_wstunnel |
+| `33d5931` | fix(module): dsh wstunnel port as string (match lighttpd backend syntax) |
 | `d7d2713` | fix(module): dsh WebSocket via mod_proxy upgrade (mod_wstunnel never runs) |
 
 ## 2026-08-19T13:10:00+09:00
@@ -33,6 +35,7 @@
 | 提交 | 说明 |
 |------|------|
 | `f2981e6` | feat(module): nixkits.dsh.settings — declarative settings |
+| `dc64cbb` | docs(dsh): declarative settings section + maintenance log |
 
 ## 2026-08-18T18:45:00+09:00
 
@@ -42,6 +45,14 @@
 |------|------|
 | `06d0e28` | docs(dsh): plugin inventory + check-updates skill sync |
 
+## 2026-08-18T18:39:34+09:00
+
+**摘要**：fix(module): dsh preStart rm before cp — settings/plugins 由 preStart 生成的文件权限为 444（只读），服务用户直接 cp 覆盖失败；改为先 rm 再 cp 生成。
+
+| 提交 | 说明 |
+|------|------|
+| `f308ac7` | fix(module): dsh preStart rm before cp — service-user cannot overwrite 444 |
+
 ## 2026-08-18T18:20:00+09:00
 
 **摘要**：feat(module): nixkits.dsh.plugins — 声明式插件启停与配置。dsh 插件经 cordis.patch.yml 运行时热加载，模块新增 plugins.disabled（禁用 entry id）、plugins.settings（config 覆盖）、plugins.extraPatch（手写片段如 MCP）。系统配置迁移 MCP 到 extraPatch、API key 改用 kix.credentials 声明式、示例禁用 session-telemetry-otel + session-stats。部署验证：cordis.patch.yml 正确生成、插件禁用无 absent 警告。
@@ -49,6 +60,7 @@
 | 提交 | 说明 |
 |------|------|
 | `0e4fe58` | feat(module): nixkits.dsh.plugins — declarative plugin on/off + config |
+| `164d515` | docs(dsh): declarative plugin management section + maintenance log |
 
 ## 2026-08-18T17:55:00+09:00
 
@@ -98,6 +110,8 @@
 | 提交 | 说明 |
 |------|------|
 | `b17e5bf` | fix(module): dsh writable HOME + StateDirectory |
+| `ed6983e` | fix(module): dsh launch via node --expose-internals (HMR requires execArgv) |
+| `456c917` | feat(skill): nixkits-skills add dsh skills directory support |
 | `ee24563` | fix(skill): correct dsh skills directory — ~/.dsh/skills |
 
 ## 2026-08-18T08:42:40+09:00
@@ -116,8 +130,8 @@
 |------|------|
 | `0ffa734` | fix(comfyui-rocm): clarify nixpkgs-compat patch target + restore assertion |
 | `cb4e250` | fix(default-overlay): codewhale riscv64 fallback to source build |
-| `c65d740` | chore(pkgs): bump codewhale 0.9.4 → 0.9.8 |
 | `04e95da` | chore(pkgs): bump mcp-searxng 1.14.1 → 1.15.0 |
+| `c65d740` | chore(pkgs): bump codewhale 0.9.4 → 0.9.8 |
 | `4531bf6` | chore(pkgs): bump opencode-telegram 0.23.1 → 0.24.0 |
 | `7f14633` | chore(pkgs): bump obs-bilibili-stream 2.1.2 → 2.1.3 |
 | `685864e` | docs: sync version numbers + ruyi link + codewhale-sudo description |
@@ -333,6 +347,7 @@
 |------|------|------|
 | codewhale | 0.9.1 | 0.9.3 |
 | mcp-searxng | 1.12.1 | 1.14.0 |
+|--------|--------|--------|
 
 ## 2026-07-31T04:07:23+09:00
 
@@ -400,6 +415,14 @@
 |------|------|
 | `547d6a0` | fix(overlays): replace dead breeze-black fetchpatch with local copy |
 
+## 2026-07-22T16:31:26+09:00
+
+**摘要**：fix(modules) — rog-control-center-fix 添加 SendSIGKILL=yes + TimeoutStopSec=30s 解决 asus-shutdown 旧进程残留阻塞 systemd-switch。comfyui-strix-halo 添加 glibc >= 2.42 assertion（ROCm 7.2 需要 GLIBC_ABI_GNU2_TLS）。
+
+| 提交 | 说明 |
+|------|------|
+| `4c314e8` | fix(modules): fix asus-shutdown SendSIGKILL + comfyui glibc assertion |
+
 ## 2026-07-22T09:00:00+09:00
 
 **摘要**：feat(overlays) — 新增 breeze-black overlay，为 Plasma 6 提供高对比度 Breeze Black 无障碍主题（全局 look-and-feel + GTK + 配色方案）。含 4 语言文档。
@@ -408,22 +431,14 @@
 |------|------|
 | `226c828` | feat(overlays): add breeze-black |
 
-## 2026-07-22T16:31:26+09:0000
-
-**摘要**：fix(modules) — rog-control-center-fix 添加 SendSIGKILL=yes + TimeoutStopSec=30s 解决 asus-shutdown 旧进程残留阻塞 systemd-switch。comfyui-strix-halo 添加 glibc >= 2.42 assertion（ROCm 7.2 需要 GLIBC_ABI_GNU2_TLS）。
-
-| 提交 | 说明 |
-|------|------|
-| `4c314e8` | fix(modules): fix asus-shutdown SendSIGKILL + comfyui glibc assertion |
-
-## 2026-07-22T05:39:31+09:0000
+## 2026-07-22T05:39:31+09:00
 
 **摘要**：docs(devshell) — 新增 devShell 文档（4 语言），描述 opencode（MCP 全栈）和 ruyi（三通道合并）开发环境。README devShell 表添加文档链接列。
 
 | 提交 | 说明 |
 |------|------|
-| `cbe9e72` | docs(README): add devShell doc column, merge ruyi 3 channels |
 | `7bfe3e3` | docs: add devShell documentation — 4 lang |
+| `cbe9e72` | docs(README): add devShell doc column, merge ruyi 3 channels |
 
 ## 2026-07-22T03:40:50+09:00
 
@@ -431,19 +446,28 @@
 
 | 提交 | 说明 |
 |------|------|
-| `bb65b77` | docs: unify all user home paths to ~/ prefix |
 | `f597b9a` | docs: generalize hardcoded /home/kix paths |
+| `bb65b77` | docs: unify all user home paths to ~/ prefix |
 
 ## 2026-07-22T03:14:27+09:00
 
-**摘要**：feat(shells) — 新增 opencode devShell（原名 opencode-telegram），合并 opencode + nodejs + blender-mcp + blender + python3 + mcp-searxng + godot-mcp + godot_4；移除独立 blender-mcp devShell。codewhale 文档补充 nix run 用法。
+**摘要**：feat(shells) — opencode devShell 迭代：SearXNG + lighttpd（与系统 NixOS 配置一致）+ blender-mcp + godot-mcp + godot + opencode + opencode-telegram，首次进入自动注册 MCP 配置；移除 godot 包的 tryEval 保护。
 
 | 提交 | 说明 |
 |------|------|
-| `c5a57a6` | refactor(shells): rename opencode, add godot-mcp + godot_4 |
-| `e83982d` | refactor(shells): merge blender-mcp + mcp-searxng |
-| `2b8f676` | fix(shells): add opencode to opencode-telegram devShell |
 | `35cc4e8` | feat(shells): add opencode-telegram devShell + nix run doc |
+| `2b8f676` | fix(shells): add opencode to opencode-telegram devShell |
+| `e83982d` | refactor(shells): merge blender-mcp + mcp-searxng |
+| `c5a57a6` | refactor(shells): rename opencode, add godot-mcp + godot_4 |
+| `60a065e` | fix(shells): add GODOT_PATH |
+| `47e43b3` | fix(shells): set SEARXNG_URL |
+| `3652030` | feat(shells): add self-contained SearXNG + Redis |
+| `e0ead5a` | refactor(shells): extract devShells from flake.nix to develop/ |
+| `9d67fd8` | feat(shells): auto-register opencode MCP servers on first entry |
+| `6a6537d` | fix(shells): add limiterSettings/trusted_proxies |
+| `c316c97` | feat(shells): add lighttpd reverse proxy |
+| `f8943ff` | refactor(shells): remove tryEval for godot-mcp |
+| `8d2f65b` | fix(shells): s/godot_4/godot/ |
 
 ## 2026-07-22T02:43:51+09:00
 
@@ -459,9 +483,9 @@
 
 | 提交 | 说明 |
 |------|------|
-| `4df8df2` | chore(pkgs): bump codewhale 0.9.0 |
-| `6046594` | chore(pkgs): bump ruyi 0.51.0 + beta 0.51.0-beta.20260714 + alpha 0.52.0-alpha.20260714 |
 | `deca3e8` | chore(pkgs): bump opencode-telegram 0.22.3 |
+| `6046594` | chore(pkgs): bump ruyi 0.51.0 + beta 0.51.0-beta.20260714 + alpha 0.52.0-alpha.20260714 |
+| `4df8df2` | chore(pkgs): bump codewhale 0.9.0 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
@@ -470,6 +494,7 @@
 | ruyi-beta | 0.50.0-beta.20260623 | 0.51.0-beta.20260714 |
 | ruyi-alpha | 0.51.0-alpha.20260616 | 0.52.0-alpha.20260714 |
 | opencode-telegram | 0.22.2 | 0.22.3 |
+
 ## 2026-07-16T06:08:43+09:00
 
 **摘要**：fix(ci) — 修复 ci-summary workflow 因 `gh run list` 逐 workflow 调用 API 触发 rate limit（HTTP 403）导致主文档 CI badge 无法更新。改为 2 次批量 `gh api` 调用 + 并发控制。
@@ -486,6 +511,14 @@
 |------|------|
 | `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
 
+## 2026-07-16T04:54:55+09:00
+
+**摘要**：docs(nixkits-skills) —「已知移除」章节改名为「风险警示」，5 语言技能文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
+
 ## 2026-07-16T04:46:54+09:00
 
 **摘要**：skill(nixkits-skills) — 移除 Claude Code 安装目标（软件内基于用户数据挖掘的国籍推断跨越安全边界），添加 Codex 支持。SKILL.md 新增「风险警示」章节包含原始声明文本。
@@ -493,8 +526,16 @@
 | 提交 | 说明 |
 |------|------|
 | `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
-| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
 | `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
+
+## 2026-07-16T04:35:20+09:00
+
+**摘要**：skill(write-maintenance-log) — 强化时间戳规则：强制使用 `git log` 获取 commit 时间、禁止 `T00:00:00` 占位符、新增生成后验证步骤。泛化自维护日志占位时间修复经验（`968df0e`）。
+
+| 提交 | 说明 |
+|------|------|
+| `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
+| `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
 
 ## 2026-07-16T04:30:55+09:00
 
@@ -521,41 +562,8 @@
 
 | 提交 | 说明 |
 |------|------|
-| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 on riscv64 cross-compile |
 | `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
-
-## 2026-07-07T12:01:12+09:00
-
-**摘要**：fix(docs) — katalish/pcn 本地化修复：katalish/ruyi.md 和 pcn/ruyi.md 语言切换器错误（缺少链接或重复语言名）修复，pcn/ruyi.md 全文从日文重写为伪中国语。
-
-| 提交 | 说明 |
-|------|------|
-| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
-| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported (5-lang sync) |
-## 2026-07-16T04:54:55+09:00
-
-**摘要**：docs(nixkits-skills) —「已知移除」章节改名为「风险警示」，5 语言技能文档同步。
-
-| 提交 | 说明 |
-|------|------|
-| `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
-
-## 2026-07-16T04:46:54+09:00
-
-**摘要**：skill(nixkits-skills) — 移除 Claude Code 支持（其软件内基于用户数据挖掘的国籍判断逻辑跨越安全边界）、添加 Codex 检测与安装支持。
-
-| 提交 | 说明 |
-|------|------|
-| `cfc59b3` | refactor(skill): replace Claude Code with Codex in nixkits-skills, add removal notice |
-
-## 2026-07-16T04:35:20+09:00
-
-**摘要**：skill(write-maintenance-log) — 强化时间戳规则：强制使用 `git log` 获取 commit 时间、禁止 `T00:00:00` 占位符、新增生成后验证步骤。泛化自维护日志占位时间修复经验（`968df0e`）。
-
-| 提交 | 说明 |
-|------|------|
-| `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
-| `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
+| `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 on riscv64 cross-compile |
 
 ## 2026-07-16T01:18:16+09:00
 
@@ -607,16 +615,25 @@
 | opencode-telegram | 0.22.0 | 0.22.1 |
 | codewhale | 0.8.66 | (跳过 — 上游 riscv64 二进制缺失) |
 
+## 2026-07-07T12:01:12+09:00
+
+**摘要**：fix(docs) — katalish/pcn 本地化修复：katalish/ruyi.md 和 pcn/ruyi.md 语言切换器错误（缺少链接或重复语言名）修复，pcn/ruyi.md 全文从日文重写为伪中国语。
+
+| 提交 | 说明 |
+|------|------|
+| `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported (5-lang sync) |
+| `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
+
 ## 2026-07-05T04:41:23+09:00
 
 **摘要**：fix(ci) — blender-mcp riscv64-cross 修复历程（4 次提交）：最初因 `callPackage` 自动解析不兼容的 `blender` 参数失败，后因 Nix/Bash 转义问题反复，最终因上游 nixpkgs 的 `sse-starlette` 交叉编译缺陷而移除 blender-mcp 的 riscv64-cross 构建。x86_64 / aarch64 不受影响。
 
 | 提交 | 说明 |
 |------|------|
-| `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
-| `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
-| `cd839d1` | fix(ci): remove stray Nix indented-string marker from riscv64-cross expr |
 | `78afb9e` | fix(ci): pass blender=null for blender-mcp riscv64-cross (Blender unsupported on riscv64) |
+| `cd839d1` | fix(ci): remove stray Nix indented-string marker from riscv64-cross expr |
+| `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
+| `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
 
 ## 2026-07-04T07:33:07+09:00
 
@@ -633,6 +650,7 @@
 | 提交 | 说明 |
 |------|------|
 | `a1cf458` | packages: add blender-mcp (MCP server for Blender) |
+| `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
@@ -743,17 +761,19 @@
 
 | 提交 | 说明 |
 |------|------|
-| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
 | `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
+| `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
 | `b1837c1` | docs(ruyi): restore precise riscv64 job filters — cross-compilation now fixed |
+
 ## 2026-06-25T10:12:02+09:00
 
 **摘要**：CI — riscv64-cross 永久移除 ruyi 系列（Python postPatch 交叉编译不可行）；docs — riscv64 badge 恢复 * 标记 + 注释说明
 
 | 提交 | 说明 |
 |------|------|
-| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
 | `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
+| `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
+
 ## 2026-06-25T10:04:30+09:00
 
 **摘要**：CI — 修复 access-tokens 被覆盖导致 GitHub API rate limit 超限（合并双行为一行），riscv64-cross 并发上限 4
@@ -761,14 +781,16 @@
 | 提交 | 说明 |
 |------|------|
 | `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
+
 ## 2026-06-25T09:44:44+09:00
 
 **摘要**：CI — riscv64-cross 加回 ruyi/ruyi-beta/ruyi-alpha（路径映射）；docs — badge 标签简化（- 取代 --）+ riscv64 job 精确过滤
 
 | 提交 | 说明 |
 |------|------|
-| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
 | `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
+| `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
+
 ## 2026-06-25T09:29:43+09:00
 
 **摘要**：CI — build / riscv64-cross job 按包拆分 matrix，支持独立 per-package badge；docs — ruyi 文档 badge 扩展为 3版本×3架构 = 9枚
@@ -777,6 +799,7 @@
 |------|------|
 | `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
 | `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
+
 ## 2026-06-25T09:24:43+09:00
 
 **摘要**：CI — build job 添加 ruyi-beta / ruyi-alpha 构建步骤；docs — ruyi 基本信息表格通道行加入 beta/alpha 版本号
@@ -785,6 +808,7 @@
 |------|------|
 | `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
 | `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
+
 ## 2026-06-25T09:09:26+09:00
 
 **摘要**：CI — 移除 ruyi riscv64-cross；overlays — default overlay 添加 ruyi-beta/ruyi-alpha + nixConfig 提升至 flake 顶层；docs — README 软件表展示 ruyi 三通道版本号
@@ -794,6 +818,7 @@
 | `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
 | `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
 | `e2b759d` | docs: show ruyi stable/beta/alpha versions in README tables (5 langs) |
+
 ## 2026-06-25T05:35:00+09:00
 
 **摘要**：docs — 全部 5 语言 README 添加 ruyi-beta / ruyi-alpha devShell 条目
@@ -801,6 +826,7 @@
 | 提交 | 说明 |
 |------|------|
 | `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
+
 ## 2026-06-25T05:28:12+09:00
 
 **摘要**：ruyi — 重构包目录结构（packages/ruyi/），beta/alpha 为 thin wrapper；新增 devShells
@@ -809,6 +835,7 @@
 |------|------|
 | `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
 | `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
+
 ## 2026-06-25T05:13:34+09:00
 
 **摘要**：ruyi — 版本通道改为独立软件包（ruyi / ruyi-beta / ruyi-alpha），移除独立 overlay
@@ -816,6 +843,7 @@
 | 提交 | 说明 |
 |------|------|
 | `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
+
 ## 2026-06-25T04:58:36+09:00
 
 **摘要**：ruyi — 三通道版本体系（stable/beta/alpha），基础包切至 0.50.0 稳定版，beta/alpha 通过 overlay 覆盖
@@ -829,6 +857,7 @@
 | ruyi | 0.51.0-alpha.20260616 | 0.50.0（稳定） |
 | 　 | 新增 ruyi-beta overlay | 0.50.0-beta.20260623 |
 | 　 | 新增 ruyi-alpha overlay | 0.51.0-alpha.20260616 |
+
 ## 2026-06-24T03:19:30+09:00
 
 **摘要**：workflow — 维护日志更新规则强制化（AGENTS.md + write-maintenance-log 技能）
@@ -836,6 +865,7 @@
 | 提交 | 说明 |
 |------|------|
 | `2e719df` | fix: make maintenance log update mandatory after every push |
+
 ## 2026-06-24T03:15:37+09:00
 
 **摘要**：docs — 移除过时的本地 riscv64 构建指令，CI 现已覆盖三架构
@@ -868,10 +898,11 @@
 
 | 提交 | 说明 |
 |------|------|
-| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
-| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
-| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
 | `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
+| `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
+| `39ae218` | fix(ci): exclude obs-bilibili-stream from riscv64 cross-compile (OBS unsupported) |
+| `cf05bd2` | feat(docs): add riscv64 CI badges to all 30 docs, update templates |
+
 ## 2026-06-23T05:20:00+09:00
 
 **摘要**：translate-pseudocn — 基于网络研究扩充词典（7→46 条），语序改为 SVO，全量重新生成 pcn 文档
@@ -899,9 +930,21 @@
 | `c7b8662` | docs(AGENTS): remove user-facing subsection, rename to 缓存操作 |
 | `44f3667` | docs(AGENTS): remove redundant cache section, merge into single 二进制缓存 |
 
+## 2026-06-22T23:49:00+09:00
+
+**摘要**：mcp-searxng 1.7.2 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | 1.7.1 | 1.7.2 |
+| 　 | source hash | `sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=` → `sha256-6N1YFMMgrEfGJaVYw4dffIGR58Nq0Ji4Q9epTmiKDBs=` |
+| 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
+
 ## 2026-06-22T23:22:00+09:00
-
-
 
 **摘要**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
 
@@ -1040,45 +1083,6 @@
 |------|------|
 | `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
 
-
-
-## 2026-06-22T23:49:00+09:00
-
-**摘要**：mcp-searxng 1.7.2 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | 1.7.1 | 1.7.2 |
-| 　 | source hash | `sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=` → `sha256-6N1YFMMgrEfGJaVYw4dffIGR58Nq0Ji4Q9epTmiKDBs=` |
-| 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
-
-
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
-
-## 2026-08-04T01:15:52+09:00
-
-**摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
-
-| 提交 | 说明 |
-|------|------|
-| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
-| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
-| `d778b1b` | docs: sync version numbers |
-
-| 软件名 | 旧版本 | 新版本 |
-|------|------|------|
-| codewhale | 0.9.1 | 0.9.3 |
-| mcp-searxng | 1.12.1 | 1.14.0 |
-
-NixKits 软件更新维护日志。
-
----
-
-
 ## 2026-06-21T04:32:31+09:00
 
 **摘要**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
@@ -1094,15 +1098,31 @@ NixKits 软件更新维护日志。
 
 **摘要**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
 
+| 提交 | 说明 |
+|------|------|
+| `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
+
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | codewhale | 0.8.61 | 0.8.62 |
 | mcp-searxng | 1.6.0 | 1.7.1 |
 | 　 | cli hash | `sha256-3k0K/I/Nx...` → `sha256-ci3MokGW...` |
 
+## 2026-06-20T18:36:33+09:00
+
+**摘要**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+
 | 提交 | 说明 |
 |------|------|
-| `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
+| `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
+| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
+| `f1904a1` | feat(skill): add translate-katakana — katakana english mechanical substitution |
+| `97b696c` | docs(skill): purge pcn references from write-project-docs, add kata-en |
+| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
+| `911052b` | refactor(docs): migrate pcn directory to katalish |
+| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
+| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
+| `fee1534` | docs(skill): add translate-* support and docs-as-code mapping to write-maintenance-log |
 
 ## 2026-06-18T09:52:34+09:00
 
@@ -1110,8 +1130,8 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `...` | chore(pkgs): bump codewhale 0.8.61 |
-| `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
+| `719e16e` | chore(pkgs): bump codewhale 0.8.61 |
+| `d6717c1` | chore(pkgs): bump mcp-searxng 1.6.0 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
@@ -1122,8 +1142,6 @@ NixKits 软件更新维护日志。
 | 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
 | 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
 
----
-
 ## 2026-06-18T09:03:48+09:00
 
 **摘要**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
@@ -1131,8 +1149,6 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
-
----
 
 ## 2026-06-17T10:59:35+09:00
 
@@ -1145,8 +1161,6 @@ NixKits 软件更新维护日志。
 | `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
 | `cc396f8` | fix(ruyi): always generate config.toml when module enabled |
 
----
-
 ## 2026-06-17T10:03:05+09:00
 
 **摘要**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
@@ -1154,8 +1168,6 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `975295d` | refactor(flake): remove default package alias |
-
----
 
 ## 2026-06-17T09:48:33+09:00
 
@@ -1169,26 +1181,6 @@ NixKits 软件更新维护日志。
 |--------|--------|
 | ruyi | 0.51.0-alpha.20260616 |
 
----
-
-## 2026-06-20T18:36:33+09:00
-
-**摘要**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
-
-| 提交 | 说明 |
-|------|------|
-| `fee1534` | docs(skill): add translate-* support and docs-as-code mapping to write-maintenance-log |
-| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
-| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
-| `911052b` | refactor(docs): migrate pcn directory to katalish |
-| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
-| `97b696c` | docs(skill): purge pcn references from write-project-docs, add kata-en |
-| `f1904a1` | feat(skill): add translate-katakana — katakana english mechanical substitution |
-| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
-| `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
-
----
-
 ## 2026-06-17T07:37:39+09:00
 
 **摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
@@ -1200,8 +1192,21 @@ NixKits 软件更新维护日志。
 | `704ebe4` | docs(skill): correct flake.lock pre-check — three-branch logic |
 | `359fe29` | feat(skill): extract write-maintenance-log as standalone skill |
 | `5187b07` | docs(skill): optimize write-maintenance-log triggers and add audit entry |
+| `34bf34e` | feat(skill): add write-maintenance-log SKILL.md (zh) |
+| `edce70f` | refactor(docs): switch MAINTENANCE.md to ISO 8601 precise timestamps |
+| `fb6f1a5` | docs(skill): write-maintenance-log — add auto-discovery contract |
+| `fe4b13f` | fix(docs): remove non-patch sections from MAINTENANCE.md |
+| `d5318fb` | docs(skill): write-maintenance-log — add 使用 section |
+| `e9e40f4` | docs(skill): add write-maintenance-log skill with trilingual docs |
+| `c9dedf9` | docs(skill): write-maintenance-log — add en/ja skill docs |
 
----
+## 2026-06-17T06:48:47+09:00
+
+**摘要**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
+
+| 提交 | 说明 |
+|------|------|
+| `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point instead of dist/index.js |
 
 ## 2026-06-17T06:46:13+09:00
 
@@ -1212,8 +1217,6 @@ NixKits 软件更新维护日志。
 | `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
 | `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
 
----
-
 ## 2026-06-16T06:03:24+09:00
 
 **摘要**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
@@ -1221,8 +1224,6 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
-
----
 
 ## 2026-06-16T05:20:34+09:00
 
@@ -1232,7 +1233,35 @@ NixKits 软件更新维护日志。
 |------|------|
 | `bd42478` | docs(skill): add Nix Store path trap section to nixos-modern-cli |
 
----
+## 2026-06-16T04:56:06+09:00
+
+**摘要**：opencode-telegram 0.21.2 — 上游修复及依赖更新
+
+| 提交 | 说明 |
+|------|------|
+| `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
+| `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.21.1 | 0.21.2 |
+| 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
+| 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
+
+## 2026-06-15T17:32:16+09:00
+
+**摘要**：codewhale 0.8.60 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
+| `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.59 | 0.8.60 |
+| 　 | cli hash | `sha256-ti/IBPZV...` → `sha256-JqlByElHoLcR2Mlwmx5Qczfj+EoAp+igdLCd/QUOsX4=` |
+| 　 | tui hash | `sha256-3Lh80hTS...` → `sha256-LTf681cWVH9Cu3TQrFeMlJUNVVG+TWxO2oI6VXK+4zA=` |
 
 ## 2026-06-14T08:11:16+09:00
 
@@ -1242,7 +1271,24 @@ NixKits 软件更新维护日志。
 |------|------|
 | `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
 
----
+## 2026-06-14T07:56:11+09:00
+
+**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
+
+| 提交 | 说明 |
+|------|------|
+| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
+| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
+| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.58 | 0.8.59 |
+| mcp-searxng | 1.3.4 | 1.4.0 |
+| 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
+| 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
+| 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
+| 　 | npmDepsHash | `sha256-3hWshG0...` → `sha256-Lh1UoM8zSMFji/TkqDAOiRtFRrQ/jqn5TbONySj9ckg=` |
 
 ## 2026-06-12T18:17:52+09:00
 
@@ -1253,7 +1299,28 @@ NixKits 软件更新维护日志。
 | `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
 | `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
 
----
+## 2026-06-12T17:29:59+09:00
+
+**摘要**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
+
+## 2026-06-12T10:51:31+09:00
+
+**摘要**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
+| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
+| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.57 | 0.8.58 |
+| mcp-searxng | 1.3.2 | 1.3.4 |
+| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
+| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
+| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
+| 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
 
 ## 2026-06-11T05:28:59+09:00
 
@@ -1261,15 +1328,37 @@ NixKits 软件更新维护日志。
 
 | 提交 | 说明 |
 |------|------|
-| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
 | `7680adf` | docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder |
-| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
-| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
 | `487e18f` | docs(skills): sync descriptive title rule to trilingual docs |
 | `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
 | `033d3b8` | docs(skills): sync auto-discovery generalizations to trilingual docs |
 
----
+## 2026-06-11T05:13:39+09:00
+
+**摘要**：other — 2 项更新
+
+| 提交 | 说明 |
+|------|------|
+| `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
+| `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
+
+## 2026-06-11T04:52:16+09:00
+
+**摘要**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
+| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
+| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
+| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.55 | 0.8.57 |
+| mcp-searxng | 1.3.1 | 1.3.2 |
+| 　 | cli hash | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
+| 　 | tui hash | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
 
 ## 2026-06-10T04:31:20+09:00
 
@@ -1280,7 +1369,20 @@ NixKits 软件更新维护日志。
 | `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
 | `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
 
----
+## 2026-06-10T02:28:10+09:00
+
+**摘要**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `397e4ee` | chore(pkgs): bump codewhale 0.8.55, mcp-searxng 1.3.1 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.8.53 | 0.8.55 |
+| mcp-searxng | 1.2.1 | 1.3.1 |
+| 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
+| 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
 
 ## 2026-06-08T15:12:39+09:00
 
@@ -1297,7 +1399,24 @@ NixKits 软件更新维护日志。
 | `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
 | `551e6fd` | docs(skills): sync localized-file-in-docs/ rule and path updates |
 
----
+## 2026-06-08T14:25:02+09:00
+
+**摘要**：mcp-searxng 1.2.1 — 上游修复
+
+| 提交 | 说明 |
+|------|------|
+| `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
+| `db680df` | docs: add MAINTENANCE.md — software update changelog |
+| `d4cb81f` | docs(skill): add Step 8 — MAINTENANCE.md update workflow |
+| `5ba1361` | docs(skills): sync MAINTENANCE.md step to trilingual docs |
+| `b8a98bc` | docs(skill): skip MAINTENANCE.md when no updates found |
+| `2cd9daf` | docs: drop doc-sync line from MAINTENANCE; only record substantive rewrites |
+| `b34ed08` | docs: add trilingual MAINTENANCE (en/ja) with language switchers |
+| `e5e505e` | docs(skills): sync trilingual MAINTENANCE rule to skill docs |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | 1.1.0 | 1.2.1 |
 
 ## 2026-06-08T14:22:25+09:00
 
@@ -1306,8 +1425,6 @@ NixKits 软件更新维护日志。
 | 提交 | 说明 |
 |------|------|
 | `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |
-
----
 
 ## 2026-06-06T15:17:11+09:00
 
@@ -1325,360 +1442,6 @@ NixKits 软件更新维护日志。
 | `2ba85d3` | docs(comfyui-strix-halo): add C build toolchain + CC=gcc to changes list |
 | `f5941ae` | docs(skill): add anti-patterns for stale/unsynced doc bullets after source changes |
 | `b8c2399` | docs(skills): sync source-change doc sync rule to trilingual docs |
-
----
-
-## 2026-06-04T13:07:30+09:00
-
-**摘要**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
-
-| 提交 | 说明 |
-|------|------|
-| `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
-| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
-
----
-
-## 2026-06-02T03:42:25+09:00
-
-**摘要**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
-
-| 提交 | 说明 |
-|------|------|
-| `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
-
----
-
-## 2026-05-31T03:42:18+09:00
-
-**摘要**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
-
-| 提交 | 说明 |
-|------|------|
-| `373da95` | feat(skills): add write-project-docs skill with trilingual docs |
-
----
-
-## 2026-05-30T03:42:14+09:00
-
-**摘要**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
-
-| 提交 | 说明 |
-|------|------|
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
-| `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset from system.nix |
-| `15f956c` | docs(llama-cpp-rocm): replace Usage with upstream reference |
-| `494f512` | docs(llama-cpp-rocm): remove inline upstream link from description |
-| `7e53e25` | docs(llama-cpp-rocm): remove inline link from Usage section too |
-| `df4074f` | fix(codewhale): fix stdenv typo causing build failure |
-
----
-
-## 2026-05-29T15:25:12+09:00
-
-**摘要**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
-
-| 提交 | 说明 |
-|------|------|
-| `6a42efd` | fix(kitsfmt): idempotency, inplace safety, output validation |
-| `1b7d0a9` | fix(build): restrict .vscode gitignore to repo root to not exclude vendored crate files |
-| `2b237ff` | feat(kitsfmt): with→builtins.attrValues best-practice transformation |
-| `8497bf7` | feat(kitsfmt): add --stdin flag for explicit stdin mode |
-| `a612af7` | feat(rcc-fix): rewrite patch for asusctl 6.3.7 with hot-plug and boundary checks |
-| `e56f122` | fix(rcc-fix): scope hotplug variable correctly for asusctl build |
-| `15a0104` | fix(kitsfmt): restore vendor dir for offline builds |
-| `6ba43df` | fix(rcc-fix): set keyboard_connected=false when no aura iface found |
-| `b7ebbfa` | fix(rcc-fix): replace polling with D-Bus InterfacesAdded event |
-
----
-
-## 2026-05-28T08:29:27+09:00
-
-**摘要**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
-
-| 提交 | 说明 |
-|------|------|
-| `3d2c38c` | docs(skill): nixkits-check-updates — dynamic discovery, not hardcoded list |
-| `e5ee4ab` | docs(skill): remove hardcoded count from features, add exclusion note |
-| `814731e` | docs(skill): sync ja doc with zh/en — dynamic discovery wording |
-| `713b693` | fix(rcc-fix): use visible: property instead of if conditional for ScrollView |
-| `34d309b` | docs(skills): add Install section with full 5-agent support to all skills |
-| `2db934e` | docs(zh): simplify Skills description, remove semantic duplication |
-| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
-| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
-| `bd9e1b9` | feat(llama-cpp-rocm): add NixOS module for service sandbox overrides |
-
----
-
-## 2026-05-27T06:08:13+09:00
-
-**摘要**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
-
-| 提交 | 说明 |
-|------|------|
-| `327291a` | feat(skills): add nixos-modern-cli skill with 3-language docs |
-| `f0e74d3` | feat(skills): add nixkits-skills installer with 3-language docs |
-| `fc7fa3d` | docs(llama-cpp-rocm): clarify dynamic release tracking purpose |
-| `627c9c5` | feat(skills): add nixkits-check-updates skill with 3-language docs |
-
----
-
-## 2026-05-26T05:30:58+09:00
-
-**摘要**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
-
-| 提交 | 说明 |
-|------|------|
-| `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
-
----
-
-## 2026-05-24T03:01:02+09:00
-
-**摘要**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
-
-| 提交 | 说明 |
-|------|------|
-| `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
-
----
-
-## 2026-05-22T06:45:11+09:00
-
-**摘要**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
-
-| 提交 | 说明 |
-|------|------|
-| `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly |
-
----
-
-## 2026-05-16T19:07:54+09:00
-
-**摘要**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
-
-| 提交 | 说明 |
-|------|------|
-| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
-| `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
-| `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
-
----
-
-## 2026-05-15T16:59:28+09:00
-
-**摘要**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
-
-| 提交 | 说明 |
-|------|------|
-| `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
-| `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
-
-
-## 2026-06-11T05:13:39+09:00
-
-**摘要**：other — 2 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
-| `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
-
----
-
-## 2026-06-02T10:15:53+09:00
-
-**摘要**：other — 7 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `3be4889` | docs: add recover-nixos-config skill with multi-language docs |
-| `fc5eca3` | docs: fix Skills section titles and generic agent descriptions |
-| `d2e071f` | docs: add quantization levels to local model names |
-| `22d206c` | docs: add UD- prefix to model quantization labels |
-| `f15db79` | docs: add MIT license file and link from all READMEs |
-| `218aeca` | docs: add local flake input example alongside remote |
-| `4f0f968` | docs: fix local flake input syntax to match actual usage |
-
----
-
-## 2026-06-02T08:49:47+09:00
-
-**摘要**：opencode-telegram — 8 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
-| `8fe3fae` | docs(opencode-telegram): simplify to flake module config only, remove manual systemd |
-| `ee0a904` | docs(opencode-telegram): rename NixOS module → flake module |
-| `a38e426` | docs(opencode-telegram): use accurate section name — service config, not module |
-| `dea4dc6` | docs(opencode-telegram): show full flake.nix context in service config |
-| `44975ed` | docs(opencode-telegram): flake module as section title, consistent across langs |
-| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
-
----
-
-## 2026-05-30T03:19:48+09:00
-
-**摘要**：other — 2 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `358316c` | docs: add English and Japanese translations with I18n structure |
-| `bef3b4b` | docs: add English and Japanese README with language switcher |
-
----
-
-## 2026-05-29T13:16:30+09:00
-
-**摘要**：docs: fix codewhale type description (pre-built, not source-built)
-
-| 提交 | 说明 |
-|------|------|
-| `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
-
----
-
-## 2026-06-16T04:56:06+09:00
-
-**摘要**：opencode-telegram 0.21.2 — 上游修复及依赖更新
-
-| 提交 | 说明 |
-|------|------|
-| `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
-| `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| opencode-telegram | 0.21.1 | 0.21.2 |
-| 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
-| 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
-
----
-
-## 2026-06-15T17:32:16+09:00
-
-**摘要**：codewhale 0.8.60 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
-| `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.59 | 0.8.60 |
-| 　 | cli hash | `sha256-ti/IBPZV...` → `sha256-JqlByElHoLcR2Mlwmx5Qczfj+EoAp+igdLCd/QUOsX4=` |
-| 　 | tui hash | `sha256-3Lh80hTS...` → `sha256-LTf681cWVH9Cu3TQrFeMlJUNVVG+TWxO2oI6VXK+4zA=` |
-
----
-
-## 2026-06-14T07:56:11+09:00
-
-**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
-
-| 提交 | 说明 |
-|------|------|
-| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
-| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
-| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.58 | 0.8.59 |
-| mcp-searxng | 1.3.4 | 1.4.0 |
-| 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
-| 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
-| 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
-| 　 | npmDepsHash | `sha256-3hWshG0...` → `sha256-Lh1UoM8zSMFji/TkqDAOiRtFRrQ/jqn5TbONySj9ckg=` |
-
----
-
-## 2026-06-12T10:51:31+09:00
-
-**摘要**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
-| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
-| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.57 | 0.8.58 |
-| mcp-searxng | 1.3.2 | 1.3.4 |
-| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
-| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
-| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
-| 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
-
----
-
-## 2026-06-11T04:52:16+09:00
-
-**摘要**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
-| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
-| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
-| `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.55 | 0.8.57 |
-| mcp-searxng | 1.3.1 | 1.3.2 |
-| 　 | cli hash | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
-| 　 | tui hash | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
-
----
-
-## 2026-06-10T02:28:10+09:00
-
-**摘要**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `397e4ee` | chore(pkgs): bump codewhale 0.8.55, mcp-searxng 1.3.1 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.53 | 0.8.55 |
-| mcp-searxng | 1.2.1 | 1.3.1 |
-| 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
-| 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
-
----
-
-## 2026-06-08T14:25:02+09:00
-
-**摘要**：mcp-searxng 1.2.1 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
-| `e5e505e` | docs(skills): sync trilingual MAINTENANCE rule to skill docs |
-| `b34ed08` | docs: add trilingual MAINTENANCE (en/ja) with language switchers |
-| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
-| `1a28625` | docs(MAINTENANCE): backfill full package history from repo creation |
-| `2cd9daf` | docs: drop doc-sync line from MAINTENANCE; only record substantive rewrites |
-| `e4a3813` | docs: omit build status and unchanged hashes from MAINTENANCE.md |
-| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
-| `b8a98bc` | docs(skill): skip MAINTENANCE.md when no updates found |
-| `5ba1361` | docs(skills): sync MAINTENANCE.md step to trilingual docs |
-| `d4cb81f` | docs(skill): add Step 8 — MAINTENANCE.md update workflow |
-| `db680df` | docs: add MAINTENANCE.md — software update changelog |
-| `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | 1.1.0 | 1.2.1 |
-
----
 
 ## 2026-06-06T13:58:47+09:00
 
@@ -1700,26 +1463,59 @@ NixKits 软件更新维护日志。
 | 　 | source hash(telegram) | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
 | 　 | npmDepsHash(telegram) | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
 
----
-
 ## 2026-06-06T12:51:46+09:00
 
 **摘要**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
 
 | 提交 | 说明 |
 |------|------|
-| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by module, not hardware |
-| `468b89a` | feat(skill): add patch-embedded version check for comfyui-strix-halo |
-| `8f16f91` | docs(skill): add length/structure rules from comfyui-strix-halo doc fix |
-| `ed25bb5` | docs(comfyui-strix-halo): rewrite trilingual docs in NixKits concise style |
-| `48d842f` | docs(ja): add 基本情報 section to comfyui-strix-halo |
 | `e11f899` | fix(docs): add missing ja doc and en/ja README entries for comfyui-strix-halo |
+| `48d842f` | docs(ja): add 基本情報 section to comfyui-strix-halo |
+| `ed25bb5` | docs(comfyui-strix-halo): rewrite trilingual docs in NixKits concise style |
+| `8f16f91` | docs(skill): add length/structure rules from comfyui-strix-halo doc fix |
+| `468b89a` | feat(skill): add patch-embedded version check for comfyui-strix-halo |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
 
----
+## 2026-06-04T13:07:30+09:00
+
+**摘要**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
+
+| 提交 | 说明 |
+|------|------|
+| `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
+| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
+
+## 2026-06-02T10:15:53+09:00
+
+**摘要**：other — 7 项更新
+
+| 提交 | 说明 |
+|------|------|
+| `3be4889` | docs: add recover-nixos-config skill with multi-language docs |
+| `fc5eca3` | docs: fix Skills section titles and generic agent descriptions |
+| `d2e071f` | docs: add quantization levels to local model names |
+| `22d206c` | docs: add UD- prefix to model quantization labels |
+| `f15db79` | docs: add MIT license file and link from all READMEs |
+| `218aeca` | docs: add local flake input example alongside remote |
+| `4f0f968` | docs: fix local flake input syntax to match actual usage |
+
+## 2026-06-02T08:49:47+09:00
+
+**摘要**：opencode-telegram — 8 项更新
+
+| 提交 | 说明 |
+|------|------|
+| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
+| `8fe3fae` | docs(opencode-telegram): simplify to flake module config only, remove manual systemd |
+| `ee0a904` | docs(opencode-telegram): rename NixOS module → flake module |
+| `a38e426` | docs(opencode-telegram): use accurate section name — service config, not module |
+| `dea4dc6` | docs(opencode-telegram): show full flake.nix context in service config |
+| `44975ed` | docs(opencode-telegram): flake module as section title, consistent across langs |
+| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
+| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
 
 ## 2026-06-02T05:57:11+09:00
 
@@ -1739,529 +1535,7 @@ NixKits 软件更新维护日志。
 | 　 | source hash(tele) | `sha256-RKsZwK...` → `sha256-Al7CVol/HDgH3M0FwkdQWOze6xY/wvaWOskRsh9Abxo=` |
 | 　 | npmDepsHash(tele) | `sha256-...+` → `sha256-ZOhS7lX5z2bRi0Cilm2QBUVKmacK41oRcUn9kRcfdOg=` |
 
----
-
-## 2026-05-29T10:18:46+09:00
-
-**摘要**：codewhale v0.8.47 — 新包
-
-| 提交 | 说明 |
-|------|------|
-| `979b75c` | refactor(codewhale): switch to pre-built binaries, remove cargoHash |
-| `d5b1878` | feat: add codewhale (DeepSeek V4 TUI agent) v0.8.47 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | v0.8.47 |
-
----
-
-## 2026-05-21T16:35:02+09:00
-
-**摘要**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | v1.0.3 |
-| opencode-telegram | v0.20.5 |
-
----
-
-## 2026-05-14T17:10:06+09:00
-
-**摘要**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
-
-| 提交 | 说明 |
-|------|------|
-| `9cb24a3` | llama-cpp MTP |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
-
----
-
-## 2026-05-14T07:38:08+09:00
-
-**摘要**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
-
-| 提交 | 说明 |
-|------|------|
-| `2c917bd` | feat: Add kitsfmt formatter and modernize flake structure |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| kitsfmt | 自建（`packages/kitsfmt-src/`） |
-| obs-bilibili-stream | v1.0.0 |
-
----
-
-## 2026-05-01T01:08:15+09:00
-
-**摘要**：rcc-fix — 新包（asusctl 补丁）
-
-| 提交 | 说明 |
-|------|------|
-| `e2d09a2` | RCC-Fix |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| rcc-fix | 跟随 nixpkgs（overlay + patch） |
-
----
-
-## 2026-06-17T06:48:47+09:00
-
-**摘要**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
-
-| 提交 | 说明 |
-|------|------|
-| `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point instead of dist/index.js |
-
----
-
-## 2026-06-12T17:29:59+09:00
-
-**摘要**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
-
----
-
-## 2026-05-29T06:28:50+09:00
-
-**摘要**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
-
-| 提交 | 说明 |
-|------|------|
-| `45f3c26` | feat(kitsfmt): rec→let-in conversion and multi-file support |
-| `3656154` | chore(kitsfmt): update Cargo.lock for v0.4.0 |
-| `d1ab491` | feat(kitsfmt): best-practice auto-corrections with env var support |
-| `f4b56ba` | fix(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
-
----
-
-## 2026-05-29T05:57:55+09:00
-
-**摘要**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
-
-
-**摘要**：translate-pseudocn 技能重构 — 伪中国语重新定义为「日语剥离假名后的视觉结果」，不再转换为中文。日本汉字原样保留（非简化字）、SOV 语序保留、词典从 40 条精简为 7 条（仅片假名→日本汉字）。全部 22 篇 pcn 文档重新生成。
-
-| 提交 | 说明 |
-|------|------|
-| `be0780b` | refactor(pcn): redesign pseudo-Chinese skill — Japanese-native kanji, SOV order, no Chinese chars |
-
-
-**摘要**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
-
-| 提交 | 说明 |
-|------|------|
-| `771cd1c` | docs(AGENTS): remove hardcoded counts, merge audit memo, rewrite cache as actionable guide, use auto-discovered languages only |
-| `c7b8662` | docs(AGENTS): remove user-facing subsection, rename to 缓存操作 |
-| `44f3667` | docs(AGENTS): remove redundant cache section, merge into single 二进制缓存 |
-
-
-
-
-**摘要**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
-
-| 提交 | 说明 |
-|------|------|
-| `135d347` | docs(AGENTS): add new-session audit rule |
-| `5192e2c` | docs(AGENTS): move new-session audit rule after access control |
-
-
-**摘要**：docs — README 重复行修复，write-project-docs 反模式补充
-
-| 提交 | 说明 |
-|------|------|
-| `091290b` | fix(docs): remove duplicate "提供 nix develop" line in README.md |
-| `922b1d8` | fix(skill): add anti-pattern — check for duplicate content before insert |
-
-
-**摘要**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
-
-| 提交 | 说明 |
-|------|------|
-| `ac6081c` | docs(AGENTS): add access control, language req, commit discipline, maintenance check, doc sync, generalization, multi-arch cache rules |
-
-
-**摘要**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
-
-| 提交 | 说明 |
-|------|------|
-| `8e50035` | feat(docs): add per-package dual-arch CI badges to all 30 docs |
-| `d3b3827` | fix(docs): split dual-arch badges to separate lines |
-| `6b8a283` | fix(docs): add blank line between CI badges and language switcher |
-| `0751500` | docs(skill): update CI badge template — one per line + blank gap |
-
-
-**摘要**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
-
-| 提交 | 说明 |
-|------|------|
-| `97f2ea4` | docs: compress cache sections, add ARM CI runner, update AGENTS.md |
-| `6d581ac` | fix(ci): fix YAML syntax - merge duplicate strategy keys, add runs-on |
-| `126cf2c` | fix(ci): add GitHub token for llama-cpp-ver API access |
-| `0022f50` | fix(ci): add --no-write-lock-file to prevent llama-cpp-ver fetch race |
-
-
-**摘要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
-
-| 提交 | 说明 |
-|------|------|
-| `89f5441` | fix(pkgs): update mcp-searxng source hash + npmDepsHash |
-| `303b1fa` | fix(pkgs): update mcp-searxng hash, restore ruyi overlay postPatch |
-
-
-**摘要**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
-
-| 提交 | 说明 |
-|------|------|
-| `6be660e` | fix: add nixConfig auto-discovery, remove hardcoded package count, clarify arch support |
-| `b28c126` | docs: add cache-exclusion warnings for overlays and module+patch entries |
-
-
-**摘要**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
-
-| 提交 | 说明 |
-|------|------|
-| `7071893` | docs: improve CI badge layout, add cache config options, update skills |
-| `02b355c` | docs: add binary cache section to all 30 package docs + template sync |
-
-
-**摘要**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
-
-| 提交 | 说明 |
-|------|------|
-| `6956af1` | feat: add CI/CD workflow, binary cache, and AGENTS.md |
-
-
-**摘要**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
-
-| 提交 | 说明 |
-|------|------|
-| `5367452` | refactor(skills): split dictionaries, compress SKILL.md to ~60-80 lines |
-
-
-**摘要**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
-
-| 提交 | 说明 |
-|------|------|
-| `61cc470` | docs: fix MAINTENANCE timestamps, dedup 30 sections, rename nix-kits→nixkits |
-
-
-**摘要**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
-
-| 提交 | 说明 |
-|------|------|
-| `1be2e84` | fix(patches): rebuild ruyi-nixos-compat.patch from clean clone (1223→426 lines) |
-
-
-**摘要**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
-
-| 提交 | 说明 |
-|------|------|
-| `81bb2ef` | fix(overlays): lib.unique dedup on patches, simplify ruyi-nixos-compat, add llama-cpp-rocm comment |
-
-
-**摘要**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
-
-| 提交 | 说明 |
-|------|------|
-| `d21db2a` | refactor(modules): add enable options, assertions, migrate to nixkits.* namespace |
-
-
-**摘要**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
-
-| 提交 | 说明 |
-|------|------|
-| `c9e7fc5` | feat(pkgs): codewhale multi-arch + 0.8.63, meta fixes, ruyi postPatch merge |
-
-
-**摘要**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
-
-| 提交 | 说明 |
-|------|------|
-| `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
-
-
-
-
-**摘要**：mcp-searxng 1.7.2 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | 1.7.1 | 1.7.2 |
-| 　 | source hash | `sha256-Mi8+Uk+WF7O4L3TAxsed3K3LhQlnVZ6e+VGsdwoRulg=` → `sha256-6N1YFMMgrEfGJaVYw4dffIGR58Nq0Ji4Q9epTmiKDBs=` |
-| 　 | npmDepsHash | `sha256-/d/AJ1z9zJRYeSAMKS3MkS6F61foY+uro4Cr1ik64Lg=` → `sha256-ZKhLPdW/GWpp4OyJss8G6sgr7xFaVdyJ73LzZ5RMu+Q=` |
-
-
-中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
-
-## 2026-08-04T01:15:52+09:00
-
-**摘要**：codewhale 0.9.3 — 上游 bug 修复；mcp-searxng 1.14.0 — 上游功能更新
-
-| 提交 | 说明 |
-|------|------|
-| `f84cbcb` | chore(pkgs): bump codewhale 0.9.1 → 0.9.3 |
-| `6968f4e` | chore(pkgs): bump mcp-searxng 1.12.1 → 1.14.0 |
-| `d778b1b` | docs: sync version numbers |
-
-| 软件名 | 旧版本 | 新版本 |
-|------|------|------|
-| codewhale | 0.9.1 | 0.9.3 |
-| mcp-searxng | 1.12.1 | 1.14.0 |
-
-NixKits 软件更新维护日志。
-
----
-
-
-
-**摘要**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
-
-| 提交 | 说明 |
-|------|------|
-| `f5aee43` | docs(skill): write-project-docs — 添加语言名称不本地化规则 |
-| `7ba8c1d` | fix(katalish): 语言切换器中 English 不应本地化为片假名 |
-| `5ce9f7d` | fix: display_name 语义修正 — 语言自称与切换器标签分离 |
-| `aa8634b` | fix(docs): zh 文档切换器残留旧名称修正 + MAINTENANCE 翻译补全 + translate-* 技能泛化 |
-
-
-**摘要**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.61 | 0.8.62 |
-| mcp-searxng | 1.6.0 | 1.7.1 |
-| 　 | cli hash | `sha256-3k0K/I/Nx...` → `sha256-ci3MokGW...` |
-
-| 提交 | 说明 |
-|------|------|
-| `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
-
-
-**摘要**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `...` | chore(pkgs): bump codewhale 0.8.61 |
-| `...` | chore(pkgs): bump mcp-searxng 1.6.0 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.60 | 0.8.61 |
-| 　 | cli hash | `...` → `sha256-3k0K/I/NxYHrNszgniQncWTu8HRqsR3RSg+YLuB+IkY=` |
-| 　 | tui hash | `...` → `sha256-YVjKDO/JNnsAHwzCf4itrEw8psKyi9bbFaLJLFvMyAI=` |
-| mcp-searxng | 1.4.0 | 1.6.0 |
-| 　 | source hash | `...` → `sha256-oBpSAAppLfnPhC3tHoE2X1YAGMyd42fka+xAVFuhjKw=` |
-| 　 | npmDepsHash | `...` → `sha256-7z5T8po2ya698J7vqu4pA7c8s85k33sRbOV2tRmGdPo=` |
-
----
-
-
-**摘要**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
-
-| 提交 | 说明 |
-|------|------|
-| `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
-
----
-
-
-**摘要**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
-
-| 提交 | 说明 |
-|------|------|
-| `5cea307` | feat(ruyi): add NixOS module for declarative configuration |
-| `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
-| `8059526` | fix(ruyi): replace lib.generators.toToml with manual generation |
-| `cc396f8` | fix(ruyi): always generate config.toml when module enabled |
-
----
-
-
-**摘要**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
-
-| 提交 | 说明 |
-|------|------|
-| `975295d` | refactor(flake): remove default package alias |
-
----
-
-
-**摘要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
-
-| 提交 | 说明 |
-|------|------|
-| `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
-
-| 软件名 | 新版本 |
-|--------|--------|
-| ruyi | 0.51.0-alpha.20260616 |
-
----
-
-
-**摘要**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
-
-| 提交 | 说明 |
-|------|------|
-| `fee1534` | docs(skill): add translate-* support and docs-as-code mapping to write-maintenance-log |
-| `177ad9b` | refactor: rename translate-katakana→translate-katalish, add translate-pseudocn, auto-discovery |
-| `39906b9` | docs: purge remaining pcn references from zh write-project-docs |
-| `911052b` | refactor(docs): migrate pcn directory to katalish |
-| `7caf343` | refactor(translate-katakana): rename kata-en → katalish, use ｶﾀﾘｯｼｭ as canonical name |
-| `97b696c` | docs(skill): purge pcn references from write-project-docs, add kata-en |
-| `f1904a1` | feat(skill): add translate-katakana — katakana english mechanical substitution |
-| `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
-| `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
-
----
-
-
-**摘要**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
-
-| 提交 | 说明 |
-|------|------|
-| `b77170a` | docs(skill): re-apply flake.lock sync and build verification steps |
-| `be2239b` | docs(skill): add .gitignore pre-check to flake.lock sync step |
-| `704ebe4` | docs(skill): correct flake.lock pre-check — three-branch logic |
-| `359fe29` | feat(skill): extract write-maintenance-log as standalone skill |
-| `5187b07` | docs(skill): optimize write-maintenance-log triggers and add audit entry |
-
----
-
-
-**摘要**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
-
-| 提交 | 说明 |
-|------|------|
-| `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
-| `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
-
----
-
-
-**摘要**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
-
-| 提交 | 说明 |
-|------|------|
-| `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
-
----
-
-
-**摘要**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
-
-| 提交 | 说明 |
-|------|------|
-| `bd42478` | docs(skill): add Nix Store path trap section to nixos-modern-cli |
-
----
-
-
-**摘要**：comfyui-strix-halo 文档 — 在线集成模式说明与文件结构图
-
-| 提交 | 说明 |
-|------|------|
-| `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
-
----
-
-
-**摘要**：llama-cpp-rocm 模块 — 恢复 modelsPreset 支持（nixpkgs 已移除）、命名空间迁移至 nixkits、三语迁移指南
-
-| 提交 | 说明 |
-|------|------|
-| `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
-| `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
-
----
-
-
-**摘要**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
-
-| 提交 | 说明 |
-|------|------|
-| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
-| `7680adf` | docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder |
-| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
-| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
-| `487e18f` | docs(skills): sync descriptive title rule to trilingual docs |
-| `3e9467f` | refactor(skills): generalize hardcoded content to auto-discovery |
-| `033d3b8` | docs(skills): sync auto-discovery generalizations to trilingual docs |
-
----
-
-
-**摘要**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
-
-| 提交 | 说明 |
-|------|------|
-| `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
-| `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
-
----
-
-
-**摘要**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
-
-| 提交 | 说明 |
-|------|------|
-| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
-| `e4a3813` | docs: omit build status and unchanged hashes from MAINTENANCE.md |
-| `4bf2d30` | docs(skill): add first-time package table format rule |
-| `f7bb6ce` | docs(skill): merge version columns for first-time packages |
-| `1a28625` | docs(MAINTENANCE): backfill full package history from repo creation |
-| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
-| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
-| `551e6fd` | docs(skills): sync localized-file-in-docs/ rule and path updates |
-
----
-
-
-**摘要**：rcc-fix — NixOS 模块（systemd 死锁修复）
-
-| 提交 | 说明 |
-|------|------|
-| `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |
-
----
-
-
-**摘要**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
-
-| 提交 | 说明 |
-|------|------|
-| `7e22edd` | docs(skill): add skill doc template, sync rules, and staleness check |
-| `86fc7c2` | docs(skills): sync write-project-docs trilingual docs with SKILL.md |
-| `454a4e4` | fix(skill): generalize 基本情報 rule to all languages, not just Japanese |
-| `28ec492` | docs(skills): sync generalized 基本情報 rule to trilingual docs |
-| `c79ffff` | docs(skill): add SRI hash format and nix build gotchas to update skill |
-| `6dcbbfc` | docs(skills): sync hash gotchas to nixkits-check-updates trilingual docs |
-| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by module, not hardware |
-| `2ba85d3` | docs(comfyui-strix-halo): add C build toolchain + CC=gcc to changes list |
-| `f5941ae` | docs(skill): add anti-patterns for stale/unsynced doc bullets after source changes |
-| `b8c2399` | docs(skills): sync source-change doc sync rule to trilingual docs |
-
----
-
-
-**摘要**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
-
-| 提交 | 说明 |
-|------|------|
-| `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
-| `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
-
----
-
+## 2026-06-02T03:42:25+09:00
 
 **摘要**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
 
@@ -2269,8 +1543,7 @@ NixKits 软件更新维护日志。
 |------|------|
 | `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
 
----
-
+## 2026-05-31T03:42:18+09:00
 
 **摘要**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
 
@@ -2278,22 +1551,28 @@ NixKits 软件更新维护日志。
 |------|------|
 | `373da95` | feat(skills): add write-project-docs skill with trilingual docs |
 
----
-
+## 2026-05-30T03:42:14+09:00
 
 **摘要**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
 
 | 提交 | 说明 |
 |------|------|
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
 | `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset from system.nix |
 | `15f956c` | docs(llama-cpp-rocm): replace Usage with upstream reference |
 | `494f512` | docs(llama-cpp-rocm): remove inline upstream link from description |
 | `7e53e25` | docs(llama-cpp-rocm): remove inline link from Usage section too |
 | `df4074f` | fix(codewhale): fix stdenv typo causing build failure |
 
----
+## 2026-05-30T03:19:48+09:00
 
+**摘要**：other — 2 项更新
+
+| 提交 | 说明 |
+|------|------|
+| `358316c` | docs: add English and Japanese translations with I18n structure |
+| `bef3b4b` | docs: add English and Japanese README with language switcher |
+
+## 2026-05-29T15:25:12+09:00
 
 **摘要**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
 
@@ -2309,8 +1588,46 @@ NixKits 软件更新维护日志。
 | `6ba43df` | fix(rcc-fix): set keyboard_connected=false when no aura iface found |
 | `b7ebbfa` | fix(rcc-fix): replace polling with D-Bus InterfacesAdded event |
 
----
+## 2026-05-29T13:16:30+09:00
 
+**摘要**：docs: fix codewhale type description (pre-built, not source-built)
+
+| 提交 | 说明 |
+|------|------|
+| `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
+
+## 2026-05-29T10:18:46+09:00
+
+**摘要**：codewhale v0.8.47 — 新包
+
+| 提交 | 说明 |
+|------|------|
+| `d5b1878` | feat: add codewhale (DeepSeek V4 TUI agent) v0.8.47 |
+| `979b75c` | refactor(codewhale): switch to pre-built binaries, remove cargoHash |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | v0.8.47 |
+
+## 2026-05-29T06:28:50+09:00
+
+**摘要**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
+
+| 提交 | 说明 |
+|------|------|
+| `f4b56ba` | fix(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
+| `d1ab491` | feat(kitsfmt): best-practice auto-corrections with env var support |
+| `3656154` | chore(kitsfmt): update Cargo.lock for v0.4.0 |
+| `45f3c26` | feat(kitsfmt): rec→let-in conversion and multi-file support |
+
+## 2026-05-29T05:57:55+09:00
+
+**摘要**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+
+## 2026-05-28T08:29:27+09:00
 
 **摘要**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
 
@@ -2322,12 +1639,9 @@ NixKits 软件更新维护日志。
 | `713b693` | fix(rcc-fix): use visible: property instead of if conditional for ScrollView |
 | `34d309b` | docs(skills): add Install section with full 5-agent support to all skills |
 | `2db934e` | docs(zh): simplify Skills description, remove semantic duplication |
-| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
-| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
 | `bd9e1b9` | feat(llama-cpp-rocm): add NixOS module for service sandbox overrides |
 
----
-
+## 2026-05-27T06:08:13+09:00
 
 **摘要**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
 
@@ -2338,8 +1652,7 @@ NixKits 软件更新维护日志。
 | `fc7fa3d` | docs(llama-cpp-rocm): clarify dynamic release tracking purpose |
 | `627c9c5` | feat(skills): add nixkits-check-updates skill with 3-language docs |
 
----
-
+## 2026-05-26T05:30:58+09:00
 
 **摘要**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
 
@@ -2347,8 +1660,7 @@ NixKits 软件更新维护日志。
 |------|------|
 | `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
 
----
-
+## 2026-05-24T03:01:02+09:00
 
 **摘要**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
 
@@ -2356,8 +1668,7 @@ NixKits 软件更新维护日志。
 |------|------|
 | `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
 
----
-
+## 2026-05-22T06:45:11+09:00
 
 **摘要**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
 
@@ -2365,8 +1676,16 @@ NixKits 软件更新维护日志。
 |------|------|
 | `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly |
 
----
+## 2026-05-21T16:35:02+09:00
 
+**摘要**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | v1.0.3 |
+| opencode-telegram | v0.20.5 |
+
+## 2026-05-16T19:07:54+09:00
 
 **摘要**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
 
@@ -2376,8 +1695,7 @@ NixKits 软件更新维护日志。
 | `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
 | `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
----
-
+## 2026-05-15T16:59:28+09:00
 
 **摘要**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
 
@@ -2387,281 +1705,7 @@ NixKits 软件更新维护日志。
 | `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
 | `a1d1d36` | feat(kitsfmt): 生成 Cargo.lock，更新 kitsfmt.nix 使用 rnix AST 构建 |
 
-
-
-**摘要**：other — 2 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
-| `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
-
----
-
-
-**摘要**：other — 7 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `3be4889` | docs: add recover-nixos-config skill with multi-language docs |
-| `fc5eca3` | docs: fix Skills section titles and generic agent descriptions |
-| `d2e071f` | docs: add quantization levels to local model names |
-| `22d206c` | docs: add UD- prefix to model quantization labels |
-| `f15db79` | docs: add MIT license file and link from all READMEs |
-| `218aeca` | docs: add local flake input example alongside remote |
-| `4f0f968` | docs: fix local flake input syntax to match actual usage |
-
----
-
-
-**摘要**：opencode-telegram — 8 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
-| `8fe3fae` | docs(opencode-telegram): simplify to flake module config only, remove manual systemd |
-| `ee0a904` | docs(opencode-telegram): rename NixOS module → flake module |
-| `a38e426` | docs(opencode-telegram): use accurate section name — service config, not module |
-| `dea4dc6` | docs(opencode-telegram): show full flake.nix context in service config |
-| `44975ed` | docs(opencode-telegram): flake module as section title, consistent across langs |
-| `941eb48` | feat(opencode-telegram): auto-install package when module enabled |
-| `2a8c41b` | docs(opencode-telegram): add first-time setup flow (opencode serve + config) |
-
----
-
-
-**摘要**：other — 2 项更新
-
-| 提交 | 说明 |
-|------|------|
-| `358316c` | docs: add English and Japanese translations with I18n structure |
-| `bef3b4b` | docs: add English and Japanese README with language switcher |
-
----
-
-
-**摘要**：docs: fix codewhale type description (pre-built, not source-built)
-
-| 提交 | 说明 |
-|------|------|
-| `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
-
----
-
-
-**摘要**：opencode-telegram 0.21.2 — 上游修复及依赖更新
-
-| 提交 | 说明 |
-|------|------|
-| `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
-| `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| opencode-telegram | 0.21.1 | 0.21.2 |
-| 　 | source hash | `sha256-V/rThMV5...` → `sha256-NEaQ2grHCKXi13utcHeUR83pJT6kqBGS4UqllhG93kY=` |
-| 　 | npmDepsHash | `sha256-Bcexury...` → `sha256-z9trDo9xeWZyTSvCqX5XTb+AHY50wk0gsoEnAAEHOEg=` |
-
----
-
-
-**摘要**：codewhale 0.8.60 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
-| `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.59 | 0.8.60 |
-| 　 | cli hash | `sha256-ti/IBPZV...` → `sha256-JqlByElHoLcR2Mlwmx5Qczfj+EoAp+igdLCd/QUOsX4=` |
-| 　 | tui hash | `sha256-3Lh80hTS...` → `sha256-LTf681cWVH9Cu3TQrFeMlJUNVVG+TWxO2oI6VXK+4zA=` |
-
----
-
-
-**摘要**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
-
-| 提交 | 说明 |
-|------|------|
-| `ec7d5ca` | docs(MAINTENANCE): record 2026-06-14 updates (codewhale 0.8.59, mcp-searxng 1.4.0) |
-| `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
-| `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.58 | 0.8.59 |
-| mcp-searxng | 1.3.4 | 1.4.0 |
-| 　 | cli hash | `sha256-AR9jJZzB...` → `sha256-ti/IBPZVJdaLvQ00OevzTfcMQ0XHELvOKTcul4+iBg8=` |
-| 　 | tui hash | `sha256-BpCHu9M...` → `sha256-3Lh80hTSMG0RG+CHkR403rqcMtDA6kMdbyvBe7sLQaQ=` |
-| 　 | source hash | `sha256-Xsp1vReg...` → `sha256-RMzxCBua89oYbKXmwXCtcSHan5QVefsm8IBdMIVq7UE=` |
-| 　 | npmDepsHash | `sha256-3hWshG0...` → `sha256-Lh1UoM8zSMFji/TkqDAOiRtFRrQ/jqn5TbONySj9ckg=` |
-
----
-
-
-**摘要**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `716d98c` | docs(MAINTENANCE): record 2026-06-12 updates (codewhale 0.8.58, mcp-searxng 1.3.4) |
-| `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
-| `b995798` | chore(pkgs): bump codewhale 0.8.58 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.57 | 0.8.58 |
-| mcp-searxng | 1.3.2 | 1.3.4 |
-| 　 | cli hash | `sha256-Hp0Z6mwe...` → `sha256-AR9jJZzB1VNUe7yaI3jpSUJsXuzgvqk5aWeLWe/L/vA=` |
-| 　 | tui hash | `sha256-dExfhrfG...` → `sha256-BpCHu9MbDGuCAXNNJXPTZpj3BrIwx7jWs29I31cbSag=` |
-| 　 | source hash | `sha256-OVllsRM...` → `sha256-Xsp1vRegHDWNk54nqLk+4l5MI0xGgocCg5Qa2UwWNqA=` |
-| 　 | npmDepsHash | `sha256-LN9yDbw...` → `sha256-3hWshG0L8k0U2fnmz0OotrYaPAYBQE7DanjXgnFnNrE=` |
-
----
-
-
-**摘要**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `07f347f` | docs(skill): add descriptive title rule for MAINTENANCE files |
-| `f92f9c4` | docs(MAINTENANCE): use descriptive titles instead of filename |
-| `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
-| `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.55 | 0.8.57 |
-| mcp-searxng | 1.3.1 | 1.3.2 |
-| 　 | cli hash | `sha256-jwn3rKD...` → `sha256-Hp0Z6mweaC+sB/BH2KpD1W/sdS0me69pErKiWOa2GqY=` |
-| 　 | tui hash | `sha256-1Cxofu9...` → `sha256-dExfhrfGs1wbWWmvXYTuCGXKnkhD+7rBY32aV938Dz0=` |
-
----
-
-
-**摘要**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `397e4ee` | chore(pkgs): bump codewhale 0.8.55, mcp-searxng 1.3.1 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.53 | 0.8.55 |
-| mcp-searxng | 1.2.1 | 1.3.1 |
-| 　 | cli hash | `sha256-VxBNH2o4i...` → `sha256-jwn3rKDda7nftaNLqMXNg+tjicshOC4s17StfSyTuEU=` |
-| 　 | tui hash | `sha256-DBiWk4c4Q...` → `sha256-1Cxofu986R1hx1A1RNLqvRGrmFIYviRIkdO/pw+LIl8=` |
-
----
-
-
-**摘要**：mcp-searxng 1.2.1 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `2f58ac5` | refactor: move localized README/MAINTENANCE files into docs/ |
-| `e5e505e` | docs(skills): sync trilingual MAINTENANCE rule to skill docs |
-| `b34ed08` | docs: add trilingual MAINTENANCE (en/ja) with language switchers |
-| `b4742ad` | docs(skills): sync refined MAINTENANCE.md format rules to trilingual docs |
-| `1a28625` | docs(MAINTENANCE): backfill full package history from repo creation |
-| `2cd9daf` | docs: drop doc-sync line from MAINTENANCE; only record substantive rewrites |
-| `e4a3813` | docs: omit build status and unchanged hashes from MAINTENANCE.md |
-| `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
-| `b8a98bc` | docs(skill): skip MAINTENANCE.md when no updates found |
-| `5ba1361` | docs(skills): sync MAINTENANCE.md step to trilingual docs |
-| `d4cb81f` | docs(skill): add Step 8 — MAINTENANCE.md update workflow |
-| `db680df` | docs: add MAINTENANCE.md — software update changelog |
-| `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | 1.1.0 | 1.2.1 |
-
----
-
-
-**摘要**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
-
-| 提交 | 说明 |
-|------|------|
-| `300a9a6` | chore(pkgs): bump codewhale 0.8.53, mcp-searxng 1.1.0, opencode-telegram 0.21.1 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.49 | 0.8.53 |
-| mcp-searxng | 1.0.4 | 1.1.0 |
-| opencode-telegram | 0.21.0 | 0.21.1 |
-| 　 | cli hash | `sha256-97zk4L...` → `sha256-VxBNH2o4iEkk0PrnuZHDPECjvm+ARXR9T/BV8QqvYtw=` |
-| 　 | tui hash | `sha256-tc/s3e...` → `sha256-DBiWk4c4QFh/BKPlG5a3KkH0ZTxNQgqZ7IWwH4OaEEw=` |
-| 　 | source hash | `sha256-ML5Hgle...` → `sha256-OVllsRMst6dWO/RagsmGyWN3muz1ATtffxfmLTfa0qU=` |
-| 　 | npmDepsHash(searx) | `sha256-xnefgQ...` → `sha256-LN9yDbwvlICoFl5KgQvzZjLGXflVM0QkSzaB2dJzR/w=` |
-| 　 | source hash(telegram) | `sha256-Al7CVol...` → `sha256-V/rThMV5qZ5Z07A+A54Il4Vi/69bv8PVgV6uIr6vxGA=` |
-| 　 | npmDepsHash(telegram) | `sha256-ZOhS7l...` → `sha256-BcexuryL26CNLKeAOR9DffE07H4dYO1UYPqfX9aHm4g=` |
-
----
-
-
-**摘要**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
-
-| 提交 | 说明 |
-|------|------|
-| `58b06ea` | docs(comfyui-strix-halo): clarify kernel param is set by module, not hardware |
-| `468b89a` | feat(skill): add patch-embedded version check for comfyui-strix-halo |
-| `8f16f91` | docs(skill): add length/structure rules from comfyui-strix-halo doc fix |
-| `ed25bb5` | docs(comfyui-strix-halo): rewrite trilingual docs in NixKits concise style |
-| `48d842f` | docs(ja): add 基本情報 section to comfyui-strix-halo |
-| `e11f899` | fix(docs): add missing ja doc and en/ja README entries for comfyui-strix-halo |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| comfyui-strix-halo | 补丁（ROCm 7.2 wheels 内嵌） |
-
----
-
-
-**摘要**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | 0.8.47 | 0.8.49 |
-| mcp-searxng | 1.0.3 | 1.0.4 |
-| obs-bilibili-stream | 2.0.12 | 2.1.0 |
-| opencode-telegram | 0.20.5 | 0.21.0 |
-| 　 | cli hash | `sha256-JGNVKih...` → `sha256-97zk4LzahspVqd8U/Z8rfS60oOWNUPsWn4xtn/rL8CQ=` |
-| 　 | tui hash | — → `sha256-tc/s3e1oomJhfYEN1EtuEtPBF77dByrMimDH3bQibCI=` |
-| 　 | source hash(searx) | `sha256-xS2Hr/g...` → `sha256-ML5HgleThmzBwJFtmsCQEPxHvZz4gzrDxW3Udkx9YjA=` |
-| 　 | npmDepsHash(searx) | `sha256-...+` → `sha256-xnefgQnFuHVPSCWVSD8MWxjHmNSrKpWlbGaAtks5rkg=` |
-| 　 | source hash(obs) | — → `sha256-lbN73L3ey7qZftsgmRGb9wPcj8DmwlOUWR9gdEni29w=` |
-| 　 | source hash(tele) | `sha256-RKsZwK...` → `sha256-Al7CVol/HDgH3M0FwkdQWOze6xY/wvaWOskRsh9Abxo=` |
-| 　 | npmDepsHash(tele) | `sha256-...+` → `sha256-ZOhS7lX5z2bRi0Cilm2QBUVKmacK41oRcUn9kRcfdOg=` |
-
----
-
-
-**摘要**：codewhale v0.8.47 — 新包
-
-| 提交 | 说明 |
-|------|------|
-| `979b75c` | refactor(codewhale): switch to pre-built binaries, remove cargoHash |
-| `d5b1878` | feat: add codewhale (DeepSeek V4 TUI agent) v0.8.47 |
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| codewhale | v0.8.47 |
-
----
-
-
-**摘要**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
-
-| 软件名 | 旧版本 | 新版本 |
-|--------|--------|--------|
-| mcp-searxng | v1.0.3 |
-| opencode-telegram | v0.20.5 |
-
----
-
+## 2026-05-14T17:10:06+09:00
 
 **摘要**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
 
@@ -2673,8 +1717,7 @@ NixKits 软件更新维护日志。
 |--------|--------|--------|
 | llama-cpp-rocm | 动态（构建时获取上游最新 Release） |
 
----
-
+## 2026-05-14T07:38:08+09:00
 
 **摘要**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
 
@@ -2687,8 +1730,7 @@ NixKits 软件更新维护日志。
 | kitsfmt | 自建（`packages/kitsfmt-src/`） |
 | obs-bilibili-stream | v1.0.0 |
 
----
-
+## 2026-05-01T01:08:15+09:00
 
 **摘要**：rcc-fix — 新包（asusctl 补丁）
 
@@ -2699,35 +1741,4 @@ NixKits 软件更新维护日志。
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
 | rcc-fix | 跟随 nixpkgs（overlay + patch） |
-
----
-
-
-**摘要**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
-
-| 提交 | 说明 |
-|------|------|
-| `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point instead of dist/index.js |
-
----
-
-
-**摘要**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
-
----
-
-
-**摘要**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
-
-| 提交 | 说明 |
-|------|------|
-| `45f3c26` | feat(kitsfmt): rec→let-in conversion and multi-file support |
-| `3656154` | chore(kitsfmt): update Cargo.lock for v0.4.0 |
-| `d1ab491` | feat(kitsfmt): best-practice auto-corrections with env var support |
-| `f4b56ba` | fix(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
-
----
-
-
-**摘要**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
 
