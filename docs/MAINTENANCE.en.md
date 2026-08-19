@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T16:52:54+09:00
+
+**Summary**: fix(module): dsh WebSocket reverse proxy via mod_proxy upgrade — NixOS's lighttpd module generates server.modules in a fixed allKnownModules order, so mod_wstunnel always loads after mod_proxy. Because proxy.server matches every path, mod_proxy intercepts the WebSocket upgrade on /api/events.* and returns 426 Upgrade Required, while mod_wstunnel never runs (r->handler_module already set). Switched to lighttpd 1.4.56+ mod_proxy native WebSocket tunneling (proxy.header = "upgrade" => "enable"), dropping mod_wstunnel. Verified: 8625 / returns 200, /api/events.host|mux handshake 101 (local + LAN).
+
+| Commit | Description |
+|------|------|
+| `d7d2713` | fix(module): dsh WebSocket via mod_proxy upgrade (mod_wstunnel never runs) |
+
 ## 2026-08-19T13:10:00+09:00
 
 **Summary**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7. rc.6 crashed after ~13h (fatal load failure: Context has been disposed) — cordis-plugin-timer ctx.timeout() rejects on a silent Context dispose, surfacing as an unhandled rejection. rc.7 (8/17) is latest; cordis/timer versions unchanged (bug may persist) but carries upstream fixes. Plugin inventory unchanged (131).

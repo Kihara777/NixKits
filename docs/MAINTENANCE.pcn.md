@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-19T16:52:54+09:00
+
+**摘要**: fix(module): dsh WebSocket 反代 mod_proxy upgrade 変更 — NixOS lighttpd 模組 allKnownModules 固定順 server.modules 生成、mod_wstunnel 常 mod_proxy 後負載。proxy.server 全路徑匹配、mod_proxy /api/events.* WebSocket 升級請求先処理 426 Upgrade Required 返、mod_wstunnel r->handler_module 非 NULL skip 不実行。lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"）変更、mod_wstunnel 削除。検証: 8625 / 200、/api/events.host|mux 握手 101（本地+LAN）。
+
+| 提交 | 説明 |
+|------|------|
+| `d7d2713` | fix(module): dsh WebSocket via mod_proxy upgrade (mod_wstunnel never runs) |
+
 ## 2026-08-19T13:10:00+09:00
 
 **摘要**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 約 13 時間後崩壊（fatal load failure: Context has been disposed）— cordis-plugin-timer ctx.timeout() Context 静態 dispose 時 reject unhandled rejection 化。rc.7（8/17）最新、cordis/timer 版不変（bug 残存可）上流修正含。插件清單不変（131）。
