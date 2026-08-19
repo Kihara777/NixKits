@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T06:27:40+09:00
+
+**概要**：feat(dsh-nix-shell): 外部 sudo デーモン統合（0.2.0）— dsh サンドボックスは sudo の setuid を剥奪し、エージェントは昇格できない。プラグインは初期化時にデーモンソケット（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）を検出し、存在すれば `sudo`/`justification` パラメータを有効化。`sudo: true` のリクエストは全体（command/cwd/env/timeout）を Unix ソケット経由でデーモンへルーティングし、`justification` は必須で結果と共に返却。デーモンは systemd ソケットアクティベーション型の root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続ごとに 1 リクエストの JSON プロトコル、プラグインパッケージに同梱）。アクセス制御境界は dsh サービスユーザー所有・`0600` のソケットファイル（SocketUser/SocketMode）。モジュールに nixkits.dsh.sudo（enable/socketPath/package）を追加し、ユニット生成と環境変数注入を行う。検証：ゲーティング（ソケットなしでパラメータ非公開／ありで公開）、ルーティング往復、justification 強制、実行器直結プロトコル、モジュールユニット評価がすべて通過。
+
+| コミット | 説明 |
+|------|------|
+| `ef4bcfc` | feat(dsh-nix-shell): external sudo daemon integration — socket-activated root executor, init-time detection, sudo routing |
+
 ## 2026-08-20T06:02:50+09:00
 
 **概要**：refactor(skills): NixKits スキルをネイティブ DSH スキルプラグインへ書き直し — 新パッケージ dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、ランタイム依存ゼロ）、7 スキル各々がパッケージ内のサブパスプラグインエントリ。各プラグインはランタイムに ctx.skills.register で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、apply() が登録 disposer を返してコンポジション解除と共に破棄。SKILL.md は skills/ に単一ソースとして残りビルド時に埋め込み、frontmatter は剥離して content とし metadata に保持（ドキュメントパイプラインの自動発見契約は不変）。モジュールの skills.enable は 7 行のコンポジション行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）を自動生成し、以前の誤実装だったディレクトリ注入（nixkits-skills パッケージ + bundledSkillDir）を置き換え。検証：7 プラグインの mock 登録全通過、ベアサブパスインポート + 登録を実測（SUBPATH-OK/REGISTERED）。CI に x86_64/aarch64 ビルドを追加。

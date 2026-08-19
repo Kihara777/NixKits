@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T06:27:40+09:00
+
+**摘要**：feat(dsh-nix-shell): 外部 sudo 守護統合（0.2.0）— dsh 沙箱 sudo setuid 剥奪、代理昇格不能。插件初期化時守護套接字（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）検出、存在時 `sudo`/`justification` 參數有効化。`sudo: true` 請求全体（command/cwd/env/timeout）Unix 套接字経由守護路由、`justification` 必須結果随返。守護 = systemd 套接字激活型 root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続毎 1 請求 JSON 協議、插件包同梱）。接続制御境界 = dsh service 用戶所有 `0600` 套接字文件（SocketUser/SocketMode）。部品 nixkits.dsh.sudo（enable/socketPath/package）追加、単元生成与環境変数注入。検証：門控（套接字無參數非公開／有公開）、路由往復、justification 強制、実行器直結協議、部品単元評価全通過。
+
+| 提交 | 説明 |
+|------|------|
+| `ef4bcfc` | feat(dsh-nix-shell): external sudo daemon integration — socket-activated root executor, init-time detection, sudo routing |
+
 ## 2026-08-20T06:02:50+09:00
 
 **摘要**：refactor(skills): NixKits 技能原生 DSH 技能插件書換 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、runtime 依存零）、7 技能各包内子路插件条目。各插件 runtime ctx.skills.register 自身内容登録（runtime provider、rank 250、文件系統由來優先）、apply() 登録 disposer 返組合解除随破棄。SKILL.md skills/ 単一來源殘置構築期嵌入、frontmatter 剥離 content 化 metadata 保持（文書管自動発見契約不変）。部品 skills.enable 7 組合行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）自動生成、旧誤実装目録注入（nixkits-skills 包 + bundledSkillDir）置換。検証：7 插件 mock 登録全通過、裸子路 import + 登録実測（SUBPATH-OK/REGISTERED）。CI x86_64/aarch64 構築追加。

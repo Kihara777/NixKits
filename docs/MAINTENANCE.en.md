@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T06:27:40+09:00
+
+**Summary**: feat(dsh-nix-shell): external sudo daemon integration (0.2.0) — the dsh sandbox strips sudo's setuid, so the agent cannot elevate. The plugin now probes the daemon socket at apply time (config `sudoSocketPath` / env `NIXKITS_SUDO_SOCKET`), advertises `sudo`/`justification` when present, and routes `sudo: true` requests whole (command/cwd/env/timeout) over a Unix socket to the daemon; `justification` is mandatory and echoed with the result. The daemon is a systemd socket-activated root executor (nixkits-sudo@.service + nixkits-sudo-exec.js, one-request-per-connection JSON protocol, shipped with the plugin package); the access-control boundary is the socket file owned by the dsh service user with mode 0600 (SocketUser/SocketMode). The module gains nixkits.dsh.sudo (enable/socketPath/package) creating the units and injecting the env var. Verified: gating (params hidden without socket, exposed with), routing round-trip, justification enforcement, direct executor protocol, and module unit evaluation.
+
+| Commit | Description |
+|------|------|
+| `ef4bcfc` | feat(dsh-nix-shell): external sudo daemon integration — socket-activated root executor, init-time detection, sudo routing |
+
 ## 2026-08-20T06:02:50+09:00
 
 **Summary**: refactor(skills): NixKits skills rewritten as native DSH skill plugins — new package dsh-skill-nixkits (@kihara777/dsh-skill-nixkits, zero runtime dependencies) with one subpath plugin entry per skill; each plugin registers its own content via ctx.skills.register (runtime provider, rank 250, outranking filesystem sources) and returns the registration disposer from apply(). The SKILL.md files remain the single source of truth in skills/, embedded at build time, with frontmatter stripped into content and preserved as metadata (the docs-pipeline auto-discovery contract is unchanged). The module's skills.enable now auto-generates the 7 composition rows (skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>), replacing the previously misimplemented directory injection (nixkits-skills package + bundledSkillDir). Verified: all 7 plugins register via a mock ctx, bare-subpath import + registration tested live (SUBPATH-OK/REGISTERED). CI builds added for x86_64/aarch64.
