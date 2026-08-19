@@ -207,7 +207,7 @@ in
         # dsh's /api/events.* endpoints are WebSocket (Upgrade: websocket).
         # mod_proxy cannot carry the Upgrade; tunnel them via mod_wstunnel.
         $HTTP["url"] =~ "^/api/events" {
-          wstunnel.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
+          wstunnel.server = ( "" => (("host" => "127.0.0.1", "port" => "${toString cfg.port}")) )
           wstunnel.frame-type = "text"
         }
       }
