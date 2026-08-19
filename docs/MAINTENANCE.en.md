@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T20:39:47+09:00
+
+**Summary**: fix(ci): ci-summary badge stuck on failing — the jq pipeline filtered failures before grouping by workflow, so an old failed run masked all later successes forever (badge stayed red after the codewhale riscv64 fix); now it takes the latest run per workflow first and only then filters failures — badge back to passing.
+
+| Commit | Description |
+|------|------|
+| `d752c83` | fix(ci): ci-summary badge stuck on failing — latest-run check must precede failure filter |
+
 ## 2026-08-19T19:57:03+09:00
 
 **Summary**: fix(codewhale-src): riscv64 cross build — four-part fix chain: ① rquickjs-sys 0.12.2 (newest on crates.io) ships no riscv64gc bindings (the build.rs non-bindgen path includes the target file); upstream's LP64 little-endian bindings are byte-identical, so postPatch drops an x86_64 copy into the materialized vendor dir; ② the host-side (x86_64 build-dependency) ring build let cc-rs fall back from the host triple to the derivation CC (the cross compiler) and add -m64 — now points at the buildPackages toolchain explicitly; ③ the bare postInstall cargo build lost --target and linked with the host toolchain — now mirrors cargoBuildHook's target triple; ④ binaries link -lgcc_s dynamically and autoPatchelfHook only scans hostPlatform deps — the cross gcc libgcc output is now an explicit input. Verified locally with the exact CI command (pkgsCross.riscv64.callPackage); clears the 6-run red Build codewhale (riscv64).

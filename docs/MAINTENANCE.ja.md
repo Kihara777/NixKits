@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T20:39:47+09:00
+
+**概要**：fix(ci): ci-summary バッジが failing に張り付く問題を修正 — jq パイプラインが workflow ごとのグループ化より先に failure をフィルタしていたため、過去の失敗が以降の成功を永久に覆い隠していた（codewhale riscv64 修正後もバッジが赤のまま）。先に workflow ごとの最新実行を取得してから failure を判定するよう修正し、バッジは passing に復帰。
+
+| コミット | 説明 |
+|------|------|
+| `d752c83` | fix(ci): ci-summary badge stuck on failing — latest-run check must precede failure filter |
+
 ## 2026-08-19T19:57:03+09:00
 
 **概要**：fix(codewhale-src): riscv64 クロスビルド修正 — 4 段階の問題連鎖を解消：① rquickjs-sys 0.12.2（crates.io 最新版）に riscv64gc bindings が無く（build.rs 非 bindgen パスが対象ファイルを include）、上流の各 64bit リトルエンディアン向け bindings はバイト単位で同一のため postPatch で x86_64 版を物化済み vendor ディレクトリへ配置；② ホスト側（x86_64 build 依存）の ring ビルドで cc-rs がホスト triple から派生レベルの CC（クロスコンパイラ）へフォールバックし -m64 を付与 — buildPackages ツールチェーンを明示；③ postInstall の裸 cargo build が --target を失いホストツールチェーンでリンク — cargoBuildHook と同様にターゲット triple を明示；④ バイナリが -lgcc_s を動的リンクし autoPatchelfHook は hostPlatform 依存のみ走査 — クロス gcc の libgcc 出力を明示的に追加。CI と同一コマンド（pkgsCross.riscv64.callPackage）でローカル検証済み。Build codewhale (riscv64) の 6 連続失敗を解消。

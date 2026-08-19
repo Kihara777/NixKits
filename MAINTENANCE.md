@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-19T20:39:47+09:00
+
+**摘要**：fix(ci): ci-summary 徽章卡在 failing — jq 管道先过滤 failure 再按 workflow 分组取最新，旧失败会永远掩盖后续成功（Build codewhale (riscv64) 修复后徽章仍红）；改为先分组取每 workflow 最新运行、再判定 failure，徽章恢复 passing。
+
+| 提交 | 说明 |
+|------|------|
+| `d752c83` | fix(ci): ci-summary badge stuck on failing — latest-run check must precede failure filter |
+
 ## 2026-08-19T19:57:03+09:00
 
 **摘要**：fix(codewhale-src): riscv64 交叉构建修复 — 四重问题链：① rquickjs-sys 0.12.2（crates.io 最新版）不提供 riscv64gc bindings（build.rs 非 bindgen 路径 include 目标文件），上游各 64 位小端平台 bindings 字节级一致，postPatch 将 x86_64 副本落入物化后的 vendor 目录；② ring 宿主侧（x86_64 build 依赖）构建时 cc-rs 从宿主 triple 回退到派生级 CC（交叉编译器）并追加 -m64，显式指向 buildPackages 工具链；③ postInstall 裸 cargo build 丢失 --target 而误用宿主工具链链接，镜像 cargoBuildHook 的目标三元组；④ 二进制以 -lgcc_s 动态链接，autoPatchelfHook 仅扫描 hostPlatform 依赖，显式加入交叉 gcc 的 libgcc 输出。本地以 CI 相同命令（pkgsCross.riscv64.callPackage）验证通过，Build codewhale (riscv64) 连续 6 次失败恢复。
