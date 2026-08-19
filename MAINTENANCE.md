@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T05:27:48+09:00
+
+**摘要**：feat(dsh): 内置 bash 工具 NixOS 修复 + 第三方插件包 + 部署级技能 — ① 模块为 dsh 服务注入完整 NixOS PATH（systemd 默认 PATH 无 bash，内置 bash 工具报 spawn bash ENOENT）；② 新增 dsh-nix-shell 包（@kihara777/dsh-nix-shell，NixOS 感知 shell 工具插件：PATH 解析失败回退 Nix store bash、注入 NixOS PATH、超时与落盘输出）与 nixkits-skills 包（技能目录 bundle）；③ 模块新增 plugins.packages（tar 解包注入 node_modules——symlink 被 Node realpath 回插件 store 路径导致 peer 解析断裂，故须实体解包——并自动生成组合行）与 skills.enable（skill-filesystem bundledSkillDir rank 600）；④ CI 新增 dsh-nix-shell x86_64/aarch64 构建。端到端验证：注入树内 IMPORT-OK（插件导出与依赖链解析正常）。
+
+| 提交 | 说明 |
+|------|------|
+| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路径A |
+| `55664ed` | docs: dsh-nix-shell package docs + dsh module options + README rows (4 languages) |
+
 ## 2026-08-19T20:39:47+09:00
 
 **摘要**：fix(ci): ci-summary 徽章卡在 failing — jq 管道先过滤 failure 再按 workflow 分组取最新，旧失败会永远掩盖后续成功（Build codewhale (riscv64) 修复后徽章仍红）；改为先分组取每 workflow 最新运行、再判定 failure，徽章恢复 passing。

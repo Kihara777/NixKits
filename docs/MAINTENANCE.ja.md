@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T05:27:48+09:00
+
+**概要**：feat(dsh): 内蔵 bash ツールの NixOS 修正 + サードパーティプラグインパッケージ + デプロイメント同梱スキル — ① モジュールが dsh サービスへ完全な NixOS PATH を注入（systemd 既定 PATH に bash が無く、標準 bash ツールが spawn bash ENOENT で失敗）；② dsh-nix-shell パッケージ新規（@kihara777/dsh-nix-shell、NixOS 対応シェルツールプラグイン：PATH 解決失敗時に Nix store の bash へフォールバック、NixOS PATH 注入、タイムアウトとスピル出力）と nixkits-skills パッケージ（スキルディレクトリバンドル）新規；③ モジュールに plugins.packages（node_modules へ tar 展開注入 — シンボリックリンクは Node の realpath でプラグイン自身の store パスへ戻り peer 解決が壊れるため実展開 — とコンポジション行の自動生成）と skills.enable（skill-filesystem bundledSkillDir、rank 600）を追加；④ CI に dsh-nix-shell の x86_64/aarch64 ビルドを追加。注入ツリー内で IMPORT-OK をエンドツーエンド検証（プラグインのエクスポートと依存連鎖が解決）。
+
+| コミット | 説明 |
+|------|------|
+| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路径A |
+| `55664ed` | docs: dsh-nix-shell package docs + dsh module options + README rows (4 languages) |
+
 ## 2026-08-19T20:39:47+09:00
 
 **概要**：fix(ci): ci-summary バッジが failing に張り付く問題を修正 — jq パイプラインが workflow ごとのグループ化より先に failure をフィルタしていたため、過去の失敗が以降の成功を永久に覆い隠していた（codewhale riscv64 修正後もバッジが赤のまま）。先に workflow ごとの最新実行を取得してから failure を判定するよう修正し、バッジは passing に復帰。

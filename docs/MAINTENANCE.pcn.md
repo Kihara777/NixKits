@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T05:27:48+09:00
+
+**摘要**：feat(dsh): 内建 bash 工具 NixOS 修正 + 第三者插件包 + 配備同梱技能 — ① 部品 dsh service 完全 NixOS PATH 注入（systemd 既定 PATH bash 無、標準 bash 工具 spawn bash ENOENT 失敗）；② dsh-nix-shell 包新規（@kihara777/dsh-nix-shell、NixOS 対応 shell 工具插件：PATH 解失敗時 Nix store bash 回退、NixOS PATH 注入、超時與落盤輸出）與 nixkits-skills 包（技能目録 bundle）新規；③ 部品 plugins.packages（node_modules tar 展開注入 — 符号連結 Node realpath 插件自身 store 路戻 peer 解決壊故実展開 — 與組合行自動生成）與 skills.enable（skill-filesystem bundledSkillDir、rank 600）追加；④ CI dsh-nix-shell x86_64/aarch64 構築追加。注入樹内 IMPORT-OK 端到端検証（插件輸出與依存連鎖解決正常）。
+
+| 提交 | 説明 |
+|------|------|
+| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路径A |
+| `55664ed` | docs: dsh-nix-shell package docs + dsh module options + README rows (4 languages) |
+
 ## 2026-08-19T20:39:47+09:00
 
 **摘要**：fix(ci): ci-summary 徽章 failing 固定問題修正 — jq 管 workflow 分組先 failure 過濾、旧失敗永久覆後続成功（codewhale riscv64 修正後徽章仍紅）。先 workflow 別最新実行取得後 failure 判定修正、徽章 passing 復帰。

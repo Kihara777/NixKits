@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T05:27:48+09:00
+
+**Summary**: feat(dsh): built-in bash tool NixOS fix + third-party plugin packages + deployment-bundled skills — ① the module injects a complete NixOS PATH into the dsh service (systemd's default PATH lacks bash; the stock bash tool failed with spawn bash ENOENT); ② new dsh-nix-shell package (@kihara777/dsh-nix-shell, a NixOS-aware shell tool plugin: Nix store bash fallback when PATH resolution fails, injected NixOS PATH, timeout and spill output) and nixkits-skills package (skill directory bundle); ③ new module options plugins.packages (tar-extracted into node_modules — a symlink is realpathed back into the plugin's store path, breaking peer resolution — with auto-generated composition rows) and skills.enable (skill-filesystem bundledSkillDir, rank 600); ④ CI builds for dsh-nix-shell on x86_64/aarch64. Verified end-to-end: IMPORT-OK inside the injected tree (plugin exports and dependency chain resolve).
+
+| Commit | Description |
+|------|------|
+| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路径A |
+| `55664ed` | docs: dsh-nix-shell package docs + dsh module options + README rows (4 languages) |
+
 ## 2026-08-19T20:39:47+09:00
 
 **Summary**: fix(ci): ci-summary badge stuck on failing — the jq pipeline filtered failures before grouping by workflow, so an old failed run masked all later successes forever (badge stayed red after the codewhale riscv64 fix); now it takes the latest run per workflow first and only then filters failures — badge back to passing.
