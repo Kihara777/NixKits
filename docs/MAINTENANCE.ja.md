@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T06:02:50+09:00
+
+**概要**：refactor(skills): NixKits スキルをネイティブ DSH スキルプラグインへ書き直し — 新パッケージ dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、ランタイム依存ゼロ）、7 スキル各々がパッケージ内のサブパスプラグインエントリ。各プラグインはランタイムに ctx.skills.register で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、apply() が登録 disposer を返してコンポジション解除と共に破棄。SKILL.md は skills/ に単一ソースとして残りビルド時に埋め込み、frontmatter は剥離して content とし metadata に保持（ドキュメントパイプラインの自動発見契約は不変）。モジュールの skills.enable は 7 行のコンポジション行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）を自動生成し、以前の誤実装だったディレクトリ注入（nixkits-skills パッケージ + bundledSkillDir）を置き換え。検証：7 プラグインの mock 登録全通過、ベアサブパスインポート + 登録を実測（SUBPATH-OK/REGISTERED）。CI に x86_64/aarch64 ビルドを追加。
+
+| コミット | 説明 |
+|------|------|
+| `7393b95` | feat(dsh): rewrite NixKits skills as native skill plugins — dsh-skill-nixkits package, one plugin entry per skill |
+
 ## 2026-08-20T05:27:48+09:00
 
 **概要**：feat(dsh): 内蔵 bash ツールの NixOS 修正 + サードパーティプラグインパッケージ + デプロイメント同梱スキル — ① モジュールが dsh サービスへ完全な NixOS PATH を注入（systemd 既定 PATH に bash が無く、標準 bash ツールが spawn bash ENOENT で失敗）；② dsh-nix-shell パッケージ新規（@kihara777/dsh-nix-shell、NixOS 対応シェルツールプラグイン：PATH 解決失敗時に Nix store の bash へフォールバック、NixOS PATH 注入、タイムアウトとスピル出力）と nixkits-skills パッケージ（スキルディレクトリバンドル）新規；③ モジュールに plugins.packages（node_modules へ tar 展開注入 — シンボリックリンクは Node の realpath でプラグイン自身の store パスへ戻り peer 解決が壊れるため実展開 — とコンポジション行の自動生成）と skills.enable（skill-filesystem bundledSkillDir、rank 600）を追加；④ CI に dsh-nix-shell の x86_64/aarch64 ビルドを追加。注入ツリー内で IMPORT-OK をエンドツーエンド検証（プラグインのエクスポートと依存連鎖が解決）。

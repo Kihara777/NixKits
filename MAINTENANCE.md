@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T06:02:50+09:00
+
+**摘要**：refactor(skills): NixKits 技能重写为原生 DSH 技能插件 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits，零运行时依赖），7 个技能各为包内一个子路径插件条目，运行时经 ctx.skills.register 注册自身内容（runtime provider，rank 250，优先于文件系统来源），apply() 返回注册 disposer 随组合撤销；SKILL.md 保留在 skills/ 为内容单一来源、构建期嵌入，frontmatter 剥离并保留进 metadata（文档流水线自动发现契约不变）。模块 skills.enable 改为自动生成 7 条组合行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>），移除此前误实施的目录注入机制（nixkits-skills 包与 bundledSkillDir）。验证：7 插件 mock 注册全通过、子路径裸导入解析 + 注册实测通过（SUBPATH-OK/REGISTERED）。CI 新增 x86_64/aarch64 构建。
+
+| 提交 | 说明 |
+|------|------|
+| `7393b95` | feat(dsh): rewrite NixKits skills as native skill plugins — dsh-skill-nixkits package, one plugin entry per skill |
+
 ## 2026-08-20T05:27:48+09:00
 
 **摘要**：feat(dsh): 内置 bash 工具 NixOS 修复 + 第三方插件包 + 部署级技能 — ① 模块为 dsh 服务注入完整 NixOS PATH（systemd 默认 PATH 无 bash，内置 bash 工具报 spawn bash ENOENT）；② 新增 dsh-nix-shell 包（@kihara777/dsh-nix-shell，NixOS 感知 shell 工具插件：PATH 解析失败回退 Nix store bash、注入 NixOS PATH、超时与落盘输出）与 nixkits-skills 包（技能目录 bundle）；③ 模块新增 plugins.packages（tar 解包注入 node_modules——symlink 被 Node realpath 回插件 store 路径导致 peer 解析断裂，故须实体解包——并自动生成组合行）与 skills.enable（skill-filesystem bundledSkillDir rank 600）；④ CI 新增 dsh-nix-shell x86_64/aarch64 构建。端到端验证：注入树内 IMPORT-OK（插件导出与依赖链解析正常）。
