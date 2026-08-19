@@ -186,6 +186,8 @@ in
       }
     ];
 
+    services.lighttpd.enableModules = lib.mkIf cfg.reverseProxy.enable [ "mod_wstunnel" ];
+
     services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
       $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
         proxy.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
@@ -202,6 +204,12 @@ in
           "Host" => "127.0.0.1:${toString cfg.port}",
           "Origin" => "http://127.0.0.1:${toString cfg.port}"
         )
+        # dsh's /api/events.* endpoints are WebSocket (Upgrade: websocket).
+        # mod_proxy cannot carry the Upgrade; tunnel them via mod_wstunnel.
+        $HTTP["url"] =~ "^/api/events" {
+          wstunnel.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
+          wstunnel.frame-type = "text"
+        }
       }
     '';
 
