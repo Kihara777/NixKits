@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T13:10:00+09:00
+
+**概要**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 は約 13 時間でクラッシュ（fatal load failure: Context has been disposed）— cordis-plugin-timer の ctx.timeout() が Context の静的な dispose 時に reject し unhandled rejection 化。rc.7（8/17）が最新、cordis/timer バージョンは不変（バグ残存の可能性）だが上流修正を含む。プラグイン一覧不変（131）。
+
+| コミット | 説明 |
+|------|------|
+| `c75cb4c` | chore(pkgs): bump dsh 0.1.0-rc.6 → 0.1.0-rc.7 |
+
 ## 2026-08-18T20:00:00+09:00
 
 **概要**: fix(module): dsh 通常ユーザー実行対応 — 隔離システムユーザー（home /var/lib/dsh）では /home/<user>（700 権限）にアクセスできず、agent が作業ディレクトリを操作できなかった。dshHome オプションを追加し、HOME/DSH_HOME/WorkingDirectory/preStart を統一ルート化、StateDirectory を preStart mkdir + chown に置換。ローカル設定は user="kix" + dshHome="/home/kix/.dsh" で、dsh が kix として実行され /home/kix に到達。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T13:10:00+09:00
+
+**Summary**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7. rc.6 crashed after ~13h (fatal load failure: Context has been disposed) — cordis-plugin-timer ctx.timeout() rejects on a silent Context dispose, surfacing as an unhandled rejection. rc.7 (8/17) is latest; cordis/timer versions unchanged (bug may persist) but carries upstream fixes. Plugin inventory unchanged (131).
+
+| Commit | Description |
+|------|------|
+| `c75cb4c` | chore(pkgs): bump dsh 0.1.0-rc.6 → 0.1.0-rc.7 |
+
 ## 2026-08-18T20:00:00+09:00
 
 **Summary**: fix(module): dsh supports normal-user operation — running as the isolated system user (home /var/lib/dsh) it could not read /home/<user> (mode 700), so the agent could not touch the working tree. Add dshHome; route HOME/DSH_HOME/WorkingDirectory/preStart through it, replace StateDirectory with preStart mkdir + chown. Local config uses user="kix" + dshHome="/home/kix/.dsh", so dsh runs as kix and reaches /home/kix.

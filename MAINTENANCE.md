@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-19T13:10:00+09:00
+
+**摘要**：fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 运行约 13 小时后崩溃（fatal load failure: Context has been disposed）—— cordis-plugin-timer 的 ctx.timeout() 在 Context 静默 dispose 时 reject 变成 unhandled rejection。rc.7（8/17）为最新版，cordis/timer 版本未变（bug 可能仍在），但携带上游修复。插件清单不变（131 项）。
+
+| 提交 | 说明 |
+|------|------|
+| `c75cb4c` | chore(pkgs): bump dsh 0.1.0-rc.6 → 0.1.0-rc.7 |
+
 ## 2026-08-18T20:00:00+09:00
 
 **摘要**：fix(module): dsh 支持普通用户运行 — dsh 以隔离系统用户（home /var/lib/dsh）运行无法访问 /home/<user>（700 权限），agent 无法操作用户工作目录。新增 dshHome 选项，HOME/DSH_HOME/WorkingDirectory/preStart 统一走该路径，StateDirectory 改为 preStart mkdir + chown。本机配置 user="kix" + dshHome="/home/kix/.dsh"，dsh 以 kix 身份运行，可访问 /home/kix。
