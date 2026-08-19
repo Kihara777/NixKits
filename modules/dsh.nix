@@ -186,11 +186,18 @@ in
       }
     ];
 
-    services.lighttpd.enableModules = lib.mkIf cfg.reverseProxy.enable [ "mod_wstunnel" ];
-
     services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
       $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
         proxy.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
+        # dsh 的 /api/events.* 是 WebSocket（Upgrade: websocket）。
+        # lighttpd 1.4.56+ 的 mod_proxy 原生支持 WebSocket 隧道，但必须
+        # 显式开启 proxy.header 的 upgrade 转发，否则返回 426 Upgrade Required。
+        #
+        # 不能用 mod_wstunnel：NixOS 的 lighttpd 模块按 allKnownModules 固定
+        # 顺序生成 server.modules，mod_wstunnel 永远排在 mod_proxy 之后，
+        # mod_proxy 先接管请求（proxy.server 匹配所有路径）返回 426，
+        # mod_wstunnel 因 r->handler_module 已非空而跳过，从不生效。
+        proxy.header = ( "upgrade" => "enable" )
         setenv.add-request-header = (
           "X-Real-IP" => "%{remote-addr}e",
           "X-Forwarded-For" => "%{remote-addr}e",
@@ -204,12 +211,6 @@ in
           "Host" => "127.0.0.1:${toString cfg.port}",
           "Origin" => "http://127.0.0.1:${toString cfg.port}"
         )
-        # dsh's /api/events.* endpoints are WebSocket (Upgrade: websocket).
-        # mod_proxy cannot carry the Upgrade; tunnel them via mod_wstunnel.
-        $HTTP["url"] =~ "^/api/events" {
-          wstunnel.server = ( "" => (("host" => "127.0.0.1", "port" => "${toString cfg.port}")) )
-          wstunnel.frame-type = "text"
-        }
       }
     '';
 
