@@ -84,18 +84,20 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 }
 ```
 
-### 技能目录
+### 技能插件
 
-`skills.enable` 把 NixKits 技能目录以部署级技能（`skill-filesystem` 的 `bundledSkillDir`，rank 600）注入所有会话——无需写 home 目录、随 `nixos-rebuild` 原子升级：
+`skills.enable` 把 NixKits 全部 7 个技能以**原生 dsh 技能插件**注册——每个技能一条组合行，插件在运行时经 `ctx.skills.register` 注册自身内容（runtime provider，rank 250，优先于文件系统来源），可随预设/会话粒度启停：
 
 ```nix
 {
   nixkits.dsh.skills = {
     enable = true;
-    package = pkgs.nixkits-skills;  # 默认值，可替换为自定义技能目录包
+    package = pkgs.dsh-skill-nixkits;  # 默认值，可替换
   };
 }
 ```
+
+生成 7 条组合行：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
 
 ## 插件清单
 

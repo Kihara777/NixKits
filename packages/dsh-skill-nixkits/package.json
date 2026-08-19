@@ -1,0 +1,46 @@
+{
+  "name": "@kihara777/dsh-skill-nixkits",
+  "version": "0.1.0",
+  "description": "NixKits skills as native DeepSeek Harness skill plugins — one plugin entry per skill",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kihara777/NixKits.git",
+    "directory": "packages/dsh-skill-nixkits"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./nixkits-check-updates": {
+      "default": "./lib/nixkits-check-updates.js"
+    },
+    "./nixkits-skills": {
+      "default": "./lib/nixkits-skills.js"
+    },
+    "./nixos-modern-cli": {
+      "default": "./lib/nixos-modern-cli.js"
+    },
+    "./recover-nixos-config": {
+      "default": "./lib/recover-nixos-config.js"
+    },
+    "./translate-pseudocn": {
+      "default": "./lib/translate-pseudocn.js"
+    },
+    "./write-maintenance-log": {
+      "default": "./lib/write-maintenance-log.js"
+    },
+    "./write-project-docs": {
+      "default": "./lib/write-project-docs.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "skills"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

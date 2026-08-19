@@ -17,6 +17,6 @@ final: prev: {
   dsh                  = final.callPackage ../packages/dsh.nix { };
   # NixOS-aware shell tool plugin for dsh (fixes "spawn bash ENOENT").
   dsh-nix-shell        = final.callPackage ../packages/dsh-nix-shell.nix { };
-  # Deployment-bundled skill directory for dsh's skill-filesystem provider.
-  nixkits-skills       = final.callPackage ../packages/nixkits-skills.nix { };
+  # NixKits skills as native dsh skill plugins (one plugin entry per skill).
+  dsh-skill-nixkits    = final.callPackage ../packages/dsh-skill-nixkits.nix { };
 }

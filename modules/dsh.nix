@@ -173,11 +173,11 @@ in
     };
 
     skills = {
-      enable = lib.mkEnableOption "bundle the NixKits skills into the deployment (skill-filesystem bundledSkillDir, rank 600)";
+      enable = lib.mkEnableOption "register the NixKits skills as native dsh skill plugins (one composition row per skill)";
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.nixkits-skills;
-        description = "Skill bundle package — a directory of <skill-name>/SKILL.md entries scanned by dsh's skill-filesystem provider.";
+        default = pkgs.dsh-skill-nixkits;
+        description = "Skill plugin package (@kihara777/dsh-skill-nixkits) embedding the NixKits skills.";
       };
     };
 
@@ -196,11 +196,24 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    # NixKits skills as deployment-bundled skills: the skill-filesystem
-    # provider's bundledSkillDir (rank 600) points at the skill bundle in the
-    # store, so every session on this deployment sees them with no
-    # home-directory writes.
-    nixkits.dsh.plugins.settings."skill-filesystem".bundledSkillDir = lib.mkIf cfg.skills.enable "${cfg.skills.package}";
+    # NixKits skills as native dsh skill plugins: one composition row per
+    # skill, each plugin registering its own content via ctx.skills.register
+    # (runtime provider, rank 250 — outranking the filesystem roots).
+    nixkits.dsh.plugins.packages = lib.mkIf cfg.skills.enable (
+      builtins.map (skillId: {
+        package = cfg.skills.package;
+        id = "skill-nixkits-${skillId}";
+        name = "@kihara777/dsh-skill-nixkits/${skillId}";
+      }) [
+        "nixkits-check-updates"
+        "nixkits-skills"
+        "nixos-modern-cli"
+        "recover-nixos-config"
+        "translate-pseudocn"
+        "write-maintenance-log"
+        "write-project-docs"
+      ]
+    );
 
     users.users = lib.mkIf (cfg.user == "dsh") {
       dsh = {

@@ -84,18 +84,20 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 }
 ```
 
-### スキルバンドル
+### スキルプラグイン
 
-`skills.enable` は NixKits スキルディレクトリをデプロイメント同梱スキル（`skill-filesystem` の `bundledSkillDir`、rank 600）として全セッションに提供する — home ディレクトリへの書き込み不要、`nixos-rebuild` で原子的にアップグレード：
+`skills.enable` は NixKits の全 7 スキルを**ネイティブ dsh スキルプラグイン**として登録する — スキルごとに 1 行のコンポジション行、各プラグインはランタイムに `ctx.skills.register` で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、プリセット／セッション粒度で制御可能：
 
 ```nix
 {
   nixkits.dsh.skills = {
     enable = true;
-    package = pkgs.nixkits-skills;  # 既定値。カスタムバンドルに置換可
+    package = pkgs.dsh-skill-nixkits;  # 既定値、置換可
   };
 }
 ```
+
+7 行のコンポジション行を生成：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
 
 ## プラグイン一覧
 

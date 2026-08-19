@@ -84,18 +84,20 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 }
 ```
 
-### Skill bundle
+### Skill plugins
 
-`skills.enable` mounts the NixKits skill directory as deployment-bundled skills (`skill-filesystem`'s `bundledSkillDir`, rank 600) for every session — no home-directory writes, atomic upgrades with `nixos-rebuild`:
+`skills.enable` registers all 7 NixKits skills as **native dsh skill plugins** — one composition row per skill, each plugin registering its own content via `ctx.skills.register` (runtime provider, rank 250, outranking filesystem sources), controllable at preset/session granularity:
 
 ```nix
 {
   nixkits.dsh.skills = {
     enable = true;
-    package = pkgs.nixkits-skills;  # default; replaceable with a custom bundle
+    package = pkgs.dsh-skill-nixkits;  # default, replaceable
   };
 }
 ```
+
+Generates 7 composition rows: `skill-nixkits-check-updates`, `skill-nixkits-skills`, `skill-nixos-modern-cli`, `skill-recover-nixos-config`, `skill-translate-pseudocn`, `skill-write-maintenance-log`, `skill-write-project-docs` (`@kihara777/dsh-skill-nixkits/<id>`).
 
 ## Plugin inventory
 

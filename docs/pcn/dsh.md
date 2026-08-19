@@ -84,18 +84,20 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 }
 ```
 
-### 技能目録
+### 技能插件
 
-`skills.enable` NixKits 技能目録配備同梱技能（`skill-filesystem` 的 `bundledSkillDir`、rank 600）全 session 提供 — home 目録書込不要、`nixos-rebuild` 原子昇級：
+`skills.enable` NixKits 全 7 技能**原生 dsh 技能插件**登録 — 技能毎 1 組合行、各插件 runtime `ctx.skills.register` 自身内容登録（runtime provider、rank 250、文件系統由来優先）、preset/session 粒度制御可：
 
 ```nix
 {
   nixkits.dsh.skills = {
     enable = true;
-    package = pkgs.nixkits-skills;  # 既定値。自定義目録包置換可
+    package = pkgs.dsh-skill-nixkits;  # 既定値、置換可
   };
 }
 ```
+
+7 組合行生成：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
 
 ## 插件清單
 

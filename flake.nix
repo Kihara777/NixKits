@@ -39,7 +39,7 @@
       godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-nix-shell        = pkgs.callPackage ./packages/dsh-nix-shell.nix { };
-      nixkits-skills       = pkgs.callPackage ./packages/nixkits-skills.nix { };
+      dsh-skill-nixkits    = pkgs.callPackage ./packages/dsh-skill-nixkits.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''

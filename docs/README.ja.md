@@ -24,7 +24,7 @@ inputs.nixkits.url = "~/NixKits";
 | codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— すべてがプラグイン | [docs/ja/dsh.md](ja/dsh.md) |
 | dsh-nix-shell | DSH 向け NixOS 対応シェルツールプラグイン（`spawn bash ENOENT` 修正） | [docs/ja/dsh-nix-shell.md](ja/dsh-nix-shell.md) |
-| nixkits-skills | DSH デプロイメント同梱スキルディレクトリ（skill-filesystem bundledSkillDir） | [docs/ja/dsh.md](ja/dsh.md) |
+| dsh-skill-nixkits | NixKits スキルのネイティブ DSH スキルプラグイン（スキルごとに 1 エントリ） | [docs/ja/dsh-skill-nixkits.md](ja/dsh-skill-nixkits.md) |
 | godot-ai | Godot エンジン向けの MCP サーバーと AI ツール | [docs/ja/godot-ai.md](ja/godot-ai.md) |
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
