@@ -47,6 +47,8 @@ dsh web   # 瀏覧器 UI 起動
 }
 ```
 
+> **PATH**：部品 service 完全 NixOS PATH（`/run/current-system/sw/bin` 等）自動注入。無場合 systemd 既定 PATH bash 発見不能、内建 bash 工具 `spawn bash ENOENT` 失敗。
+
 ## 插件宣言管理
 
 dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits.dsh.plugins` 宣言 on/off 与設定：
@@ -65,7 +67,35 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 |------|------|
 | `disabled` | 無効化 plugin entry id、`- id: <id> / disabled: true` 描画 |
 | `settings` | plugin config 覆写（id → JSON、YAML flow style） |
+| `packages` | 第三者插件包：dsh node_modules 注入 + 組合行生成（下記） |
 | `extraPatch` | 生 cordis.patch.yml 片段（MCP server 等） |
+
+### 第三者插件包
+
+`plugins.packages` 第三者 npm 插件包 dsh node_modules 樹注入（組合行 install root 自包名解決、包実目録存在必要 — 符号連結 Node realpath 插件自身 store 路戻、peer 解決壊）、生成 cordis.patch.yml 組合行自動登録：
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-nix-shell;         # NixKits 包（npm 構築）
+    id = "tool-nix-shell";                # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nix-shell";    # 行参照 npm 包名
+  }];
+}
+```
+
+### 技能目録
+
+`skills.enable` NixKits 技能目録配備同梱技能（`skill-filesystem` 的 `bundledSkillDir`、rank 600）全 session 提供 — home 目録書込不要、`nixos-rebuild` 原子昇級：
+
+```nix
+{
+  nixkits.dsh.skills = {
+    enable = true;
+    package = pkgs.nixkits-skills;  # 既定値。自定義目録包置換可
+  };
+}
+```
 
 ## 插件清單
 

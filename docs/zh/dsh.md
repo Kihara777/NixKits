@@ -47,6 +47,8 @@ dsh web   # 启动浏览器 UI
 }
 ```
 
+> **PATH**：模块自动为服务注入 NixOS 完整 PATH（`/run/current-system/sw/bin` 等）。没有它，systemd 默认 PATH 找不到 bash，内置 bash 工具会报 `spawn bash ENOENT`。
+
 ## 插件声明式管理
 
 dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`nixkits.dsh.plugins` 提供声明式启停与配置：
@@ -65,7 +67,35 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 |------|------|
 | `disabled` | 禁用的插件 entry id，渲染为 `- id: <id> / disabled: true` |
 | `settings` | 插件 config 覆盖（id → JSON，YAML flow style） |
+| `packages` | 第三方插件包：注入 dsh 的 node_modules 并生成组合行（见下文） |
 | `extraPatch` | 手写 cordis.patch.yml 片段（如 MCP 服务） |
+
+### 第三方插件包
+
+`plugins.packages` 把第三方 npm 插件包注入 dsh 的 node_modules 树（组合行按包名解析，必须以真实目录存在——符号链接会被 Node realpath 回插件自身的 store 路径，导致 peer 依赖无法命中 dsh 树），并自动在生成的 cordis.patch.yml 中注册组合行：
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-nix-shell;         # NixKits 包（npm 构建）
+    id = "tool-nix-shell";                # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nix-shell";    # 组合行引用的 npm 包名
+  }];
+}
+```
+
+### 技能目录
+
+`skills.enable` 把 NixKits 技能目录以部署级技能（`skill-filesystem` 的 `bundledSkillDir`，rank 600）注入所有会话——无需写 home 目录、随 `nixos-rebuild` 原子升级：
+
+```nix
+{
+  nixkits.dsh.skills = {
+    enable = true;
+    package = pkgs.nixkits-skills;  # 默认值，可替换为自定义技能目录包
+  };
+}
+```
 
 ## 插件清单
 

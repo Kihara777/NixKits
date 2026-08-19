@@ -47,6 +47,8 @@ Run as a resident web service via the `nixkits.dsh` module. dsh listens loopback
 }
 ```
 
+> **PATH**: the module injects a complete NixOS PATH (`/run/current-system/sw/bin`, …) into the service. Without it, systemd's default PATH cannot find bash and the built-in bash tool fails with `spawn bash ENOENT`.
+
 ## Declarative plugin management
 
 dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits.dsh.plugins` provides declarative on/off and config:
@@ -65,7 +67,35 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 |------|------|
 | `disabled` | plugin entry ids to disable, rendered as `- id: <id> / disabled: true` |
 | `settings` | plugin config overrides (id → JSON, YAML flow style) |
+| `packages` | third-party plugin packages: injected into dsh's node_modules + generated composition rows (below) |
 | `extraPatch` | raw cordis.patch.yml fragment (e.g. MCP servers) |
+
+### Third-party plugin packages
+
+`plugins.packages` injects third-party npm plugin packages into dsh's node_modules tree (composition rows resolve package names from the install root, and the packages must be real directories there — a symlink would be realpathed back into the plugin's own store path, breaking peer resolution) and registers the composition row in the generated cordis.patch.yml:
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-nix-shell;         # NixKits package (npm build)
+    id = "tool-nix-shell";                # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nix-shell";    # npm package name referenced by the row
+  }];
+}
+```
+
+### Skill bundle
+
+`skills.enable` mounts the NixKits skill directory as deployment-bundled skills (`skill-filesystem`'s `bundledSkillDir`, rank 600) for every session — no home-directory writes, atomic upgrades with `nixos-rebuild`:
+
+```nix
+{
+  nixkits.dsh.skills = {
+    enable = true;
+    package = pkgs.nixkits-skills;  # default; replaceable with a custom bundle
+  };
+}
+```
 
 ## Plugin inventory
 

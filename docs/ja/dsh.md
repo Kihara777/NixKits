@@ -47,6 +47,8 @@ dsh web   # ブラウザ UI を起動
 }
 ```
 
+> **PATH**：モジュールはサービスへ完全な NixOS PATH（`/run/current-system/sw/bin` など）を自動注入する。これが無いと systemd の既定 PATH では bash が見つからず、内蔵 bash ツールが `spawn bash ENOENT` で失敗する。
+
 ## プラグイン宣言的管理
 
 dsh のプラグインは `cordis.patch.yml` からランタイムにホットリロードされる（再起動不要）。`nixkits.dsh.plugins` で宣言的なオン/オフと設定が可能：
@@ -65,7 +67,35 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 |------|------|
 | `disabled` | 無効化するプラグイン entry id、`- id: <id> / disabled: true` に描画 |
 | `settings` | プラグイン config 上書き（id → JSON、YAML flow style） |
+| `packages` | サードパーティプラグインパッケージ：dsh の node_modules へ注入 + コンポジション行生成（下記） |
 | `extraPatch` | 生 cordis.patch.yml フラグメント（MCP サーバーなど） |
+
+### サードパーティプラグインパッケージ
+
+`plugins.packages` はサードパーティ npm プラグインパッケージを dsh の node_modules ツリーへ注入する（コンポジション行はインストールルートからパッケージ名を解決するため、パッケージは実ディレクトリとして存在する必要がある — シンボリックリンクは Node の realpath によりプラグイン自身の store パスへ戻され、peer 解決が壊れる）。生成される cordis.patch.yml にコンポジション行も自動登録する：
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-nix-shell;         # NixKits パッケージ（npm ビルド）
+    id = "tool-nix-shell";                # cordis.patch.yml の entry id
+    name = "@kihara777/dsh-nix-shell";    # 行が参照する npm パッケージ名
+  }];
+}
+```
+
+### スキルバンドル
+
+`skills.enable` は NixKits スキルディレクトリをデプロイメント同梱スキル（`skill-filesystem` の `bundledSkillDir`、rank 600）として全セッションに提供する — home ディレクトリへの書き込み不要、`nixos-rebuild` で原子的にアップグレード：
+
+```nix
+{
+  nixkits.dsh.skills = {
+    enable = true;
+    package = pkgs.nixkits-skills;  # 既定値。カスタムバンドルに置換可
+  };
+}
+```
 
 ## プラグイン一覧
 
