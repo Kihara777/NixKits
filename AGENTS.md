@@ -63,7 +63,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 - **统一使用 `nixkits.*` 命名空间**（非 `services.*`）。历史遗留的 `services.opencode-telegram` 和 `services.ruyi` 已迁移并向后兼容。
 - **每个模块必须有 `enable` 选项**，默认 `false`。
-- **依赖外部模块时必须添加 `assertions`**（参见 `comfyui-strix-halo.nix`）。
+- **依赖外部模块时必须添加 `assertions`**（参见 `comfyui-rocm.nix`）。
 - **避免硬编码路径**：优先从 config 推导（如 `hfCacheDir` 从 `config.users.users.<user>.home` 推导）。
 
 ### 文档
@@ -124,8 +124,8 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
-构建 job 通过矩阵并行构建全部软件包（x86_64-linux / aarch64-linux / riscv64-linux），完成后推送到 Cachix 二进制缓存。
+构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`，每小时刷新）。
 
 ## 二进制缓存
 
-CI 自动构建全部三个架构（x86_64 / aarch64 / riscv64）并推送到 Cachix。`nixkits-check-updates` 技能执行后，确认 CI 通过即可，无需本地额外操作。
+CI 自动构建支持的架构组合并推送到 Cachix。`nixkits-check-updates` 技能执行后，确认 CI 通过即可，无需本地额外操作。
