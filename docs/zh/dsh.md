@@ -99,6 +99,21 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 生成 7 条组合行：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
 
+### sudo 守护
+
+dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebuild`）。`sudo.enable` 部署一个 systemd **套接字激活的 root 执行器**（`nixkits-sudo@.service`，每连接运行一次 `nixkits-sudo-exec`），并向 dsh 服务注入 `NIXKITS_SUDO_SOCKET`。dsh-nix-shell 插件初始化时探测该套接字，存在即启用 `sudo` 参数并路由请求：
+
+```nix
+{
+  nixkits.dsh.sudo = {
+    enable = true;
+    socketPath = "/run/nixkits-sudo.sock";  # 默认
+  };
+}
+```
+
+> **安全模型**：套接字文件归 dsh 服务用户所有且 `0600`（`SocketUser`/`SocketMode`），仅该用户可连接——等价于为该用户提供免密 root 执行入口，请仅在信任该用户与代理行为的前提下开启。
+
 ## 插件清单
 
 dsh 0.1.0-rc.6 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：

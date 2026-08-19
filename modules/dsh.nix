@@ -181,6 +181,20 @@ in
       };
     };
 
+    sudo = {
+      enable = lib.mkEnableOption "external sudo daemon for dsh-nix-shell (systemd socket-activated root executor)";
+      socketPath = lib.mkOption {
+        type = lib.types.str;
+        default = "/run/nixkits-sudo.sock";
+        description = "Unix socket path for the sudo executor; exported to the dsh service as NIXKITS_SUDO_SOCKET.";
+      };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.dsh-nix-shell;
+        description = "Package providing the nixkits-sudo-exec executor script.";
+      };
+    };
+
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.attrs;
       default = { };
@@ -266,7 +280,39 @@ in
           "DSH_HOME=${cfg.dshHome}"
           "PATH=/run/current-system/sw/bin:/run/wrappers/bin:/etc/profiles/per-user/${cfg.user}/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
         ]
+          ++ lib.optionals cfg.sudo.enable [ "NIXKITS_SUDO_SOCKET=${cfg.sudo.socketPath}" ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
+      };
+    };
+
+    # External sudo daemon: a systemd socket-activated root executor.  The
+    # socket is owned by the dsh service user (SocketUser + 0600), so only
+    # that user can connect; every accepted connection runs one command as
+    # root via the nixkits-sudo-exec script.  This deliberately equals
+    # passwordless root for the dsh user — gate it behind cfg.sudo.enable and
+    # prefer narrower alternatives when the sandbox permits sudo directly.
+    systemd.sockets.nixkits-sudo = lib.mkIf cfg.sudo.enable {
+      description = "NixKits sudo executor socket (dsh-nix-shell)";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ cfg.sudo.socketPath ];
+      socketConfig = {
+        SocketUser = cfg.user;
+        SocketMode = "0600";
+        Accept = true;
+        RemoveOnStop = true;
+      };
+    };
+
+    systemd.services."nixkits-sudo@" = lib.mkIf cfg.sudo.enable {
+      description = "NixKits sudo executor (per-connection root command runner)";
+      serviceConfig = {
+        ExecStart = "${lib.getExe pkgs.nodejs} ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nix-shell/bin/nixkits-sudo-exec.js";
+        StandardInput = "socket";
+        StandardOutput = "socket";
+        StandardError = "journal";
+        TimeoutStopSec = 30;
+        # Runs as root by design — the socket gate above is the access
+        # control boundary.
       };
     };
 

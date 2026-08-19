@@ -1,7 +1,7 @@
 {
   "name": "@kihara777/dsh-nix-shell",
-  "version": "0.1.0",
-  "description": "NixOS-aware shell tool for the DeepSeek Harness — executes commands through a Nix store bash when the stock tool cannot resolve one",
+  "version": "0.2.0",
+  "description": "NixOS-aware shell tool for the DeepSeek Harness — executes commands through a Nix store bash when the stock tool cannot resolve one, with optional external sudo daemon routing",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,8 +15,12 @@
       "default": "./lib/index.js"
     }
   },
+  "bin": {
+    "nixkits-sudo-exec": "./bin/nixkits-sudo-exec.js"
+  },
   "files": [
-    "lib/index.js"
+    "lib/index.js",
+    "bin/nixkits-sudo-exec.js"
   ],
   "publishConfig": {
     "access": "public"

@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）向け NixOS 対応シェルツールプラグイン。
 |------|-----|
 | 種別 | DSH ホストプラグイン（npm パッケージ）|
 | npm 名 | `@kihara777/dsh-nix-shell` |
-| バージョン | `0.1.0` |
+| バージョン | `0.2.0` |
 | ライセンス | MIT |
 | ツール名 | `nix_shell` |
 
@@ -36,6 +36,22 @@ DeepSeek Harness（DSH）向け NixOS 対応シェルツールプラグイン。
 | `maxTimeoutMs` | `3600000` | タイムアウト上限 |
 | `stdoutMaxBytes` / `stdoutSpillMaxBytes` | 2 MiB / 16 MiB | メモリ上限と全量スピル上限 |
 | `graceMs` | `5000` | 終了猶予 |
+| `sudoSocketPath` | `""`（無効） | 外部 sudo デーモンのソケットパス。環境変数 `NIXKITS_SUDO_SOCKET` からも取得 |
+
+## sudo デーモン統合
+
+dsh サンドボックス内では `sudo` の setuid が失われ昇格できない。プラグインは**初期化時**に外部 sudo デーモンのソケット（コンポジション config の `sudoSocketPath`、フォールバックとして環境変数 `NIXKITS_SUDO_SOCKET`）を検出し、存在すれば `sudo`/`justification` パラメータを有効化。`sudo: true` のリクエストはローカル実行せず、Unix ソケット経由でリクエスト全体（command/cwd/env/timeout）をデーモンへ渡し、root で実行する：
+
+```
+nix_shell(sudo=true)
+  └─ Unix ソケット ──▶ systemd ソケットアクティベーション（nixkits-sudo@.service, root）
+                         └─ nixkits-sudo-exec.js：接続ごとに 1 リクエスト、JSON リクエスト/レスポンス
+```
+
+- **アクセス制御境界**：ソケットファイルは dsh サービスユーザー所有で `0600`（`SocketUser`/`SocketMode`）— そのユーザーのみ接続可能で、事実上そのユーザーへのパスワードレス root 実行を意味する
+- **監査**：`justification` 必須、結果と共に返却。サービス stderr は journal へ
+- モジュールで一行有効化：`nixkits.dsh.sudo.enable = true`（ソケット + 接続ごとの root サービス生成 + `NIXKITS_SUDO_SOCKET` 注入）
+- デーモン不在時は `sudo` パラメータが現れず、ソケット消失後は呼び出しが明確なエラーを返す
 
 ## 使い方
 

@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）的 NixOS 感知 Shell 工具插件。在 NixOS 上，d
 |------|-----|
 | 类型 | DSH Host 插件（npm 包）|
 | npm 名 | `@kihara777/dsh-nix-shell` |
-| 版本 | `0.1.0` |
+| 版本 | `0.2.0` |
 | 许可 | MIT |
 | 工具名 | `nix_shell` |
 
@@ -36,6 +36,22 @@ DeepSeek Harness（DSH）的 NixOS 感知 Shell 工具插件。在 NixOS 上，d
 | `maxTimeoutMs` | `3600000` | 超时上限 |
 | `stdoutMaxBytes` / `stdoutSpillMaxBytes` | 2 MiB / 16 MiB | 输出内存上限与完整落盘上限 |
 | `graceMs` | `5000` | 终止宽限 |
+| `sudoSocketPath` | `""`（关闭） | 外部 sudo 守护套接字路径；亦可经环境变量 `NIXKITS_SUDO_SOCKET` 提供 |
+
+## sudo 守护集成
+
+dsh 沙箱中 `sudo` 的 setuid 被剥离，无法直接提权。插件在**初始化时**探测外部 sudo 守护套接字（组合 config 的 `sudoSocketPath`，回退环境变量 `NIXKITS_SUDO_SOCKET`），存在即启用 `sudo`/`justification` 参数；`sudo: true` 的请求不再本地执行，而是整单（command/cwd/env/timeout）经 Unix 套接字交由守护以 root 执行：
+
+```
+nix_shell(sudo=true)
+  └─ Unix 套接字 ──▶ systemd 套接字激活（nixkits-sudo@.service, root）
+                       └─ nixkits-sudo-exec.js：单请求单连接，JSON 请求/响应
+```
+
+- **访问控制边界**：套接字文件归 dsh 服务用户所有且 `0600`（`SocketUser`/`SocketMode`），仅该用户可连接——相当于为该用户提供免密 root 执行入口
+- **审计**：`justification` 必填，随结果回显；服务 stderr 入 journal
+- 模块一键开启：`nixkits.dsh.sudo.enable = true`（自动生成 socket + 每连接 root 服务 + 注入 `NIXKITS_SUDO_SOCKET`）
+- 守护不可用时 `sudo` 参数不出现；套接字消失后调用返回明确错误
 
 ## 使用
 

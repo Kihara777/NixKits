@@ -10,7 +10,7 @@ NixOS-aware shell tool plugin for the DeepSeek Harness (DSH). On NixOS the dsh p
 |------|-------|
 | Type | DSH host plugin (npm package) |
 | npm name | `@kihara777/dsh-nix-shell` |
-| Version | `0.1.0` |
+| Version | `0.2.0` |
 | License | MIT |
 | Tool name | `nix_shell` |
 
@@ -36,6 +36,22 @@ Model ⇐ tool registration (ctx.tools) ⇐ plugin ⇐ ctx.subprocess ⇐ bash -
 | `maxTimeoutMs` | `3600000` | Timeout cap |
 | `stdoutMaxBytes` / `stdoutSpillMaxBytes` | 2 MiB / 16 MiB | In-memory and full-stream spill caps |
 | `graceMs` | `5000` | Termination grace period |
+| `sudoSocketPath` | `""` (disabled) | External sudo daemon socket path; also read from `NIXKITS_SUDO_SOCKET` |
+
+## Sudo daemon integration
+
+Inside the dsh sandbox `sudo` loses its setuid bit and cannot elevate. At **apply time** the plugin probes the external sudo daemon socket (composition config `sudoSocketPath`, falling back to the `NIXKITS_SUDO_SOCKET` environment variable); when present it advertises the `sudo`/`justification` parameters, and `sudo: true` requests are not executed locally but routed whole (command/cwd/env/timeout) over the Unix socket to the daemon, which runs them as root:
+
+```
+nix_shell(sudo=true)
+  └─ Unix socket ──▶ systemd socket activation (nixkits-sudo@.service, root)
+                       └─ nixkits-sudo-exec.js: one request per connection, JSON request/response
+```
+
+- **Access-control boundary**: the socket file is owned by the dsh service user with mode `0600` (`SocketUser`/`SocketMode`) — only that user can connect, which equals passwordless root execution for that user
+- **Audit**: `justification` is mandatory and echoed with the result; service stderr goes to the journal
+- One-line module enablement: `nixkits.dsh.sudo.enable = true` (creates the socket, the per-connection root service, and injects `NIXKITS_SUDO_SOCKET`)
+- Without the daemon the `sudo` parameters are not advertised; a vanished socket yields a clear error at call time
 
 ## Usage
 

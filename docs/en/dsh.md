@@ -99,6 +99,21 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 
 Generates 7 composition rows: `skill-nixkits-check-updates`, `skill-nixkits-skills`, `skill-nixos-modern-cli`, `skill-recover-nixos-config`, `skill-translate-pseudocn`, `skill-write-maintenance-log`, `skill-write-project-docs` (`@kihara777/dsh-skill-nixkits/<id>`).
 
+### Sudo daemon
+
+Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The dsh-nix-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:
+
+```nix
+{
+  nixkits.dsh.sudo = {
+    enable = true;
+    socketPath = "/run/nixkits-sudo.sock";  # default
+  };
+}
+```
+
+> **Security model**: the socket file is owned by the dsh service user with mode `0600` (`SocketUser`/`SocketMode`), so only that user can connect — equivalent to passwordless root for that user; enable only when both the user and the agent's behavior are trusted.
+
 ## Plugin inventory
 
 Built-in plugin entry ids for dsh 0.1.0-rc.6 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
