@@ -15,4 +15,8 @@ final: prev: {
   # dependencies resolve to 3.4.7.
   godot-ai             = (prev.extend (import ./fastmcp.nix)).callPackage ../packages/godot-ai.nix { };
   dsh                  = final.callPackage ../packages/dsh.nix { };
+  # NixOS-aware shell tool plugin for dsh (fixes "spawn bash ENOENT").
+  dsh-nix-shell        = final.callPackage ../packages/dsh-nix-shell.nix { };
+  # Deployment-bundled skill directory for dsh's skill-filesystem provider.
+  nixkits-skills       = final.callPackage ../packages/nixkits-skills.nix { };
 }

@@ -3,13 +3,38 @@
 let
   cfg = config.nixkits.dsh;
 
+  # dsh with third-party plugin packages injected into its node_modules tree.
+  # Composition rows resolve package names from the dsh install root, so the
+  # packages must be real directories in that tree: a symlink would be
+  # realpathed back into the plugin's own store path and its peer imports
+  # (@deepseek-ai/cordis etc.) would never reach dsh's node_modules.  The tar
+  # round trip yields a builder-owned tree, chmod opens the node_modules dir
+  # for the injection, and the plugin is then extracted in place.
+  dshWithPlugins = pkgs.runCommand "${cfg.package.name}-with-plugins" { } ''
+    mkdir -p "$out"
+    tar -C ${cfg.package} -cf - . | tar -C "$out" -xf -
+    NM="$out/lib/node_modules/@deepseek-ai/dsh/node_modules"
+    chmod -R u+w "$NM"
+    ${lib.concatMapStrings (p: ''
+      tar -C ${p.package}/lib/node_modules -cf - . | tar -C "$NM" -xf -
+    '') cfg.plugins.packages}
+  '';
+
+  dshPkg = if cfg.plugins.packages == [ ] then cfg.package else dshWithPlugins;
+
   # Generated cordis.patch.yml: user's extraPatch + declarative plugin
-  # off-switches (disabled) and config overrides (settings).  Written to
-  # $DSH_HOME/profiles/web by preStart; dsh hot-reloads it at runtime.
+  # off-switches (disabled), config overrides (settings), and rows for
+  # third-party plugin packages.  Written to $DSH_HOME/profiles/web by
+  # preStart; dsh hot-reloads it at runtime.
   cordisPatch = pkgs.writeText "cordis.patch.yml" ''
     ${cfg.plugins.extraPatch}
     ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
     ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
+    ${lib.concatMapStrings (p: ''
+      - id: ${p.id}
+        name: ${builtins.toJSON p.name}
+      ${lib.optionalString (p.config != { }) "  config: ${builtins.toJSON p.config}\n"}
+    '') cfg.plugins.packages}
   '';
 
   # Generated settings.yaml: declarative per-namespace dsh settings, JSON
@@ -98,6 +123,36 @@ in
           `- id: <id> / disabled: true` in the generated cordis.patch.yml.
         '';
       };
+      packages = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
+          options = {
+            package = lib.mkOption {
+              type = lib.types.package;
+              description = "Plugin package (npm build with the package installed under lib/node_modules).";
+            };
+            id = lib.mkOption {
+              type = lib.types.str;
+              description = "Entry id for the generated cordis.patch.yml composition row.";
+            };
+            name = lib.mkOption {
+              type = lib.types.str;
+              description = "npm package name referenced by the composition row (e.g. @kihara777/dsh-nix-shell).";
+            };
+            config = lib.mkOption {
+              type = lib.types.attrs;
+              default = { };
+              description = "Row config rendered as YAML flow JSON.";
+            };
+          };
+        });
+        default = [ ];
+        description = ''
+          Third-party dsh plugin packages.  Each entry is injected into dsh's
+          node_modules tree (Node module resolution makes it reachable from
+          composition rows) and registered as a row in the generated
+          cordis.patch.yml.
+        '';
+      };
       settings = lib.mkOption {
         type = lib.types.attrsOf lib.types.attrs;
         default = { };
@@ -117,6 +172,15 @@ in
       };
     };
 
+    skills = {
+      enable = lib.mkEnableOption "bundle the NixKits skills into the deployment (skill-filesystem bundledSkillDir, rank 600)";
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.nixkits-skills;
+        description = "Skill bundle package — a directory of <skill-name>/SKILL.md entries scanned by dsh's skill-filesystem provider.";
+      };
+    };
+
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.attrs;
       default = { };
@@ -131,6 +195,12 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+
+    # NixKits skills as deployment-bundled skills: the skill-filesystem
+    # provider's bundledSkillDir (rank 600) points at the skill bundle in the
+    # store, so every session on this deployment sees them with no
+    # home-directory writes.
+    nixkits.dsh.plugins.settings."skill-filesystem".bundledSkillDir = lib.mkIf cfg.skills.enable "${cfg.skills.package}";
 
     users.users = lib.mkIf (cfg.user == "dsh") {
       dsh = {
@@ -162,7 +232,7 @@ in
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${cfg.package}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
+        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
         WorkingDirectory = cfg.dshHome;
         Restart = "on-failure";
         RestartSec = 10;
@@ -171,7 +241,18 @@ in
         Group = cfg.group;
         # HOME/DSH_HOME must be writable (system user default /var/empty is not);
         # merge with user-provided environment instead of overwriting.
-        Environment = [ "HOME=${cfg.dshHome}" "DSH_HOME=${cfg.dshHome}" ]
+        #
+        # PATH: systemd's default PATH does not include the NixOS system
+        # profile, so the built-in bash tool fails with "spawn bash ENOENT"
+        # (dsh resolves the shell through the subprocess service against its
+        # own PATH).  Inject the NixOS layout explicitly; the per-user
+        # profile dir keeps tools installed for a normal-user deployment
+        # (cfg.user) reachable from the service.
+        Environment = [
+          "HOME=${cfg.dshHome}"
+          "DSH_HOME=${cfg.dshHome}"
+          "PATH=/run/current-system/sw/bin:/run/wrappers/bin:/etc/profiles/per-user/${cfg.user}/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
+        ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
       };
     };

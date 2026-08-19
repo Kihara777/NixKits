@@ -1,0 +1,33 @@
+{
+  "name": "@kihara777/dsh-nix-shell",
+  "version": "0.1.0",
+  "description": "NixOS-aware shell tool for the DeepSeek Harness — executes commands through a Nix store bash when the stock tool cannot resolve one",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kihara777/NixKits.git",
+    "directory": "packages/dsh-nix-shell"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib/index.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.7",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-subprocess": "*",
+    "@deepseek-ai/dsh-timer": "*"
+  }
+}

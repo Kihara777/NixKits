@@ -38,6 +38,8 @@
       ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
       godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
+      dsh-nix-shell        = pkgs.callPackage ./packages/dsh-nix-shell.nix { };
+      nixkits-skills       = pkgs.callPackage ./packages/nixkits-skills.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
