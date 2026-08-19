@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T19:57:03+09:00
+
+**Summary**: fix(codewhale-src): riscv64 cross build — four-part fix chain: ① rquickjs-sys 0.12.2 (newest on crates.io) ships no riscv64gc bindings (the build.rs non-bindgen path includes the target file); upstream's LP64 little-endian bindings are byte-identical, so postPatch drops an x86_64 copy into the materialized vendor dir; ② the host-side (x86_64 build-dependency) ring build let cc-rs fall back from the host triple to the derivation CC (the cross compiler) and add -m64 — now points at the buildPackages toolchain explicitly; ③ the bare postInstall cargo build lost --target and linked with the host toolchain — now mirrors cargoBuildHook's target triple; ④ binaries link -lgcc_s dynamically and autoPatchelfHook only scans hostPlatform deps — the cross gcc libgcc output is now an explicit input. Verified locally with the exact CI command (pkgsCross.riscv64.callPackage); clears the 6-run red Build codewhale (riscv64).
+
+| Commit | Description |
+|------|------|
+| `962ce6c` | fix(codewhale-src): riscv64 cross build — rquickjs bindings overlay, host cc-rs toolchain, postInstall --target, libgcc rpath |
+
+## 2026-08-19T17:57:26+09:00
+
+**Summary**: AGENTS.md — fixed the stale comfyui-strix-halo module reference (that module was merged into comfyui-rocm) and aligned the CI section with the actual workflow layout (per-package build-<pkg>-<arch>.yml calling the shared build-package.yml with cachix-action pushes; noting packages without riscv64 builds and godot-ai/dsh having no dedicated build workflow; ci-summary.yml badge mechanism).
+
+| Commit | Description |
+|------|------|
+| `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
+
 ## 2026-08-19T16:52:54+09:00
 
 **Summary**: fix(module): dsh WebSocket reverse proxy via mod_proxy upgrade — NixOS's lighttpd module generates server.modules in a fixed allKnownModules order, so mod_wstunnel always loads after mod_proxy. Because proxy.server matches every path, mod_proxy intercepts the WebSocket upgrade on /api/events.* and returns 426 Upgrade Required, while mod_wstunnel never runs (r->handler_module already set). Switched to lighttpd 1.4.56+ mod_proxy native WebSocket tunneling (proxy.header = "upgrade" => "enable"), dropping mod_wstunnel. Verified: 8625 / returns 200, /api/events.host|mux handshake 101 (local + LAN).

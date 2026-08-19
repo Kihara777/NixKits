@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-19T19:57:03+09:00
+
+**摘要**：fix(codewhale-src): riscv64 交叉構築修正 — 四重問題連鎖解消：① rquickjs-sys 0.12.2（crates.io 最新版）riscv64gc bindings 無（build.rs 非 bindgen 路 include 目標文件）、上流各 64bit 小端 bindings 字節一致故 postPatch x86_64 版物化済 vendor 目録配置；② 宿主側（x86_64 build 依存）ring 構築 cc-rs 宿主 triple 自派生 CC（交叉編譯器）回退 -m64 付与 — buildPackages 工具連明示；③ postInstall 裸 cargo build --target 喪失宿主工具連連結 — cargoBuildHook 同目標 triple 明示；④ 二進 -lgcc_s 動的連結 autoPatchelfHook hostPlatform 依存走査 — 交叉 gcc libgcc 輸出明示追加。CI 同命令（pkgsCross.riscv64.callPackage）本地検証済。Build codewhale (riscv64) 六連敗解消。
+
+| 提交 | 説明 |
+|------|------|
+| `962ce6c` | fix(codewhale-src): riscv64 cross build — rquickjs bindings overlay, host cc-rs toolchain, postInstall --target, libgcc rpath |
+
+## 2026-08-19T17:57:26+09:00
+
+**摘要**：AGENTS.md — 旧 comfyui-strix-halo 部品参照（comfyui-rocm 統合済）修正、CI 章実際 workflow 構成（包別 build-<pkg>-<arch>.yml 共有 build-package.yml 呼出 + cachix-action 配信、riscv64 構築無包及専用構築無 godot-ai/dsh 明記、ci-summary.yml 徽章機構）一致更新。
+
+| 提交 | 説明 |
+|------|------|
+| `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
+
 ## 2026-08-19T16:52:54+09:00
 
 **摘要**: fix(module): dsh WebSocket 反代 mod_proxy upgrade 変更 — NixOS lighttpd 模組 allKnownModules 固定順 server.modules 生成、mod_wstunnel 常 mod_proxy 後負載。proxy.server 全路徑匹配、mod_proxy /api/events.* WebSocket 升級請求先処理 426 Upgrade Required 返、mod_wstunnel r->handler_module 非 NULL skip 不実行。lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"）変更、mod_wstunnel 削除。検証: 8625 / 200、/api/events.host|mux 握手 101（本地+LAN）。

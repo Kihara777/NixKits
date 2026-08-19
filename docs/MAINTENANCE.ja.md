@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-19T19:57:03+09:00
+
+**概要**：fix(codewhale-src): riscv64 クロスビルド修正 — 4 段階の問題連鎖を解消：① rquickjs-sys 0.12.2（crates.io 最新版）に riscv64gc bindings が無く（build.rs 非 bindgen パスが対象ファイルを include）、上流の各 64bit リトルエンディアン向け bindings はバイト単位で同一のため postPatch で x86_64 版を物化済み vendor ディレクトリへ配置；② ホスト側（x86_64 build 依存）の ring ビルドで cc-rs がホスト triple から派生レベルの CC（クロスコンパイラ）へフォールバックし -m64 を付与 — buildPackages ツールチェーンを明示；③ postInstall の裸 cargo build が --target を失いホストツールチェーンでリンク — cargoBuildHook と同様にターゲット triple を明示；④ バイナリが -lgcc_s を動的リンクし autoPatchelfHook は hostPlatform 依存のみ走査 — クロス gcc の libgcc 出力を明示的に追加。CI と同一コマンド（pkgsCross.riscv64.callPackage）でローカル検証済み。Build codewhale (riscv64) の 6 連続失敗を解消。
+
+| コミット | 説明 |
+|------|------|
+| `962ce6c` | fix(codewhale-src): riscv64 cross build — rquickjs bindings overlay, host cc-rs toolchain, postInstall --target, libgcc rpath |
+
+## 2026-08-19T17:57:26+09:00
+
+**概要**：AGENTS.md — 古い comfyui-strix-halo モジュール参照（comfyui-rocm に統合済み）を修正し、CI 章を実際のワークフロー構成（パッケージ別 build-<pkg>-<arch>.yml が共有 build-package.yml を呼び cachix-action で配信、riscv64 ビルドなしのパッケージと専用ビルドのない godot-ai/dsh を明記、ci-summary.yml バッジ機構）に合わせて更新。
+
+| コミット | 説明 |
+|------|------|
+| `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
+
 ## 2026-08-19T16:52:54+09:00
 
 **概要**: fix(module): dsh WebSocket 反代を mod_proxy upgrade に変更 — NixOS の lighttpd モジュールは allKnownModules 固定順で server.modules を生成し、mod_wstunnel は常に mod_proxy の後にロードされる。proxy.server が全パスにマッチするため mod_proxy が /api/events.* の WebSocket アップグレードを先に処理して 426 Upgrade Required を返し、mod_wstunnel は r->handler_module 非 NULL でスキップされ実行されない。lighttpd 1.4.56+ の mod_proxy ネイティブ WebSocket トンネル（proxy.header = "upgrade" => "enable"）に変更し、mod_wstunnel を削除。検証: 8625 / は 200、/api/events.host|mux ハンドシェイク 101（ローカル+LAN）。
