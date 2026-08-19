@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T07:41:45+09:00
+
+**Summary**: fix(rcc-fix): patch rebased for asusctl 6.4.0 — after nixpkgs advanced, asusctl moved 6.3.7 → 6.4.0 and hunk 4 of rcc-fix.patch failed (system build broke). Upstream restructured the region: `if dev.is_old_laptop() { pow3r.retain(...) }` replaced the old push block, and the PowerZones::None filter in the else branch was absorbed upstream; the patch now keeps only the bounds-check replacement (`names[(*z) as usize]` → filter_map with bounds check + warn). The other hunks needed no change. Verified: git apply --check passes all hunks against the 6.4.0 source; asusctl builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).
+
+| Commit | Description |
+|------|------|
+| `ce216c7` | fix(rcc-fix): rebase patch hunk 4 for asusctl 6.4.0 — upstream is_old_laptop/retain restructure, else-filter absorbed upstream |
+
 ## 2026-08-20T06:27:40+09:00
 
 **Summary**: feat(dsh-nix-shell): external sudo daemon integration (0.2.0) — the dsh sandbox strips sudo's setuid, so the agent cannot elevate. The plugin now probes the daemon socket at apply time (config `sudoSocketPath` / env `NIXKITS_SUDO_SOCKET`), advertises `sudo`/`justification` when present, and routes `sudo: true` requests whole (command/cwd/env/timeout) over a Unix socket to the daemon; `justification` is mandatory and echoed with the result. The daemon is a systemd socket-activated root executor (nixkits-sudo@.service + nixkits-sudo-exec.js, one-request-per-connection JSON protocol, shipped with the plugin package); the access-control boundary is the socket file owned by the dsh service user with mode 0600 (SocketUser/SocketMode). The module gains nixkits.dsh.sudo (enable/socketPath/package) creating the units and injecting the env var. Verified: gating (params hidden without socket, exposed with), routing round-trip, justification enforcement, direct executor protocol, and module unit evaluation.

@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T07:41:45+09:00
+
+**摘要**：fix(rcc-fix): 补丁重基适配 asusctl 6.4.0 — nixpkgs 前进后 asusctl 6.3.7 → 6.4.0，rcc-fix.patch 第 4 hunk 失效（系统构建失败）。上游重构了该区域：`if dev.is_old_laptop() { pow3r.retain(...) }` 替代原 push 块，else 分支的 PowerZones::None 过滤已吸收上游；补丁仅保留越界防护替换（`names[(*z) as usize]` → filter_map 边界检查 + warn）。其余 hunk 无需变更。验证：git apply --check 对 6.4.0 源码全 hunk 通过；以本机系统 nixpkgs 修订（0ae2bc1）构建 asusctl 成功（EXIT=0）。
+
+| 提交 | 说明 |
+|------|------|
+| `ce216c7` | fix(rcc-fix): rebase patch hunk 4 for asusctl 6.4.0 — upstream is_old_laptop/retain restructure, else-filter absorbed upstream |
+
 ## 2026-08-20T06:27:40+09:00
 
 **摘要**：feat(dsh-nix-shell): 外部 sudo 守护集成（0.2.0）— dsh 沙箱剥离 sudo setuid，代理无法提权。插件新增：初始化时探测守护套接字（config sudoSocketPath / 环境变量 NIXKITS_SUDO_SOCKET），存在即启用 sudo/justification 参数；sudo 请求整单（command/cwd/env/timeout）经 Unix 套接字路由至守护执行，justification 必填随结果回显。守护 = systemd 套接字激活的 root 执行器（nixkits-sudo@.service + nixkits-sudo-exec.js，单请求单连接 JSON 协议，随插件包发布）；访问控制边界 = 套接字文件归 dsh 服务用户所有且 0600（SocketUser/SocketMode）。模块新增 nixkits.dsh.sudo（enable/socketPath/package）自动生成 socket+service 并注入环境变量。验证：门控（无套接字不暴露参数/有套接字暴露）、路由往返、justification 校验、执行器直连协议全部通过；模块求值单元正确。

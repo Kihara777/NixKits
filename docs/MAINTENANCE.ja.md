@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T07:41:45+09:00
+
+**概要**：fix(rcc-fix): asusctl 6.4.0 向けパッチ再ベース — nixpkgs 前進で asusctl が 6.3.7 → 6.4.0 となり、rcc-fix.patch の 4 番目の hunk が失敗（システムビルド失敗）。上流が該当領域を再構築（`if dev.is_old_laptop() { pow3r.retain(...) }` が旧 push ブロックを置換、else 分岐の PowerZones::None フィルタは上流に吸収）。パッチは境界チェック置換（`names[(*z) as usize]` → filter_map による境界チェック + warn）のみを保持。他 hunk は変更不要。検証：6.4.0 ソースへの git apply --check が全 hunk 通過、本機ピン留め nixpkgs rev（0ae2bc1）で asusctl ビルド成功（EXIT=0）。
+
+| コミット | 説明 |
+|------|------|
+| `ce216c7` | fix(rcc-fix): rebase patch hunk 4 for asusctl 6.4.0 — upstream is_old_laptop/retain restructure, else-filter absorbed upstream |
+
 ## 2026-08-20T06:27:40+09:00
 
 **概要**：feat(dsh-nix-shell): 外部 sudo デーモン統合（0.2.0）— dsh サンドボックスは sudo の setuid を剥奪し、エージェントは昇格できない。プラグインは初期化時にデーモンソケット（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）を検出し、存在すれば `sudo`/`justification` パラメータを有効化。`sudo: true` のリクエストは全体（command/cwd/env/timeout）を Unix ソケット経由でデーモンへルーティングし、`justification` は必須で結果と共に返却。デーモンは systemd ソケットアクティベーション型の root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続ごとに 1 リクエストの JSON プロトコル、プラグインパッケージに同梱）。アクセス制御境界は dsh サービスユーザー所有・`0600` のソケットファイル（SocketUser/SocketMode）。モジュールに nixkits.dsh.sudo（enable/socketPath/package）を追加し、ユニット生成と環境変数注入を行う。検証：ゲーティング（ソケットなしでパラメータ非公開／ありで公開）、ルーティング往復、justification 強制、実行器直結プロトコル、モジュールユニット評価がすべて通過。
