@@ -31,13 +31,17 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed")
 
-          # Find failed "Build *" workflows (latest run per workflow).
+          # Find "Build *" workflows whose LATEST run failed. Group by
+          # workflow first and take the newest run per workflow, then filter
+          # failures — filtering failures first would let an old failed run
+          # mask a newer successful one forever (badge stuck on failing).
           # Filter out non-object entries (API may return error strings interleaved).
           FAILED=$(echo "$RUNS" | jq -r '
             [.workflow_runs[]? | select(type == "object")]
-            | map(select(.name? | startswith("Build ")) | select(.conclusion? == "failure"))
+            | map(select(.name? | startswith("Build ")))
             | group_by(.workflow_id)
             | map(sort_by(.run_number) | .[-1] // empty)
+            | map(select(.conclusion? == "failure"))
             | map(.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
             | join(" ")
           ' 2>/dev/null || true)
