@@ -294,8 +294,17 @@ in
         TimeoutStopSec = 30;
         User = cfg.user;
         Group = cfg.group;
-        # HOME/DSH_HOME must be writable (system user default /var/empty is not);
-        # merge with user-provided environment instead of overwriting.
+        # HOME/DSH_HOME must be writable (system user default /var/empty is
+        # not); merge with user-provided environment instead of overwriting.
+        #
+        # HOME points at the service user's REAL home (falling back to
+        # dshHome) so the agent inherits the user's own tooling context —
+        # git/gh credentials (~/.config/gh), ~/.gitconfig, npm/ssh configs
+        # all resolve from $HOME.  Pointing HOME at dshHome instead breaks
+        # exactly that: git's gh credential helper looks for
+        # $HOME/.config/gh/hosts.yml and silently finds no credentials.
+        # DSH_HOME remains dsh's own state root (settings, profiles,
+        # skills) and is unaffected.
         #
         # PATH: systemd's default PATH does not include the NixOS system
         # profile, so the built-in bash tool fails with "spawn bash ENOENT"
@@ -304,7 +313,7 @@ in
         # profile dir keeps tools installed for a normal-user deployment
         # (cfg.user) reachable from the service.
         Environment = [
-          "HOME=${cfg.dshHome}"
+          "HOME=${config.users.users.${cfg.user}.home or cfg.dshHome}"
           "DSH_HOME=${cfg.dshHome}"
           "PATH=/run/current-system/sw/bin:/run/wrappers/bin:/etc/profiles/per-user/${cfg.user}/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
         ]

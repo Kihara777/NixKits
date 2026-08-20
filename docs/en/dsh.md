@@ -60,6 +60,8 @@ Run as a resident web service via the `nixkits.dsh` module. dsh listens loopback
 
 > **PATH**: the module injects a complete NixOS PATH (`/run/current-system/sw/bin`, …) into the service. Without it, systemd's default PATH cannot find bash and the built-in bash tool fails with `spawn bash ENOENT`.
 
+> **HOME**: the service HOME points at the running user's real home (`users.users.<user>.home`, falling back to dshHome), so the agent inherits the user's own tooling context — git/gh credentials (`~/.config/gh`), `~/.gitconfig`, npm/ssh configs all resolve from `$HOME`. Pointing HOME at dshHome breaks this: git's gh credential helper finds no credentials and pushes fail.
+
 ## Declarative plugin management
 
 dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits.dsh.plugins` provides declarative on/off and config:

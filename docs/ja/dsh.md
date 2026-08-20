@@ -60,6 +60,8 @@ dsh web   # ブラウザ UI を起動
 
 > **PATH**：モジュールはサービスへ完全な NixOS PATH（`/run/current-system/sw/bin` など）を自動注入する。これが無いと systemd の既定 PATH では bash が見つからず、内蔵 bash ツールが `spawn bash ENOENT` で失敗する。
 
+> **HOME**：サービスの HOME は実行ユーザーの実ホーム（`users.users.<user>.home`、無ければ dshHome にフォールバック）を指し、エージェントはユーザー自身のツール環境を継承する——git/gh 認証情報（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定はすべて `$HOME` から解決される。HOME を dshHome に向けると、git の gh credential helper が認証情報を見つけられず push が失敗する。
+
 ## プラグイン宣言的管理
 
 dsh のプラグインは `cordis.patch.yml` からランタイムにホットリロードされる（再起動不要）。`nixkits.dsh.plugins` で宣言的なオン/オフと設定が可能：

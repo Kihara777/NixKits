@@ -60,6 +60,8 @@ dsh web   # 瀏覧器 UI 起動
 
 > **PATH**：部品 service 完全 NixOS PATH（`/run/current-system/sw/bin` 等）自動注入。無場合 systemd 既定 PATH bash 発見不能、内建 bash 工具 `spawn bash ENOENT` 失敗。
 
+> **HOME**：service HOME 実行用户実家（`users.users.<user>.home`、無場合 dshHome 回退）指、代理用户自身工具環境継承——git/gh 憑証（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定全 `$HOME` 解決。HOME dshHome 指向場合 git gh credential helper 憑証発見不能 push 失敗。
+
 ## 插件宣言管理
 
 dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits.dsh.plugins` 宣言 on/off 与設定：

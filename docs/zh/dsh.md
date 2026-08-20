@@ -60,6 +60,8 @@ dsh web   # 启动浏览器 UI
 
 > **PATH**：模块自动为服务注入 NixOS 完整 PATH（`/run/current-system/sw/bin` 等）。没有它，systemd 默认 PATH 找不到 bash，内置 bash 工具会报 `spawn bash ENOENT`。
 
+> **HOME**：服务 HOME 指向运行用户的真实家目录（`users.users.<user>.home`，缺省回退 dshHome），代理因此继承用户自身的工具上下文——git/gh 凭据（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 配置全部按 `$HOME` 解析。若把 HOME 指向 dshHome，git 的 gh credential helper 会找不到凭据导致推送失败。
+
 ## 插件声明式管理
 
 dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`nixkits.dsh.plugins` 提供声明式启停与配置：
