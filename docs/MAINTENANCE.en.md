@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T20:10:08+09:00
+
+**Summary**: fix(dsh-nixos-shell): NixOS-mode acceptance fixes P1–P4 — P1 (high): the tools-bootstrap wrapper changed from `bash -lc` to `bash -c`; the login shell's /etc/profile chain reset PATH and discarded the nix shell injection, and the sudo path sharing the wrapper is fixed too (control experiment: `-c` yields Python 3.14.7, `-lc` yields command not found); the mapping also fixes grep→gnugrep and find→findutils (previously masked by login-PATH false positives). P2: generations gains `limit` (default 20, max 200, newest first) and returns the current generation plus the total. P3: journal unit accepts `*`/`%` globs and a trailing `@` auto-appends `*` (all template instances). P4: naming unified from nixos-cli to the nixos binary (nixos-cli project), across the tool description, the command map, and the gate guidance. Docs op tables synced in four languages. Verified: 5-case functional suite passes (including the real nix shell injection through the plugin echoing TOOLS_INJECTION_OK), node syntax checks, nix flake check passes.
+
+| Commit | Description |
+|--------|-------------|
+| `a591826` | fix(dsh-nixos-shell): P1-P4 acceptance fixes |
+
 ## 2026-08-20T19:33:51+09:00
 
 **Summary**: fix(dsh-nixos-shell): use the PromptSection `text` field instead of `content` — the dsh-system-prompt interpolator reads `input.text`, so sections registered with `content` crashed a real NixOS-mode session ("Cannot read properties of undefined (reading 'indexOf')"), a real-session path defect that mount validation cannot cover. Fixed 3 sites: nixos-gate (guidance/gate sections) and maintenance-skills (workflow section). Root cause located by reading the dsh-system-prompt interpolate() source and the PromptSection type definition (text: string | provider); the ToolGuard shape was also confirmed from its type definition (`(execution) => string | undefined`, compatible with the current implementation). Verified: mock assertions on the text field and no dangling `{{`; real systemPrompt service registration + assemble (includes=true, no crash); system prebuild passes.

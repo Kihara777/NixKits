@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T20:10:08+09:00
+
+**概要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）ツールブートストラップのラッパーを `bash -lc` から `bash -c` に変更：ログインシェルの /etc/profile チェーンが PATH をリセットして nix shell の注入を破棄しており、sudo 経路が同じラッパーを共有するため同時修正（対照実験：`-c` は Python 3.14.7、`-lc` は command not found）。マッピングも grep→gnugrep、find→findutils に修正（従来はログイン PATH の偽陽性で覆われていた）。P2 generations に `limit` を追加（既定 20・上限 200・新→旧）、現在世代と総数を返す。P3 journal の unit は `*`/`%` ワイルドカードを許可し、末尾 `@` は自動で `*` を補う（テンプレート全インスタンス）。P4 命名統一：nixos-cli → nixos コマンド（nixos-cli プロジェクト）、ツール説明・コマンド対照表・ゲートガイダンスを更新。ドキュメント op 表を 4 言語同期。検証：5 ケースの機能スイート全通過（プラグイン経由の実 nix shell 注入で TOOLS_INJECTION_OK 回顕を含む）、node 構文検査、nix flake check 通過。
+
+| コミット | 説明 |
+|----------|------|
+| `a591826` | fix(dsh-nixos-shell): P1-P4 acceptance fixes |
+
 ## 2026-08-20T19:33:51+09:00
 
 **概要**：fix(dsh-nixos-shell): プロンプト節のフィールドを text に変更 — dsh-system-prompt の補間器は `input.text` を読むため、`content` で登録した節が実セッションの NixOS模式をクラッシュさせた（Cannot read properties of undefined (reading 'indexOf')。マウント検証では捉えられない実セッション経路の欠陥）。nixos-gate（guidance/gate の 2 節）と maintenance-skills（workflow 節）の計 3 箇所を `content` → `text` に修正。原因は dsh-system-prompt の interpolate() ソースと PromptSection 型定義（text: string | provider）の読み取りで特定。ToolGuard の形も型定義から確認（`(execution) => string | undefined`、現行実装と互換）。検証：mock で text フィールドと未閉じ `{{` なしを確認；実 systemPrompt サービスで登録 + assemble（includes=true、クラッシュなし）；システム事前ビルド通過。

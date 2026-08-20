@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T20:10:08+09:00
+
+**摘要**：fix(dsh-nixos-shell): NixOS模式验收 P1–P4 修复 — P1（高）tools 引导包装由 `bash -lc` 改为 `bash -c`：登录壳的 /etc/profile 链重置 PATH、丢弃 nix shell 注入，sudo 路径共用同一 wrapper 一并修复（对照实验：`-c` 得 Python 3.14.7、`-lc` 得 command not found）；同步修正映射 grep→gnugrep、find→findutils（此前被登录 PATH 假阳性掩盖）。P2 generations 新增 `limit`（默认 20、上限 200、新→旧），返回当前代与总数。P3 journal 的 unit 允许 `*`/`%` 通配，尾随 `@` 自动补 `*`（模板单元全实例）。P4 命名统一：nixos-cli → nixos 命令（nixos-cli 项目），覆盖工具描述、命令对照表与门控提示词。文档四语同步 op 表。验证：5 项功能套件全过（含经插件执行的真实 nix shell 注入回显 TOOLS_INJECTION_OK）、node 语法检查、nix flake check 通过。
+
+| 提交 | 说明 |
+|------|------|
+| `a591826` | fix(dsh-nixos-shell): P1-P4 acceptance fixes |
+
 ## 2026-08-20T19:33:51+09:00
 
 **摘要**：fix(dsh-nixos-shell): 提示节字段改用 text — dsh-system-prompt 的插值器读取 `input.text`，此前以 `content` 注册的节导致真实 NixOS模式会话崩溃（Cannot read properties of undefined (reading 'indexOf')，mount 校验无法覆盖的真实会话路径缺陷）。修复 nixos-gate（guidance/gate 两节）与 maintenance-skills（workflow 节）共 3 处 `content` → `text`。根因定位：反查 dsh-system-prompt 包 interpolate() 源码 + PromptSection 类型定义（text: string | provider）；ToolGuard 形态亦经类型定义确认为 `(execution) => string | undefined`（现有实现兼容）。验证：mock 断言 text 字段 + 无未闭合 `{{`；真实 systemPrompt 服务注册并 assemble（includes=true，无崩溃）；系统预构建通过。
