@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T16:13:40+09:00
+
+**摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 与 nixos-rebuild 等 profile 工具解決不能（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env 先、明示 NixOS profile PATH 後展開修正（請求 env 最後合併不変）。検証：systemd 既定 PATH 模擬実行器直接実行、PATH /run/current-system/sw/bin 先頭、ps 与 nixos-rebuild 両方解決成功。
+
+| 提交 | 説明 |
+|------|------|
+| `63b2576` | fix(dsh-nix-shell): put the explicit NixOS profile PATH after the inherited env — socket-activated template units inherit systemd's manager-default PATH, which overrode the executor PATH and left profile tools (ps, nixos-rebuild) unresolvable |
+
 ## 2026-08-20T16:01:28+09:00
 
 **摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹与警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）与 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）与二進緩存説明追加。4 言語同期。

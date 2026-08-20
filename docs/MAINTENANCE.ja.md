@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:13:40+09:00
+
+**概要**：fix(dsh-nix-shell): sudo エグゼキュータの PATH マージ順修正 — ソケット活性化のテンプレートユニットは systemd マネージャ既定 PATH（coreutils/findutils/grep/sed/systemd の store パスのみ）を継承し、明示的な NixOS PATH の後で展開される `...process.env` がそれを上書きして、デーモン内で ps や nixos-rebuild など profile ツールが解決不能になっていた（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env を先に、明示的 NixOS profile PATH を後に展開するよう修正（リクエスト env は最後にマージのまま）。検証：systemd 既定 PATH を模擬してエグゼキュータを直接実行、PATH は /run/current-system/sw/bin 先頭、ps と nixos-rebuild の両方が解決成功。
+
+| コミット | 説明 |
+|----------|------|
+| `63b2576` | fix(dsh-nix-shell): put the explicit NixOS profile PATH after the inherited env — socket-activated template units inherit systemd's manager-default PATH, which overrode the executor PATH and left profile tools (ps, nixos-rebuild) unresolvable |
+
 ## 2026-08-20T16:01:28+09:00
 
 **概要**：docs(dsh): 使用例を実際のモジュール動作に同期 — 手動コンポジション行の例に `- insert:` ラップと注意書きを追加（裸の `- id:` 行は既存エントリのパッチに過ぎない）；スキルプラグイン文書の全 7 entry id（`skill-nixkits-<id>` 接頭辞が欠落していた）と disabled 例の id を修正；dsh 文書のインストール節をモジュール式に変更（旧 `nixkits.extraPackages` は既に存在しない）し、バイナリキャッシュの説明を追加。4 言語同期。

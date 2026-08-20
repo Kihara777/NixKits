@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:13:40+09:00
+
+**摘要**：fix(dsh-nix-shell): sudo 执行器 PATH 合并顺序 — 套接字激活的模板单元继承 systemd 管理器默认 PATH（仅 coreutils/findutils/grep/sed/systemd 的 store 路径），`...process.env` 在显式 NixOS PATH 之后展开将其覆盖，导致守护进程内 ps、nixos-rebuild 等 profile 工具全部不可解析（PS-MISSING/NIXOS-REBUILD-MISSING）。改为继承 env 在前、显式 NixOS profile PATH 在后（请求 env 仍最后合并）。验证：模拟 systemd 默认 PATH 直跑执行器，PATH 以 /run/current-system/sw/bin 开头、ps 与 nixos-rebuild 均解析成功。
+
+| 提交 | 说明 |
+|------|------|
+| `63b2576` | fix(dsh-nix-shell): put the explicit NixOS profile PATH after the inherited env — socket-activated template units inherit systemd's manager-default PATH, which overrode the executor PATH and left profile tools (ps, nixos-rebuild) unresolvable |
+
 ## 2026-08-20T16:01:28+09:00
 
 **摘要**：docs(dsh): 使用示例与实际模块行为同步 — 手工组合行示例补上 `- insert:` 包裹与警告（裸 `- id:` 行只补丁已有条目）；技能插件文档修正全部 7 个 entry id（`skill-nixkits-<id>` 前缀此前缺失）与 disabled 示例 id；dsh 文档安装章节改为模块式安装（原 `nixkits.extraPackages` 已不存在）并补充二进制缓存说明。四语同步。
