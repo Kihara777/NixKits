@@ -80,3 +80,22 @@ nixos_cli(op = "capabilities")
 nixos_cli(op = "journal", unit = "dsh", lines = 30)
 nixos_cli(op = "audit-store-paths")
 ```
+
+## Agent プリセット
+
+パッケージは「NixOS模式」プリセット（`presets/nixos-mode/`、id `nixos`）を同梱する：創造モード基盤で、セッション初期化時にホストが NixOS であることを検証する——非 NixOS では全実行を拒否するツールガードと拒否プロンプト節を登録し、NixOS では開発ガイドのプロンプト節を注入して本プラグインの 2 ツール（`nixos_shell` / `nixos_cli`）をマウントする。モジュールは `nixkits.dsh.presets.nixosMode = true` で `$DSH_HOME/.agent-presets/nixos` へ一度だけシードする（ユーザーの後続編集は尊重）：
+
+```nix
+{
+  nixkits.dsh = {
+    plugins.packages = [{
+      package = pkgs.dsh-nixos-shell;
+      id = "nixos-shell";
+      name = "@kihara777/dsh-nixos-shell";
+    }];
+    presets.nixosMode = true;
+  };
+}
+```
+
+ゲートはパッケージ内サブパス `@kihara777/dsh-nixos-shell/nixos-gate` で、プリセットのコンポジションでのみマウントされ、グローバルセッションには影響しない。

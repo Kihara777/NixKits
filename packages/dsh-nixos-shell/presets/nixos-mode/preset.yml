@@ -1,0 +1,2 @@
+name: NixOS模式
+description: 基于创造模式的 NixOS 专用 Agent 预设：初始化时校验宿主系统为 NixOS（非 NixOS 拒绝一切请求并明确告知理由），加载 nixos-shell 辅助工具（nixos_shell 执行器 + nixos_cli 诊断）并注入 NixOS 高效开发提示词。

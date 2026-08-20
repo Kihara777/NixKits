@@ -80,3 +80,22 @@ nixos_cli(op = "capabilities")
 nixos_cli(op = "journal", unit = "dsh", lines = 30)
 nixos_cli(op = "audit-store-paths")
 ```
+
+## Agent preset
+
+The package ships the "NixOS模式" preset (`presets/nixos-mode/`, id `nixos`): based on the creation-mode preset, it verifies at session initialization that the host is NixOS — on a non-NixOS host it registers a tool guard denying all execution plus a refusal prompt section; on NixOS it installs the development-guidance prompt section and mounts this plugin's two tools (`nixos_shell` / `nixos_cli`). The module seeds it (once) into `$DSH_HOME/.agent-presets/nixos` via `nixkits.dsh.presets.nixosMode = true` (later user edits are respected):
+
+```nix
+{
+  nixkits.dsh = {
+    plugins.packages = [{
+      package = pkgs.dsh-nixos-shell;
+      id = "nixos-shell";
+      name = "@kihara777/dsh-nixos-shell";
+    }];
+    presets.nixosMode = true;
+  };
+}
+```
+
+The gate is the package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected.

@@ -6,13 +6,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kihara777/NixKits.git",
-    "directory": "packages/nixos-shell"
+    "directory": "packages/dsh-nixos-shell"
   },
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": {
       "default": "./lib/index.js"
+    },
+    "./nixos-gate": {
+      "default": "./lib/nixos-gate.js"
     }
   },
   "bin": {
@@ -20,7 +23,9 @@
   },
   "files": [
     "lib/index.js",
-    "bin/nixkits-sudo-exec.js"
+    "lib/nixos-gate.js",
+    "bin/nixkits-sudo-exec.js",
+    "presets"
   ],
   "publishConfig": {
     "access": "public"

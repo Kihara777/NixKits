@@ -80,3 +80,22 @@ nixos_cli(op = "capabilities")
 nixos_cli(op = "journal", unit = "dsh", lines = 30)
 nixos_cli(op = "audit-store-paths")
 ```
+
+## Agent 预设
+
+随包分发「NixOS模式」预设（`presets/nixos-mode/`，id `nixos`）：基于创造模式，初始化时校验宿主为 NixOS——非 NixOS 时注册工具守卫拒绝一切执行并注入拒绝提示词；NixOS 时注入开发指南提示词并挂载本插件的两个工具（`nixos_shell` / `nixos_cli`）。模块经 `nixkits.dsh.presets.nixosMode = true` 以 seed-once 方式写入 `$DSH_HOME/.agent-presets/nixos`（尊重用户后续编辑）：
+
+```nix
+{
+  nixkits.dsh = {
+    plugins.packages = [{
+      package = pkgs.dsh-nixos-shell;
+      id = "nixos-shell";
+      name = "@kihara777/dsh-nixos-shell";
+    }];
+    presets.nixosMode = true;
+  };
+}
+```
+
+门控入口为包内子路径 `@kihara777/dsh-nixos-shell/nixos-gate`，仅在预设组合中挂载，不影响全局会话。

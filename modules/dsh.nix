@@ -211,6 +211,10 @@ in
         sections and dsh hot-reloads external edits.
       '';
     };
+
+    presets = {
+      nixosMode = lib.mkEnableOption "seed the NixOS模式 agent preset (id `nixos`) into \$DSH_HOME/.agent-presets/nixos at service start";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -255,6 +259,19 @@ in
           rm -rf ${cfg.dshHome}/node_modules
           mkdir -p ${cfg.dshHome}/node_modules
           ln -sfn ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/node_modules/@kihara777 ${cfg.dshHome}/node_modules/@kihara777
+        ''}
+
+        # 种子预设（seed-once）：仅在目标不存在时复制，尊重用户后续对
+        # ~/.dsh/.agent-presets/<id> 的编辑。NixOS模式预设（id `nixos`）
+        # 随 dsh-nixos-shell 包分发（presets/nixos-mode：组合 + 元数据 +
+        # 创造模式技能目录），非 NixOS 宿主由预设内的 nixos-gate 插件
+        # 拒绝一切请求。
+        ${lib.optionalString cfg.presets.nixosMode ''
+          if [ ! -e ${cfg.dshHome}/.agent-presets/nixos ]; then
+            mkdir -p ${cfg.dshHome}/.agent-presets
+            cp -r ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
+            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/nixos
+          fi
         ''}
       '';
       serviceConfig = {
