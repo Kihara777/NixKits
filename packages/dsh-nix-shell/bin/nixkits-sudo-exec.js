@@ -61,9 +61,14 @@ function runCommand(request) {
       MAX_TIMEOUT_MS,
     );
     const env = {
+      ...process.env,
+      // The explicit NixOS profile PATH must come AFTER the inherited env:
+      // socket-activated template units inherit systemd's manager-default
+      // PATH (coreutils/findutils/grep/sed/systemd store paths only), which
+      // would otherwise override this and leave profile tools such as
+      // nixos-rebuild or ps unresolvable inside the executed command.
       PATH:
         "/run/current-system/sw/bin:/run/wrappers/bin:/etc/profiles/per-user/root/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin",
-      ...process.env,
       ...(typeof request.env === "object" && request.env !== null ? request.env : {}),
     };
     delete env.NODE_OPTIONS;
