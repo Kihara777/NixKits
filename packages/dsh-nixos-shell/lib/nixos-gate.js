@@ -73,7 +73,7 @@ export function apply(ctx) {
   if (isNixOS()) {
     ctx.systemPrompt.section({
       name: "nixos-mode-guidance",
-      content: GUIDANCE,
+      text: GUIDANCE,
       order: 900,
     });
     return;
@@ -83,7 +83,7 @@ export function apply(ctx) {
   });
   ctx.systemPrompt.section({
     name: "nixos-mode-gate",
-    content: REFUSAL,
+    text: REFUSAL,
     order: 50,
   });
 }

@@ -97,7 +97,7 @@ export function apply(ctx) {
 
   ctx.systemPrompt.section({
     name: "maintenance-mode-workflow",
-    content: MAINTENANCE_WORKFLOW,
+    text: MAINTENANCE_WORKFLOW,
     order: 901,
   });
 }
