@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T18:24:04+09:00
+
+**概要**：docs: README プラグイン独立章 + AGENTS.md 更新 — ① dsh-* プラグインを「ソフトウェア」表から README 新設の「プラグイン」章へ移動（4 言語同期）、ソフトウェアと混在させない。AGENTS.md にプラグイン独立掲載の規約と「dsh はスキル導入対象外」規則を追加。② 承認済みクリーンアップ適用（本機）：~/.bashrc の古い store 絶対パス bash-completion ブロックを削除、~/.profile の hm-session-vars を安定パス /etc/profiles/per-user/kix へ変更、旧 ~/.dsh/skills を削除（nixos_cli audit-store-paths 再検査：0 件）。
+
+| コミット | 説明 |
+|----------|------|
+| `57ae6b5` | docs: list dsh-* plugins in a dedicated README plugins section (4 langs); AGENTS.md plugin-listing + dsh-skill-target rules |
+
 ## 2026-08-20T17:56:21+09:00
 
 **概要**：refactor(dsh-nixos-shell): パッケージ名修正 nixos-shell → dsh-nixos-shell — パッケージ名（pname/ディレクトリ/flake 出力/overlay/CI ワークフロー/ドキュメント）を `dsh-nixos-shell`（pkgs.dsh-nixos-shell）に統一。dsh 内の表示名は `nixos-shell` のまま（コンポジション行の entry id、プラグイン名、ツール名 nixos_shell/nixos_cli は不変）。検証：パッケージビルド通過；配備側の参照も同期済み。

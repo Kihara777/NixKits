@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T18:24:04+09:00
+
+**摘要**：docs: README 插件独立章节 + AGENTS.md 更新 — ① dsh-* 插件从「软件」表移入 README 新增「插件」章节（四语同步），不再与软件混合展示；AGENTS.md 新增插件独立展示约定与「dsh 不是技能安装目标」规则。② 已批准清理落地（本机）：移除 ~/.bashrc 中 bash-completion 的陈旧 store 绝对路径块、~/.profile 的 hm-session-vars 改指 /etc/profiles/per-user/kix 稳定路径、删除 ~/.dsh/skills 旧文件（nixos_cli audit-store-paths 复测 0 残留）。
+
+| 提交 | 说明 |
+|------|------|
+| `57ae6b5` | docs: list dsh-* plugins in a dedicated README plugins section (4 langs); AGENTS.md plugin-listing + dsh-skill-target rules |
+
 ## 2026-08-20T17:56:21+09:00
 
 **摘要**：refactor(dsh-nixos-shell): 包名修正 nixos-shell → dsh-nixos-shell — 软件包名（pname/目录/flake 输出/overlay/CI workflow/文档）统一为 `dsh-nixos-shell`（pkgs.dsh-nixos-shell）；dsh 内显示名保持 `nixos-shell`（组合行 entry id、插件 name、工具名 nixos_shell/nixos_cli 不变）。验证：包构建通过；部署侧引用已同步。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T18:24:04+09:00
+
+**Summary**: docs: dedicated README plugins section + AGENTS.md update — ① dsh-* plugins move from the software table into a new README "Plugins" section (all four languages), no longer mixed with software; AGENTS.md gains the plugin-listing convention and the "dsh is not a skill install target" rule. ② Approved cleanups applied (this machine): removed the stale store-absolute bash-completion block from ~/.bashrc, repointed ~/.profile's hm-session-vars at the stable /etc/profiles/per-user/kix path, deleted the old ~/.dsh/skills files (nixos_cli audit-store-paths re-check: 0 findings).
+
+| Commit | Description |
+|--------|-------------|
+| `57ae6b5` | docs: list dsh-* plugins in a dedicated README plugins section (4 langs); AGENTS.md plugin-listing + dsh-skill-target rules |
+
 ## 2026-08-20T17:56:21+09:00
 
 **Summary**: refactor(dsh-nixos-shell): rename package nixos-shell → dsh-nixos-shell — the package name (pname/directory/flake output/overlay/CI workflows/docs) is now `dsh-nixos-shell` (pkgs.dsh-nixos-shell); the dsh-internal display name stays `nixos-shell` (composition-row entry id, plugin name, tool names nixos_shell/nixos_cli unchanged). Verified: package build passes; deployment-side references synced.

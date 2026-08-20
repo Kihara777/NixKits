@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T18:24:04+09:00
+
+**摘要**：docs: README 插件独立章 + AGENTS.md 更新 — ① dsh-* 插件「軟体」表自 README 新設「插件」章移動（4 言語同期）、軟体混在禁止。AGENTS.md 插件独立掲載規約与「dsh 技能導入対象外」規則追加。② 承認済清理適用（本機）：~/.bashrc 旧 store 絶対路徑 bash-completion 塊削除、~/.profile hm-session-vars 安定路徑 /etc/profiles/per-user/kix 変更、旧 ~/.dsh/skills 削除（nixos_cli audit-store-paths 再検査：0 件）。
+
+| 提交 | 説明 |
+|------|------|
+| `57ae6b5` | docs: list dsh-* plugins in a dedicated README plugins section (4 langs); AGENTS.md plugin-listing + dsh-skill-target rules |
+
 ## 2026-08-20T17:56:21+09:00
 
 **摘要**：refactor(dsh-nixos-shell): 包名修正 nixos-shell → dsh-nixos-shell — 包名（pname/目録/flake 輸出/overlay/CI workflow/文書）`dsh-nixos-shell`（pkgs.dsh-nixos-shell）統一。dsh 内表示名 `nixos-shell` 不変（組合行 entry id、插件名、工具名 nixos_shell/nixos_cli）。検証：包構築通過；配備側参照同期済。
