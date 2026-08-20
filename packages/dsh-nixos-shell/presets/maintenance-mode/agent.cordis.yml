@@ -278,3 +278,14 @@
 
 - id: nixos-shell
   name: '@kihara777/dsh-nixos-shell'
+
+# ── maintenance mode ─────────────────────────────────────────────────────────
+
+# `maintenance-skills` registers the NixKits documentation/maintenance skills
+# as runtime skills (write-project-docs, write-maintenance-log, and every
+# translate-* language extension, auto-discovered) from the canonical repo
+# skills/ tree embedded in the package at build time — a fresh session always
+# gets the latest content — and installs the repository maintenance workflow
+# prompt section.  It publishes no services, so no realm is needed.
+- id: maintenance-skills
+  name: '@kihara777/dsh-nixos-shell/maintenance-skills'

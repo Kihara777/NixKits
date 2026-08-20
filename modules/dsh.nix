@@ -214,6 +214,7 @@ in
 
     presets = {
       nixosMode = lib.mkEnableOption "seed the NixOS模式 agent preset (id `nixos`) into \$DSH_HOME/.agent-presets/nixos at service start";
+      maintenanceMode = lib.mkEnableOption "seed the 维护模式 agent preset (id `maintenance`) into \$DSH_HOME/.agent-presets/maintenance at service start";
     };
   };
 
@@ -271,6 +272,13 @@ in
             mkdir -p ${cfg.dshHome}/.agent-presets
             cp -r ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/nixos
+          fi
+        ''}
+        ${lib.optionalString cfg.presets.maintenanceMode ''
+          if [ ! -e ${cfg.dshHome}/.agent-presets/maintenance ]; then
+            mkdir -p ${cfg.dshHome}/.agent-presets
+            cp -r ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
+            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
           fi
         ''}
       '';

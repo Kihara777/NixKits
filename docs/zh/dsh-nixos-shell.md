@@ -99,3 +99,7 @@ nixos_cli(op = "audit-store-paths")
 ```
 
 门控入口为包内子路径 `@kihara777/dsh-nixos-shell/nixos-gate`，仅在预设组合中挂载，不影响全局会话。
+
+### 维护模式预设
+
+包内还分发「维护模式」预设（`presets/maintenance-mode/`，id `maintenance`）：基于 NixOS模式，额外挂载 `maintenance-skills` 入口——初始化时从构建期嵌入的仓库 `skills/` 树（内容单一来源，全新会话即最新）注册运行时技能 `write-project-docs`、`write-maintenance-log` 与全部 `translate-*` 语言扩展（apply 时自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）。模块经 `nixkits.dsh.presets.maintenanceMode = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/maintenance`。

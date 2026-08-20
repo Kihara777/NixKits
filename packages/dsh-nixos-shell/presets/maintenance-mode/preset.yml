@@ -1,0 +1,2 @@
+name: 维护模式
+description: 基于 NixOS模式的仓库维护专用 Agent 预设：初始化时注入最新的文档撰写技能（write-project-docs，含 translate-* 语言扩展自动发现）与维护日志技能（write-maintenance-log），并载入仓库维护工作流提示词，用于在全新会话中开箱即用地维护与开发仓库内容。

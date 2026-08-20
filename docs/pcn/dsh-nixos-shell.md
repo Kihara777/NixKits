@@ -99,3 +99,7 @@ nixos_cli(op = "audit-store-paths")
 ```
 
 門控 = 包内子路 `@kihara777/dsh-nixos-shell/nixos-gate`、預設組合内掛載、全局 session 無影響。
+
+### 維護模式預設
+
+包同梱「維護模式」預設（`presets/maintenance-mode/`、id `maintenance`）：NixOS模式基盤、追加 `maintenance-skills` 入口掛載——初期化時構築期嵌入倉庫 `skills/` 樹（単一來源、新規 session 常最新）自 runtime 技能 `write-project-docs`、`write-maintenance-log`、全 `translate-*` 言語拡張（apply 時自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。模組 `nixkits.dsh.presets.maintenanceMode = true` 一度限 seed `$DSH_HOME/.agent-presets/maintenance`。

@@ -99,3 +99,7 @@ The package ships the "NixOS模式" preset (`presets/nixos-mode/`, id `nixos`): 
 ```
 
 The gate is the package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected.
+
+### Maintenance-mode preset
+
+The package also ships the "维护模式" preset (`presets/maintenance-mode/`, id `maintenance`): based on NixOS模式, it additionally mounts the `maintenance-skills` entry — at initialization it registers runtime skills `write-project-docs`, `write-maintenance-log`, and every `translate-*` language extension (auto-discovered at apply time) from the repo's `skills/` tree embedded at build time (single source of truth, so a fresh session always gets the latest content), and injects the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization). The module seeds it once via `nixkits.dsh.presets.maintenanceMode = true` into `$DSH_HOME/.agent-presets/maintenance`.

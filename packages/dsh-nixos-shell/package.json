@@ -16,6 +16,9 @@
     },
     "./nixos-gate": {
       "default": "./lib/nixos-gate.js"
+    },
+    "./maintenance-skills": {
+      "default": "./lib/maintenance-skills.js"
     }
   },
   "bin": {
@@ -24,8 +27,10 @@
   "files": [
     "lib/index.js",
     "lib/nixos-gate.js",
+    "lib/maintenance-skills.js",
     "bin/nixkits-sudo-exec.js",
-    "presets"
+    "presets",
+    "skills-embedded"
   ],
   "publishConfig": {
     "access": "public"
