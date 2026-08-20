@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T19:05:44+09:00
+
+**摘要**：feat(dsh-nixos-shell): 維護模式 agent 預設 — 新包内入口 maintenance-skills：apply 時構築期嵌入倉庫 skills/ 樹（単一來源、新規 session 常最新）自 runtime 技能 write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。包 postPatch skills → skills-embedded 複製。預設 presets/maintenance-mode（id `maintenance`、NixOS模式組合 + maintenance-skills 行基盤）包同梱。模組 nixkits.dsh.presets.maintenanceMode（seed-once）追加。検証：mock 3 技能登録 + 工作流節全過、包嵌入樹与導出有、系統預構築通過。nixos 預設掛載検証通過（mounted ok）、maintenance 預設 loader 進程内 package.json 緩存故再起動後最終確認要。
+
+| 提交 | 説明 |
+|------|------|
+| `f6c749e` | feat(dsh-nixos-shell): 维护模式 agent preset — maintenance-skills entry, presets/maintenance-mode, module presets.maintenanceMode seed |
+
 ## 2026-08-20T18:30:46+09:00
 
 **摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新包内子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否与拒否提示詞節注入（明確理由 + 預設切替助言）、NixOS 開発指南提示詞節注入（nixos-modern-cli 場景由来：宣言式本質、工具引導、現代命令、store 路徑陷阱）。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos（用户後続編輯尊重）。検証：包構築、門控構文検査、系統預構築全通過。

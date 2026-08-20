@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:05:44+09:00
+
+**Summary**: feat(dsh-nixos-shell): 维护模式 agent preset — new package entry maintenance-skills: at apply time it registers runtime skills write-project-docs, write-maintenance-log, and every translate-* language extension (auto-discovered) from the repo's skills/ tree embedded at build time (single source of truth, fresh sessions always get the latest content), plus the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization); the package postPatch copies skills → skills-embedded. The preset presets/maintenance-mode (id `maintenance`, based on the NixOS-mode composition plus the maintenance-skills row) ships with the package; the module gains nixkits.dsh.presets.maintenanceMode (seed-once). Verified: mock registration of 3 skills + workflow section all pass, package contains the embedded tree and export, system prebuild passes; the nixos preset mount-validates (mounted ok), the maintenance preset needs a final check after restart due to the loader's in-process package.json cache.
+
+| Commit | Description |
+|--------|-------------|
+| `f6c749e` | feat(dsh-nixos-shell): 维护模式 agent preset — maintenance-skills entry, presets/maintenance-mode, module presets.maintenanceMode seed |
+
 ## 2026-08-20T18:30:46+09:00
 
 **Summary**: feat(dsh-nixos-shell): NixOS模式 agent preset — new package subpath entry nixos-gate: at session initialization it verifies the host is NixOS (/etc/NIXOS or os-release ID=nixos) — on non-NixOS it denies every tool execution via tools.guard and injects a refusal prompt section (clear reason + preset-switch advice), on NixOS it injects the development-guidance prompt section (derived from the nixos-modern-cli scenarios: declarative nature, tool bootstrap, modern commands, store-path pitfalls). The preset presets/nixos-mode (id `nixos`, based on the creation-mode cordis composition plus its skill directories, with nixos-gate/nixos-shell rows appended) ships with the package; the module gains nixkits.dsh.presets.nixosMode, seeding $DSH_HOME/.agent-presets/nixos once in preStart (later user edits respected). Verified: package build, gate syntax check, and system prebuild all pass.

@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:05:44+09:00
+
+**摘要**：feat(dsh-nixos-shell): 维护模式 agent 预设 — 新包内入口 maintenance-skills：apply 时从构建期嵌入的仓库 skills/ 树（内容单一来源，全新会话即最新）注册运行时技能 write-project-docs、write-maintenance-log 与全部 translate-* 语言扩展（自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）；包内 postPatch cp -r skills → skills-embedded。预设 presets/maintenance-mode（id `maintenance`，基于 NixOS模式组合 + maintenance-skills 行）随包分发；模块新增 nixkits.dsh.presets.maintenanceMode seed-once。验证：mock 注册 3 技能 + 工作流提示节全过、包含嵌入树与导出、系统预构建通过；nixos 预设挂载校验通过（mounted ok），maintenance 预设因加载器进程内 package.json 缓存需重启后终验。
+
+| 提交 | 说明 |
+|------|------|
+| `f6c749e` | feat(dsh-nixos-shell): 维护模式 agent preset — maintenance-skills entry, presets/maintenance-mode, module presets.maintenanceMode seed |
+
 ## 2026-08-20T18:30:46+09:00
 
 **摘要**：feat(dsh-nixos-shell): NixOS模式 agent 预设 — 新包内子路径入口 nixos-gate：会话初始化时校验宿主为 NixOS（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS 时经 tools.guard 拒绝一切工具执行并注入拒绝提示词（明确理由 + 建议切换预设），NixOS 时注入开发指南提示词（源自 nixos-modern-cli 场景：声明式本质、tools 引导、现代命令、store 路径陷阱）。预设 presets/nixos-mode（id `nixos`，基于创造模式 cordis 组合 + 其技能目录 + 追加 nixos-gate/nixos-shell 两行）随包分发；模块新增 nixkits.dsh.presets.nixosMode，preStart seed-once 写入 $DSH_HOME/.agent-presets/nixos（尊重用户后续编辑）。验证：包构建通过、门控语法检查通过、系统预构建通过。

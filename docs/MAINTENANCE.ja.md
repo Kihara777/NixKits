@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:05:44+09:00
+
+**概要**：feat(dsh-nixos-shell): 維護模式 agent プリセット — 新パッケージ内エントリ maintenance-skills：apply 時にビルド時に埋め込まれたリポジトリの skills/ ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入。パッケージの postPatch が skills → skills-embedded をコピー。プリセット presets/maintenance-mode（id `maintenance`、NixOS模式コンポジション + maintenance-skills 行基盤）はパッケージに同梱。モジュールに nixkits.dsh.presets.maintenanceMode（seed-once）を追加。検証：mock で 3 スキル登録 + ワークフロー節すべて通過、パッケージに埋め込みツリーとエクスポートあり、システム事前ビルド通過。nixos プリセットはマウント検証通過（mounted ok）、maintenance プリセットはローダーのプロセス内 package.json キャッシュのため再起動後の最終確認を要す。
+
+| コミット | 説明 |
+|----------|------|
+| `f6c749e` | feat(dsh-nixos-shell): 维护模式 agent preset — maintenance-skills entry, presets/maintenance-mode, module presets.maintenanceMode seed |
+
 ## 2026-08-20T18:30:46+09:00
 
 **概要**：feat(dsh-nixos-shell): NixOS模式 agent プリセット — 新パッケージ内サブパス nixos-gate：セッション初期化時にホストが NixOS であることを検証（/etc/NIXOS または os-release の ID=nixos）——非 NixOS では tools.guard で全ツール実行を拒否し拒否プロンプト節を注入（明確な理由 + プリセット切替の助言）、NixOS では開発ガイドのプロンプト節を注入（nixos-modern-cli シナリオ由来：宣言的本質、ツールブートストラップ、モダンコマンド、store パスの落とし穴）。プリセット presets/nixos-mode（id `nixos`、創造モード cordis コンポジション + スキルディレクトリ基盤、nixos-gate/nixos-shell 行を追加）はパッケージに同梱。モジュールに nixkits.dsh.presets.nixosMode を追加し、preStart で $DSH_HOME/.agent-presets/nixos へ一度だけシード（ユーザーの後続編集は尊重）。検証：パッケージビルド、ゲート構文チェック、システム事前ビルドすべて通過。
