@@ -34,21 +34,22 @@ let
   #
   # Row verbs matter: a bare `- id: …` row PATCHES an existing entry and
   # dsh drops it with "patch: entry … not found" when the entry does not
-  # exist in the profile tree yet.  New entries must be appended under the
-  # `- insert:` op (one op, list of entry objects), exactly like the MCP
-  # rows in the user's extraPatch.
+  # exist in the profile tree yet.  Each new entry is emitted as its own
+  # `- insert:` op with the entry object indented under it (column 0 rows
+  # would parse as separate patch ops), exactly like the MCP rows in the
+  # user's extraPatch.  The entry object must live in the SAME '' string as
+  # its `- insert:` line: a nested '' string is dedented by its own minimum
+  # indent, which would push the rows back to column 0.
   cordisPatch = pkgs.writeText "cordis.patch.yml" ''
     ${cfg.plugins.extraPatch}
     ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
     ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
-    ${lib.optionalString (cfg.plugins.packages != [ ]) ''
+    ${lib.concatMapStrings (p: ''
       - insert:
-      ${lib.concatMapStrings (p: ''
         - id: ${p.id}
           name: ${builtins.toJSON p.name}
-        ${lib.optionalString (p.config != { }) "  config: ${builtins.toJSON p.config}\n"}
-      '') cfg.plugins.packages}
-    ''}
+        ${lib.optionalString (p.config != { }) "config: ${builtins.toJSON p.config}\n"}
+    '') cfg.plugins.packages}
   '';
 
   # Generated settings.yaml: declarative per-namespace dsh settings, JSON
