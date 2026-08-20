@@ -271,6 +271,19 @@ in
         rm -f ${cfg.dshHome}/profiles/web/cordis.patch.yml ${cfg.dshHome}/settings.yaml
         cp ${cordisPatch} ${cfg.dshHome}/profiles/web/cordis.patch.yml
         cp ${settingsDoc} ${cfg.dshHome}/settings.yaml
+
+        # 插件包 ESM 解析：dsh 的 cordis-plugin-loader 以 profile 目录
+        # ($DSH_HOME/profiles/web) 为解析基准（Node 24 内部 cascaded loader
+        # 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的
+        # store 树 (dshPkg)，但 store 不在 profile 的 node_modules 链上，
+        # 直接 import 会 ERR_MODULE_NOT_FOUND。把注入后的 @kihara777 scope
+        # 链接到 $DSH_HOME/node_modules 下让 Node 可解析；符号链接 realpath
+        # 回 store 树，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。
+        ${lib.optionalString (cfg.plugins.packages != []) ''
+          rm -rf ${cfg.dshHome}/node_modules
+          mkdir -p ${cfg.dshHome}/node_modules
+          ln -sfn ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/node_modules/@kihara777 ${cfg.dshHome}/node_modules/@kihara777
+        ''}
       '';
       serviceConfig = {
         Type = "simple";
