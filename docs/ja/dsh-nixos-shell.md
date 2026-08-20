@@ -1,6 +1,6 @@
-# nixos-shell
+# dsh-nixos-shell
 
-[中文](../zh/nixos-shell.md) | [English](../en/nixos-shell.md) | 日本語  | [偽中国語](../pcn/nixos-shell.md)
+[中文](../zh/dsh-nixos-shell.md) | [English](../en/dsh-nixos-shell.md) | 日本語  | [偽中国語](../pcn/dsh-nixos-shell.md)
 
 NixOS シナリオ能力のための DeepSeek Harness（DSH）プラグイン — shell 実行・ツールブートストラップ・sudo デーモンルーティング・読み取り専用 NixOS 診断を**単一プラグインに統合**。機能要件は `nixos-modern-cli` スキルのシナリオに由来する（宣言的で不変な NixOS、最小限の PATH、モダン CLI、システムメンテナンス、Nix store パスの落とし穴）。
 
@@ -60,7 +60,7 @@ sudo デーモンは systemd ソケット活性化の root 実行器（`nixkits-
   nixkits.dsh = {
     sudo.enable = true;                 # sudo デーモンを配備し NIXKITS_SUDO_SOCKET を注入
     plugins.packages = [{
-      package = pkgs.nixos-shell;
+      package = pkgs.dsh-nixos-shell;
       id = "nixos-shell";
       name = "@kihara777/dsh-nixos-shell";
     }];

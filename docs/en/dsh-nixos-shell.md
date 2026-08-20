@@ -1,6 +1,6 @@
-# nixos-shell
+# dsh-nixos-shell
 
-[中文](../zh/nixos-shell.md) | English | [日本語](../ja/nixos-shell.md)  | [偽中国語](../pcn/nixos-shell.md)
+[中文](../zh/dsh-nixos-shell.md) | English | [日本語](../ja/dsh-nixos-shell.md)  | [偽中国語](../pcn/dsh-nixos-shell.md)
 
 A DeepSeek Harness (DSH) plugin for NixOS scenario capabilities — a **single plugin consolidating** shell execution, tool bootstrap, sudo-daemon routing, and read-only NixOS diagnostics. Functional requirements derive from the `nixos-modern-cli` skill scenarios (declarative immutable NixOS, minimal PATH, modern CLI, system maintenance, Nix store path pitfalls).
 
@@ -60,7 +60,7 @@ Recommended: declarative install via the `nixkits.dsh` module (node_modules inje
   nixkits.dsh = {
     sudo.enable = true;                 # deploys the sudo daemon and injects NIXKITS_SUDO_SOCKET
     plugins.packages = [{
-      package = pkgs.nixos-shell;
+      package = pkgs.dsh-nixos-shell;
       id = "nixos-shell";
       name = "@kihara777/dsh-nixos-shell";
     }];

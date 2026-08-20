@@ -196,7 +196,7 @@ in
       };
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.nixos-shell;
+        default = pkgs.dsh-nixos-shell;
         description = "Package providing the nixkits-sudo-exec executor script.";
       };
     };

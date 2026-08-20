@@ -1,10 +1,10 @@
-name: Build nixos-shell (aarch64)
+name: Build dsh-nixos-shell (x86_64)
 on: [push, pull_request]
 jobs:
   call:
     uses: ./.github/workflows/build-package.yml
     with:
-      package: "nixos-shell"
-      runs-on: "ubuntu-24.04-arm"
+      package: "dsh-nixos-shell"
+      runs-on: "ubuntu-latest"
       riscv64-cross: false
     secrets: inherit

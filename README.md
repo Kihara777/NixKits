@@ -27,7 +27,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 的 MCP Server（自然语言控制 Blender） | [docs/zh/blender-mcp.md](docs/zh/blender-mcp.md) |
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/zh/dsh.md](docs/zh/dsh.md) |
-| nixos-shell | DSH 的 NixOS 场景能力整合插件（shell 执行、工具引导、sudo 守护路由、NixOS 诊断） | [docs/zh/nixos-shell.md](docs/zh/nixos-shell.md) |
+| dsh-nixos-shell | DSH 的 NixOS 场景能力整合插件（shell 执行、工具引导、sudo 守护路由、NixOS 诊断） | [docs/zh/dsh-nixos-shell.md](docs/zh/dsh-nixos-shell.md) |
 | godot-ai | Godot 引擎的 MCP Server 与 AI 工具 | [docs/zh/godot-ai.md](docs/zh/godot-ai.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |

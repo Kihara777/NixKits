@@ -90,7 +90,7 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;           # NixKits package (npm build)
+    package = pkgs.dsh-nixos-shell;           # NixKits package (npm build)
     id = "nixos-shell";                   # cordis.patch.yml entry id
     name = "@kihara777/dsh-nixos-shell";  # npm package name referenced by the row
   }];
@@ -107,7 +107,7 @@ NixOS scenario capabilities are consolidated into a **single plugin** `nixos-she
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;
+    package = pkgs.dsh-nixos-shell;
     id = "nixos-shell";
     name = "@kihara777/dsh-nixos-shell";
   }];

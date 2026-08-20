@@ -90,7 +90,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;           # NixKits 包（npm 構築）
+    package = pkgs.dsh-nixos-shell;           # NixKits 包（npm 構築）
     id = "nixos-shell";                   # cordis.patch.yml entry id
     name = "@kihara777/dsh-nixos-shell";  # 行参照 npm 包名
   }];
@@ -107,7 +107,7 @@ NixOS 場景能力**単一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`�
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;
+    package = pkgs.dsh-nixos-shell;
     id = "nixos-shell";
     name = "@kihara777/dsh-nixos-shell";
   }];

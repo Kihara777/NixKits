@@ -4,10 +4,10 @@
 }:
 
 buildNpmPackage (finalAttrs: {
-  pname = "nixos-shell";
+  pname = "dsh-nixos-shell";
   version = "0.1.0";
 
-  src = ./nixos-shell;
+  src = ./dsh-nixos-shell;
 
   # dsh ecosystem rc.7 packages declare peers against unreleased rc.8
   # prereleases; the plugin resolves those peers from the host dsh tree at

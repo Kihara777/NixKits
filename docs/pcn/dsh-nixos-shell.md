@@ -1,6 +1,6 @@
-# nixos-shell
+# dsh-nixos-shell
 
-[中文](../zh/nixos-shell.md) | [English](../en/nixos-shell.md) | [日本語](../ja/nixos-shell.md)  | 偽中国語
+[中文](../zh/dsh-nixos-shell.md) | [English](../en/dsh-nixos-shell.md) | [日本語](../ja/dsh-nixos-shell.md)  | 偽中国語
 
 NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引導・sudo 守護路由・読取専用 NixOS 診断**単一插件統合**。機能要件 `nixos-modern-cli` 技能場景由来（宣言式不変 NixOS、極小 PATH、現代 CLI、系統維護、Nix store 路徑陷阱）。
 
@@ -60,7 +60,7 @@ sudo 守護 = systemd 套接字活性化 root 実行器（`nixkits-sudo-exec.js`
   nixkits.dsh = {
     sudo.enable = true;                 # sudo 守護配備与 NIXKITS_SUDO_SOCKET 注入
     plugins.packages = [{
-      package = pkgs.nixos-shell;
+      package = pkgs.dsh-nixos-shell;
       id = "nixos-shell";
       name = "@kihara777/dsh-nixos-shell";
     }];

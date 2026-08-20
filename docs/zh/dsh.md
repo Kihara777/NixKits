@@ -90,7 +90,7 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;           # NixKits 包（npm 构建）
+    package = pkgs.dsh-nixos-shell;           # NixKits 包（npm 构建）
     id = "nixos-shell";                   # cordis.patch.yml entry id
     name = "@kihara777/dsh-nixos-shell";  # 组合行引用的 npm 包名
   }];
@@ -107,7 +107,7 @@ NixOS 场景能力整合为**单一插件** `nixos-shell`（`@kihara777/dsh-nixo
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;
+    package = pkgs.dsh-nixos-shell;
     id = "nixos-shell";
     name = "@kihara777/dsh-nixos-shell";
   }];

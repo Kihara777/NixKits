@@ -90,7 +90,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;           # NixKits パッケージ（npm ビルド）
+    package = pkgs.dsh-nixos-shell;           # NixKits パッケージ（npm ビルド）
     id = "nixos-shell";                   # cordis.patch.yml の entry id
     name = "@kihara777/dsh-nixos-shell";  # 行が参照する npm パッケージ名
   }];
@@ -107,7 +107,7 @@ NixOS シナリオ能力は**単一プラグイン** `nixos-shell`（`@kihara777
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.nixos-shell;
+    package = pkgs.dsh-nixos-shell;
     id = "nixos-shell";
     name = "@kihara777/dsh-nixos-shell";
   }];

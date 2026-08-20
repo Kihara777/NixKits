@@ -16,6 +16,6 @@ final: prev: {
   godot-ai             = (prev.extend (import ./fastmcp.nix)).callPackage ../packages/godot-ai.nix { };
   dsh                  = final.callPackage ../packages/dsh.nix { };
   # NixOS-aware shell tool plugin for dsh (fixes "spawn bash ENOENT").
-  nixos-shell          = final.callPackage ../packages/nixos-shell.nix { };
+  dsh-nixos-shell      = final.callPackage ../packages/dsh-nixos-shell.nix { };
   # NixKits skills as native dsh skill plugins (one plugin entry per skill).
 }
