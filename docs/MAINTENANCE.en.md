@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T18:30:46+09:00
+
+**Summary**: feat(dsh-nixos-shell): NixOS模式 agent preset — new package subpath entry nixos-gate: at session initialization it verifies the host is NixOS (/etc/NIXOS or os-release ID=nixos) — on non-NixOS it denies every tool execution via tools.guard and injects a refusal prompt section (clear reason + preset-switch advice), on NixOS it injects the development-guidance prompt section (derived from the nixos-modern-cli scenarios: declarative nature, tool bootstrap, modern commands, store-path pitfalls). The preset presets/nixos-mode (id `nixos`, based on the creation-mode cordis composition plus its skill directories, with nixos-gate/nixos-shell rows appended) ships with the package; the module gains nixkits.dsh.presets.nixosMode, seeding $DSH_HOME/.agent-presets/nixos once in preStart (later user edits respected). Verified: package build, gate syntax check, and system prebuild all pass.
+
+| Commit | Description |
+|--------|-------------|
+| `aaa21cb` | feat(dsh-nixos-shell): NixOS模式 agent preset — nixos-gate entry, presets/nixos-mode, module presets.nixosMode seed |
+
 ## 2026-08-20T18:24:04+09:00
 
 **Summary**: docs: dedicated README plugins section + AGENTS.md update — ① dsh-* plugins move from the software table into a new README "Plugins" section (all four languages), no longer mixed with software; AGENTS.md gains the plugin-listing convention and the "dsh is not a skill install target" rule. ② Approved cleanups applied (this machine): removed the stale store-absolute bash-completion block from ~/.bashrc, repointed ~/.profile's hm-session-vars at the stable /etc/profiles/per-user/kix path, deleted the old ~/.dsh/skills files (nixos_cli audit-store-paths re-check: 0 findings).

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T18:30:46+09:00
+
+**概要**：feat(dsh-nixos-shell): NixOS模式 agent プリセット — 新パッケージ内サブパス nixos-gate：セッション初期化時にホストが NixOS であることを検証（/etc/NIXOS または os-release の ID=nixos）——非 NixOS では tools.guard で全ツール実行を拒否し拒否プロンプト節を注入（明確な理由 + プリセット切替の助言）、NixOS では開発ガイドのプロンプト節を注入（nixos-modern-cli シナリオ由来：宣言的本質、ツールブートストラップ、モダンコマンド、store パスの落とし穴）。プリセット presets/nixos-mode（id `nixos`、創造モード cordis コンポジション + スキルディレクトリ基盤、nixos-gate/nixos-shell 行を追加）はパッケージに同梱。モジュールに nixkits.dsh.presets.nixosMode を追加し、preStart で $DSH_HOME/.agent-presets/nixos へ一度だけシード（ユーザーの後続編集は尊重）。検証：パッケージビルド、ゲート構文チェック、システム事前ビルドすべて通過。
+
+| コミット | 説明 |
+|----------|------|
+| `aaa21cb` | feat(dsh-nixos-shell): NixOS模式 agent preset — nixos-gate entry, presets/nixos-mode, module presets.nixosMode seed |
+
 ## 2026-08-20T18:24:04+09:00
 
 **概要**：docs: README プラグイン独立章 + AGENTS.md 更新 — ① dsh-* プラグインを「ソフトウェア」表から README 新設の「プラグイン」章へ移動（4 言語同期）、ソフトウェアと混在させない。AGENTS.md にプラグイン独立掲載の規約と「dsh はスキル導入対象外」規則を追加。② 承認済みクリーンアップ適用（本機）：~/.bashrc の古い store 絶対パス bash-completion ブロックを削除、~/.profile の hm-session-vars を安定パス /etc/profiles/per-user/kix へ変更、旧 ~/.dsh/skills を削除（nixos_cli audit-store-paths 再検査：0 件）。

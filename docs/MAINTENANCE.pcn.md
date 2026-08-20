@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T18:30:46+09:00
+
+**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新包内子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否与拒否提示詞節注入（明確理由 + 預設切替助言）、NixOS 開発指南提示詞節注入（nixos-modern-cli 場景由来：宣言式本質、工具引導、現代命令、store 路徑陷阱）。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos（用户後続編輯尊重）。検証：包構築、門控構文検査、系統預構築全通過。
+
+| 提交 | 説明 |
+|------|------|
+| `aaa21cb` | feat(dsh-nixos-shell): NixOS模式 agent preset — nixos-gate entry, presets/nixos-mode, module presets.nixosMode seed |
+
 ## 2026-08-20T18:24:04+09:00
 
 **摘要**：docs: README 插件独立章 + AGENTS.md 更新 — ① dsh-* 插件「軟体」表自 README 新設「插件」章移動（4 言語同期）、軟体混在禁止。AGENTS.md 插件独立掲載規約与「dsh 技能導入対象外」規則追加。② 承認済清理適用（本機）：~/.bashrc 旧 store 絶対路徑 bash-completion 塊削除、~/.profile hm-session-vars 安定路徑 /etc/profiles/per-user/kix 変更、旧 ~/.dsh/skills 削除（nixos_cli audit-store-paths 再検査：0 件）。
