@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T17:56:21+09:00
+
+**摘要**：refactor(dsh-nixos-shell): 包名修正 nixos-shell → dsh-nixos-shell — 包名（pname/目録/flake 輸出/overlay/CI workflow/文書）`dsh-nixos-shell`（pkgs.dsh-nixos-shell）統一。dsh 内表示名 `nixos-shell` 不変（組合行 entry id、插件名、工具名 nixos_shell/nixos_cli）。検証：包構築通過；配備側参照同期済。
+
+| 提交 | 説明 |
+|------|------|
+| `26a844e` | refactor(dsh-nixos-shell): rename package nixos-shell -> dsh-nixos-shell |
+
 ## 2026-08-20T17:46:44+09:00
 
 **摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 參數 `nix shell nixpkgs#… --command` 不足 POSIX 工具提供 + sudo 守護路由）与 nixos_cli 読取専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件 nixos-modern-cli 技能場景由来。併削除：dsh-nix-shell（機能統合）与 dsh-skill-nixkits（7 技能插件設計、模組 skills 選項含）、CI/文書差替。nixkits-skills 安裝器 dsh 対象削除（dsh 能力 nixos-shell 提供、技能他助手向残置）。修正：generations 進程内読取専用列表変更（nix-env 鎖文件権限必要、非 root Permission denied）。検証：13 案例機能套件全過（実 sudo root 路由与 nix shell 工具引導含）；系統預構築通過。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T17:56:21+09:00
+
+**Summary**: refactor(dsh-nixos-shell): rename package nixos-shell → dsh-nixos-shell — the package name (pname/directory/flake output/overlay/CI workflows/docs) is now `dsh-nixos-shell` (pkgs.dsh-nixos-shell); the dsh-internal display name stays `nixos-shell` (composition-row entry id, plugin name, tool names nixos_shell/nixos_cli unchanged). Verified: package build passes; deployment-side references synced.
+
+| Commit | Description |
+|--------|-------------|
+| `26a844e` | refactor(dsh-nixos-shell): rename package nixos-shell -> dsh-nixos-shell |
+
 ## 2026-08-20T17:46:44+09:00
 
 **Summary**: feat(nixos-shell): consolidate NixOS scenario capabilities into a single plugin; refactor: abandon the skills-as-plugins design — new package nixos-shell (@kihara777/dsh-nixos-shell 0.1.0) registers two tools: the nixos_shell executor (NixOS PATH injection + bash fallback + a `tools` parameter wrapping the command in `nix shell nixpkgs#… --command` to provide missing POSIX tools + sudo-daemon routing) and nixos_cli read-only diagnostics (capabilities / system-status / generations / journal / audit-store-paths), with functional requirements derived from the nixos-modern-cli skill scenarios. Also removed: dsh-nix-shell (function merged in) and dsh-skill-nixkits (the 7-skill-plugin design, including the module's skills option), with CI/docs swapped accordingly; the nixkits-skills installer no longer targets dsh (dsh capabilities come from nixos-shell; skills remain for other assistants). Fix: generations uses an in-process read-only listing (nix-env needs the profile lock file and fails unprivileged with Permission denied). Verified: 13-case functional suite passes (including real sudo root routing and nix shell tool bootstrap); system prebuild passes.

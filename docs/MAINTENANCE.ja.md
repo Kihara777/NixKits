@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T17:56:21+09:00
+
+**概要**：refactor(dsh-nixos-shell): パッケージ名修正 nixos-shell → dsh-nixos-shell — パッケージ名（pname/ディレクトリ/flake 出力/overlay/CI ワークフロー/ドキュメント）を `dsh-nixos-shell`（pkgs.dsh-nixos-shell）に統一。dsh 内の表示名は `nixos-shell` のまま（コンポジション行の entry id、プラグイン名、ツール名 nixos_shell/nixos_cli は不変）。検証：パッケージビルド通過；配備側の参照も同期済み。
+
+| コミット | 説明 |
+|----------|------|
+| `26a844e` | refactor(dsh-nixos-shell): rename package nixos-shell -> dsh-nixos-shell |
+
 ## 2026-08-20T17:46:44+09:00
 
 **概要**：feat(nixos-shell): NixOS シナリオ能力を単一プラグインへ統合；refactor: スキルプラグイン化設計の廃止 — 新パッケージ nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）は 2 つのツールを登録する：nixos_shell 実行器（NixOS PATH 注入 + bash フォールバック + `tools` パラメータによる `nix shell nixpkgs#… --command` の不足 POSIX ツール提供 + sudo デーモンルーティング）と nixos_cli 読み取り専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件は nixos-modern-cli スキルのシナリオに由来。併せて削除：dsh-nix-shell（機能統合）と dsh-skill-nixkits（7 スキルプラグイン設計、モジュールの skills オプション含む）、CI/ドキュメントも差し替え。nixkits-skills インストーラから dsh 対象を削除（dsh 能力は nixos-shell が提供、スキルは他アシスタント向けに残置）。修正：generations はプロセス内の読み取り専用リストに変更（nix-env はロックファイル権限が必要で、非 root は Permission denied）。検証：13 ケースの機能スイート全通過（実 sudo root ルーティングと nix shell ツールブートストラップ含む）；システム事前ビルド通過。
