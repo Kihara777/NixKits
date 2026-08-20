@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T10:21:46+09:00
+
+**概要**：fix(dsh): 生成行を insert 動詞でラップ — cordis.patch.yml の裸の `- id:` 行は既存エントリのパッチに過ぎず、新規プラグインエントリは dsh に破棄され（stderr: patch: entry "nixkits-nix-shell" not found）、8 つのプラグイン行すべてが未マウントだった（dump-config で検証）。パッケージ注入自体は成功していたが、合成ツリーにエントリが無いため nix_shell ツールと 7 スキルプラグインが未登録だった。生成される plugins.packages 行を `- insert:` 操作でラップして修正（extraPatch の MCP 行と同じ形）。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。
+
+| コミット | 説明 |
+|----------|------|
+| `3d0433d` | fix(dsh): wrap generated plugin rows in the insert op — bare - id: rows only patch existing entries, so dsh dropped every new entry with 'patch: entry … not found' |
+
 ## 2026-08-20T09:45:59+09:00
 
 **概要**：fix(dsh): 複数プラグイン注入失敗の修正 — 展開後、GNU tar はアーカイブ内のディレクトリモード（store ツリーは 0555）を復元するため、直前のプラグインが作成した scope ディレクトリ（@kihara777/）が次のプラグインから書き込めず、2 つ目以降が Cannot mkdir: Permission denied で失敗する。単一プラグインでは発生せず、初の実システムビルドで顕在化。各プラグイン解包直後に chmod -R u+w を実行するよう修正。検証：システム toplevel の完全ビルド成功、dsh-nix-shell と 7 スキルすべて注入済み。

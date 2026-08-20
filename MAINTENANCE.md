@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T10:21:46+09:00
+
+**摘要**：fix(dsh): 生成行改用 insert 动词 — cordis.patch.yml 中裸 `- id:` 行只补丁已有条目，新增插件条目被 dsh 丢弃（stderr: patch: entry "nixkits-nix-shell" not found），8 个插件行全部未挂载（dump-config 验证）。插件包注入虽成功，但组合树中没有条目 → 工具 nix_shell 与 7 技能插件均未注册。修复：模块生成的 plugins.packages 行包裹在 `- insert:` 操作下（与 extraPatch 的 MCP 行同构）。验证：dump-config 零 stderr、8 行全部进入组合树。
+
+| 提交 | 说明 |
+|------|------|
+| `3d0433d` | fix(dsh): wrap generated plugin rows in the insert op — bare - id: rows only patch existing entries, so dsh dropped every new entry with 'patch: entry … not found' |
+
 ## 2026-08-20T09:45:59+09:00
 
 **摘要**：fix(dsh): 修复多插件注入失败 — GNU tar 解包结束后恢复归档中的目录模式（store 树为 0555），前一个插件创建的 scope 目录（@kihara777/）对下一个插件不可写，第二个插件起报 Cannot mkdir: Permission denied；单插件场景不触发，首次真实系统构建暴露。改为每次插件解包后立即 chmod -R u+w。验证：系统 toplevel 完整构建成功，dsh-nix-shell 与 7 技能全部注入。
