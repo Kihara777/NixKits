@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T20:12:33+09:00
+
+**摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正 — 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）、交接卡与插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤。`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一。検証：node 構文検査、nix flake check 通過。系統配備 `nixos apply` 変更実測成功。
+
+| 提交 | 説明 |
+|------|------|
+| `caa7d41` | fix(dsh-nixos-shell): correct the modern rebuild command to 'nixos apply' |
+
 ## 2026-08-20T20:10:08+09:00
 
 **摘要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）工具引導包装 `bash -lc` 自 `bash -c` 変更：登録壳 /etc/profile 鏈 PATH 重置 nix shell 注入破棄、sudo 路徑同 wrapper 共用同時修正（対照実験：`-c` 得 Python 3.14.7、`-lc` 得 command not found）。映射亦 grep→gnugrep、find→findutils 修正（従来登録 PATH 偽陽性覆蓋）。P2 generations `limit` 追加（既定 20・上限 200・新→旧）、現在世代与総数返。P3 journal unit `*`/`%` 通配許可、末尾 `@` 自動 `*` 補（模版全實例）。P4 命名統一：nixos-cli → nixos 命令（nixos-cli 項目）、工具説明・命令対照表・門控指南更新。文書 op 表 4 言語同期。検証：5 案例機能套件全過（插件経由実 nix shell 注入 TOOLS_INJECTION_OK 回顕含）、node 構文検査、nix flake check 通過。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T20:12:33+09:00
+
+**概要**：fix(dsh-nixos-shell): 現代 rebuild コマンドを `nixos apply` に訂正 — 実測の nixos 0.16.1-dev に `rebuild` サブコマンドは存在せず（`nixos --help` は activate/apply/generation 等を列挙）、引き継ぎカードとプラグインの recommendedRebuild/コマンド対照表/ゲートガイダンスの `nixos rebuild switch` は誤りだった。`nixos apply /etc/nixos`（または従来の `sudo nixos-rebuild switch --flake /etc/nixos`）に統一。検証：node 構文検査、nix flake check 通過。システム配備は `nixos apply` に変更し実測成功。
+
+| コミット | 説明 |
+|----------|------|
+| `caa7d41` | fix(dsh-nixos-shell): correct the modern rebuild command to 'nixos apply' |
+
 ## 2026-08-20T20:10:08+09:00
 
 **概要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）ツールブートストラップのラッパーを `bash -lc` から `bash -c` に変更：ログインシェルの /etc/profile チェーンが PATH をリセットして nix shell の注入を破棄しており、sudo 経路が同じラッパーを共有するため同時修正（対照実験：`-c` は Python 3.14.7、`-lc` は command not found）。マッピングも grep→gnugrep、find→findutils に修正（従来はログイン PATH の偽陽性で覆われていた）。P2 generations に `limit` を追加（既定 20・上限 200・新→旧）、現在世代と総数を返す。P3 journal の unit は `*`/`%` ワイルドカードを許可し、末尾 `@` は自動で `*` を補う（テンプレート全インスタンス）。P4 命名統一：nixos-cli → nixos コマンド（nixos-cli プロジェクト）、ツール説明・コマンド対照表・ゲートガイダンスを更新。ドキュメント op 表を 4 言語同期。検証：5 ケースの機能スイート全通過（プラグイン経由の実 nix shell 注入で TOOLS_INJECTION_OK 回顕を含む）、node 構文検査、nix flake check 通過。

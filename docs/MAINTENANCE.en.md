@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T20:12:33+09:00
+
+**Summary**: fix(dsh-nixos-shell): correct the modern rebuild command to `nixos apply` — the installed nixos 0.16.1-dev has no `rebuild` subcommand (`nixos --help` lists activate/apply/generation etc.), so the handoff book and the plugin's recommendedRebuild/command map/gate guidance were wrong; unified to `nixos apply /etc/nixos` (or the traditional `sudo nixos-rebuild switch --flake /etc/nixos`). Verified: node syntax checks and nix flake check pass; system deployment switched to `nixos apply` and works.
+
+| Commit | Description |
+|--------|-------------|
+| `caa7d41` | fix(dsh-nixos-shell): correct the modern rebuild command to 'nixos apply' |
+
 ## 2026-08-20T20:10:08+09:00
 
 **Summary**: fix(dsh-nixos-shell): NixOS-mode acceptance fixes P1–P4 — P1 (high): the tools-bootstrap wrapper changed from `bash -lc` to `bash -c`; the login shell's /etc/profile chain reset PATH and discarded the nix shell injection, and the sudo path sharing the wrapper is fixed too (control experiment: `-c` yields Python 3.14.7, `-lc` yields command not found); the mapping also fixes grep→gnugrep and find→findutils (previously masked by login-PATH false positives). P2: generations gains `limit` (default 20, max 200, newest first) and returns the current generation plus the total. P3: journal unit accepts `*`/`%` globs and a trailing `@` auto-appends `*` (all template instances). P4: naming unified from nixos-cli to the nixos binary (nixos-cli project), across the tool description, the command map, and the gate guidance. Docs op tables synced in four languages. Verified: 5-case functional suite passes (including the real nix shell injection through the plugin echoing TOOLS_INJECTION_OK), node syntax checks, nix flake check passes.
