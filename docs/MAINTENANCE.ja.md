@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T09:45:59+09:00
+
+**概要**：fix(dsh): 複数プラグイン注入失敗の修正 — 展開後、GNU tar はアーカイブ内のディレクトリモード（store ツリーは 0555）を復元するため、直前のプラグインが作成した scope ディレクトリ（@kihara777/）が次のプラグインから書き込めず、2 つ目以降が Cannot mkdir: Permission denied で失敗する。単一プラグインでは発生せず、初の実システムビルドで顕在化。各プラグイン解包直後に chmod -R u+w を実行するよう修正。検証：システム toplevel の完全ビルド成功、dsh-nix-shell と 7 スキルすべて注入済み。
+
+| コミット | 説明 |
+|----------|------|
+| `b03a386` | fix(dsh): chmod node_modules after each plugin injection — GNU tar restores archived dir modes (0555) after extraction, leaving the scope dir created by the previous plugin unwritable for the next one |
+
 ## 2026-08-20T08:12:57+09:00
 
 **概要**：fix(rcc-fix): デスクトップエントリ改名互換 — asusctl 6.4.0 がデスクトップエントリを org.opengamingcollective.rog-control-center.desktop へ改名した一方、nixpkgs の programs.rog-control-center autoStart（makeAutostartItem）は旧名 rog-control-center.desktop をコピーし続け、システムビルドが失敗（cp cannot stat）。rcc-fix overlay が asusctl の postInstall で旧名をシンボリックリンクとして提供。検証：本機ピン留め nixpkgs rev（0ae2bc1）で makeAutostartItem { name = "rog-control-center"; package = asusctl } のビルド成功（EXIT=0）。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T09:45:59+09:00
+
+**Summary**: fix(dsh): fix multi-plugin injection failure — after unpacking, GNU tar restores the archived directory modes (0555 for store trees), so the scope directory (@kihara777/) created by the previous plugin is unwritable for the next one, and the second and later plugins fail with "Cannot mkdir: Permission denied"; a single-plugin setup never triggers it, and the first real system build exposed it. Fixed by chmod -R u+w immediately after each plugin extraction. Verified: full system toplevel build succeeds; dsh-nix-shell and all 7 skills injected.
+
+| Commit | Description |
+|--------|-------------|
+| `b03a386` | fix(dsh): chmod node_modules after each plugin injection — GNU tar restores archived dir modes (0555) after extraction, leaving the scope dir created by the previous plugin unwritable for the next one |
+
 ## 2026-08-20T08:12:57+09:00
 
 **Summary**: fix(rcc-fix): desktop entry rename compat — asusctl 6.4.0 renamed its desktop entry to org.opengamingcollective.rog-control-center.desktop, while nixpkgs' programs.rog-control-center autoStart (makeAutostartItem) still copies the old rog-control-center.desktop name, breaking the system build (cp cannot stat). The rcc-fix overlay now ships the old name as a symlink in asusctl's postInstall. Verified: makeAutostartItem { name = "rog-control-center"; package = asusctl } builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).

@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T09:45:59+09:00
+
+**摘要**：fix(dsh): 修复多插件注入失败 — GNU tar 解包结束后恢复归档中的目录模式（store 树为 0555），前一个插件创建的 scope 目录（@kihara777/）对下一个插件不可写，第二个插件起报 Cannot mkdir: Permission denied；单插件场景不触发，首次真实系统构建暴露。改为每次插件解包后立即 chmod -R u+w。验证：系统 toplevel 完整构建成功，dsh-nix-shell 与 7 技能全部注入。
+
+| 提交 | 说明 |
+|------|------|
+| `b03a386` | fix(dsh): chmod node_modules after each plugin injection — GNU tar restores archived dir modes (0555) after extraction, leaving the scope dir created by the previous plugin unwritable for the next one |
+
 ## 2026-08-20T08:12:57+09:00
 
 **摘要**：fix(rcc-fix): desktop 条目重命名兼容 — asusctl 6.4.0 将桌面条目重命名为 org.opengamingcollective.rog-control-center.desktop，nixpkgs 的 programs.rog-control-center autoStart（makeAutostartItem）仍复制旧文件名 rog-control-center.desktop，导致系统构建失败（cp cannot stat）。rcc-fix overlay 在 asusctl 的 postInstall 中以符号链接提供旧文件名。验证：以本机 nixpkgs 修订（0ae2bc1）构建 makeAutostartItem { name = "rog-control-center"; package = asusctl } 成功（EXIT=0）。
