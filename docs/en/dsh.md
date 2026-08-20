@@ -17,9 +17,20 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 ## Install
 
 ```nix
-# /etc/nixos/flake.nix
-nixkits.extraPackages = [ nixkits.dsh ];
+# /etc/nixos/flake.nix — add the flake input and mount the module
+{
+  inputs.nixkits.url = "github:Kihara777/NixKits";
+  # in nixosConfigurations.<host>.modules:
+  #   nixkits.nixosModules.dsh
+}
 ```
+
+```nix
+# Module configuration (enabling it also adds dsh to systemPackages)
+{ nixkits.dsh.enable = true; }
+```
+
+> **Binary cache**: the flake declares the cache (`nixkits.cachix.org`) via `nixConfig`; Nix prompts to enable it on first build. Manual: `cachix use nixkits`.
 
 ## Usage
 

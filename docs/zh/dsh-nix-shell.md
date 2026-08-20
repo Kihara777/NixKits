@@ -70,12 +70,18 @@ nix_shell(sudo=true)
 组合行手工挂载（npm 安装于 dsh 可解析处时）：
 
 ```yaml
-- id: tool-nix-shell
-  name: '@kihara777/dsh-nix-shell'
+- insert:
+  - id: tool-nix-shell
+    name: '@kihara777/dsh-nix-shell'
 ```
+
+> **注意**：新条目必须包裹在 `- insert:` 操作下——裸 `- id:` 行只补丁已有条目，dsh 会报 `patch: entry … not found` 并丢弃该行；包本身需位于 profile 可解析处（`$DSH_HOME/node_modules` 或 dsh 安装树的 node_modules）。
 
 工具调用：
 
 ```
 nix_shell(command = "nix flake check", workdir = "/path/to/flake")
+
+# 经外部 sudo 守护进程以 root 执行（需先部署守护，见「sudo 守护集成」）
+nix_shell(command = "nixos-rebuild switch --flake /etc/nixos", sudo = true, justification = "...")
 ```

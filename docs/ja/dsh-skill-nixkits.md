@@ -18,13 +18,13 @@ NixKits の全 7 スキルをネイティブ DeepSeek Harness（DSH）スキル�
 
 | サブパス | プラグイン名 | スキル |
 |----------|--------------|--------|
-| `nixkits-check-updates` | `skill-nixkits-check-updates` | 上流バージョン確認と自動適用 |
-| `nixkits-skills` | `skill-nixkits-skills` | コーディングアシスタントへのスキル導入 |
-| `nixos-modern-cli` | `skill-nixos-modern-cli` | モダン NixOS CLI ワークフロー規則 |
-| `recover-nixos-config` | `skill-recover-nixos-config` | Nix store からの /etc/nixos 復旧 |
-| `translate-pseudocn` | `skill-translate-pseudocn` | 偽中国語ドキュメントローカライズ |
-| `write-maintenance-log` | `skill-write-maintenance-log` | メンテナンスログ執筆規則 |
-| `write-project-docs` | `skill-write-project-docs` | 多言語プロジェクトドキュメント生成 |
+| `nixkits-check-updates` | `skill-nixkits-nixkits-check-updates` | 上流バージョン確認と自動適用 |
+| `nixkits-skills` | `skill-nixkits-nixkits-skills` | コーディングアシスタントへのスキル導入 |
+| `nixos-modern-cli` | `skill-nixkits-nixos-modern-cli` | モダン NixOS CLI ワークフロー規則 |
+| `recover-nixos-config` | `skill-nixkits-recover-nixos-config` | Nix store からの /etc/nixos 復旧 |
+| `translate-pseudocn` | `skill-nixkits-translate-pseudocn` | 偽中国語ドキュメントローカライズ |
+| `write-maintenance-log` | `skill-nixkits-write-maintenance-log` | メンテナンスログ執筆規則 |
+| `write-project-docs` | `skill-nixkits-write-project-docs` | 多言語プロジェクトドキュメント生成 |
 
 ## アーキテクチャ
 
@@ -55,12 +55,15 @@ NixKits の全 7 スキルをネイティブ DeepSeek Harness（DSH）スキル�
 手動コンポジション行（選択的マウント、npm パッケージが dsh から解決できる場合）：
 
 ```yaml
-- id: skill-nixos-modern-cli
-  name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
+- insert:
+  - id: skill-nixkits-nixos-modern-cli
+    name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
 ```
+
+> **注意**：新規エントリは `- insert:` 操作でラップする必要がある——裸の `- id:` 行は既存エントリのパッチに過ぎず、dsh は `patch: entry … not found` を報告して行を破棄する。
 
 単一スキルの無効化（通常のプラグインと同様）：
 
 ```nix
-nixkits.dsh.plugins.disabled = [ "skill-translate-pseudocn" ];
+nixkits.dsh.plugins.disabled = [ "skill-nixkits-translate-pseudocn" ];
 ```

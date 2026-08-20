@@ -70,12 +70,18 @@ nix_shell(sudo=true)
 手動コンポジション行（npm パッケージが dsh から解決できる場合）：
 
 ```yaml
-- id: tool-nix-shell
-  name: '@kihara777/dsh-nix-shell'
+- insert:
+  - id: tool-nix-shell
+    name: '@kihara777/dsh-nix-shell'
 ```
+
+> **注意**：新規エントリは `- insert:` 操作でラップする必要がある——裸の `- id:` 行は既存エントリのパッチに過ぎず、dsh は `patch: entry … not found` を報告して行を破棄する。パッケージ自体はプロファイルから解決可能な場所（`$DSH_HOME/node_modules` または dsh インストールツリーの node_modules）に置くこと。
 
 ツール呼び出し：
 
 ```
 nix_shell(command = "nix flake check", workdir = "/path/to/flake")
+
+# 外部 sudo デーモン経由で root 実行（デーモン展開が先、詳細は「sudo デーモン統合」）
+nix_shell(command = "nixos-rebuild switch --flake /etc/nixos", sudo = true, justification = "...")
 ```

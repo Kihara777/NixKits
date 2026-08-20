@@ -70,12 +70,18 @@ Declarative install via `nixkits.dsh.plugins.packages` (node_modules injection +
 Manual composition row (when the npm package is resolvable from dsh):
 
 ```yaml
-- id: tool-nix-shell
-  name: '@kihara777/dsh-nix-shell'
+- insert:
+  - id: tool-nix-shell
+    name: '@kihara777/dsh-nix-shell'
 ```
+
+> **Note**: new entries must be wrapped in an `- insert:` op — a bare `- id:` row only patches an existing entry, and dsh reports `patch: entry … not found` and drops the row; the package itself must be resolvable from the profile (`$DSH_HOME/node_modules` or the dsh install tree's node_modules).
 
 Tool call:
 
 ```
 nix_shell(command = "nix flake check", workdir = "/path/to/flake")
+
+# Run as root through the external sudo daemon (deploy the daemon first, see "Sudo daemon integration")
+nix_shell(command = "nixos-rebuild switch --flake /etc/nixos", sudo = true, justification = "...")
 ```

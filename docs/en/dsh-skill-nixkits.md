@@ -18,13 +18,13 @@ All 7 NixKits skills as native DeepSeek Harness (DSH) skill plugins. **Each skil
 
 | Subpath | Plugin name | Skill |
 |---------|-------------|-------|
-| `nixkits-check-updates` | `skill-nixkits-check-updates` | Upstream version checks and auto-application |
-| `nixkits-skills` | `skill-nixkits-skills` | Installing skills into coding-assistant directories |
-| `nixos-modern-cli` | `skill-nixos-modern-cli` | Modern NixOS CLI workflow rules |
-| `recover-nixos-config` | `skill-recover-nixos-config` | Recovering /etc/nixos from the Nix store |
-| `translate-pseudocn` | `skill-translate-pseudocn` | Pseudo-Chinese document localization |
-| `write-maintenance-log` | `skill-write-maintenance-log` | Maintenance log authoring rules |
-| `write-project-docs` | `skill-write-project-docs` | Multi-language project documentation generation |
+| `nixkits-check-updates` | `skill-nixkits-nixkits-check-updates` | Upstream version checks and auto-application |
+| `nixkits-skills` | `skill-nixkits-nixkits-skills` | Installing skills into coding-assistant directories |
+| `nixos-modern-cli` | `skill-nixkits-nixos-modern-cli` | Modern NixOS CLI workflow rules |
+| `recover-nixos-config` | `skill-nixkits-recover-nixos-config` | Recovering /etc/nixos from the Nix store |
+| `translate-pseudocn` | `skill-nixkits-translate-pseudocn` | Pseudo-Chinese document localization |
+| `write-maintenance-log` | `skill-nixkits-write-maintenance-log` | Maintenance log authoring rules |
+| `write-project-docs` | `skill-nixkits-write-project-docs` | Multi-language project documentation generation |
 
 ## Architecture
 
@@ -55,12 +55,15 @@ Register all 7 composition rows at once via `nixkits.dsh.skills`:
 Manual composition row (selective mounting, when the npm package is resolvable from dsh):
 
 ```yaml
-- id: skill-nixos-modern-cli
-  name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
+- insert:
+  - id: skill-nixkits-nixos-modern-cli
+    name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
 ```
+
+> **Note**: new entries must be wrapped in an `- insert:` op — a bare `- id:` row only patches an existing entry, and dsh reports `patch: entry … not found` and drops the row.
 
 Disable a single skill (like any other plugin):
 
 ```nix
-nixkits.dsh.plugins.disabled = [ "skill-translate-pseudocn" ];
+nixkits.dsh.plugins.disabled = [ "skill-nixkits-translate-pseudocn" ];
 ```

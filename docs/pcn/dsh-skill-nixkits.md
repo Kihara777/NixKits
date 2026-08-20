@@ -18,13 +18,13 @@ NixKits 全 7 技能原生 DeepSeek Harness（DSH）技能插件包。**各技�
 
 | 子路 | 插件名 | 技能 |
 |------|--------|------|
-| `nixkits-check-updates` | `skill-nixkits-check-updates` | 上流版本確認與自動適用 |
-| `nixkits-skills` | `skill-nixkits-skills` | 編碼助手目録技能導入 |
-| `nixos-modern-cli` | `skill-nixos-modern-cli` | 現代 NixOS CLI 工作規則 |
-| `recover-nixos-config` | `skill-recover-nixos-config` | Nix store 自 /etc/nixos 復旧 |
-| `translate-pseudocn` | `skill-translate-pseudocn` | 偽中国語文書本地化 |
-| `write-maintenance-log` | `skill-write-maintenance-log` | 維護日誌執筆規則 |
-| `write-project-docs` | `skill-write-project-docs` | 多言語項目文書生成 |
+| `nixkits-check-updates` | `skill-nixkits-nixkits-check-updates` | 上流版本確認與自動適用 |
+| `nixkits-skills` | `skill-nixkits-nixkits-skills` | 編碼助手目録技能導入 |
+| `nixos-modern-cli` | `skill-nixkits-nixos-modern-cli` | 現代 NixOS CLI 工作規則 |
+| `recover-nixos-config` | `skill-nixkits-recover-nixos-config` | Nix store 自 /etc/nixos 復旧 |
+| `translate-pseudocn` | `skill-nixkits-translate-pseudocn` | 偽中国語文書本地化 |
+| `write-maintenance-log` | `skill-nixkits-write-maintenance-log` | 維護日誌執筆規則 |
+| `write-project-docs` | `skill-nixkits-write-project-docs` | 多言語項目文書生成 |
 
 ## 架構
 
@@ -55,12 +55,15 @@ NixKits 全 7 技能原生 DeepSeek Harness（DSH）技能插件包。**各技�
 手動組合行（選択掛載、npm 包 dsh 可解時）：
 
 ```yaml
-- id: skill-nixos-modern-cli
-  name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
+- insert:
+  - id: skill-nixkits-nixos-modern-cli
+    name: '@kihara777/dsh-skill-nixkits/nixos-modern-cli'
 ```
+
+> **注意**：新規条目 `- insert:` 操作包裹必要——裸 `- id:` 行僅補丁既有条目、dsh 報 `patch: entry … not found` 行破棄。
 
 単一技能無効化（普通插件同様）：
 
 ```nix
-nixkits.dsh.plugins.disabled = [ "skill-translate-pseudocn" ];
+nixkits.dsh.plugins.disabled = [ "skill-nixkits-translate-pseudocn" ];
 ```

@@ -17,9 +17,20 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 ## 安装
 
 ```nix
-# /etc/nixos/flake.nix
-nixkits.extraPackages = [ nixkits.dsh ];
+# /etc/nixos/flake.nix — 引入 flake 并挂载模块
+{
+  inputs.nixkits.url = "github:Kihara777/NixKits";
+  # nixosConfigurations.<host>.modules 中:
+  #   nixkits.nixosModules.dsh
+}
 ```
+
+```nix
+# 模块配置（启用后同时把 dsh 加入 systemPackages）
+{ nixkits.dsh.enable = true; }
+```
+
+> **二进制缓存**：flake 已通过 `nixConfig` 声明缓存（`nixkits.cachix.org`），首次构建时 Nix 自动提示启用；手动启用：`cachix use nixkits`。
 
 ## 使用
 
