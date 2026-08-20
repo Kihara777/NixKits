@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:33:51+09:00
+
+**概要**：fix(dsh-nixos-shell): プロンプト節のフィールドを text に変更 — dsh-system-prompt の補間器は `input.text` を読むため、`content` で登録した節が実セッションの NixOS模式をクラッシュさせた（Cannot read properties of undefined (reading 'indexOf')。マウント検証では捉えられない実セッション経路の欠陥）。nixos-gate（guidance/gate の 2 節）と maintenance-skills（workflow 節）の計 3 箇所を `content` → `text` に修正。原因は dsh-system-prompt の interpolate() ソースと PromptSection 型定義（text: string | provider）の読み取りで特定。ToolGuard の形も型定義から確認（`(execution) => string | undefined`、現行実装と互換）。検証：mock で text フィールドと未閉じ `{{` なしを確認；実 systemPrompt サービスで登録 + assemble（includes=true、クラッシュなし）；システム事前ビルド通過。
+
+| コミット | 説明 |
+|----------|------|
+| `476e9dc` | fix(dsh-nixos-shell): use the PromptSection text field instead of content |
+
 ## 2026-08-20T19:05:44+09:00
 
 **概要**：feat(dsh-nixos-shell): 維護模式 agent プリセット — 新パッケージ内エントリ maintenance-skills：apply 時にビルド時に埋め込まれたリポジトリの skills/ ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入。パッケージの postPatch が skills → skills-embedded をコピー。プリセット presets/maintenance-mode（id `maintenance`、NixOS模式コンポジション + maintenance-skills 行基盤）はパッケージに同梱。モジュールに nixkits.dsh.presets.maintenanceMode（seed-once）を追加。検証：mock で 3 スキル登録 + ワークフロー節すべて通過、パッケージに埋め込みツリーとエクスポートあり、システム事前ビルド通過。nixos プリセットはマウント検証通過（mounted ok）、maintenance プリセットはローダーのプロセス内 package.json キャッシュのため再起動後の最終確認を要す。

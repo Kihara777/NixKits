@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:33:51+09:00
+
+**摘要**：fix(dsh-nixos-shell): 提示节字段改用 text — dsh-system-prompt 的插值器读取 `input.text`，此前以 `content` 注册的节导致真实 NixOS模式会话崩溃（Cannot read properties of undefined (reading 'indexOf')，mount 校验无法覆盖的真实会话路径缺陷）。修复 nixos-gate（guidance/gate 两节）与 maintenance-skills（workflow 节）共 3 处 `content` → `text`。根因定位：反查 dsh-system-prompt 包 interpolate() 源码 + PromptSection 类型定义（text: string | provider）；ToolGuard 形态亦经类型定义确认为 `(execution) => string | undefined`（现有实现兼容）。验证：mock 断言 text 字段 + 无未闭合 `{{`；真实 systemPrompt 服务注册并 assemble（includes=true，无崩溃）；系统预构建通过。
+
+| 提交 | 说明 |
+|------|------|
+| `476e9dc` | fix(dsh-nixos-shell): use the PromptSection text field instead of content |
+
 ## 2026-08-20T19:05:44+09:00
 
 **摘要**：feat(dsh-nixos-shell): 维护模式 agent 预设 — 新包内入口 maintenance-skills：apply 时从构建期嵌入的仓库 skills/ 树（内容单一来源，全新会话即最新）注册运行时技能 write-project-docs、write-maintenance-log 与全部 translate-* 语言扩展（自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）；包内 postPatch cp -r skills → skills-embedded。预设 presets/maintenance-mode（id `maintenance`，基于 NixOS模式组合 + maintenance-skills 行）随包分发；模块新增 nixkits.dsh.presets.maintenanceMode seed-once。验证：mock 注册 3 技能 + 工作流提示节全过、包含嵌入树与导出、系统预构建通过；nixos 预设挂载校验通过（mounted ok），maintenance 预设因加载器进程内 package.json 缓存需重启后终验。

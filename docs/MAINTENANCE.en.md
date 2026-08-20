@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T19:33:51+09:00
+
+**Summary**: fix(dsh-nixos-shell): use the PromptSection `text` field instead of `content` — the dsh-system-prompt interpolator reads `input.text`, so sections registered with `content` crashed a real NixOS-mode session ("Cannot read properties of undefined (reading 'indexOf')"), a real-session path defect that mount validation cannot cover. Fixed 3 sites: nixos-gate (guidance/gate sections) and maintenance-skills (workflow section). Root cause located by reading the dsh-system-prompt interpolate() source and the PromptSection type definition (text: string | provider); the ToolGuard shape was also confirmed from its type definition (`(execution) => string | undefined`, compatible with the current implementation). Verified: mock assertions on the text field and no dangling `{{`; real systemPrompt service registration + assemble (includes=true, no crash); system prebuild passes.
+
+| Commit | Description |
+|--------|-------------|
+| `476e9dc` | fix(dsh-nixos-shell): use the PromptSection text field instead of content |
+
 ## 2026-08-20T19:05:44+09:00
 
 **Summary**: feat(dsh-nixos-shell): 维护模式 agent preset — new package entry maintenance-skills: at apply time it registers runtime skills write-project-docs, write-maintenance-log, and every translate-* language extension (auto-discovered) from the repo's skills/ tree embedded at build time (single source of truth, fresh sessions always get the latest content), plus the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization); the package postPatch copies skills → skills-embedded. The preset presets/maintenance-mode (id `maintenance`, based on the NixOS-mode composition plus the maintenance-skills row) ships with the package; the module gains nixkits.dsh.presets.maintenanceMode (seed-once). Verified: mock registration of 3 skills + workflow section all pass, package contains the embedded tree and export, system prebuild passes; the nixos preset mount-validates (mounted ok), the maintenance preset needs a final check after restart due to the loader's in-process package.json cache.
