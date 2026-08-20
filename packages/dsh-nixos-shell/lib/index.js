@@ -91,7 +91,7 @@ const TOOL_PACKAGES = {
 
 /** Traditional → modern command mapping (nixos-modern-cli requirement). */
 const MODERN_COMMANDS = [
-  ["nixos-rebuild switch", "nixos rebuild switch (nixos binary, nixos-cli project) or nixos-rebuild switch"],
+  ["nixos-rebuild switch", "nixos apply (nixos binary, nixos-cli project) or nixos-rebuild switch"],
   ["nix-env -iA", "nix profile install"],
   ["nix-shell", "nix shell"],
   ["nix-build", "nix build"],
@@ -398,7 +398,7 @@ export function apply(ctx, config = {}) {
         shell,
         sudoDaemonAvailable: sudoEnabled,
         recommendedRebuild: nixosCli.exitCode === 0
-          ? "nixos rebuild switch --flake /etc/nixos"
+          ? "nixos apply /etc/nixos"
           : "sudo nixos-rebuild switch --flake /etc/nixos",
         modernCommands: MODERN_COMMANDS.map(([traditional, modern]) => ({ traditional, modern })),
       };
