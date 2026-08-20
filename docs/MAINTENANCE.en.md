@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-21T00:01:46+09:00
+
+**Summary**: fix(dsh-nixos-shell): surface the tools whitelist in the tool description — the acceptance round's non-blocking finding: the fixed POSIX tool whitelist was not shown in the tool description. The whitelist is now generated dynamically from the TOOL_PACKAGES map (27 names, including the python alias) into the `tools` parameter description, the tool description points at it, and the four-language docs list the full whitelist. Verified: all 27 names present in the parameter description, tool description carries the pointer, syntax check and nix flake check pass.
+
+| Commit | Description |
+|--------|-------------|
+| `30d0c40` | fix(dsh-nixos-shell): surface the tools whitelist in the parameter description |
+
 ## 2026-08-20T20:12:33+09:00
 
 **Summary**: fix(dsh-nixos-shell): correct the modern rebuild command to `nixos apply` — the installed nixos 0.16.1-dev has no `rebuild` subcommand (`nixos --help` lists activate/apply/generation etc.), so the handoff book and the plugin's recommendedRebuild/command map/gate guidance were wrong; unified to `nixos apply /etc/nixos` (or the traditional `sudo nixos-rebuild switch --flake /etc/nixos`). Verified: node syntax checks and nix flake check pass; system deployment switched to `nixos apply` and works.

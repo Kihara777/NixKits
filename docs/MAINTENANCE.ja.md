@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-21T00:01:46+09:00
+
+**概要**：fix(dsh-nixos-shell): ツール説明に tools ホワイトリストを明示 — 受入の非ブロッキング指摘：固定 POSIX ツールのホワイトリストがツール説明に記載されていなかった。ホワイトリストを TOOL_PACKAGES マップから動的生成（27 名、python エイリアス含む）して `tools` パラメータ説明に記載し、ツール説明からパラメータを参照。4 言語ドキュメントに完全なリストを同期。検証：27 名すべてがパラメータ説明に存在、ツール説明に参照あり、構文検査と nix flake check 通過。
+
+| コミット | 説明 |
+|----------|------|
+| `30d0c40` | fix(dsh-nixos-shell): surface the tools whitelist in the parameter description |
+
 ## 2026-08-20T20:12:33+09:00
 
 **概要**：fix(dsh-nixos-shell): 現代 rebuild コマンドを `nixos apply` に訂正 — 実測の nixos 0.16.1-dev に `rebuild` サブコマンドは存在せず（`nixos --help` は activate/apply/generation 等を列挙）、引き継ぎカードとプラグインの recommendedRebuild/コマンド対照表/ゲートガイダンスの `nixos rebuild switch` は誤りだった。`nixos apply /etc/nixos`（または従来の `sudo nixos-rebuild switch --flake /etc/nixos`）に統一。検証：node 構文検査、nix flake check 通過。システム配備は `nixos apply` に変更し実測成功。

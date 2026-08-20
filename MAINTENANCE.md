@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-21T00:01:46+09:00
+
+**摘要**：fix(dsh-nixos-shell): 工具描述明示 tools 白名单 — 验收非阻塞发现：固定 POSIX 工具白名单未在工具描述中明示。改为白名单从 TOOL_PACKAGES 映射动态生成（27 个名字，含 python 别名），写入 `tools` 参数描述，工具描述指向参数；四语文档同步完整列表。验证：27 项全在参数描述中、工具描述含指向、语法检查与 nix flake check 通过。
+
+| 提交 | 说明 |
+|------|------|
+| `30d0c40` | fix(dsh-nixos-shell): surface the tools whitelist in the parameter description |
+
 ## 2026-08-20T20:12:33+09:00
 
 **摘要**：fix(dsh-nixos-shell): 现代 rebuild 命令更正为 `nixos apply` — 实测 nixos 0.16.1-dev 无 `rebuild` 子命令（`nixos --help` 列出 activate/apply/generation 等），交接卡与插件 recommendedRebuild/命令对照表/门控提示词中的 `nixos rebuild switch` 表述错误；统一更正为 `nixos apply /etc/nixos`（或传统 `sudo nixos-rebuild switch --flake /etc/nixos`）。验证：node 语法检查、nix flake check 通过；系统部署改用 `nixos apply` 实测成功。
