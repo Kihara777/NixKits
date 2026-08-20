@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:01:28+09:00
+
+**Summary**: docs(dsh): sync usage examples with actual module behavior — manual composition-row examples now use `- insert:` wrapping plus a warning (a bare `- id:` row only patches existing entries); the skill-plugin doc corrects all 7 entry ids (the `skill-nixkits-<id>` prefix was missing) and the disabled-example id; the dsh doc's install section switches to module-based installation (the old `nixkits.extraPackages` no longer exists) and adds the binary-cache note. All four languages synced.
+
+| Commit | Description |
+|--------|-------------|
+| `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
+
+## 2026-08-20T11:08:08+09:00
+
+**Summary**: fix(module): dsh plugin ESM resolution — dsh's cordis-plugin-loader resolves from the profile directory ($DSH_HOME/profiles/web) as its base (the parentURL of Node 24's internal cascaded loader), searching node_modules upward from there. Plugins were injected into dsh's store tree, but the store is not on the profile's node_modules path, so import hit ERR_MODULE_NOT_FOUND and dsh crashed at startup (restart loop up to 108). preStart now symlinks the injected @kihara777 scope into $DSH_HOME/node_modules so Node can resolve it; after realpath back into the store tree, the @deepseek-ai/* peer deps the plugins import remain resolvable in the same tree. Verified: skills + nix-shell plugins load.
+
+| Commit | Description |
+|------|------|
+| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
+
 ## 2026-08-20T10:33:26+09:00
 
 **Summary**: fix(dsh): insert-block indentation fix — a nested '' string is dedented by its own minimum indent, pushing the plugin entry objects back to column 0, where they parsed as sibling patch ops of `- insert:` instead of its children (dsh reported patch: entry … not found plus id is required for non-insert patches, and all 8 rows failed to mount again). Fixed by emitting one insert op per package entry with the entry object sharing the `- insert:` line's string (column 2/4 indentation); the module comment now records the trap. Verified: dump-config runs with zero stderr and all 8 rows in the composed tree.
@@ -90,14 +106,6 @@
 | Commit | Description |
 |------|------|
 | `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
-
-## 2026-08-20T11:08:08+09:00
-
-**Summary**: fix(module): dsh plugin ESM resolution — dsh's cordis-plugin-loader resolves from the profile directory ($DSH_HOME/profiles/web) as its base (the parentURL of Node 24's internal cascaded loader), searching node_modules upward from there. Plugins were injected into dsh's store tree, but the store is not on the profile's node_modules path, so import hit ERR_MODULE_NOT_FOUND and dsh crashed at startup (restart loop up to 108). preStart now symlinks the injected @kihara777 scope into $DSH_HOME/node_modules so Node can resolve it; after realpath back into the store tree, the @deepseek-ai/* peer deps the plugins import remain resolvable in the same tree. Verified: skills + nix-shell plugins load.
-
-| Commit | Description |
-|------|------|
-| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
 
 ## 2026-08-19T16:52:54+09:00
 

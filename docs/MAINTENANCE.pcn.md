@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T16:01:28+09:00
+
+**摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹与警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）与 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）与二進緩存説明追加。4 言語同期。
+
+| 提交 | 説明 |
+|------|------|
+| `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
+
+## 2026-08-20T11:08:08+09:00
+
+**摘要**: fix(module): dsh 插件 ESM 解決 — dsh cordis-plugin-loader profile 目録（$DSH_HOME/profiles/web）解決基準（Node 24 内部 cascaded loader parentURL）、上方向 node_modules 検索。插件 dsh store 樹注入済、store profile node_modules 路徑上不在、import ERR_MODULE_NOT_FOUND 起動直後崩壊（restart 循環 108 回）。preStart 注入済 @kihara777 scope $DSH_HOME/node_modules 符号連結、Node 解決可。realpath store 樹復帰、插件参照 @deepseek-ai/* peer deps 同一樹内解決可。検証: skills + nix-shell 插件読込成功。
+
+| 提交 | 説明 |
+|------|------|
+| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
+
 ## 2026-08-20T10:33:26+09:00
 
 **摘要**：fix(dsh): insert 塊縮進修正 — 嵌套 '' 字符串按自身最小縮進剝離、插件条目第 0 列復帰、`- insert:` 兄弟補丁操作誤解析（dsh 報 patch: entry … not found + id is required for non-insert patches、8 行再度全部未掛載）。每包一個 insert 操作発行、条目对象与 `- insert:` 行同字符串（2/4 列縮進）修正、模組注釈陷阱記録。検証：dump-config stderr 零、8 行全部合成樹反映。
@@ -90,14 +106,6 @@
 | 提交 | 説明 |
 |------|------|
 | `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
-
-## 2026-08-20T11:08:08+09:00
-
-**摘要**: fix(module): dsh 插件 ESM 解決 — dsh cordis-plugin-loader profile 目録（$DSH_HOME/profiles/web）解決基準（Node 24 内部 cascaded loader parentURL）、上方向 node_modules 検索。插件 dsh store 樹注入済、store profile node_modules 路徑上不在、import ERR_MODULE_NOT_FOUND 起動直後崩壊（restart 循環 108 回）。preStart 注入済 @kihara777 scope $DSH_HOME/node_modules 符号連結、Node 解決可。realpath store 樹復帰、插件参照 @deepseek-ai/* peer deps 同一樹内解決可。検証: skills + nix-shell 插件読込成功。
-
-| 提交 | 説明 |
-|------|------|
-| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
 
 ## 2026-08-19T16:52:54+09:00
 

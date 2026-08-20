@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:01:28+09:00
+
+**摘要**：docs(dsh): 使用示例与实际模块行为同步 — 手工组合行示例补上 `- insert:` 包裹与警告（裸 `- id:` 行只补丁已有条目）；技能插件文档修正全部 7 个 entry id（`skill-nixkits-<id>` 前缀此前缺失）与 disabled 示例 id；dsh 文档安装章节改为模块式安装（原 `nixkits.extraPackages` 已不存在）并补充二进制缓存说明。四语同步。
+
+| 提交 | 说明 |
+|------|------|
+| `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
+
+## 2026-08-20T11:08:08+09:00
+
+**摘要**：fix(module): dsh 插件 ESM 解析 — dsh 的 cordis-plugin-loader 以 profile 目录（$DSH_HOME/profiles/web）为解析基准（Node 24 内部 cascaded loader 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的 store 树，但 store 不在 profile 的 node_modules 链上，import 直接 ERR_MODULE_NOT_FOUND，启动即崩溃（restart 循环到 108）。preStart 把注入后的 @kihara777 scope 符号链接到 $DSH_HOME/node_modules 让 Node 可解析；realpath 回 store 树后，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。实测 skills + nix-shell 插件加载成功。
+
+| 提交 | 说明 |
+|------|------|
+| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
+
 ## 2026-08-20T10:33:26+09:00
 
 **摘要**：fix(dsh): insert 块缩进修复 — 嵌套 '' 字符串按自身最小缩进剥离，插件条目被顶回第 0 列，变成 `- insert:` 的兄弟补丁操作而非子条目（dsh 报 patch: entry … not found + id is required for non-insert patches，8 行再次全部未挂载）。改为每包一个 insert 操作、条目对象与 `- insert:` 行共处同一字符串（列 2/4 缩进），模块注释记录该陷阱。验证：dump-config 零 stderr、8 行进入组合树。
@@ -90,14 +106,6 @@
 | 提交 | 说明 |
 |------|------|
 | `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
-
-## 2026-08-20T11:08:08+09:00
-
-**摘要**：fix(module): dsh 插件 ESM 解析 — dsh 的 cordis-plugin-loader 以 profile 目录（$DSH_HOME/profiles/web）为解析基准（Node 24 内部 cascaded loader 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的 store 树，但 store 不在 profile 的 node_modules 链上，import 直接 ERR_MODULE_NOT_FOUND，启动即崩溃（restart 循环到 108）。preStart 把注入后的 @kihara777 scope 符号链接到 $DSH_HOME/node_modules 让 Node 可解析；realpath 回 store 树后，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。实测 skills + nix-shell 插件加载成功。
-
-| 提交 | 说明 |
-|------|------|
-| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
 
 ## 2026-08-19T16:52:54+09:00
 

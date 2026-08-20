@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:01:28+09:00
+
+**概要**：docs(dsh): 使用例を実際のモジュール動作に同期 — 手動コンポジション行の例に `- insert:` ラップと注意書きを追加（裸の `- id:` 行は既存エントリのパッチに過ぎない）；スキルプラグイン文書の全 7 entry id（`skill-nixkits-<id>` 接頭辞が欠落していた）と disabled 例の id を修正；dsh 文書のインストール節をモジュール式に変更（旧 `nixkits.extraPackages` は既に存在しない）し、バイナリキャッシュの説明を追加。4 言語同期。
+
+| コミット | 説明 |
+|----------|------|
+| `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
+
+## 2026-08-20T11:08:08+09:00
+
+**概要**: fix(module): dsh プラグイン ESM 解決 — dsh の cordis-plugin-loader は profile ディレクトリ（$DSH_HOME/profiles/web）を解決基準（Node 24 内部 cascaded loader の parentURL）とし、そこから上へ node_modules を検索する。プラグインは dsh の store ツリーに注入済みだが、store は profile の node_modules パス上にないため import が ERR_MODULE_NOT_FOUND となり起動直後にクラッシュ（restart ループ 108 回まで）。preStart で注入済み @kihara777 scope を $DSH_HOME/node_modules へシンボリックリンクし Node から解決可能に。realpath で store ツリーに戻るため、プラグインが参照する @deepseek-ai/* peer deps も同一ツリー内で解決できる。検証: skills + nix-shell プラグイン読込成功。
+
+| コミット | 説明 |
+|------|------|
+| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
+
 ## 2026-08-20T10:33:26+09:00
 
 **概要**：fix(dsh): insert ブロックのインデント修正 — ネストした '' 文字列は自身の最小インデントで dedent されるため、プラグイン条目が第 0 列に戻り、`- insert:` の子条目ではなく兄弟のパッチ操作として解釈されていた（dsh が patch: entry … not found と id is required for non-insert patches を報告し、8 行すべてが再び未マウント）。パッケージごとに 1 つの insert 操作を発行し、条目オブジェクトを `- insert:` 行と同じ文字列に置く形（2/4 列インデント）に修正、モジュールコメントにこの落とし穴を記録。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。
@@ -90,14 +106,6 @@
 | コミット | 説明 |
 |------|------|
 | `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
-
-## 2026-08-20T11:08:08+09:00
-
-**概要**: fix(module): dsh プラグイン ESM 解決 — dsh の cordis-plugin-loader は profile ディレクトリ（$DSH_HOME/profiles/web）を解決基準（Node 24 内部 cascaded loader の parentURL）とし、そこから上へ node_modules を検索する。プラグインは dsh の store ツリーに注入済みだが、store は profile の node_modules パス上にないため import が ERR_MODULE_NOT_FOUND となり起動直後にクラッシュ（restart ループ 108 回まで）。preStart で注入済み @kihara777 scope を $DSH_HOME/node_modules へシンボリックリンクし Node から解決可能に。realpath で store ツリーに戻るため、プラグインが参照する @deepseek-ai/* peer deps も同一ツリー内で解決できる。検証: skills + nix-shell プラグイン読込成功。
-
-| コミット | 説明 |
-|------|------|
-| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
 
 ## 2026-08-19T16:52:54+09:00
 
