@@ -22,7 +22,7 @@ NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引�
 | 參數 | 説明 |
 |------|------|
 | `command` | 実行 shell 命令（必填） |
-| `tools` | 任意 POSIX 工具名列表、命令 `nix shell nixpkgs#<pkg>… --command` 経由実行（python3、grep、sed、awk、git、jq、ripgrep 等） |
+| `tools` | 任意 POSIX 工具名列表、命令 `nix shell nixpkgs#<pkg>… --command` 経由実行。白名單：python3、python、grep、ls、cat、head、tail、wc、tr、sort、mkdir、rm、cp、mv、find、env、sed、bash、awk、git、curl、jq、ripgrep、rsync、htop、tree、unzip |
 | `workdir` / `timeoutMs` / `env` | 作業目録 / 超時（設定上限）/ 追加環境変数（注入 NixOS PATH 合併） |
 | `sudo` / `justification` | sudo 守護套接字検出時有効：`sudo: true` 外部 root 実行器路由、`justification` 必填結果回顕 |
 

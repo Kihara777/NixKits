@@ -22,7 +22,7 @@ A DeepSeek Harness (DSH) plugin for NixOS scenario capabilities — a **single p
 | Parameter | Description |
 |-----------|-------------|
 | `command` | Shell command to execute (required) |
-| `tools` | Optional POSIX tool names; the command runs via `nix shell nixpkgs#<pkg>… --command` (python3, grep, sed, awk, git, jq, ripgrep, …) |
+| `tools` | Optional POSIX tool names; the command runs via `nix shell nixpkgs#<pkg>… --command`. Whitelist: python3, python, grep, ls, cat, head, tail, wc, tr, sort, mkdir, rm, cp, mv, find, env, sed, bash, awk, git, curl, jq, ripgrep, rsync, htop, tree, unzip |
 | `workdir` / `timeoutMs` / `env` | Working directory / timeout (capped by config) / extra environment (merged over the injected NixOS PATH) |
 | `sudo` / `justification` | Enabled when the sudo daemon socket is detected: `sudo: true` routes the request to the external root executor; `justification` is required and echoed with the result |
 

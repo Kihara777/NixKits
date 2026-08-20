@@ -119,8 +119,8 @@ function shellDescription(sudoEnabled) {
     "falls back to a Nix store shell path so it keeps working when the stock bash " +
     "tool cannot resolve bash (spawn bash ENOENT on NixOS). Returns exitCode/stdout/stderr " +
     "with truncation flags and spill paths. Pass `tools` to wrap the command in " +
-    "`nix shell nixpkgs#<pkg>… --command` so missing POSIX tools (python3, coreutils, " +
-    "gnused, gawk, git, …) are provided temporarily; use full names like python3/grep/sed/awk/git.";
+    "`nix shell nixpkgs#<pkg>… --command` so missing POSIX tools are provided " +
+    "temporarily; the accepted tool-name whitelist is listed on the `tools` parameter.";
   return sudoEnabled
     ? base + " Set sudo: true (with a justification) to run a privileged command through the external sudo daemon."
     : base;
@@ -532,8 +532,9 @@ export function apply(ctx, config = {}) {
         type: "array",
         items: { type: "string" },
         description:
-          "Optional POSIX tool names to provide via `nix shell` (e.g. python3, grep, sed, awk, git, jq, ripgrep). " +
-          "The command then runs inside `nix shell nixpkgs#<pkg>… --command`.",
+          "Optional POSIX tool names to provide via `nix shell`. Whitelist: " +
+          Object.keys(TOOL_PACKAGES).join(", ") +
+          ". The command then runs inside `nix shell nixpkgs#<pkg>… --command`.",
       },
       workdir: {
         type: "string",

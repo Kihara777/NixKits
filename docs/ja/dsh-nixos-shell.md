@@ -22,7 +22,7 @@ NixOS シナリオ能力のための DeepSeek Harness（DSH）プラグイン �
 | パラメータ | 説明 |
 |-----------|------|
 | `command` | 実行する shell コマンド（必須） |
-| `tools` | 任意の POSIX ツール名リスト。コマンドは `nix shell nixpkgs#<pkg>… --command` 経由で実行（python3、grep、sed、awk、git、jq、ripgrep など） |
+| `tools` | 任意の POSIX ツール名リスト。コマンドは `nix shell nixpkgs#<pkg>… --command` 経由で実行。ホワイトリスト：python3、python、grep、ls、cat、head、tail、wc、tr、sort、mkdir、rm、cp、mv、find、env、sed、bash、awk、git、curl、jq、ripgrep、rsync、htop、tree、unzip |
 | `workdir` / `timeoutMs` / `env` | 作業ディレクトリ / タイムアウト（設定上限あり）/ 追加環境変数（注入 NixOS PATH にマージ） |
 | `sudo` / `justification` | sudo デーモンソケット検出時に有効：`sudo: true` で外部 root 実行器へルーティング。`justification` は必須で結果にエコーされる |
 
