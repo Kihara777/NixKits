@@ -32,10 +32,10 @@ NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引�
 
 | op | 説明 |
 |----|------|
-| `capabilities` | nixos-cli / nix-command / 解決 shell / sudo 守護検出、推奨 rebuild 命令与伝統→現代命令対照返 |
+| `capabilities` | nixos / nix-command / 解決 shell / sudo 守護検出、推奨 rebuild 命令与伝統→現代命令対照返 |
 | `system-status` | `systemctl is-system-running` + 失敗単元一覧 |
-| `generations` | 系統 profile 世代一覧（`/nix/var/nix/profiles/system`） |
-| `journal` | 指定 unit 日誌末尾（`unit` 必填、`lines` 既定 50 上限 500） |
+| `generations` | 系統 profile 世代一覧（新→旧）。`limit` 既定 20・上限 200、現在世代与総数返 |
+| `journal` | 指定 unit 日誌末尾（`unit` 必填、`*`/`%` 通配対応、末尾 `@` 自動 `*` 補全模板全實例対象。`lines` 既定 50 上限 500） |
 | `audit-store-paths` | `~/.gitconfig`/`~/.bashrc`/`~/.zshrc`/`~/.profile` 内 `/nix/store/` 絶対路徑（gc 後無効化）走査、git 憑証助手形式検査修正規則提示 |
 
 変更性維護（`nix store gc`、`nix store optimise`、rebuild）`nixos_shell` `sudo: true` 実行 — 昇格常明示 justification 付。

@@ -13,7 +13,7 @@
  *    `nix shell nixpkgs#<pkg>… --command`, using the skill's package
  *    mapping (python3, coreutils, gnused, bash, gawk, git, …).
  * 3. "Check CLI capabilities": `nixos_cli op=capabilities` probes the
- *    modern CLI surface (nixos-cli, nix-command), the resolved shell, and
+ *    modern CLI surface (nixos, nix-command), the resolved shell, and
  *    the sudo daemon, and recommends the modern command set.
  * 4. "System maintenance": read-only diagnostics — `system-status`
  *    (is-system-running + failed units), `generations` (system profile
@@ -62,7 +62,7 @@ const SUDO_DAEMON_TIMEOUT_MS = 600000;
 const TOOL_PACKAGES = {
   python3: "python3",
   python: "python3",
-  grep: "coreutils",
+  grep: "gnugrep",
   ls: "coreutils",
   cat: "coreutils",
   head: "coreutils",
@@ -74,7 +74,7 @@ const TOOL_PACKAGES = {
   rm: "coreutils",
   cp: "coreutils",
   mv: "coreutils",
-  find: "coreutils",
+  find: "findutils",
   env: "coreutils",
   sed: "gnused",
   bash: "bash",
@@ -91,7 +91,7 @@ const TOOL_PACKAGES = {
 
 /** Traditional → modern command mapping (nixos-modern-cli requirement). */
 const MODERN_COMMANDS = [
-  ["nixos-rebuild switch", "nixos rebuild switch (nixos-cli) or nixos-rebuild switch"],
+  ["nixos-rebuild switch", "nixos rebuild switch (nixos binary, nixos-cli project) or nixos-rebuild switch"],
   ["nix-env -iA", "nix profile install"],
   ["nix-shell", "nix shell"],
   ["nix-build", "nix build"],
@@ -131,10 +131,11 @@ const CLI_OPS = ["capabilities", "system-status", "generations", "journal", "aud
 function cliDescription() {
   return (
     "Read-only NixOS diagnostics (from the nixos-modern-cli scenario set). " +
-    "op: capabilities (probe nixos-cli / nix-command / shell / sudo daemon and print the " +
+    "op: capabilities (probe nixos / nix-command / shell / sudo daemon and print the " +
     "traditional→modern command map), system-status (systemctl is-system-running + failed units), " +
-    "generations (system profile generation list), journal (journalctl tail for one unit — " +
-    "provide unit and optional lines), audit-store-paths (scan user config files for stale " +
+    "generations (system profile generations, newest first — default 20, limit up to 200), " +
+    "journal (journalctl tail for one unit — unit accepts */% globs and a trailing @ matches " +
+    "all template instances; optional lines), audit-store-paths (scan user config files for stale " +
     "absolute /nix/store/ references and check the git credential helper form). " +
     "Mutating maintenance (gc, optimise, rebuild) belongs to nixos_shell with sudo: true."
   );
@@ -287,7 +288,9 @@ export function apply(ctx, config = {}) {
       .join(" ");
     // Uniform wrapper string: safe for both the local argv path (via bash -c)
     // and the sudo daemon path (the daemon itself runs bash -c).
-    return `exec nix shell ${pkgs} --command bash -lc ${shq(command)}`;
+    // NOT bash -lc: a login shell sources the /etc/profile chain, which
+    // resets PATH and discards the `nix shell` injection entirely.
+    return `exec nix shell ${pkgs} --command bash -c ${shq(command)}`;
   }
 
   async function executeShell(args, exec) {
@@ -415,18 +418,33 @@ export function apply(ctx, config = {}) {
       // Read-only in-process listing: nix-env --list-generations needs a
       // write lock on the profile lock file and fails for unprivileged
       // users ("opening lock file …: Permission denied"), so list the
-      // profile directory symlinks directly instead.
+      // profile directory symlinks directly instead.  Capped to the most
+      // recent generations by default (`limit`, newest first).
       const dir = "/nix/var/nix/profiles";
+      const limit = typeof args.limit === "number" && args.limit > 0
+        ? Math.min(Math.floor(args.limit), 200)
+        : 20;
       try {
-        const entries = readdirSync(dir)
-          .filter((n) => /^system(-\d+-link)?$/.test(n))
-          .sort()
-          .map((n) => {
-            const st = lstatSync(`${dir}/${n}`);
-            const target = n === "system" ? readlinkSync(`${dir}/${n}`) : null;
-            return { name: n, mtime: new Date(st.mtimeMs).toISOString(), target };
+        const current = readlinkSync(`${dir}/system`);
+        const links = readdirSync(dir)
+          .filter((n) => /^system-\d+-link$/.test(n))
+          .sort((a, b) => {
+            const na = Number(/^system-(\d+)-link$/.exec(a)?.[1] ?? 0);
+            const nb = Number(/^system-(\d+)-link$/.exec(b)?.[1] ?? 0);
+            return nb - na;
           });
-        return { profileDir: dir, generations: entries };
+        const truncated = links.length > limit;
+        const entries = links.slice(0, limit).map((n) => {
+          const st = lstatSync(`${dir}/${n}`);
+          return { name: n, mtime: new Date(st.mtimeMs).toISOString() };
+        });
+        return {
+          profileDir: dir,
+          current,
+          generationCount: links.length,
+          truncated,
+          generations: entries,
+        };
       } catch (error) {
         return {
           profileDir: dir,
@@ -437,12 +455,15 @@ export function apply(ctx, config = {}) {
     }
 
     if (op === "journal") {
-      const unit = typeof args.unit === "string" ? args.unit.trim() : "";
+      let unit = typeof args.unit === "string" ? args.unit.trim() : "";
       if (unit === "") {
         throw new Error("op=journal requires unit: the systemd unit name to read");
       }
-      if (!/^[A-Za-z0-9@._:-]+$/.test(unit)) {
-        throw new Error("invalid unit name: allowed characters are A-Za-z0-9@._:-");
+      // journalctl -u supports shell-style globs (*, %) natively; a trailing
+      // `@` means "all instances of this template", so append `*`.
+      if (/@$/.test(unit)) unit += "*";
+      if (!/^[A-Za-z0-9@._:*%-]+$/.test(unit)) {
+        throw new Error("invalid unit name: allowed characters are A-Za-z0-9@._:*%-");
       }
       const lines = typeof args.lines === "number" && args.lines > 0
         ? Math.min(Math.floor(args.lines), 500)
@@ -557,11 +578,17 @@ export function apply(ctx, config = {}) {
       },
       unit: {
         type: "string",
-        description: "op=journal: the systemd unit name to read (e.g. dsh, nixkits-sudo@).",
+        description:
+          "op=journal: the systemd unit name to read. Accepts journalctl shell-style globs (*, %) " +
+          "and a trailing @ (auto-appends * to match all template instances, e.g. nixkits-sudo@).",
       },
       lines: {
         type: "number",
         description: "op=journal: number of log lines to return (default 50, max 500).",
+      },
+      limit: {
+        type: "number",
+        description: "op=generations: max generations to return, newest first (default 20, max 200).",
       },
       workdir: {
         type: "string",

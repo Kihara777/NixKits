@@ -61,7 +61,7 @@ const GUIDANCE = `## NixOS模式 — NixOS 高效开发指南
 - 命令执行优先使用本预设的 nixos_shell（NixOS PATH 注入 + bash 回退 + tools 引导）。
 - 需要 root 的变更性操作（nixos-rebuild、systemctl 系统级、nix store gc/optimise）经 nixos_shell 的 sudo: true 执行，且必须提供 justification——该请求经外部 sudo 守护进程以 root 执行并留痕。
 - 只读诊断使用 nixos_cli：capabilities（CLI 能力与现代命令对照）、system-status、generations、journal、audit-store-paths。
-- 现代命令优先：nixos rebuild switch（nixos-cli）或 nixos-rebuild switch、nix profile install、nix shell、nix build、nix store gc、nix store optimise。
+- 现代命令优先：nixos rebuild switch（nixos 命令，nixos-cli 项目）或 nixos-rebuild switch、nix profile install、nix shell、nix build、nix store gc、nix store optimise。
 
 ### 关键陷阱
 

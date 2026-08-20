@@ -34,8 +34,8 @@ NixOS シナリオ能力のための DeepSeek Harness（DSH）プラグイン �
 |----|------|
 | `capabilities` | nixos-cli / nix-command / 解決 shell / sudo デーモンを検出し、推奨 rebuild コマンドと伝統→モダンコマンド対照を返す |
 | `system-status` | `systemctl is-system-running` + 失敗ユニット一覧 |
-| `generations` | システムプロファイルの世代一覧（`/nix/var/nix/profiles/system`） |
-| `journal` | 指定ユニットのログ末尾（`unit` 必須、`lines` 既定 50・上限 500） |
+| `generations` | システムプロファイル世代一覧（新→旧）。`limit` 既定 20・上限 200、現在世代と総数を返す |
+| `journal` | 指定ユニットのログ末尾（`unit` 必須、`*`/`%` ワイルドカード対応、末尾 `@` は自動で `*` を補いテンプレート全インスタンスを対象。`lines` 既定 50・上限 500） |
 | `audit-store-paths` | `~/.gitconfig`/`~/.bashrc`/`~/.zshrc`/`~/.profile` 内の `/nix/store/` 絶対パス（gc 後に無効化）を走査し、git 認証ヘルパーの形式を検査して修正規則を提示 |
 
 変更を伴うメンテナンス（`nix store gc`、`nix store optimise`、rebuild）は `nixos_shell` の `sudo: true` で実行 — 昇格には常に明示的な justification が付く。

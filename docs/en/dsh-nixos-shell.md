@@ -32,10 +32,10 @@ Behavior: prefers the PATH-resolvable `bash`, falls back to a Nix store shell pa
 
 | op | Description |
 |----|-------------|
-| `capabilities` | Probes nixos-cli / nix-command / resolved shell / sudo daemon, returns the recommended rebuild command and the traditional→modern command map |
+| `capabilities` | Probes nixos / nix-command / resolved shell / sudo daemon, returns the recommended rebuild command and the traditional→modern command map |
 | `system-status` | `systemctl is-system-running` + failed units list |
-| `generations` | System profile generation list (`/nix/var/nix/profiles/system`) |
-| `journal` | Journal tail for one unit (`unit` required, `lines` default 50, max 500) |
+| `generations` | System profile generations, newest first; `limit` default 20, max 200; returns the current generation and the total count |
+| `journal` | Journal tail for one unit (`unit` required, accepts `*`/`%` globs, trailing `@` auto-appends `*` for all template instances; `lines` default 50, max 500) |
 | `audit-store-paths` | Scans `~/.gitconfig`/`~/.bashrc`/`~/.zshrc`/`~/.profile` for absolute `/nix/store/` references (stale after gc), checks the git credential helper form and emits the fix rule |
 
 Mutating maintenance (`nix store gc`, `nix store optimise`, rebuild) goes through `nixos_shell` with `sudo: true` — escalation always carries an explicit justification.
