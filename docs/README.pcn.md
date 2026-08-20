@@ -23,7 +23,6 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
-| dsh-nixos-shell | DSH 向 NixOS 操作統合插件（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
 | godot-ai | Godot 引擎 MCP server 与 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
@@ -31,6 +30,14 @@ inputs.nixkits.url = "~/NixKits";
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.51.0 · beta 0.51.0-beta.20260714 · alpha 0.52.0-alpha.20260714 | [docs/pcn/ruyi.md](docs/pcn/ruyi.md) |
 
+
+## 插件
+
+DeepSeek Harness（DSH）插件与軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
+
+| 插件 | 説明 | 文書 |
+|------|------|------|
+| dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
 
 ## 開発
 

@@ -76,6 +76,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
   - 基于提交 SHA 全局去重（每个 SHA 只出现一次）。
   - 节标题时间戳必须精确到秒（git 提交时间），禁止 `T00:00:00` 占位符。
   - 所有已注册语言同步更新。
+- **插件独立展示**：`dsh-*` 插件在 README 的「插件」章节单独列出（四语同步），不混入「软件」表；DSH 自身的包（`dsh`）仍归「软件」。
 
 ### 补丁
 
@@ -87,6 +88,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **技能目录结构**：`skills/<name>/SKILL.md` + 可选配套文件（`dictionary.md`、`templates.md`）。
 - **SKILL.md 保持聚焦**：仅包含 AI 执行所需的最小上下文。词典、模板、检查清单等独立数据拆为配套文件；纯执行流程不强制拆分，允许适当长度。
 - **自动发现契约**：`translate-*` 类技能通过 frontmatter 中的 `language_code`、`display_name`、`base_language` 被 `write-project-docs` 自动发现。
+- **dsh 不是技能安装目标**：`nixkits-skills` 仅安装到 opencode/codewhale/codex/openclaw/agents；dsh 的 NixOS 场景能力由 `dsh-nixos-shell` 插件提供（`nixos_shell` 执行器 + `nixos_cli` 诊断）。技能内容保留在 `skills/` 作为其他助手的安装源。
 
 ## 工作流
 
