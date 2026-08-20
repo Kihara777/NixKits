@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T17:46:44+09:00
+
+**摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 參數 `nix shell nixpkgs#… --command` 不足 POSIX 工具提供 + sudo 守護路由）与 nixos_cli 読取専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件 nixos-modern-cli 技能場景由来。併削除：dsh-nix-shell（機能統合）与 dsh-skill-nixkits（7 技能插件設計、模組 skills 選項含）、CI/文書差替。nixkits-skills 安裝器 dsh 対象削除（dsh 能力 nixos-shell 提供、技能他助手向残置）。修正：generations 進程内読取専用列表変更（nix-env 鎖文件権限必要、非 root Permission denied）。検証：13 案例機能套件全過（実 sudo root 路由与 nix shell 工具引導含）；系統預構築通過。
+
+| 提交 | 説明 |
+|------|------|
+| `395d8b4` | feat(nixos-shell): consolidate NixOS scenario capabilities into one plugin |
+
+| 軟件名 | 舊 | 新 |
+|--------|-----|-----|
+| nixos-shell | — | 新規 v0.1.0 |
+
 ## 2026-08-20T16:40:16+09:00
 
 **摘要**：fix(dsh): service HOME 実用户家指向 — git gh credential helper `$HOME/.config/gh` 憑証解決、模組此前 service HOME dshHome（/home/kix/.dsh）設定、沙箱内 git push 憑証発見不能（could not read Username）。`users.users.<user>.home`（無場合 dshHome 回退）変更、代理用户自身工具環境（git/gh 憑証、~/.gitconfig、npm/ssh 設定）継承。DSH_HOME dsh 状態根不変無影響。検証：HOME=/home/kix 滞留提交 push 全成功；系統預構築通過。

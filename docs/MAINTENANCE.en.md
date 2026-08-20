@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T17:46:44+09:00
+
+**Summary**: feat(nixos-shell): consolidate NixOS scenario capabilities into a single plugin; refactor: abandon the skills-as-plugins design — new package nixos-shell (@kihara777/dsh-nixos-shell 0.1.0) registers two tools: the nixos_shell executor (NixOS PATH injection + bash fallback + a `tools` parameter wrapping the command in `nix shell nixpkgs#… --command` to provide missing POSIX tools + sudo-daemon routing) and nixos_cli read-only diagnostics (capabilities / system-status / generations / journal / audit-store-paths), with functional requirements derived from the nixos-modern-cli skill scenarios. Also removed: dsh-nix-shell (function merged in) and dsh-skill-nixkits (the 7-skill-plugin design, including the module's skills option), with CI/docs swapped accordingly; the nixkits-skills installer no longer targets dsh (dsh capabilities come from nixos-shell; skills remain for other assistants). Fix: generations uses an in-process read-only listing (nix-env needs the profile lock file and fails unprivileged with Permission denied). Verified: 13-case functional suite passes (including real sudo root routing and nix shell tool bootstrap); system prebuild passes.
+
+| Commit | Description |
+|--------|-------------|
+| `395d8b4` | feat(nixos-shell): consolidate NixOS scenario capabilities into one plugin |
+
+| Package | Old | New |
+|---------|-----|-----|
+| nixos-shell | — | new v0.1.0 |
+
 ## 2026-08-20T16:40:16+09:00
 
 **Summary**: fix(dsh): point the service HOME at the real user home — git's gh credential helper resolves credentials from `$HOME/.config/gh`, and the module previously set the service HOME to dshHome (/home/kix/.dsh), so sandbox git pushes found no credentials (could not read Username). Changed to `users.users.<user>.home` (falling back to dshHome), letting the agent inherit the user's own tooling context (git/gh credentials, ~/.gitconfig, npm/ssh configs); DSH_HOME remains dsh's state root and is unaffected. Verified: pushing the backlog with HOME=/home/kix succeeded; the system prebuild passes.

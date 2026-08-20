@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T17:46:44+09:00
+
+**概要**：feat(nixos-shell): NixOS シナリオ能力を単一プラグインへ統合；refactor: スキルプラグイン化設計の廃止 — 新パッケージ nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）は 2 つのツールを登録する：nixos_shell 実行器（NixOS PATH 注入 + bash フォールバック + `tools` パラメータによる `nix shell nixpkgs#… --command` の不足 POSIX ツール提供 + sudo デーモンルーティング）と nixos_cli 読み取り専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件は nixos-modern-cli スキルのシナリオに由来。併せて削除：dsh-nix-shell（機能統合）と dsh-skill-nixkits（7 スキルプラグイン設計、モジュールの skills オプション含む）、CI/ドキュメントも差し替え。nixkits-skills インストーラから dsh 対象を削除（dsh 能力は nixos-shell が提供、スキルは他アシスタント向けに残置）。修正：generations はプロセス内の読み取り専用リストに変更（nix-env はロックファイル権限が必要で、非 root は Permission denied）。検証：13 ケースの機能スイート全通過（実 sudo root ルーティングと nix shell ツールブートストラップ含む）；システム事前ビルド通過。
+
+| コミット | 説明 |
+|----------|------|
+| `395d8b4` | feat(nixos-shell): consolidate NixOS scenario capabilities into one plugin |
+
+| パッケージ | 旧 | 新 |
+|------------|-----|-----|
+| nixos-shell | — | 新規 v0.1.0 |
+
 ## 2026-08-20T16:40:16+09:00
 
 **概要**：fix(dsh): サービス HOME を実ユーザーホームへ — git の gh credential helper は `$HOME/.config/gh` から認証情報を解決するが、モジュールはサービス HOME を dshHome（/home/kix/.dsh）に設定していたため、サンドボックス内の git push が認証情報を見つけられなかった（could not read Username）。`users.users.<user>.home`（無ければ dshHome にフォールバック）に変更し、エージェントがユーザー自身のツール環境（git/gh 認証情報、~/.gitconfig、npm/ssh 設定）を継承するようにした。DSH_HOME は dsh の状態ルートのままで影響なし。検証：HOME=/home/kix で滞留コミットの push がすべて成功；システムの事前ビルドも通過。
