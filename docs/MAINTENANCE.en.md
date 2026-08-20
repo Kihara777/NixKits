@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T10:33:26+09:00
+
+**Summary**: fix(dsh): insert-block indentation fix — a nested '' string is dedented by its own minimum indent, pushing the plugin entry objects back to column 0, where they parsed as sibling patch ops of `- insert:` instead of its children (dsh reported patch: entry … not found plus id is required for non-insert patches, and all 8 rows failed to mount again). Fixed by emitting one insert op per package entry with the entry object sharing the `- insert:` line's string (column 2/4 indentation); the module comment now records the trap. Verified: dump-config runs with zero stderr and all 8 rows in the composed tree.
+
+| Commit | Description |
+|--------|-------------|
+| `988dc6d` | fix(dsh): emit one insert op per plugin entry in a single string — nested '' strings dedent to column 0, turning entry objects into sibling patch ops |
+
 ## 2026-08-20T10:21:46+09:00
 
 **Summary**: fix(dsh): wrap generated rows in the insert op — a bare `- id:` row in cordis.patch.yml only patches an existing entry, so dsh dropped every new plugin entry (stderr: patch: entry "nixkits-nix-shell" not found) and none of the 8 plugin rows mounted (verified via dump-config). The package injection succeeded, but with no entries in the composed tree the nix_shell tool and the 7 skill plugins never registered. Fixed by wrapping the generated plugins.packages rows in an `- insert:` op (same shape as the MCP rows in extraPatch). Verified: dump-config runs with zero stderr and all 8 rows in the composed tree.

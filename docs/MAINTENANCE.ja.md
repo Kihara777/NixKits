@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T10:33:26+09:00
+
+**概要**：fix(dsh): insert ブロックのインデント修正 — ネストした '' 文字列は自身の最小インデントで dedent されるため、プラグイン条目が第 0 列に戻り、`- insert:` の子条目ではなく兄弟のパッチ操作として解釈されていた（dsh が patch: entry … not found と id is required for non-insert patches を報告し、8 行すべてが再び未マウント）。パッケージごとに 1 つの insert 操作を発行し、条目オブジェクトを `- insert:` 行と同じ文字列に置く形（2/4 列インデント）に修正、モジュールコメントにこの落とし穴を記録。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。
+
+| コミット | 説明 |
+|----------|------|
+| `988dc6d` | fix(dsh): emit one insert op per plugin entry in a single string — nested '' strings dedent to column 0, turning entry objects into sibling patch ops |
+
 ## 2026-08-20T10:21:46+09:00
 
 **概要**：fix(dsh): 生成行を insert 動詞でラップ — cordis.patch.yml の裸の `- id:` 行は既存エントリのパッチに過ぎず、新規プラグインエントリは dsh に破棄され（stderr: patch: entry "nixkits-nix-shell" not found）、8 つのプラグイン行すべてが未マウントだった（dump-config で検証）。パッケージ注入自体は成功していたが、合成ツリーにエントリが無いため nix_shell ツールと 7 スキルプラグインが未登録だった。生成される plugins.packages 行を `- insert:` 操作でラップして修正（extraPatch の MCP 行と同じ形）。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。

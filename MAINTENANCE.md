@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-20T10:33:26+09:00
+
+**摘要**：fix(dsh): insert 块缩进修复 — 嵌套 '' 字符串按自身最小缩进剥离，插件条目被顶回第 0 列，变成 `- insert:` 的兄弟补丁操作而非子条目（dsh 报 patch: entry … not found + id is required for non-insert patches，8 行再次全部未挂载）。改为每包一个 insert 操作、条目对象与 `- insert:` 行共处同一字符串（列 2/4 缩进），模块注释记录该陷阱。验证：dump-config 零 stderr、8 行进入组合树。
+
+| 提交 | 说明 |
+|------|------|
+| `988dc6d` | fix(dsh): emit one insert op per plugin entry in a single string — nested '' strings dedent to column 0, turning entry objects into sibling patch ops |
+
 ## 2026-08-20T10:21:46+09:00
 
 **摘要**：fix(dsh): 生成行改用 insert 动词 — cordis.patch.yml 中裸 `- id:` 行只补丁已有条目，新增插件条目被 dsh 丢弃（stderr: patch: entry "nixkits-nix-shell" not found），8 个插件行全部未挂载（dump-config 验证）。插件包注入虽成功，但组合树中没有条目 → 工具 nix_shell 与 7 技能插件均未注册。修复：模块生成的 plugins.packages 行包裹在 `- insert:` 操作下（与 extraPatch 的 MCP 行同构）。验证：dump-config 零 stderr、8 行全部进入组合树。
