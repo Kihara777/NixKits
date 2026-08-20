@@ -31,15 +31,24 @@ let
   # off-switches (disabled), config overrides (settings), and rows for
   # third-party plugin packages.  Written to $DSH_HOME/profiles/web by
   # preStart; dsh hot-reloads it at runtime.
+  #
+  # Row verbs matter: a bare `- id: …` row PATCHES an existing entry and
+  # dsh drops it with "patch: entry … not found" when the entry does not
+  # exist in the profile tree yet.  New entries must be appended under the
+  # `- insert:` op (one op, list of entry objects), exactly like the MCP
+  # rows in the user's extraPatch.
   cordisPatch = pkgs.writeText "cordis.patch.yml" ''
     ${cfg.plugins.extraPatch}
     ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
     ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
-    ${lib.concatMapStrings (p: ''
-      - id: ${p.id}
-        name: ${builtins.toJSON p.name}
-      ${lib.optionalString (p.config != { }) "  config: ${builtins.toJSON p.config}\n"}
-    '') cfg.plugins.packages}
+    ${lib.optionalString (cfg.plugins.packages != [ ]) ''
+      - insert:
+      ${lib.concatMapStrings (p: ''
+        - id: ${p.id}
+          name: ${builtins.toJSON p.name}
+        ${lib.optionalString (p.config != { }) "  config: ${builtins.toJSON p.config}\n"}
+      '') cfg.plugins.packages}
+    ''}
   '';
 
   # Generated settings.yaml: declarative per-namespace dsh settings, JSON
@@ -154,8 +163,8 @@ in
         description = ''
           Third-party dsh plugin packages.  Each entry is injected into dsh's
           node_modules tree (Node module resolution makes it reachable from
-          composition rows) and registered as a row in the generated
-          cordis.patch.yml.
+          composition rows) and inserted as a new entry row under the
+          `- insert:` op in the generated cordis.patch.yml.
         '';
       };
       settings = lib.mkOption {
