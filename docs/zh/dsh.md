@@ -90,31 +90,35 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nix-shell;         # NixKits 包（npm 构建）
-    id = "tool-nix-shell";                # cordis.patch.yml entry id
-    name = "@kihara777/dsh-nix-shell";    # 组合行引用的 npm 包名
+    package = pkgs.nixos-shell;           # NixKits 包（npm 构建）
+    id = "nixos-shell";                   # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nixos-shell";  # 组合行引用的 npm 包名
   }];
 }
 ```
 
-### 技能插件
+### nixos-shell 插件
 
-`skills.enable` 把 NixKits 全部 7 个技能以**原生 dsh 技能插件**注册——每个技能一条组合行，插件在运行时经 `ctx.skills.register` 注册自身内容（runtime provider，rank 250，优先于文件系统来源），可随预设/会话粒度启停：
+NixOS 场景能力整合为**单一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`），功能需求源自 `nixos-modern-cli` 技能的场景描述，注册两个工具：
+
+- `nixos_shell` — shell 执行器：NixOS PATH 注入 + bash 回退（`spawn bash ENOENT` 修复）、`tools` 参数经 `nix shell nixpkgs#<pkg>… --command` 引导缺失的 POSIX 工具、sudo 守护路由
+- `nixos_cli` — 只读 NixOS 诊断：`capabilities`（现代 CLI 能力探测与传统→现代命令对照）、`system-status`、`generations`、`journal`、`audit-store-paths`（配置文件中 `/nix/store/` 绝对路径审计）
 
 ```nix
 {
-  nixkits.dsh.skills = {
-    enable = true;
-    package = pkgs.dsh-skill-nixkits;  # 默认值，可替换
-  };
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.nixos-shell;
+    id = "nixos-shell";
+    name = "@kihara777/dsh-nixos-shell";
+  }];
 }
 ```
 
-生成 7 条组合行：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
+> 原「技能插件化」设计（dsh-skill-nixkits，7 技能 7 组合行）已废弃并移除。技能内容仍保留在仓库 `skills/`，供其他编码助手（opencode/codewhale/codex/openclaw/agents）经 `nixkits-skills` 技能安装。
 
 ### sudo 守护
 
-dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebuild`）。`sudo.enable` 部署一个 systemd **套接字激活的 root 执行器**（`nixkits-sudo@.service`，每连接运行一次 `nixkits-sudo-exec`），并向 dsh 服务注入 `NIXKITS_SUDO_SOCKET`。dsh-nix-shell 插件初始化时探测该套接字，存在即启用 `sudo` 参数并路由请求：
+dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebuild`）。`sudo.enable` 部署一个 systemd **套接字激活的 root 执行器**（`nixkits-sudo@.service`，每连接运行一次 `nixkits-sudo-exec`），并向 dsh 服务注入 `NIXKITS_SUDO_SOCKET`。nixos-shell 插件初始化时探测该套接字，存在即启用 `sudo` 参数并路由请求：
 
 ```nix
 {

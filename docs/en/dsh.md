@@ -90,31 +90,35 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nix-shell;         # NixKits package (npm build)
-    id = "tool-nix-shell";                # cordis.patch.yml entry id
-    name = "@kihara777/dsh-nix-shell";    # npm package name referenced by the row
+    package = pkgs.nixos-shell;           # NixKits package (npm build)
+    id = "nixos-shell";                   # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nixos-shell";  # npm package name referenced by the row
   }];
 }
 ```
 
-### Skill plugins
+### nixos-shell plugin
 
-`skills.enable` registers all 7 NixKits skills as **native dsh skill plugins** — one composition row per skill, each plugin registering its own content via `ctx.skills.register` (runtime provider, rank 250, outranking filesystem sources), controllable at preset/session granularity:
+NixOS scenario capabilities are consolidated into a **single plugin** `nixos-shell` (`@kihara777/dsh-nixos-shell`), with functional requirements derived from the `nixos-modern-cli` skill scenarios. It registers two tools:
+
+- `nixos_shell` — shell executor: NixOS PATH injection + bash fallback (the `spawn bash ENOENT` fix), a `tools` parameter that wraps the command in `nix shell nixpkgs#<pkg>… --command` to provide missing POSIX tools, and sudo-daemon routing
+- `nixos_cli` — read-only NixOS diagnostics: `capabilities` (modern-CLI probing plus the traditional→modern command map), `system-status`, `generations`, `journal`, `audit-store-paths` (scanning config files for absolute `/nix/store/` references)
 
 ```nix
 {
-  nixkits.dsh.skills = {
-    enable = true;
-    package = pkgs.dsh-skill-nixkits;  # default, replaceable
-  };
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.nixos-shell;
+    id = "nixos-shell";
+    name = "@kihara777/dsh-nixos-shell";
+  }];
 }
 ```
 
-Generates 7 composition rows: `skill-nixkits-check-updates`, `skill-nixkits-skills`, `skill-nixos-modern-cli`, `skill-recover-nixos-config`, `skill-translate-pseudocn`, `skill-write-maintenance-log`, `skill-write-project-docs` (`@kihara777/dsh-skill-nixkits/<id>`).
+> The former "skills as plugins" design (dsh-skill-nixkits, 7 skills / 7 composition rows) is abandoned and removed. The skill content stays in the repo's `skills/` for other coding assistants (opencode/codewhale/codex/openclaw/agents) via the `nixkits-skills` skill.
 
 ### Sudo daemon
 
-Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The dsh-nix-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:
+Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The nixos-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:
 
 ```nix
 {

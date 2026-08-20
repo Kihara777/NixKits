@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * NixKits sudo executor — per-connection root command runner for the
- * dsh-nix-shell plugin.
+ * nixos-shell plugin.
  *
  * Designed for systemd socket activation (Accept=yes): each accepted
  * connection starts this process as root with stdin/stdout bound to the

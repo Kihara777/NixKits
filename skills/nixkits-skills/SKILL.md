@@ -1,6 +1,6 @@
 ---
 name: nixkits-skills
-description: 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、codex、openclaw、agents、dsh）。支持本地和在线两种安装模式。
+description: 将 NixKits 技能安装或更新到编码助手目录（opencode、codewhale、codex、openclaw、agents）。支持本地和在线两种安装模式。DeepSeek Harness (dsh) 不再作为安装目标——其 NixOS 场景能力由 nixos-shell 插件提供。
 ---
 
 # NixKits 技能安装器
@@ -16,7 +16,8 @@ description: 将 NixKits 技能安装或更新到编码助手目录（opencode�
 | Codex | `~/.codex/skills/` |
 | OpenClaw | `~/.openclaw/skills/` |
 | 通用 | `~/.agents/skills/` |
-| DeepSeek Harness (dsh) | `~/.dsh/skills/` |
+
+> **dsh 例外**：DeepSeek Harness 不再是安装目标。其 NixOS 场景能力（shell 执行、工具引导、sudo 守护、NixOS 诊断）已整合进 `nixos-shell` 插件（`@kihara777/dsh-nixos-shell`），经 `nixkits.dsh.plugins.packages` 声明式挂载。
 
 ## 可用的技能
 
@@ -45,7 +46,7 @@ NIXKITS_DIR=$(pwd)
 [ -z "$NIXKITS_DIR" ] && NIXKITS_DIR=$(dirname "$(readlink -f flake.nix)" 2>/dev/null)
 
 # 将技能复制到各已存在的助手目录
-for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills ~/.dsh/skills; do
+for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$NIXKITS_DIR/skills/"* "$dir/"
     echo "Installed to $dir"
@@ -65,7 +66,7 @@ TMPDIR=$(mktemp -d)
 git clone ${REPO_URL:-https://github.com/Kihara777/NixKits.git} "$TMPDIR"
 
 # 从克隆的源码安装
-for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills ~/.dsh/skills; do
+for dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
   if [ -d "$dir" ]; then
     cp -r "$TMPDIR/skills/"* "$dir/"
     echo "Installed to $dir"
@@ -84,7 +85,7 @@ rm -rf "$TMPDIR"
 NIXKITS_DIR=$(pwd)
 for skill_dir in "$NIXKITS_DIR/skills/"*/; do
   skill_name=$(basename "$skill_dir")
-  for agent_dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills ~/.dsh/skills; do
+  for agent_dir in ~/.opencode/skills ~/.codewhale/skills ~/.codex/skills ~/.openclaw/skills ~/.agents/skills; do
     if [ -d "$agent_dir/$skill_name" ]; then
       if ! diff -rq "$skill_dir" "$agent_dir/$skill_name" > /dev/null 2>&1; then
         echo "Update available: $skill_name in $(basename $(dirname $agent_dir))"

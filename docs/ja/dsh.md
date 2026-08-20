@@ -90,31 +90,35 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nix-shell;         # NixKits パッケージ（npm ビルド）
-    id = "tool-nix-shell";                # cordis.patch.yml の entry id
-    name = "@kihara777/dsh-nix-shell";    # 行が参照する npm パッケージ名
+    package = pkgs.nixos-shell;           # NixKits パッケージ（npm ビルド）
+    id = "nixos-shell";                   # cordis.patch.yml の entry id
+    name = "@kihara777/dsh-nixos-shell";  # 行が参照する npm パッケージ名
   }];
 }
 ```
 
-### スキルプラグイン
+### nixos-shell プラグイン
 
-`skills.enable` は NixKits の全 7 スキルを**ネイティブ dsh スキルプラグイン**として登録する — スキルごとに 1 行のコンポジション行、各プラグインはランタイムに `ctx.skills.register` で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、プリセット／セッション粒度で制御可能：
+NixOS シナリオ能力は**単一プラグイン** `nixos-shell`（`@kihara777/dsh-nixos-shell`）へ統合され、機能要件は `nixos-modern-cli` スキルのシナリオに由来する。2 つのツールを登録する：
+
+- `nixos_shell` — shell 実行器：NixOS PATH 注入 + bash フォールバック（`spawn bash ENOENT` 修正）、`tools` パラメータで `nix shell nixpkgs#<pkg>… --command` にラップして不足する POSIX ツールを提供、sudo デーモンルーティング
+- `nixos_cli` — 読み取り専用 NixOS 診断：`capabilities`（モダン CLI の検出と伝統→モダンコマンド対照）、`system-status`、`generations`、`journal`、`audit-store-paths`（設定ファイル内の `/nix/store/` 絶対パス監査）
 
 ```nix
 {
-  nixkits.dsh.skills = {
-    enable = true;
-    package = pkgs.dsh-skill-nixkits;  # 既定値、置換可
-  };
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.nixos-shell;
+    id = "nixos-shell";
+    name = "@kihara777/dsh-nixos-shell";
+  }];
 }
 ```
 
-7 行のコンポジション行を生成：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
+> 旧「スキルプラグイン化」設計（dsh-skill-nixkits、7 スキル / 7 コンポジション行）は廃止・削除済み。スキル内容はリポジトリの `skills/` に残り、他のコーディングアシスタント（opencode/codewhale/codex/openclaw/agents）向けに `nixkits-skills` スキルでインストールされる。
 
 ### sudo デーモン
 
-dsh サンドボックス内では `sudo` の setuid が失われ、エージェントは昇格できない（例：`nixos-rebuild`）。`sudo.enable` は systemd の**ソケットアクティベーション型 root 実行器**（`nixkits-sudo@.service`、接続ごとに `nixkits-sudo-exec` を実行）を配備し、dsh サービスへ `NIXKITS_SUDO_SOCKET` を注入する。dsh-nix-shell プラグインは初期化時にこのソケットを検出し、存在すれば `sudo` パラメータを有効化してリクエストをルーティングする：
+dsh サンドボックス内では `sudo` の setuid が失われ、エージェントは昇格できない（例：`nixos-rebuild`）。`sudo.enable` は systemd の**ソケットアクティベーション型 root 実行器**（`nixkits-sudo@.service`、接続ごとに `nixkits-sudo-exec` を実行）を配備し、dsh サービスへ `NIXKITS_SUDO_SOCKET` を注入する。nixos-shell プラグインは初期化時にこのソケットを検出し、存在すれば `sudo` パラメータを有効化してリクエストをルーティングする：
 
 ```nix
 {

@@ -90,31 +90,35 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nix-shell;         # NixKits 包（npm 構築）
-    id = "tool-nix-shell";                # cordis.patch.yml entry id
-    name = "@kihara777/dsh-nix-shell";    # 行参照 npm 包名
+    package = pkgs.nixos-shell;           # NixKits 包（npm 構築）
+    id = "nixos-shell";                   # cordis.patch.yml entry id
+    name = "@kihara777/dsh-nixos-shell";  # 行参照 npm 包名
   }];
 }
 ```
 
-### 技能插件
+### nixos-shell 插件
 
-`skills.enable` NixKits 全 7 技能**原生 dsh 技能插件**登録 — 技能毎 1 組合行、各插件 runtime `ctx.skills.register` 自身内容登録（runtime provider、rank 250、文件系統由来優先）、preset/session 粒度制御可：
+NixOS 場景能力**単一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`）統合、機能要件 `nixos-modern-cli` 技能場景由来。2 工具登録：
+
+- `nixos_shell` — shell 実行器：NixOS PATH 注入 + bash 回退（`spawn bash ENOENT` 修正）、`tools` 參數 `nix shell nixpkgs#<pkg>… --command` 包裹不足 POSIX 工具提供、sudo 守護路由
+- `nixos_cli` — 読取専用 NixOS 診断：`capabilities`（現代 CLI 検出与伝統→現代命令対照）、`system-status`、`generations`、`journal`、`audit-store-paths`（設定文件 `/nix/store/` 絶対路徑監査）
 
 ```nix
 {
-  nixkits.dsh.skills = {
-    enable = true;
-    package = pkgs.dsh-skill-nixkits;  # 既定値、置換可
-  };
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.nixos-shell;
+    id = "nixos-shell";
+    name = "@kihara777/dsh-nixos-shell";
+  }];
 }
 ```
 
-7 組合行生成：`skill-nixkits-check-updates`、`skill-nixkits-skills`、`skill-nixos-modern-cli`、`skill-recover-nixos-config`、`skill-translate-pseudocn`、`skill-write-maintenance-log`、`skill-write-project-docs`（`@kihara777/dsh-skill-nixkits/<id>`）。
+> 旧「技能插件化」設計（dsh-skill-nixkits、7 技能 / 7 組合行）廃止削除済。技能内容倉庫 `skills/` 残置、他編碼助手（opencode/codewhale/codex/openclaw/agents）向 `nixkits-skills` 技能安裝。
 
 ### sudo 守護
 
-dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`）。`sudo.enable` systemd **套接字激活型 root 実行器**（`nixkits-sudo@.service`、接続毎 `nixkits-sudo-exec` 実行）配備、dsh service `NIXKITS_SUDO_SOCKET` 注入。dsh-nix-shell 插件初期化時該套接字検出、存在時 `sudo` 參數有効化請求路由：
+dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`）。`sudo.enable` systemd **套接字激活型 root 実行器**（`nixkits-sudo@.service`、接続毎 `nixkits-sudo-exec` 実行）配備、dsh service `NIXKITS_SUDO_SOCKET` 注入。nixos-shell 插件初期化時該套接字検出、存在時 `sudo` 參數有効化請求路由：
 
 ```nix
 {

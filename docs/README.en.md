@@ -23,8 +23,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | dsh | DeepSeek Harness (DSH) — Everything is a Plugin | [docs/en/dsh.md](en/dsh.md) |
-| dsh-nix-shell | NixOS-aware shell tool plugin for DSH (fixes `spawn bash ENOENT`) | [docs/en/dsh-nix-shell.md](en/dsh-nix-shell.md) |
-| dsh-skill-nixkits | NixKits skills as native DSH skill plugins (one plugin entry per skill) | [docs/en/dsh-skill-nixkits.md](en/dsh-skill-nixkits.md) |
+| nixos-shell | Consolidated NixOS operations plugin for DSH (shell execution, tool bootstrap, sudo daemon routing, NixOS diagnostics) | [docs/en/nixos-shell.md](en/nixos-shell.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |

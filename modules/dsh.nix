@@ -151,7 +151,7 @@ in
             };
             name = lib.mkOption {
               type = lib.types.str;
-              description = "npm package name referenced by the composition row (e.g. @kihara777/dsh-nix-shell).";
+              description = "npm package name referenced by the composition row (e.g. @kihara777/dsh-nixos-shell).";
             };
             config = lib.mkOption {
               type = lib.types.attrs;
@@ -187,17 +187,8 @@ in
       };
     };
 
-    skills = {
-      enable = lib.mkEnableOption "register the NixKits skills as native dsh skill plugins (one composition row per skill)";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.dsh-skill-nixkits;
-        description = "Skill plugin package (@kihara777/dsh-skill-nixkits) embedding the NixKits skills.";
-      };
-    };
-
     sudo = {
-      enable = lib.mkEnableOption "external sudo daemon for dsh-nix-shell (systemd socket-activated root executor)";
+      enable = lib.mkEnableOption "external sudo daemon for nixos-shell (systemd socket-activated root executor)";
       socketPath = lib.mkOption {
         type = lib.types.str;
         default = "/run/nixkits-sudo.sock";
@@ -205,7 +196,7 @@ in
       };
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.dsh-nix-shell;
+        default = pkgs.nixos-shell;
         description = "Package providing the nixkits-sudo-exec executor script.";
       };
     };
@@ -224,25 +215,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-
-    # NixKits skills as native dsh skill plugins: one composition row per
-    # skill, each plugin registering its own content via ctx.skills.register
-    # (runtime provider, rank 250 — outranking the filesystem roots).
-    nixkits.dsh.plugins.packages = lib.mkIf cfg.skills.enable (
-      builtins.map (skillId: {
-        package = cfg.skills.package;
-        id = "skill-nixkits-${skillId}";
-        name = "@kihara777/dsh-skill-nixkits/${skillId}";
-      }) [
-        "nixkits-check-updates"
-        "nixkits-skills"
-        "nixos-modern-cli"
-        "recover-nixos-config"
-        "translate-pseudocn"
-        "write-maintenance-log"
-        "write-project-docs"
-      ]
-    );
 
     users.users = lib.mkIf (cfg.user == "dsh") {
       dsh = {
@@ -329,7 +301,7 @@ in
     # passwordless root for the dsh user — gate it behind cfg.sudo.enable and
     # prefer narrower alternatives when the sandbox permits sudo directly.
     systemd.sockets.nixkits-sudo = lib.mkIf cfg.sudo.enable {
-      description = "NixKits sudo executor socket (dsh-nix-shell)";
+      description = "NixKits sudo executor socket (nixos-shell)";
       wantedBy = [ "sockets.target" ];
       listenStreams = [ cfg.sudo.socketPath ];
       socketConfig = {
@@ -343,7 +315,7 @@ in
     systemd.services."nixkits-sudo@" = lib.mkIf cfg.sudo.enable {
       description = "NixKits sudo executor (per-connection root command runner)";
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.nodejs} ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nix-shell/bin/nixkits-sudo-exec.js";
+        ExecStart = "${lib.getExe pkgs.nodejs} ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/bin/nixkits-sudo-exec.js";
         StandardInput = "socket";
         StandardOutput = "socket";
         StandardError = "journal";

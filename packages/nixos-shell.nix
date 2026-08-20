@@ -4,10 +4,10 @@
 }:
 
 buildNpmPackage (finalAttrs: {
-  pname = "dsh-nix-shell";
-  version = "0.2.0";
+  pname = "nixos-shell";
+  version = "0.1.0";
 
-  src = ./dsh-nix-shell;
+  src = ./nixos-shell;
 
   # dsh ecosystem rc.7 packages declare peers against unreleased rc.8
   # prereleases; the plugin resolves those peers from the host dsh tree at
@@ -17,11 +17,12 @@ buildNpmPackage (finalAttrs: {
   # Pure JS plugin (lib/index.js committed); no build script to run.
   dontNpmBuild = true;
 
-  # npm package tarballs ship no lock file; the one in src/ is committed.
-  npmDepsHash = "sha256-5zDwzj6ek3C0KmN5JiVsJU8fCQKERbarsY9nlBDBoHI=";
+  # Same dependency tree as the former dsh-nix-shell package (dsh-tools +
+  # schemastery, peers resolved at runtime from the host dsh tree).
+  npmDepsHash = "sha256-18Z9sTpUA/dvsKc+gqTdwklMHPpDMzar0B7urHamKGI=";
 
   meta = {
-    description = "NixOS-aware shell tool plugin for the DeepSeek Harness (dsh)";
+    description = "Consolidated NixOS operations plugin for the DeepSeek Harness (shell execution, tool bootstrap, sudo daemon routing, read-only NixOS diagnostics)";
     homepage = "https://github.com/Kihara777/NixKits";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
