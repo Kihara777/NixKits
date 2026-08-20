@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-20T16:40:16+09:00
+
+**Summary**: fix(dsh): point the service HOME at the real user home — git's gh credential helper resolves credentials from `$HOME/.config/gh`, and the module previously set the service HOME to dshHome (/home/kix/.dsh), so sandbox git pushes found no credentials (could not read Username). Changed to `users.users.<user>.home` (falling back to dshHome), letting the agent inherit the user's own tooling context (git/gh credentials, ~/.gitconfig, npm/ssh configs); DSH_HOME remains dsh's state root and is unaffected. Verified: pushing the backlog with HOME=/home/kix succeeded; the system prebuild passes.
+
+| Commit | Description |
+|--------|-------------|
+| `514831c` | fix(dsh): point service HOME at the real user home — git's gh credential helper resolves ~/.config/gh from $HOME, so HOME=dshHome left sandbox pushes without credentials |
+
 ## 2026-08-20T16:13:40+09:00
 
 **Summary**: fix(dsh-nix-shell): sudo executor PATH merge order — socket-activated template units inherit systemd's manager-default PATH (coreutils/findutils/grep/sed/systemd store paths only), and `...process.env` spread after the explicit NixOS PATH overrode it, leaving profile tools like ps and nixos-rebuild unresolvable inside the daemon (PS-MISSING/NIXOS-REBUILD-MISSING). Fixed by spreading the inherited env first and the explicit NixOS profile PATH second (request env still merges last). Verified: running the executor directly with a simulated systemd-default PATH yields a PATH headed by /run/current-system/sw/bin, with both ps and nixos-rebuild resolving.

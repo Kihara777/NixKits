@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-20T16:40:16+09:00
+
+**摘要**：fix(dsh): service HOME 実用户家指向 — git gh credential helper `$HOME/.config/gh` 憑証解決、模組此前 service HOME dshHome（/home/kix/.dsh）設定、沙箱内 git push 憑証発見不能（could not read Username）。`users.users.<user>.home`（無場合 dshHome 回退）変更、代理用户自身工具環境（git/gh 憑証、~/.gitconfig、npm/ssh 設定）継承。DSH_HOME dsh 状態根不変無影響。検証：HOME=/home/kix 滞留提交 push 全成功；系統預構築通過。
+
+| 提交 | 説明 |
+|------|------|
+| `514831c` | fix(dsh): point service HOME at the real user home — git's gh credential helper resolves ~/.config/gh from $HOME, so HOME=dshHome left sandbox pushes without credentials |
+
 ## 2026-08-20T16:13:40+09:00
 
 **摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 与 nixos-rebuild 等 profile 工具解決不能（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env 先、明示 NixOS profile PATH 後展開修正（請求 env 最後合併不変）。検証：systemd 既定 PATH 模擬実行器直接実行、PATH /run/current-system/sw/bin 先頭、ps 与 nixos-rebuild 両方解決成功。
