@@ -8,8 +8,12 @@ let
   # packages must be real directories in that tree: a symlink would be
   # realpathed back into the plugin's own store path and its peer imports
   # (@deepseek-ai/cordis etc.) would never reach dsh's node_modules.  The tar
-  # round trip yields a builder-owned tree, chmod opens the node_modules dir
-  # for the injection, and the plugin is then extracted in place.
+  # round trip yields a builder-owned tree and chmod opens the node_modules
+  # dir for the injection; each plugin is then extracted in place.  The chmod
+  # must run again after EVERY extraction: GNU tar restores each directory's
+  # archived mode (0555 for store trees) once its contents are in place, so
+  # a scope dir created by the previous plugin would otherwise be unwritable
+  # and the next extraction fails with "Cannot mkdir: Permission denied".
   dshWithPlugins = pkgs.runCommand "${cfg.package.name}-with-plugins" { } ''
     mkdir -p "$out"
     tar -C ${cfg.package} -cf - . | tar -C "$out" -xf -
@@ -17,6 +21,7 @@ let
     chmod -R u+w "$NM"
     ${lib.concatMapStrings (p: ''
       tar -C ${p.package}/lib/node_modules -cf - . | tar -C "$NM" -xf -
+      chmod -R u+w "$NM"
     '') cfg.plugins.packages}
   '';
 
