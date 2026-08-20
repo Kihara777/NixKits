@@ -91,6 +91,14 @@
 |------|------|
 | `c4e320e` | docs(AGENTS): fix stale comfyui-strix-halo reference + align CI description with actual workflows |
 
+## 2026-08-20T11:08:08+09:00
+
+**摘要**：fix(module): dsh 插件 ESM 解析 — dsh 的 cordis-plugin-loader 以 profile 目录（$DSH_HOME/profiles/web）为解析基准（Node 24 内部 cascaded loader 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的 store 树，但 store 不在 profile 的 node_modules 链上，import 直接 ERR_MODULE_NOT_FOUND，启动即崩溃（restart 循环到 108）。preStart 把注入后的 @kihara777 scope 符号链接到 $DSH_HOME/node_modules 让 Node 可解析；realpath 回 store 树后，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。实测 skills + nix-shell 插件加载成功。
+
+| 提交 | 说明 |
+|------|------|
+| `044b891` | fix(module): dsh plugin ESM resolution via DSH_HOME/node_modules symlink |
+
 ## 2026-08-19T16:52:54+09:00
 
 **摘要**：fix(module): dsh WebSocket 反代改用 mod_proxy upgrade — NixOS lighttpd 模块按 allKnownModules 固定顺序生成 server.modules，mod_wstunnel 永远排在 mod_proxy 之后；proxy.server 匹配所有路径，mod_proxy 先接管 /api/events.* 的 WebSocket 升级请求返回 426 Upgrade Required，mod_wstunnel 因 r->handler_module 非空而跳过、从不生效。改用 lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"），移除 mod_wstunnel 配置。实测 8625 首页 200、/api/events.host|mux 握手 101（本地+局域网）。
