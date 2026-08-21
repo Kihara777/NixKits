@@ -9,14 +9,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "dsh";
-  version = "0.1.0-rc.7";
+  version = "0.1.0-rc.8";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@deepseek-ai/dsh/-/dsh-${finalAttrs.version}.tgz";
-    hash = "sha256-L48Ldj1hGsU296lBHuQ8CvwGfBuHMsMQLATb45i8rMU=";
+    hash = "sha256-uLDbbzvPOu13wlu5Af250O8Peb2MpAO1LjTBSnHRSH8=";
   };
 
-  npmDepsHash = "sha256-25xDYcMOKv3PI9ItCN4CyGVsFTtCORgTJNPJTNEEKIM=";
+  npmDepsHash = "sha256-KqPwMhUQBnuyVLNIpspM0POzNjere3mr++fDduLgA6U=";
 
   # Prebuilt npm package (bin → lib/bin.js); no build script to run.
   dontNpmBuild = true;
