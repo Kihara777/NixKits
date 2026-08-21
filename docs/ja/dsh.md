@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— Everything is a Plugin（すべてがプラグ�
 |------|-----|
 | タイプ | Node.js アプリ（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| バージョン | `0.1.0-rc.6` |
+| バージョン | `0.1.0-rc.8` |
 | ライセンス | MIT |
 | コマンド | `dsh` |
 
@@ -133,7 +133,7 @@ dsh サンドボックス内では `sudo` の setuid が失われ、エージェ
 
 ## プラグイン一覧
 
-dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled` の有効値、`id -> パッケージ`）：
+dsh 0.1.0-rc.8 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled` の有効値、`id -> パッケージ`）：
 
 ```text
   agent -> @deepseek-ai/dsh-agent
@@ -159,6 +159,7 @@ dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
   credentials -> @deepseek-ai/dsh-credentials-local
   directory-picker -> @deepseek-ai/dsh-host-directory-picker-auto
+  file-reference-local -> @deepseek-ai/dsh-file-reference-local
   fs-observation-policy -> @deepseek-ai/dsh-fs-observation-policy
   fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
   goal -> @deepseek-ai/dsh-goal
@@ -188,6 +189,7 @@ dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   session-projection -> @deepseek-ai/dsh-session-projection
   session-projection-cache -> @deepseek-ai/dsh-session-projection-cache
   session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
+  session-reference -> @deepseek-ai/dsh-session-reference
   session-stats -> @deepseek-ai/dsh-session-stats
   session-telemetry-otel -> @deepseek-ai/dsh-session-telemetry-otel
   session-title -> @deepseek-ai/dsh-session-title
@@ -233,6 +235,8 @@ dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   typert-gateway -> @deepseek-ai/dsh-api-gateway
   typert-loader -> @deepseek-ai/dsh-typert-loader
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
+  ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
   ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
   ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
@@ -245,6 +249,8 @@ dsh 0.1.0-rc.6 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-plan -> @deepseek-ai/dsh-client-ui-plan
+  ui-reference -> @deepseek-ai/dsh-client-ui-reference
+  ui-renderer -> @deepseek-ai/dsh-client-ui-renderer
   ui-settings -> @deepseek-ai/dsh-client-ui-settings
   ui-settings-general -> @deepseek-ai/dsh-client-ui-settings-general
   ui-settings-models -> @deepseek-ai/dsh-client-ui-settings-models

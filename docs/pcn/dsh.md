@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.1.0-rc.6` |
+| 版本 | `0.1.0-rc.8` |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
@@ -133,7 +133,7 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 
 ## 插件清單
 
-dsh 0.1.0-rc.6 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
+dsh 0.1.0-rc.8 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
 
 ```text
   agent -> @deepseek-ai/dsh-agent
@@ -159,6 +159,7 @@ dsh 0.1.0-rc.6 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
   cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
   credentials -> @deepseek-ai/dsh-credentials-local
   directory-picker -> @deepseek-ai/dsh-host-directory-picker-auto
+  file-reference-local -> @deepseek-ai/dsh-file-reference-local
   fs-observation-policy -> @deepseek-ai/dsh-fs-observation-policy
   fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
   goal -> @deepseek-ai/dsh-goal
@@ -188,6 +189,7 @@ dsh 0.1.0-rc.6 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
   session-projection -> @deepseek-ai/dsh-session-projection
   session-projection-cache -> @deepseek-ai/dsh-session-projection-cache
   session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
+  session-reference -> @deepseek-ai/dsh-session-reference
   session-stats -> @deepseek-ai/dsh-session-stats
   session-telemetry-otel -> @deepseek-ai/dsh-session-telemetry-otel
   session-title -> @deepseek-ai/dsh-session-title
@@ -233,6 +235,8 @@ dsh 0.1.0-rc.6 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
   typert-gateway -> @deepseek-ai/dsh-api-gateway
   typert-loader -> @deepseek-ai/dsh-typert-loader
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
+  ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
   ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
   ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
@@ -245,6 +249,8 @@ dsh 0.1.0-rc.6 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-plan -> @deepseek-ai/dsh-client-ui-plan
+  ui-reference -> @deepseek-ai/dsh-client-ui-reference
+  ui-renderer -> @deepseek-ai/dsh-client-ui-renderer
   ui-settings -> @deepseek-ai/dsh-client-ui-settings
   ui-settings-general -> @deepseek-ai/dsh-client-ui-settings-general
   ui-settings-models -> @deepseek-ai/dsh-client-ui-settings-models
