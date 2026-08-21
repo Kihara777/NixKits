@@ -110,6 +110,14 @@
 |------|------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T23:02:33+09:00
+
+**摘要**：chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。完成遗留的 rc.8 升级：src hash 与 npmDepsHash 从占位符填入真实值；package-lock.json 重新生成（旧 lock 缺失 120 个 entries 含 dsh-invariants，导致 buildNpmPackage fetch 阶段 ENOTCACHED）。验证：rc.8 构建成功、randomUUID 回退 patch 生效、with-plugins 变体正常、服务启动无插件加载错误。注意：本机 skills-as-plugins 设计已废弃，skills 已整合进 dsh-nixos-shell（maintenance-skills），with-plugins 仅注入 dsh-nixos-shell。
+
+| 提交 | 说明 |
+|------|------|
+| `a7cbe3e` | chore(pkgs): bump dsh 0.1.0-rc.7 → 0.1.0-rc.8 |
+
 ## 2026-08-21T22:11:28+09:00
 
 **摘要**：fix(module): dsh 崩溃韧性 — Restart=always + RestartSec 5s。dsh 上游有已知崩溃 bug（cordis-plugin-timer 的 Context disposed，rc.6 实测运行约 13 小时触发），rc.7/rc.8 的 cordis-plugin-timer 依赖版本不变（^1.1.3），bug 仍存。崩溃时 lighttpd 反代随即返回 503 直到 systemd 拉起。改为 Restart=always（on-failure 不覆盖 exit 0 退出路径）+ 重启间隔 5s，把中断窗口压到最小。

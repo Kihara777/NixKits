@@ -110,6 +110,14 @@
 |------|------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T23:02:33+09:00
+
+**摘要**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。遺留 rc.8 升級完了：src hash npmDepsHash 占位符実値、package-lock.json 再生成（旧 lock dsh-invariants 含 120 条目欠落、buildNpmPackage fetch ENOTCACHED）。検証: rc.8 構築成功、randomUUID fallback patch 適用、with-plugins 変体正常、起動插件読込 error 無。注: 本機 skills-as-plugins 設計廃止、skills dsh-nixos-shell（maintenance-skills）統合、with-plugins dsh-nixos-shell 只注入。
+
+| 提交 | 説明 |
+|------|------|
+| `a7cbe3e` | chore(pkgs): bump dsh 0.1.0-rc.7 → 0.1.0-rc.8 |
+
 ## 2026-08-21T22:11:28+09:00
 
 **摘要**: fix(module): dsh 崩壊耐性 — Restart=always + RestartSec 5s。dsh 上流既知崩壊 bug（cordis-plugin-timer Context disposed、rc.6 約 13 時間稼働後発生）、rc.7/rc.8 cordis-plugin-timer 依存不変（^1.1.3）bug 残存。崩壊時 lighttpd 反代 systemd 再起動迄 503 返。Restart=always（on-failure exit 0 終了未覆）+ 再起動間隔 5s 変更、中断時間最小化。

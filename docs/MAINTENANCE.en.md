@@ -110,6 +110,14 @@
 |--------|-------------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T23:02:33+09:00
+
+**Summary**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8. Completed the leftover rc.8 bump: filled real src hash and npmDepsHash (previously placeholders); regenerated package-lock.json (the old lock was missing 120 entries incl. dsh-invariants, causing ENOTCACHED during buildNpmPackage fetch). Verified: rc.8 builds, the randomUUID fallback patch applies, the with-plugins variant runs, and the service starts with no plugin load errors. Note: the local skills-as-plugins design was abandoned — skills now live inside dsh-nixos-shell (maintenance-skills), so with-plugins injects only dsh-nixos-shell.
+
+| Commit | Description |
+|------|------|
+| `a7cbe3e` | chore(pkgs): bump dsh 0.1.0-rc.7 → 0.1.0-rc.8 |
+
 ## 2026-08-21T22:11:28+09:00
 
 **Summary**: fix(module): dsh crash resilience — Restart=always + RestartSec 5s. dsh upstream has a known crash bug (cordis-plugin-timer Context disposed; rc.6 hit it after ~13h), and rc.7/rc.8 keep the same cordis-plugin-timer dependency (^1.1.3), so the bug persists. On crash the lighttpd reverse proxy returns 503 until systemd restarts the unit. Switched to Restart=always (on-failure does not cover exit-0 paths) with a 5s restart delay to minimize the outage window.
