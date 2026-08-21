@@ -286,8 +286,12 @@ in
         Type = "simple";
         ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
         WorkingDirectory = cfg.dshHome;
-        Restart = "on-failure";
-        RestartSec = 10;
+        Restart = "always";
+        # 快速恢复：dsh 上游有已知崩溃 bug（cordis-plugin-timer 的 Context
+        # disposed，rc.6 实测 13 小时触发）；rc.7 尚未修复该上游问题，缩短
+        # 重启间隔把中断窗口压到最小。always 覆盖 exit 0 退出（on-failure
+        # 不重启 exit 0，dsh 某些异常路径会以 0 退出）。
+        RestartSec = 5;
         TimeoutStopSec = 30;
         User = cfg.user;
         Group = cfg.group;
