@@ -110,6 +110,14 @@
 |------|------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T22:11:28+09:00
+
+**摘要**: fix(module): dsh 崩壊耐性 — Restart=always + RestartSec 5s。dsh 上流既知崩壊 bug（cordis-plugin-timer Context disposed、rc.6 約 13 時間稼働後発生）、rc.7/rc.8 cordis-plugin-timer 依存不変（^1.1.3）bug 残存。崩壊時 lighttpd 反代 systemd 再起動迄 503 返。Restart=always（on-failure exit 0 終了未覆）+ 再起動間隔 5s 変更、中断時間最小化。
+
+| 提交 | 説明 |
+|------|------|
+| `ed7e9d5` | fix(module): dsh Restart=always + faster RestartSec (crash resilience) |
+
 ## 2026-08-20T11:08:08+09:00
 
 **摘要**: fix(module): dsh 插件 ESM 解決 — dsh cordis-plugin-loader profile 目録（$DSH_HOME/profiles/web）解決基準（Node 24 内部 cascaded loader parentURL）、上方向 node_modules 検索。插件 dsh store 樹注入済、store profile node_modules 路徑上不在、import ERR_MODULE_NOT_FOUND 起動直後崩壊（restart 循環 108 回）。preStart 注入済 @kihara777 scope $DSH_HOME/node_modules 符号連結、Node 解決可。realpath store 樹復帰、插件参照 @deepseek-ai/* peer deps 同一樹内解決可。検証: skills + nix-shell 插件読込成功。

@@ -110,6 +110,14 @@
 |--------|-------------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T22:11:28+09:00
+
+**Summary**: fix(module): dsh crash resilience — Restart=always + RestartSec 5s. dsh upstream has a known crash bug (cordis-plugin-timer Context disposed; rc.6 hit it after ~13h), and rc.7/rc.8 keep the same cordis-plugin-timer dependency (^1.1.3), so the bug persists. On crash the lighttpd reverse proxy returns 503 until systemd restarts the unit. Switched to Restart=always (on-failure does not cover exit-0 paths) with a 5s restart delay to minimize the outage window.
+
+| Commit | Description |
+|------|------|
+| `ed7e9d5` | fix(module): dsh Restart=always + faster RestartSec (crash resilience) |
+
 ## 2026-08-20T11:08:08+09:00
 
 **Summary**: fix(module): dsh plugin ESM resolution — dsh's cordis-plugin-loader resolves from the profile directory ($DSH_HOME/profiles/web) as its base (the parentURL of Node 24's internal cascaded loader), searching node_modules upward from there. Plugins were injected into dsh's store tree, but the store is not on the profile's node_modules path, so import hit ERR_MODULE_NOT_FOUND and dsh crashed at startup (restart loop up to 108). preStart now symlinks the injected @kihara777 scope into $DSH_HOME/node_modules so Node can resolve it; after realpath back into the store tree, the @deepseek-ai/* peer deps the plugins import remain resolvable in the same tree. Verified: skills + nix-shell plugins load.

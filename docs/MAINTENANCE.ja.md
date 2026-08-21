@@ -110,6 +110,14 @@
 |----------|------|
 | `6074661` | docs(dsh): sync usage examples with module reality — insert-op wrapping for manual rows, corrected skill entry ids, module-based install + cache note |
 
+## 2026-08-21T22:11:28+09:00
+
+**概要**: fix(module): dsh クラッシュ耐性 — Restart=always + RestartSec 5s。dsh 上流に既知のクラッシュバグ（cordis-plugin-timer の Context disposed、rc.6 で約 13 時間稼働後に発生）があり、rc.7/rc.8 も cordis-plugin-timer 依存は不変（^1.1.3）のためバグは残存。クラッシュ時は lighttpd 反代が systemd の再起動まで 503 を返す。Restart=always（on-failure は exit 0 終了をカバーしない）+ 再起動間隔 5s に変更し、中断時間を最小化。
+
+| コミット | 説明 |
+|------|------|
+| `ed7e9d5` | fix(module): dsh Restart=always + faster RestartSec (crash resilience) |
+
 ## 2026-08-20T11:08:08+09:00
 
 **概要**: fix(module): dsh プラグイン ESM 解決 — dsh の cordis-plugin-loader は profile ディレクトリ（$DSH_HOME/profiles/web）を解決基準（Node 24 内部 cascaded loader の parentURL）とし、そこから上へ node_modules を検索する。プラグインは dsh の store ツリーに注入済みだが、store は profile の node_modules パス上にないため import が ERR_MODULE_NOT_FOUND となり起動直後にクラッシュ（restart ループ 108 回まで）。preStart で注入済み @kihara777 scope を $DSH_HOME/node_modules へシンボリックリンクし Node から解決可能に。realpath で store ツリーに戻るため、プラグインが参照する @deepseek-ai/* peer deps も同一ツリー内で解決できる。検証: skills + nix-shell プラグイン読込成功。
