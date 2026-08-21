@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-22T00:03:28+09:00
+
+**概要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語の dsh.md のバージョン行（rc.6 → rc.8）と「プラグイン一覧」コードブロック（rc.8 ビルドから抽出した 137 エントリの id マップ）を同期。nix flake check 通過。併せて /etc/nixos ローカル設定に `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）を宣言し新規セッションの既定に——DeepSeek API の正規モデル一覧は flash/pro/flash-vision-exp のみで "pro-max" id は存在せず、Pro+Max 推論が現状最高位。rc.8 上で nixos/maintenance 両プリセットのマウント検証通過。
+
+| コミット | 説明 |
+|----------|------|
+| `535567d` | docs(dsh): sync version and built-in plugin inventory for 0.1.0-rc.8 (137 entries) in four languages |
+
 ## 2026-08-21T21:51:26+09:00
 
 **概要**：docs: README「プラグイン」章の拡充とクレジットの DSH 情報 — ①「プラグイン」章に「Agent プリセット」表（NixOS模式/維護模式、プラグイン同梱、nixkits.dsh.presets で一度だけシード）を追加し、DSH コンポーネントをソフトウェアと分離掲載；② クレジットの「小爪」エントリに DSH エコシステム情報（dsh-nixos-shell プラグインと 2 つの Agent プリセット）を追記；③ AGENTS.md のプラグイン独立掲載規則を「dsh-* コンポーネント（プラグインと Agent プリセット）」に拡大。4 言語同期。

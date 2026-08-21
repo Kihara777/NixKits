@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-22T00:03:28+09:00
+
+**Summary**: docs(dsh): 0.1.0-rc.8 documentation sync — the four-language dsh.md version rows (rc.6 → rc.8) and the "Plugin inventory" code blocks (137 entry-id mappings extracted from the rc.8 build) are synced; nix flake check passes. Also: the /etc/nixos local config now declares `settings.agent-default-model` (deepseek-v4-pro + reasoningEffort=max) as the new-session default — the authoritative DeepSeek API model list is only flash/pro/flash-vision-exp with no "pro-max" id, so Pro + Max reasoning is the top tier; both the nixos and maintenance presets mount-validate on rc.8.
+
+| Commit | Description |
+|--------|-------------|
+| `535567d` | docs(dsh): sync version and built-in plugin inventory for 0.1.0-rc.8 (137 entries) in four languages |
+
 ## 2026-08-21T21:51:26+09:00
 
 **Summary**: docs: README plugins-section expansion and DSH credits info — ① the "Plugins" section gains an "Agent presets" table (NixOS模式/维护模式, shipped with the plugin, seeded once via nixkits.dsh.presets), keeping DSH components separate from software; ② the credits "小爪" entry now carries DSH ecosystem info (the dsh-nixos-shell plugin and the two agent presets); ③ the AGENTS.md plugin-listing rule is widened to "dsh-* components (plugins and agent presets)". All four languages synced.

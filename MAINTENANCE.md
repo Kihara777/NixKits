@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-22T00:03:28+09:00
+
+**摘要**：docs(dsh): 0.1.0-rc.8 文档同步 — 四语 dsh.md 的版本行（rc.6 → rc.8）与「插件清单」代码块（137 条 entry id 映射，从 rc.8 构建产物提取）同步完成；nix flake check 通过。另：/etc/nixos 本地配置新增 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）声明化新会话默认——DeepSeek API 权威模型列表仅 flash/pro/flash-vision-exp，无 "pro-max" id，Pro+Max 思考即当前最高档；rc.8 上 nixos/maintenance 两预设挂载校验通过。
+
+| 提交 | 说明 |
+|------|------|
+| `535567d` | docs(dsh): sync version and built-in plugin inventory for 0.1.0-rc.8 (137 entries) in four languages |
+
 ## 2026-08-21T21:51:26+09:00
 
 **摘要**：docs: README「插件」章节扩充与作者 DSH 信息 — ①「插件」章节在 dsh-nixos-shell 之外补充「Agent 预设」表（NixOS模式/维护模式，随插件分发、经 nixkits.dsh.presets seed-once），DSH 组件与软件独立展示；② 作者章节「小爪」条目加入 DSH 生态信息（dsh-nixos-shell 插件与两个 Agent 预设）；③ AGENTS.md 的插件独立展示规则拓宽为「dsh-* 组件（插件与 Agent 预设）」。四语同步。
