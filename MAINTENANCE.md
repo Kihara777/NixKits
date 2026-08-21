@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-21T21:51:26+09:00
+
+**摘要**：docs: README「插件」章节扩充与作者 DSH 信息 — ①「插件」章节在 dsh-nixos-shell 之外补充「Agent 预设」表（NixOS模式/维护模式，随插件分发、经 nixkits.dsh.presets seed-once），DSH 组件与软件独立展示；② 作者章节「小爪」条目加入 DSH 生态信息（dsh-nixos-shell 插件与两个 Agent 预设）；③ AGENTS.md 的插件独立展示规则拓宽为「dsh-* 组件（插件与 Agent 预设）」。四语同步。
+
+| 提交 | 说明 |
+|------|------|
+| `4277b51` | docs: list DSH agent presets in the README plugins section and add DSH ecosystem info to the credits paw entry |
+
 ## 2026-08-21T00:01:46+09:00
 
 **摘要**：fix(dsh-nixos-shell): 工具描述明示 tools 白名单 — 验收非阻塞发现：固定 POSIX 工具白名单未在工具描述中明示。改为白名单从 TOOL_PACKAGES 映射动态生成（27 个名字，含 python 别名），写入 `tools` 参数描述，工具描述指向参数；四语文档同步完整列表。验证：27 项全在参数描述中、工具描述含指向、语法检查与 nix flake check 通过。

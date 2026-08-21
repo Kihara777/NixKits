@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-21T21:51:26+09:00
+
+**概要**：docs: README「プラグイン」章の拡充とクレジットの DSH 情報 — ①「プラグイン」章に「Agent プリセット」表（NixOS模式/維護模式、プラグイン同梱、nixkits.dsh.presets で一度だけシード）を追加し、DSH コンポーネントをソフトウェアと分離掲載；② クレジットの「小爪」エントリに DSH エコシステム情報（dsh-nixos-shell プラグインと 2 つの Agent プリセット）を追記；③ AGENTS.md のプラグイン独立掲載規則を「dsh-* コンポーネント（プラグインと Agent プリセット）」に拡大。4 言語同期。
+
+| コミット | 説明 |
+|----------|------|
+| `4277b51` | docs: list DSH agent presets in the README plugins section and add DSH ecosystem info to the credits paw entry |
+
 ## 2026-08-21T00:01:46+09:00
 
 **概要**：fix(dsh-nixos-shell): ツール説明に tools ホワイトリストを明示 — 受入の非ブロッキング指摘：固定 POSIX ツールのホワイトリストがツール説明に記載されていなかった。ホワイトリストを TOOL_PACKAGES マップから動的生成（27 名、python エイリアス含む）して `tools` パラメータ説明に記載し、ツール説明からパラメータを参照。4 言語ドキュメントに完全なリストを同期。検証：27 名すべてがパラメータ説明に存在、ツール説明に参照あり、構文検査と nix flake check 通過。

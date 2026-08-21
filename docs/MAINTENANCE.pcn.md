@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-21T21:51:26+09:00
+
+**摘要**：docs: README「插件」章拡充与作者 DSH 情報 — ①「插件」章「Agent 預設」表（NixOS模式/維護模式、插件同梱、nixkits.dsh.presets 一度限 seed）追加、DSH 组件与軟体分離掲載；② 作者「小爪」条目 DSH 生態情報（dsh-nixos-shell 插件与 2 Agent 預設）追記；③ AGENTS.md 插件独立掲載規則「dsh-* 组件（插件与 Agent 預設）」拡大。4 言語同期。
+
+| 提交 | 説明 |
+|------|------|
+| `4277b51` | docs: list DSH agent presets in the README plugins section and add DSH ecosystem info to the credits paw entry |
+
 ## 2026-08-21T00:01:46+09:00
 
 **摘要**：fix(dsh-nixos-shell): 工具説明明示 tools 白名單 — 受入非阻塞指摘：固定 POSIX 工具白名單工具説明未記載。白名單 TOOL_PACKAGES 映射自動生成（27 名、python 別名含）`tools` 參數説明記載、工具説明自參數参照。4 言語文書完全列表同期。検証：27 名全參數説明存在、工具説明参照有、構文検査与 nix flake check 通過。
