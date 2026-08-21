@@ -33,11 +33,18 @@ inputs.nixkits.url = "~/NixKits";
 
 ## プラグイン
 
-DeepSeek Harness（DSH）プラグインはソフトウェアと分けて掲載する（マウント方法は [docs/ja/dsh.md](ja/dsh.md)）：
+DeepSeek Harness（DSH）コンポーネントはソフトウェアと分けて掲載する（マウント方法は [docs/ja/dsh.md](ja/dsh.md)）：
 
 | プラグイン | 説明 | ドキュメント |
 |------------|------|--------------|
 | dsh-nixos-shell | NixOS 操作統合（シェル実行、ツールブートストラップ、sudo デーモンルーティング、NixOS 診断） | [docs/ja/dsh-nixos-shell.md](ja/dsh-nixos-shell.md) |
+
+**Agent プリセット**（dsh-nixos-shell に同梱、`nixkits.dsh.presets` で DSH へ一度だけシード）：
+
+| プリセット | 説明 |
+|------------|------|
+| NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は全拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発ガイドをロード |
+| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`translate-*` スキルとリポジトリ保守ワークフローを注入 |
 
 ## 開発
 
@@ -91,7 +98,7 @@ AI コーディングアシスタント向け：
 ## クレジット
 
 - **狐莉 (キツのり)** — 作成と保守
-- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4 Pro (Max)
+- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) エコシステム（dsh-nixos-shell プラグインと NixOS模式/維護模式 Agent プリセット）
 - **小小爪 (キツのめ)** — ハードウェア推論インフラ feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## ライセンス

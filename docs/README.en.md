@@ -33,11 +33,18 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 
 ## Plugins
 
-DeepSeek Harness (DSH) plugins are listed separately from software (mounting instructions in [docs/en/dsh.md](en/dsh.md)):
+DeepSeek Harness (DSH) components are listed separately from software (mounting instructions in [docs/en/dsh.md](en/dsh.md)):
 
 | Plugin | Description | Docs |
 |--------|-------------|------|
 | dsh-nixos-shell | Consolidated NixOS operations (shell execution, tool bootstrap, sudo daemon routing, NixOS diagnostics) | [docs/en/dsh-nixos-shell.md](en/dsh-nixos-shell.md) |
+
+**Agent presets** (shipped with dsh-nixos-shell, seeded once into DSH via `nixkits.dsh.presets`):
+
+| Preset | Description |
+|--------|-------------|
+| NixOS模式 (id `nixos`) | Verifies a NixOS host at init (refuses everything otherwise); loads `nixos_shell`/`nixos_cli` plus the NixOS development guidance |
+| 维护模式 (id `maintenance`) | Based on NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`translate-*` skills plus the repo-maintenance workflow |
 
 ## Development
 
@@ -91,7 +98,7 @@ For AI coding assistants:
 ## Credits
 
 - **狐莉 (キツのり)** — creator and maintainer
-- **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Pro (Max)
+- **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) ecosystem (dsh-nixos-shell plugin and NixOS-mode/maintenance-mode agent presets)
 - **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## License

@@ -33,11 +33,18 @@ inputs.nixkits.url = "~/NixKits";
 
 ## 插件
 
-DeepSeek Harness（DSH）插件与軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
+DeepSeek Harness（DSH）组件与軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
 
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
+
+**Agent 預設**（dsh-nixos-shell 同梱、`nixkits.dsh.presets` 一度限 DSH seed）：
+
+| 預設 | 説明 |
+|------|------|
+| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 全拒否）；`nixos_shell`/`nixos_cli` 与 NixOS 開発指南負載 |
+| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`translate-*` 技能与倉庫維護工作流注入 |
 
 ## 開発
 
@@ -91,7 +98,7 @@ AI 符号化代理向：
 ## 銘記
 
 - **狐莉 (Kitsunori)** — 作成及保守
-- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Pro (Max)
+- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) 生態（dsh-nixos-shell 插件与 NixOS模式/維護模式 Agent 預設）
 - **小小爪 (Kitsunome)** — 硬体推論基盤 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## 許諾
