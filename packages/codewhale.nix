@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.9.8";
+  version = "0.9.11";
 
   # Prebuilt binaries from GitHub Releases — x86_64 and aarch64 only.
   # riscv64 is built from source (see codewhale-src.nix).
@@ -19,21 +19,23 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   cliHashes = {
-    x64     = "sha256-86A13kOLWQTp8DLTMJkJh7vRmEOuHLXB432LG3guweo=";
-    arm64   = "sha256-r08MkXpJBWxZZa3cdDacv9b5zSdhl/Ao9v2TAUJcXbQ=";
+    x64     = "sha256-wClpVW5R4Tivo/6cl6E1mHjNPRmGsc4fX6lsk8aQlBY=";
+    arm64   = "sha256-YKFFUemUdHpPTdt3m5whxtdao+f9+EUVVDdIRQqkjxg=";
   };
 
   tuiHashes = {
-    x64     = "sha256-86A13kOLWQTp8DLTMJkJh7vRmEOuHLXB432LG3guweo=";
-    arm64   = "sha256-r08MkXpJBWxZZa3cdDacv9b5zSdhl/Ao9v2TAUJcXbQ=";
+    x64     = "sha256-wClpVW5R4Tivo/6cl6E1mHjNPRmGsc4fX6lsk8aQlBY=";
+    arm64   = "sha256-YKFFUemUdHpPTdt3m5whxtdao+f9+EUVVDdIRQqkjxg=";
   };
 
   codewhale-cli = fetchurl {
     url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-${archSuffix}";
     hash = cliHashes.${archSuffix};
   };
+  # The TUI binary was renamed `codewhale-tui` → `codew` upstream in v0.9.9
+  # (release asset `codew-linux-*`; same compiled runtime as the main CLI).
   codewhale-tui = fetchurl {
-    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-tui-linux-${archSuffix}";
+    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codew-linux-${archSuffix}";
     hash = tuiHashes.${archSuffix};
   };
 
@@ -74,7 +76,7 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -Dm755 ${codewhale-cli} $out/bin/.codewhale-wrapped
-    install -Dm755 ${codewhale-tui} $out/bin/.codewhale-tui-wrapped
+    install -Dm755 ${codewhale-tui} $out/bin/.codew-wrapped
   '' + lib.optionalString allowSudo ''
     # ptrace-based sudo intercept: launch codewhale through the ptrace wrapper
     # which intercepts prctl(PR_SET_NO_NEW_PRIVS) and prctl(PR_SET_SECCOMP)
@@ -86,16 +88,18 @@ exec ${sudoPtrace}/bin/codewhale-sudo-ptrace ${placeholder "out"}/bin/.codewhale
 WRAPEOF
     chmod +x $out/bin/codewhale
 
-    cat > $out/bin/codewhale-tui << WRAPEOF
+    cat > $out/bin/codew << WRAPEOF
 #!${stdenv.shell}
 export CODEWHALE_ALLOW_SUDO=1
-exec ${sudoPtrace}/bin/codewhale-sudo-ptrace ${placeholder "out"}/bin/.codewhale-tui-wrapped "\$@"
+exec ${sudoPtrace}/bin/codewhale-sudo-ptrace ${placeholder "out"}/bin/.codew-wrapped "\$@"
 WRAPEOF
-    chmod +x $out/bin/codewhale-tui
+    chmod +x $out/bin/codew
   '' + lib.optionalString (!allowSudo) ''
     mv $out/bin/.codewhale-wrapped $out/bin/codewhale
-    mv $out/bin/.codewhale-tui-wrapped $out/bin/codewhale-tui
+    mv $out/bin/.codew-wrapped $out/bin/codew
   '' + ''
+    # Backward-compat alias for the pre-0.9.9 binary name (codewhale-tui).
+    ln -s codew $out/bin/codewhale-tui
     runHook postInstall
   '';
 

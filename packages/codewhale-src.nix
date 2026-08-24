@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.9.8";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "Hmbown";
     repo = "CodeWhale";
     rev = "v${version}";
-    hash = "sha256-/j43zxaC7rOu4M2Sk9khI/Bb2drs9n/WghhJiKqQDyU=";
+    hash = "sha256-UOSqa7mS083QsYmjAB9XcMgVzTAZH4NCkMAGNF5pPMU=";
   };
 
   # Cargo.lock is in workspace root
@@ -94,6 +94,10 @@ rustPlatform.buildRustPackage rec {
     # with the wrong toolchain.
     cargo build --release --target ${stdenv.hostPlatform.rust.rustcTarget} -p codewhale-tui
     install -Dm755 target/${stdenv.hostPlatform.rust.rustcTarget}/release/codewhale-tui -t $out/bin
+    # Upstream renamed the TUI command `codewhale-tui` → `codew` in v0.9.9;
+    # install under the new name and keep a backward-compat alias.
+    mv $out/bin/codewhale-tui $out/bin/codew
+    ln -s codew $out/bin/codewhale-tui
   '';
 
   meta = {

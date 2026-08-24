@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md)  | 偽中国語
 
@@ -12,7 +12,7 @@ DeepSeek V4 専用端末符号化代理。
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.9.8 |
+| 版 | 0.9.11 |
 | 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 種別 | 構築済二進（GitHub Releases） |
 
@@ -35,6 +35,7 @@ nix run github:Kihara777/NixKits#codewhale
 
 ```bash
 codewhale                              # 対話型 TUI
+codew                                  # TUI 入口（v0.9.9 起上流改名、旧 codewhale-tui）
 codewhale "explain this function"      # 単発指示
 codewhale --model auto "fix this bug"  # 自動模型選択
 codewhale --yolo                       # 自動承認模式
@@ -46,7 +47,7 @@ codewhale auth set --provider deepseek # API 鍵保存
 
 ## sudo 有効化
 
-codewhale v0.9.8 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale-sudo.pcn.md) 参照。
+codewhale v0.9.11 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale-sudo.pcn.md) 参照。
 
 ## 既知問題
 
@@ -55,12 +56,4 @@ codewhale v0.9.8 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale
 ## 緩衝
 
 `cachix use nixkits`（flake `nixConfig` 以自動宣言、flake input 使用時自動案内）。
-
-## sudo 有効化
-
-codewhale v0.9.8 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale-sudo.pcn.md) 参照。
-
-## 既知問題
-
-> ⚠️ **v0.9.8 sudo 不能**: `no_new_privs` 標幟完全遮断 sudo（非暗号問題、Wheel NOPASSWD 無効）。上流報告済 — 修正待。
 

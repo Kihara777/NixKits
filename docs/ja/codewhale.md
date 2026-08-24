@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.8)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.11)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/codewhale.md) | [English](../en/codewhale.md) | 日本語  | [偽中国語](../pcn/codewhale.md)
 
@@ -12,7 +12,7 @@ DeepSeek V4 専用のターミナルコーディングエージェント。
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 0.9.8 |
+| バージョン | 0.9.11 |
 | アップストリーム | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | タイプ | ビルド済みバイナリ（GitHub Releases） |
 
@@ -35,6 +35,7 @@ nix run github:Kihara777/NixKits#codewhale
 
 ```bash
 codewhale                              # 対話型 TUI
+codew                                  # TUI 入口（v0.9.9 から上流で改名、旧 codewhale-tui）
 codewhale "explain this function"      # ワンショットプロンプト
 codewhale --model auto "fix this bug"  # 自動モデル選択
 codewhale --yolo                       # 自動承認モード
@@ -46,7 +47,7 @@ codewhale auth set --provider deepseek # API キー保存
 
 ## sudo の有効化
 
-codewhale v0.9.8 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
+codewhale v0.9.11 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
 
 ## 既知の問題
 
@@ -55,12 +56,4 @@ codewhale v0.9.8 はデフォルトで `sudo` をブロックします。 [codew
 ## キャッシュ
 
 `cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。
-
-## sudo の有効化
-
-codewhale v0.9.8 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
-
-## 既知の問題
-
-> ⚠️ **v0.9.8 sudo 使用不可**: `no_new_privs` フラグにより sudo が完全にブロック（パスワード問題ではなく、Wheel NOPASSWD でも回避不可）。上流に報告済み — 修正待ち。
 
