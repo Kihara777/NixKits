@@ -2,6 +2,24 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-24T14:27:47+09:00
+
+**摘要**：codewhale 0.9.11 — 上游 v0.9.9 起 TUI 资产更名 codewhale-tui → codew，包内安装 codew 并保留兼容别名，riscv64 源码构建同步 Cargo.lock（687→690 条目，rquickjs-sys 0.12.2 不变、bindings 补丁继续有效）；mcp-searxng 2.0.0 — 大版本升级（要求 Node.js ≥ 22，nixpkgs 默认满足，CLI 入口不变）；dsh 0.1.1-rc.2 — vendored lock 重新生成（560 个 resolved 条目），randomUUID 回退补丁目标路径不变，内置插件清单与 rc.8 完全一致（137 条）；dsh-nixos-shell 依赖 dsh-tools → 0.1.1-rc.2 对齐新生态。四语文档同步，nix flake check 通过。
+
+| 提交 | 说明 |
+|------|------|
+| `17bf588` | chore(pkgs): bump codewhale 0.9.8 → 0.9.11 |
+| `065d261` | chore(pkgs): bump mcp-searxng 1.15.0 → 2.0.0 |
+| `c0c8e3a` | chore(pkgs): bump dsh 0.1.0-rc.8 → 0.1.1-rc.2 |
+| `bec4c3d` | chore(pkgs): dsh-nixos-shell dep dsh-tools 0.1.0-rc.7 → 0.1.1-rc.2 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.9.8 | 0.9.11 |
+| mcp-searxng | 1.15.0 | 2.0.0 |
+| dsh | 0.1.0-rc.8 | 0.1.1-rc.2 |
+| dsh-nixos-shell | dsh-tools 0.1.0-rc.7 | dsh-tools 0.1.1-rc.2 |
+
 ## 2026-08-22T00:03:28+09:00
 
 **摘要**：docs(dsh): 0.1.0-rc.8 文档同步 — 四语 dsh.md 的版本行（rc.6 → rc.8）与「插件清单」代码块（137 条 entry id 映射，从 rc.8 构建产物提取）同步完成；nix flake check 通过。另：/etc/nixos 本地配置新增 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）声明化新会话默认——DeepSeek API 权威模型列表仅 flash/pro/flash-vision-exp，无 "pro-max" id，Pro+Max 思考即当前最高档；rc.8 上 nixos/maintenance 两预设挂载校验通过。

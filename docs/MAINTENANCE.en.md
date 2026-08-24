@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-24T14:27:47+09:00
+
+**Summary**: codewhale 0.9.11 — upstream renamed the TUI asset codewhale-tui → codew from v0.9.9; the package installs codew and keeps a compat alias; the riscv64 source build synced Cargo.lock (687→690 entries, rquickjs-sys 0.12.2 unchanged, bindings patch still valid); mcp-searxng 2.0.0 — major upgrade (requires Node.js ≥ 22, satisfied by the nixpkgs default, CLI entry unchanged); dsh 0.1.1-rc.2 — vendored lock regenerated (560 resolved entries), randomUUID fallback patch target paths unchanged, built-in plugin inventory identical to rc.8 (137 entries); dsh-nixos-shell dependency dsh-tools → 0.1.1-rc.2 to align with the new ecosystem. Four-language docs synced; nix flake check passes.
+
+| Commit | Description |
+|------|------|
+| `17bf588` | chore(pkgs): bump codewhale 0.9.8 → 0.9.11 |
+| `065d261` | chore(pkgs): bump mcp-searxng 1.15.0 → 2.0.0 |
+| `c0c8e3a` | chore(pkgs): bump dsh 0.1.0-rc.8 → 0.1.1-rc.2 |
+| `bec4c3d` | chore(pkgs): dsh-nixos-shell dep dsh-tools 0.1.0-rc.7 → 0.1.1-rc.2 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale | 0.9.8 | 0.9.11 |
+| mcp-searxng | 1.15.0 | 2.0.0 |
+| dsh | 0.1.0-rc.8 | 0.1.1-rc.2 |
+| dsh-nixos-shell | dsh-tools 0.1.0-rc.7 | dsh-tools 0.1.1-rc.2 |
+
 ## 2026-08-22T00:03:28+09:00
 
 **Summary**: docs(dsh): 0.1.0-rc.8 documentation sync — the four-language dsh.md version rows (rc.6 → rc.8) and the "Plugin inventory" code blocks (137 entry-id mappings extracted from the rc.8 build) are synced; nix flake check passes. Also: the /etc/nixos local config now declares `settings.agent-default-model` (deepseek-v4-pro + reasoningEffort=max) as the new-session default — the authoritative DeepSeek API model list is only flash/pro/flash-vision-exp with no "pro-max" id, so Pro + Max reasoning is the top tier; both the nixos and maintenance presets mount-validate on rc.8.
