@@ -10,7 +10,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 |------|-------|
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| Version | `0.1.0-rc.8` |
+| Version | `0.1.1-rc.2` |
 | License | MIT |
 | Command | `dsh` |
 
@@ -133,7 +133,7 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 
 ## Plugin inventory
 
-Built-in plugin entry ids for dsh 0.1.0-rc.8 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
 ```text
   agent -> @deepseek-ai/dsh-agent

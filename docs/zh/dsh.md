@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.1.0-rc.8` |
+| 版本 | `0.1.1-rc.2` |
 | 许可 | MIT |
 | 命令 | `dsh` |
 
@@ -133,7 +133,7 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 
 ## 插件清单
 
-dsh 0.1.0-rc.8 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
+dsh 0.1.1-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
 
 ```text
   agent -> @deepseek-ai/dsh-agent

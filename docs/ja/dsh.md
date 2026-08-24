@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— Everything is a Plugin（すべてがプラグ�
 |------|-----|
 | タイプ | Node.js アプリ（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| バージョン | `0.1.0-rc.8` |
+| バージョン | `0.1.1-rc.2` |
 | ライセンス | MIT |
 | コマンド | `dsh` |
 
@@ -133,7 +133,7 @@ dsh サンドボックス内では `sudo` の setuid が失われ、エージェ
 
 ## プラグイン一覧
 
-dsh 0.1.0-rc.8 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled` の有効値、`id -> パッケージ`）：
+dsh 0.1.1-rc.2 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled` の有効値、`id -> パッケージ`）：
 
 ```text
   agent -> @deepseek-ai/dsh-agent
