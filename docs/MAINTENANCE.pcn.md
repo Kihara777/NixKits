@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-24T15:44:06+09:00
+
+**摘要**: fix(overlay): llama-cpp-rocm v0.2.0 語義版 — llama.cpp 上流 release tag build number（b10549）→ 語義版（v0.2.0）切替。旧 overlay b 前置詞只除去 v0.2.0 得、nixpkgs 它 LLAMA_BUILD_NUMBER 渡、`int LLAMA_BUILD_NUMBER = v0.2.0;` 生成 C++ 編譯失敗（too many decimal points）、系統 rebuild dsh 更新阻塞。現在 v/b 前置詞両方除去、-DLLAMA_BUILD_NUMBER=0 追記。検証: llama-cpp-0.2.0 構築成功、llama-cpp.service 稼働。
+
+| 提交 | 説明 |
+|------|------|
+| `1a1b9d1` | fix(overlay): llama-cpp-rocm — handle v0.2.0 semantic version tag |
+
+## 2026-08-24T15:20:16+09:00
+
+**摘要**: fix(pkgs): dsh 崩壊修正 — cordis-plugin-timer（上流最新 1.1.3 未修）Context dispose 時 pending ctx.timeout() promise "Context has been disposed" reject、未 catch unhandled rejection 化。dsh-app-boot installFailLoud process.exit(1) 変、実行中偶発崩壊（rc.6/rc.7/rc.8/0.1.1-rc.2 全影響、8/22 00:05 rc.8 38 分発生）。installFailLoud 此 error 只無視、他 fatal rejection 従来終了。検証: patch 0.1.1-rc.2 出力適用（dsh-app-boot/lib/index.js:1047）。
+
+| 提交 | 説明 |
+|------|------|
+| `6e862b6` | fix(pkgs): dsh — ignore Context-disposed dispose race in installFailLoud |
+
 ## 2026-08-24T14:27:47+09:00
 
 **摘要**：codewhale 0.9.11 — 上流 v0.9.9 起 TUI 資産名 codewhale-tui → codew 改名、包内 codew 導入互換別名維持、riscv64 源構築 Cargo.lock 同期（687→690 条目、rquickjs-sys 0.12.2 不変、bindings 補丁有効継続）；mcp-searxng 2.0.0 — 大版本升級（Node.js ≥ 22 要求、nixpkgs 既定充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved 条目）、randomUUID 回退補丁対象路径不変、内建插件清單 rc.8 完全一致（137 件）；dsh-nixos-shell 依存 dsh-tools → 0.1.1-rc.2 新生態整合。四言語文書同期、nix flake check 通過。

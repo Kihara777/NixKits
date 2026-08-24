@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-24T15:44:06+09:00
+
+**Summary**: fix(overlay): llama-cpp-rocm v0.2.0 semantic version — llama.cpp upstream switched release tags from build numbers (b10549) to semantic versions (v0.2.0). The old overlay only stripped the b prefix, yielding v0.2.0, which nixpkgs then passed into LLAMA_BUILD_NUMBER, producing `int LLAMA_BUILD_NUMBER = v0.2.0;` and a C++ compile failure (too many decimal points) that blocked system rebuilds and the dsh upgrade. It now strips both v/b prefixes and appends -DLLAMA_BUILD_NUMBER=0. Verified: llama-cpp-0.2.0 builds and llama-cpp.service runs.
+
+| Commit | Description |
+|------|------|
+| `1a1b9d1` | fix(overlay): llama-cpp-rocm — handle v0.2.0 semantic version tag |
+
+## 2026-08-24T15:20:16+09:00
+
+**Summary**: fix(pkgs): dsh crash fix — cordis-plugin-timer (latest upstream 1.1.3, unfixed) rejects a pending ctx.timeout() promise with "Context has been disposed" during Context dispose; when uncached it becomes an unhandled rejection that dsh-app-boot's installFailLoud turns into process.exit(1), causing sporadic runtime crashes (rc.6/rc.7/rc.8/0.1.1-rc.2 all affected; rc.8 hit it after only 38min on 8/22 00:05). installFailLoud is patched to ignore only this error; other fatal rejections still exit. Verified: patch lands in the 0.1.1-rc.2 output (dsh-app-boot/lib/index.js:1047).
+
+| Commit | Description |
+|------|------|
+| `6e862b6` | fix(pkgs): dsh — ignore Context-disposed dispose race in installFailLoud |
+
 ## 2026-08-24T14:27:47+09:00
 
 **Summary**: codewhale 0.9.11 — upstream renamed the TUI asset codewhale-tui → codew from v0.9.9; the package installs codew and keeps a compat alias; the riscv64 source build synced Cargo.lock (687→690 entries, rquickjs-sys 0.12.2 unchanged, bindings patch still valid); mcp-searxng 2.0.0 — major upgrade (requires Node.js ≥ 22, satisfied by the nixpkgs default, CLI entry unchanged); dsh 0.1.1-rc.2 — vendored lock regenerated (560 resolved entries), randomUUID fallback patch target paths unchanged, built-in plugin inventory identical to rc.8 (137 entries); dsh-nixos-shell dependency dsh-tools → 0.1.1-rc.2 to align with the new ecosystem. Four-language docs synced; nix flake check passes.

@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-24T15:44:06+09:00
+
+**摘要**：fix(overlay): llama-cpp-rocm v0.2.0 语义化版本 — llama.cpp 上游 release tag 从 build number（b10549）切换为语义化版本（v0.2.0），旧 overlay 只剥离 b 前缀得到 v0.2.0，nixpkgs 又把它传入 LLAMA_BUILD_NUMBER，生成 `int LLAMA_BUILD_NUMBER = v0.2.0;` 导致 C++ 编译失败（too many decimal points），阻塞系统 rebuild 与 dsh 升级。现在同时剥离 v/b 前缀并追加 -DLLAMA_BUILD_NUMBER=0 覆盖。验证：llama-cpp-0.2.0 构建成功、llama-cpp.service 正常运行。
+
+| 提交 | 说明 |
+|------|------|
+| `1a1b9d1` | fix(overlay): llama-cpp-rocm — handle v0.2.0 semantic version tag |
+
+## 2026-08-24T15:20:16+09:00
+
+**摘要**：fix(pkgs): dsh 崩溃修复 — cordis-plugin-timer（上游最新 1.1.3 未修）在 Context dispose 时对 pending 的 ctx.timeout() promise reject "Context has been disposed"，未 catch 时成为 unhandled rejection，被 dsh-app-boot 的 installFailLoud 捕获后 process.exit(1)，表现为运行中偶发崩溃（rc.6/rc.7/rc.8/0.1.1-rc.2 均受影响，8/22 00:05 rc.8 实测 38 分钟即触发）。patch installFailLoud 仅忽略该特定错误，其余 fatal rejection 仍照常退出。验证：patch 落入 0.1.1-rc.2 产物（dsh-app-boot/lib/index.js:1047），服务升级后正常。
+
+| 提交 | 说明 |
+|------|------|
+| `6e862b6` | fix(pkgs): dsh — ignore Context-disposed dispose race in installFailLoud |
+
 ## 2026-08-24T14:27:47+09:00
 
 **摘要**：codewhale 0.9.11 — 上游 v0.9.9 起 TUI 资产更名 codewhale-tui → codew，包内安装 codew 并保留兼容别名，riscv64 源码构建同步 Cargo.lock（687→690 条目，rquickjs-sys 0.12.2 不变、bindings 补丁继续有效）；mcp-searxng 2.0.0 — 大版本升级（要求 Node.js ≥ 22，nixpkgs 默认满足，CLI 入口不变）；dsh 0.1.1-rc.2 — vendored lock 重新生成（560 个 resolved 条目），randomUUID 回退补丁目标路径不变，内置插件清单与 rc.8 完全一致（137 条）；dsh-nixos-shell 依赖 dsh-tools → 0.1.1-rc.2 对齐新生态。四语文档同步，nix flake check 通过。
