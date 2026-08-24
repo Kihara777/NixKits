@@ -50,6 +50,14 @@ buildNpmPackage (finalAttrs: {
       sed -i 's#crypto\.randomUUID#__dshUuid#g' "$f"
       sed -i "/factory: (require) => {/a\\$UUID_FALLBACK" "$f"
     done
+
+    # cordis-plugin-timer 的已知 bug（上游最新 1.1.3 未修）：Context dispose
+    # 时 cleanup 会 reject pending 的 ctx.timeout() promise（"Context has been
+    # disposed"），调用者未 catch 时成为 unhandled rejection，被 dsh-app-boot
+    # 的 installFailLoud 捕获后 process.exit(1)。这是正常的 dispose 竞态，
+    # 不应终止整个服务 —— 忽略该特定错误，其余 fatal rejection 仍照常退出。
+    sed -i '/if (assembledActivationRejections.has(err)) return;/a\\t\tif (err instanceof Error \&\& err.message === "Context has been disposed") return;' \
+      "$out/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js"
   '';
 
   meta = {
