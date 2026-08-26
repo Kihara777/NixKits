@@ -52,9 +52,13 @@ nixos-shell プラグイン
 
 sudo デーモンは systemd ソケット活性化の root 実行器（`nixkits-sudo-exec.js`、プラグインに同梱）：接続ごとに 1 リクエストの JSON プロトコル（v3：クライアントはリクエスト 1 行を書き接続を開いたまま保持、デーモンは先頭行で実行を開始し完了時に応答を返して終了。リクエスト後の入力行はすべて明示的取消 — 子プロセスの**プロセスグループ全体**へ SIGTERM、猶予後に SIGKILL。シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になるため — これが `job_kill` の帯内取消機構）。**断絶は取消ではない**：rebuild の活性化段階で dsh サービスが再起動して接続が切れるが、断絶＝取消として扱うと switch が活性化の途中で殺され部分活性化状態が残る。よって対向消失時は子プロセスが分離状態で完了まで走り続ける（デーモン側上限 6 時間、rebuild コマンドは自動でこの上限を使用）。アクセス制御はソケットファイル（dsh サービスユーザー所有、`0600`）。PATH マージ順は継承 env が先、明示的 NixOS profile PATH が後（テンプレートユニットの systemd 既定 PATH は基本 store パスのみ）。
 
-### rebuild 自動分離
+### rebuild / dsh 再起動の自動分離
 
-`nixos_shell` は `nixos-rebuild` / `nixos apply` コマンド（`sudo: true`）を認識し、`systemd-run --collect` の一時ユニット（独立 cgroup）で実行するよう自動ラップする。呼び出しは即座にユニット名を返す（結果の `detachedUnit`）。理由：活性化段階で switch-to-configuration は dsh.service を再起動し、**かつ** nixkits-sudo.socket を stop/start する（テンプレート変更 → socket 再起動で新規接続が新デーモンを使うため）。rebuild がデーモン経由で実行されていると、socket 停止が @ インスタンスとその子（switch プロセス自身を含む）を同じ cgroup ごと殺し、活性化は途中で死に socket は自動復旧できない。分離実行なら活性化が完走し socket も自動復旧する。進捗は `nixos_cli op=journal unit=nixkits-rebuild-<id>`、結果は `nixos_cli op=generations` で確認。
+`nixos_shell` は `nixos-rebuild` / `nixos apply` / `systemctl restart dsh` コマンド（`sudo: true`）を認識し、`systemd-run --collect` の一時ユニット（独立 cgroup）で実行するよう自動ラップする。呼び出しは即座にユニット名を返す（結果の `detachedUnit`）。理由：これらをデーモン経由で実行すると、コマンドが引き起こす dsh 再起動や socket 停止が呼び出しチェーン自身（@ インスタンスと子プロセスは同一 cgroup、または harness プロセスが本呼び出しの宿主）を殺し、活性化途中で死に socket が自動復旧できず、呼び出し結果も失われる。分離実行ならプロセスは完走する。進捗は `nixos_cli op=journal unit=nixkits-rebuild-<id>`、結果は `nixos_cli op=generations` で確認。
+
+分離呼び出しの結果は**ビルドの成否を主張しない**：`detached: true` + `detachedUnit` + `note` を返し `exitCode` は `null`（systemd-run は引き継ぎのみ——引き継ぎ成功はビルド成功ではない）。実際の結果は必ず journal/generations で検証する。
+
+モジュール側は「安定マウントポイント」（dsh.md 参照）でこれに連携する：プラグインパッケージの更新は dsh/sudo のユニット内容をもはや変えないため、通常の rebuild は何も再起動しない。プラグイン更新は明示的な `systemctl restart dsh`（同じく自動分離）で反映し、sudo 実行器は接続ごとに生成されるため新規接続は自動的に新スクリプトを使用する。
 
 sudo ソケットは apply 時ではなく**呼び出し時**に検証する：rebuild の活性化中は socket が一時的に消えるため、その窓で起動したセッションが `sudo` パラメータを恒久的に失うことはない——socket 復旧後はそのまま使える。
 

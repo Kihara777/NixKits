@@ -52,9 +52,13 @@ nixos-shell 插件
 
 sudo 守护 = systemd 套接字激活的 root 执行器（`nixkits-sudo-exec.js`，随插件包发布）：单请求单连接 JSON 协议（v3：客户端写入一行请求后保持连接打开，守护读首行即执行，完成回写响应并退出；请求行之后的任何输入行 = 显式取消，守护对子进程**整组** SIGTERM、宽限后 SIGKILL——只杀 shell 包装进程会留下继承管道写端的孤儿孙进程并卡死守护——这是 `job_kill` 的带内取消机制）。**连接断开不是取消**：rebuild 的激活阶段重启 dsh 服务会断开连接，若按断开取消则 switch 在激活中途被杀、留下部分激活状态，因此对端消失时子进程以分离方式继续运行到完成（守护侧超时上限 6 小时，rebuild 命令自动使用该上限）。访问控制边界为套接字文件（归 dsh 服务用户所有、`0600`）。PATH 合并顺序：继承 env 在前、显式 NixOS profile PATH 在后（systemd 模板单元的默认 PATH 只含基础 store 路径）。
 
-### rebuild 自动分离
+### rebuild / dsh 重启自动分离
 
-`nixos_shell` 识别出 `nixos-rebuild` / `nixos apply` 命令（`sudo: true`）后自动将其包装进 `systemd-run --collect` 瞬态单元（独立 cgroup）执行，调用立即返回单元名（结果含 `detachedUnit`）。原因：激活阶段 switch-to-configuration 会重启 dsh.service **并 stop/start nixkits-sudo.socket**（模板变更 → socket 重启以让新连接使用新守护）；若 rebuild 经守护执行，socket 停止会连同 switch 进程自身一起杀掉（@ 实例与子进程同 cgroup），激活中途死亡、socket 无法自动恢复。分离执行后激活完整跑完、socket 自动恢复；进度经 `nixos_cli op=journal unit=nixkits-rebuild-<id>` 查看，结果经 `nixos_cli op=generations` 验证。
+`nixos_shell` 识别出 `nixos-rebuild` / `nixos apply` / `systemctl restart dsh` 命令（`sudo: true`）后自动将其包装进 `systemd-run --collect` 瞬态单元（独立 cgroup）执行，调用立即返回单元名（结果含 `detachedUnit`）。原因：若这些命令经守护执行，其触发的 dsh 重启或 socket 停止会连同调用链自身一起杀掉（@ 实例与子进程同 cgroup，或 harness 进程即本调用宿主），激活中途死亡、socket 无法自动恢复、调用结果丢失。分离执行后进程完整跑完；进度经 `nixos_cli op=journal unit=nixkits-rebuild-<id>` 查看，结果经 `nixos_cli op=generations` 验证。
+
+分离调用的结果**不声称构建成败**：返回 `detached: true` + `detachedUnit` + `note` 且 `exitCode` 为 `null`（systemd-run 仅完成交接，交接成功 ≠ 构建成功），真实结果一律经 journal/generations 验证。
+
+模块侧配合「稳定挂载点」（见 dsh.md）：插件包更新不再改变 dsh/sudo 的 unit 内容，普通 rebuild 已不重启任何东西；插件更新经显式 `systemctl restart dsh`（同样自动分离）生效，sudo 守护按连接生成、新连接自动用新脚本。
 
 sudo 套接字在**调用时**校验而非 apply 时：rebuild 激活期间 socket 会短暂消失，恰在该窗口启动的会话不会永久丢失 `sudo` 参数——socket 恢复后即可直接使用。
 

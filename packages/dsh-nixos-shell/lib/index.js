@@ -65,15 +65,28 @@ const REBUILD_TIMEOUT_MS = 21600000;
 // 而非断连——断连在 rebuild 重启 dsh 时必然发生，不能当作取消）。
 const CANCEL_LINE = '{"op":"cancel"}';
 
-/** Whether the command mutates the system generation (may restart dsh). */
+/**
+ * Whether the command mutates system runtime state and must run detached
+ * from the sudo daemon connection:
+ *   - nixos-rebuild / nixos apply: the activation restarts dsh AND
+ *     stops/starts nixkits-sudo.socket (see wrapDetachedSystemCommand);
+ *   - systemctl restart dsh: restarts the harness process serving this very
+ *     tool call — detached so the call returns before the restart lands
+ *     (used to activate updated plugins without losing the call result).
+ */
+function isSystemMutationCommand(command) {
+  return /\b(?:nixos-rebuild|nixos\s+apply|systemctl\s+restart\s+dsh(?:\.service)?)\b/.test(command);
+}
+
+/** Rebuild-only predicate kept for the 6h timeout decision. */
 function isSystemRebuildCommand(command) {
   return /\b(?:nixos-rebuild|nixos\s+apply)\b/.test(command);
 }
 
 /**
- * Wrap a rebuild command in a detached transient systemd unit.
+ * Wrap a system-mutating command in a detached transient systemd unit.
  *
- * Why rebuilds must NEVER run as daemon children: during activation,
+ * Why these commands must NEVER run as daemon children: during activation,
  * switch-to-configuration restarts dsh.service AND stops nixkits-sudo.socket
  * (template change → socket restart so new connections pick up the new
  * daemon).  Stopping the socket kills every accepted @ instance together
@@ -88,8 +101,9 @@ function isSystemRebuildCommand(command) {
  * starts it with the manager-default environment), so the inner command
  * exports the NixOS PATH explicitly.
  */
-function wrapDetachedRebuild(command, cwd, pathEnv) {
-  const unit = `nixkits-rebuild-${Date.now().toString(36)}`;
+function wrapDetachedSystemCommand(command, cwd, pathEnv) {
+  const unitPrefix = isSystemRebuildCommand(command) ? "nixkits-rebuild" : "nixkits-dsh-restart";
+  const unit = `${unitPrefix}-${Date.now().toString(36)}`;
   const inner = `export PATH=${shq(pathEnv)}; cd ${shq(cwd)} && ${command}`;
   const wrapped =
     `/run/current-system/sw/bin/systemd-run --collect --unit=${unit} -- ` +
@@ -167,7 +181,7 @@ function shellDescription(sudoConfigured) {
     "`nixos_cli op=generations` instead of `job_output`; the command itself keeps running to " +
     "completion in the sudo daemon.";
   return sudoConfigured
-    ? base + " Set sudo: true (with a justification) to run a privileged command through the external sudo daemon. nixos-rebuild / nixos apply commands run DETACHED in a transient systemd unit (independent cgroup): the call returns the unit name immediately and the activation survives the mid-way dsh restart and sudo-socket restart — follow progress via `nixos_cli op=journal unit=<unit>` and verify via generations."
+    ? base + " Set sudo: true (with a justification) to run a privileged command through the external sudo daemon. nixos-rebuild / nixos apply commands run DETACHED in a transient systemd unit (independent cgroup): the call returns the unit name immediately and the activation survives the mid-way dsh restart and sudo-socket restart — follow progress via `nixos_cli op=journal unit=<unit>` and verify via generations. Plugin package updates do NOT restart dsh automatically (stable mount points); activate them with `systemctl restart dsh` — also auto-detached, so the call returns before the restart lands."
     : base;
 }
 
@@ -512,8 +526,8 @@ export function apply(ctx, config = {}) {
     // 及其子进程同 cgroup），激活中途死亡且 socket 无法自动恢复。分离到
     // systemd-run 瞬态单元（独立 cgroup）后激活可以完整跑完。
     let detachedUnit = null;
-    if (args.sudo === true && isSystemRebuildCommand(finalCommand)) {
-      const detached = wrapDetachedRebuild(finalCommand, cwd, pathEnv);
+    if (args.sudo === true && isSystemMutationCommand(finalCommand)) {
+      const detached = wrapDetachedSystemCommand(finalCommand, cwd, pathEnv);
       finalCommand = detached.wrapped;
       detachedUnit = detached.unit;
     }
@@ -543,6 +557,18 @@ export function apply(ctx, config = {}) {
           },
           sudoSocketPath,
         );
+        // 分离命令：systemd-run 交接即返回——任务很快 "completed" 并不代表
+        // 构建成功，把验证指引追加到最终输出，避免把交接成功当构建成功。
+        if (detachedUnit !== null) {
+          const base = hooks;
+          hooks = {
+            ...base,
+            done: base.done.then((result) => ({
+              ...result,
+              output: `${result.output ?? ""}\n[detached ${detachedUnit}: the result above only confirms the handoff — the real outcome is pending; track progress via nixos_cli op=journal unit=${detachedUnit} and verify completion via nixos_cli op=generations]`,
+            })),
+          };
+        }
       } else {
         let shell;
         try {
@@ -562,7 +588,7 @@ export function apply(ctx, config = {}) {
         }),
         sudo: args.sudo === true,
         justification: args.sudo === true ? args.justification : undefined,
-        ...(detachedUnit !== null ? { detachedUnit } : {}),
+        ...(detachedUnit !== null ? { detachedUnit, detached: true } : {}),
       };
     }
 
@@ -595,7 +621,27 @@ export function apply(ctx, config = {}) {
           stderrSpillPath: null,
           sudo: true,
           justification: args.justification,
-          ...(detachedUnit !== null ? { detachedUnit } : {}),
+          ...(detachedUnit !== null ? { detachedUnit, detached: true } : {}),
+        };
+      }
+      if (detachedUnit !== null) {
+        // 分离交接结果不得声称构建成功：systemd-run 只负责排队，真实成败
+        // 待验证。exitCode 置 null 并给出明确的验证指引。
+        return {
+          exitCode: null,
+          signal: null,
+          timedOut: false,
+          stdout: response.stdout ?? "",
+          stderr: response.stderr ?? "",
+          stdoutTruncated: response.stdoutTruncated ?? false,
+          stderrTruncated: response.stderrTruncated ?? false,
+          stdoutSpillPath: null,
+          stderrSpillPath: null,
+          sudo: true,
+          justification: args.justification,
+          detachedUnit,
+          detached: true,
+          note: `detached: this result only confirms the handoff to transient unit ${detachedUnit} — the real outcome is pending. Track progress via nixos_cli op=journal unit=${detachedUnit} and verify completion via nixos_cli op=generations.`,
         };
       }
       return {
@@ -610,7 +656,6 @@ export function apply(ctx, config = {}) {
         stderrSpillPath: null,
         sudo: true,
         justification: args.justification,
-        ...(detachedUnit !== null ? { detachedUnit } : {}),
       };
     }
 
@@ -814,7 +859,7 @@ export function apply(ctx, config = {}) {
           description:
             "Run the command through the external sudo daemon (root). Requires justification. " +
             "The socket is validated at call time — if it is down, restore it with `sudo systemctl start nixkits-sudo.socket`. " +
-            "nixos-rebuild / nixos apply commands are auto-detached into a transient systemd unit so activation survives the dsh/sudo-socket restarts.",
+            "nixos-rebuild / nixos apply / `systemctl restart dsh` commands are auto-detached into a transient systemd unit so the call returns before any dsh/sudo-socket restart lands; detached results carry `detached: true` + `detachedUnit` + `note` and exitCode null — the handoff is NOT the build outcome, verify via journal/generations. Plugin package updates only take effect after an explicit `systemctl restart dsh`.",
         },
         justification: {
           type: "string",
