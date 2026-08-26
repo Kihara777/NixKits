@@ -24,6 +24,7 @@ NixOS シナリオ能力のための DeepSeek Harness（DSH）プラグイン �
 | `command` | 実行する shell コマンド（必須） |
 | `tools` | 任意の POSIX ツール名リスト。コマンドは `nix shell nixpkgs#<pkg>… --command` 経由で実行。ホワイトリスト：python3、python、grep、ls、cat、head、tail、wc、tr、sort、mkdir、rm、cp、mv、find、env、sed、bash、awk、git、curl、jq、ripgrep、rsync、htop、tree、unzip |
 | `workdir` / `timeoutMs` / `env` | 作業ディレクトリ / タイムアウト（設定上限あり）/ 追加環境変数（注入 NixOS PATH にマージ） |
+| `run_in_background` | `true` で dsh-jobs バックグラウンドジョブを登録し job id を即時返す（`job_output` で読取・`job_kill` で停止、クライアント側タイムアウトなし — `sudo: true` ジョブはデーモン側のリクエスト毎上限あり）。`nixos-rebuild` 等の長いコマンド向け — 実行時間超過によるツール結果喪失を防ぐ。ローカルジョブは増分出力対応；`sudo: true` ジョブはデーモン協議 v3 で実行し、`job_kill` は明示的帯内取消行でデーモンに子プロセスを殺させる。**注意**：rebuild の活性化段階で dsh サービスが再起動し（插件パスはサービスユニットに焼き込み）、プロセス内ジョブ記録は消える — rebuild 後は `nixos_cli op=generations` で完了を検証すること。コマンド自体はデーモン内で完了まで走り続ける（断絶は決して取消ではない） |
 | `sudo` / `justification` | sudo デーモンソケット検出時に有効：`sudo: true` で外部 root 実行器へルーティング。`justification` は必須で結果にエコーされる |
 
 挙動：PATH 解決可能な `bash` を優先し、失敗時は Nix store の shell パスへフォールバック（内蔵ツールの `spawn bash ENOENT` を修正）；全子プロセスに完全な NixOS PATH を注入；出力は切り詰め + スピルファイル。
@@ -49,7 +50,13 @@ nixos-shell プラグイン
 └─ nixos_cli ──── 読み取り専用ローカル実行（systemctl / nix-env / journalctl / 設定ファイル走査）
 ```
 
-sudo デーモンは systemd ソケット活性化の root 実行器（`nixkits-sudo-exec.js`、プラグインに同梱）：接続ごとに 1 リクエスト、JSON プロトコル、アクセス制御はソケットファイル（dsh サービスユーザー所有、`0600`）。PATH マージ順は継承 env が先、明示的 NixOS profile PATH が後（テンプレートユニットの systemd 既定 PATH は基本 store パスのみ）。
+sudo デーモンは systemd ソケット活性化の root 実行器（`nixkits-sudo-exec.js`、プラグインに同梱）：接続ごとに 1 リクエストの JSON プロトコル（v3：クライアントはリクエスト 1 行を書き接続を開いたまま保持、デーモンは先頭行で実行を開始し完了時に応答を返して終了。リクエスト後の入力行はすべて明示的取消 — 子プロセスの**プロセスグループ全体**へ SIGTERM、猶予後に SIGKILL。シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になるため — これが `job_kill` の帯内取消機構）。**断絶は取消ではない**：rebuild の活性化段階で dsh サービスが再起動して接続が切れるが、断絶＝取消として扱うと switch が活性化の途中で殺され部分活性化状態が残る。よって対向消失時は子プロセスが分離状態で完了まで走り続ける（デーモン側上限 6 時間、rebuild コマンドは自動でこの上限を使用）。アクセス制御はソケットファイル（dsh サービスユーザー所有、`0600`）。PATH マージ順は継承 env が先、明示的 NixOS profile PATH が後（テンプレートユニットの systemd 既定 PATH は基本 store パスのみ）。
+
+### rebuild 自動分離
+
+`nixos_shell` は `nixos-rebuild` / `nixos apply` コマンド（`sudo: true`）を認識し、`systemd-run --collect` の一時ユニット（独立 cgroup）で実行するよう自動ラップする。呼び出しは即座にユニット名を返す（結果の `detachedUnit`）。理由：活性化段階で switch-to-configuration は dsh.service を再起動し、**かつ** nixkits-sudo.socket を stop/start する（テンプレート変更 → socket 再起動で新規接続が新デーモンを使うため）。rebuild がデーモン経由で実行されていると、socket 停止が @ インスタンスとその子（switch プロセス自身を含む）を同じ cgroup ごと殺し、活性化は途中で死に socket は自動復旧できない。分離実行なら活性化が完走し socket も自動復旧する。進捗は `nixos_cli op=journal unit=nixkits-rebuild-<id>`、結果は `nixos_cli op=generations` で確認。
+
+sudo ソケットは apply 時ではなく**呼び出し時**に検証する：rebuild の活性化中は socket が一時的に消えるため、その窓で起動したセッションが `sudo` パラメータを恒久的に失うことはない——socket 復旧後はそのまま使える。
 
 ## 使い方
 

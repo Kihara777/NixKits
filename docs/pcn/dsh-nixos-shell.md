@@ -24,6 +24,7 @@ NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引�
 | `command` | 実行 shell 命令（必填） |
 | `tools` | 任意 POSIX 工具名列表、命令 `nix shell nixpkgs#<pkg>… --command` 経由実行。白名單：python3、python、grep、ls、cat、head、tail、wc、tr、sort、mkdir、rm、cp、mv、find、env、sed、bash、awk、git、curl、jq、ripgrep、rsync、htop、tree、unzip |
 | `workdir` / `timeoutMs` / `env` | 作業目録 / 超時（設定上限）/ 追加環境変数（注入 NixOS PATH 合併） |
+| `run_in_background` | `true` 時 dsh-jobs 後台任務登録 job id 即返（`job_output` 読取・`job_kill` 停止、無 client 側超時 — `sudo: true` 任務守護側請求毎上限）。`nixos-rebuild` 等長命令向 — 実行時間超工具結果喪失防。本地任務増分輸出対応；`sudo: true` 任務守護協議 v3 実行、`job_kill` 明示帯内取消行令守護殺子進程。**注意**：rebuild 活性化段 dsh service 再起（插件路徑焼込 service 単元）、進程内 job 記録清空 — rebuild 後 `nixos_cli op=generations` 検証完成。命令自體守護内継続完走（断絶絶不取消） |
 | `sudo` / `justification` | sudo 守護套接字検出時有効：`sudo: true` 外部 root 実行器路由、`justification` 必填結果回顕 |
 
 挙動：PATH 解決 `bash` 優先、失敗時 Nix store shell 路徑回退（内建工具 `spawn bash ENOENT` 修正）；全子進程完全 NixOS PATH 注入；輸出截断 + 溢出文件。
@@ -49,7 +50,13 @@ nixos-shell 插件
 └─ nixos_cli ──── 読取専用本地実行（systemctl / nix-env / journalctl / 設定文件走査）
 ```
 
-sudo 守護 = systemd 套接字活性化 root 実行器（`nixkits-sudo-exec.js`、插件同梱）：接続毎 1 請求、JSON 協議、訪問制御套接字文件（dsh service 用户所有、`0600`）。PATH 合併順：継承 env 先、明示 NixOS profile PATH 後（模版単元 systemd 既定 PATH 僅基礎 store 路徑）。
+sudo 守護 = systemd 套接字活性化 root 実行器（`nixkits-sudo-exec.js`、插件同梱）：接続毎 1 請求 JSON 協議（v3：client 請求 1 行写入連接開保持、守護首行即実行完了応答返終了；請求後一切輸入行 = 明示取消 — 子進程**進程組全体** SIGTERM、寛限後 SIGKILL。僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能故 — `job_kill` 帯内取消機構）。**断絶非取消**：rebuild 活性化段 dsh service 再起連接切断、断絶＝取消処理則 switch 活性化中途被殺部分活性化殘留、故対向消失時子進程分離態継続完走（守護側上限 6 時間、rebuild 命令自動用）。訪問制御套接字文件（dsh service 用户所有、`0600`）。PATH 合併順：継承 env 先、明示 NixOS profile PATH 後（模版単元 systemd 既定 PATH 僅基礎 store 路徑）。
+
+### rebuild 自動分離
+
+`nixos_shell` 認識 `nixos-rebuild` / `nixos apply` 命令（`sudo: true`）自動包装 `systemd-run --collect` 瞬時単元（独立 cgroup）実行、呼出即返単元名（結果含 `detachedUnit`）。理由：活性化段 switch-to-configuration 再起 dsh.service **且** stop/start nixkits-sudo.socket（模版変更 → socket 再起新連接用新守護）。rebuild 経守護実行則 socket 停止連同 switch 進程自身殺（@ 實例与子進程同 cgroup）、活性化中途死 socket 不能自復。分離実行則活性化完走 socket 自復。進捗 `nixos_cli op=journal unit=nixkits-rebuild-<id>` 看、結果 `nixos_cli op=generations` 検証。
+
+sudo 套接字**呼出時**検証非 apply 時：rebuild 活性化中 socket 暫時消失、該窓啟動 session 不永久失 `sudo` 參數——socket 復後即可用。
 
 ## 使用
 

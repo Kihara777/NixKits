@@ -24,6 +24,7 @@ A DeepSeek Harness (DSH) plugin for NixOS scenario capabilities — a **single p
 | `command` | Shell command to execute (required) |
 | `tools` | Optional POSIX tool names; the command runs via `nix shell nixpkgs#<pkg>… --command`. Whitelist: python3, python, grep, ls, cat, head, tail, wc, tr, sort, mkdir, rm, cp, mv, find, env, sed, bash, awk, git, curl, jq, ripgrep, rsync, htop, tree, unzip |
 | `workdir` / `timeoutMs` / `env` | Working directory / timeout (capped by config) / extra environment (merged over the injected NixOS PATH) |
+| `run_in_background` | When `true`, registers a dsh-jobs background job and returns a job id immediately (read with `job_output`, stop with `job_kill`; no client-side timeout — `sudo: true` jobs carry the daemon's per-request cap). Use for long commands such as `nixos-rebuild` so tool results aren't lost to execution time. Local jobs stream incremental output; `sudo: true` jobs run over daemon protocol v3, where `job_kill` cancels via an explicit in-band cancel line. **Note**: a rebuild restarts the dsh service during activation (plugin paths are baked into the service unit), which clears in-process job records — after one, verify completion via `nixos_cli op=generations`; the command itself keeps running to completion in the daemon (a disconnect is never a cancel) |
 | `sudo` / `justification` | Enabled when the sudo daemon socket is detected: `sudo: true` routes the request to the external root executor; `justification` is required and echoed with the result |
 
 Behavior: prefers the PATH-resolvable `bash`, falls back to a Nix store shell path (fixing the stock tool's `spawn bash ENOENT`); injects a full NixOS PATH into every child; output truncation with spill files.
@@ -49,7 +50,13 @@ nixos-shell plugin
 └─ nixos_cli ──── read-only local execution (systemctl / nix-env / journalctl / config-file scans)
 ```
 
-The sudo daemon is a systemd socket-activated root executor (`nixkits-sudo-exec.js`, shipped with the plugin): one request per connection, JSON protocol, access control at the socket file (owned by the dsh service user, `0600`). PATH merge order: inherited env first, explicit NixOS profile PATH second (template-unit systemd default PATH contains only base store paths).
+The sudo daemon is a systemd socket-activated root executor (`nixkits-sudo-exec.js`, shipped with the plugin): one request per connection, JSON protocol (v3: the client writes one request line and keeps the connection open; the daemon executes on the first line and writes the response when done; any input line after the request means explicit cancel — SIGTERM to the child's whole process group, then SIGKILL after a grace period, since killing only the shell wrapper would leave orphaned grandchildren holding the pipe write-ends and hang the daemon — the in-band mechanism behind `job_kill`). **A disconnect is not a cancel**: a rebuild's activation stage restarts the dsh service, dropping the connection — treating that as cancel would kill the switch mid-activation and leave a partially activated system, so on peer loss the child keeps running detached to completion (daemon-side cap 6 hours, used automatically for rebuild commands). Access control at the socket file (owned by the dsh service user, `0600`). PATH merge order: inherited env first, explicit NixOS profile PATH second (template-unit systemd default PATH contains only base store paths).
+
+### Rebuild auto-detach
+
+`nixos_shell` recognises `nixos-rebuild` / `nixos apply` commands (with `sudo: true`) and wraps them in a `systemd-run --collect` transient unit (own cgroup): the call returns the unit name immediately (`detachedUnit` in the result). Reason: during activation, switch-to-configuration restarts dsh.service AND stops/restarts nixkits-sudo.socket (template change → socket restart so new connections use the new daemon); a rebuild running through the daemon would be killed by its own socket stop (the @ instance and its children share one cgroup), dying mid-activation and leaving the socket down. Detached execution lets the activation complete and the socket recover automatically; follow progress via `nixos_cli op=journal unit=nixkits-rebuild-<id>` and verify via `nixos_cli op=generations`.
+
+The sudo socket is validated at CALL time, not apply time: the socket disappears briefly during a rebuild's activation, so a session booted in that window does not permanently lose the `sudo` parameter — it works again as soon as the socket is back.
 
 ## Usage
 
