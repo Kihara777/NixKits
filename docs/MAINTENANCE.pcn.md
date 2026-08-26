@@ -15,6 +15,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新規 v0.1.0 |
 
+## 2026-08-27T01:30:33+09:00
+
+**摘要**: fix(module): dsh watchdog — switch-to-configuration 失敗後自動起動。nixos-rebuild switch-to-configuration「stop dsh → start dsh」間偶発失敗（exit 101）dsh inactive 残。systemd 能動 stop Restart=always 非発、反代長期 503（8/26 22:10、23:53 二回観測）。dsh-watchdog timer（15s 間隔）追加、inactive 検知時 systemctl start。検証: stop 後 20 秒以内自動復帰。
+
+| 提交 | 説明 |
+|------|------|
+| `3ed6aa7` | fix(module): dsh watchdog — auto-restart after switch-to-configuration failure |
+
 ## 2026-08-24T15:44:06+09:00
 
 **摘要**: fix(overlay): llama-cpp-rocm v0.2.0 語義版 — llama.cpp 上流 release tag build number（b10549）→ 語義版（v0.2.0）切替。旧 overlay b 前置詞只除去 v0.2.0 得、nixpkgs 它 LLAMA_BUILD_NUMBER 渡、`int LLAMA_BUILD_NUMBER = v0.2.0;` 生成 C++ 編譯失敗（too many decimal points）、系統 rebuild dsh 更新阻塞。現在 v/b 前置詞両方除去、-DLLAMA_BUILD_NUMBER=0 追記。検証: llama-cpp-0.2.0 構築成功、llama-cpp.service 稼働。

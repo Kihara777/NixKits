@@ -15,6 +15,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | new v0.1.0 |
 
+## 2026-08-27T01:30:33+09:00
+
+**Summary**: fix(module): dsh watchdog — auto-restart after switch-to-configuration failure. nixos-rebuild's switch-to-configuration can fail (exit 101) between stopping and starting dsh, leaving it inactive; a systemd-initiated stop does not trigger Restart=always, so the reverse proxy returned 503 for a long time (seen 8/26 22:10 and 23:53). Added a dsh-watchdog timer (15s) that runs systemctl start when dsh is inactive. Verified: recovers within 20s of a stop.
+
+| Commit | Description |
+|------|------|
+| `3ed6aa7` | fix(module): dsh watchdog — auto-restart after switch-to-configuration failure |
+
 ## 2026-08-24T15:44:06+09:00
 
 **Summary**: fix(overlay): llama-cpp-rocm v0.2.0 semantic version — llama.cpp upstream switched release tags from build numbers (b10549) to semantic versions (v0.2.0). The old overlay only stripped the b prefix, yielding v0.2.0, which nixpkgs then passed into LLAMA_BUILD_NUMBER, producing `int LLAMA_BUILD_NUMBER = v0.2.0;` and a C++ compile failure (too many decimal points) that blocked system rebuilds and the dsh upgrade. It now strips both v/b prefixes and appends -DLLAMA_BUILD_NUMBER=0. Verified: llama-cpp-0.2.0 builds and llama-cpp.service runs.
