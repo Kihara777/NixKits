@@ -97,6 +97,12 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 }
 ```
 
+### 插件更新与零重启激活
+
+插件包通过**稳定挂载点**加载：activation script 在每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell`（sudo 守护脚本）符号链接翻到当前代的 store 路径（GC 安全：目标始终处于当前 toplevel 闭包内，回滚自动翻回旧代路径）。`dsh.service` 与 `nixkits-sudo@.service` 的单元定义只引用这些稳定路径，因此**插件包更新不再改变 unit 内容**——switch-to-configuration 既不重启 dsh、也不 stop/start sudo socket，激活阶段对在途工具调用零中断。
+
+代价与配套：dsh 是长驻进程，插件更新后需显式 `systemctl restart dsh` 才生效（`nixos_shell` 会把该命令自动分离到瞬态单元，调用先于重启返回）；sudo 守护按连接生成，新连接自动使用新脚本，无需任何重启。
+
 ### api-balance 插件
 
 API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（发送按钮左侧的上下文已用显示）的弹出面板中提供「用量 / 余额」标签切换——「用量」为原有内容（上下文占用与细分），「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额）。数据来自 DeepSeek 官方 `GET /user/balance` 接口，host 端 30 秒 TTL 缓存；API key 按 `apiKeyEnv`（默认 `DEEPSEEK_API_KEY`）走 `credentials` 服务解析，回退进程环境变量。

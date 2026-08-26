@@ -97,6 +97,12 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 }
 ```
 
+### 插件更新与零再起活性化
+
+插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体与插件樹）与 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 与 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
+
+代価与配套：dsh 長駐進程、插件更新反映需明示 `systemctl restart dsh`（`nixos_shell` 該命令自動分離瞬時単元、呼出先於再起返）。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
+
 ### api-balance 插件
 
 API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加——「用量」原内容（上下文占有率与内訳）、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）表示。數據 DeepSeek 公式 `GET /user/balance` 取得、宿主側 30 秒 TTL 緩存。API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退。

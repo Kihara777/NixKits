@@ -97,6 +97,12 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 }
 ```
 
+### プラグイン更新とゼロ再起動活性化
+
+プラグインパッケージは**安定マウントポイント**経由で読み込む：activation script が毎回の switch/boot で `/run/dsh/current`（dsh 本体とプラグイン木）と `/run/dsh/nixos-shell`（sudo 実行スクリプト）のシンボリックリンクを現在世代の store パスへ張り替える（GC 安全：リンク先は常に現在の toplevel 閉包内にあり、ロールバック時は旧世代のパスへ自動で戻る）。`dsh.service` と `nixkits-sudo@.service` のユニット定義はこれら安定パスのみを参照するため、**プラグインパッケージの更新でユニット内容は変わらない**——switch-to-configuration は dsh を再起動せず、sudo socket も stop/start しない。活性化は実行中のツール呼び出しを一切中断しない。
+
+トレードオフ：dsh は長寿命プロセスのため、プラグイン更新の反映には明示的な `systemctl restart dsh` が必要（`nixos_shell` はこのコマンドを一時ユニットへ自動分離し、再起動前に呼び出しが返る）。sudo 実行器は接続ごとに生成されるため、新規接続は自動的に新スクリプトを使用し、再起動は一切不要。
+
 ### api-balance プラグイン
 
 API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加——「用量」は元の内容（コンテキスト占有率と内訳）、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高）を表示する。データは DeepSeek 公式 `GET /user/balance` から取得し、ホスト側で 30 秒 TTL キャッシュ。API キーは `credentials` サービス経由で `apiKeyEnv`（デフォルト `DEEPSEEK_API_KEY`）を解決し、プロセス環境変数へフォールバックする。

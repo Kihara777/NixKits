@@ -97,6 +97,12 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 }
 ```
 
+### Plugin updates and zero-restart activation
+
+Plugin packages are loaded through **stable mount points**: an activation script re-links `/run/dsh/current` (dsh with its plugin tree) and `/run/dsh/nixos-shell` (the sudo executor script) to the current generation's store paths on every switch/boot (GC-safe: the targets always sit in the current toplevel closure, and rollback flips back to the old generation's paths). The `dsh.service` and `nixkits-sudo@.service` unit definitions reference only these stable paths, so **plugin package updates no longer change unit content** — switch-to-configuration neither restarts dsh nor stops/starts the sudo socket, and the activation interrupts no in-flight tool call.
+
+Trade-off: dsh is a long-lived process, so plugin updates take effect only after an explicit `systemctl restart dsh` (`nixos_shell` auto-detaches that command into a transient unit, returning before the restart lands); the sudo executor spawns per connection, so new connections pick up the new script automatically with no restart at all.
+
 ### api-balance plugin
 
 API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button) — 「Usage」 keeps the original content (context occupancy and its breakdown), 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance). Data comes from the official DeepSeek `GET /user/balance` endpoint with a 30-second host-side TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`) with a process-environment fallback.

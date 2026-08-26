@@ -221,6 +221,23 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    # 稳定挂载点（方案 C — 插件更新零重启）：dsh.service 与
+    # nixkits-sudo@.service 的单元定义只引用 /run/dsh/* 稳定路径，
+    # 插件包更新不再改变 unit 内容，switch-to-configuration 因此
+    # 既不重启 dsh、也不 stop/start sudo socket（模板变更才重启），
+    # 激活阶段对在途工具调用零中断。本激活脚本在每次 switch/boot
+    # 时把符号链接翻到当前代的 store 路径；链接目标处于当前
+    # toplevel 闭包内，GC 安全，回滚时自动翻回旧代路径。
+    #
+    # 插件更新后 dsh 仍在运行旧代码，需显式 `systemctl restart dsh`
+    # 生效（nixos_shell 会把它自动分离到瞬态单元）；sudo 守护按
+    # 连接生成，新连接自动使用新脚本。
+    system.activationScripts.dshPlugins = ''
+      mkdir -p /run/dsh
+      ln -sfn ${dshPkg} /run/dsh/current
+      ${lib.optionalString cfg.sudo.enable "ln -sfn ${cfg.sudo.package} /run/dsh/nixos-shell"}
+    '';
+
     users.users = lib.mkIf (cfg.user == "dsh") {
       dsh = {
         isSystemUser = true;
@@ -251,15 +268,16 @@ in
 
         # 插件包 ESM 解析：dsh 的 cordis-plugin-loader 以 profile 目录
         # ($DSH_HOME/profiles/web) 为解析基准（Node 24 内部 cascaded loader
-        # 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的
-        # store 树 (dshPkg)，但 store 不在 profile 的 node_modules 链上，
-        # 直接 import 会 ERR_MODULE_NOT_FOUND。把注入后的 @kihara777 scope
-        # 链接到 $DSH_HOME/node_modules 下让 Node 可解析；符号链接 realpath
-        # 回 store 树，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。
+        # 的 parentURL），从那里向上查找 node_modules。插件注入的 dsh store
+        # 树经稳定挂载点 /run/dsh/current 访问（activation script 翻链），
+        # store 不在 profile 的 node_modules 链上，直接 import 会
+        # ERR_MODULE_NOT_FOUND。把注入后的 @kihara777 scope 链接到
+        # $DSH_HOME/node_modules 下让 Node 可解析；符号链接 realpath 回
+        # store 树，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。
         ${lib.optionalString (cfg.plugins.packages != []) ''
           rm -rf ${cfg.dshHome}/node_modules
           mkdir -p ${cfg.dshHome}/node_modules
-          ln -sfn ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/node_modules/@kihara777 ${cfg.dshHome}/node_modules/@kihara777
+          ln -sfn /run/dsh/current/lib/node_modules/@deepseek-ai/dsh/node_modules/@kihara777 ${cfg.dshHome}/node_modules/@kihara777
         ''}
 
         # 种子预设（seed-once）：仅在目标不存在时复制，尊重用户后续对
@@ -270,21 +288,24 @@ in
         ${lib.optionalString cfg.presets.nixosMode ''
           if [ ! -e ${cfg.dshHome}/.agent-presets/nixos ]; then
             mkdir -p ${cfg.dshHome}/.agent-presets
-            cp -r ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
+            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/nixos
           fi
         ''}
         ${lib.optionalString cfg.presets.maintenanceMode ''
           if [ ! -e ${cfg.dshHome}/.agent-presets/maintenance ]; then
             mkdir -p ${cfg.dshHome}/.agent-presets
-            cp -r ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
+            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
           fi
         ''}
       '';
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals ${dshPkg}/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
+        # ExecStart 只引用稳定路径 /run/dsh/current（activation script 在每次
+        # switch/boot 时翻链）——插件包更新不改变本 unit 的内容，switch 不再
+        # 在激活阶段重启 dsh，在途工具调用零中断。
+        ExecStart = "${lib.getExe pkgs.nodejs} --expose-internals /run/dsh/current/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --host ${cfg.host} --port ${toString cfg.port} ${lib.concatMapStringsSep " " (h: "--trusted-host ${h}") cfg.trustedHosts}";
         WorkingDirectory = cfg.dshHome;
         Restart = "always";
         # 快速恢复：dsh 上游有已知崩溃 bug（cordis-plugin-timer 的 Context
@@ -365,7 +386,10 @@ in
     systemd.services."nixkits-sudo@" = lib.mkIf cfg.sudo.enable {
       description = "NixKits sudo executor (per-connection root command runner)";
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.nodejs} ${cfg.sudo.package}/lib/node_modules/@kihara777/dsh-nixos-shell/bin/nixkits-sudo-exec.js";
+        # ExecStart 只引用稳定路径 /run/dsh/nixos-shell——插件包更新不改变
+        # 本模板的内容，switch 不再 stop/start socket（不会杀死在途 @ 实例）。
+        # 守护按连接生成：新连接自动使用翻链后的新脚本。
+        ExecStart = "${lib.getExe pkgs.nodejs} /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/bin/nixkits-sudo-exec.js";
         StandardInput = "socket";
         StandardOutput = "socket";
         StandardError = "journal";
