@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-27T07:28:58+09:00
+
+**概要**: feat(dsh-api-balance): パネル刷新ボタン。パネルヘッダーのタブ行右側に刷新ボタン（↻）を追加：クリックで queryBalance(true) を呼び、ホスト側 30 秒 TTL キャッシュを迂回して残高 + 公式使用量を再取得（日別/月別チャートも同時更新）。読み込み中はボタン無効化 + スピナー（dshAbSpin 再利用）。中英二言語文案（刷新数据 / Refresh data）。検証：ビルド通過、安定マウントポイント経由でゼロ再起動配備（424 世代）後に dsh 再起動で反映。
+
+| コミット | 説明 |
+|----------|------|
+| `e864b58` | feat(dsh-api-balance): パネル刷新ボタン — 残高と公式使用量のワンクリック再取得 |
+
+## 2026-08-27T07:28:49+09:00
+
+**概要**: fix(dsh-nixos-shell): 分離結果の誠実な意味論 + systemctl restart dsh の自動分離。従来は systemd-run 経由の引き継ぎが返す exit 0 をそのまま透かしていたため、ツール結果が「ビルド成功」に見えながら実際の結果は不明だった。分離コマンドは今後 `detached: true` + `detachedUnit` + `note` を返し exitCode は null——引き継ぎ成功はビルド成功ではなく、実際の結果は必ず nixos_cli op=journal / op=generations で検証する（バックグラウンドジョブも最終出力に同じ検証ガイドを追記）。分離述語は `systemctl restart dsh` にも拡大：安定マウントポイント経由で配備したプラグイン更新は明示的な dsh 再起動で反映され、このコマンドも自動分離されて再起動前に呼び出しが返る。検証：分離式 dsh 再起動が着地（RESTARTED_EXIT=0）、プラグイン変更 rebuild（424/425 世代）は何も再起動せず何も中断せず、nix flake check 通過。四言語ドキュメント同期。
+
+| コミット | 説明 |
+|----------|------|
+| `0c7b7f6` | fix(dsh-nixos-shell): 分離結果の誠実な意味論 + systemctl restart dsh の自動分離 |
+
+## 2026-08-27T07:28:39+09:00
+
+**概要**: feat(module): dsh プラグイン安定マウントポイント — ゼロ再起動活性化。プラグインパッケージは従来 dsh/sudo のユニット（ExecStart/preStart/実行器テンプレート）に直接焼き込まれていたため、プラグイン更新のたびにユニット内容が変化：switch-to-configuration が活性化段階で dsh を再起動し（実行中のツール呼び出しは harness プロセスごと消滅）、sudo socket を stop/start した（デーモン経由の rebuild は自身の switch ごと殺され socket は復旧不能）。安定マウントポイントへ変更：activation script が毎回の switch/boot で `/run/dsh/current`（dsh とプラグイン木）と `/run/dsh/nixos-shell`（sudo 実行スクリプト）のシンボリックリンクを現在世代の store パスへ張り替え（GC 安全：リンク先は現在の toplevel 閉包内、ロールバック時は旧世代へ自動復帰）。dsh.service と nixkits-sudo@.service のユニット定義はこれら安定パスのみを参照——プラグインパッケージの更新はユニット内容を変えず、活性化は何も再起動せず何も中断しない。付随意味論：dsh は長寿命プロセスのため、プラグイン更新は明示的な `systemctl restart dsh`（自動分離）で反映。sudo 実行器は接続ごとに生成され、新規接続は自動的に新スクリプトを使用。検証：423 世代で本変更を配備（一度だけの dsh 再起動）。424/425 世代の連続 2 回のプラグイン変更 rebuild では dsh と socket の ActiveEnterTimestamp がともに不変、/run/dsh/current は正常に張り替えられ、中断されたツール呼び出しはゼロ。四言語ドキュメント同期。
+
+| コミット | 説明 |
+|----------|------|
+| `dfce302` | feat(module): dsh プラグイン安定マウントポイント — ゼロ再起動活性化 |
+
 ## 2026-08-27T04:07:27+09:00
 
 **概要**: fix(dsh-nixos-shell): sudo プロトコル v3 + rebuild 自動分離。三種類の欠陥を修正：1) v2 プロトコルは断絶を取消とみなした——rebuild の switch 段階で dsh.service が再起動し（插件パスは service ユニットに焼き込み）、クライアントが消えるとデーモンが活性化の途中で switch を殺し、部分活性化状態が残った（8/26 14:31 実測：profile は 415 のまま dsh は再起動済み、ユニットファイルは半新半旧）；v3 は明示的帯内取消行（job_kill が socket.end で書込）に変更し、対向消失時は子プロセスが分離状態で完了まで走り続ける。2) 取消/タイムアウトはプロセスグループ全体を殺す方式に変更（spawn detached + kill(-pid)）——シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になる；デーモンのタイムアウト上限は 6 時間に緩和し rebuild コマンドが自動使用。3) rebuild は systemd-run 一時ユニット（独立 cgroup）へ自動分離——活性化段階で switch-to-configuration が nixkits-sudo.socket を stop/start するため、rebuild をデーモン経由で実行すると socket 停止が switch 自身もろとも殺し、socket が自動復旧できなかった（8/26 17:25 実測：socket 死滅し、その窓で起動したセッションは sudo パラメータを恒久的に喪失）；分離後は呼び出しが即座にユニット名（detachedUnit）を返し、活性化は完走する。その他：socket は呼び出し時検証へ変更、dsh-jobs の取消を合法 enum `killed` へマッピング、デーモン応答は write コールバックでフラッシュ後に終了。検証：バックグラウンド sudo が job id を即時返却、job_output が全出力を配信、job_kill がグループ全体を孤児なしで殺害、実 rebuild が分離ユニット経由で配備成功し socket が活性化後に自動復旧、nix flake check 通過。四言語ドキュメント同期。

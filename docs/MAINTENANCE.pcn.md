@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-27T07:28:58+09:00
+
+**摘要**: feat(dsh-api-balance): 面板刷新按鈕。面板頭部標籤行右側追加刷新按鈕（↻）：點擊 queryBalance(true) 強制繞宿主側 30s TTL 緩存重取余额 + 官方用量（按日/按月圖表同步更新）；載入中按鈕禁用 + 旋轉動畫（dshAbSpin 復用）。中英双語文案（刷新数据 / Refresh data）。検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映。
+
+| 提交 | 説明 |
+|------|------|
+| `e864b58` | feat(dsh-api-balance): 面板刷新按鈕 — 一鍵強制刷新余额与官方用量 |
+
+## 2026-08-27T07:28:49+09:00
+
+**摘要**: fix(dsh-nixos-shell): 分離結果誠実語義 + systemctl restart dsh 自動分離。従前 rebuild 経 systemd-run 交接後直接透伝其 exit 0、工具結果看似「構築成功」而実結果未知；現分離命令返 `detached: true` + `detachedUnit` + `note`、exitCode 為 null——交接成功非構築成功、実結果一律 nixos_cli op=journal / op=generations 検証（後台任務最終輸出同追記検証指引）。分離謂詞拡至 `systemctl restart dsh`：插件更新経安定掛載点配備後需明示 dsh 再起反映、該命令同自動分離、呼出先於再起返。検証：分離式 dsh 再起着地（RESTARTED_EXIT=0）、插件変更 rebuild（424/425 代）零再起零中断、nix flake check 通過。四語文書同期。
+
+| 提交 | 説明 |
+|------|------|
+| `0c7b7f6` | fix(dsh-nixos-shell): 分離結果誠実語義 + systemctl restart dsh 自動分離 |
+
+## 2026-08-27T07:28:39+09:00
+
+**摘要**: feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化。插件包従前直接焼込 dsh/sudo 単元（ExecStart/preStart/守護模版）、插件更新即変単元内容：switch-to-configuration 活性化段再起 dsh（在途工具呼出随 harness 進程消滅）、stop/start sudo socket（連同経守護実行 rebuild 自身殺、socket 不能自復）。改安定掛載点：activation script 毎回 switch/boot `/run/dsh/current`（dsh 含插件樹）与 `/run/dsh/nixos-shell`（sudo 守護脚本）符号連結翻當前代 store 路（GC 安全：目標處當前 toplevel 閉包、回滚自翻旧代）；dsh.service 与 nixkits-sudo@.service 単元定義僅参照該安定路——插件包更新不変単元内容、活性化零再起零 socket 中断。配套語義：dsh 長駐進程、插件更新需明示 `systemctl restart dsh` 反映（自動分離）；sudo 守護接続毎生成、新連接自動新脚本。検証：423 代配備本改動（一次性 dsh 再起）；424/425 代連続両回插件変更 rebuild——dsh 与 socket ActiveEnterTimestamp 均不変、/run/dsh/current 正常翻鏈、全程無工具呼出被中断。四語文書同期。
+
+| 提交 | 説明 |
+|------|------|
+| `dfce302` | feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化 |
+
 ## 2026-08-27T04:07:27+09:00
 
 **摘要**: fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離。三類欠陥修正：1) v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起（插件路徑焼込 service 単元）、客户端消失則守護活性化中途殺 switch、部分活性化状態殘留（8/26 14:31 実測：profile 停 415 而 dsh 已再起、単元文件半新半旧）；v3 改明示帯内取消行（job_kill 経 socket.end 写入）、対向消失時子進程分離態継続完走。2) 取消/超時改進程組撃殺（spawn detached + kill(-pid)）——僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能；守護超時上限 6h 放寛、rebuild 自動用。3) rebuild 自動分離 systemd-run 瞬時単元（独立 cgroup）——活性化段 switch-to-configuration stop/start nixkits-sudo.socket、rebuild 経守護実行則 socket 停止連同 switch 自身殺、socket 不能自復（8/26 17:25 実測：socket 死滅、該窓起動 session 永久失 sudo 參數）；分離後呼出即返単元名（detachedUnit）、活性化完走。其他：socket 改呼出時検証、dsh-jobs 取消映射合法 enum `killed`、守護応答 write 回調刷出後退出。検証：後台 sudo 即返 job id、job_output 全輸出配信、job_kill 整組無孤児撃殺、実 rebuild 分離単元配備成功且 socket 活性化後自復、nix flake check 通過。四語文書同期。

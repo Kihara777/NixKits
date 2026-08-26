@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-27T07:28:58+09:00
+
+**Summary**: feat(dsh-api-balance): panel refresh button. A refresh button (↻) is added to the right of the panel header tab row: clicking it calls queryBalance(true), bypassing the host-side 30s TTL cache to re-fetch the balance + official usage (daily/monthly charts update together); the button is disabled with a spinner while loading (reuses dshAbSpin). Bilingual zh/en labels (刷新数据 / Refresh data). Verified: build passed, deployed zero-restart via the stable mount point (generation 424), then activated with a dsh restart.
+
+| Commit | Description |
+|--------|-------------|
+| `e864b58` | feat(dsh-api-balance): panel refresh button — one-click refresh of balance and official usage |
+
+## 2026-08-27T07:28:49+09:00
+
+**Summary**: fix(dsh-nixos-shell): honest detached results + auto-detach for systemctl restart dsh. Previously a rebuild handed off through systemd-run returned the handoff's exit 0, so the tool result looked like a successful build while the real outcome was unknown; detached commands now return `detached: true` + `detachedUnit` + `note` with exitCode null — a successful handoff is not a successful build, and the real result must be verified via nixos_cli op=journal / op=generations (background jobs append the same verification guidance to their final output). The detach predicate now also covers `systemctl restart dsh`: after a plugin update deploys through the stable mount points, an explicit dsh restart activates it — that command is equally auto-detached, returning before the restart lands. Verified: detached dsh restart landed (RESTARTED_EXIT=0), plugin-change rebuilds (generations 424/425) restarted nothing and interrupted nothing, nix flake check passed. Four-language docs synced.
+
+| Commit | Description |
+|--------|-------------|
+| `0c7b7f6` | fix(dsh-nixos-shell): honest detached results + auto-detach for systemctl restart dsh |
+
+## 2026-08-27T07:28:39+09:00
+
+**Summary**: feat(module): dsh plugin stable mount points — zero-restart plugin activation. Plugin packages were previously baked directly into the dsh/sudo units (ExecStart/preStart/executor template), so any plugin update changed unit content: switch-to-configuration restarted dsh during activation (killing in-flight tool calls with the harness process) and stopped/started the sudo socket (killing a daemon-run rebuild together with its own switch, leaving the socket down). Now stable mount points: an activation script re-links `/run/dsh/current` (dsh with its plugin tree) and `/run/dsh/nixos-shell` (the sudo executor script) to the current generation's store paths on every switch/boot (GC-safe: targets sit in the current toplevel closure, rollback flips back); the dsh.service and nixkits-sudo@.service unit definitions reference only these stable paths — plugin package updates no longer change unit content, so activation restarts nothing and interrupts nothing. Companion semantics: dsh is a long-lived process, so plugin updates take effect via an explicit `systemctl restart dsh` (auto-detached); the sudo executor spawns per connection and new connections use the new script automatically. Verified: generation 423 deployed this change (one-time dsh restart); two consecutive plugin-change rebuilds (424/425) left both dsh's and the socket's ActiveEnterTimestamp unchanged, flipped /run/dsh/current correctly, and interrupted no tool call. Four-language docs synced.
+
+| Commit | Description |
+|--------|-------------|
+| `dfce302` | feat(module): dsh plugin stable mount points — zero-restart plugin activation |
+
 ## 2026-08-27T04:07:27+09:00
 
 **Summary**: fix(dsh-nixos-shell): sudo protocol v3 + rebuild auto-detach. Three defects fixed: 1) the v2 protocol treated a disconnect as cancel — a rebuild's switch stage restarts dsh.service (plugin paths are baked into the service unit), so the client disappears and the daemon killed the switch mid-activation, leaving a partially activated system (observed 8/26 14:31: profile stuck at 415 while dsh had restarted and unit files were half-new); v3 uses an explicit in-band cancel line (job_kill writes it via socket.end) and on peer loss the child keeps running detached to completion. 2) Cancel/timeout now kill the whole process group (spawn detached + kill(-pid)) — killing only the shell wrapper leaves orphaned grandchildren holding the pipe write-ends and hangs the daemon; the daemon timeout cap is raised to 6h and rebuild commands use it automatically. 3) Rebuilds auto-detach into a systemd-run transient unit (own cgroup) — during activation, switch-to-configuration stops/starts nixkits-sudo.socket, and a rebuild running through the daemon is killed by its own socket stop, leaving the socket down (observed 8/26 17:25: socket dead and sessions booted in that window permanently lost the sudo parameter); detached execution returns the unit name immediately (detachedUnit) and the activation completes. Also: the socket is validated at call time, dsh-jobs cancellation maps to the valid `killed` enum, and the daemon response is flushed via the write callback before exit. Verified: background sudo returns a job id immediately, job_output delivers full output, job_kill kills the whole group with no orphans, a real rebuild deployed through a detached unit with the socket auto-recovering after activation, nix flake check passed. Four-language docs synced.

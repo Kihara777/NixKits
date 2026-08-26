@@ -2,6 +2,30 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-27T07:28:58+09:00
+
+**摘要**：feat(dsh-api-balance): 面板刷新按钮。面板头部标签行右侧新增刷新按钮（↻）：点击经 queryBalance(true) 强制绕过 host 端 30s TTL 缓存重新拉取余额 + 官方用量（按日/按月图表同步更新）；加载中按钮禁用并显示旋转动画（复用 dshAbSpin）。中英双语文案（刷新数据 / Refresh data）。验证：构建通过、经稳定挂载点零重启部署（424 代）后 dsh 重启生效。
+
+| 提交 | 说明 |
+|------|------|
+| `e864b58` | feat(dsh-api-balance): 面板刷新按钮 — 一键强制刷新余额与官方用量 |
+
+## 2026-08-27T07:28:49+09:00
+
+**摘要**：fix(dsh-nixos-shell): 分离结果诚实语义 + systemctl restart dsh 自动分离。此前 rebuild 经 systemd-run 交接后直接透传其 exit 0，工具结果看起来「构建成功」而真实结果未知；现在分离命令返回 `detached: true` + `detachedUnit` + `note`、exitCode 为 null——交接成功 ≠ 构建成功，真实结果一律经 nixos_cli op=journal / op=generations 验证（后台任务最终输出同样追加验证指引）。分离谓词扩展至 `systemctl restart dsh`：插件更新经稳定挂载点部署后需显式重启 dsh 生效，该命令同样自动分离、调用先于重启返回。验证：分离式 dsh 重启落地（RESTARTED_EXIT=0）、插件变更 rebuild（424/425 代）零重启零中断、nix flake check 通过。四语文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `0c7b7f6` | fix(dsh-nixos-shell): 分离结果诚实语义 + systemctl restart dsh 自动分离 |
+
+## 2026-08-27T07:28:39+09:00
+
+**摘要**：feat(module): dsh 插件稳定挂载点 — 插件更新零重启激活。插件包此前直接烧进 dsh/sudo 的 unit（ExecStart/preStart/守护模板），任何插件更新都会改变 unit 内容：switch-to-configuration 在激活阶段重启 dsh（在途工具调用随 harness 进程消失）、stop/start sudo socket（连同经守护执行的 rebuild 自身一起杀掉，socket 无法自动恢复）。改为稳定挂载点：activation script 在每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell`（sudo 守护脚本）符号链接翻到当前代 store 路径（GC 安全：目标处于当前 toplevel 闭包，回滚自动翻回旧代）；dsh.service 与 nixkits-sudo@.service 的单元定义只引用这些稳定路径——插件包更新不再改变 unit 内容，激活阶段零重启、零 socket 中断。配套语义：dsh 是长驻进程，插件更新后需显式 `systemctl restart dsh` 生效（自动分离）；sudo 守护按连接生成，新连接自动使用新脚本。验证：423 代部署本改动（一次性 dsh 重启）；424/425 代连续两次插件包变更 rebuild——dsh 与 socket 的 ActiveEnterTimestamp 均未变化、/run/dsh/current 正常翻链、全程无工具调用被中断。四语文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `dfce302` | feat(module): dsh 插件稳定挂载点 — 插件更新零重启激活 |
+
 ## 2026-08-27T04:07:27+09:00
 
 **摘要**：fix(dsh-nixos-shell): sudo 协议 v3 + rebuild 自动分离。修复三类缺陷：1) v2 协议把连接断开当取消——rebuild 的 switch 阶段重启 dsh.service（插件路径烧进 service unit）导致客户端消失，守护在激活中途杀死 switch、留下部分激活状态（8/26 14:31 实测：profile 停在 415 而 dsh 已重启、单元文件半新半旧）；v3 改为显式带内取消行（job_kill 经 socket.end 写入），对端消失时子进程分离继续运行到完成。2) 取消/超时改为进程组击杀（spawn detached + kill(-pid)），只杀 shell 包装进程会留下继承管道写端的孤儿孙进程并卡死守护；守护超时上限放宽至 6h、rebuild 自动使用。3) rebuild 自动分离到 systemd-run 瞬态单元（独立 cgroup）——激活阶段 switch-to-configuration 会 stop/start nixkits-sudo.socket，rebuild 经守护执行时 socket 停止会连同 switch 自身一起杀掉、socket 无法自动恢复（8/26 17:25 实测 socket 死掉且该窗口期启动的会话永久丢失 sudo 参数）；分离后调用立即返回单元名（detachedUnit）、激活完整跑完。另：socket 改为调用时校验、dsh-jobs 取消映射合法枚举 killed、守护响应经 write 回调刷出后退出。验证：后台 sudo 即时返回 job id、job_output 完整输出、job_kill 整组击杀无孤儿、真实 rebuild 经分离单元部署成功且 socket 激活后自动恢复、nix flake check 通过。四语文档同步。
