@@ -323,6 +323,27 @@ in
       };
     };
 
+    # 健康守护：nixos-rebuild 的 switch-to-configuration 在「stop dsh →
+    # start dsh」之间偶发失败（exit 101）会把 dsh 留在 inactive ——
+    # systemd 主动 stop 不触发 Restart=always，导致反代长期 503。用
+    # timer 定期检查并拉起。
+    systemd.services.dsh-watchdog = {
+      description = "Ensure dsh is running";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.systemd}/bin/systemctl is-active --quiet dsh.service || ${pkgs.systemd}/bin/systemctl start dsh.service'";
+      };
+    };
+
+    systemd.timers.dsh-watchdog = {
+      description = "Periodically ensure dsh is running";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "15s";
+        OnUnitActiveSec = "15s";
+      };
+    };
+
     # External sudo daemon: a systemd socket-activated root executor.  The
     # socket is owned by the dsh service user (SocketUser + 0600), so only
     # that user can connect; every accepted connection runs one command as
