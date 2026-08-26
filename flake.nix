@@ -39,6 +39,7 @@
       godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
+      dsh-api-balance      = pkgs.callPackage ./packages/dsh-api-balance.nix { };
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''

@@ -38,6 +38,7 @@ DeepSeek Harness（DSH）コンポーネントはソフトウェアと分けて�
 | プラグイン | 説明 | ドキュメント |
 |------------|------|--------------|
 | dsh-nixos-shell | NixOS 操作統合（シェル実行、ツールブートストラップ、sudo デーモンルーティング、NixOS 診断） | [docs/ja/dsh-nixos-shell.md](ja/dsh-nixos-shell.md) |
+| dsh-api-balance | API 使用量残高——webui の使用量リング（送信ボタン左）に「用量 / 残高」タブ切替を追加、残高ビューは現在の API キーのアカウント残高を表示（DeepSeek /user/balance） | [docs/ja/dsh.md](ja/dsh.md) |
 
 **Agent プリセット**（dsh-nixos-shell に同梱、`nixkits.dsh.presets` で DSH へ一度だけシード）：
 

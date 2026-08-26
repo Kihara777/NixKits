@@ -97,6 +97,23 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
 }
 ```
 
+### api-balance plugin
+
+API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button) — 「Usage」 keeps the original content (context occupancy and its breakdown), 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance). Data comes from the official DeepSeek `GET /user/balance` endpoint with a 30-second host-side TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`) with a process-environment fallback.
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-api-balance;
+    id = "api-balance";
+    name = "@kihara777/dsh-api-balance";
+    # config (optional):
+    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
+    #   baseURL = "https://api.deepseek.com";
+  }];
+}
+```
+
 ### nixos-shell plugin
 
 NixOS scenario capabilities are consolidated into a **single plugin** `nixos-shell` (`@kihara777/dsh-nixos-shell`), with functional requirements derived from the `nixos-modern-cli` skill scenarios. It registers two tools:

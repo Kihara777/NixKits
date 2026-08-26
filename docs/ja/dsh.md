@@ -97,6 +97,23 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 }
 ```
 
+### api-balance プラグイン
+
+API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加——「用量」は元の内容（コンテキスト占有率と内訳）、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高）を表示する。データは DeepSeek 公式 `GET /user/balance` から取得し、ホスト側で 30 秒 TTL キャッシュ。API キーは `credentials` サービス経由で `apiKeyEnv`（デフォルト `DEEPSEEK_API_KEY`）を解決し、プロセス環境変数へフォールバックする。
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-api-balance;
+    id = "api-balance";
+    name = "@kihara777/dsh-api-balance";
+    # config（任意）：
+    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
+    #   baseURL = "https://api.deepseek.com";
+  }];
+}
+```
+
 ### nixos-shell プラグイン
 
 NixOS シナリオ能力は**単一プラグイン** `nixos-shell`（`@kihara777/dsh-nixos-shell`）へ統合され、機能要件は `nixos-modern-cli` スキルのシナリオに由来する。2 つのツールを登録する：

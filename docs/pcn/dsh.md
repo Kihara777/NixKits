@@ -97,6 +97,23 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 }
 ```
 
+### api-balance 插件
+
+API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加——「用量」原内容（上下文占有率与内訳）、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）表示。數據 DeepSeek 公式 `GET /user/balance` 取得、宿主側 30 秒 TTL 緩存。API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退。
+
+```nix
+{
+  nixkits.dsh.plugins.packages = [{
+    package = pkgs.dsh-api-balance;
+    id = "api-balance";
+    name = "@kihara777/dsh-api-balance";
+    # config（任意）：
+    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
+    #   baseURL = "https://api.deepseek.com";
+  }];
+}
+```
+
 ### nixos-shell 插件
 
 NixOS 場景能力**単一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`）統合、機能要件 `nixos-modern-cli` 技能場景由来。2 工具登録：
