@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-26T11:44:45+09:00
+
+**Summary**: dsh-api-balance 0.1.0 — new package. The webui usage ring (the context-usage display left of the send button) gains a 「Usage / Balance」 tab switch in its popover panel: 「Usage」 keeps the original context occupancy and breakdown, 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance, sourced from DeepSeek's official GET /user/balance with a 30s host-side TTL cache). The host half registers a package-private endpoint via connection.rpc.intercept, the client half registers a visually compatible replacement ring in conversation.input.right and hides the original button. Verified: RPC returns a live CNY 271.07 balance; the client bundle serves correctly. Four-language docs synced, nix flake check passed.
+
+| Commit | Description |
+|------|------|
+| `95998cd` | feat(dsh): add dsh-api-balance plugin — Usage/Balance tab switch on the webui usage ring |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 　 | new v0.1.0 |
+
 ## 2026-08-24T15:44:06+09:00
 
 **Summary**: fix(overlay): llama-cpp-rocm v0.2.0 semantic version — llama.cpp upstream switched release tags from build numbers (b10549) to semantic versions (v0.2.0). The old overlay only stripped the b prefix, yielding v0.2.0, which nixpkgs then passed into LLAMA_BUILD_NUMBER, producing `int LLAMA_BUILD_NUMBER = v0.2.0;` and a C++ compile failure (too many decimal points) that blocked system rebuilds and the dsh upgrade. It now strips both v/b prefixes and appends -DLLAMA_BUILD_NUMBER=0. Verified: llama-cpp-0.2.0 builds and llama-cpp.service runs.

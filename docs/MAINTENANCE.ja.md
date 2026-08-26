@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-26T11:44:45+09:00
+
+**概要**: dsh-api-balance 0.1.0 — 新規パッケージ。webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加：「用量」は元のコンテキスト占有率と内訳を維持、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高、DeepSeek 公式 GET /user/balance から取得しホスト側 30 秒 TTL キャッシュ）を表示する。ホスト側は connection.rpc.intercept でパッケージプライベート endpoint を登録、クライアント側は conversation.input.right に視覚互換の代替リングを登録し元のボタンを非表示化。検証: RPC が CNY 271.07 の実残高を返し、client bundle の配信も正常。四言語ドキュメント同期、nix flake check 通過。
+
+| コミット | 説明 |
+|------|------|
+| `95998cd` | feat(dsh): dsh-api-balance プラグイン追加 — webui 使用量リングに「用量 / 残高」タブ切替 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 　 | 新規 v0.1.0 |
+
 ## 2026-08-24T15:44:06+09:00
 
 **概要**: fix(overlay): llama-cpp-rocm v0.2.0 セマンティック版 — llama.cpp 上流が release tag を build number（b10549）からセマンティック版（v0.2.0）に切替。旧 overlay は b 前置詞のみ除去して v0.2.0 を得たが、nixpkgs がそれを LLAMA_BUILD_NUMBER に渡し、`int LLAMA_BUILD_NUMBER = v0.2.0;` を生成して C++ コンパイル失敗（too many decimal points）になり、システム rebuild と dsh 更新を阻塞。現在は v/b 前置詞を両方除去し、-DLLAMA_BUILD_NUMBER=0 を追記。検証: llama-cpp-0.2.0 ビルド成功、llama-cpp.service 稼働。

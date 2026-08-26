@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-26T11:44:45+09:00
+
+**摘要**：dsh-api-balance 0.1.0 — 新包。webui 用量圆圈（发送按钮左侧的上下文已用显示）弹出面板添加「用量 / 余额」标签切换：「用量」保留原有上下文占用与细分内容，「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额，数据来自 DeepSeek 官方 GET /user/balance，host 端 30s TTL 缓存）。host 端经 connection.rpc.intercept 注册包私有 endpoint，client 端在 conversation.input.right 注册视觉兼容的替代圆圈并隐藏原按钮。验证：RPC 实测返回 CNY 271.07 余额，client bundle 正常服务。四语文档同步，nix flake check 通过。
+
+| 提交 | 说明 |
+|------|------|
+| `95998cd` | feat(dsh): 新增 dsh-api-balance 插件 — webui 用量圆圈「用量 / 余额」标签切换 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 　 | 新增 v0.1.0 |
+
 ## 2026-08-24T15:44:06+09:00
 
 **摘要**：fix(overlay): llama-cpp-rocm v0.2.0 语义化版本 — llama.cpp 上游 release tag 从 build number（b10549）切换为语义化版本（v0.2.0），旧 overlay 只剥离 b 前缀得到 v0.2.0，nixpkgs 又把它传入 LLAMA_BUILD_NUMBER，生成 `int LLAMA_BUILD_NUMBER = v0.2.0;` 导致 C++ 编译失败（too many decimal points），阻塞系统 rebuild 与 dsh 升级。现在同时剥离 v/b 前缀并追加 -DLLAMA_BUILD_NUMBER=0 覆盖。验证：llama-cpp-0.2.0 构建成功、llama-cpp.service 正常运行。
