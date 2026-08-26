@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-27T04:07:27+09:00
+
+**摘要**：fix(dsh-nixos-shell): sudo 协议 v3 + rebuild 自动分离。修复三类缺陷：1) v2 协议把连接断开当取消——rebuild 的 switch 阶段重启 dsh.service（插件路径烧进 service unit）导致客户端消失，守护在激活中途杀死 switch、留下部分激活状态（8/26 14:31 实测：profile 停在 415 而 dsh 已重启、单元文件半新半旧）；v3 改为显式带内取消行（job_kill 经 socket.end 写入），对端消失时子进程分离继续运行到完成。2) 取消/超时改为进程组击杀（spawn detached + kill(-pid)），只杀 shell 包装进程会留下继承管道写端的孤儿孙进程并卡死守护；守护超时上限放宽至 6h、rebuild 自动使用。3) rebuild 自动分离到 systemd-run 瞬态单元（独立 cgroup）——激活阶段 switch-to-configuration 会 stop/start nixkits-sudo.socket，rebuild 经守护执行时 socket 停止会连同 switch 自身一起杀掉、socket 无法自动恢复（8/26 17:25 实测 socket 死掉且该窗口期启动的会话永久丢失 sudo 参数）；分离后调用立即返回单元名（detachedUnit）、激活完整跑完。另：socket 改为调用时校验、dsh-jobs 取消映射合法枚举 killed、守护响应经 write 回调刷出后退出。验证：后台 sudo 即时返回 job id、job_output 完整输出、job_kill 整组击杀无孤儿、真实 rebuild 经分离单元部署成功且 socket 激活后自动恢复、nix flake check 通过。四语文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `ead3526` | fix(dsh-nixos-shell): sudo 协议 v3 + rebuild 自动分离 |
+
+## 2026-08-27T04:07:15+09:00
+
+**摘要**：feat(dsh-api-balance): 充值卡片弹窗替代 iframe + 余额不足语音提醒。platform.deepseek.com/top_up 被 WAF 拦截（"Max challenge attempts exceeded"），iframe 弹窗无法工作——改为居中卡片弹窗（新窗口按钮 + 右上角关闭按钮），不跳转页面。新增余额不足语音提醒：余额低于阈值（10 CNY/USD）时经 Web Speech API 播报提示，15 分钟轮询 + 30 分钟冷却，面板内开关（balance.speechOn/Off），中英双语文案。验证：部署后特征 grep（TopupModal/speechOn/announceHunger）确认生效。
+
+| 提交 | 说明 |
+|------|------|
+| `eeffc49` | feat(dsh-api-balance): 充值卡片弹窗替代 iframe + 余额不足语音提醒 |
+
 ## 2026-08-26T11:44:45+09:00
 
 **摘要**：dsh-api-balance 0.1.0 — 新包。webui 用量圆圈（发送按钮左侧的上下文已用显示）弹出面板添加「用量 / 余额」标签切换：「用量」保留原有上下文占用与细分内容，「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额，数据来自 DeepSeek 官方 GET /user/balance，host 端 30s TTL 缓存）。host 端经 connection.rpc.intercept 注册包私有 endpoint，client 端在 conversation.input.right 注册视觉兼容的替代圆圈并隐藏原按钮。验证：RPC 实测返回 CNY 271.07 余额，client bundle 正常服务。四语文档同步，nix flake check 通过。

@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-27T04:07:27+09:00
+
+**Summary**: fix(dsh-nixos-shell): sudo protocol v3 + rebuild auto-detach. Three defects fixed: 1) the v2 protocol treated a disconnect as cancel — a rebuild's switch stage restarts dsh.service (plugin paths are baked into the service unit), so the client disappears and the daemon killed the switch mid-activation, leaving a partially activated system (observed 8/26 14:31: profile stuck at 415 while dsh had restarted and unit files were half-new); v3 uses an explicit in-band cancel line (job_kill writes it via socket.end) and on peer loss the child keeps running detached to completion. 2) Cancel/timeout now kill the whole process group (spawn detached + kill(-pid)) — killing only the shell wrapper leaves orphaned grandchildren holding the pipe write-ends and hangs the daemon; the daemon timeout cap is raised to 6h and rebuild commands use it automatically. 3) Rebuilds auto-detach into a systemd-run transient unit (own cgroup) — during activation, switch-to-configuration stops/starts nixkits-sudo.socket, and a rebuild running through the daemon is killed by its own socket stop, leaving the socket down (observed 8/26 17:25: socket dead and sessions booted in that window permanently lost the sudo parameter); detached execution returns the unit name immediately (detachedUnit) and the activation completes. Also: the socket is validated at call time, dsh-jobs cancellation maps to the valid `killed` enum, and the daemon response is flushed via the write callback before exit. Verified: background sudo returns a job id immediately, job_output delivers full output, job_kill kills the whole group with no orphans, a real rebuild deployed through a detached unit with the socket auto-recovering after activation, nix flake check passed. Four-language docs synced.
+
+| Commit | Description |
+|--------|-------------|
+| `ead3526` | fix(dsh-nixos-shell): sudo protocol v3 + rebuild auto-detach |
+
+## 2026-08-27T04:07:15+09:00
+
+**Summary**: feat(dsh-api-balance): top-up card modal replaces iframe + low-balance voice alert. platform.deepseek.com/top_up is blocked by a WAF ("Max challenge attempts exceeded"), so the iframe modal could not work — replaced with a centered card modal (new-window button + close button top-right), no page navigation. Added a low-balance voice alert: when the balance drops below the threshold (10 CNY/USD) it speaks a prompt via the Web Speech API, with 15-minute polling + 30-minute cooldown and a panel toggle (balance.speechOn/Off), bilingual zh/en copy. Verified: post-deploy feature grep (TopupModal/speechOn/announceHunger) confirms it is live.
+
+| Commit | Description |
+|--------|-------------|
+| `eeffc49` | feat(dsh-api-balance): top-up card modal replaces iframe + low-balance voice alert |
+
 ## 2026-08-26T11:44:45+09:00
 
 **Summary**: dsh-api-balance 0.1.0 — new package. The webui usage ring (the context-usage display left of the send button) gains a 「Usage / Balance」 tab switch in its popover panel: 「Usage」 keeps the original context occupancy and breakdown, 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance, sourced from DeepSeek's official GET /user/balance with a 30s host-side TTL cache). The host half registers a package-private endpoint via connection.rpc.intercept, the client half registers a visually compatible replacement ring in conversation.input.right and hides the original button. Verified: RPC returns a live CNY 271.07 balance; the client bundle serves correctly. Four-language docs synced, nix flake check passed.

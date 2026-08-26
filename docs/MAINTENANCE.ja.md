@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-27T04:07:27+09:00
+
+**概要**: fix(dsh-nixos-shell): sudo プロトコル v3 + rebuild 自動分離。三種類の欠陥を修正：1) v2 プロトコルは断絶を取消とみなした——rebuild の switch 段階で dsh.service が再起動し（插件パスは service ユニットに焼き込み）、クライアントが消えるとデーモンが活性化の途中で switch を殺し、部分活性化状態が残った（8/26 14:31 実測：profile は 415 のまま dsh は再起動済み、ユニットファイルは半新半旧）；v3 は明示的帯内取消行（job_kill が socket.end で書込）に変更し、対向消失時は子プロセスが分離状態で完了まで走り続ける。2) 取消/タイムアウトはプロセスグループ全体を殺す方式に変更（spawn detached + kill(-pid)）——シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になる；デーモンのタイムアウト上限は 6 時間に緩和し rebuild コマンドが自動使用。3) rebuild は systemd-run 一時ユニット（独立 cgroup）へ自動分離——活性化段階で switch-to-configuration が nixkits-sudo.socket を stop/start するため、rebuild をデーモン経由で実行すると socket 停止が switch 自身もろとも殺し、socket が自動復旧できなかった（8/26 17:25 実測：socket 死滅し、その窓で起動したセッションは sudo パラメータを恒久的に喪失）；分離後は呼び出しが即座にユニット名（detachedUnit）を返し、活性化は完走する。その他：socket は呼び出し時検証へ変更、dsh-jobs の取消を合法 enum `killed` へマッピング、デーモン応答は write コールバックでフラッシュ後に終了。検証：バックグラウンド sudo が job id を即時返却、job_output が全出力を配信、job_kill がグループ全体を孤児なしで殺害、実 rebuild が分離ユニット経由で配備成功し socket が活性化後に自動復旧、nix flake check 通過。四言語ドキュメント同期。
+
+| コミット | 説明 |
+|----------|------|
+| `ead3526` | fix(dsh-nixos-shell): sudo プロトコル v3 + rebuild 自動分離 |
+
+## 2026-08-27T04:07:15+09:00
+
+**概要**: feat(dsh-api-balance): チャージカードモーダルが iframe を代替 + 残高不足音声アラート。platform.deepseek.com/top_up は WAF に遮断され（"Max challenge attempts exceeded"）、iframe モーダルは機能しなかった——中央カードモーダル（新規ウィンドウボタン + 右上閉じるボタン）に置き換え、ページ遷移なし。残高不足音声アラートを追加：残高が閾値（10 CNY/USD）を下回ると Web Speech API で読み上げ、15 分間隔ポーリング + 30 分クールダウン、パネル内トグル（balance.speechOn/Off）、中英二言語文案。検証：配備後の特徴 grep（TopupModal/speechOn/announceHunger）で稼働確認。
+
+| コミット | 説明 |
+|----------|------|
+| `eeffc49` | feat(dsh-api-balance): チャージカードモーダルが iframe を代替 + 残高不足音声アラート |
+
 ## 2026-08-26T11:44:45+09:00
 
 **概要**: dsh-api-balance 0.1.0 — 新規パッケージ。webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加：「用量」は元のコンテキスト占有率と内訳を維持、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高、DeepSeek 公式 GET /user/balance から取得しホスト側 30 秒 TTL キャッシュ）を表示する。ホスト側は connection.rpc.intercept でパッケージプライベート endpoint を登録、クライアント側は conversation.input.right に視覚互換の代替リングを登録し元のボタンを非表示化。検証: RPC が CNY 271.07 の実残高を返し、client bundle の配信も正常。四言語ドキュメント同期、nix flake check 通過。

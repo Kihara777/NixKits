@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-27T04:07:27+09:00
+
+**摘要**: fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離。三類欠陥修正：1) v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起（插件路徑焼込 service 単元）、客户端消失則守護活性化中途殺 switch、部分活性化状態殘留（8/26 14:31 実測：profile 停 415 而 dsh 已再起、単元文件半新半旧）；v3 改明示帯内取消行（job_kill 経 socket.end 写入）、対向消失時子進程分離態継続完走。2) 取消/超時改進程組撃殺（spawn detached + kill(-pid)）——僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能；守護超時上限 6h 放寛、rebuild 自動用。3) rebuild 自動分離 systemd-run 瞬時単元（独立 cgroup）——活性化段 switch-to-configuration stop/start nixkits-sudo.socket、rebuild 経守護実行則 socket 停止連同 switch 自身殺、socket 不能自復（8/26 17:25 実測：socket 死滅、該窓起動 session 永久失 sudo 參數）；分離後呼出即返単元名（detachedUnit）、活性化完走。其他：socket 改呼出時検証、dsh-jobs 取消映射合法 enum `killed`、守護応答 write 回調刷出後退出。検証：後台 sudo 即返 job id、job_output 全輸出配信、job_kill 整組無孤児撃殺、実 rebuild 分離単元配備成功且 socket 活性化後自復、nix flake check 通過。四語文書同期。
+
+| 提交 | 説明 |
+|------|------|
+| `ead3526` | fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離 |
+
+## 2026-08-27T04:07:15+09:00
+
+**摘要**: feat(dsh-api-balance): 充值卡片弾窓代替 iframe + 残高不足語音提醒。platform.deepseek.com/top_up WAF 遮断（"Max challenge attempts exceeded"）、iframe 弾窓不能工作——改居中卡片弾窓（新窓按鈕 + 右上閉按鈕）、無頁面跳転。追加残高不足語音提醒：残高低閾値（10 CNY/USD）時 Web Speech API 播報、15 分輪詢 + 30 分冷却、面板内開關（balance.speechOn/Off）、中英双語文案。検証：配備後特徴 grep（TopupModal/speechOn/announceHunger）確認生效。
+
+| 提交 | 説明 |
+|------|------|
+| `eeffc49` | feat(dsh-api-balance): 充值卡片弾窓代替 iframe + 残高不足語音提醒 |
+
 ## 2026-08-26T11:44:45+09:00
 
 **摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率与内訳維持、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
