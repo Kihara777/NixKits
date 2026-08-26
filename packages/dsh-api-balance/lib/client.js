@@ -744,7 +744,7 @@ window.__ModuleLoader__.load({
 							width: (percent * breakdown[row.key]) / breakdownTotal,
 						})).filter((part) => part.width > 0);
 
-			// 标签行（用量 | 余额）。
+				// 标签行（用量 | 余额）。
 			const tabButton = (id, active) =>
 				react.createElement(
 					"button",
@@ -769,6 +769,58 @@ window.__ModuleLoader__.load({
 					},
 					id === TAB_USAGE ? t("tab.usage") : t("tab.balance"),
 				);
+
+			// 刷新按钮：强制绕过 host 端缓存重新拉取余额 + 官方用量
+			// （queryBalance(true) → RPC refresh:true）。加载中显示旋转动画。
+			const refreshing = balanceState === "loading";
+			const refreshButton = react.createElement(
+				"button",
+				{
+					type: "button",
+					"aria-label": t("balance.refresh"),
+					title: t("balance.refresh"),
+					disabled: refreshing,
+					onClick: () => {
+						void load(true);
+					},
+					style: {
+						display: "inline-flex",
+						alignItems: "center",
+						justifyContent: "center",
+						width: "24px",
+						height: "24px",
+						padding: 0,
+						borderRadius: "999px",
+						cursor: refreshing ? "default" : "pointer",
+						userSelect: "none",
+						border: "1px solid var(--dsw-alias-separator-primary)",
+						background: "transparent",
+						color: "var(--dsw-alias-label-tertiary)",
+						opacity: refreshing ? 0.6 : 1,
+					},
+				},
+				refreshing
+					? react.createElement("i", { className: "dshAbSpin", "aria-hidden": true, style: { margin: 0 } })
+					: react.createElement(
+							"svg",
+							{ viewBox: "0 0 16 16", width: "13", height: "13", "aria-hidden": true },
+							react.createElement("path", {
+								d: "M13.6 8a5.6 5.6 0 1 1-1.64-3.96",
+								fill: "none",
+								stroke: "currentColor",
+								strokeWidth: 1.6,
+								strokeLinecap: "round",
+							}),
+							react.createElement("path", {
+								d: "M12.4 1.5v3.1H9.3",
+								fill: "none",
+								stroke: "currentColor",
+								strokeWidth: 1.6,
+								strokeLinecap: "round",
+								strokeLinejoin: "round",
+							}),
+						),
+			);
 
 			// 「用量」标签内容：复刻原 ContextMeter 面板。
 			const usageBody = react.createElement(
@@ -1355,13 +1407,19 @@ window.__ModuleLoader__.load({
 						},
 						react.createElement(
 							"div",
-							{
-								role: "tablist",
-								"aria-label": t("tab.aria"),
-								style: { display: "flex", gap: "4px", marginBottom: "12px" },
-							},
-							tabButton(TAB_USAGE, tab === TAB_USAGE),
-							tabButton(TAB_BALANCE, tab === TAB_BALANCE),
+							{ style: { display: "flex", alignItems: "center", gap: "4px", marginBottom: "12px" } },
+							react.createElement(
+								"div",
+								{
+									role: "tablist",
+									"aria-label": t("tab.aria"),
+									style: { display: "flex", gap: "4px" },
+								},
+								tabButton(TAB_USAGE, tab === TAB_USAGE),
+								tabButton(TAB_BALANCE, tab === TAB_BALANCE),
+							),
+							react.createElement("span", { style: { flex: "1 1 auto" } }),
+							refreshButton,
 						),
 						tab === TAB_USAGE ? usageBody : balanceBody,
 					),
@@ -1383,6 +1441,7 @@ window.__ModuleLoader__.load({
 			"usage.messages": "对话消息",
 			"balance.loading": "查询余额中…",
 			"balance.error": "余额查询失败",
+			"balance.refresh": "刷新数据",
 			"balance.key": "API Key",
 			"balance.status": "账户状态",
 			"balance.available": "余额充足",
@@ -1432,6 +1491,7 @@ window.__ModuleLoader__.load({
 			"usage.tools": "Tools",
 			"usage.messages": "Conversation",
 			"balance.loading": "Fetching balance…",
+			"balance.refresh": "Refresh data",
 			"balance.error": "Balance fetch failed",
 			"balance.key": "API Key",
 			"balance.status": "Status",
