@@ -9,6 +9,7 @@
 | Commit | Description |
 |------|------|
 | `95998cd` | feat(dsh): add dsh-api-balance plugin — Usage/Balance tab switch on the webui usage ring |
+| `db721ba` | docs(MAINTENANCE): record 2026-08-26 — new dsh-api-balance 0.1.0 package |
 
 | Package | Old | New |
 |--------|--------|--------|

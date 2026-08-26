@@ -9,6 +9,7 @@
 | 提交 | 说明 |
 |------|------|
 | `95998cd` | feat(dsh): 新增 dsh-api-balance 插件 — webui 用量圆圈「用量 / 余额」标签切换 |
+| `db721ba` | docs(MAINTENANCE): record 2026-08-26 — dsh-api-balance 0.1.0 新包 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
