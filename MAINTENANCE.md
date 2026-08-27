@@ -2,6 +2,31 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-27T09:19:59+09:00
+
+**摘要**：opencode-telegram 0.24.1 — 新增韩语界面、`/opencode_stop` 忙时可终止卡死的本地 OpenCode 进程、语音转写以引用块显示、Telegram 临时错误安全重试防回复丢失/重复、流式编辑节流自适应；mcp-searxng 2.1.0 — 显式选择引擎时逐引擎校验 time-range 能力、不支持时快速失败并给出可操作错误；godot-ai 3.2.0 — custom_tools 第三方 addon 工具注册、CLI 注册范围可选、新增 DeepSeek Harness 客户端支持；ruyi-beta 0.52.0-beta.20260824 — beta 通道上游更新。四语文档同步，nix flake check 通过。
+
+| 提交 | 说明 |
+|------|------|
+| `7d57bfa` | chore(pkgs): bump opencode-telegram 0.24.0 → 0.24.1 |
+| `85b813e` | chore(pkgs): bump mcp-searxng 2.0.0 → 2.1.0 |
+| `0fe16db` | chore(pkgs): bump godot-ai 3.1.5 → 3.2.0 |
+| `b26d013` | chore(pkgs): bump ruyi-beta 0.51.0-beta.20260714 → 0.52.0-beta.20260824 |
+| `ac44923` | docs(MAINTENANCE): record 2026-08-27 — 四包上游更新 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.24.0 | 0.24.1 |
+| 　 | source hash | `sha256-uZaAyt...` → `sha256-uWhSMq...` |
+| 　 | npmDepsHash | `sha256-Vh/e3S...` → `sha256-5ndUrB...` |
+| mcp-searxng | 2.0.0 | 2.1.0 |
+| 　 | source hash | `sha256-zakEU/...` → `sha256-Zq6oKX...` |
+| 　 | npmDepsHash | `sha256-4WUOJJ...` → `sha256-YIH/5R...` |
+| godot-ai | 3.1.5 | 3.2.0 |
+| 　 | source hash | `sha256-zqZnKk...` → `sha256-ImKAsI...` |
+| ruyi-beta | 0.51.0-beta.20260714 | 0.52.0-beta.20260824 |
+| 　 | hash | `sha256-saOsHG...` → `sha256-vxu9Ah...` |
+
 ## 2026-08-27T07:28:58+09:00
 
 **摘要**：feat(dsh-api-balance): 面板刷新按钮。面板头部标签行右侧新增刷新按钮（↻）：点击经 queryBalance(true) 强制绕过 host 端 30s TTL 缓存重新拉取余额 + 官方用量（按日/按月图表同步更新）；加载中按钮禁用并显示旋转动画（复用 dshAbSpin）。中英双语文案（刷新数据 / Refresh data）。验证：构建通过、经稳定挂载点零重启部署（424 代）后 dsh 重启生效。

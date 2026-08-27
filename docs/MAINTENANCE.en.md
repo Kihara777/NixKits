@@ -2,6 +2,31 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-27T09:19:59+09:00
+
+**Summary**: opencode-telegram 0.24.1 — Korean interface, `/opencode_stop` can kill a hung local OpenCode server even while busy, voice transcripts shown as quotes, safe retries on temporary Telegram errors prevent lost/duplicated replies, adaptive streaming throttle; mcp-searxng 2.1.0 — per-engine time-range capability validation when engines are explicitly selected, failing fast with an actionable error; godot-ai 3.2.0 — custom_tools third-party addon registry, selectable CLI registration scope, DeepSeek Harness client support; ruyi-beta 0.52.0-beta.20260824 — beta channel upstream update. Four-language docs synced; nix flake check passes.
+
+| Commit | Description |
+|------|------|
+| `7d57bfa` | chore(pkgs): bump opencode-telegram 0.24.0 → 0.24.1 |
+| `85b813e` | chore(pkgs): bump mcp-searxng 2.0.0 → 2.1.0 |
+| `0fe16db` | chore(pkgs): bump godot-ai 3.1.5 → 3.2.0 |
+| `b26d013` | chore(pkgs): bump ruyi-beta 0.51.0-beta.20260714 → 0.52.0-beta.20260824 |
+| `ac44923` | docs(MAINTENANCE): record 2026-08-27 — four upstream package updates |
+
+| Package | Old | New |
+|--------|--------|--------|
+| opencode-telegram | 0.24.0 | 0.24.1 |
+| 　 | source hash | `sha256-uZaAyt...` → `sha256-uWhSMq...` |
+| 　 | npmDepsHash | `sha256-Vh/e3S...` → `sha256-5ndUrB...` |
+| mcp-searxng | 2.0.0 | 2.1.0 |
+| 　 | source hash | `sha256-zakEU/...` → `sha256-Zq6oKX...` |
+| 　 | npmDepsHash | `sha256-4WUOJJ...` → `sha256-YIH/5R...` |
+| godot-ai | 3.1.5 | 3.2.0 |
+| 　 | source hash | `sha256-zqZnKk...` → `sha256-ImKAsI...` |
+| ruyi-beta | 0.51.0-beta.20260714 | 0.52.0-beta.20260824 |
+| 　 | hash | `sha256-saOsHG...` → `sha256-vxu9Ah...` |
+
 ## 2026-08-27T07:28:58+09:00
 
 **Summary**: feat(dsh-api-balance): panel refresh button. A refresh button (↻) is added to the right of the panel header tab row: clicking it calls queryBalance(true), bypassing the host-side 30s TTL cache to re-fetch the balance + official usage (daily/monthly charts update together); the button is disabled with a spinner while loading (reuses dshAbSpin). Bilingual zh/en labels (刷新数据 / Refresh data). Verified: build passed, deployed zero-restart via the stable mount point (generation 424), then activated with a dsh restart.
