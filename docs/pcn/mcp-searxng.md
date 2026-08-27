@@ -1,8 +1,8 @@
 # mcp-searxng
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-x86_64.yml?branch=main&label=x86_64%20v2.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-aarch64.yml?branch=main&label=aarch64%20v2.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-riscv64.yml?branch=main&label=riscv64%20v2.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-x86_64.yml?branch=main&label=x86_64%20v2.1.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-aarch64.yml?branch=main&label=aarch64%20v2.1.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-mcp-searxng-riscv64.yml?branch=main&label=riscv64%20v2.1.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/mcp-searxng.md) | [English](../en/mcp-searxng.md) | [日本語](../ja/mcp-searxng.md)  | 偽中国語
 
@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 2.0.0 |
+| 版 | 2.1.0 |
 | 上流 | [ihor-sokoliuk/MCP-searxng](https://github.com/ihor-sokoliuk/MCP-searxng) |
 
 ## 導入
