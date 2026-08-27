@@ -12,7 +12,7 @@
 | `85b813e` | chore(pkgs): bump mcp-searxng 2.0.0 → 2.1.0 |
 | `0fe16db` | chore(pkgs): bump godot-ai 3.1.5 → 3.2.0 |
 | `b26d013` | chore(pkgs): bump ruyi-beta 0.51.0-beta.20260714 → 0.52.0-beta.20260824 |
-| `ac44923` | docs(MAINTENANCE): record 2026-08-27 — 四パッケージ上流更新 |
+| `e88e284` | docs(MAINTENANCE): record 2026-08-27 — 四パッケージ上流更新 |
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
