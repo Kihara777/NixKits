@@ -10,6 +10,7 @@
 |------|------|
 | `88a2dfc` | feat(dsh): multi-version channels — add dsh-alpha 0.1.2-alpha.2 |
 | `33bff25` | docs(dsh): add version-channels section to four-language docs |
+| `095d002` | docs(MAINTENANCE): record 2026-08-31 — new dsh-alpha package |
 
 | Package | Old | New |
 |--------|--------|--------|

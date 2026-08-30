@@ -10,6 +10,7 @@
 |------|------|
 | `88a2dfc` | feat(dsh): 多版本通道 — 新增 dsh-alpha 0.1.2-alpha.2 |
 | `33bff25` | docs(dsh): 四语文档新增版本通道章节（dsh-alpha） |
+| `095d002` | docs(MAINTENANCE): record 2026-08-31 — dsh-alpha 新包 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
