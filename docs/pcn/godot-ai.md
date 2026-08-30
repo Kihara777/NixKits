@@ -12,7 +12,7 @@ Godot 引擎 高品質 MCP server 與 AI 工具 — MCP client **実行中 Godot
 |------|-----|
 | 類型 | Python 応用（MCP server）|
 | 上流 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| 版本 | `3.2.0` |
+| 版本 | `3.2.4` |
 | 許可 | MIT |
 | Python | ≥ 3.11 |
 

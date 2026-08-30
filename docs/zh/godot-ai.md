@@ -12,7 +12,7 @@ Production-grade MCP server 和 AI 工具，用于 Godot 引擎 — 连接 MCP �
 |------|-----|
 | 类型 | Python 应用（MCP server）|
 | 上游 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| 版本 | `3.2.0` |
+| 版本 | `3.2.4` |
 | 许可 | MIT |
 | Python | ≥ 3.11 |
 

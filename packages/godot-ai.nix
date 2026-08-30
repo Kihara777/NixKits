@@ -6,13 +6,13 @@
 
 python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
-  version = "3.2.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "hi-godot";
     repo = "godot-ai";
     tag = "v${version}";
-    hash = "sha256-ImKAsIEIynliM8Rc8pp+BvOkFOekuhEuRuWrsYM5wD0=";
+    hash = "sha256-Uo6GvEOmQdsEOd6e7U+DGaZzGOmp1W5rMt1x1GKOvJg=";
   };
 
   pyproject = true;
