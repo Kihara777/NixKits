@@ -15,6 +15,7 @@ final: prev: {
   # dependencies resolve to 3.4.7.
   godot-ai             = (prev.extend (import ./fastmcp.nix)).callPackage ../packages/godot-ai.nix { };
   dsh                  = final.callPackage ../packages/dsh.nix { };
+  dsh-alpha            = final.callPackage ../packages/dsh-alpha.nix { };
   # NixOS-aware shell tool plugin for dsh (fixes "spawn bash ENOENT").
   dsh-nixos-shell      = final.callPackage ../packages/dsh-nixos-shell.nix { };
   # API 用量余额插件: webui 用量显示旁添加「用量 / 开销」标签切换。
