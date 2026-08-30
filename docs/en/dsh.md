@@ -11,8 +11,25 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | Version | `0.1.1-rc.2` |
+| Development channel | `dsh-alpha 0.1.2-alpha.2` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
+
+## Version Channels
+
+NixKits ships multiple dsh versions at once, following ruyi's thin-wrapper pattern (main definition + version/hash override wrappers):
+
+| Package | Channel | Version | Notes |
+|---------|---------|---------|-------|
+| `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag, default |
+| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.2` | npm `alpha` dist-tag, tracks the latest development build |
+
+```nix
+# Use the latest development version on this machine
+{ nixkits.dsh.package = pkgs.dsh-alpha; }
+```
+
+> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.1-rc.2`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
 
 ## Install
 
