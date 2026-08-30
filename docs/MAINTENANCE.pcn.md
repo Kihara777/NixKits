@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-31T07:23:07+09:00
+
+**摘要**: dsh-alpha 0.1.2-alpha.2 — 新規包、npm `alpha` dist-tag 開発通道；dsh ruyi 式薄包装再構成（version/hash/npmDepsHash/lockFile 上書可能）、postPatch 純 sed tarball devDependencies 削除（未公開 monorepo 内部包参照、registry 404）、修正対象書類存在警備追加。四言語文書版本通道節追加。
+
+| 提交 | 説明 |
+|------|------|
+| `88a2dfc` | feat(dsh): 多版本通道 — dsh-alpha 0.1.2-alpha.2 追加 |
+| `33bff25` | docs(dsh): 四言語文書版本通道節追加 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-alpha | 新規 `0.1.2-alpha.2` | |
+| 　 | source hash | `sha256-W/Biom...` |
+| 　 | npmDepsHash | `sha256-bJMeVS...` |
+
 ## 2026-08-31T07:05:44+09:00
 
 **摘要**: godot-ai 3.2.4 — 自己更新復旧直列化、設定書込堅牢化、経路検証與冷起動修正（v3.2.1〜v3.2.4 皆不具合修正）；四言語文書版番号同期。

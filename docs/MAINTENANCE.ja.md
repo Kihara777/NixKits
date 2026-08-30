@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T07:23:07+09:00
+
+**概要**: dsh-alpha 0.1.2-alpha.2 — 新規パッケージ、npm `alpha` dist-tag 開発チャネル；dsh を ruyi 式薄ラッパーに再構成（version/hash/npmDepsHash/lockFile 上書き可能）、postPatch は純 sed で tarball の devDependencies を削除（未公開の monorepo 内部パッケージ参照、registry 404）、パッチ対象ファイルに存在ガード追加。四言語文書にバージョンチャネル節を追加。
+
+| コミット | 説明 |
+|------|------|
+| `88a2dfc` | feat(dsh): 多バージョンチャネル — dsh-alpha 0.1.2-alpha.2 追加 |
+| `33bff25` | docs(dsh): 四言語文書にバージョンチャネル節を追加 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-alpha | 新規 `0.1.2-alpha.2` | |
+| 　 | source hash | `sha256-W/Biom...` |
+| 　 | npmDepsHash | `sha256-bJMeVS...` |
+
 ## 2026-08-31T07:05:44+09:00
 
 **概要**: godot-ai 3.2.4 — 自己更新復旧の直列化、設定書き込みの堅牢化、パス検証とコールドスタートの修正（v3.2.1〜v3.2.4 はいずれもバグ修正）；四言語文書のバージョン番号同期。

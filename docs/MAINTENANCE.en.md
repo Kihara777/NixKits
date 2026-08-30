@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T07:23:07+09:00
+
+**Summary**: dsh-alpha 0.1.2-alpha.2 — new package, npm `alpha` dist-tag development channel; dsh refactored into a ruyi-style thin wrapper (version/hash/npmDepsHash/lockFile overridable), postPatch drops the tarball's devDependencies with plain sed (they reference unpublished monorepo-internal packages — registry 404), patch target files guarded by existence checks. Four-language docs gain a version-channels section.
+
+| Commit | Description |
+|------|------|
+| `88a2dfc` | feat(dsh): multi-version channels — add dsh-alpha 0.1.2-alpha.2 |
+| `33bff25` | docs(dsh): add version-channels section to four-language docs |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-alpha | new `0.1.2-alpha.2` | |
+| 　 | source hash | `sha256-W/Biom...` |
+| 　 | npmDepsHash | `sha256-bJMeVS...` |
+
 ## 2026-08-31T07:05:44+09:00
 
 **Summary**: godot-ai 3.2.4 — serialized self-update recovery, hardened config writes, path-validation and cold-start fixes (v3.2.1~v3.2.4 are all bugfixes); four-language docs version numbers synced.
