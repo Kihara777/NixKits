@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-31T07:05:44+09:00
+
+**摘要**：godot-ai 3.2.4 — 自更新恢复序列化、配置写入加固、路径校验与冷启动修复（v3.2.1~v3.2.4 均为 bugfix）；四语文档版本号同步。
+
+| 提交 | 说明 |
+|------|------|
+| `c30fc17` | chore(pkgs): bump godot-ai 3.2.0 → 3.2.4 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 3.2.0 | 3.2.4 |
+| 　 | source hash | `sha256-ImKAsI...` → `sha256-Uo6GvE...` |
+
 ## 2026-08-27T09:19:59+09:00
 
 **摘要**：opencode-telegram 0.24.1 — 新增韩语界面、`/opencode_stop` 忙时可终止卡死的本地 OpenCode 进程、语音转写以引用块显示、Telegram 临时错误安全重试防回复丢失/重复、流式编辑节流自适应；mcp-searxng 2.1.0 — 显式选择引擎时逐引擎校验 time-range 能力、不支持时快速失败并给出可操作错误；godot-ai 3.2.0 — custom_tools 第三方 addon 工具注册、CLI 注册范围可选、新增 DeepSeek Harness 客户端支持；ruyi-beta 0.52.0-beta.20260824 — beta 通道上游更新。四语文档同步，nix flake check 通过。

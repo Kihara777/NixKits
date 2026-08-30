@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T07:05:44+09:00
+
+**概要**: godot-ai 3.2.4 — 自己更新復旧の直列化、設定書き込みの堅牢化、パス検証とコールドスタートの修正（v3.2.1〜v3.2.4 はいずれもバグ修正）；四言語文書のバージョン番号同期。
+
+| コミット | 説明 |
+|------|------|
+| `c30fc17` | chore(pkgs): bump godot-ai 3.2.0 → 3.2.4 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| godot-ai | 3.2.0 | 3.2.4 |
+| 　 | source hash | `sha256-ImKAsI...` → `sha256-Uo6GvE...` |
+
 ## 2026-08-27T09:19:59+09:00
 
 **概要**: opencode-telegram 0.24.1 — 韓国語インターフェース追加、`/opencode_stop` が応答中でもハングしたローカル OpenCode プロセスを強制終了可能、音声文字起こしを引用ブロックで表示、Telegram の一時エラーを安全に再試行して返信の消失/重複を防止、ストリーミング編集スロットルを適応化；mcp-searxng 2.1.0 — エンジン明示選択時にエンジンごとの time-range 対応を検証し、非対応時は実用的なエラーで即時失敗；godot-ai 3.2.0 — custom_tools によるサードパーティ addon ツール登録、CLI 登録スコープの選択化、DeepSeek Harness クライアント対応追加；ruyi-beta 0.52.0-beta.20260824 — beta チャネルの上流更新。四言語文書同期、nix flake check 通過。

@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T07:05:44+09:00
+
+**Summary**: godot-ai 3.2.4 — serialized self-update recovery, hardened config writes, path-validation and cold-start fixes (v3.2.1~v3.2.4 are all bugfixes); four-language docs version numbers synced.
+
+| Commit | Description |
+|------|------|
+| `c30fc17` | chore(pkgs): bump godot-ai 3.2.0 → 3.2.4 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| godot-ai | 3.2.0 | 3.2.4 |
+| 　 | source hash | `sha256-ImKAsI...` → `sha256-Uo6GvE...` |
+
 ## 2026-08-27T09:19:59+09:00
 
 **Summary**: opencode-telegram 0.24.1 — Korean interface, `/opencode_stop` can kill a hung local OpenCode server even while busy, voice transcripts shown as quotes, safe retries on temporary Telegram errors prevent lost/duplicated replies, adaptive streaming throttle; mcp-searxng 2.1.0 — per-engine time-range capability validation when engines are explicitly selected, failing fast with an actionable error; godot-ai 3.2.0 — custom_tools third-party addon registry, selectable CLI registration scope, DeepSeek Harness client support; ruyi-beta 0.52.0-beta.20260824 — beta channel upstream update. Four-language docs synced; nix flake check passes.
