@@ -9,6 +9,7 @@
 | Commit | Description |
 |------|------|
 | `c30fc17` | chore(pkgs): bump godot-ai 3.2.0 → 3.2.4 |
+| `e4b9981` | docs(MAINTENANCE): record 2026-08-31 — godot-ai update |
 
 | Package | Old | New |
 |--------|--------|--------|
