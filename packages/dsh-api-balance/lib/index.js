@@ -594,67 +594,104 @@ export function apply(ctx, config = {}) {
     };
   }, "api-balance: token routes");
 
-  ctx.effect(() => {
-    const dispose = ctx.connection.rpc.intercept(
-      "/api",
-      (endpoint) => endpoint === "api-balance/query",
-      async (_endpoint, payload, signal) => {
-        const refresh = payload?.args?.refresh === true;
-        const now = Date.now();
-        if (!refresh && cache !== null && now - cacheAt < CACHE_TTL_MS) {
-          return { ok: true, value: cache };
-        }
-        const apiKey = await resolveSecret(ctx, apiKeyEnv);
-        if (apiKey === null) {
+  /** api-balance/query 的 RPC 业务逻辑（apply 闭包内，供 exact fetch route 调用）。 */
+  async function queryRpc(payload, signal) {
+    const refresh = payload?.args?.refresh === true;
+    const now = Date.now();
+    if (!refresh && cache !== null && now - cacheAt < CACHE_TTL_MS) {
+      return { ok: true, value: cache };
+    }
+    const apiKey = await resolveSecret(ctx, apiKeyEnv);
+    if (apiKey === null) {
+      return {
+        ok: false,
+        error: {
+          code: "internal",
+          message: `api-balance: API key 未配置（credential-ref ${apiKeyEnv}）`,
+          details: {},
+        },
+      };
+    }
+    const [balanceResult, usageResult] = await Promise.all([
+      (async () => {
+        try {
+          const response = await fetchWithTimeout(
+            `${baseURL}${BALANCE_PATH}`,
+            { method: "GET", headers: { authorization: `Bearer ${apiKey}`, accept: "application/json" } },
+            signal,
+          );
+          if (!response.ok) {
+            const body = await response.text().catch(() => "");
+            return {
+              ok: false,
+              error: `DeepSeek /user/balance 返回 ${response.status}${body ? `: ${body.slice(0, 200)}` : ""}`,
+            };
+          }
+          return { ok: true, value: projectBalance(await response.json(), apiKey) };
+        } catch (error) {
+          const aborted = error?.name === "AbortError";
           return {
             ok: false,
-            error: {
-              code: "internal",
-              message: `api-balance: API key 未配置（credential-ref ${apiKeyEnv}）`,
-              details: {},
-            },
+            error: aborted
+              ? "查询 DeepSeek 余额超时"
+              : `查询失败 — ${error instanceof Error ? error.message : String(error)}`,
           };
         }
-        const [balanceResult, usageResult] = await Promise.all([
-          (async () => {
-            try {
-              const response = await fetchWithTimeout(
-                `${baseURL}${BALANCE_PATH}`,
-                { method: "GET", headers: { authorization: `Bearer ${apiKey}`, accept: "application/json" } },
-                signal,
-              );
-              if (!response.ok) {
-                const body = await response.text().catch(() => "");
-                return {
-                  ok: false,
-                  error: `DeepSeek /user/balance 返回 ${response.status}${body ? `: ${body.slice(0, 200)}` : ""}`,
-                };
-              }
-              return { ok: true, value: projectBalance(await response.json(), apiKey) };
-            } catch (error) {
-              const aborted = error?.name === "AbortError";
-              return {
-                ok: false,
-                error: aborted
-                  ? "查询 DeepSeek 余额超时"
-                  : `查询失败 — ${error instanceof Error ? error.message : String(error)}`,
-              };
-            }
-          })(),
-          queryUsage(signal),
-        ]);
-        if (!balanceResult.ok) {
-          return { ok: false, error: { code: "internal", message: `api-balance: ${balanceResult.error}`, details: {} } };
+      })(),
+      queryUsage(signal),
+    ]);
+    if (!balanceResult.ok) {
+      return { ok: false, error: { code: "internal", message: `api-balance: ${balanceResult.error}`, details: {} } };
+    }
+    const value = { ...balanceResult.value, usage: usageResult };
+    cache = value;
+    cacheAt = Date.now();
+    return { ok: true, value };
+  }
+
+  ctx.effect(() => {
+    // 注意：不能用 ctx.connection.rpc.intercept("/api", …)——client-connection
+    // 的 shared RPC channel interceptor 是互斥的（每 channel 仅一个，重复
+    // 注册直接 throw），而 /api 已被 typert-gateway 占用；再抢会导致其
+    // interceptor 被顶掉、所有 llm/session 等 RPC 方法 404。改用精确
+    // fetch route（fetchRoutes 优先于 interceptor 命中），自行实现 dsh 的
+    // RPC envelope 约定：{ rpcId, method, payload } →
+    // { type: "server-response", rpcId, result }。
+    const dispose = ctx.connection.fetch.register({
+      path: "/api/api-balance/query",
+      methods: ["POST"],
+      fetch: async (request) => {
+        let body;
+        try {
+          body = await request.json();
+        } catch {
+          return new Response("body is not JSON", { status: 400 });
         }
-        const value = { ...balanceResult.value, usage: usageResult };
-        cache = value;
-        cacheAt = Date.now();
-        return { ok: true, value };
+        const rpcId = typeof body?.rpcId === "string" ? body.rpcId : "invalid-request";
+        if (body?.method !== "api-balance/query") {
+          return Response.json({
+            type: "server-response",
+            rpcId,
+            result: {
+              ok: false,
+              error: {
+                code: "gateway/bad-request",
+                message: `method ${JSON.stringify(body?.method)} does not match endpoint "api-balance/query"`,
+                details: { issues: [] },
+              },
+            },
+          });
+        }
+        try {
+          const result = await queryRpc(body?.payload ?? {}, request.signal);
+          return Response.json({ type: "server-response", rpcId, result });
+        } catch (error) {
+          return new Response(`handler failure: ${String(error)}`, { status: 500 });
+        }
       },
-      { authority: "trusted-host" },
-    );
+    });
     return () => {
-      dispose().catch(() => {});
+      dispose();
     };
   }, "api-balance: rpc endpoint");
 }

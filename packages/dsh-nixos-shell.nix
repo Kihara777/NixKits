@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
 
   # Same dependency tree as the former dsh-nix-shell package (dsh-tools +
   # schemastery, peers resolved at runtime from the host dsh tree).
-  npmDepsHash = "sha256-uOQ3DqQoy/nazE+h6m/4wU7bexZlNlJic6i+5nqnKIg=";
+  npmDepsHash = "sha256-bAXZCiAJ6h+vykOG1+MnD1a3MNzA2Z/429FokpgDmfY=";
 
   meta = {
     description = "Consolidated NixOS operations plugin for the DeepSeek Harness (shell execution, tool bootstrap, sudo daemon routing, read-only NixOS diagnostics, NixOS-mode gate and maintenance-mode skill presets)";
