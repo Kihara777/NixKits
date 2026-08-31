@@ -11,6 +11,7 @@
 | `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha 互換 |
 | `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha 反代 Host セマンティクス修正 |
 | `a2fe5f3` | docs(dsh): 四言語文書に局域网アクセス/免認証/alpha 插件互換性節を追加 |
+| `1176553` | docs(AGENTS): モジュール節に dsh alpha セマンティクスと插件互換性の経験を標注 |
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|

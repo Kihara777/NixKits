@@ -11,6 +11,7 @@
 | `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha 互換 |
 | `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha 反代 Host 語義修正 |
 | `a2fe5f3` | docs(dsh): 四言語文書局域网訪問/免認証/alpha 插件互換性節追加 |
+| `1176553` | docs(AGENTS): 部品節 dsh alpha 語義與插件互換性経験標注 |
 
 | 軟件名 | 舊版本 | 新版本 |
 |--------|--------|--------|

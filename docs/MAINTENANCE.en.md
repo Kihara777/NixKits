@@ -11,6 +11,7 @@
 | `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha compatibility |
 | `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha reverse-proxy Host fix |
 | `a2fe5f3` | docs(dsh): add LAN access / autoAuth / alpha plugin compatibility sections in four languages |
+| `1176553` | docs(AGENTS): annotate dsh alpha semantics and plugin compatibility lessons in the module section |
 
 | Package | Old | New |
 |--------|--------|--------|

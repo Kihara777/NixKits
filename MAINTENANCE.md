@@ -11,6 +11,7 @@
 | `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha 兼容 |
 | `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha 反代 Host 语义修复 |
 | `a2fe5f3` | docs(dsh): 四语文档补全局域网访问/免认证/alpha 插件兼容章节 |
+| `1176553` | docs(AGENTS): 模块章节标注 dsh alpha 语义与插件兼容经验 |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|
