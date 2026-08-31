@@ -99,6 +99,16 @@ window.__ModuleLoader__.load({
 			}
 		}
 
+		// 预热语音引擎：触发浏览器加载语音列表（首次 getVoices 常为空，
+		// 不预热会导致首次播报用默认音色甚至无声）。
+		if (typeof window !== "undefined" && typeof window.speechSynthesis !== "undefined") {
+			try {
+				window.speechSynthesis.getVoices();
+			} catch {
+				// 无语音引擎时忽略
+			}
+		}
+
 		/**
 		 * 语音喊饿（Web Speech API，中文优先）。余额不足时提醒主人；
 		 * 30 分钟限流防重复，浏览器不支持时静默降级。
@@ -121,6 +131,26 @@ window.__ModuleLoader__.load({
 				synth.speak(utter);
 			} catch {
 				// 语音不可用（无语音引擎/自动播放策略）时静默
+			}
+		}
+
+		/** 手动播报（无开关/限流约束）：用户点击播报按钮时直接朗读。 */
+		function speakNow(text) {
+			try {
+				if (typeof window === "undefined") return;
+				const synth = window.speechSynthesis;
+				if (synth === void 0) return;
+				const utter = new SpeechSynthesisUtterance(text);
+				utter.lang = "zh-CN";
+				utter.rate = 1.05;
+				utter.volume = 1;
+				const voices = synth.getVoices();
+				const zh = voices.find((voice) => voice.lang.toLowerCase().startsWith("zh"));
+				if (zh !== void 0) utter.voice = zh;
+				synth.cancel();
+				synth.speak(utter);
+			} catch {
+				// 语音不可用时静默
 			}
 		}
 
@@ -491,6 +521,164 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
+		 * 平台未登录提示弹窗：本机浏览器扫描未命中有效令牌时自动弹出。
+		 * 「前往登录」在新标签页打开平台登录页并开始轮询快扫；「手动输入
+		 * 令牌」关闭弹窗并展开面板内的手动输入表单（不想登录时的备选）。
+		 */
+		function LoginPromptModal({ t, waiting, onClose, onGoLogin, onManual }) {
+			const overlayStyle = {
+				position: "fixed",
+				inset: 0,
+				zIndex: 1001,
+				background: "rgba(0, 0, 0, 0.5)",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "16px",
+			};
+			const boxStyle = {
+				position: "relative",
+				width: "min(420px, 94vw)",
+				background: "var(--dsw-specific-menu)",
+				border: "1px solid var(--dsw-alias-border-inverted)",
+				borderRadius: "12px",
+				boxShadow: "var(--dsw-shadow-lv3)",
+				display: "flex",
+				flexDirection: "column",
+				overflow: "hidden",
+			};
+			const closeStyle = {
+				position: "absolute",
+				top: "8px",
+				right: "8px",
+				zIndex: 2,
+				width: "28px",
+				height: "28px",
+				display: "grid",
+				placeItems: "center",
+				border: "none",
+				borderRadius: "999px",
+				cursor: "pointer",
+				background: "var(--dsw-alias-interactive-bg-hover)",
+				color: "var(--dsw-alias-label-secondary)",
+				fontSize: "14px",
+				lineHeight: 1,
+			};
+			return reactDOM.createPortal(
+				react.createElement(
+					"div",
+					{
+						role: "dialog",
+						"aria-modal": true,
+						"aria-label": t("balance.loginPromptTitle"),
+						style: overlayStyle,
+						onClick: onClose,
+					},
+					react.createElement(
+						"div",
+						{ style: boxStyle, onClick: (event) => event.stopPropagation() },
+						react.createElement(
+							"div",
+							{
+								style: {
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+									padding: "12px 40px 12px 16px",
+									fontSize: "14px",
+									fontWeight: 600,
+									color: "var(--dsw-alias-label-primary)",
+								},
+							},
+							t("balance.loginPromptTitle"),
+						),
+						react.createElement(
+							"button",
+							{ type: "button", "aria-label": t("balance.topupClose"), style: closeStyle, onClick: onClose },
+							"✕",
+						),
+						react.createElement(
+							"p",
+							{
+								style: {
+									margin: 0,
+									padding: "0 16px 4px",
+									fontSize: "12px",
+									lineHeight: "18px",
+									color: "var(--dsw-alias-label-tertiary)",
+								},
+							},
+							waiting ? t("balance.loginWaiting") : t("balance.loginPromptBody"),
+						),
+						react.createElement(
+							"div",
+							{ style: { display: "flex", gap: "8px", padding: "8px 16px 16px", flexWrap: "wrap" } },
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									disabled: waiting,
+									onClick: () => (waiting ? void 0 : onGoLogin()),
+									style: {
+										flex: 1,
+										minWidth: "120px",
+										padding: "7px 16px",
+										borderRadius: "999px",
+										cursor: waiting ? "default" : "pointer",
+										border: "1px solid var(--dsw-alias-brand-primary, #4d6bfe)",
+										background: "var(--dsw-alias-brand-primary, #4d6bfe)",
+										color: "#fff",
+										fontSize: "13px",
+										lineHeight: "20px",
+										opacity: waiting ? 0.6 : 1,
+									},
+								},
+								t("balance.loginGo"),
+							),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									onClick: onManual,
+									style: {
+										padding: "7px 16px",
+										borderRadius: "999px",
+										cursor: "pointer",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: "transparent",
+										color: "var(--dsw-alias-label-secondary)",
+										fontSize: "13px",
+										lineHeight: "20px",
+									},
+								},
+								t("balance.manualFallback"),
+							),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									onClick: onClose,
+									style: {
+										padding: "7px 16px",
+										borderRadius: "999px",
+										cursor: "pointer",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: "transparent",
+										color: "var(--dsw-alias-label-secondary)",
+										fontSize: "13px",
+										lineHeight: "20px",
+									},
+								},
+								t("balance.loginClose"),
+							),
+						),
+					),
+				),
+				document.body,
+			);
+		}
+
+		/**
 		 * 替代圆圈组件。props 为框架标准 props（useProjection、t）+ 注册时
 		 * inject 的 owner face（queryBalance、clearToken）。
 		 */
@@ -513,9 +701,22 @@ window.__ModuleLoader__.load({
 			const [chartMode, setChartMode] = react.useState("daily");
 			// 充值 IFRAME 弹窗。
 			const [topupOpen, setTopupOpen] = react.useState(false);
+			// 平台未登录提示弹窗：检测到 no-token 且浏览器扫描启用时自动弹出，
+			// 用户关闭后不再自动弹出（面板内按钮仍可再次触发登录流程）。
+			const [loginPromptDismissed, setLoginPromptDismissed] = react.useState(false);
 			const touchDevice = isTouchDevice();
 			const context = contextOccupancy(pressure);
 			const available = context !== null;
+
+			// 登录提示弹窗的判定条件（渲染返回在分支作用域之外，故提升到此）。
+			const promptUsage = balance !== null && typeof balance === "object" ? balance.usage : null;
+			const promptNoToken = promptUsage !== null && promptUsage.status === "no-token";
+			const promptBrowserScan = promptUsage !== null && promptUsage.browserScanEnabled === true;
+			const promptScanReport =
+				promptUsage !== null && typeof promptUsage.scanReport === "object" && promptUsage.scanReport !== null
+					? promptUsage.scanReport
+					: null;
+			const promptScanNotFound = promptScanReport !== null && promptScanReport.found !== true;
 
 			// 面板外点击 / Escape 关闭（与原 ContextMeter 行为一致）。
 			react.useEffect(() => {
@@ -622,9 +823,52 @@ window.__ModuleLoader__.load({
 			};
 
 			/**
-			 * 一键授权：打开平台用量页，把回传命令写入剪贴板，并开始轮询
-			 * 检测令牌是否回传成功；成功后自动加载官方用量数据，无需用户
-			 * 再抄录任何内容。
+			 * 登录流程（浏览器扫描启用时主通道）：在新标签页打开平台登录页，
+			 * 轮询强制快扫——用户在标签页完成登录后，令牌写入本机浏览器
+			 * leveldb，扫描自动拾取，用量随即显示，全程无需控制台。
+			 */
+			const startLogin = () => {
+				window.open("https://platform.deepseek.com/usage", "_blank", "noopener");
+				setConnectState("waiting");
+				beginPoll();
+			};
+
+			/** 轮询检测令牌到位（queryBalance 强制快扫，只校验标记邻近候选）。 */
+			const beginPoll = () => {
+				if (pollRef.current !== null) {
+					window.clearTimeout(pollRef.current);
+					pollRef.current = null;
+				}
+				let attempts = 0;
+				const poll = async () => {
+					attempts += 1;
+					try {
+						const value = await queryBalance({ refresh: true, rescanBrowsers: true, quick: true });
+						if (value !== null && typeof value === "object" && value.ok === true) {
+							const usage = value.value?.usage;
+							if (usage !== null && typeof usage === "object" && usage.status !== "no-token") {
+								setBalance(value.value);
+								setBalanceState("ok");
+								setConnectState("idle");
+								setLoginPromptDismissed(true);
+								return;
+							}
+						}
+					} catch {
+						// 轮询失败继续尝试
+					}
+					if (attempts < 24) {
+						pollRef.current = window.setTimeout(poll, 3000);
+					} else {
+						setConnectState("timeout");
+					}
+				};
+				poll();
+			};
+
+			/**
+			 * 一键授权（浏览器扫描禁用时的回退）：打开平台用量页，把回传命令
+			 * 写入剪贴板，并轮询检测令牌是否回传成功。
 			 */
 			const startConnect = () => {
 				const origin = window.location.origin;
@@ -635,30 +879,7 @@ window.__ModuleLoader__.load({
 				copyText(command);
 				window.open("https://platform.deepseek.com/usage", "_blank", "noopener");
 				setConnectState("waiting");
-				let attempts = 0;
-				const poll = async () => {
-					attempts += 1;
-					try {
-						const value = await queryBalance(true);
-						if (value !== null && typeof value === "object" && value.ok === true) {
-							const usage = value.value?.usage;
-							if (usage !== null && typeof usage === "object" && usage.status !== "no-token") {
-								setBalance(value.value);
-								setBalanceState("ok");
-								setConnectState("idle");
-								return;
-							}
-						}
-					} catch {
-						// 轮询失败继续尝试
-					}
-					if (attempts < 24) {
-						pollRef.current = window.setTimeout(poll, 2500);
-					} else {
-						setConnectState("timeout");
-					}
-				};
-				poll();
+				beginPoll();
 			};
 
 			const disconnectPlatform = async () => {
@@ -708,6 +929,20 @@ window.__ModuleLoader__.load({
 
 			// 余额轮询（15 分钟）：页面常驻期间自动检测，余额不足时语音喊饿。
 			const [speechOn, setSpeechOn] = react.useState(speechEnabled());
+			// 语音播报下拉菜单（点击播报按钮弹出；portal 渲染，位置按按钮 rect 计算）。
+			const [speechMenuOpen, setSpeechMenuOpen] = react.useState(false);
+			const [speechMenuPos, setSpeechMenuPos] = react.useState({ x: 0, y: 0 });
+			const speechMenuRef = react.useRef(null);
+			// 菜单打开时：点击菜单外任意处关闭。
+			react.useEffect(() => {
+				if (!speechMenuOpen) return;
+				const onDown = (event) => {
+					if (speechMenuRef.current !== null && speechMenuRef.current.contains(event.target)) return;
+					setSpeechMenuOpen(false);
+				};
+				document.addEventListener("pointerdown", onDown);
+				return () => document.removeEventListener("pointerdown", onDown);
+			}, [speechMenuOpen]);
 			const hungerPollRef = react.useRef(null);
 			react.useEffect(() => {
 				let cancelled = false;
@@ -1115,18 +1350,15 @@ window.__ModuleLoader__.load({
 						}),
 					);
 				}
-				// no-token：授权 UI。首选「重新扫描本机浏览器」（host 直接读
-				// 本机浏览器的登录态，无需任何手动操作）；回退手动通道：桌面
-				// 端一键授权（打开平台页 + 剪贴板回传命令 + 自动轮询），触屏
-				// 设备直接展开手动令牌输入框（同源 POST 保存）。
-				if (usage !== null && usage.status === "no-token") {
+				// no-token：授权 UI。浏览器扫描启用时主通道为「前往登录」
+				// （新标签页登录 + 轮询快扫自动拾取）；扫描禁用时回退旧版
+				// 剪贴板回传流程。手动输入令牌始终作为不想登录时的备选。
+				if (promptNoToken) {
 					const waiting = connectState === "waiting";
 					const showManual = touchDevice || manualOpen;
-					const scanReport =
-						usage !== null && typeof usage.scanReport === "object" && usage.scanReport !== null
-							? usage.scanReport
-							: null;
-					const scanNotFound = scanReport !== null && scanReport.found !== true;
+					const scanReport = promptScanReport;
+					const scanNotFound = promptScanNotFound;
+					const browserScanEnabled = promptBrowserScan;
 					const scanning = balanceState === "loading";
 					const rescanButton = react.createElement(
 						"button",
@@ -1152,33 +1384,46 @@ window.__ModuleLoader__.load({
 						},
 						scanning ? t("balance.scanning") : t("balance.rescan"),
 					);
-					const connectButton = touchDevice
-						? null
-						: react.createElement(
-								"button",
-								{
-									type: "button",
-									disabled: waiting,
-									onClick: () => (waiting ? void 0 : startConnect()),
-									style: {
-										display: "inline-flex",
-										alignItems: "center",
-										marginTop: "10px",
-										padding: "3px 12px",
-										borderRadius: "999px",
-										cursor: waiting ? "default" : "pointer",
-										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: "var(--dsw-alias-interactive-bg-hover)",
-										color: "var(--dsw-alias-label-secondary)",
-										fontSize: "12px",
-										lineHeight: "20px",
-										opacity: waiting ? 0.6 : 1,
+					// 主行动按钮：扫描启用 → 「前往登录」（新标签页登录 + 轮询
+					// 自动拾取，桌面/触屏均可用；轮询中显示「检测登录中…」）；
+					// 扫描禁用 → 旧版剪贴板回传流程（仅桌面）。
+					const connectButton =
+						touchDevice && !browserScanEnabled
+							? null
+							: react.createElement(
+									"button",
+									{
+										type: "button",
+										disabled: waiting,
+										onClick: () => (waiting ? void 0 : browserScanEnabled ? startLogin() : startConnect()),
+										style: {
+											display: "inline-flex",
+											alignItems: "center",
+											marginTop: "10px",
+											padding: "3px 12px",
+											borderRadius: "999px",
+											cursor: waiting ? "default" : "pointer",
+											border: "1px solid var(--dsw-alias-separator-primary)",
+											background: "var(--dsw-alias-interactive-bg-hover)",
+											color: "var(--dsw-alias-label-secondary)",
+											fontSize: "12px",
+											lineHeight: "20px",
+											opacity: waiting ? 0.6 : 1,
+										},
 									},
-								},
-								waiting ? t("balance.connecting") : t("balance.connect"),
-							);
+									waiting
+										? browserScanEnabled
+											? t("balance.loginChecking")
+											: t("balance.connecting")
+										: browserScanEnabled
+											? t("balance.loginGo")
+											: t("balance.connect"),
+								);
+					// 手动输入为二级功能：扫描启用时只在未登录提示弹窗中提供
+					// （不想登录时的备选），面板内不再单独展示入口；扫描禁用
+					// 时保留旧入口（触屏设备主通道）。
 					const manualLink =
-						touchDevice || waiting
+						browserScanEnabled || touchDevice || waiting
 							? null
 							: react.createElement(
 									"button",
@@ -1270,9 +1515,13 @@ window.__ModuleLoader__.load({
 								},
 							},
 							waiting
-								? t("balance.connectWaiting")
+								? browserScanEnabled
+									? t("balance.loginWaiting")
+									: t("balance.connectWaiting")
 								: connectState === "timeout"
-									? t("balance.connectTimeout")
+									? browserScanEnabled
+										? t("balance.loginTimeout")
+										: t("balance.connectTimeout")
 									: scanNotFound
 										? `${t("balance.scanHint")}${
 												scanReport.candidates > 0 ? `（${scanReport.candidates} 个候选无效）` : ""
@@ -1304,9 +1553,83 @@ window.__ModuleLoader__.load({
 						),
 					);
 				}
-				// 已连接：提供断开入口（清除本机令牌）与令牌来源徽章。
+				// 已连接：令牌来源（标题/正文两行）+ 断开按钮；语音播报独立
+				// 一行（播报按钮 + 下拉菜单 + 提醒开关）。
 				if (usage !== null && usage.status !== "no-token") {
 					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
+					// 播报内容（数据来自当前 balance 快照）。
+					const speakCurrentUsage = () => {
+						if (usageWindows === null) return;
+						const today = usageWindows.today ?? {};
+						const month = usageWindows.month ?? {};
+						speakNow(
+							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}，${t("balance.out")}${formatTokens(today.completion ?? 0)}；${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}，${t("balance.out")}${formatTokens(month.completion ?? 0)}`,
+						);
+					};
+					const speakCurrentBalance = () => {
+						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
+						const parts = infos.map((info) => `${info.currency} ${info.totalBalance}`);
+						speakNow(`${t("balance.total")}：${parts.length > 0 ? parts.join("；") : "—"}`);
+					};
+					const speechMenuItems = [
+						{ key: "usage", label: t("speech.broadcastUsage"), run: speakCurrentUsage },
+						{ key: "balance", label: t("speech.broadcastBalance"), run: speakCurrentBalance },
+						{ key: "test-low", label: t("speech.testLow"), run: () => speakNow(t("speech.low")) },
+						{ key: "test-dead", label: t("speech.testDead"), run: () => speakNow(t("speech.dead")) },
+					];
+					const speechMenu = !speechMenuOpen
+						? null
+						: reactDOM.createPortal(
+								react.createElement(
+									"div",
+									{
+										ref: speechMenuRef,
+										onPointerDown: (event) => event.stopPropagation(),
+										style: {
+											// portal + fixed：面板主体带 overflow 滚动，绝对定位
+											// 菜单会被裁剪（播报按钮在下部时菜单不可见/不可点）。
+											position: "fixed",
+											top: speechMenuPos.y,
+											left: speechMenuPos.x,
+											minWidth: "208px",
+											zIndex: 1002,
+											background: "var(--dsw-specific-menu)",
+											border: "1px solid var(--dsw-alias-border-inverted)",
+											borderRadius: "8px",
+											boxShadow: "var(--dsw-shadow-lv3)",
+											padding: "4px",
+										},
+									},
+									speechMenuItems.map((item) =>
+										react.createElement(
+											"button",
+											{
+												key: item.key,
+												type: "button",
+												onClick: () => {
+													setSpeechMenuOpen(false);
+													item.run();
+												},
+												style: {
+													display: "block",
+													width: "100%",
+													textAlign: "left",
+													padding: "5px 10px",
+													border: "none",
+													borderRadius: "6px",
+													background: "transparent",
+													color: "var(--dsw-alias-label-secondary)",
+													fontSize: "12px",
+													lineHeight: "18px",
+													cursor: "pointer",
+												},
+											},
+											item.label,
+										),
+									),
+								),
+								document.body,
+							);
 					balanceBody = react.createElement(
 						react.Fragment,
 						null,
@@ -1317,17 +1640,55 @@ window.__ModuleLoader__.load({
 							tokenSource === null
 								? null
 								: react.createElement(
-										"span",
-										{
-											style: {
-												fontSize: "11px",
-												lineHeight: "18px",
-												color: "var(--dsw-alias-label-tertiary)",
-												marginRight: "auto",
+										"div",
+										{ style: { marginRight: "auto", minWidth: 0 } },
+										react.createElement(
+											"div",
+											{
+												style: {
+													fontSize: "10px",
+													lineHeight: "14px",
+													color: "var(--dsw-alias-label-tertiary)",
+												},
 											},
-										},
-										tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
+											t("balance.sourceLabel"),
+										),
+										react.createElement(
+											"div",
+											{
+												style: {
+													fontSize: "12px",
+													lineHeight: "18px",
+													color: "var(--dsw-alias-label-secondary)",
+												},
+											},
+											tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
+										),
 									),
+							// 登录状态按钮：已登录 → 灰显「✓ 已登录」。
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									disabled: true,
+									"aria-disabled": true,
+									style: {
+										display: "inline-flex",
+										alignItems: "center",
+										gap: "4px",
+										padding: "1px 10px",
+										borderRadius: "999px",
+										cursor: "default",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: "transparent",
+										color: "var(--dsw-alias-label-tertiary)",
+										fontSize: "11px",
+										lineHeight: "18px",
+										opacity: 0.6,
+									},
+								},
+								t("balance.loggedIn"),
+							),
 							react.createElement(
 								"button",
 								{
@@ -1347,6 +1708,48 @@ window.__ModuleLoader__.load({
 									},
 								},
 								t("balance.disconnect"),
+							),
+						),
+						react.createElement(
+							"div",
+							{
+								style: {
+									position: "relative",
+									display: "flex",
+									gap: "8px",
+									alignItems: "center",
+									marginTop: "8px",
+								},
+							},
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									"aria-haspopup": "menu",
+									"aria-expanded": speechMenuOpen,
+									onClick: (event) => {
+										const next = !speechMenuOpen;
+										if (next) {
+											const rect = event.currentTarget.getBoundingClientRect();
+											setSpeechMenuPos({ x: Math.round(rect.left), y: Math.round(rect.bottom + 4) });
+										}
+										setSpeechMenuOpen(next);
+									},
+									style: {
+										display: "inline-flex",
+										alignItems: "center",
+										gap: "4px",
+										padding: "1px 10px",
+										borderRadius: "999px",
+										cursor: "pointer",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: speechMenuOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+										color: "var(--dsw-alias-label-secondary)",
+										fontSize: "11px",
+										lineHeight: "18px",
+									},
+								},
+								t("balance.speechBroadcast"),
 							),
 							react.createElement(
 								"button",
@@ -1370,6 +1773,7 @@ window.__ModuleLoader__.load({
 								},
 								speechOn ? t("balance.speechOn") : t("balance.speechOff"),
 							),
+							speechMenu,
 						),
 					);
 				}
@@ -1482,6 +1886,22 @@ window.__ModuleLoader__.load({
 				topupOpen
 					? react.createElement(TopupModal, { t, onClose: () => setTopupOpen(false) })
 					: null,
+				tab === TAB_BALANCE &&
+				promptNoToken &&
+				promptBrowserScan &&
+				promptScanNotFound &&
+				!loginPromptDismissed
+					? react.createElement(LoginPromptModal, {
+							t,
+							waiting: connectState === "waiting",
+							onClose: () => setLoginPromptDismissed(true),
+							onGoLogin: () => (connectState === "waiting" ? void 0 : startLogin()),
+							onManual: () => {
+								setLoginPromptDismissed(true);
+								setManualOpen(true);
+							},
+						})
+					: null,
 			);
 		}
 
@@ -1520,8 +1940,18 @@ window.__ModuleLoader__.load({
 			"balance.rescan": "重新扫描本机浏览器",
 			"balance.scanning": "正在扫描本机浏览器…",
 			"balance.scanHint": "未在本机浏览器检测到平台登录态：请先在浏览器登录 platform.deepseek.com，再点「重新扫描」。",
-			"balance.sourceBrowser": "令牌来源：本机浏览器自动获取",
-			"balance.sourceManual": "令牌来源：手动连接",
+			"balance.loginPromptTitle": "未检测到平台登录",
+			"balance.loginPromptBody": "本机浏览器尚未登录 platform.deepseek.com。点击「前往登录」将在新标签页打开平台登录页；登录完成后回到本页，用量将自动显示。",
+			"balance.loginGo": "前往登录",
+			"balance.loginChecking": "检测登录中…",
+			"balance.loggedIn": "✓ 已登录",
+			"balance.loginWaiting": "已在新标签页打开登录页，等待登录完成…（登录后令牌自动获取）",
+			"balance.loginTimeout": "尚未检测到登录完成。请确认已在新标签页登录，然后点「重新扫描」。",
+			"balance.loginClose": "稍后再说",
+			"balance.manualFallback": "手动输入令牌",
+			"balance.sourceLabel": "令牌来源",
+			"balance.sourceBrowser": "本机浏览器自动获取",
+			"balance.sourceManual": "手动连接",
 			"chart.title": "用量图表",
 			"chart.daily": "按日",
 			"chart.monthly": "按月",
@@ -1535,6 +1965,11 @@ window.__ModuleLoader__.load({
 			"balance.manualPlaceholder": "粘贴平台令牌…",
 			"balance.manualSave": "保存",
 			"balance.disconnect": "断开",
+			"balance.speechBroadcast": "🔊 播报语音用量",
+			"speech.broadcastUsage": "播报当前用量",
+			"speech.broadcastBalance": "播报当前余额",
+			"speech.testLow": "测试音频：低用量警告",
+			"speech.testDead": "测试音频：余额不足警告",
 			"balance.speechOn": "🔔 语音提醒：开",
 			"balance.speechOff": "🔕 语音提醒：关",
 			"speech.dead": "主人，余额不足啦，我快饿晕了，快喂我吃 token！",
@@ -1576,8 +2011,18 @@ window.__ModuleLoader__.load({
 			"balance.rescan": "Rescan local browsers",
 			"balance.scanning": "Scanning local browsers…",
 			"balance.scanHint": "No platform login found in local browsers: sign in at platform.deepseek.com first, then rescan.",
-			"balance.sourceBrowser": "Token source: local browser",
-			"balance.sourceManual": "Token source: manual",
+			"balance.loginPromptTitle": "Platform login not detected",
+			"balance.loginPromptBody": "This machine's browser isn't signed in to platform.deepseek.com. Click 「Go to login」 to open the login page in a new tab; once signed in, usage shows automatically.",
+			"balance.loginGo": "Go to login",
+			"balance.loginChecking": "Checking sign-in…",
+			"balance.loggedIn": "✓ Signed in",
+			"balance.loginWaiting": "Login page opened in a new tab — waiting for sign-in… (the token is picked up automatically)",
+			"balance.loginTimeout": "Sign-in not detected yet. Make sure you signed in on the new tab, then rescan.",
+			"balance.loginClose": "Later",
+			"balance.manualFallback": "Enter token manually",
+			"balance.sourceLabel": "Token source",
+			"balance.sourceBrowser": "Auto from local browser",
+			"balance.sourceManual": "Manual",
 			"chart.title": "Usage chart",
 			"chart.daily": "Daily",
 			"chart.monthly": "Monthly",
@@ -1591,6 +2036,11 @@ window.__ModuleLoader__.load({
 			"balance.manualPlaceholder": "Paste platform token…",
 			"balance.manualSave": "Save",
 			"balance.disconnect": "Disconnect",
+			"balance.speechBroadcast": "🔊 Speak usage",
+			"speech.broadcastUsage": "Speak current usage",
+			"speech.broadcastBalance": "Speak current balance",
+			"speech.testLow": "Test audio: low-usage warning",
+			"speech.testDead": "Test audio: out-of-tokens warning",
 			"balance.speechOn": "🔔 Voice alerts: on",
 			"balance.speechOff": "🔕 Voice alerts: off",
 			"speech.dead": "Master, I'm out of tokens — please feed me!",

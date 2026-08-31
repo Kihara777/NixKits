@@ -116,6 +116,8 @@ const TOKEN_LEN_MIN = 55;
 const TOKEN_LEN_MAX = 85;
 /** 单次扫描校验的候选上限（约束「无有效令牌」时的上游成本）。 */
 const MAX_CANDIDATES = 40;
+/** 登录轮询的快扫候选数：只校验标记邻近的第一档前几候选。 */
+const QUICK_SCAN_MAX = 5;
 
 /** 令牌落盘路径：$DSH_HOME/api-balance-token（0600，仅本机服务用户可读）。 */
 function tokenFilePath() {
@@ -464,17 +466,206 @@ async function fetchWithTimeout(url, init, signal) {
 }
 
 /**
- * 扫描本机浏览器 Local Storage LevelDB，提取 userToken 候选。
+ * ── LevelDB 表解析（精确提取 userToken）──────────────────────────
+ * Chromium 系浏览器把 localStorage 存为 LevelDB。记录值被
+ * `{"value":"<token>","__version":"0"}` JSON 包裹，但数据块经 snappy
+ * 压缩，键/值还可能被 compaction 拆分——裸字节扫描不可靠。这里实现
+ * 最小表解析：footer → index 块 → 数据块句柄 → 逐块解压 → 条目遍历，
+ * 精确读出 `_https://platform.deepseek.com\x00\x01userToken` 的值。
+ * 解析失败（文件正被写入/异常布局）时回退启发式裸扫。
+ */
+
+/** LevelDB varint 读取（返回 [值, 新位置]）。 */
+function readVarintAt(buf, pos) {
+  let shift = 0;
+  let result = 0;
+  for (;;) {
+    if (pos >= buf.length) throw new Error("varint eof");
+    const byte = buf[pos++];
+    result |= (byte & 0x7f) << shift;
+    if ((byte & 0x80) === 0) return [result >>> 0, pos];
+    shift += 7;
+    if (shift > 35) throw new Error("varint too long");
+  }
+}
+
+/**
+ * snappy 解压（纯 JS）。注意：扩展字面量（tag>>2 === 60）的长度是
+ * 紧随 tag 的单字节 + 1（并非 varint；>256 的字面量由编码器拆分为
+ * 多个元素）。输出写满即停；单元素溢出时钳制（填充字节安全忽略）。
+ */
+function snappyDecompress(buf) {
+  const [uncompressedLength, startPos] = readVarintAt(buf, 0);
+  const out = Buffer.alloc(uncompressedLength);
+  let pos = startPos;
+  let op = 0;
+  while (pos < buf.length && op < uncompressedLength) {
+    const tag = buf[pos++];
+    const type = tag & 0x03;
+    let len;
+    let offset;
+    if (type === 0) {
+      len = (tag >> 2) + 1;
+      if (len > 60) {
+        len = buf[pos++] + 1;
+      }
+      const take = Math.min(len, uncompressedLength - op, buf.length - pos);
+      buf.copy(out, op, pos, pos + take);
+      op += take;
+      pos += len;
+    } else {
+      if (type === 1) {
+        len = ((tag >> 2) & 0x07) + 4;
+        offset = ((tag >> 5) << 8) | buf[pos++];
+      } else if (type === 2) {
+        len = (tag >> 2) + 1;
+        offset = buf[pos] | (buf[pos + 1] << 8);
+        pos += 2;
+      } else {
+        len = (tag >> 2) + 1;
+        offset = buf[pos] | (buf[pos + 1] << 8) | (buf[pos + 2] << 16) | (buf[pos + 3] << 24);
+        pos += 4;
+      }
+      if (offset <= 0 || offset > op) break;
+      const take = Math.min(len, uncompressedLength - op);
+      let src = op - offset;
+      for (let i = 0; i < take; i++) out[op++] = out[src++];
+    }
+  }
+  return out.subarray(0, op);
+}
+
+/** 解压一个 LevelDB 块（data + 1B 压缩类型 trailer）。 */
+function decompressLevelDbBlock(buf, start, size) {
+  if (start + size + 1 > buf.length) return null;
+  const type = buf[start + size];
+  const data = buf.subarray(start, start + size);
+  if (type === 0) return Buffer.from(data);
+  if (type === 1) {
+    try {
+      return snappyDecompress(data);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+/** 遍历一个块内的条目（shared 前缀增量 + restart 数组跳过）。 */
+function parseLevelDbEntries(block) {
+  const entries = [];
+  if (block.length < 5) return entries;
+  const numRestarts = block.readUInt32LE(block.length - 4);
+  const end = Math.max(0, block.length - 4 - numRestarts * 4);
+  let pos = 0;
+  let lastKey = Buffer.alloc(0);
+  while (pos < end) {
+    let shared;
+    let nonShared;
+    let valueLen;
+    try {
+      [shared, pos] = readVarintAt(block, pos);
+      [nonShared, pos] = readVarintAt(block, pos);
+      [valueLen, pos] = readVarintAt(block, pos);
+    } catch {
+      break;
+    }
+    if (pos + nonShared + valueLen > block.length) break;
+    const key = Buffer.concat([lastKey.subarray(0, shared), block.subarray(pos, pos + nonShared)]);
+    pos += nonShared;
+    const value = block.subarray(pos, pos + valueLen);
+    pos += valueLen;
+    lastKey = key;
+    entries.push({ key, value });
+  }
+  return entries;
+}
+
+/** 表格式 .ldb：footer → index 块 → 数据块 {off, size} 列表。 */
+function ldbDataBlockHandles(buf) {
+  if (buf.length < 48) return [];
+  const pos0 = buf.length - 48;
+  let pos = pos0;
+  let metaOff;
+  let metaSize;
+  let indexOff;
+  let indexSize;
+  try {
+    [metaOff, pos] = readVarintAt(buf, pos);
+    [metaSize, pos] = readVarintAt(buf, pos);
+    [indexOff, pos] = readVarintAt(buf, pos);
+    [indexSize, pos] = readVarintAt(buf, pos);
+  } catch {
+    return [];
+  }
+  void metaOff;
+  void metaSize;
+  const indexBlock = decompressLevelDbBlock(buf, indexOff, indexSize);
+  if (indexBlock === null) return [];
+  const handles = [];
+  for (const entry of parseLevelDbEntries(indexBlock)) {
+    let p = 0;
+    let off;
+    let size;
+    try {
+      [off, p] = readVarintAt(entry.value, p);
+      [size, p] = readVarintAt(entry.value, p);
+    } catch {
+      continue;
+    }
+    if (off >= 0 && size > 0 && off + size + 5 <= buf.length) handles.push({ off, size });
+  }
+  return handles;
+}
+
+/** 从条目的值 buffer 提取令牌：编码标记（0x01=UTF-8 / 0x00=UTF-16LE）+ JSON。 */
+function tokenFromEntryValue(value) {
+  if (value.length < 3) return null;
+  let text = null;
+  if (value[0] === 0x01) text = value.subarray(1).toString("utf8");
+  else if (value[0] === 0x00) text = value.subarray(1).toString("utf16le");
+  if (text === null) return null;
+  const match = text.slice(0, 300).match(/"value"\s*:\s*"([A-Za-z0-9+/=]{40,200})"/);
+  return match !== null ? match[1] : null;
+}
+
+/** 从单个 .ldb 文件精确提取 userToken（解析失败返回 null）。 */
+function exactUserTokenFromLdb(path) {
+  let buf;
+  try {
+    if (statSync(path).size > BROWSER_SCAN_MAX_BYTES) return null;
+    buf = readFileSync(path);
+  } catch {
+    return null;
+  }
+  const handles = ldbDataBlockHandles(buf);
+  if (handles.length === 0) return null;
+  for (const handle of handles) {
+    const block = decompressLevelDbBlock(buf, handle.off, handle.size);
+    if (block === null) continue;
+    for (const entry of parseLevelDbEntries(block)) {
+      const key = entry.key.toString("latin1");
+      if (key.includes("platform.deepseek.com\u0000\u0001userToken")) {
+        const token = tokenFromEntryValue(entry.value);
+        if (token !== null) return token;
+      }
+    }
+  }
+  return null;
+}
+
+/** 扫描本机浏览器 Local Storage LevelDB，提取 userToken 候选。
  * Chromium 系浏览器把 localStorage 存为 LevelDB：键形如
  * `_https://platform.deepseek.com\x00\x01userToken`，值为 `\x01`（编码
- * 标记）+ `{"value":"<token>","__version":"0"}`。LevelDB 记录可能跨
- * SSTable / 日志文件且块经 snappy 压缩，无法可靠整体解析，因此采用
- * 启发式：只读含 platform origin 或 userToken 标记的文件，提取 base64
- * 运行，按「userToken 标记邻近的 JSON value」→「origin 文件内」→
- * 「其余」分档排序（真实令牌通常落在第一档）。
+ * 标记）+ `{"value":"<token>","__version":"0"}`。分档：
+ *   tier0：.ldb 表解析精确提取（footer → index → 数据块解压 → 条目）
+ *   tier1：origin 文件内任意位置的 `"value":"<base64>"` JSON 值
+ *   tier2：userToken 标记邻近的 JSON value（裸字节布局兜底）
+ *   tier3：文件内独立 base64 运行（.log / 异常布局兜底）
+ * 登录后的新令牌落在 tier0 首位，快扫（前几候选）即可命中。
  */
 function scanBrowserTokens() {
-  const tiers = [[], [], []];
+  const tiers = [[], [], [], []];
   const seen = new Set();
   const push = (tier, token) => {
     if (!seen.has(token)) {
@@ -500,6 +691,11 @@ function scanBrowserTokens() {
       for (const file of files) {
         if (!file.endsWith(".ldb") && !file.endsWith(".log")) continue;
         const path = join(root, profile, "Local Storage", "leveldb", file);
+        // tier0：.ldb 表解析精确提取（最可靠，1 次上游校验即命中）。
+        if (file.endsWith(".ldb")) {
+          const exact = exactUserTokenFromLdb(path);
+          if (exact !== null) push(0, exact);
+        }
         let buf;
         try {
           if (statSync(path).size > BROWSER_SCAN_MAX_BYTES) continue;
@@ -511,29 +707,38 @@ function scanBrowserTokens() {
         const hasOrigin = text.includes("platform.deepseek.com");
         const hasMarker = text.includes("userToken");
         if (!hasOrigin && !hasMarker) continue;
-        // 第一档：userToken 标记邻近的 JSON value（最接近真实记录结构）。
+        // tier1：origin 文件内任意位置的 `"value":"<base64>"` JSON 值。
+        if (hasOrigin) {
+          const valueRe = /"value"\s*:\s*"([A-Za-z0-9+/=]{40,200})"/g;
+          let match;
+          while ((match = valueRe.exec(text)) !== null) push(1, match[1]);
+        }
+        // tier2：userToken 标记邻近的 JSON value（键/值未拆分的布局兜底）。
         if (hasMarker) {
           let idx = 0;
           while ((idx = text.indexOf("userToken", idx)) !== -1) {
             const segment = text.slice(idx, idx + 600);
             const match = segment.match(/"value"\s*:\s*"([A-Za-z0-9+/=]{40,200})"/);
-            if (match !== null) push(0, match[1]);
+            if (match !== null) push(2, match[1]);
             idx += 9;
           }
         }
-        // 第二/三档：文件内独立 base64 运行，按长度收敛。
+        // tier3：文件内独立 base64 运行，按长度收敛。
         const re = /[A-Za-z0-9+/=]{40,200}/g;
         let match;
         while ((match = re.exec(text)) !== null) {
           const len = match[0].length;
           if (len < TOKEN_LEN_MIN || len > TOKEN_LEN_MAX) continue;
-          push(hasOrigin ? 1 : 2, match[0]);
+          push(3, match[0]);
         }
       }
     }
   }
   const byLen = (a, b) => Math.abs(a.length - 65) - Math.abs(b.length - 65);
-  return [...tiers[0].sort(byLen), ...tiers[1].sort(byLen), ...tiers[2].sort(byLen)].slice(0, MAX_CANDIDATES);
+  return [...tiers[0].sort(byLen), ...tiers[1].sort(byLen), ...tiers[2].sort(byLen), ...tiers[3].sort(byLen)].slice(
+    0,
+    MAX_CANDIDATES,
+  );
 }
 
 /** 校验候选令牌：平台用户摘要接口 code === 0 即有效。 */
@@ -573,17 +778,23 @@ export function apply(ctx, config = {}) {
   const tokenState = {
     source: readTokenMeta().source === "browser" ? "browser" : "manual",
     lastScanAt: 0,
+    lastReport: null,
     scanInFlight: null,
   };
 
-  /** 扫描本机浏览器并逐候选校验，命中即落盘（返回扫描报告）。 */
-  async function acquireBrowserToken(signal) {
+  /**
+   * 扫描本机浏览器并逐候选校验，命中即落盘（返回扫描报告）。
+   * maxChecks 限制单次校验的候选数：登录轮询用小块快速校验（登录后
+   * 新令牌落在标记邻近第一档，前几候选即可命中），避免每轮轮询都
+   * 校验全部候选造成大量上游请求。
+   */
+  async function acquireBrowserToken(signal, maxChecks = MAX_CANDIDATES) {
     if (tokenState.scanInFlight !== null) return tokenState.scanInFlight;
     const run = (async () => {
       const started = Date.now();
       const candidates = scanBrowserTokens();
       const report = { candidates: candidates.length, found: false, elapsedMs: 0 };
-      for (const token of candidates) {
+      for (const token of candidates.slice(0, maxChecks)) {
         if (await verifyPlatformToken(token, signal)) {
           writeTokenFile(token);
           writeTokenMeta("browser");
@@ -594,6 +805,7 @@ export function apply(ctx, config = {}) {
       }
       report.elapsedMs = Date.now() - started;
       tokenState.lastScanAt = Date.now();
+      tokenState.lastReport = report;
       return report;
     })();
     tokenState.scanInFlight = run;
@@ -605,16 +817,18 @@ export function apply(ctx, config = {}) {
   }
 
   /** 平台令牌获取：落盘文件优先；无令牌且开启扫描时自动尝试本机浏览器。 */
-  async function ensureUsageToken(signal, forceScan) {
+  async function ensureUsageToken(signal, forceScan, maxChecks = MAX_CANDIDATES) {
     const existing = readTokenFile();
     if (existing !== null) {
       return { token: existing, source: tokenState.source, scan: null };
     }
     if (!browserScan) return { token: null, source: null, scan: null };
     if (forceScan !== true && Date.now() - tokenState.lastScanAt < browserScanIntervalMs) {
-      return { token: null, source: null, scan: null };
+      // 节流窗口内不重扫，但回传上一次扫描报告：client 据此维持
+      // 一致的「未登录」提示（而非退回旧指引），行为不再漂移。
+      return { token: null, source: null, scan: tokenState.lastReport };
     }
-    const report = await acquireBrowserToken(signal);
+    const report = await acquireBrowserToken(signal, maxChecks);
     const token = readTokenFile();
     return { token, source: token !== null ? tokenState.source : null, scan: report };
   }
@@ -627,6 +841,7 @@ export function apply(ctx, config = {}) {
     const tokenMeta = {
       tokenSource: source,
       scanReport: scan !== null ? scan : null,
+      browserScanEnabled: browserScan,
     };
     if (token === null) {
       return {
@@ -836,9 +1051,18 @@ export function apply(ctx, config = {}) {
         },
       };
     }
-    // 平台令牌：落盘优先；缺失时按节流自动扫描本机浏览器（rescanBrowsers
-    // 强制立即重扫）。扫描在余额请求并发之外先行完成，避免竞态写令牌。
-    const usageTokenCtx = await ensureUsageToken(signal, payload?.args?.rescanBrowsers === true);
+    // 平台令牌：落盘优先；缺失时自动扫描本机浏览器。
+    //  - rescanBrowsers：面板「重新扫描」按钮 → 强制全量重扫（绕过节流）
+    //  - refresh（手动刷新，无令牌时）：也强制检查浏览器登录态——快扫只
+    //    校验标记邻近前几候选（登录后新令牌落在第一档，快扫即可命中），
+    //    无需用户再点任何按钮
+    //  - quick：登录轮询专用快扫
+    //  - 其余情况：按 6 小时节流全量扫描
+    const args = payload?.args ?? {};
+    const forceRescan = args.rescanBrowsers === true;
+    const refreshQuick = args.refresh === true && !forceRescan;
+    const maxChecks = args.quick === true || refreshQuick ? QUICK_SCAN_MAX : MAX_CANDIDATES;
+    const usageTokenCtx = await ensureUsageToken(signal, forceRescan || refreshQuick, maxChecks);
     const [balanceResult, usageResult] = await Promise.all([
       (async () => {
         try {
