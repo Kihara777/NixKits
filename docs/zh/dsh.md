@@ -153,8 +153,9 @@ API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（�
 
 平台令牌两级获取，全自动优先：
 
-- **本机浏览器自动扫描（默认开启）**：host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 `Local Storage/leveldb`，提取 base64 候选（55–85 字符）并逐个发往 `GET /api/v0/users/get_user_summary` 校验（`code === 0` 即有效），命中即落盘 `$DSH_HOME/api-balance-token`（0600）。用户在本机浏览器登录过平台即无感获取；节流默认每 6 小时最多扫描一次（`browserScanIntervalMs` 可配，`browserScan = false` 关闭），令牌失效（40003/401）后下次查询立即重扫，面板内「重新扫描本机浏览器」按钮强制重扫。
-- **手动一键授权（回退）**：面板「连接平台」打开 platform.deepseek.com/usage 并复制回传命令，控制台粘贴回车回传令牌；移动端可用「手动输入」。
+- **本机浏览器自动扫描（默认开启）**：host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 `Local Storage/leveldb`——先按 LevelDB 表结构精确解析（footer → index → 数据块 → snappy 解压 → 条目遍历）读出 `userToken`，解析失败时回退裸字节启发式候选——命中即落盘 `$DSH_HOME/api-balance-token`（0600）。用户在本机浏览器登录过平台即无感获取；节流默认每 6 小时最多扫描一次（`browserScanIntervalMs` 可配，`browserScan = false` 关闭），令牌失效（40003/401）后下次查询立即重扫。
+- **未登录检测与登录引导**：扫描未命中时面板自动弹出「未检测到平台登录」提示——「前往登录」在新标签页打开登录页并轮询自动拾取令牌；手动输入令牌仅作为弹窗内的二级备选（不想登录时使用）。已连接后面板显示灰显「✓ 已登录」按钮与令牌来源（本机浏览器自动获取 / 手动连接）；每次手动刷新在无令牌时也会自动快扫检查登录态，无需点任何按钮。
+- **语音播报**：面板内独立一行提供「播报语音用量」下拉菜单——播报当前用量 / 余额，或试听低用量、余额不足警告音频；另有语音提醒开关（余额低于阈值自动播报）。
 
 ```nix
 {

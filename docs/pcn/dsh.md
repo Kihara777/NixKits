@@ -153,8 +153,9 @@ API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信
 
 platform token 二段取得、全自動優先：
 
-- **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 直接読取、base64 候補（55–85 字）抽出 `GET /api/v0/users/get_user_summary` 逐個検証（`code === 0` 即有効）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描、面板「本機瀏覽器再掃描」按鈕強制再掃描。
-- **手動一鍵授權（回退）**：面板「連接平台」開 platform.deepseek.com/usage 与回伝命令複製、控制台粘貼回車回伝 token；触屏設備「手動輸入」可。
+- **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 読取、LevelDB 表構造精確解析（footer → index → 數據 block → snappy 解凍 → entry 走査）`userToken` 取出（解析失敗時生 byte 啓発式回退）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描。
+- **未登録検出与登録案内**：scan 不命中時面板「platform 未登録」prompt 自動表示——「前往登録」新標籤開登録頁、polling token 自動取得。手動輸入 prompt 内二級 option 限定（登録不要時備）。接続後灰顯「✓ 登録済」按鈕与 token 取得元（本機瀏覽器自動取得 / 手動連接）表示、手動更新毎 token 未取得時自動快掃登録状態確認——按鈕操作不要。
+- **音声放送**：面板独立行「使用量読上」drop-down——當前使用量 / 残高読上、低使用量・残高不足警告音声試聴可能。別途音声 reminder 切替（残高閾値下自動読上）備。
 
 ```nix
 {
