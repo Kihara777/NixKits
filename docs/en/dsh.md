@@ -149,7 +149,12 @@ Trade-off: dsh is a long-lived process, so plugin updates take effect only after
 
 ### api-balance plugin
 
-API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button) — 「Usage」 keeps the original content (context occupancy and its breakdown), 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance). Data comes from the official DeepSeek `GET /user/balance` endpoint with a 30-second host-side TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`) with a process-environment fallback.
+API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button) — 「Usage」 keeps the original content (context occupancy and its breakdown), 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance) plus today / this-month / 30-day consumption (cost + tokens + per-model breakdown) and daily / monthly usage charts. Balance comes from the official DeepSeek `GET /user/balance` endpoint (API-key auth); usage comes from the platform console's internal `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}` (platform session token auth), both with a 30-second host-side TTL cache. The API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`) with a process-environment fallback.
+
+The platform token is acquired in two tiers, fully automatic first:
+
+- **Local browser auto-scan (on by default)**: the host reads the `Local Storage/leveldb` of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile), extracts base64 candidates (55–85 chars) and validates each against `GET /api/v0/users/get_user_summary` (`code === 0` = valid); the first hit is saved to `$DSH_HOME/api-balance-token` (0600). Signing in to the platform once in a local browser is all it takes — no manual console steps. Throttled to one scan per 6 hours by default (`browserScanIntervalMs` configurable, `browserScan = false` disables); after token invalidation (40003/401) the next query rescans immediately, and the panel's 「Rescan local browsers」 button forces a rescan.
+- **Manual one-click auth (fallback)**: the panel's 「Connect platform」 opens platform.deepseek.com/usage and copies a relay command to the clipboard; pasting it into the console sends the token back. Touch devices can use 「Enter manually」.
 
 ```nix
 {
@@ -160,6 +165,8 @@ API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 t
     # config (optional):
     #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
     #   baseURL = "https://api.deepseek.com";
+    #   browserScan = true;               # local browser auto-scan
+    #   browserScanIntervalMs = 21600000; # scan throttle (default 6 h)
   }];
 }
 ```

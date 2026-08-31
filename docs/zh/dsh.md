@@ -149,7 +149,12 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 ### api-balance 插件
 
-API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（发送按钮左侧的上下文已用显示）的弹出面板中提供「用量 / 余额」标签切换——「用量」为原有内容（上下文占用与细分），「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额）。数据来自 DeepSeek 官方 `GET /user/balance` 接口，host 端 30 秒 TTL 缓存；API key 按 `apiKeyEnv`（默认 `DEEPSEEK_API_KEY`）走 `credentials` 服务解析，回退进程环境变量。
+API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（发送按钮左侧的上下文已用显示）的弹出面板中提供「用量 / 余额」标签切换——「用量」为原有内容（上下文占用与细分），「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额），并含当日 / 当月 / 30 日内消耗（金额 + token + 分模型明细）与按日 / 按月用量图表。余额数据来自 DeepSeek 官方 `GET /user/balance` 接口（API key 认证），用量数据来自平台控制台内部接口 `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（平台会话令牌认证），host 端 30 秒 TTL 缓存；API key 按 `apiKeyEnv`（默认 `DEEPSEEK_API_KEY`）走 `credentials` 服务解析，回退进程环境变量。
+
+平台令牌两级获取，全自动优先：
+
+- **本机浏览器自动扫描（默认开启）**：host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 `Local Storage/leveldb`，提取 base64 候选（55–85 字符）并逐个发往 `GET /api/v0/users/get_user_summary` 校验（`code === 0` 即有效），命中即落盘 `$DSH_HOME/api-balance-token`（0600）。用户在本机浏览器登录过平台即无感获取；节流默认每 6 小时最多扫描一次（`browserScanIntervalMs` 可配，`browserScan = false` 关闭），令牌失效（40003/401）后下次查询立即重扫，面板内「重新扫描本机浏览器」按钮强制重扫。
+- **手动一键授权（回退）**：面板「连接平台」打开 platform.deepseek.com/usage 并复制回传命令，控制台粘贴回车回传令牌；移动端可用「手动输入」。
 
 ```nix
 {
@@ -160,6 +165,8 @@ API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（�
     # config 可选：
     #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
     #   baseURL = "https://api.deepseek.com";
+    #   browserScan = true;               # 本机浏览器自动扫描
+    #   browserScanIntervalMs = 21600000; # 扫描节流（默认 6 小时）
   }];
 }
 ```

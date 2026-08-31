@@ -25,6 +25,12 @@ window.__ModuleLoader__.load({
 		 *      · 分模型 token 明细（30 日内，接口按模型返回时可得）
 		 *    数据经 host 端 `api-balance/query` RPC 获取（同一 /api 通道）。
 		 *
+		 * 平台令牌两级获取（host 端实现，本端只渲染状态）：
+		 *  - 自动：扫描本机浏览器 Local Storage LevelDB 提取并校验 userToken，
+		 *    面板内「重新扫描本机浏览器」按钮强制重扫（rescanBrowsers）；
+		 *  - 手动回退：一键授权（剪贴板回传命令）与手动输入令牌。
+		 * 连接成功后显示令牌来源徽章（tokenSource: browser | manual）。
+		 *
 		 * 原 ContextMeter 按钮经 CSS 隐藏（结构选择器 + dsh 0.1.1-rc.2 的
 		 * 构建类名双保险，`:not()` 排除替代按钮自身）。
 		 *
@@ -564,9 +570,9 @@ window.__ModuleLoader__.load({
 				};
 			}, [available]);
 
-			const load = (refresh) => {
+			const load = (refresh, rescanBrowsers = false) => {
 				setBalanceState("loading");
-				return queryBalance(refresh)
+				return queryBalance({ refresh: refresh === true, rescanBrowsers: rescanBrowsers === true })
 					.then((result) => {
 						if (result !== null && typeof result === "object" && result.ok === true) {
 							setBalance(result.value);
@@ -1109,13 +1115,43 @@ window.__ModuleLoader__.load({
 						}),
 					);
 				}
-				// no-token：授权 UI。桌面端走一键授权（打开平台页 + 剪贴板
-				// 回传命令 + 自动轮询）；触屏设备无 DevTools 控制台，直接
-				// 展开手动令牌输入框（同源 POST 保存）。桌面端也提供
-				// 「手动输入」折叠入口作为备用通道。
+				// no-token：授权 UI。首选「重新扫描本机浏览器」（host 直接读
+				// 本机浏览器的登录态，无需任何手动操作）；回退手动通道：桌面
+				// 端一键授权（打开平台页 + 剪贴板回传命令 + 自动轮询），触屏
+				// 设备直接展开手动令牌输入框（同源 POST 保存）。
 				if (usage !== null && usage.status === "no-token") {
 					const waiting = connectState === "waiting";
 					const showManual = touchDevice || manualOpen;
+					const scanReport =
+						usage !== null && typeof usage.scanReport === "object" && usage.scanReport !== null
+							? usage.scanReport
+							: null;
+					const scanNotFound = scanReport !== null && scanReport.found !== true;
+					const scanning = balanceState === "loading";
+					const rescanButton = react.createElement(
+						"button",
+						{
+							type: "button",
+							disabled: scanning || waiting,
+							onClick: () => (scanning || waiting ? void 0 : load(true, true)),
+							style: {
+								display: "inline-flex",
+								alignItems: "center",
+								marginTop: "10px",
+								marginRight: "8px",
+								padding: "3px 12px",
+								borderRadius: "999px",
+								cursor: scanning || waiting ? "default" : "pointer",
+								border: "1px solid var(--dsw-alias-separator-primary)",
+								background: "var(--dsw-alias-interactive-bg-hover)",
+								color: "var(--dsw-alias-label-secondary)",
+								fontSize: "12px",
+								lineHeight: "20px",
+								opacity: scanning || waiting ? 0.6 : 1,
+							},
+						},
+						scanning ? t("balance.scanning") : t("balance.rescan"),
+					);
 					const connectButton = touchDevice
 						? null
 						: react.createElement(
@@ -1217,6 +1253,7 @@ window.__ModuleLoader__.load({
 						react.Fragment,
 						null,
 						balanceBody,
+						rescanButton,
 						connectButton,
 						manualLink,
 						manualForm,
@@ -1236,9 +1273,13 @@ window.__ModuleLoader__.load({
 								? t("balance.connectWaiting")
 								: connectState === "timeout"
 									? t("balance.connectTimeout")
-									: touchDevice
-										? t("balance.connectGuideMobile")
-										: t("balance.connectGuide"),
+									: scanNotFound
+										? `${t("balance.scanHint")}${
+												scanReport.candidates > 0 ? `（${scanReport.candidates} 个候选无效）` : ""
+											}`
+										: touchDevice
+											? t("balance.connectGuideMobile")
+											: t("balance.connectGuide"),
 						),
 					);
 				} else if (usage !== null && usage.status === "error" && usageMessage !== null) {
@@ -1263,8 +1304,9 @@ window.__ModuleLoader__.load({
 						),
 					);
 				}
-				// 已连接：提供断开入口（清除本机令牌）。
+				// 已连接：提供断开入口（清除本机令牌）与令牌来源徽章。
 				if (usage !== null && usage.status !== "no-token") {
+					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
 					balanceBody = react.createElement(
 						react.Fragment,
 						null,
@@ -1272,6 +1314,20 @@ window.__ModuleLoader__.load({
 						react.createElement(
 							"div",
 							{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "10px" } },
+							tokenSource === null
+								? null
+								: react.createElement(
+										"span",
+										{
+											style: {
+												fontSize: "11px",
+												lineHeight: "18px",
+												color: "var(--dsw-alias-label-tertiary)",
+												marginRight: "auto",
+											},
+										},
+										tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
+									),
 							react.createElement(
 								"button",
 								{
@@ -1461,6 +1517,11 @@ window.__ModuleLoader__.load({
 			"balance.allModels": "全部模型",
 			"balance.usage": "用量",
 			"balance.noToken": "未连接平台",
+			"balance.rescan": "重新扫描本机浏览器",
+			"balance.scanning": "正在扫描本机浏览器…",
+			"balance.scanHint": "未在本机浏览器检测到平台登录态：请先在浏览器登录 platform.deepseek.com，再点「重新扫描」。",
+			"balance.sourceBrowser": "令牌来源：本机浏览器自动获取",
+			"balance.sourceManual": "令牌来源：手动连接",
 			"chart.title": "用量图表",
 			"chart.daily": "按日",
 			"chart.monthly": "按月",
@@ -1512,6 +1573,11 @@ window.__ModuleLoader__.load({
 			"balance.allModels": "All models",
 			"balance.usage": "Usage",
 			"balance.noToken": "Not connected",
+			"balance.rescan": "Rescan local browsers",
+			"balance.scanning": "Scanning local browsers…",
+			"balance.scanHint": "No platform login found in local browsers: sign in at platform.deepseek.com first, then rescan.",
+			"balance.sourceBrowser": "Token source: local browser",
+			"balance.sourceManual": "Token source: manual",
 			"chart.title": "Usage chart",
 			"chart.daily": "Daily",
 			"chart.monthly": "Monthly",
@@ -1573,9 +1639,14 @@ window.__ModuleLoader__.load({
 						order: 10,
 						locale: NS,
 						inject: () => ({
-							queryBalance: async (refresh) => {
+							queryBalance: async (args) => {
+								const opts =
+									typeof args === "object" && args !== null ? args : { refresh: args === true };
 								const result = await ctx.connection.rpc.call("/api", "api-balance/query", {
-									args: { refresh: refresh === true },
+									args: {
+										refresh: opts.refresh === true,
+										rescanBrowsers: opts.rescanBrowsers === true,
+									},
 								});
 								return result;
 							},

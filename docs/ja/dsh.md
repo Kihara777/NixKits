@@ -149,7 +149,12 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 ### api-balance プラグイン
 
-API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加——「用量」は元の内容（コンテキスト占有率と内訳）、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高）を表示する。データは DeepSeek 公式 `GET /user/balance` から取得し、ホスト側で 30 秒 TTL キャッシュ。API キーは `credentials` サービス経由で `apiKeyEnv`（デフォルト `DEEPSEEK_API_KEY`）を解決し、プロセス環境変数へフォールバックする。
+API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加——「用量」は元の内容（コンテキスト占有率と内訳）、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高）に加え、当日 / 当月 / 30 日間の消費（金額 + トークン + モデル別内訳）と日別 / 月別の使用量チャートを表示する。残高データは DeepSeek 公式 `GET /user/balance`（API キー認証）、使用量データはプラットフォームコンソール内部 API `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（プラットフォームセッショントークン認証）から取得し、ホスト側で 30 秒 TTL キャッシュ。API キーは `credentials` サービス経由で `apiKeyEnv`（デフォルト `DEEPSEEK_API_KEY`）を解決し、プロセス環境変数へフォールバックする。
+
+プラットフォームトークンは二段構えで取得し、全自動を優先する：
+
+- **ローカルブラウザ自動スキャン（デフォルト有効）**：ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の `Local Storage/leveldb` を直接読み、base64 候補（55–85 文字）を抽出して `GET /api/v0/users/get_user_summary` で逐一検証（`code === 0` が有効）、最初の一致を `$DSH_HOME/api-balance-token`（0600）へ保存する。ローカルブラウザで一度プラットフォームにログインしていれば手動操作なしで取得できる。節流はデフォルト 6 時間に 1 回まで（`browserScanIntervalMs` で設定、`browserScan = false` で無効化）。トークン失効（40003/401）後は次回クエリで即再スキャンし、パネルの「本機ブラウザを再スキャン」ボタンで強制再スキャンできる。
+- **手動ワンクリック認可（フォールバック）**：パネルの「プラットフォーム接続」で platform.deepseek.com/usage を開き回伝コマンドをクリップボードへコピー、コンソールに貼り付けて実行するとトークンが返送される。タッチデバイスは「手動入力」を利用できる。
 
 ```nix
 {
@@ -160,6 +165,8 @@ API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リン
     # config（任意）：
     #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
     #   baseURL = "https://api.deepseek.com";
+    #   browserScan = true;               # ローカルブラウザ自動スキャン
+    #   browserScanIntervalMs = 21600000; # スキャン節流（デフォルト 6 時間）
   }];
 }
 ```
