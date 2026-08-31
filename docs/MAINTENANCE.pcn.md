@@ -9,6 +9,7 @@
 | 提交 | 説明 |
 |------|------|
 | `86a7c3f` | docs(AGENTS): dsh-alpha 会話経験泛化 — buildNpmPackage 細則與本機部署約定 |
+| `396c3ae` | docs(MAINTENANCE): record 2026-08-31 — AGENTS.md dsh-alpha 会話経験泛化 |
 
 ## 2026-08-31T11:31:42+09:00
 

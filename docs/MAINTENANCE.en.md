@@ -9,6 +9,7 @@
 | Commit | Description |
 |------|------|
 | `86a7c3f` | docs(AGENTS): generalize dsh-alpha session lessons — buildNpmPackage rules and local deployment conventions |
+| `396c3ae` | docs(MAINTENANCE): record 2026-08-31 — generalize dsh-alpha session lessons into AGENTS.md |
 
 ## 2026-08-31T11:31:42+09:00
 

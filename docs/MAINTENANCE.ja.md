@@ -9,6 +9,7 @@
 | コミット | 説明 |
 |------|------|
 | `86a7c3f` | docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 細則と本機デプロイ約定 |
+| `396c3ae` | docs(MAINTENANCE): record 2026-08-31 — AGENTS.md dsh-alpha セッション経験汎化 |
 
 ## 2026-08-31T11:31:42+09:00
 
