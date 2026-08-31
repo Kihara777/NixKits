@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:50:02+09:00
+
+**摘要**：docs(AGENTS): 泛化 dsh-alpha 会话经验 — buildNpmPackage 三条细则（vendored lock 与 npmDepsHash 自洽 / devDependencies 引用未发布包时 postPatch 纯 sed 剔除且 lock 同源 / 同源多通道仿 ruyi 薄包装），初次启动审计前 git fetch 对齐远端，新增本机部署章节（path-input 重锁、nixos apply 命令、--no-link 产物回收）
+
+| 提交 | 说明 |
+|------|------|
+| `86a7c3f` | docs(AGENTS): 泛化 dsh-alpha 会话经验 — buildNpmPackage 细则与本机部署约定 |
+
 ## 2026-08-31T11:31:42+09:00
 
 **摘要**：dsh-alpha 上线灾难恢复 — 修复 alpha 反代 Host 语义（web UI 入口按 Host authority 的 session cookie 认证，重写 Host 致永远 401）、dsh-api-balance 的 shared RPC interceptor 冲突（/api 已被 typert-gateway 独占，改用精确 fetch route 自实现 RPC envelope）、dsh-nixos-shell 的 dsh-tools 通道对齐；新增 launchUrlFile（局域网启动 URL 捕获）与 reverseProxy.autoAuth（mod_magnet 免认证注入，显式禁用入口认证仅限可信局域网）模块选项；四语文档补全局域网访问章节。

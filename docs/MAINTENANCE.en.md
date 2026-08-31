@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:50:02+09:00
+
+**Summary**: docs(AGENTS): generalize dsh-alpha session lessons — three buildNpmPackage rules (vendored lock consistent with npmDepsHash / postPatch strips unpublished devDependencies with plain sed, lock generated from the same package.json / multi-channel thin-wrapper pattern after ruyi), git fetch before the startup audit, new local-deployment section (path-input relock, nixos apply command, --no-link artifact collection)
+
+| Commit | Description |
+|------|------|
+| `86a7c3f` | docs(AGENTS): generalize dsh-alpha session lessons — buildNpmPackage rules and local deployment conventions |
+
 ## 2026-08-31T11:31:42+09:00
 
 **Summary**: dsh-alpha rollout disaster recovery — fixed the alpha reverse-proxy Host semantics (the web UI entry authenticates with a Host-authority session cookie; rewriting Host caused permanent 401s), the dsh-api-balance shared RPC interceptor conflict (`/api` is exclusively held by typert-gateway; switched to an exact fetch route implementing the RPC envelope), and dsh-nixos-shell's dsh-tools channel alignment; new module options launchUrlFile (LAN startup URL capture) and reverseProxy.autoAuth (mod_magnet passwordless token injection — explicitly disables entry auth, trusted LAN only); four-language docs gain the LAN access sections.

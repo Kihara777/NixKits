@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:50:02+09:00
+
+**概要**: docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 三則（vendored lock と npmDepsHash の一致 / 未公開 devDependencies を postPatch の純 sed で削除し lock も同源生成 / ruyi 式多チャネル薄ラッパー）、初回起動監査前の git fetch、本機デプロイ節新設（path-input 再ロック、nixos apply コマンド、--no-link 成果物回収）
+
+| コミット | 説明 |
+|------|------|
+| `86a7c3f` | docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 細則と本機デプロイ約定 |
+
 ## 2026-08-31T11:31:42+09:00
 
 **概要**: dsh-alpha 導入の障害復旧 — alpha のリバースプロキシ Host セマンティクス修正（web UI 入口は Host authority の session cookie で認証、Host 書き換えが恒久 401 を引き起こしていた）、dsh-api-balance の shared RPC interceptor 衝突修正（`/api` は typert-gateway が独占、正確な fetch route に切替えて RPC envelope を自前実装）、dsh-nixos-shell の dsh-tools チャネル整合；新規モジュールオプション launchUrlFile（局域网起動 URL 捕捉）と reverseProxy.autoAuth（mod_magnet 免認証トークン注入 — 入口認証を明示的に無効化、信頼できる局域网のみ）；四言語文書に局域网アクセス節を追加。
