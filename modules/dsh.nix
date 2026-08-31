@@ -57,6 +57,91 @@ let
   # hot-reloads it.  Empty ({} or missing) resolves every namespace to
   # schema defaults.
   settingsDoc = pkgs.writeText "settings.yaml" (builtins.toJSON cfg.settings);
+
+  # External launch authorities: dsh prints its tokenized startup URL for
+  # 127.0.0.1 only (localWebUrl hardcodes loopback, and --host 0.0.0.0 is
+  # rejected upstream as RCE exposure).  LAN devices behind the reverse
+  # proxy must authenticate against the external authority, so derive it
+  # from trustedHosts: port-less entries get the reverse-proxy port.
+  launchAuthorities = lib.map (h:
+    if builtins.match ".*:[0-9]+$" h != null || !cfg.reverseProxy.enable
+    then h
+    else "${h}:${toString cfg.reverseProxy.port}"
+  ) cfg.trustedHosts;
+
+  # Writes the external launch URLs once dsh has printed its tokenized
+  # startup URL.  A separate script (not an inline bash -c) because systemd
+  # unit quoting does not understand bash's '\'' escapes for the grep
+  # single quotes.
+  launchUrlScript = pkgs.writeShellApplication {
+    name = "dsh-launch-url";
+    runtimeInputs = [ pkgs.coreutils pkgs.gnugrep ];
+    text = ''
+      token=""
+      for _ in $(seq 1 60); do
+        # writeShellApplication runs under `set -e -o pipefail`; grep exits 1
+        # on an empty log, so absorb it or the first poll kills the script.
+        token=$(grep -oP 'token=\K[A-Za-z0-9_-]+' /run/dsh/web.log 2>/dev/null | head -1 || true)
+        [ -n "$token" ] && break
+        sleep 1
+      done
+      if [ -z "$token" ]; then
+        echo "dsh: launch token not printed within 60s — launch URLs not written" >&2
+        exit 0
+      fi
+      umask 077
+      {
+        echo "# dsh web launch URLs — open one from a LAN device to authenticate"
+        echo "# (token rotates on every dsh restart; cookies stay valid until expiry)"
+        ${lib.concatMapStringsSep "\n" (a: "echo \"http://${a}/?token=\$token\"") launchAuthorities}
+      } > ${cfg.launchUrlFile}
+      chown ${cfg.user}:${cfg.group} ${cfg.launchUrlFile}
+
+      # 纯 token 文件：lighttpd mod_magnet (autoAuth) 读取它做免认证注入。
+      # autoAuth 模式下 token 不再是秘密（反代会自动使用），world-readable。
+      echo "$token" > /run/dsh/launch-token
+      chmod 644 /run/dsh/launch-token
+    '';
+  };
+
+  # lighttpd with mod_magnet (Lua) compiled in.  nixpkgs' lighttpd ships
+  # enableMagnet=false by default; magnet is required for the autoAuth
+  # launch-token injection.
+  lighttpdMagnet = pkgs.lighttpd.override { enableMagnet = true; };
+
+  # mod_magnet Lua script: transparently inject the launch token for LAN
+  # devices that have not yet exchanged it for a session cookie.  Runs at
+  # magnet.attract-raw-url-to (before URL parsing), so it reads the raw
+  # request URI via lighty.env["request.uri"].
+  dshAutoAuthScript = pkgs.writeText "dsh-auto-auth.lua" ''
+    -- dsh auto-auth: transparently inject the launch token for LAN devices
+    -- that have not yet exchanged it for a session cookie.
+    local cookie = lighty.request["Cookie"] or ""
+    if string.find(cookie, "dsh-auth-", 1, true) then
+      return nil
+    end
+
+    local uri = lighty.env["request.uri"] or "/"
+    -- Already carrying a token (our own redirect, or a manual one): let dsh
+    -- exchange it for a signed cookie.  Injecting again would loop forever.
+    if string.find(uri, "token=", 1, true) then
+      return nil
+    end
+
+    local path = string.match(uri, "^([^?]*)")
+    if path == "/" or path == "/index.html" then
+      local f = io.open("/run/dsh/launch-token", "r")
+      if f then
+        local token = f:read("*l")
+        f:close()
+        if token and token ~= "" then
+          lighty.header["Location"] = "/?token=" .. token
+          return 302
+        end
+      end
+    end
+    return nil
+  '';
 in
 {
   options.nixkits.dsh = {
@@ -83,6 +168,19 @@ in
         reverse proxy: dsh validates the request Host header against
         loopback + this list (exact host:port, or port-less host matching
         any port), and same-origin checks the browser Origin.
+      '';
+    };
+
+    launchUrlFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        When set (and trustedHosts non-empty), dsh startup writes the
+        authenticated launch URLs (http://<trusted-host>/?token=…) to this
+        file.  dsh prints its token URL for 127.0.0.1 only; LAN devices
+        behind the reverse proxy need the external-authority URL to
+        exchange the launch token for a session cookie.  The token rotates
+        on every dsh restart; issued cookies remain valid until expiry.
       '';
     };
 
@@ -127,6 +225,13 @@ in
         default = 8625;
         description = "Public port for the lighttpd reverse proxy";
       };
+      autoAuth = lib.mkEnableOption ''
+        transparently inject the dsh launch token so LAN devices reach the
+        web UI with no manual authentication step.  This DISABLES dsh's
+        entry authentication (token secrecy) — only enable when the local
+        network is fully trusted, as any device that can reach the proxy
+        port gains full dsh access (including its RCE surface).
+      '';
     };
 
     plugins = {
@@ -236,6 +341,13 @@ in
       mkdir -p /run/dsh
       ln -sfn ${dshPkg} /run/dsh/current
       ${lib.optionalString cfg.sudo.enable "ln -sfn ${cfg.sudo.package} /run/dsh/nixos-shell"}
+      ${lib.optionalString (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) ''
+        # launch-URL capture: systemd appends dsh's stdout here as the
+        # service user, so the file must be pre-created and owned by them
+        # (/run/dsh itself is root-owned).
+        touch /run/dsh/web.log
+        chown ${cfg.user}:${cfg.group} /run/dsh/web.log
+      ''}
     '';
 
     users.users = lib.mkIf (cfg.user == "dsh") {
@@ -299,6 +411,11 @@ in
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
           fi
         ''}
+        ${lib.optionalString (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) ''
+          # Truncate the launch-URL capture log so ExecStartPost only sees
+          # this boot's token line (dsh prints it once at startup).
+          : > /run/dsh/web.log
+        ''}
       '';
       serviceConfig = {
         Type = "simple";
@@ -341,6 +458,15 @@ in
         ]
           ++ lib.optionals cfg.sudo.enable [ "NIXKITS_SUDO_SOCKET=${cfg.sudo.socketPath}" ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
+        # Capture dsh's stdout (it prints the tokenized startup URL once)
+        # for ExecStartPost to derive the external launch URLs.
+        StandardOutput = lib.mkIf (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) "append:/run/dsh/web.log";
+        # Run as root ('+') to write the launch URL file under root-owned
+        # /run/dsh and chown it to the service user.  The script polls the
+        # capture log for dsh's token line, then derives one launch URL per
+        # trusted host with the reverse-proxy port (dsh's own URL is
+        # loopback-only).
+        ExecStartPost = lib.mkIf (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) "+${lib.getExe launchUrlScript}";
       };
     };
 
@@ -409,6 +535,11 @@ in
       }
     ];
 
+    # autoAuth: 换用带 mod_magnet 的 lighttpd，并追加该模块到 server.modules。
+    # enableModules 是 types.listOf，与 SearXNG 的列表拼接而非覆盖。
+    services.lighttpd.package = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.autoAuth) lighttpdMagnet;
+    services.lighttpd.enableModules = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.autoAuth) [ "mod_magnet" ];
+
     services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
       $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
         proxy.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
@@ -426,14 +557,17 @@ in
           "X-Forwarded-For" => "%{remote-addr}e",
           "X-Forwarded-Proto" => "http"
         )
-        # Rewrite Host + Origin to the loopback backend so dsh's
-        # isTrustedApiRequest sees loopback (no trustedHosts needed) and the
-        # LAN hostname/IP is not leaked to the backend.  Origin must be
-        # rewritten together with Host, otherwise the same-origin check fails.
-        setenv.set-request-header = (
-          "Host" => "127.0.0.1:${toString cfg.port}",
-          "Origin" => "http://127.0.0.1:${toString cfg.port}"
-        )
+        # dsh 的 /api 浏览器信任鉴权用 --trusted-host 配置的 authority，
+        # 而 web UI 入口（dsh ≥ 0.1.2-alpha）用基于 Host authority 的
+        # session cookie 认证。这里不能重写 Host：重写会让后端看到的
+        # authority 与浏览器实际访问的域名不一致，cookie 无法跨反代匹配，
+        # 表现为永远 401。保持原始 Host，由 trustedHosts 授权局域网 authority。
+        # X-Forwarded-* 保留给后端日志/审计。
+        ${lib.optionalString cfg.reverseProxy.autoAuth ''
+          # autoAuth（免认证）：无 dsh-auth cookie 的首页请求由 magnet 脚本
+          # 302 注入当前 launch token，换取签名 cookie 后正常进入。
+          magnet.attract-raw-url-to = ( "${dshAutoAuthScript}" )
+        ''}
       }
     '';
 
