@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T01:25:25+09:00
+
+**Summary**: feat(dsh-api-balance): login prompt + exact LevelDB parsing + voice broadcast menu — when the browser scan finds nothing, a prompt pops up with 「Go to login」 (opens the login page in a new tab and picks up the token via quick-scan polling); manual entry is demoted to a secondary option inside the prompt. A greyed 「✓ Signed in」 button shows once connected, and every manual refresh auto-quick-scans for the login state. New pure-JS LevelDB table parser (footer → index → data blocks → snappy decompression → entry walk; fixes the extended-literal length as single byte + 1, not a varint) extracts userToken exactly — quick scan hits in 949ms (previously 5.3s full scan / quick scan failed). Voice broadcast gets its own row with a dropdown (current usage / balance / test warning audio); the menu is now a fixed-position portal to fix scroll clipping, with speech-engine warmup; token source is displayed in two lines.
+
+| Commit | Description |
+|------|------|
+| `a3ad3ff` | feat(dsh-api-balance): login prompt + exact LevelDB parsing + voice broadcast menu |
+| `a0e945e` | docs(dsh): sync the login-prompt / exact-parsing / voice-broadcast sections in four languages |
+
 ## 2026-08-31T23:55:52+09:00
 
 **Summary**: docs(dsh): complete the api-balance plugin section in all four languages — the pcn dsh.md gains the plugin section (local browser auto-scan / usage charts / config options), and the four-language README plugin tables describe the auto-scan-from-browser-session semantics

@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T01:25:25+09:00
+
+**摘要**：feat(dsh-api-balance): 未登录弹窗 + LevelDB 精确解析 + 语音播报下拉 — 浏览器扫描未命中时自动弹窗「前往登录」（新标签页登录 + 轮询快扫自动拾取），手动输入降为弹窗内二级备选；已连接显示灰显「✓ 已登录」，手动刷新时自动快扫检查登录态；新增纯 JS LevelDB 表解析（footer → index → 数据块 → snappy 解压 → 条目遍历，修正扩展字面量长度 = 单字节+1 而非 varint）精确提取 userToken，快扫 949ms 命中（此前全扫 5.3s / 快扫失败）；语音播报独立一行 + 下拉菜单（当前用量 / 余额 / 测试警告音频），菜单改 portal 固定定位修复滚动裁剪并预热语音引擎；令牌来源改两行显示。
+
+| 提交 | 说明 |
+|------|------|
+| `a3ad3ff` | feat(dsh-api-balance): 未登录弹窗 + LevelDB 精确解析 + 语音播报下拉 |
+| `a0e945e` | docs(dsh): api-balance 未登录弹窗/精确解析/语音播报章节四语同步 |
+
 ## 2026-08-31T23:55:52+09:00
 
 **摘要**：docs(dsh): api-balance 插件章节四语补齐 — 补全 pcn 语言 dsh.md 的插件章节（本机浏览器自动扫描 / 用量图表 / config 选项），四语 README 插件表描述同步为「浏览器登录态自动扫描获取令牌」语义
