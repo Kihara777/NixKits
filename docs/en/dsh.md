@@ -75,6 +75,31 @@ Run as a resident web service via the `nixkits.dsh` module. dsh listens loopback
 }
 ```
 
+### LAN access (trustedHosts + launch URLs)
+
+The dsh ≥ 0.1.2-alpha web UI entry authenticates with a Host-authority session cookie, so the proxy **no longer rewrites Host** (rewriting makes the backend see a different authority than the browser visited; the cookie cannot match across the proxy and every request 401s). LAN devices visiting `http://<host>:8625` must have their authority listed in `trustedHosts`. dsh prints its tokenized startup URL for 127.0.0.1 only; `launchUrlFile` makes the module capture dsh's startup output (ExecStartPost) and write the LAN devices' authenticated URLs there:
+
+```nix
+{
+  nixkits.dsh = {
+    trustedHosts = [ "harukax.lan" "192.168.31.241" ];  # LAN authorities
+    launchUrlFile = "/run/dsh/launch-urls";             # startup URL output file
+  };
+}
+```
+
+> The token rotates on every dsh restart; exchanged session cookies stay valid until expiry.
+
+### Passwordless entry (autoAuth)
+
+`reverseProxy.autoAuth` uses lighttpd mod_magnet (the module swaps in an `enableMagnet` lighttpd automatically) to 302-inject the current launch token on home-page requests without a session cookie — LAN devices reach the web UI with no manual authentication step. **This DISABLES dsh's entry authentication (the token is no longer secret)** — enable only when the local network is fully trusted, otherwise any device that can reach the proxy port gains full dsh access (including its RCE surface):
+
+```nix
+{ nixkits.dsh.reverseProxy.autoAuth = true; }
+```
+
+> Note: autoAuth assumes a network-layer security scheme (e.g. an isolated LAN) owns the access boundary.
+
 > **PATH**: the module injects a complete NixOS PATH (`/run/current-system/sw/bin`, …) into the service. Without it, systemd's default PATH cannot find bash and the built-in bash tool fails with `spawn bash ENOENT`.
 
 > **HOME**: the service HOME points at the running user's real home (`users.users.<user>.home`, falling back to dshHome), so the agent inherits the user's own tooling context — git/gh credentials (`~/.config/gh`), `~/.gitconfig`, npm/ssh configs all resolve from `$HOME`. Pointing HOME at dshHome breaks this: git's gh credential helper finds no credentials and pushes fail.
@@ -113,6 +138,8 @@ dsh plugins hot-reload from `cordis.patch.yml` at runtime (no restart). `nixkits
   }];
 }
 ```
+
+> **dsh ≥ 0.1.2-alpha plugin compatibility**: `ctx.connection.rpc.intercept` shared RPC channel interceptors are exclusive (one per channel; a second registration throws), and `/api` is already taken by the built-in typert-gateway. Third-party plugins exposing RPC methods should use an exact fetch route instead (`ctx.connection.fetch.register` on e.g. `/api/<plugin>/<method>`, implementing the RPC envelope contract `{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` yourself) — grabbing the channel interceptor displaces the built-in one and 404s every llm/session RPC. Plugin peer deps like `@deepseek-ai/dsh-tools` must match the host dsh channel.
 
 ### Plugin updates and zero-restart activation
 

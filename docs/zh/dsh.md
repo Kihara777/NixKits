@@ -75,6 +75,31 @@ dsh web   # 启动浏览器 UI
 }
 ```
 
+### 局域网访问（trustedHosts + 启动 URL）
+
+dsh ≥ 0.1.2-alpha 的 web UI 入口用基于 Host authority 的 session cookie 认证，反代**不再重写 Host**（重写会让后端看到的 authority 与浏览器实际访问的不一致，cookie 无法跨反代匹配，表现为永远 401）。局域网设备通过 `http://<host>:8625` 访问时，其 authority 必须列入 `trustedHosts`。dsh 打印的 token 启动 URL 仅限 127.0.0.1，`launchUrlFile` 让模块在 dsh 启动时（ExecStartPost 捕获启动输出）把局域网设备的认证 URL 写入指定文件：
+
+```nix
+{
+  nixkits.dsh = {
+    trustedHosts = [ "harukax.lan" "192.168.31.241" ];  # 局域网 authority
+    launchUrlFile = "/run/dsh/launch-urls";             # 启动 URL 输出文件
+  };
+}
+```
+
+> token 每次 dsh 重启轮换；换取到的 session cookie 在到期前持续有效。
+
+### 免认证入口（autoAuth）
+
+`reverseProxy.autoAuth` 用 lighttpd mod_magnet（模块自动换用 `enableMagnet` 编译的 lighttpd）在无 session cookie 的首页请求上 302 注入当前 launch token，局域网设备免手动认证一步直达。**该开关禁用 dsh 的入口认证（token 不再是秘密）**——仅当本地局域网完全可信时启用，否则任何能到达反代端口的设备都能获得完整 dsh 访问（含 RCE 面）：
+
+```nix
+{ nixkits.dsh.reverseProxy.autoAuth = true; }
+```
+
+> 注意：autoAuth 假定由网络层安全方案（如隔离的 LAN）负责访问边界。
+
 > **PATH**：模块自动为服务注入 NixOS 完整 PATH（`/run/current-system/sw/bin` 等）。没有它，systemd 默认 PATH 找不到 bash，内置 bash 工具会报 `spawn bash ENOENT`。
 
 > **HOME**：服务 HOME 指向运行用户的真实家目录（`users.users.<user>.home`，缺省回退 dshHome），代理因此继承用户自身的工具上下文——git/gh 凭据（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 配置全部按 `$HOME` 解析。若把 HOME 指向 dshHome，git 的 gh credential helper 会找不到凭据导致推送失败。
@@ -113,6 +138,8 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
   }];
 }
 ```
+
+> **dsh ≥ 0.1.2-alpha 插件兼容**：`ctx.connection.rpc.intercept` 的 shared RPC channel interceptor 互斥（每 channel 仅一个，重复注册直接 throw），`/api` 已被内置 typert-gateway 占用。第三方插件提供 RPC 方法请改用精确 fetch route（`ctx.connection.fetch.register` 注册如 `/api/<plugin>/<method>`，自行实现 `{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` 的 RPC envelope 约定），避免顶掉内置 interceptor 导致所有 llm/session 等 RPC 404。插件依赖的 `@deepseek-ai/dsh-tools` 等 peer 版本需与宿主 dsh 通道对齐。
 
 ### 插件更新与零重启激活
 

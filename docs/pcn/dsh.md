@@ -75,6 +75,31 @@ dsh web   # 瀏覧器 UI 起動
 }
 ```
 
+### 局域网訪問（trustedHosts + 起動 URL）
+
+dsh ≥ 0.1.2-alpha web UI 入口 Host authority 基盤 session cookie 認証使用、反代**Host 書換停止**（書換場合後端見 authority 瀏覧器実際訪問先不一致、cookie 反代越一致不能常時 401）。局域网機器 `http://<host>:8625` 訪問場合当該 authority `trustedHosts` 列挙必要。dsh 表示 token 起動 URL 127.0.0.1 限定。`launchUrlFile` 設定時部品 dsh 起動時（ExecStartPost 起動出力捕捉）局域网機器向認証 URL 当該書類書込：
+
+```nix
+{
+  nixkits.dsh = {
+    trustedHosts = [ "harukax.lan" "192.168.31.241" ];  # 局域网 authority
+    launchUrlFile = "/run/dsh/launch-urls";             # 起動 URL 出力書類
+  };
+}
+```
+
+> token dsh 再起動毎 rotation。交換済 session cookie 有効期限迄有効。
+
+### 免認証入口（autoAuth）
+
+`reverseProxy.autoAuth` lighttpd mod_magnet（部品 `enableMagnet` 版 lighttpd 自動切替）以 session cookie 無 homepage 要求 302 現在 launch token 注入、局域网機器手動認証不要直達。**此開關 dsh 入口認証無効化（token 秘密不再）**——local network 完全可信場合限定有効化、否則反代端口到達可能任意機器完全 dsh 訪問（RCE 面含）得：
+
+```nix
+{ nixkits.dsh.reverseProxy.autoAuth = true; }
+```
+
+> 注意：autoAuth network 層安全施策（隔離 LAN 等）訪問境界担当前提。
+
 > **PATH**：部品 service 完全 NixOS PATH（`/run/current-system/sw/bin` 等）自動注入。無場合 systemd 既定 PATH bash 発見不能、内建 bash 工具 `spawn bash ENOENT` 失敗。
 
 > **HOME**：service HOME 実行用户実家（`users.users.<user>.home`、無場合 dshHome 回退）指、代理用户自身工具環境継承——git/gh 憑証（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定全 `$HOME` 解決。HOME dshHome 指向場合 git gh credential helper 憑証発見不能 push 失敗。
@@ -113,6 +138,8 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
   }];
 }
 ```
+
+> **dsh ≥ 0.1.2-alpha 插件互換性**：`ctx.connection.rpc.intercept` shared RPC channel interceptor 排他（1 channel 1 個限定、再登録 throw）、`/api` 内建 typert-gateway 既占有。RPC 方法提供第三者插件宜用精確 fetch route（`ctx.connection.fetch.register` `/api/<plugin>/<method>` 等登録、`{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` RPC envelope 契約自前実装）——channel interceptor 奪取時内建 interceptor 押退、全 llm/session 等 RPC 404。插件 `@deepseek-ai/dsh-tools` 等 peer 依存宿主 dsh 通道一致必要。
 
 ### 插件更新与零再起活性化
 

@@ -75,6 +75,31 @@ dsh web   # ブラウザ UI を起動
 }
 ```
 
+### 局域网アクセス（trustedHosts + 起動 URL）
+
+dsh ≥ 0.1.2-alpha の web UI 入口は Host authority ベースの session cookie 認証を使うため、リバースプロキシは**Host を書き換えなくなった**（書き換えるとバックエンドが見る authority がブラウザの実際の訪問先と不一致になり、cookie が反代越しに一致せず常に 401 になる）。局域网デバイスが `http://<host>:8625` にアクセスする場合、その authority を `trustedHosts` に列挙する必要がある。dsh が表示する token 起動 URL は 127.0.0.1 のみ。`launchUrlFile` を設定すると、モジュールが dsh 起動時（ExecStartPost が起動出力を捕捉）に局域网デバイス向け認証 URL を当該ファイルへ書き込む：
+
+```nix
+{
+  nixkits.dsh = {
+    trustedHosts = [ "harukax.lan" "192.168.31.241" ];  # 局域网 authority
+    launchUrlFile = "/run/dsh/launch-urls";             # 起動 URL 出力ファイル
+  };
+}
+```
+
+> token は dsh 再起動のたびにローテーションする。交換済みの session cookie は有効期限まで有効。
+
+### 免認証入口（autoAuth）
+
+`reverseProxy.autoAuth` は lighttpd mod_magnet（モジュールが `enableMagnet` 版 lighttpd へ自動切替）で session cookie の無いホームページ要求に 302 で現在の launch token を注入し、局域网デバイスが手動認証なしで到達できる。**このスイッチは dsh の入口認証を無効化する（token はもはや秘密ではない）**——ローカルネットワークが完全に信頼できる場合のみ有効化すること。さもなければ反代ポートへ到達できる任意のデバイスが完全な dsh アクセス（RCE 面を含む）を得る：
+
+```nix
+{ nixkits.dsh.reverseProxy.autoAuth = true; }
+```
+
+> 注意：autoAuth はネットワーク層のセキュリティ施策（隔離された LAN など）がアクセス境界を担うことを前提とする。
+
 > **PATH**：モジュールはサービスへ完全な NixOS PATH（`/run/current-system/sw/bin` など）を自動注入する。これが無いと systemd の既定 PATH では bash が見つからず、内蔵 bash ツールが `spawn bash ENOENT` で失敗する。
 
 > **HOME**：サービスの HOME は実行ユーザーの実ホーム（`users.users.<user>.home`、無ければ dshHome にフォールバック）を指し、エージェントはユーザー自身のツール環境を継承する——git/gh 認証情報（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定はすべて `$HOME` から解決される。HOME を dshHome に向けると、git の gh credential helper が認証情報を見つけられず push が失敗する。
@@ -113,6 +138,8 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
   }];
 }
 ```
+
+> **dsh ≥ 0.1.2-alpha プラグイン互換性**：`ctx.connection.rpc.intercept` の shared RPC channel interceptor は排他的（1 チャネルに 1 つのみ、再登録は throw）で、`/api` は内蔵 typert-gateway が既に占有している。RPC メソッドを提供するサードパーティプラグインは正確な fetch route（`ctx.connection.fetch.register` で `/api/<plugin>/<method>` などに登録し、`{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` の RPC envelope 契約を自前実装）を使うこと——チャネル interceptor を奪うと内蔵の interceptor が押しのけられ、すべての llm/session 等の RPC が 404 になる。プラグインの `@deepseek-ai/dsh-tools` 等の peer 依存はホスト dsh のチャネルに合わせること。
 
 ### プラグイン更新とゼロ再起動活性化
 
