@@ -110,45 +110,61 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
-		 * 语音喊饿（Web Speech API，中文优先）。余额不足时提醒主人；
-		 * 30 分钟限流防重复，浏览器不支持时静默降级。
+		 * 界面语言 id → speechSynthesis lang 标签。DSH 界面语言跟随
+		 * LocaleFace 快照的 active（zh / en）；语音 lang 与音色选择同样
+		 * 跟随——zh 映射为 zh-CN（与 locale 插件的 document lang 逻辑
+		 * 一致），其余语言原样透传。
 		 */
-		function speakHungry(text) {
+		function speechLang(localeId) {
+			if (typeof localeId !== "string" || localeId.length === 0) return "zh-CN";
+			const id = localeId.toLowerCase();
+			return id === "zh" ? "zh-CN" : localeId;
+		}
+
+		/** 兜底 LocaleFace（稳定引用）：locale 服务不可用时按 zh 处理。 */
+		const FALLBACK_LOCALE_SNAPSHOT = Object.freeze({ active: "zh" });
+		const FALLBACK_LOCALE_FACE = {
+			subscribe: () => () => {},
+			getSnapshot: () => FALLBACK_LOCALE_SNAPSHOT,
+		};
+
+		/** 构造并朗读一条语音（语言/音色跟随界面语言）。 */
+		function speakUtterance(text, lang) {
+			const synth = window.speechSynthesis;
+			if (synth === void 0) return;
+			const utter = new SpeechSynthesisUtterance(text);
+			utter.lang = lang;
+			utter.rate = 1.05;
+			utter.volume = 1;
+			const voices = synth.getVoices();
+			const prefix = lang.toLowerCase().split("-")[0];
+			const preferred = voices.find((voice) => voice.lang.toLowerCase().startsWith(prefix));
+			if (preferred !== void 0) utter.voice = preferred;
+			synth.cancel();
+			synth.speak(utter);
+		}
+
+		/**
+		 * 语音喊饿（Web Speech API，语言跟随 DSH 界面语言）。余额不足时
+		 * 提醒主人；30 分钟限流防重复，浏览器不支持时静默降级。
+		 */
+		function speakHungry(text, lang) {
 			try {
 				if (typeof window === "undefined" || !speechEnabled()) return;
-				const synth = window.speechSynthesis;
-				if (synth === void 0) return;
 				const now = Date.now();
 				if (now - lastHungrySpeechAt < HUNGRY_SPEECH_INTERVAL_MS) return;
 				lastHungrySpeechAt = now;
-				const utter = new SpeechSynthesisUtterance(text);
-				utter.lang = "zh-CN";
-				utter.rate = 1.05;
-				const voices = synth.getVoices();
-				const zh = voices.find((voice) => voice.lang.toLowerCase().startsWith("zh"));
-				if (zh !== void 0) utter.voice = zh;
-				synth.cancel();
-				synth.speak(utter);
+				speakUtterance(text, lang);
 			} catch {
 				// 语音不可用（无语音引擎/自动播放策略）时静默
 			}
 		}
 
 		/** 手动播报（无开关/限流约束）：用户点击播报按钮时直接朗读。 */
-		function speakNow(text) {
+		function speakNow(text, lang) {
 			try {
 				if (typeof window === "undefined") return;
-				const synth = window.speechSynthesis;
-				if (synth === void 0) return;
-				const utter = new SpeechSynthesisUtterance(text);
-				utter.lang = "zh-CN";
-				utter.rate = 1.05;
-				utter.volume = 1;
-				const voices = synth.getVoices();
-				const zh = voices.find((voice) => voice.lang.toLowerCase().startsWith("zh"));
-				if (zh !== void 0) utter.voice = zh;
-				synth.cancel();
-				synth.speak(utter);
+				speakUtterance(text, lang);
 			} catch {
 				// 语音不可用时静默
 			}
@@ -166,11 +182,11 @@ window.__ModuleLoader__.load({
 			return "ok";
 		}
 
-		/** 根据饥饿状态播报对应文案（受限流约束）。 */
-		function announceHunger(t, balance) {
+		/** 根据饥饿状态播报对应文案（受限流约束；语言跟随界面语言）。 */
+		function announceHunger(t, balance, lang) {
 			const state = hungryState(balance);
-			if (state === "dead") speakHungry(t("speech.dead"));
-			else if (state === "low") speakHungry(t("speech.low"));
+			if (state === "dead") speakHungry(t("speech.dead"), lang);
+			else if (state === "low") speakHungry(t("speech.low"), lang);
 		}
 
 		/** 金额文案：两位小数（万分之一精度的小额不显示成 0.00）。 */
@@ -682,9 +698,17 @@ window.__ModuleLoader__.load({
 		 * 替代圆圈组件。props 为框架标准 props（useProjection、t）+ 注册时
 		 * inject 的 owner face（queryBalance、clearToken）。
 		 */
-		function ApiBalanceMeter({ useProjection, t, queryBalance, clearToken }) {
+		function ApiBalanceMeter({ useProjection, t, queryBalance, clearToken, localeFace }) {
 			const pressure = useProjection("contextPressure");
 			const breakdown = useProjection("contextBreakdown");
+			// 当前界面语言（LocaleFace 快照的 active；播报语音 lang 与音色跟随）。
+			// FALLBACK_LOCALE_FACE 提供稳定引用（getSnapshot 必须返回稳定对象，
+			// 否则 useSyncExternalStore 会无限重渲染）。
+			const face = localeFace !== null && typeof localeFace === "object" && localeFace !== void 0
+				? localeFace
+				: FALLBACK_LOCALE_FACE;
+			const localeSnap = react.useSyncExternalStore(face.subscribe, face.getSnapshot);
+			const uiLocale = speechLang(localeSnap?.active);
 			const [open, setOpen] = react.useState(false);
 			const [tab, setTab] = react.useState(TAB_USAGE);
 			const [balance, setBalance] = react.useState(null);
@@ -778,7 +802,7 @@ window.__ModuleLoader__.load({
 						if (result !== null && typeof result === "object" && result.ok === true) {
 							setBalance(result.value);
 							setBalanceState("ok");
-							announceHunger(t, result.value);
+							announceHunger(t, result.value, uiLocale);
 							return result.value;
 						}
 						setBalance(null);
@@ -961,7 +985,7 @@ window.__ModuleLoader__.load({
 					if (cancelled || value === null || typeof value !== "object" || value.ok !== true) return;
 					setBalance(value.value);
 					setBalanceState("ok");
-					announceHunger(t, value.value);
+					announceHunger(t, value.value, uiLocale);
 				};
 				hungerPollRef.current = window.setInterval(poll, HUNGRY_POLL_INTERVAL_MS);
 				return () => {
@@ -1572,20 +1596,24 @@ window.__ModuleLoader__.load({
 						if (usageWindows === null) return;
 						const today = usageWindows.today ?? {};
 						const month = usageWindows.month ?? {};
+						// 分隔符随界面语言：中文全角，其余半角。
+						const sep = uiLocale.startsWith("zh") ? { c: "，", s: "；" } : { c: ", ", s: "; " };
 						speakNow(
-							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}，${t("balance.out")}${formatTokens(today.completion ?? 0)}；${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}，${t("balance.out")}${formatTokens(month.completion ?? 0)}`,
+							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}${sep.c}${t("balance.out")}${formatTokens(today.completion ?? 0)}${sep.s}${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}${sep.c}${t("balance.out")}${formatTokens(month.completion ?? 0)}`,
+							uiLocale,
 						);
 					};
 					const speakCurrentBalance = () => {
 						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
 						const parts = infos.map((info) => `${info.currency} ${info.totalBalance}`);
-						speakNow(`${t("balance.total")}：${parts.length > 0 ? parts.join("；") : "—"}`);
+						const colon = uiLocale.startsWith("zh") ? "：" : ": ";
+						speakNow(`${t("balance.total")}${colon}${parts.length > 0 ? parts.join(uiLocale.startsWith("zh") ? "；" : "; ") : "—"}`, uiLocale);
 					};
 					const speechMenuItems = [
 						{ key: "usage", label: t("speech.broadcastUsage"), run: speakCurrentUsage },
 						{ key: "balance", label: t("speech.broadcastBalance"), run: speakCurrentBalance },
-						{ key: "test-low", label: t("speech.testLow"), run: () => speakNow(t("speech.low")) },
-						{ key: "test-dead", label: t("speech.testDead"), run: () => speakNow(t("speech.dead")) },
+						{ key: "test-low", label: t("speech.testLow"), run: () => speakNow(t("speech.low"), uiLocale) },
+						{ key: "test-dead", label: t("speech.testDead"), run: () => speakNow(t("speech.dead"), uiLocale) },
 					];
 					const speechMenu = !speechMenuOpen
 						? null
@@ -2127,6 +2155,12 @@ window.__ModuleLoader__.load({
 								} catch {
 									// 断开失败仅影响本机令牌清理，忽略
 								}
+							},
+							// LocaleFace：播报语音语言与音色跟随 DSH 界面语言
+							// （subscribe/getSnapshot 以闭包绑定实例方法）。
+							localeFace: {
+								subscribe: (callback) => ctx.locale.subscribe(callback),
+								getSnapshot: () => ctx.locale.getSnapshot(),
 							},
 						}),
 					},
