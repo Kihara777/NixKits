@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T23:55:52+09:00
+
+**概要**: docs(dsh): api-balance プラグイン節の四言語補完 — pcn 版 dsh.md にプラグイン節を追加（本機ブラウザ自動スキャン / 使用量チャート / config オプション）、四言語 README のプラグイン表の説明を「ブラウザログイン状態からの自動スキャン取得」の意味に同期
+
+| コミット | 説明 |
+|------|------|
+| `b912f82` | docs(dsh): api-balance ブラウザ自動スキャン節を pcn へ同期 + 四言語 README プラグイン表更新 |
+
 ## 2026-08-31T23:50:04+09:00
 
 **概要**: feat(dsh-api-balance): ローカルブラウザ自動スキャンで platform userToken を取得 — ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の Local Storage LevelDB を直接読み、base64 候補（55–85 文字）を抽出して GET /api/v0/users/get_user_summary で逐一検証し最初の一致を保存。ローカルブラウザで一度プラットフォームにログインしていれば手動操作なしで使用量トークンを取得できる。6 時間節流 + トークン失効（40003/401）時の即時再スキャン + パネルの「本機ブラウザを再スキャン」ボタン（RPC args.rescanBrowsers）、接続後はトークン取得元バッジ（browser / manual）を表示。実測：ローカル Edge leveldb の 31 候補から実トークンを自動命中し、デプロイ後にブラウザ起因のクエリで自動再取得。四言語文書同期。

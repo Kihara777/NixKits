@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-08-31T23:55:52+09:00
+
+**摘要**: docs(dsh): api-balance 插件節四語補完 — pcn 版 dsh.md 插件節追加（本機瀏覽器自動掃描 / 用量図表 / config 選項）、四語 README 插件表説明「瀏覽器登録状態自動掃描取得」語義同期
+
+| 提交 | 説明 |
+|------|------|
+| `b912f82` | docs(dsh): api-balance 瀏覽器自動掃描節 pcn 同期 + 四語 README 插件表更新 |
+
 ## 2026-08-31T23:50:04+09:00
 
 **摘要**: feat(dsh-api-balance): 本機瀏覽器自動掃描 platform userToken 取得 — host 本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）Local Storage LevelDB 直接読取、base64 候補（55–85 字）抽出 GET /api/v0/users/get_user_summary 逐次検証最初一致保存。本機瀏覽器一度 platform 登録済使用者手動操作無使用量 token 取得可能。6 時間節流 + token 失効（40003/401）即時再掃描 + 面板「本機瀏覽器再掃描」按鈕（RPC args.rescanBrowsers）、接続後 token 取得元徽章（browser / manual）表示。実測：本機 Edge leveldb 31 候補中実 token 自動命中、部署後瀏覽器起因 query 自動再取得。四言語文書同期。

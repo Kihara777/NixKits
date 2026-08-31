@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-31T23:55:52+09:00
+
+**摘要**：docs(dsh): api-balance 插件章节四语补齐 — 补全 pcn 语言 dsh.md 的插件章节（本机浏览器自动扫描 / 用量图表 / config 选项），四语 README 插件表描述同步为「浏览器登录态自动扫描获取令牌」语义
+
+| 提交 | 说明 |
+|------|------|
+| `b912f82` | docs(dsh): api-balance 浏览器自动扫描章节同步 pcn + 四语 README 插件表更新 |
+
 ## 2026-08-31T23:50:04+09:00
 
 **摘要**：feat(dsh-api-balance): 本机浏览器自动扫描获取平台 userToken — host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 Local Storage LevelDB，提取 base64 候选（55–85 字符）并经 GET /api/v0/users/get_user_summary 校验后落盘，用户在本机浏览器登录过平台即可无感获取用量令牌，无需控制台手动粘贴；6 小时节流 + 令牌失效（40003/401）立即重扫 + 面板「重新扫描本机浏览器」按钮（RPC args.rescanBrowsers），连接后显示令牌来源徽章（browser / manual）。实测：本机 Edge leveldb 31 个候选中自动命中真实令牌，部署后浏览器触发查询即自动重取令牌，四语文档同步。
