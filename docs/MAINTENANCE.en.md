@@ -9,6 +9,7 @@
 | Commit | Description |
 |------|------|
 | `7d0c49e` | fix(dsh-api-balance): voice broadcast menu expands upward |
+| `8d9058c` | docs(dsh): sync the upward-menu note for the voice broadcast in four languages |
 
 ## 2026-09-01T01:25:25+09:00
 
