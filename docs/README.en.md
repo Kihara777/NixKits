@@ -39,7 +39,7 @@ DeepSeek Harness (DSH) components are listed separately from software (mounting 
 | Plugin | Description | Docs |
 |--------|-------------|------|
 | dsh-nixos-shell | Consolidated NixOS operations (shell execution, tool bootstrap, sudo daemon routing, NixOS diagnostics) | [docs/en/dsh-nixos-shell.md](en/dsh-nixos-shell.md) |
-| dsh-api-balance | API usage balance — adds a 「Usage / Balance」 tab switch to the webui usage ring (left of the send button); the balance view shows the current API key's account balance (DeepSeek /user/balance) | [docs/en/dsh.md](en/dsh.md) |
+| dsh-api-balance | API usage balance — adds a 「Usage / Balance」 tab switch to the webui usage ring (left of the send button): account balance, today / this-month / 30-day consumption with charts; the platform token is auto-scanned from local browser sessions by default (manual connect as fallback) | [docs/en/dsh.md](en/dsh.md) |
 
 **Agent presets** (shipped with dsh-nixos-shell, seeded once into DSH via `nixkits.dsh.presets`):
 

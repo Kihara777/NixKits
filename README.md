@@ -43,7 +43,7 @@ DeepSeek Harness（DSH）组件与软件独立展示（挂载方式见 [docs/zh/
 | 插件 | 说明 | 文档 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 场景能力整合（shell 执行、工具引导、sudo 守护路由、NixOS 诊断） | [docs/zh/dsh-nixos-shell.md](docs/zh/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量余额——webui 用量圆圈（发送按钮左侧）添加「用量 / 余额」标签切换，余额视图展示当前 API KEY 的账户余额（DeepSeek /user/balance） | [docs/zh/dsh.md](docs/zh/dsh.md) |
+| dsh-api-balance | API 用量余额——webui 用量圆圈（发送按钮左侧）添加「用量 / 余额」标签切换，展示账户余额、当日 / 当月 / 30 日消耗与图表；平台令牌默认从本机浏览器登录态自动扫描获取（手动连接回退） | [docs/zh/dsh.md](docs/zh/dsh.md) |
 
 **Agent 预设**（随 dsh-nixos-shell 分发，经 `nixkits.dsh.presets` seed-once 写入 DSH）：
 

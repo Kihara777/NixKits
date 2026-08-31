@@ -149,7 +149,12 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 ### api-balance 插件
 
-API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加——「用量」原内容（上下文占有率与内訳）、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）表示。數據 DeepSeek 公式 `GET /user/balance` 取得、宿主側 30 秒 TTL 緩存。API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退。
+API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加——「用量」原内容（上下文占有率与内訳）、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）加当日 / 当月 / 30 日内消耗（金額 + token + 模型別内訳）与日別 / 月別用量図表表示。残高數據 DeepSeek 公式 `GET /user/balance`（API キー認証）、用量數據 platform 控制台内部 API `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（platform 会話 token 認証）取得、宿主側 30 秒 TTL 緩存。API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退。
+
+platform token 二段取得、全自動優先：
+
+- **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 直接読取、base64 候補（55–85 字）抽出 `GET /api/v0/users/get_user_summary` 逐個検証（`code === 0` 即有効）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描、面板「本機瀏覽器再掃描」按鈕強制再掃描。
+- **手動一鍵授權（回退）**：面板「連接平台」開 platform.deepseek.com/usage 与回伝命令複製、控制台粘貼回車回伝 token；触屏設備「手動輸入」可。
 
 ```nix
 {
@@ -160,6 +165,8 @@ API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信
     # config（任意）：
     #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
     #   baseURL = "https://api.deepseek.com";
+    #   browserScan = true;               # 本機瀏覽器自動掃描
+    #   browserScanIntervalMs = 21600000; # 掃描節流（預設 6 時間）
   }];
 }
 ```
