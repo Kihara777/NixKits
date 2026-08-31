@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T23:50:04+09:00
+
+**概要**: feat(dsh-api-balance): ローカルブラウザ自動スキャンで platform userToken を取得 — ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の Local Storage LevelDB を直接読み、base64 候補（55–85 文字）を抽出して GET /api/v0/users/get_user_summary で逐一検証し最初の一致を保存。ローカルブラウザで一度プラットフォームにログインしていれば手動操作なしで使用量トークンを取得できる。6 時間節流 + トークン失効（40003/401）時の即時再スキャン + パネルの「本機ブラウザを再スキャン」ボタン（RPC args.rescanBrowsers）、接続後はトークン取得元バッジ（browser / manual）を表示。実測：ローカル Edge leveldb の 31 候補から実トークンを自動命中し、デプロイ後にブラウザ起因のクエリで自動再取得。四言語文書同期。
+
+| コミット | 説明 |
+|------|------|
+| `cec90b0` | feat(dsh-api-balance): ローカルブラウザ自動スキャンで platform userToken を取得 |
+
 ## 2026-08-31T11:50:02+09:00
 
 **概要**: docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 三則（vendored lock と npmDepsHash の一致 / 未公開 devDependencies を postPatch の純 sed で削除し lock も同源生成 / ruyi 式多チャネル薄ラッパー）、初回起動監査前の git fetch、本機デプロイ節新設（path-input 再ロック、nixos apply コマンド、--no-link 成果物回収）

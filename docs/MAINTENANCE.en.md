@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T23:50:04+09:00
+
+**Summary**: feat(dsh-api-balance): auto-scan local browsers for the platform userToken — the host reads the Local Storage LevelDB of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) directly, extracts base64 candidates (55–85 chars) and validates each against GET /api/v0/users/get_user_summary, saving the first hit. Anyone who has signed in to the platform in a local browser gets the usage token with zero manual steps. 6-hour throttle + immediate rescan after token invalidation (40003/401) + a panel 「Rescan local browsers」 button (RPC args.rescanBrowsers), with a token-source badge (browser / manual) once connected. Verified: the real token was found automatically among 31 candidates in the local Edge leveldb, and a browser-triggered query re-acquired it after deployment; four-language docs synced.
+
+| Commit | Description |
+|------|------|
+| `cec90b0` | feat(dsh-api-balance): auto-scan local browsers for the platform userToken |
+
 ## 2026-08-31T11:50:02+09:00
 
 **Summary**: docs(AGENTS): generalize dsh-alpha session lessons — three buildNpmPackage rules (vendored lock consistent with npmDepsHash / postPatch strips unpublished devDependencies with plain sed, lock generated from the same package.json / multi-channel thin-wrapper pattern after ruyi), git fetch before the startup audit, new local-deployment section (path-input relock, nixos apply command, --no-link artifact collection)
