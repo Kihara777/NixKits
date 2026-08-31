@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T01:51:10+09:00
+
+**摘要**: fix(dsh-api-balance): 音声放送 menu 下→上展開変更 — menu 預設按鈕上辺接上向展開（translateY(-100%)）、上方余白不足時（viewport 上端 8px 未満）自動下向展開回退
+
+| 提交 | 説明 |
+|------|------|
+| `7d0c49e` | fix(dsh-api-balance): 音声放送 menu 下→上展開変更 |
+
 ## 2026-09-01T01:25:25+09:00
 
 **摘要**: feat(dsh-api-balance): 未登録 prompt + LevelDB 精確解析 + 音声放送 drop-down — 瀏覽器 scan 不命中時「前往登録」prompt 自動表示（新標籤開登録頁、polling 快掃自動取得）、手動輸入 prompt 内二級 option 降格。接続後灰顯「✓ 登録済」按鈕表示、手動更新毎登録状態自動快掃。純 JS LevelDB 表 parser 新設（footer → index → 數據 block → snappy 解凍 → entry 走査、拡張 literal 長 varint 非単 byte+1 修正）userToken 精確抽出——快掃 949ms 命中（従前全掃 5.3s / 快掃失敗）。音声放送独立行 + drop-down（當前使用量 / 残高 / test 警告音声）、menu portal 固定位置変更 scroll 切抜修正 + 音声 engine 予熱。token 取得元二行表示変更。

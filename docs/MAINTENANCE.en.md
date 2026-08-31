@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T01:51:10+09:00
+
+**Summary**: fix(dsh-api-balance): voice broadcast menu now expands upward — the menu opens upward from the button's top edge by default (translateY(-100%)); when there's not enough room above (<8px from the viewport top) it falls back to opening downward
+
+| Commit | Description |
+|------|------|
+| `7d0c49e` | fix(dsh-api-balance): voice broadcast menu expands upward |
+
 ## 2026-09-01T01:25:25+09:00
 
 **Summary**: feat(dsh-api-balance): login prompt + exact LevelDB parsing + voice broadcast menu — when the browser scan finds nothing, a prompt pops up with 「Go to login」 (opens the login page in a new tab and picks up the token via quick-scan polling); manual entry is demoted to a secondary option inside the prompt. A greyed 「✓ Signed in」 button shows once connected, and every manual refresh auto-quick-scans for the login state. New pure-JS LevelDB table parser (footer → index → data blocks → snappy decompression → entry walk; fixes the extended-literal length as single byte + 1, not a varint) extracts userToken exactly — quick scan hits in 949ms (previously 5.3s full scan / quick scan failed). Voice broadcast gets its own row with a dropdown (current usage / balance / test warning audio); the menu is now a fixed-position portal to fix scroll clipping, with speech-engine warmup; token source is displayed in two lines.
