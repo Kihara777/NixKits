@@ -2,15 +2,32 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:31:42+09:00
+
+**摘要**：dsh-alpha 上线灾难恢复 — 修复 alpha 反代 Host 语义（web UI 入口按 Host authority 的 session cookie 认证，重写 Host 致永远 401）、dsh-api-balance 的 shared RPC interceptor 冲突（/api 已被 typert-gateway 独占，改用精确 fetch route 自实现 RPC envelope）、dsh-nixos-shell 的 dsh-tools 通道对齐；新增 launchUrlFile（局域网启动 URL 捕获）与 reverseProxy.autoAuth（mod_magnet 免认证注入，显式禁用入口认证仅限可信局域网）模块选项；四语文档补全局域网访问章节。
+
+| 提交 | 说明 |
+|------|------|
+| `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha 兼容 |
+| `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha 反代 Host 语义修复 |
+| `a2fe5f3` | docs(dsh): 四语文档补全局域网访问/免认证/alpha 插件兼容章节 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-nixos-shell | dsh-tools `0.1.1-rc.2` | dsh-tools `0.1.2-alpha.2` |
+| 　 | npmDepsHash | `sha256-uOQ3Dq...` → `sha256-bAXZCi...` |
+
 ## 2026-08-31T07:23:07+09:00
 
-**摘要**：dsh-alpha 0.1.2-alpha.2 — 新包，npm `alpha` dist-tag 开发通道；dsh 重构为 ruyi 式薄包装（version/hash/npmDepsHash/lockFile 可覆盖），postPatch 纯 sed 删除 tarball 的 devDependencies（引用未发布的 monorepo 内部包，registry 404），补丁目标文件加存在性守卫。四语文档新增版本通道章节。
+**摘要**：dsh-alpha 0.1.2-alpha.2 — 新包，npm `alpha` dist-tag 开发通道；dsh 重构为 ruyi 式薄包装（version/hash/npmDepsHash/lockFile 可覆盖），postPatch 纯 sed 删除 tarball 的 devDependencies（引用未发布的 monorepo 内部包，registry 404），补丁目标文件加存在性守卫。四语文档新增版本通道章节。后续修复 vendored lock 与 npmDepsHash 对齐（npm fixup 平台条目缺失导致主构建报 out of date），README 软件表四语补齐 dsh-alpha 行。
 
 | 提交 | 说明 |
 |------|------|
 | `88a2dfc` | feat(dsh): 多版本通道 — 新增 dsh-alpha 0.1.2-alpha.2 |
 | `33bff25` | docs(dsh): 四语文档新增版本通道章节（dsh-alpha） |
 | `095d002` | docs(MAINTENANCE): record 2026-08-31 — dsh-alpha 新包 |
+| `a97fffd` | fix(pkgs): dsh-alpha vendored lock 与 npmDepsHash 对齐 |
+| `d9a83f8` | docs: README 软件表新增 dsh-alpha 行（四语） |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|

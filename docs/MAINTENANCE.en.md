@@ -2,15 +2,32 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:31:42+09:00
+
+**Summary**: dsh-alpha rollout disaster recovery — fixed the alpha reverse-proxy Host semantics (the web UI entry authenticates with a Host-authority session cookie; rewriting Host caused permanent 401s), the dsh-api-balance shared RPC interceptor conflict (`/api` is exclusively held by typert-gateway; switched to an exact fetch route implementing the RPC envelope), and dsh-nixos-shell's dsh-tools channel alignment; new module options launchUrlFile (LAN startup URL capture) and reverseProxy.autoAuth (mod_magnet passwordless token injection — explicitly disables entry auth, trusted LAN only); four-language docs gain the LAN access sections.
+
+| Commit | Description |
+|------|------|
+| `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha compatibility |
+| `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha reverse-proxy Host fix |
+| `a2fe5f3` | docs(dsh): add LAN access / autoAuth / alpha plugin compatibility sections in four languages |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-nixos-shell | dsh-tools `0.1.1-rc.2` | dsh-tools `0.1.2-alpha.2` |
+| 　 | npmDepsHash | `sha256-uOQ3Dq...` → `sha256-bAXZCi...` |
+
 ## 2026-08-31T07:23:07+09:00
 
-**Summary**: dsh-alpha 0.1.2-alpha.2 — new package, npm `alpha` dist-tag development channel; dsh refactored into a ruyi-style thin wrapper (version/hash/npmDepsHash/lockFile overridable), postPatch drops the tarball's devDependencies with plain sed (they reference unpublished monorepo-internal packages — registry 404), patch target files guarded by existence checks. Four-language docs gain a version-channels section.
+**Summary**: dsh-alpha 0.1.2-alpha.2 — new package, npm `alpha` dist-tag development channel; dsh refactored into a ruyi-style thin wrapper (version/hash/npmDepsHash/lockFile overridable), postPatch drops the tarball's devDependencies with plain sed (they reference unpublished monorepo-internal packages — registry 404), patch target files guarded by existence checks. Four-language docs gain a version-channels section. Follow-up fixes: vendored lock aligned with npmDepsHash (missing npm fixup platform entries caused an out-of-date error in the main build), and the README software table gains the dsh-alpha row in all four languages.
 
 | Commit | Description |
 |------|------|
 | `88a2dfc` | feat(dsh): multi-version channels — add dsh-alpha 0.1.2-alpha.2 |
 | `33bff25` | docs(dsh): add version-channels section to four-language docs |
 | `095d002` | docs(MAINTENANCE): record 2026-08-31 — new dsh-alpha package |
+| `a97fffd` | fix(pkgs): align dsh-alpha vendored lock with npmDepsHash |
+| `d9a83f8` | docs: add dsh-alpha row to README software table (four languages) |
 
 | Package | Old | New |
 |--------|--------|--------|

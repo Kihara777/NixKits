@@ -2,15 +2,32 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-08-31T11:31:42+09:00
+
+**概要**: dsh-alpha 導入の障害復旧 — alpha のリバースプロキシ Host セマンティクス修正（web UI 入口は Host authority の session cookie で認証、Host 書き換えが恒久 401 を引き起こしていた）、dsh-api-balance の shared RPC interceptor 衝突修正（`/api` は typert-gateway が独占、正確な fetch route に切替えて RPC envelope を自前実装）、dsh-nixos-shell の dsh-tools チャネル整合；新規モジュールオプション launchUrlFile（局域网起動 URL 捕捉）と reverseProxy.autoAuth（mod_magnet 免認証トークン注入 — 入口認証を明示的に無効化、信頼できる局域网のみ）；四言語文書に局域网アクセス節を追加。
+
+| コミット | 説明 |
+|------|------|
+| `222ece4` | fix(pkgs): dsh-api-balance / dsh-nixos-shell alpha 互換 |
+| `bd4cdb1` | feat(dsh-module): launchUrlFile + autoAuth + alpha 反代 Host セマンティクス修正 |
+| `a2fe5f3` | docs(dsh): 四言語文書に局域网アクセス/免認証/alpha 插件互換性節を追加 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-nixos-shell | dsh-tools `0.1.1-rc.2` | dsh-tools `0.1.2-alpha.2` |
+| 　 | npmDepsHash | `sha256-uOQ3Dq...` → `sha256-bAXZCi...` |
+
 ## 2026-08-31T07:23:07+09:00
 
-**概要**: dsh-alpha 0.1.2-alpha.2 — 新規パッケージ、npm `alpha` dist-tag 開発チャネル；dsh を ruyi 式薄ラッパーに再構成（version/hash/npmDepsHash/lockFile 上書き可能）、postPatch は純 sed で tarball の devDependencies を削除（未公開の monorepo 内部パッケージ参照、registry 404）、パッチ対象ファイルに存在ガード追加。四言語文書にバージョンチャネル節を追加。
+**概要**: dsh-alpha 0.1.2-alpha.2 — 新規パッケージ、npm `alpha` dist-tag 開発チャネル；dsh を ruyi 式薄ラッパーに再構成（version/hash/npmDepsHash/lockFile 上書き可能）、postPatch は純 sed で tarball の devDependencies を削除（未公開の monorepo 内部パッケージ参照、registry 404）、パッチ対象ファイルに存在ガード追加。四言語文書にバージョンチャネル節を追加。後続修正：vendored lock を npmDepsHash に一致させ（npm fixup のプラットフォーム項目欠落が主ビルドの out of date を引き起こしていた）、README ソフトウェア表に dsh-alpha 行を四言語で追補。
 
 | コミット | 説明 |
 |------|------|
 | `88a2dfc` | feat(dsh): 多バージョンチャネル — dsh-alpha 0.1.2-alpha.2 追加 |
 | `33bff25` | docs(dsh): 四言語文書にバージョンチャネル節を追加 |
 | `095d002` | docs(MAINTENANCE): record 2026-08-31 — dsh-alpha 新規パッケージ |
+| `a97fffd` | fix(pkgs): dsh-alpha vendored lock を npmDepsHash に一致させる修正 |
+| `d9a83f8` | docs: README ソフトウェア表に dsh-alpha 行を追加（四言語） |
 
 | パッケージ | 旧 | 新 |
 |--------|--------|--------|
