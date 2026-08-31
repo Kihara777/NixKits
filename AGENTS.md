@@ -18,7 +18,7 @@ gh auth status 2>/dev/null && \
 
 ## 初次启动
 
-每个新 session 启动时，首先执行完整的项目审计与评估，汇报发现。审计范围包括：所有组件状态（包、模块、overlay、补丁、技能）、文档一致性、CI/CD 状态，以及未提交变更。**审计前先执行 `rm -f flake.lock` 确保后续操作使用最新 nixpkgs。**
+每个新 session 启动时，首先执行完整的项目审计与评估，汇报发现。审计范围包括：所有组件状态（包、模块、overlay、补丁、技能）、文档一致性、CI/CD 状态，以及未提交变更。**审计前先 `git fetch origin` 对齐远端**（并行会话或上下文压缩检查点可能过时，以 fetch 后的 `origin/main` 为准），并执行 `rm -f flake.lock` 确保后续操作使用最新 nixpkgs。
 
 ## 语言要求
 
@@ -57,6 +57,9 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **预编译二进制包**：按 `stdenv.hostPlatform.system` 选择对应架构二进制（如 codewhale）。
 - **SRI hash 格式**：`sha256-<base64>`。
 - **npm 包用 `buildNpmPackage` + finalAttrs 模式**。
+- **buildNpmPackage 的 vendored lock 必须与 `npmDepsHash` 自洽**：主构建把 src 的 `package-lock.json` 与 npm-deps 产物内 npm fixup 后的 lock 逐字节校验，不一致报 `npmDepsHash is out of date`。生成 vendored lock 必须采用 fixup 后版本（`prefetch-npm-deps --fixup-lockfile`，或从已实现的 `/nix/store/...-npm-deps/package-lock.json` 直接复制），再回填 hash。
+- **npm tarball 的 devDependencies 引用未发布包时**：上游 monorepo 发布的 tarball 可能残留未发布内部包（registry 404）。postPatch 以纯 sed 删除该字段（patchPhase 无 node/npm），vendored lock 基于同样处理后的 package.json 生成——两者必须同源。
+- **同源多通道（stable/alpha 等）仿 ruyi 薄包装模式**：主定义参数化（version/hash/npmDepsHash/lockFile 可覆盖），通道文件仅传覆盖参数（参见 `packages/dsh.nix` + `packages/dsh-alpha.nix`）。
 - **Python 包用 `buildPythonApplication` + `pyproject = true`**。
 
 ### 模块
@@ -92,6 +95,14 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **SKILL.md 保持聚焦**：仅包含 AI 执行所需的最小上下文。词典、模板、检查清单等独立数据拆为配套文件；纯执行流程不强制拆分，允许适当长度。
 - **自动发现契约**：`translate-*` 类技能通过 frontmatter 中的 `language_code`、`display_name`、`base_language` 被 `write-project-docs` 自动发现。
 - **dsh 不是技能安装目标**：`nixkits-skills` 仅安装到 opencode/codewhale/codex/openclaw/agents；dsh 的 NixOS 场景能力由 `dsh-nixos-shell` 插件提供（`nixos_shell` 执行器 + `nixos_cli` 诊断）。技能内容保留在 `skills/` 作为其他助手的安装源。
+
+## 本机部署
+
+维护者本机以 path-input 方式引用本仓库（`/etc/nixos`）：
+
+- **仓库变更后必须重锁**：`nix flake lock /etc/nixos --update-input nixkits` 并清 eval 缓存，否则 `nixos apply` 静默 no-op（path-input 锁定后不自动拾取仓库新状态）。
+- **部署命令**：`nixos apply -y /etc/nixos`（nixos 0.16.1 无 `rebuild` 子命令）。
+- **`nix build --no-link` 产物可能被 GC 立即回收**：需要产物时同调用内复制出 store，或改用带链接的构建。
 
 ## 工作流
 
