@@ -31,8 +31,8 @@
  * @module @kihara777/dsh-api-balance
  */
 import { credentialRef } from "@deepseek-ai/dsh-credentials";
-import { readFileSync, writeFileSync, rmSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, writeFileSync, rmSync, readdirSync, statSync, mkdirSync } from "node:fs";
+import { join, basename } from "node:path";
 import { homedir } from "node:os";
 
 export const name = "api-balance";
@@ -55,6 +55,19 @@ const USAGE_COST_PATH = "/api/v0/usage/by_api_key/cost";
 /** 令牌回传端点（client 授权流程的落点）。 */
 const TOKEN_ROUTE = "/api/api-balance/token";
 const TOKEN_CLEAR_ROUTE = "/api/api-balance/token/clear";
+/** 语音包存取端点（同源；包存 $DSH_HOME/api-balance-voicepack/ 目录全设备共享）。 */
+const VOICEPACK_ROUTE = "/api/api-balance/voicepack";
+/** 语音包音频服务前缀（音频文件经 URL 引用播放）。 */
+const VOICEPACK_AUDIO_PREFIX = "/api/api-balance/voicepack/audio/";
+/** 自定义 TTS 代理端点（浏览器 → host → 用户 TTS 服务，规避 CORS）。 */
+const TTS_ROUTE = "/api/api-balance/tts";
+/** 语音包 zip 体积上限。 */
+const VOICEPACK_MAX_BYTES = 16 * 1024 * 1024;
+/** 语音包内文件数量 / 单文件体积上限。 */
+const VOICEPACK_MAX_FILES = 32;
+const VOICEPACK_MAX_FILE_BYTES = 2 * 1024 * 1024;
+/** TTS 代理响应上限。 */
+const TTS_MAX_BYTES = 2 * 1024 * 1024;
 /** 响应短缓存：30 秒内重复查询不重打上游。 */
 const CACHE_TTL_MS = 30_000;
 /** 上游请求超时。 */
@@ -123,6 +136,89 @@ const QUICK_SCAN_MAX = 5;
 function tokenFilePath() {
   const home = process.env.DSH_HOME ?? join(homedir(), ".dsh");
   return join(home, "api-balance-token");
+}
+
+/** 语音包目录：$DSH_HOME/api-balance-voicepack/（manifest.json + 音频文件）。 */
+function voicepackDir() {
+  const home = process.env.DSH_HOME ?? join(homedir(), ".dsh");
+  return join(home, "api-balance-voicepack");
+}
+
+function voicepackManifestPath() {
+  return join(voicepackDir(), "manifest.json");
+}
+
+/** 读取语音包清单（不存在返回 null）。 */
+function readVoicepackManifest() {
+  try {
+    const text = readFileSync(voicepackManifestPath(), "utf8");
+    const value = JSON.parse(text);
+    return value !== null && typeof value === "object" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearVoicepackDir() {
+  rmSync(voicepackDir(), { recursive: true, force: true });
+}
+
+/**
+ * 纯 JS zip 读取：解析 EOCD → 中央目录 → 局部文件头，解出全部条目。
+ * 支持 STORE（0）与 DEFLATE（8，经 DecompressionStream("deflate-raw")）。
+ */
+async function readZipEntries(buf) {
+  const entries = new Map();
+  const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  // EOCD：尾部 64KB 内查找签名 0x06054b50。
+  let eocd = -1;
+  const scanStart = Math.max(0, buf.length - 65557);
+  for (let i = buf.length - 22; i >= scanStart; i--) {
+    if (view.getUint32(i, true) === 0x06054b50) {
+      eocd = i;
+      break;
+    }
+  }
+  if (eocd === -1) return null;
+  const totalEntries = view.getUint16(eocd + 10, true);
+  const cdSize = view.getUint32(eocd + 12, true);
+  const cdOffset = view.getUint32(eocd + 16, true);
+  if (totalEntries === 0 || totalEntries > VOICEPACK_MAX_FILES * 2 || cdOffset + cdSize > buf.length) return null;
+
+  let pos = cdOffset;
+  const cdEnd = cdOffset + cdSize;
+  const inflate = (data) => {
+    const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(stream).arrayBuffer().then((ab) => Buffer.from(ab));
+  };
+  const work = [];
+  for (let i = 0; i < totalEntries && pos < cdEnd; i++) {
+    if (view.getUint32(pos, true) !== 0x02014b50) return null;
+    const method = view.getUint16(pos + 10, true);
+    const compressedSize = view.getUint32(pos + 20, true);
+    const nameLen = view.getUint16(pos + 28, true);
+    const extraLen = view.getUint16(pos + 30, true);
+    const commentLen = view.getUint16(pos + 32, true);
+    const localOffset = view.getUint32(pos + 42, true);
+    const name = buf.subarray(pos + 46, pos + 46 + nameLen).toString("utf8");
+    pos += 46 + nameLen + extraLen + commentLen;
+    if (name.endsWith("/")) continue; // 目录条目
+    if (localOffset + 30 > buf.length) return null;
+    const lNameLen = view.getUint16(localOffset + 26, true);
+    const lExtraLen = view.getUint16(localOffset + 28, true);
+    const dataStart = localOffset + 30 + lNameLen + lExtraLen;
+    const data = buf.subarray(dataStart, dataStart + compressedSize);
+    work.push({ name, method, data });
+  }
+  for (const item of work) {
+    try {
+      const out = item.method === 0 ? Buffer.from(item.data) : await inflate(item.data);
+      entries.set(item.name, out);
+    } catch {
+      // 单条目解压失败跳过（manifest 校验时会报缺文件）
+    }
+  }
+  return entries;
 }
 
 function readTokenFile() {
@@ -949,12 +1045,12 @@ export function apply(ctx, config = {}) {
     vary: "Origin",
   };
 
-  const readJsonBody = (req) =>
+  const readJsonBody = (req, maxBytes = 64 * 1024) =>
     new Promise((resolve) => {
       let body = "";
       req.on("data", (chunk) => {
         body += chunk;
-        if (body.length > 64 * 1024) req.destroy();
+        if (body.length > maxBytes) req.destroy();
       });
       req.on("end", () => {
         try {
@@ -1032,6 +1128,259 @@ export function apply(ctx, config = {}) {
       disposeClear();
     };
   }, "api-balance: token routes");
+
+  // 语音包存取（zip 导入 → 目录存储 + 音频 URL 服务）+ 自定义 TTS 代理。
+  ctx.effect(() => {
+    /** 读取二进制请求体（zip 上传）。 */
+    const readRawBody = (req, maxBytes) =>
+      new Promise((resolve) => {
+        const chunks = [];
+        let size = 0;
+        req.on("data", (chunk) => {
+          size += chunk.length;
+          if (size > maxBytes) {
+            req.destroy();
+            resolve(null);
+            return;
+          }
+          chunks.push(chunk);
+        });
+        req.on("end", () => resolve(Buffer.concat(chunks)));
+        req.on("error", () => resolve(null));
+      });
+
+    const audioType = (name) => {
+      const ext = name.toLowerCase().split(".").pop();
+      if (ext === "wav") return "audio/wav";
+      if (ext === "ogg" || ext === "oga") return "audio/ogg";
+      if (ext === "webm") return "audio/webm";
+      if (ext === "m4a" || ext === "mp4" || ext === "aac") return "audio/mp4";
+      if (ext === "flac") return "audio/flac";
+      return "audio/mpeg";
+    };
+
+    const disposeVoicepack = ctx.webServer.register({
+      kind: "exact",
+      path: VOICEPACK_ROUTE,
+      handler: async (req, res) => {
+        if (req.method === "GET") {
+          const manifest = readVoicepackManifest();
+          if (manifest === null) {
+            res.writeHead(404, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "no voice pack" }));
+            return;
+          }
+          const segments = {};
+          for (const [key, value] of Object.entries(manifest.segments ?? {})) {
+            if (typeof value !== "string" || value.length === 0) continue;
+            segments[key] = { url: `${VOICEPACK_AUDIO_PREFIX}${encodeURIComponent(key)}` };
+          }
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ...manifest, segments }));
+          return;
+        }
+        if (req.method === "POST") {
+          const zipBuf = await readRawBody(req, VOICEPACK_MAX_BYTES);
+          if (zipBuf === null || zipBuf.length === 0) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "zip body is required (application/zip)" }));
+            return;
+          }
+          const entries = await readZipEntries(zipBuf);
+          if (entries === null || entries.size === 0) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "invalid zip archive" }));
+            return;
+          }
+          const manifestBuf = entries.get("manifest.json");
+          if (manifestBuf === undefined) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: 'zip must contain "manifest.json"' }));
+            return;
+          }
+          let manifest;
+          try {
+            manifest = JSON.parse(manifestBuf.toString("utf8"));
+          } catch {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "manifest.json is not valid JSON" }));
+            return;
+          }
+          if (manifest === null || typeof manifest !== "object" || manifest.format !== "dsh-api-balance-voice-pack") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: 'manifest format must be "dsh-api-balance-voice-pack"' }));
+            return;
+          }
+          if (manifest.segments === null || typeof manifest.segments !== "object") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "manifest segments object is required" }));
+            return;
+          }
+          const segmentKeys = Object.keys(manifest.segments);
+          if (segmentKeys.length === 0 || segmentKeys.length > VOICEPACK_MAX_FILES) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: `segments must be 1..${VOICEPACK_MAX_FILES} entries` }));
+            return;
+          }
+          // 校验片段文件存在且体积合规；文件统一按 basename 落盘（防路径穿越）。
+          const files = new Map();
+          for (const key of segmentKeys) {
+            if (!/^[A-Za-z0-9_-]{1,32}$/u.test(key)) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `invalid segment key "${key}"` }));
+              return;
+            }
+            const ref = manifest.segments[key];
+            if (typeof ref !== "string" || ref.length === 0) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `segment "${key}" must reference a file path` }));
+              return;
+            }
+            const data = entries.get(ref);
+            if (data === undefined) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `segment "${key}" file "${ref}" not found in zip` }));
+              return;
+            }
+            if (data.length === 0 || data.length > VOICEPACK_MAX_FILE_BYTES) {
+              res.writeHead(413, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `segment "${key}" file too large` }));
+              return;
+            }
+            const base = basename(ref);
+            if (base.length === 0 || base.length > 120) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `segment "${key}" file name invalid` }));
+              return;
+            }
+            files.set(key, { name: base, data });
+          }
+          // 写盘：目录重建（manifest.json + 各音频文件）。
+          clearVoicepackDir();
+          try {
+            mkdirSync(voicepackDir(), { recursive: true });
+            for (const [key, file] of files) {
+              writeFileSync(join(voicepackDir(), `${key}-${file.name}`), file.data, { mode: 0o600 });
+            }
+            const stored = { ...manifest, segments: Object.fromEntries([...files.keys()].map((key) => [key, `${key}-${files.get(key).name}`])) };
+            writeFileSync(voicepackManifestPath(), JSON.stringify(stored), { mode: 0o600 });
+          } catch {
+            res.writeHead(500, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "failed to write voice pack" }));
+            return;
+          }
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: true }));
+          return;
+        }
+        if (req.method === "DELETE") {
+          clearVoicepackDir();
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: true }));
+          return;
+        }
+        res.writeHead(405, { "content-type": "application/json" });
+        res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
+      },
+    });
+    // 音频前缀路由：/api/api-balance/voicepack/audio/<key> → 文件字节。
+    const disposeAudio = ctx.webServer.register({
+      kind: "prefix",
+      path: VOICEPACK_AUDIO_PREFIX,
+      handler: (req, res) => {
+        if (req.method !== "GET") {
+          res.writeHead(405, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
+          return;
+        }
+        const key = decodeURIComponent(req.url.slice(VOICEPACK_AUDIO_PREFIX.length)).split("?")[0];
+        const manifest = readVoicepackManifest();
+        const file = manifest !== null && typeof manifest.segments === "object" ? manifest.segments[key] : null;
+        if (typeof file !== "string" || file.length === 0) {
+          res.writeHead(404, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "segment not found" }));
+          return;
+        }
+        try {
+          const buf = readFileSync(join(voicepackDir(), file));
+          res.writeHead(200, { "content-type": audioType(file), "content-length": buf.length, "cache-control": "no-store" });
+          res.end(buf);
+        } catch {
+          res.writeHead(404, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "segment file missing" }));
+        }
+      },
+    });
+    const disposeTts = ctx.webServer.register({
+      kind: "exact",
+      path: TTS_ROUTE,
+      handler: async (req, res) => {
+        if (req.method !== "POST") {
+          res.writeHead(405, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
+          return;
+        }
+        const payload = await readJsonBody(req, 16 * 1024);
+        const url = typeof payload?.url === "string" ? payload.url : "";
+        const text = typeof payload?.text === "string" ? payload.text : "";
+        const method = payload?.method === "POST" ? "POST" : "GET";
+        if (text.length === 0 || text.length > 2000) {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "text is required (max 2000 chars)" }));
+          return;
+        }
+        let parsed;
+        try {
+          parsed = new URL(url);
+        } catch {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "invalid tts url" }));
+          return;
+        }
+        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "tts url must be http(s)" }));
+          return;
+        }
+        const headers =
+          payload?.headers !== null && typeof payload?.headers === "object" && !Array.isArray(payload.headers)
+            ? payload.headers
+            : {};
+        try {
+          const upstream = await fetch(url, {
+            method,
+            headers,
+            ...(method === "POST"
+              ? { body: typeof payload?.jsonBody === "string" ? payload.jsonBody : JSON.stringify({ text }) }
+              : {}),
+            signal: AbortSignal.timeout(15_000),
+          });
+          if (!upstream.ok) {
+            res.writeHead(502, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: `tts upstream returned ${upstream.status}` }));
+            return;
+          }
+          const buf = Buffer.from(await upstream.arrayBuffer());
+          if (buf.length === 0 || buf.length > TTS_MAX_BYTES) {
+            res.writeHead(413, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "tts response empty or too large" }));
+            return;
+          }
+          const type = upstream.headers.get("content-type") ?? "audio/mpeg";
+          res.writeHead(200, { "content-type": type, "content-length": buf.length, "cache-control": "no-store" });
+          res.end(buf);
+        } catch (error) {
+          res.writeHead(502, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: `tts proxy failed — ${String(error)}` }));
+        }
+      },
+    });
+    return () => {
+      disposeVoicepack();
+      disposeAudio();
+      disposeTts();
+    };
+  }, "api-balance: voice routes");
 
   /** api-balance/query 的 RPC 业务逻辑（apply 闭包内，供 exact fetch route 调用）。 */
   async function queryRpc(payload, signal) {

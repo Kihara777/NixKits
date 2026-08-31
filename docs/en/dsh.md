@@ -155,7 +155,55 @@ The platform token is acquired in two tiers, fully automatic first:
 
 - **Local browser auto-scan (on by default)**: the host reads the `Local Storage/leveldb` of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) — parsing the LevelDB tables exactly (footer → index → data blocks → snappy decompression → entry walk) to read `userToken`, falling back to raw-byte heuristics if parsing fails — and saves the first hit to `$DSH_HOME/api-balance-token` (0600). Signing in to the platform once in a local browser is all it takes. Throttled to one scan per 6 hours by default (`browserScanIntervalMs` configurable, `browserScan = false` disables); after token invalidation (40003/401) the next query rescans immediately.
 - **Not-signed-in detection and login guidance**: when the scan finds nothing, the panel pops up 「Platform login not detected」 — 「Go to login」 opens the login page in a new tab and picks up the token automatically via polling; manual token entry is only a secondary option inside the prompt (for those who don't want to log in). Once connected, a greyed 「✓ Signed in」 button and the token source (auto from local browser / manual) are shown; every manual refresh also auto-quick-scans the login state when no token exists — no button clicks needed.
-- **Voice broadcast**: a dedicated panel row provides a 「Speak usage」 dropdown — speak current usage / balance, or audition the low-usage and out-of-tokens warning audio; the menu opens upward from the button by default (falling back downward when there's not enough room above); a voice-alert toggle announces automatically when the balance drops below the threshold.
+- **Voice broadcast**: a dedicated panel row provides a 「Speak usage」 dropdown — speak current usage / balance, or audition the low-usage and out-of-tokens warning audio; the menu opens upward from the button by default (falling back downward when there's not enough room above). Broadcast language and voice follow the DSH UI language (zh / en). The 「⚙ Voice settings」 dialog provides: an auto-broadcast toggle (balance alerts with a 30-minute rate limit), TTS backend selection (browser built-in / custom TTS API proxied through the host to avoid CORS, URL template placeholders `{text}` `{lang}` `{rate}`), voice-pack zip import / audition / clear (stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices), plus a browser-recording voice-pack creator with zip packaging for sharing.
+
+#### Voice pack format guide
+
+A voice pack is a **zip archive** (easy to deploy and share) containing a `manifest.json` and audio files. Import the .zip in 「⚙ Voice settings」 to enable it; clearing restores the default whole-sentence TTS broadcast.
+
+Zip layout:
+
+```
+voice-pack.zip
+├── manifest.json
+└── audio/
+    ├── dead.mp3
+    ├── low.mp3
+    └── …
+```
+
+```json
+// manifest.json
+{
+  "format": "dsh-api-balance-voice-pack",
+  "version": 1,
+  "name": "My pack",
+  "lang": "zh-CN",
+  "segments": {
+    "dead": "audio/dead.mp3",
+    "low": "audio/low.mp3",
+    "usage": "audio/usage.mp3",
+    "balance": "audio/balance.mp3",
+    "tokenUnit": "audio/tokenUnit.mp3",
+    "month": "audio/month.mp3",
+    "suffix": "audio/suffix.mp3"
+  }
+}
+```
+
+| Segment | Purpose |
+|------|------|
+| `dead` | whole-sentence out-of-tokens alert |
+| `low` | whole-sentence low-balance alert |
+| `usage` | 「current usage」 broadcast prefix |
+| `balance` | 「current balance」 broadcast prefix |
+| `tokenUnit` | unit after numbers (e.g. 「tokens」), reusable |
+| `month` | 「this month」 label |
+| `suffix` | broadcast ending |
+
+All segments are optional: missing ones fall back to TTS during playback. Limits: segment keys `[A-Za-z0-9_-]{1,32}`, zip ≤ 16 MB, ≤ 32 files, ≤ 2 MB per audio file; mp3 / wav / ogg / webm recommended, ≤ 2 s per segment, 22.05/44.1 kHz mono. Dynamic parts (balance numbers, token counts) are not in the pack — they are synthesized live by the current TTS backend (browser built-in or custom TTS API proxied through the host), then concatenated with the pack segments into the complete broadcast.
+
+**Create & share**: the settings dialog includes a 「Create a voice pack」 section — record each segment with the browser microphone (permission required; localhost or HTTPS) or import local audio files; enter a pack name, then 「Package & download」 produces a shareable zip, or 「Compile & apply」 installs it locally right away. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
 
 ```nix
 {

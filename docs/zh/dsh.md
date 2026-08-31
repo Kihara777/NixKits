@@ -155,7 +155,55 @@ API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（�
 
 - **本机浏览器自动扫描（默认开启）**：host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 `Local Storage/leveldb`——先按 LevelDB 表结构精确解析（footer → index → 数据块 → snappy 解压 → 条目遍历）读出 `userToken`，解析失败时回退裸字节启发式候选——命中即落盘 `$DSH_HOME/api-balance-token`（0600）。用户在本机浏览器登录过平台即无感获取；节流默认每 6 小时最多扫描一次（`browserScanIntervalMs` 可配，`browserScan = false` 关闭），令牌失效（40003/401）后下次查询立即重扫。
 - **未登录检测与登录引导**：扫描未命中时面板自动弹出「未检测到平台登录」提示——「前往登录」在新标签页打开登录页并轮询自动拾取令牌；手动输入令牌仅作为弹窗内的二级备选（不想登录时使用）。已连接后面板显示灰显「✓ 已登录」按钮与令牌来源（本机浏览器自动获取 / 手动连接）；每次手动刷新在无令牌时也会自动快扫检查登录态，无需点任何按钮。
-- **语音播报**：面板内独立一行提供「播报语音用量」下拉菜单——播报当前用量 / 余额，或试听低用量、余额不足警告音频；菜单默认从按钮上方展开（上方空间不足时自动向下）；另有语音提醒开关（余额低于阈值自动播报）。
+- **语音播报**：面板内独立一行提供「播报语音用量」下拉菜单——播报当前用量 / 余额，或试听低用量、余额不足警告音频；菜单默认从按钮上方展开（上方空间不足时自动向下）。播报语言与音色跟随 DSH 界面语言（zh / en）。「⚙ 语音设置」弹窗提供：自动播报开关（余额低于阈值时提醒，30 分钟限流）、TTS 后端选择（浏览器内置语音 / 自定义 TTS API，后者经 host 代理调用规避跨域，URL 模板占位符 `{text}` `{lang}` `{rate}`）、语音包 zip 导入 / 试听 / 清除（保存于 `$DSH_HOME/api-balance-voicepack/`，全设备共享），以及浏览器录音制作语音包并打包下载分享。
+
+#### 语音包格式指南
+
+语音包为 **zip 压缩包**（方便部署与分享），内含 `manifest.json` 清单与音频文件；面板「⚙ 语音设置」选择 .zip 导入即启用，清除即恢复默认 TTS 整句播报。
+
+zip 结构：
+
+```
+voice-pack.zip
+├── manifest.json
+└── audio/
+    ├── dead.mp3
+    ├── low.mp3
+    └── …
+```
+
+```json
+// manifest.json
+{
+  "format": "dsh-api-balance-voice-pack",
+  "version": 1,
+  "name": "我的语音包",
+  "lang": "zh-CN",
+  "segments": {
+    "dead": "audio/dead.mp3",
+    "low": "audio/low.mp3",
+    "usage": "audio/usage.mp3",
+    "balance": "audio/balance.mp3",
+    "tokenUnit": "audio/tokenUnit.mp3",
+    "month": "audio/month.mp3",
+    "suffix": "audio/suffix.mp3"
+  }
+}
+```
+
+| 片段 | 用途 |
+|------|------|
+| `dead` | 余额不可用提醒整句 |
+| `low` | 低余额提醒整句 |
+| `usage` | 「当前用量」播报前缀 |
+| `balance` | 「当前余额」播报前缀 |
+| `tokenUnit` | 数字后的单位（如「个 token」），可复用 |
+| `month` | 「当月」标签 |
+| `suffix` | 播报结尾 |
+
+全部片段可选：缺失片段在播报时以 TTS 兜底。约束：片段键 `[A-Za-z0-9_-]{1,32}`，zip ≤ 16 MB、文件 ≤ 32 个、单音频 ≤ 2 MB；音频建议 mp3 / wav / ogg / webm，单段 2 秒以内、22.05/44.1 kHz 单声道。动态部分（余额数字、token 数量等）不在包内——由当前 TTS 后端（浏览器内置或自定义 TTS API，后者经 host 代理规避跨域）实时合成，按「包片段 + TTS 数字」顺序拼接为完整播报。
+
+**制作与分享**：语音设置弹窗内置「制作语音包」——逐段用浏览器麦克风录音（需授予权限；本地或 HTTPS 环境可用）或导入本地音频文件，填写包名后可「打包下载」生成 zip 直接分享，或「编译并应用」立即应用到本机；已导入语音包时，首次编辑会弹出覆盖提示，确认后方可继续（会话内确认一次）。
 
 ```nix
 {

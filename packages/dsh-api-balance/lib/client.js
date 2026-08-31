@@ -128,46 +128,320 @@ window.__ModuleLoader__.load({
 			getSnapshot: () => FALLBACK_LOCALE_SNAPSHOT,
 		};
 
-		/** 构造并朗读一条语音（语言/音色跟随界面语言）。 */
-		function speakUtterance(text, lang) {
-			const synth = window.speechSynthesis;
-			if (synth === void 0) return;
-			const utter = new SpeechSynthesisUtterance(text);
-			utter.lang = lang;
-			utter.rate = 1.05;
-			utter.volume = 1;
-			const voices = synth.getVoices();
-			const prefix = lang.toLowerCase().split("-")[0];
-			const preferred = voices.find((voice) => voice.lang.toLowerCase().startsWith(prefix));
-			if (preferred !== void 0) utter.voice = preferred;
-			synth.cancel();
-			synth.speak(utter);
+		// ── 语音引擎：Web Speech / 自定义 TTS（host 代理）+ 语音包拼接 ──
+		const TTS_STORE_KEY = "dsh-api-balance-tts";
+		const VOICEPACK_ENDPOINT = "/api/api-balance/voicepack";
+		const TTS_PROXY_ENDPOINT = "/api/api-balance/tts";
+		/** 语音包清单格式标识（host 端同样校验）。 */
+		const VOICEPACK_FORMAT = "dsh-api-balance-voice-pack";
+
+		/** TTS 配置读写（localStorage；每浏览器独立）。 */
+		function readTtsConfig() {
+			try {
+				if (typeof window === "undefined") return { backend: "web", urlTemplate: "", method: "GET" };
+				const raw = window.localStorage.getItem(TTS_STORE_KEY);
+				if (raw !== null) {
+					const value = JSON.parse(raw);
+					if (value !== null && typeof value === "object") {
+						return {
+							backend: value.backend === "custom" ? "custom" : "web",
+							urlTemplate: typeof value.urlTemplate === "string" ? value.urlTemplate : "",
+							method: value.method === "POST" ? "POST" : "GET",
+						};
+					}
+				}
+			} catch {
+				// 损坏配置回退默认
+			}
+			return { backend: "web", urlTemplate: "", method: "GET" };
+		}
+
+		function writeTtsConfig(config) {
+			try {
+				window.localStorage.setItem(TTS_STORE_KEY, JSON.stringify(config));
+			} catch {
+				// 存储不可用则本次会话生效
+			}
+		}
+
+		/** 自定义 TTS URL 模板占位符替换（{text} / {lang} / {rate}）。 */
+		function buildTtsUrl(template, text, lang) {
+			return template
+				.split("{text}")
+				.join(encodeURIComponent(text))
+				.split("{lang}")
+				.join(encodeURIComponent(lang))
+				.split("{rate}")
+				.join("1.0");
+		}
+
+		/** 当前播放控制器：新播报开始前停止上一次（音频 / 合成）。 */
+		let activeAudio = null;
+		function stopActiveSpeech() {
+			if (activeAudio !== null) {
+				try {
+					activeAudio.pause();
+					activeAudio.src = "";
+				} catch {
+					// 忽略
+				}
+				activeAudio = null;
+			}
+			try {
+				if (typeof window !== "undefined" && window.speechSynthesis !== void 0) window.speechSynthesis.cancel();
+			} catch {
+				// 忽略
+			}
+		}
+
+		/** 播放一段音频（Promise 化；end/error 均视为完成）。 */
+		function playAudioSrc(src) {
+			return new Promise((resolve) => {
+				try {
+					const audio = new Audio(src);
+					activeAudio = audio;
+					const done = () => {
+						if (activeAudio === audio) activeAudio = null;
+						resolve();
+					};
+					audio.onended = done;
+					audio.onerror = done;
+					audio.play().catch(done);
+				} catch {
+					resolve();
+				}
+			});
+		}
+
+		/** 经 host 代理调用自定义 TTS 服务并播放返回音频。 */
+		async function playCustomTts(text, lang, config) {
+			const url = buildTtsUrl(config.urlTemplate, text, lang);
+			if (url.length === 0) throw new Error("empty tts url");
+			const response = await fetch(TTS_PROXY_ENDPOINT, {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ text, url, method: config.method }),
+			});
+			if (!response.ok) throw new Error(`tts proxy ${response.status}`);
+			const blob = await response.blob();
+			if (blob.size === 0) throw new Error("empty tts audio");
+			const objectUrl = URL.createObjectURL(blob);
+			try {
+				await playAudioSrc(objectUrl);
+			} finally {
+				URL.revokeObjectURL(objectUrl);
+			}
+		}
+
+		/** 用 Web Speech 朗读（Promise 化；兜底超时防 onend 不触发）。 */
+		function playWebSpeech(text, lang) {
+			return new Promise((resolve) => {
+				try {
+					if (typeof window === "undefined") {
+						resolve();
+						return;
+					}
+					const synth = window.speechSynthesis;
+					if (synth === void 0) {
+						resolve();
+						return;
+					}
+					const utter = new SpeechSynthesisUtterance(text);
+					utter.lang = lang;
+					utter.rate = 1.05;
+					utter.volume = 1;
+					const voices = synth.getVoices();
+					const prefix = lang.toLowerCase().split("-")[0];
+					const preferred = voices.find((voice) => voice.lang.toLowerCase().startsWith(prefix));
+					if (preferred !== void 0) utter.voice = preferred;
+					let settled = false;
+					const done = () => {
+						if (!settled) {
+							settled = true;
+							resolve();
+						}
+					};
+					utter.onend = done;
+					utter.onerror = done;
+					synth.cancel();
+					synth.speak(utter);
+					window.setTimeout(done, 60_000);
+				} catch {
+					resolve();
+				}
+			});
+		}
+
+		/** 合成并播放一段 TTS 文本（custom 失败时回落 Web Speech）。 */
+		async function ttsSpeak(text, lang, config) {
+			if (typeof text !== "string" || text.length === 0) return;
+			if (config !== null && typeof config === "object" && config.backend === "custom" && config.urlTemplate.trim().length > 0) {
+				try {
+					await playCustomTts(text, lang, config);
+					return;
+				} catch {
+					// custom 失败 → Web Speech 兜底
+				}
+			}
+			await playWebSpeech(text, lang);
 		}
 
 		/**
-		 * 语音喊饿（Web Speech API，语言跟随 DSH 界面语言）。余额不足时
-		 * 提醒主人；30 分钟限流防重复，浏览器不支持时静默降级。
+		 * 按序播放片段列表。片段：
+		 *  - { kind: "pack", key, fallbackText? }：语音包片段；缺省时
+		 *    若有 fallbackText 则用 TTS 朗读兜底，否则跳过
+		 *  - { kind: "tts", text }：动态数字/文本，走当前 TTS 后端合成
+		 * 语音包片段支持两种载体：host 音频 URL（url）或 data URI（audio）。
 		 */
-		function speakHungry(text, lang) {
+		async function playParts(parts, lang, config, pack) {
+			const segments = pack !== null && typeof pack === "object" && pack.segments !== null && typeof pack.segments === "object"
+				? pack.segments
+				: {};
+			for (const part of parts) {
+				if (part.kind === "pack") {
+					const segment = segments[part.key];
+					const src =
+						segment !== null && typeof segment === "object"
+							? typeof segment.url === "string" && segment.url.length > 0
+								? segment.url
+								: typeof segment.audio === "string" && segment.audio.length > 0
+									? segment.audio
+									: null
+							: null;
+					if (src !== null) {
+						await playAudioSrc(src);
+					} else if (typeof part.fallbackText === "string" && part.fallbackText.length > 0) {
+						await ttsSpeak(part.fallbackText, lang, config);
+					}
+				} else {
+					await ttsSpeak(part.text, lang, config);
+				}
+			}
+		}
+
+		/**
+		 * 语音喊饿（自动播报；30 分钟限流 + 开关约束）。片段经拼接引擎
+		 * 播放：语音包有对应片段则播包，否则 TTS 兜底整句。
+		 */
+		function speakHungry(parts, lang, config, pack) {
 			try {
 				if (typeof window === "undefined" || !speechEnabled()) return;
 				const now = Date.now();
 				if (now - lastHungrySpeechAt < HUNGRY_SPEECH_INTERVAL_MS) return;
 				lastHungrySpeechAt = now;
-				speakUtterance(text, lang);
-			} catch {
-				// 语音不可用（无语音引擎/自动播放策略）时静默
-			}
-		}
-
-		/** 手动播报（无开关/限流约束）：用户点击播报按钮时直接朗读。 */
-		function speakNow(text, lang) {
-			try {
-				if (typeof window === "undefined") return;
-				speakUtterance(text, lang);
+				stopActiveSpeech();
+				playParts(parts, lang, config, pack).catch(() => {});
 			} catch {
 				// 语音不可用时静默
 			}
+		}
+
+		/** 手动播报（无开关/限流约束）。 */
+		function speakNowParts(parts, lang, config, pack) {
+			try {
+				if (typeof window === "undefined") return;
+				stopActiveSpeech();
+				playParts(parts, lang, config, pack).catch(() => {});
+			} catch {
+				// 语音不可用时静默
+			}
+		}
+
+		/** 语音包片段键（制作器按此清单逐段录制）。 */
+		const VOICEPACK_SEGMENT_KEYS = ["dead", "low", "usage", "balance", "tokenUnit", "month", "suffix"];
+
+		// ── zip 打包（STORE 方式，浏览器侧导出语音包用）────────────
+		const CRC32_TABLE = (() => {
+			const table = new Uint32Array(256);
+			for (let i = 0; i < 256; i++) {
+				let c = i;
+				for (let k = 0; k < 8; k++) c = (c & 1) !== 0 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+				table[i] = c >>> 0;
+			}
+			return table;
+		})();
+
+		function crc32(bytes) {
+			let crc = 0xffffffff;
+			for (let i = 0; i < bytes.length; i++) crc = CRC32_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+			return (crc ^ 0xffffffff) >>> 0;
+		}
+
+		/** entries: [{ name, data: Uint8Array }] → STORE 方式 zip 字节。 */
+		function buildZip(entries) {
+			const encoder = new TextEncoder();
+			const chunks = [];
+			const central = [];
+			let offset = 0;
+			for (const entry of entries) {
+				const nameBytes = encoder.encode(entry.name);
+				const data = entry.data;
+				const crc = crc32(data);
+				const local = new Uint8Array(30 + nameBytes.length);
+				const lv = new DataView(local.buffer);
+				lv.setUint32(0, 0x04034b50, true);
+				lv.setUint16(4, 20, true);
+				lv.setUint16(6, 0, true);
+				lv.setUint16(8, 0, true);
+				lv.setUint16(10, 0, true);
+				lv.setUint16(12, 0, true);
+				lv.setUint32(14, crc, true);
+				lv.setUint32(18, data.length, true);
+				lv.setUint32(22, data.length, true);
+				lv.setUint16(26, nameBytes.length, true);
+				lv.setUint16(28, 0, true);
+				local.set(nameBytes, 30);
+				chunks.push(local, data);
+				const cd = new Uint8Array(46 + nameBytes.length);
+				const cv = new DataView(cd.buffer);
+				cv.setUint32(0, 0x02014b50, true);
+				cv.setUint16(4, 20, true);
+				cv.setUint16(6, 20, true);
+				cv.setUint16(8, 0, true);
+				cv.setUint16(10, 0, true);
+				cv.setUint16(12, 0, true);
+				cv.setUint16(14, 0, true);
+				cv.setUint32(16, crc, true);
+				cv.setUint32(20, data.length, true);
+				cv.setUint32(24, data.length, true);
+				cv.setUint16(28, nameBytes.length, true);
+				cv.setUint16(30, 0, true);
+				cv.setUint16(32, 0, true);
+				cv.setUint16(34, 0, true);
+				cv.setUint16(36, 0, true);
+				cv.setUint32(38, 0, true);
+				cv.setUint32(42, offset, true);
+				cd.set(nameBytes, 46);
+				central.push(cd);
+				offset += local.length + data.length;
+			}
+			const cdStart = offset;
+			let cdTotal = 0;
+			for (const c of central) cdTotal += c.length;
+			const cdBytes = new Uint8Array(cdTotal);
+			let p = 0;
+			for (const c of central) {
+				cdBytes.set(c, p);
+				p += c.length;
+			}
+			chunks.push(cdBytes);
+			const eocd = new Uint8Array(22);
+			const ev = new DataView(eocd.buffer);
+			ev.setUint32(0, 0x06054b50, true);
+			ev.setUint16(8, entries.length, true);
+			ev.setUint16(10, entries.length, true);
+			ev.setUint32(12, cdBytes.length, true);
+			ev.setUint32(16, cdStart, true);
+			chunks.push(eocd);
+			let total = 0;
+			for (const c of chunks) total += c.length;
+			const out = new Uint8Array(total);
+			p = 0;
+			for (const c of chunks) {
+				out.set(c, p);
+				p += c.length;
+			}
+			return out;
 		}
 
 		/** 余额 → 饥饿状态：dead（不可用）/ low（低于阈值）/ ok。 */
@@ -182,11 +456,14 @@ window.__ModuleLoader__.load({
 			return "ok";
 		}
 
-		/** 根据饥饿状态播报对应文案（受限流约束；语言跟随界面语言）。 */
-		function announceHunger(t, balance, lang) {
+		/** 根据饥饿状态播报对应文案（限流；语言/音色/TTS 后端随配置）。 */
+		function announceHunger(t, balance, lang, config, pack) {
 			const state = hungryState(balance);
-			if (state === "dead") speakHungry(t("speech.dead"), lang);
-			else if (state === "low") speakHungry(t("speech.low"), lang);
+			if (state === "dead") {
+				speakHungry([{ kind: "pack", key: "dead", fallbackText: t("speech.dead") }], lang, config, pack);
+			} else if (state === "low") {
+				speakHungry([{ kind: "pack", key: "low", fallbackText: t("speech.low") }], lang, config, pack);
+			}
 		}
 
 		/** 金额文案：两位小数（万分之一精度的小额不显示成 0.00）。 */
@@ -695,6 +972,432 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
+		 * 语音设置弹窗：自动播报开关、TTS 后端（浏览器内置 / 自定义 API
+		 * 经 host 代理）、语音包 zip 导入 / 试听 / 清除，以及浏览器录音
+		 * 制作语音包并打包下载分享。
+		 */
+		function VoiceSettingsModal({
+			t,
+			autoOn,
+			onToggleAuto,
+			ttsCfg,
+			onTtsChange,
+			pack,
+			packBusy,
+			packMessage,
+			onImportFile,
+			onClear,
+			onTestPack,
+			onTestTts,
+			recordings,
+			recordingKey,
+			onStartRecording,
+			onStopRecording,
+			onPlayRecording,
+			onDeleteRecording,
+			onImportSegmentFile,
+			onCompileInstall,
+			editConfirmOpen,
+			onConfirmEdit,
+			onCancelEdit,
+			packNameInput,
+			onPackNameInput,
+			onDownloadPack,
+			onClose,
+		}) {
+			const overlayStyle = {
+				position: "fixed",
+				inset: 0,
+				zIndex: 1003,
+				background: "rgba(0, 0, 0, 0.5)",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "16px",
+			};
+			const boxStyle = {
+				position: "relative",
+				width: "min(460px, 94vw)",
+				maxHeight: "80vh",
+				overflowY: "auto",
+				background: "var(--dsw-specific-menu)",
+				border: "1px solid var(--dsw-alias-border-inverted)",
+				borderRadius: "12px",
+				boxShadow: "var(--dsw-shadow-lv3)",
+				display: "flex",
+				flexDirection: "column",
+			};
+			const closeStyle = {
+				position: "absolute",
+				top: "8px",
+				right: "8px",
+				zIndex: 2,
+				width: "28px",
+				height: "28px",
+				display: "grid",
+				placeItems: "center",
+				border: "none",
+				borderRadius: "999px",
+				cursor: "pointer",
+				background: "var(--dsw-alias-interactive-bg-hover)",
+				color: "var(--dsw-alias-label-secondary)",
+				fontSize: "14px",
+				lineHeight: 1,
+			};
+			const sectionStyle = { margin: "10px 16px 0" };
+			const labelStyle = { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)", margin: 0 };
+			const pillStyle = (active) => ({
+				padding: "3px 12px",
+				borderRadius: "999px",
+				cursor: "pointer",
+				border: "1px solid var(--dsw-alias-separator-primary)",
+				background: active ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+				color: active ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
+				fontSize: "12px",
+				lineHeight: "20px",
+			});
+			const inputStyle = {
+				flex: 1,
+				minWidth: 0,
+				padding: "4px 8px",
+				borderRadius: "8px",
+				border: "1px solid var(--dsw-alias-border-l3)",
+				background: "var(--dsw-alias-bg-layer-2, transparent)",
+				color: "var(--dsw-alias-label-primary)",
+				fontSize: "12px",
+				lineHeight: "18px",
+			};
+			const packName =
+				pack !== null && typeof pack === "object" ? `${pack.name ?? "?"}（${pack.lang ?? "?"}）` : null;
+			const recordedCount = recordings !== null && typeof recordings === "object" ? Object.keys(recordings).length : 0;
+			return reactDOM.createPortal(
+				react.createElement(
+					"div",
+					{ role: "dialog", "aria-modal": true, "aria-label": t("voice.title"), style: overlayStyle, onClick: onClose },
+					react.createElement(
+						"div",
+						{ style: boxStyle, onClick: (event) => event.stopPropagation() },
+						react.createElement(
+							"div",
+							{
+								style: {
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+									padding: "12px 40px 12px 16px",
+									fontSize: "14px",
+									fontWeight: 600,
+									color: "var(--dsw-alias-label-primary)",
+								},
+							},
+							t("voice.title"),
+						),
+						react.createElement(
+							"button",
+							{ type: "button", "aria-label": t("voice.close"), style: closeStyle, onClick: onClose },
+							"✕",
+						),
+						// 自动播报开关
+						react.createElement(
+							"div",
+							{ style: sectionStyle },
+							react.createElement("p", { style: labelStyle }, t("voice.autoLabel")),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									"aria-pressed": autoOn,
+									onClick: onToggleAuto,
+									style: { ...pillStyle(autoOn), marginTop: "4px" },
+								},
+								autoOn ? t("balance.speechOn") : t("balance.speechOff"),
+							),
+						),
+						// TTS 后端
+						react.createElement(
+							"div",
+							{ style: sectionStyle },
+							react.createElement("p", { style: labelStyle }, t("voice.ttsBackend")),
+							react.createElement(
+								"div",
+								{ style: { display: "flex", gap: "8px", marginTop: "4px" } },
+								react.createElement(
+									"button",
+									{
+										type: "button",
+										onClick: () => onTtsChange({ ...ttsCfg, backend: "web" }),
+										style: pillStyle(ttsCfg.backend === "web"),
+									},
+									t("voice.ttsWeb"),
+								),
+								react.createElement(
+									"button",
+									{
+										type: "button",
+										onClick: () => onTtsChange({ ...ttsCfg, backend: "custom" }),
+										style: pillStyle(ttsCfg.backend === "custom"),
+									},
+									t("voice.ttsCustom"),
+								),
+								react.createElement(
+									"button",
+									{
+										type: "button",
+										onClick: onTestTts,
+										style: { ...pillStyle(false), marginLeft: "auto" },
+									},
+									t("voice.test"),
+								),
+							),
+							ttsCfg.backend === "custom"
+								? react.createElement(
+										"div",
+										{ style: { display: "flex", gap: "6px", marginTop: "6px", alignItems: "center" } },
+										react.createElement("input", {
+											type: "text",
+											value: ttsCfg.urlTemplate,
+											placeholder: t("voice.ttsUrlPlaceholder"),
+											onChange: (event) => onTtsChange({ ...ttsCfg, urlTemplate: event.target.value }),
+											style: inputStyle,
+										}),
+										react.createElement(
+											"select",
+											{
+												value: ttsCfg.method,
+												onChange: (event) => onTtsChange({ ...ttsCfg, method: event.target.value }),
+												style: { ...inputStyle, flex: "0 0 auto" },
+											},
+											react.createElement("option", { value: "GET" }, "GET"),
+											react.createElement("option", { value: "POST" }, "POST"),
+										),
+									)
+								: react.createElement(
+										"p",
+										{ style: { ...labelStyle, marginTop: "4px" } },
+										t("voice.ttsUrlHint"),
+									),
+						),
+						// 语音包：zip 导入 / 试听 / 清除
+						react.createElement(
+							"div",
+							{ style: sectionStyle },
+							react.createElement("p", { style: labelStyle }, t("voice.packLabel")),
+							react.createElement(
+								"div",
+								{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "4px" } },
+								react.createElement(
+									"span",
+									{
+										style: {
+											flex: 1,
+											minWidth: 0,
+											fontSize: "12px",
+											lineHeight: "18px",
+											color: packName !== null ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
+										},
+									},
+									packName !== null ? t("voice.packLoaded", { name: pack.name, lang: pack.lang }) : t("voice.packNone"),
+								),
+								packName !== null
+									? react.createElement(
+											"button",
+											{ type: "button", onClick: onTestPack, style: pillStyle(false) },
+											t("voice.test"),
+										)
+									: null,
+								packName !== null
+									? react.createElement(
+											"button",
+											{ type: "button", disabled: packBusy, onClick: onClear, style: pillStyle(false) },
+											t("voice.packClear"),
+										)
+									: null,
+							),
+							react.createElement(
+								"div",
+								{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "6px" } },
+								react.createElement("input", {
+									type: "file",
+									accept: ".zip,application/zip",
+									disabled: packBusy,
+									onChange: (event) => {
+										const file = event.target.files !== null ? event.target.files[0] : null;
+										if (file !== null) onImportFile(file);
+										event.target.value = "";
+									},
+									style: {
+										flex: 1,
+										minWidth: 0,
+										fontSize: "11px",
+										color: "var(--dsw-alias-label-secondary)",
+									},
+								}),
+								packMessage !== ""
+									? react.createElement(
+											"span",
+											{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+											packMessage,
+										)
+									: null,
+							),
+						),
+						// 语音包制作器：录音 / 导入音频 + 编译（打包下载 / 编译并应用）
+						react.createElement(
+							"div",
+							{ style: { ...sectionStyle, marginBottom: "16px" } },
+							react.createElement("p", { style: labelStyle }, t("voice.recorderLabel")),
+							editConfirmOpen
+								? react.createElement(
+										"div",
+										{
+											style: {
+												display: "flex",
+												gap: "8px",
+												alignItems: "center",
+												flexWrap: "wrap",
+												marginTop: "6px",
+												padding: "6px 10px",
+												borderRadius: "8px",
+												border: "1px solid var(--dsw-alias-warning-primary, #e5a50a)",
+												background: "var(--dsw-alias-bg-layer-2, transparent)",
+											},
+										},
+										react.createElement(
+											"span",
+											{
+												style: {
+													flex: "1 1 100%",
+													fontSize: "11px",
+													lineHeight: "16px",
+													color: "var(--dsw-alias-label-secondary)",
+												},
+											},
+											t("voice.editWarn", { name: packName ?? "?" }),
+										),
+										react.createElement(
+											"button",
+											{ type: "button", onClick: onConfirmEdit, style: pillStyle(true) },
+											t("voice.continue"),
+										),
+										react.createElement(
+											"button",
+											{ type: "button", onClick: onCancelEdit, style: pillStyle(false) },
+											t("voice.cancel"),
+										),
+									)
+								: null,
+							react.createElement(
+								"div",
+								{ style: { display: "flex", gap: "6px", marginTop: "4px", alignItems: "center" } },
+								react.createElement("input", {
+									type: "text",
+									value: packNameInput,
+									placeholder: t("voice.packNamePlaceholder"),
+									onChange: (event) => onPackNameInput(event.target.value),
+									style: { ...inputStyle, flex: "0 1 220px" },
+								}),
+								react.createElement(
+									"button",
+									{
+										type: "button",
+										disabled: recordedCount === 0,
+										onClick: onDownloadPack,
+										style: { ...pillStyle(false), marginLeft: "auto" },
+									},
+									t("voice.download"),
+								),
+								react.createElement(
+									"button",
+									{
+										type: "button",
+										disabled: recordedCount === 0 || packBusy,
+										onClick: onCompileInstall,
+										style: pillStyle(true),
+									},
+									t("voice.compileInstall"),
+								),
+							),
+							react.createElement(
+								"p",
+								{ style: { ...labelStyle, marginTop: "4px" } },
+								t("voice.recordHint"),
+							),
+							VOICEPACK_SEGMENT_KEYS.map((key) => {
+								const rec = recordings[key];
+								const isRecording = recordingKey === key;
+								const canRecordOthers = recordingKey === null;
+								return react.createElement(
+									"div",
+									{
+										key,
+										style: {
+											display: "flex",
+											gap: "8px",
+											alignItems: "center",
+											marginTop: "4px",
+										},
+									},
+									react.createElement(
+										"span",
+										{ style: { width: "96px", fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
+										t(`voice.seg.${key}`),
+									),
+									react.createElement(
+										"button",
+										{
+											type: "button",
+											disabled: !canRecordOthers,
+											onClick: () => (isRecording ? onStopRecording() : onStartRecording(key)),
+											style: pillStyle(isRecording),
+										},
+										isRecording ? t("voice.stop") : t("voice.record"),
+									),
+									react.createElement(
+										"label",
+										{ style: pillStyle(false) },
+										t("voice.importFile"),
+										react.createElement("input", {
+											type: "file",
+											accept: "audio/*,.mp3,.wav,.ogg,.webm,.m4a,.aac,.flac",
+											style: { display: "none" },
+											onChange: (event) => {
+												const file = event.target.files !== null ? event.target.files[0] : null;
+												if (file !== null) onImportSegmentFile(key, file);
+												event.target.value = "";
+											},
+										}),
+									),
+									rec !== void 0
+										? react.createElement(
+												"button",
+												{ type: "button", onClick: () => onPlayRecording(key), style: pillStyle(false) },
+												t("voice.play"),
+											)
+										: null,
+									rec !== void 0
+										? react.createElement(
+												"button",
+												{ type: "button", onClick: () => onDeleteRecording(key), style: pillStyle(false) },
+												t("voice.delete"),
+											)
+										: null,
+									rec !== void 0
+										? react.createElement(
+												"span",
+												{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+												t("voice.recorded"),
+											)
+										: null,
+								);
+							}),
+						),
+					),
+				),
+				document.body,
+			);
+		}
+
+		/**
 		 * 替代圆圈组件。props 为框架标准 props（useProjection、t）+ 注册时
 		 * inject 的 owner face（queryBalance、clearToken）。
 		 */
@@ -802,7 +1505,7 @@ window.__ModuleLoader__.load({
 						if (result !== null && typeof result === "object" && result.ok === true) {
 							setBalance(result.value);
 							setBalanceState("ok");
-							announceHunger(t, result.value, uiLocale);
+							announceHunger(t, result.value, uiLocale, ttsCfgRef.current, voicePackRef.current);
 							return result.value;
 						}
 						setBalance(null);
@@ -953,6 +1656,233 @@ window.__ModuleLoader__.load({
 
 			// 余额轮询（15 分钟）：页面常驻期间自动检测，余额不足时语音喊饿。
 			const [speechOn, setSpeechOn] = react.useState(speechEnabled());
+			// 语音设置：TTS 后端配置（localStorage）+ 语音包（host 共享文件）。
+			const [voiceSettingsOpen, setVoiceSettingsOpen] = react.useState(false);
+			const [ttsCfg, setTtsCfg] = react.useState(readTtsConfig());
+			const ttsCfgRef = react.useRef(ttsCfg);
+			ttsCfgRef.current = ttsCfg;
+			const [voicePack, setVoicePack] = react.useState(null);
+			const voicePackRef = react.useRef(voicePack);
+			voicePackRef.current = voicePack;
+			const [packBusy, setPackBusy] = react.useState(false);
+			const [packMessage, setPackMessage] = react.useState("");
+			// 语音包制作器：逐段浏览器录音（MediaRecorder）+ zip 打包导出。
+			const [recordings, setRecordings] = react.useState({});
+			const [recordingKey, setRecordingKey] = react.useState(null);
+			const [packNameInput, setPackNameInput] = react.useState("");
+			const mediaRecorderRef = react.useRef(null);
+			const startRecording = async (key) => {
+				if (recordingKey !== null) return;
+				try {
+					const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+					const mimeType =
+						MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+							? "audio/webm;codecs=opus"
+							: MediaRecorder.isTypeSupported("audio/ogg;codecs=opus")
+								? "audio/ogg;codecs=opus"
+								: "";
+					const recorder = mimeType !== "" ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+					const chunks = [];
+					recorder.ondataavailable = (event) => {
+						if (event.data.size > 0) chunks.push(event.data);
+					};
+					recorder.onstop = () => {
+						stream.getTracks().forEach((track) => track.stop());
+						const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
+						const ext = recorder.mimeType.includes("ogg") ? "ogg" : recorder.mimeType.includes("mp4") ? "m4a" : "webm";
+						setRecordings((current) => ({
+							...current,
+							[key]: { blob, url: URL.createObjectURL(blob), ext },
+						}));
+						setRecordingKey(null);
+					};
+					recorder.start();
+					mediaRecorderRef.current = recorder;
+					setRecordingKey(key);
+				} catch {
+					setPackMessage(t("voice.recordDenied"));
+				}
+			};
+			const stopRecording = () => {
+				if (mediaRecorderRef.current !== null) {
+					try {
+						mediaRecorderRef.current.stop();
+					} catch {
+						setRecordingKey(null);
+					}
+				}
+			};
+			const deleteRecording = (key) => {
+				setRecordings((current) => {
+					const next = { ...current };
+					if (next[key] !== void 0 && typeof next[key].url === "string") {
+						try {
+							URL.revokeObjectURL(next[key].url);
+						} catch {
+							// 忽略
+						}
+					}
+					delete next[key];
+					return next;
+				});
+			};
+			/** 每段导入音频文件（与录音同构：blob + url + ext）。 */
+			const importSegmentAudio = async (key, file) => {
+				if (!(file instanceof File) || file.size === 0) return;
+				const nameExt = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
+				const ext =
+					["mp3", "wav", "ogg", "oga", "webm", "m4a", "mp4", "aac", "flac"].includes(nameExt) ? nameExt : "webm";
+				const blob = file.type.length > 0 ? file : new Blob([await file.arrayBuffer()], { type: `audio/${ext}` });
+				const rec = { blob, url: URL.createObjectURL(blob), ext };
+				setRecordings((current) => {
+					if (current[key] !== void 0 && typeof current[key].url === "string") {
+						try {
+							URL.revokeObjectURL(current[key].url);
+						} catch {
+							// 忽略
+						}
+					}
+					return { ...current, [key]: rec };
+				});
+				setPackMessage(t("voice.segmentImported"));
+			};
+			/** 编译 zip 条目（制作器的共同打包逻辑）。 */
+			const buildPackZip = async () => {
+				const keys = VOICEPACK_SEGMENT_KEYS.filter((key) => recordings[key] !== void 0);
+				if (keys.length === 0) return null;
+				const segments = {};
+				for (const key of keys) {
+					segments[key] = `audio/${key}.${recordings[key].ext}`;
+				}
+				const audioEntries = await Promise.all(
+					keys.map(async (key) => {
+						const rec = recordings[key];
+						const buf = new Uint8Array(await rec.blob.arrayBuffer());
+						return { name: `audio/${key}.${rec.ext}`, data: buf };
+					}),
+				);
+				const manifest = {
+					format: "dsh-api-balance-voice-pack",
+					version: 1,
+					name: packNameInput.trim().length > 0 ? packNameInput.trim() : "voice-pack",
+					lang: uiLocale,
+					segments,
+				};
+				return { manifest, zip: buildZip([{ name: "manifest.json", data: new TextEncoder().encode(JSON.stringify(manifest, null, 2)) }, ...audioEntries]) };
+			};
+			/** 编译并打包下载（分享用）。 */
+			const downloadVoicePack = async () => {
+				const built = await buildPackZip();
+				if (built === null) return;
+				const blob = new Blob([built.zip], { type: "application/zip" });
+				const anchor = document.createElement("a");
+				anchor.href = URL.createObjectURL(blob);
+				anchor.download = `${built.manifest.name}.zip`;
+				document.body.appendChild(anchor);
+				anchor.click();
+				document.body.removeChild(anchor);
+				setTimeout(() => URL.revokeObjectURL(anchor.href), 5000);
+				setPackMessage(t("voice.downloaded"));
+			};
+			/** 编译并应用本机（覆盖当前语音包）。 */
+			const compileInstallPack = async () => {
+				const built = await buildPackZip();
+				if (built === null) return;
+				setPackBusy(true);
+				try {
+					const resp = await fetch(VOICEPACK_ENDPOINT, {
+						method: "POST",
+						headers: { "content-type": "application/zip" },
+						body: built.zip,
+					});
+					if (resp.ok) {
+						const manifestResp = await fetch(VOICEPACK_ENDPOINT);
+						if (manifestResp.ok) setVoicePack(await manifestResp.json());
+						setPackMessage(t("voice.compiled"));
+					} else {
+						const err = await resp.json().catch(() => null);
+						setPackMessage(`${t("voice.importFailed")}${err?.error ? `（${err.error}）` : ""}`);
+					}
+				} catch {
+					setPackMessage(t("voice.importFailed"));
+				}
+				setPackBusy(false);
+			};
+			// 编辑已导入语音包的保护：首次编辑前弹确认提示（会话内确认一次即可）。
+			const [editConfirmOpen, setEditConfirmOpen] = react.useState(false);
+			const editConfirmedRef = react.useRef(false);
+			const pendingEditRef = react.useRef(null);
+			const guardEdit = (action) => {
+				if (voicePackRef.current !== null && !editConfirmedRef.current) {
+					pendingEditRef.current = action;
+					setEditConfirmOpen(true);
+					return;
+				}
+				action();
+			};
+			const confirmEdit = () => {
+				editConfirmedRef.current = true;
+				setEditConfirmOpen(false);
+				const action = pendingEditRef.current;
+				pendingEditRef.current = null;
+				if (action !== null) action();
+			};
+			const cancelEdit = () => {
+				pendingEditRef.current = null;
+				setEditConfirmOpen(false);
+			};
+			// 拉取语音包（host 共享；404 视为未导入）。
+			react.useEffect(() => {
+				let cancelled = false;
+				fetch(VOICEPACK_ENDPOINT)
+					.then((resp) => (resp.ok ? resp.json() : null))
+					.then((pack) => {
+						if (!cancelled && pack !== null && typeof pack === "object") setVoicePack(pack);
+					})
+					.catch(() => {});
+				return () => {
+					cancelled = true;
+				};
+			}, []);
+			const importVoicePack = async (file) => {
+				if (!(file instanceof File) || file.size === 0 || packBusy) return;
+				setPackBusy(true);
+				try {
+					const bytes = await file.arrayBuffer();
+					const resp = await fetch(VOICEPACK_ENDPOINT, {
+						method: "POST",
+						headers: { "content-type": "application/zip" },
+						body: bytes,
+					});
+					if (resp.ok) {
+						const pack = await resp.json().catch(() => null);
+						if (pack !== null && typeof pack === "object") {
+							// host 仅回 ok；重新 GET 拿带 URL 的清单。
+							const manifestResp = await fetch(VOICEPACK_ENDPOINT);
+							if (manifestResp.ok) setVoicePack(await manifestResp.json());
+							else setVoicePack(pack);
+						}
+						setPackMessage(t("voice.imported"));
+					} else {
+						const err = await resp.json().catch(() => null);
+						setPackMessage(`${t("voice.importFailed")}${err?.error ? `（${err.error}）` : ""}`);
+					}
+				} catch {
+					setPackMessage(t("voice.importFailed"));
+				}
+				setPackBusy(false);
+			};
+			const clearVoicePack = async () => {
+				setPackBusy(true);
+				try {
+					await fetch(VOICEPACK_ENDPOINT, { method: "DELETE" });
+					setVoicePack(null);
+					setPackMessage(t("voice.cleared"));
+				} catch {
+					setPackMessage(t("voice.importFailed"));
+				}
+				setPackBusy(false);
+			};
 			// 语音播报下拉菜单（点击播报按钮弹出；portal 渲染，位置按按钮 rect
 			// 计算）。默认从下往上展开（按钮顶部上方）；上方空间不足时回退向下。
 			const [speechMenuOpen, setSpeechMenuOpen] = react.useState(false);
@@ -985,7 +1915,7 @@ window.__ModuleLoader__.load({
 					if (cancelled || value === null || typeof value !== "object" || value.ok !== true) return;
 					setBalance(value.value);
 					setBalanceState("ok");
-					announceHunger(t, value.value, uiLocale);
+					announceHunger(t, value.value, uiLocale, ttsCfgRef.current, voicePackRef.current);
 				};
 				hungerPollRef.current = window.setInterval(poll, HUNGRY_POLL_INTERVAL_MS);
 				return () => {
@@ -1591,29 +2521,92 @@ window.__ModuleLoader__.load({
 				// 一行（播报按钮 + 下拉菜单 + 提醒开关）。
 				if (usage !== null && usage.status !== "no-token") {
 					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
-					// 播报内容（数据来自当前 balance 快照）。
-					const speakCurrentUsage = () => {
-						if (usageWindows === null) return;
+					// 播报内容（数据来自当前 balance 快照）。有语音包时按
+					// 「包片段 + TTS 动态数字」拼接；无包时整句 TTS。
+					const sepForLang = uiLocale.startsWith("zh") ? { c: "，", s: "；" } : { c: ", ", s: "; " };
+					const usageFullText = () => {
+						if (usageWindows === null) return "";
 						const today = usageWindows.today ?? {};
 						const month = usageWindows.month ?? {};
-						// 分隔符随界面语言：中文全角，其余半角。
-						const sep = uiLocale.startsWith("zh") ? { c: "，", s: "；" } : { c: ", ", s: "; " };
-						speakNow(
-							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}${sep.c}${t("balance.out")}${formatTokens(today.completion ?? 0)}${sep.s}${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}${sep.c}${t("balance.out")}${formatTokens(month.completion ?? 0)}`,
-							uiLocale,
+						return (
+							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}` +
+							`${sepForLang.c}${t("balance.out")}${formatTokens(today.completion ?? 0)}` +
+							`${sepForLang.s}${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}` +
+							`${sepForLang.c}${t("balance.out")}${formatTokens(month.completion ?? 0)}`
 						);
 					};
-					const speakCurrentBalance = () => {
+					const usageParts = () => {
+						if (usageWindows === null) return [];
+						const today = usageWindows.today ?? {};
+						const month = usageWindows.month ?? {};
+						return [
+							{ kind: "pack", key: "usage", fallbackText: t("balance.usage") },
+							{ kind: "tts", text: formatTokens((today.hit ?? 0) + (today.miss ?? 0)) },
+							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
+							{ kind: "pack", key: "month", fallbackText: t("balance.month") },
+							{ kind: "tts", text: formatTokens((month.hit ?? 0) + (month.miss ?? 0)) },
+							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
+							{ kind: "pack", key: "suffix", fallbackText: "" },
+						];
+					};
+					const balanceFullText = () => {
 						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
 						const parts = infos.map((info) => `${info.currency} ${info.totalBalance}`);
 						const colon = uiLocale.startsWith("zh") ? "：" : ": ";
-						speakNow(`${t("balance.total")}${colon}${parts.length > 0 ? parts.join(uiLocale.startsWith("zh") ? "；" : "; ") : "—"}`, uiLocale);
+						return `${t("balance.total")}${colon}${parts.length > 0 ? parts.join(uiLocale.startsWith("zh") ? "；" : "; ") : "—"}`;
+					};
+					const balanceParts = () => {
+						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
+						const parts = [{ kind: "pack", key: "balance", fallbackText: t("balance.total") }];
+						for (const info of infos) {
+							parts.push({ kind: "tts", text: `${info.totalBalance}` });
+							if (typeof info.currency === "string" && info.currency.length > 0) {
+								parts.push({ kind: "tts", text: info.currency });
+							}
+						}
+						parts.push({ kind: "pack", key: "suffix", fallbackText: "" });
+						return parts;
+					};
+					const speakCurrentUsage = () => {
+						if (usageWindows === null) return;
+						if (voicePackRef.current !== null) {
+							speakNowParts(usageParts(), uiLocale, ttsCfgRef.current, voicePackRef.current);
+						} else {
+							speakNowParts([{ kind: "tts", text: usageFullText() }], uiLocale, ttsCfgRef.current, null);
+						}
+					};
+					const speakCurrentBalance = () => {
+						if (voicePackRef.current !== null) {
+							speakNowParts(balanceParts(), uiLocale, ttsCfgRef.current, voicePackRef.current);
+						} else {
+							speakNowParts([{ kind: "tts", text: balanceFullText() }], uiLocale, ttsCfgRef.current, null);
+						}
 					};
 					const speechMenuItems = [
 						{ key: "usage", label: t("speech.broadcastUsage"), run: speakCurrentUsage },
 						{ key: "balance", label: t("speech.broadcastBalance"), run: speakCurrentBalance },
-						{ key: "test-low", label: t("speech.testLow"), run: () => speakNow(t("speech.low"), uiLocale) },
-						{ key: "test-dead", label: t("speech.testDead"), run: () => speakNow(t("speech.dead"), uiLocale) },
+						{
+							key: "test-low",
+							label: t("speech.testLow"),
+							run: () =>
+								speakNowParts(
+									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
+									uiLocale,
+									ttsCfgRef.current,
+									voicePackRef.current,
+								),
+						},
+						{
+							key: "test-dead",
+							label: t("speech.testDead"),
+							run: () =>
+								speakNowParts(
+									[{ kind: "pack", key: "dead", fallbackText: t("speech.dead") }],
+									uiLocale,
+									ttsCfgRef.current,
+									voicePackRef.current,
+								),
+						},
 					];
 					const speechMenu = !speechMenuOpen
 						? null
@@ -1802,8 +2795,8 @@ window.__ModuleLoader__.load({
 								"button",
 								{
 									type: "button",
-									"aria-pressed": speechOn,
-									onClick: toggleSpeech,
+									"aria-haspopup": "dialog",
+									onClick: () => setVoiceSettingsOpen(true),
 									style: {
 										display: "inline-flex",
 										alignItems: "center",
@@ -1812,13 +2805,13 @@ window.__ModuleLoader__.load({
 										borderRadius: "999px",
 										cursor: "pointer",
 										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: speechOn ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+										background: voiceSettingsOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
 										color: speechOn ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
 										fontSize: "11px",
 										lineHeight: "18px",
 									},
 								},
-								speechOn ? t("balance.speechOn") : t("balance.speechOff"),
+								t("balance.voiceSettings"),
 							),
 							speechMenu,
 						),
@@ -1949,6 +2942,55 @@ window.__ModuleLoader__.load({
 							},
 						})
 					: null,
+				voiceSettingsOpen
+					? react.createElement(VoiceSettingsModal, {
+							t,
+							autoOn: speechOn,
+							onToggleAuto: toggleSpeech,
+							ttsCfg,
+							onTtsChange: (next) => {
+								setTtsCfg(next);
+								writeTtsConfig(next);
+							},
+							pack: voicePack,
+							packBusy,
+							packMessage,
+							onImportFile: importVoicePack,
+							onClear: clearVoicePack,
+							onTestPack: () =>
+								speakNowParts(
+									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
+									uiLocale,
+									ttsCfgRef.current,
+									voicePackRef.current,
+								),
+							onTestTts: () => {
+								stopActiveSpeech();
+								ttsSpeak(t("voice.ttsTestText"), uiLocale, ttsCfgRef.current).catch(() => {});
+							},
+							recordings,
+							recordingKey,
+							onStartRecording: (key) => guardEdit(() => startRecording(key)),
+							onStopRecording: stopRecording,
+							onPlayRecording: (key) => {
+								const rec = recordings[key];
+								if (rec !== void 0 && typeof rec.url === "string") {
+									stopActiveSpeech();
+									playAudioSrc(rec.url).catch(() => {});
+								}
+							},
+							onDeleteRecording: (key) => guardEdit(() => deleteRecording(key)),
+							onImportSegmentFile: (key, file) => guardEdit(() => importSegmentAudio(key, file)),
+							onCompileInstall: () => guardEdit(compileInstallPack),
+							editConfirmOpen,
+							onConfirmEdit: confirmEdit,
+							onCancelEdit: cancelEdit,
+							packNameInput,
+							onPackNameInput: setPackNameInput,
+							onDownloadPack: downloadVoicePack,
+							onClose: () => setVoiceSettingsOpen(false),
+						})
+					: null,
 			);
 		}
 
@@ -2021,6 +3063,50 @@ window.__ModuleLoader__.load({
 			"balance.speechOff": "🔕 语音提醒：关",
 			"speech.dead": "主人，余额不足啦，我快饿晕了，快喂我吃 token！",
 			"speech.low": "主人，token 快吃完了，记得喂我哦！",
+			"balance.voiceSettings": "⚙ 语音设置",
+			"voice.title": "语音设置",
+			"voice.close": "关闭",
+			"voice.autoLabel": "自动播报（余额不足时提醒）",
+			"voice.ttsBackend": "TTS 后端",
+			"voice.ttsWeb": "浏览器内置语音",
+			"voice.ttsCustom": "自定义 TTS API",
+			"voice.ttsUrlPlaceholder": "https://tts.example.com/speak?text={text}&lang={lang}",
+			"voice.ttsUrlHint": "自定义后端经 host 代理调用（避免跨域）；占位符 {text} {lang} {rate}。",
+			"voice.test": "试听",
+			"voice.ttsTestText": "这是语音设置测试。",
+			"voice.packLabel": "语音包",
+			"voice.packNone": "未导入",
+			"voice.packLoaded": "已导入：{name}（{lang}）",
+			"voice.packImportPlaceholder": "选择 .zip 语音包文件导入",
+			"voice.packClear": "清除",
+			"voice.imported": "导入成功",
+			"voice.cleared": "已清除",
+			"voice.importFailed": "导入失败：格式不正确",
+			"voice.recorderLabel": "制作语音包（录音或导入音频）",
+			"voice.packNamePlaceholder": "语音包名称…",
+			"voice.download": "打包下载",
+			"voice.downloaded": "已打包下载，可直接分享",
+			"voice.compileInstall": "编译并应用",
+			"voice.compiled": "已编译并应用本机",
+			"voice.importFile": "导入文件",
+			"voice.segmentImported": "已导入音频",
+			"voice.editWarn": "已导入语音包「{name}」；继续编辑将覆盖其片段。",
+			"voice.continue": "继续编辑",
+			"voice.cancel": "取消",
+			"voice.recordHint": "逐段录制（浏览器麦克风，需授予权限；本地或 HTTPS 环境可用）或导入音频文件，编译为 zip 分享 / 应用本机。",
+			"voice.record": "录制",
+			"voice.stop": "停止",
+			"voice.play": "试听",
+			"voice.delete": "删除",
+			"voice.recorded": "✓ 已录制",
+			"voice.recordDenied": "无法访问麦克风（权限被拒或非安全上下文）",
+			"voice.seg.dead": "余额不足提醒",
+			"voice.seg.low": "低用量提醒",
+			"voice.seg.usage": "用量前缀",
+			"voice.seg.balance": "余额前缀",
+			"voice.seg.tokenUnit": "单位",
+			"voice.seg.month": "当月标签",
+			"voice.seg.suffix": "结尾",
 		};
 
 		/** 英文文案。 */
@@ -2092,6 +3178,50 @@ window.__ModuleLoader__.load({
 			"balance.speechOff": "🔕 Voice alerts: off",
 			"speech.dead": "Master, I'm out of tokens — please feed me!",
 			"speech.low": "Master, tokens are running low, remember to feed me!",
+			"balance.voiceSettings": "⚙ Voice settings",
+			"voice.title": "Voice settings",
+			"voice.close": "Close",
+			"voice.autoLabel": "Auto broadcast (balance alerts)",
+			"voice.ttsBackend": "TTS backend",
+			"voice.ttsWeb": "Browser built-in",
+			"voice.ttsCustom": "Custom TTS API",
+			"voice.ttsUrlPlaceholder": "https://tts.example.com/speak?text={text}&lang={lang}",
+			"voice.ttsUrlHint": "Custom backends are called via the host proxy (no CORS issues); placeholders: {text} {lang} {rate}.",
+			"voice.test": "Test",
+			"voice.ttsTestText": "This is a voice settings test.",
+			"voice.packLabel": "Voice pack",
+			"voice.packNone": "None",
+			"voice.packLoaded": "Loaded: {name} ({lang})",
+			"voice.packImportPlaceholder": "Choose a .zip voice pack to import",
+			"voice.packClear": "Clear",
+			"voice.imported": "Imported",
+			"voice.cleared": "Cleared",
+			"voice.importFailed": "Import failed: invalid format",
+			"voice.recorderLabel": "Create a voice pack (record or import audio)",
+			"voice.packNamePlaceholder": "Voice pack name…",
+			"voice.download": "Package & download",
+			"voice.downloaded": "Packaged — ready to share",
+			"voice.compileInstall": "Compile & apply",
+			"voice.compiled": "Compiled & applied locally",
+			"voice.importFile": "Import file",
+			"voice.segmentImported": "Audio imported",
+			"voice.editWarn": "A voice pack 「{name}」 is imported; continuing will overwrite its segments.",
+			"voice.continue": "Continue",
+			"voice.cancel": "Cancel",
+			"voice.recordHint": "Record each segment (browser microphone, permission required; localhost or HTTPS only) or import audio files, then compile to a shareable zip / apply locally.",
+			"voice.record": "Record",
+			"voice.stop": "Stop",
+			"voice.play": "Play",
+			"voice.delete": "Delete",
+			"voice.recorded": "✓ Recorded",
+			"voice.recordDenied": "Microphone unavailable (permission denied or insecure context)",
+			"voice.seg.dead": "Out-of-tokens alert",
+			"voice.seg.low": "Low-usage alert",
+			"voice.seg.usage": "Usage prefix",
+			"voice.seg.balance": "Balance prefix",
+			"voice.seg.tokenUnit": "Unit",
+			"voice.seg.month": "This-month label",
+			"voice.seg.suffix": "Suffix",
 		};
 
 		/**
