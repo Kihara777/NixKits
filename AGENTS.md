@@ -65,6 +65,9 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **每个模块必须有 `enable` 选项**，默认 `false`。
 - **依赖外部模块时必须添加 `assertions`**（参见 `comfyui-rocm.nix`）。
 - **避免硬编码路径**：优先从 config 推导（如 `hfCacheDir` 从 `config.users.users.<user>.home` 推导）。
+- **dsh 模块的 alpha 语义**（`modules/dsh.nix`，dsh ≥ 0.1.2-alpha；详见 `docs/zh/dsh.md`「局域网访问 / 免认证入口 / 插件兼容」章节）：
+  - web UI 入口按 Host authority 的 session cookie 认证——反代**不得重写 Host**（重写致永远 401），局域网 authority 必须列入 `trustedHosts`；LAN 认证 URL 经 `launchUrlFile` 捕获启动 token 生成，免认证入口经 `reverseProxy.autoAuth`（mod_magnet，禁用入口认证，仅可信局域网）。
+  - shared RPC channel interceptor 互斥（每 channel 仅一个，`/api` 已被内置 typert-gateway 独占）——第三方 dsh 插件提供 RPC 方法必须用精确 fetch route（`ctx.connection.fetch.register`，`/api/<plugin>/<method>`）自实现 `{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` envelope；插件 peer 依赖（`@deepseek-ai/dsh-tools` 等）必须与宿主 dsh 通道对齐。
 
 ### 文档
 
