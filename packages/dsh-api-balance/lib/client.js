@@ -89,6 +89,22 @@ window.__ModuleLoader__.load({
 			en: ["Welcome back!", "I'm here, master!", "Did you miss me?", "Let's have a great day!", "I've been waiting for you."],
 		};
 
+		/** 随机播放一个问候/放置音效：语音包 greetings 优先，无则 TTS 池。 */
+		function playRandomGreeting(lang, ttsConfig, pack) {
+			const greetings = pack !== null && typeof pack === "object" && Array.isArray(pack.greetings) ? pack.greetings : [];
+			if (greetings.length > 0) {
+				const pick = greetings[Math.floor(Math.random() * greetings.length)];
+				if (pick !== null && typeof pick === "object" && typeof pick.url === "string") {
+					stopActiveSpeech();
+					playAudioSrc(pick.url).catch(() => {});
+					return;
+				}
+			}
+			const table = GREETING_TTS_POOL[lang] ?? GREETING_TTS_POOL["zh-CN"];
+			stopActiveSpeech();
+			ttsSpeak(table[Math.floor(Math.random() * table.length)], lang, ttsConfig).catch(() => {});
+		}
+
 		/** 语音提醒开关（localStorage 持久化，默认开启）。 */
 		function speechEnabled() {
 			if (typeof window === "undefined") return false;
@@ -1891,19 +1907,7 @@ window.__ModuleLoader__.load({
 						if (pageGreetingPlayed || !speechEnabled()) return;
 						pageGreetingPlayed = true;
 						window.setTimeout(() => {
-							const pack = voicePackRef.current;
-							const greetings = pack !== null && Array.isArray(pack.greetings) ? pack.greetings : [];
-							if (greetings.length > 0) {
-								const pick = greetings[Math.floor(Math.random() * greetings.length)];
-								if (pick !== null && typeof pick === "object" && typeof pick.url === "string") {
-									stopActiveSpeech();
-									playAudioSrc(pick.url).catch(() => {});
-									return;
-								}
-							}
-							const table = GREETING_TTS_POOL[uiLocale] ?? GREETING_TTS_POOL["zh-CN"];
-							stopActiveSpeech();
-							ttsSpeak(table[Math.floor(Math.random() * table.length)], uiLocale, ttsCfgRef.current).catch(() => {});
+							playRandomGreeting(uiLocale, ttsCfgRef.current, voicePackRef.current);
 						}, 1200);
 					})
 					.catch(() => {});
@@ -2297,6 +2301,10 @@ window.__ModuleLoader__.load({
 					disabled: refreshing,
 					onClick: () => {
 						void load(true);
+						// 手动刷新也触发随机问候音效（语音播报开启时）。
+						if (speechEnabled()) {
+							playRandomGreeting(uiLocale, ttsCfgRef.current, voicePackRef.current);
+						}
 					},
 					style: {
 						display: "inline-flex",
@@ -3506,7 +3514,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "语音设置",
 			"voice.close": "关闭",
 			"voice.autoLabel": "自动播报（余额不足时提醒）",
-			"voice.greetingHint": "开启后每次刷新页面会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
+			"voice.greetingHint": "开启后每次刷新页面或点击「刷新数据」按钮都会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
 			"voice.ttsBackend": "TTS 后端",
 			"voice.ttsWeb": "浏览器内置语音",
 			"voice.ttsCustom": "自定义 TTS API",
@@ -3636,7 +3644,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "Voice settings",
 			"voice.close": "Close",
 			"voice.autoLabel": "Auto broadcast (balance alerts)",
-			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh (pack greeting audio, or a TTS greeting otherwise).",
+			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh and on each manual 「Refresh data」 click (pack greeting audio, or a TTS greeting otherwise).",
 			"voice.ttsBackend": "TTS backend",
 			"voice.ttsWeb": "Browser built-in",
 			"voice.ttsCustom": "Custom TTS API",
