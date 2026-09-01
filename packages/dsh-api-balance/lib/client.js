@@ -2851,18 +2851,54 @@ window.__ModuleLoader__.load({
 				);
 			};
 
-			// 消耗窗口行：`¥0.12 · 入 1.2k · 出 800`。
-			const usageWindowRow = (window) => {
+			// 指标子行（标题左、正文右，单行短文本——最大程度节约横向宽度）。
+			const metricRow = (label, value, extra) =>
+				react.createElement(
+					"div",
+					{
+						key: extra?.key,
+						style: {
+							display: "flex",
+							alignItems: "baseline",
+							gap: "8px",
+							padding: "1px 0",
+							paddingLeft: extra?.indent === true ? "10px" : 0,
+						},
+					},
+					react.createElement(
+						"span",
+						{ style: { fontSize: "10px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)", flexShrink: 0 } },
+						label,
+					),
+					react.createElement(
+						"span",
+						{
+							style: {
+								fontSize: "12px",
+								lineHeight: "16px",
+								color: "var(--dsw-alias-label-primary)",
+								fontVariantNumeric: "tabular-nums",
+								marginLeft: "auto",
+								whiteSpace: "nowrap",
+							},
+						},
+						value,
+					),
+				);
+
+			// 消耗窗口：金额 / 入 / 缓存命中 / 出 拆为子行（进一步节约横向宽度）。
+			const usageWindowRows = (window) => {
 				const costs = Object.entries(window?.costByCurrency ?? {});
-				const parts = [];
-				for (const [currency, cost] of costs) {
-					parts.push(`${formatCost(cost)}${currency.length > 0 ? ` ${currency}` : ""}`);
-				}
-				if (parts.length === 0) parts.push(formatCost(0));
-				parts.push(`${t("balance.in")} ${formatTokens(window?.miss ?? 0)}`);
-				parts.push(`${t("balance.cacheHit")} ${formatTokens(window?.hit ?? 0)}`);
-				parts.push(`${t("balance.out")} ${formatTokens(window?.completion ?? 0)}`);
-				return parts.join(" · ");
+				const costText =
+					costs.length > 0
+						? costs.map(([currency, cost]) => `${formatCost(cost)}${currency.length > 0 ? ` ${currency}` : ""}`).join(" · ")
+						: formatCost(0);
+				return [
+					metricRow(t("speech.costLabel"), costText),
+					metricRow(t("balance.in"), formatTokens(window?.miss ?? 0)),
+					metricRow(t("balance.cacheHit"), formatTokens(window?.hit ?? 0)),
+					metricRow(t("balance.out"), formatTokens(window?.completion ?? 0)),
+				];
 			};
 
 			// 「余额」标签内容。
@@ -2919,20 +2955,31 @@ window.__ModuleLoader__.load({
 					speakNowParts(parts, uiLocale, ttsCfgRef.current, voicePackRef.current);
 				};
 				const rows = [];
-				rows.push(detailRow(t("balance.key"), balance.keyHint ?? "—"));
+				// 账户信息合并块：key 尾号 / 状态 / 各币种余额一行；充值按钮在标题右侧。
+				const accountParts = [
+					balance.keyHint ?? "—",
+					balance.isAvailable === true ? t("balance.available") : t("balance.unavailable"),
+					...infos.map((info) => `${info.totalBalance}${info.currency ? ` ${info.currency}` : ""}`),
+				];
 				rows.push(
-					detailRow(
-						t("balance.status"),
+					react.createElement(
+						"div",
+						{ key: "account", style: { padding: "3px 0" } },
 						react.createElement(
-							"span",
-							{ style: { display: "inline-flex", alignItems: "center", gap: "6px" } },
-							balance.isAvailable === true ? t("balance.available") : t("balance.unavailable"),
+							"div",
+							{ style: { display: "flex", alignItems: "center", gap: "8px" } },
+							react.createElement(
+								"dt",
+								{ style: { margin: 0, fontSize: "10px", lineHeight: "14px", color: "var(--dsw-alias-label-tertiary)" } },
+								t("balance.accountInfo"),
+							),
 							react.createElement(
 								"button",
 								{
 									type: "button",
 									onClick: () => setTopupOpen(true),
 									style: {
+										marginLeft: "auto",
 										padding: "0 8px",
 										borderRadius: "999px",
 										cursor: "pointer",
@@ -2946,23 +2993,27 @@ window.__ModuleLoader__.load({
 								t("balance.topup"),
 							),
 						),
+						react.createElement(
+							"dd",
+							{
+								style: {
+									margin: 0,
+									fontSize: "12px",
+									lineHeight: "18px",
+									color: "var(--dsw-alias-label-primary)",
+									fontVariantNumeric: "tabular-nums",
+									overflowWrap: "anywhere",
+								},
+							},
+							accountParts.join(" · "),
+						),
 					),
 				);
-				// 各币种总余额（逐币种透传，无币种假设）。
-				infos.forEach((info, index) => {
-					rows.push(
-						detailRow(
-							`${t("balance.total")}${info.currency ? ` (${info.currency})` : ""}`,
-							info.totalBalance ?? "—",
-							{ key: `total-${index}` },
-						),
-					);
-				});
 				// 当日 / 当月 / 30日内消耗（金额 + token）。
 				if (usageWindows !== null) {
-					rows.push(detailRow(t("balance.today"), usageWindowRow(usageWindows.today), { key: "w-today" }));
-					rows.push(detailRow(t("balance.month"), usageWindowRow(usageWindows.month), { key: "w-month" }));
-					rows.push(detailRow(t("balance.last30d"), usageWindowRow(usageWindows.last30d), { key: "w-last30d" }));
+					rows.push(detailRow(t("balance.today"), usageWindowRows(usageWindows.today), { key: "w-today" }));
+					rows.push(detailRow(t("balance.month"), usageWindowRows(usageWindows.month), { key: "w-month" }));
+					rows.push(detailRow(t("balance.last30d"), usageWindowRows(usageWindows.last30d), { key: "w-last30d" }));
 				} else {
 					const isNoToken = usage !== null && usage.status === "no-token";
 					rows.push(
@@ -2991,7 +3042,12 @@ window.__ModuleLoader__.load({
 						rows.push(
 							detailRow(
 								modelRow.model.length > 0 ? modelRow.model : t("balance.allModels"),
-								`${t("balance.in")} ${formatTokens(modelRow.miss)} · ${t("balance.cacheHit")} ${formatTokens(modelRow.hit)} · ${t("balance.out")} ${formatTokens(modelRow.completion)}${modelRow.cost > 0 ? ` · ${formatCost(modelRow.cost)}` : ""}`,
+								[
+									metricRow(t("balance.in"), formatTokens(modelRow.miss), { indent: true }),
+									metricRow(t("balance.cacheHit"), formatTokens(modelRow.hit), { indent: true }),
+									metricRow(t("balance.out"), formatTokens(modelRow.completion), { indent: true }),
+									metricRow(t("speech.costLabel"), modelRow.cost > 0 ? formatCost(modelRow.cost) : "—", { indent: true }),
+								],
 								{ key: `m-${index}`, labelStyle: { paddingLeft: "10px", fontSize: "11px" }, valueStyle: { fontSize: "11px" } },
 							),
 						);
@@ -3393,10 +3449,12 @@ window.__ModuleLoader__.load({
 								boxSizing: "border-box",
 								border: "1px solid var(--dsw-alias-border-inverted)",
 								background: "var(--dsw-specific-menu)",
-								// 横向宽度尽量小：两标签页统一 264px（与原始用量圆圈一致），
-								// 行内容为「标题/正文」两行布局；只有内容在窄屏下仍溢出时才
-								// 出现横向滚动（overflow-x:auto）。上限 = 锚点右缘 − 工具栏。
-								width: "264px",
+								// 横向宽度动态：按内容自适应（max-content），最小 264px
+								// 保底；行内容为「标题/正文」两行 + 指标子行，天然窄。
+								// 只有内容在窄屏下仍溢出时才出现横向滚动
+								// （overflow-x:auto）。上限 = 锚点右缘 − 工具栏。
+								width: "max-content",
+								minWidth: "264px",
 								maxWidth: `${panelMaxWidth}px`,
 								overflowX: "auto",
 								boxShadow: "var(--dsw-shadow-lv3)",
@@ -3673,6 +3731,8 @@ window.__ModuleLoader__.load({
 			"balance.error": "余额查询失败",
 			"balance.refresh": "刷新数据",
 			"balance.key": "API Key",
+			"balance.accountInfo": "Account",
+			"balance.accountInfo": "账户信息",
 			"balance.status": "账户状态",
 			"balance.available": "余额充足",
 			"balance.unavailable": "余额不足",
