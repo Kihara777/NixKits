@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T10:27:06+09:00
+
+**摘要**: feat(dsh-api-balance): 音声試聴 — library list pack 展開対応全音声一条毎試聴 — packs 視図下部独立 test 音声按鈕削除；各行展開 toggle（▸/▾）追加、展開時全対応音声（segment + 挨拶）一覧 ▶ one click 試聴可。active pack 限定非、任意 import 済 pack 試聴可能。
+
+| 提交 | 説明 |
+|------|------|
+| `04facc1` | feat(dsh-api-balance): 音声試聴 — pack 展開対応全音声逐条試聴 |
+
 ## 2026-09-01T10:20:14+09:00
 
 **摘要**: fix/feat(dsh-api-balance): 「入」与缓存命中分離官方基準一致 + 挨拶 list 編集与 TTS 揃 sample text — 「当日入 200M」水増調査：官方 API token bucket PROMPT_CACHE_HIT_TOKEN（当日 228M 大半占）含、従前缓存命中「入」合算。官方使用量頁分項基準一致（入 = 未命中輸入限定、缓存命中別掲）、window 行 / 模型別行 / chart 切替放送分離 cacheHitLabel segment 追加。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、manifest.greetings 打包）追加。segment key today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix 再構成、sample text 預設 TTS 兜底文案一字一句一致。chart 切替放送全數據（入 / 缓存命中 / 出 / 金額幣種）網羅。

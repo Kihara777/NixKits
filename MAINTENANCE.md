@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:27:06+09:00
+
+**摘要**：feat(dsh-api-balance): 语音试听 — 语音包列表内展开逐条试听全部支持音频 — 移除 packs 视图底部的独立测试音频按钮；每个语音包行新增展开开关（▸/▾），展开后逐条列出该包全部支持音频（片段 + 问候语）并可一键 ▶ 试听，任意导入的包均可试听而不限于当前激活包
+
+| 提交 | 说明 |
+|------|------|
+| `04facc1` | feat(dsh-api-balance): 语音试听 — 语音包列表内展开逐条试听全部支持音频 |
+
 ## 2026-09-01T10:20:14+09:00
 
 **摘要**：fix/feat(dsh-api-balance): 「入」与「缓存命中」拆分对齐官方口径 + 问候语列表编辑与示例文本对齐 TTS — 排查「当日入 200M」虚高：官方 API 的 token 桶含 PROMPT_CACHE_HIT_TOKEN（当日 228M 占绝对多数），此前把缓存命中折进「入」导致膨胀；现与官方用量页分项口径一致（入 = 仅缓存未命中输入、缓存命中单列），窗口行 / 分模型行 / 图表切换播报同步拆分并新增 cacheHitLabel 语音包片段；制作器新增问候语列表编辑（添加 / 移除槽位、逐条录制 / 导入 / 试听 / 删除，打包编入 manifest.greetings）；片段键重构为 today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix，示例文本与默认 TTS 兜底文案一字不差；图表切换播报补全三组数据（入 / 缓存命中 / 出 / 金额币种）

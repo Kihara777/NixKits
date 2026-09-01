@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:27:06+09:00
+
+**Summary**: feat(dsh-api-balance): voice audition — expand a pack in the library list to play all of its supported audio one by one — the standalone test-audio buttons at the bottom of the packs view are removed; each pack row gains an expand toggle (▸/▾) that lists every supported audio entry (segments + greetings) with a one-click ▶ play button, so any imported pack can be auditioned, not just the active one.
+
+| Commit | Description |
+|------|------|
+| `04facc1` | feat(dsh-api-balance): voice audition — per-pack expandable audio preview |
+
 ## 2026-09-01T10:20:14+09:00
 
 **Summary**: fix/feat(dsh-api-balance): split 「in」 from cache hits to match the official usage page + greeting list editor and TTS-aligned sample texts — investigated the inflated 200M 「today in」: the official API's token buckets include PROMPT_CACHE_HIT_TOKEN (228M today, the dominant share), which we previously folded into 「in」; now the panel matches the official itemization (in = uncached input only, cache hits listed separately) across the window rows, per-model rows, and the chart-toggle broadcast, with a new cacheHitLabel voice-pack segment. The creator gains a greeting list editor (add/remove slots, per-entry record/import/play/delete, packaged into manifest.greetings); segment keys are reworked to today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix with sample texts matching the default TTS fallbacks exactly; the chart-toggle broadcast now covers the full data set (in / cache hit / out / cost with currency).
