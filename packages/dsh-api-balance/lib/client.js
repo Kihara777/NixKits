@@ -81,8 +81,6 @@ window.__ModuleLoader__.load({
 		const HUNGRY_POLL_INTERVAL_MS = 15 * 60 * 1000;
 		let lastHungrySpeechAt = 0;
 
-		/** 页面刷新问候音效：每个页面加载（JS 上下文）只播一次，随机选一。 */
-		let pageGreetingPlayed = false;
 		/** TTS 问候语池（语音包无问候音频时随机取一条；语言跟随界面语言）。 */
 		const GREETING_TTS_POOL = {
 			"zh-CN": ["欢迎回来～", "主人，我在这儿哦！", "想我了吗？", "今天也要元气满满呀！", "我一直在等你回来。"],
@@ -917,18 +915,26 @@ window.__ModuleLoader__.load({
 		function Pager({ pages, pageIndex, onPageChange, t }) {
 			const [drag, setDrag] = react.useState(null); // {startX, startY, dx, dy, captured}
 			const [pageW, setPageW] = react.useState(220);
+			// 区域高度跟随「当前页」内容自动增加与回收：容器高度 = 当前页
+			// 实测高度（offsetHeight），切页/内容变化时重测；非当前页按
+			// flex-start 自然高度渲染（平移出视图，超高部分由容器裁剪）。
+			const [pageH, setPageH] = react.useState(null);
 			const pageRefs = react.useRef([]);
 			const count = Array.isArray(pages) ? pages.length : 0;
 			const clampIndex = (i) => Math.max(0, Math.min(count - 1, i));
-			// 实测各页内容宽度（溢出可见，scrollWidth = 内容宽度）；
-			// 数据/图表变化（pages 引用变化）后重测。
+			// 实测各页内容宽度（溢出可见，scrollWidth = 内容宽度）与当前
+			// 页高度；数据/图表变化（pages 引用变化）或切页后重测。
 			react.useLayoutEffect(() => {
 				let w = 220;
 				for (const el of pageRefs.current) {
 					if (el !== null && Number.isFinite(el.scrollWidth)) w = Math.max(w, Math.ceil(el.scrollWidth));
 				}
 				setPageW(w);
-			}, [pages]);
+				const active = pageRefs.current[pageIndex] ?? null;
+				if (active !== null && Number.isFinite(active.offsetHeight)) {
+					setPageH(Math.ceil(active.offsetHeight));
+				}
+			}, [pages, pageIndex]);
 			const onPointerDown = (event) => {
 				if (count < 2) return;
 				setDrag({ startX: event.clientX, startY: event.clientY, dx: 0, dy: 0, captured: false });
@@ -1002,6 +1008,7 @@ window.__ModuleLoader__.load({
 							display: "flex",
 							overflow: "hidden",
 							width: `${pageW}px`,
+							height: pageH !== null ? `${pageH}px` : void 0,
 							touchAction: "pan-y",
 							cursor: count > 1 ? "grab" : "default",
 						},
@@ -1021,6 +1028,7 @@ window.__ModuleLoader__.load({
 								style: {
 									flex: "0 0 auto",
 									width: `${pageW}px`,
+									alignSelf: "flex-start",
 									transform: `translateX(${offsetPx}px)`,
 									transition: drag === null ? "transform .22s ease" : "none",
 								},
@@ -2579,12 +2587,14 @@ window.__ModuleLoader__.load({
 			};
 
 			// 「余额」标签完整继承原「刷新数据」按钮：点击即强制刷新
-			// （绕过 host 缓存）+ 随机问候音效（语音播报开启时）。
+			// （绕过 host 缓存）。问候仅手动刷新时播（已加载过数据的
+			// 再次刷新）；初始化（首次加载）仅按自动播报设置播报用量警告。
 			const switchTab = (next) => {
 				setTab(next);
 				if (next === TAB_BALANCE && balanceState !== "loading") {
+					const isInitialLoad = balance === null;
 					void load(true);
-					if (speechEnabled()) {
+					if (!isInitialLoad && speechEnabled()) {
 						playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
 					}
 				}
@@ -2789,16 +2799,10 @@ window.__ModuleLoader__.load({
 				return null;
 			};
 			react.useEffect(() => {
-				refreshPacks()
-					.then(() => {
-						// 页面刷新问候音效：语音播报开启时随机播放一个（每页一次）。
-						if (pageGreetingPlayed || !speechEnabled()) return;
-						pageGreetingPlayed = true;
-						window.setTimeout(() => {
-							playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
-						}, 1200);
-					})
-					.catch(() => {});
+				// 页面初始化不播问候：问候仅由手动刷新（「余额」标签）触发；
+				// 初始化数据加载后仅按自动播报设置播报余额警告（load →
+				// announceHunger，受语音提醒开关与 30 分钟限流约束）。
+				refreshPacks().catch(() => {});
 			}, []);
 			const [packBusy, setPackBusy] = react.useState(false);
 			const [packMessage, setPackMessage] = react.useState("");
@@ -4385,7 +4389,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "语音设置",
 			"voice.close": "关闭",
 			"voice.autoLabel": "自动播报（余额不足时提醒）",
-			"voice.greetingHint": "开启后每次刷新页面或点击「余额」标签（刷新）都会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
+			"voice.greetingHint": "开启后点击「余额」标签（手动刷新）会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）；页面初始化不播问候，仅按自动播报设置播报余额警告。",
 			"voice.ttsBackend": "TTS 后端",
 			"voice.ttsWeb": "浏览器内置语音",
 			"voice.ttsCustom": "自定义 TTS API",
@@ -4411,7 +4415,7 @@ window.__ModuleLoader__.load({
 			"voice.langLabel": "语音包语言（决定示例文本与清单 lang）",
 			"voice.sampleText": "示例文本",
 			"voice.recordingTitle": "录制中：{label}",
-			"voice.greetingSection": "问候语（页面刷新时随机播放一个）",
+			"voice.greetingSection": "问候语（点击「余额」标签手动刷新时随机播放一个）",
 			"voice.greetingLabel": "问候 {n}",
 			"voice.addGreeting": "添加问候",
 			"voice.auditionToggle": "展开语音试听",
@@ -4542,7 +4546,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "Voice settings",
 			"voice.close": "Close",
 			"voice.autoLabel": "Auto broadcast (balance alerts)",
-			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh and on each click of the 「Balance」 tab (refresh) (pack greeting audio, or a TTS greeting otherwise).",
+			"voice.greetingHint": "When enabled, clicking the 「Balance」 tab (manual refresh) plays a random greeting (pack greeting audio, or a TTS greeting otherwise); page initialization plays no greeting — only the balance warnings per the auto-broadcast setting.",
 			"voice.ttsBackend": "TTS backend",
 			"voice.ttsWeb": "Browser built-in",
 			"voice.ttsCustom": "Custom TTS API",
@@ -4568,7 +4572,7 @@ window.__ModuleLoader__.load({
 			"voice.langLabel": "Pack language (drives sample texts and manifest lang)",
 			"voice.sampleText": "Sample text",
 			"voice.recordingTitle": "Recording: {label}",
-			"voice.greetingSection": "Greetings (a random one plays on page refresh)",
+			"voice.greetingSection": "Greetings (a random one plays on manual refresh via the Balance tab)",
 			"voice.greetingLabel": "Greeting {n}",
 			"voice.addGreeting": "Add greeting",
 			"voice.auditionToggle": "Toggle audition",
