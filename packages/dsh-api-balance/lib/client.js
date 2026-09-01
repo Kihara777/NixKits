@@ -912,7 +912,7 @@ window.__ModuleLoader__.load({
 		 * 横向拖拽/滑动翻页（touch-action: pan-y 保留面板纵向滚动；
 		 * 拖过阈值后才启用指针捕获，避免误吞页面内按钮的点击）。
 		 */
-		function Pager({ pages, pageIndex, onPageChange, t }) {
+		function Pager({ pages, pageIndex, onPageChange, t, fitWidth }) {
 			const [drag, setDrag] = react.useState(null); // {startX, startY, dx, dy, captured}
 			const [pageW, setPageW] = react.useState(220);
 			// 区域高度跟随「当前页」内容自动增加与回收：容器高度 = 当前页
@@ -921,6 +921,10 @@ window.__ModuleLoader__.load({
 			const [pageH, setPageH] = react.useState(null);
 			const pageRefs = react.useRef([]);
 			const count = Array.isArray(pages) ? pages.length : 0;
+			// 内容超出面板宽度（手机竖屏窄屏）：横向手势必须交给面板的
+			// 原生横向滚动（touch-action: auto + 停用拖拽翻页），翻页仅经
+			// 上方指示点；不超出时保留 pan-y + 拖拽/滑动翻页。
+			const overflowing = Number.isFinite(fitWidth) && pageW > fitWidth + 1;
 			const clampIndex = (i) => Math.max(0, Math.min(count - 1, i));
 			// 实测各页内容宽度（溢出可见，scrollWidth = 内容宽度）与当前
 			// 页高度；数据/图表变化（pages 引用变化）或切页后重测。
@@ -936,7 +940,7 @@ window.__ModuleLoader__.load({
 				}
 			}, [pages, pageIndex]);
 			const onPointerDown = (event) => {
-				if (count < 2) return;
+				if (count < 2 || overflowing) return;
 				setDrag({ startX: event.clientX, startY: event.clientY, dx: 0, dy: 0, captured: false });
 			};
 			const onPointerMove = (event) => {
@@ -1009,8 +1013,8 @@ window.__ModuleLoader__.load({
 							overflow: "hidden",
 							width: `${pageW}px`,
 							height: pageH !== null ? `${pageH}px` : void 0,
-							touchAction: "pan-y",
-							cursor: count > 1 ? "grab" : "default",
+							touchAction: overflowing ? "auto" : "pan-y",
+							cursor: overflowing ? "auto" : count > 1 ? "grab" : "default",
 						},
 						onPointerDown: onPointerDown,
 						onPointerMove: onPointerMove,
@@ -3721,6 +3725,7 @@ window.__ModuleLoader__.load({
 						balanceBody,
 						react.createElement(Pager, {
 							t,
+							fitWidth: Math.round((panelWidth ?? 264) - 24),
 							pages: [
 								react.createElement("dl", { key: "page-windows", style: { margin: 0 } }, windowRows),
 								react.createElement(
