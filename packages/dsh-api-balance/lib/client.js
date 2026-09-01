@@ -90,20 +90,29 @@ window.__ModuleLoader__.load({
 			ja: ["おかえりなさい！", "マスター、ここにいますよ！", "会いたかったです！", "今日も元気いっぱい！", "ずっと待っていました。"],
 		};
 
-		/** 随机播放一个问候/放置音效：语音包 greetings 优先，无则 TTS 池。 */
-		function playRandomGreeting(lang, ttsConfig, pack) {
+		/** 随机播放一个问候/放置音效：语音包 greetings 优先，无则 TTS 池。
+		 * 高峰计费时段播完问候后追加高峰提示（语音包 peak 片段优先，无则 TTS）。 */
+		function playRandomGreeting(t, lang, ttsConfig, pack) {
+			const playPeakHint = async () => {
+				if (!isPeakPricing()) return;
+				try {
+					await playParts([{ kind: "pack", key: "peak", fallbackText: t("speech.peakHint") }], lang, ttsConfig, pack);
+				} catch {
+					// 语音不可用时静默
+				}
+			};
 			const greetings = pack !== null && typeof pack === "object" && Array.isArray(pack.greetings) ? pack.greetings : [];
 			if (greetings.length > 0) {
 				const pick = greetings[Math.floor(Math.random() * greetings.length)];
 				if (pick !== null && typeof pick === "object" && typeof pick.url === "string") {
 					stopActiveSpeech();
-					playAudioSrc(pick.url).catch(() => {});
+					playAudioSrc(pick.url).then(playPeakHint).catch(() => {});
 					return;
 				}
 			}
 			const table = GREETING_TTS_POOL[lang] ?? GREETING_TTS_POOL["zh-CN"];
 			stopActiveSpeech();
-			ttsSpeak(table[Math.floor(Math.random() * table.length)], lang, ttsConfig).catch(() => {});
+			ttsSpeak(table[Math.floor(Math.random() * table.length)], lang, ttsConfig).then(playPeakHint).catch(() => {});
 		}
 
 		/** 语音提醒开关（localStorage 持久化，默认开启）。 */
@@ -236,6 +245,81 @@ window.__ModuleLoader__.load({
 			} else if (enterSwapInstalled) {
 				enterSwapInstalled = false;
 				document.removeEventListener("keydown", enterSwapHandler, true);
+			}
+		}
+
+		// ── 峰谷计费高峰时段 + 移动端键盘守护 ──────────────────────
+		/**
+		 * DeepSeek 峰谷计费高峰时段判定（北京时间 UTC+8）。现行官方规则
+		 * （api-docs.deepseek.com/quick_start/pricing 脚注 (1)）：
+		 * 高峰 = 周一至周五 UTC 01:00–04:00、06:00–10:00（即北京时间
+		 * 09:00–12:00、14:00–18:00），其余时间（含周末全天）按低谷价。
+		 */
+		function isPeakPricing(now = new Date()) {
+			// now 为绝对时刻：直接加 8 小时得到北京时间墙钟，读 UTC 字段。
+			const beijing = new Date(now.getTime() + 480 * 60_000);
+			const day = beijing.getUTCDay();
+			if (day === 0 || day === 6) return false;
+			const minutes = beijing.getUTCHours() * 60 + beijing.getUTCMinutes();
+			return (minutes >= 540 && minutes < 720) || (minutes >= 840 && minutes < 1080);
+		}
+		/** 高峰时段图表的红色系配色（替代常规模型色板）。 */
+		const PEAK_PALETTE = ["#e5484d", "#dc2626", "#f87171", "#ef4444", "#fca5a5", "#b91c1c", "#f97316", "#7f1d1d"];
+
+		/** 移动端会话切换不弹键盘开关（localStorage 持久化，默认开启）。 */
+		const MOBILE_KB_STORE_KEY = "dsh-api-balance-mobile-kb";
+		function mobileKbGuardEnabled() {
+			if (typeof window === "undefined") return false;
+			try {
+				return window.localStorage.getItem(MOBILE_KB_STORE_KEY) !== "off";
+			} catch {
+				return true;
+			}
+		}
+		function setMobileKbGuardEnabled(enabled) {
+			try {
+				window.localStorage.setItem(MOBILE_KB_STORE_KEY, enabled ? "on" : "off");
+			} catch {
+				// 存储不可用则本次会话生效
+			}
+		}
+		/**
+		 * 移动端切换会话时 DSH 会程序化聚焦输入框（软键盘自动弹出）。
+		 * 守护在 focusin 捕获阶段拦下「非用户点按触发的聚焦」（focusin
+		 * 可取消，preventDefault 后元素不获得焦点、键盘不弹出）；用户近期
+		 * 点按过输入框（touch/pointer 记录时间戳）则放行，正常输入不受影响。
+		 */
+		let mobileKbGuardInstalled = false;
+		let lastComposerTouchAt = 0;
+		function composerTouchTracker(event) {
+			const target = event.target;
+			if (target instanceof Element && target.closest('[data-composer-input="true"]') !== null) {
+				lastComposerTouchAt = Date.now();
+			}
+		}
+		function mobileKbGuardHandler(event) {
+			if (mobileKbGuardInstalled !== true) return;
+			if (!isTouchDevice()) return;
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			if (target.closest('[data-composer-input="true"]') === null) return;
+			if (Date.now() - lastComposerTouchAt < 800) return;
+			event.preventDefault();
+		}
+		function applyMobileKbGuard(enabled) {
+			if (typeof document === "undefined") return;
+			if (enabled) {
+				if (!mobileKbGuardInstalled) {
+					mobileKbGuardInstalled = true;
+					document.addEventListener("pointerdown", composerTouchTracker, true);
+					document.addEventListener("touchstart", composerTouchTracker, true);
+					document.addEventListener("focusin", mobileKbGuardHandler, true);
+				}
+			} else if (mobileKbGuardInstalled) {
+				mobileKbGuardInstalled = false;
+				document.removeEventListener("pointerdown", composerTouchTracker, true);
+				document.removeEventListener("touchstart", composerTouchTracker, true);
+				document.removeEventListener("focusin", mobileKbGuardHandler, true);
 			}
 		}
 
@@ -491,6 +575,7 @@ window.__ModuleLoader__.load({
 		const VOICEPACK_SEGMENT_KEYS = [
 			"dead",
 			"low",
+			"peak",
 			"today",
 			"month",
 			"inLabel",
@@ -505,6 +590,7 @@ window.__ModuleLoader__.load({
 		 * 制作器示例文本（随语音包语言选择变化）。为「贴近默认 TTS 体验」，
 		 * 示例文本与无语音包时 TTS 兜底文案保持一字不差：
 		 *  - dead/low 对应 t("speech.dead") / t("speech.low") 文案
+		 *  - peak 对应 t("speech.peakHint")（高峰计费时段提示）
 		 *  - today/month 对应 t("balance.today") / t("balance.month")
 		 *  - inLabel/outLabel 对应 t("balance.in") / t("balance.out")
 		 *  - costLabel 对应 t("speech.costLabel")，tokenUnit 对应 t("speech.tokenUnit")
@@ -514,6 +600,7 @@ window.__ModuleLoader__.load({
 			"zh-CN": {
 				dead: "主人，余额不足啦，我快饿晕了，快喂我吃 token！",
 				low: "主人，token 快吃完了，记得喂我哦！",
+				peak: "现在是高峰计费时段，请留意用量哦～",
 				today: "当日消耗",
 				month: "当月消耗",
 				inLabel: "入",
@@ -526,6 +613,7 @@ window.__ModuleLoader__.load({
 			en: {
 				dead: "Master, I'm out of tokens — please feed me!",
 				low: "Master, tokens are running low, remember to feed me!",
+				peak: "We're in the peak pricing period now — mind your usage!",
 				today: "Today",
 				month: "This month",
 				inLabel: "in",
@@ -538,6 +626,7 @@ window.__ModuleLoader__.load({
 			ja: {
 				dead: "残高がありません、お腹ペコペコです。トークンをちょうだい！",
 				low: "トークンが残りわずかです。補充を忘れずに！",
+				peak: "今はピーク課金時間帯です。使用量にご注意ください！",
 				today: "今日",
 				month: "今月",
 				inLabel: "入力",
@@ -760,7 +849,7 @@ window.__ModuleLoader__.load({
 		 * { daily: [{date, models:[{model, cost}]}], monthly: [...] }；
 		 * mode 切换按日 / 按月视图。柱高按金额比例，段色按模型名稳定分配。
 		 */
-		function UsageChart({ t, series, mode, onModeChange, width }) {
+		function UsageChart({ t, series, mode, onModeChange, width, peak }) {
 			const points = Array.isArray(mode === "daily" ? series.daily : series.monthly)
 				? mode === "daily"
 					? series.daily
@@ -772,7 +861,11 @@ window.__ModuleLoader__.load({
 			const modelSet = new Set();
 			for (const point of points) for (const entry of point.models) modelSet.add(entry.model);
 			const models = [...modelSet].sort();
-			const palette = ["#5b8def", "#a78bfa", "#34d399", "#fbbf24", "#f87171", "#22d3ee", "#fb923c", "#a3b18a"];
+			// 高峰计费时段：整图红色系（替代常规模型色板）。
+			const palette =
+				peak === true
+					? PEAK_PALETTE
+					: ["#5b8def", "#a78bfa", "#34d399", "#fbbf24", "#f87171", "#22d3ee", "#fb923c", "#a3b18a"];
 			const colorOf = (model) => palette[models.indexOf(model) % palette.length];
 			const totalOf = (point) => point.models.reduce((sum, entry) => sum + entry.cost, 0);
 			const maxTotal = Math.max(1, ...points.map(totalOf));
@@ -859,6 +952,24 @@ window.__ModuleLoader__.load({
 						{ style: { fontSize: "11px", color: "var(--dsw-alias-label-tertiary)" } },
 						t("chart.title"),
 					),
+					peak === true
+						? react.createElement(
+								"span",
+								{
+									title: t("chart.peakHint"),
+									style: {
+										padding: "0 6px",
+										borderRadius: "999px",
+										background: "rgba(229, 72, 77, 0.16)",
+										color: "var(--dsw-alias-danger-primary, #e5484d)",
+										fontSize: "10px",
+										lineHeight: "16px",
+										whiteSpace: "nowrap",
+									},
+								},
+								t("chart.peakBadge"),
+							)
+						: null,
 					react.createElement(
 						"span",
 						{ style: { marginLeft: "auto", display: "flex", gap: "4px" } },
@@ -1973,6 +2084,8 @@ window.__ModuleLoader__.load({
 			onToggleStatsScroll,
 			enterSwapOn,
 			onToggleEnterSwap,
+			mobileKbGuardOn,
+			onToggleMobileKbGuard,
 		}) {
 			const overlayStyle = {
 				position: "fixed",
@@ -2060,6 +2173,7 @@ window.__ModuleLoader__.load({
 				null,
 				settingRow("settings.statsLabel", statsScrollOn, onToggleStatsScroll, "settings.statsHint"),
 				settingRow("settings.enterLabel", enterSwapOn, onToggleEnterSwap, "settings.enterHint"),
+				settingRow("settings.mobileKbLabel", mobileKbGuardOn, onToggleMobileKbGuard, "settings.mobileKbHint"),
 			);
 			return reactDOM.createPortal(
 				react.createElement(
@@ -2138,36 +2252,33 @@ window.__ModuleLoader__.load({
 			const [connectState, setConnectState] = react.useState("idle");
 			const pollRef = react.useRef(null);
 			const rootRef = react.useRef(null);
-			// 面板容器宽度（响应式：图表随面板宽度扩展）。
+			// 面板容器宽度（响应式）。修复「宽度铺满整页」回归：面板宽度
+			// 由「一次性测量内容 scrollWidth → 落成具体 px」驱动，不再用
+			// width:max-content 与图表宽度形成「图表 px → 面板 max-content
+			// → 观察器 → 图表 px」的正反馈（会把面板顶到上限铺满整页）。
+			// 上限 = min(锚点右缘 − 左侧工具栏 − 边距, 640)，内容更宽时
+			// 面板内横向滚动。
 			const panelRef = react.useRef(null);
 			const [panelWidth, setPanelWidth] = react.useState(264);
-			// 面板可用横向空间：以圆圈锚点右缘为基准，扣除左侧工具栏
-			// （sidebar，可能覆盖面板）与边距后即为不出屏的最大宽度。
 			const [panelMaxWidth, setPanelMaxWidth] = react.useState(264);
 			react.useEffect(() => {
 				if (!open) return;
 				const el = panelRef.current;
 				if (el === null) return;
 				const update = () => {
-					setPanelWidth(el.getBoundingClientRect().width);
 					const root = rootRef.current;
 					const anchorRight = root !== null ? root.getBoundingClientRect().right : window.innerWidth;
 					const railRight = leftRailWidth();
-					const available = Math.round(anchorRight - railRight - 12);
-					setPanelMaxWidth(Math.max(280, available));
+					const available = Math.max(280, Math.min(640, Math.round(anchorRight - railRight - 12)));
+					setPanelMaxWidth(available);
+					// scrollWidth = 内容完整宽度（含溢出部分与内边距）。
+					const contentW = Math.round(el.scrollWidth);
+					setPanelWidth(Math.max(264, Math.min(contentW, available)));
 				};
 				update();
 				window.addEventListener("resize", update);
-				if (typeof ResizeObserver !== "undefined") {
-					const observer = new ResizeObserver(update);
-					observer.observe(el);
-					return () => {
-						observer.disconnect();
-						window.removeEventListener("resize", update);
-					};
-				}
 				return () => window.removeEventListener("resize", update);
-			}, [open]);
+			}, [open, tab, balance, balanceState, panelMaxWidth]);
 			// 手动令牌输入（移动端主通道 / 桌面端备用通道）。
 			const [manualOpen, setManualOpen] = react.useState(false);
 			const [manualToken, setManualToken] = react.useState("");
@@ -2429,6 +2540,24 @@ window.__ModuleLoader__.load({
 				setEnterSwapOn(next);
 				setEnterSwapEnabled(next);
 			};
+			// 移动端会话切换不弹键盘（守护 focusin 的开关状态）。
+			const [mobileKbGuardOn, setMobileKbGuardOn] = react.useState(mobileKbGuardEnabled());
+			react.useEffect(() => {
+				applyMobileKbGuard(mobileKbGuardOn);
+				return () => applyMobileKbGuard(false);
+			}, [mobileKbGuardOn]);
+			const toggleMobileKbGuard = () => {
+				const next = !mobileKbGuardOn;
+				setMobileKbGuardOn(next);
+				setMobileKbGuardEnabled(next);
+			};
+			// 峰谷计费高峰时段标记（红色用量圈/图表 + 问候语高峰提示）。
+			// 每分钟复核一次（跨时段边界自动刷新）。
+			const [peakNow, setPeakNow] = react.useState(isPeakPricing());
+			react.useEffect(() => {
+				const timer = window.setInterval(() => setPeakNow(isPeakPricing()), 60_000);
+				return () => window.clearInterval(timer);
+			}, []);
 			const [ttsCfg, setTtsCfg] = react.useState(readTtsConfig());
 			const ttsCfgRef = react.useRef(ttsCfg);
 			ttsCfgRef.current = ttsCfg;
@@ -2461,7 +2590,7 @@ window.__ModuleLoader__.load({
 						if (pageGreetingPlayed || !speechEnabled()) return;
 						pageGreetingPlayed = true;
 						window.setTimeout(() => {
-							playRandomGreeting(uiLocale, ttsCfgRef.current, voicePackRef.current);
+							playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
 						}, 1200);
 					})
 					.catch(() => {});
@@ -2912,7 +3041,7 @@ window.__ModuleLoader__.load({
 						void load(true);
 						// 手动刷新也触发随机问候音效（语音播报开启时）。
 						if (speechEnabled()) {
-							playRandomGreeting(uiLocale, ttsCfgRef.current, voicePackRef.current);
+							playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
 						}
 					},
 					style: {
@@ -3169,7 +3298,8 @@ window.__ModuleLoader__.load({
 				const usageWindows = usageOk ? usage.windows : null;
 				const usageMessage = usage !== null && typeof usage.message === "string" ? usage.message : null;
 				// 图表宽度随面板宽度扩展（去掉 24px 内边距），窄面板下限 220。
-				const chartWidth = Math.max(220, Math.round((panelWidth ?? 264) - 24));
+				// 图表宽度随面板内容宽度走（下限 220；双保险不超面板上限）。
+				const chartWidth = Math.max(220, Math.round(Math.min(panelWidth ?? 264, panelMaxWidth ?? 264) - 24));
 				/** 图表「按日/按月」切换按钮点击时的对应语音播报。
 				 * 播报完整三组数据：入 token、出 token、金额（币种）。 */
 				const speakChartMode = (mode) => {
@@ -3316,6 +3446,7 @@ window.__ModuleLoader__.load({
 										speakChartMode(mode);
 									},
 							width: chartWidth,
+							peak: peakNow,
 						}),
 					);
 				}
@@ -3630,7 +3761,7 @@ window.__ModuleLoader__.load({
 				react.createElement(
 					primitives.Tooltip,
 					{
-						label: t("usage.aria", { percent: reading }),
+						label: peakNow ? `${t("usage.aria", { percent: reading })} · ${t("chart.peakBadge")}` : t("usage.aria", { percent: reading }),
 						side: "top",
 						delayMs: 200,
 						disabled: open,
@@ -3640,7 +3771,7 @@ window.__ModuleLoader__.load({
 						{
 							type: "button",
 							"data-dsh-api-balance": "",
-							"aria-label": t("usage.aria", { percent: reading }),
+							"aria-label": peakNow ? `${t("usage.aria", { percent: reading })} · ${t("chart.peakBadge")}` : t("usage.aria", { percent: reading }),
 							"aria-haspopup": "dialog",
 							"aria-expanded": open,
 							onClick: () => setOpen(!open),
@@ -3665,7 +3796,7 @@ window.__ModuleLoader__.load({
 								cy: "7",
 								r: RADIUS,
 								fill: "none",
-								stroke: "var(--dsw-alias-border-l3)",
+								stroke: peakNow ? "rgba(229, 72, 77, 0.35)" : "var(--dsw-alias-border-l3)",
 								strokeWidth: "2px",
 							}),
 							react.createElement("circle", {
@@ -3673,7 +3804,7 @@ window.__ModuleLoader__.load({
 								cy: "7",
 								r: RADIUS,
 								fill: "none",
-								stroke: "var(--dsw-alias-label-tertiary)",
+								stroke: peakNow ? "var(--dsw-alias-danger-primary, #e5484d)" : "var(--dsw-alias-label-tertiary)",
 								strokeWidth: "2px",
 								strokeLinecap: "round",
 								strokeDasharray: `${(CIRCUMFERENCE * percent) / 100} ${CIRCUMFERENCE}`,
@@ -3695,11 +3826,9 @@ window.__ModuleLoader__.load({
 								boxSizing: "border-box",
 								border: "1px solid var(--dsw-alias-border-inverted)",
 								background: "var(--dsw-specific-menu)",
-								// 横向宽度动态：按内容自适应（max-content），最小 264px
-								// 保底；行内容为「标题/正文」两行 + 指标子行，天然窄。
-								// 只有内容在窄屏下仍溢出时才出现横向滚动
-								// （overflow-x:auto）。上限 = 锚点右缘 − 工具栏。
-								width: "max-content",
+								// 横向宽度：具体 px（内容 scrollWidth 测量 + 上限钳制），
+								// 不再随内容闭环增长；内容超出时面板内横向滚动。
+								width: `${panelWidth}px`,
 								minWidth: "264px",
 								maxWidth: `${panelMaxWidth}px`,
 								overflowX: "auto",
@@ -3728,6 +3857,24 @@ window.__ModuleLoader__.load({
 								tabButton(TAB_USAGE, tab === TAB_USAGE),
 								tabButton(TAB_BALANCE, tab === TAB_BALANCE),
 							),
+							peakNow
+								? react.createElement(
+										"span",
+										{
+											title: t("chart.peakHint"),
+											style: {
+												padding: "0 6px",
+												borderRadius: "999px",
+												background: "rgba(229, 72, 77, 0.16)",
+												color: "var(--dsw-alias-danger-primary, #e5484d)",
+												fontSize: "10px",
+												lineHeight: "16px",
+												whiteSpace: "nowrap",
+											},
+										},
+										t("chart.peakBadge"),
+									)
+								: null,
 							react.createElement("span", { style: { flex: "1 1 auto" } }),
 							refreshButton,
 						),
@@ -3762,6 +3909,8 @@ window.__ModuleLoader__.load({
 							onToggleStatsScroll: toggleStatsScroll,
 							enterSwapOn,
 							onToggleEnterSwap: toggleEnterSwap,
+							mobileKbGuardOn,
+							onToggleMobileKbGuard: toggleMobileKbGuard,
 							voiceContent: react.createElement(VoiceSettingsModal, {
 								t,
 								autoOn: speechOn,
@@ -4122,6 +4271,12 @@ window.__ModuleLoader__.load({
 			"settings.statsHint": "关闭时统计条超出宽度以省略号截断（悬停气泡显示完整内容）；开启后越界内容改为横向滚动并隐藏滚动条。",
 			"settings.enterLabel": "回车键行为（会话输入框）",
 			"settings.enterHint": "DSH 默认为回车发送、Shift+回车换行；开启后互换。仅作用于会话输入框，不干扰其他输入框。",
+			"settings.mobileKbLabel": "移动端会话切换不弹键盘",
+			"settings.mobileKbHint": "触屏设备上切换会话时阻止输入框自动聚焦（避免软键盘自动弹出）；点按输入框仍可正常输入。",
+			"chart.peakBadge": "峰时计费",
+			"chart.peakHint": "标准价格时段：北京时间 09:00–12:00、14:00–18:00（周一至周五，其余时间含周末为低谷价）",
+			"speech.peakHint": "现在是高峰计费时段，请留意用量哦～",
+			"voice.seg.peak": "高峰时段提示",
 		};
 
 		/** 英文文案。 */
@@ -4271,6 +4426,12 @@ window.__ModuleLoader__.load({
 			"settings.statsHint": "When off, the stats bar truncates with an ellipsis (hover shows the full line). When on, overflowing content scrolls horizontally with the scrollbar hidden.",
 			"settings.enterLabel": "Enter key behavior (composer)",
 			"settings.enterHint": "DSH defaults to Enter = send and Shift+Enter = newline; enabling swaps them. Only affects the composer, not other inputs.",
+			"settings.mobileKbLabel": "Mobile: no keyboard on session switch",
+			"settings.mobileKbHint": "On touch devices, blocks the composer auto-focus when switching sessions (prevents the soft keyboard from popping up); tapping the composer still works.",
+			"chart.peakBadge": "Peak pricing",
+			"chart.peakHint": "Standard-price windows: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time (all other hours, incl. weekends, are off-peak)",
+			"speech.peakHint": "We're in the peak pricing period now — mind your usage!",
+			"voice.seg.peak": "Peak-period hint",
 		};
 
 		/**
