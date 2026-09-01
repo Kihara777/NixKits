@@ -17,7 +17,7 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 ## 功能
 
 - **用量**：原内容（上下文占有率与内訳）
-- **余额**：當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）、消耗明細与用量図表——消耗明細同一区域水平翻頁（1 頁目：当日 / 当月 / 30 日、2 頁目：模型別内訳 + 日別 / 月別 chart）、上方類手機主屏幕頁面指示 dot（tap 可、横 drag / swipe 翻頁）、区域高度内容応動態調整自身不 scroll（全内容面板自身縦 scroll 依存）
+- **余额**：當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）、消耗明細与用量図表——消耗明細同一区域水平翻頁（1 頁目：当日 / 当月 / 30 日、2 頁目：模型別内訳 + 日別 / 月別 chart）、上方類手機主屏幕頁面指示 dot（tap 可、横 drag / swipe 翻頁）、区域高度當前頁内容応自動増減（切頁即回収）自身不 scroll（全内容面板自身縦 scroll 依存）
 - 宿主側 30 秒 TTL 緩存；API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退
 
 ### platform token 取得（二段、全自動優先）
@@ -34,7 +34,7 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 
 ### 峰谷課金標記
 
-DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）与使用量 chart 紅色表示、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。頁面更新挨拶与「余额」標籤 click（更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
+DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）与使用量 chart 紅色表示、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
 
 ### 音声放送
 
@@ -99,7 +99,7 @@ voice-pack.zip
 | `tokenUnit` | 数字後単位（例「個 token」、再利用可） |
 | `suffix` | 放送結尾 |
 
-全 segment 任意：欠落 segment 放送時 TTS 回退。面板呈現与官方使用量頁基準一致：「入」未命中輸入限定計上、缓存命中別列（token 与金額數據官方 API 日粒度 bucket 取得、二次合算不）。作成器 sample text 預設 TTS 兜底文案一字不差（録音 pack 預設 TTS 体験接近保証）；動的數字（token 数、金額与幣種）當前 TTS backend 合成、「pack segment + TTS 數字」順連結。任意 `greetings` file 路配列（0–32 個）：音声放送有効時、頁面更新毎 random 一個挨拶/着地音再生。挨拶音声無時 TTS 挨拶 pool random 再生。
+全 segment 任意：欠落 segment 放送時 TTS 回退。面板呈現与官方使用量頁基準一致：「入」未命中輸入限定計上、缓存命中別列（token 与金額數據官方 API 日粒度 bucket 取得、二次合算不）。作成器 sample text 預設 TTS 兜底文案一字不差（録音 pack 預設 TTS 体験接近保証）；動的數字（token 数、金額与幣種）當前 TTS backend 合成、「pack segment + TTS 數字」順連結。任意 `greetings` file 路配列（0–32 個）：音声放送有効時、「余额」標籤 click（手動更新）毎 random 一個挨拶/着地音再生。挨拶音声無時 TTS 挨拶 pool random 再生。
 
 **作成与共有**：「設定 → 音声 → 音声 pack 管理」→「音声 pack 作成」作成器開——先 pack 語言（zh-CN / en / ja）選択（sample text 与 manifest `lang` 決定、言語跨録音可能）；segment 逐段瀏覽器 mic 録音、挨拶 list 逐条録音（「添加挨拶」list 拡張、✕ slot 削除、sample text 預設 TTS 挨拶 pool 対応）；或 local 音声 file import。録音中右下可視化浮窗（level meter + 経過時間 + sample text + 停止/破棄）表示。完了後「打包 download」共有 zip 生成、「compile & 適用」本機 library import 即適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
 

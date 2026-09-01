@@ -17,7 +17,7 @@ API usage balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab
 ## Features
 
 - **Usage**: the original content (context occupancy and its breakdown)
-- **Balance**: the current API key's account info (key hint, availability, per-currency total / top-up / granted balance), plus consumption details and usage charts — the consumption detail is one horizontally-paged area (page 1: today / this-month / 30-day; page 2: per-model breakdown + daily / monthly chart), with a phone-home-screen-style dot indicator above it (tappable, swipe/drag to flip); the area height follows its content and never scrolls itself (full content relies on the panel's own vertical scroll)
+- **Balance**: the current API key's account info (key hint, availability, per-currency total / top-up / granted balance), plus consumption details and usage charts — the consumption detail is one horizontally-paged area (page 1: today / this-month / 30-day; page 2: per-model breakdown + daily / monthly chart), with a phone-home-screen-style dot indicator above it (tappable, swipe/drag to flip); the area height grows and shrinks with the current page's content (reclaimed on page switch) and never scrolls itself (full content relies on the panel's own vertical scroll)
 - Host-side 30-second TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`), falling back to the process environment
 
 ### Platform token acquisition (two tiers, fully automatic first)
@@ -34,7 +34,7 @@ All three settings are on by default and persist in browser localStorage.
 
 ### Peak pricing marker
 
-DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key) and the usage chart turn red, and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on page refresh and on each 「Balance」-tab click (refresh) is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
+DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key) and the usage chart turn red, and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on each 「Balance」-tab click (manual refresh) is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
 
 ### Voice broadcast
 
@@ -99,7 +99,7 @@ voice-pack.zip
 | `tokenUnit` | unit after numbers (e.g. 「tokens」), reusable |
 | `suffix` | broadcast ending |
 
-All segments are optional: missing ones fall back to TTS during playback. Panel presentation matches the official usage page: 「in」 counts only uncached input, and cache hits are listed separately (token and cost data come from the official API's daily-granularity buckets without secondary merging). The creator's sample texts match the default TTS fallback strings exactly (so recorded packs stay close to the default TTS experience); dynamic numbers (token counts, cost and currency) are synthesized by the current TTS backend and concatenated as 「pack segment + TTS numbers」. The optional `greetings` is an array of file paths (0–32): when voice broadcast is enabled, a random one plays as a greeting/landing sound on every page refresh; without greeting audio, a random TTS greeting is used instead.
+All segments are optional: missing ones fall back to TTS during playback. Panel presentation matches the official usage page: 「in」 counts only uncached input, and cache hits are listed separately (token and cost data come from the official API's daily-granularity buckets without secondary merging). The creator's sample texts match the default TTS fallback strings exactly (so recorded packs stay close to the default TTS experience); dynamic numbers (token counts, cost and currency) are synthesized by the current TTS backend and concatenated as 「pack segment + TTS numbers」. The optional `greetings` is an array of file paths (0–32): when voice broadcast is enabled, a random one plays as a greeting/landing sound on each 「Balance」-tab click (manual refresh); without greeting audio, a random TTS greeting is used instead.
 
 **Create & share**: 「Settings → Voice → Voice pack management」 → 「Create a voice pack」 opens the creator — first pick the pack language (zh-CN / en / ja; drives the sample texts and the manifest `lang`, so packs can be recorded across languages); record each segment with the browser microphone, and record greetings list entry by entry («Add greeting» extends the list, ✕ removes a slot, sample texts mirror the default TTS greeting pool); or import local audio files; while recording, a visual float window appears in the corner (level meter + elapsed time + sample text + stop/discard). Finish with 「Package & download」 to produce a shareable zip, or 「Compile & apply」 to import into the local library and activate it. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
 
