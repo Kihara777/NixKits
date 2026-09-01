@@ -134,14 +134,14 @@ window.__ModuleLoader__.load({
 		}
 
 		// ── 界面设置：底部统计条横向滚动 + 回车键行为 ──────────────
-		/** 底部统计条越界内容横向滚动开关（localStorage 持久化，默认关闭）。 */
+		/** 底部统计条越界内容横向滚动开关（localStorage 持久化，默认开启）。 */
 		const STATS_SCROLL_STORE_KEY = "dsh-api-balance-stats-scroll";
 		function statsScrollEnabled() {
-			if (typeof window === "undefined") return false;
+			if (typeof window === "undefined") return true;
 			try {
-				return window.localStorage.getItem(STATS_SCROLL_STORE_KEY) === "on";
+				return window.localStorage.getItem(STATS_SCROLL_STORE_KEY) !== "off";
 			} catch {
-				return false;
+				return true;
 			}
 		}
 		function setStatsScrollEnabled(enabled) {
@@ -164,7 +164,8 @@ window.__ModuleLoader__.load({
 		}
 		/**
 		 * 注入/移除统计条横向滚动样式：越界内容横向滚动 + 隐藏滚动条
-		 * （替换默认的省略号截断）。!important 抵消加载顺序差异。
+		 * （替换默认的省略号截断）。!important 抵消加载顺序差异；ui-chat
+		 * 样式标签尚未注入时（极早期挂载）按 1s 间隔重试至多 5 次。
 		 */
 		function applyStatsScrollCss(enabled) {
 			if (typeof document === "undefined") return;
@@ -174,33 +175,41 @@ window.__ModuleLoader__.load({
 				if (existing !== null) existing.remove();
 				return;
 			}
-			const cls = statsLineRootClass();
-			if (cls === null) {
-				if (existing !== null) existing.remove();
-				return;
-			}
-			const cssText =
-				`.${cls}{overflow-x:auto!important;overflow-y:hidden!important;text-overflow:clip!important;scrollbar-width:none!important}` +
-				`.${cls}::-webkit-scrollbar{display:none}`;
-			if (existing === null) {
-				const tag = document.createElement("style");
-				tag.dataset.plugin = NS;
-				tag.dataset.pluginCss = tagId;
-				tag.textContent = cssText;
-				document.head.appendChild(tag);
-			} else if (existing.textContent !== cssText) {
-				existing.textContent = cssText;
-			}
+			const ensure = (attempt) => {
+				const cls = statsLineRootClass();
+				if (cls === null) {
+					if (attempt < 5 && typeof window !== "undefined" && typeof window.setTimeout === "function") {
+						window.setTimeout(() => ensure(attempt + 1), 1000);
+					} else if (existing !== null) {
+						existing.remove();
+					}
+					return;
+				}
+				const cssText =
+					`.${cls}{overflow-x:auto!important;overflow-y:hidden!important;text-overflow:clip!important;scrollbar-width:none!important}` +
+					`.${cls}::-webkit-scrollbar{display:none}`;
+				const current = document.querySelector(`style[data-plugin-css="${tagId}"]`);
+				if (current === null) {
+					const tag = document.createElement("style");
+					tag.dataset.plugin = NS;
+					tag.dataset.pluginCss = tagId;
+					tag.textContent = cssText;
+					document.head.appendChild(tag);
+				} else if (current.textContent !== cssText) {
+					current.textContent = cssText;
+				}
+			};
+			ensure(0);
 		}
 
-		/** 回车键行为交换开关（localStorage 持久化，默认关闭）。 */
+		/** 回车键行为交换开关（localStorage 持久化，默认开启）。 */
 		const ENTER_SWAP_STORE_KEY = "dsh-api-balance-enter-swap";
 		function enterSwapEnabled() {
-			if (typeof window === "undefined") return false;
+			if (typeof window === "undefined") return true;
 			try {
-				return window.localStorage.getItem(ENTER_SWAP_STORE_KEY) === "on";
+				return window.localStorage.getItem(ENTER_SWAP_STORE_KEY) !== "off";
 			} catch {
-				return false;
+				return true;
 			}
 		}
 		function setEnterSwapEnabled(enabled) {
@@ -283,11 +292,21 @@ window.__ModuleLoader__.load({
 				// 存储不可用则本次会话生效
 			}
 		}
+		/** 触屏判定放宽：coarse 主指针，或存在触点数 > 0（平板/混合设备）。 */
+		function isTouchLike() {
+			if (isTouchDevice()) return true;
+			try {
+				return typeof navigator !== "undefined" && typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 0;
+			} catch {
+				return false;
+			}
+		}
 		/**
 		 * 移动端切换会话时 DSH 会程序化聚焦输入框（软键盘自动弹出）。
 		 * 守护在 focusin 捕获阶段拦下「非用户点按触发的聚焦」（focusin
 		 * 可取消，preventDefault 后元素不获得焦点、键盘不弹出）；用户近期
 		 * 点按过输入框（touch/pointer 记录时间戳）则放行，正常输入不受影响。
+		 * focus 捕获监听为兜底：个别引擎不派发 focusin 时立即 blur 关键盘。
 		 */
 		let mobileKbGuardInstalled = false;
 		let lastComposerTouchAt = 0;
@@ -299,12 +318,26 @@ window.__ModuleLoader__.load({
 		}
 		function mobileKbGuardHandler(event) {
 			if (mobileKbGuardInstalled !== true) return;
-			if (!isTouchDevice()) return;
+			if (!isTouchLike()) return;
 			const target = event.target;
 			if (!(target instanceof Element)) return;
 			if (target.closest('[data-composer-input="true"]') === null) return;
 			if (Date.now() - lastComposerTouchAt < 800) return;
 			event.preventDefault();
+		}
+		function mobileKbFocusFallback(event) {
+			// focus 不可取消：focusin 未拦截成功时立即 blur 关闭软键盘。
+			if (mobileKbGuardInstalled !== true) return;
+			if (!isTouchLike()) return;
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			if (target.closest('[data-composer-input="true"]') === null) return;
+			if (Date.now() - lastComposerTouchAt < 800) return;
+			try {
+				target.blur();
+			} catch {
+				// 忽略
+			}
 		}
 		function applyMobileKbGuard(enabled) {
 			if (typeof document === "undefined") return;
@@ -314,12 +347,14 @@ window.__ModuleLoader__.load({
 					document.addEventListener("pointerdown", composerTouchTracker, true);
 					document.addEventListener("touchstart", composerTouchTracker, true);
 					document.addEventListener("focusin", mobileKbGuardHandler, true);
+					document.addEventListener("focus", mobileKbFocusFallback, true);
 				}
 			} else if (mobileKbGuardInstalled) {
 				mobileKbGuardInstalled = false;
 				document.removeEventListener("pointerdown", composerTouchTracker, true);
 				document.removeEventListener("touchstart", composerTouchTracker, true);
 				document.removeEventListener("focusin", mobileKbGuardHandler, true);
+				document.removeEventListener("focus", mobileKbFocusFallback, true);
 			}
 		}
 
@@ -4268,9 +4303,9 @@ window.__ModuleLoader__.load({
 			"settings.on": "开",
 			"settings.off": "关",
 			"settings.statsLabel": "底部统计条（轮次 / 耗时 / 速率）",
-			"settings.statsHint": "关闭时统计条超出宽度以省略号截断（悬停气泡显示完整内容）；开启后越界内容改为横向滚动并隐藏滚动条。",
+			"settings.statsHint": "默认开启：统计条越界内容横向滚动并隐藏滚动条；关闭后恢复省略号截断（悬停气泡显示完整内容）。",
 			"settings.enterLabel": "回车键行为（会话输入框）",
-			"settings.enterHint": "DSH 默认为回车发送、Shift+回车换行；开启后互换。仅作用于会话输入框，不干扰其他输入框。",
+			"settings.enterHint": "默认开启：回车换行、Shift+回车发送（DSH 原生为回车发送）；关闭后恢复原生行为。仅作用于会话输入框。",
 			"settings.mobileKbLabel": "移动端会话切换不弹键盘",
 			"settings.mobileKbHint": "触屏设备上切换会话时阻止输入框自动聚焦（避免软键盘自动弹出）；点按输入框仍可正常输入。",
 			"chart.peakBadge": "峰时计费",
@@ -4423,9 +4458,9 @@ window.__ModuleLoader__.load({
 			"settings.on": "On",
 			"settings.off": "Off",
 			"settings.statsLabel": "Bottom stats bar (turns / duration / speed)",
-			"settings.statsHint": "When off, the stats bar truncates with an ellipsis (hover shows the full line). When on, overflowing content scrolls horizontally with the scrollbar hidden.",
+			"settings.statsHint": "On by default: overflowing stats-bar content scrolls horizontally with the scrollbar hidden; turning it off restores ellipsis truncation (hover shows the full line).",
 			"settings.enterLabel": "Enter key behavior (composer)",
-			"settings.enterHint": "DSH defaults to Enter = send and Shift+Enter = newline; enabling swaps them. Only affects the composer, not other inputs.",
+			"settings.enterHint": "On by default: Enter = newline and Shift+Enter = send (DSH's native behavior is Enter = send); turning it off restores the native behavior. Composer only.",
 			"settings.mobileKbLabel": "Mobile: no keyboard on session switch",
 			"settings.mobileKbHint": "On touch devices, blocks the composer auto-focus when switching sessions (prevents the soft keyboard from popping up); tapping the composer still works.",
 			"chart.peakBadge": "Peak pricing",
