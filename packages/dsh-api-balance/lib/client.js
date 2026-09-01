@@ -857,31 +857,6 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
-		 * 面板纵向裁剪上缘（≈ 顶栏下缘）：从圆圈沿祖先链向上找第一个
-		 * 带纵向裁剪（overflow-y hidden/clip/auto/scroll）的容器，其
-		 * rect.top 即面板向上扩展的硬边界——手机横屏时面板高度必须
-		 * 收进该边界，否则顶部被顶栏/裁剪区域遮挡。
-		 */
-		function clippingCeilingTop(from) {
-			if (typeof document === "undefined" || typeof window === "undefined") return 0;
-			try {
-				let node = from instanceof Element ? from.parentElement : null;
-				while (node !== null && node !== document.body) {
-					const style = window.getComputedStyle(node);
-					const clipsY = /(hidden|clip|auto|scroll)/.test(style.overflowY);
-					if (clipsY) {
-						const rect = node.getBoundingClientRect();
-						if (rect.height >= 80) return Math.max(0, Math.round(rect.top));
-					}
-					node = node.parentElement;
-				}
-			} catch {
-				// 测量失败按 0 处理
-			}
-			return 0;
-		}
-
-		/**
 		 * 查找原 ContextMeter 的 root 节点（用于 DOM 就位）。首选 dsh
 		 * 0.1.1-rc.2 的构建类名，回退结构查找（内嵌 14px ring 且不带本插件
 		 * 标记的 dialog 按钮向上找 inline-flex relative 祖先）。
@@ -2461,33 +2436,50 @@ window.__ModuleLoader__.load({
 			const panelRef = react.useRef(null);
 			const [panelWidth, setPanelWidth] = react.useState(264);
 			const [panelMaxWidth, setPanelMaxWidth] = react.useState(264);
-			// 面板最大高度：手机横屏时收进「锚点上方可用空间」（顶栏下缘
-			// 为硬边界），避免面板顶部被顶栏遮挡；常规高度上限 460。
+			// 面板最大高度：随「锚点上方可用空间」钳制（手机横屏避开顶栏），
+			// 常规上限 460；面板自身纵向滚动承载完整内容。
 			const [panelMaxHeight, setPanelMaxHeight] = react.useState(460);
-			react.useEffect(() => {
+			// 面板为 document.body 级 fixed portal（与设置弹窗同架构）：
+			// 不受会话区裁剪/坐标影响；位置由圆圈锚点的视口坐标换算。
+			const [panelRight, setPanelRight] = react.useState(0);
+			const [panelBottom, setPanelBottom] = react.useState(0);
+			react.useLayoutEffect(() => {
 				if (!open) return;
 				const el = panelRef.current;
 				if (el === null) return;
 				const update = () => {
 					const root = rootRef.current;
 					const anchor = root !== null ? root.getBoundingClientRect() : null;
-					const anchorRight = anchor !== null ? anchor.right : window.innerWidth;
-					const railRight = leftRailWidth();
-					const available = Math.max(280, Math.min(640, Math.round(anchorRight - railRight - 12)));
-					setPanelMaxWidth(available);
-					// 高度钳制：锚点顶缘 − 裁剪上缘（≈ 顶栏下缘）− 间隙。
 					if (anchor !== null) {
-						const ceiling = clippingCeilingTop(root);
-						const heightCap = Math.max(120, Math.min(460, Math.round(anchor.top - ceiling - 12)));
+						// fixed 坐标：右缘对齐圆圈右缘、下缘在圆圈上方 8px。
+						setPanelRight(Math.round(window.innerWidth - anchor.right));
+						setPanelBottom(Math.round(window.innerHeight - anchor.top + 8));
+						const railRight = leftRailWidth();
+						// 宽度上限：锚点空间与「视口 − 24px」取更小者，双保险
+						// 不出屏；内容更宽时面板内横向滚动。
+						const available = Math.max(
+							280,
+							Math.min(640, Math.min(Math.round(anchor.right - railRight - 12), window.innerWidth - 24)),
+						);
+						setPanelMaxWidth(available);
+						// 高度钳制：锚点上方可用空间（横屏自动收缩避开顶栏）。
+						const heightCap = Math.max(120, Math.min(460, Math.round(anchor.top - 12)));
 						setPanelMaxHeight(heightCap);
+						// scrollWidth = 内容完整宽度（含溢出部分与内边距）。
+						const contentW = Math.round(el.scrollWidth);
+						setPanelWidth(Math.max(264, Math.min(contentW, available)));
+					} else {
+						setPanelMaxWidth(Math.max(280, Math.min(640, window.innerWidth - 24)));
+						setPanelMaxHeight(460);
 					}
-					// scrollWidth = 内容完整宽度（含溢出部分与内边距）。
-					const contentW = Math.round(el.scrollWidth);
-					setPanelWidth(Math.max(264, Math.min(contentW, available)));
 				};
 				update();
 				window.addEventListener("resize", update);
-				return () => window.removeEventListener("resize", update);
+				window.addEventListener("scroll", update, true);
+				return () => {
+					window.removeEventListener("resize", update);
+					window.removeEventListener("scroll", update, true);
+				};
 			}, [open, tab, balance, balanceState, panelMaxWidth]);
 			// 手动令牌输入（移动端主通道 / 桌面端备用通道）。
 			const [manualOpen, setManualOpen] = react.useState(false);
@@ -2521,6 +2513,7 @@ window.__ModuleLoader__.load({
 				if (!open || !available) return;
 				const onPointerDown = (e) => {
 					if (e.target instanceof Node && rootRef.current?.contains(e.target) === true) return;
+					if (e.target instanceof Node && panelRef.current?.contains(e.target) === true) return;
 					setOpen(false);
 				};
 				const onKeyDown = (e) => {
@@ -4005,72 +3998,78 @@ window.__ModuleLoader__.load({
 					),
 				),
 				open &&
-					react.createElement(
-						"div",
-						{
-							role: "dialog",
-							className: "dshAbPanel",
-							"aria-label": t("usage.headline"),
-							ref: panelRef,
-							style: {
-								zIndex: 100,
-								boxSizing: "border-box",
-								border: "1px solid var(--dsw-alias-border-inverted)",
-								background: "var(--dsw-specific-menu)",
-								// 横向宽度：具体 px（内容 scrollWidth 测量 + 上限钳制），
-								// 不再随内容闭环增长；内容超出时面板内横向滚动。
-								width: `${panelWidth}px`,
-								minWidth: "264px",
-								maxWidth: `${panelMaxWidth}px`,
-								maxHeight: `${panelMaxHeight}px`,
-								overflowX: "auto",
-								boxShadow: "var(--dsw-shadow-lv3)",
-								color: "var(--dsw-alias-label-secondary)",
-								cursor: "default",
-								borderRadius: "12px",
-								padding: "12px",
-								fontSize: "12px",
-								lineHeight: "20px",
-								position: "absolute",
-								bottom: "calc(100% + 8px)",
-								right: 0,
-							},
-						},
+					reactDOM.createPortal(
 						react.createElement(
 							"div",
-							{ style: { display: "flex", alignItems: "center", gap: "4px", marginBottom: "12px" } },
+							{
+								role: "dialog",
+								className: "dshAbPanel",
+								"aria-label": t("usage.headline"),
+								ref: panelRef,
+								style: {
+									zIndex: 900,
+									boxSizing: "border-box",
+									border: "1px solid var(--dsw-alias-border-inverted)",
+									background: "var(--dsw-specific-menu)",
+									// 横向宽度：具体 px（内容 scrollWidth 测量 + 上限钳制），
+									// 不再随内容闭环增长；内容超出时面板内横向滚动。
+									width: `${panelWidth}px`,
+									minWidth: "264px",
+									maxWidth: `${panelMaxWidth}px`,
+									maxHeight: `${panelMaxHeight}px`,
+									overflowX: "auto",
+									WebkitOverflowScrolling: "touch",
+									boxShadow: "var(--dsw-shadow-lv3)",
+									color: "var(--dsw-alias-label-secondary)",
+									cursor: "default",
+									borderRadius: "12px",
+									padding: "12px",
+									fontSize: "12px",
+									lineHeight: "20px",
+									// document 级 fixed 定位（与设置弹窗同架构）：不受
+									// 会话区裁剪/坐标影响，视口内硬钳制不出界。
+									position: "fixed",
+									right: `${panelRight}px`,
+									bottom: `${panelBottom}px`,
+								},
+							},
 							react.createElement(
 								"div",
-								{
-									role: "tablist",
-									"aria-label": t("tab.aria"),
-									style: { display: "flex", gap: "4px" },
-								},
-								tabButton(TAB_USAGE, tab === TAB_USAGE),
-								tabButton(TAB_BALANCE, tab === TAB_BALANCE),
-							),
-							peakNow
-								? react.createElement(
-										"span",
-										{
-											title: t("chart.peakHint"),
-											style: {
-												padding: "0 6px",
-												borderRadius: "999px",
-												background: "rgba(229, 72, 77, 0.16)",
-												color: "var(--dsw-alias-danger-primary, #e5484d)",
-												fontSize: "10px",
-												lineHeight: "16px",
-												whiteSpace: "nowrap",
+								{ style: { display: "flex", alignItems: "center", gap: "4px", marginBottom: "12px" } },
+								react.createElement(
+									"div",
+									{
+										role: "tablist",
+										"aria-label": t("tab.aria"),
+										style: { display: "flex", gap: "4px" },
+									},
+									tabButton(TAB_USAGE, tab === TAB_USAGE),
+									tabButton(TAB_BALANCE, tab === TAB_BALANCE),
+								),
+								peakNow
+									? react.createElement(
+											"span",
+											{
+												title: t("chart.peakHint"),
+												style: {
+													padding: "0 6px",
+													borderRadius: "999px",
+													background: "rgba(229, 72, 77, 0.16)",
+													color: "var(--dsw-alias-danger-primary, #e5484d)",
+													fontSize: "10px",
+													lineHeight: "16px",
+													whiteSpace: "nowrap",
+												},
 											},
-										},
-										t("chart.peakBadge"),
-									)
-								: null,
-							react.createElement("span", { style: { flex: "1 1 auto" } }),
-							settingsButton,
+											t("chart.peakBadge"),
+										)
+									: null,
+								react.createElement("span", { style: { flex: "1 1 auto" } }),
+								settingsButton,
+							),
+							tab === TAB_USAGE ? usageBody : balanceBody,
 						),
-						tab === TAB_USAGE ? usageBody : balanceBody,
+						document.body,
 					),
 				topupOpen
 					? react.createElement(TopupModal, { t, onClose: () => setTopupOpen(false) })
