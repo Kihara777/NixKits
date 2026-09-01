@@ -29,6 +29,11 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 
 - **底部統計条**：預設幅超内容省略号截断（hover 全文表示）。「越界内容横向 scroll」有効時横向 scroll 切替、scrollbar 隠蔽、越界内容閲覧可。
 - **Enter key 動作**：DSH 預設 Enter = 送信、Shift+Enter = 改行。「Enter = 改行 · Shift+Enter = 送信」有効時交換（会話入力欄限定作用、他入力欄不影響）。両設定瀏覽器 localStorage 永続化。
+- **移動端 session 切替 keyboard 不弹出**：觸屏 device 側欄 session 切替時入力欄自動聚焦阻止、軟 keyboard 自動表示防。入力欄 tap 通常入力可。預設有効、此処無効化可。
+
+### 峰谷課金標記
+
+DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）与使用量 chart 紅色表示、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。頁面更新挨拶与手動「數據更新」挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
 
 ### 音声放送
 
@@ -64,6 +69,7 @@ voice-pack.zip
   "segments": {
     "dead": "audio/dead.mp3",
     "low": "audio/low.mp3",
+    "peak": "audio/peak.mp3",
     "today": "audio/today.mp3",
     "month": "audio/month.mp3",
     "inLabel": "audio/inLabel.mp3",
@@ -82,6 +88,7 @@ voice-pack.zip
 |------|------|
 | `dead` | 残高不足警告全文 |
 | `low` | 低残高警告全文 |
+| `peak` | 峰時課金提示（挨拶音声後追加） |
 | `today` | 「当日消耗」放送 prefix |
 | `month` | 「当月消耗」放送 prefix |
 | `inLabel` | 「入」標籤 |

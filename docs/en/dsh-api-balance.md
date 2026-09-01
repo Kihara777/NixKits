@@ -29,6 +29,11 @@ API usage balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab
 
 - **Bottom stats bar**: by default content beyond the width truncates with an ellipsis (hovering shows the full line in a tooltip); enabling 「horizontal scroll for overflow」 switches it to horizontal scrolling with the scrollbar hidden — overflowing content becomes visible and scrollable.
 - **Enter key behavior**: DSH defaults to Enter = send and Shift+Enter = newline; enabling 「Enter = newline · Shift+Enter = send」 swaps them (composer only; other inputs unaffected). Both settings persist in browser localStorage.
+- **Mobile: no keyboard on session switch**: on touch devices, switching sessions via the sidebar no longer auto-focuses the composer, so the soft keyboard doesn't pop up by itself; tapping the composer still works. Enabled by default, can be turned off here.
+
+### Peak pricing marker
+
+DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key) and the usage chart turn red, and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on page refresh and on manual 「Refresh data」 is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
 
 ### Voice broadcast
 
@@ -64,6 +69,7 @@ voice-pack.zip
   "segments": {
     "dead": "audio/dead.mp3",
     "low": "audio/low.mp3",
+    "peak": "audio/peak.mp3",
     "today": "audio/today.mp3",
     "month": "audio/month.mp3",
     "inLabel": "audio/inLabel.mp3",
@@ -82,6 +88,7 @@ voice-pack.zip
 |------|------|
 | `dead` | whole-sentence out-of-tokens alert |
 | `low` | whole-sentence low-balance alert |
+| `peak` | peak-pricing hint (appended after the greeting audio) |
 | `today` | 「Today」 broadcast prefix |
 | `month` | 「This month」 broadcast prefix |
 | `inLabel` | 「in」 label |
