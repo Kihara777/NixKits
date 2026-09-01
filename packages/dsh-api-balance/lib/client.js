@@ -124,6 +124,121 @@ window.__ModuleLoader__.load({
 			}
 		}
 
+		// ── 界面设置：底部统计条横向滚动 + 回车键行为 ──────────────
+		/** 底部统计条越界内容横向滚动开关（localStorage 持久化，默认关闭）。 */
+		const STATS_SCROLL_STORE_KEY = "dsh-api-balance-stats-scroll";
+		function statsScrollEnabled() {
+			if (typeof window === "undefined") return false;
+			try {
+				return window.localStorage.getItem(STATS_SCROLL_STORE_KEY) === "on";
+			} catch {
+				return false;
+			}
+		}
+		function setStatsScrollEnabled(enabled) {
+			try {
+				window.localStorage.setItem(STATS_SCROLL_STORE_KEY, enabled ? "on" : "off");
+			} catch {
+				// 存储不可用则本次会话生效
+			}
+		}
+		/**
+		 * 从 dsh-client-ui-chat 注入的 StatsLine 样式标签提取根类名——
+		 * 构建哈希自适应，不硬编码当前构建的 `-NDN2W_root`。
+		 */
+		function statsLineRootClass() {
+			if (typeof document === "undefined") return null;
+			const tag = document.querySelector('style[data-plugin-css="@deepseek-ai/dsh-client-ui-chat/StatsLine.module.css"]');
+			if (tag === null || typeof tag.textContent !== "string") return null;
+			const match = tag.textContent.match(/\.(-?[A-Za-z0-9_-]+_root)\{/);
+			return match !== null ? match[1] : null;
+		}
+		/**
+		 * 注入/移除统计条横向滚动样式：越界内容横向滚动 + 隐藏滚动条
+		 * （替换默认的省略号截断）。!important 抵消加载顺序差异。
+		 */
+		function applyStatsScrollCss(enabled) {
+			if (typeof document === "undefined") return;
+			const tagId = `${NS}/stats-scroll.css`;
+			const existing = document.querySelector(`style[data-plugin-css="${tagId}"]`);
+			if (!enabled) {
+				if (existing !== null) existing.remove();
+				return;
+			}
+			const cls = statsLineRootClass();
+			if (cls === null) {
+				if (existing !== null) existing.remove();
+				return;
+			}
+			const cssText =
+				`.${cls}{overflow-x:auto!important;overflow-y:hidden!important;text-overflow:clip!important;scrollbar-width:none!important}` +
+				`.${cls}::-webkit-scrollbar{display:none}`;
+			if (existing === null) {
+				const tag = document.createElement("style");
+				tag.dataset.plugin = NS;
+				tag.dataset.pluginCss = tagId;
+				tag.textContent = cssText;
+				document.head.appendChild(tag);
+			} else if (existing.textContent !== cssText) {
+				existing.textContent = cssText;
+			}
+		}
+
+		/** 回车键行为交换开关（localStorage 持久化，默认关闭）。 */
+		const ENTER_SWAP_STORE_KEY = "dsh-api-balance-enter-swap";
+		function enterSwapEnabled() {
+			if (typeof window === "undefined") return false;
+			try {
+				return window.localStorage.getItem(ENTER_SWAP_STORE_KEY) === "on";
+			} catch {
+				return false;
+			}
+		}
+		function setEnterSwapEnabled(enabled) {
+			try {
+				window.localStorage.setItem(ENTER_SWAP_STORE_KEY, enabled ? "on" : "off");
+			} catch {
+				// 存储不可用则本次会话生效
+			}
+		}
+		/**
+		 * 回车换行 + Shift+回车发送（DSH 默认为回车发送）。document 捕获
+		 * 阶段拦截 composer（[data-composer-input="true"]）内的 Enter，
+		 * 重派发一个 shiftKey 取反的 Enter——Lexical 据 event.shiftKey 决定
+		 * 「换行 / 发送」，交换即交换 shiftKey。仅作用于会话输入框。
+		 */
+		let enterSwapInstalled = false;
+		function enterSwapHandler(event) {
+			if (enterSwapInstalled !== true || event.__dshAbSwap === true) return;
+			if (event.key !== "Enter" || event.isComposing === true || event.keyCode === 229) return;
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			if (target.closest('[data-composer-input="true"]') === null) return;
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			const next = new KeyboardEvent("keydown", {
+				key: "Enter",
+				code: "Enter",
+				bubbles: true,
+				cancelable: true,
+				shiftKey: !event.shiftKey,
+			});
+			next.__dshAbSwap = true;
+			target.dispatchEvent(next);
+		}
+		function applyEnterSwap(enabled) {
+			if (typeof document === "undefined") return;
+			if (enabled) {
+				if (!enterSwapInstalled) {
+					enterSwapInstalled = true;
+					document.addEventListener("keydown", enterSwapHandler, true);
+				}
+			} else if (enterSwapInstalled) {
+				enterSwapInstalled = false;
+				document.removeEventListener("keydown", enterSwapHandler, true);
+			}
+		}
+
 		// 预热语音引擎：触发浏览器加载语音列表（首次 getVoices 常为空，
 		// 不预热会导致首次播报用默认音色甚至无声）。
 		if (typeof window !== "undefined" && typeof window.speechSynthesis !== "undefined") {
@@ -1096,12 +1211,10 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
-		 * 语音设置弹窗：自动播报开关、TTS 后端（浏览器内置 / 自定义 API
-		 * 经 host 代理）、语音包 zip 导入 / 试听 / 清除，以及浏览器录音
-		 * 制作语音包并打包下载分享。
-		 */
-		/**
-		 * 语音设置弹窗（三视图）：
+		 * 语音设置内容（设置弹窗「语音」标签页主体，自身不再弹层）：
+		 * 自动播报开关、TTS 后端（浏览器内置 / 自定义 API 经 host 代理）、
+		 * 语音包 zip 导入 / 试听 / 清除，以及浏览器录音制作语音包并打包
+		 * 下载分享。三视图：
 		 *  - main：自动播报开关、TTS 后端、语音包行（当前激活 + 导入 + 一个「语音包管理」按钮）
 		 *  - packs：语音包库（可滚动列表：点击切换激活、勾选多选移除、进入制作器）
 		 *  - creator：制作语音包（语言选择 → 示例文本变化；逐段录音/导入；编译下载/应用）
@@ -1151,45 +1264,7 @@ window.__ModuleLoader__.load({
 			const [viewMode, setViewMode] = react.useState("main");
 			const [selectedIds, setSelectedIds] = react.useState([]);
 			const [expandedId, setExpandedId] = react.useState(null);
-			const overlayStyle = {
-				position: "fixed",
-				inset: 0,
-				zIndex: 1003,
-				background: "rgba(0, 0, 0, 0.5)",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				padding: "16px",
-			};
-			const boxStyle = {
-				position: "relative",
-				width: "min(520px, 94vw)",
-				maxHeight: "80vh",
-				overflowY: "auto",
-				background: "var(--dsw-specific-menu)",
-				border: "1px solid var(--dsw-alias-border-inverted)",
-				borderRadius: "12px",
-				boxShadow: "var(--dsw-shadow-lv3)",
-				display: "flex",
-				flexDirection: "column",
-			};
-			const closeStyle = {
-				position: "absolute",
-				top: "8px",
-				right: "8px",
-				zIndex: 2,
-				width: "28px",
-				height: "28px",
-				display: "grid",
-				placeItems: "center",
-				border: "none",
-				borderRadius: "999px",
-				cursor: "pointer",
-				background: "var(--dsw-alias-interactive-bg-hover)",
-				color: "var(--dsw-alias-label-secondary)",
-				fontSize: "14px",
-				lineHeight: 1,
-			};
+			// 弹层外壳（overlay / box / close）由 SettingsModal 统一提供。
 			const sectionStyle = { margin: "10px 16px 0" };
 			const labelStyle = { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)", margin: 0 };
 			const pillStyle = (active) => ({
@@ -1391,33 +1466,24 @@ window.__ModuleLoader__.load({
 					{ type: "button", onClick: () => setViewMode(mode), style: { ...pillStyle(false), marginTop: "6px" } },
 					t("voice.back"),
 				);
-			return reactDOM.createPortal(
+			return react.createElement(
+				react.Fragment,
+				null,
 				react.createElement(
 					"div",
-					{ role: "dialog", "aria-modal": true, "aria-label": t("voice.title"), style: overlayStyle, onClick: onClose },
-					react.createElement(
-						"div",
-						{ style: boxStyle, onClick: (event) => event.stopPropagation() },
-						react.createElement(
-							"div",
-							{
-								style: {
-									display: "flex",
-									alignItems: "center",
-									gap: "8px",
-									padding: "12px 40px 12px 16px",
-									fontSize: "14px",
-									fontWeight: 600,
-									color: "var(--dsw-alias-label-primary)",
-								},
-							},
-							viewMode === "main" ? t("voice.title") : viewMode === "packs" ? t("voice.packListTitle") : t("voice.recorderLabel"),
-						),
-						react.createElement(
-							"button",
-							{ type: "button", "aria-label": t("voice.close"), style: closeStyle, onClick: onClose },
-							"✕",
-						),
+					{
+						style: {
+							display: "flex",
+							alignItems: "center",
+							gap: "8px",
+							padding: "4px 16px 0",
+							fontSize: "13px",
+							fontWeight: 600,
+							color: "var(--dsw-alias-label-primary)",
+						},
+					},
+					viewMode === "main" ? t("voice.title") : viewMode === "packs" ? t("voice.packListTitle") : t("voice.recorderLabel"),
+				),
 						viewMode !== "main"
 							? null
 							: react.createElement(
@@ -1887,12 +1953,169 @@ window.__ModuleLoader__.load({
 										),
 										backButton("packs"),
 									),
-							),
-					),
 				),
-					document.body,
 				);
 			}		/**
+		 * 设置弹窗：两个标签页。
+		 *  - 界面：底部统计条越界内容横向滚动开关（隐藏滚动条）、回车键
+		 *    行为交换（回车换行 + Shift+回车发送）。
+		 *  - 语音：VoiceSettingsModal 三视图（自动播报、TTS、语音包）。
+		 * 弹层外壳（overlay / box / 关闭按钮）统一由本组件提供，语音内容
+		 * 以 React 元素传入（voiceContent）。
+		 */
+		function SettingsModal({
+			t,
+			tab,
+			onTabChange,
+			onClose,
+			voiceContent,
+			statsScrollOn,
+			onToggleStatsScroll,
+			enterSwapOn,
+			onToggleEnterSwap,
+		}) {
+			const overlayStyle = {
+				position: "fixed",
+				inset: 0,
+				zIndex: 1003,
+				background: "rgba(0, 0, 0, 0.5)",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "16px",
+			};
+			const boxStyle = {
+				position: "relative",
+				width: "min(520px, 94vw)",
+				maxHeight: "80vh",
+				overflowY: "auto",
+				background: "var(--dsw-specific-menu)",
+				border: "1px solid var(--dsw-alias-border-inverted)",
+				borderRadius: "12px",
+				boxShadow: "var(--dsw-shadow-lv3)",
+				display: "flex",
+				flexDirection: "column",
+			};
+			const closeStyle = {
+				position: "absolute",
+				top: "8px",
+				right: "8px",
+				zIndex: 2,
+				width: "28px",
+				height: "28px",
+				display: "grid",
+				placeItems: "center",
+				border: "none",
+				borderRadius: "999px",
+				cursor: "pointer",
+				background: "var(--dsw-alias-interactive-bg-hover)",
+				color: "var(--dsw-alias-label-secondary)",
+				fontSize: "14px",
+				lineHeight: 1,
+			};
+			const tabStyle = (active) => ({
+				padding: "3px 14px",
+				borderRadius: "999px",
+				cursor: "pointer",
+				border: "1px solid var(--dsw-alias-separator-primary)",
+				background: active ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+				color: active ? "var(--dsw-alias-label-primary)" : "var(--dsw-alias-label-tertiary)",
+				fontSize: "12px",
+				lineHeight: "20px",
+			});
+			const sectionStyle = { margin: "10px 16px 0" };
+			const labelStyle = { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)", margin: 0 };
+			const pillStyle = (active) => ({
+				padding: "3px 12px",
+				borderRadius: "999px",
+				cursor: "pointer",
+				border: "1px solid var(--dsw-alias-separator-primary)",
+				background: active ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+				color: active ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
+				fontSize: "12px",
+				lineHeight: "20px",
+			});
+			// 设置行：标签 + 开关按钮 + 说明文字。
+			const settingRow = (labelKey, active, onToggle, hintKey) =>
+				react.createElement(
+					"div",
+					{ style: sectionStyle },
+					react.createElement("p", { style: labelStyle }, t(labelKey)),
+					react.createElement(
+						"button",
+						{
+							type: "button",
+							"aria-pressed": active,
+							onClick: onToggle,
+							style: { ...pillStyle(active), marginTop: "4px" },
+						},
+						active ? t("settings.on") : t("settings.off"),
+					),
+					hintKey !== void 0
+						? react.createElement("p", { style: { ...labelStyle, marginTop: "4px" } }, t(hintKey))
+						: null,
+				);
+			const interfaceBody = react.createElement(
+				react.Fragment,
+				null,
+				settingRow("settings.statsLabel", statsScrollOn, onToggleStatsScroll, "settings.statsHint"),
+				settingRow("settings.enterLabel", enterSwapOn, onToggleEnterSwap, "settings.enterHint"),
+			);
+			return reactDOM.createPortal(
+				react.createElement(
+					"div",
+					{ role: "dialog", "aria-modal": true, "aria-label": t("settings.title"), style: overlayStyle, onClick: onClose },
+					react.createElement(
+						"div",
+						{ style: boxStyle, onClick: (event) => event.stopPropagation() },
+						react.createElement(
+							"div",
+							{
+								role: "tablist",
+								"aria-label": t("settings.title"),
+								style: {
+									display: "flex",
+									gap: "8px",
+									padding: "12px 40px 10px 16px",
+									borderBottom: "1px solid var(--dsw-alias-separator-primary)",
+								},
+							},
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									role: "tab",
+									"aria-selected": tab === "interface",
+									onClick: () => onTabChange("interface"),
+									style: tabStyle(tab === "interface"),
+								},
+								t("settings.interface"),
+							),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									role: "tab",
+									"aria-selected": tab === "voice",
+									onClick: () => onTabChange("voice"),
+									style: tabStyle(tab === "voice"),
+								},
+								t("settings.voice"),
+							),
+						),
+						react.createElement(
+							"button",
+							{ type: "button", "aria-label": t("settings.close"), style: closeStyle, onClick: onClose },
+							"✕",
+						),
+						tab === "voice" ? voiceContent : interfaceBody,
+						react.createElement("div", { style: { height: "16px" } }),
+					),
+				),
+				document.body,
+			);
+		}
+		/**
 		 * 替代圆圈组件。props 为框架标准 props（useProjection、t）+ 注册时
 		 * inject 的 owner face（queryBalance、clearToken）。
 		 */
@@ -2181,8 +2404,31 @@ window.__ModuleLoader__.load({
 
 			// 余额轮询（15 分钟）：页面常驻期间自动检测，余额不足时语音喊饿。
 			const [speechOn, setSpeechOn] = react.useState(speechEnabled());
-			// 语音设置：TTS 后端配置（localStorage）+ 语音包（host 共享文件）。
-			const [voiceSettingsOpen, setVoiceSettingsOpen] = react.useState(false);
+			// 设置弹窗（界面 / 语音两标签）。语音设置：TTS 后端配置
+			// （localStorage）+ 语音包（host 共享文件）。
+			const [settingsOpen, setSettingsOpen] = react.useState(false);
+			const [settingsTab, setSettingsTab] = react.useState("interface");
+			// 界面设置：底部统计条横向滚动、回车键行为交换（均 localStorage）。
+			const [statsScrollOn, setStatsScrollOn] = react.useState(statsScrollEnabled());
+			const [enterSwapOn, setEnterSwapOn] = react.useState(enterSwapEnabled());
+			// 界面设置生效：统计条 CSS 注入/移除 + 回车键捕获处理安装/卸载。
+			react.useEffect(() => {
+				applyStatsScrollCss(statsScrollOn);
+			}, [statsScrollOn]);
+			react.useEffect(() => {
+				applyEnterSwap(enterSwapOn);
+				return () => applyEnterSwap(false);
+			}, [enterSwapOn]);
+			const toggleStatsScroll = () => {
+				const next = !statsScrollOn;
+				setStatsScrollOn(next);
+				setStatsScrollEnabled(next);
+			};
+			const toggleEnterSwap = () => {
+				const next = !enterSwapOn;
+				setEnterSwapOn(next);
+				setEnterSwapEnabled(next);
+			};
 			const [ttsCfg, setTtsCfg] = react.useState(readTtsConfig());
 			const ttsCfgRef = react.useRef(ttsCfg);
 			ttsCfgRef.current = ttsCfg;
@@ -3355,7 +3601,7 @@ window.__ModuleLoader__.load({
 								{
 									type: "button",
 									"aria-haspopup": "dialog",
-									onClick: () => setVoiceSettingsOpen(true),
+									onClick: () => setSettingsOpen(true),
 									style: {
 										display: "inline-flex",
 										alignItems: "center",
@@ -3364,13 +3610,13 @@ window.__ModuleLoader__.load({
 										borderRadius: "999px",
 										cursor: "pointer",
 										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: voiceSettingsOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
-										color: speechOn ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
+										background: settingsOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+										color: "var(--dsw-alias-label-secondary)",
 										fontSize: "11px",
 										lineHeight: "18px",
 									},
 								},
-								t("balance.voiceSettings"),
+								t("settings.open"),
 							),
 						),
 					);
@@ -3506,16 +3752,25 @@ window.__ModuleLoader__.load({
 							},
 						})
 					: null,
-				voiceSettingsOpen
-					? react.createElement(VoiceSettingsModal, {
+				settingsOpen
+					? react.createElement(SettingsModal, {
 							t,
-							autoOn: speechOn,
-							onToggleAuto: toggleSpeech,
-							ttsCfg,
-							onTtsChange: (next) => {
-								setTtsCfg(next);
-								writeTtsConfig(next);
-							},
+							tab: settingsTab,
+							onTabChange: setSettingsTab,
+							onClose: () => setSettingsOpen(false),
+							statsScrollOn,
+							onToggleStatsScroll: toggleStatsScroll,
+							enterSwapOn,
+							onToggleEnterSwap: toggleEnterSwap,
+							voiceContent: react.createElement(VoiceSettingsModal, {
+								t,
+								autoOn: speechOn,
+								onToggleAuto: toggleSpeech,
+								ttsCfg,
+								onTtsChange: (next) => {
+									setTtsCfg(next);
+									writeTtsConfig(next);
+								},
 							packs: voicePacks,
 							activeId: activePackId,
 							packBusy,
@@ -3568,7 +3823,8 @@ window.__ModuleLoader__.load({
 							packLangInput,
 							onPackLangInput: setPackLangInput,
 							onDownloadPack: downloadVoicePack,
-							onClose: () => setVoiceSettingsOpen(false),
+								onClose: () => setSettingsOpen(false),
+							}),
 						})
 					: null,
 				recordingKey !== null
@@ -3855,6 +4111,17 @@ window.__ModuleLoader__.load({
 			"voice.seg.tokenUnit": "单位",
 			"voice.seg.month": "当月标签",
 			"voice.seg.suffix": "结尾",
+			"settings.open": "⚙ 设置",
+			"settings.title": "设置",
+			"settings.close": "关闭",
+			"settings.interface": "界面",
+			"settings.voice": "语音",
+			"settings.on": "开",
+			"settings.off": "关",
+			"settings.statsLabel": "底部统计条（轮次 / 耗时 / 速率）",
+			"settings.statsHint": "关闭时统计条超出宽度以省略号截断（悬停气泡显示完整内容）；开启后越界内容改为横向滚动并隐藏滚动条。",
+			"settings.enterLabel": "回车键行为（会话输入框）",
+			"settings.enterHint": "DSH 默认为回车发送、Shift+回车换行；开启后互换。仅作用于会话输入框，不干扰其他输入框。",
 		};
 
 		/** 英文文案。 */
@@ -3993,6 +4260,17 @@ window.__ModuleLoader__.load({
 			"voice.seg.tokenUnit": "Unit",
 			"voice.seg.month": "This-month label",
 			"voice.seg.suffix": "Suffix",
+			"settings.open": "⚙ Settings",
+			"settings.title": "Settings",
+			"settings.close": "Close",
+			"settings.interface": "Interface",
+			"settings.voice": "Voice",
+			"settings.on": "On",
+			"settings.off": "Off",
+			"settings.statsLabel": "Bottom stats bar (turns / duration / speed)",
+			"settings.statsHint": "When off, the stats bar truncates with an ellipsis (hover shows the full line). When on, overflowing content scrolls horizontally with the scrollbar hidden.",
+			"settings.enterLabel": "Enter key behavior (composer)",
+			"settings.enterHint": "DSH defaults to Enter = send and Shift+Enter = newline; enabling swaps them. Only affects the composer, not other inputs.",
 		};
 
 		/**
