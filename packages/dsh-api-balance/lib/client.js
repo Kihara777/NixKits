@@ -859,6 +859,31 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
+		 * 面板纵向裁剪上缘（≈ 顶栏下缘）：从圆圈沿祖先链向上找第一个
+		 * 带纵向裁剪（overflow-y hidden/clip/auto/scroll）的容器，其
+		 * rect.top 即面板向上扩展的硬边界——手机横屏时面板高度必须
+		 * 收进该边界，否则顶部被顶栏/裁剪区域遮挡。
+		 */
+		function clippingCeilingTop(from) {
+			if (typeof document === "undefined" || typeof window === "undefined") return 0;
+			try {
+				let node = from instanceof Element ? from.parentElement : null;
+				while (node !== null && node !== document.body) {
+					const style = window.getComputedStyle(node);
+					const clipsY = /(hidden|clip|auto|scroll)/.test(style.overflowY);
+					if (clipsY) {
+						const rect = node.getBoundingClientRect();
+						if (rect.height >= 80) return Math.max(0, Math.round(rect.top));
+					}
+					node = node.parentElement;
+				}
+			} catch {
+				// 测量失败按 0 处理
+			}
+			return 0;
+		}
+
+		/**
 		 * 查找原 ContextMeter 的 root 节点（用于 DOM 就位）。首选 dsh
 		 * 0.1.1-rc.2 的构建类名，回退结构查找（内嵌 14px ring 且不带本插件
 		 * 标记的 dialog 按钮向上找 inline-flex relative 祖先）。
@@ -880,17 +905,30 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
-		 * 水平翻页区：多页并排（flex 行 + overflow hidden + 每页
-		 * translateX calc 翻页，拖拽时混入 px 实时位移）。区域高度 =
-		 * 最高页内容高度，随内容动态调整、自身不滚动——完整内容依赖
-		 * 面板自身的纵向滚动条。上方为 iOS 主屏幕风格页面指示点（可
-		 * 点按），支持横向拖拽/滑动翻页（touch-action: pan-y 保留面板
-		 * 纵向滚动；拖过阈值后指针捕获，避免误吞页面内按钮的点击）。
+		 * 水平翻页区：多页并排（flex 行 + overflow hidden）。页宽 = 各页
+		 * 内容实测宽度（scrollWidth 取最大，下限 220）——窄屏可用宽度
+		 * 不足时页内容维持自身宽度，由面板的横向滚动承载（面板自身
+		 * overflow-x:auto），不再被本区域裁剪。区域高度 = 最高页内容
+		 * 高度，随内容动态调整、自身不滚动——完整内容依赖面板自身的
+		 * 纵向滚动条。上方为 iOS 主屏幕风格页面指示点（可点按），支持
+		 * 横向拖拽/滑动翻页（touch-action: pan-y 保留面板纵向滚动；
+		 * 拖过阈值后才启用指针捕获，避免误吞页面内按钮的点击）。
 		 */
 		function Pager({ pages, pageIndex, onPageChange, t }) {
 			const [drag, setDrag] = react.useState(null); // {startX, startY, dx, dy, captured}
+			const [pageW, setPageW] = react.useState(220);
+			const pageRefs = react.useRef([]);
 			const count = Array.isArray(pages) ? pages.length : 0;
 			const clampIndex = (i) => Math.max(0, Math.min(count - 1, i));
+			// 实测各页内容宽度（溢出可见，scrollWidth = 内容宽度）；
+			// 数据/图表变化（pages 引用变化）后重测。
+			react.useLayoutEffect(() => {
+				let w = 220;
+				for (const el of pageRefs.current) {
+					if (el !== null && Number.isFinite(el.scrollWidth)) w = Math.max(w, Math.ceil(el.scrollWidth));
+				}
+				setPageW(w);
+			}, [pages]);
 			const onPointerDown = (event) => {
 				if (count < 2) return;
 				setDrag({ startX: event.clientX, startY: event.clientY, dx: 0, dy: 0, captured: false });
@@ -922,6 +960,7 @@ window.__ModuleLoader__.load({
 					return null;
 				});
 			};
+			const offsetPx = -pageIndex * pageW + (drag !== null ? drag.dx : 0);
 			return react.createElement(
 				"div",
 				null,
@@ -959,7 +998,13 @@ window.__ModuleLoader__.load({
 				react.createElement(
 					"div",
 					{
-						style: { display: "flex", overflow: "hidden", touchAction: "pan-y", cursor: count > 1 ? "grab" : "default" },
+						style: {
+							display: "flex",
+							overflow: "hidden",
+							width: `${pageW}px`,
+							touchAction: "pan-y",
+							cursor: count > 1 ? "grab" : "default",
+						},
 						onPointerDown: onPointerDown,
 						onPointerMove: onPointerMove,
 						onPointerUp: finishDrag,
@@ -970,10 +1015,13 @@ window.__ModuleLoader__.load({
 							"div",
 							{
 								key: index,
+								ref: (node) => {
+									pageRefs.current[index] = node;
+								},
 								style: {
-									flex: "0 0 100%",
-									minWidth: 0,
-									transform: `translateX(calc(${-pageIndex * 100}% + ${drag !== null ? drag.dx : 0}px))`,
+									flex: "0 0 auto",
+									width: `${pageW}px`,
+									transform: `translateX(${offsetPx}px)`,
 									transition: drag === null ? "transform .22s ease" : "none",
 								},
 							},
@@ -2401,16 +2449,26 @@ window.__ModuleLoader__.load({
 			const panelRef = react.useRef(null);
 			const [panelWidth, setPanelWidth] = react.useState(264);
 			const [panelMaxWidth, setPanelMaxWidth] = react.useState(264);
+			// 面板最大高度：手机横屏时收进「锚点上方可用空间」（顶栏下缘
+			// 为硬边界），避免面板顶部被顶栏遮挡；常规高度上限 460。
+			const [panelMaxHeight, setPanelMaxHeight] = react.useState(460);
 			react.useEffect(() => {
 				if (!open) return;
 				const el = panelRef.current;
 				if (el === null) return;
 				const update = () => {
 					const root = rootRef.current;
-					const anchorRight = root !== null ? root.getBoundingClientRect().right : window.innerWidth;
+					const anchor = root !== null ? root.getBoundingClientRect() : null;
+					const anchorRight = anchor !== null ? anchor.right : window.innerWidth;
 					const railRight = leftRailWidth();
 					const available = Math.max(280, Math.min(640, Math.round(anchorRight - railRight - 12)));
 					setPanelMaxWidth(available);
+					// 高度钳制：锚点顶缘 − 裁剪上缘（≈ 顶栏下缘）− 间隙。
+					if (anchor !== null) {
+						const ceiling = clippingCeilingTop(root);
+						const heightCap = Math.max(120, Math.min(460, Math.round(anchor.top - ceiling - 12)));
+						setPanelMaxHeight(heightCap);
+					}
 					// scrollWidth = 内容完整宽度（含溢出部分与内边距）。
 					const contentW = Math.round(el.scrollWidth);
 					setPanelWidth(Math.max(264, Math.min(contentW, available)));
@@ -3955,6 +4013,7 @@ window.__ModuleLoader__.load({
 								width: `${panelWidth}px`,
 								minWidth: "264px",
 								maxWidth: `${panelMaxWidth}px`,
+								maxHeight: `${panelMaxHeight}px`,
 								overflowX: "auto",
 								boxShadow: "var(--dsw-shadow-lv3)",
 								color: "var(--dsw-alias-label-secondary)",
