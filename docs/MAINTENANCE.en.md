@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-02T02:49:52+09:00
+
+**Summary**: feat(dsh-api-balance): full-page panel width regression fix + peak-pricing marker + mobile keyboard guard — the panel width is now measured once from content scrollWidth and set as a concrete px (eliminating the 「chart px → panel max-content → observer → chart px」 feedback that pushed the panel to the cap and filled the whole page), with the cap tightened to min(anchor right edge − sidebar, 640) and in-panel horizontal scrolling beyond it; during DeepSeek peak hours (official current rule: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time, everything else incl. weekends off-peak) the usage ring and chart turn red with a 「Peak pricing」 badge (panel header + chart title), and greetings are followed by a peak hint (pack `peak` segment / TTS fallback) with a new `peak` segment in the creator; on mobile, switching sessions via the sidebar no longer pops the soft keyboard (focusin capture blocks non-tap composer focus; on by default, Settings → Interface to disable)
+
+| Commit | Description |
+|------|------|
+| `3b126c7` | feat(dsh-api-balance): full-page panel width fix + peak-pricing marker + mobile keyboard guard |
+| `4ed2e7c` | docs(dsh-api-balance): sync four-language docs (peak marker / mobile keyboard / peak segment) |
 ## 2026-09-01T12:18:16+09:00
 
 **Summary**: feat(presets): preset-derivation drift check hooked into flake check — new develop/check-preset-derivation.py verifies the maintenance mode fully derives from the NixOS mode (composition file = appended fixed block, skills directories identical file-by-file); flake.nix adds checks.preset-derivation (run by CI on every push); AGENTS.md gains a 「预设」 section recording the derivation rules and the drift check, and the Enter-key entry is corrected to the dsh-api-balance 「Settings → Interface」 toggle

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-02T02:49:52+09:00
+
+**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量リング与 chart 紅色表示 + 「峰時課金」badge（面板 header 与 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
+
+| 提交 | 説明 |
+|------|------|
+| `3b126c7` | feat(dsh-api-balance): 面板全幅修正 + 峰谷峰標記 + 移動端 keyboard 抑制 |
+| `4ed2e7c` | docs(dsh-api-balance): 四語文書同期（峰標記 / 移動端 keyboard / peak segment） |
 ## 2026-09-01T12:18:16+09:00
 
 **摘要**：feat(presets): 預設派生漂移檢查 flake check 導入 — develop/check-preset-derivation.py 新設、維護模式 NixOS模式自完全派生検証（組合 file = 固定行 block 追記、skills 目録 file 単位一致）；flake.nix checks.preset-derivation 追加（CI 毎 push 実行）；AGENTS.md「预设」節新設派生規約与漂移檢查記録、Enter key 動作項目 dsh-api-balance「設定 → 界面」switch 実装修正

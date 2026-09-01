@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-02T02:49:52+09:00
+
+**摘要**：feat(dsh-api-balance): 修复面板铺满整页 + 峰谷高峰标记 + 移动端不弹键盘 — 面板宽度回归修复：由内容 scrollWidth 一次性测量落成具体 px，消除「图表 px → 面板 max-content → 观察器 → 图表 px」正反馈（此前面板被顶到上限铺满整页），上限收紧为 min(锚点右缘 − 工具栏, 640)，内容更宽时面板内横向滚动；峰谷计费高峰时段（官方现行规则：周一至周五北京时间 09:00–12:00、14:00–18:00，其余含周末全天低谷）用量圈与图表红色显示 + 「峰时计费」标记（面板头部与图表标题），问候音效后追加高峰提示（语音包 peak 片段 / TTS 兜底），制作器新增 peak 片段与示例文本；移动端侧栏切换会话不再自动弹出软键盘（focusin 捕获拦截非用户点按的输入框聚焦，默认开、设置 → 界面可关）
+
+| 提交 | 说明 |
+|------|------|
+| `3b126c7` | feat(dsh-api-balance): 修复面板铺满整页 + 峰谷高峰标记 + 移动端不弹键盘 |
+| `4ed2e7c` | docs(dsh-api-balance): 同步四语文档（峰谷高峰标记 / 移动端不弹键盘 / peak 片段） |
 ## 2026-09-01T12:18:16+09:00
 
 **摘要**：feat(presets): 预设派生漂移检查挂入 flake check — 新增 develop/check-preset-derivation.py 校验维护模式完整派生自 NixOS模式（组合文件 = 追加固定行块、skills 目录逐文件一致），flake.nix 挂入 checks.preset-derivation（CI 每次 push 执行）；AGENTS.md 新增「预设」章节记录派生约定与漂移检查，回车键行为条目更正为 dsh-api-balance「设置 → 界面」开关实现
