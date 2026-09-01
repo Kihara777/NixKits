@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:48:40+09:00
+
+**Summary**: feat(dsh-api-balance): horizontally paged consumption-detail area (dot indicator + swipe) — today/month/30-day and the per-model breakdown/chart merge into one two-page horizontal pager (page 1: window rows; page 2: per-model + daily/monthly chart); a phone-home-screen-style dot indicator sits above (tappable, the active dot stretches into a pill), with horizontal drag/swipe paging (pointer capture only engages past the threshold, so in-page button clicks are never swallowed; touch-action: pan-y keeps the panel's vertical scroll); the area height follows its content and never scrolls itself — full content relies on the usage panel's own vertical scrollbar
+
+| Commit | Description |
+|------|------|
+| `b1a6406` | feat(dsh-api-balance): horizontally paged consumption-detail area (dot indicator + swipe) |
+| `8db2f12` | docs(dsh-api-balance): paged consumption-detail notes (4 languages) |
 ## 2026-09-02T04:40:47+09:00
 
 **Summary**: refactor(dsh-api-balance): settings button moves to the header + Balance tab takes over refresh + token source moves below account info — another panel layout pass: the 「⚙ Settings」 button moves into the panel header where the 「Refresh data」 button used to be; the refresh button is removed and its behavior (force-refresh bypassing the host cache + a random greeting) is fully inherited by clicking the 「Balance」 tab (a spinner shows inside the tab while loading); the token-source area (source label / ✓ Signed in / Disconnect) moves from the panel bottom to directly below the 「Account」 block, forming one continuous info section

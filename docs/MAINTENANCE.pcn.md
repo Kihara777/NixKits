@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:48:40+09:00
+
+**摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 与 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 胶囊状伸長）、横 drag/swipe 翻頁対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応動態調整自身不 scroll、全内容用量面板自身縦 scrollbar 依存
+
+| 提交 | 説明 |
+|------|------|
+| `b1a6406` | feat(dsh-api-balance): 消耗明細区域水平翻頁（dot + swipe） |
+| `8db2f12` | docs(dsh-api-balance): 消耗明細翻頁説明（四語） |
 ## 2026-09-02T04:40:47+09:00
 
 **摘要**：refactor(dsh-api-balance): 設定按鈕 header 移動 + 余额標籤更新継承 + token 取得元帳戶情報下移動 — 面板 layout 再調整：「⚙ 設定」按鈕面板 header 旧「數據更新」按鈕位置移動；更新按鈕廃止、其機能（host cache 迂回強制更新 + random 挨拶音声）「余额」標籤 click 完全継承（読込中標籤内 spinner 表示）；token 取得元区域（取得元 label / ✓ 登録済 / 切断）面板下部 → 「帳戶情報」block 直下移動、帳戶情報与連続情報 section 構成
