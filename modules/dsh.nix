@@ -56,7 +56,19 @@ let
   # (valid YAML).  Written to $DSH_HOME/settings.yaml by preStart; dsh
   # hot-reloads it.  Empty ({} or missing) resolves every namespace to
   # schema defaults.
-  settingsDoc = pkgs.writeText "settings.yaml" (builtins.toJSON cfg.settings);
+  #
+  # effectiveSettings folds the declarative defaultModel (when enabled) under
+  # agent-default-model; an explicit cfg.settings."agent-default-model" wins
+  # over the injected default (left side of // loses).
+  defaultModelSection = if cfg.defaultModel.enable then {
+    "agent-default-model" = {
+      provider = cfg.defaultModel.provider;
+      model = cfg.defaultModel.model;
+      reasoningEffort = cfg.defaultModel.reasoningEffort;
+    };
+  } else { };
+  effectiveSettings = defaultModelSection // cfg.settings;
+  settingsDoc = pkgs.writeText "settings.yaml" (builtins.toJSON effectiveSettings);
 
   # External launch authorities: dsh prints its tokenized startup URL for
   # 127.0.0.1 only (localWebUrl hardcodes loopback, and --host 0.0.0.0 is
@@ -314,6 +326,40 @@ in
         \$DSH_HOME/settings.yaml.  The document is JSON (valid YAML) so it
         survives dsh's js-yaml parser; namespaces map to the settings UI
         sections and dsh hot-reloads external edits.
+      '';
+    };
+
+    # 新会话默认模型：结构化选项，经 settings.agent-default-model 注入。
+    # 默认 off（不注入），启用时用本选项的 provider/model/reasoningEffort
+    # 生成 agent-default-model 段；若 cfg.settings 已显式给出
+    # "agent-default-model"，则以显式值为准（本选项仅作未配置时的回退）。
+    defaultModel = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkEnableOption "inject a default agent model under settings.agent-default-model";
+          provider = lib.mkOption {
+            type = lib.types.str;
+            default = "deepseek-official";
+            description = "Model provider route id (e.g. deepseek-official).";
+          };
+          model = lib.mkOption {
+            type = lib.types.str;
+            default = "deepseek-v4-flash";
+            description = "Default DeepSeek model id.";
+          };
+          reasoningEffort = lib.mkOption {
+            type = lib.types.enum [ "off" "low" "high" "max" ];
+            default = "off";
+            description = "Default reasoning effort; 'off' maps to non-thinking (incl. FIM's non-thinking-only use).";
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Declarative default agent model for new sessions, injected into
+        nixkits.dsh.settings under the "agent-default-model" namespace when
+        enable = true (backed by \@deepseek-ai/dsh-agent-default-model).  An
+        explicit nixkits.dsh.settings."agent-default-model" always wins.
       '';
     };
 

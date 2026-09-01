@@ -375,3 +375,30 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）�
 | `agent-presets` | — | Agent preset |
 
 > **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明配置。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内配置、或 device 別独立瀏覽器。
+
+
+### 默認模型（defaultModel）
+
+`nixkits.dsh.defaultModel` 新規 session 默認模型向構造化声明 option（`@deepseek-ai/dsh-agent-default-model` 経由 `settings."agent-default-model"` 書込）。默認 `enable = false`（不注入）；`enable = true` 時下記 sub option 生成、**明示 `nixkits.dsh.settings."agent-default-model"` 常優先**：
+
+```nix
+{
+  nixkits.dsh.defaultModel = {
+    enable = true;
+    provider = "deepseek-official";  # 默認
+    model = "deepseek-v4-flash";     # 默認
+    reasoningEffort = "off";         # 默認
+  };
+}
+```
+
+#### reasoningEffort 段階与 cost
+
+| reasoningEffort | 動作 | 開銷 |
+|-----------------|------|------|
+| `off` | non-thinking：思考連鎖無、`thinking:disabled` 映射 | **最省**（reasoning token 無）、延遲最小；**FIM 補全僅此段支持** |
+| `low` | 思考開・最小力度 | off 稍高（少量 reasoning token） |
+| `high` | 默認段（dsh-llm-deepseek adapter 默認 high）、品質/速度均衡 | 出力含推論 segment、token 比率増 |
+| `max` | 最高力思考、品質最強 | **最高**（出力 token 比率最大） |
+
+> `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限支持」）。FIM 僅 `deepseek-v4-flash` 与 `deepseek-v4-pro` 支持、`deepseek-v4-flash-vision-exp` 不支援。

@@ -375,3 +375,30 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 | `agent-presets` | — | agent presets |
 
 > **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.register` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.
+
+
+### Default model (defaultModel)
+
+`nixkits.dsh.defaultModel` provides a structured declarative option for the new-session default model (backed by `@deepseek-ai/dsh-agent-default-model`, written to `settings."agent-default-model"`). Defaults to `enable = false` (no injection); with `enable = true` it renders the subsection below, and an **explicit `nixkits.dsh.settings."agent-default-model"` always wins** over the generated default:
+
+```nix
+{
+  nixkits.dsh.defaultModel = {
+    enable = true;
+    provider = "deepseek-official";  # default
+    model = "deepseek-v4-flash";     # default
+    reasoningEffort = "off";         # default
+  };
+}
+```
+
+#### reasoningEffort tiers and cost
+
+| reasoningEffort | behavior | cost |
+|-----------------|----------|------|
+| `off` | non-thinking: no chain-of-thought, maps to `thinking:disabled` | **cheapest** (no reasoning tokens), lowest latency; **the only tier FIM completion supports** |
+| `low` | thinking on, lightest effort | slightly more than off (a few reasoning tokens) |
+| `high` | adapter default (dsh-llm-deepseek default is high), balanced quality/speed | output includes the reasoning segment, larger token share |
+| `max` | strongest reasoning, best quality | **most expensive** (largest output-token share) |
+
+> `off` mapping to `thinking:disabled` is the prerequisite for enabling FIM (fill-in-the-middle) completion — DeepSeek marks FIM "non-thinking mode only". FIM is supported only on `deepseek-v4-flash` and `deepseek-v4-pro`; `deepseek-v4-flash-vision-exp` does not support it.

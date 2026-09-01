@@ -375,3 +375,30 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 | `agent-presets` | — | エージェントプリセット |
 
 > **設定メニューのストレージ境界**：設定 UI の全項目が `nixkits.dsh.settings` で宣言的に設定できるわけではない。**dsh-api-balance の界面 / 音声設定**（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**（ブラウザごとの独立・既定 ON・UI 内で切替）であり、`settings.register` システムを経由しない——そのため `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` はこれらを上書き**しない**。こうした「ブラウザごとの設定」は当プラグインの `⚙ 設定` パネルで行うか、デバイスごとに別ブラウザを用意する。
+
+
+### デフォルトモデル（defaultModel）
+
+`nixkits.dsh.defaultModel` は新規セッションのデフォルトモデル向けの構造化された宣言的オプション（`@deepseek-ai/dsh-agent-default-model` 経由で `settings."agent-default-model"` に書き込む）。既定は `enable = false`（注入なし）；`enable = true` で下記サブオプションを描画し、**明示的な `nixkits.dsh.settings."agent-default-model"` が常に優先**される：
+
+```nix
+{
+  nixkits.dsh.defaultModel = {
+    enable = true;
+    provider = "deepseek-official";  # 既定
+    model = "deepseek-v4-flash";     # 既定
+    reasoningEffort = "off";         # 既定
+  };
+}
+```
+
+#### reasoningEffort の段階とコスト
+
+| reasoningEffort | 動作 | コスト |
+|-----------------|------|--------|
+| `off` | non-thinking：思考連鎖なし、`thinking:disabled` にマップ | **最安**（reasoning token なし）、遅延最小；**FIM 補完がこの段のみ対応** |
+| `low` | 思考オン・最小力度 | off よりやや高（少量の reasoning token） |
+| `high` | 既定段（dsh-llm-deepseek アダプタの default は high）、品質/速度均衡 | 出力に推論セグメントが含まれ token 比率増 |
+| `max` | 最高力の思考、品質最強 | **最高額**（出力 token 比率最大） |
+
+> `off` → `thinking:disabled` は FIM（Fill-In-The-Middle 補完）を有効化する前提条件（DeepSeek は FIM を「非思考モードのみ対応」と明記）。FIM は `deepseek-v4-flash` と `deepseek-v4-pro` のみ対応、`deepseek-v4-flash-vision-exp` は非対応。
