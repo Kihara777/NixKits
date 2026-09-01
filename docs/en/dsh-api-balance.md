@@ -17,7 +17,7 @@ API usage balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab
 ## Features
 
 - **Usage**: the original content (context occupancy and its breakdown)
-- **Balance**: the current API key's account info (key hint, availability, per-currency total / top-up / granted balance), plus today / this-month / 30-day consumption (cost + tokens + per-model breakdown) and daily / monthly usage charts
+- **Balance**: the current API key's account info (key hint, availability, per-currency total / top-up / granted balance), plus consumption details and usage charts — the consumption detail is one horizontally-paged area (page 1: today / this-month / 30-day; page 2: per-model breakdown + daily / monthly chart), with a phone-home-screen-style dot indicator above it (tappable, swipe/drag to flip); the area height follows its content and never scrolls itself (full content relies on the panel's own vertical scroll)
 - Host-side 30-second TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`), falling back to the process environment
 
 ### Platform token acquisition (two tiers, fully automatic first)
