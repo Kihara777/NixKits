@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:45:48+09:00
+
+**摘要**：fix(dsh-api-balance): 用量面板改为页面级 fixed portal（根治移动端出界） — 面板从「会话树内 absolute 定位」改为 document.body 级 fixed portal（与设置弹窗同架构），不再受会话区 overflow 裁剪与坐标空间影响；位置由圆圈锚点的视口坐标换算（resize/scroll 重算，useLayoutEffect 测量避免闪烁）；双保险钳制：宽度上限 = min(锚点空间, 视口 − 24px)、高度上限 = 锚点上方可用空间（横屏自动收缩避开顶栏），任何屏幕尺寸不越界；面板外点击关闭同步更新（面板已移出圆圈祖先链），z-index 900 低于充值/登录/设置弹层
+
+| 提交 | 说明 |
+|------|------|
+| `4b2f19f` | fix(dsh-api-balance): 用量面板改为页面级 fixed portal（根治移动端出界） |
+| `7145e5f` | docs(dsh-api-balance): 页面级弹层架构说明（四语） |
 ## 2026-09-02T05:29:47+09:00
 
 **摘要**：fix(dsh-api-balance): 手机竖屏窄屏横向手势交还面板滚动 — 根因：翻页区 touch-action: pan-y 在触屏上禁止浏览器级横向手势，面板的原生横向滚动被整个翻页区吞掉——内容超出面板宽度时表现为「出界且无法横向滚动」；修复：翻页区检测内容宽度是否超出面板可用宽度（fitWidth 传入），超出时 touch-action 改为 auto（横向手势交还面板原生滚动）并停用拖拽翻页（手势只滚动面板），页面切换保留经上方指示点；不超出时维持 pan-y + 拖拽/滑动翻页

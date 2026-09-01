@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:45:48+09:00
+
+**摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 与座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新（面板 ring 祖先 chain 離脱）、z-index 900 充值/登録/設定 overlay 下
+
+| 提交 | 説明 |
+|------|------|
+| `4b2f19f` | fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） |
+| `7145e5f` | docs(dsh-api-balance): 頁面級 overlay architecture 説明（四語） |
 ## 2026-09-02T05:29:47+09:00
 
 **摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll pager 全体吞——内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅与面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止（gesture 面板 scroll 限定）、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持

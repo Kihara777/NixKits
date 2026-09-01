@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:45:48+09:00
+
+**Summary**: fix(dsh-api-balance): usage panel becomes a page-level fixed portal (root fix for mobile off-screen) — the panel moves from absolute positioning inside the conversation tree to a document.body-level fixed portal (same architecture as the settings dialog), no longer clipped by the conversation area's overflow or bound to its coordinate space; the position is derived from the ring anchor's viewport rect (recomputed on resize/scroll, measured in useLayoutEffect to avoid flicker); double clamps: width cap = min(anchor space, viewport − 24px), height cap = the space above the anchor (auto-shrinks in landscape to avoid the top bar) — never off-screen at any size; the outside-click close is updated (the panel left the ring's ancestor chain), and z-index 900 sits below the top-up/login/settings overlays
+
+| Commit | Description |
+|------|------|
+| `4b2f19f` | fix(dsh-api-balance): usage panel becomes a page-level fixed portal (root fix for mobile off-screen) |
+| `7145e5f` | docs(dsh-api-balance): page-level overlay architecture notes (4 languages) |
 ## 2026-09-02T05:29:47+09:00
 
 **Summary**: fix(dsh-api-balance): narrow phone-portrait horizontal gestures returned to panel scrolling — root cause: the pager's touch-action: pan-y forbids browser-level horizontal gestures on touch, so the panel's native horizontal scroll was swallowed by the whole pager — overflowing content appeared cut off with no horizontal scrolling; fix: the pager checks whether its content exceeds the panel's available width (fitWidth prop) and, when it does, switches touch-action to auto (handing horizontal gestures back to the panel's native scroll) and disables drag-flipping (gestures only scroll the panel), with page switching kept via the indicator dots; when it fits, pan-y + drag/swipe flipping stays
