@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:29:47+09:00
+
+**Summary**: fix(dsh-api-balance): narrow phone-portrait horizontal gestures returned to panel scrolling — root cause: the pager's touch-action: pan-y forbids browser-level horizontal gestures on touch, so the panel's native horizontal scroll was swallowed by the whole pager — overflowing content appeared cut off with no horizontal scrolling; fix: the pager checks whether its content exceeds the panel's available width (fitWidth prop) and, when it does, switches touch-action to auto (handing horizontal gestures back to the panel's native scroll) and disables drag-flipping (gestures only scroll the panel), with page switching kept via the indicator dots; when it fits, pan-y + drag/swipe flipping stays
+
+| Commit | Description |
+|------|------|
+| `c86cd9f` | fix(dsh-api-balance): narrow phone-portrait horizontal gestures returned to panel scrolling |
+| `189945c` | docs(dsh-api-balance): narrow-screen gesture-priority notes (4 languages) |
 ## 2026-09-02T05:23:13+09:00
 
 **Summary**: fix(dsh-api-balance): the first manual refresh plays the greeting too — every manual refresh via the 「Balance」 tab (including the first click) plays the random greeting; only the full-page-load initialization skips it (broadcasting just the usage warnings per the auto-broadcast setting)

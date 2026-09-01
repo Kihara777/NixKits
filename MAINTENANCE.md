@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:29:47+09:00
+
+**摘要**：fix(dsh-api-balance): 手机竖屏窄屏横向手势交还面板滚动 — 根因：翻页区 touch-action: pan-y 在触屏上禁止浏览器级横向手势，面板的原生横向滚动被整个翻页区吞掉——内容超出面板宽度时表现为「出界且无法横向滚动」；修复：翻页区检测内容宽度是否超出面板可用宽度（fitWidth 传入），超出时 touch-action 改为 auto（横向手势交还面板原生滚动）并停用拖拽翻页（手势只滚动面板），页面切换保留经上方指示点；不超出时维持 pan-y + 拖拽/滑动翻页
+
+| 提交 | 说明 |
+|------|------|
+| `c86cd9f` | fix(dsh-api-balance): 手机竖屏窄屏横向手势交还面板滚动 |
+| `189945c` | docs(dsh-api-balance): 窄屏手势优先级说明（四语） |
 ## 2026-09-02T05:23:13+09:00
 
 **摘要**：fix(dsh-api-balance): 初次手动刷新也播放问候 — 「余额」标签的每次手动刷新（含初次点击）都随机播放问候音效；仅页面整体加载的初始化不播问候（只按自动播报设置播报用量警告）

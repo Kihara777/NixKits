@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:29:47+09:00
+
+**摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll pager 全体吞——内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅与面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止（gesture 面板 scroll 限定）、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持
+
+| 提交 | 説明 |
+|------|------|
+| `c86cd9f` | fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 |
+| `189945c` | docs(dsh-api-balance): 窄幅 gesture 優先説明（四語） |
 ## 2026-09-02T05:23:13+09:00
 
 **摘要**：fix(dsh-api-balance): 初回手動更新挨拶同再生 — 「余额」標籤手動更新毎回（初回 click 含）random 挨拶音声再生；頁面全体読込初期化限定挨拶 skip（自動放送設定従使用量警告限定放送）
