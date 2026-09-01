@@ -1917,10 +1917,10 @@ window.__ModuleLoader__.load({
 			const rootRef = react.useRef(null);
 			// 面板容器宽度（响应式：图表随面板宽度扩展）。
 			const panelRef = react.useRef(null);
-			const [panelWidth, setPanelWidth] = react.useState(340);
+			const [panelWidth, setPanelWidth] = react.useState(264);
 			// 面板可用横向空间：以圆圈锚点右缘为基准，扣除左侧工具栏
 			// （sidebar，可能覆盖面板）与边距后即为不出屏的最大宽度。
-			const [panelMaxWidth, setPanelMaxWidth] = react.useState(340);
+			const [panelMaxWidth, setPanelMaxWidth] = react.useState(264);
 			react.useEffect(() => {
 				if (!open) return;
 				const el = panelRef.current;
@@ -2772,19 +2772,10 @@ window.__ModuleLoader__.load({
 							USAGE_ROWS.map((row) =>
 								react.createElement(
 									"div",
-									{
-										key: row.key,
-										style: {
-											justifyContent: "space-between",
-											alignItems: "center",
-											gap: "12px",
-											padding: "2px 0",
-											display: "flex",
-										},
-									},
+									{ key: row.key, style: { padding: "3px 0" } },
 									react.createElement(
 										"dt",
-										{ style: { color: "var(--dsw-alias-label-secondary)", margin: 0 } },
+										{ style: { margin: 0, fontSize: "10px", lineHeight: "14px", color: "var(--dsw-alias-label-tertiary)" } },
 										react.createElement(
 											"span",
 											{
@@ -2808,7 +2799,10 @@ window.__ModuleLoader__.load({
 											style: {
 												fontVariantNumeric: "tabular-nums",
 												color: "var(--dsw-alias-label-primary)",
+												fontSize: "12px",
+												lineHeight: "18px",
 												margin: 0,
+												overflowWrap: "anywhere",
 											},
 										},
 										`~${formatTokens(breakdown[row.key])}`,
@@ -2819,29 +2813,21 @@ window.__ModuleLoader__.load({
 					: null,
 			);
 
-			// 明细行（label 左、value 右，面板内通用）。
+			// 明细行（标题与正文两行显示：小号标题在上，正文在下可换行——
+			// 复用令牌来源的信息层级，窄面板更美观）。
 			const detailRow = (label, value, extra) => {
 				const { key, labelStyle, valueStyle } = extra ?? {};
 				return react.createElement(
 					"div",
-					{
-						key,
-						style: {
-							justifyContent: "space-between",
-							alignItems: "center",
-							gap: "12px",
-							padding: "2px 0",
-							display: "flex",
-						},
-					},
+					{ key, style: { padding: "3px 0" } },
 					react.createElement(
 						"dt",
 						{
 							style: {
-								color: "var(--dsw-alias-label-secondary)",
 								margin: 0,
-								whiteSpace: "nowrap",
-								flexShrink: 0,
+								fontSize: "10px",
+								lineHeight: "14px",
+								color: "var(--dsw-alias-label-tertiary)",
 								...labelStyle,
 							},
 						},
@@ -2851,12 +2837,12 @@ window.__ModuleLoader__.load({
 						"dd",
 						{
 							style: {
-								fontVariantNumeric: "tabular-nums",
-								color: "var(--dsw-alias-label-primary)",
 								margin: 0,
-								whiteSpace: "nowrap",
-								flexShrink: 0,
-								marginLeft: "auto",
+								fontVariantNumeric: "tabular-nums",
+								fontSize: "12px",
+								lineHeight: "18px",
+								color: "var(--dsw-alias-label-primary)",
+								overflowWrap: "anywhere",
 								...valueStyle,
 							},
 						},
@@ -2900,8 +2886,8 @@ window.__ModuleLoader__.load({
 				const usageOk = usage !== null && usage.status === "ok" && typeof usage.windows === "object";
 				const usageWindows = usageOk ? usage.windows : null;
 				const usageMessage = usage !== null && typeof usage.message === "string" ? usage.message : null;
-				// 图表宽度随面板宽度扩展（去掉 24px 内边距），窄屏下限 316。
-				const chartWidth = Math.max(316, Math.round((panelWidth ?? 340) - 24));
+				// 图表宽度随面板宽度扩展（去掉 24px 内边距），窄面板下限 220。
+				const chartWidth = Math.max(220, Math.round((panelWidth ?? 264) - 24));
 				/** 图表「按日/按月」切换按钮点击时的对应语音播报。
 				 * 播报完整三组数据：入 token、出 token、金额（币种）。 */
 				const speakChartMode = (mode) => {
@@ -3407,10 +3393,10 @@ window.__ModuleLoader__.load({
 								boxSizing: "border-box",
 								border: "1px solid var(--dsw-alias-border-inverted)",
 								background: "var(--dsw-specific-menu)",
-								// 宽度按内容自适应（保证上方文字一行内），不出屏上限 =
-								// 锚点右缘 − 左侧工具栏宽度 − 边距；内容超出（如窄竖屏
-								// 手机）时允许横向滚动。用量视图沿用原 264px。
-								width: tab === TAB_BALANCE ? "max-content" : "264px",
+								// 横向宽度尽量小：两标签页统一 264px（与原始用量圆圈一致），
+								// 行内容为「标题/正文」两行布局；只有内容在窄屏下仍溢出时才
+								// 出现横向滚动（overflow-x:auto）。上限 = 锚点右缘 − 工具栏。
+								width: "264px",
 								maxWidth: `${panelMaxWidth}px`,
 								overflowX: "auto",
 								boxShadow: "var(--dsw-shadow-lv3)",
