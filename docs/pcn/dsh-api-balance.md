@@ -27,9 +27,10 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 
 ### 界面設定（⚙ 設定 → 界面）
 
-- **底部統計条**：預設幅超内容省略号截断（hover 全文表示）。「越界内容横向 scroll」有効時横向 scroll 切替、scrollbar 隠蔽、越界内容閲覧可。
-- **Enter key 動作**：DSH 預設 Enter = 送信、Shift+Enter = 改行。「Enter = 改行 · Shift+Enter = 送信」有効時交換（会話入力欄限定作用、他入力欄不影響）。両設定瀏覽器 localStorage 永続化。
+- **底部統計条**：越界内容横向 scroll 表示、scrollbar 隠蔽（預設有効）。無効時省略号截断（hover 全文表示）復帰。
+- **Enter key 動作**：Enter = 改行、Shift+Enter = 送信（預設有効；DSH 原生動作 Enter = 送信）。無効時原生動作復帰。会話入力欄限定作用、他入力欄不影響。
 - **移動端 session 切替 keyboard 不弹出**：觸屏 device 側欄 session 切替時入力欄自動聚焦阻止、軟 keyboard 自動表示防。入力欄 tap 通常入力可。預設有効、此処無効化可。
+三設定預設有効、瀏覽器 localStorage 永続化。
 
 ### 峰谷課金標記
 
