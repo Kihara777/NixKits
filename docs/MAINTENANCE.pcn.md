@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T06:32:01+09:00
+
+**摘要**：refactor(dsh-api-balance): 手機縦屏画面外修正除去、簡潔実装復帰 — 「縦屏越界 size 邏輯」除去（面板幅内容 scrollWidth 測定 + 上限 clamp 復帰、越界時 min(520px, 94vw) 切替不）；pager fitWidth / overflowing / layoutW 処理除去（頁幅固定計測内容幅復帰、touchAction pan-y 復帰、touch/drag 翻頁全 scenario 有効）；頁面級 fixed portal 維持（手機横屏 top bar 回避与汎用 overlay 安定性）
+
+| 提交 | 説明 |
+|------|------|
+| `d948b8f` | refactor(dsh-api-balance): 手機縦屏画面外修正除去、簡潔実装復帰 |
+| `e529d48` | docs(dsh-api-balance): 窄幅動作内容適応+面板 scroll 回帰（四語） |
 ## 2026-09-02T05:56:57+09:00
 
 **摘要**：fix(dsh-api-balance): 縦屏越界時設定 dialog 頁面 size 邏輯直接採用 — 内容幅利用可能空間超（縦屏越界）場合、面板幅設定 dialog 同頁面 size 邏輯（min(520px, 94vw)）直接切替、内容面板幅適応；僅極罕 hard 超幅内容面板横 scroll 兜底；pager 同同期——越界時頁幅面板利用可能幅変更（内容折返適応）、gesture 面板 native scroll 返還、頁面切替指示 dot 経由、内容収時 drag/swipe 頁面切替自動復帰

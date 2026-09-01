@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T06:32:01+09:00
+
+**Summary**: refactor(dsh-api-balance): remove the phone-portrait overflow fixes and restore the lean implementation — remove the 「portrait-overflow sizing logic」(panel width returns to content scrollWidth measurement + cap, no longer switching to min(520px, 94vw) on overflow); remove the pager's fitWidth / overflowing / layoutW handling (page width returns to the fixed measured content width, touchAction back to pan-y, touch/drag paging works in every scenario); keep the page-level fixed portal (mobile-landscape top-bar avoidance and general overlay stability)
+
+| Commit | Description |
+|------|------|
+| `d948b8f` | refactor(dsh-api-balance): remove phone-portrait overflow fixes, restore lean implementation |
+| `e529d48` | docs(dsh-api-balance): narrow-screen behavior reverted to content-adaptive + panel scroll (4 languages) |
 ## 2026-09-02T05:56:57+09:00
 
 **Summary**: fix(dsh-api-balance): portrait overflow directly adopts the settings dialog's sizing logic — when the content width exceeds the available space (portrait overflow), the panel width switches directly to the settings dialog's page sizing logic (min(520px, 94vw)) and the content adapts to the panel width; only rare hard-overflow content falls back to the panel's horizontal scroll; the pager follows suit: on overflow the page width uses the panel's available width (content wraps to fit), gestures return to the panel's native scroll and paging goes through the indicator dots, and once the content fits, drag/swipe paging resumes automatically

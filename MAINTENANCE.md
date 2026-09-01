@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T06:32:01+09:00
+
+**摘要**：refactor(dsh-api-balance): 移除手机竖屏越界修复，恢复简洁实现 — 移除「竖屏越界设置页尺寸逻辑」（面板宽度恢复为内容 scrollWidth 测量 + 上限钳制，不再越界切 min(520px, 94vw)）；移除翻页区 fitWidth / overflowing / layoutW 处理（页宽恢复固定内容实测宽度、touchAction 恢复 pan-y、触摸/拖拽翻页全场景可用）；保留页面级 fixed portal（移动端横屏顶栏避让与通用弹层稳定性）
+
+| 提交 | 说明 |
+|------|------|
+| `d948b8f` | refactor(dsh-api-balance): 移除手机竖屏越界修复，恢复简洁实现 |
+| `e529d48` | docs(dsh-api-balance): 窄屏行为回退为内容自适应+面板滚动（四语） |
 ## 2026-09-02T05:56:57+09:00
 
 **摘要**：fix(dsh-api-balance): 竖屏越界直接采用设置弹窗页面尺寸逻辑 — 检测到内容宽度超出可用空间（竖屏越界）时，面板宽度直接切换为设置弹窗同款页面尺寸逻辑（min(520px, 94vw)），内容自适应面板宽度；仅极少数硬性超宽内容由面板横向滚动兜底；翻页区同步：越界时页宽改用面板可用宽度（内容自适应换行）、手势交还面板原生滚动、翻页经指示点，内容适配后自动恢复拖拽/滑动翻页
