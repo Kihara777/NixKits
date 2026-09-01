@@ -114,3 +114,5 @@ nixos_cli(op = "audit-store-paths")
 ### メンテナンスモードプリセット
 
 パッケージは「維護模式」プリセット（`presets/maintenance-mode/`、id `maintenance`）も同梱する：NixOS模式基盤で、さらに `maintenance-skills` エントリをマウントする——初期化時に、ビルド時に埋め込まれたリポジトリの `skills/` ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル `write-project-docs`、`write-maintenance-log`、全 `translate-*` 言語拡張（apply 時に自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入する。モジュールは `nixkits.dsh.presets.maintenanceMode = true` で `$DSH_HOME/.agent-presets/maintenance` へ一度だけシードする。
+
+**派生関係**：メンテナンスモードのコンポジションは NixOS模式コンポジションの末尾に固定の `maintenance-skills` ブロックを追加したもので、両プリセットの `skills/` ツリーはファイル単位で一致する——`develop/check-preset-derivation.py` を `nix flake check` に組み込み強制（NixOS模式を変更したらメンテナンスモードへ必ず同期。リポジトリ AGENTS.md「预设」節参照）。
