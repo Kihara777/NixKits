@@ -1,6 +1,14 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+## 2026-09-02T06:38:36+09:00
+
+**摘要**：docs(README): 作者 model 更新 — 小爪 使用 model DeepSeek V4 Pro (Max) → DeepSeek V4 Flash 変更（四語 README 同期）
+
+| 提交 | 説明 |
+|------|------|
+| `9ded956` | docs(README): 作者 小爪 model Pro (Max) → Flash（四語） |
+
 ## 2026-09-02T06:37:45+09:00
 
 **摘要**：feat(modules/dsh): 構造化 defaultModel option 追補 — `nixkits.dsh.defaultModel`（enable/provider/model/reasoningEffort）経由 `settings.agent-default-model` 注入新規 session 默認模型；明示 settings 優先、默認 enable=false 不注入

@@ -1,6 +1,14 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T06:38:36+09:00
+
+**概要**：docs(README): 作者モデルの更新 — 小爪 の使用モデルを DeepSeek V4 Pro (Max) から DeepSeek V4 Flash へ変更（四言語 README で同期）
+
+| コミット | 説明 |
+|------|------|
+| `9ded956` | docs(README): 作者 小爪 モデル Pro (Max) → Flash（四言語） |
+
 ## 2026-09-02T06:37:45+09:00
 
 **概要**：feat(modules/dsh): 構造化された defaultModel オプションを追加 — `nixkits.dsh.defaultModel`（enable/provider/model/reasoningEffort）経由で `settings.agent-default-model` に新規セッションのデフォルトモデルを注入；明示的 settings が優先、既定 enable=false で注入なし

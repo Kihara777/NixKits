@@ -1,6 +1,14 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-02T06:38:36+09:00
+
+**摘要**：docs(README): 作者部分模型更新 — 小爪使用的模型由 DeepSeek V4 Pro (Max) 改为 DeepSeek V4 Flash（四语 README 同步）
+
+| 提交 | 说明 |
+|------|------|
+| `9ded956` | docs(README): 作者部分小爪模型 Pro (Max) → Flash（四语） |
+
 ## 2026-09-02T06:37:45+09:00
 
 **摘要**：feat(modules/dsh): 新增 defaultModel 结构化默认模型选项 — `nixkits.dsh.defaultModel`（enable/provider/model/reasoningEffort）经 `settings.agent-default-model` 注入新会话默认模型；显式 settings 优先，默认 enable=false 不注入

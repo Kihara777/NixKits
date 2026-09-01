@@ -1,6 +1,14 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T06:38:36+09:00
+
+**Summary**：docs(README): author-model update — 小爪's model changed from DeepSeek V4 Pro (Max) to DeepSeek V4 Flash (synced across the four-language README)
+
+| Commit | Description |
+|------|------|
+| `9ded956` | docs(README): author 小爪 model Pro (Max) → Flash (four languages) |
+
 ## 2026-09-02T06:37:45+09:00
 
 **Summary**：feat(modules/dsh): add a structured defaultModel option — `nixkits.dsh.defaultModel` (enable/provider/model/reasoningEffort) injects the new-session default model via `settings.agent-default-model`; explicit settings win, default enable=false injects nothing
