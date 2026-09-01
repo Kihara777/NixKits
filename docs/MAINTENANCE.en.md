@@ -1,6 +1,14 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T06:37:45+09:00
+
+**Summary**：feat(modules/dsh): add a structured defaultModel option — `nixkits.dsh.defaultModel` (enable/provider/model/reasoningEffort) injects the new-session default model via `settings.agent-default-model`; explicit settings win, default enable=false injects nothing
+
+| Commit | Description |
+|------|------|
+| `7cf0914` | feat(modules/dsh): add structured defaultModel option |
+
 ## 2026-09-02T05:45:33+09:00
 
 **Summary**：docs(dsh): settings-menu audit — declaratively configurable host namespace inventory and the storage-layer boundary; clarifies the edge between `nixkits.dsh.settings` and per-browser localStorage state

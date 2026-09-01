@@ -1,6 +1,14 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T06:37:45+09:00
+
+**概要**：feat(modules/dsh): 構造化された defaultModel オプションを追加 — `nixkits.dsh.defaultModel`（enable/provider/model/reasoningEffort）経由で `settings.agent-default-model` に新規セッションのデフォルトモデルを注入；明示的 settings が優先、既定 enable=false で注入なし
+
+| コミット | 説明 |
+|------|------|
+| `7cf0914` | feat(modules/dsh): 構造化 defaultModel オプションを追加 |
+
 ## 2026-09-02T05:45:33+09:00
 
 **概要**：docs(dsh): 設定メニュー監査——宣言的に設定可能な host ネームスペース一覧とストレージ層の境界；`nixkits.dsh.settings` とブラウザごとの localStorage 状態の境界を明確化

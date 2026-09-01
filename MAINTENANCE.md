@@ -1,6 +1,14 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-02T06:37:45+09:00
+
+**摘要**：feat(modules/dsh): 新增 defaultModel 结构化默认模型选项 — `nixkits.dsh.defaultModel`（enable/provider/model/reasoningEffort）经 `settings.agent-default-model` 注入新会话默认模型；显式 settings 优先，默认 enable=false 不注入
+
+| 提交 | 说明 |
+|------|------|
+| `7cf0914` | feat(modules/dsh): 新增 defaultModel 结构化默认模型选项 |
+
 ## 2026-09-02T05:45:33+09:00
 
 **摘要**：docs(dsh): 设置菜单审计——声明式配置的宿主 namespace 清单与存储层边界 — `nixkits.dsh.settings` 与每浏览器 localStorage 状态的边界厘清
