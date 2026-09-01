@@ -147,107 +147,36 @@ Plugin packages are loaded through **stable mount points**: an activation script
 
 Trade-off: dsh is a long-lived process, so plugin updates take effect only after an explicit `systemctl restart dsh` (`nixos_shell` auto-detaches that command into a transient unit, returning before the restart lands); the sudo executor spawns per connection, so new connections pick up the new script automatically with no restart at all.
 
-### api-balance plugin
+## NixKits plugins
 
-API usage balance (`@kihara777/dsh-api-balance`): adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button) — 「Usage」 keeps the original content (context occupancy and its breakdown), 「Balance」 shows the current API key's account info (key hint, availability, per-currency total / top-up / granted balance) plus today / this-month / 30-day consumption (cost + tokens + per-model breakdown) and daily / monthly usage charts. Balance comes from the official DeepSeek `GET /user/balance` endpoint (API-key auth); usage comes from the platform console's internal `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}` (platform session token auth), both with a 30-second host-side TTL cache. The API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`) with a process-environment fallback.
+Plugins developed in this repo for dsh are **not expanded in this document** — each keeps its own dedicated doc (mounting is covered by `plugins.packages` above):
 
-The platform token is acquired in two tiers, fully automatic first:
+| Plugin | Description | Doc |
+|------|------|------|
+| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-api-balance | 「Usage / Balance」 tab switch in the webui usage panel: account balance, daily / monthly / 30-day consumption charts and voice broadcast (incl. the voice-pack format guide) | [dsh-api-balance.md](dsh-api-balance.md) |
 
-- **Local browser auto-scan (on by default)**: the host reads the `Local Storage/leveldb` of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) — parsing the LevelDB tables exactly (footer → index → data blocks → snappy decompression → entry walk) to read `userToken`, falling back to raw-byte heuristics if parsing fails — and saves the first hit to `$DSH_HOME/api-balance-token` (0600). Signing in to the platform once in a local browser is all it takes. Throttled to one scan per 6 hours by default (`browserScanIntervalMs` configurable, `browserScan = false` disables); after token invalidation (40003/401) the next query rescans immediately.
-- **Not-signed-in detection and login guidance**: when the scan finds nothing, the panel pops up 「Platform login not detected」 — 「Go to login」 opens the login page in a new tab and picks up the token automatically via polling; manual token entry is only a secondary option inside the prompt (for those who don't want to log in). Once connected, a greyed 「✓ Signed in」 button and the token source (auto from local browser / manual) are shown; every manual refresh also auto-quick-scans the login state when no token exists — no button clicks needed.
-- **Voice broadcast**: clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching view's voice usage (pack segments + TTS numbers), covering: in (uncached input), cache hit, out, and cost (currency) — matching the official usage page's itemization; broadcast language and voice follow the DSH UI language (zh / en). The 「⚙ Voice settings」 dialog provides: an auto-broadcast toggle (balance alerts with a 30-minute rate limit), TTS backend selection (browser built-in / custom TTS API proxied through the host to avoid CORS, URL template placeholders `{text}` `{lang}` `{rate}`), voice-pack library management (import multiple zips, switch the active pack by clicking rows, multi-select removal, scrollable list; each pack expands into an 「audition」 view to play all of its supported audio one by one; stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices), plus a creator inside the 「Manage packs」 sub-menu (browser recording or audio-file import, with a visual recording float window and sample texts; cross-language recording; package & download / compile & apply).
+## Agent presets
 
-#### Voice pack format guide
+`nixkits.dsh.presets` writes the Agent presets shipped with dsh-nixos-shell into `$DSH_HOME/.agent-presets/<id>` **seed-once** (copied only when the target does not exist, respecting later user edits):
 
-A voice pack is a **zip archive** (easy to deploy and share) containing a `manifest.json` and audio files. Import the .zip in 「⚙ Voice settings」 to enable it; clearing restores the default whole-sentence TTS broadcast.
-
-Zip layout:
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
+```nix
 {
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "My pack",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // optional: greeting clips (a random one plays on every page refresh)
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
+  nixkits.dsh.presets = {
+    nixosMode = true;       # id `nixos` — NixOS mode
+    maintenanceMode = true; # id `maintenance` — maintenance mode (derived from NixOS mode)
+  };
 }
 ```
 
-| Segment | Purpose |
+| Preset | Description |
 |------|------|
-| `dead` | whole-sentence out-of-tokens alert |
-| `low` | whole-sentence low-balance alert |
-| `today` | 「Today」 broadcast prefix |
-| `month` | 「This month」 broadcast prefix |
-| `inLabel` | 「in」 label |
-| `outLabel` | 「out」 label |
-| `cacheHitLabel` | 「cache hit」 label |
-| `costLabel` | 「cost」 label |
-| `tokenUnit` | unit after numbers (e.g. 「tokens」), reusable |
-| `suffix` | broadcast ending |
+| NixOS mode (id `nixos`) | validates the NixOS host at initialization (non-NixOS rejects all requests with an explicit reason); loads `nixos_shell` / `nixos_cli` and the NixOS development prompts |
+| Maintenance mode (id `maintenance`) | based on NixOS mode; injects `write-project-docs` / `write-maintenance-log` / `translate-*` skills (the repo `skills/` tree embedded at build time — always current in a fresh session) and the repo-maintenance workflow prompts |
 
-All segments are optional: missing ones fall back to TTS during playback. Panel presentation matches the official usage page: 「in」 counts only uncached input, and cache hits are listed separately (token and cost data come from the official API's daily-granularity buckets without secondary merging). The creator's sample texts match the default TTS fallback strings exactly (so recorded packs stay close to the default TTS experience); dynamic numbers (token counts, cost and currency) are synthesized by the current TTS backend and concatenated as 「pack segment + TTS numbers」. The optional `greetings` is an array of file paths (0–16): when voice broadcast is enabled, a random one plays as a greeting/landing sound on every page refresh; without greeting audio, a random TTS greeting is used instead. Limits: segment keys `[A-Za-z0-9_-]{1,32}`, zip ≤ 16 MB, ≤ 32 files, ≤ 2 MB per audio file; mp3 / wav / ogg / webm recommended, ≤ 2 s per segment, 22.05/44.1 kHz mono. Dynamic parts (balance numbers, token counts) are not in the pack — they are synthesized live by the current TTS backend (browser built-in or custom TTS API proxied through the host), then concatenated with the pack segments into the complete broadcast.
+Detailed preset behavior, composition structure, and derivation maintenance rules: see [dsh-nixos-shell.md](dsh-nixos-shell.md).
 
-**Create & share**: 「Manage packs」 → 「Create a voice pack」 opens the creator — first pick the pack language (zh-CN / en / ja; drives the sample texts and the manifest `lang`, so packs can be recorded across languages); record each segment with the browser microphone, and record greetings list entry by entry («Add greeting» extends the list, ✕ removes a slot, sample texts mirror the default TTS greeting pool); then record each segment with the browser microphone (permission required; localhost or HTTPS) or import local audio files; while recording, a visual float window appears in the corner (level meter + elapsed time + sample text + stop/discard). Finish with 「Package & download」 to produce a shareable zip, or 「Compile & apply」 to import into the local library and activate it. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-api-balance;
-    id = "api-balance";
-    name = "@kihara777/dsh-api-balance";
-    # config (optional):
-    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
-    #   baseURL = "https://api.deepseek.com";
-    #   browserScan = true;               # local browser auto-scan
-    #   browserScanIntervalMs = 21600000; # scan throttle (default 6 h)
-  }];
-}
-```
-
-### nixos-shell plugin
-
-NixOS scenario capabilities are consolidated into a **single plugin** `nixos-shell` (`@kihara777/dsh-nixos-shell`), with functional requirements derived from the `nixos-modern-cli` skill scenarios. It registers two tools:
-
-- `nixos_shell` — shell executor: NixOS PATH injection + bash fallback (the `spawn bash ENOENT` fix), a `tools` parameter that wraps the command in `nix shell nixpkgs#<pkg>… --command` to provide missing POSIX tools, and sudo-daemon routing
-- `nixos_cli` — read-only NixOS diagnostics: `capabilities` (modern-CLI probing plus the traditional→modern command map), `system-status`, `generations`, `journal`, `audit-store-paths` (scanning config files for absolute `/nix/store/` references)
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nixos-shell;
-    id = "nixos-shell";
-    name = "@kihara777/dsh-nixos-shell";
-  }];
-}
-```
-
-> The former "skills as plugins" design (dsh-skill-nixkits, 7 skills / 7 composition rows) is abandoned and removed. The skill content stays in the repo's `skills/` for other coding assistants (opencode/codewhale/codex/openclaw/agents) via the `nixkits-skills` skill.
-
-### Sudo daemon
+## Sudo daemon
 
 Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The nixos-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:
 
@@ -261,6 +190,7 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 ```
 
 > **Security model**: the socket file is owned by the dsh service user with mode `0600` (`SocketUser`/`SocketMode`), so only that user can connect — equivalent to passwordless root for that user; enable only when both the user and the agent's behavior are trusted.
+
 
 ## Plugin inventory
 

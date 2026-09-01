@@ -147,107 +147,36 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 トレードオフ：dsh は長寿命プロセスのため、プラグイン更新の反映には明示的な `systemctl restart dsh` が必要（`nixos_shell` はこのコマンドを一時ユニットへ自動分離し、再起動前に呼び出しが返る）。sudo 実行器は接続ごとに生成されるため、新規接続は自動的に新スクリプトを使用し、再起動は一切不要。
 
-### api-balance プラグイン
+## NixKits プラグイン
 
-API 使用量残高（`@kihara777/dsh-api-balance`）：webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加——「用量」は元の内容（コンテキスト占有率と内訳）、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高）に加え、当日 / 当月 / 30 日間の消費（金額 + トークン + モデル別内訳）と日別 / 月別の使用量チャートを表示する。残高データは DeepSeek 公式 `GET /user/balance`（API キー認証）、使用量データはプラットフォームコンソール内部 API `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（プラットフォームセッショントークン認証）から取得し、ホスト側で 30 秒 TTL キャッシュ。API キーは `credentials` サービス経由で `apiKeyEnv`（デフォルト `DEEPSEEK_API_KEY`）を解決し、プロセス環境変数へフォールバックする。
+リポジトリ内で dsh 向けに開発された独立プラグインは**本文書では展開せず**、各プラグインが独立ドキュメントを維持する（マウント方法は上文の `plugins.packages` を参照）：
 
-プラットフォームトークンは二段構えで取得し、全自動を優先する：
+| プラグイン | 説明 | ドキュメント |
+|------|------|------|
+| dsh-nixos-shell | NixOS シナリオ能力の統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）+ `nixos_cli` 読み取り専用診断；NixOS模式 / 維護模式の 2 つの Agent プリセットを同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-api-balance | webui 用量パネルの「用量 / 残高」切替：アカウント残高、日 / 月 / 30 日間の消費チャートと音声放送（音声パック形式ガイドを含む） | [dsh-api-balance.md](dsh-api-balance.md) |
 
-- **ローカルブラウザ自動スキャン（デフォルト有効）**：ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の `Local Storage/leveldb` を読み、LevelDB テーブル構造を精確に解析（footer → index → データブロック → snappy 解凍 → エントリ走査）して `userToken` を取り出し（解析失敗時は生バイトのヒューリスティックへフォールバック）、最初の一致を `$DSH_HOME/api-balance-token`（0600）へ保存する。ローカルブラウザで一度プラットフォームにログインしていれば手動操作なしで取得できる。節流はデフォルト 6 時間に 1 回まで（`browserScanIntervalMs` で設定、`browserScan = false` で無効化）。トークン失効（40003/401）後は次回クエリで即再スキャンする。
-- **未ログイン検出とログイン案内**：スキャンがヒットしない場合、パネルに「プラットフォーム未ログイン」プロンプトを自動表示——「ログインへ」で新タブにログインページを開き、ポーリングでトークンを自動取得する。手動入力はプロンプト内の二級オプションのみ（ログインしたくない場合の備え）。接続後はグレー表示の「✓ ログイン済み」ボタンとトークン取得元（本機ブラウザ自動取得 / 手動接続）を表示し、手動更新のたびにトークン未取得時は自動クイックスキャンでログイン状態を確認する——ボタン操作は不要。
-- **音声放送**：使用量チャートの「日別 / 月別」切替ボタンをクリックすると、対応するビューの音声使用量を放送する（パックセグメント + TTS 数字の連結）。内容は：入力（キャッシュ未ヒット）、キャッシュヒット、出力、金額（通貨）——公式使用量ページの分項基準と一致。放送の言語と音色は DSH 界面言語（zh / en）に追従する。「⚙ 音声設定」ダイアログには：自動放送スイッチ（残高が閾値以下の際の通知、30 分レート制限）、TTS バックエンド選択（ブラウザ内蔵 / カスタム TTS API——ホスト経由プロキシで CORS 回避、URL テンプレートのプレースホルダ `{text}` `{lang}` `{rate}`）、音声パックライブラリ管理（複数 zip のインポート、行クリックで使用パックを切替、複数選択で一括削除、スクロール可能なリスト；各パックを展開して「音声試聴」——そのパックが対応する全音声を 1 つずつ試聴できる；`$DSH_HOME/api-balance-voicepack/` に保存し全デバイス共有）、および「パック管理」サブメニュー内の作成器（ブラウザ録音または音声ファイルのインポート、録音中は可視化フローティングウィンドウとサンプルテキストを表示、言語をまたいだ録音が可能、パッケージ & ダウンロード / コンパイル & 適用）を備える。
+## Agent プリセット
 
-#### 音声パック形式ガイド
+`nixkits.dsh.presets` は dsh-nixos-shell パッケージ同梱の Agent プリセットを **seed-once** 方式で `$DSH_HOME/.agent-presets/<id>` へ書き込む（対象が存在しない場合のみコピーし、ユーザーの後からの編集を尊重する）：
 
-音声パックは **zip アーカイブ**（配布・共有に便利）で、`manifest.json` と音声ファイルを含む。パネルの「⚙ 音声設定」で .zip をインポートすると有効になり、削除するとデフォルトの全文 TTS 放送に戻る。
-
-zip 構造：
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
+```nix
 {
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "マイパック",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // 任意：挨拶音声配列（ページ更新時にランダム再生）
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
+  nixkits.dsh.presets = {
+    nixosMode = true;       # id `nixos` — NixOS模式
+    maintenanceMode = true; # id `maintenance` — 維護模式（NixOS模式から派生）
+  };
 }
 ```
 
-| セグメント | 用途 |
+| プリセット | 説明 |
 |------|------|
-| `dead` | 残高不足警告の全文 |
-| `low` | 低残高警告の全文 |
-| `today` | 「今日」放送のプレフィックス |
-| `month` | 「今月」放送のプレフィックス |
-| `inLabel` | 「入力」ラベル |
-| `outLabel` | 「出力」ラベル |
-| `cacheHitLabel` | 「キャッシュヒット」ラベル |
-| `costLabel` | 「金額」ラベル |
-| `tokenUnit` | 数字の後の単位（例「トークン」、再利用可） |
-| `suffix` | 放送の結び |
+| NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は理由を明示して全リクエストを拒否）；`nixos_shell` / `nixos_cli` と NixOS 効率開発プロンプトを読み込む |
+| 維護模式（id `maintenance`） | NixOS模式ベース；`write-project-docs` / `write-maintenance-log` / `translate-*` スキル（ビルド時埋め込みのリポジトリ `skills/` ツリー、新規セッションでも常に最新）とリポジトリ維護工作流プロンプトを注入する |
 
-全セグメントは任意：欠けているセグメントは放送時に TTS でフォールバックする。パネルの表示は公式使用量ページと基準を一致：「入力」はキャッシュ未ヒットのみを計上し、キャッシュヒットは別掲（トークン・金額データは公式 API の日粒度バケットから取得し二次合算しない）。作成器のサンプルテキストはデフォルト TTS のフォールバック文案と一字一句一致させ（録音パックがデフォルト TTS 体験に近づくよう）、動的な数字（トークン数・金額・通貨）は現在の TTS バックエンドが合成し「パックセグメント + TTS 数字」の順で連結する。任意の `greetings` はファイルパスの配列（0–16 個）：音声放送が有効な場合、ページ更新のたびにランダムに 1 つを挨拶/着地音として再生する。挨拶音声がない場合は TTS の挨拶プールからランダムに再生する。制約：セグメントキー `[A-Za-z0-9_-]{1,32}`、zip ≤ 16 MB、ファイル ≤ 32 個、音声 1 ファイル ≤ 2 MB。音声は mp3 / wav / ogg / webm 推奨、1 セグメント 2 秒以内、22.05/44.1 kHz モノラル。動的部分（残高の数字、トークン数など）はパックに含めず——現在の TTS バックエンド（ブラウザ内蔵またはホスト経由プロキシのカスタム TTS API）がリアルタイム合成し、「パックセグメント + TTS 数字」の順で連結して完全な放送にする。
+プリセットの詳細な動作・コンポジション構造・派生維持ルールは [dsh-nixos-shell.md](dsh-nixos-shell.md) を参照。
 
-**作成と共有**：「パック管理」→「音声パックを作成」で作成器を開く——まずパック言語（zh-CN / en / ja）を選択（サンプルテキストとマニフェストの `lang` を決定し、言語をまたいだ録音が可能）；各セグメントをブラウザのマイクで録音し、挨拶はリストで 1 件ずつ録音（「挨拶を追加」でリスト拡張、✕ でスロット削除、サンプルテキストはデフォルト TTS 挨拶プールに対応）；その後各セグメントをブラウザのマイクで録音（許可が必要；localhost または HTTPS のみ）またはローカル音声ファイルをインポートする。録音中は右下に可視化フローティングウィンドウ（レベルメーター + 経過時間 + サンプルテキスト + 停止/破棄）が表示される。完了後「パッケージ & ダウンロード」で共有可能な zip を生成、「コンパイル & 適用」で本機ライブラリへインポートして即適用できる。音声パックがインポート済みの場合、最初の編集時に上書き警告を表示し確認が必要（セッション内で 1 回）。
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-api-balance;
-    id = "api-balance";
-    name = "@kihara777/dsh-api-balance";
-    # config（任意）：
-    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
-    #   baseURL = "https://api.deepseek.com";
-    #   browserScan = true;               # ローカルブラウザ自動スキャン
-    #   browserScanIntervalMs = 21600000; # スキャン節流（デフォルト 6 時間）
-  }];
-}
-```
-
-### nixos-shell プラグイン
-
-NixOS シナリオ能力は**単一プラグイン** `nixos-shell`（`@kihara777/dsh-nixos-shell`）へ統合され、機能要件は `nixos-modern-cli` スキルのシナリオに由来する。2 つのツールを登録する：
-
-- `nixos_shell` — shell 実行器：NixOS PATH 注入 + bash フォールバック（`spawn bash ENOENT` 修正）、`tools` パラメータで `nix shell nixpkgs#<pkg>… --command` にラップして不足する POSIX ツールを提供、sudo デーモンルーティング
-- `nixos_cli` — 読み取り専用 NixOS 診断：`capabilities`（モダン CLI の検出と伝統→モダンコマンド対照）、`system-status`、`generations`、`journal`、`audit-store-paths`（設定ファイル内の `/nix/store/` 絶対パス監査）
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nixos-shell;
-    id = "nixos-shell";
-    name = "@kihara777/dsh-nixos-shell";
-  }];
-}
-```
-
-> 旧「スキルプラグイン化」設計（dsh-skill-nixkits、7 スキル / 7 コンポジション行）は廃止・削除済み。スキル内容はリポジトリの `skills/` に残り、他のコーディングアシスタント（opencode/codewhale/codex/openclaw/agents）向けに `nixkits-skills` スキルでインストールされる。
-
-### sudo デーモン
+## sudo デーモン
 
 dsh サンドボックス内では `sudo` の setuid が失われ、エージェントは昇格できない（例：`nixos-rebuild`）。`sudo.enable` は systemd の**ソケットアクティベーション型 root 実行器**（`nixkits-sudo@.service`、接続ごとに `nixkits-sudo-exec` を実行）を配備し、dsh サービスへ `NIXKITS_SUDO_SOCKET` を注入する。nixos-shell プラグインは初期化時にこのソケットを検出し、存在すれば `sudo` パラメータを有効化してリクエストをルーティングする：
 
@@ -261,6 +190,7 @@ dsh サンドボックス内では `sudo` の setuid が失われ、エージェ
 ```
 
 > **セキュリティモデル**：ソケットファイルは dsh サービスユーザー所有で `0600`（`SocketUser`/`SocketMode`）— そのユーザーのみ接続可能で、事実上そのユーザーへのパスワードレス root 実行を意味する。ユーザーとエージェントの挙動の両方を信頼できる場合のみ有効化すること。
+
 
 ## プラグイン一覧
 

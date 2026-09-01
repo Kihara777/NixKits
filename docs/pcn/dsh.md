@@ -147,107 +147,36 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 代価与配套：dsh 長駐進程、插件更新反映需明示 `systemctl restart dsh`（`nixos_shell` 該命令自動分離瞬時単元、呼出先於再起返）。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
 
-### api-balance 插件
+## NixKits 插件
 
-API 用量残高（`@kihara777/dsh-api-balance`）：webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加——「用量」原内容（上下文占有率与内訳）、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）加当日 / 当月 / 30 日内消耗（金額 + token + 模型別内訳）与日別 / 月別用量図表表示。残高數據 DeepSeek 公式 `GET /user/balance`（API キー認証）、用量數據 platform 控制台内部 API `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（platform 会話 token 認証）取得、宿主側 30 秒 TTL 緩存。API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退。
+倉庫内 dsh 向開発独立插件**本文書展開不**、各插件独立文書維持（mount 方式上文 `plugins.packages` 参照）：
 
-platform token 二段取得、全自動優先：
+| 插件 | 説明 | 文書 |
+|------|------|------|
+| dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-api-balance | webui 用量面板「用量 / 余额」切替：帳戶残高、日 / 月 / 30 日内消耗図表与音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
 
-- **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 読取、LevelDB 表構造精確解析（footer → index → 數據 block → snappy 解凍 → entry 走査）`userToken` 取出（解析失敗時生 byte 啓発式回退）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描。
-- **未登録検出与登録案内**：scan 不命中時面板「platform 未登録」prompt 自動表示——「前往登録」新標籤開登録頁、polling token 自動取得。手動輸入 prompt 内二級 option 限定（登録不要時備）。接続後灰顯「✓ 登録済」按鈕与 token 取得元（本機瀏覽器自動取得 / 手動連接）表示、手動更新毎 token 未取得時自動快掃登録状態確認——按鈕操作不要。
-- **音声放送**：使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack segment + TTS 數字連結）。内容：入（未命中輸入）、缓存命中、出、金額（幣種）——官方使用量頁分項基準一致。放送語言与音色 DSH 界面語言（zh / en）追従。「⚙ 音声設定」dialog 備：自動放送 switch（残高閾値下通知、30 分 rate 制限）、TTS backend 選択（瀏覽器内蔵 / 自訂 TTS API——host 経由 proxy CORS 回避、URL template placeholder `{text}` `{lang}` `{rate}`）、音声 pack library 管理（複数 zip import、行 click 使用 pack 切替、複数選択一括削除、scroll 可能 list；各 pack 展開「音声試聴」——該 pack 対応全音声一条毎試聴可；`$DSH_HOME/api-balance-voicepack/` 保存全 device 共有）、「pack 管理」次級 menu 内作成器（瀏覽器録音或音声 file import、録音中可視化浮窗与 sample text 表示、言語跨録音可能、打包 download / compile 適用）備。
+## Agent 預設
 
-#### 音声 pack 形式指南
+`nixkits.dsh.presets` dsh-nixos-shell package 同梱 Agent 預設 **seed-once** 方式 `$DSH_HOME/.agent-presets/<id>` 書込（対象不存在時限定 copy、用戶後續編輯尊重）：
 
-音声 pack **zip archive**（配布共有便利）、`manifest.json` 与音声 file 含。面板「⚙ 音声設定」.zip import 即有効、削除即預設全文 TTS 放送復帰。
-
-zip 構造：
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
+```nix
 {
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "我的 pack",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // 任意：挨拶音声配列（頁面更新時 random 再生）
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
+  nixkits.dsh.presets = {
+    nixosMode = true;       # id `nixos` — NixOS模式
+    maintenanceMode = true; # id `maintenance` — 維護模式（NixOS模式派生）
+  };
 }
 ```
 
-| segment | 用途 |
+| 預設 | 説明 |
 |------|------|
-| `dead` | 残高不足警告全文 |
-| `low` | 低残高警告全文 |
-| `today` | 「当日消耗」放送 prefix |
-| `month` | 「当月消耗」放送 prefix |
-| `inLabel` | 「入」標籤 |
-| `outLabel` | 「出」標籤 |
-| `cacheHitLabel` | 「缓存命中」標籤 |
-| `costLabel` | 「金額」標籤 |
-| `tokenUnit` | 数字後単位（例「個 token」、再利用可） |
-| `suffix` | 放送結尾 |
+| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 理由明示全請求拒否）；`nixos_shell` / `nixos_cli` 与 NixOS 高效開発 prompt 読込 |
+| 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）与倉庫維護工作流 prompt 注入 |
 
-全 segment 任意：欠落 segment 放送時 TTS 回退。面板呈現与官方使用量頁基準一致：「入」未命中輸入限定計上、缓存命中別列（token 与金額數據官方 API 日粒度 bucket 取得、二次合算不）。任意 `greetings` file 路配列（0–16 個）：音声放送有効時、頁面更新毎 random 一個挨拶/着地音再生。挨拶音声無時 TTS 挨拶 pool random 再生。制約：segment key `[A-Za-z0-9_-]{1,32}`、zip ≤ 16 MB、file ≤ 32 個、音声 1 file ≤ 2 MB。音声 mp3 / wav / ogg / webm 推奨、1 segment 2 秒以内、22.05/44.1 kHz mono。作成器 sample text 預設 TTS 兜底文案一字不差（録音 pack 預設 TTS 体験接近保証）；動的部分（token 数、金額与幣種）當前 TTS backend（瀏覽器内蔵或 host 経由 proxy 自訂 TTS API）実時合成、「pack segment + TTS 數字」順連結完全放送。
+預設詳細動作、組合構造与派生維持規則 [dsh-nixos-shell.md](dsh-nixos-shell.md) 参照。
 
-**作成与共有**：「pack 管理」→「音声 pack 作成」作成器開——先 pack 語言（zh-CN / en / ja）選択（sample text 与 manifest `lang` 決定、言語跨録音可能）；segment 逐段瀏覽器 mic 録音（許可必要；localhost 或 HTTPS 限定）或 local 音声 file import、挨拶 list 逐条録音（「添加挨拶」list 拡張、✕ slot 削除、sample text 預設 TTS 挨拶 pool 対応）。録音中右下可視化浮窗（level meter + 経過時間 + sample text + 停止/破棄）表示。完了後「打包 download」共有 zip 生成、「compile & 適用」本機 library import 即適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-api-balance;
-    id = "api-balance";
-    name = "@kihara777/dsh-api-balance";
-    # config（任意）：
-    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
-    #   baseURL = "https://api.deepseek.com";
-    #   browserScan = true;               # 本機瀏覽器自動掃描
-    #   browserScanIntervalMs = 21600000; # 掃描節流（預設 6 時間）
-  }];
-}
-```
-
-### nixos-shell 插件
-
-NixOS 場景能力**単一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`）統合、機能要件 `nixos-modern-cli` 技能場景由来。2 工具登録：
-
-- `nixos_shell` — shell 実行器：NixOS PATH 注入 + bash 回退（`spawn bash ENOENT` 修正）、`tools` 參數 `nix shell nixpkgs#<pkg>… --command` 包裹不足 POSIX 工具提供、sudo 守護路由
-- `nixos_cli` — 読取専用 NixOS 診断：`capabilities`（現代 CLI 検出与伝統→現代命令対照）、`system-status`、`generations`、`journal`、`audit-store-paths`（設定文件 `/nix/store/` 絶対路徑監査）
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nixos-shell;
-    id = "nixos-shell";
-    name = "@kihara777/dsh-nixos-shell";
-  }];
-}
-```
-
-> 旧「技能插件化」設計（dsh-skill-nixkits、7 技能 / 7 組合行）廃止削除済。技能内容倉庫 `skills/` 残置、他編碼助手（opencode/codewhale/codex/openclaw/agents）向 `nixkits-skills` 技能安裝。
-
-### sudo 守護
+## sudo 守護
 
 dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`）。`sudo.enable` systemd **套接字激活型 root 実行器**（`nixkits-sudo@.service`、接続毎 `nixkits-sudo-exec` 実行）配備、dsh service `NIXKITS_SUDO_SOCKET` 注入。nixos-shell 插件初期化時該套接字検出、存在時 `sudo` 參數有効化請求路由：
 
@@ -261,6 +190,7 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 ```
 
 > **安全模型**：套接字文件 dsh service 用戶所有 `0600`（`SocketUser`/`SocketMode`）— 該用戶接続可、実質該用戶向免密 root 実行。用戶与代理挙動双方信頼可場合有効化。
+
 
 ## 插件清單
 

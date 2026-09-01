@@ -147,107 +147,36 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 代价与配套：dsh 是长驻进程，插件更新后需显式 `systemctl restart dsh` 才生效（`nixos_shell` 会把该命令自动分离到瞬态单元，调用先于重启返回）；sudo 守护按连接生成，新连接自动使用新脚本，无需任何重启。
 
-### api-balance 插件
+## NixKits 插件
 
-API 用量余额（`@kihara777/dsh-api-balance`）：在 webui 用量圆圈（发送按钮左侧的上下文已用显示）的弹出面板中提供「用量 / 余额」标签切换——「用量」为原有内容（上下文占用与细分），「余额」展示当前 API KEY 的账户信息（key 尾号、余额是否充足、各币种总余额 / 充值余额 / 赠送余额），并含当日 / 当月 / 30 日内消耗（金额 + token + 分模型明细）与按日 / 按月用量图表。余额数据来自 DeepSeek 官方 `GET /user/balance` 接口（API key 认证），用量数据来自平台控制台内部接口 `GET platform.deepseek.com/api/v0/usage/by_api_key/{amount,cost}`（平台会话令牌认证），host 端 30 秒 TTL 缓存；API key 按 `apiKeyEnv`（默认 `DEEPSEEK_API_KEY`）走 `credentials` 服务解析，回退进程环境变量。
+仓库内为 dsh 开发的独立插件**不在本文档展开**，各自维护独立文档（挂载方式见上文 `plugins.packages`）：
 
-平台令牌两级获取，全自动优先：
+| 插件 | 说明 | 文档 |
+|------|------|------|
+| dsh-nixos-shell | NixOS 场景能力整合：`nixos_shell` 执行器（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）+ `nixos_cli` 只读诊断；随包分发 NixOS模式 / 维护模式两个 Agent 预设 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-api-balance | webui 用量面板「用量 / 余额」切换：账户余额、日 / 月 / 30 日消耗图表与语音播报（含语音包格式指南） | [dsh-api-balance.md](dsh-api-balance.md) |
 
-- **本机浏览器自动扫描（默认开启）**：host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 `Local Storage/leveldb`——先按 LevelDB 表结构精确解析（footer → index → 数据块 → snappy 解压 → 条目遍历）读出 `userToken`，解析失败时回退裸字节启发式候选——命中即落盘 `$DSH_HOME/api-balance-token`（0600）。用户在本机浏览器登录过平台即无感获取；节流默认每 6 小时最多扫描一次（`browserScanIntervalMs` 可配，`browserScan = false` 关闭），令牌失效（40003/401）后下次查询立即重扫。
-- **未登录检测与登录引导**：扫描未命中时面板自动弹出「未检测到平台登录」提示——「前往登录」在新标签页打开登录页并轮询自动拾取令牌；手动输入令牌仅作为弹窗内的二级备选（不想登录时使用）。已连接后面板显示灰显「✓ 已登录」按钮与令牌来源（本机浏览器自动获取 / 手动连接）；每次手动刷新在无令牌时也会自动快扫检查登录态，无需点任何按钮。
-- **语音播报**：点击用量图表「按日 / 按月」切换按钮即播报对应视图的语音用量（语音包片段 + TTS 数字拼接），内容为：入（缓存未命中输入）、缓存命中、出、金额（币种）——与官方用量页的分项口径一致；播报语言与音色跟随 DSH 界面语言（zh / en）。「⚙ 语音设置」弹窗提供：自动播报开关（余额低于阈值时提醒，30 分钟限流）、TTS 后端选择（浏览器内置语音 / 自定义 TTS API，后者经 host 代理调用规避跨域，URL 模板占位符 `{text}` `{lang}` `{rate}`）、语音包库管理（zip 导入多个包、列表切换使用 / 多选移除，列表可滚动；每个语音包可展开「语音试听」，逐条试听该包全部支持音频；保存于 `$DSH_HOME/api-balance-voicepack/`，全设备共享），以及「语音包管理」次级菜单中的制作器（浏览器录音或导入音频，录音时展示可视化浮窗与示例文本，可跨语言录制并打包下载 / 编译应用）。
+## Agent 预设
 
-#### 语音包格式指南
+`nixkits.dsh.presets` 把随 dsh-nixos-shell 包分发的 Agent 预设以 **seed-once** 方式写入 `$DSH_HOME/.agent-presets/<id>`（仅目标不存在时复制，尊重用户后续编辑）：
 
-语音包为 **zip 压缩包**（方便部署与分享），内含 `manifest.json` 清单与音频文件；面板「⚙ 语音设置」选择 .zip 导入即启用，清除即恢复默认 TTS 整句播报。
-
-zip 结构：
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
+```nix
 {
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "我的语音包",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // 可选：问候音效数组（页面刷新时随机播放一个）
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
+  nixkits.dsh.presets = {
+    nixosMode = true;       # id `nixos` —— NixOS模式
+    maintenanceMode = true; # id `maintenance` —— 维护模式（派生自 NixOS模式）
+  };
 }
 ```
 
-| 片段 | 用途 |
+| 预设 | 说明 |
 |------|------|
-| `dead` | 余额不可用提醒整句 |
-| `low` | 低余额提醒整句 |
-| `today` | 「当日消耗」播报前缀 |
-| `month` | 「当月消耗」播报前缀 |
-| `inLabel` | 「入」标签 |
-| `outLabel` | 「出」标签 |
-| `cacheHitLabel` | 「缓存命中」标签 |
-| `costLabel` | 「金额」标签 |
-| `tokenUnit` | 数字后的单位（如「个 token」），可复用 |
-| `suffix` | 播报结尾 |
+| NixOS模式（id `nixos`） | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求并明确告知理由）；加载 `nixos_shell` / `nixos_cli` 与 NixOS 高效开发提示词 |
+| 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `translate-*` 技能（构建期嵌入的仓库 `skills/` 树，全新会话即最新）与仓库维护工作流提示词 |
 
-全部片段可选：缺失片段在播报时以 TTS 兜底。面板呈现与官方用量页口径一致：「入」只计缓存未命中的输入，缓存命中单列（token 与金额数据均来自官方接口的日粒度桶，不做二次合并）。制作器内的示例文本与默认 TTS 兜底文案一字不差（保证录制的语音包贴近默认 TTS 体验）；动态数字（token 数量、金额与币种）由当前 TTS 后端合成后按「包片段 + TTS 数字」顺序拼接。可选 `greetings` 为文件路径数组（0–16 个）：语音播报开启时，每次刷新页面随机播放其中一个作为问候/放置音效；无问候音频时改用 TTS 问候语池随机播放。约束：片段键 `[A-Za-z0-9_-]{1,32}`，zip ≤ 16 MB、文件 ≤ 32 个、单音频 ≤ 2 MB；音频建议 mp3 / wav / ogg / webm，单段 2 秒以内、22.05/44.1 kHz 单声道。动态部分（余额数字、token 数量等）不在包内——由当前 TTS 后端（浏览器内置或自定义 TTS API，后者经 host 代理规避跨域）实时合成，按「包片段 + TTS 数字」顺序拼接为完整播报。
+预设的详细行为、组合结构与派生维护规则见 [dsh-nixos-shell.md](dsh-nixos-shell.md)。
 
-**制作与分享**：「语音包管理」→「制作语音包」进入制作器——先选择语音包语言（zh-CN / en / ja，决定示例文本与清单 `lang`，可跨语言录制）；片段逐段用浏览器麦克风录音，问候语按列表逐条录制（「添加问候」扩列、✕ 移除槽位，示例文本对应默认 TTS 问候池）；再逐段用浏览器麦克风录音（需授予权限；本地或 HTTPS 环境可用）或导入本地音频文件；录音时右下角弹出可视化浮窗（电平表 + 计时 + 示例文本 + 停止/放弃）。完成后「打包下载」生成 zip 分享，或「编译并应用」导入本机库并激活；已导入语音包时，首次编辑会弹出覆盖提示，确认后方可继续（会话内确认一次）。
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-api-balance;
-    id = "api-balance";
-    name = "@kihara777/dsh-api-balance";
-    # config 可选：
-    #   apiKeyEnv = "DEEPSEEK_API_KEY";   # credential-ref
-    #   baseURL = "https://api.deepseek.com";
-    #   browserScan = true;               # 本机浏览器自动扫描
-    #   browserScanIntervalMs = 21600000; # 扫描节流（默认 6 小时）
-  }];
-}
-```
-
-### nixos-shell 插件
-
-NixOS 场景能力整合为**单一插件** `nixos-shell`（`@kihara777/dsh-nixos-shell`），功能需求源自 `nixos-modern-cli` 技能的场景描述，注册两个工具：
-
-- `nixos_shell` — shell 执行器：NixOS PATH 注入 + bash 回退（`spawn bash ENOENT` 修复）、`tools` 参数经 `nix shell nixpkgs#<pkg>… --command` 引导缺失的 POSIX 工具、sudo 守护路由
-- `nixos_cli` — 只读 NixOS 诊断：`capabilities`（现代 CLI 能力探测与传统→现代命令对照）、`system-status`、`generations`、`journal`、`audit-store-paths`（配置文件中 `/nix/store/` 绝对路径审计）
-
-```nix
-{
-  nixkits.dsh.plugins.packages = [{
-    package = pkgs.dsh-nixos-shell;
-    id = "nixos-shell";
-    name = "@kihara777/dsh-nixos-shell";
-  }];
-}
-```
-
-> 原「技能插件化」设计（dsh-skill-nixkits，7 技能 7 组合行）已废弃并移除。技能内容仍保留在仓库 `skills/`，供其他编码助手（opencode/codewhale/codex/openclaw/agents）经 `nixkits-skills` 技能安装。
-
-### sudo 守护
+## sudo 守护
 
 dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebuild`）。`sudo.enable` 部署一个 systemd **套接字激活的 root 执行器**（`nixkits-sudo@.service`，每连接运行一次 `nixkits-sudo-exec`），并向 dsh 服务注入 `NIXKITS_SUDO_SOCKET`。nixos-shell 插件初始化时探测该套接字，存在即启用 `sudo` 参数并路由请求：
 
