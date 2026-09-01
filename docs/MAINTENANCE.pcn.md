@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:15:52+09:00
+
+**摘要**：feat(dsh-api-balance): 挨拶手動更新時限定 + pager 高度當前頁追従 — 挨拶時機再構成：頁面初期化（全頁更新/読込）挨拶再生不、自動放送設定従使用量警告限定放送（load → announceHunger、音声通知 switch 与 30 分 rate 制限制約）；「余额」標籤 click 數據読込済（初回初期化読込以外）場合限定 random 挨拶音声再生；pager 高度自動増減/回収：container 高度 = 當前頁実測高度（offsetHeight）、切頁或内容変化時再測定——矮頁切替即回収、高頁切替即増加、非 active 頁自然高度描画（視図外移動、超過分 container clip）、区域自身 scroll 不、全内容面板縦 scroll 依存
+
+| 提交 | 説明 |
+|------|------|
+| `cf68777` | feat(dsh-api-balance): 挨拶手動更新時限定 + pager 高度當前頁追従 |
+| `610c402` | docs(dsh-api-balance): 挨拶時機 + pager 高度回収説明（四語） |
 ## 2026-09-02T05:03:47+09:00
 
 **摘要**：fix(dsh-api-balance): 手機横屏 top bar 遮蔽 + 窄幅横 scroll 不具合 — 横屏修正：面板最大高「锚点上方可用空間」動態 clamp（リング自祖先 chain 辿最初縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 锚点上端 − clip 上端 − 12)、window size 変更時再計算）、面板自身縦 scroll 全内容表示；窄幅修正：pager 頁幅各頁内容実測幅（scrollWidth 最大、下限 220、px base 翻頁）変更固定 100% 廃止——利用可能幅不足時頁内容自身幅維持、面板 overflow-x:auto 横 scroll 表示、pager overflow:hidden clip 回避

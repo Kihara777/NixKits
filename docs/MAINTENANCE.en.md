@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:15:52+09:00
+
+**Summary**: feat(dsh-api-balance): greetings only on manual refresh + pager height follows the current page — greeting timing reworked: page initialization (full refresh/load) no longer plays a greeting and only broadcasts the usage warnings per the auto-broadcast setting (load → announceHunger, gated by the voice-alert switch and the 30-minute rate limit); the 「Balance」 tab click plays the random greeting only when data has already been loaded (i.e. not the initial load); pager height auto-grow/reclaim: the container height equals the current page's measured height (offsetHeight), re-measured on page switch or content change — switching to a shorter page reclaims height, a taller page grows it; non-active pages render at natural height (translated out of view, overflow clipped by the container), the area never scrolls itself, and full content relies on the panel's vertical scroll
+
+| Commit | Description |
+|------|------|
+| `cf68777` | feat(dsh-api-balance): greetings only on manual refresh + pager height follows the current page |
+| `610c402` | docs(dsh-api-balance): greeting timing + pager height reclaim notes (4 languages) |
 ## 2026-09-02T05:03:47+09:00
 
 **Summary**: fix(dsh-api-balance): phone-landscape top-bar occlusion + broken narrow-screen horizontal scroll — landscape fix: the panel max-height clamps dynamically to the space above the anchor (the first vertically-clipping ancestor of the ring ≈ the top bar's bottom edge is the hard boundary; maxHeight = min(460, anchor top − clipping top − 12), recomputed on resize), with the panel's own vertical scroll carrying the full content; narrow-screen fix: pager pages now use each page's measured content width (max scrollWidth, floor 220, px-based paging) instead of a fixed 100% — when the available width is too small, page content keeps its own width and the panel's overflow-x:auto scrolls horizontally instead of being clipped by the pager's overflow:hidden
