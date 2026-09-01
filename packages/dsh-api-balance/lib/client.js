@@ -1056,7 +1056,8 @@ window.__ModuleLoader__.load({
 			onImportFile,
 			onActivate,
 			onRemovePacks,
-			onTestPack,
+			onTestLow,
+			onTestDead,
 			onTestTts,
 			recordings,
 			recordingKey,
@@ -1405,6 +1406,17 @@ window.__ModuleLoader__.load({
 									react.createElement(
 										"div",
 										{ style: { ...sectionStyle, marginBottom: "16px", display: "flex", gap: "8px", flexWrap: "wrap" } },
+										// 测试音频（原播报菜单内容移入此处）。
+										react.createElement(
+											"button",
+											{ type: "button", onClick: onTestLow, style: pillStyle(false) },
+											t("speech.testLow"),
+										),
+										react.createElement(
+											"button",
+											{ type: "button", onClick: onTestDead, style: pillStyle(false) },
+											t("speech.testDead"),
+										),
 										react.createElement(
 											"button",
 											{
@@ -2197,30 +2209,6 @@ window.__ModuleLoader__.load({
 				}
 				setPackBusy(false);
 			};
-			// 语音播报下拉菜单（点击播报按钮弹出；portal 渲染，位置按按钮 rect
-			// 计算）。默认从下往上展开（按钮顶部上方）；上方空间不足时回退向下。
-			const [speechMenuOpen, setSpeechMenuOpen] = react.useState(false);
-			const [speechMenuPos, setSpeechMenuPos] = react.useState({ x: 0, y: 0, h: 0 });
-			const [speechMenuPlacement, setSpeechMenuPlacement] = react.useState("up");
-			const speechMenuRef = react.useRef(null);
-			// 菜单打开时：点击菜单外任意处关闭。
-			react.useEffect(() => {
-				if (!speechMenuOpen) return;
-				const onDown = (event) => {
-					if (speechMenuRef.current !== null && speechMenuRef.current.contains(event.target)) return;
-					setSpeechMenuOpen(false);
-				};
-				document.addEventListener("pointerdown", onDown);
-				return () => document.removeEventListener("pointerdown", onDown);
-			}, [speechMenuOpen]);
-			// 向上展开空间不足（会超出视口顶部）时回退为向下展开。
-			react.useLayoutEffect(() => {
-				if (!speechMenuOpen || speechMenuPlacement !== "up") return;
-				const menu = speechMenuRef.current;
-				if (menu === null) return;
-				const height = menu.offsetHeight;
-				if (speechMenuPos.y - height - 4 < 8) setSpeechMenuPlacement("down");
-			}, [speechMenuOpen, speechMenuPlacement, speechMenuPos]);
 			const hungerPollRef = react.useRef(null);
 			react.useEffect(() => {
 				let cancelled = false;
@@ -2536,6 +2524,25 @@ window.__ModuleLoader__.load({
 				const usageOk = usage !== null && usage.status === "ok" && typeof usage.windows === "object";
 				const usageWindows = usageOk ? usage.windows : null;
 				const usageMessage = usage !== null && typeof usage.message === "string" ? usage.message : null;
+				/** 图表「按日/按月」切换按钮点击时的对应语音播报。 */
+				const speakChartMode = (mode) => {
+					if (usageWindows === null) return;
+					const today = usageWindows.today ?? {};
+					const month = usageWindows.month ?? {};
+					const isDaily = mode === "daily";
+					const total = formatTokens(isDaily ? (today.hit ?? 0) + (today.miss ?? 0) : (month.hit ?? 0) + (month.miss ?? 0));
+					speakNowParts(
+						[
+							{ kind: "pack", key: "usage", fallbackText: isDaily ? t("balance.today") : t("balance.month") },
+							{ kind: "tts", text: total },
+							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
+							{ kind: "pack", key: "suffix", fallbackText: "" },
+						],
+						uiLocale,
+						ttsCfgRef.current,
+						voicePackRef.current,
+					);
+				};
 				const rows = [];
 				rows.push(detailRow(t("balance.key"), balance.keyHint ?? "—"));
 				rows.push(
@@ -2627,7 +2634,10 @@ window.__ModuleLoader__.load({
 							t,
 							series: chartSeries,
 							mode: chartMode,
-							onModeChange: setChartMode,
+							onModeChange: (mode) => {
+										setChartMode(mode);
+										speakChartMode(mode);
+									},
 							width: 316,
 						}),
 					);
@@ -2835,153 +2845,10 @@ window.__ModuleLoader__.load({
 						),
 					);
 				}
-				// 已连接：令牌来源（标题/正文两行）+ 断开按钮；语音播报独立
-				// 一行（播报按钮 + 下拉菜单 + 提醒开关）。
+				// 已连接：令牌来源（标题/正文两行）+ 登录状态 + 断开按钮；
+				// 语音设置按钮独立一行。
 				if (usage !== null && usage.status !== "no-token") {
 					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
-					// 播报内容（数据来自当前 balance 快照）。有语音包时按
-					// 「包片段 + TTS 动态数字」拼接；无包时整句 TTS。
-					const sepForLang = uiLocale.startsWith("zh") ? { c: "，", s: "；" } : { c: ", ", s: "; " };
-					const usageFullText = () => {
-						if (usageWindows === null) return "";
-						const today = usageWindows.today ?? {};
-						const month = usageWindows.month ?? {};
-						return (
-							`${t("balance.today")}${formatTokens((today.hit ?? 0) + (today.miss ?? 0))}` +
-							`${sepForLang.c}${t("balance.out")}${formatTokens(today.completion ?? 0)}` +
-							`${sepForLang.s}${t("balance.month")}${formatTokens((month.hit ?? 0) + (month.miss ?? 0))}` +
-							`${sepForLang.c}${t("balance.out")}${formatTokens(month.completion ?? 0)}`
-						);
-					};
-					const usageParts = () => {
-						if (usageWindows === null) return [];
-						const today = usageWindows.today ?? {};
-						const month = usageWindows.month ?? {};
-						return [
-							{ kind: "pack", key: "usage", fallbackText: t("balance.usage") },
-							{ kind: "tts", text: formatTokens((today.hit ?? 0) + (today.miss ?? 0)) },
-							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
-							{ kind: "pack", key: "month", fallbackText: t("balance.month") },
-							{ kind: "tts", text: formatTokens((month.hit ?? 0) + (month.miss ?? 0)) },
-							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
-							{ kind: "pack", key: "suffix", fallbackText: "" },
-						];
-					};
-					const balanceFullText = () => {
-						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
-						const parts = infos.map((info) => `${info.currency} ${info.totalBalance}`);
-						const colon = uiLocale.startsWith("zh") ? "：" : ": ";
-						return `${t("balance.total")}${colon}${parts.length > 0 ? parts.join(uiLocale.startsWith("zh") ? "；" : "; ") : "—"}`;
-					};
-					const balanceParts = () => {
-						const infos = Array.isArray(balance?.balanceInfos) ? balance.balanceInfos : [];
-						const parts = [{ kind: "pack", key: "balance", fallbackText: t("balance.total") }];
-						for (const info of infos) {
-							parts.push({ kind: "tts", text: `${info.totalBalance}` });
-							if (typeof info.currency === "string" && info.currency.length > 0) {
-								parts.push({ kind: "tts", text: info.currency });
-							}
-						}
-						parts.push({ kind: "pack", key: "suffix", fallbackText: "" });
-						return parts;
-					};
-					const speakCurrentUsage = () => {
-						if (usageWindows === null) return;
-						if (voicePackRef.current !== null) {
-							speakNowParts(usageParts(), uiLocale, ttsCfgRef.current, voicePackRef.current);
-						} else {
-							speakNowParts([{ kind: "tts", text: usageFullText() }], uiLocale, ttsCfgRef.current, null);
-						}
-					};
-					const speakCurrentBalance = () => {
-						if (voicePackRef.current !== null) {
-							speakNowParts(balanceParts(), uiLocale, ttsCfgRef.current, voicePackRef.current);
-						} else {
-							speakNowParts([{ kind: "tts", text: balanceFullText() }], uiLocale, ttsCfgRef.current, null);
-						}
-					};
-					const speechMenuItems = [
-						{ key: "usage", label: t("speech.broadcastUsage"), run: speakCurrentUsage },
-						{ key: "balance", label: t("speech.broadcastBalance"), run: speakCurrentBalance },
-						{
-							key: "test-low",
-							label: t("speech.testLow"),
-							run: () =>
-								speakNowParts(
-									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
-									uiLocale,
-									ttsCfgRef.current,
-									voicePackRef.current,
-								),
-						},
-						{
-							key: "test-dead",
-							label: t("speech.testDead"),
-							run: () =>
-								speakNowParts(
-									[{ kind: "pack", key: "dead", fallbackText: t("speech.dead") }],
-									uiLocale,
-									ttsCfgRef.current,
-									voicePackRef.current,
-								),
-						},
-					];
-					const speechMenu = !speechMenuOpen
-						? null
-						: reactDOM.createPortal(
-								react.createElement(
-									"div",
-									{
-										ref: speechMenuRef,
-										onPointerDown: (event) => event.stopPropagation(),
-										style: {
-											// portal + fixed：面板主体带 overflow 滚动，绝对定位
-											// 菜单会被裁剪（播报按钮在下部时菜单不可见/不可点）。
-											position: "fixed",
-											left: speechMenuPos.x,
-											// 默认向上展开：菜单底边贴着按钮顶边（4px 间距）；
-											// 上方空间不足时回退向下（贴按钮底边）。
-											top: speechMenuPlacement === "up" ? speechMenuPos.y - 4 : speechMenuPos.y + speechMenuPos.h + 4,
-											transform: speechMenuPlacement === "up" ? "translateY(-100%)" : "none",
-											minWidth: "208px",
-											zIndex: 1002,
-											background: "var(--dsw-specific-menu)",
-											border: "1px solid var(--dsw-alias-border-inverted)",
-											borderRadius: "8px",
-											boxShadow: "var(--dsw-shadow-lv3)",
-											padding: "4px",
-										},
-									},
-									speechMenuItems.map((item) =>
-										react.createElement(
-											"button",
-											{
-												key: item.key,
-												type: "button",
-												onClick: () => {
-													setSpeechMenuOpen(false);
-													item.run();
-												},
-												style: {
-													display: "block",
-													width: "100%",
-													textAlign: "left",
-													padding: "5px 10px",
-													border: "none",
-													borderRadius: "6px",
-													background: "transparent",
-													color: "var(--dsw-alias-label-secondary)",
-													fontSize: "12px",
-													lineHeight: "18px",
-													cursor: "pointer",
-												},
-											},
-											item.label,
-										),
-									),
-								),
-								document.body,
-							);
 					balanceBody = react.createElement(
 						react.Fragment,
 						null,
@@ -2996,28 +2863,15 @@ window.__ModuleLoader__.load({
 										{ style: { marginRight: "auto", minWidth: 0 } },
 										react.createElement(
 											"div",
-											{
-												style: {
-													fontSize: "10px",
-													lineHeight: "14px",
-													color: "var(--dsw-alias-label-tertiary)",
-												},
-											},
+											{ style: { fontSize: "10px", lineHeight: "14px", color: "var(--dsw-alias-label-tertiary)" } },
 											t("balance.sourceLabel"),
 										),
 										react.createElement(
 											"div",
-											{
-												style: {
-													fontSize: "12px",
-													lineHeight: "18px",
-													color: "var(--dsw-alias-label-secondary)",
-												},
-											},
+											{ style: { fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
 											tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
 										),
 									),
-							// 登录状态按钮：已登录 → 灰显「✓ 已登录」。
 							react.createElement(
 								"button",
 								{
@@ -3064,51 +2918,7 @@ window.__ModuleLoader__.load({
 						),
 						react.createElement(
 							"div",
-							{
-								style: {
-									position: "relative",
-									display: "flex",
-									gap: "8px",
-									alignItems: "center",
-									marginTop: "8px",
-								},
-							},
-							react.createElement(
-								"button",
-								{
-									type: "button",
-									"aria-haspopup": "menu",
-									"aria-expanded": speechMenuOpen,
-									onClick: (event) => {
-										const next = !speechMenuOpen;
-										if (next) {
-											const rect = event.currentTarget.getBoundingClientRect();
-											// 锚点：按钮顶边（默认向上展开）。
-											setSpeechMenuPos({
-												x: Math.round(rect.left),
-												y: Math.round(rect.top),
-												h: Math.round(rect.height),
-											});
-											setSpeechMenuPlacement("up");
-										}
-										setSpeechMenuOpen(next);
-									},
-									style: {
-										display: "inline-flex",
-										alignItems: "center",
-										gap: "4px",
-										padding: "1px 10px",
-										borderRadius: "999px",
-										cursor: "pointer",
-										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: speechMenuOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
-										color: "var(--dsw-alias-label-secondary)",
-										fontSize: "11px",
-										lineHeight: "18px",
-									},
-								},
-								t("balance.speechBroadcast"),
-							),
+							{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "8px" } },
 							react.createElement(
 								"button",
 								{
@@ -3131,11 +2941,11 @@ window.__ModuleLoader__.load({
 								},
 								t("balance.voiceSettings"),
 							),
-							speechMenu,
 						),
 					);
 				}
 			}
+
 
 			return react.createElement(
 				"span",
@@ -3277,6 +3087,20 @@ window.__ModuleLoader__.load({
 							onImportFile: importVoicePack,
 							onActivate: activatePack,
 							onRemovePacks: removePacks,
+							onTestLow: () =>
+								speakNowParts(
+									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
+									uiLocale,
+									ttsCfgRef.current,
+									voicePackRef.current,
+								),
+							onTestDead: () =>
+								speakNowParts(
+									[{ kind: "pack", key: "dead", fallbackText: t("speech.dead") }],
+									uiLocale,
+									ttsCfgRef.current,
+									voicePackRef.current,
+								),
 							onTestTts: () => {
 								stopActiveSpeech();
 								ttsSpeak(t("voice.ttsTestText"), uiLocale, ttsCfgRef.current).catch(() => {});
