@@ -887,7 +887,7 @@ window.__ModuleLoader__.load({
 		 * 横向拖拽/滑动翻页（touch-action: pan-y 保留面板纵向滚动；
 		 * 拖过阈值后才启用指针捕获，避免误吞页面内按钮的点击）。
 		 */
-		function Pager({ pages, pageIndex, onPageChange, t, fitWidth }) {
+		function Pager({ pages, pageIndex, onPageChange, t }) {
 			const [drag, setDrag] = react.useState(null); // {startX, startY, dx, dy, captured}
 			const [pageW, setPageW] = react.useState(220);
 			// 区域高度跟随「当前页」内容自动增加与回收：容器高度 = 当前页
@@ -896,12 +896,6 @@ window.__ModuleLoader__.load({
 			const [pageH, setPageH] = react.useState(null);
 			const pageRefs = react.useRef([]);
 			const count = Array.isArray(pages) ? pages.length : 0;
-			// 内容超出面板宽度（手机竖屏窄屏）：直接采用设置页尺寸逻辑——
-			// 页宽改为面板可用宽度（内容自适应换行），横向手势交还面板
-			// 原生滚动兜底、停用拖拽翻页（翻页经上方指示点）；不超出时
-			// 页宽 = 内容实测宽度，保留 pan-y + 拖拽/滑动翻页。
-			const overflowing = Number.isFinite(fitWidth) && pageW > fitWidth + 1;
-			const layoutW = overflowing && Number.isFinite(fitWidth) ? Math.max(220, Math.floor(fitWidth)) : pageW;
 			const clampIndex = (i) => Math.max(0, Math.min(count - 1, i));
 			// 实测各页内容宽度（溢出可见，scrollWidth = 内容宽度）与当前
 			// 页高度；数据/图表变化（pages 引用变化）或切页后重测。
@@ -917,7 +911,7 @@ window.__ModuleLoader__.load({
 				}
 			}, [pages, pageIndex]);
 			const onPointerDown = (event) => {
-				if (count < 2 || overflowing) return;
+				if (count < 2) return;
 				setDrag({ startX: event.clientX, startY: event.clientY, dx: 0, dy: 0, captured: false });
 			};
 			const onPointerMove = (event) => {
@@ -947,7 +941,7 @@ window.__ModuleLoader__.load({
 					return null;
 				});
 			};
-			const offsetPx = -pageIndex * layoutW + (drag !== null ? drag.dx : 0);
+			const offsetPx = -pageIndex * pageW + (drag !== null ? drag.dx : 0);
 			return react.createElement(
 				"div",
 				null,
@@ -988,10 +982,10 @@ window.__ModuleLoader__.load({
 						style: {
 							display: "flex",
 							overflow: "hidden",
-							width: `${layoutW}px`,
+							width: `${pageW}px`,
 							height: pageH !== null ? `${pageH}px` : void 0,
-							touchAction: overflowing ? "auto" : "pan-y",
-							cursor: overflowing ? "auto" : count > 1 ? "grab" : "default",
+							touchAction: "pan-y",
+							cursor: count > 1 ? "grab" : "default",
 						},
 						onPointerDown: onPointerDown,
 						onPointerMove: onPointerMove,
@@ -1008,7 +1002,7 @@ window.__ModuleLoader__.load({
 								},
 								style: {
 									flex: "0 0 auto",
-									width: `${layoutW}px`,
+									width: `${pageW}px`,
 									alignSelf: "flex-start",
 									transform: `translateX(${offsetPx}px)`,
 									transition: drag === null ? "transform .22s ease" : "none",
@@ -2458,23 +2452,15 @@ window.__ModuleLoader__.load({
 						setPanelBottom(Math.round(window.innerHeight - anchor.top + 8));
 						const railRight = leftRailWidth();
 						// 宽度上限：锚点空间与「视口 − 24px」取更小者，双保险
-						// 不出屏。
+						// 不出屏；内容更宽时面板内横向滚动。
 						const available = Math.max(
 							280,
 							Math.min(640, Math.min(Math.round(anchor.right - railRight - 12), window.innerWidth - 24)),
 						);
-						// 竖屏越界逻辑：内容宽于可用空间时，直接采用插件设置
-						// 弹窗的页面尺寸逻辑（min(520px, 94vw)），内容自适应
-						// 面板宽度；仅极少数硬性超宽内容由面板横向滚动兜底。
+						setPanelMaxWidth(available);
+						// scrollWidth = 内容完整宽度（含溢出部分与内边距）。
 						const contentW = Math.round(el.scrollWidth);
-						if (contentW > available) {
-							const w = Math.max(264, Math.min(520, Math.floor(window.innerWidth * 0.94)));
-							setPanelMaxWidth(Math.max(available, w));
-							setPanelWidth(w);
-						} else {
-							setPanelMaxWidth(available);
-							setPanelWidth(Math.max(264, Math.min(contentW, available)));
-						}
+						setPanelWidth(Math.max(264, Math.min(contentW, available)));
 						// 高度钳制：锚点上方可用空间（横屏自动收缩避开顶栏）。
 						const heightCap = Math.max(120, Math.min(460, Math.round(anchor.top - 12)));
 						setPanelMaxHeight(heightCap);
@@ -3728,7 +3714,6 @@ window.__ModuleLoader__.load({
 						balanceBody,
 						react.createElement(Pager, {
 							t,
-							fitWidth: Math.round((panelWidth ?? 264) - 24),
 							pages: [
 								react.createElement("dl", { key: "page-windows", style: { margin: 0 } }, windowRows),
 								react.createElement(
