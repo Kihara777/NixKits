@@ -1887,6 +1887,20 @@ window.__ModuleLoader__.load({
 			const [connectState, setConnectState] = react.useState("idle");
 			const pollRef = react.useRef(null);
 			const rootRef = react.useRef(null);
+			// 面板容器宽度（响应式：图表随面板宽度扩展）。
+			const panelRef = react.useRef(null);
+			const [panelWidth, setPanelWidth] = react.useState(340);
+			react.useEffect(() => {
+				if (!open) return;
+				const el = panelRef.current;
+				if (el === null) return;
+				const update = () => setPanelWidth(el.getBoundingClientRect().width);
+				update();
+				if (typeof ResizeObserver === "undefined") return;
+				const observer = new ResizeObserver(update);
+				observer.observe(el);
+				return () => observer.disconnect();
+			}, [open]);
 			// 手动令牌输入（移动端主通道 / 桌面端备用通道）。
 			const [manualOpen, setManualOpen] = react.useState(false);
 			const [manualToken, setManualToken] = react.useState("");
@@ -2842,6 +2856,8 @@ window.__ModuleLoader__.load({
 				const usageOk = usage !== null && usage.status === "ok" && typeof usage.windows === "object";
 				const usageWindows = usageOk ? usage.windows : null;
 				const usageMessage = usage !== null && typeof usage.message === "string" ? usage.message : null;
+				// 图表宽度随面板宽度扩展（去掉 24px 内边距），窄屏下限 316。
+				const chartWidth = Math.max(316, Math.round((panelWidth ?? 340) - 24));
 				/** 图表「按日/按月」切换按钮点击时的对应语音播报。
 				 * 播报完整三组数据：入 token、出 token、金额（币种）。 */
 				const speakChartMode = (mode) => {
@@ -2967,7 +2983,7 @@ window.__ModuleLoader__.load({
 										setChartMode(mode);
 										speakChartMode(mode);
 									},
-							width: 316,
+							width: chartWidth,
 						}),
 					);
 				}
@@ -3341,15 +3357,18 @@ window.__ModuleLoader__.load({
 							role: "dialog",
 							className: "dshAbPanel",
 							"aria-label": t("usage.headline"),
+							ref: panelRef,
 							style: {
 								zIndex: 100,
 								boxSizing: "border-box",
 								border: "1px solid var(--dsw-alias-border-inverted)",
 								background: "var(--dsw-specific-menu)",
-								// 用量视图沿用原 ContextMeter 的 264px；余额视图数据列更长，
-								// 加宽到 340px 避免中文标签被挤压成竖列。
-								width: tab === TAB_BALANCE ? "340px" : "264px",
+								// 不出屏幕的前提下自动扩展横向宽度：余额视图在桌面
+								// 加宽到 560px，窄屏收缩至视口内；内容超出（如窄竖屏
+								// 手机）时允许横向滚动。用量视图沿用原 264px。
+								width: tab === TAB_BALANCE ? "min(560px, calc(100vw - 24px))" : "264px",
 								maxWidth: "calc(100vw - 24px)",
+								overflowX: "auto",
 								boxShadow: "var(--dsw-shadow-lv3)",
 								color: "var(--dsw-alias-label-secondary)",
 								cursor: "default",
@@ -3901,7 +3920,7 @@ window.__ModuleLoader__.load({
 			"@keyframes dshAbSpinRot{to{transform:rotate(360deg)}}" +
 			// 录音指示点脉冲动画。
 			"@keyframes dshAbRecPulse{0%,100%{opacity:1}50%{opacity:0.3}}" +
-			".dshAbPanel{max-height:min(62vh,460px);overflow-y:auto;scrollbar-width:thin}";
+			".dshAbPanel{max-height:min(62vh,460px);overflow-y:auto;overflow-x:auto;scrollbar-width:thin;overscroll-behavior-x:contain}";
 
 		const tagId = `${NS}/client.css`;
 		if (typeof document !== "undefined" && document.querySelector(`style[data-plugin-css="${tagId}"]`) === null) {
