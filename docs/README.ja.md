@@ -100,7 +100,7 @@ AI コーディングアシスタント向け：
 ## クレジット
 
 - **狐莉 (キツのり)** — 作成と保守
-- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) エコシステム（dsh-nixos-shell プラグインと NixOS模式/維護模式 Agent プリセット）
+- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4 Flash · DeepSeek Harness (DSH) エコシステム（dsh-nixos-shell プラグインと NixOS模式/維護模式 Agent プリセット）
 - **小小爪 (キツのめ)** — ハードウェア推論インフラ feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## ライセンス

@@ -100,7 +100,7 @@ For AI coding assistants:
 ## Credits
 
 - **狐莉 (キツのり)** — creator and maintainer
-- **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) ecosystem (dsh-nixos-shell plugin and NixOS-mode/maintenance-mode agent presets)
+- **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Flash · DeepSeek Harness (DSH) ecosystem (dsh-nixos-shell plugin and NixOS-mode/maintenance-mode agent presets)
 - **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## License

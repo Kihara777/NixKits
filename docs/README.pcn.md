@@ -100,7 +100,7 @@ AI 符号化代理向：
 ## 銘記
 
 - **狐莉 (Kitsunori)** — 作成及保守
-- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Pro (Max) · DeepSeek Harness (DSH) 生態（dsh-nixos-shell 插件与 NixOS模式/維護模式 Agent 預設）
+- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Flash · DeepSeek Harness (DSH) 生態（dsh-nixos-shell 插件与 NixOS模式/維護模式 Agent 預設）
 - **小小爪 (Kitsunome)** — 硬体推論基盤 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
 
 ## 許諾
