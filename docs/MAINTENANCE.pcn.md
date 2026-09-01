@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:40:47+09:00
+
+**摘要**：refactor(dsh-api-balance): 設定按鈕 header 移動 + 余额標籤更新継承 + token 取得元帳戶情報下移動 — 面板 layout 再調整：「⚙ 設定」按鈕面板 header 旧「數據更新」按鈕位置移動；更新按鈕廃止、其機能（host cache 迂回強制更新 + random 挨拶音声）「余额」標籤 click 完全継承（読込中標籤内 spinner 表示）；token 取得元区域（取得元 label / ✓ 登録済 / 切断）面板下部 → 「帳戶情報」block 直下移動、帳戶情報与連続情報 section 構成
+
+| 提交 | 説明 |
+|------|------|
+| `3ccc0d1` | refactor(dsh-api-balance): 設定按鈕 header + 余额標籤更新継承 + token 取得元帳戶情報下 |
+| `3b1a7be` | docs(dsh-api-balance): 挨拶 trigger 余额標籤改訂（四語） |
 ## 2026-09-02T04:29:05+09:00
 
 **摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 与 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、用戶明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加

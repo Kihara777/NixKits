@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:40:47+09:00
+
+**Summary**: refactor(dsh-api-balance): settings button moves to the header + Balance tab takes over refresh + token source moves below account info — another panel layout pass: the 「⚙ Settings」 button moves into the panel header where the 「Refresh data」 button used to be; the refresh button is removed and its behavior (force-refresh bypassing the host cache + a random greeting) is fully inherited by clicking the 「Balance」 tab (a spinner shows inside the tab while loading); the token-source area (source label / ✓ Signed in / Disconnect) moves from the panel bottom to directly below the 「Account」 block, forming one continuous info section
+
+| Commit | Description |
+|------|------|
+| `3ccc0d1` | refactor(dsh-api-balance): settings button in header + Balance-tab refresh + token source under account info |
+| `3b1a7be` | docs(dsh-api-balance): greeting trigger reworded to the Balance tab (4 languages) |
 ## 2026-09-02T04:29:05+09:00
 
 **Summary**: fix(dsh-api-balance): interface optimizations on by default + hardened mobile keyboard guard — the stats-bar horizontal scroll and Enter/newline swap settings flip from default-off to default-on (unset localStorage counts as on; explicit user off still works); the stats-bar CSS injection now retries (up to 5 times, 1s apart) when the ui-chat style tag isn't ready yet, avoiding silent injection failures from mount timing; the mobile keyboard guard is hardened — touch detection broadens to coarse pointer OR maxTouchPoints > 0 (tablets/hybrids), plus a focus-capture fallback that blurs immediately to close the soft keyboard on engines that don't fire focusin
