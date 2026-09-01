@@ -2,6 +2,29 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T12:18:16+09:00
+
+**摘要**：feat(presets): 预设派生漂移检查挂入 flake check — 新增 develop/check-preset-derivation.py 校验维护模式完整派生自 NixOS模式（组合文件 = 追加固定行块、skills 目录逐文件一致），flake.nix 挂入 checks.preset-derivation（CI 每次 push 执行）；AGENTS.md 新增「预设」章节记录派生约定与漂移检查，回车键行为条目更正为 dsh-api-balance「设置 → 界面」开关实现
+
+| 提交 | 说明 |
+|------|------|
+| `d6373cb` | feat(presets): 预设派生漂移检查挂入 flake check |
+
+## 2026-09-01T12:18:09+09:00
+
+**摘要**：docs(dsh): 插件文档独立成册 + Agent 预设章节（四语同步） — dsh.md 的 api-balance / nixos-shell 内联章节收敛为「NixKits 插件」表（各插件指向独立文档），新增「Agent 预设」章节（seed-once 挂载与两预设说明）；新增 dsh-api-balance 独立文档四语版本，界面设置章节记录统计条横向滚动与回车键交换两项设置
+
+| 提交 | 说明 |
+|------|------|
+| `eb0ad2d` | docs(dsh): 插件文档独立成册 + Agent 预设章节（四语同步） |
+
+## 2026-09-01T12:18:02+09:00
+
+**摘要**：feat(dsh-api-balance): 设置弹窗（界面/语音）+ 统计条横向滚动 + 回车键交换 — 语音设置重构为「设置 → 界面 / 语音」双标签弹窗（语音内容整体移入语音标签）；界面标签新增底部统计条越界内容横向滚动（隐藏滚动条，CSS 从 ui-chat 注入的 StatsLine 样式标签运行时提取根类名、构建哈希自适应）与回车换行 + Shift+回车发送（DSH 默认回车发送，document 捕获阶段改写 shiftKey 后重派发 Enter，仅作用于会话输入框）两项设置，浏览器 localStorage 持久化
+
+| 提交 | 说明 |
+|------|------|
+| `9dc7a5d` | feat(dsh-api-balance): 设置弹窗（界面/语音）+ 统计条横向滚动 + 回车键交换 |
 ## 2026-09-01T11:34:40+09:00
 
 **摘要**：feat(dsh-api-balance): 动态宽度 + 账户信息合并行 + 消耗指标子行 — 面板宽度改为 max-content 动态自适应（min 264px、上限 = 锚点右缘 − 工具栏），正文不再被窄宽折行；API Key / 账户状态 / 各币种余额合并为「账户信息」一行（· 分隔），充值按钮移至标题右侧；当日/当月/30 日消耗与分模型消耗正文拆为指标子行（金额 / 入 / 缓存命中 / 出），进一步节约横向宽度

@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T12:18:16+09:00
+
+**摘要**：feat(presets): 預設派生漂移檢查 flake check 導入 — develop/check-preset-derivation.py 新設、維護模式 NixOS模式自完全派生検証（組合 file = 固定行 block 追記、skills 目録 file 単位一致）；flake.nix checks.preset-derivation 追加（CI 毎 push 実行）；AGENTS.md「预设」節新設派生規約与漂移檢查記録、Enter key 動作項目 dsh-api-balance「設定 → 界面」switch 実装修正
+
+| 提交 | 説明 |
+|------|------|
+| `d6373cb` | feat(presets): 預設派生漂移檢查 flake check 導入 |
+
+## 2026-09-01T12:18:09+09:00
+
+**摘要**：docs(dsh): 插件文書独立成冊 + Agent 預設節（四語同期） — dsh.md api-balance / nixos-shell inline 節「NixKits 插件」表集約（各插件独立文書 link）、「Agent 預設」節新設（seed-once mount 与二預設説明）；dsh-api-balance 独立文書四語新設、界面設定節統計条横 scroll 与 Enter key 交換二設定記録
+
+| 提交 | 説明 |
+|------|------|
+| `eb0ad2d` | docs(dsh): 插件文書独立成冊 + Agent 預設節（四語同期） |
+
+## 2026-09-01T12:18:02+09:00
+
+**摘要**：feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 — 音声設定「設定 → 界面 / 音声」二標籤 dialog 再構成（音声内容音声標籤全面移動）；界面標籤二設定追加（瀏覽器 localStorage 永続化）：底部統計条越界内容横向 scroll（scrollbar 隠蔽、CSS ui-chat 注入 StatsLine style 標籤自実行時 root 類名抽出、build hash 変化追従）、Enter = 改行 · Shift+Enter = 送信（DSH 預設 Enter = 送信；document capture 段階 shiftKey 書換 Enter 再発行、会話入力欄限定作用）
+
+| 提交 | 説明 |
+|------|------|
+| `9dc7a5d` | feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 |
 ## 2026-09-01T11:34:40+09:00
 
 **摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API キー / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日与模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。

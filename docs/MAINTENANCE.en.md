@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T12:18:16+09:00
+
+**Summary**: feat(presets): preset-derivation drift check hooked into flake check — new develop/check-preset-derivation.py verifies the maintenance mode fully derives from the NixOS mode (composition file = appended fixed block, skills directories identical file-by-file); flake.nix adds checks.preset-derivation (run by CI on every push); AGENTS.md gains a 「预设」 section recording the derivation rules and the drift check, and the Enter-key entry is corrected to the dsh-api-balance 「Settings → Interface」 toggle
+
+| Commit | Description |
+|------|------|
+| `d6373cb` | feat(presets): preset-derivation drift check hooked into flake check |
+
+## 2026-09-01T12:18:09+09:00
+
+**Summary**: docs(dsh): dedicated plugin docs + Agent presets section (4 languages) — the inline api-balance / nixos-shell sections of dsh.md converge into a 「NixKits plugins」 table (each plugin links to its dedicated doc), and a new 「Agent presets」 section is added (seed-once mounting and the two presets); new four-language dsh-api-balance docs, whose interface-settings section records the stats-bar horizontal scrolling and the Enter-key swap
+
+| Commit | Description |
+|------|------|
+| `eb0ad2d` | docs(dsh): dedicated plugin docs + Agent presets section (4 languages) |
+
+## 2026-09-01T12:18:02+09:00
+
+**Summary**: feat(dsh-api-balance): settings dialog (Interface/Voice) + stats-bar horizontal scroll + Enter-key swap — voice settings restructured into a two-tab 「Settings → Interface / Voice」 dialog (all voice content moves to the Voice tab); the Interface tab adds two settings (browser-localStorage persisted): horizontal scrolling for overflowing bottom-stats-bar content with the scrollbar hidden (the root class is extracted at runtime from the ui-chat-injected StatsLine style tag, so it survives build hashes), and Enter = newline · Shift+Enter = send (DSH defaults to Enter = send; the document capture phase rewrites shiftKey and re-dispatches Enter, composer-only)
+
+| Commit | Description |
+|------|------|
+| `9dc7a5d` | feat(dsh-api-balance): settings dialog (Interface/Voice) + stats-bar scroll + Enter-key swap |
 ## 2026-09-01T11:34:40+09:00
 
 **Summary**: feat(dsh-api-balance): dynamic width + merged account row + consumption metric sub-rows — the panel width becomes dynamic max-content (min 264px, capped at anchor-right-edge minus the sidebar) so values no longer wrap due to a narrow fixed width; API key / account status / per-currency balances merge into a single 「Account」 line (joined by ·) with the top-up button moved to the right of the title; the today/month/30-day and per-model consumption values split into metric sub-rows (cost / in / cache hit / out), further saving horizontal width.
