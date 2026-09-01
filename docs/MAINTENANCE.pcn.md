@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T10:45:06+09:00
+
+**摘要**: feat(dsh-api-balance): 面板幅 content base 化 + 左 sidebar 回避 — 残高視図幅 max-content 変更（上方文字一行維持）；不出屏上限「anchor 右端 − 左 sidebar 幅 − margin」変更（sidebar 幅幾何 hit-test 測定、build hash class 名回避、window resize 時再計算）、左 toolbar 覆被防。超出 content 横 scroll 継続。
+
+| 提交 | 説明 |
+|------|------|
+| `b1c724a` | feat(dsh-api-balance): 面板幅 content base 化 + 左 sidebar 回避 |
+
 ## 2026-09-01T10:33:16+09:00
 
 **摘要**: feat(dsh-api-balance): 面板幅 responsive — 不出屏自動拡張、狭幅横 scroll — 残高視図幅固定 340px → min(560px, calc(100vw - 24px)) 変更：desktop 560px 自動拡張、狭幅 viewport 内収縮。内容畫面超時（縦持手機等）面板横 scroll 可（overflow-x + overscroll-behavior-x 収束）。chart 幅 ResizeObserver 面板幅追従。

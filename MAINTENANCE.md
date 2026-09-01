@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:45:06+09:00
+
+**摘要**：feat(dsh-api-balance): 面板宽度内容自适应 + 左侧工具栏避让 — 余额视图宽度改为 max-content（保证上方文字一行内）；不出屏上限改为「锚点右缘 − 左侧工具栏宽度 − 边距」（工具栏宽度用几何命中测试测量，规避构建哈希类名，窗口 resize 时重算），避免被左侧工具栏盖住；内容超出仍横向滚动
+
+| 提交 | 说明 |
+|------|------|
+| `b1c724a` | feat(dsh-api-balance): 面板宽度内容自适应 + 左侧工具栏避让 |
+
 ## 2026-09-01T10:33:16+09:00
 
 **摘要**：feat(dsh-api-balance): 面板响应式宽度 — 不出屏自动扩展，窄屏横向滚动 — 余额视图宽度从固定 340px 改为 min(560px, calc(100vw - 24px))：桌面自动扩展至 560px、窄屏收缩至视口内；内容超出屏幕（如手机窄竖屏）时面板允许横向滚动（overflow-x + overscroll-behavior-x 收束）；图表宽度经 ResizeObserver 随面板宽度同步扩展

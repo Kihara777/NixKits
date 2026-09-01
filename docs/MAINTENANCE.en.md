@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:45:06+09:00
+
+**Summary**: feat(dsh-api-balance): content-based panel width + left-sidebar avoidance — the balance view width becomes max-content (keeping the top text on one line); the on-screen cap is now 「anchor right edge − left sidebar width − margin」 (the sidebar width is measured by geometric hit-testing to avoid hashed class names, recalculated on window resize) so the left toolbar never covers the panel; overflowing content still scrolls horizontally.
+
+| Commit | Description |
+|------|------|
+| `b1c724a` | feat(dsh-api-balance): content-based panel width + left-sidebar avoidance |
+
 ## 2026-09-01T10:33:16+09:00
 
 **Summary**: feat(dsh-api-balance): responsive panel width — auto-expand without leaving the screen, horizontal scroll on narrow screens — the balance view width changes from a fixed 340px to min(560px, calc(100vw - 24px)): it auto-expands to 560px on desktop and shrinks within the viewport on narrow screens; when content exceeds the screen (e.g. narrow portrait phones) the panel allows horizontal scrolling (overflow-x with overscroll-behavior-x containment); the chart width follows the panel width via ResizeObserver.
