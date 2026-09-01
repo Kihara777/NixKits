@@ -43,6 +43,18 @@
       dsh-api-balance      = pkgs.callPackage ./packages/dsh-api-balance.nix { };
     };
 
+    # 预设派生漂移检查：维护模式必须完整派生自 NixOS模式
+    # （见 AGENTS.md「预设」一节与 develop/check-preset-derivation.py）。
+    checks = {
+      preset-derivation = pkgs.runCommand "check-preset-derivation" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-preset-derivation.py
+        touch $out
+      '';
+    };
+
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
       exec ${kitsfmtDrv}/bin/kitsfmt -i "$@"
     '';
