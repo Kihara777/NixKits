@@ -155,7 +155,7 @@ The platform token is acquired in two tiers, fully automatic first:
 
 - **Local browser auto-scan (on by default)**: the host reads the `Local Storage/leveldb` of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) — parsing the LevelDB tables exactly (footer → index → data blocks → snappy decompression → entry walk) to read `userToken`, falling back to raw-byte heuristics if parsing fails — and saves the first hit to `$DSH_HOME/api-balance-token` (0600). Signing in to the platform once in a local browser is all it takes. Throttled to one scan per 6 hours by default (`browserScanIntervalMs` configurable, `browserScan = false` disables); after token invalidation (40003/401) the next query rescans immediately.
 - **Not-signed-in detection and login guidance**: when the scan finds nothing, the panel pops up 「Platform login not detected」 — 「Go to login」 opens the login page in a new tab and picks up the token automatically via polling; manual token entry is only a secondary option inside the prompt (for those who don't want to log in). Once connected, a greyed 「✓ Signed in」 button and the token source (auto from local browser / manual) are shown; every manual refresh also auto-quick-scans the login state when no token exists — no button clicks needed.
-- **Voice broadcast**: clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching view's voice usage (pack segments + TTS numbers); broadcast language and voice follow the DSH UI language (zh / en). The 「⚙ Voice settings」 dialog provides: an auto-broadcast toggle (balance alerts with a 30-minute rate limit), TTS backend selection (browser built-in / custom TTS API proxied through the host to avoid CORS, URL template placeholders `{text}` `{lang}` `{rate}`), voice-pack library management (import multiple zips, switch the active pack by clicking rows, multi-select removal, scrollable list; the low-usage / out-of-tokens test audio also lives here; stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices), plus a creator inside the 「Manage packs」 sub-menu (browser recording or audio-file import, with a visual recording float window and sample texts; cross-language recording; package & download / compile & apply).
+- **Voice broadcast**: clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching view's voice usage (pack segments + TTS numbers), covering: in (uncached input), cache hit, out, and cost (currency) — matching the official usage page's itemization; broadcast language and voice follow the DSH UI language (zh / en). The 「⚙ Voice settings」 dialog provides: an auto-broadcast toggle (balance alerts with a 30-minute rate limit), TTS backend selection (browser built-in / custom TTS API proxied through the host to avoid CORS, URL template placeholders `{text}` `{lang}` `{rate}`), voice-pack library management (import multiple zips, switch the active pack by clicking rows, multi-select removal, scrollable list; the low-usage / out-of-tokens test audio also lives here; stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices), plus a creator inside the 「Manage packs」 sub-menu (browser recording or audio-file import, with a visual recording float window and sample texts; cross-language recording; package & download / compile & apply).
 
 #### Voice pack format guide
 
@@ -182,13 +182,16 @@ voice-pack.zip
   "segments": {
     "dead": "audio/dead.mp3",
     "low": "audio/low.mp3",
-    "usage": "audio/usage.mp3",
-    "balance": "audio/balance.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
+    "today": "audio/today.mp3",
     "month": "audio/month.mp3",
+    "inLabel": "audio/inLabel.mp3",
+    "outLabel": "audio/outLabel.mp3",
+    "cacheHitLabel": "audio/cacheHitLabel.mp3",
+    "costLabel": "audio/costLabel.mp3",
+    "tokenUnit": "audio/tokenUnit.mp3",
     "suffix": "audio/suffix.mp3",
     // optional: greeting clips (a random one plays on every page refresh)
-    "greetings": ["audio/hello1.mp3", "audio/hello2.mp3"]
+    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
   }
 }
 ```
@@ -197,15 +200,18 @@ voice-pack.zip
 |------|------|
 | `dead` | whole-sentence out-of-tokens alert |
 | `low` | whole-sentence low-balance alert |
-| `usage` | 「current usage」 broadcast prefix |
-| `balance` | 「current balance」 broadcast prefix |
+| `today` | 「Today」 broadcast prefix |
+| `month` | 「This month」 broadcast prefix |
+| `inLabel` | 「in」 label |
+| `outLabel` | 「out」 label |
+| `cacheHitLabel` | 「cache hit」 label |
+| `costLabel` | 「cost」 label |
 | `tokenUnit` | unit after numbers (e.g. 「tokens」), reusable |
-| `month` | 「this month」 label |
 | `suffix` | broadcast ending |
 
-All segments are optional: missing ones fall back to TTS during playback. The optional `greetings` is an array of file paths (0–16): when voice broadcast is enabled, a random one plays as a greeting/landing sound on every page refresh; without greeting audio, a random TTS greeting is used instead. Limits: segment keys `[A-Za-z0-9_-]{1,32}`, zip ≤ 16 MB, ≤ 32 files, ≤ 2 MB per audio file; mp3 / wav / ogg / webm recommended, ≤ 2 s per segment, 22.05/44.1 kHz mono. Dynamic parts (balance numbers, token counts) are not in the pack — they are synthesized live by the current TTS backend (browser built-in or custom TTS API proxied through the host), then concatenated with the pack segments into the complete broadcast.
+All segments are optional: missing ones fall back to TTS during playback. Panel presentation matches the official usage page: 「in」 counts only uncached input, and cache hits are listed separately (token and cost data come from the official API's daily-granularity buckets without secondary merging). The creator's sample texts match the default TTS fallback strings exactly (so recorded packs stay close to the default TTS experience); dynamic numbers (token counts, cost and currency) are synthesized by the current TTS backend and concatenated as 「pack segment + TTS numbers」. The optional `greetings` is an array of file paths (0–16): when voice broadcast is enabled, a random one plays as a greeting/landing sound on every page refresh; without greeting audio, a random TTS greeting is used instead. Limits: segment keys `[A-Za-z0-9_-]{1,32}`, zip ≤ 16 MB, ≤ 32 files, ≤ 2 MB per audio file; mp3 / wav / ogg / webm recommended, ≤ 2 s per segment, 22.05/44.1 kHz mono. Dynamic parts (balance numbers, token counts) are not in the pack — they are synthesized live by the current TTS backend (browser built-in or custom TTS API proxied through the host), then concatenated with the pack segments into the complete broadcast.
 
-**Create & share**: 「Manage packs」 → 「Create a voice pack」 opens the creator — first pick the pack language (zh-CN / en / ja; drives the sample texts and the manifest `lang`, so packs can be recorded across languages), then record each segment with the browser microphone (permission required; localhost or HTTPS) or import local audio files; while recording, a visual float window appears in the corner (level meter + elapsed time + sample text + stop/discard). Finish with 「Package & download」 to produce a shareable zip, or 「Compile & apply」 to import into the local library and activate it. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
+**Create & share**: 「Manage packs」 → 「Create a voice pack」 opens the creator — first pick the pack language (zh-CN / en / ja; drives the sample texts and the manifest `lang`, so packs can be recorded across languages); record each segment with the browser microphone, and record greetings list entry by entry («Add greeting» extends the list, ✕ removes a slot, sample texts mirror the default TTS greeting pool); then record each segment with the browser microphone (permission required; localhost or HTTPS) or import local audio files; while recording, a visual float window appears in the corner (level meter + elapsed time + sample text + stop/discard). Finish with 「Package & download」 to produce a shareable zip, or 「Compile & apply」 to import into the local library and activate it. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
 
 ```nix
 {

@@ -87,6 +87,7 @@ window.__ModuleLoader__.load({
 		const GREETING_TTS_POOL = {
 			"zh-CN": ["欢迎回来～", "主人，我在这儿哦！", "想我了吗？", "今天也要元气满满呀！", "我一直在等你回来。"],
 			en: ["Welcome back!", "I'm here, master!", "Did you miss me?", "Let's have a great day!", "I've been waiting for you."],
+			ja: ["おかえりなさい！", "マスター、ここにいますよ！", "会いたかったです！", "今日も元気いっぱい！", "ずっと待っていました。"],
 		};
 
 		/** 随机播放一个问候/放置音效：语音包 greetings 优先，无则 TTS 池。 */
@@ -372,36 +373,64 @@ window.__ModuleLoader__.load({
 		}
 
 		/** 语音包片段键（制作器按此清单逐段录制）。 */
-		const VOICEPACK_SEGMENT_KEYS = ["dead", "low", "usage", "balance", "tokenUnit", "month", "suffix"];
+		const VOICEPACK_SEGMENT_KEYS = [
+			"dead",
+			"low",
+			"today",
+			"month",
+			"inLabel",
+			"outLabel",
+			"cacheHitLabel",
+			"costLabel",
+			"tokenUnit",
+			"suffix",
+		];
 
-		/** 制作器示例文本（随语音包语言选择变化；录制浮窗展示朗读用）。 */
+		/**
+		 * 制作器示例文本（随语音包语言选择变化）。为「贴近默认 TTS 体验」，
+		 * 示例文本与无语音包时 TTS 兜底文案保持一字不差：
+		 *  - dead/low 对应 t("speech.dead") / t("speech.low") 文案
+		 *  - today/month 对应 t("balance.today") / t("balance.month")
+		 *  - inLabel/outLabel 对应 t("balance.in") / t("balance.out")
+		 *  - costLabel 对应 t("speech.costLabel")，tokenUnit 对应 t("speech.tokenUnit")
+		 *  - suffix 无 TTS 兜底（空）
+		 */
 		const VOICEPACK_SAMPLE_TEXTS = {
 			"zh-CN": {
-				dead: "余额不足啦，我快饿晕了，快喂我吃 token！",
-				low: "token 快吃完了，记得喂我哦！",
-				usage: "当前用量",
-				balance: "当前余额",
+				dead: "主人，余额不足啦，我快饿晕了，快喂我吃 token！",
+				low: "主人，token 快吃完了，记得喂我哦！",
+				today: "当日消耗",
+				month: "当月消耗",
+				inLabel: "入",
+				outLabel: "出",
+				cacheHitLabel: "缓存命中",
+				costLabel: "金额",
 				tokenUnit: "个 token",
-				month: "当月",
-				suffix: "以上。",
+				suffix: "",
 			},
 			en: {
 				dead: "Master, I'm out of tokens — please feed me!",
-				low: "Tokens are running low, remember to feed me!",
-				usage: "Current usage",
-				balance: "Current balance",
+				low: "Master, tokens are running low, remember to feed me!",
+				today: "Today",
+				month: "This month",
+				inLabel: "in",
+				outLabel: "out",
+				cacheHitLabel: "cache hit",
+				costLabel: "cost",
 				tokenUnit: "tokens",
-				month: "this month",
-				suffix: "That's all.",
+				suffix: "",
 			},
 			ja: {
 				dead: "残高がありません、お腹ペコペコです。トークンをちょうだい！",
 				low: "トークンが残りわずかです。補充を忘れずに！",
-				usage: "現在の使用量",
-				balance: "現在の残高",
-				tokenUnit: "トークン",
+				today: "今日",
 				month: "今月",
-				suffix: "以上です。",
+				inLabel: "入力",
+				outLabel: "出力",
+				cacheHitLabel: "キャッシュヒット",
+				costLabel: "金額",
+				tokenUnit: "トークン",
+				suffix: "",
 			},
 		};
 
@@ -409,6 +438,12 @@ window.__ModuleLoader__.load({
 		function sampleTextFor(lang, key) {
 			const table = VOICEPACK_SAMPLE_TEXTS[lang] ?? VOICEPACK_SAMPLE_TEXTS["zh-CN"];
 			return typeof table[key] === "string" ? table[key] : key;
+		}
+
+		/** 问候语示例（按槽位取 TTS 问候池对应条目，贴近默认 TTS 体验）。 */
+		function greetingSampleTextFor(lang, index) {
+			const pool = GREETING_TTS_POOL[lang] ?? GREETING_TTS_POOL["zh-CN"];
+			return pool[index % pool.length];
 		}
 
 		// ── zip 打包（STORE 方式，浏览器侧导出语音包用）────────────
@@ -1060,6 +1095,15 @@ window.__ModuleLoader__.load({
 			onTestDead,
 			onTestTts,
 			recordings,
+			greetingSlots,
+			greetingRecordings,
+			onAddGreeting,
+			onRemoveGreeting,
+			onStartGreetingRecording,
+			onImportGreeting,
+			onPlayGreeting,
+			onDeleteGreetingRec,
+			recordedCount,
 			recordingKey,
 			onStartRecording,
 			onStopRecording,
@@ -1142,7 +1186,7 @@ window.__ModuleLoader__.load({
 				lineHeight: "18px",
 			};
 			const activePack = Array.isArray(packs) ? packs.find((pack) => pack.id === activeId) ?? null : null;
-			const recordedCount = recordings !== null && typeof recordings === "object" ? Object.keys(recordings).length : 0;
+			
 			const sampleOf = (key) => {
 				const table = VOICEPACK_SAMPLE_TEXTS[packLangInput] ?? VOICEPACK_SAMPLE_TEXTS["zh-CN"];
 				return typeof table[key] === "string" ? table[key] : key;
@@ -1619,6 +1663,99 @@ window.__ModuleLoader__.load({
 													: null,
 											);
 										}),
+										// 问候语列表编辑（页面刷新随机播放一个）。
+										react.createElement(
+											"div",
+											{ style: { ...sectionStyle, marginBottom: "4px" } },
+											react.createElement("p", { style: labelStyle }, t("voice.greetingSection")),
+											Array.isArray(greetingSlots)
+												? greetingSlots.map((id, index) => {
+														const rec = greetingRecordings[id];
+														const isRec = recordingKey === id;
+														return react.createElement(
+															"div",
+															{
+																key: id,
+																style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "4px", flexWrap: "wrap" },
+															},
+															react.createElement(
+																"span",
+																{ style: { width: "72px", fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
+																t("voice.greetingLabel", { n: index + 1 }),
+															),
+															react.createElement(
+																"span",
+																{
+																	style: {
+																		flex: 1,
+																		minWidth: "120px",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
+																		whiteSpace: "nowrap",
+																		fontSize: "11px",
+																		lineHeight: "16px",
+																		color: "var(--dsw-alias-label-tertiary)",
+																	},
+																},
+																`${t("voice.sampleText")}：${greetingSampleTextFor(packLangInput, index)}`,
+															),
+															react.createElement(
+																"button",
+																{
+																	type: "button",
+																	disabled: recordingKey !== null && !isRec,
+																	onClick: () => (isRec ? onStopRecording(false) : onStartGreetingRecording(id)),
+																	style: pillStyle(isRec),
+																},
+																isRec ? t("voice.stop") : t("voice.record"),
+															),
+															react.createElement(
+																"label",
+																{ style: pillStyle(false) },
+																t("voice.importFile"),
+																react.createElement("input", {
+																	type: "file",
+																	accept: "audio/*,.mp3,.wav,.ogg,.webm,.m4a,.aac,.flac",
+																	style: { display: "none" },
+																	onChange: (event) => {
+																		const file = event.target.files !== null ? event.target.files[0] : null;
+																		if (file !== null) onImportGreeting(id, file);
+																		event.target.value = "";
+																	},
+																}),
+															),
+															rec !== void 0
+																? react.createElement(
+																		"button",
+																		{ type: "button", onClick: () => onPlayGreeting(id), style: pillStyle(false) },
+																		t("voice.play"),
+																	)
+																: null,
+															rec !== void 0
+																? react.createElement(
+																		"button",
+																		{ type: "button", onClick: () => onDeleteGreetingRec(id), style: pillStyle(false) },
+																		t("voice.delete"),
+																	)
+																: null,
+															react.createElement(
+																"button",
+																{
+																	type: "button",
+																	onClick: () => onRemoveGreeting(id),
+																	style: { ...pillStyle(false), marginLeft: "auto" },
+																},
+																"✕",
+															),
+														);
+													})
+												: null,
+											react.createElement(
+												"button",
+												{ type: "button", onClick: onAddGreeting, style: { ...pillStyle(false), marginTop: "4px" } },
+												t("voice.addGreeting"),
+											),
+										),
 										backButton("packs"),
 									),
 							),
@@ -1927,7 +2064,10 @@ window.__ModuleLoader__.load({
 			const [packBusy, setPackBusy] = react.useState(false);
 			const [packMessage, setPackMessage] = react.useState("");
 			// 语音包制作器：逐段录音 / 导入 + zip 编译；录音可视化浮窗状态。
+			// 问候语列表编辑：greetingSlots 为槽位 id 列表，greetingRecordings 按 id 存录音。
 			const [recordings, setRecordings] = react.useState({});
+			const [greetingSlots, setGreetingSlots] = react.useState(["g0"]);
+			const [greetingRecordings, setGreetingRecordings] = react.useState({});
 			const [recordingKey, setRecordingKey] = react.useState(null);
 			const [packNameInput, setPackNameInput] = react.useState("");
 			const [packLangInput, setPackLangInput] = react.useState(uiLocale === "zh-CN" ? "zh-CN" : uiLocale === "en" ? "en" : "zh-CN");
@@ -1969,10 +2109,13 @@ window.__ModuleLoader__.load({
 						if (!recDiscardRef.current) {
 							const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
 							const ext = recorder.mimeType.includes("ogg") ? "ogg" : recorder.mimeType.includes("mp4") ? "m4a" : "webm";
-							setRecordings((current) => ({
-								...current,
-								[key]: { blob, url: URL.createObjectURL(blob), ext },
-							}));
+							const rec = { blob, url: URL.createObjectURL(blob), ext };
+							// 问候槽位（greet:<id>）与片段分开存放。
+							if (key.startsWith("greet:")) {
+								setGreetingRecordings((current) => ({ ...current, [key]: rec }));
+							} else {
+								setRecordings((current) => ({ ...current, [key]: rec }));
+							}
 						}
 						recDiscardRef.current = false;
 						mediaRecorderRef.current = null;
@@ -2071,10 +2214,67 @@ window.__ModuleLoader__.load({
 				});
 				setPackMessage(t("voice.segmentImported"));
 			};
-			/** 编译 zip 条目（制作器的共同打包逻辑；lang 取制作器语言选择）。 */
+			// ── 问候语列表编辑 ──────────────────────────────
+			const addGreeting = () => {
+				setGreetingSlots((current) => {
+					const maxId = current.reduce((max, id) => Math.max(max, Number.parseInt(id.slice(1), 10) || 0), 0);
+					return [...current, `g${maxId + 1}`];
+				});
+			};
+			const removeGreeting = (id) => {
+				setGreetingSlots((current) => current.filter((slot) => slot !== id));
+				setGreetingRecordings((current) => {
+					const next = { ...current };
+					if (next[id] !== void 0 && typeof next[id].url === "string") {
+						try {
+							URL.revokeObjectURL(next[id].url);
+						} catch {
+							// 忽略
+						}
+					}
+					delete next[id];
+					return next;
+				});
+			};
+			const importGreetingAudio = async (id, file) => {
+				if (!(file instanceof File) || file.size === 0) return;
+				const nameExt = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
+				const ext =
+					["mp3", "wav", "ogg", "oga", "webm", "m4a", "mp4", "aac", "flac"].includes(nameExt) ? nameExt : "webm";
+				const blob = file.type.length > 0 ? file : new Blob([await file.arrayBuffer()], { type: `audio/${ext}` });
+				const rec = { blob, url: URL.createObjectURL(blob), ext };
+				setGreetingRecordings((current) => {
+					if (current[id] !== void 0 && typeof current[id].url === "string") {
+						try {
+							URL.revokeObjectURL(current[id].url);
+						} catch {
+							// 忽略
+						}
+					}
+					return { ...current, [id]: rec };
+				});
+				setPackMessage(t("voice.segmentImported"));
+			};
+			const deleteGreetingRec = (id) => {
+				setGreetingRecordings((current) => {
+					const next = { ...current };
+					if (next[id] !== void 0 && typeof next[id].url === "string") {
+						try {
+							URL.revokeObjectURL(next[id].url);
+						} catch {
+							// 忽略
+						}
+					}
+					delete next[id];
+					return next;
+				});
+			};
+			/** 编译 zip 条目（制作器的共同打包逻辑；lang 取制作器语言选择）。
+			 * 问候语槽位按序编入 manifest.greetings（audio/greetN.ext）。 */
 			const buildPackZip = async () => {
 				const keys = VOICEPACK_SEGMENT_KEYS.filter((key) => recordings[key] !== void 0);
-				if (keys.length === 0) return null;
+				const greetIds = greetingSlots.filter((id) => greetingRecordings[id] !== void 0);
+				if (keys.length === 0 && greetIds.length === 0) return null;
 				const segments = {};
 				for (const key of keys) {
 					segments[key] = `audio/${key}.${recordings[key].ext}`;
@@ -2086,14 +2286,30 @@ window.__ModuleLoader__.load({
 						return { name: `audio/${key}.${rec.ext}`, data: buf };
 					}),
 				);
+				const greetingRefs = greetIds.map((id, index) => `audio/greet${index}.${greetingRecordings[id].ext}`);
+				const greetingEntries = await Promise.all(
+					greetIds.map(async (id, index) => {
+						const rec = greetingRecordings[id];
+						const buf = new Uint8Array(await rec.blob.arrayBuffer());
+						return { name: `audio/greet${index}.${rec.ext}`, data: buf };
+					}),
+				);
 				const manifest = {
 					format: "dsh-api-balance-voice-pack",
 					version: 1,
 					name: packNameInput.trim().length > 0 ? packNameInput.trim() : "voice-pack",
 					lang: packLangInput,
 					segments,
+					greetings: greetingRefs,
 				};
-				return { manifest, zip: buildZip([{ name: "manifest.json", data: new TextEncoder().encode(JSON.stringify(manifest, null, 2)) }, ...audioEntries]) };
+				return {
+					manifest,
+					zip: buildZip([
+						{ name: "manifest.json", data: new TextEncoder().encode(JSON.stringify(manifest, null, 2)) },
+						...audioEntries,
+						...greetingEntries,
+					]),
+				};
 			};
 			/** 编译并打包下载（分享用）。 */
 			const downloadVoicePack = async () => {
@@ -2498,7 +2714,8 @@ window.__ModuleLoader__.load({
 					parts.push(`${formatCost(cost)}${currency.length > 0 ? ` ${currency}` : ""}`);
 				}
 				if (parts.length === 0) parts.push(formatCost(0));
-				parts.push(`${t("balance.in")} ${formatTokens((window?.hit ?? 0) + (window?.miss ?? 0))}`);
+				parts.push(`${t("balance.in")} ${formatTokens(window?.miss ?? 0)}`);
+				parts.push(`${t("balance.cacheHit")} ${formatTokens(window?.hit ?? 0)}`);
 				parts.push(`${t("balance.out")} ${formatTokens(window?.completion ?? 0)}`);
 				return parts.join(" · ");
 			};
@@ -2524,24 +2741,35 @@ window.__ModuleLoader__.load({
 				const usageOk = usage !== null && usage.status === "ok" && typeof usage.windows === "object";
 				const usageWindows = usageOk ? usage.windows : null;
 				const usageMessage = usage !== null && typeof usage.message === "string" ? usage.message : null;
-				/** 图表「按日/按月」切换按钮点击时的对应语音播报。 */
+				/** 图表「按日/按月」切换按钮点击时的对应语音播报。
+				 * 播报完整三组数据：入 token、出 token、金额（币种）。 */
 				const speakChartMode = (mode) => {
 					if (usageWindows === null) return;
-					const today = usageWindows.today ?? {};
-					const month = usageWindows.month ?? {};
 					const isDaily = mode === "daily";
-					const total = formatTokens(isDaily ? (today.hit ?? 0) + (today.miss ?? 0) : (month.hit ?? 0) + (month.miss ?? 0));
-					speakNowParts(
-						[
-							{ kind: "pack", key: "usage", fallbackText: isDaily ? t("balance.today") : t("balance.month") },
-							{ kind: "tts", text: total },
-							{ kind: "pack", key: "tokenUnit", fallbackText: "" },
-							{ kind: "pack", key: "suffix", fallbackText: "" },
-						],
-						uiLocale,
-						ttsCfgRef.current,
-						voicePackRef.current,
-					);
+					const win = isDaily ? usageWindows.today ?? {} : usageWindows.month ?? {};
+					const costByCurrency = win.costByCurrency !== null && typeof win.costByCurrency === "object" ? win.costByCurrency : {};
+					const costPairs = Object.entries(costByCurrency);
+					const parts = [
+						{ kind: "pack", key: isDaily ? "today" : "month", fallbackText: isDaily ? t("balance.today") : t("balance.month") },
+						{ kind: "pack", key: "inLabel", fallbackText: t("balance.in") },
+						{ kind: "tts", text: formatTokens(win.miss ?? 0) },
+						{ kind: "pack", key: "tokenUnit", fallbackText: t("speech.tokenUnit") },
+						{ kind: "pack", key: "cacheHitLabel", fallbackText: t("balance.cacheHit") },
+						{ kind: "tts", text: formatTokens(win.hit ?? 0) },
+						{ kind: "pack", key: "tokenUnit", fallbackText: t("speech.tokenUnit") },
+						{ kind: "pack", key: "outLabel", fallbackText: t("balance.out") },
+						{ kind: "tts", text: formatTokens(win.completion ?? 0) },
+						{ kind: "pack", key: "tokenUnit", fallbackText: t("speech.tokenUnit") },
+					];
+					if (costPairs.length > 0) {
+						parts.push({ kind: "pack", key: "costLabel", fallbackText: t("speech.costLabel") });
+						for (const [currency, cost] of costPairs) {
+							parts.push({ kind: "tts", text: formatCost(cost) });
+							parts.push({ kind: "tts", text: currency });
+						}
+					}
+					parts.push({ kind: "pack", key: "suffix", fallbackText: "" });
+					speakNowParts(parts, uiLocale, ttsCfgRef.current, voicePackRef.current);
 				};
 				const rows = [];
 				rows.push(detailRow(t("balance.key"), balance.keyHint ?? "—"));
@@ -2616,7 +2844,7 @@ window.__ModuleLoader__.load({
 						rows.push(
 							detailRow(
 								modelRow.model.length > 0 ? modelRow.model : t("balance.allModels"),
-								`${t("balance.in")} ${formatTokens(modelRow.hit + modelRow.miss)} · ${t("balance.out")} ${formatTokens(modelRow.completion)}${modelRow.cost > 0 ? ` · ${formatCost(modelRow.cost)}` : ""}`,
+								`${t("balance.in")} ${formatTokens(modelRow.miss)} · ${t("balance.cacheHit")} ${formatTokens(modelRow.hit)} · ${t("balance.out")} ${formatTokens(modelRow.completion)}${modelRow.cost > 0 ? ` · ${formatCost(modelRow.cost)}` : ""}`,
 								{ key: `m-${index}`, labelStyle: { paddingLeft: "10px", fontSize: "11px" }, valueStyle: { fontSize: "11px" } },
 							),
 						);
@@ -3118,6 +3346,21 @@ window.__ModuleLoader__.load({
 							},
 							onDeleteRecording: (key) => guardEdit(() => deleteRecording(key)),
 							onImportSegmentFile: (key, file) => guardEdit(() => importSegmentAudio(key, file)),
+							greetingSlots,
+							greetingRecordings,
+							onAddGreeting: () => guardEdit(addGreeting),
+							onRemoveGreeting: (id) => guardEdit(() => removeGreeting(id)),
+							onStartGreetingRecording: (id) => guardEdit(() => startRecording(`greet:${id}`)),
+							onImportGreeting: (id, file) => guardEdit(() => importGreetingAudio(id, file)),
+							onPlayGreeting: (id) => {
+								const rec = greetingRecordings[id];
+								if (rec !== void 0 && typeof rec.url === "string") {
+									stopActiveSpeech();
+									playAudioSrc(rec.url).catch(() => {});
+								}
+							},
+							onDeleteGreetingRec: (id) => guardEdit(() => deleteGreetingRec(id)),
+							recordedCount: Object.keys(recordings).length + Object.keys(greetingRecordings).length,
 							onCompileInstall: () => guardEdit(compileInstallPack),
 							editConfirmOpen,
 							onConfirmEdit: confirmEdit,
@@ -3131,13 +3374,23 @@ window.__ModuleLoader__.load({
 						})
 					: null,
 				recordingKey !== null
-					? reactDOM.createPortal(
+					? (() => {
+							// 问候槽位与片段分开取标签/示例文本（示例贴近默认 TTS）。
+							const recIsGreeting = recordingKey.startsWith("greet:");
+							const recIndex = recIsGreeting ? (Number.parseInt(recordingKey.slice(6), 10) || 0) : 0;
+							const recLabel = recIsGreeting
+								? t("voice.greetingLabel", { n: recIndex + 1 })
+								: t(`voice.seg.${recordingKey}`);
+							const recSample = recIsGreeting
+								? greetingSampleTextFor(packLangInput, recIndex)
+								: sampleTextFor(packLangInput, recordingKey);
+							return reactDOM.createPortal(
 							react.createElement(
 								"div",
 								{
 									role: "dialog",
 									"aria-modal": false,
-									"aria-label": t("voice.recordingTitle", { label: t(`voice.seg.${recordingKey}`) }),
+									"aria-label": t("voice.recordingTitle", { label: recLabel }),
 									style: {
 										position: "fixed",
 										right: "20px",
@@ -3215,7 +3468,7 @@ window.__ModuleLoader__.load({
 											fontWeight: 500,
 										},
 									},
-									sampleTextFor(packLangInput, recordingKey),
+									recSample,
 								),
 								react.createElement(
 									"div",
@@ -3260,7 +3513,8 @@ window.__ModuleLoader__.load({
 								),
 							),
 							document.body,
-						)
+						);
+						})()
 					: null,
 			);
 		}
@@ -3292,6 +3546,7 @@ window.__ModuleLoader__.load({
 			"balance.month": "当月消耗",
 			"balance.last30d": "30日内消耗",
 			"balance.in": "入",
+			"balance.cacheHit": "缓存命中",
 			"balance.out": "出",
 			"balance.models": "分模型（30日内）",
 			"balance.allModels": "全部模型",
@@ -3329,6 +3584,8 @@ window.__ModuleLoader__.load({
 			"speech.broadcastUsage": "播报当前用量",
 			"speech.broadcastBalance": "播报当前余额",
 			"speech.testLow": "测试音频：低用量警告",
+			"speech.tokenUnit": "个 token",
+			"speech.costLabel": "金额",
 			"speech.testDead": "测试音频：余额不足警告",
 			"balance.speechOn": "🔔 语音提醒：开",
 			"balance.speechOff": "🔕 语音提醒：关",
@@ -3364,6 +3621,9 @@ window.__ModuleLoader__.load({
 			"voice.langLabel": "语音包语言（决定示例文本与清单 lang）",
 			"voice.sampleText": "示例文本",
 			"voice.recordingTitle": "录制中：{label}",
+			"voice.greetingSection": "问候语（页面刷新时随机播放一个）",
+			"voice.greetingLabel": "问候 {n}",
+			"voice.addGreeting": "添加问候",
 			"voice.recordingTip": "请朗读下方示例文本",
 			"voice.saveStop": "停止并保存",
 			"voice.discard": "放弃",
@@ -3422,6 +3682,7 @@ window.__ModuleLoader__.load({
 			"balance.month": "This month",
 			"balance.last30d": "Last 30 days",
 			"balance.in": "in",
+			"balance.cacheHit": "Cache hit",
 			"balance.out": "out",
 			"balance.models": "By model (30d)",
 			"balance.allModels": "All models",
@@ -3459,6 +3720,8 @@ window.__ModuleLoader__.load({
 			"speech.broadcastUsage": "Speak current usage",
 			"speech.broadcastBalance": "Speak current balance",
 			"speech.testLow": "Test audio: low-usage warning",
+			"speech.tokenUnit": "tokens",
+			"speech.costLabel": "cost",
 			"speech.testDead": "Test audio: out-of-tokens warning",
 			"balance.speechOn": "🔔 Voice alerts: on",
 			"balance.speechOff": "🔕 Voice alerts: off",
@@ -3494,6 +3757,9 @@ window.__ModuleLoader__.load({
 			"voice.langLabel": "Pack language (drives sample texts and manifest lang)",
 			"voice.sampleText": "Sample text",
 			"voice.recordingTitle": "Recording: {label}",
+			"voice.greetingSection": "Greetings (a random one plays on page refresh)",
+			"voice.greetingLabel": "Greeting {n}",
+			"voice.addGreeting": "Add greeting",
 			"voice.recordingTip": "Read the sample text below",
 			"voice.saveStop": "Stop & save",
 			"voice.discard": "Discard",
