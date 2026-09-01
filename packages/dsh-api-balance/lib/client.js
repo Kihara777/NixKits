@@ -880,6 +880,111 @@ window.__ModuleLoader__.load({
 		}
 
 		/**
+		 * 水平翻页区：多页并排（flex 行 + overflow hidden + 每页
+		 * translateX calc 翻页，拖拽时混入 px 实时位移）。区域高度 =
+		 * 最高页内容高度，随内容动态调整、自身不滚动——完整内容依赖
+		 * 面板自身的纵向滚动条。上方为 iOS 主屏幕风格页面指示点（可
+		 * 点按），支持横向拖拽/滑动翻页（touch-action: pan-y 保留面板
+		 * 纵向滚动；拖过阈值后指针捕获，避免误吞页面内按钮的点击）。
+		 */
+		function Pager({ pages, pageIndex, onPageChange, t }) {
+			const [drag, setDrag] = react.useState(null); // {startX, startY, dx, dy, captured}
+			const count = Array.isArray(pages) ? pages.length : 0;
+			const clampIndex = (i) => Math.max(0, Math.min(count - 1, i));
+			const onPointerDown = (event) => {
+				if (count < 2) return;
+				setDrag({ startX: event.clientX, startY: event.clientY, dx: 0, dy: 0, captured: false });
+			};
+			const onPointerMove = (event) => {
+				setDrag((current) => {
+					if (current === null) return null;
+					const dx = event.clientX - current.startX;
+					const dy = event.clientY - current.startY;
+					if (current.captured !== true && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+						try {
+							event.currentTarget.setPointerCapture?.(event.pointerId);
+						} catch {
+							// 忽略
+						}
+						return { ...current, dx, dy, captured: true };
+					}
+					return { ...current, dx, dy };
+				});
+			};
+			const finishDrag = (event) => {
+				setDrag((current) => {
+					if (current === null) return null;
+					const dx = event !== null && Number.isFinite(event.clientX) ? event.clientX - current.startX : current.dx;
+					const dy = event !== null && Number.isFinite(event.clientY) ? event.clientY - current.startY : current.dy;
+					if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+						onPageChange(clampIndex(pageIndex + (dx < 0 ? 1 : -1)));
+					}
+					return null;
+				});
+			};
+			return react.createElement(
+				"div",
+				null,
+				count > 1
+					? react.createElement(
+							"div",
+							{
+								style: { display: "flex", justifyContent: "center", gap: "6px", padding: "2px 0 6px" },
+								"aria-hidden": true,
+							},
+							pages.map((_, index) =>
+								react.createElement(
+									"button",
+									{
+										key: index,
+										type: "button",
+										tabIndex: -1,
+										"aria-label": t("pager.pageLabel", { n: index + 1, total: count }),
+										onClick: () => onPageChange(clampIndex(index)),
+										style: {
+											width: pageIndex === index ? "14px" : "6px",
+											height: "6px",
+											padding: 0,
+											border: "none",
+											borderRadius: "999px",
+											cursor: "pointer",
+											background: pageIndex === index ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-border-l3)",
+											transition: "width .18s ease, background .18s ease",
+										},
+									},
+								),
+							),
+						)
+					: null,
+				react.createElement(
+					"div",
+					{
+						style: { display: "flex", overflow: "hidden", touchAction: "pan-y", cursor: count > 1 ? "grab" : "default" },
+						onPointerDown: onPointerDown,
+						onPointerMove: onPointerMove,
+						onPointerUp: finishDrag,
+						onPointerCancel: () => finishDrag(null),
+					},
+					pages.map((page, index) =>
+						react.createElement(
+							"div",
+							{
+								key: index,
+								style: {
+									flex: "0 0 100%",
+									minWidth: 0,
+									transform: `translateX(calc(${-pageIndex * 100}% + ${drag !== null ? drag.dx : 0}px))`,
+									transition: drag === null ? "transform .22s ease" : "none",
+								},
+							},
+							page,
+						),
+					),
+				),
+			);
+		}
+
+		/**
 		 * 分模型堆叠柱状图（SVG）。series 为 host 端 fold 的
 		 * { daily: [{date, models:[{model, cost}]}], monthly: [...] }；
 		 * mode 切换按日 / 按月视图。柱高按金额比例，段色按模型名稳定分配。
@@ -2320,6 +2425,8 @@ window.__ModuleLoader__.load({
 			const [manualSaving, setManualSaving] = react.useState(false);
 			// 用量图表：按日 / 按月。
 			const [chartMode, setChartMode] = react.useState("daily");
+			// 消耗明细水平翻页区当前页（0 = 当日/当月/30日，1 = 分模型/图表）。
+			const [pagerIndex, setPagerIndex] = react.useState(0);
 			// 充值 IFRAME 弹窗。
 			const [topupOpen, setTopupOpen] = react.useState(false);
 			// 平台未登录提示弹窗：检测到 no-token 且浏览器扫描启用时自动弹出，
@@ -3479,14 +3586,19 @@ window.__ModuleLoader__.load({
 						),
 					);
 				}
-				// 当日 / 当月 / 30日内消耗（金额 + token）。
+				// 消耗明细区：同一区域水平翻页（指示点在上方）。
+				//  - 第 1 页：当日 / 当月 / 30日内消耗（金额 + token）
+				//  - 第 2 页：分模型 token 明细 + 按日 / 按月图表
+				// 区域高度随页面内容动态调整、自身不滚动；完整内容依赖
+				// 面板自身的纵向滚动条。
+				const windowRows = [];
 				if (usageWindows !== null) {
-					rows.push(detailRow(t("balance.today"), usageWindowRows(usageWindows.today), { key: "w-today" }));
-					rows.push(detailRow(t("balance.month"), usageWindowRows(usageWindows.month), { key: "w-month" }));
-					rows.push(detailRow(t("balance.last30d"), usageWindowRows(usageWindows.last30d), { key: "w-last30d" }));
+					windowRows.push(detailRow(t("balance.today"), usageWindowRows(usageWindows.today), { key: "w-today" }));
+					windowRows.push(detailRow(t("balance.month"), usageWindowRows(usageWindows.month), { key: "w-month" }));
+					windowRows.push(detailRow(t("balance.last30d"), usageWindowRows(usageWindows.last30d), { key: "w-last30d" }));
 				} else {
 					const isNoToken = usage !== null && usage.status === "no-token";
-					rows.push(
+					windowRows.push(
 						detailRow(
 							t("balance.usage"),
 							isNoToken ? t("balance.noToken") : t("balance.error"),
@@ -3501,15 +3613,16 @@ window.__ModuleLoader__.load({
 								(row) => row.hit + row.miss + row.completion + row.cost > 0,
 							)
 						: [];
+				const modelRows = [];
 				if (activeModels.length > 0) {
-					rows.push(
+					modelRows.push(
 						detailRow(t("balance.models"), null, {
 							key: "m-head",
 							labelStyle: { color: "var(--dsw-alias-label-tertiary)", marginTop: "4px" },
 						}),
 					);
 					activeModels.forEach((modelRow, index) => {
-						rows.push(
+						modelRows.push(
 							detailRow(
 								modelRow.model.length > 0 ? modelRow.model : t("balance.allModels"),
 								[
@@ -3523,24 +3636,40 @@ window.__ModuleLoader__.load({
 						);
 					});
 				}
-				balanceBody = react.createElement("dl", { style: { margin: 0 } }, rows);
-				// 分模型堆叠柱状图（按日 / 按月切换）。
 				const chartSeries = usage !== null && typeof usage.series === "object" ? usage.series : null;
-				if (usageWindows !== null && chartSeries !== null) {
+				const chartElement =
+					usageWindows !== null && chartSeries !== null
+						? react.createElement(UsageChart, {
+								t,
+								series: chartSeries,
+								mode: chartMode,
+								onModeChange: (mode) => {
+									setChartMode(mode);
+									speakChartMode(mode);
+								},
+								width: chartWidth,
+								peak: peakNow,
+							})
+						: null;
+				balanceBody = react.createElement("dl", { style: { margin: 0 } }, rows);
+				if (usageWindows !== null) {
 					balanceBody = react.createElement(
 						react.Fragment,
 						null,
 						balanceBody,
-						react.createElement(UsageChart, {
+						react.createElement(Pager, {
 							t,
-							series: chartSeries,
-							mode: chartMode,
-							onModeChange: (mode) => {
-										setChartMode(mode);
-										speakChartMode(mode);
-									},
-							width: chartWidth,
-							peak: peakNow,
+							pages: [
+								react.createElement("dl", { key: "page-windows", style: { margin: 0 } }, windowRows),
+								react.createElement(
+									react.Fragment,
+									{ key: "page-models" },
+									modelRows.length > 0 ? react.createElement("dl", { style: { margin: 0 } }, modelRows) : null,
+									chartElement,
+								),
+							],
+							pageIndex: pagerIndex,
+							onPageChange: setPagerIndex,
 						}),
 					);
 				}
@@ -4123,6 +4252,7 @@ window.__ModuleLoader__.load({
 			"tab.usage": "用量",
 			"tab.balance": "余额",
 			"tab.balanceHint": "切换至余额并刷新数据",
+			"pager.pageLabel": "第 {n} 页（共 {total} 页）",
 			"usage.aria": "上下文已用 {percent}",
 			"usage.headline": "上下文已用",
 			"usage.system": "系统提示词",
@@ -4281,6 +4411,7 @@ window.__ModuleLoader__.load({
 			"tab.usage": "Usage",
 			"tab.balance": "Balance",
 			"tab.balanceHint": "Switch to balance and refresh data",
+			"pager.pageLabel": "Page {n} of {total}",
 			"usage.aria": "{percent} of context used",
 			"usage.headline": "Context used",
 			"usage.system": "System prompt",
