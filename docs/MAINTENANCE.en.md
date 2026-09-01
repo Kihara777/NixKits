@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T09:10:18+09:00
+
+**Summary**: feat(dsh-api-balance): voice-pack library management + creator sub-menu + recording float window — the host now keeps a library (packs/<id>/ + state.json active record; new activate route for switching, DELETE ?ids= for multi-select removal with automatic fallback when the active pack is removed, audio served as /audio/<id>/<key>); the settings dialog keeps only an import control plus one 「Manage packs」 button, whose sub-menu has a packs view (scrollable list: click a row to switch, checkboxes for multi-select removal, entry to the creator) and a creator view (language picker zh-CN/en/ja — sample texts follow it, cross-language recording, manifest lang records the pack language; per-segment record/import/play/delete; compile-download / compile-apply); while recording, a visual float window appears in the corner (AudioContext+Analyser canvas level meter, elapsed time, sample text, stop-and-save/discard); the list shows pack name and language after import; the first-edit overwrite warning for imported packs is retained.
+
+| Commit | Description |
+|------|------|
+| `398b093` | feat(dsh-api-balance): voice-pack library management + creator sub-menu + recording float window |
+
+## 2026-09-01T08:41:48+09:00
+
+**Summary**: feat(dsh-api-balance): zip voice packs + record/import creator + edit protection — voice packs are now zip archives (manifest.json + audio/ files); the host parses zips in pure JS (STORE/DEFLATE via DecompressionStream inflate) into `$DSH_HOME/api-balance-voicepack/` and serves audio through a prefix route, shared by all devices. The settings dialog's creator supports per-segment browser recording (MediaRecorder) or importing local audio files; 「Package & download」 produces a shareable zip and 「Compile & apply」 installs it locally right away (overwriting the current pack). When a voice pack is imported, the first edit (record/import/delete/compile) shows an overwrite warning confirmed once per session. Broadcast segments now support both URL and inline data-URI carriers; four-language docs gain the voice-pack format guide (zip layout / manifest / segment table / recording & sharing flow).
+
+| Commit | Description |
+|------|------|
+| `5f4c50a` | feat(dsh-api-balance): zip voice packs + record/import creator + edit protection |
+
+## 2026-09-01T02:36:15+09:00
+
+**Summary**: feat(dsh-api-balance): broadcast voice language and voice follow the DSH UI language — the broadcast text already followed the UI language via t(), but the utterance lang and voice preference were hardcoded to zh-CN; now the current language code is read from the LocaleFace snapshot (useSyncExternalStore over the locale service's subscribe/getSnapshot): zh → zh-CN, others pass through; the voice is matched by language prefix, and the separators in composed broadcast text switch with the language (full-width for Chinese, half-width otherwise); falls back to zh when the locale service is unavailable
+
+| Commit | Description |
+|------|------|
+| `11c070b` | feat(dsh-api-balance): broadcast voice language and voice follow the DSH UI language |
+
 ## 2026-09-01T01:51:10+09:00
 
 **Summary**: fix(dsh-api-balance): voice broadcast menu now expands upward — the menu opens upward from the button's top edge by default (translateY(-100%)); when there's not enough room above (<8px from the viewport top) it falls back to opening downward

@@ -2,6 +2,30 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T09:10:18+09:00
+
+**摘要**：feat(dsh-api-balance): 语音包库管理 + 制作器次级菜单 + 录音可视化浮窗 — host 语音包库化（packs/<id>/ 多包存储 + state.json 激活记录；新增 activate 切换路由、DELETE ?ids= 多选移除（激活包被移除自动切换剩余）、音频按 /audio/<id>/<key> 服务）；设置页仅保留「导入 + 一个语音包管理按钮」，次级菜单含 packs 视图（可滚动列表：点击行切换激活、勾选多选移除、入口进制作器）与 creator 视图（语言选择 zh-CN/en/ja——示例文本随之变化、可跨语言录制，清单 lang 记录包语言；逐段录音/导入文件/试听/删除；编译下载/编译应用）；录音时右下角弹出可视化浮窗（AudioContext+Analyser 画布电平表、计时、示例文本、停止并保存/放弃）；导入后列表显示包名与语言；编辑已导入包仍保留首次覆盖提示。
+
+| 提交 | 说明 |
+|------|------|
+| `398b093` | feat(dsh-api-balance): 语音包库管理 + 制作器次级菜单 + 录音可视化浮窗 |
+
+## 2026-09-01T08:41:48+09:00
+
+**摘要**：feat(dsh-api-balance): 语音包 zip 化 + 录音/导入制作器 + 编辑保护 — 语音包改为 zip 压缩包（manifest.json + audio/ 音频文件），host 纯 JS zip 解析（STORE/DEFLATE，DecompressionStream inflate）落盘 `$DSH_HOME/api-balance-voicepack/` 目录，音频经 prefix 路由按 URL 服务全设备共享；设置弹窗内制作器支持逐段浏览器录音（MediaRecorder）或导入本地音频文件，「打包下载」生成可分享 zip、「编译并应用」立即覆盖应用到本机；已导入语音包时首次编辑（录制/导入/删除/编译）弹出覆盖提示，会话内确认一次；播报引擎片段支持 URL/内嵌双载体，四语文档补语音包格式指南（zip 结构 / manifest / 片段表 / 录音与分享流程）。
+
+| 提交 | 说明 |
+|------|------|
+| `5f4c50a` | feat(dsh-api-balance): 语音包 zip 化 + 录音/导入制作器 + 编辑保护 |
+
+## 2026-09-01T02:36:15+09:00
+
+**摘要**：feat(dsh-api-balance): 播报语音语言与音色跟随 DSH 界面语言 — 播报文本此前已随 t() 跟随界面语言，但语音 lang 与音色偏好硬编码 zh-CN；现经 LocaleFace 快照（useSyncExternalStore 订阅 locale 服务的 subscribe/getSnapshot）取当前语言码（zh → zh-CN，其余原样透传），音色按语言前缀匹配，组合播报文本的分隔符随语言切换（中文全角 / 其余半角），locale 服务不可用时回退 zh
+
+| 提交 | 说明 |
+|------|------|
+| `11c070b` | feat(dsh-api-balance): 播报语音语言与音色跟随 DSH 界面语言 |
+
 ## 2026-09-01T01:51:10+09:00
 
 **摘要**：fix(dsh-api-balance): 语音播报菜单改为从下往上展开 — 菜单默认贴按钮顶边向上展开（translateY(-100%)），上方空间不足（距视口顶部 <8px）时自动回退向下展开

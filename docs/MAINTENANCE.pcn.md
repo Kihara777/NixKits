@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T09:10:18+09:00
+
+**摘要**: feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（packs/<id>/ 複数保存 + state.json active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 /audio/<id>/<key> 配信）；設定 dialog import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）与 creator 視図（語言選択 zh-CN/en/ja——sample text 追従言語跨録音可能、manifest lang pack 語言記録；segment 毎録音/import/試聴/削除；compile download/compile 適用）搭載；録音中右下可視化浮窗（AudioContext+Analyser canvas level meter、経過時間、sample text、停止保存/破棄）表示；import 後 list pack 名与語言表示；import 済 pack 初回編集上書警告維持。
+
+| 提交 | 説明 |
+|------|------|
+| `398b093` | feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 |
+
+## 2026-09-01T08:41:48+09:00
+
+**摘要**: feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 — 音声 pack zip archive（manifest.json + audio/ file）変更。host 純 JS zip 解析（STORE/DEFLATE、DecompressionStream inflate）`$DSH_HOME/api-balance-voicepack/` 展開、prefix route 音声 URL 配信全 device 共有。設定 dialog 作成器 segment 毎瀏覽器録音（MediaRecorder）或 local 音声 file import 対応、「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用（當前 pack 上書）。pack import 済時初回編集（録音/import/削除/compile）上書警告表示 session 内一回確認。放送 segment URL / inline 両 carrier 対応、四語言文書音声 pack 形式指南（zip 構造 / manifest / segment 表 / 録音与共有 flow）追加。
+
+| 提交 | 説明 |
+|------|------|
+| `5f4c50a` | feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 |
+
+## 2026-09-01T02:36:15+09:00
+
+**摘要**: feat(dsh-api-balance): 音声放送語言与音色 DSH 界面語言追従 — 放送 text 従前 t() 界面語言追従済、発声 lang 与音色 zh-CN 固定。LocaleFace snapshot（useSyncExternalStore locale service subscribe/getSnapshot 購読）當前語言碼取得（zh → zh-CN、他其儘透過）、音色語言 prefix 一致、組合放送 text 区切文字語言応切替（中文全角 / 他半角）。locale service 不在時 zh 回退。
+
+| 提交 | 説明 |
+|------|------|
+| `11c070b` | feat(dsh-api-balance): 音声放送語言与音色 DSH 界面語言追従 |
+
 ## 2026-09-01T01:51:10+09:00
 
 **摘要**: fix(dsh-api-balance): 音声放送 menu 下→上展開変更 — menu 預設按鈕上辺接上向展開（translateY(-100%)）、上方余白不足時（viewport 上端 8px 未満）自動下向展開回退
