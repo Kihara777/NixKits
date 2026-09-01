@@ -359,3 +359,19 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 - namespace は設定 UI のセクションに対応（`web-search-deepseek`、`llm-deepseek`、`ui-onboarding` など）
 - 値は JSON 互換データ（string/number/boolean/list/object）必須
 - JSON（合法 YAML）として描画、ホットリロード；空 `{}` または欠落時はスキーマ既定値にフォールバック
+
+
+### 宣言的に設定可能な host ネームスペース
+
+`nixkits.dsh.settings` は**host 側で `settings.register` により登録された**名前空間にのみ書き込める——これらの値は `$DSH_HOME/settings.yaml` に置かれ、ブラウザ間で一致する。DSH 0.1.2-alpha が登録する名前空間とフィールド：
+
+| namespace | フィールド | 説明 |
+|-----------|-----------|------|
+| `locale` | `language` 等 | インターフェース言語 |
+| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観とテーマ |
+| `ui-chat` | `transcriptView` 等 | 会話ビュー |
+| `ui-conversation` | `busyEnter`（`queue`/`steer`） | ビジー時の Enter 動作 |
+| `ui-onboarding` | — | オンボーディングステップ状態 |
+| `agent-presets` | — | エージェントプリセット |
+
+> **設定メニューのストレージ境界**：設定 UI の全項目が `nixkits.dsh.settings` で宣言的に設定できるわけではない。**dsh-api-balance の界面 / 音声設定**（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**（ブラウザごとの独立・既定 ON・UI 内で切替）であり、`settings.register` システムを経由しない——そのため `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` はこれらを上書き**しない**。こうした「ブラウザごとの設定」は当プラグインの `⚙ 設定` パネルで行うか、デバイスごとに別ブラウザを用意する。

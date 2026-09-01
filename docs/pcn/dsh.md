@@ -359,3 +359,19 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）�
 - namespace 設定 UI セクション対応（`web-search-deepseek`、`llm-deepseek`、`ui-onboarding` 等）
 - 値 JSON 互換データ（string/number/boolean/list/object）必須
 - JSON（合法 YAML）描画、hot reload；空 `{}` 或欠落 schema 既定値 fallback
+
+
+### 声明配置可能 host namespace
+
+`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 配置、瀏覽器間一致。DSH 0.1.2-alpha 内建登録 namespace 与字段：
+
+| namespace | 字段 | 説明 |
+|-----------|------|------|
+| `locale` | `language` 等 | 界面言語 |
+| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観与主題 |
+| `ui-chat` | `transcriptView` 等 | 会話視図 |
+| `ui-conversation` | `busyEnter`（`queue`/`steer`） | busy 時 Enter 動作 |
+| `ui-onboarding` | — | 引導 step 状態 |
+| `agent-presets` | — | Agent preset |
+
+> **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明配置。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内配置、或 device 別独立瀏覽器。

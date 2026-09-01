@@ -359,3 +359,19 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 - namespace maps to a settings-UI section (e.g. `web-search-deepseek`, `llm-deepseek`, `ui-onboarding`)
 - values must be JSON-compatible (string/number/boolean/list/object)
 - rendered as JSON (valid YAML), hot-reloaded; empty `{}` or missing falls back to schema defaults
+
+
+### Declaratively configurable host namespaces
+
+`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.register`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. DSH 0.1.2-alpha ships these registered namespaces and fields:
+
+| namespace | fields | description |
+|-----------|--------|-------------|
+| `locale` | `language` etc. | interface language |
+| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` etc. | appearance & theme |
+| `ui-chat` | `transcriptView` etc. | conversation view |
+| `ui-conversation` | `busyEnter` (`queue`/`steer`) | Enter behavior while busy |
+| `ui-onboarding` | — | onboarding-step state |
+| `agent-presets` | — | agent presets |
+
+> **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.register` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.

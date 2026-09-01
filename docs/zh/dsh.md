@@ -358,3 +358,19 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 - namespace 对应设置 UI 的分区（如 `web-search-deepseek`、`llm-deepseek`、`ui-onboarding`）
 - 值必须是 JSON 兼容数据（string/number/boolean/list/object）
 - 生成 JSON（合法 YAML），dsh 热加载；空 `{}` 或缺失回退到 schema 默认值
+
+### 可声明式配置的宿主 namespace
+
+`nixkits.dsh.settings` 只能写入**宿主侧已通过 `settings.register` 注册**的命名空间——这些值存 `$DSH_HOME/settings.yaml`，跨浏览器一致。DSH 0.1.2-alpha 内置注册的 namespace 及字段：
+
+| namespace | 字段 | 说明 |
+|-----------|------|------|
+| `locale` | `language` 等 | 界面语言 |
+| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外观与主题 |
+| `ui-chat` | `transcriptView` 等 | 会话视图 |
+| `ui-conversation` | `busyEnter`（`queue`/`steer`） | 忙碌时 Enter 行为 |
+| `ui-onboarding` | — | 引导步骤状态 |
+| `agent-presets` | — | Agent 预设 |
+
+> **设置菜单的存储层边界**：并非设置 UI 里每一项都能用 `nixkits.dsh.settings` 声明式配置。**dsh-api-balance 的界面 / 语音设置**（语音提醒、底部统计条横向滚动、回车换行 + Shift+回车发送、移动端会话切换不弹键盘、TTS 后端）是**浏览器 localStorage 状态**（每浏览器独立、默认开启、UI 内切换），**不经过** `settings.register` 系统，因此 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` **不会**覆盖它们。这类"每浏览器偏好"请在该插件的 `⚙ 设置` 面板内配置，或按设备部署独立浏览器。
+

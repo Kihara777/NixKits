@@ -127,3 +127,8 @@ voice-pack.zip
 - 残高數據 DeepSeek 官方 API、用量數據 platform 控制台内部 API 由来——認証方式異（API キー / platform 会話 token）、一方欠時該当視図 error 非表示未登録状態表示。
 - 自動掃描本機瀏覽器登録済 token 限定読取、瀏覽器外數據不採集。token file `0600` 権限落盤。
 - 面板高度「锚点上方可用空間」自動 clamp（手機横屏 top bar 遮蔽回避）；横向可用幅不足時内容適応幅維持、面板横 scroll 表示（此際横 gesture 面板 scroll 優先、頁面切替上方指示 dot 経由），縦向同面板自身 scrollbar 表示。
+
+
+### 設定存儲層
+
+界面与語音設定（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**：毎瀏覽器独立、既定有効、插件 `⚙ 設定` panel 内切替即時永続化。此等 DSH host 設定系統（`settings.register` / `settings.yaml`）**不経由**、故 `nixkits.dsh.settings` 此等文書化 override **提供無**——此類「毎瀏覽器偏好」device 別 panel 内設定。host 側插件参數（`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`）依然 `nixkits.dsh.plugins.packages[].config` 声明設定。
