@@ -81,6 +81,14 @@ window.__ModuleLoader__.load({
 		const HUNGRY_POLL_INTERVAL_MS = 15 * 60 * 1000;
 		let lastHungrySpeechAt = 0;
 
+		/** 页面刷新问候音效：每个页面加载（JS 上下文）只播一次，随机选一。 */
+		let pageGreetingPlayed = false;
+		/** TTS 问候语池（语音包无问候音频时随机取一条；语言跟随界面语言）。 */
+		const GREETING_TTS_POOL = {
+			"zh-CN": ["欢迎回来～", "主人，我在这儿哦！", "想我了吗？", "今天也要元气满满呀！", "我一直在等你回来。"],
+			en: ["Welcome back!", "I'm here, master!", "Did you miss me?", "Let's have a great day!", "I've been waiting for you."],
+		};
+
 		/** 语音提醒开关（localStorage 持久化，默认开启）。 */
 		function speechEnabled() {
 			if (typeof window === "undefined") return false;
@@ -1230,6 +1238,11 @@ window.__ModuleLoader__.load({
 											},
 											autoOn ? t("balance.speechOn") : t("balance.speechOff"),
 										),
+										react.createElement(
+											"p",
+											{ style: { ...labelStyle, marginTop: "4px" } },
+											t("voice.greetingHint"),
+										),
 									),
 									// TTS 后端
 									react.createElement(
@@ -1872,7 +1885,28 @@ window.__ModuleLoader__.load({
 				return null;
 			};
 			react.useEffect(() => {
-				refreshPacks().catch(() => {});
+				refreshPacks()
+					.then(() => {
+						// 页面刷新问候音效：语音播报开启时随机播放一个（每页一次）。
+						if (pageGreetingPlayed || !speechEnabled()) return;
+						pageGreetingPlayed = true;
+						window.setTimeout(() => {
+							const pack = voicePackRef.current;
+							const greetings = pack !== null && Array.isArray(pack.greetings) ? pack.greetings : [];
+							if (greetings.length > 0) {
+								const pick = greetings[Math.floor(Math.random() * greetings.length)];
+								if (pick !== null && typeof pick === "object" && typeof pick.url === "string") {
+									stopActiveSpeech();
+									playAudioSrc(pick.url).catch(() => {});
+									return;
+								}
+							}
+							const table = GREETING_TTS_POOL[uiLocale] ?? GREETING_TTS_POOL["zh-CN"];
+							stopActiveSpeech();
+							ttsSpeak(table[Math.floor(Math.random() * table.length)], uiLocale, ttsCfgRef.current).catch(() => {});
+						}, 1200);
+					})
+					.catch(() => {});
 			}, []);
 			const [packBusy, setPackBusy] = react.useState(false);
 			const [packMessage, setPackMessage] = react.useState("");
@@ -3472,6 +3506,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "语音设置",
 			"voice.close": "关闭",
 			"voice.autoLabel": "自动播报（余额不足时提醒）",
+			"voice.greetingHint": "开启后每次刷新页面会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
 			"voice.ttsBackend": "TTS 后端",
 			"voice.ttsWeb": "浏览器内置语音",
 			"voice.ttsCustom": "自定义 TTS API",
@@ -3601,6 +3636,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "Voice settings",
 			"voice.close": "Close",
 			"voice.autoLabel": "Auto broadcast (balance alerts)",
+			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh (pack greeting audio, or a TTS greeting otherwise).",
 			"voice.ttsBackend": "TTS backend",
 			"voice.ttsWeb": "Browser built-in",
 			"voice.ttsCustom": "Custom TTS API",

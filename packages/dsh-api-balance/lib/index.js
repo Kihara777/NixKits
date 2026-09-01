@@ -1215,7 +1215,11 @@ export function apply(ctx, config = {}) {
               if (typeof value !== "string" || value.length === 0) continue;
               segments[key] = { url: `${VOICEPACK_AUDIO_PREFIX}${encodeURIComponent(id)}/${encodeURIComponent(key)}` };
             }
-            return { id, name: manifest.name ?? id, lang: manifest.lang ?? "", segments };
+            const greetingKeys = Array.isArray(manifest.greetingKeys) ? manifest.greetingKeys : [];
+            const greetings = greetingKeys
+              .filter((key) => typeof key === "string" && segments[key] !== void 0)
+              .map((key) => ({ url: segments[key].url }));
+            return { id, name: manifest.name ?? id, lang: manifest.lang ?? "", segments, greetings };
           });
           res.writeHead(200, { "content-type": "application/json" });
           res.end(JSON.stringify({ packs, active: typeof state.active === "string" ? state.active : null }));
@@ -1296,6 +1300,39 @@ export function apply(ctx, config = {}) {
             }
             files.set(key, { name: `${key}.${ext}`, data });
           }
+          // 可选问候音频集：页面刷新时随机播放一个（manifest.greetings 为文件路径数组）。
+          const greetingRefs = Array.isArray(manifest.greetings) ? manifest.greetings : [];
+          if (greetingRefs.length > VOICEPACK_MAX_FILES) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: `greetings must be 0..${VOICEPACK_MAX_FILES} entries` }));
+            return;
+          }
+          const greetingFiles = [];
+          for (const [index, ref] of greetingRefs.entries()) {
+            if (typeof ref !== "string" || ref.length === 0) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `greetings[${index}] must reference a file path` }));
+              return;
+            }
+            const data = entries.get(ref);
+            if (data === undefined) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `greetings[${index}] file "${ref}" not found in zip` }));
+              return;
+            }
+            if (data.length === 0 || data.length > VOICEPACK_MAX_FILE_BYTES) {
+              res.writeHead(413, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `greetings[${index}] file too large` }));
+              return;
+            }
+            const ext = basename(ref).includes(".") ? basename(ref).split(".").pop().toLowerCase() : "bin";
+            if (!/^[a-z0-9]{1,8}$/u.test(ext)) {
+              res.writeHead(400, { "content-type": "application/json" });
+              res.end(JSON.stringify({ ok: false, error: `greetings[${index}] file name invalid` }));
+              return;
+            }
+            greetingFiles.push({ key: `greet${index}`, name: `greet${index}.${ext}`, data });
+          }
           const id = `p${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
           const packDir = join(voicepackPacksDir(), id);
           try {
@@ -1303,7 +1340,18 @@ export function apply(ctx, config = {}) {
             for (const [key, file] of files) {
               writeFileSync(join(packDir, file.name), file.data, { mode: 0o600 });
             }
-            const stored = { ...manifest, segments: Object.fromEntries([...files.keys()].map((key) => [key, `${key}.${files.get(key).name.split(".").pop()}`])) };
+            for (const file of greetingFiles) {
+              writeFileSync(join(packDir, file.name), file.data, { mode: 0o600 });
+            }
+            const segmentNames = Object.fromEntries([...files.keys()].map((key) => [key, `${key}.${files.get(key).name.split(".").pop()}`]));
+            for (const file of greetingFiles) {
+              segmentNames[file.key] = file.name;
+            }
+            const stored = {
+              ...manifest,
+              segments: segmentNames,
+              greetingKeys: greetingFiles.map((file) => file.key),
+            };
             writeFileSync(join(packDir, "manifest.json"), JSON.stringify(stored), { mode: 0o600 });
             const state = readVoicepackState();
             state.active = id;

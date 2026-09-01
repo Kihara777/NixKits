@@ -186,7 +186,9 @@ voice-pack.zip
     "balance": "audio/balance.mp3",
     "tokenUnit": "audio/tokenUnit.mp3",
     "month": "audio/month.mp3",
-    "suffix": "audio/suffix.mp3"
+    "suffix": "audio/suffix.mp3",
+    // 任意：挨拶音声配列（頁面更新時 random 再生）
+    "greetings": ["audio/hello1.mp3", "audio/hello2.mp3"]
   }
 }
 ```
@@ -201,7 +203,7 @@ voice-pack.zip
 | `month` | 「当月」標籤 |
 | `suffix` | 放送結尾 |
 
-全 segment 任意：欠落 segment 放送時 TTS 回退。制約：segment key `[A-Za-z0-9_-]{1,32}`、zip ≤ 16 MB、file ≤ 32 個、音声 1 file ≤ 2 MB。音声 mp3 / wav / ogg / webm 推奨、1 segment 2 秒以内、22.05/44.1 kHz mono。動的部分（残高數字、token 数等）pack 不含——當前 TTS backend（瀏覽器内蔵或 host 経由 proxy 自訂 TTS API）実時合成、「pack segment + TTS 數字」順連結完全放送。
+全 segment 任意：欠落 segment 放送時 TTS 回退。任意 `greetings` file 路配列（0–16 個）：音声放送有効時、頁面更新毎 random 一個挨拶/着地音再生。挨拶音声無時 TTS 挨拶 pool random 再生。制約：segment key `[A-Za-z0-9_-]{1,32}`、zip ≤ 16 MB、file ≤ 32 個、音声 1 file ≤ 2 MB。音声 mp3 / wav / ogg / webm 推奨、1 segment 2 秒以内、22.05/44.1 kHz mono。動的部分（残高數字、token 数等）pack 不含——當前 TTS backend（瀏覽器内蔵或 host 経由 proxy 自訂 TTS API）実時合成、「pack segment + TTS 數字」順連結完全放送。
 
 **作成与共有**：「pack 管理」→「音声 pack 作成」作成器開——先 pack 語言（zh-CN / en / ja）選択（sample text 与 manifest `lang` 決定、言語跨録音可能）、後各 segment 瀏覽器 mic 録音（許可必要；localhost 或 HTTPS 限定）或 local 音声 file import。録音中右下可視化浮窗（level meter + 経過時間 + sample text + 停止/破棄）表示。完了後「打包 download」共有 zip 生成、「compile & 適用」本機 library import 即適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
 
