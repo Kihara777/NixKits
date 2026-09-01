@@ -34,7 +34,7 @@ All three settings are on by default and persist in browser localStorage.
 
 ### Peak pricing marker
 
-DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key) and the usage chart turn red, and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on page refresh and on manual 「Refresh data」 is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
+DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key) and the usage chart turn red, and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on page refresh and on each 「Balance」-tab click (refresh) is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
 
 ### Voice broadcast
 
