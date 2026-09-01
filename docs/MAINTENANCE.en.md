@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:56:57+09:00
+
+**Summary**: fix(dsh-api-balance): portrait overflow directly adopts the settings dialog's sizing logic — when the content width exceeds the available space (portrait overflow), the panel width switches directly to the settings dialog's page sizing logic (min(520px, 94vw)) and the content adapts to the panel width; only rare hard-overflow content falls back to the panel's horizontal scroll; the pager follows suit: on overflow the page width uses the panel's available width (content wraps to fit), gestures return to the panel's native scroll and paging goes through the indicator dots, and once the content fits, drag/swipe paging resumes automatically
+
+| Commit | Description |
+|------|------|
+| `280fd6a` | fix(dsh-api-balance): portrait overflow directly adopts the settings dialog's sizing logic |
+| `a8f8cda` | docs(dsh-api-balance): portrait-overflow sizing-logic notes (4 languages) |
 ## 2026-09-02T05:45:48+09:00
 
 **Summary**: fix(dsh-api-balance): usage panel becomes a page-level fixed portal (root fix for mobile off-screen) — the panel moves from absolute positioning inside the conversation tree to a document.body-level fixed portal (same architecture as the settings dialog), no longer clipped by the conversation area's overflow or bound to its coordinate space; the position is derived from the ring anchor's viewport rect (recomputed on resize/scroll, measured in useLayoutEffect to avoid flicker); double clamps: width cap = min(anchor space, viewport − 24px), height cap = the space above the anchor (auto-shrinks in landscape to avoid the top bar) — never off-screen at any size; the outside-click close is updated (the panel left the ring's ancestor chain), and z-index 900 sits below the top-up/login/settings overlays

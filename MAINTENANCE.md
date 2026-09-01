@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:56:57+09:00
+
+**摘要**：fix(dsh-api-balance): 竖屏越界直接采用设置弹窗页面尺寸逻辑 — 检测到内容宽度超出可用空间（竖屏越界）时，面板宽度直接切换为设置弹窗同款页面尺寸逻辑（min(520px, 94vw)），内容自适应面板宽度；仅极少数硬性超宽内容由面板横向滚动兜底；翻页区同步：越界时页宽改用面板可用宽度（内容自适应换行）、手势交还面板原生滚动、翻页经指示点，内容适配后自动恢复拖拽/滑动翻页
+
+| 提交 | 说明 |
+|------|------|
+| `280fd6a` | fix(dsh-api-balance): 竖屏越界直接采用设置弹窗页面尺寸逻辑 |
+| `a8f8cda` | docs(dsh-api-balance): 竖屏越界设置页尺寸逻辑说明（四语） |
 ## 2026-09-02T05:45:48+09:00
 
 **摘要**：fix(dsh-api-balance): 用量面板改为页面级 fixed portal（根治移动端出界） — 面板从「会话树内 absolute 定位」改为 document.body 级 fixed portal（与设置弹窗同架构），不再受会话区 overflow 裁剪与坐标空间影响；位置由圆圈锚点的视口坐标换算（resize/scroll 重算，useLayoutEffect 测量避免闪烁）；双保险钳制：宽度上限 = min(锚点空间, 视口 − 24px)、高度上限 = 锚点上方可用空间（横屏自动收缩避开顶栏），任何屏幕尺寸不越界；面板外点击关闭同步更新（面板已移出圆圈祖先链），z-index 900 低于充值/登录/设置弹层

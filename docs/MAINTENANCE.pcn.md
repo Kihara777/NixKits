@@ -33,6 +33,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:56:57+09:00
+
+**摘要**：fix(dsh-api-balance): 縦屏越界時設定 dialog 頁面 size 邏輯直接採用 — 内容幅利用可能空間超（縦屏越界）場合、面板幅設定 dialog 同頁面 size 邏輯（min(520px, 94vw)）直接切替、内容面板幅適応；僅極罕 hard 超幅内容面板横 scroll 兜底；pager 同同期——越界時頁幅面板利用可能幅変更（内容折返適応）、gesture 面板 native scroll 返還、頁面切替指示 dot 経由、内容収時 drag/swipe 頁面切替自動復帰
+
+| 提交 | 説明 |
+|------|------|
+| `280fd6a` | fix(dsh-api-balance): 縦屏越界時設定 dialog 頁面 size 邏輯直接採用 |
+| `a8f8cda` | docs(dsh-api-balance): 縦屏越界 size 邏輯説明（四語） |
 ## 2026-09-02T05:45:48+09:00
 
 **摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 与座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新（面板 ring 祖先 chain 離脱）、z-index 900 充值/登録/設定 overlay 下
