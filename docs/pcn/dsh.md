@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版本 | `0.1.1-rc.2` |
-| 開発通道 | `dsh-alpha 0.1.2-alpha.2`（npm `alpha` dist-tag） |
+| 開発通道 | `dsh-alpha 0.1.2-alpha.3`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,7 +22,7 @@ NixKits 仿 ruyi 薄包装模式（本体定義 + 版本/hash 上書包装）複
 | 包 | 通道 | 版本 | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag、既定 |
-| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.2` | npm `alpha` dist-tag、最新開発版追跡 |
+| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.3` | npm `alpha` dist-tag、最新開発版追跡 |
 
 ```nix
 # 本機最新開発版切替
@@ -195,6 +195,8 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 ## 插件清單
 
 dsh 0.1.1-rc.2 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
+
+> **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版本輸出為准。表中 `headless-runner` / `headless-startup` 二行来自 headless profile 組合、非 web profile 之 base + web-app patch 集。
 
 ```text
   agent -> @deepseek-ai/dsh-agent

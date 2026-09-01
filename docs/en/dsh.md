@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | Version | `0.1.1-rc.2` |
-| Development channel | `dsh-alpha 0.1.2-alpha.2` (npm `alpha` dist-tag) |
+| Development channel | `dsh-alpha 0.1.2-alpha.3` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -22,7 +22,7 @@ NixKits ships multiple dsh versions at once, following ruyi's thin-wrapper patte
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag, default |
-| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.2` | npm `alpha` dist-tag, tracks the latest development build |
+| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.3` | npm `alpha` dist-tag, tracks the latest development build |
 
 ```nix
 # Use the latest development version on this machine
@@ -195,6 +195,8 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 ## Plugin inventory
 
 Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+
+> **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. The `headless-runner` / `headless-startup` rows come from the headless profile composition, not the web profile's base + web-app patch set.
 
 ```text
   agent -> @deepseek-ai/dsh-agent

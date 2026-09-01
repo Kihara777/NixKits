@@ -23,7 +23,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.2-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.2-alpha.3） | [docs/pcn/dsh.md](pcn/dsh.md) |
 | godot-ai | Godot 引擎 MCP server 与 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
@@ -39,7 +39,7 @@ DeepSeek Harness（DSH）组件与軟体分開掲載（掛載方式 [docs/pcn/ds
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗与図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh.md](pcn/dsh.md) |
+| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗与図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
 
 **Agent 預設**（dsh-nixos-shell 同梱、`nixkits.dsh.presets` 一度限 DSH seed）：
 

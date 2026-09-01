@@ -23,7 +23,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | dsh | DeepSeek Harness (DSH) — Everything is a Plugin | [docs/en/dsh.md](en/dsh.md) |
-| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.1.2-alpha.2) | [docs/en/dsh.md](en/dsh.md) |
+| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.1.2-alpha.3) | [docs/en/dsh.md](en/dsh.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
@@ -39,7 +39,7 @@ DeepSeek Harness (DSH) components are listed separately from software (mounting 
 | Plugin | Description | Docs |
 |--------|-------------|------|
 | dsh-nixos-shell | Consolidated NixOS operations (shell execution, tool bootstrap, sudo daemon routing, NixOS diagnostics) | [docs/en/dsh-nixos-shell.md](en/dsh-nixos-shell.md) |
-| dsh-api-balance | API usage balance — adds a 「Usage / Balance」 tab switch to the webui usage ring (left of the send button): account balance, today / this-month / 30-day consumption with charts; the platform token is auto-scanned from local browser sessions by default (manual connect as fallback) | [docs/en/dsh.md](en/dsh.md) |
+| dsh-api-balance | API usage balance — adds a 「Usage / Balance」 tab switch to the webui usage ring (left of the send button): account balance, today / this-month / 30-day consumption with charts; the platform token is auto-scanned from local browser sessions by default (manual connect as fallback) | [docs/en/dsh-api-balance.md](en/dsh-api-balance.md) |
 
 **Agent presets** (shipped with dsh-nixos-shell, seeded once into DSH via `nixkits.dsh.presets`):
 

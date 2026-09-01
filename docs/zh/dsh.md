@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版本 | `0.1.1-rc.2` |
-| 开发通道 | `dsh-alpha 0.1.2-alpha.2`（npm `alpha` dist-tag） |
+| 开发通道 | `dsh-alpha 0.1.2-alpha.3`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,7 +22,7 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 | 包 | 通道 | 版本 | 说明 |
 |----|------|------|------|
 | `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag，默认 |
-| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.2` | npm `alpha` dist-tag，跟踪最新开发版 |
+| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.3` | npm `alpha` dist-tag，跟踪最新开发版 |
 
 ```nix
 # 本机改用最新开发版本
@@ -194,6 +194,8 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 ## 插件清单
 
 dsh 0.1.1-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
+
+> **清单生成方法**：`dsh --profile web --dump-default-config`（只读）输出即 `id -> name` 格式；升级 dsh 后用它重新生成本表，以所装版本的输出为准。表中 `headless-runner` / `headless-startup` 两行来自 headless profile 组合，非 web profile 的 base + web-app 补丁集。
 
 ```text
   agent -> @deepseek-ai/dsh-agent

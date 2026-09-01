@@ -27,7 +27,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 的 MCP Server（自然语言控制 Blender） | [docs/zh/blender-mcp.md](docs/zh/blender-mcp.md) |
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/zh/dsh.md](docs/zh/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.1.2-alpha.2） | [docs/zh/dsh.md](docs/zh/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.1.2-alpha.3） | [docs/zh/dsh.md](docs/zh/dsh.md) |
 | godot-ai | Godot 引擎的 MCP Server 与 AI 工具 | [docs/zh/godot-ai.md](docs/zh/godot-ai.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
@@ -43,7 +43,7 @@ DeepSeek Harness（DSH）组件与软件独立展示（挂载方式见 [docs/zh/
 | 插件 | 说明 | 文档 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 场景能力整合（shell 执行、工具引导、sudo 守护路由、NixOS 诊断） | [docs/zh/dsh-nixos-shell.md](docs/zh/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量余额——webui 用量圆圈（发送按钮左侧）添加「用量 / 余额」标签切换，展示账户余额、当日 / 当月 / 30 日消耗与图表；平台令牌默认从本机浏览器登录态自动扫描获取（手动连接回退） | [docs/zh/dsh.md](docs/zh/dsh.md) |
+| dsh-api-balance | API 用量余额——webui 用量圆圈（发送按钮左侧）添加「用量 / 余额」标签切换，展示账户余额、当日 / 当月 / 30 日消耗与图表；平台令牌默认从本机浏览器登录态自动扫描获取（手动连接回退） | [docs/zh/dsh-api-balance.md](docs/zh/dsh-api-balance.md) |
 
 **Agent 预设**（随 dsh-nixos-shell 分发，经 `nixkits.dsh.presets` seed-once 写入 DSH）：
 

@@ -23,7 +23,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向け MCP サーバー（自然言語による Blender 操作） | [docs/ja/blender-mcp.md](ja/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— すべてがプラグイン | [docs/ja/dsh.md](ja/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— アルファ開発チャネル（0.1.2-alpha.2） | [docs/ja/dsh.md](ja/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— アルファ開発チャネル（0.1.2-alpha.3） | [docs/ja/dsh.md](ja/dsh.md) |
 | godot-ai | Godot エンジン向けの MCP サーバーと AI ツール | [docs/ja/godot-ai.md](ja/godot-ai.md) |
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
@@ -39,7 +39,7 @@ DeepSeek Harness（DSH）コンポーネントはソフトウェアと分けて�
 | プラグイン | 説明 | ドキュメント |
 |------------|------|--------------|
 | dsh-nixos-shell | NixOS 操作統合（シェル実行、ツールブートストラップ、sudo デーモンルーティング、NixOS 診断） | [docs/ja/dsh-nixos-shell.md](ja/dsh-nixos-shell.md) |
-| dsh-api-balance | API 使用量残高——webui の使用量リング（送信ボタン左）に「用量 / 残高」タブ切替を追加。残高・当日 / 当月 / 30 日消費とチャートを表示。プラットフォームトークンはデフォルトで本機ブラウザのログイン状態から自動スキャン取得（手動接続はフォールバック） | [docs/ja/dsh.md](ja/dsh.md) |
+| dsh-api-balance | API 使用量残高——webui の使用量リング（送信ボタン左）に「用量 / 残高」タブ切替を追加。残高・当日 / 当月 / 30 日消費とチャートを表示。プラットフォームトークンはデフォルトで本機ブラウザのログイン状態から自動スキャン取得（手動接続はフォールバック） | [docs/ja/dsh-api-balance.md](ja/dsh-api-balance.md) |
 
 **Agent プリセット**（dsh-nixos-shell に同梱、`nixkits.dsh.presets` で DSH へ一度だけシード）：
 
