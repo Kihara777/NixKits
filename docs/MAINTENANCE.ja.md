@@ -1,6 +1,29 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T04:12:23+09:00
+
+**概要**：docs(dsh): 文書の時点性検証と同期 — dsh-alpha のバージョンを 0.1.2-alpha.3 に同期（README 四言語 + dsh.md 四言語）；プラグイン一覧に生成方法の注記（`dsh --profile web --dump-default-config`、読み取り専用）を追加し headless 2 行の由来プロファイルを明記；README のプラグイン表で api-balance 行が独立文書を指すよう修正；dsh-nixos-shell 文書にメンテナンスモードの派生関係とドリフト検査の説明を追加（四言語）
+
+| コミット | 説明 |
+|------|------|
+| `99746d3` | docs(dsh): 時点性同期——alpha 0.1.2-alpha.3 / プラグイン一覧生成方法 / プラグイン文書リンク |
+| `c45f64f` | docs(dsh-nixos-shell): メンテナンスモード派生関係とドリフト検査の説明（四言語） |
+
+## 2026-09-02T04:12:05+09:00
+
+**概要**：dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 — npm alpha dist-tag を追従し 1 リリース前進（上流 alpha.3 は 2026-08-31 公開）；vendored lock を再生成し、npmDeps の fixup lock とバイト単位で一致
+
+| コミット | 説明 |
+|------|------|
+| `6a45ac8` | feat(pkgs): dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
+| 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
+| 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
+
 
 ## 2026-09-02T02:49:52+09:00
 

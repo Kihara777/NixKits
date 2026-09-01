@@ -1,6 +1,29 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T04:12:23+09:00
+
+**Summary**：docs(dsh): documentation freshness audit and sync — dsh-alpha version bumped to 0.1.2-alpha.3 across READMEs and dsh.md (four languages); the plugin inventory gains a regeneration note (`dsh --profile web --dump-default-config`, read-only) and the headless rows are annotated with their source profile; README plugin table links api-balance to its standalone doc; dsh-nixos-shell doc adds the maintenance-preset derivation rule and drift-check note (four languages)
+
+| Commit | Description |
+|------|------|
+| `99746d3` | docs(dsh): freshness sync — alpha 0.1.2-alpha.3 / plugin inventory generation method / plugin doc links |
+| `c45f64f` | docs(dsh-nixos-shell): maintenance-preset derivation relation and drift-check note (four languages) |
+
+## 2026-09-02T04:12:05+09:00
+
+**Summary**：dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 — tracks the npm alpha dist-tag one release forward (upstream alpha.3 published 2026-08-31); vendored lock regenerated, byte-identical to the npmDeps fixup lock
+
+| Commit | Description |
+|------|------|
+| `6a45ac8` | feat(pkgs): dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
+| 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
+| 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
+
 
 ## 2026-09-02T02:49:52+09:00
 

@@ -1,6 +1,29 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-02T04:12:23+09:00
+
+**摘要**：docs(dsh): 文档时效性校验与同步 — dsh-alpha 版本号同步至 0.1.2-alpha.3（README 四语 + dsh.md 四语）；插件清单新增生成方法注记（`dsh --profile web --dump-default-config`，只读）并标注 headless 两行来源 profile；README 插件表 api-balance 行指向独立文档；dsh-nixos-shell 文档补充维护模式派生关系与漂移检查说明（四语）
+
+| 提交 | 说明 |
+|------|------|
+| `99746d3` | docs(dsh): 时效性同步——alpha 0.1.2-alpha.3 / 插件清单生成方法 / 插件文档链接 |
+| `c45f64f` | docs(dsh-nixos-shell): 维护模式派生关系与漂移检查说明（四语） |
+
+## 2026-09-02T04:12:05+09:00
+
+**摘要**：dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 — 跟随 npm alpha dist-tag 前进一个版本（上游 alpha.3 于 2026-08-31 发布）；vendored lock 重生成，与 npmDeps 产物的 fixup 锁逐字节一致
+
+| 提交 | 说明 |
+|------|------|
+| `6a45ac8` | feat(pkgs): dsh-alpha 0.1.2-alpha.2 → 0.1.2-alpha.3 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
+| 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
+| 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
+
 
 ## 2026-09-02T02:49:52+09:00
 
