@@ -2,6 +2,38 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T10:20:14+09:00
+
+**摘要**: fix/feat(dsh-api-balance): 「入」与缓存命中分離官方基準一致 + 挨拶 list 編集与 TTS 揃 sample text — 「当日入 200M」水増調査：官方 API token bucket PROMPT_CACHE_HIT_TOKEN（当日 228M 大半占）含、従前缓存命中「入」合算。官方使用量頁分項基準一致（入 = 未命中輸入限定、缓存命中別掲）、window 行 / 模型別行 / chart 切替放送分離 cacheHitLabel segment 追加。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、manifest.greetings 打包）追加。segment key today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix 再構成、sample text 預設 TTS 兜底文案一字一句一致。chart 切替放送全數據（入 / 缓存命中 / 出 / 金額幣種）網羅。
+
+| 提交 | 説明 |
+|------|------|
+| `ec5fb41` | fix(dsh-api-balance): 「入」与缓存命中分離、官方使用量頁基準一致 |
+
+## 2026-09-01T09:35:56+09:00
+
+**摘要**: refactor(dsh-api-balance): 放送按鈕削除、chart 切替按鈕対応視図読上 — 「🔊 使用量読上」按鈕与 drop-down menu（menu 位置・方向回退機構含）削除；使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack prefix + TTS 數字）；test 音声（低使用量 / 残高不足）「pack 管理」視図移動；音声設定按鈕独立行維持。
+
+| 提交 | 説明 |
+|------|------|
+| `dd61fe0` | refactor(dsh-api-balance): 放送按鈕削除、chart 切替対応視図読上 |
+
+## 2026-09-01T09:28:55+09:00
+
+**摘要**: fix(dsh-api-balance): 手動「數據更新」按鈕亦 random 挨拶音声再生 — 挨拶再生 playRandomGreeting 抽出共用：頁面更新（頁毎一回）与手動更新按鈕 click（毎回）両方 trigger、音声放送 switch 一律 gate。設定 dialog 説明文更新。
+
+| 提交 | 説明 |
+|------|------|
+| `264a6e3` | fix(dsh-api-balance): 手動更新按鈕亦 random 挨拶音声再生 |
+
+## 2026-09-01T09:24:11+09:00
+
+**摘要**: feat(dsh-api-balance): 頁面更新時 random 挨拶音声 — 音声放送有効時、頁面更新毎 random 挨拶/着地音再生（頁毎一回）：音声 pack manifest 任意 `greetings` 配列（0–16 個音声 file；host 検証保存 `/audio/<id>/greetN` 配信、GET list 挨拶 URL 返）追加。挨拶音声無時 TTS 挨拶 pool（zh 5 件 / en 5 件）random 再生。設定 dialog 自動放送 switch 下説明文追加。
+
+| 提交 | 説明 |
+|------|------|
+| `edd205c` | feat(dsh-api-balance): 頁面更新時 random 挨拶音声 |
+
 ## 2026-09-01T09:10:18+09:00
 
 **摘要**: feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（packs/<id>/ 複数保存 + state.json active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 /audio/<id>/<key> 配信）；設定 dialog import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）与 creator 視図（語言選択 zh-CN/en/ja——sample text 追従言語跨録音可能、manifest lang pack 語言記録；segment 毎録音/import/試聴/削除；compile download/compile 適用）搭載；録音中右下可視化浮窗（AudioContext+Analyser canvas level meter、経過時間、sample text、停止保存/破棄）表示；import 後 list pack 名与語言表示；import 済 pack 初回編集上書警告維持。

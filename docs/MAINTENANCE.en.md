@@ -2,6 +2,38 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:20:14+09:00
+
+**Summary**: fix/feat(dsh-api-balance): split 「in」 from cache hits to match the official usage page + greeting list editor and TTS-aligned sample texts — investigated the inflated 200M 「today in」: the official API's token buckets include PROMPT_CACHE_HIT_TOKEN (228M today, the dominant share), which we previously folded into 「in」; now the panel matches the official itemization (in = uncached input only, cache hits listed separately) across the window rows, per-model rows, and the chart-toggle broadcast, with a new cacheHitLabel voice-pack segment. The creator gains a greeting list editor (add/remove slots, per-entry record/import/play/delete, packaged into manifest.greetings); segment keys are reworked to today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix with sample texts matching the default TTS fallbacks exactly; the chart-toggle broadcast now covers the full data set (in / cache hit / out / cost with currency).
+
+| Commit | Description |
+|------|------|
+| `ec5fb41` | fix(dsh-api-balance): split 「in」 from cache hits to match the official usage page |
+
+## 2026-09-01T09:35:56+09:00
+
+**Summary**: refactor(dsh-api-balance): broadcast button removed; the chart mode toggle now speaks the matching view — the 「🔊 Speak usage」 button and its dropdown menu (including menu positioning/direction fallback) are removed; clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching view's voice usage (pack prefix + TTS numbers); the test audio (low-usage / out-of-tokens) moves into the 「Manage packs」 view; the voice-settings button remains on its own row.
+
+| Commit | Description |
+|------|------|
+| `dd61fe0` | refactor(dsh-api-balance): broadcast button removed; chart toggle speaks the matching view |
+
+## 2026-09-01T09:28:55+09:00
+
+**Summary**: fix(dsh-api-balance): the manual 「Refresh data」 button also triggers the random greeting sound — greeting playback is extracted into playRandomGreeting and shared: page refresh (once per page) and each manual refresh-button click both trigger it, uniformly gated by the voice-broadcast toggle; the settings hint text is updated accordingly.
+
+| Commit | Description |
+|------|------|
+| `264a6e3` | fix(dsh-api-balance): manual refresh button also triggers the random greeting |
+
+## 2026-09-01T09:24:11+09:00
+
+**Summary**: feat(dsh-api-balance): random greeting sound on page refresh — with voice broadcast enabled, a random greeting/landing sound plays on every page refresh (once per page): the voice-pack manifest gains an optional `greetings` array (0–16 audio files; the host validates, stores and serves them via `/audio/<id>/greetN`, and the GET list returns greeting URLs); without greeting audio, a random TTS greeting from a pool (5 zh / 5 en) plays; a hint text is added under the auto-broadcast toggle in the settings dialog.
+
+| Commit | Description |
+|------|------|
+| `edd205c` | feat(dsh-api-balance): random greeting sound on page refresh |
+
 ## 2026-09-01T09:10:18+09:00
 
 **Summary**: feat(dsh-api-balance): voice-pack library management + creator sub-menu + recording float window — the host now keeps a library (packs/<id>/ + state.json active record; new activate route for switching, DELETE ?ids= for multi-select removal with automatic fallback when the active pack is removed, audio served as /audio/<id>/<key>); the settings dialog keeps only an import control plus one 「Manage packs」 button, whose sub-menu has a packs view (scrollable list: click a row to switch, checkboxes for multi-select removal, entry to the creator) and a creator view (language picker zh-CN/en/ja — sample texts follow it, cross-language recording, manifest lang records the pack language; per-segment record/import/play/delete; compile-download / compile-apply); while recording, a visual float window appears in the corner (AudioContext+Analyser canvas level meter, elapsed time, sample text, stop-and-save/discard); the list shows pack name and language after import; the first-edit overwrite warning for imported packs is retained.
