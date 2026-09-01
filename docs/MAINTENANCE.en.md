@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T11:34:40+09:00
+
+**Summary**: feat(dsh-api-balance): dynamic width + merged account row + consumption metric sub-rows — the panel width becomes dynamic max-content (min 264px, capped at anchor-right-edge minus the sidebar) so values no longer wrap due to a narrow fixed width; API key / account status / per-currency balances merge into a single 「Account」 line (joined by ·) with the top-up button moved to the right of the title; the today/month/30-day and per-model consumption values split into metric sub-rows (cost / in / cache hit / out), further saving horizontal width.
+
+| Commit | Description |
+|------|------|
+| `81b524a` | feat(dsh-api-balance): dynamic width + merged account row + metric sub-rows |
+
 ## 2026-09-01T11:20:09+09:00
 
 **Summary**: feat(dsh-api-balance): compact panel width + two-line title/value rows — the panel width is unified to 264px (matching the original usage ring), with horizontal scrolling appearing only when content overflows on narrow screens; every row now uses a two-line layout (10px tertiary title / 12px wrapping value, reusing the token-source hierarchy), which looks better given the abundant vertical space; the chart width floor drops to 220 and follows the panel.
