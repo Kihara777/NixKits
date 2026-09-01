@@ -2413,10 +2413,15 @@ window.__ModuleLoader__.load({
 					});
 			};
 
+			// 「余额」标签完整继承原「刷新数据」按钮：点击即强制刷新
+			// （绕过 host 缓存）+ 随机问候音效（语音播报开启时）。
 			const switchTab = (next) => {
 				setTab(next);
-				if (next === TAB_BALANCE && balanceState === "idle") {
-					load(false);
+				if (next === TAB_BALANCE && balanceState !== "loading") {
+					void load(true);
+					if (speechEnabled()) {
+						playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
+					}
 				}
 			};
 
@@ -3036,18 +3041,23 @@ window.__ModuleLoader__.load({
 							width: (percent * breakdown[row.key]) / breakdownTotal,
 						})).filter((part) => part.width > 0);
 
-				// 标签行（用量 | 余额）。
-			const tabButton = (id, active) =>
-				react.createElement(
+				// 标签行（用量 | 余额）。「余额」标签承载原「刷新数据」按钮：
+				// 点击即刷新（title 提示），加载中显示旋转图标。
+			const tabButton = (id, active) => {
+				const refreshing = balanceState === "loading";
+				const isBalance = id === TAB_BALANCE;
+				return react.createElement(
 					"button",
 					{
 						type: "button",
 						role: "tab",
 						"aria-selected": active,
+						title: isBalance ? t("tab.balanceHint") : void 0,
 						onClick: () => switchTab(id),
 						style: {
 							display: "inline-flex",
 							alignItems: "center",
+							gap: "4px",
 							padding: "0 10px",
 							borderRadius: "999px",
 							cursor: "pointer",
@@ -3059,63 +3069,39 @@ window.__ModuleLoader__.load({
 							lineHeight: "20px",
 						},
 					},
+					isBalance && refreshing
+						? react.createElement("i", { className: "dshAbSpin", "aria-hidden": true, style: { width: "10px", height: "10px", borderWidth: "1.5px", margin: 0 } })
+						: null,
 					id === TAB_USAGE ? t("tab.usage") : t("tab.balance"),
 				);
+			};
 
-			// 刷新按钮：强制绕过 host 端缓存重新拉取余额 + 官方用量
-			// （queryBalance(true) → RPC refresh:true）。加载中显示旋转动画。
-			const refreshing = balanceState === "loading";
-			const refreshButton = react.createElement(
+			// 插件设置按钮：占据原「刷新数据」按钮的位置（刷新能力已由
+			// 「余额」标签完整继承）。点击打开设置弹窗（界面 / 语音）。
+			const settingsButton = react.createElement(
 				"button",
 				{
 					type: "button",
-					"aria-label": t("balance.refresh"),
-					title: t("balance.refresh"),
-					disabled: refreshing,
-					onClick: () => {
-						void load(true);
-						// 手动刷新也触发随机问候音效（语音播报开启时）。
-						if (speechEnabled()) {
-							playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
-						}
-					},
+					"aria-label": t("settings.open"),
+					title: t("settings.open"),
+					"aria-haspopup": "dialog",
+					onClick: () => setSettingsOpen(true),
 					style: {
 						display: "inline-flex",
 						alignItems: "center",
-						justifyContent: "center",
-						width: "24px",
 						height: "24px",
-						padding: 0,
+						padding: "0 10px",
 						borderRadius: "999px",
-						cursor: refreshing ? "default" : "pointer",
+						cursor: "pointer",
 						userSelect: "none",
 						border: "1px solid var(--dsw-alias-separator-primary)",
-						background: "transparent",
-						color: "var(--dsw-alias-label-tertiary)",
-						opacity: refreshing ? 0.6 : 1,
+						background: settingsOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+						color: "var(--dsw-alias-label-secondary)",
+						fontSize: "11px",
+						lineHeight: "18px",
 					},
 				},
-				refreshing
-					? react.createElement("i", { className: "dshAbSpin", "aria-hidden": true, style: { margin: 0 } })
-					: react.createElement(
-							"svg",
-							{ viewBox: "0 0 16 16", width: "13", height: "13", "aria-hidden": true },
-							react.createElement("path", {
-								d: "M13.6 8a5.6 5.6 0 1 1-1.64-3.96",
-								fill: "none",
-								stroke: "currentColor",
-								strokeWidth: 1.6,
-								strokeLinecap: "round",
-							}),
-							react.createElement("path", {
-								d: "M12.4 1.5v3.1H9.3",
-								fill: "none",
-								stroke: "currentColor",
-								strokeWidth: 1.6,
-								strokeLinecap: "round",
-								strokeLinejoin: "round",
-							}),
-						),
+				t("settings.open"),
 			);
 
 			// 「用量」标签内容：复刻原 ContextMeter 面板。
@@ -3420,6 +3406,79 @@ window.__ModuleLoader__.load({
 						),
 					),
 				);
+				// 令牌来源（已连接时）：紧跟账户信息下方展示（标题/正文
+				// 两行 + 灰显「已登录」与「断开」按钮）。
+				if (usage !== null && usage.status !== "no-token") {
+					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
+					rows.push(
+						react.createElement(
+							"div",
+							{
+								key: "token-source",
+								style: { padding: "3px 0", display: "flex", gap: "8px", alignItems: "center" },
+							},
+							tokenSource === null
+								? null
+								: react.createElement(
+										"div",
+										{ style: { marginRight: "auto", minWidth: 0 } },
+										react.createElement(
+											"div",
+											{ style: { fontSize: "10px", lineHeight: "14px", color: "var(--dsw-alias-label-tertiary)" } },
+											t("balance.sourceLabel"),
+										),
+										react.createElement(
+											"div",
+											{ style: { fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
+											tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
+										),
+									),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									disabled: true,
+									"aria-disabled": true,
+									style: {
+										display: "inline-flex",
+										alignItems: "center",
+										gap: "4px",
+										padding: "1px 10px",
+										borderRadius: "999px",
+										cursor: "default",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: "transparent",
+										color: "var(--dsw-alias-label-tertiary)",
+										fontSize: "11px",
+										lineHeight: "18px",
+										opacity: 0.6,
+									},
+								},
+								t("balance.loggedIn"),
+							),
+							react.createElement(
+								"button",
+								{
+									type: "button",
+									onClick: () => disconnectPlatform(),
+									style: {
+										display: "inline-flex",
+										alignItems: "center",
+										padding: "1px 10px",
+										borderRadius: "999px",
+										cursor: "pointer",
+										border: "1px solid var(--dsw-alias-separator-primary)",
+										background: "transparent",
+										color: "var(--dsw-alias-label-tertiary)",
+										fontSize: "11px",
+										lineHeight: "18px",
+									},
+								},
+								t("balance.disconnect"),
+							),
+						),
+					);
+				}
 				// 当日 / 当月 / 30日内消耗（金额 + token）。
 				if (usageWindows !== null) {
 					rows.push(detailRow(t("balance.today"), usageWindowRows(usageWindows.today), { key: "w-today" }));
@@ -3688,105 +3747,6 @@ window.__ModuleLoader__.load({
 						),
 					);
 				}
-				// 已连接：令牌来源（标题/正文两行）+ 登录状态 + 断开按钮；
-				// 语音设置按钮独立一行。
-				if (usage !== null && usage.status !== "no-token") {
-					const tokenSource = typeof usage.tokenSource === "string" ? usage.tokenSource : null;
-					balanceBody = react.createElement(
-						react.Fragment,
-						null,
-						balanceBody,
-						react.createElement(
-							"div",
-							{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "10px" } },
-							tokenSource === null
-								? null
-								: react.createElement(
-										"div",
-										{ style: { marginRight: "auto", minWidth: 0 } },
-										react.createElement(
-											"div",
-											{ style: { fontSize: "10px", lineHeight: "14px", color: "var(--dsw-alias-label-tertiary)" } },
-											t("balance.sourceLabel"),
-										),
-										react.createElement(
-											"div",
-											{ style: { fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
-											tokenSource === "browser" ? t("balance.sourceBrowser") : t("balance.sourceManual"),
-										),
-									),
-							react.createElement(
-								"button",
-								{
-									type: "button",
-									disabled: true,
-									"aria-disabled": true,
-									style: {
-										display: "inline-flex",
-										alignItems: "center",
-										gap: "4px",
-										padding: "1px 10px",
-										borderRadius: "999px",
-										cursor: "default",
-										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: "transparent",
-										color: "var(--dsw-alias-label-tertiary)",
-										fontSize: "11px",
-										lineHeight: "18px",
-										opacity: 0.6,
-									},
-								},
-								t("balance.loggedIn"),
-							),
-							react.createElement(
-								"button",
-								{
-									type: "button",
-									onClick: () => disconnectPlatform(),
-									style: {
-										display: "inline-flex",
-										alignItems: "center",
-										padding: "1px 10px",
-										borderRadius: "999px",
-										cursor: "pointer",
-										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: "transparent",
-										color: "var(--dsw-alias-label-tertiary)",
-										fontSize: "11px",
-										lineHeight: "18px",
-									},
-								},
-								t("balance.disconnect"),
-							),
-						),
-						react.createElement(
-							"div",
-							{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "8px" } },
-							react.createElement(
-								"button",
-								{
-									type: "button",
-									"aria-haspopup": "dialog",
-									onClick: () => setSettingsOpen(true),
-									style: {
-										display: "inline-flex",
-										alignItems: "center",
-										gap: "4px",
-										padding: "1px 10px",
-										borderRadius: "999px",
-										cursor: "pointer",
-										border: "1px solid var(--dsw-alias-separator-primary)",
-										background: settingsOpen ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
-										color: "var(--dsw-alias-label-secondary)",
-										fontSize: "11px",
-										lineHeight: "18px",
-									},
-								},
-								t("settings.open"),
-							),
-						),
-					);
-				}
 			}
 
 
@@ -3911,7 +3871,7 @@ window.__ModuleLoader__.load({
 									)
 								: null,
 							react.createElement("span", { style: { flex: "1 1 auto" } }),
-							refreshButton,
+							settingsButton,
 						),
 						tab === TAB_USAGE ? usageBody : balanceBody,
 					),
@@ -4162,6 +4122,7 @@ window.__ModuleLoader__.load({
 			"tab.aria": "面板视图切换",
 			"tab.usage": "用量",
 			"tab.balance": "余额",
+			"tab.balanceHint": "切换至余额并刷新数据",
 			"usage.aria": "上下文已用 {percent}",
 			"usage.headline": "上下文已用",
 			"usage.system": "系统提示词",
@@ -4235,7 +4196,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "语音设置",
 			"voice.close": "关闭",
 			"voice.autoLabel": "自动播报（余额不足时提醒）",
-			"voice.greetingHint": "开启后每次刷新页面或点击「刷新数据」按钮都会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
+			"voice.greetingHint": "开启后每次刷新页面或点击「余额」标签（刷新）都会随机播放一个问候音效（语音包问候音频，无则 TTS 问候语）。",
 			"voice.ttsBackend": "TTS 后端",
 			"voice.ttsWeb": "浏览器内置语音",
 			"voice.ttsCustom": "自定义 TTS API",
@@ -4319,6 +4280,7 @@ window.__ModuleLoader__.load({
 			"tab.aria": "Switch panel view",
 			"tab.usage": "Usage",
 			"tab.balance": "Balance",
+			"tab.balanceHint": "Switch to balance and refresh data",
 			"usage.aria": "{percent} of context used",
 			"usage.headline": "Context used",
 			"usage.system": "System prompt",
@@ -4390,7 +4352,7 @@ window.__ModuleLoader__.load({
 			"voice.title": "Voice settings",
 			"voice.close": "Close",
 			"voice.autoLabel": "Auto broadcast (balance alerts)",
-			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh and on each manual 「Refresh data」 click (pack greeting audio, or a TTS greeting otherwise).",
+			"voice.greetingHint": "When enabled, a random greeting plays on every page refresh and on each click of the 「Balance」 tab (refresh) (pack greeting audio, or a TTS greeting otherwise).",
 			"voice.ttsBackend": "TTS backend",
 			"voice.ttsWeb": "Browser built-in",
 			"voice.ttsCustom": "Custom TTS API",
