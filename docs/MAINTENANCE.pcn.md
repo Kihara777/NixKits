@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:29:05+09:00
+
+**摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 与 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、用戶明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加
+
+| 提交 | 説明 |
+|------|------|
+| `c940f92` | fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 |
+| `b8cd0b7` | docs(dsh-api-balance): 界面設定預設有効説明（四語）+ AGENTS Enter key 項目 |
 ## 2026-09-02T02:49:52+09:00
 
 **摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量リング与 chart 紅色表示 + 「峰時課金」badge（面板 header 与 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）

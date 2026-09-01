@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T04:29:05+09:00
+
+**Summary**: fix(dsh-api-balance): interface optimizations on by default + hardened mobile keyboard guard — the stats-bar horizontal scroll and Enter/newline swap settings flip from default-off to default-on (unset localStorage counts as on; explicit user off still works); the stats-bar CSS injection now retries (up to 5 times, 1s apart) when the ui-chat style tag isn't ready yet, avoiding silent injection failures from mount timing; the mobile keyboard guard is hardened — touch detection broadens to coarse pointer OR maxTouchPoints > 0 (tablets/hybrids), plus a focus-capture fallback that blurs immediately to close the soft keyboard on engines that don't fire focusin
+
+| Commit | Description |
+|------|------|
+| `c940f92` | fix(dsh-api-balance): interface optimizations on by default + hardened mobile keyboard guard |
+| `b8cd0b7` | docs(dsh-api-balance): default-on interface settings notes (4 languages) + AGENTS Enter-key entry |
 ## 2026-09-02T02:49:52+09:00
 
 **Summary**: feat(dsh-api-balance): full-page panel width regression fix + peak-pricing marker + mobile keyboard guard — the panel width is now measured once from content scrollWidth and set as a concrete px (eliminating the 「chart px → panel max-content → observer → chart px」 feedback that pushed the panel to the cap and filled the whole page), with the cap tightened to min(anchor right edge − sidebar, 640) and in-panel horizontal scrolling beyond it; during DeepSeek peak hours (official current rule: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time, everything else incl. weekends off-peak) the usage ring and chart turn red with a 「Peak pricing」 badge (panel header + chart title), and greetings are followed by a peak hint (pack `peak` segment / TTS fallback) with a new `peak` segment in the creator; on mobile, switching sessions via the sidebar no longer pops the soft keyboard (focusin capture blocks non-tap composer focus; on by default, Settings → Interface to disable)
