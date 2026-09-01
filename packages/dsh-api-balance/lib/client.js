@@ -1091,8 +1091,7 @@ window.__ModuleLoader__.load({
 			onImportFile,
 			onActivate,
 			onRemovePacks,
-			onTestLow,
-			onTestDead,
+			onAudition,
 			onTestTts,
 			recordings,
 			greetingSlots,
@@ -1123,6 +1122,7 @@ window.__ModuleLoader__.load({
 		}) {
 			const [viewMode, setViewMode] = react.useState("main");
 			const [selectedIds, setSelectedIds] = react.useState([]);
+			const [expandedId, setExpandedId] = react.useState(null);
 			const overlayStyle = {
 				position: "fixed",
 				inset: 0,
@@ -1191,61 +1191,172 @@ window.__ModuleLoader__.load({
 				const table = VOICEPACK_SAMPLE_TEXTS[packLangInput] ?? VOICEPACK_SAMPLE_TEXTS["zh-CN"];
 				return typeof table[key] === "string" ? table[key] : key;
 			};
-			const packRow = (pack) =>
-				react.createElement(
-					"div",
-					{
-						key: pack.id,
-						style: {
-							display: "flex",
-							gap: "8px",
-							alignItems: "center",
-							padding: "5px 8px",
-							borderRadius: "8px",
-							cursor: "pointer",
-							background: pack.id === activeId ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
-						},
-						onClick: () => onActivate(pack.id),
-					},
-					react.createElement("input", {
-						type: "checkbox",
-						checked: selectedIds.includes(pack.id),
-						onClick: (event) => event.stopPropagation(),
-						onChange: (event) => {
-							setSelectedIds((current) =>
-								event.target.checked ? [...current, pack.id] : current.filter((id) => id !== pack.id),
-							);
-						},
-					}),
+			// 语音试听：展开的语音包展示其全部支持音频，逐条播放。
+			const auditionKeys = (pack) => {
+				const keys = [];
+				const segments = pack.segments !== null && typeof pack.segments === "object" ? pack.segments : {};
+				for (const key of Object.keys(segments)) {
+					if (key.startsWith("greet")) continue;
+					keys.push({ kind: "segment", key });
+				}
+				const greetings = Array.isArray(pack.greetings) ? pack.greetings : [];
+				greetings.forEach((greeting, index) => {
+					if (greeting !== null && typeof greeting === "object" && typeof greeting.url === "string") {
+						keys.push({ kind: "greeting", index, url: greeting.url });
+					}
+				});
+				return keys;
+			};
+			const packRow = (pack) => {
+				const expanded = expandedId === pack.id;
+				const entries = expanded ? auditionKeys(pack) : [];
+				return react.createElement(
+					react.Fragment,
+					{ key: pack.id },
 					react.createElement(
-						"span",
+						"div",
 						{
 							style: {
-								flex: 1,
-								minWidth: 0,
-								overflow: "hidden",
-								textOverflow: "ellipsis",
-								whiteSpace: "nowrap",
-								fontSize: "12px",
-								lineHeight: "18px",
-								color: "var(--dsw-alias-label-secondary)",
+								display: "flex",
+								gap: "8px",
+								alignItems: "center",
+								padding: "5px 8px",
+								borderRadius: "8px",
+								cursor: "pointer",
+								background: pack.id === activeId ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
 							},
+							onClick: () => onActivate(pack.id),
 						},
-						pack.name,
+						react.createElement(
+							"button",
+							{
+								type: "button",
+								"aria-label": t("voice.auditionToggle"),
+								"aria-expanded": expanded,
+								onClick: (event) => {
+									event.stopPropagation();
+									setExpandedId(expanded ? null : pack.id);
+								},
+								style: {
+									width: "18px",
+									height: "18px",
+									padding: 0,
+									border: "none",
+									background: "transparent",
+									cursor: "pointer",
+									color: "var(--dsw-alias-label-tertiary)",
+									fontSize: "10px",
+									lineHeight: "18px",
+									textAlign: "center",
+								},
+							},
+							expanded ? "▾" : "▸",
+						),
+						react.createElement("input", {
+							type: "checkbox",
+							checked: selectedIds.includes(pack.id),
+							onClick: (event) => event.stopPropagation(),
+							onChange: (event) => {
+								setSelectedIds((current) =>
+									event.target.checked ? [...current, pack.id] : current.filter((id) => id !== pack.id),
+								);
+							},
+						}),
+						react.createElement(
+							"span",
+							{
+								style: {
+									flex: 1,
+									minWidth: 0,
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									whiteSpace: "nowrap",
+									fontSize: "12px",
+									lineHeight: "18px",
+									color: "var(--dsw-alias-label-secondary)",
+								},
+							},
+							pack.name,
+						),
+						react.createElement(
+							"span",
+							{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+							pack.lang,
+						),
+						pack.id === activeId
+							? react.createElement(
+									"span",
+									{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-brand-primary, #4d6bfe)" } },
+									t("voice.activeMark"),
+								)
+							: null,
 					),
-					react.createElement(
-						"span",
-						{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
-						pack.lang,
-					),
-					pack.id === activeId
+					expanded
 						? react.createElement(
-								"span",
-								{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-brand-primary, #4d6bfe)" } },
-								t("voice.activeMark"),
+								"div",
+								{
+									style: {
+										margin: "0 8px 4px 34px",
+										display: "flex",
+										flexDirection: "column",
+										gap: "2px",
+										maxHeight: "160px",
+										overflowY: "auto",
+									},
+								},
+								entries.length === 0
+									? react.createElement(
+											"p",
+											{ style: { ...labelStyle, padding: "2px 0" } },
+											t("voice.auditionEmpty"),
+										)
+									: entries.map((entry, index) =>
+											react.createElement(
+												"div",
+												{
+													key: `${entry.kind}-${entry.key ?? index}`,
+													style: { display: "flex", gap: "8px", alignItems: "center" },
+												},
+												react.createElement(
+													"button",
+													{
+														type: "button",
+														"aria-label": t("voice.test"),
+														onClick: () => {
+															const url =
+																entry.kind === "greeting"
+																	? entry.url
+																	: pack.segments?.[entry.key]?.url;
+															if (typeof url === "string" && url.length > 0) onAudition(url);
+														},
+														style: {
+															width: "20px",
+															height: "18px",
+															padding: 0,
+															border: "none",
+															background: "transparent",
+															cursor: "pointer",
+															color: "var(--dsw-alias-label-secondary)",
+															fontSize: "10px",
+															lineHeight: "18px",
+															textAlign: "center",
+														},
+													},
+													"▶",
+												),
+												react.createElement(
+													"span",
+													{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+													entry.kind === "greeting"
+														? t("voice.greetingLabel", { n: entry.index + 1 })
+														: t(`voice.seg.${entry.key}`),
+												),
+											),
+										),
 							)
 						: null,
 				);
+			};
 			const backButton = (mode) =>
 				react.createElement(
 					"button",
@@ -1450,17 +1561,7 @@ window.__ModuleLoader__.load({
 									react.createElement(
 										"div",
 										{ style: { ...sectionStyle, marginBottom: "16px", display: "flex", gap: "8px", flexWrap: "wrap" } },
-										// 测试音频（原播报菜单内容移入此处）。
-										react.createElement(
-											"button",
-											{ type: "button", onClick: onTestLow, style: pillStyle(false) },
-											t("speech.testLow"),
-										),
-										react.createElement(
-											"button",
-											{ type: "button", onClick: onTestDead, style: pillStyle(false) },
-											t("speech.testDead"),
-										),
+
 										react.createElement(
 											"button",
 											{
@@ -3315,20 +3416,10 @@ window.__ModuleLoader__.load({
 							onImportFile: importVoicePack,
 							onActivate: activatePack,
 							onRemovePacks: removePacks,
-							onTestLow: () =>
-								speakNowParts(
-									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
-									uiLocale,
-									ttsCfgRef.current,
-									voicePackRef.current,
-								),
-							onTestDead: () =>
-								speakNowParts(
-									[{ kind: "pack", key: "dead", fallbackText: t("speech.dead") }],
-									uiLocale,
-									ttsCfgRef.current,
-									voicePackRef.current,
-								),
+							onAudition: (url) => {
+								stopActiveSpeech();
+								playAudioSrc(url).catch(() => {});
+							},
 							onTestTts: () => {
 								stopActiveSpeech();
 								ttsSpeak(t("voice.ttsTestText"), uiLocale, ttsCfgRef.current).catch(() => {});
@@ -3624,6 +3715,8 @@ window.__ModuleLoader__.load({
 			"voice.greetingSection": "问候语（页面刷新时随机播放一个）",
 			"voice.greetingLabel": "问候 {n}",
 			"voice.addGreeting": "添加问候",
+			"voice.auditionToggle": "展开语音试听",
+			"voice.auditionEmpty": "该语音包无可试听音频",
 			"voice.recordingTip": "请朗读下方示例文本",
 			"voice.saveStop": "停止并保存",
 			"voice.discard": "放弃",
@@ -3760,6 +3853,8 @@ window.__ModuleLoader__.load({
 			"voice.greetingSection": "Greetings (a random one plays on page refresh)",
 			"voice.greetingLabel": "Greeting {n}",
 			"voice.addGreeting": "Add greeting",
+			"voice.auditionToggle": "Toggle audition",
+			"voice.auditionEmpty": "No auditionable audio in this pack",
 			"voice.recordingTip": "Read the sample text below",
 			"voice.saveStop": "Stop & save",
 			"voice.discard": "Discard",
