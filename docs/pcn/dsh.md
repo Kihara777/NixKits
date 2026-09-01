@@ -155,7 +155,7 @@ platform token 二段取得、全自動優先：
 
 - **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 読取、LevelDB 表構造精確解析（footer → index → 數據 block → snappy 解凍 → entry 走査）`userToken` 取出（解析失敗時生 byte 啓発式回退）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描。
 - **未登録検出与登録案内**：scan 不命中時面板「platform 未登録」prompt 自動表示——「前往登録」新標籤開登録頁、polling token 自動取得。手動輸入 prompt 内二級 option 限定（登録不要時備）。接続後灰顯「✓ 登録済」按鈕与 token 取得元（本機瀏覽器自動取得 / 手動連接）表示、手動更新毎 token 未取得時自動快掃登録状態確認——按鈕操作不要。
-- **音声放送**：面板独立行「使用量読上」drop-down——當前使用量 / 残高読上、低使用量・残高不足警告音声試聴可能。menu 預設按鈕上方向展開（上方余白不足時自動下方向）。放送語言与音色 DSH 界面語言（zh / en）追従。「⚙ 音声設定」dialog 備：自動放送 switch（残高閾値下通知、30 分 rate 制限）、TTS backend 選択（瀏覽器内蔵 / 自訂 TTS API——host 経由 proxy CORS 回避、URL template placeholder `{text}` `{lang}` `{rate}`）、音声 pack zip import / 試聴 / 削除（`$DSH_HOME/api-balance-voicepack/` 保存全 device 共有）、瀏覽器録音音声 pack 作成与 zip 打包配布。
+- **音声放送**：面板独立行「使用量読上」drop-down——當前使用量 / 残高読上、低使用量・残高不足警告音声試聴可能。menu 預設按鈕上方向展開（上方余白不足時自動下方向）。放送語言与音色 DSH 界面語言（zh / en）追従。「⚙ 音声設定」dialog 備：自動放送 switch（残高閾値下通知、30 分 rate 制限）、TTS backend 選択（瀏覽器内蔵 / 自訂 TTS API——host 経由 proxy CORS 回避、URL template placeholder `{text}` `{lang}` `{rate}`）、音声 pack library 管理（複数 zip import、行 click 使用 pack 切替、複数選択一括削除、scroll 可能 list；`$DSH_HOME/api-balance-voicepack/` 保存全 device 共有）、「pack 管理」次級 menu 内作成器（瀏覽器録音或音声 file import、録音中可視化浮窗与 sample text 表示、言語跨録音可能、打包 download / compile 適用）備。
 
 #### 音声 pack 形式指南
 
@@ -203,7 +203,7 @@ voice-pack.zip
 
 全 segment 任意：欠落 segment 放送時 TTS 回退。制約：segment key `[A-Za-z0-9_-]{1,32}`、zip ≤ 16 MB、file ≤ 32 個、音声 1 file ≤ 2 MB。音声 mp3 / wav / ogg / webm 推奨、1 segment 2 秒以内、22.05/44.1 kHz mono。動的部分（残高數字、token 数等）pack 不含——當前 TTS backend（瀏覽器内蔵或 host 経由 proxy 自訂 TTS API）実時合成、「pack segment + TTS 數字」順連結完全放送。
 
-**作成与共有**：音声設定 dialog 内蔵「音声 pack 作成」——各 segment 瀏覽器 mic 録音（許可必要；localhost 或 HTTPS 限定）或 local 音声 file import、pack 名入力「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
+**作成与共有**：「pack 管理」→「音声 pack 作成」作成器開——先 pack 語言（zh-CN / en / ja）選択（sample text 与 manifest `lang` 決定、言語跨録音可能）、後各 segment 瀏覽器 mic 録音（許可必要；localhost 或 HTTPS 限定）或 local 音声 file import。録音中右下可視化浮窗（level meter + 経過時間 + sample text + 停止/破棄）表示。完了後「打包 download」共有 zip 生成、「compile & 適用」本機 library import 即適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
 
 ```nix
 {

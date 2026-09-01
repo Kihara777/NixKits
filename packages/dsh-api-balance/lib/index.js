@@ -138,29 +138,73 @@ function tokenFilePath() {
   return join(home, "api-balance-token");
 }
 
-/** 语音包目录：$DSH_HOME/api-balance-voicepack/（manifest.json + 音频文件）。 */
+/** 语音包库目录：$DSH_HOME/api-balance-voicepack/（packs/<id>/ + state.json）。 */
 function voicepackDir() {
   const home = process.env.DSH_HOME ?? join(homedir(), ".dsh");
   return join(home, "api-balance-voicepack");
 }
 
-function voicepackManifestPath() {
-  return join(voicepackDir(), "manifest.json");
+function voicepackPacksDir() {
+  return join(voicepackDir(), "packs");
 }
 
-/** 读取语音包清单（不存在返回 null）。 */
-function readVoicepackManifest() {
+function voicepackStatePath() {
+  return join(voicepackDir(), "state.json");
+}
+
+/** 库状态：{ active: id | null }。 */
+function readVoicepackState() {
   try {
-    const text = readFileSync(voicepackManifestPath(), "utf8");
-    const value = JSON.parse(text);
-    return value !== null && typeof value === "object" ? value : null;
+    const value = JSON.parse(readFileSync(voicepackStatePath(), "utf8"));
+    return value !== null && typeof value === "object" ? value : {};
   } catch {
-    return null;
+    return {};
   }
 }
 
-function clearVoicepackDir() {
-  rmSync(voicepackDir(), { recursive: true, force: true });
+function writeVoicepackState(state) {
+  try {
+    mkdirSync(voicepackDir(), { recursive: true });
+    writeFileSync(voicepackStatePath(), JSON.stringify(state), { mode: 0o600 });
+  } catch {
+    // 状态写入失败不影响读取
+  }
+}
+
+/** 扫描 packs/<id>/manifest.json → [{ id, manifest }]。 */
+function listVoicepackPacks() {
+  const out = [];
+  let dirs = [];
+  try {
+    dirs = readdirSync(voicepackPacksDir());
+  } catch {
+    return out;
+  }
+  for (const id of dirs) {
+    if (!/^[A-Za-z0-9_-]{1,48}$/u.test(id)) continue;
+    try {
+      const manifest = JSON.parse(readFileSync(join(voicepackPacksDir(), id, "manifest.json"), "utf8"));
+      if (manifest !== null && typeof manifest === "object") out.push({ id, manifest });
+    } catch {
+      // 损坏条目跳过
+    }
+  }
+  return out;
+}
+
+/** 移除若干语音包；active 被移除时自动切换为剩余第一个（或 null）。 */
+function removeVoicepackPacks(ids) {
+  const remove = new Set(ids);
+  for (const id of remove) {
+    rmSync(join(voicepackPacksDir(), id), { recursive: true, force: true });
+  }
+  const state = readVoicepackState();
+  if (typeof state.active === "string" && remove.has(state.active)) {
+    const remaining = listVoicepackPacks();
+    state.active = remaining.length > 0 ? remaining[0].id : null;
+    writeVoicepackState(state);
+  }
+  return state;
 }
 
 /**
@@ -1164,19 +1208,17 @@ export function apply(ctx, config = {}) {
       path: VOICEPACK_ROUTE,
       handler: async (req, res) => {
         if (req.method === "GET") {
-          const manifest = readVoicepackManifest();
-          if (manifest === null) {
-            res.writeHead(404, { "content-type": "application/json" });
-            res.end(JSON.stringify({ ok: false, error: "no voice pack" }));
-            return;
-          }
-          const segments = {};
-          for (const [key, value] of Object.entries(manifest.segments ?? {})) {
-            if (typeof value !== "string" || value.length === 0) continue;
-            segments[key] = { url: `${VOICEPACK_AUDIO_PREFIX}${encodeURIComponent(key)}` };
-          }
+          const state = readVoicepackState();
+          const packs = listVoicepackPacks().map(({ id, manifest }) => {
+            const segments = {};
+            for (const [key, value] of Object.entries(manifest.segments ?? {})) {
+              if (typeof value !== "string" || value.length === 0) continue;
+              segments[key] = { url: `${VOICEPACK_AUDIO_PREFIX}${encodeURIComponent(id)}/${encodeURIComponent(key)}` };
+            }
+            return { id, name: manifest.name ?? id, lang: manifest.lang ?? "", segments };
+          });
           res.writeHead(200, { "content-type": "application/json" });
-          res.end(JSON.stringify({ ...manifest, segments }));
+          res.end(JSON.stringify({ packs, active: typeof state.active === "string" ? state.active : null }));
           return;
         }
         if (req.method === "POST") {
@@ -1222,7 +1264,6 @@ export function apply(ctx, config = {}) {
             res.end(JSON.stringify({ ok: false, error: `segments must be 1..${VOICEPACK_MAX_FILES} entries` }));
             return;
           }
-          // 校验片段文件存在且体积合规；文件统一按 basename 落盘（防路径穿越）。
           const files = new Map();
           for (const key of segmentKeys) {
             if (!/^[A-Za-z0-9_-]{1,32}$/u.test(key)) {
@@ -1247,43 +1288,79 @@ export function apply(ctx, config = {}) {
               res.end(JSON.stringify({ ok: false, error: `segment "${key}" file too large` }));
               return;
             }
-            const base = basename(ref);
-            if (base.length === 0 || base.length > 120) {
+            const ext = basename(ref).includes(".") ? basename(ref).split(".").pop().toLowerCase() : "bin";
+            if (!/^[a-z0-9]{1,8}$/u.test(ext)) {
               res.writeHead(400, { "content-type": "application/json" });
               res.end(JSON.stringify({ ok: false, error: `segment "${key}" file name invalid` }));
               return;
             }
-            files.set(key, { name: base, data });
+            files.set(key, { name: `${key}.${ext}`, data });
           }
-          // 写盘：目录重建（manifest.json + 各音频文件）。
-          clearVoicepackDir();
+          const id = `p${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+          const packDir = join(voicepackPacksDir(), id);
           try {
-            mkdirSync(voicepackDir(), { recursive: true });
+            mkdirSync(packDir, { recursive: true });
             for (const [key, file] of files) {
-              writeFileSync(join(voicepackDir(), `${key}-${file.name}`), file.data, { mode: 0o600 });
+              writeFileSync(join(packDir, file.name), file.data, { mode: 0o600 });
             }
-            const stored = { ...manifest, segments: Object.fromEntries([...files.keys()].map((key) => [key, `${key}-${files.get(key).name}`])) };
-            writeFileSync(voicepackManifestPath(), JSON.stringify(stored), { mode: 0o600 });
+            const stored = { ...manifest, segments: Object.fromEntries([...files.keys()].map((key) => [key, `${key}.${files.get(key).name.split(".").pop()}`])) };
+            writeFileSync(join(packDir, "manifest.json"), JSON.stringify(stored), { mode: 0o600 });
+            const state = readVoicepackState();
+            state.active = id;
+            writeVoicepackState(state);
           } catch {
             res.writeHead(500, { "content-type": "application/json" });
             res.end(JSON.stringify({ ok: false, error: "failed to write voice pack" }));
             return;
           }
           res.writeHead(200, { "content-type": "application/json" });
-          res.end(JSON.stringify({ ok: true }));
+          res.end(JSON.stringify({ ok: true, id }));
           return;
         }
         if (req.method === "DELETE") {
-          clearVoicepackDir();
+          const ids = (new URL(req.url, "http://localhost").searchParams.get("ids") ?? "")
+            .split(",")
+            .map((id) => id.trim())
+            .filter((id) => /^[A-Za-z0-9_-]{1,48}$/u.test(id));
+          if (ids.length === 0) {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ ok: false, error: "ids query is required" }));
+            return;
+          }
+          const state = removeVoicepackPacks(ids);
           res.writeHead(200, { "content-type": "application/json" });
-          res.end(JSON.stringify({ ok: true }));
+          res.end(JSON.stringify({ ok: true, active: state.active ?? null }));
           return;
         }
         res.writeHead(405, { "content-type": "application/json" });
         res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
       },
     });
-    // 音频前缀路由：/api/api-balance/voicepack/audio/<key> → 文件字节。
+    // 激活语音包：POST { id }。
+    const disposeActivate = ctx.webServer.register({
+      kind: "exact",
+      path: `${VOICEPACK_ROUTE}/activate`,
+      handler: async (req, res) => {
+        if (req.method !== "POST") {
+          res.writeHead(405, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
+          return;
+        }
+        const payload = await readJsonBody(req, 4 * 1024);
+        const id = typeof payload?.id === "string" ? payload.id : "";
+        if (!/^[A-Za-z0-9_-]{1,48}$/u.test(id) || !listVoicepackPacks().some((pack) => pack.id === id)) {
+          res.writeHead(404, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "voice pack not found" }));
+          return;
+        }
+        const state = readVoicepackState();
+        state.active = id;
+        writeVoicepackState(state);
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+      },
+    });
+    // 音频前缀路由：/api/api-balance/voicepack/audio/<id>/<key> → 文件字节。
     const disposeAudio = ctx.webServer.register({
       kind: "prefix",
       path: VOICEPACK_AUDIO_PREFIX,
@@ -1293,8 +1370,20 @@ export function apply(ctx, config = {}) {
           res.end(JSON.stringify({ ok: false, error: "method not allowed" }));
           return;
         }
-        const key = decodeURIComponent(req.url.slice(VOICEPACK_AUDIO_PREFIX.length)).split("?")[0];
-        const manifest = readVoicepackManifest();
+        const rest = decodeURIComponent(req.url.slice(VOICEPACK_AUDIO_PREFIX.length)).split("?")[0].split("/");
+        const id = rest[0] ?? "";
+        const key = rest[1] ?? "";
+        if (!/^[A-Za-z0-9_-]{1,48}$/u.test(id) || !/^[A-Za-z0-9_-]{1,32}$/u.test(key)) {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "invalid audio path" }));
+          return;
+        }
+        let manifest = null;
+        try {
+          manifest = JSON.parse(readFileSync(join(voicepackPacksDir(), id, "manifest.json"), "utf8"));
+        } catch {
+          // 404 分支
+        }
         const file = manifest !== null && typeof manifest.segments === "object" ? manifest.segments[key] : null;
         if (typeof file !== "string" || file.length === 0) {
           res.writeHead(404, { "content-type": "application/json" });
@@ -1302,7 +1391,7 @@ export function apply(ctx, config = {}) {
           return;
         }
         try {
-          const buf = readFileSync(join(voicepackDir(), file));
+          const buf = readFileSync(join(voicepackPacksDir(), id, file));
           res.writeHead(200, { "content-type": audioType(file), "content-length": buf.length, "cache-control": "no-store" });
           res.end(buf);
         } catch {
@@ -1377,6 +1466,7 @@ export function apply(ctx, config = {}) {
     });
     return () => {
       disposeVoicepack();
+      disposeActivate();
       disposeAudio();
       disposeTts();
     };

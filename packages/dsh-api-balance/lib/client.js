@@ -350,6 +350,43 @@ window.__ModuleLoader__.load({
 		/** 语音包片段键（制作器按此清单逐段录制）。 */
 		const VOICEPACK_SEGMENT_KEYS = ["dead", "low", "usage", "balance", "tokenUnit", "month", "suffix"];
 
+		/** 制作器示例文本（随语音包语言选择变化；录制浮窗展示朗读用）。 */
+		const VOICEPACK_SAMPLE_TEXTS = {
+			"zh-CN": {
+				dead: "余额不足啦，我快饿晕了，快喂我吃 token！",
+				low: "token 快吃完了，记得喂我哦！",
+				usage: "当前用量",
+				balance: "当前余额",
+				tokenUnit: "个 token",
+				month: "当月",
+				suffix: "以上。",
+			},
+			en: {
+				dead: "Master, I'm out of tokens — please feed me!",
+				low: "Tokens are running low, remember to feed me!",
+				usage: "Current usage",
+				balance: "Current balance",
+				tokenUnit: "tokens",
+				month: "this month",
+				suffix: "That's all.",
+			},
+			ja: {
+				dead: "残高がありません、お腹ペコペコです。トークンをちょうだい！",
+				low: "トークンが残りわずかです。補充を忘れずに！",
+				usage: "現在の使用量",
+				balance: "現在の残高",
+				tokenUnit: "トークン",
+				month: "今月",
+				suffix: "以上です。",
+			},
+		};
+
+		/** 指定语言/片段键的示例文本（未知语言回退 zh-CN）。 */
+		function sampleTextFor(lang, key) {
+			const table = VOICEPACK_SAMPLE_TEXTS[lang] ?? VOICEPACK_SAMPLE_TEXTS["zh-CN"];
+			return typeof table[key] === "string" ? table[key] : key;
+		}
+
 		// ── zip 打包（STORE 方式，浏览器侧导出语音包用）────────────
 		const CRC32_TABLE = (() => {
 			const table = new Uint32Array(256);
@@ -976,17 +1013,25 @@ window.__ModuleLoader__.load({
 		 * 经 host 代理）、语音包 zip 导入 / 试听 / 清除，以及浏览器录音
 		 * 制作语音包并打包下载分享。
 		 */
+		/**
+		 * 语音设置弹窗（三视图）：
+		 *  - main：自动播报开关、TTS 后端、语音包行（当前激活 + 导入 + 一个「语音包管理」按钮）
+		 *  - packs：语音包库（可滚动列表：点击切换激活、勾选多选移除、进入制作器）
+		 *  - creator：制作语音包（语言选择 → 示例文本变化；逐段录音/导入；编译下载/应用）
+		 */
 		function VoiceSettingsModal({
 			t,
 			autoOn,
 			onToggleAuto,
 			ttsCfg,
 			onTtsChange,
-			pack,
+			packs,
+			activeId,
 			packBusy,
 			packMessage,
 			onImportFile,
-			onClear,
+			onActivate,
+			onRemovePacks,
 			onTestPack,
 			onTestTts,
 			recordings,
@@ -1002,9 +1047,13 @@ window.__ModuleLoader__.load({
 			onCancelEdit,
 			packNameInput,
 			onPackNameInput,
+			packLangInput,
+			onPackLangInput,
 			onDownloadPack,
 			onClose,
 		}) {
+			const [viewMode, setViewMode] = react.useState("main");
+			const [selectedIds, setSelectedIds] = react.useState([]);
 			const overlayStyle = {
 				position: "fixed",
 				inset: 0,
@@ -1017,7 +1066,7 @@ window.__ModuleLoader__.load({
 			};
 			const boxStyle = {
 				position: "relative",
-				width: "min(460px, 94vw)",
+				width: "min(520px, 94vw)",
 				maxHeight: "80vh",
 				overflowY: "auto",
 				background: "var(--dsw-specific-menu)",
@@ -1067,9 +1116,73 @@ window.__ModuleLoader__.load({
 				fontSize: "12px",
 				lineHeight: "18px",
 			};
-			const packName =
-				pack !== null && typeof pack === "object" ? `${pack.name ?? "?"}（${pack.lang ?? "?"}）` : null;
+			const activePack = Array.isArray(packs) ? packs.find((pack) => pack.id === activeId) ?? null : null;
 			const recordedCount = recordings !== null && typeof recordings === "object" ? Object.keys(recordings).length : 0;
+			const sampleOf = (key) => {
+				const table = VOICEPACK_SAMPLE_TEXTS[packLangInput] ?? VOICEPACK_SAMPLE_TEXTS["zh-CN"];
+				return typeof table[key] === "string" ? table[key] : key;
+			};
+			const packRow = (pack) =>
+				react.createElement(
+					"div",
+					{
+						key: pack.id,
+						style: {
+							display: "flex",
+							gap: "8px",
+							alignItems: "center",
+							padding: "5px 8px",
+							borderRadius: "8px",
+							cursor: "pointer",
+							background: pack.id === activeId ? "var(--dsw-alias-interactive-bg-hover)" : "transparent",
+						},
+						onClick: () => onActivate(pack.id),
+					},
+					react.createElement("input", {
+						type: "checkbox",
+						checked: selectedIds.includes(pack.id),
+						onClick: (event) => event.stopPropagation(),
+						onChange: (event) => {
+							setSelectedIds((current) =>
+								event.target.checked ? [...current, pack.id] : current.filter((id) => id !== pack.id),
+							);
+						},
+					}),
+					react.createElement(
+						"span",
+						{
+							style: {
+								flex: 1,
+								minWidth: 0,
+								overflow: "hidden",
+								textOverflow: "ellipsis",
+								whiteSpace: "nowrap",
+								fontSize: "12px",
+								lineHeight: "18px",
+								color: "var(--dsw-alias-label-secondary)",
+							},
+						},
+						pack.name,
+					),
+					react.createElement(
+						"span",
+						{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+						pack.lang,
+					),
+					pack.id === activeId
+						? react.createElement(
+								"span",
+								{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-brand-primary, #4d6bfe)" } },
+								t("voice.activeMark"),
+							)
+						: null,
+				);
+			const backButton = (mode) =>
+				react.createElement(
+					"button",
+					{ type: "button", onClick: () => setViewMode(mode), style: { ...pillStyle(false), marginTop: "6px" } },
+					t("voice.back"),
+				);
 			return reactDOM.createPortal(
 				react.createElement(
 					"div",
@@ -1090,314 +1203,389 @@ window.__ModuleLoader__.load({
 									color: "var(--dsw-alias-label-primary)",
 								},
 							},
-							t("voice.title"),
+							viewMode === "main" ? t("voice.title") : viewMode === "packs" ? t("voice.packListTitle") : t("voice.recorderLabel"),
 						),
 						react.createElement(
 							"button",
 							{ type: "button", "aria-label": t("voice.close"), style: closeStyle, onClick: onClose },
 							"✕",
 						),
-						// 自动播报开关
-						react.createElement(
-							"div",
-							{ style: sectionStyle },
-							react.createElement("p", { style: labelStyle }, t("voice.autoLabel")),
-							react.createElement(
-								"button",
-								{
-									type: "button",
-									"aria-pressed": autoOn,
-									onClick: onToggleAuto,
-									style: { ...pillStyle(autoOn), marginTop: "4px" },
-								},
-								autoOn ? t("balance.speechOn") : t("balance.speechOff"),
-							),
-						),
-						// TTS 后端
-						react.createElement(
-							"div",
-							{ style: sectionStyle },
-							react.createElement("p", { style: labelStyle }, t("voice.ttsBackend")),
-							react.createElement(
-								"div",
-								{ style: { display: "flex", gap: "8px", marginTop: "4px" } },
-								react.createElement(
-									"button",
-									{
-										type: "button",
-										onClick: () => onTtsChange({ ...ttsCfg, backend: "web" }),
-										style: pillStyle(ttsCfg.backend === "web"),
-									},
-									t("voice.ttsWeb"),
-								),
-								react.createElement(
-									"button",
-									{
-										type: "button",
-										onClick: () => onTtsChange({ ...ttsCfg, backend: "custom" }),
-										style: pillStyle(ttsCfg.backend === "custom"),
-									},
-									t("voice.ttsCustom"),
-								),
-								react.createElement(
-									"button",
-									{
-										type: "button",
-										onClick: onTestTts,
-										style: { ...pillStyle(false), marginLeft: "auto" },
-									},
-									t("voice.test"),
-								),
-							),
-							ttsCfg.backend === "custom"
-								? react.createElement(
+						viewMode !== "main"
+							? null
+							: react.createElement(
+									react.Fragment,
+									null,
+									// 自动播报开关
+									react.createElement(
 										"div",
-										{ style: { display: "flex", gap: "6px", marginTop: "6px", alignItems: "center" } },
-										react.createElement("input", {
-											type: "text",
-											value: ttsCfg.urlTemplate,
-											placeholder: t("voice.ttsUrlPlaceholder"),
-											onChange: (event) => onTtsChange({ ...ttsCfg, urlTemplate: event.target.value }),
-											style: inputStyle,
-										}),
+										{ style: sectionStyle },
+										react.createElement("p", { style: labelStyle }, t("voice.autoLabel")),
 										react.createElement(
-											"select",
+											"button",
 											{
-												value: ttsCfg.method,
-												onChange: (event) => onTtsChange({ ...ttsCfg, method: event.target.value }),
-												style: { ...inputStyle, flex: "0 0 auto" },
+												type: "button",
+												"aria-pressed": autoOn,
+												onClick: onToggleAuto,
+												style: { ...pillStyle(autoOn), marginTop: "4px" },
 											},
-											react.createElement("option", { value: "GET" }, "GET"),
-											react.createElement("option", { value: "POST" }, "POST"),
+											autoOn ? t("balance.speechOn") : t("balance.speechOff"),
 										),
-									)
-								: react.createElement(
-										"p",
-										{ style: { ...labelStyle, marginTop: "4px" } },
-										t("voice.ttsUrlHint"),
 									),
-						),
-						// 语音包：zip 导入 / 试听 / 清除
-						react.createElement(
-							"div",
-							{ style: sectionStyle },
-							react.createElement("p", { style: labelStyle }, t("voice.packLabel")),
-							react.createElement(
-								"div",
-								{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "4px" } },
-								react.createElement(
-									"span",
-									{
-										style: {
-											flex: 1,
-											minWidth: 0,
-											fontSize: "12px",
-											lineHeight: "18px",
-											color: packName !== null ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
-										},
-									},
-									packName !== null ? t("voice.packLoaded", { name: pack.name, lang: pack.lang }) : t("voice.packNone"),
+									// TTS 后端
+									react.createElement(
+										"div",
+										{ style: sectionStyle },
+										react.createElement("p", { style: labelStyle }, t("voice.ttsBackend")),
+										react.createElement(
+											"div",
+											{ style: { display: "flex", gap: "8px", marginTop: "4px" } },
+											react.createElement(
+												"button",
+												{
+													type: "button",
+													onClick: () => onTtsChange({ ...ttsCfg, backend: "web" }),
+													style: pillStyle(ttsCfg.backend === "web"),
+												},
+												t("voice.ttsWeb"),
+											),
+											react.createElement(
+												"button",
+												{
+													type: "button",
+													onClick: () => onTtsChange({ ...ttsCfg, backend: "custom" }),
+													style: pillStyle(ttsCfg.backend === "custom"),
+												},
+												t("voice.ttsCustom"),
+											),
+											react.createElement(
+												"button",
+												{ type: "button", onClick: onTestTts, style: { ...pillStyle(false), marginLeft: "auto" } },
+												t("voice.test"),
+											),
+										),
+										ttsCfg.backend === "custom"
+											? react.createElement(
+													"div",
+													{ style: { display: "flex", gap: "6px", marginTop: "6px", alignItems: "center" } },
+													react.createElement("input", {
+														type: "text",
+														value: ttsCfg.urlTemplate,
+														placeholder: t("voice.ttsUrlPlaceholder"),
+														onChange: (event) => onTtsChange({ ...ttsCfg, urlTemplate: event.target.value }),
+														style: inputStyle,
+													}),
+													react.createElement(
+														"select",
+														{
+															value: ttsCfg.method,
+															onChange: (event) => onTtsChange({ ...ttsCfg, method: event.target.value }),
+															style: { ...inputStyle, flex: "0 0 auto" },
+														},
+														react.createElement("option", { value: "GET" }, "GET"),
+														react.createElement("option", { value: "POST" }, "POST"),
+													),
+												)
+											: react.createElement(
+													"p",
+													{ style: { ...labelStyle, marginTop: "4px" } },
+													t("voice.ttsUrlHint"),
+												),
+									),
+									// 语音包行：当前激活 + 导入 + 一个「语音包管理」按钮
+									react.createElement(
+										"div",
+										{ style: { ...sectionStyle, marginBottom: "16px" } },
+										react.createElement("p", { style: labelStyle }, t("voice.packLabel")),
+										react.createElement(
+											"div",
+											{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "4px", flexWrap: "wrap" } },
+											react.createElement(
+												"span",
+												{
+													style: {
+														flex: 1,
+														minWidth: 0,
+														fontSize: "12px",
+														lineHeight: "18px",
+														color: activePack !== null ? "var(--dsw-alias-label-secondary)" : "var(--dsw-alias-label-tertiary)",
+													},
+												},
+												activePack !== null
+													? t("voice.packLoaded", { name: activePack.name, lang: activePack.lang })
+													: t("voice.packNone"),
+											),
+											react.createElement("label", { style: pillStyle(false) },
+												t("voice.packImport"),
+												react.createElement("input", {
+													type: "file",
+													accept: ".zip,application/zip",
+													disabled: packBusy,
+													style: { display: "none" },
+													onChange: (event) => {
+														const file = event.target.files !== null ? event.target.files[0] : null;
+														if (file !== null) onImportFile(file);
+														event.target.value = "";
+													},
+												}),
+											),
+											react.createElement(
+												"button",
+												{ type: "button", onClick: () => setViewMode("packs"), style: pillStyle(true) },
+												t("voice.manage"),
+											),
+										),
+										packMessage !== ""
+											? react.createElement(
+													"p",
+													{ style: { ...labelStyle, marginTop: "4px" } },
+													packMessage,
+												)
+											: null,
+									),
 								),
-								packName !== null
-									? react.createElement(
-											"button",
-											{ type: "button", onClick: onTestPack, style: pillStyle(false) },
-											t("voice.test"),
-										)
-									: null,
-								packName !== null
-									? react.createElement(
-											"button",
-											{ type: "button", disabled: packBusy, onClick: onClear, style: pillStyle(false) },
-											t("voice.packClear"),
-										)
-									: null,
-							),
-							react.createElement(
-								"div",
-								{ style: { display: "flex", gap: "8px", alignItems: "center", marginTop: "6px" } },
-								react.createElement("input", {
-									type: "file",
-									accept: ".zip,application/zip",
-									disabled: packBusy,
-									onChange: (event) => {
-										const file = event.target.files !== null ? event.target.files[0] : null;
-										if (file !== null) onImportFile(file);
-										event.target.value = "";
-									},
-									style: {
-										flex: 1,
-										minWidth: 0,
-										fontSize: "11px",
-										color: "var(--dsw-alias-label-secondary)",
-									},
-								}),
-								packMessage !== ""
-									? react.createElement(
-											"span",
-											{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
-											packMessage,
-										)
-									: null,
-							),
-						),
-						// 语音包制作器：录音 / 导入音频 + 编译（打包下载 / 编译并应用）
-						react.createElement(
-							"div",
-							{ style: { ...sectionStyle, marginBottom: "16px" } },
-							react.createElement("p", { style: labelStyle }, t("voice.recorderLabel")),
-							editConfirmOpen
-								? react.createElement(
+						viewMode !== "packs"
+							? null
+							: react.createElement(
+									react.Fragment,
+									null,
+									react.createElement(
 										"div",
 										{
 											style: {
-												display: "flex",
-												gap: "8px",
-												alignItems: "center",
-												flexWrap: "wrap",
-												marginTop: "6px",
-												padding: "6px 10px",
+												...sectionStyle,
+												maxHeight: "220px",
+												overflowY: "auto",
+												border: "1px solid var(--dsw-alias-separator-primary)",
 												borderRadius: "8px",
-												border: "1px solid var(--dsw-alias-warning-primary, #e5a50a)",
-												background: "var(--dsw-alias-bg-layer-2, transparent)",
+												padding: "4px",
 											},
 										},
+										Array.isArray(packs) && packs.length > 0
+											? packs.map(packRow)
+											: react.createElement(
+													"p",
+													{ style: { ...labelStyle, padding: "8px" } },
+													t("voice.packNone"),
+												),
+									),
+									react.createElement(
+										"p",
+										{ style: { ...labelStyle, marginTop: "4px" } },
+										t("voice.packListHint"),
+									),
+									react.createElement(
+										"div",
+										{ style: { ...sectionStyle, marginBottom: "16px", display: "flex", gap: "8px", flexWrap: "wrap" } },
 										react.createElement(
-											"span",
+											"button",
 											{
-												style: {
-													flex: "1 1 100%",
-													fontSize: "11px",
-													lineHeight: "16px",
-													color: "var(--dsw-alias-label-secondary)",
+												type: "button",
+												disabled: packBusy || selectedIds.length === 0,
+												onClick: () => {
+													onRemovePacks(selectedIds);
+													setSelectedIds([]);
 												},
+												style: pillStyle(false),
 											},
-											t("voice.editWarn", { name: packName ?? "?" }),
+											t("voice.removeSelected"),
 										),
 										react.createElement(
 											"button",
-											{ type: "button", onClick: onConfirmEdit, style: pillStyle(true) },
-											t("voice.continue"),
+											{ type: "button", onClick: () => setViewMode("creator"), style: pillStyle(true) },
+											t("voice.create"),
+										),
+										backButton("main"),
+									),
+								),
+						viewMode !== "creator"
+							? null
+							: react.createElement(
+									react.Fragment,
+									null,
+									editConfirmOpen
+										? react.createElement(
+												"div",
+												{
+													style: {
+														display: "flex",
+														gap: "8px",
+														alignItems: "center",
+														flexWrap: "wrap",
+														margin: "10px 16px 0",
+														padding: "6px 10px",
+														borderRadius: "8px",
+														border: "1px solid var(--dsw-alias-warning-primary, #e5a50a)",
+														background: "var(--dsw-alias-bg-layer-2, transparent)",
+													},
+												},
+												react.createElement(
+													"span",
+													{
+														style: {
+															flex: "1 1 100%",
+															fontSize: "11px",
+															lineHeight: "16px",
+															color: "var(--dsw-alias-label-secondary)",
+														},
+													},
+													t("voice.editWarn", { name: activePack?.name ?? "?" }),
+												),
+												react.createElement(
+													"button",
+													{ type: "button", onClick: onConfirmEdit, style: pillStyle(true) },
+													t("voice.continue"),
+												),
+												react.createElement(
+													"button",
+													{ type: "button", onClick: onCancelEdit, style: pillStyle(false) },
+													t("voice.cancel"),
+												),
+											)
+										: null,
+									react.createElement(
+										"div",
+										{ style: sectionStyle },
+										react.createElement("p", { style: labelStyle }, t("voice.langLabel")),
+										react.createElement(
+											"select",
+											{
+												value: packLangInput,
+												onChange: (event) => onPackLangInput(event.target.value),
+												style: { ...inputStyle, marginTop: "4px", flex: "0 0 auto" },
+											},
+											Object.keys(VOICEPACK_SAMPLE_TEXTS).map((lang) =>
+												react.createElement("option", { key: lang, value: lang }, lang),
+											),
 										),
 										react.createElement(
-											"button",
-											{ type: "button", onClick: onCancelEdit, style: pillStyle(false) },
-											t("voice.cancel"),
+											"div",
+											{ style: { display: "flex", gap: "6px", marginTop: "6px", alignItems: "center" } },
+											react.createElement("input", {
+												type: "text",
+												value: packNameInput,
+												placeholder: t("voice.packNamePlaceholder"),
+												onChange: (event) => onPackNameInput(event.target.value),
+												style: { ...inputStyle, flex: "0 1 220px" },
+											}),
+											react.createElement(
+												"button",
+												{
+													type: "button",
+													disabled: recordedCount === 0,
+													onClick: onDownloadPack,
+													style: { ...pillStyle(false), marginLeft: "auto" },
+												},
+												t("voice.download"),
+											),
+											react.createElement(
+												"button",
+												{
+													type: "button",
+													disabled: recordedCount === 0 || packBusy,
+													onClick: onCompileInstall,
+													style: pillStyle(true),
+												},
+												t("voice.compileInstall"),
+											),
 										),
-									)
-								: null,
-							react.createElement(
-								"div",
-								{ style: { display: "flex", gap: "6px", marginTop: "4px", alignItems: "center" } },
-								react.createElement("input", {
-									type: "text",
-									value: packNameInput,
-									placeholder: t("voice.packNamePlaceholder"),
-									onChange: (event) => onPackNameInput(event.target.value),
-									style: { ...inputStyle, flex: "0 1 220px" },
-								}),
-								react.createElement(
-									"button",
-									{
-										type: "button",
-										disabled: recordedCount === 0,
-										onClick: onDownloadPack,
-										style: { ...pillStyle(false), marginLeft: "auto" },
-									},
-									t("voice.download"),
-								),
-								react.createElement(
-									"button",
-									{
-										type: "button",
-										disabled: recordedCount === 0 || packBusy,
-										onClick: onCompileInstall,
-										style: pillStyle(true),
-									},
-									t("voice.compileInstall"),
-								),
-							),
-							react.createElement(
-								"p",
-								{ style: { ...labelStyle, marginTop: "4px" } },
-								t("voice.recordHint"),
-							),
-							VOICEPACK_SEGMENT_KEYS.map((key) => {
-								const rec = recordings[key];
-								const isRecording = recordingKey === key;
-								const canRecordOthers = recordingKey === null;
-								return react.createElement(
-									"div",
-									{
-										key,
-										style: {
-											display: "flex",
-											gap: "8px",
-											alignItems: "center",
-											marginTop: "4px",
-										},
-									},
-									react.createElement(
-										"span",
-										{ style: { width: "96px", fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
-										t(`voice.seg.${key}`),
-									),
-									react.createElement(
-										"button",
-										{
-											type: "button",
-											disabled: !canRecordOthers,
-											onClick: () => (isRecording ? onStopRecording() : onStartRecording(key)),
-											style: pillStyle(isRecording),
-										},
-										isRecording ? t("voice.stop") : t("voice.record"),
-									),
-									react.createElement(
-										"label",
-										{ style: pillStyle(false) },
-										t("voice.importFile"),
-										react.createElement("input", {
-											type: "file",
-											accept: "audio/*,.mp3,.wav,.ogg,.webm,.m4a,.aac,.flac",
-											style: { display: "none" },
-											onChange: (event) => {
-												const file = event.target.files !== null ? event.target.files[0] : null;
-												if (file !== null) onImportSegmentFile(key, file);
-												event.target.value = "";
-											},
+										react.createElement(
+											"p",
+											{ style: { ...labelStyle, marginTop: "4px" } },
+											t("voice.recordHint"),
+										),
+										VOICEPACK_SEGMENT_KEYS.map((key) => {
+											const rec = recordings[key];
+											const isRecording = recordingKey === key;
+											const canRecordOthers = recordingKey === null;
+											return react.createElement(
+												"div",
+												{
+													key,
+													style: {
+														display: "flex",
+														gap: "8px",
+														alignItems: "center",
+														marginTop: "4px",
+														flexWrap: "wrap",
+													},
+												},
+												react.createElement(
+													"span",
+													{ style: { width: "96px", fontSize: "12px", lineHeight: "18px", color: "var(--dsw-alias-label-secondary)" } },
+													t(`voice.seg.${key}`),
+												),
+												react.createElement(
+													"span",
+													{
+														style: {
+															flex: 1,
+															minWidth: "120px",
+															overflow: "hidden",
+															textOverflow: "ellipsis",
+															whiteSpace: "nowrap",
+															fontSize: "11px",
+															lineHeight: "16px",
+															color: "var(--dsw-alias-label-tertiary)",
+														},
+													},
+													`${t("voice.sampleText")}：${sampleOf(key)}`,
+												),
+												react.createElement(
+													"button",
+													{
+														type: "button",
+														disabled: !canRecordOthers,
+														onClick: () => (isRecording ? onStopRecording(false) : onStartRecording(key)),
+														style: pillStyle(isRecording),
+													},
+													isRecording ? t("voice.stop") : t("voice.record"),
+												),
+												react.createElement(
+													"label",
+													{ style: pillStyle(false) },
+													t("voice.importFile"),
+													react.createElement("input", {
+														type: "file",
+														accept: "audio/*,.mp3,.wav,.ogg,.webm,.m4a,.aac,.flac",
+														style: { display: "none" },
+														onChange: (event) => {
+															const file = event.target.files !== null ? event.target.files[0] : null;
+															if (file !== null) onImportSegmentFile(key, file);
+															event.target.value = "";
+														},
+													}),
+												),
+												rec !== void 0
+													? react.createElement(
+															"button",
+															{ type: "button", onClick: () => onPlayRecording(key), style: pillStyle(false) },
+															t("voice.play"),
+														)
+													: null,
+												rec !== void 0
+													? react.createElement(
+															"button",
+															{ type: "button", onClick: () => onDeleteRecording(key), style: pillStyle(false) },
+															t("voice.delete"),
+														)
+													: null,
+												rec !== void 0
+													? react.createElement(
+															"span",
+															{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
+															t("voice.recorded"),
+														)
+													: null,
+											);
 										}),
+										backButton("packs"),
 									),
-									rec !== void 0
-										? react.createElement(
-												"button",
-												{ type: "button", onClick: () => onPlayRecording(key), style: pillStyle(false) },
-												t("voice.play"),
-											)
-										: null,
-									rec !== void 0
-										? react.createElement(
-												"button",
-												{ type: "button", onClick: () => onDeleteRecording(key), style: pillStyle(false) },
-												t("voice.delete"),
-											)
-										: null,
-									rec !== void 0
-										? react.createElement(
-												"span",
-												{ style: { fontSize: "11px", lineHeight: "16px", color: "var(--dsw-alias-label-tertiary)" } },
-												t("voice.recorded"),
-											)
-										: null,
-								);
-							}),
-						),
+							),
 					),
 				),
-				document.body,
-			);
-		}
-
-		/**
+					document.body,
+				);
+			}		/**
 		 * 替代圆圈组件。props 为框架标准 props（useProjection、t）+ 注册时
 		 * inject 的 owner face（queryBalance、clearToken）。
 		 */
@@ -1661,16 +1849,56 @@ window.__ModuleLoader__.load({
 			const [ttsCfg, setTtsCfg] = react.useState(readTtsConfig());
 			const ttsCfgRef = react.useRef(ttsCfg);
 			ttsCfgRef.current = ttsCfg;
-			const [voicePack, setVoicePack] = react.useState(null);
-			const voicePackRef = react.useRef(voicePack);
-			voicePackRef.current = voicePack;
+			// 语音包库：packs 列表 + activeId；激活包（含 segments URL）供播报引擎。
+			const [voicePacks, setVoicePacks] = react.useState([]);
+			const [activePackId, setActivePackId] = react.useState(null);
+			const voicePackRef = react.useRef(null);
+			const refreshPacks = async () => {
+				try {
+					const resp = await fetch(VOICEPACK_ENDPOINT);
+					if (resp.ok) {
+						const data = await resp.json();
+						const packs = Array.isArray(data.packs) ? data.packs : [];
+						setVoicePacks(packs);
+						setActivePackId(typeof data.active === "string" ? data.active : null);
+						const active = packs.find((pack) => pack.id === data.active) ?? null;
+						voicePackRef.current = active;
+						return active;
+					}
+				} catch {
+					// 库不可用视为空
+				}
+				voicePackRef.current = null;
+				return null;
+			};
+			react.useEffect(() => {
+				refreshPacks().catch(() => {});
+			}, []);
 			const [packBusy, setPackBusy] = react.useState(false);
 			const [packMessage, setPackMessage] = react.useState("");
-			// 语音包制作器：逐段浏览器录音（MediaRecorder）+ zip 打包导出。
+			// 语音包制作器：逐段录音 / 导入 + zip 编译；录音可视化浮窗状态。
 			const [recordings, setRecordings] = react.useState({});
 			const [recordingKey, setRecordingKey] = react.useState(null);
 			const [packNameInput, setPackNameInput] = react.useState("");
+			const [packLangInput, setPackLangInput] = react.useState(uiLocale === "zh-CN" ? "zh-CN" : uiLocale === "en" ? "en" : "zh-CN");
 			const mediaRecorderRef = react.useRef(null);
+			const recAnalyserRef = react.useRef(null);
+			const recCanvasRef = react.useRef(null);
+			const recRafRef = react.useRef(0);
+			const recDiscardRef = react.useRef(false);
+			const [recElapsed, setRecElapsed] = react.useState(0);
+			const stopRecorder = (discard) => {
+				recDiscardRef.current = discard === true;
+				if (mediaRecorderRef.current !== null) {
+					try {
+						mediaRecorderRef.current.stop();
+					} catch {
+						setRecordingKey(null);
+					}
+				} else {
+					setRecordingKey(null);
+				}
+			};
 			const startRecording = async (key) => {
 				if (recordingKey !== null) return;
 				try {
@@ -1688,30 +1916,77 @@ window.__ModuleLoader__.load({
 					};
 					recorder.onstop = () => {
 						stream.getTracks().forEach((track) => track.stop());
-						const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
-						const ext = recorder.mimeType.includes("ogg") ? "ogg" : recorder.mimeType.includes("mp4") ? "m4a" : "webm";
-						setRecordings((current) => ({
-							...current,
-							[key]: { blob, url: URL.createObjectURL(blob), ext },
-						}));
+						if (!recDiscardRef.current) {
+							const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
+							const ext = recorder.mimeType.includes("ogg") ? "ogg" : recorder.mimeType.includes("mp4") ? "m4a" : "webm";
+							setRecordings((current) => ({
+								...current,
+								[key]: { blob, url: URL.createObjectURL(blob), ext },
+							}));
+						}
+						recDiscardRef.current = false;
+						mediaRecorderRef.current = null;
+						recAnalyserRef.current = null;
+						if (recRafRef.current !== 0) {
+							cancelAnimationFrame(recRafRef.current);
+							recRafRef.current = 0;
+						}
 						setRecordingKey(null);
 					};
+					// 可视化：AudioContext + Analyser 电平表（rAF 画布绘制）。
+					const AudioCtx = window.AudioContext ?? window.webkitAudioContext;
+					if (AudioCtx !== void 0 && recCanvasRef.current !== null) {
+						const audioCtx = new AudioCtx();
+						const source = audioCtx.createMediaStreamSource(stream);
+						const analyser = audioCtx.createAnalyser();
+						analyser.fftSize = 256;
+						source.connect(analyser);
+						recAnalyserRef.current = analyser;
+						const data = new Uint8Array(analyser.frequencyBinCount);
+						const draw = () => {
+							const canvas = recCanvasRef.current;
+							const analyserNow = recAnalyserRef.current;
+							if (canvas === null || analyserNow === null) return;
+							const ctx2d = canvas.getContext("2d");
+							if (ctx2d === null) return;
+							analyserNow.getByteFrequencyData(data);
+							const width = canvas.width;
+							const height = canvas.height;
+							ctx2d.clearRect(0, 0, width, height);
+							const bars = 24;
+							const step = Math.floor(data.length / bars);
+							for (let i = 0; i < bars; i++) {
+								let sum = 0;
+								for (let j = 0; j < step; j++) sum += data[i * step + j];
+								const level = Math.min(1, (sum / step) / 128);
+								const barHeight = Math.max(2, level * height);
+								ctx2d.fillStyle = "var(--dsw-alias-brand-primary, #4d6bfe)";
+								ctx2d.fillRect(i * (width / bars) + 1, height - barHeight, width / bars - 2, barHeight);
+							}
+							recRafRef.current = requestAnimationFrame(draw);
+						};
+						recRafRef.current = requestAnimationFrame(draw);
+						stream.getTracks()[0]?.addEventListener("ended", () => {
+							audioCtx.close().catch(() => {});
+						});
+					}
 					recorder.start();
 					mediaRecorderRef.current = recorder;
+					setRecElapsed(0);
 					setRecordingKey(key);
 				} catch {
 					setPackMessage(t("voice.recordDenied"));
 				}
 			};
-			const stopRecording = () => {
-				if (mediaRecorderRef.current !== null) {
-					try {
-						mediaRecorderRef.current.stop();
-					} catch {
-						setRecordingKey(null);
-					}
-				}
-			};
+			// 录音计时（浮窗展示）。
+			react.useEffect(() => {
+				if (recordingKey === null) return;
+				const started = Date.now();
+				const timer = window.setInterval(() => {
+					setRecElapsed(Math.round((Date.now() - started) / 1000));
+				}, 500);
+				return () => window.clearInterval(timer);
+			}, [recordingKey]);
 			const deleteRecording = (key) => {
 				setRecordings((current) => {
 					const next = { ...current };
@@ -1746,7 +2021,7 @@ window.__ModuleLoader__.load({
 				});
 				setPackMessage(t("voice.segmentImported"));
 			};
-			/** 编译 zip 条目（制作器的共同打包逻辑）。 */
+			/** 编译 zip 条目（制作器的共同打包逻辑；lang 取制作器语言选择）。 */
 			const buildPackZip = async () => {
 				const keys = VOICEPACK_SEGMENT_KEYS.filter((key) => recordings[key] !== void 0);
 				if (keys.length === 0) return null;
@@ -1765,7 +2040,7 @@ window.__ModuleLoader__.load({
 					format: "dsh-api-balance-voice-pack",
 					version: 1,
 					name: packNameInput.trim().length > 0 ? packNameInput.trim() : "voice-pack",
-					lang: uiLocale,
+					lang: packLangInput,
 					segments,
 				};
 				return { manifest, zip: buildZip([{ name: "manifest.json", data: new TextEncoder().encode(JSON.stringify(manifest, null, 2)) }, ...audioEntries]) };
@@ -1784,7 +2059,7 @@ window.__ModuleLoader__.load({
 				setTimeout(() => URL.revokeObjectURL(anchor.href), 5000);
 				setPackMessage(t("voice.downloaded"));
 			};
-			/** 编译并应用本机（覆盖当前语音包）。 */
+			/** 编译并应用本机（导入库并激活）。 */
 			const compileInstallPack = async () => {
 				const built = await buildPackZip();
 				if (built === null) return;
@@ -1796,8 +2071,7 @@ window.__ModuleLoader__.load({
 						body: built.zip,
 					});
 					if (resp.ok) {
-						const manifestResp = await fetch(VOICEPACK_ENDPOINT);
-						if (manifestResp.ok) setVoicePack(await manifestResp.json());
+						await refreshPacks();
 						setPackMessage(t("voice.compiled"));
 					} else {
 						const err = await resp.json().catch(() => null);
@@ -1831,19 +2105,6 @@ window.__ModuleLoader__.load({
 				pendingEditRef.current = null;
 				setEditConfirmOpen(false);
 			};
-			// 拉取语音包（host 共享；404 视为未导入）。
-			react.useEffect(() => {
-				let cancelled = false;
-				fetch(VOICEPACK_ENDPOINT)
-					.then((resp) => (resp.ok ? resp.json() : null))
-					.then((pack) => {
-						if (!cancelled && pack !== null && typeof pack === "object") setVoicePack(pack);
-					})
-					.catch(() => {});
-				return () => {
-					cancelled = true;
-				};
-			}, []);
 			const importVoicePack = async (file) => {
 				if (!(file instanceof File) || file.size === 0 || packBusy) return;
 				setPackBusy(true);
@@ -1855,13 +2116,7 @@ window.__ModuleLoader__.load({
 						body: bytes,
 					});
 					if (resp.ok) {
-						const pack = await resp.json().catch(() => null);
-						if (pack !== null && typeof pack === "object") {
-							// host 仅回 ok；重新 GET 拿带 URL 的清单。
-							const manifestResp = await fetch(VOICEPACK_ENDPOINT);
-							if (manifestResp.ok) setVoicePack(await manifestResp.json());
-							else setVoicePack(pack);
-						}
+						await refreshPacks();
 						setPackMessage(t("voice.imported"));
 					} else {
 						const err = await resp.json().catch(() => null);
@@ -1872,12 +2127,33 @@ window.__ModuleLoader__.load({
 				}
 				setPackBusy(false);
 			};
-			const clearVoicePack = async () => {
+			const activatePack = async (id) => {
 				setPackBusy(true);
 				try {
-					await fetch(VOICEPACK_ENDPOINT, { method: "DELETE" });
-					setVoicePack(null);
-					setPackMessage(t("voice.cleared"));
+					const resp = await fetch(`${VOICEPACK_ENDPOINT}/activate`, {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JSON.stringify({ id }),
+					});
+					if (resp.ok) {
+						await refreshPacks();
+					}
+				} catch {
+					// 忽略
+				}
+				setPackBusy(false);
+			};
+			const removePacks = async (ids) => {
+				if (ids.length === 0 || packBusy) return;
+				setPackBusy(true);
+				try {
+					const resp = await fetch(`${VOICEPACK_ENDPOINT}?ids=${encodeURIComponent(ids.join(","))}`, {
+						method: "DELETE",
+					});
+					if (resp.ok) {
+						await refreshPacks();
+						setPackMessage(t("voice.removed"));
+					}
 				} catch {
 					setPackMessage(t("voice.importFailed"));
 				}
@@ -2952,18 +3228,13 @@ window.__ModuleLoader__.load({
 								setTtsCfg(next);
 								writeTtsConfig(next);
 							},
-							pack: voicePack,
+							packs: voicePacks,
+							activeId: activePackId,
 							packBusy,
 							packMessage,
 							onImportFile: importVoicePack,
-							onClear: clearVoicePack,
-							onTestPack: () =>
-								speakNowParts(
-									[{ kind: "pack", key: "low", fallbackText: t("speech.low") }],
-									uiLocale,
-									ttsCfgRef.current,
-									voicePackRef.current,
-								),
+							onActivate: activatePack,
+							onRemovePacks: removePacks,
 							onTestTts: () => {
 								stopActiveSpeech();
 								ttsSpeak(t("voice.ttsTestText"), uiLocale, ttsCfgRef.current).catch(() => {});
@@ -2971,7 +3242,7 @@ window.__ModuleLoader__.load({
 							recordings,
 							recordingKey,
 							onStartRecording: (key) => guardEdit(() => startRecording(key)),
-							onStopRecording: stopRecording,
+							onStopRecording: (discard) => stopRecorder(discard === true),
 							onPlayRecording: (key) => {
 								const rec = recordings[key];
 								if (rec !== void 0 && typeof rec.url === "string") {
@@ -2987,9 +3258,143 @@ window.__ModuleLoader__.load({
 							onCancelEdit: cancelEdit,
 							packNameInput,
 							onPackNameInput: setPackNameInput,
+							packLangInput,
+							onPackLangInput: setPackLangInput,
 							onDownloadPack: downloadVoicePack,
 							onClose: () => setVoiceSettingsOpen(false),
 						})
+					: null,
+				recordingKey !== null
+					? reactDOM.createPortal(
+							react.createElement(
+								"div",
+								{
+									role: "dialog",
+									"aria-modal": false,
+									"aria-label": t("voice.recordingTitle", { label: t(`voice.seg.${recordingKey}`) }),
+									style: {
+										position: "fixed",
+										right: "20px",
+										bottom: "20px",
+										zIndex: 1004,
+										width: "min(320px, 92vw)",
+										background: "var(--dsw-specific-menu)",
+										border: "1px solid var(--dsw-alias-border-inverted)",
+										borderRadius: "12px",
+										boxShadow: "var(--dsw-shadow-lv3)",
+										padding: "12px 14px",
+										display: "flex",
+										flexDirection: "column",
+										gap: "8px",
+									},
+								},
+								react.createElement(
+									"div",
+									{
+										style: {
+											display: "flex",
+											alignItems: "center",
+											gap: "8px",
+											fontSize: "13px",
+											fontWeight: 600,
+											color: "var(--dsw-alias-label-primary)",
+										},
+									},
+									react.createElement(
+										"span",
+										{
+											style: {
+												width: "10px",
+												height: "10px",
+												borderRadius: "999px",
+												background: "#e5484d",
+												display: "inline-block",
+												animation: "dshAbRecPulse 1s ease-in-out infinite",
+											},
+										},
+									),
+									t("voice.recordingTitle", { label: t(`voice.seg.${recordingKey}`) }),
+									react.createElement(
+										"span",
+										{ style: { marginLeft: "auto", fontSize: "12px", color: "var(--dsw-alias-label-secondary)" } },
+										`${recElapsed}s`,
+									),
+								),
+								react.createElement("canvas", {
+									ref: recCanvasRef,
+									width: 288,
+									height: 44,
+									style: { width: "100%", borderRadius: "8px", background: "var(--dsw-alias-bg-layer-2, transparent)" },
+								}),
+								react.createElement(
+									"p",
+									{
+										style: {
+											margin: 0,
+											fontSize: "11px",
+											lineHeight: "16px",
+											color: "var(--dsw-alias-label-tertiary)",
+										},
+									},
+									t("voice.recordingTip"),
+								),
+								react.createElement(
+									"p",
+									{
+										style: {
+											margin: 0,
+											fontSize: "14px",
+											lineHeight: "22px",
+											color: "var(--dsw-alias-label-primary)",
+											fontWeight: 500,
+										},
+									},
+									sampleTextFor(packLangInput, recordingKey),
+								),
+								react.createElement(
+									"div",
+									{ style: { display: "flex", gap: "8px" } },
+									react.createElement(
+										"button",
+										{
+											type: "button",
+											onClick: () => stopRecorder(false),
+											style: {
+												flex: 1,
+												padding: "6px 14px",
+												borderRadius: "999px",
+												cursor: "pointer",
+												border: "1px solid var(--dsw-alias-brand-primary, #4d6bfe)",
+												background: "var(--dsw-alias-brand-primary, #4d6bfe)",
+												color: "#fff",
+												fontSize: "13px",
+												lineHeight: "20px",
+											},
+										},
+										t("voice.saveStop"),
+									),
+									react.createElement(
+										"button",
+										{
+											type: "button",
+											onClick: () => stopRecorder(true),
+											style: {
+												padding: "6px 14px",
+												borderRadius: "999px",
+												cursor: "pointer",
+												border: "1px solid var(--dsw-alias-separator-primary)",
+												background: "transparent",
+												color: "var(--dsw-alias-label-secondary)",
+												fontSize: "13px",
+												lineHeight: "20px",
+											},
+										},
+										t("voice.discard"),
+									),
+								),
+							),
+							document.body,
+						)
 					: null,
 			);
 		}
@@ -3077,11 +3482,25 @@ window.__ModuleLoader__.load({
 			"voice.packLabel": "语音包",
 			"voice.packNone": "未导入",
 			"voice.packLoaded": "已导入：{name}（{lang}）",
-			"voice.packImportPlaceholder": "选择 .zip 语音包文件导入",
+			"voice.packImport": "导入",
 			"voice.packClear": "清除",
 			"voice.imported": "导入成功",
 			"voice.cleared": "已清除",
 			"voice.importFailed": "导入失败：格式不正确",
+			"voice.manage": "语音包管理",
+			"voice.packListTitle": "语音包库",
+			"voice.activeMark": "使用中",
+			"voice.removeSelected": "移除所选",
+			"voice.removed": "已移除",
+			"voice.create": "制作语音包",
+			"voice.back": "返回",
+			"voice.langLabel": "语音包语言（决定示例文本与清单 lang）",
+			"voice.sampleText": "示例文本",
+			"voice.recordingTitle": "录制中：{label}",
+			"voice.recordingTip": "请朗读下方示例文本",
+			"voice.saveStop": "停止并保存",
+			"voice.discard": "放弃",
+			"voice.packListHint": "点击行切换使用；勾选多行后「移除所选」批量删除。",
 			"voice.recorderLabel": "制作语音包（录音或导入音频）",
 			"voice.packNamePlaceholder": "语音包名称…",
 			"voice.download": "打包下载",
@@ -3192,11 +3611,25 @@ window.__ModuleLoader__.load({
 			"voice.packLabel": "Voice pack",
 			"voice.packNone": "None",
 			"voice.packLoaded": "Loaded: {name} ({lang})",
-			"voice.packImportPlaceholder": "Choose a .zip voice pack to import",
+			"voice.packImport": "Import",
 			"voice.packClear": "Clear",
 			"voice.imported": "Imported",
 			"voice.cleared": "Cleared",
 			"voice.importFailed": "Import failed: invalid format",
+			"voice.manage": "Manage packs",
+			"voice.packListTitle": "Voice pack library",
+			"voice.activeMark": "Active",
+			"voice.removeSelected": "Remove selected",
+			"voice.removed": "Removed",
+			"voice.create": "Create a voice pack",
+			"voice.back": "Back",
+			"voice.langLabel": "Pack language (drives sample texts and manifest lang)",
+			"voice.sampleText": "Sample text",
+			"voice.recordingTitle": "Recording: {label}",
+			"voice.recordingTip": "Read the sample text below",
+			"voice.saveStop": "Stop & save",
+			"voice.discard": "Discard",
+			"voice.packListHint": "Click a row to switch the active pack; check rows to remove in bulk.",
 			"voice.recorderLabel": "Create a voice pack (record or import audio)",
 			"voice.packNamePlaceholder": "Voice pack name…",
 			"voice.download": "Package & download",
@@ -3237,6 +3670,8 @@ window.__ModuleLoader__.load({
 			"border-top-color:var(--dsw-alias-label-secondary);border-radius:50%;" +
 			"animation:dshAbSpinRot 0.8s linear infinite;display:inline-block;vertical-align:-3px;margin-right:8px}" +
 			"@keyframes dshAbSpinRot{to{transform:rotate(360deg)}}" +
+			// 录音指示点脉冲动画。
+			"@keyframes dshAbRecPulse{0%,100%{opacity:1}50%{opacity:0.3}}" +
 			".dshAbPanel{max-height:min(62vh,460px);overflow-y:auto;scrollbar-width:thin}";
 
 		const tagId = `${NS}/client.css`;
