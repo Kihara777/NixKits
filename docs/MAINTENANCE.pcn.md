@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T11:20:09+09:00
+
+**摘要**: feat(dsh-api-balance): 面板幅縮小 + 標題/正文二行 layout — 面板幅 264px 統一（元使用量 ring 一致）、狭幅溢出時限定横 scroll 表示。各行「標題（10px 三次色）/ 正文（12px 折返可）」二行 layout 変更（token 取得元階層再利用、縦方向余白豊富故美観向上）。chart 幅下限 220 降下面板追従。
+
+| 提交 | 説明 |
+|------|------|
+| `0c1d3fd` | feat(dsh-api-balance): 面板幅縮小与標題/正文二行 layout |
+
 ## 2026-09-01T10:45:06+09:00
 
 **摘要**: feat(dsh-api-balance): 面板幅 content base 化 + 左 sidebar 回避 — 残高視図幅 max-content 変更（上方文字一行維持）；不出屏上限「anchor 右端 − 左 sidebar 幅 − margin」変更（sidebar 幅幾何 hit-test 測定、build hash class 名回避、window resize 時再計算）、左 toolbar 覆被防。超出 content 横 scroll 継続。

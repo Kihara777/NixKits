@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T11:20:09+09:00
+
+**Summary**: feat(dsh-api-balance): compact panel width + two-line title/value rows — the panel width is unified to 264px (matching the original usage ring), with horizontal scrolling appearing only when content overflows on narrow screens; every row now uses a two-line layout (10px tertiary title / 12px wrapping value, reusing the token-source hierarchy), which looks better given the abundant vertical space; the chart width floor drops to 220 and follows the panel.
+
+| Commit | Description |
+|------|------|
+| `0c1d3fd` | feat(dsh-api-balance): compact panel width + two-line title/value rows |
+
 ## 2026-09-01T10:45:06+09:00
 
 **Summary**: feat(dsh-api-balance): content-based panel width + left-sidebar avoidance — the balance view width becomes max-content (keeping the top text on one line); the on-screen cap is now 「anchor right edge − left sidebar width − margin」 (the sidebar width is measured by geometric hit-testing to avoid hashed class names, recalculated on window resize) so the left toolbar never covers the panel; overflowing content still scrolls horizontally.
