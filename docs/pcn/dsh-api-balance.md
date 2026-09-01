@@ -126,7 +126,7 @@ voice-pack.zip
 
 - 残高數據 DeepSeek 官方 API、用量數據 platform 控制台内部 API 由来——認証方式異（API キー / platform 会話 token）、一方欠時該当視図 error 非表示未登録状態表示。
 - 自動掃描本機瀏覽器登録済 token 限定読取、瀏覽器外數據不採集。token file `0600` 権限落盤。
-- 面板頁面級 overlay（document 級 fixed portal、会話区域 clip 不、横屏/窄幅均画面外出不）；高度「锚点上方可用空間」自動 clamp（手機横屏 top bar 遮蔽回避）；横向可用幅不足（縦屏越界）時設定 dialog 頁面 size 邏輯（min(520px, 94vw)）直接採用、内容面板幅適応——僅極罕硬性超幅内容面板横 scroll 兜底、頁面切替上方指示 dot 経由。縦向同面板自身 scrollbar 表示。
+- 面板頁面級 overlay（document 級 fixed portal、会話区域 clip 不、横屏/窄幅均画面外出不）；高度「锚点上方可用空間」自動 clamp（手機横屏 top bar 遮蔽回避）；横向可用幅不足時内容適応幅維持、面板横 scroll 表示、縦向同面板自身 scrollbar 表示。
 
 
 ### 設定存儲層
