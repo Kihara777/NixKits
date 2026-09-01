@@ -592,6 +592,34 @@ window.__ModuleLoader__.load({
 		];
 
 		/**
+		 * 左侧工具栏（sidebar）宽度：命中测试视口最左侧中高处的元素，
+		 * 沿祖先链找「贴左缘 + 近全高 + 可见」的容器，返回其右缘。
+		 * 构建类名是哈希（跨版本变化），故用几何测量而非选择器。
+		 */
+		function leftRailWidth() {
+			if (typeof document === "undefined") return 0;
+			try {
+				const probe = document.elementFromPoint(4, Math.floor(window.innerHeight / 2));
+				if (probe === null) return 0;
+				let node = probe;
+				while (node !== null && node !== document.body) {
+					const rect = node.getBoundingClientRect();
+					const style = window.getComputedStyle(node);
+					const fullHeight = rect.height >= window.innerHeight * 0.8;
+					const touchesLeft = rect.left <= 1;
+					const visible = style.display !== "none" && style.visibility !== "hidden" && rect.width > 0;
+					if (fullHeight && touchesLeft && visible && rect.width < window.innerWidth * 0.5) {
+						return Math.round(rect.right);
+					}
+					node = node.parentElement;
+				}
+			} catch {
+				// 测量失败按 0 处理
+			}
+			return 0;
+		}
+
+		/**
 		 * 查找原 ContextMeter 的 root 节点（用于 DOM 就位）。首选 dsh
 		 * 0.1.1-rc.2 的构建类名，回退结构查找（内嵌 14px ring 且不带本插件
 		 * 标记的 dialog 按钮向上找 inline-flex relative 祖先）。
@@ -1890,16 +1918,32 @@ window.__ModuleLoader__.load({
 			// 面板容器宽度（响应式：图表随面板宽度扩展）。
 			const panelRef = react.useRef(null);
 			const [panelWidth, setPanelWidth] = react.useState(340);
+			// 面板可用横向空间：以圆圈锚点右缘为基准，扣除左侧工具栏
+			// （sidebar，可能覆盖面板）与边距后即为不出屏的最大宽度。
+			const [panelMaxWidth, setPanelMaxWidth] = react.useState(340);
 			react.useEffect(() => {
 				if (!open) return;
 				const el = panelRef.current;
 				if (el === null) return;
-				const update = () => setPanelWidth(el.getBoundingClientRect().width);
+				const update = () => {
+					setPanelWidth(el.getBoundingClientRect().width);
+					const root = rootRef.current;
+					const anchorRight = root !== null ? root.getBoundingClientRect().right : window.innerWidth;
+					const railRight = leftRailWidth();
+					const available = Math.round(anchorRight - railRight - 12);
+					setPanelMaxWidth(Math.max(280, available));
+				};
 				update();
-				if (typeof ResizeObserver === "undefined") return;
-				const observer = new ResizeObserver(update);
-				observer.observe(el);
-				return () => observer.disconnect();
+				window.addEventListener("resize", update);
+				if (typeof ResizeObserver !== "undefined") {
+					const observer = new ResizeObserver(update);
+					observer.observe(el);
+					return () => {
+						observer.disconnect();
+						window.removeEventListener("resize", update);
+					};
+				}
+				return () => window.removeEventListener("resize", update);
 			}, [open]);
 			// 手动令牌输入（移动端主通道 / 桌面端备用通道）。
 			const [manualOpen, setManualOpen] = react.useState(false);
@@ -3363,11 +3407,11 @@ window.__ModuleLoader__.load({
 								boxSizing: "border-box",
 								border: "1px solid var(--dsw-alias-border-inverted)",
 								background: "var(--dsw-specific-menu)",
-								// 不出屏幕的前提下自动扩展横向宽度：余额视图在桌面
-								// 加宽到 560px，窄屏收缩至视口内；内容超出（如窄竖屏
+								// 宽度按内容自适应（保证上方文字一行内），不出屏上限 =
+								// 锚点右缘 − 左侧工具栏宽度 − 边距；内容超出（如窄竖屏
 								// 手机）时允许横向滚动。用量视图沿用原 264px。
-								width: tab === TAB_BALANCE ? "min(560px, calc(100vw - 24px))" : "264px",
-								maxWidth: "calc(100vw - 24px)",
+								width: tab === TAB_BALANCE ? "max-content" : "264px",
+								maxWidth: `${panelMaxWidth}px`,
 								overflowX: "auto",
 								boxShadow: "var(--dsw-shadow-lv3)",
 								color: "var(--dsw-alias-label-secondary)",
