@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:03:47+09:00
+
+**Summary**: fix(dsh-api-balance): phone-landscape top-bar occlusion + broken narrow-screen horizontal scroll — landscape fix: the panel max-height clamps dynamically to the space above the anchor (the first vertically-clipping ancestor of the ring ≈ the top bar's bottom edge is the hard boundary; maxHeight = min(460, anchor top − clipping top − 12), recomputed on resize), with the panel's own vertical scroll carrying the full content; narrow-screen fix: pager pages now use each page's measured content width (max scrollWidth, floor 220, px-based paging) instead of a fixed 100% — when the available width is too small, page content keeps its own width and the panel's overflow-x:auto scrolls horizontally instead of being clipped by the pager's overflow:hidden
+
+| Commit | Description |
+|------|------|
+| `5e28d84` | fix(dsh-api-balance): phone-landscape top-bar occlusion + broken narrow-screen horizontal scroll |
+| `2f37193` | docs(dsh-api-balance): mobile panel height/width adaptation notes (4 languages) |
 ## 2026-09-02T04:48:40+09:00
 
 **Summary**: feat(dsh-api-balance): horizontally paged consumption-detail area (dot indicator + swipe) — today/month/30-day and the per-model breakdown/chart merge into one two-page horizontal pager (page 1: window rows; page 2: per-model + daily/monthly chart); a phone-home-screen-style dot indicator sits above (tappable, the active dot stretches into a pill), with horizontal drag/swipe paging (pointer capture only engages past the threshold, so in-page button clicks are never swallowed; touch-action: pan-y keeps the panel's vertical scroll); the area height follows its content and never scrolls itself — full content relies on the usage panel's own vertical scrollbar

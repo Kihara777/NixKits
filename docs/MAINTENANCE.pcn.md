@@ -25,6 +25,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:03:47+09:00
+
+**摘要**：fix(dsh-api-balance): 手機横屏 top bar 遮蔽 + 窄幅横 scroll 不具合 — 横屏修正：面板最大高「锚点上方可用空間」動態 clamp（リング自祖先 chain 辿最初縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 锚点上端 − clip 上端 − 12)、window size 変更時再計算）、面板自身縦 scroll 全内容表示；窄幅修正：pager 頁幅各頁内容実測幅（scrollWidth 最大、下限 220、px base 翻頁）変更固定 100% 廃止——利用可能幅不足時頁内容自身幅維持、面板 overflow-x:auto 横 scroll 表示、pager overflow:hidden clip 回避
+
+| 提交 | 説明 |
+|------|------|
+| `5e28d84` | fix(dsh-api-balance): 手機横屏 top bar 遮蔽 + 窄幅横 scroll 不具合 |
+| `2f37193` | docs(dsh-api-balance): 移動端面板高/幅適応説明（四語） |
 ## 2026-09-02T04:48:40+09:00
 
 **摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 与 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 胶囊状伸長）、横 drag/swipe 翻頁対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応動態調整自身不 scroll、全内容用量面板自身縦 scrollbar 依存
