@@ -1,6 +1,14 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T05:45:33+09:00
+
+**Summary**：docs(dsh): settings-menu audit — declaratively configurable host namespace inventory and the storage-layer boundary; clarifies the edge between `nixkits.dsh.settings` and per-browser localStorage state
+
+| Commit | Description |
+|------|------|
+| `f2e91a0` | docs(dsh): settings-menu audit — declaratively configurable host namespace inventory and storage-layer boundary (four languages) |
+
 ## 2026-09-02T04:12:23+09:00
 
 **Summary**：docs(dsh): documentation freshness audit and sync — dsh-alpha version bumped to 0.1.2-alpha.3 across READMEs and dsh.md (four languages); the plugin inventory gains a regeneration note (`dsh --profile web --dump-default-config`, read-only) and the headless rows are annotated with their source profile; README plugin table links api-balance to its standalone doc; dsh-nixos-shell doc adds the maintenance-preset derivation rule and drift-check note (four languages)

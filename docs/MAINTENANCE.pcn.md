@@ -1,6 +1,14 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+## 2026-09-02T05:45:33+09:00
+
+**摘要**：docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単与存儲層境界；`nixkits.dsh.settings` 与毎瀏覽器 localStorage 状態境界厘清
+
+| 提交 | 説明 |
+|------|------|
+| `f2e91a0` | docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単与存儲層境界（四語） |
+
 ## 2026-09-02T04:12:23+09:00
 
 **摘要**：docs(dsh): 文書時点性検証与同期 — dsh-alpha 版本号 0.1.2-alpha.3 同期（README 四語 + dsh.md 四語）；插件清單追加生成方法注記（`dsh --profile web --dump-default-config`、読取専用）并 headless 二行来源 profile 標注；README 插件表 api-balance 行指向独立文書；dsh-nixos-shell 文書補充維護模式派生関係与漂移検査説明（四語）

@@ -1,6 +1,14 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-02T05:45:33+09:00
+
+**摘要**：docs(dsh): 设置菜单审计——声明式配置的宿主 namespace 清单与存储层边界 — `nixkits.dsh.settings` 与每浏览器 localStorage 状态的边界厘清
+
+| 提交 | 说明 |
+|------|------|
+| `f2e91a0` | docs(dsh): 设置菜单审计——声明式配置的宿主 namespace 清单与存储层边界（四语） |
+
 ## 2026-09-02T04:12:23+09:00
 
 **摘要**：docs(dsh): 文档时效性校验与同步 — dsh-alpha 版本号同步至 0.1.2-alpha.3（README 四语 + dsh.md 四语）；插件清单新增生成方法注记（`dsh --profile web --dump-default-config`，只读）并标注 headless 两行来源 profile；README 插件表 api-balance 行指向独立文档；dsh-nixos-shell 文档补充维护模式派生关系与漂移检查说明（四语）

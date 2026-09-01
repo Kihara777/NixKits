@@ -1,6 +1,14 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-02T05:45:33+09:00
+
+**概要**：docs(dsh): 設定メニュー監査——宣言的に設定可能な host ネームスペース一覧とストレージ層の境界；`nixkits.dsh.settings` とブラウザごとの localStorage 状態の境界を明確化
+
+| コミット | 説明 |
+|------|------|
+| `f2e91a0` | docs(dsh): 設定メニュー監査——宣言的に設定可能な host ネームスペース一覧とストレージ層の境界（四言語） |
+
 ## 2026-09-02T04:12:23+09:00
 
 **概要**：docs(dsh): 文書の時点性検証と同期 — dsh-alpha のバージョンを 0.1.2-alpha.3 に同期（README 四言語 + dsh.md 四言語）；プラグイン一覧に生成方法の注記（`dsh --profile web --dump-default-config`、読み取り専用）を追加し headless 2 行の由来プロファイルを明記；README のプラグイン表で api-balance 行が独立文書を指すよう修正；dsh-nixos-shell 文書にメンテナンスモードの派生関係とドリフト検査の説明を追加（四言語）
