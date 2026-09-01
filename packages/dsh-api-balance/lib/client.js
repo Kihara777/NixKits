@@ -2587,14 +2587,14 @@ window.__ModuleLoader__.load({
 			};
 
 			// 「余额」标签完整继承原「刷新数据」按钮：点击即强制刷新
-			// （绕过 host 缓存）。问候仅手动刷新时播（已加载过数据的
-			// 再次刷新）；初始化（首次加载）仅按自动播报设置播报用量警告。
+			// （绕过 host 缓存）。每次手动刷新（含初次）都随机播问候；
+			// 仅页面整体加载的初始化不播问候（只按自动播报设置播报用量
+			// 警告，load → announceHunger）。
 			const switchTab = (next) => {
 				setTab(next);
 				if (next === TAB_BALANCE && balanceState !== "loading") {
-					const isInitialLoad = balance === null;
 					void load(true);
-					if (!isInitialLoad && speechEnabled()) {
+					if (speechEnabled()) {
 						playRandomGreeting(t, uiLocale, ttsCfgRef.current, voicePackRef.current);
 					}
 				}
