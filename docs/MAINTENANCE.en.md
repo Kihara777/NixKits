@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:33:16+09:00
+
+**Summary**: feat(dsh-api-balance): responsive panel width — auto-expand without leaving the screen, horizontal scroll on narrow screens — the balance view width changes from a fixed 340px to min(560px, calc(100vw - 24px)): it auto-expands to 560px on desktop and shrinks within the viewport on narrow screens; when content exceeds the screen (e.g. narrow portrait phones) the panel allows horizontal scrolling (overflow-x with overscroll-behavior-x containment); the chart width follows the panel width via ResizeObserver.
+
+| Commit | Description |
+|------|------|
+| `bc85f5b` | feat(dsh-api-balance): responsive panel width with horizontal scroll |
+
 ## 2026-09-01T10:27:06+09:00
 
 **Summary**: feat(dsh-api-balance): voice audition — expand a pack in the library list to play all of its supported audio one by one — the standalone test-audio buttons at the bottom of the packs view are removed; each pack row gains an expand toggle (▸/▾) that lists every supported audio entry (segments + greetings) with a one-click ▶ play button, so any imported pack can be auditioned, not just the active one.

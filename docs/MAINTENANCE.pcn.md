@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-01T10:33:16+09:00
+
+**摘要**: feat(dsh-api-balance): 面板幅 responsive — 不出屏自動拡張、狭幅横 scroll — 残高視図幅固定 340px → min(560px, calc(100vw - 24px)) 変更：desktop 560px 自動拡張、狭幅 viewport 内収縮。内容畫面超時（縦持手機等）面板横 scroll 可（overflow-x + overscroll-behavior-x 収束）。chart 幅 ResizeObserver 面板幅追従。
+
+| 提交 | 説明 |
+|------|------|
+| `bc85f5b` | feat(dsh-api-balance): 面板幅 responsive 化与横 scroll |
+
 ## 2026-09-01T10:27:06+09:00
 
 **摘要**: feat(dsh-api-balance): 音声試聴 — library list pack 展開対応全音声一条毎試聴 — packs 視図下部独立 test 音声按鈕削除；各行展開 toggle（▸/▾）追加、展開時全対応音声（segment + 挨拶）一覧 ▶ one click 試聴可。active pack 限定非、任意 import 済 pack 試聴可能。

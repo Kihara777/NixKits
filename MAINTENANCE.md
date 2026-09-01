@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-01T10:33:16+09:00
+
+**摘要**：feat(dsh-api-balance): 面板响应式宽度 — 不出屏自动扩展，窄屏横向滚动 — 余额视图宽度从固定 340px 改为 min(560px, calc(100vw - 24px))：桌面自动扩展至 560px、窄屏收缩至视口内；内容超出屏幕（如手机窄竖屏）时面板允许横向滚动（overflow-x + overscroll-behavior-x 收束）；图表宽度经 ResizeObserver 随面板宽度同步扩展
+
+| 提交 | 说明 |
+|------|------|
+| `bc85f5b` | feat(dsh-api-balance): 面板响应式宽度 — 不出屏自动扩展，窄屏横向滚动 |
+
 ## 2026-09-01T10:27:06+09:00
 
 **摘要**：feat(dsh-api-balance): 语音试听 — 语音包列表内展开逐条试听全部支持音频 — 移除 packs 视图底部的独立测试音频按钮；每个语音包行新增展开开关（▸/▾），展开后逐条列出该包全部支持音频（片段 + 问候语）并可一键 ▶ 试听，任意导入的包均可试听而不限于当前激活包
