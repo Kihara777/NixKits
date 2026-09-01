@@ -25,6 +25,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:23:13+09:00
+
+**摘要**：fix(dsh-api-balance): 初回手動更新挨拶同再生 — 「余额」標籤手動更新毎回（初回 click 含）random 挨拶音声再生；頁面全体読込初期化限定挨拶 skip（自動放送設定従使用量警告限定放送）
+
+| 提交 | 説明 |
+|------|------|
+| `4836b4e` | fix(dsh-api-balance): 初回手動更新挨拶同再生 |
 ## 2026-09-02T05:15:52+09:00
 
 **摘要**：feat(dsh-api-balance): 挨拶手動更新時限定 + pager 高度當前頁追従 — 挨拶時機再構成：頁面初期化（全頁更新/読込）挨拶再生不、自動放送設定従使用量警告限定放送（load → announceHunger、音声通知 switch 与 30 分 rate 制限制約）；「余额」標籤 click 數據読込済（初回初期化読込以外）場合限定 random 挨拶音声再生；pager 高度自動増減/回収：container 高度 = 當前頁実測高度（offsetHeight）、切頁或内容変化時再測定——矮頁切替即回収、高頁切替即増加、非 active 頁自然高度描画（視図外移動、超過分 container clip）、区域自身 scroll 不、全内容面板縦 scroll 依存

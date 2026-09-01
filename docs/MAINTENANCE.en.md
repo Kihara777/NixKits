@@ -25,6 +25,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T05:23:13+09:00
+
+**Summary**: fix(dsh-api-balance): the first manual refresh plays the greeting too — every manual refresh via the 「Balance」 tab (including the first click) plays the random greeting; only the full-page-load initialization skips it (broadcasting just the usage warnings per the auto-broadcast setting)
+
+| Commit | Description |
+|------|------|
+| `4836b4e` | fix(dsh-api-balance): the first manual refresh plays the greeting too |
 ## 2026-09-02T05:15:52+09:00
 
 **Summary**: feat(dsh-api-balance): greetings only on manual refresh + pager height follows the current page — greeting timing reworked: page initialization (full refresh/load) no longer plays a greeting and only broadcasts the usage warnings per the auto-broadcast setting (load → announceHunger, gated by the voice-alert switch and the 30-minute rate limit); the 「Balance」 tab click plays the random greeting only when data has already been loaded (i.e. not the initial load); pager height auto-grow/reclaim: the container height equals the current page's measured height (offsetHeight), re-measured on page switch or content change — switching to a shorter page reclaims height, a taller page grows it; non-active pages render at natural height (translated out of view, overflow clipped by the container), the area never scrolls itself, and full content relies on the panel's vertical scroll
