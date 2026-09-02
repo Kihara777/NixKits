@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:29:20+09:00
+
+**摘要**：feat(dsh-api-balance): 峰时变红自动触发/解除 + 高峰开始与结束两端播报 — 峰时边界自动检测：每 30 秒复核官方高峰时段，进入/解除时同步 peakNow 驱动全套变红（用量圈/进度条/明细/动画/图表），无需手动刷新页面；边界播报：高峰开始播 peak 片段（/TTS 兜底）、结束播新增的 peakEnd 片段（/TTS 兜底），30 秒限流防重复；语音包制作器新增 peakEnd 片段（含示例文本、对齐默认 TTS 兜底），新增 speech.peakEndHint 文案与 voice.seg.peakEnd 标签
+
+| 提交 | 说明 |
+|------|------|
+| `b67e41d` | feat(dsh-api-balance): 峰时变红自动触发/解除 + 高峰开始与结束两端播报 |
+| `9483c2c` | docs(dsh-api-balance): 高峰自动触发/解除与 peakEnd 片段（四语） |
 ## 2026-09-02T10:23:55+09:00
 
 **摘要**：feat(dsh-api-balance): 峰时红色统一到用量页全元素 + 图表模型色保持可分 — 峰时变红扩展：用量页上下文进度条与明细色块、刷新/加载动画（dshAbSpin 新增 dshAbSpinPeak 红环类）、读取文本统一转为红色系，与已变红的用量圈/图表一致；进度条峰时各段经 peakShade 按索引取不同红档色调，多条段仍可分；图表峰时沿用 PEAK_PALETTE——红系但各模型用不同红档（图例圆点同步），红且可分而非盲目替换同一色

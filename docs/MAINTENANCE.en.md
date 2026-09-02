@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:29:20+09:00
+
+**Summary**: feat(dsh-api-balance): peak red auto-engages/clears + notifications on both peak start and end — peak boundaries auto-detect: the official peak window is re-checked every 30 s, and on entering/leaving peakNow drives the whole red-off effect (usage ring / progress bar / details / spinner / chart) with no manual refresh; boundary speech: peak start speaks the `peak` segment (TTS fallback) and end speaks the new `peakEnd` segment (TTS fallback), with a 30 s throttle against repeats; the voice-pack creator gains a `peakEnd` segment (with matching sample text), plus speech.peakEndHint copy and a voice.seg.peakEnd label
+
+| Commit | Description |
+|------|------|
+| `b67e41d` | feat(dsh-api-balance): peak red auto-engages/clears + peak-start/end notifications |
+| `9483c2c` | docs(dsh-api-balance): peak auto-trigger/clear and peakEnd segment (4 languages) |
 ## 2026-09-02T10:23:55+09:00
 
 **Summary**: feat(dsh-api-balance): unify peak-hour red across the usage page + keep chart models distinguishable — the peak-hour red now covers the usage page's context progress bar and detail color chips, the refresh/loading spinner (new dshAbSpinPeak red-ring class), and the reading text, matching the already-red usage ring/chart; the progress bar's segments take different red shades by index via peakShade so multiple segments stay distinguishable; the chart keeps PEAK_PALETTE at peak — a red family where each model keeps a distinct red shade (legend dots synced), red yet distinguishable rather than blindly replaced by one color

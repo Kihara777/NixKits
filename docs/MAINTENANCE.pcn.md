@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:29:20+09:00
+
+**摘要**：feat(dsh-api-balance): 峰赤自動入/解除 + 峰開始与終了両方通知 — 峰境界自動検出：公式峰時間帯 30 秒毎再検査、入/出 peakNow 同期一式赤表示（用量リング/進捗 bar/明細/spinner/chart）駆動、手動更新不要；境界通知：開始 `peak` segment（TTS 回退）、終了新設 `peakEnd` segment（TTS 回退）再生、30 秒 throttle 重複防止；音声 pack 作成器 `peakEnd` segment 追加（默認 TTS 回退一致 sample text 付）、speech.peakEndHint 文案与 voice.seg.peakEnd 標籤新設
+
+| 提交 | 説明 |
+|------|------|
+| `b67e41d` | feat(dsh-api-balance): 峰赤自動入/解除 + 開始/終了通知 |
+| `9483c2c` | docs(dsh-api-balance): 峰自動起動/解除与 peakEnd segment（四語） |
 ## 2026-09-02T10:23:55+09:00
 
 **摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 与明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量リング/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
