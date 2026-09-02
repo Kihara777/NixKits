@@ -15,8 +15,8 @@
   gnumake,
   patchelf,
   # version/hash overridden for beta/alpha channels
-  version ? "0.51.0",
-  hash ? "sha256-VJr2dHwh7ydXhtEdUu5l9XGDTO1Hn4/8VFZw4vxJUGI=",
+  version ? "0.52.0",
+  hash ? "sha256-K024ic7C3yO1livoBzgn9+yWkKQnAUvW/Sjc15Heluk=",
 }:
 
 let
