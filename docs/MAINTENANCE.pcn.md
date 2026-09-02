@@ -1,6 +1,15 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+
+## 2026-09-03T04:41:42+09:00
+
+**概要**：docs(dsh-api-balance): 上流 StatsLine 横 scroll 最適化提案記録 — DeepSeek Harness Discussion #5458（上流現時外部 PR 不承、故 Discussion + 準備済 branch 形公開）；fork Kihara777/deepseek-harness 準備済 branch `draft/statline-overflow-scroll`（commit e5ece63）；本 repo 公式 `dsh-plugin` 生態 topic 追記（四言語 dsh-api-balance 文書同期）
+
+| 提交 | 説明 |
+|------|------|
+| `6030e6d` | docs(dsh-api-balance): 上流 StatsLine scroll 提案与準備済 branch 記録 |
+
 ## 2026-09-03T03:25:59+09:00
 
 **摘要**：feat(dsh-nixos-shell): 維護模式 nixkits-check-updates 技能注入 — maintenance-skills entry 現 nixkits-check-updates 一并 runtime 技能登録、維護 session 内直接 skill 経由 software 更新検査実行可能

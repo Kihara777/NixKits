@@ -1,6 +1,15 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+
+## 2026-09-03T04:41:42+09:00
+
+**概要**：docs(dsh-api-balance): 上流 StatsLine 横スクロール最適化提案を記録 — DeepSeek Harness Discussion #5458（上流は現時点で外部 PR を受け付けないため、Discussion + 準備済みブランチの形で公開）；fork Kihara777/deepseek-harness の準備済みブランチ `draft/statline-overflow-scroll`（commit e5ece63）；本リポジトリには公式 `dsh-plugin` エコシステムトピックも追記（四言語の dsh-api-balance ドキュメントを同期）
+
+| コミット | 説明 |
+|------|------|
+| `6030e6d` | docs(dsh-api-balance): 上流 StatsLine スクロール提案と準備済みブランチを記録 |
+
 ## 2026-09-03T03:25:59+09:00
 
 **概要**：feat(dsh-nixos-shell): メンテナンスモードに nixkits-check-updates スキルを注入 — maintenance-skills エントリが nixkits-check-updates をランタイムスキルとして登録し、メンテナンスセッション内で skill 経由のソフトウェア更新チェックが直接実行可能に

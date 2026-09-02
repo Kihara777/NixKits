@@ -1,6 +1,14 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-03T04:41:42+09:00
+
+**摘要**：docs(dsh-api-balance): 记录上游 StatsLine 横向滚动优化提案 — DeepSeek Harness Discussion #5458（上游暂不接受外部 PR，以讨论+就绪分支落地）；fork Kihara777/deepseek-harness 就绪分支 draft/statline-overflow-scroll（commit e5ece63）；本仓库补关联官方 dsh-plugin 生态话题（四语 dsh-api-balance 文档同步）
+
+| 提交 | 说明 |
+|------|------|
+| `6030e6d` | docs(dsh-api-balance): 记录上游 StatsLine 滚动优化提案与就绪分支 |
+
 ## 2026-09-03T03:25:59+09:00
 
 **摘要**：feat(dsh-nixos-shell): 维护模式注入 nixkits-check-updates 技能 — maintenance-skills entry 现将 nixkits-check-updates 一并注册为运行时技能，维护会话内可直接 skill 加载执行软件包更新检查

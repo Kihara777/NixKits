@@ -1,6 +1,15 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+
+## 2026-09-03T04:41:42+09:00
+
+**Summary**：docs(dsh-api-balance): record the upstream StatsLine horizontal-scroll proposal — DeepSeek Harness Discussion #5458 (upstream does not yet accept external PRs, so it lands as a discussion plus a ready branch); ready branch on fork Kihara777/deepseek-harness `draft/statline-overflow-scroll` (commit e5ece63); this repo also adds the official `dsh-plugin` ecosystem topic (four-language dsh-api-balance docs synced)
+
+| Commit | Description |
+|------|------|
+| `6030e6d` | docs(dsh-api-balance): record the upstream StatsLine scrolling proposal and ready branch |
+
 ## 2026-09-03T03:25:59+09:00
 
 **Summary**：feat(dsh-nixos-shell): maintenance mode now injects the nixkits-check-updates skill — the maintenance-skills entry registers nixkits-check-updates as a runtime skill, so a maintenance session can run the software-update check directly via skill
