@@ -9,6 +9,8 @@
  *
  * - `write-project-docs` (multi-language documentation authoring);
  * - `write-maintenance-log` (MAINTENANCE.md authoring per NixKits rules);
+ * - `nixkits-check-updates` (upstream version bump + docs sync for all
+ *   repository packages, so a maintenance session can run it directly);
  * - every `translate-*` language-extension skill (auto-discovered at apply
  *   time from the embedded tree, so new language extensions are picked up
  *   without code changes).
@@ -78,6 +80,7 @@ export function apply(ctx) {
   // Fixed maintenance/doc skills.
   registerSkill("write-project-docs");
   registerSkill("write-maintenance-log");
+  registerSkill("nixkits-check-updates");
 
   // Language-extension skills, auto-discovered (translate-*).
   let entries = [];
