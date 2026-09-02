@@ -172,7 +172,7 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
 | Preset | Description |
 |------|------|
 | NixOS mode (id `nixos`) | validates the NixOS host at initialization (non-NixOS rejects all requests with an explicit reason); loads `nixos_shell` / `nixos_cli` and the NixOS development prompts |
-| Maintenance mode (id `maintenance`) | based on NixOS mode; injects `write-project-docs` / `write-maintenance-log` / `translate-*` skills (the repo `skills/` tree embedded at build time — always current in a fresh session) and the repo-maintenance workflow prompts |
+| Maintenance mode (id `maintenance`) | based on NixOS mode; injects `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` skills (the repo `skills/` tree embedded at build time — always current in a fresh session) and the repo-maintenance workflow prompts |
 
 Detailed preset behavior, composition structure, and derivation maintenance rules: see [dsh-nixos-shell.md](dsh-nixos-shell.md).
 

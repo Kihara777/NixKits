@@ -172,7 +172,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 | 預設 | 説明 |
 |------|------|
 | NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 理由明示全請求拒否）；`nixos_shell` / `nixos_cli` 与 NixOS 高效開発 prompt 読込 |
-| 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）与倉庫維護工作流 prompt 注入 |
+| 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）与倉庫維護工作流 prompt 注入 |
 
 預設詳細動作、組合構造与派生維持規則 [dsh-nixos-shell.md](dsh-nixos-shell.md) 参照。
 

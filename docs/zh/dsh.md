@@ -172,7 +172,7 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 | 预设 | 说明 |
 |------|------|
 | NixOS模式（id `nixos`） | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求并明确告知理由）；加载 `nixos_shell` / `nixos_cli` 与 NixOS 高效开发提示词 |
-| 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `translate-*` 技能（构建期嵌入的仓库 `skills/` 树，全新会话即最新）与仓库维护工作流提示词 |
+| 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（构建期嵌入的仓库 `skills/` 树，全新会话即最新）与仓库维护工作流提示词 |
 
 预设的详细行为、组合结构与派生维护规则见 [dsh-nixos-shell.md](dsh-nixos-shell.md)。
 

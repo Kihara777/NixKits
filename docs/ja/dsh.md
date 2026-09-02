@@ -172,7 +172,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 | プリセット | 説明 |
 |------|------|
 | NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は理由を明示して全リクエストを拒否）；`nixos_shell` / `nixos_cli` と NixOS 効率開発プロンプトを読み込む |
-| 維護模式（id `maintenance`） | NixOS模式ベース；`write-project-docs` / `write-maintenance-log` / `translate-*` スキル（ビルド時埋め込みのリポジトリ `skills/` ツリー、新規セッションでも常に最新）とリポジトリ維護工作流プロンプトを注入する |
+| 維護模式（id `maintenance`） | NixOS模式ベース；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` スキル（ビルド時埋め込みのリポジトリ `skills/` ツリー、新規セッションでも常に最新）とリポジトリ維護工作流プロンプトを注入する |
 
 プリセットの詳細な動作・コンポジション構造・派生維持ルールは [dsh-nixos-shell.md](dsh-nixos-shell.md) を参照。
 

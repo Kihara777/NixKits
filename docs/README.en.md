@@ -46,7 +46,7 @@ DeepSeek Harness (DSH) components are listed separately from software (mounting 
 | Preset | Description |
 |--------|-------------|
 | NixOS模式 (id `nixos`) | Verifies a NixOS host at init (refuses everything otherwise); loads `nixos_shell`/`nixos_cli` plus the NixOS development guidance |
-| 维护模式 (id `maintenance`) | Based on NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`translate-*` skills plus the repo-maintenance workflow |
+| 维护模式 (id `maintenance`) | Based on NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` skills plus the repo-maintenance workflow |
 
 ## Development
 

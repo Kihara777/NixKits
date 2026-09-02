@@ -46,7 +46,7 @@ DeepSeek Harness（DSH）组件与軟体分開掲載（掛載方式 [docs/pcn/ds
 | 預設 | 説明 |
 |------|------|
 | NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 全拒否）；`nixos_shell`/`nixos_cli` 与 NixOS 開発指南負載 |
-| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`translate-*` 技能与倉庫維護工作流注入 |
+| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与倉庫維護工作流注入 |
 
 ## 開発
 

@@ -113,6 +113,6 @@ nixos_cli(op = "audit-store-paths")
 
 ### 维护模式预设
 
-包内还分发「维护模式」预设（`presets/maintenance-mode/`，id `maintenance`）：基于 NixOS模式，额外挂载 `maintenance-skills` 入口——初始化时从构建期嵌入的仓库 `skills/` 树（内容单一来源，全新会话即最新）注册运行时技能 `write-project-docs`、`write-maintenance-log` 与全部 `translate-*` 语言扩展（apply 时自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）。模块经 `nixkits.dsh.presets.maintenanceMode = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/maintenance`。
+包内还分发「维护模式」预设（`presets/maintenance-mode/`，id `maintenance`）：基于 NixOS模式，额外挂载 `maintenance-skills` 入口——初始化时从构建期嵌入的仓库 `skills/` 树（内容单一来源，全新会话即最新）注册运行时技能 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates` 与全部 `translate-*` 语言扩展（apply 时自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）。模块经 `nixkits.dsh.presets.maintenanceMode = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/maintenance`。
 
 **派生关系**：维护模式的组合文件 = NixOS模式组合末尾追加固定 `maintenance-skills` 行块，两预设 `skills/` 目录逐文件一致——`develop/check-preset-derivation.py` 挂入 `nix flake check` 强制执行（修改 NixOS模式后必须同步维护模式，见仓库 AGENTS.md「预设」一节）。

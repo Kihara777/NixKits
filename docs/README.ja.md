@@ -46,7 +46,7 @@ DeepSeek Harness（DSH）コンポーネントはソフトウェアと分けて�
 | プリセット | 説明 |
 |------------|------|
 | NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は全拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発ガイドをロード |
-| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`translate-*` スキルとリポジトリ保守ワークフローを注入 |
+| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフローを注入 |
 
 ## 開発
 
