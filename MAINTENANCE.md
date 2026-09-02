@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:23:55+09:00
+
+**摘要**：feat(dsh-api-balance): 峰时红色统一到用量页全元素 + 图表模型色保持可分 — 峰时变红扩展：用量页上下文进度条与明细色块、刷新/加载动画（dshAbSpin 新增 dshAbSpinPeak 红环类）、读取文本统一转为红色系，与已变红的用量圈/图表一致；进度条峰时各段经 peakShade 按索引取不同红档色调，多条段仍可分；图表峰时沿用 PEAK_PALETTE——红系但各模型用不同红档（图例圆点同步），红且可分而非盲目替换同一色
+
+| 提交 | 说明 |
+|------|------|
+| `3aea067` | feat(dsh-api-balance): 峰时红色统一到用量页全元素 + 图表模型色保持可分 |
+| `ea34699` | docs(dsh-api-balance): 峰时红色统一到进度条/动画/明细（四语） |
 ## 2026-09-02T06:32:01+09:00
 
 **摘要**：refactor(dsh-api-balance): 移除手机竖屏越界修复，恢复简洁实现 — 移除「竖屏越界设置页尺寸逻辑」（面板宽度恢复为内容 scrollWidth 测量 + 上限钳制，不再越界切 min(520px, 94vw)）；移除翻页区 fitWidth / overflowing / layoutW 处理（页宽恢复固定内容实测宽度、touchAction 恢复 pan-y、触摸/拖拽翻页全场景可用）；保留页面级 fixed portal（移动端横屏顶栏避让与通用弹层稳定性）

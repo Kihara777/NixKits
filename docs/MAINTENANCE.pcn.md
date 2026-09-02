@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:23:55+09:00
+
+**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 与明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量リング/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
+
+| 提交 | 説明 |
+|------|------|
+| `3aea067` | feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 |
+| `ea34699` | docs(dsh-api-balance): 峰赤進捗 bar/spinner/明細統一（四語） |
 ## 2026-09-02T06:32:01+09:00
 
 **摘要**：refactor(dsh-api-balance): 手機縦屏画面外修正除去、簡潔実装復帰 — 「縦屏越界 size 邏輯」除去（面板幅内容 scrollWidth 測定 + 上限 clamp 復帰、越界時 min(520px, 94vw) 切替不）；pager fitWidth / overflowing / layoutW 処理除去（頁幅固定計測内容幅復帰、touchAction pan-y 復帰、touch/drag 翻頁全 scenario 有効）；頁面級 fixed portal 維持（手機横屏 top bar 回避与汎用 overlay 安定性）

@@ -49,6 +49,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-02T10:23:55+09:00
+
+**Summary**: feat(dsh-api-balance): unify peak-hour red across the usage page + keep chart models distinguishable — the peak-hour red now covers the usage page's context progress bar and detail color chips, the refresh/loading spinner (new dshAbSpinPeak red-ring class), and the reading text, matching the already-red usage ring/chart; the progress bar's segments take different red shades by index via peakShade so multiple segments stay distinguishable; the chart keeps PEAK_PALETTE at peak — a red family where each model keeps a distinct red shade (legend dots synced), red yet distinguishable rather than blindly replaced by one color
+
+| Commit | Description |
+|------|------|
+| `3aea067` | feat(dsh-api-balance): peak red unified across usage page + chart models stay distinguishable |
+| `ea34699` | docs(dsh-api-balance): peak-red unified to progress bar/spinner/details (4 languages) |
 ## 2026-09-02T06:32:01+09:00
 
 **Summary**: refactor(dsh-api-balance): remove the phone-portrait overflow fixes and restore the lean implementation — remove the 「portrait-overflow sizing logic」(panel width returns to content scrollWidth measurement + cap, no longer switching to min(520px, 94vw) on overflow); remove the pager's fitWidth / overflowing / layoutW handling (page width returns to the fixed measured content width, touchAction back to pan-y, touch/drag paging works in every scenario); keep the page-level fixed portal (mobile-landscape top-bar avoidance and general overlay stability)
