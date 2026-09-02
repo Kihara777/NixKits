@@ -134,3 +134,9 @@ All segments are optional: missing ones fall back to TTS during playback. Panel 
 ### Settings storage layer
 
 The interface and voice settings (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state**: independent per browser, enabled by default, persisted the moment you toggle them in the plugin's `⚙ Settings` panel. They do **not** go through the DSH host settings system (`settings.register` / `settings.yaml`), so `nixkits.dsh.settings` provides **no declarative override** for them — configure these per-browser preferences in the panel per device. Host-side plugin parameters (`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`) remain declaratively set via `nixkits.dsh.plugins.packages[].config`.
+
+### Upstream proposal and ecosystem
+
+- This plugin's **horizontal-scroll** optimization for the host `StatsLine` session-stats strip (in-place scrolling instead of ellipsis truncation, for mobile / portrait touch and large-font readers) has been proposed to DeepSeek Harness upstream: GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458). The official `CONTRIBUTING.md` does not yet accept external pull requests, so it currently lands as a discussion plus a ready branch.
+- The PR-ready change lives on branch `draft/statline-overflow-scroll` in the project's fork `Kihara777/deepseek-harness` (local commit `e5ece63`, touching three files under `packages/client/ui-chat` — CSS + TSX + two component tests); it can be promoted to a PR once upstream accepts external pulls. The plugin can then drop its runtime style injection over the host `.root` and follow the upstream behavior instead.
+- This repository is tagged with the official `dsh-plugin` ecosystem topic so the plugin stays discoverable within the plugin ecosystem.

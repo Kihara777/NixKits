@@ -134,3 +134,9 @@ voice-pack.zip
 ### 設定存儲層
 
 界面与語音設定（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**：毎瀏覽器独立、既定有効、插件 `⚙ 設定` panel 内切替即時永続化。此等 DSH host 設定系統（`settings.register` / `settings.yaml`）**不経由**、故 `nixkits.dsh.settings` 此等文書化 override **提供無**——此類「毎瀏覽器偏好」device 別 panel 内設定。host 側插件参數（`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`）依然 `nixkits.dsh.plugins.packages[].config` 声明設定。
+
+### 上流提案與生態
+
+- 本插件 host `StatsLine` 会話統計条之**横 scroll** 最適化（mobile / 縦向 touch 及大字体環境向、省略記号切詰代行内 scroll 全可視）DeepSeek Harness 上流提案済：GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458)。公式 `CONTRIBUTING.md` 現時外部 PR 不承、故「Discussion + 準備済 branch」形公開。
+- PR 準備済変更本 repo fork `Kihara777/deepseek-harness` branch `draft/statline-overflow-scroll` 所在（local commit `e5ece63`、`packages/client/ui-chat` 下 3 文件 — CSS・TSX・component test 2 件変更）。上流外部 PR 受入開始次第正式 PR 昇格可。插件側上流挙動追従後、host `.root` runtime style 注入撤去可。
+- 本 repo 公式 `dsh-plugin` 生態 topic 付与済、plugin 生態内発見容易。

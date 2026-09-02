@@ -133,3 +133,9 @@ voice-pack.zip
 ### 设置存储层
 
 界面与语音设置（语音提醒、底部统计条横向滚动、回车换行 + Shift+回车发送、移动端会话切换不弹键盘、TTS 后端）为**浏览器 localStorage 状态**：每浏览器独立、默认开启、在插件 `⚙ 设置` 面板内即时切换即持久化。它们**不经过** DSH 宿主设置系统（`settings.register` / `settings.yaml`），故 `nixkits.dsh.settings` **不提供**对这些项的声明式覆盖——这类"每浏览器偏好"请按设备在面板内配置。宿主侧插件参数（`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`）仍经 `nixkits.dsh.plugins.packages[].config` 声明式设置。
+
+### 上游提案与生态
+
+- 本插件对宿主 `StatsLine` 会话统计条的**横向可滚动**优化（移动/竖屏触摸与大字体场景下以行内滚动取代省略截断）已向 DeepSeek Harness 上游提出：GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458)。官方 `CONTRIBUTING.md` 暂不接受外部 PR，故当前以「讨论 + 就绪分支」形式落地。
+- PR-ready 改动位于本仓库 fork `Kihara777/deepseek-harness` 的 `draft/statline-overflow-scroll` 分支（local commit `e5ece63`，改动 `packages/client/ui-chat` 三个文件，CSS+TSX+2 组件测试）；待上游开放外部 PR 即转正。插件侧以上游一致做法后可移除对宿主 `.root` 的运行时样式注入。
+- 仓库已关联官方 `dsh-plugin` 生态话题，便于按插件生态检索发现本插件。

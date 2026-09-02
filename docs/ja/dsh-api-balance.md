@@ -134,3 +134,9 @@ voice-pack.zip
 ### 設定ストレージ層
 
 界面と音声設定（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**：ブラウザごとに独立、既定 ON、プラグインの `⚙ 設定` パネルで切り替えると即座に永続化される。これらは DSH host 設定システム（`settings.register` / `settings.yaml`）を**経由しない**ため、`nixkits.dsh.settings` はこれらへの宣言的オーバーライドを**提供しない**——こうした「ブラウザごとの設定」はデバイスごとにパネルで設定する。host 側プラグインパラメータ（`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`）は引き続き `nixkits.dsh.plugins.packages[].config` で宣言的に設定する。
+
+### 上流提案とエコシステム
+
+- 本プラグインによる host の `StatsLine` セッション統計バーの**横スクロール**最適化（モバイル / 縦向きタッチおよび大フォント環境向けに、省略記号による切り詰めの代わりに行内スクロールで全体を表示）は DeepSeek Harness 上流へ提案済み：GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458)。公式 `CONTRIBUTING.md` は現時点で外部 PR を受け付けないため、「Discussion + 準備済みブランチ」の形で公開している。
+- PR 準備済みの変更は当リポジトリのフォーク `Kihara777/deepseek-harness` のブランチ `draft/statline-overflow-scroll` に置いてある（local commit `e5ece63`、`packages/client/ui-chat` 配下 3 ファイル — CSS・TSX・コンポーネントテスト 2 件を変更）。アップストリームが外部 PR の受け入れを開始したら正式 PR へ昇格できる。插件側は上流の挙動へ追従後、host の `.root` へのランタイムスタイル注入を撤去できる。
+- 本リポジトリには公式の `dsh-plugin` エコシステムトピックを付与してあり、プラグインエコシステム内で発見しやすくしてある。
