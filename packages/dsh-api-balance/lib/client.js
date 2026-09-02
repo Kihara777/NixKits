@@ -113,6 +113,27 @@ window.__ModuleLoader__.load({
 			ttsSpeak(table[Math.floor(Math.random() * table.length)], lang, ttsConfig).then(playPeakHint).catch(() => {});
 		}
 
+		/**
+		 * 高峰计费时段开始/解除时播报提示（语音播报开启时）。进入用
+		 * `peak` 片段（/TTS 施底），结束用 `peakEnd` 片段（/TTS 施底）；
+		 * 30 秒限流，避免跨边界多次触发时反复播报。
+		 */
+		let lastPeakBoundarySpeakAt = 0;
+		function speakPeakBoundary(t, entering, lang, ttsConfig, pack) {
+			try {
+				if (typeof window === "undefined" || !speechEnabled()) return;
+				const now = Date.now();
+				if (now - lastPeakBoundarySpeakAt < 30_000) return;
+				lastPeakBoundarySpeakAt = now;
+				const key = entering ? "peak" : "peakEnd";
+				const fallback = entering ? t("speech.peakHint") : t("speech.peakEndHint");
+				stopActiveSpeech();
+				playParts([{ kind: "pack", key, fallbackText: fallback }], lang, ttsConfig, pack).catch(() => {});
+			} catch {
+				// 语音不可用时静默
+			}
+		}
+
 		/** 语音提醒开关（localStorage 持久化，默认开启）。 */
 		function speechEnabled() {
 			if (typeof window === "undefined") return false;
@@ -630,6 +651,7 @@ window.__ModuleLoader__.load({
 			"dead",
 			"low",
 			"peak",
+			"peakEnd",
 			"today",
 			"month",
 			"inLabel",
@@ -644,7 +666,8 @@ window.__ModuleLoader__.load({
 		 * 制作器示例文本（随语音包语言选择变化）。为「贴近默认 TTS 体验」，
 		 * 示例文本与无语音包时 TTS 兜底文案保持一字不差：
 		 *  - dead/low 对应 t("speech.dead") / t("speech.low") 文案
-		 *  - peak 对应 t("speech.peakHint")（高峰计费时段提示）
+		 *  - peak / peakEnd 对应 t("speech.peakHint") / t("speech.peakEndHint")
+		 *    （高峰计费时段进入/结束提示）
 		 *  - today/month 对应 t("balance.today") / t("balance.month")
 		 *  - inLabel/outLabel 对应 t("balance.in") / t("balance.out")
 		 *  - costLabel 对应 t("speech.costLabel")，tokenUnit 对应 t("speech.tokenUnit")
@@ -655,6 +678,7 @@ window.__ModuleLoader__.load({
 				dead: "主人，余额不足啦，我快饿晕了，快喂我吃 token！",
 				low: "主人，token 快吃完了，记得喂我哦！",
 				peak: "现在是高峰计费时段，请留意用量哦～",
+				peakEnd: "高峰计费时段已结束，现在按低谷价计费啦。",
 				today: "当日消耗",
 				month: "当月消耗",
 				inLabel: "入",
@@ -668,6 +692,7 @@ window.__ModuleLoader__.load({
 				dead: "Master, I'm out of tokens — please feed me!",
 				low: "Master, tokens are running low, remember to feed me!",
 				peak: "We're in the peak pricing period now — mind your usage!",
+				peakEnd: "The peak pricing period is over — you're on off-peak rates now!",
 				today: "Today",
 				month: "This month",
 				inLabel: "in",
@@ -681,6 +706,7 @@ window.__ModuleLoader__.load({
 				dead: "残高がありません、お腹ペコペコです。トークンをちょうだい！",
 				low: "トークンが残りわずかです。補充を忘れずに！",
 				peak: "今はピーク課金時間帯です。使用量にご注意ください！",
+				peakEnd: "ピーク課金時間帯は終わりました。今はオフピーク料金です！",
 				today: "今日",
 				month: "今月",
 				inLabel: "入力",
@@ -2781,12 +2807,9 @@ window.__ModuleLoader__.load({
 				setMobileKbGuardEnabled(next);
 			};
 			// 峰谷计费高峰时段标记（红色用量圈/图表 + 问候语高峰提示）。
-			// 每分钟复核一次（跨时段边界自动刷新）。
+			// 自动触发/解除，无需手动刷新：30 秒复核一次，检测进入/结束
+			// 边界时播报对应提示并同步 peakNow 驱动变红。
 			const [peakNow, setPeakNow] = react.useState(isPeakPricing());
-			react.useEffect(() => {
-				const timer = window.setInterval(() => setPeakNow(isPeakPricing()), 60_000);
-				return () => window.clearInterval(timer);
-			}, []);
 			const [ttsCfg, setTtsCfg] = react.useState(readTtsConfig());
 			const ttsCfgRef = react.useRef(ttsCfg);
 			ttsCfgRef.current = ttsCfg;
@@ -2817,6 +2840,23 @@ window.__ModuleLoader__.load({
 				// 初始化数据加载后仅按自动播报设置播报余额警告（load →
 				// announceHunger，受语音提醒开关与 30 分钟限流约束）。
 				refreshPacks().catch(() => {});
+			}, []);
+			// 高峰时段进入/解除自动播报提示并同步变红：30 秒复核一次，
+			// 检测边界（进入用 peak 片段 / 结束用 peakEnd 片段，TTS 兜底，
+			// 30 秒限流）；无需用户手动刷新页面。
+			react.useEffect(() => {
+				let prev = isPeakPricing();
+				const check = () => {
+					const now = isPeakPricing();
+					if (now !== prev) {
+						setPeakNow(now);
+						speakPeakBoundary(t, !prev, uiLocale, ttsCfgRef.current, voicePackRef.current);
+						prev = now;
+					}
+				};
+				const timer = window.setInterval(check, 30_000);
+				return () => window.clearInterval(timer);
+				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, []);
 			const [packBusy, setPackBusy] = react.useState(false);
 			const [packMessage, setPackMessage] = react.useState("");
@@ -4491,7 +4531,9 @@ window.__ModuleLoader__.load({
 			"chart.peakBadge": "峰时计费",
 			"chart.peakHint": "标准价格时段：北京时间 09:00–12:00、14:00–18:00（周一至周五，其余时间含周末为低谷价）",
 			"speech.peakHint": "现在是高峰计费时段，请留意用量哦～",
+			"speech.peakEndHint": "高峰计费时段已结束，现在按低谷价计费啦。",
 			"voice.seg.peak": "高峰时段提示",
+			"voice.seg.peakEnd": "高峰结束提示",
 		};
 
 		/** 英文文案。 */
@@ -4648,7 +4690,9 @@ window.__ModuleLoader__.load({
 			"chart.peakBadge": "Peak pricing",
 			"chart.peakHint": "Standard-price windows: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time (all other hours, incl. weekends, are off-peak)",
 			"speech.peakHint": "We're in the peak pricing period now — mind your usage!",
+			"speech.peakEndHint": "The peak pricing period is over — you're on off-peak rates now!",
 			"voice.seg.peak": "Peak-period hint",
+			"voice.seg.peakEnd": "Peak-end hint",
 		};
 
 		/**
