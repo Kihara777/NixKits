@@ -1,6 +1,21 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-03T03:07:21+09:00
+
+**摘要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 升级上游发布版本；ruyi stable 转正 0.52.0（beta/alpha 通道保持），obs-bilibili 与 opencode-telegram 常规小版本更新
+
+| 提交 | 说明 |
+|------|------|
+| `22c28a2` | feat(pkgs): 升级 ruyi 0.52.0 / obs-bilibili-stream 2.1.4 / opencode-telegram 0.25.0 |
+| `65b7edf` | docs: 三包版本与徽章同步至四语文档与 README |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| ruyi | 0.51.0 | 0.52.0 |
+| obs-bilibili-stream | 2.1.3 | 2.1.4 |
+| opencode-telegram | 0.24.1 | 0.25.0 |
+
 ## 2026-09-02T06:38:36+09:00
 
 **摘要**：docs(README): 作者部分模型更新 — 小爪使用的模型由 DeepSeek V4 Pro (Max) 改为 DeepSeek V4 Flash（四语 README 同步）

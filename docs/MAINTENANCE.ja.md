@@ -1,6 +1,21 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-03T03:07:21+09:00
+
+**概要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 上流リリースバージョンへアップグレード；ruyi stable が 0.52.0 に正式化（beta/alpha チャネルは維持）、obs-bilibili と opencode-telegram はマイナー更新
+
+| コミット | 説明 |
+|------|------|
+| `22c28a2` | feat(pkgs): ruyi 0.52.0 / obs-bilibili-stream 2.1.4 / opencode-telegram 0.25.0 にアップグレード |
+| `65b7edf` | docs: 三パッケージのバージョンとバッジを四言語ドキュメントと README に同期 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| ruyi | 0.51.0 | 0.52.0 |
+| obs-bilibili-stream | 2.1.3 | 2.1.4 |
+| opencode-telegram | 0.24.1 | 0.25.0 |
+
 ## 2026-09-02T06:38:36+09:00
 
 **概要**：docs(README): 作者モデルの更新 — 小爪 の使用モデルを DeepSeek V4 Pro (Max) から DeepSeek V4 Flash へ変更（四言語 README で同期）
