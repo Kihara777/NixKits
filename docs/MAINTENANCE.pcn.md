@@ -1,6 +1,15 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+## 2026-09-03T03:25:59+09:00
+
+**摘要**：feat(dsh-nixos-shell): 維護模式 nixkits-check-updates 技能注入 — maintenance-skills entry 現 nixkits-check-updates 一并 runtime 技能登録、維護 session 内直接 skill 経由 software 更新検査実行可能
+
+| 提交 | 説明 |
+|------|------|
+| `3baf456` | feat(dsh-nixos-shell): 維護模式 nixkits-check-updates 技能注入 |
+| `7554c6d` | docs: 維護模式注入技能列挙補 nixkits-check-updates（四語） |
+
 ## 2026-09-03T03:07:21+09:00
 
 **摘要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 上流 release version 昇級；ruyi stable 正式化 0.52.0（beta/alpha channel 維持）、obs-bilibili 与 opencode-telegram minor 更新

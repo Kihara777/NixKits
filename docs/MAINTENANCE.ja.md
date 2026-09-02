@@ -1,6 +1,15 @@
 # メンテナンスログ
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-03T03:25:59+09:00
+
+**概要**：feat(dsh-nixos-shell): メンテナンスモードに nixkits-check-updates スキルを注入 — maintenance-skills エントリが nixkits-check-updates をランタイムスキルとして登録し、メンテナンスセッション内で skill 経由のソフトウェア更新チェックが直接実行可能に
+
+| コミット | 説明 |
+|------|------|
+| `3baf456` | feat(dsh-nixos-shell): メンテナンスモードに nixkits-check-updates スキルを注入 |
+| `7554c6d` | docs: メンテナンスモードの注入スキル列挙に nixkits-check-updates を追加（四言語） |
+
 ## 2026-09-03T03:07:21+09:00
 
 **概要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 上流リリースバージョンへアップグレード；ruyi stable が 0.52.0 に正式化（beta/alpha チャネルは維持）、obs-bilibili と opencode-telegram はマイナー更新
