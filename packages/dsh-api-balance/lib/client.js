@@ -270,8 +270,29 @@ window.__ModuleLoader__.load({
 			const minutes = beijing.getUTCHours() * 60 + beijing.getUTCMinutes();
 			return (minutes >= 540 && minutes < 720) || (minutes >= 840 && minutes < 1080);
 		}
-		/** 高峰时段图表的红色系配色（替代常规模型色板）。 */
-		const PEAK_PALETTE = ["#e5484d", "#dc2626", "#f87171", "#ef4444", "#fca5a5", "#b91c1c", "#f97316", "#7f1d1d"];
+		/** 高峰时段图表的红色系配色——不同模型用不同红阶/色调，既整体
+		 * 变红又保持模型可分。 */
+		const PEAK_PALETTE = [
+			"#ff6b6b",
+			"#f03e3e",
+			"#c92a2a",
+			"#e64980",
+			"#f76707",
+			"#ff922b",
+			"#fa5252",
+			"#ae3ec9",
+		];
+		/**
+		 * 高峰时段的「圆环/进度条」取色：把常规色的色相转到红色域、保留
+		 * 明度/饱和度差异，使多条进度段在峰时统一变红又仍能彼此区分。
+		 * 传入的 color 为 CSS 变量时按占位红色处理。
+		 */
+		function peakShade(color, index) {
+			if (typeof color !== "string" || color.indexOf("var(") === 0) {
+				return PEAK_PALETTE[index % PEAK_PALETTE.length];
+			}
+			return PEAK_PALETTE[(index % PEAK_PALETTE.length)];
+		}
 
 		/** 移动端会话切换不弹键盘开关（localStorage 持久化，默认开启）。 */
 		const MOBILE_KB_STORE_KEY = "dsh-api-balance-mobile-kb";
@@ -3232,7 +3253,7 @@ window.__ModuleLoader__.load({
 						},
 					},
 					isBalance && refreshing
-						? react.createElement("i", { className: "dshAbSpin", "aria-hidden": true, style: { width: "10px", height: "10px", borderWidth: "1.5px", margin: 0 } })
+						? react.createElement("i", { className: peakNow ? "dshAbSpin dshAbSpinPeak" : "dshAbSpin", "aria-hidden": true, style: { width: "10px", height: "10px", borderWidth: "1.5px", margin: 0 } })
 						: null,
 					id === TAB_USAGE ? t("tab.usage") : t("tab.balance"),
 				);
@@ -3280,7 +3301,12 @@ window.__ModuleLoader__.load({
 					),
 					react.createElement(
 						"span",
-						{ style: { color: "var(--dsw-alias-label-primary)", fontWeight: 500 } },
+						{
+							style: {
+								color: peakNow ? "var(--dsw-alias-danger-primary, #e5484d)" : "var(--dsw-alias-label-primary)",
+								fontWeight: 500,
+							},
+						},
 						reading,
 					),
 					react.createElement(
@@ -3309,11 +3335,12 @@ window.__ModuleLoader__.load({
 							overflow: "hidden",
 						},
 					},
-					segments.map((segment) =>
+					segments.map((segment, segIndex) =>
 						react.createElement("div", {
 							key: segment.key,
 							style: {
-								background: segment.tint ?? "var(--dsw-alias-label-tertiary)",
+								// 峰时：各进度段统一转红系、按索引错开色调（保持区分度）。
+								background: peakNow ? peakShade(segment.tint, segIndex) : segment.tint ?? "var(--dsw-alias-label-tertiary)",
 								borderRadius: "1px",
 								flex: "none",
 								minWidth: "2px",
@@ -3339,7 +3366,7 @@ window.__ModuleLoader__.load({
 											{
 												"aria-hidden": true,
 												style: {
-													background: row.tint,
+													background: peakNow ? peakShade(row.tint, USAGE_ROWS.indexOf(row)) : row.tint,
 													verticalAlign: "baseline",
 													borderRadius: "2px",
 													width: "8px",
@@ -3465,7 +3492,7 @@ window.__ModuleLoader__.load({
 				balanceBody = react.createElement(
 					"span",
 					{ style: { color: "var(--dsw-alias-label-tertiary)", display: "inline-flex", alignItems: "center" } },
-					react.createElement("i", { className: "dshAbSpin", "aria-hidden": true }),
+					react.createElement("i", { className: peakNow ? "dshAbSpin dshAbSpinPeak" : "dshAbSpin", "aria-hidden": true }),
 					t("balance.loading"),
 				);
 			} else if (balanceState === "error" || balance === null) {
@@ -4636,6 +4663,9 @@ window.__ModuleLoader__.load({
 			".dshAbSpin{width:14px;height:14px;border:2px solid var(--dsw-alias-border-l3);" +
 			"border-top-color:var(--dsw-alias-label-secondary);border-radius:50%;" +
 			"animation:dshAbSpinRot 0.8s linear infinite;display:inline-block;vertical-align:-3px;margin-right:8px}" +
+			// 峰值计费：刷新动画进度环转红（圆环视觉统一；border-top 即环的
+			// 前进段，主题红在 var(--dsw-alias-danger-primary)）。
+			".dshAbSpinPeak{border-color:rgba(229, 72, 77, 0.35);border-top-color:var(--dsw-alias-danger-primary, #e5484d)}" +
 			"@keyframes dshAbSpinRot{to{transform:rotate(360deg)}}" +
 			// 录音指示点脉冲动画。
 			"@keyframes dshAbRecPulse{0%,100%{opacity:1}50%{opacity:0.3}}" +
