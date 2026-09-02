@@ -34,7 +34,7 @@ All three settings are on by default and persist in browser localStorage.
 
 ### Peak pricing marker
 
-DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key), the usage page's context progress bar and its detail color chips, the refresh/loading spinner, and the usage chart all turn into a unified red family — within the chart each model keeps a distinct red shade (red yet distinguishable, legend synced) — and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details); the greeting audio on each 「Balance」-tab click (manual refresh) is followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
+DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key), the usage page's context progress bar and its detail color chips, the refresh/loading spinner, and the usage chart all turn into a unified red family — within the chart each model keeps a distinct red shade (red yet distinguishable, legend synced) — and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details). The red effect engages and clears automatically on the official peak windows (re-checked every 30 s across the boundary), no manual refresh needed; both the start and end of a peak window speak a notification (pack `peak` / `peakEnd` segments first, TTS fallback otherwise). The greeting audio on each 「Balance」-tab click (manual refresh) is also followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
 
 ### Voice broadcast
 
@@ -71,6 +71,7 @@ voice-pack.zip
     "dead": "audio/dead.mp3",
     "low": "audio/low.mp3",
     "peak": "audio/peak.mp3",
+    "peakEnd": "audio/peakEnd.mp3",
     "today": "audio/today.mp3",
     "month": "audio/month.mp3",
     "inLabel": "audio/inLabel.mp3",
@@ -90,6 +91,7 @@ voice-pack.zip
 | `dead` | whole-sentence out-of-tokens alert |
 | `low` | whole-sentence low-balance alert |
 | `peak` | peak-pricing hint (appended after the greeting audio) |
+| `peakEnd` | peak-pricing-end hint (spoken when the red effect auto-clears) |
 | `today` | 「Today」 broadcast prefix |
 | `month` | 「This month」 broadcast prefix |
 | `inLabel` | 「in」 label |

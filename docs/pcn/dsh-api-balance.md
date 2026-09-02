@@ -34,7 +34,7 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 
 ### 峰谷課金標記
 
-DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）、用量頁 context 進捗 bar 与各明細色塊、更新/load 動画、使用量 chart 一括紅色系表示——chart 内各 model 異紅 tone（紅但区分可、図例同同期）維持、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
+DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）、用量頁 context 進捗 bar 与各明細色塊、更新/load 動画、使用量 chart 一括紅色系表示——chart 内各 model 異紅 tone（紅但区分可、図例同同期）維持、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。紅表示官方峰時間帯合わせ自動入/解除（30 秒毎境界再検査）、手動更新不要。峰開始与終了両方通知自働再生（pack `peak` / `peakEnd` segment 優先、無時 TTS 回退）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
 
 ### 音声放送
 
@@ -71,6 +71,7 @@ voice-pack.zip
     "dead": "audio/dead.mp3",
     "low": "audio/low.mp3",
     "peak": "audio/peak.mp3",
+    "peakEnd": "audio/peakEnd.mp3",
     "today": "audio/today.mp3",
     "month": "audio/month.mp3",
     "inLabel": "audio/inLabel.mp3",
@@ -90,6 +91,7 @@ voice-pack.zip
 | `dead` | 残高不足警告全文 |
 | `low` | 低残高警告全文 |
 | `peak` | 峰時課金提示（挨拶音声後追加） |
+| `peakEnd` | 峰時課金終了提示（紅表示自動解除時再生） |
 | `today` | 「当日消耗」放送 prefix |
 | `month` | 「当月消耗」放送 prefix |
 | `inLabel` | 「入」標籤 |
