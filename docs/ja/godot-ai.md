@@ -12,7 +12,7 @@ Godotエンジン向けの本格的なMCPサーバーおよびAIツール — MC
 |------|-----|
 | タイプ | Python アプリ（MCPサーバー）|
 | 上流 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| バージョン | `3.2.4` |
+| バージョン | `3.2.5` |
 | ライセンス | MIT |
 | Python | ≥ 3.11 |
 
