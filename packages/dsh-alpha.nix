@@ -1,10 +1,10 @@
 # dsh-alpha — latest alpha development channel
 #
 # Thin wrapper around the stable dsh.nix with version + hash overrides.
-{ callPackage, lib }:
+{ callPackage }:
 callPackage ./dsh.nix {
-  version = "0.1.2-alpha.3";
-  hash = "sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=";
-  npmDepsHash = "sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=";
+  version = "0.1.2-alpha.5";
+  hash = "sha256-xtRp4CJ8WbCu6AoZxKAy9EsmPi1OtdRHAXBO1a/BNxs=";
+  npmDepsHash = "sha256-/d/TL3qVBCYm0xzqLp+EHwX7OSCGMJDAAmrBSrVksS8=";
   lockFile = ./dsh-package-lock-alpha.json;
 }

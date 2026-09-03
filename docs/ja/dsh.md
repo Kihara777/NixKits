@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— Everything is a Plugin（すべてがプラグ�
 | タイプ | Node.js アプリ（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | バージョン | `0.1.1-rc.2` |
-| 開発チャネル | `dsh-alpha 0.1.2-alpha.3`（npm `alpha` dist-tag） |
+| 開発チャネル | `dsh-alpha 0.1.2-alpha.5`（npm `alpha` dist-tag） |
 | ライセンス | MIT |
 | コマンド | `dsh` |
 
@@ -22,7 +22,7 @@ NixKits は ruyi の薄いラッパーパターン（本体定義 + バージョ
 | パッケージ | チャネル | バージョン | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag、既定 |
-| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.3` | npm `alpha` dist-tag、最新開発版を追跡 |
+| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.5` | npm `alpha` dist-tag、最新開発版を追跡 |
 
 ```nix
 # 本機で最新開発版に切り替える
