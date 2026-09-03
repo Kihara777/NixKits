@@ -1,6 +1,20 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-04T07:21:36+09:00
+
+**Summary**：godot-ai 3.2.5；dsh-alpha 0.1.2-alpha.5 — upstream releases updated; godot-ai follows v3.2.5, dsh-alpha tracks the npm alpha dist-tag two releases forward
+
+| Commit | Description |
+|------|------|
+| `56b40e7` | feat(pkgs): godot-ai 3.2.4 → 3.2.5 |
+| `d4f938c` | feat(pkgs): dsh-alpha 0.1.2-alpha.3 → 0.1.2-alpha.5 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| godot-ai | 3.2.4 | 3.2.5 |
+| dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
+
 
 ## 2026-09-03T04:41:42+09:00
 

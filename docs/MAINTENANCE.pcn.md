@@ -1,6 +1,20 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+## 2026-09-04T07:21:36+09:00
+
+**摘要**：godot-ai 3.2.5；dsh-alpha 0.1.2-alpha.5 — 上流 release 更新；godot-ai v3.2.5 追従、dsh-alpha npm alpha dist-tag 二 release 前進
+
+| 提交 | 説明 |
+|------|------|
+| `56b40e7` | feat(pkgs): godot-ai 3.2.4 → 3.2.5 |
+| `d4f938c` | feat(pkgs): dsh-alpha 0.1.2-alpha.3 → 0.1.2-alpha.5 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 3.2.4 | 3.2.5 |
+| dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
+
 
 ## 2026-09-03T04:41:42+09:00
 

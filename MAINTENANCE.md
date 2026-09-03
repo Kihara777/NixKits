@@ -1,6 +1,20 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-04T07:21:36+09:00
+
+**摘要**：godot-ai 3.2.5；dsh-alpha 0.1.2-alpha.5 — 上游发布更新；godot-ai 跟进 v3.2.5，dsh-alpha 跟随 npm alpha dist-tag 前进两版
+
+| 提交 | 说明 |
+|------|------|
+| `56b40e7` | feat(pkgs): godot-ai 3.2.4 → 3.2.5 |
+| `d4f938c` | feat(pkgs): dsh-alpha 0.1.2-alpha.3 → 0.1.2-alpha.5 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 3.2.4 | 3.2.5 |
+| dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
+
 ## 2026-09-03T04:41:42+09:00
 
 **摘要**：docs(dsh-api-balance): 记录上游 StatsLine 横向滚动优化提案 — DeepSeek Harness Discussion #5458（上游暂不接受外部 PR，以讨论+就绪分支落地）；fork Kihara777/deepseek-harness 就绪分支 draft/statline-overflow-scroll（commit e5ece63）；本仓库补关联官方 dsh-plugin 生态话题（四语 dsh-api-balance 文档同步）
