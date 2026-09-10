@@ -6,9 +6,9 @@
   makeWrapper,
   python3,
   # version/hash/lock overridden for other channels (e.g. dsh-alpha)
-  version ? "0.1.1-rc.2",
-  hash ? "sha256-R+wF9FraWrh3ea4YqQRWtev/VCHcD/XBeWd9ZeHBYFc=",
-  npmDepsHash ? "sha256-Xq49esW1IT7KRpxNrJlivtqkU2BFS97wTnBPzx7Qnts=",
+  version ? "0.1.5-rc.1",
+  hash ? "sha256-Gnlxnxx2ORisMOgZTfeDqTMMaxLV8EyVBzGj+KHD2dA=",
+  npmDepsHash ? "sha256-+/9XAzsADxOI4D+w9P6HsoOv4hKLFTeSGYmvWRCnBTg=",
   lockFile ? ./dsh-package-lock.json,
 }:
 
