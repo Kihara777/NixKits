@@ -2921,6 +2921,8 @@ window.__ModuleLoader__.load({
 				setMobileKbGuardEnabled(next);
 			};
 			// 交互式疑问窗口整页滚动（标题+选项一起滚动，题干不再压缩选项）。
+			// 注入本身在插件加载时完成（apply 内的 effect），这里只持有
+			// 开关状态：切换时即时改注入结果，组件卸载不影响。
 			const [questionScrollOn, setQuestionScrollOn] = react.useState(questionScrollEnabled());
 			react.useEffect(() => {
 				applyQuestionScrollCss(questionScrollOn);
@@ -4864,6 +4866,13 @@ window.__ModuleLoader__.load({
 		 */
 		function apply(ctx) {
 			ctx.effect(() => ctx.locale.register(NS, { zh, en }), "api-balance: dictionaries");
+			// 疑问窗口整页滚动的 CSS 注入在插件加载时即执行，不依赖
+			// ApiBalanceMeter 挂载——提问时 composer 被 takeover 替换，
+			// 圆圈组件会卸载/重挂，注入必须独立于该生命周期。
+			ctx.effect(() => {
+				applyQuestionScrollCss(questionScrollEnabled());
+				return () => applyQuestionScrollCss(false);
+			}, "api-balance: question-scroll css");
 			ctx.slots.inject("conversation.input.right", () =>
 				ctx.slots.register(
 					{
