@@ -30,7 +30,8 @@ API usage balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab
 - **Bottom stats bar**: overflowing content scrolls horizontally with the scrollbar hidden (on by default); turning it off restores the ellipsis truncation (hovering shows the full line in a tooltip).
 - **Enter key behavior**: Enter = newline, Shift+Enter = send (on by default; DSH's native behavior is Enter = send); turning it off restores the native behavior. Composer only; other inputs unaffected.
 - **Mobile: no keyboard on session switch**: on touch devices, switching sessions via the sidebar no longer auto-focuses the composer, so the soft keyboard doesn't pop up by itself; tapping the composer still works. Enabled by default, can be turned off here.
-All three settings are on by default and persist in browser localStorage.
+- **Question dialog: whole-page scroll**: with a long prompt, the title scrolls together with the options (instead of only the option list scrolling); the action and footer buttons stay pinned, so a long prompt no longer squeezes the options. On by default.
+All four settings are on by default and persist in browser localStorage.
 
 ### Peak pricing marker
 
