@@ -119,6 +119,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:15:47+09:00
+
+**摘要**：feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项） — 交互式疑问窗口（AskUserQuestion）把标题钉在不可滚动的 header，题干过长时挤占竖向空间、压缩下方选项区；注入 CSS 让卡片自身成为滚动容器（标题+详情+选项一起滚动），header 与底部按钮区 sticky 吸附保持可见，body 取消独立滚动避免双重滚动条；类名经 ui-user-questions 注入样式标签运行时提取（构建哈希自适应，同 StatsLine 方案），样式标签未就绪时 1s 重试至多 5 次；设置 → 界面新增「疑问窗口整页滚动」开关（默认开启，localStorage 持久化）；已用 headless Chromium 复刻真实标记验证（修复前 body 仅 91px 可滚动、修复后卡片整页滚动且 header 吸顶可用）
+
+| 提交 | 说明 |
+|------|------|
+| `4afe4c4` | feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项） |
+| `6809b3d` | docs(dsh-api-balance): 疑问窗口整页滚动设置说明（四语） |
 ## 2026-09-02T10:29:20+09:00
 
 **摘要**：feat(dsh-api-balance): 峰时变红自动触发/解除 + 高峰开始与结束两端播报 — 峰时边界自动检测：每 30 秒复核官方高峰时段，进入/解除时同步 peakNow 驱动全套变红（用量圈/进度条/明细/动画/图表），无需手动刷新页面；边界播报：高峰开始播 peak 片段（/TTS 兜底）、结束播新增的 peakEnd 片段（/TTS 兜底），30 秒限流防重复；语音包制作器新增 peakEnd 片段（含示例文本、对齐默认 TTS 兜底），新增 speech.peakEndHint 文案与 voice.seg.peakEnd 标签

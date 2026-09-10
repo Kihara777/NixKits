@@ -120,6 +120,14 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:15:47+09:00
+
+**Summary**: feat(dsh-api-balance): question dialog whole-page scroll (long prompts no longer squeeze the options) — the interactive question dialog (AskUserQuestion) pins its title in a non-scrolling header, so an overlong prompt consumes vertical space and compresses the option list; injected CSS makes the card itself the scroll container (title + detail + options scroll together), keeps the header and footer button areas pinned via sticky, and stops the body from scrolling to avoid double scrollbars; class names are extracted at runtime from the ui-user-questions style tag (build-hash adaptive, same approach as StatsLine) with up to 5 retries at 1s when the tag isn't ready; Settings → Interface gains a 「Question dialog: whole-page scroll」 toggle (on by default, localStorage-persisted); verified against a faithful markup replica in headless Chromium (before the fix the body had only 91px of scroll room; after it the card scrolls as a whole with the header pinned and usable)
+
+| Commit | Description |
+|------|------|
+| `4afe4c4` | feat(dsh-api-balance): question dialog whole-page scroll (long prompts no longer squeeze options) |
+| `6809b3d` | docs(dsh-api-balance): question-scroll setting notes (4 languages) |
 ## 2026-09-02T10:29:20+09:00
 
 **Summary**: feat(dsh-api-balance): peak red auto-engages/clears + notifications on both peak start and end — peak boundaries auto-detect: the official peak window is re-checked every 30 s, and on entering/leaving peakNow drives the whole red-off effect (usage ring / progress bar / details / spinner / chart) with no manual refresh; boundary speech: peak start speaks the `peak` segment (TTS fallback) and end speaks the new `peakEnd` segment (TTS fallback), with a 30 s throttle against repeats; the voice-pack creator gains a `peakEnd` segment (with matching sample text), plus speech.peakEndHint copy and a voice.seg.peakEnd label
