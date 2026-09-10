@@ -119,6 +119,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:38:00+09:00
+
+**摘要**：fix(dsh-api-balance): 疑问窗口注入移到插件加载期，独立于圆圈组件生命周期 — 根因二：提问时 composer 被 takeover 替换，conversation.input.right 上的圆圈组件会卸载/重挂，注入逻辑挂在组件 effect 里会随生命周期起落，样式可能始终未落到页面；修复：CSS 注入改到 apply() 内的 ctx.effect，插件加载即执行一次、与组件挂载无关，组件侧只保留开关状态；端到端验证：抽取真实 helper + 真实 QuestionComposer CSS 在 Chromium 中执行，确认注入成功、卡片整体滚动、header 吸附（body 释放为 visible、card 变 auto）
+
+| 提交 | 说明 |
+|------|------|
+| `2c30611` | fix(dsh-api-balance): 疑问窗口注入移到插件加载期，独立于圆圈组件生命周期 |
 ## 2026-09-11T07:27:00+09:00
 
 **摘要**：fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望 — 实测反馈窗口无变化；用 headless Chromium 复刻真实标记验证 CSS 方案本身正确（长题干时 body 由 101px 恢复到 150px、改为卡片整体滚动、四条属性全部生效），定位问题在注入时机而非 CSS；根因：疑问 UI 样式标签由独立插件包注入，可能晚于本插件初始化，原 5×1s 有界重试窗口错过即静默不注入；修复改为 MutationObserver 守望 document.head（标签一出现即提取类名注入）+ 2s 兜底轮询，注入成功后自动断开；冒烟测试补「标签晚到仍能注入」用例复现并验证该 bug

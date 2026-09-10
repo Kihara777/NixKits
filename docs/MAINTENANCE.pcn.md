@@ -120,6 +120,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:38:00+09:00
+
+**摘要**：fix(dsh-api-balance): 疑問 window 注入插件読込時移動、リング component lifecycle 独立 — 根因二：質問時 composer takeover 置換、conversation.input.right リング component unmount/remount、component effect 内注入該 lifecycle 追随消、style 頁面到達不可能；修正 CSS 注入 apply() 内 ctx.effect 移動、插件読込時一回実行（component mount 非依存）、component 側 toggle 状態限定保持；実 helper + 実 QuestionComposer CSS 抽出 Chromium 実行端到端検証、注入成功・卡片全体 scroll・header 吸着（body visible、card auto 変化）確認
+
+| 提交 | 説明 |
+|------|------|
+| `2c30611` | fix(dsh-api-balance): 疑問 window 注入插件読込時移動 |
 ## 2026-09-11T07:27:00+09:00
 
 **摘要**：fix(dsh-api-balance): 疑問 window 頁面全体 scroll 実測無効 — MutationObserver 守望変更 — 実測 window 変化無；headless Chromium 実 markup 再現 CSS 方式自身正確確認（長題干時 body 101px → 150px 回復、卡片全体 scroll、四属性全部有効）、問題 CSS 非注入時機特定；根因：疑問 UI style 標籤独立插件包注入、本插件初期化遅可能、旧 5×1s 有界 retry 窓逸失時 class 抽出失敗静黙注入不；修正 document.head MutationObserver 守望（標籤出現即 class 名抽出入）+ 2 秒 fallback polling 変更、注入成功後自動切断；smoke test「標籤遅到仍注入」case 追加、該 bug 再現検証

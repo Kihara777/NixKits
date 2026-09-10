@@ -120,6 +120,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:38:00+09:00
+
+**Summary**: fix(dsh-api-balance): move question-dialog injection to plugin load, independent of the ring component's lifecycle — second root cause: asking a question takes over the composer, so the ring component on conversation.input.right unmounts/remounts and an injection living in its effect rises and falls with that lifecycle, potentially never reaching the page; the fix moves the CSS injection into a ctx.effect inside apply(), running once at plugin load regardless of component mounting, while the component keeps only the toggle state; verified end-to-end by extracting the real helpers plus the real QuestionComposer CSS and executing them in Chromium — injection succeeds, the card scrolls as a whole, and the header sticks (body released to visible, card to auto)
+
+| Commit | Description |
+|------|------|
+| `2c30611` | fix(dsh-api-balance): question-dialog injection at plugin load, independent of ring lifecycle |
 ## 2026-09-11T07:27:00+09:00
 
 **Summary**: fix(dsh-api-balance): question-dialog whole-page scroll had no effect in testing — switched to a MutationObserver watch — the live test showed no change; a faithful markup replica in headless Chromium confirmed the CSS approach itself is correct (with a long prompt the body recovers from 101px to 150px, the card scrolls as a whole, and all four properties apply), so the failure was in injection timing rather than the CSS; root cause: the question UI's style tag is injected by a separate plugin bundle that can load after this plugin initializes, so the previous bounded 5×1s retry window missed it and the class extraction silently skipped injection; the fix watches document.head with a MutationObserver (injecting as soon as the tag appears) plus a 2s fallback poll, disconnecting automatically once injected; the smoke suite gains a 「late-arriving tag still injects」 case that reproduces and verifies the bug
