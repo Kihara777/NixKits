@@ -23,7 +23,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.2-alpha.5） | [docs/pcn/dsh.md](pcn/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.5-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
 | godot-ai | Godot 引擎 MCP server 与 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
@@ -73,7 +73,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
 | comfyui-rocm | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm.md](pcn/comfyui-rocm.md) |
 | efl-cross-fix | efl 交叉编译符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
-| codewhale-sudo | overlay — codewhale v0.9.11 sudo 机能复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.12 sudo 机能复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
 | breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。

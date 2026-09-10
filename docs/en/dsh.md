@@ -10,8 +10,8 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 |------|-------|
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| Version | `0.1.1-rc.2` |
-| Development channel | `dsh-alpha 0.1.2-alpha.5` (npm `alpha` dist-tag) |
+| Version | `0.1.5-rc.1` |
+| Development channel | `dsh-alpha 0.1.5-alpha.2` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -21,15 +21,15 @@ NixKits ships multiple dsh versions at once, following ruyi's thin-wrapper patte
 
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
-| `pkgs.dsh` | stable | `0.1.1-rc.2` | npm `latest` dist-tag, default |
-| `pkgs.dsh-alpha` | alpha | `0.1.2-alpha.5` | npm `alpha` dist-tag, tracks the latest development build |
+| `pkgs.dsh` | stable | `0.1.5-rc.1` | npm `latest` dist-tag, default |
+| `pkgs.dsh-alpha` | alpha | `0.1.5-alpha.2` | npm `alpha` dist-tag, tracks the latest development build |
 
 ```nix
 # Use the latest development version on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.1-rc.2`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
+> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.5-rc.1`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
 
 ## Install
 
@@ -194,9 +194,9 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 
 ## Plugin inventory
 
-Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+Built-in plugin entry ids for dsh 0.1.5-rc.1 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
-> **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. The `headless-runner` / `headless-startup` rows come from the headless profile composition, not the web profile's base + web-app patch set.
+> **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 
 ```text
   agent -> @deepseek-ai/dsh-agent
@@ -204,13 +204,11 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   agent-instructions -> @deepseek-ai/dsh-agent-instructions
   agent-loop -> @deepseek-ai/dsh-agent-loop
   agent-presets -> @deepseek-ai/dsh-agent-presets
-  api-gateway -> @deepseek-ai/dsh-host-apiproxy
   api-remotes -> @deepseek-ai/dsh-api-remotes
   approval -> @deepseek-ai/dsh-user-approval
   attachment-local -> @deepseek-ai/dsh-attachment-local
   bash-sandbox -> @deepseek-ai/dsh-bash-sandbox
   client-hmr -> @deepseek-ai/dsh-client-hmr
-  client-runtime -> @deepseek-ai/dsh-client-runtime
   code-runtime -> @deepseek-ai/dsh-code-runtime-worker-thread
   command-compact -> @deepseek-ai/dsh-command-compact
   command-feedback -> @deepseek-ai/dsh-command-feedback
@@ -221,14 +219,14 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   cordis-client-runner -> @deepseek-ai/dsh-cordis-client-runner
   cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
   credentials -> @deepseek-ai/dsh-credentials-local
+  deepseek-llm-api-extensions -> @deepseek-ai/dsh-deepseek-llm-api-extensions
   directory-picker -> @deepseek-ai/dsh-host-directory-picker-auto
   file-reference-local -> @deepseek-ai/dsh-file-reference-local
+  file-upload -> @deepseek-ai/dsh-client-file-upload
   fs-observation-policy -> @deepseek-ai/dsh-fs-observation-policy
   fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
   goal -> @deepseek-ai/dsh-goal
   goal-round-driver -> @deepseek-ai/dsh-goal-round-driver
-  headless-runner -> @deepseek-ai/dsh-headless
-  headless-startup -> @deepseek-ai/dsh-headless/startup
   hmr -> @deepseek-ai/cordis-plugin-hmr
   jobs -> @deepseek-ai/dsh-jobs-local
   llm -> @deepseek-ai/dsh-llm
@@ -238,29 +236,36 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   locale -> @deepseek-ai/dsh-client-locale
   message-feedback -> @deepseek-ai/dsh-message-feedback
   modules -> @deepseek-ai/dsh-client-modules
+  open-in-app -> @deepseek-ai/dsh-host-open-in-app
   permission -> @deepseek-ai/dsh-permission-presets
   plan-mode -> @deepseek-ai/dsh-plan-mode
   plugin-inventory -> @deepseek-ai/dsh-host-plugin-inventory
+  plugin-package-inventory-deepseek -> @deepseek-ai/dsh-plugin-package-inventory-deepseek
   pwsh-sandbox -> @deepseek-ai/dsh-pwsh-sandbox
   repeat-tool-reminder -> @deepseek-ai/dsh-repeat-tool-reminder
+  resources -> @deepseek-ai/dsh-client-resources
   sandbox -> @deepseek-ai/dsh-sandbox-local
   sandbox-policy -> @deepseek-ai/dsh-sandbox-policy
-  session -> @deepseek-ai/dsh-session
   session-checkpoint-policy -> @deepseek-ai/dsh-session-checkpoint-policy
+  session-controller -> @deepseek-ai/dsh-api-session-controller
+  session -> @deepseek-ai/dsh-session
+  session-log-deepseek -> @deepseek-ai/dsh-session-log-deepseek
   session-log-download -> @deepseek-ai/dsh-session-log-export
   session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
-  session-projection -> @deepseek-ai/dsh-session-projection
   session-projection-cache -> @deepseek-ai/dsh-session-projection-cache
+  session-projection -> @deepseek-ai/dsh-session-projection
   session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
   session-reference -> @deepseek-ai/dsh-session-reference
   session-stats -> @deepseek-ai/dsh-session-stats
   session-telemetry-otel -> @deepseek-ai/dsh-session-telemetry-otel
   session-title -> @deepseek-ai/dsh-session-title
   session-title-llm -> @deepseek-ai/dsh-session-title-first-prompt-llm
+  session-turn-outline -> @deepseek-ai/dsh-session-turn-outline
+  settings-controller -> @deepseek-ai/dsh-api-settings-controller
   settings -> @deepseek-ai/dsh-settings-file
   shell-env -> @deepseek-ai/dsh-shell-env
-  skill -> @deepseek-ai/dsh-skill
   skill-badge -> @deepseek-ai/dsh-skill-badge
+  skill -> @deepseek-ai/dsh-skill
   skill-filesystem -> @deepseek-ai/dsh-skill-filesystem
   spill-local -> @deepseek-ai/dsh-spill-local
   spill-policy -> @deepseek-ai/dsh-spill-policy
@@ -269,6 +274,7 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   storage-json -> @deepseek-ai/dsh-storage-json
   subagent -> @deepseek-ai/dsh-subagent
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
+  subagent-model-selection-settings -> @deepseek-ai/dsh-tool-subagent/model-selection-settings
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subprocess -> @deepseek-ai/dsh-subprocess-local
   system-prompt -> @deepseek-ai/dsh-system-prompt
@@ -283,23 +289,23 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   tool-pwsh -> @deepseek-ai/dsh-tool-pwsh
   tool-ralph -> @deepseek-ai/dsh-tool-ralph
   tool-result-pruner -> @deepseek-ai/dsh-compaction-tool-result-pruner
+  tools -> @deepseek-ai/dsh-tools
   tool-skill -> @deepseek-ai/dsh-tool-skill
-  tool-str-replace-editor -> @deepseek-ai/dsh-tool-str-replace-editor
-  tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
+  tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-fork -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control/list-agents
-  tool-subagent-report -> @deepseek-ai/dsh-tool-subagent-report
   tool-todo -> @deepseek-ai/dsh-tool-todo
   tool-web -> @deepseek-ai/dsh-tool-web
   tool-workflow -> @deepseek-ai/dsh-tool-workflow
-  tools -> @deepseek-ai/dsh-tools
   typert -> @deepseek-ai/dsh-typert-registry
   typert-gateway -> @deepseek-ai/dsh-api-gateway
   typert-loader -> @deepseek-ai/dsh-typert-loader
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  ui-approval -> @deepseek-ai/dsh-client-ui-approval
   ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
   ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
+  ui-chat -> @deepseek-ai/dsh-client-ui-chat
   ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
   ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
@@ -310,16 +316,22 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   ui-layout -> @deepseek-ai/dsh-client-ui-layout
   ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
+  ui-open-in-app -> @deepseek-ai/dsh-client-ui-open-in-app
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-plan -> @deepseek-ai/dsh-client-ui-plan
   ui-reference -> @deepseek-ai/dsh-client-ui-reference
   ui-renderer -> @deepseek-ai/dsh-client-ui-renderer
+  ui-schedule -> @deepseek-ai/dsh-client-ui-schedule
+  ui-session -> @deepseek-ai/dsh-client-ui-session
   ui-settings -> @deepseek-ai/dsh-client-ui-settings
   ui-settings-general -> @deepseek-ai/dsh-client-ui-settings-general
   ui-settings-models -> @deepseek-ai/dsh-client-ui-settings-models
   ui-settings-plugin-inventory -> @deepseek-ai/dsh-client-ui-settings-plugin-inventory
   ui-settings-plugins -> @deepseek-ai/dsh-client-ui-settings-plugins
   ui-sidebar -> @deepseek-ai/dsh-client-ui-sidebar
+  ui-sidebar-documentpreview -> @deepseek-ai/dsh-client-ui-sidebar-documentpreview
+  ui-sidebar-files -> @deepseek-ai/dsh-client-ui-sidebar-files
+  ui-sidebar-right -> @deepseek-ai/dsh-client-ui-sidebar-right
   ui-skill -> @deepseek-ai/dsh-client-ui-skill
   ui-subagent -> @deepseek-ai/dsh-client-ui-subagent
   ui-theme -> @deepseek-ai/dsh-client-ui-theme
@@ -330,12 +342,15 @@ Built-in plugin entry ids for dsh 0.1.1-rc.2 (valid values for `nixkits.dsh.plug
   ui-workspace -> @deepseek-ai/dsh-client-ui-workspace
   user-questions -> @deepseek-ai/dsh-user-questions
   web -> @deepseek-ai/dsh-web
+  web-fetch-http -> @deepseek-ai/dsh-web-fetch-http
   web-runtime -> @deepseek-ai/dsh-web-app
   web-search-deepseek -> @deepseek-ai/dsh-web-search-deepseek
-  web-startup -> @deepseek-ai/dsh-web-app/startup
   webserver -> @deepseek-ai/dsh-host-webserver
+  web-startup -> @deepseek-ai/dsh-web-app/startup
   workflow-worker-thread -> @deepseek-ai/dsh-workflow-worker-thread
+  workspace-controller -> @deepseek-ai/dsh-api-workspace-controller
   workspace -> @deepseek-ai/dsh-workspace
+  workspace-files -> @deepseek-ai/dsh-api-workspace-files
 ```
 
 ## Declarative settings

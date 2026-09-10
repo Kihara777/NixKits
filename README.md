@@ -27,7 +27,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 的 MCP Server（自然语言控制 Blender） | [docs/zh/blender-mcp.md](docs/zh/blender-mcp.md) |
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/zh/dsh.md](docs/zh/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.1.2-alpha.5） | [docs/zh/dsh.md](docs/zh/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.1.5-alpha.2） | [docs/zh/dsh.md](docs/zh/dsh.md) |
 | godot-ai | Godot 引擎的 MCP Server 与 AI 工具 | [docs/zh/godot-ai.md](docs/zh/godot-ai.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
@@ -75,7 +75,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui-rocm | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm.md](docs/zh/comfyui-rocm.md) |
 | efl-cross-fix | 修复 efl 交叉编译代码生成器缺失 | [docs/zh/efl-cross-fix.md](docs/zh/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高对比度 Breeze Black 无障碍主题 | [docs/zh/breeze-black.md](docs/zh/breeze-black.md) |
-| codewhale-sudo | overlay — 恢复 codewhale v0.9.11 的 sudo 功能（ptrace 拦截器） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
+| codewhale-sudo | overlay — 恢复 codewhale v0.9.12 的 sudo 功能（ptrace 拦截器） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
 
 > ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。动态追踪版本的项目（如 llama-cpp-rocm）其 hash 随上游发布变化，无法被缓存固定。
 
