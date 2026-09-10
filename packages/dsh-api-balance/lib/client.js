@@ -221,6 +221,92 @@ window.__ModuleLoader__.load({
 			ensure(0);
 		}
 
+		/**
+		 * 交互式疑问窗口（AskUserQuestion）滚动优化开关（默认开启）。
+		 * 题干过长时窗口会把标题钉在不可滚动的 header 里，挤压缩下方的
+		 * 选项区；本优化把整个「标题 + 详情 + 选项」一起滚动（卡片成为
+		 * 滚动容器），操作按钮与底部按钮经 sticky 钉住，题干再长也不
+		 * 压缩选项。
+		 */
+		const QUESTION_SCROLL_STORE_KEY = "dsh-api-balance-question-scroll";
+		function questionScrollEnabled() {
+			if (typeof window === "undefined") return true;
+			try {
+				return window.localStorage.getItem(QUESTION_SCROLL_STORE_KEY) !== "off";
+			} catch {
+				return true;
+			}
+		}
+		function setQuestionScrollEnabled(enabled) {
+			try {
+				window.localStorage.setItem(QUESTION_SCROLL_STORE_KEY, enabled ? "on" : "off");
+			} catch {
+				// 存储不可用则本次会话生效
+			}
+		}
+		/** 从 ui-user-questions 注入的样式标签提取 QuestionComposer 类名表。 */
+		function questionComposerClasses() {
+			if (typeof document === "undefined") return null;
+			const tag = document.querySelector('style[data-plugin-css="@deepseek-ai/dsh-client-ui-user-questions/QuestionComposer.module.css"]');
+			if (tag === null || typeof tag.textContent !== "string") return null;
+			const pick = (suffix) => {
+				const m = tag.textContent.match(new RegExp(`\\.([A-Za-z0-9_-]+_${suffix})\\{`));
+				return m !== null ? m[1] : null;
+			};
+			const card = pick("card");
+			const header = pick("header");
+			const body = pick("body");
+			const footer = pick("footer");
+			const headerActions = pick("headerActions");
+			if (card === null || header === null || body === null) return null;
+			return { card, header, body, footer, headerActions };
+		}
+		/**
+		 * 注入疑问窗口整页滚动样式：卡片自身滚动（含标题），header 与
+		 * 底部按钮区吸附固定；body 取消独立滚动，避免双重滚动条。
+		 * ui-user-questions 样式标签未就绪时按 1s 重试至多 5 次。
+		 */
+		function applyQuestionScrollCss(enabled) {
+			if (typeof document === "undefined") return;
+			const tagId = `${NS}/question-scroll.css`;
+			const existing = document.querySelector(`style[data-plugin-css="${tagId}"]`);
+			if (!enabled) {
+				if (existing !== null) existing.remove();
+				return;
+			}
+			const ensure = (attempt) => {
+				const cls = questionComposerClasses();
+				if (cls === null) {
+					if (attempt < 5 && typeof window !== "undefined" && typeof window.setTimeout === "function") {
+						window.setTimeout(() => ensure(attempt + 1), 1000);
+					} else if (existing !== null) {
+						existing.remove();
+					}
+					return;
+				}
+				// 卡片成为滚动容器；header 吸顶、footer 吸底；body 取消滚动。
+				const cssText =
+					`.${cls.card}{overflow-y:auto!important;overscroll-behavior:contain}` +
+					`.${cls.header}{position:sticky!important;top:0;z-index:2;background:var(--dsw-specific-input-major);` +
+					`padding-bottom:14px!important}` +
+					`.${cls.body}{overflow:visible!important;flex:none!important;min-height:auto!important}` +
+					(cls.footer !== null
+						? `.${cls.footer}{position:sticky!important;bottom:0;z-index:2;background:var(--dsw-specific-input-major)}`
+						: "");
+				const current = document.querySelector(`style[data-plugin-css="${tagId}"]`);
+				if (current === null) {
+					const tag = document.createElement("style");
+					tag.dataset.plugin = NS;
+					tag.dataset.pluginCss = tagId;
+					tag.textContent = cssText;
+					document.head.appendChild(tag);
+				} else if (current.textContent !== cssText) {
+					current.textContent = cssText;
+				}
+			};
+			ensure(0);
+		}
+
 		/** 回车键行为交换开关（localStorage 持久化，默认开启）。 */
 		const ENTER_SWAP_STORE_KEY = "dsh-api-balance-enter-swap";
 		function enterSwapEnabled() {
@@ -2304,6 +2390,8 @@ window.__ModuleLoader__.load({
 			onToggleEnterSwap,
 			mobileKbGuardOn,
 			onToggleMobileKbGuard,
+			questionScrollOn,
+			onToggleQuestionScroll,
 		}) {
 			const overlayStyle = {
 				position: "fixed",
@@ -2392,6 +2480,7 @@ window.__ModuleLoader__.load({
 				settingRow("settings.statsLabel", statsScrollOn, onToggleStatsScroll, "settings.statsHint"),
 				settingRow("settings.enterLabel", enterSwapOn, onToggleEnterSwap, "settings.enterHint"),
 				settingRow("settings.mobileKbLabel", mobileKbGuardOn, onToggleMobileKbGuard, "settings.mobileKbHint"),
+				settingRow("settings.questionScrollLabel", questionScrollOn, onToggleQuestionScroll, "settings.questionScrollHint"),
 			);
 			return reactDOM.createPortal(
 				react.createElement(
@@ -2805,6 +2894,16 @@ window.__ModuleLoader__.load({
 				const next = !mobileKbGuardOn;
 				setMobileKbGuardOn(next);
 				setMobileKbGuardEnabled(next);
+			};
+			// 交互式疑问窗口整页滚动（标题+选项一起滚动，题干不再压缩选项）。
+			const [questionScrollOn, setQuestionScrollOn] = react.useState(questionScrollEnabled());
+			react.useEffect(() => {
+				applyQuestionScrollCss(questionScrollOn);
+			}, [questionScrollOn]);
+			const toggleQuestionScroll = () => {
+				const next = !questionScrollOn;
+				setQuestionScrollOn(next);
+				setQuestionScrollEnabled(next);
 			};
 			// 峰谷计费高峰时段标记（红色用量圈/图表 + 问候语高峰提示）。
 			// 自动触发/解除，无需手动刷新：30 秒复核一次，检测进入/结束
@@ -4164,6 +4263,8 @@ window.__ModuleLoader__.load({
 							onToggleEnterSwap: toggleEnterSwap,
 							mobileKbGuardOn,
 							onToggleMobileKbGuard: toggleMobileKbGuard,
+							questionScrollOn,
+							onToggleQuestionScroll: toggleQuestionScroll,
 							voiceContent: react.createElement(VoiceSettingsModal, {
 								t,
 								autoOn: speechOn,
@@ -4528,6 +4629,8 @@ window.__ModuleLoader__.load({
 			"settings.enterHint": "默认开启：回车换行、Shift+回车发送（DSH 原生为回车发送）；关闭后恢复原生行为。仅作用于会话输入框。",
 			"settings.mobileKbLabel": "移动端会话切换不弹键盘",
 			"settings.mobileKbHint": "触屏设备上切换会话时阻止输入框自动聚焦（避免软键盘自动弹出）；点按输入框仍可正常输入。",
+			"settings.questionScrollLabel": "疑问窗口整页滚动",
+			"settings.questionScrollHint": "题干过长时让标题与选项一起滚动（而非仅选项区滚动）；操作按钮与底部按钮保持吸附可见，题干不再挤压选项。",
 			"chart.peakBadge": "峰时计费",
 			"chart.peakHint": "标准价格时段：北京时间 09:00–12:00、14:00–18:00（周一至周五，其余时间含周末为低谷价）",
 			"speech.peakHint": "现在是高峰计费时段，请留意用量哦～",
@@ -4687,6 +4790,8 @@ window.__ModuleLoader__.load({
 			"settings.enterHint": "On by default: Enter = newline and Shift+Enter = send (DSH's native behavior is Enter = send); turning it off restores the native behavior. Composer only.",
 			"settings.mobileKbLabel": "Mobile: no keyboard on session switch",
 			"settings.mobileKbHint": "On touch devices, blocks the composer auto-focus when switching sessions (prevents the soft keyboard from popping up); tapping the composer still works.",
+			"settings.questionScrollLabel": "Question dialog: whole-page scroll",
+			"settings.questionScrollHint": "With a long prompt, the title scrolls together with the options (instead of only the option list scrolling); the action and footer buttons stay pinned, so a long prompt no longer squeezes the options.",
 			"chart.peakBadge": "Peak pricing",
 			"chart.peakHint": "Standard-price windows: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time (all other hours, incl. weekends, are off-peak)",
 			"speech.peakHint": "We're in the peak pricing period now — mind your usage!",
