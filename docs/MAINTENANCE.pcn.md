@@ -120,6 +120,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:27:00+09:00
+
+**摘要**：fix(dsh-api-balance): 疑問 window 頁面全体 scroll 実測無効 — MutationObserver 守望変更 — 実測 window 変化無；headless Chromium 実 markup 再現 CSS 方式自身正確確認（長題干時 body 101px → 150px 回復、卡片全体 scroll、四属性全部有効）、問題 CSS 非注入時機特定；根因：疑問 UI style 標籤独立插件包注入、本插件初期化遅可能、旧 5×1s 有界 retry 窓逸失時 class 抽出失敗静黙注入不；修正 document.head MutationObserver 守望（標籤出現即 class 名抽出入）+ 2 秒 fallback polling 変更、注入成功後自動切断；smoke test「標籤遅到仍注入」case 追加、該 bug 再現検証
+
+| 提交 | 説明 |
+|------|------|
+| `b392097` | fix(dsh-api-balance): 疑問 window 頁面全体 scroll 実測無効 — MutationObserver 守望 |
 ## 2026-09-11T07:15:47+09:00
 
 **摘要**：feat(dsh-api-balance): 疑問 window 頁面全体 scroll 最適化（長題干選択肢圧迫不） — 対話式質問 window（AskUserQuestion）標題非 scroll header 固定、題干過長時縦空間奪取選択肢一覧圧縮；注入 CSS 卡片自身 scroll container 化（標題+詳細+選択肢一括 scroll）、header 与 footer 按鈕領域 sticky 追従表示、body scroll 停止二重 scrollbar 回避；class 名 ui-user-questions style 標籤自実行時抽出（build hash 適応、StatsLine 同方式）、標籤未準備時 1 秒間隔最大 5 回 retry；設定 → 界面「疑問 window 頁面全体 scroll」toggle 追加（預設有効、localStorage 永続化）；headless Chromium 実 markup 再現検証（修正前 body scroll 余地 91px 限定、修正後 卡片全体 scroll header 吸着使用可）

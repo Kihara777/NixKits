@@ -120,6 +120,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:27:00+09:00
+
+**Summary**: fix(dsh-api-balance): question-dialog whole-page scroll had no effect in testing — switched to a MutationObserver watch — the live test showed no change; a faithful markup replica in headless Chromium confirmed the CSS approach itself is correct (with a long prompt the body recovers from 101px to 150px, the card scrolls as a whole, and all four properties apply), so the failure was in injection timing rather than the CSS; root cause: the question UI's style tag is injected by a separate plugin bundle that can load after this plugin initializes, so the previous bounded 5×1s retry window missed it and the class extraction silently skipped injection; the fix watches document.head with a MutationObserver (injecting as soon as the tag appears) plus a 2s fallback poll, disconnecting automatically once injected; the smoke suite gains a 「late-arriving tag still injects」 case that reproduces and verifies the bug
+
+| Commit | Description |
+|------|------|
+| `b392097` | fix(dsh-api-balance): question-dialog whole-page scroll ineffective — MutationObserver watch |
 ## 2026-09-11T07:15:47+09:00
 
 **Summary**: feat(dsh-api-balance): question dialog whole-page scroll (long prompts no longer squeeze the options) — the interactive question dialog (AskUserQuestion) pins its title in a non-scrolling header, so an overlong prompt consumes vertical space and compresses the option list; injected CSS makes the card itself the scroll container (title + detail + options scroll together), keeps the header and footer button areas pinned via sticky, and stops the body from scrolling to avoid double scrollbars; class names are extracted at runtime from the ui-user-questions style tag (build-hash adaptive, same approach as StatsLine) with up to 5 retries at 1s when the tag isn't ready; Settings → Interface gains a 「Question dialog: whole-page scroll」 toggle (on by default, localStorage-persisted); verified against a faithful markup replica in headless Chromium (before the fix the body had only 91px of scroll room; after it the card scrolls as a whole with the header pinned and usable)

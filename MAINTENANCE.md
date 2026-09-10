@@ -119,6 +119,13 @@
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
 
 
+## 2026-09-11T07:27:00+09:00
+
+**摘要**：fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望 — 实测反馈窗口无变化；用 headless Chromium 复刻真实标记验证 CSS 方案本身正确（长题干时 body 由 101px 恢复到 150px、改为卡片整体滚动、四条属性全部生效），定位问题在注入时机而非 CSS；根因：疑问 UI 样式标签由独立插件包注入，可能晚于本插件初始化，原 5×1s 有界重试窗口错过即静默不注入；修复改为 MutationObserver 守望 document.head（标签一出现即提取类名注入）+ 2s 兜底轮询，注入成功后自动断开；冒烟测试补「标签晚到仍能注入」用例复现并验证该 bug
+
+| 提交 | 说明 |
+|------|------|
+| `b392097` | fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望 |
 ## 2026-09-11T07:15:47+09:00
 
 **摘要**：feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项） — 交互式疑问窗口（AskUserQuestion）把标题钉在不可滚动的 header，题干过长时挤占竖向空间、压缩下方选项区；注入 CSS 让卡片自身成为滚动容器（标题+详情+选项一起滚动），header 与底部按钮区 sticky 吸附保持可见，body 取消独立滚动避免双重滚动条；类名经 ui-user-questions 注入样式标签运行时提取（构建哈希自适应，同 StatsLine 方案），样式标签未就绪时 1s 重试至多 5 次；设置 → 界面新增「疑问窗口整页滚动」开关（默认开启，localStorage 持久化）；已用 headless Chromium 复刻真实标记验证（修复前 body 仅 91px 可滚动、修复后卡片整页滚动且 header 吸顶可用）
