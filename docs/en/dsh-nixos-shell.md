@@ -111,6 +111,27 @@ The package ships the "NixOS模式" preset (`presets/nixos-mode/`, id `nixos`): 
 
 The gate is the package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected.
 
+### The persona row (preset identity)
+
+Both presets mount an `@deepseek-ai/dsh-persona` row in their composition, giving that session its identity prompt (shadowing the deployment-level default persona):
+
+```yaml
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    prefix: |-
+      …
+```
+
+| Field | Type | Default | Description |
+|------|------|--------|------|
+| `prefix` | string | — (**required**) | Identity prompt prefix; when missing the plugin fails to load (`$.prefix missing required value`) |
+| `suffix` | string | `""` | Suffix appended after the runtime context |
+| `complete` | boolean | `false` | When `true` the persona is the complete prompt and no runtime context is appended |
+| `includeRuntimeContext` | boolean | `true` | Whether to append runtime context (model, working directory, …) |
+
+> **Upgrade note**: `prefix` is **required** as of dsh 0.1.5-alpha.2 (the field was previously named `text`). If a preset still writes `text`, the persona plugin fails to load and takes down **the whole session creation path** — once `session/create` fails, the settings UI, the llm provider catalog, and session history all become unloadable, surfacing in the frontend as `llm/listProviders failed: Failed to fetch` plus an infinite `commands/list` retry. **That symptom shares a root cause with a "model settings page error"; do not misdiagnose it as a network or reverse-proxy problem** (localhost and LAN are affected alike, because the root cause is server-side session creation, not entry authentication). After upgrading dsh, verify the config schema of every plugin row in your presets.
+
 ### Maintenance-mode preset
 
 The package also ships the "维护模式" preset (`presets/maintenance-mode/`, id `maintenance`): based on NixOS模式, it additionally mounts the `maintenance-skills` entry — at initialization it registers runtime skills `write-project-docs`, `write-maintenance-log`, `nixkits-check-updates`, and every `translate-*` language extension (auto-discovered at apply time) from the repo's `skills/` tree embedded at build time (single source of truth, so a fresh session always gets the latest content), and injects the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization). The module seeds it once via `nixkits.dsh.presets.maintenanceMode = true` into `$DSH_HOME/.agent-presets/maintenance`.

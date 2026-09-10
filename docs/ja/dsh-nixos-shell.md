@@ -111,6 +111,27 @@ nixos_cli(op = "audit-store-paths")
 
 ゲートはパッケージ内サブパス `@kihara777/dsh-nixos-shell/nixos-gate` で、プリセットのコンポジションでのみマウントされ、グローバルセッションには影響しない。
 
+### persona 行（プリセットのアイデンティティ）
+
+両プリセットはコンポジションで `@deepseek-ai/dsh-persona` 行をマウントし、そのセッションのアイデンティティプロンプトを与える（デプロイ既定の persona を上書き）:
+
+```yaml
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    prefix: |-
+      …
+```
+
+| フィールド | 型 | 既定値 | 説明 |
+|------|------|--------|------|
+| `prefix` | string | —（**必須**） | アイデンティティプロンプトの前置き。欠落時はプラグインの読込に失敗（`$.prefix missing required value`） |
+| `suffix` | string | `""` | ランタイムコンテキストの後に付加する後置き |
+| `complete` | boolean | `false` | `true` のとき persona を完全なプロンプトとして扱い、ランタイムコンテキストを付加しない |
+| `includeRuntimeContext` | boolean | `true` | ランタイムコンテキスト（モデル、作業ディレクトリ等）を付加するか |
+
+> **アップグレード時の注意**: `prefix` は dsh 0.1.5-alpha.2 以降**必須**（従前のフィールド名は `text`）。プリセットが依然 `text` を書いていると、persona プラグインの読込失敗が**セッション生成経路全体を巻き込む**——`session/create` が失敗すると、設定画面・llm 提供方一覧・セッション履歴がすべて読込不可となり、前端では `llm/listProviders failed: Failed to fetch` と `commands/list` の無限リトライとして現れる。**この症状は「モデル設定画面のエラー」と根本原因を同じくするため、ネットワークやリバースプロキシの問題と誤診しないこと**（localhost と LAN がいずれも影響を受けるのは、根本原因が入口認証ではなくサーバー側のセッション生成にあるため）。dsh 更新後はプリセット内の各プラグイン行の config schema を検証すること。
+
 ### メンテナンスモードプリセット
 
 パッケージは「維護模式」プリセット（`presets/maintenance-mode/`、id `maintenance`）も同梱する：NixOS模式基盤で、さらに `maintenance-skills` エントリをマウントする——初期化時に、ビルド時に埋め込まれたリポジトリの `skills/` ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates`、全 `translate-*` 言語拡張（apply 時に自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入する。モジュールは `nixkits.dsh.presets.maintenanceMode = true` で `$DSH_HOME/.agent-presets/maintenance` へ一度だけシードする。

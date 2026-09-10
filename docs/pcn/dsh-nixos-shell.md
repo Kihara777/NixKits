@@ -111,6 +111,27 @@ nixos_cli(op = "audit-store-paths")
 
 門控 = 包内子路 `@kihara777/dsh-nixos-shell/nixos-gate`、預設組合内掛載、全局 session 無影響。
 
+### persona 行（預設身份）
+
+両預設は組合で `@deepseek-ai/dsh-persona` 行を掛載、該 session に身份 prompt 提供（部署既定 persona 遮蔽）:
+
+```yaml
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    prefix: |-
+      …
+```
+
+| 字段 | 型 | 既定値 | 説明 |
+|------|------|--------|------|
+| `prefix` | string | —（**必須**） | 身份 prompt 前置。欠落時 plugin 読込失敗（`$.prefix missing required value`） |
+| `suffix` | string | `""` | 実行時 context 之後に付加之後置 |
+| `complete` | boolean | `false` | `true` 時 persona 完全 prompt、実行時 context 付加無 |
+| `includeRuntimeContext` | boolean | `true` | 実行時 context（model、作業 directory 等）付加可否 |
+
+> **升級注意**：`prefix` は dsh 0.1.5-alpha.2 以降**必須**（従前字段名 `text`）。preset 依然 `text` 記述時、persona plugin 読込失敗が**session 生成経路全体を巻込**——`session/create` 失敗後、設定画面・llm 提供方一覧・session 履歴 全読込不可、前端 `llm/listProviders failed: Failed to fetch` 與 `commands/list` 無限再試と現。**該症状は「model 設定画面 error」與根本原因同一、network 或 reverse proxy 問題と誤診不可**（localhost 與 LAN 同受限、根本原因 server 側 session 生成、非入口認証）。dsh 升級後 preset 内各 plugin 行 config schema 検証必須。
+
 ### 維護模式預設
 
 包同梱「維護模式」預設（`presets/maintenance-mode/`、id `maintenance`）：NixOS模式基盤、追加 `maintenance-skills` 入口掛載——初期化時構築期嵌入倉庫 `skills/` 樹（単一來源、新規 session 常最新）自 runtime 技能 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates`、全 `translate-*` 言語拡張（apply 時自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。模組 `nixkits.dsh.presets.maintenanceMode = true` 一度限 seed `$DSH_HOME/.agent-presets/maintenance`。

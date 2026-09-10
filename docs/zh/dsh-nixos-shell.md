@@ -111,6 +111,27 @@ nixos_cli(op = "audit-store-paths")
 
 门控入口为包内子路径 `@kihara777/dsh-nixos-shell/nixos-gate`，仅在预设组合中挂载，不影响全局会话。
 
+### persona 行（预设身份）
+
+两预设都在组合中挂载 `@deepseek-ai/dsh-persona` 行，为该会话提供身份提示词（遮蔽部署级默认 persona）：
+
+```yaml
+- id: persona
+  name: '@deepseek-ai/dsh-persona'
+  config:
+    prefix: |-
+      …
+```
+
+| 字段 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `prefix` | string | —（**必填**） | 身份提示词前缀；缺失时插件加载失败（`$.prefix missing required value`） |
+| `suffix` | string | `""` | 追加在运行时上下文之后的后缀 |
+| `complete` | boolean | `false` | 置 `true` 时该 persona 作为完整提示词，不再拼接运行时上下文 |
+| `includeRuntimeContext` | boolean | `true` | 是否附加上下文（模型、工作目录等） |
+
+> **升级注意**：`prefix` 在 dsh 0.1.5-alpha.2 起为**必填**（此前字段名为 `text`）。若 preset 仍写 `text`，persona 插件加载失败会**连累整个会话创建**——`session/create` 失败后，设置界面、llm 提供方目录、会话历史均无法加载，前端表现为 `llm/listProviders failed: Failed to fetch` 与 `commands/list` 无限重试。**该症状与「模型界面报错」同源，勿误判为网络/反代问题**（`localhost` 与局域网同样受限，因根因在服务端会话创建而非入口认证）。升级 dsh 后应校验 preset 中各插件行的 config schema。
+
 ### 维护模式预设
 
 包内还分发「维护模式」预设（`presets/maintenance-mode/`，id `maintenance`）：基于 NixOS模式，额外挂载 `maintenance-skills` 入口——初始化时从构建期嵌入的仓库 `skills/` 树（内容单一来源，全新会话即最新）注册运行时技能 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates` 与全部 `translate-*` 语言扩展（apply 时自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）。模块经 `nixkits.dsh.presets.maintenanceMode = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/maintenance`。
