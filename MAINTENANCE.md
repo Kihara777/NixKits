@@ -510,6 +510,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新增 v0.1.0 |
 
+## 2026-09-11T06:15:33+09:00
+
+**摘要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 兼容）。dsh 0.1.5-alpha.2 的 dsh-persona 插件 Config 由 text 改为 prefix（必填）+ suffix（可选）。旧 agent preset（nixos-mode / maintenance-mode / 本机 ocean-spiral）仍写 text，导致 persona 插件加载失败（$.prefix missing required value）→ session/create 失败 → settings / llm 提供方目录 / session 历史全部无法加载（前端表现为 Failed to fetch + 无限重试 commands/list 缺 agentId）。修复：两预设的 persona config 改为 prefix，本机三个 preset 同步修改。验证：session/create 返回 ok:true + sessionId，session/list 返回会话列表，llm/listProviders 返回 DeepSeek 提供方。
+
+| 提交 | 说明 |
+|------|------|
+| `772abf8` | fix(preset): dsh persona text → prefix for 0.1.5-alpha.2 |
+
 ## 2026-08-27T01:30:33+09:00
 
 **摘要**：fix(module): dsh watchdog — switch-to-configuration 失败后的自动拉起。nixos-rebuild 的 switch-to-configuration 在「stop dsh → start dsh」之间偶发失败（exit 101）会把 dsh 留在 inactive；systemd 主动 stop 不触发 Restart=always，反代因此长期 503（实测 8/26 22:10、23:53 两次）。新增 dsh-watchdog timer（15s 间隔）检测 inactive 时自动 systemctl start。实测 stop 后 20 秒内自动恢复。

@@ -511,6 +511,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新規 v0.1.0 |
 
+## 2026-09-11T06:15:33+09:00
+
+**概要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 は dsh-persona の Config を text から prefix（必須）+ suffix（任意）に変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）は text のままで、persona プラグインの読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴すべて読込不可（前端は Failed to fetch と agentId 欠如による commands/list 無限リトライを呈す）。修正: 両 preset の persona config を prefix に変更、本機の 3 preset も同期修正。検証: session/create が ok:true + sessionId を返し、session/list がセッション一覧を返し、llm/listProviders が DeepSeek 提供方を返す。
+
+| コミット | 説明 |
+|------|------|
+| `772abf8` | fix(preset): dsh persona text → prefix for 0.1.5-alpha.2 |
+
 ## 2026-08-27T01:30:33+09:00
 
 **概要**: fix(module): dsh watchdog — switch-to-configuration 失敗後の自動起動。nixos-rebuild の switch-to-configuration は「stop dsh → start dsh」の間で偶発失敗（exit 101）し、dsh を inactive に残す。systemd の能動的な stop は Restart=always をトリガーしないため、反代が長期間 503（8/26 22:10、23:53 の 2 回観測）。dsh-watchdog timer（15s 間隔）を追加し、inactive 検知時に systemctl start。検証: stop 後 20 秒以内に自動復帰。

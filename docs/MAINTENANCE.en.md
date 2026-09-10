@@ -511,6 +511,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | new v0.1.0 |
 
+## 2026-09-11T06:15:33+09:00
+
+**Summary**: fix(preset): dsh persona text → prefix (0.1.5-alpha.2 compat). dsh 0.1.5-alpha.2 changed dsh-persona's Config from text to prefix (required) + suffix (optional). The old agent presets (nixos-mode / maintenance-mode / local ocean-spiral) still wrote text, so the persona plugin failed to load ($.prefix missing required value) → session/create failed → settings, llm provider catalog, and session history all failed to load (frontend showed Failed to fetch plus an infinite commands/list retry missing agentId). Fix: both presets' persona config now uses prefix; the three local presets were patched too. Verified: session/create returns ok:true + sessionId, session/list returns sessions, llm/listProviders returns the DeepSeek provider.
+
+| Commit | Description |
+|------|------|
+| `772abf8` | fix(preset): dsh persona text → prefix for 0.1.5-alpha.2 |
+
 ## 2026-08-27T01:30:33+09:00
 
 **Summary**: fix(module): dsh watchdog — auto-restart after switch-to-configuration failure. nixos-rebuild's switch-to-configuration can fail (exit 101) between stopping and starting dsh, leaving it inactive; a systemd-initiated stop does not trigger Restart=always, so the reverse proxy returned 503 for a long time (seen 8/26 22:10 and 23:53). Added a dsh-watchdog timer (15s) that runs systemctl start when dsh is inactive. Verified: recovers within 20s of a stop.

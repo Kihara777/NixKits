@@ -511,6 +511,14 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新規 v0.1.0 |
 
+## 2026-09-11T06:15:33+09:00
+
+**摘要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 插件読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可（前端 Failed to fetch + agentId 欠如 commands/list 無限再試）。修正: 両 preset persona config prefix 変更、本機 3 preset 同期修正。検証: session/create ok:true + sessionId、session/list セッション一覧、llm/listProviders DeepSeek 提供方返。
+
+| 提交 | 説明 |
+|------|------|
+| `772abf8` | fix(preset): dsh persona text → prefix for 0.1.5-alpha.2 |
+
 ## 2026-08-27T01:30:33+09:00
 
 **摘要**: fix(module): dsh watchdog — switch-to-configuration 失敗後自動起動。nixos-rebuild switch-to-configuration「stop dsh → start dsh」間偶発失敗（exit 101）dsh inactive 残。systemd 能動 stop Restart=always 非発、反代長期 503（8/26 22:10、23:53 二回観測）。dsh-watchdog timer（15s 間隔）追加、inactive 検知時 systemctl start。検証: stop 後 20 秒以内自動復帰。
