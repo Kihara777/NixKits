@@ -1,6 +1,30 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+## 2026-09-10T18:06:12+09:00
+
+**Summary**：codewhale 0.9.12; obs-bilibili-stream 2.1.5; mcp-searxng 2.2.0; opencode-telegram 0.25.1; dsh 0.1.5-rc.1; dsh-alpha 0.1.5-alpha.2 — upstream releases updated; both dsh channels got regenerated vendored locks and the built-in plugin inventory grew from 137 to 152 entries
+
+| Commit | Description |
+|------|------|
+| `69af6c7` | feat(pkgs): bump codewhale 0.9.11 → 0.9.12 |
+| `db7c0ed` | feat(pkgs): bump obs-bilibili-stream 2.1.4 / mcp-searxng 2.1.0 / opencode-telegram 0.25.0 |
+| `c0f8346` | feat(pkgs): bump dsh 0.1.1-rc.2 → 0.1.5-rc.1 / dsh-alpha 0.1.2-alpha.5 → 0.1.5-alpha.2 |
+| `b29db07` | docs: sync codewhale / obs-bilibili-stream / mcp-searxng / opencode-telegram / dsh version numbers |
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale | 0.9.11 | 0.9.12 |
+| obs-bilibili-stream | 2.1.4 | 2.1.5 |
+| mcp-searxng | 2.1.0 | 2.2.0 |
+| opencode-telegram | 0.25.0 | 0.25.1 |
+| dsh | 0.1.1-rc.2 | 0.1.5-rc.1 |
+| dsh-alpha | 0.1.2-alpha.5 | 0.1.5-alpha.2 |
+| 　 | dsh built-in plugin count | 137 → 152 |
+| 　 | dsh lock resolved entries | 560 → 580 |
+
+> **godot-ai not updated**: the upstream 3.2.5 → 4.0.4 jump is a breaking major release. Its pyproject pins nine runtime dependencies exactly and validates them fail-closed at startup, and six of them (mcp 1.29.1 / websockets 17.1 / pydantic 2.13.5 / uvicorn 0.52.4 / starlette 1.6.0 / setuptools 84.0.0) are newer than what nixpkgs — or even master — provides, so it could only be built by adding an overlay that bumps each one. On top of that, v3 plugins and v4 servers do not interoperate and clients must switch to `godot-ai attach`. This update stays on 3.2.5 (upstream's `release/v3` branch is still maintained).
+
 ## 2026-09-04T07:21:36+09:00
 
 **Summary**：godot-ai 3.2.5；dsh-alpha 0.1.2-alpha.5 — upstream releases updated; godot-ai follows v3.2.5, dsh-alpha tracks the npm alpha dist-tag two releases forward

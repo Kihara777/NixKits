@@ -1,6 +1,30 @@
 # 维护日志
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
+## 2026-09-10T18:06:12+09:00
+
+**摘要**：codewhale 0.9.12；obs-bilibili-stream 2.1.5；mcp-searxng 2.2.0；opencode-telegram 0.25.1；dsh 0.1.5-rc.1；dsh-alpha 0.1.5-alpha.2 — 上游发布更新；dsh 两通道 vendored lock 重生成、内置插件清单 137 → 152 条目
+
+| 提交 | 说明 |
+|------|------|
+| `69af6c7` | feat(pkgs): bump codewhale 0.9.11 → 0.9.12 |
+| `db7c0ed` | feat(pkgs): bump obs-bilibili-stream 2.1.4 / mcp-searxng 2.1.0 / opencode-telegram 0.25.0 |
+| `c0f8346` | feat(pkgs): bump dsh 0.1.1-rc.2 → 0.1.5-rc.1 / dsh-alpha 0.1.2-alpha.5 → 0.1.5-alpha.2 |
+| `b29db07` | docs: 同步 codewhale / obs-bilibili-stream / mcp-searxng / opencode-telegram / dsh 版本号 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.9.11 | 0.9.12 |
+| obs-bilibili-stream | 2.1.4 | 2.1.5 |
+| mcp-searxng | 2.1.0 | 2.2.0 |
+| opencode-telegram | 0.25.0 | 0.25.1 |
+| dsh | 0.1.1-rc.2 | 0.1.5-rc.1 |
+| dsh-alpha | 0.1.2-alpha.5 | 0.1.5-alpha.2 |
+| 　 | dsh 内置插件数 | 137 → 152 |
+| 　 | dsh lock resolved | 560 → 580 |
+
+> **godot-ai 未更新**：上游 3.2.5 → 4.0.4 为破坏性大版本，其 pyproject 精确锁定 9 个运行时依赖并在启动时 fail-closed 校验，其中 6 个（mcp 1.29.1 / websockets 17.1 / pydantic 2.13.5 / uvicorn 0.52.4 / starlette 1.6.0 / setuptools 84.0.0）高于 nixpkgs 甚至 master 提供的版本，需新增 overlay 逐一升级方能构建；且 v3 插件与 v4 服务器互不兼容、客户端须改用 `godot-ai attach`。本次保持 3.2.5（上游 `release/v3` 分支仍维护）。
+
 ## 2026-09-04T07:21:36+09:00
 
 **摘要**：godot-ai 3.2.5；dsh-alpha 0.1.2-alpha.5 — 上游发布更新；godot-ai 跟进 v3.2.5，dsh-alpha 跟随 npm alpha dist-tag 前进两版
