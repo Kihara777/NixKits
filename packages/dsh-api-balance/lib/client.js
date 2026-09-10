@@ -264,7 +264,9 @@ window.__ModuleLoader__.load({
 		/**
 		 * 注入疑问窗口整页滚动样式：卡片自身滚动（含标题），header 与
 		 * 底部按钮区吸附固定；body 取消独立滚动，避免双重滚动条。
-		 * ui-user-questions 样式标签未就绪时按 1s 重试至多 5 次。
+		 * 疑问 UI 的样式标签由独立插件包注入，可能晚于本插件初始化
+		 * （懒加载 / 分包），故用 MutationObserver 守望 head，标签一出现
+		 * 即提取类名注入，避免有界重试窗口错过导致静默失效。
 		 */
 		function applyQuestionScrollCss(enabled) {
 			if (typeof document === "undefined") return;
@@ -272,18 +274,12 @@ window.__ModuleLoader__.load({
 			const existing = document.querySelector(`style[data-plugin-css="${tagId}"]`);
 			if (!enabled) {
 				if (existing !== null) existing.remove();
+				stopQuestionScrollWatch();
 				return;
 			}
-			const ensure = (attempt) => {
+			const inject = () => {
 				const cls = questionComposerClasses();
-				if (cls === null) {
-					if (attempt < 5 && typeof window !== "undefined" && typeof window.setTimeout === "function") {
-						window.setTimeout(() => ensure(attempt + 1), 1000);
-					} else if (existing !== null) {
-						existing.remove();
-					}
-					return;
-				}
+				if (cls === null) return false;
 				// 卡片成为滚动容器；header 吸顶、footer 吸底；body 取消滚动。
 				const cssText =
 					`.${cls.card}{overflow-y:auto!important;overscroll-behavior:contain}` +
@@ -303,8 +299,37 @@ window.__ModuleLoader__.load({
 				} else if (current.textContent !== cssText) {
 					current.textContent = cssText;
 				}
+				return true;
 			};
-			ensure(0);
+			if (inject()) {
+				stopQuestionScrollWatch();
+				return;
+			}
+			startQuestionScrollWatch(inject);
+		}
+		/** head 守望句柄（注入成功后自动断开，避免常驻观察）。 */
+		let questionScrollObserver = null;
+		let questionScrollRetryTimer = null;
+		function startQuestionScrollWatch(inject) {
+			if (typeof window === "undefined" || typeof MutationObserver === "undefined") return;
+			if (questionScrollObserver !== null) return;
+			const tryInject = () => {
+				if (inject()) stopQuestionScrollWatch();
+			};
+			questionScrollObserver = new MutationObserver(tryInject);
+			questionScrollObserver.observe(document.head, { childList: true, subtree: true });
+			// 兜底轮询：个别情况下样式标签以非 childList 方式变化。
+			questionScrollRetryTimer = window.setInterval(tryInject, 2000);
+		}
+		function stopQuestionScrollWatch() {
+			if (questionScrollObserver !== null) {
+				questionScrollObserver.disconnect();
+				questionScrollObserver = null;
+			}
+			if (questionScrollRetryTimer !== null && typeof window !== "undefined") {
+				window.clearInterval(questionScrollRetryTimer);
+				questionScrollRetryTimer = null;
+			}
 		}
 
 		/** 回车键行为交换开关（localStorage 持久化，默认开启）。 */
