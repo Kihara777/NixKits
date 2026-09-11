@@ -10,6 +10,8 @@
   hash ? "sha256-Gnlxnxx2ORisMOgZTfeDqTMMaxLV8EyVBzGj+KHD2dA=",
   npmDepsHash ? "sha256-+/9XAzsADxOI4D+w9P6HsoOv4hKLFTeSGYmvWRCnBTg=",
   lockFile ? ./dsh-package-lock.json,
+  # 允许局域网（非 loopback）浏览器读写设置，见 postInstall 中的说明。
+  allowLanSettings ? false,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -84,7 +86,33 @@ buildNpmPackage (finalAttrs: {
       sed -i '/if (assembledActivationRejections.has(err)) return;/a\\t\tif (err instanceof Error \&\& err.message === "Context has been disposed") return;' \
         "$BOOT_IDX"
     fi
-  '';
+'' + lib.optionalString allowLanSettings ''
+    # 局域网设置读写：dsh 的 settings UI 只用「页面是否 loopback」决定设置
+    # 镜像的持久化模式，非 loopback 页面被强制为 "memory"，镜像 status 置
+    # "unavailable" 且 load()/ensure() 直接返回 —— 从不发出 settings/describe，
+    # 模型设置页因此报 "settings are unavailable in this browser"。
+    #
+    # 服务端并不限制：settings/describe 与 settings/update 在 trustedHosts 的
+    # authority 下均正常（实测 LAN authority 两者都返回 ok），Host fence 已是
+    # 唯一且正确的边界。
+    #
+    # 浏览器端拿不到 trustedHosts，故用连接状态作为等价判据：$host.state 为
+    # "connected" 说明该页面的 authority 已被服务端接受（fence 通过并完成
+    # 会话认证）。仅此情形放宽为 "host"；未连通的页面仍保持 "memory"，
+    # 不扩大上游暴露面。
+    # Guarded by [ -f ]：包路径随 dsh 版本漂移，缺失不应导致构建失败。
+    SETTINGS_CLIENT="$out/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-settings/lib/client.js"
+    if [ -f "$SETTINGS_CLIENT" ]; then
+      sed -i 's#ctx\.remote\.\$host\.isLoopback ? "host" : "memory"#(ctx.remote.$host.isLoopback || ctx.remote.$host.state.getSnapshot() === "connected") ? "host" : "memory"#' "$SETTINGS_CLIENT"
+      grep -q 'state.getSnapshot() === "connected"' "$SETTINGS_CLIENT" || {
+        echo "dsh: lan-settings patch did not apply (upstream text changed)" >&2
+        exit 1
+      }
+    else
+      echo "dsh: lan-settings patch target missing" >&2
+      exit 1
+    fi
+'';
 
   meta = {
     description = "DeepSeek Harness (DSH) — Everything is a Plugin";
