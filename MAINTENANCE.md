@@ -532,6 +532,15 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新增 v0.1.0 |
 
+## 2026-09-11T12:54:29+09:00
+
+**摘要**：fix(dsh/module): 移除 allowLanSettings 的 $host.state.getSnapshot() 补丁 — dsh ≥ 0.1.5 的 $host 客户端服务不暴露 state（仅 isLoopback/home），旧补丁在 client-ui-settings apply 时访问 undefined.getSnapshot，抛 "Cannot read properties of undefined (reading 'getSnapshot')"，整个前端白屏（Failed to load plugins）。修复：模块不再强制 override allowLanSettings=true（恢复上游行为，非 loopback 页面 settings 保持 memory 只读）；packages/dsh.nix 的补丁改为无条件 "host"（若将来显式启用也不会崩）。验证：client.js 无 state.getSnapshot，首页 200，llm/listProviders 返回 DeepSeek 提供方。
+
+| 提交 | 说明 |
+|------|------|
+| `06a5ce1` | fix(dsh): allowLanSettings — drop $host.state.getSnapshot() (undefined) |
+| `155b09b` | fix(module): dsh — drop allowLanSettings override (state.getSnapshot undefined) |
+
 ## 2026-09-11T06:15:33+09:00
 
 **摘要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 兼容）。dsh 0.1.5-alpha.2 的 dsh-persona 插件 Config 由 text 改为 prefix（必填）+ suffix（可选）。旧 agent preset（nixos-mode / maintenance-mode / 本机 ocean-spiral）仍写 text，导致 persona 插件加载失败（$.prefix missing required value）→ session/create 失败 → settings / llm 提供方目录 / session 历史全部无法加载（前端表现为 Failed to fetch + 无限重试 commands/list 缺 agentId）。修复：两预设的 persona config 改为 prefix，本机三个 preset 同步修改。验证：session/create 返回 ok:true + sessionId，session/list 返回会话列表，llm/listProviders 返回 DeepSeek 提供方。

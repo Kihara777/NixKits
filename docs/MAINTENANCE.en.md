@@ -533,6 +533,15 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | new v0.1.0 |
 
+## 2026-09-11T12:54:29+09:00
+
+**Summary**: fix(dsh/module): drop the allowLanSettings $host.state.getSnapshot() patch — dsh ≥ 0.1.5's $host client service no longer exposes state (only isLoopback/home), so the old patch hit undefined.getSnapshot during client-ui-settings apply, throwing "Cannot read properties of undefined (reading 'getSnapshot')" and blanking the whole frontend (Failed to load plugins). Fix: the module no longer force-overrides allowLanSettings=true (restoring upstream behavior — non-loopback pages keep settings read-only/memory); packages/dsh.nix patch now writes unconditional "host" so an explicit future enable cannot crash. Verified: client.js has no state.getSnapshot, home page 200, llm/listProviders returns the DeepSeek provider.
+
+| Commit | Description |
+|------|------|
+| `06a5ce1` | fix(dsh): allowLanSettings — drop $host.state.getSnapshot() (undefined) |
+| `155b09b` | fix(module): dsh — drop allowLanSettings override (state.getSnapshot undefined) |
+
 ## 2026-09-11T06:15:33+09:00
 
 **Summary**: fix(preset): dsh persona text → prefix (0.1.5-alpha.2 compat). dsh 0.1.5-alpha.2 changed dsh-persona's Config from text to prefix (required) + suffix (optional). The old agent presets (nixos-mode / maintenance-mode / local ocean-spiral) still wrote text, so the persona plugin failed to load ($.prefix missing required value) → session/create failed → settings, llm provider catalog, and session history all failed to load (frontend showed Failed to fetch plus an infinite commands/list retry missing agentId). Fix: both presets' persona config now uses prefix; the three local presets were patched too. Verified: session/create returns ok:true + sessionId, session/list returns sessions, llm/listProviders returns the DeepSeek provider.

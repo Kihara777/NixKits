@@ -533,6 +533,15 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新規 v0.1.0 |
 
+## 2026-09-11T12:54:29+09:00
+
+**概要**: fix(dsh/module): allowLanSettings の $host.state.getSnapshot() 補丁を撤去 — dsh ≥ 0.1.5 の $host クライアントサービスは state を公開しない（isLoopback/home のみ）。旧補丁は client-ui-settings apply 時に undefined.getSnapshot を参照し、"Cannot read properties of undefined (reading 'getSnapshot')" を投げて前端全体が白画面（Failed to load plugins）。修正: モジュールは allowLanSettings=true の強制 override をやめ（上流行為へ復帰、非 loopback ページの settings は memory 読取専用のまま）、packages/dsh.nix の補丁は無条件 "host" に変更（将来明示的に有効化してもクラッシュしない）。検証: client.js に state.getSnapshot なし、ホーム 200、llm/listProviders が DeepSeek 提供方を返す。
+
+| コミット | 説明 |
+|------|------|
+| `06a5ce1` | fix(dsh): allowLanSettings — drop $host.state.getSnapshot() (undefined) |
+| `155b09b` | fix(module): dsh — drop allowLanSettings override (state.getSnapshot undefined) |
+
 ## 2026-09-11T06:15:33+09:00
 
 **概要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 は dsh-persona の Config を text から prefix（必須）+ suffix（任意）に変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）は text のままで、persona プラグインの読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴すべて読込不可（前端は Failed to fetch と agentId 欠如による commands/list 無限リトライを呈す）。修正: 両 preset の persona config を prefix に変更、本機の 3 preset も同期修正。検証: session/create が ok:true + sessionId を返し、session/list がセッション一覧を返し、llm/listProviders が DeepSeek 提供方を返す。

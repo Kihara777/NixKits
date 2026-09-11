@@ -533,6 +533,15 @@
 |--------|--------|--------|
 | dsh-api-balance | 　 | 新規 v0.1.0 |
 
+## 2026-09-11T12:54:29+09:00
+
+**摘要**: fix(dsh/module): allowLanSettings $host.state.getSnapshot() 補丁撤去 — dsh ≥ 0.1.5 $host 客户端服务 state 非公開（isLoopback/home 只）。旧補丁 client-ui-settings apply 時 undefined.getSnapshot 参照、"Cannot read properties of undefined (reading 'getSnapshot')" 投、前端全体白画面（Failed to load plugins）。修正: 模組 allowLanSettings=true 強制 override 停止（上流行為復帰、非 loopback 页面 settings memory 読取専用維持）、packages/dsh.nix 補丁無条件 "host" 変更（将来明示有効化亦不崩）。検証: client.js state.getSnapshot 無、首頁 200、llm/listProviders DeepSeek 提供方返。
+
+| 提交 | 説明 |
+|------|------|
+| `06a5ce1` | fix(dsh): allowLanSettings — drop $host.state.getSnapshot() (undefined) |
+| `155b09b` | fix(module): dsh — drop allowLanSettings override (state.getSnapshot undefined) |
+
 ## 2026-09-11T06:15:33+09:00
 
 **摘要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 插件読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可（前端 Failed to fetch + agentId 欠如 commands/list 無限再試）。修正: 両 preset persona config prefix 変更、本機 3 preset 同期修正。検証: session/create ok:true + sessionId、session/list セッション一覧、llm/listProviders DeepSeek 提供方返。
