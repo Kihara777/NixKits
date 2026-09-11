@@ -3,20 +3,12 @@
 let
   cfg = config.nixkits.dsh;
 
-  # 局域网设置读写补丁（见 packages/dsh.nix 的 allowLanSettings）。
-  #
-  # 跟随 reverseProxy.autoAuth —— 该开关的语义正是「让局域网浏览器无感使用
-  # web UI」，也正是补丁需要的前提：页面经反代访问、authority 已列入
-  # trustedHosts。关闭 autoAuth 时保持上游行为（非 loopback 页面设置只读），
-  # 打补丁后的产物与上游逐字节一致。
-  #
-  # override 只在开启且包确实暴露该参数时使用：cfg.package 可能是用户传入的
-  # 任意 dsh 派生（含不含本参数的第三方构建），hasAttr 探测避免 eval 报错。
-  dshPackage =
-    if cfg.reverseProxy.enable && cfg.reverseProxy.autoAuth
-       && (cfg.package.override.__functionArgs or { }) ? allowLanSettings
-    then cfg.package.override { allowLanSettings = true; }
-    else cfg.package;
+  # 局域网设置读写补丁（见 packages/dsh.nix 的 allowLanSettings）已废弃：
+  # dsh ≥ 0.1.5 的 $host 客户端服务不再暴露连接状态（无 $host.state），
+  # 旧补丁用 state.getSnapshot() 会抛 "Cannot read properties of undefined"
+  # 使整个前端白屏；服务端 Host fence（trustedHosts）仍是唯一边界，非
+  # loopback 页面的 settings 保持上游行为（memory，只读）。
+  dshPackage = cfg.package;
 
   # dsh with third-party plugin packages injected into its node_modules tree.
   # Composition rows resolve package names from the dsh install root, so the
