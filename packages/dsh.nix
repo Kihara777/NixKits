@@ -96,15 +96,16 @@ buildNpmPackage (finalAttrs: {
     # authority 下均正常（实测 LAN authority 两者都返回 ok），Host fence 已是
     # 唯一且正确的边界。
     #
-    # 浏览器端拿不到 trustedHosts，故用连接状态作为等价判据：$host.state 为
-    # "connected" 说明该页面的 authority 已被服务端接受（fence 通过并完成
-    # 会话认证）。仅此情形放宽为 "host"；未连通的页面仍保持 "memory"，
-    # 不扩大上游暴露面。
+    # 浏览器端拿不到 trustedHosts，且 dsh ≥ 0.1.5 的 $host 服务不暴露
+    # 连接状态（无 $host.state —— 旧 patch 的 state.getSnapshot() 会抛
+    # "Cannot read properties of undefined"）。服务端 settings
+    # describe/update 已有 Host fence（trustedHosts）作唯一边界，未认证
+    # 页面无法通过 fence，故直接放宽为 "host" 持久化是安全的。
     # Guarded by [ -f ]：包路径随 dsh 版本漂移，缺失不应导致构建失败。
     SETTINGS_CLIENT="$out/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-settings/lib/client.js"
     if [ -f "$SETTINGS_CLIENT" ]; then
-      sed -i 's#ctx\.remote\.\$host\.isLoopback ? "host" : "memory"#(ctx.remote.$host.isLoopback || ctx.remote.$host.state.getSnapshot() === "connected") ? "host" : "memory"#' "$SETTINGS_CLIENT"
-      grep -q 'state.getSnapshot() === "connected"' "$SETTINGS_CLIENT" || {
+      sed -i 's#ctx\.remote\.\$host\.isLoopback ? "host" : "memory"#"host"#' "$SETTINGS_CLIENT"
+      grep -q 'isLoopback ? "host" : "memory"' "$SETTINGS_CLIENT" && {
         echo "dsh: lan-settings patch did not apply (upstream text changed)" >&2
         exit 1
       }
