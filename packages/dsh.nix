@@ -102,13 +102,18 @@ buildNpmPackage (finalAttrs: {
     # describe/update 已有 Host fence（trustedHosts）作唯一边界，未认证
     # 页面无法通过 fence，故直接放宽为 "host" 持久化是安全的。
     # Guarded by [ -f ]：包路径随 dsh 版本漂移，缺失不应导致构建失败。
+    #
+    # 断言必须用 if/then，不能用 `grep -q … && { …; exit 1; }`：补丁**成功**时
+    # grep 无匹配返回 1，&& 短路后整个命令列表的状态就是 1，而 genericBuild 在
+    # set -e 下执行 postInstall —— 于是“打补丁成功”反而让构建中止（exit 1，
+    # 且日志停在 npmInstallHook 之后、无任何错误文本，极难定位）。
     SETTINGS_CLIENT="$out/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-settings/lib/client.js"
     if [ -f "$SETTINGS_CLIENT" ]; then
       sed -i 's#ctx\.remote\.\$host\.isLoopback ? "host" : "memory"#"host"#' "$SETTINGS_CLIENT"
-      grep -q 'isLoopback ? "host" : "memory"' "$SETTINGS_CLIENT" && {
+      if grep -q 'isLoopback ? "host" : "memory"' "$SETTINGS_CLIENT"; then
         echo "dsh: lan-settings patch did not apply (upstream text changed)" >&2
         exit 1
-      }
+      fi
     else
       echo "dsh: lan-settings patch target missing" >&2
       exit 1
