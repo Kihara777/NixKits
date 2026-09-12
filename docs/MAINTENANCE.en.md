@@ -8,7 +8,7 @@
 
 | Commit | Description |
 |--------|-------------|
-| `PENDING` | docs(llama-cpp-rocm): correct outdated/invalid preset examples and add verified parameter reference |
+| `a68d225` | docs(llama-cpp-rocm): correct outdated/invalid preset examples and add verified parameter reference |
 
 ## 2026-09-10T18:06:12+09:00
 
