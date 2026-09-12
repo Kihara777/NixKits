@@ -596,10 +596,16 @@ in
       }
     ];
 
-    # autoAuth: 换用带 mod_magnet 的 lighttpd，并追加该模块到 server.modules。
-    # enableModules 是 types.listOf，与 SearXNG 的列表拼接而非覆盖。
+    # reverseProxy 依赖 mod_proxy（proxy.server/proxy.header）与 mod_setenv
+    # （setenv.add-request-header）。早期版本依赖 SearXNG 模块顺带启用的这
+    # 两个模块；core/headless 场景不再启用 SearXNG（只带 mod_access/mod_alias
+    # 的轻量 lighttpd），必须在此显式声明，否则 lighttpd 未加载 mod_proxy，
+    # proxy.server 配置被忽略，反代端口请求无 handler 而返回 403。
+    # autoAuth 额外追加 mod_magnet。enableModules 是 types.listOf，与用户或
+    # 其它模块的列表拼接而非覆盖。
     services.lighttpd.package = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.autoAuth) lighttpdMagnet;
-    services.lighttpd.enableModules = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.autoAuth) [ "mod_magnet" ];
+    services.lighttpd.enableModules = lib.mkIf cfg.reverseProxy.enable
+      ([ "mod_proxy" "mod_setenv" ] ++ lib.optional cfg.reverseProxy.autoAuth "mod_magnet");
 
     services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
       $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
