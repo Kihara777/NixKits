@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-12T19:00:39+00:00
+
+**摘要**：修复 dsh 反代端口 403 — lighttpd 缺 mod_proxy/mod_setenv 模块，proxy.server/setenv 配置被忽略、反代端口请求无 handler；改为 reverseProxy.enable 时显式声明这两个模块（autoAuth 时再追加 mod_magnet）
+
+| 提交 | 说明 |
+|------|------|
+| `8e486be` | fix(module): dsh reverseProxy 显式启用 mod_proxy/mod_setenv |
+
 ## 2026-09-12T15:10:55+09:00
 
 **摘要**：docs(llama-cpp-rocm): 修正过时与错误配置示例 — `fit="off"` 改为 `"on"`（旧值在显存受限时 OOM）、`mmap` 改为 `load-mode`（前者已弃用）、移除迁移示例中的 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1`（实测导致输出退化）；新增四语「参数详解」节记录经实测验证的推荐值与禁用项

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-12T19:00:39+00:00
+
+**概要**：dsh リバースプロキシの 403 を修正 — lighttpd に mod_proxy/mod_setenv がなく、proxy.server/setenv 設定が無視され反代ポートのリクエストにハンドラがなかった；reverseProxy.enable 時にこの 2 モジュールを明示宣言するよう変更（autoAuth 時に mod_magnet を追加）
+
+| コミット | 説明 |
+|----------|------|
+| `8e486be` | fix(module): dsh reverseProxy で mod_proxy/mod_setenv を明示的に有効化 |
+
 ## 2026-09-12T15:10:55+09:00
 
 **概要**：docs(llama-cpp-rocm): 古い・不正なプリセット例を修正 — `fit="off"` を `"on"` に（旧値は VRAM 制限下で OOM）、`mmap` を `load-mode` に（前者は非推奨）、移行例から `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` を削除（実測で出力が退化）；四言語の「パラメータ解説」節を追加し、実測済みの推奨値と回避項目を記載

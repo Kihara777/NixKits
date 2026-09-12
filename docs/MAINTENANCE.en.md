@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-12T19:00:39+00:00
+
+**Summary**：Fixed dsh reverse-proxy port returning 403 — lighttpd was missing mod_proxy/mod_setenv, so the proxy.server/setenv config was ignored and requests to the proxy port had no handler; both modules are now declared explicitly on reverseProxy.enable (mod_magnet appended when autoAuth is on)
+
+| Commit | Description |
+|--------|-------------|
+| `8e486be` | fix(module): dsh reverseProxy explicitly enable mod_proxy/mod_setenv |
+
 ## 2026-09-12T15:10:55+09:00
 
 **Summary**：docs(llama-cpp-rocm): corrected outdated and invalid preset examples — `fit="off"` → `"on"` (the old value OOMs under limited VRAM), `mmap` → `load-mode` (the former is deprecated), and removed `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` from the migration example (it degrades model output); added a four-language "Parameter Reference" section documenting measured recommendations and items to avoid
