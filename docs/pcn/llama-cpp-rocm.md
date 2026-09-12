@@ -55,10 +55,10 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                mmap             = "off";
+                load-mode        = "none";
                 warmup           = "on";
                 jinja            = "on";
-                fit              = "off";
+                fit              = "on";
                 prio             = "3";
               };
               "Qwen3.6-27B-MTP" = {
@@ -139,6 +139,37 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
 > **警告: Home Manager llama-cpp 服務**
 >
 > Home Manager 経由有効化場合、追加利用者段砂箱 GPU 接続（`/dev/dri`、`/dev/kfd`）遮断可能性有。体系段設定推奨。
+
+## 模型説明
+
+`modelsPreset` 複数模型保持、服務起動時必要応読込。全局預設 `"*"` 全模型適用、個別模型項目特定参數上書き可能。`hf-repo` HuggingFace から GGUF 形式模型文件自動取得。
+
+## 参數詳解
+
+以下参數は Strix Halo（統合記憶体）上 llama.cpp 0.4.0 で実測検証済。
+
+| 参數 | 推奨値 | 説明 |
+|------|--------|------|
+| `fit` | `"on"` | 未設定引數を装置記憶体に合自動調整。**`"off"` は VRAM 制限下 OOM 発生** |
+| `jinja` | `"on"` | 模型内蔵 chat template 適用。**無効化時、輸出退化** |
+| `load-mode` | `"none"` | 非推奨 `mmap` 置換。`"none"` は旧 `--no-mmap` 相当 |
+| `n-gpu-layers` | `"99"` | 全層 GPU 転送 |
+| `flash-attn` | `"on"` | Flash Attention 有効化、attention 記憶体削減 |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` は ROCm 核心不在 CPU 退回、約 2.6 倍遅** |
+| `threads` | `"32"` | CPU 執行糸数 |
+| `parallel` | `"1"` | 服務槽位数。増加時 KV 予約倍数増 |
+| `batch-size` | `"512"` | 論理批次。既定 `ubatch-size` 合計算緩衝縮小 |
+| `warmup` | `"on"` | 読込後空実行一回。最初実請求高速化 |
+
+> **注意**：`modelsPreset` 値は**文字列**（`attrsOf (attrsOf str)`）必須。`"on"` / `"off"` 記述、`true` / `false` 使用不可。
+
+### 回避項目
+
+| 項目 | 理由 |
+|------|------|
+| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **模型輸出破壊**（語彙反復・文字化）。同模型同預設、此変数無場合正常応答 |
+| `mmap` | 非推奨。`load-mode` 使用 |
+| `--no-mmproj` | mmproj 量子化不一致時暫定回避のみ。画像入力必要 |
 
 ## 移行手引
 
@@ -243,7 +274,6 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
   # NixKits 選項以覆非環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=~/.cache/huggingface/hub"
-    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

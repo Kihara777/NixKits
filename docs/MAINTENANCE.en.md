@@ -1,6 +1,15 @@
 # Maintenance Log
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+
+## 2026-09-12T15:10:55+09:00
+
+**Summary**：docs(llama-cpp-rocm): corrected outdated and invalid preset examples — `fit="off"` → `"on"` (the old value OOMs under limited VRAM), `mmap` → `load-mode` (the former is deprecated), and removed `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` from the migration example (it degrades model output); added a four-language "Parameter Reference" section documenting measured recommendations and items to avoid
+
+| Commit | Description |
+|--------|-------------|
+| `PENDING` | docs(llama-cpp-rocm): correct outdated/invalid preset examples and add verified parameter reference |
+
 ## 2026-09-10T18:06:12+09:00
 
 **Summary**：codewhale 0.9.12; obs-bilibili-stream 2.1.5; mcp-searxng 2.2.0; opencode-telegram 0.25.1; dsh 0.1.5-rc.1; dsh-alpha 0.1.5-alpha.2 — upstream releases updated; both dsh channels got regenerated vendored locks and the built-in plugin inventory grew from 137 to 152 entries

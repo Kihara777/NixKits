@@ -55,10 +55,10 @@ See upstream llama.cpp docs.
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                mmap             = "off";
+                load-mode        = "none";
                 warmup           = "on";
                 jinja            = "on";
-                fit              = "off";
+                fit              = "on";
                 prio             = "3";
               };
               "Qwen3.6-27B-MTP" = {
@@ -139,6 +139,37 @@ The module auto-sets `LLAMA_CACHE` to `~/.cache/huggingface/hub` and lifts `/hom
 > **Warning: Home Manager llama-cpp service**
 >
 > If enabled via Home Manager, additional user-level sandboxing may prevent GPU access (`/dev/dri`, `/dev/kfd`). Prefer system-level configuration.
+
+## Model Notes
+
+`modelsPreset` holds multiple models, loaded on demand when the service starts. The global `"*"` preset applies to every model, and a per-model entry can override specific parameters. `hf-repo` downloads GGUF model files from HuggingFace automatically.
+
+## Parameter Reference
+
+Parameters below are verified on Strix Halo (unified memory) with llama.cpp 0.4.0.
+
+| Parameter | Recommended | Notes |
+|-----------|-------------|-------|
+| `fit` | `"on"` | Auto-sizes unset arguments to device memory. **`"off"` OOMs on limited VRAM** |
+| `jinja` | `"on"` | Applies the model's built-in chat template. **Disabling it produces degenerate output** |
+| `load-mode` | `"none"` | Replaces the deprecated `mmap`; `"none"` equals the old `--no-mmap` |
+| `n-gpu-layers` | `"99"` | Offload every layer to the GPU |
+| `flash-attn` | `"on"` | Enables Flash Attention, lowering attention memory |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache quantisation. **`iq4_nl` falls back to CPU (no ROCm kernel) and runs ~2.6× slower** |
+| `threads` | `"32"` | CPU thread count |
+| `parallel` | `"1"` | Server slots; more slots multiply KV reservation |
+| `batch-size` | `"512"` | Logical batch, matched to the default `ubatch-size` to shrink compute buffers |
+| `warmup` | `"on"` | One empty run after load, making the first real request faster |
+
+> **Note**: `modelsPreset` values must be **strings** (`attrsOf (attrsOf str)`). Write `"on"` / `"off"`, not `true` / `false`.
+
+### Avoid
+
+| Item | Reason |
+|------|--------|
+| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **Corrupts model output** (repeated tokens, garbage). The same model and preset answer correctly without it |
+| `mmap` | Deprecated; use `load-mode` |
+| `--no-mmproj` | Only a workaround when mmproj mismatches the quantisation; keep it for image input |
 
 ## Migration Guide
 
@@ -243,7 +274,6 @@ The module auto-sets `LLAMA_CACHE` to `~/.cache/huggingface/hub` and lifts `/hom
   # Extra env vars not covered by NixKits options
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=~/.cache/huggingface/hub"
-    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

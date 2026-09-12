@@ -55,10 +55,10 @@
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                mmap             = "off";
+                load-mode        = "none";
                 warmup           = "on";
                 jinja            = "on";
-                fit              = "off";
+                fit              = "on";
                 prio             = "3";
               };
               "Qwen3.6-27B-MTP" = {
@@ -143,6 +143,33 @@
 ## 模型说明
 
 `modelsPreset` 支持多个模型，服务启动时按需加载。全局预设 `"*"` 应用于所有模型，单个模型可覆盖特定参数。`hf-repo` 自动从 HuggingFace 下载 GGUF 格式模型文件。
+
+> **注意**：`modelsPreset` 的值必须是**字符串**（`attrsOf (attrsOf str)`）。布尔开关写成 `"on"` / `"off"`，不要写 `true` / `false`。
+
+## 参数详解
+
+以下参数经实测验证，说明基于 Strix Halo（统一内存架构）上的 llama.cpp 0.4.0。
+
+| 参数 | 推荐值 | 说明 |
+|------|--------|------|
+| `fit` | `"on"` | 按设备可用内存自动调整未设置的参数。**设 `"off"` 会在显存受限时直接 OOM** |
+| `jinja` | `"on"` | 应用模型内建 chat template。**关闭会导致输出退化乱码** |
+| `load-mode` | `"none"` | 取代已弃用的 `mmap`；`"none"` 等价于旧 `--no-mmap` |
+| `n-gpu-layers` | `"99"` | 将全部层卸载到 GPU |
+| `flash-attn` | `"on"` | 启用 Flash Attention，降低注意力显存占用 |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量化。**用 `iq4_nl` 会因缺 ROCm kernel 回退 CPU，速度降至约 1/2.6** |
+| `threads` | `"32"` | CPU 线程数 |
+| `parallel` | `"1"` | 服务槽位数。多槽位会按槽位倍增 KV 预留 |
+| `batch-size` | `"512"` | 逻辑批大小，与 `ubatch-size` 默认值对齐以缩小计算缓冲 |
+| `warmup` | `"on"` | 加载后空跑一次，令首次真实请求更快 |
+
+### 禁用项
+
+| 项 | 原因 |
+|----|------|
+| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **会导致模型输出退化**（重复 token、乱码）。同样的模型与预设，不加此变量的 CLI 或 server 均正常 |
+| `mmap` | 已弃用，改用 `load-mode` |
+| `--no-mmproj` | 仅在 mmproj 与权重量化不匹配时作为临时规避；正常情况应保留以支持图片输入 |
 
 ## 迁移指南
 
@@ -247,7 +274,6 @@
   # NixKits 模块未覆盖的环境变量
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=~/.cache/huggingface/hub"
-    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

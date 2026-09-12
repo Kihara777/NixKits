@@ -55,10 +55,10 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                mmap             = "off";
+                load-mode        = "none";
                 warmup           = "on";
                 jinja            = "on";
-                fit              = "off";
+                fit              = "on";
                 prio             = "3";
               };
               "Qwen3.6-27B-MTP" = {
@@ -139,6 +139,37 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
 > **警告: Home Manager の llama-cpp サービス**
 >
 > Home Manager 経由で有効にした場合、追加のユーザーレベルサンドボックスにより GPU アクセス（`/dev/dri`、`/dev/kfd`）がブロックされる可能性があります。システムレベルでの設定を推奨します。
+
+## モデル説明
+
+`modelsPreset` は複数モデルを保持し、サービス起動時に必要に応じてロードされます。グローバルプリセット `"*"` は全モデルに適用され、個別モデルのエントリで特定のパラメータを上書きできます。`hf-repo` は HuggingFace から GGUF 形式のモデルファイルを自動ダウンロードします。
+
+## パラメータ解説
+
+以下は Strix Halo（統合メモリ）上の llama.cpp 0.4.0 で実測検証済みです。
+
+| パラメータ | 推奨値 | 説明 |
+|-----------|--------|------|
+| `fit` | `"on"` | 未設定の引数をデバイスメモリに合わせて自動調整。**`"off"` は VRAM 制限下で OOM になる** |
+| `jinja` | `"on"` | モデル内蔵の chat template を適用。**無効化すると出力が退化する** |
+| `load-mode` | `"none"` | 非推奨の `mmap` を置換。`"none"` は旧 `--no-mmap` 相当 |
+| `n-gpu-layers` | `"99"` | 全レイヤーを GPU にオフロード |
+| `flash-attn` | `"on"` | Flash Attention を有効化し、attention のメモリを削減 |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` は ROCm カーネル不在で CPU にフォールバックし約 2.6 倍遅くなる** |
+| `threads` | `"32"` | CPU スレッド数 |
+| `parallel` | `"1"` | サーバースロット数。増やすと KV 予約が倍増する |
+| `batch-size` | `"512"` | 論理バッチ。既定の `ubatch-size` に合わせ計算バッファを縮小 |
+| `warmup` | `"on"` | ロード後の空実行 1 回。最初の実リクエストを高速化 |
+
+> **注意**：`modelsPreset` の値は**文字列**（`attrsOf (attrsOf str)`）でなければなりません。`"on"` / `"off"` と書き、`true` / `false` は使えません。
+
+### 避けるべき項目
+
+| 項目 | 理由 |
+|------|------|
+| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **モデル出力を破壊する**（トークン反復・文字化け）。同じモデルとプリセットでも、この変数なしなら正常に応答する |
+| `mmap` | 非推奨。`load-mode` を使用 |
+| `--no-mmproj` | mmproj と量子化が不一致な場合の暫定回避策のみ。画像入力には必要 |
 
 ## 移行ガイド
 
@@ -243,7 +274,6 @@ llama.cpp に ROCm GPU アクセラレーションを有効化。ビルド時に
   # NixKits オプションでカバーされない環境変数
   systemd.services.llama-cpp.serviceConfig.Environment = lib.mkForce [
     "LLAMA_CACHE=~/.cache/huggingface/hub"
-    "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
   ];
 }
 ```

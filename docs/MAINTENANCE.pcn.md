@@ -1,6 +1,15 @@
 # 維護記録
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+
+## 2026-09-12T15:10:55+09:00
+
+**摘要**：docs(llama-cpp-rocm): 過時・錯誤預設示例修正 — `fit="off"` → `"on"`（旧値 VRAM 制限下 OOM）、`mmap` → `load-mode`（前者非推奨）、移行示例中 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 削除（実測輸出退化）；四言語「参數詳解」節追加、実測済推奨値与回避項目記載
+
+| 提交 | 説明 |
+|------|------|
+| `PENDING` | docs(llama-cpp-rocm): correct outdated/invalid preset examples and add verified parameter reference |
+
 ## 2026-09-10T18:06:12+09:00
 
 **摘要**：codewhale 0.9.12；obs-bilibili-stream 2.1.5；mcp-searxng 2.2.0；opencode-telegram 0.25.1；dsh 0.1.5-rc.1；dsh-alpha 0.1.5-alpha.2 — 上流 release 更新；dsh 両 channel 之 vendored lock 再生成、内蔵 plugin 一覧 137 → 152 件
