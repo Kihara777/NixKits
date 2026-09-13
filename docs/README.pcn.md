@@ -24,7 +24,7 @@ inputs.nixkits.url = "~/NixKits";
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
 | dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.5-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
-| godot-ai | Godot 引擎 MCP server 与 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
+| godot-ai | Godot 引擎 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
@@ -34,19 +34,19 @@ inputs.nixkits.url = "~/NixKits";
 
 ## 插件
 
-DeepSeek Harness（DSH）组件与軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
+DeepSeek Harness（DSH）组件與軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
 
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗与図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
+| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
 
 **Agent 預設**（dsh-nixos-shell 同梱、`nixkits.dsh.presets` 一度限 DSH seed）：
 
 | 預設 | 説明 |
 |------|------|
-| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 全拒否）；`nixos_shell`/`nixos_cli` 与 NixOS 開発指南負載 |
-| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与倉庫維護工作流注入 |
+| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 全拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発指南負載 |
+| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流注入 |
 
 ## 開発
 
@@ -71,9 +71,9 @@ nix registry add nixkits github:Kihara777/NixKits
 |------|------|------|
 | llama-cpp-rocm | 上流最新版追跡 ROCm 加速 | [docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md) |
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
-| asusd-pd-profile | 供電種別 依 平台檔位選択（USB-C PD 与 原生 AC 区別） | [docs/pcn/asusd-pd-profile.md](pcn/asusd-pd-profile.md) |
+| asusd-pd-profile | 供電種別 依 平台檔位選択（USB-C PD 與 原生 AC 区別） | [docs/pcn/asusd-pd-profile.md](pcn/asusd-pd-profile.md) |
 | comfyui-rocm | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm.md](pcn/comfyui-rocm.md) |
-| efl-cross-fix | efl 交叉编译符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
+| efl-cross-fix | efl 交叉编訳符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
 | codewhale-sudo | overlay — codewhale v0.9.12 sudo 机能复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
 | breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 

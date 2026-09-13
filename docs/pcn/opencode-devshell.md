@@ -11,7 +11,7 @@ nix develop nixkits#opencode
 
 ## 内蔵部品
 
-| 部品 | 包 | 径路 / 端口 |
+| 部品 | 包 | 経路 / 端口 |
 |------|------|------------|
 | opencode | `opencode` | `opencode`（CLI） |
 | opencode-telegram | `opencode-telegram` | `opencode-telegram`（電報 Bot） |

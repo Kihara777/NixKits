@@ -12,7 +12,7 @@
 
 ## 2026-09-14T05:32:10+09:00
 
-**摘要**：feat(asusd-pd-profile): 供電種別 依 平台檔位選択 NixOS 部品 追加 — `asusd.ron` 僅 `platform_profile_on_ac` / `platform_profile_on_battery` 二鍵、**USB-C PD 分岐不存在**、故「PD 時 Balanced、桶形 AC 時 Performance」類方針 不能 設定表現；且 ACPI 層 PD 與 桶形給電 共 `AC0.online` 上現、見 区別不能。本部品 udev 事件駆動 oneshot 服務 第三状態 補、判定 Type-C 模式 `power_operation_mode` 與 `type` 為 `USB` 在線供給元 用（二重冗長判定基準、皆 `ucsi-source-psy-USBC000:001` 如 機種固有 機器名 非、**汎用内核属性**使用）。二重要制約：①**`/sys/firmware/acpi/platform_profile` 書込禁止** — asusd AC 事件毎 上書、asusd 自身 `PlatformProfileOnAc` 属性 書込；②**`asusctl` 文本輸出解析 非、D-Bus 経由**、CLI 人間可読書式 依存 避。実測檔位列挙値（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（別名）—— `0` balanced 而 順序 ACPI sysfs `platform_profile_choices` 與**異**注意。電池給電時 意図的 不関与。四言語文書作成、各 README 登録
+**摘要**：feat(asusd-pd-profile): 供電種別 依 平台檔位選択 NixOS 部品 追加 — `asusd.ron` 僅 `platform_profile_on_ac` / `platform_profile_on_battery` 二鍵、**USB-C PD 分岐不存在**、故「PD 時 Balanced、桶形 AC 時 Performance」類方針 不能 設定表現；且 ACPI 層 PD 與 桶形給電 共 `AC0.online` 上現、見 区別不能。本部品 udev 事件駆動 oneshot 服務 第三状態 補、判定 Type-C 模式 `power_operation_mode` 與 `type` 為 `USB` 在線供給元 用（二重冗長判定基準、皆 `ucsi-source-psy-USBC000:001` 如 機種固有 機器名 非、**汎用内核属性**使用）。二重要制約：①**`/sys/firmware/acpi/platform_profile` 書込禁止** — asusd AC 事件毎 上書、asusd 自身 `PlatformProfileOnAc` 属性 書込；②**`asusctl` 文本輸出解析 非、D-Bus 経由**、CLI 人間可読書式 依存 避。実測檔位列挙値（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（別名）—— `0` balanced 而 順序 ACPI sysfs `platform_profile_choices` 與**異**注意。電池給電時 意図的 不関與。四言語文書作成、各 README 登録
 
 | 提交 | 説明 |
 |------|------|
@@ -21,7 +21,7 @@
 
 ## 2026-09-14T05:00:46+09:00
 
-**摘要**：docs(llama-cpp-rocm): IQ3_S 実測与功耗檔位數據追加 — DeepSeek 展開章節 由 IQ1_S 唯 拡張為 二量子化対照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）；三項実測結論 新規追加：①**量子化開銷非固定値**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB。事前 3.7 GiB 推定 偏差近一量級、故 換量子化後 必須 GPUActive 再実測）；②**生成速度 受限於 依頼遅延**、三条独立証拠（重値 1.56→3.44 bpw 生成不変 12.8→12.9 t/s、3 並行請求 聚合吞吐 同 12.5 t/s、performance 檔 多耗 54% 功耗 僅換 2.4% 速度）；③**功耗檔位実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s、performance 76.7 W / 90–95 °C / 13.07 t/s — quiet 省 49% 功耗、降 17~36 °C 而速度僅損 5~7%）。併 顕存指標 /proc/meminfo `GPUActive` 修正（`mem_info_gtt_used` 非）、IQ3_S 余量限界（約 6 GiB、GTT 124.9 GiB）記録。四言語同期
+**摘要**：docs(llama-cpp-rocm): IQ3_S 実測與功耗檔位數據追加 — DeepSeek 展開章節 由 IQ1_S 唯 拡張為 二量子化対照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）；三項実測結論 新規追加：①**量子化開銷非固定値**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB。事前 3.7 GiB 推定 偏差近一量級、故 換量子化後 必須 GPUActive 再実測）；②**生成速度 受限於 依頼遅延**、三条独立証拠（重値 1.56→3.44 bpw 生成不変 12.8→12.9 t/s、3 並行請求 聚合吞吐 同 12.5 t/s、performance 檔 多耗 54% 功耗 僅換 2.4% 速度）；③**功耗檔位実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s、performance 76.7 W / 90–95 °C / 13.07 t/s — quiet 省 49% 功耗、降 17~36 °C 而速度僅損 5~7%）。併 顕存指標 /proc/meminfo `GPUActive` 修正（`mem_info_gtt_used` 非）、IQ3_S 余量限界（約 6 GiB、GTT 124.9 GiB）記録。四言語同期
 
 | 提交 | 説明 |
 |------|------|
@@ -29,7 +29,7 @@
 
 ## 2026-09-13T11:59:48+09:00
 
-**摘要**：feat(skill): `nixos-specialisation-tuning` 追加 — 一次性事故記録 `SPECIALISATION-CORE.md` 再利用可能技能汎化：specialisation 三文件面構成与上書き衝突規則、設定消費者帰属原則、UMA 機器 llama.cpp 参數表与禁止項目、輸出退化時診断順序、道具 schema 文脈費用測定法、静黙故障認識（服務 active 但機能不動作）、無効対照実験自己点検。技能文書四言語、各 README 技能表登録
+**摘要**：feat(skill): `nixos-specialisation-tuning` 追加 — 一次性事故記録 `SPECIALISATION-CORE.md` 再利用可能技能汎化：specialisation 三文件面構成與上書き衝突規則、設定消費者帰属原則、UMA 機器 llama.cpp 参數表與禁止項目、輸出退化時診断順序、道具 schema 文脈費用測定法、静黙故障認識（服務 active 但機能不動作）、無効対照実験自己点検。技能文書四言語、各 README 技能表登録
 
 | 提交 | 説明 |
 |------|------|
@@ -37,7 +37,7 @@
 
 ## 2026-09-13T11:55:58+09:00
 
-**摘要**：docs(pcn): 偽中国語文書残留仮名清除与用語補完 — llama-cpp / dsh / dsh-api-balance / MAINTENANCE 四文書之片仮名・平仮名残片全清除；新規用語偽中国語化（前置充填、隘路、相反関係、暖機、復号 等）、`token` 既存慣用「語彙」統一。辞書 16 項目追加、SKILL.md 陷阱表 空列生項目 6 件追加。外部引用原文（AGENTS.md 節題、git 提交信息 2 件）意図的 verbatim 維持
+**摘要**：docs(pcn): 偽中国語文書残留仮名清除與用語補完 — llama-cpp / dsh / dsh-api-balance / MAINTENANCE 四文書之片仮名・平仮名残片全清除；新規用語偽中国語化（前置充填、隘路、相反関係、暖機、復号 等）、`token` 既存慣用「語彙」統一。辞書 16 項目追加、SKILL.md 陷阱表 空列生項目 6 件追加。外部引用原文（AGENTS.md 節題、git 提交信息 2 件）意図的 verbatim 維持
 
 | 提交 | 説明 |
 |------|------|
@@ -45,7 +45,7 @@
 
 ## 2026-09-13T11:44:48+09:00
 
-**摘要**：docs(llama-cpp-rocm): 実測最適化相違例修正 — `batch-size` 従 `"512"` 至実測最適 `"2048"` 変更、欠落 `ubatch-size` 追加、`n-gpu-layers`/`load-mode` 書死（`fit` 自動調整無効化）与効果無 `prio`/`presence-penalty`/`repeat-penalty` 削除；移行「移行前」例 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 有害注記。「DeepSeek 展開実測」節追加 — IQ1（1.5625 bpw）作業記録：五最適化効果与代価、前置充填 三回計測資料、除外済方向、低 bit 量子化 前置充填/生成 相反関係（四言語）
+**摘要**：docs(llama-cpp-rocm): 実測最適化相違例修正 — `batch-size` 従 `"512"` 至実測最適 `"2048"` 変更、欠落 `ubatch-size` 追加、`n-gpu-layers`/`load-mode` 書死（`fit` 自動調整無効化）與効果無 `prio`/`presence-penalty`/`repeat-penalty` 削除；移行「移行前」例 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 有害注記。「DeepSeek 展開実測」節追加 — IQ1（1.5625 bpw）作業記録：五最適化効果與代価、前置充填 三回計測資料、除外済方向、低 bit 量子化 前置充填/生成 相反関係（四言語）
 
 | 提交 | 説明 |
 |------|------|
@@ -69,7 +69,7 @@
 
 ## 2026-09-12T15:10:55+09:00
 
-**摘要**：docs(llama-cpp-rocm): 過時・錯誤預設示例修正 — `fit="off"` → `"on"`（旧値 VRAM 制限下 OOM）、`mmap` → `load-mode`（前者非推奨）、移行示例中 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 削除（実測輸出退化）；四言語「参數詳解」節追加、実測済推奨値与回避項目記載
+**摘要**：docs(llama-cpp-rocm): 過時・錯誤預設示例修正 — `fit="off"` → `"on"`（旧値 VRAM 制限下 OOM）、`mmap` → `load-mode`（前者非推奨）、移行示例中 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 削除（実測輸出退化）；四言語「参數詳解」節追加、実測済推奨値與回避項目記載
 
 | 提交 | 説明 |
 |------|------|
@@ -120,7 +120,7 @@
 
 | 提交 | 説明 |
 |------|------|
-| `6030e6d` | docs(dsh-api-balance): 上流 StatsLine scroll 提案与準備済 branch 記録 |
+| `6030e6d` | docs(dsh-api-balance): 上流 StatsLine scroll 提案與準備済 branch 記録 |
 
 ## 2026-09-03T03:25:59+09:00
 
@@ -133,12 +133,12 @@
 
 ## 2026-09-03T03:07:21+09:00
 
-**摘要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 上流 release version 昇級；ruyi stable 正式化 0.52.0（beta/alpha channel 維持）、obs-bilibili 与 opencode-telegram minor 更新
+**摘要**：ruyi 0.52.0；obs-bilibili-stream 2.1.4；opencode-telegram 0.25.0 — 上流 release version 昇級；ruyi stable 正式化 0.52.0（beta/alpha channel 維持）、obs-bilibili 與 opencode-telegram minor 更新
 
 | 提交 | 説明 |
 |------|------|
 | `22c28a2` | feat(pkgs): ruyi 0.52.0 / obs-bilibili-stream 2.1.4 / opencode-telegram 0.25.0 昇級 |
-| `65b7edf` | docs: 三包 version 与 badge 四語文書 + README 同期 |
+| `65b7edf` | docs: 三包 version 與 badge 四語文書 + README 同期 |
 
 | 軟件名 | 舊版本 | 新版本 |
 |--------|--------|--------|
@@ -164,20 +164,20 @@
 
 ## 2026-09-02T05:45:33+09:00
 
-**摘要**：docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単与存儲層境界；`nixkits.dsh.settings` 与毎瀏覽器 localStorage 状態境界厘清
+**摘要**：docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単與存儲層境界；`nixkits.dsh.settings` 與毎瀏覽器 localStorage 状態境界厘清
 
 | 提交 | 説明 |
 |------|------|
-| `f2e91a0` | docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単与存儲層境界（四語） |
+| `f2e91a0` | docs(dsh): 設置 menu 監査——声明配置可能 host namespace 清単與存儲層境界（四語） |
 
 ## 2026-09-02T04:12:23+09:00
 
-**摘要**：docs(dsh): 文書時点性検証与同期 — dsh-alpha 版本号 0.1.2-alpha.3 同期（README 四語 + dsh.md 四語）；插件清單追加生成方法注記（`dsh --profile web --dump-default-config`、読取専用）并 headless 二行来源 profile 標注；README 插件表 api-balance 行指向独立文書；dsh-nixos-shell 文書補充維護模式派生関係与漂移検査説明（四語）
+**摘要**：docs(dsh): 文書時点性検証與同期 — dsh-alpha 版本号 0.1.2-alpha.3 同期（README 四語 + dsh.md 四語）；插件清單追加生成方法注記（`dsh --profile web --dump-default-config`、読取専用）并 headless 二行来源 profile 標注；README 插件表 api-balance 行指向独立文書；dsh-nixos-shell 文書補充維護模式派生関係與漂移検査説明（四語）
 
 | 提交 | 説明 |
 |------|------|
 | `99746d3` | docs(dsh): 時点性同期——alpha 0.1.2-alpha.3 / 插件清單生成方法 / 插件文書 link |
-| `c45f64f` | docs(dsh-nixos-shell): 維護模式派生関係与漂移検査説明（四語） |
+| `c45f64f` | docs(dsh-nixos-shell): 維護模式派生関係與漂移検査説明（四語） |
 
 ## 2026-09-02T04:12:05+09:00
 
@@ -210,7 +210,7 @@
 | `b392097` | fix(dsh-api-balance): 疑問 window 頁面全体 scroll 実測無効 — MutationObserver 守望 |
 ## 2026-09-11T07:15:47+09:00
 
-**摘要**：feat(dsh-api-balance): 疑問 window 頁面全体 scroll 最適化（長題干選択肢圧迫不） — 対話式質問 window（AskUserQuestion）標題非 scroll header 固定、題干過長時縦空間奪取選択肢一覧圧縮；注入 CSS 卡片自身 scroll container 化（標題+詳細+選択肢一括 scroll）、header 与 footer 按鈕領域 sticky 追従表示、body scroll 停止二重 scrollbar 回避；class 名 ui-user-questions style 標籤自実行時抽出（build hash 適応、StatsLine 同方式）、標籤未準備時 1 秒間隔最大 5 回 retry；設定 → 界面「疑問 window 頁面全体 scroll」toggle 追加（預設有効、localStorage 永続化）；headless Chromium 実 markup 再現検証（修正前 body scroll 余地 91px 限定、修正後 卡片全体 scroll header 吸着使用可）
+**摘要**：feat(dsh-api-balance): 疑問 window 頁面全体 scroll 最適化（長題干選択肢圧迫不） — 対話式質問 window（AskUserQuestion）標題非 scroll header 固定、題干過長時縦空間奪取選択肢一覧圧縮；注入 CSS 卡片自身 scroll container 化（標題+詳細+選択肢一括 scroll）、header 與 footer 按鈕領域 sticky 追従表示、body scroll 停止二重 scrollbar 回避；class 名 ui-user-questions style 標籤自実行時抽出（build hash 適応、StatsLine 同方式）、標籤未準備時 1 秒間隔最大 5 回 retry；設定 → 界面「疑問 window 頁面全体 scroll」toggle 追加（預設有効、localStorage 永続化）；headless Chromium 実 markup 再現検証（修正前 body scroll 余地 91px 限定、修正後 卡片全体 scroll header 吸着使用可）
 
 | 提交 | 説明 |
 |------|------|
@@ -218,15 +218,15 @@
 | `6809b3d` | docs(dsh-api-balance): 疑問 window 頁面全体 scroll 設定説明（四語） |
 ## 2026-09-02T10:29:20+09:00
 
-**摘要**：feat(dsh-api-balance): 峰赤自動入/解除 + 峰開始与終了両方通知 — 峰境界自動検出：公式峰時間帯 30 秒毎再検査、入/出 peakNow 同期一式赤表示（用量環/進捗 bar/明細/spinner/chart）駆動、手動更新不要；境界通知：開始 `peak` segment（TTS 回退）、終了新設 `peakEnd` segment（TTS 回退）再生、30 秒 throttle 重複防止；音声 pack 作成器 `peakEnd` segment 追加（默認 TTS 回退一致 sample text 付）、speech.peakEndHint 文案与 voice.seg.peakEnd 標籤新設
+**摘要**：feat(dsh-api-balance): 峰赤自動入/解除 + 峰開始與終了両方通知 — 峰境界自動検出：公式峰時間帯 30 秒毎再検査、入/出 peakNow 同期一式赤表示（用量環/進捗 bar/明細/spinner/chart）駆動、手動更新不要；境界通知：開始 `peak` segment（TTS 回退）、終了新設 `peakEnd` segment（TTS 回退）再生、30 秒 throttle 重複防止；音声 pack 作成器 `peakEnd` segment 追加（默認 TTS 回退一致 sample text 付）、speech.peakEndHint 文案與 voice.seg.peakEnd 標籤新設
 
 | 提交 | 説明 |
 |------|------|
 | `b67e41d` | feat(dsh-api-balance): 峰赤自動入/解除 + 開始/終了通知 |
-| `9483c2c` | docs(dsh-api-balance): 峰自動起動/解除与 peakEnd segment（四語） |
+| `9483c2c` | docs(dsh-api-balance): 峰自動起動/解除與 peakEnd segment（四語） |
 ## 2026-09-02T10:23:55+09:00
 
-**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 与明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量環/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
+**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 與明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量環/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
 
 | 提交 | 説明 |
 |------|------|
@@ -234,7 +234,7 @@
 | `ea34699` | docs(dsh-api-balance): 峰赤進捗 bar/spinner/明細統一（四語） |
 ## 2026-09-02T06:32:01+09:00
 
-**摘要**：refactor(dsh-api-balance): 手機縦屏画面外修正除去、簡潔実装復帰 — 「縦屏越界 size 邏輯」除去（面板幅内容 scrollWidth 測定 + 上限 clamp 復帰、越界時 min(520px, 94vw) 切替不）；pager fitWidth / overflowing / layoutW 処理除去（頁幅固定計測内容幅復帰、touchAction pan-y 復帰、touch/drag 翻頁全 scenario 有効）；頁面級 fixed portal 維持（手機横屏 top bar 回避与汎用 overlay 安定性）
+**摘要**：refactor(dsh-api-balance): 手機縦屏画面外修正除去、簡潔実装復帰 — 「縦屏越界 size 邏輯」除去（面板幅内容 scrollWidth 測定 + 上限 clamp 復帰、越界時 min(520px, 94vw) 切替不）；pager fitWidth / overflowing / layoutW 処理除去（頁幅固定計測内容幅復帰、touchAction pan-y 復帰、touch/drag 翻頁全 scenario 有効）；頁面級 fixed portal 維持（手機横屏 top bar 回避與汎用 overlay 安定性）
 
 | 提交 | 説明 |
 |------|------|
@@ -250,7 +250,7 @@
 | `a8f8cda` | docs(dsh-api-balance): 縦屏越界 size 邏輯説明（四語） |
 ## 2026-09-02T05:45:48+09:00
 
-**摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 与座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新（面板 ring 祖先 chain 離脱）、z-index 900 充值/登録/設定 overlay 下
+**摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 與座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新（面板 ring 祖先 chain 離脱）、z-index 900 充值/登録/設定 overlay 下
 
 | 提交 | 説明 |
 |------|------|
@@ -258,7 +258,7 @@
 | `7145e5f` | docs(dsh-api-balance): 頁面級 overlay architecture 説明（四語） |
 ## 2026-09-02T05:29:47+09:00
 
-**摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll pager 全体吞——内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅与面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止（gesture 面板 scroll 限定）、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持
+**摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll pager 全体吞——内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅與面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止（gesture 面板 scroll 限定）、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持
 
 | 提交 | 説明 |
 |------|------|
@@ -273,7 +273,7 @@
 | `4836b4e` | fix(dsh-api-balance): 初回手動更新挨拶同再生 |
 ## 2026-09-02T05:15:52+09:00
 
-**摘要**：feat(dsh-api-balance): 挨拶手動更新時限定 + pager 高度當前頁追従 — 挨拶時機再構成：頁面初期化（全頁更新/読込）挨拶再生不、自動放送設定従使用量警告限定放送（load → announceHunger、音声通知 switch 与 30 分 rate 制限制約）；「余额」標籤 click 數據読込済（初回初期化読込以外）場合限定 random 挨拶音声再生；pager 高度自動増減/回収：container 高度 = 當前頁実測高度（offsetHeight）、切頁或内容変化時再測定——矮頁切替即回収、高頁切替即増加、非 active 頁自然高度描画（視図外移動、超過分 container clip）、区域自身 scroll 不、全内容面板縦 scroll 依存
+**摘要**：feat(dsh-api-balance): 挨拶手動更新時限定 + pager 高度當前頁追従 — 挨拶時機再構成：頁面初期化（全頁更新/読込）挨拶再生不、自動放送設定従使用量警告限定放送（load → announceHunger、音声通知 switch 與 30 分 rate 制限制約）；「余额」標籤 click 數據読込済（初回初期化読込以外）場合限定 random 挨拶音声再生；pager 高度自動増減/回収：container 高度 = 當前頁実測高度（offsetHeight）、切頁或内容変化時再測定——矮頁切替即回収、高頁切替即増加、非 active 頁自然高度描画（視図外移動、超過分 container clip）、区域自身 scroll 不、全内容面板縦 scroll 依存
 
 | 提交 | 説明 |
 |------|------|
@@ -289,7 +289,7 @@
 | `2f37193` | docs(dsh-api-balance): 移動端面板高/幅適応説明（四語） |
 ## 2026-09-02T04:48:40+09:00
 
-**摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 与 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 胶囊状伸長）、横 drag/swipe 翻頁対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応動態調整自身不 scroll、全内容用量面板自身縦 scrollbar 依存
+**摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 與 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 胶囊状伸長）、横 drag/swipe 翻頁対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応動態調整自身不 scroll、全内容用量面板自身縦 scrollbar 依存
 
 | 提交 | 説明 |
 |------|------|
@@ -297,7 +297,7 @@
 | `8db2f12` | docs(dsh-api-balance): 消耗明細翻頁説明（四語） |
 ## 2026-09-02T04:40:47+09:00
 
-**摘要**：refactor(dsh-api-balance): 設定按鈕 header 移動 + 余额標籤更新継承 + token 取得元帳戶情報下移動 — 面板 layout 再調整：「⚙ 設定」按鈕面板 header 旧「數據更新」按鈕位置移動；更新按鈕廃止、其機能（host cache 迂回強制更新 + random 挨拶音声）「余额」標籤 click 完全継承（読込中標籤内 spinner 表示）；token 取得元区域（取得元 label / ✓ 登録済 / 切断）面板下部 → 「帳戶情報」block 直下移動、帳戶情報与連続情報 section 構成
+**摘要**：refactor(dsh-api-balance): 設定按鈕 header 移動 + 余额標籤更新継承 + token 取得元帳戶情報下移動 — 面板 layout 再調整：「⚙ 設定」按鈕面板 header 旧「數據更新」按鈕位置移動；更新按鈕廃止、其機能（host cache 迂回強制更新 + random 挨拶音声）「余额」標籤 click 完全継承（読込中標籤内 spinner 表示）；token 取得元区域（取得元 label / ✓ 登録済 / 切断）面板下部 → 「帳戶情報」block 直下移動、帳戶情報與連続情報 section 構成
 
 | 提交 | 説明 |
 |------|------|
@@ -305,7 +305,7 @@
 | `3b1a7be` | docs(dsh-api-balance): 挨拶 trigger 余额標籤改訂（四語） |
 ## 2026-09-02T04:29:05+09:00
 
-**摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 与 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、用戶明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加
+**摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 與 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、用戶明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -313,7 +313,7 @@
 | `b8cd0b7` | docs(dsh-api-balance): 界面設定預設有効説明（四語）+ AGENTS Enter key 項目 |
 ## 2026-09-02T02:49:52+09:00
 
-**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量環与 chart 紅色表示 + 「峰時課金」badge（面板 header 与 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
+**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量環與 chart 紅色表示 + 「峰時課金」badge（面板 header 與 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
 
 | 提交 | 説明 |
 |------|------|
@@ -321,7 +321,7 @@
 | `4ed2e7c` | docs(dsh-api-balance): 四語文書同期（峰標記 / 移動端 keyboard / peak segment） |
 ## 2026-09-01T12:18:16+09:00
 
-**摘要**：feat(presets): 預設派生漂移檢查 flake check 導入 — develop/check-preset-derivation.py 新設、維護模式 NixOS模式自完全派生検証（組合 file = 固定行 block 追記、skills 目録 file 単位一致）；flake.nix checks.preset-derivation 追加（CI 毎 push 実行）；AGENTS.md「预设」節新設派生規約与漂移檢查記録、Enter key 動作項目 dsh-api-balance「設定 → 界面」switch 実装修正
+**摘要**：feat(presets): 預設派生漂移檢查 flake check 導入 — develop/check-preset-derivation.py 新設、維護模式 NixOS模式自完全派生検証（組合 file = 固定行 block 追記、skills 目録 file 単位一致）；flake.nix checks.preset-derivation 追加（CI 毎 push 実行）；AGENTS.md「预设」節新設派生規約與漂移檢查記録、Enter key 動作項目 dsh-api-balance「設定 → 界面」switch 実装修正
 
 | 提交 | 説明 |
 |------|------|
@@ -329,7 +329,7 @@
 
 ## 2026-09-01T12:18:09+09:00
 
-**摘要**：docs(dsh): 插件文書独立成冊 + Agent 預設節（四語同期） — dsh.md api-balance / nixos-shell inline 節「NixKits 插件」表集約（各插件独立文書 link）、「Agent 預設」節新設（seed-once mount 与二預設説明）；dsh-api-balance 独立文書四語新設、界面設定節統計条横 scroll 与 Enter key 交換二設定記録
+**摘要**：docs(dsh): 插件文書独立成冊 + Agent 預設節（四語同期） — dsh.md api-balance / nixos-shell inline 節「NixKits 插件」表集約（各插件独立文書 link）、「Agent 預設」節新設（seed-once mount 與二預設説明）；dsh-api-balance 独立文書四語新設、界面設定節統計条横 scroll 與 Enter key 交換二設定記録
 
 | 提交 | 説明 |
 |------|------|
@@ -344,7 +344,7 @@
 | `9dc7a5d` | feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 |
 ## 2026-09-01T11:34:40+09:00
 
-**摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API 鍵 / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日与模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。
+**摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API 鍵 / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日與模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。
 
 | 提交 | 説明 |
 |------|------|
@@ -356,7 +356,7 @@
 
 | 提交 | 説明 |
 |------|------|
-| `0c1d3fd` | feat(dsh-api-balance): 面板幅縮小与標題/正文二行 layout |
+| `0c1d3fd` | feat(dsh-api-balance): 面板幅縮小與標題/正文二行 layout |
 
 ## 2026-09-01T10:45:06+09:00
 
@@ -372,7 +372,7 @@
 
 | 提交 | 説明 |
 |------|------|
-| `bc85f5b` | feat(dsh-api-balance): 面板幅 responsive 化与横 scroll |
+| `bc85f5b` | feat(dsh-api-balance): 面板幅 responsive 化與横 scroll |
 
 ## 2026-09-01T10:27:06+09:00
 
@@ -384,15 +384,15 @@
 
 ## 2026-09-01T10:20:14+09:00
 
-**摘要**: fix/feat(dsh-api-balance): 「入」与缓存命中分離官方基準一致 + 挨拶 list 編集与 TTS 揃 sample text — 「当日入 200M」水増調査：官方 API token bucket PROMPT_CACHE_HIT_TOKEN（当日 228M 大半占）含、従前缓存命中「入」合算。官方使用量頁分項基準一致（入 = 未命中輸入限定、缓存命中別掲）、window 行 / 模型別行 / chart 切替放送分離 cacheHitLabel segment 追加。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、manifest.greetings 打包）追加。segment key today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix 再構成、sample text 預設 TTS 兜底文案一字一句一致。chart 切替放送全數據（入 / 缓存命中 / 出 / 金額幣種）網羅。
+**摘要**: fix/feat(dsh-api-balance): 「入」與缓存命中分離官方基準一致 + 挨拶 list 編集與 TTS 揃 sample text — 「当日入 200M」水増調査：官方 API token bucket PROMPT_CACHE_HIT_TOKEN（当日 228M 大半占）含、従前缓存命中「入」合算。官方使用量頁分項基準一致（入 = 未命中輸入限定、缓存命中別掲）、window 行 / 模型別行 / chart 切替放送分離 cacheHitLabel segment 追加。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、manifest.greetings 打包）追加。segment key today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix 再構成、sample text 預設 TTS 兜底文案一字一句一致。chart 切替放送全數據（入 / 缓存命中 / 出 / 金額幣種）網羅。
 
 | 提交 | 説明 |
 |------|------|
-| `ec5fb41` | fix(dsh-api-balance): 「入」与缓存命中分離、官方使用量頁基準一致 |
+| `ec5fb41` | fix(dsh-api-balance): 「入」與缓存命中分離、官方使用量頁基準一致 |
 
 ## 2026-09-01T09:35:56+09:00
 
-**摘要**: refactor(dsh-api-balance): 放送按鈕削除、chart 切替按鈕対応視図読上 — 「🔊 使用量読上」按鈕与 drop-down menu（menu 位置・方向回退機構含）削除；使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack prefix + TTS 數字）；test 音声（低使用量 / 残高不足）「pack 管理」視図移動；音声設定按鈕独立行維持。
+**摘要**: refactor(dsh-api-balance): 放送按鈕削除、chart 切替按鈕対応視図読上 — 「🔊 使用量読上」按鈕與 drop-down menu（menu 位置・方向回退機構含）削除；使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack prefix + TTS 數字）；test 音声（低使用量 / 残高不足）「pack 管理」視図移動；音声設定按鈕独立行維持。
 
 | 提交 | 説明 |
 |------|------|
@@ -400,7 +400,7 @@
 
 ## 2026-09-01T09:28:55+09:00
 
-**摘要**: fix(dsh-api-balance): 手動「數據更新」按鈕亦 random 挨拶音声再生 — 挨拶再生 playRandomGreeting 抽出共用：頁面更新（頁毎一回）与手動更新按鈕 click（毎回）両方 trigger、音声放送 switch 一律 gate。設定 dialog 説明文更新。
+**摘要**: fix(dsh-api-balance): 手動「數據更新」按鈕亦 random 挨拶音声再生 — 挨拶再生 playRandomGreeting 抽出共用：頁面更新（頁毎一回）與手動更新按鈕 click（毎回）両方 trigger、音声放送 switch 一律 gate。設定 dialog 説明文更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -416,7 +416,7 @@
 
 ## 2026-09-01T09:10:18+09:00
 
-**摘要**: feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（packs/<id>/ 複数保存 + state.json active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 /audio/<id>/<key> 配信）；設定 dialog import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）与 creator 視図（語言選択 zh-CN/en/ja——sample text 追従言語跨録音可能、manifest lang pack 語言記録；segment 毎録音/import/試聴/削除；compile download/compile 適用）搭載；録音中右下可視化浮窗（AudioContext+Analyser canvas level meter、経過時間、sample text、停止保存/破棄）表示；import 後 list pack 名与語言表示；import 済 pack 初回編集上書警告維持。
+**摘要**: feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（packs/<id>/ 複数保存 + state.json active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 /audio/<id>/<key> 配信）；設定 dialog import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）與 creator 視図（語言選択 zh-CN/en/ja——sample text 追従言語跨録音可能、manifest lang pack 語言記録；segment 毎録音/import/試聴/削除；compile download/compile 適用）搭載；録音中右下可視化浮窗（AudioContext+Analyser canvas level meter、経過時間、sample text、停止保存/破棄）表示；import 後 list pack 名與語言表示；import 済 pack 初回編集上書警告維持。
 
 | 提交 | 説明 |
 |------|------|
@@ -424,7 +424,7 @@
 
 ## 2026-09-01T08:41:48+09:00
 
-**摘要**: feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 — 音声 pack zip archive（manifest.json + audio/ file）変更。host 純 JS zip 解析（STORE/DEFLATE、DecompressionStream inflate）`$DSH_HOME/api-balance-voicepack/` 展開、prefix route 音声 URL 配信全 device 共有。設定 dialog 作成器 segment 毎瀏覽器録音（MediaRecorder）或 local 音声 file import 対応、「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用（當前 pack 上書）。pack import 済時初回編集（録音/import/削除/compile）上書警告表示 session 内一回確認。放送 segment URL / inline 両 carrier 対応、四語言文書音声 pack 形式指南（zip 構造 / manifest / segment 表 / 録音与共有 flow）追加。
+**摘要**: feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 — 音声 pack zip archive（manifest.json + audio/ file）変更。host 純 JS zip 解析（STORE/DEFLATE、DecompressionStream inflate）`$DSH_HOME/api-balance-voicepack/` 展開、prefix route 音声 URL 配信全 device 共有。設定 dialog 作成器 segment 毎瀏覽器録音（MediaRecorder）或 local 音声 file import 対応、「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用（當前 pack 上書）。pack import 済時初回編集（録音/import/削除/compile）上書警告表示 session 内一回確認。放送 segment URL / inline 両 carrier 対応、四語言文書音声 pack 形式指南（zip 構造 / manifest / segment 表 / 録音與共有 flow）追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -432,11 +432,11 @@
 
 ## 2026-09-01T02:36:15+09:00
 
-**摘要**: feat(dsh-api-balance): 音声放送語言与音色 DSH 界面語言追従 — 放送 text 従前 t() 界面語言追従済、発声 lang 与音色 zh-CN 固定。LocaleFace snapshot（useSyncExternalStore locale service subscribe/getSnapshot 購読）當前語言碼取得（zh → zh-CN、他其儘透過）、音色語言 prefix 一致、組合放送 text 区切文字語言応切替（中文全角 / 他半角）。locale service 不在時 zh 回退。
+**摘要**: feat(dsh-api-balance): 音声放送語言與音色 DSH 界面語言追従 — 放送 text 従前 t() 界面語言追従済、発声 lang 與音色 zh-CN 固定。LocaleFace snapshot（useSyncExternalStore locale service subscribe/getSnapshot 購読）當前語言碼取得（zh → zh-CN、他其儘透過）、音色語言 prefix 一致、組合放送 text 区切文字語言応切替（中文全角 / 他半角）。locale service 不在時 zh 回退。
 
 | 提交 | 説明 |
 |------|------|
-| `11c070b` | feat(dsh-api-balance): 音声放送語言与音色 DSH 界面語言追従 |
+| `11c070b` | feat(dsh-api-balance): 音声放送語言與音色 DSH 界面語言追従 |
 
 ## 2026-09-01T01:51:10+09:00
 
@@ -560,7 +560,7 @@
 
 | 提交 | 説明 |
 |------|------|
-| `e864b58` | feat(dsh-api-balance): 面板刷新按鈕 — 一鍵強制刷新余额与官方用量 |
+| `e864b58` | feat(dsh-api-balance): 面板刷新按鈕 — 一鍵強制刷新余额與官方用量 |
 
 ## 2026-08-27T07:28:49+09:00
 
@@ -572,7 +572,7 @@
 
 ## 2026-08-27T07:28:39+09:00
 
-**摘要**: feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化。插件包従前直接焼込 dsh/sudo 単元（ExecStart/preStart/守護模版）、插件更新即変単元内容：switch-to-configuration 活性化段再起 dsh（在途工具呼出随 harness 進程消滅）、stop/start sudo socket（連同経守護実行 rebuild 自身殺、socket 不能自復）。改安定掛載点：activation script 毎回 switch/boot `/run/dsh/current`（dsh 含插件樹）与 `/run/dsh/nixos-shell`（sudo 守護脚本）符号連結翻當前代 store 路（GC 安全：目標處當前 toplevel 閉包、回滚自翻旧代）；dsh.service 与 nixkits-sudo@.service 単元定義僅参照該安定路——插件包更新不変単元内容、活性化零再起零 socket 中断。配套語義：dsh 長駐進程、插件更新需明示 `systemctl restart dsh` 反映（自動分離）；sudo 守護接続毎生成、新連接自動新脚本。検証：423 代配備本改動（一次性 dsh 再起）；424/425 代連続両回插件変更 rebuild——dsh 与 socket ActiveEnterTimestamp 均不変、/run/dsh/current 正常翻鏈、全程無工具呼出被中断。四語文書同期。
+**摘要**: feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化。插件包従前直接焼込 dsh/sudo 単元（ExecStart/preStart/守護模版）、插件更新即変単元内容：switch-to-configuration 活性化段再起 dsh（在途工具呼出随 harness 進程消滅）、stop/start sudo socket（連同経守護実行 rebuild 自身殺、socket 不能自復）。改安定掛載点：activation script 毎回 switch/boot `/run/dsh/current`（dsh 含插件樹）與 `/run/dsh/nixos-shell`（sudo 守護脚本）符号連結翻當前代 store 路（GC 安全：目標處當前 toplevel 閉包、回滚自翻旧代）；dsh.service 與 nixkits-sudo@.service 単元定義僅参照該安定路——插件包更新不変単元内容、活性化零再起零 socket 中断。配套語義：dsh 長駐進程、插件更新需明示 `systemctl restart dsh` 反映（自動分離）；sudo 守護接続毎生成、新連接自動新脚本。検証：423 代配備本改動（一次性 dsh 再起）；424/425 代連続両回插件変更 rebuild——dsh 與 socket ActiveEnterTimestamp 均不変、/run/dsh/current 正常翻鏈、全程無工具呼出被中断。四語文書同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -596,7 +596,7 @@
 
 ## 2026-08-26T11:44:45+09:00
 
-**摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率与内訳維持、「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
+**摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率與内訳維持、「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付與残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -650,7 +650,7 @@
 
 ## 2026-08-24T14:27:47+09:00
 
-**摘要**：codewhale 0.9.11 — 上流 v0.9.9 起 TUI 資産名 codewhale-tui → codew 改名、包内 codew 導入互換別名維持、riscv64 源構築 Cargo.lock 同期（687→690 条目、rquickjs-sys 0.12.2 不変、bindings 補丁有効継続）；mcp-searxng 2.0.0 — 大版本升級（Node.js ≥ 22 要求、nixpkgs 既定充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved 条目）、randomUUID 回退補丁対象路径不変、内建插件清單 rc.8 完全一致（137 件）；dsh-nixos-shell 依存 dsh-tools → 0.1.1-rc.2 新生態整合。四言語文書同期、nix flake check 通過。
+**摘要**：codewhale 0.9.11 — 上流 v0.9.9 起 TUI 資産名 codewhale-tui → codew 改名、包内 codew 導入互換別名維持、riscv64 源構築 Cargo.lock 同期（687→690 条目、rquickjs-sys 0.12.2 不変、bindings 補丁有効継続）；mcp-searxng 2.0.0 — 大版本升級（Node.js ≥ 22 要求、nixpkgs 既定充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved 条目）、randomUUID 回退補丁対象路経不変、内建插件清單 rc.8 完全一致（137 件）；dsh-nixos-shell 依存 dsh-tools → 0.1.1-rc.2 新生態整合。四言語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -668,7 +668,7 @@
 
 ## 2026-08-22T00:03:28+09:00
 
-**摘要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語 dsh.md 版本行（rc.6 → rc.8）与「插件清單」代碼塊（rc.8 構築抽出自 137 entry id 映射）同期。nix flake check 通過。併 /etc/nixos 本地設定 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）宣言新規 session 既定——DeepSeek API 正規模型一覧僅 flash/pro/flash-vision-exp、"pro-max" id 無、Pro+Max 推論現状最高位。rc.8 上 nixos/maintenance 両預設掛載検証通過。
+**摘要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語 dsh.md 版本行（rc.6 → rc.8）與「插件清單」代碼塊（rc.8 構築抽出自 137 entry id 映射）同期。nix flake check 通過。併 /etc/nixos 本地設定 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）宣言新規 session 既定——DeepSeek API 正規模型一覧僅 flash/pro/flash-vision-exp、"pro-max" id 無、Pro+Max 推論現状最高位。rc.8 上 nixos/maintenance 両預設掛載検証通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -676,7 +676,7 @@
 
 ## 2026-08-21T21:51:26+09:00
 
-**摘要**：docs: README「插件」章拡充与作者 DSH 情報 — ①「插件」章「Agent 預設」表（NixOS模式/維護模式、插件同梱、nixkits.dsh.presets 一度限 seed）追加、DSH 组件与軟体分離掲載；② 作者「小爪」条目 DSH 生態情報（dsh-nixos-shell 插件与 2 Agent 預設）追記；③ AGENTS.md 插件独立掲載規則「dsh-* 组件（插件与 Agent 預設）」拡大。4 言語同期。
+**摘要**：docs: README「插件」章拡充與作者 DSH 情報 — ①「插件」章「Agent 預設」表（NixOS模式/維護模式、插件同梱、nixkits.dsh.presets 一度限 seed）追加、DSH 组件與軟体分離掲載；② 作者「小爪」条目 DSH 生態情報（dsh-nixos-shell 插件與 2 Agent 預設）追記；③ AGENTS.md 插件独立掲載規則「dsh-* 组件（插件與 Agent 預設）」拡大。4 言語同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -684,7 +684,7 @@
 
 ## 2026-08-21T00:01:46+09:00
 
-**摘要**：fix(dsh-nixos-shell): 工具説明明示 tools 白名單 — 受入非阻塞指摘：固定 POSIX 工具白名單工具説明未記載。白名單 TOOL_PACKAGES 映射自動生成（27 名、python 別名含）`tools` 參數説明記載、工具説明自參數参照。4 言語文書完全列表同期。検証：27 名全參數説明存在、工具説明参照有、構文検査与 nix flake check 通過。
+**摘要**：fix(dsh-nixos-shell): 工具説明明示 tools 白名單 — 受入非阻塞指摘：固定 POSIX 工具白名單工具説明未記載。白名單 TOOL_PACKAGES 映射自動生成（27 名、python 別名含）`tools` 參數説明記載、工具説明自參數参照。4 言語文書完全列表同期。検証：27 名全參數説明存在、工具説明参照有、構文検査與 nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -692,7 +692,7 @@
 
 ## 2026-08-20T20:12:33+09:00
 
-**摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正 — 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）、交接卡与插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤。`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一。検証：node 構文検査、nix flake check 通過。系統配備 `nixos apply` 変更実測成功。
+**摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正 — 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）、交接卡與插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤。`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一。検証：node 構文検査、nix flake check 通過。系統配備 `nixos apply` 変更実測成功。
 
 | 提交 | 説明 |
 |------|------|
@@ -700,7 +700,7 @@
 
 ## 2026-08-20T20:10:08+09:00
 
-**摘要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）工具引導包装 `bash -lc` 自 `bash -c` 変更：登録壳 /etc/profile 鏈 PATH 重置 nix shell 注入破棄、sudo 路徑同 wrapper 共用同時修正（対照実験：`-c` 得 Python 3.14.7、`-lc` 得 command not found）。映射亦 grep→gnugrep、find→findutils 修正（従来登録 PATH 偽陽性覆蓋）。P2 generations `limit` 追加（既定 20・上限 200・新→旧）、現在世代与総数返。P3 journal unit `*`/`%` 通配許可、末尾 `@` 自動 `*` 補（模版全實例）。P4 命名統一：nixos-cli → nixos 命令（nixos-cli 項目）、工具説明・命令対照表・門控指南更新。文書 op 表 4 言語同期。検証：5 案例機能套件全過（插件経由実 nix shell 注入 TOOLS_INJECTION_OK 回顕含）、node 構文検査、nix flake check 通過。
+**摘要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）工具引導包装 `bash -lc` 自 `bash -c` 変更：登録壳 /etc/profile 鏈 PATH 重置 nix shell 注入破棄、sudo 路徑同 wrapper 共用同時修正（対照実験：`-c` 得 Python 3.14.7、`-lc` 得 command not found）。映射亦 grep→gnugrep、find→findutils 修正（従来登録 PATH 偽陽性覆蓋）。P2 generations `limit` 追加（既定 20・上限 200・新→旧）、現在世代與総数返。P3 journal unit `*`/`%` 通配許可、末尾 `@` 自動 `*` 補（模版全實例）。P4 命名統一：nixos-cli → nixos 命令（nixos-cli 項目）、工具説明・命令対照表・門控指南更新。文書 op 表 4 言語同期。検証：5 案例機能套件全過（插件経由実 nix shell 注入 TOOLS_INJECTION_OK 回顕含）、node 構文検査、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -708,7 +708,7 @@
 
 ## 2026-08-20T19:33:51+09:00
 
-**摘要**：fix(dsh-nixos-shell): 提示節字段 text 変更 — dsh-system-prompt 補間器 `input.text` 読取、`content` 登録節実 session NixOS模式崩壊（Cannot read properties of undefined (reading 'indexOf')、mount 検証捕捉不能実 session 路徑欠陥）。nixos-gate（guidance/gate 2 節）与 maintenance-skills（workflow 節）計 3 箇所 `content` → `text` 修正。原因 dsh-system-prompt interpolate() 源碼与 PromptSection 型定義（text: string | provider）読取特定。ToolGuard 形型定義確認（`(execution) => string | undefined`、現行実装互換）。検証：mock text 字段与未閉 `{{` 無確認；実 systemPrompt service 登録 + assemble（includes=true、崩壊無）；系統預構築通過。
+**摘要**：fix(dsh-nixos-shell): 提示節字段 text 変更 — dsh-system-prompt 補間器 `input.text` 読取、`content` 登録節実 session NixOS模式崩壊（Cannot read properties of undefined (reading 'indexOf')、mount 検証捕捉不能実 session 路徑欠陥）。nixos-gate（guidance/gate 2 節）與 maintenance-skills（workflow 節）計 3 箇所 `content` → `text` 修正。原因 dsh-system-prompt interpolate() 源碼與 PromptSection 型定義（text: string | provider）読取特定。ToolGuard 形型定義確認（`(execution) => string | undefined`、現行実装互換）。検証：mock text 字段與未閉 `{{` 無確認；実 systemPrompt service 登録 + assemble（includes=true、崩壊無）；系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -716,7 +716,7 @@
 
 ## 2026-08-20T19:05:44+09:00
 
-**摘要**：feat(dsh-nixos-shell): 維護模式 agent 預設 — 新包内入口 maintenance-skills：apply 時構築期嵌入倉庫 skills/ 樹（単一來源、新規 session 常最新）自 runtime 技能 write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。包 postPatch skills → skills-embedded 複製。預設 presets/maintenance-mode（id `maintenance`、NixOS模式組合 + maintenance-skills 行基盤）包同梱。模組 nixkits.dsh.presets.maintenanceMode（seed-once）追加。検証：mock 3 技能登録 + 工作流節全過、包嵌入樹与導出有、系統預構築通過。nixos 預設掛載検証通過（mounted ok）、maintenance 預設 loader 進程内 package.json 緩存故再起動後最終確認要。
+**摘要**：feat(dsh-nixos-shell): 維護模式 agent 預設 — 新包内入口 maintenance-skills：apply 時構築期嵌入倉庫 skills/ 樹（単一來源、新規 session 常最新）自 runtime 技能 write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。包 postPatch skills → skills-embedded 複製。預設 presets/maintenance-mode（id `maintenance`、NixOS模式組合 + maintenance-skills 行基盤）包同梱。模組 nixkits.dsh.presets.maintenanceMode（seed-once）追加。検証：mock 3 技能登録 + 工作流節全過、包嵌入樹與導出有、系統預構築通過。nixos 預設掛載検証通過（mounted ok）、maintenance 預設 loader 進程内 package.json 緩存故再起動後最終確認要。
 
 | 提交 | 説明 |
 |------|------|
@@ -724,7 +724,7 @@
 
 ## 2026-08-20T18:30:46+09:00
 
-**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新包内子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否与拒否提示詞節注入（明確理由 + 預設切替助言）、NixOS 開発指南提示詞節注入（nixos-modern-cli 場景由来：宣言式本質、工具引導、現代命令、store 路徑陷阱）。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos（用户後続編輯尊重）。検証：包構築、門控構文検査、系統預構築全通過。
+**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新包内子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否與拒否提示詞節注入（明確理由 + 預設切替助言）、NixOS 開発指南提示詞節注入（nixos-modern-cli 場景由来：宣言式本質、工具引導、現代命令、store 路徑陷阱）。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos（用户後続編輯尊重）。検証：包構築、門控構文検査、系統預構築全通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -732,7 +732,7 @@
 
 ## 2026-08-20T18:24:04+09:00
 
-**摘要**：docs: README 插件独立章 + AGENTS.md 更新 — ① dsh-* 插件「軟体」表自 README 新設「插件」章移動（4 言語同期）、軟体混在禁止。AGENTS.md 插件独立掲載規約与「dsh 技能導入対象外」規則追加。② 承認済清理適用（本機）：~/.bashrc 旧 store 絶対路徑 bash-completion 塊削除、~/.profile hm-session-vars 安定路徑 /etc/profiles/per-user/kix 変更、旧 ~/.dsh/skills 削除（nixos_cli audit-store-paths 再検査：0 件）。
+**摘要**：docs: README 插件独立章 + AGENTS.md 更新 — ① dsh-* 插件「軟体」表自 README 新設「插件」章移動（4 言語同期）、軟体混在禁止。AGENTS.md 插件独立掲載規約與「dsh 技能導入対象外」規則追加。② 承認済清理適用（本機）：~/.bashrc 旧 store 絶対路徑 bash-completion 塊削除、~/.profile hm-session-vars 安定路徑 /etc/profiles/per-user/kix 変更、旧 ~/.dsh/skills 削除（nixos_cli audit-store-paths 再検査：0 件）。
 
 | 提交 | 説明 |
 |------|------|
@@ -748,7 +748,7 @@
 
 ## 2026-08-20T17:46:44+09:00
 
-**摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 參數 `nix shell nixpkgs#… --command` 不足 POSIX 工具提供 + sudo 守護路由）与 nixos_cli 読取専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件 nixos-modern-cli 技能場景由来。併削除：dsh-nix-shell（機能統合）与 dsh-skill-nixkits（7 技能插件設計、模組 skills 選項含）、CI/文書差替。nixkits-skills 安裝器 dsh 対象削除（dsh 能力 nixos-shell 提供、技能他助手向残置）。修正：generations 進程内読取専用列表変更（nix-env 鎖文件権限必要、非 root Permission denied）。検証：13 案例機能套件全過（実 sudo root 路由与 nix shell 工具引導含）；系統預構築通過。
+**摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 參數 `nix shell nixpkgs#… --command` 不足 POSIX 工具提供 + sudo 守護路由）與 nixos_cli 読取専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件 nixos-modern-cli 技能場景由来。併削除：dsh-nix-shell（機能統合）與 dsh-skill-nixkits（7 技能插件設計、模組 skills 選項含）、CI/文書差替。nixkits-skills 安裝器 dsh 対象削除（dsh 能力 nixos-shell 提供、技能他助手向残置）。修正：generations 進程内読取専用列表変更（nix-env 鎖文件権限必要、非 root Permission denied）。検証：13 案例機能套件全過（実 sudo root 路由與 nix shell 工具引導含）；系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -768,7 +768,7 @@
 
 ## 2026-08-20T16:13:40+09:00
 
-**摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 与 nixos-rebuild 等 profile 工具解決不能（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env 先、明示 NixOS profile PATH 後展開修正（請求 env 最後合併不変）。検証：systemd 既定 PATH 模擬実行器直接実行、PATH /run/current-system/sw/bin 先頭、ps 与 nixos-rebuild 両方解決成功。
+**摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 與 nixos-rebuild 等 profile 工具解決不能（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env 先、明示 NixOS profile PATH 後展開修正（請求 env 最後合併不変）。検証：systemd 既定 PATH 模擬実行器直接実行、PATH /run/current-system/sw/bin 先頭、ps 與 nixos-rebuild 両方解決成功。
 
 | 提交 | 説明 |
 |------|------|
@@ -776,7 +776,7 @@
 
 ## 2026-08-20T16:01:28+09:00
 
-**摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹与警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）与 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）与二進緩存説明追加。4 言語同期。
+**摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹與警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）與 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）與二進緩存説明追加。4 言語同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -808,7 +808,7 @@
 
 ## 2026-08-20T10:33:26+09:00
 
-**摘要**：fix(dsh): insert 塊縮進修正 — 嵌套 '' 字符串按自身最小縮進剝離、插件条目第 0 列復帰、`- insert:` 兄弟補丁操作誤解析（dsh 報 patch: entry … not found + id is required for non-insert patches、8 行再度全部未掛載）。每包一個 insert 操作発行、条目对象与 `- insert:` 行同字符串（2/4 列縮進）修正、模組注釈陷阱記録。検証：dump-config stderr 零、8 行全部合成樹反映。
+**摘要**：fix(dsh): insert 塊縮進修正 — 嵌套 '' 字符串按自身最小縮進剝離、插件条目第 0 列復帰、`- insert:` 兄弟補丁操作誤解析（dsh 報 patch: entry … not found + id is required for non-insert patches、8 行再度全部未掛載）。每包一個 insert 操作発行、条目对象與 `- insert:` 行同字符串（2/4 列縮進）修正、模組注釈陷阱記録。検証：dump-config stderr 零、8 行全部合成樹反映。
 
 | 提交 | 説明 |
 |------|------|
@@ -816,7 +816,7 @@
 
 ## 2026-08-20T10:21:46+09:00
 
-**摘要**：fix(dsh): 生成行 insert 動詞包裹 — cordis.patch.yml 裸 `- id:` 行僅補丁既有条目、新規插件条目 dsh 破棄（stderr: patch: entry "nixkits-nix-shell" not found）、8 插件行全部未掛載（dump-config 検証）。包注入成功処、合成樹無条目故 nix_shell 工具与 7 技能插件未登録。生成 plugins.packages 行 `- insert:` 操作包裹修正（extraPatch MCP 行同形）。検証：dump-config stderr 零、8 行全部合成樹反映。
+**摘要**：fix(dsh): 生成行 insert 動詞包裹 — cordis.patch.yml 裸 `- id:` 行僅補丁既有条目、新規插件条目 dsh 破棄（stderr: patch: entry "nixkits-nix-shell" not found）、8 插件行全部未掛載（dump-config 検証）。包注入成功処、合成樹無条目故 nix_shell 工具與 7 技能插件未登録。生成 plugins.packages 行 `- insert:` 操作包裹修正（extraPatch MCP 行同形）。検証：dump-config stderr 零、8 行全部合成樹反映。
 
 | 提交 | 説明 |
 |------|------|
@@ -824,7 +824,7 @@
 
 ## 2026-08-20T09:45:59+09:00
 
-**摘要**：fix(dsh): 複数插件注入失敗修正 — 展開後 GNU tar 復元归档内目録模式（store 樹 0555）、直前插件作成 scope 目録（@kihara777/）次插件書込不可、2 個目以降 Cannot mkdir: Permission denied 失敗。単一插件不発生、初実系統構築顕在化。各插件解包直後 chmod -R u+w 実行修正。検証：系統 toplevel 完全構築成功、dsh-nix-shell 与 7 技能全部注入済。
+**摘要**：fix(dsh): 複数插件注入失敗修正 — 展開後 GNU tar 復元归檔内目録模式（store 樹 0555）、直前插件作成 scope 目録（@kihara777/）次插件書込不可、2 個目以降 Cannot mkdir: Permission denied 失敗。単一插件不発生、初実系統構築顕在化。各插件解包直後 chmod -R u+w 実行修正。検証：系統 toplevel 完全構築成功、dsh-nix-shell 與 7 技能全部注入済。
 
 | 提交 | 説明 |
 |------|------|
@@ -848,7 +848,7 @@
 
 ## 2026-08-20T06:27:40+09:00
 
-**摘要**：feat(dsh-nix-shell): 外部 sudo 守護統合（0.2.0）— dsh 沙箱 sudo setuid 剥奪、代理昇格不能。插件初期化時守護套接字（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）検出、存在時 `sudo`/`justification` 參數有効化。`sudo: true` 請求全体（command/cwd/env/timeout）Unix 套接字経由守護路由、`justification` 必須結果随返。守護 = systemd 套接字激活型 root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続毎 1 請求 JSON 協議、插件包同梱）。接続制御境界 = dsh service 用戶所有 `0600` 套接字文件（SocketUser/SocketMode）。部品 nixkits.dsh.sudo（enable/socketPath/package）追加、単元生成与環境変数注入。検証：門控（套接字無參數非公開／有公開）、路由往復、justification 強制、実行器直結協議、部品単元評価全通過。
+**摘要**：feat(dsh-nix-shell): 外部 sudo 守護統合（0.2.0）— dsh 沙箱 sudo setuid 剥奪、代理昇格不能。插件初期化時守護套接字（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）検出、存在時 `sudo`/`justification` 參數有効化。`sudo: true` 請求全体（command/cwd/env/timeout）Unix 套接字経由守護路由、`justification` 必須結果随返。守護 = systemd 套接字激活型 root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続毎 1 請求 JSON 協議、插件包同梱）。接続制御境界 = dsh service 用戶所有 `0600` 套接字文件（SocketUser/SocketMode）。部品 nixkits.dsh.sudo（enable/socketPath/package）追加、単元生成與環境変数注入。検証：門控（套接字無參數非公開／有公開）、路由往復、justification 強制、実行器直結協議、部品単元評価全通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -868,7 +868,7 @@
 
 | 提交 | 説明 |
 |------|------|
-| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路径A |
+| `69eedd4` | feat(dsh): PATH fix + third-party plugin packages + bundled skills — L1/L2/L3/路経A |
 | `55664ed` | docs: dsh-nix-shell package docs + dsh module options + README rows (4 languages) |
 
 ## 2026-08-19T20:39:47+09:00
@@ -881,7 +881,7 @@
 
 ## 2026-08-19T19:57:03+09:00
 
-**摘要**：fix(codewhale-src): riscv64 交叉構築修正 — 四重問題連鎖解消：① rquickjs-sys 0.12.2（crates.io 最新版）riscv64gc bindings 無（build.rs 非 bindgen 路 include 目標文件）、上流各 64bit 小端 bindings 字節一致故 postPatch x86_64 版物化済 vendor 目録配置；② 宿主側（x86_64 build 依存）ring 構築 cc-rs 宿主 triple 自派生 CC（交叉編譯器）回退 -m64 付与 — buildPackages 工具連明示；③ postInstall 裸 cargo build --target 喪失宿主工具連連結 — cargoBuildHook 同目標 triple 明示；④ 二進 -lgcc_s 動的連結 autoPatchelfHook hostPlatform 依存走査 — 交叉 gcc libgcc 輸出明示追加。CI 同命令（pkgsCross.riscv64.callPackage）本地検証済。Build codewhale (riscv64) 六連敗解消。
+**摘要**：fix(codewhale-src): riscv64 交叉構築修正 — 四重問題連鎖解消：① rquickjs-sys 0.12.2（crates.io 最新版）riscv64gc bindings 無（build.rs 非 bindgen 路 include 目標文件）、上流各 64bit 小端 bindings 字節一致故 postPatch x86_64 版物化済 vendor 目録配置；② 宿主側（x86_64 build 依存）ring 構築 cc-rs 宿主 triple 自派生 CC（交叉編譯器）回退 -m64 付與 — buildPackages 工具連明示；③ postInstall 裸 cargo build --target 喪失宿主工具連連結 — cargoBuildHook 同目標 triple 明示；④ 二進 -lgcc_s 動的連結 autoPatchelfHook hostPlatform 依存走査 — 交叉 gcc libgcc 輸出明示追加。CI 同命令（pkgsCross.riscv64.callPackage）本地検証済。Build codewhale (riscv64) 六連敗解消。
 
 | 提交 | 説明 |
 |------|------|
@@ -948,7 +948,7 @@
 
 ## 2026-08-18T18:20:00+09:00
 
-**摘要**: feat(module): nixkits.dsh.plugins — 宣言插件 on/off 与設定。dsh 插件 cordis.patch.yml runtime hot reload、module plugins.disabled（entry id）、plugins.settings（config 覆写）、plugins.extraPatch（MCP 等生片段）追加。系統設定 MCP extraPatch 移行、API key kix.credentials 宣言化、session-telemetry-otel + session-stats 無効化例。実測：cordis.patch.yml 正生成、absent-id 警告無。
+**摘要**: feat(module): nixkits.dsh.plugins — 宣言插件 on/off 與設定。dsh 插件 cordis.patch.yml runtime hot reload、module plugins.disabled（entry id）、plugins.settings（config 覆写）、plugins.extraPatch（MCP 等生片段）追加。系統設定 MCP extraPatch 移行、API key kix.credentials 宣言化、session-telemetry-otel + session-stats 無効化例。実測：cordis.patch.yml 正生成、absent-id 警告無。
 
 | 提交 | 説明 |
 |------|------|
@@ -957,7 +957,7 @@
 
 ## 2026-08-18T17:55:00+09:00
 
-**摘要**: fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 与 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。
+**摘要**: fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 與 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。
 
 | 提交 | 説明 |
 |------|------|
@@ -990,7 +990,7 @@
 
 ## 2026-08-18T14:38:26+09:00
 
-**摘要**: feat(module): dsh reverseProxy via lighttpd — dsh 拒否 non loopback（RCE 安全）、lighttpd `$SERVER["socket"]` block 0.0.0.0:8626 dsh loopback 8625 反代（SearXNG lighttpd 实例再利用、extraConfig types.lines 合併）。对外 8626 firewall 開放。
+**摘要**: feat(module): dsh reverseProxy via lighttpd — dsh 拒否 non loopback（RCE 安全）、lighttpd `$SERVER["socket"]` block 0.0.0.0:8626 dsh loopback 8625 反代（SearXNG lighttpd 実例再利用、extraConfig types.lines 合併）。对外 8626 firewall 開放。
 
 | 提交 | 説明 |
 |------|------|
@@ -1032,7 +1032,7 @@
 
 ## 2026-08-15T10:04:37+09:00
 
-**摘要**: refactor: comfyui-rocm-patch + comfyui-strix-halo 単一 comfyui-rocm 統合 — 2 module 異部分処理（patch 層 vs Strix Halo 硬件最適化）、nixkits.comfyui-rocm（enable 選項）統合、patch mount/GFX 覆写/xformers 迂回/C 工具鏈/Strix Halo 設定（ROCm runtime/DeviceAllow/kernelParams）網羅。文書与 README 同期。
+**摘要**: refactor: comfyui-rocm-patch + comfyui-strix-halo 単一 comfyui-rocm 統合 — 2 module 異部分処理（patch 層 vs Strix Halo 硬件最適化）、nixkits.comfyui-rocm（enable 選項）統合、patch mount/GFX 覆写/xformers 迂回/C 工具鏈/Strix Halo 設定（ROCm runtime/DeviceAllow/kernelParams）網羅。文書與 README 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -1040,7 +1040,7 @@
 
 ## 2026-08-15T09:23:15+09:00
 
-**摘要**: refactor: 補丁 rog-control-center-fix.patch → rcc-fix.patch 改名、rcc-fix 統一名称收尾。overlays/rcc-fix.nix 与 4言語 rcc-fix.md 参照更新。
+**摘要**: refactor: 補丁 rog-control-center-fix.patch → rcc-fix.patch 改名、rcc-fix 統一名称收尾。overlays/rcc-fix.nix 與 4言語 rcc-fix.md 参照更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -1048,7 +1048,7 @@
 
 ## 2026-08-15T08:31:32+09:00
 
-**摘要**: feat(dsh): deepseek-harness 0.1.0-rc.6 新包 + 4言語文書。DSH（DeepSeek Harness）— 万物皆插件。預構築 npm 包（@deepseek-ai/dsh、bin dsh → lib/bin.js）、package-lock.json 同梱（npm tarball 無 lock）、dontNpmBuild build 跳過。godot-ai 与 dsh README 掲載（4言語）。
+**摘要**: feat(dsh): deepseek-harness 0.1.0-rc.6 新包 + 4言語文書。DSH（DeepSeek Harness）— 万物皆插件。預構築 npm 包（@deepseek-ai/dsh、bin dsh → lib/bin.js）、package-lock.json 同梱（npm tarball 無 lock）、dontNpmBuild build 跳過。godot-ai 與 dsh README 掲載（4言語）。
 
 | 提交 | 説明 |
 |------|------|
@@ -1072,7 +1072,7 @@
 
 ## 2026-08-12T10:05:00+09:00
 
-**摘要**: fix(default-overlay): godot-ai 路径修正 — default overlay callPackage `../packages/` 要（overlay 子目録）、`./packages/` 誤無存 `overlays/packages/` 解決。
+**摘要**: fix(default-overlay): godot-ai 路経修正 — default overlay callPackage `../packages/` 要（overlay 子目録）、`./packages/` 誤無存 `overlays/packages/` 解決。
 
 | 提交 | 説明 |
 |------|------|
@@ -1222,7 +1222,7 @@
 
 **摘要**: fix(ruyi): ruff lint 失敗許容 — 第2 ruff check（--fix無）nixpkgs ruff 更新後 139件 上流違反 build 遮断。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `1175df2` | fix(ruyi): tolerate ruff lint failures in checkPhase |
 
@@ -1253,7 +1253,7 @@
 
 **摘要**：fix(ci): GITHUB_TOKEN 注入 Nix access-token — llama-cpp-ver input GitHub API 要、未認証 60回/時 制限、並列 CI HTTP 403 頻発。`${{ secrets.GITHUB_TOKEN }}` 使用。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `41a8a8b` | fix(ci): inject GITHUB_TOKEN as Nix access-token for llama-cpp-ver API |
 
@@ -1311,7 +1311,7 @@
 
 **Summary**: fix(modules) — rog-control-center-fix now forces SendSIGKILL=yes + TimeoutStopSec=30s to prevent stale asus-shutdown process from blocking systemd-switch. comfyui-strix-halo now asserts glibc >= 2.42 (ROCm 7.2 needs GLIBC_ABI_GNU2_TLS).
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `4c314e8` | fix(modules): fix asus-shutdown SendSIGKILL + comfyui glibc assertion |
 
@@ -1319,7 +1319,7 @@
 
 **Summary**：feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `226c828` | feat(overlays): add breeze-black |
 
@@ -1327,7 +1327,7 @@
 
 **Summary**: docs(devshell) — new devShell documentation (4 languages), describing opencode (full MCP stack) and ruyi (3 channels merged) environments. README devShell table now includes doc links.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7bfe3e3` | docs: add devShell documentation — 4 lang |
 | `cbe9e72` | docs(README): add devShell doc column, merge ruyi 3 channels |
@@ -1336,7 +1336,7 @@
 
 **Summary**: docs — unified all user home directory paths across the repo to `~/` prefix (replaced hardcoded `/home/kix` and `/home/<user>` variants), covering 13 files.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `f597b9a` | docs: generalize hardcoded /home/kix paths |
 | `bb65b77` | docs: unify all user home paths to ~/ prefix |
@@ -1345,7 +1345,7 @@
 
 **Summary**: feat(shells) — opencode devShell iteration: SearXNG + lighttpd (matching system NixOS config) + blender-mcp + godot-mcp + godot + opencode + opencode-telegram. Auto-registers MCP config on first entry. Removed tryEval guards from godot packages.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `35cc4e8` | feat(shells): add opencode-telegram devShell + nix run doc |
 | `2b8f676` | fix(shells): add opencode to opencode-telegram devShell |
@@ -1365,7 +1365,7 @@
 
 **Summary**: feat(overlays) — new efl-cross-fix overlay, fixing efl cross-compilation failures on riscv64/riscv64-musl/aarch64 caused by missing native code-gen tools (eolian_gen, eet). Includes 4-language docs.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7d1e0e4` | feat(overlays): add efl-cross-fix |
 
@@ -1373,7 +1373,7 @@
 
 **Summary**: codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — upstream updates (codewhale v0.9.0 still no riscv64 prebuilt binaries, continues source-build path)
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `deca3e8` | chore(pkgs): bump opencode-telegram 0.22.3 |
 | `6046594` | chore(pkgs): bump ruyi 0.51.0 + beta 0.51.0-beta.20260714 + alpha 0.52.0-alpha.20260714 |
@@ -1390,7 +1390,7 @@
 
 **摘要**: fix(ci) — ci-summary workflow `gh run list` 逐 workflow API 呼出 HTTP 403 rate limit 修正。2 回一括 `gh api` 呼出並列制御変更。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `9f6a4ac` | fix(ci): fix ci-summary API rate limit — batch workflow fetch, add concurrency control |
 
@@ -1398,7 +1398,7 @@
 
 **摘要**: revert(skill) — katalish（半角片仮名機械翻訳）全内容削除：19 文書、技能（SKILL.md + 102 条辞書）、全言語切替連結。翻訳不安定（英文残留又文書構造破壊）生産環境不適。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6433bac` | revert: remove all katalish content — docs, skill, lang switchers, README entries |
 
@@ -1406,7 +1406,7 @@
 
 **Summary**: docs(nixkits-skills) — renamed 'Known Removals' to 'Risk Advisory' across 5-language skill docs.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `243cf8e` | docs(skill): add Known Removals section with verbatim rationale (5-lang) |
 
@@ -1414,7 +1414,7 @@
 
 **摘要**: skill(nixkits-skills) — Claude Code 導入対象削除（利用者資料基国籍推論安全境界越）、Codex 支援追加。SKILL.md「危険警告」節追記、原文声明含。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `cfc59b3` | refactor(skill): replace Claude Code with Codex, add removal notice |
 | `2f1272b` | docs(skill): use original verbatim text for Claude Code removal rationale |
@@ -1423,7 +1423,7 @@
 
 **Summary**: skill(write-maintenance-log) — strengthened timestamp rules: mandatory `git log` for commit times, ban `T00:00:00` placeholders, add post-generation verification step. Generalized from the MAINTENANCE placeholder timestamp fix (`968df0e`).
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `968df0e` | fix(docs): replace T00:00:00 placeholder timestamps with exact git commit times |
 | `6f2e128` | refactor(skill): enforce tool-based timestamp, forbid T00:00:00 placeholder |
@@ -1432,7 +1432,7 @@
 
 **摘要**: feat(ci) — CI 集計端点徽章追加。主文書 CI 徽章 shields.io endpoint 経由 `gh-pages/ci-status.json` 読取、失敗時失敗包名表示。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6465260` | feat(ci): add CI summary workflow with endpoint badge |
 | `b489890` | docs(README): switch main CI badge to endpoint |
@@ -1441,7 +1441,7 @@
 
 **摘要**: refactor(ci) — CI 単一 check.yml 25 独立 workflow 書類分割（包×構造毎）、徽章相互影響完全解消。再利用可能 `build-package.yml` 追加。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `bc42e6f` | refactor(ci): split single check.yml into 25 isolated per-package-per-arch workflows |
 | `1dfc1ee` | docs: update ruyi badge URLs to new isolated workflow files |
@@ -1451,7 +1451,7 @@
 
 **摘要**: fix(codewhale) — 源構築 riscv64 交叉編集修正：ring crate `-m64` 誤 cc crate 継承 host CFLAGS 起因、per-target CFLAGS 清空修正。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `ef64028` | docs(codewhale): add platform row + riscv64 source-build known-issues warning |
 | `7160431` | fix(codewhale-src): clear per-target CFLAGS to fix ring/cc -m64 on riscv64 cross-compile |
@@ -1460,7 +1460,7 @@
 
 **Summary**: codewhale 0.8.67 — dual-path build (prebuilt x86_64/aarch64 + source-built riscv64). Upstream removed riscv64 binaries from v0.8.67 release; riscv64 now built via rustPlatform.buildRustPackage from vendored Cargo.lock.
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `0025476` | feat(codewhale): dual-path build — prebuilt for x86_64/aarch64, source for riscv64 |
 
@@ -1471,7 +1471,7 @@
 
 **Summary**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — upstream updates (codewhale skipped: v0.8.67 still missing riscv64 binaries)
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `48414d4` | chore(pkgs): bump mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 |
 
@@ -1485,7 +1485,7 @@
 
 **摘要**: revert(ci) — `ci/` 削除、`llama-cpp-ver` input 上流 API 復元。上乗既 `tryEval` + fallback 備、局所緩衝不要。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `dbdd937` | revert: restore llama-cpp-ver to upstream API, remove ci/ |
 
@@ -1493,7 +1493,7 @@
 
 **摘要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上流更新（codewhale 跳過：v0.8.67 riscv64 二進欠落）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `73dc576` | chore(pkgs): bump obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 |
 
@@ -1508,7 +1508,7 @@
 
 **摘要**: fix(docs) — katalish/pcn 現地化修正：katalish/ruyi.md pcn/ruyi.md 言語切替破損（連結欠落又重複言語名）修正、pcn/ruyi.md 全文日本語偽中国語書換。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `cddf0ff` | docs(blender-mcp): add platform row noting riscv64 unsupported (5-lang sync) |
 | `cec92d5` | fix(docs): repair katalish/pcn localization — broken lang switchers, JP residue, missing translation |
@@ -1517,7 +1517,7 @@
 
 **摘要**: fix(ci) — blender-mcp riscv64-cross 修正経緯（4 回）。初 `callPackage` 自動解決非互換 `blender` 失敗、Nix/Bash 逸脱問題、最終上流 nixpkgs `sse-starlette` 交叉編集欠陥故 blender-mcp 除外。x86_64 / aarch64 無影響。
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `78afb9e` | fix(ci): pass blender=null for blender-mcp riscv64-cross (Blender unsupported on riscv64) |
 | `cd839d1` | fix(ci): remove stray Nix indented-string marker from riscv64-cross expr |
@@ -1528,7 +1528,7 @@
 
 **摘要**: docs(MAINTENANCE) — 全 6 MAINTENANCE 書類（zh/en/ja/katalish/pcn）言語切替追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
 
@@ -1536,7 +1536,7 @@
 
 **摘要**: blender-mcp 1.0.0 — 新規 Blender MCP 伺服器包（Python 構築、22 MCP 道具、Blender 拡張含）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `a1cf458` | packages: add blender-mcp (MCP server for Blender) |
 | `ab9109a` | packages: add blender-mcp (MCP server for Blender) |
@@ -1549,7 +1549,7 @@
 
 **摘要**: codewhale 0.8.66 — 上流更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `c00a5e6` | chore(pkgs): bump codewhale 0.8.66 |
 | `c61d458` | docs: bump codewhale 0.8.66 version numbers in all 5-language docs |
@@ -1564,7 +1564,7 @@
 
 **摘要**: opencode-telegram 0.22.0 — 上流更新（三模式TTS + thinking表示 + 緊湊出力 + /settings命令 + session起動修正）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `b189d0a` | chore(pkgs): bump opencode-telegram 0.22.0 |
 | `a61f444` | docs: bump opencode-telegram 0.22.0 version numbers in all 5-language docs |
@@ -1579,7 +1579,7 @@
 
 **摘要**: CI — llama-cpp-ver 本地文件切替（ci/llama-cpp-ver.json）、全CI作業GitHub API呼出排除rate limit全局構築失敗恒久修正；docs — riscv64徽章包装別精密化
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `8b3a3be` | fix(ci): use local path for llama-cpp-ver input, eliminate GitHub API calls from all CI jobs |
 | `5db4852` | fix(docs): add per-package job filter to riscv64 badges |
@@ -1588,7 +1588,7 @@
 
 **摘要**: feat(opencode-telegram): 服務PATH系包装注入extraPackages選択肢home-manager路注入extraBinPaths選択肢追加、opencode不在服務PATH問題修正；5言語文書更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7c98694` | feat(opencode-telegram): add extraPackages option to inject companion tools into service PATH |
 | `45b7c57` | feat(opencode-telegram): add extraBinPaths option for home-manager users |
@@ -1597,7 +1597,7 @@
 
 **摘要**: codewhale 0.8.65 — 上流更新（cli二進名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — 上流更新（多実例故障転送/並列扇出、能力発見集約、safesearch修正）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `57620d4` | chore(pkgs): bump codewhale 0.8.65 + mcp-searxng 1.8.0 |
 | `94ac1e4` | docs: bump codewhale 0.8.65 + mcp-searxng 1.8.0 version numbers in all 5-language docs |
@@ -1615,7 +1615,7 @@
 
 **摘要**: docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
 
@@ -1623,7 +1623,7 @@
 
 **摘要**: docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
 
@@ -1631,7 +1631,7 @@
 
 **摘要**: fix(skill): write-maintenance-log 第4段階「多言語同期」雛形実行可能流書直（4a 言語発見 → 4b 言語別翻訳書込 → 4c 項目数一致検証）；AGENTS.md 第4段階検証確認強化
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `66f29f0` | fix(skill): rewrite MAINTENANCE step 4 — multi-lang sync from stub to executable flow with verification gate |
 
@@ -1639,7 +1639,7 @@
 
 **摘要**: 監査修正 — 空 scripts/ 目録削除 .gitignore 死規則（translate_pcn.py）削除；AGENTS.md SKILL.md 行数制約硬性数値定性案内緩和
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `c49977e` | chore: remove stale .gitignore rule for deleted pcn_convert.py |
 | `b7bc884` | docs(AGENTS): replace SKILL.md hard line-count target with qualitative guidance |
@@ -1648,7 +1648,7 @@
 
 **Summary**: ruyi — 交叉編訳修正（postPatch 使用 python.pythonOnBuildForHost）；CI — ruyi* riscv64-cross 復帰；docs — riscv64 徽章正確 job filter 復元
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `3a404af` | feat(ci): restore ruyi/ruyi-beta/ruyi-alpha to riscv64-cross |
 | `4458922` | fix(ruyi): use python.pythonOnBuildForHost in postPatch for cross-compilation |
@@ -1658,7 +1658,7 @@
 
 **Summary**: CI — riscv64-cross 恒久除去 ruyi*（Python postPatch 交叉編訳不可）；docs — riscv64 徽章 * 標記回落復帰 + 注記
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `313c29c` | docs(ruyi): revert riscv64 badges to fallback with * marker + explanatory note |
 | `062a714` | fix(ci): remove ruyi* from riscv64-cross (Python postPatch cross-compile impossible) |
@@ -1667,7 +1667,7 @@
 
 **Summary**: CI — access-tokens 覆写 修正、GitHub API 速率限界超過解消（一行統合）；riscv64-cross 並列上限 4 設定
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `5858c97` | fix(ci): merge access-tokens into one line, cap riscv64-cross concurrency at 4 |
 
@@ -1675,7 +1675,7 @@
 
 **Summary**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `68921ce` | docs(ruyi): shorten badge labels, add precise riscv64 job filters |
 | `6dae52b` | feat(ci): add ruyi/ruyi-beta/ruyi-alpha back to riscv64-cross with subdir path mapping |
@@ -1684,7 +1684,7 @@
 
 **Summary**: CI — build / riscv64-cross を包別 matrix 分割、独立徽章対応；docs — ruyi 徽章を 9 枚（3版本×3架構）拡張
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `3a19da9` | refactor(ci): split build and riscv64-cross jobs into per-package matrix |
 | `7852f83` | docs(ruyi): expand build badges to 3×3 matrix (3 versions × 3 archs, 5 langs) |
@@ -1693,7 +1693,7 @@
 
 **Summary**: CI — build job に ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行に beta/alpha 版本番号追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `c92615e` | feat(ci): build ruyi-beta and ruyi-alpha alongside stable in build job |
 | `bf93859` | docs(ruyi): add beta/alpha version numbers to Basic Info channel row (5 langs) |
@@ -1702,7 +1702,7 @@
 
 **Summary**: CI — ruyi を riscv64-cross 除外；overlays — default overlay に ruyi-beta/ruyi-alpha 追加＋nixConfig を flake 最上位層移行；docs — README 表に ruyi 3路版本表示
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `17af888` | fix(ci): exclude ruyi from riscv64-cross (Python+C-ext deps too heavy) |
 | `3f711d4` | feat(overlays): add ruyi-beta/ruyi-alpha to default overlay; lift nixConfig to flake top-level |
@@ -1712,7 +1712,7 @@
 
 **摘要**: docs — 全5言語README ruyi-beta / ruyi-alpha devShell 項目追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `5d4ca02` | docs: add ruyi-beta + ruyi-alpha to devShell tables (all 5 READMEs) |
 
@@ -1720,7 +1720,7 @@
 
 **摘要**: ruyi — 包装目録構造再編（packages/ruyi/）、beta/alpha thin wrapper化；devShells 追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `4b9865e` | refactor(pkgs): move ruyi into subdirectory, beta/alpha as thin wrappers |
 | `94bb174` | feat(shells): add ruyi-beta + ruyi-alpha devShells |
@@ -1729,7 +1729,7 @@
 
 **摘要**: ruyi — 版通道独立包装化（ruyi / ruyi-beta / ruyi-alpha）、独立overlay削除
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `51f23ad` | refactor(pkgs): ruyi channels as separate packages (not overlays) |
 
@@ -1737,7 +1737,7 @@
 
 **摘要**: ruyi — 3通道版体系（stable/beta/alpha）、基本包装0.50.0安定版切替、beta/alpha overlay上書
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `a9f8baa` | feat(pkgs): ruyi 3-channel (stable/beta/alpha) via overlays |
 
@@ -1751,7 +1751,7 @@
 
 **摘要**: workflow — 維護記録更新規則必須化（AGENTS.md + write-maintenance-log 技能）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `2e719df` | fix: make maintenance log update mandatory after every push |
 
@@ -1759,7 +1759,7 @@
 
 **摘要**: docs — 古手動riscv64構築手順削除、CI 3架構網羅済
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `698400a` | docs: remove stale manual riscv64 build instructions — CI now covers all 3 architectures |
 
@@ -1767,7 +1767,7 @@
 
 **摘要**: codewhale 0.8.64 — 上流更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `0bde292` | chore(pkgs): bump codewhale 0.8.64 |
 
@@ -1785,7 +1785,7 @@
 
 **摘要**: CI — riscv64交叉編訳管追加、3架構CI全量網羅（x86_64 / aarch64 / riscv64）；包装毎riscv64徽章追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `ac3b337` | feat(ci): add riscv64 cross-compilation job via pkgsCross |
 | `0ab7a5e` | fix(ci): use direct $pkg variable in nix expr (remove heredoc) |
@@ -1796,7 +1796,7 @@
 
 **摘要**: translate-pseudocn — Web調査基辞書拡充（7→46項目）、SVO語順変更、全pcn文書再生成
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `4fbf387` | feat(pcn): expand dictionary 7→46 entries, add IT terminology from research |
 | `ec38b7e` | feat(pcn): convert to SVO word order, expand dictionary, regenerate all 22 docs |
@@ -1805,7 +1805,7 @@
 
 **摘要**: translate-pseudocn技能再構築 — 疑似中国語「日本語仮名剥視覚結果」再定義、中国語変換廃止。日本語漢字保持（簡体字化）、SOV語順維持、辞書40→7項目縮小（片仮名→日本語漢字）。全22件pcn文書再生成
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `be0780b` | refactor(pcn): redesign pseudo-Chinese skill — Japanese-native kanji, SOV order, no Chinese chars |
 
@@ -1813,7 +1813,7 @@
 
 **Summary**：AGENTS.md — 硬符号除去、冗長監査備忘削除、緩衝章代理操作手引書換、利用者側記述削除、言語体系自動発見変更
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `771cd1c` | docs(AGENTS): remove hardcoded counts, merge audit memo, rewrite cache as actionable guide, use auto-discovered languages only |
 | `c7b8662` | docs(AGENTS): remove user-facing subsection, rename to 缓存操作 |
@@ -1823,7 +1823,7 @@
 
 **Summary**：mcp-searxng 1.7.2 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `93a8714` | chore(pkgs): bump mcp-searxng 1.7.2 |
 
@@ -1836,7 +1836,7 @@
 
 **Summary**：AGENTS.md — 新規初回起動監査規則、接続制御頂部移動
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `135d347` | docs(AGENTS): add new-session audit rule |
 | `5192e2c` | docs(AGENTS): move new-session audit rule after access control |
@@ -1845,7 +1845,7 @@
 
 **Summary**：docs — README 重複行修復、write-project-docs 反模式補充
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `091290b` | fix(docs): remove duplicate "提供 nix develop" line in README.md |
 | `922b1d8` | fix(skill): add anti-pattern — check for duplicate content before insert |
@@ -1854,7 +1854,7 @@
 
 **Summary**：AGENTS.md — 新規接続制御、言語要求、送信規範、保守記録確認、文書同期、汎化、多構造緩衝規則
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `ac6081c` | docs(AGENTS): add access control, language req, commit discipline, maintenance check, doc sync, generalization, multi-arch cache rules |
 
@@ -1862,7 +1862,7 @@
 
 **Summary**：docs — 毎包文書双構造 CI 徽章追加、技能雛形同期
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `8e50035` | feat(docs): add per-package dual-arch CI badges to all 30 docs |
 | `d3b3827` | fix(docs): split dual-arch badges to separate lines |
@@ -1873,7 +1873,7 @@
 
 **Summary**：CI — ARM runner 多構造構築追加、flake.lock 並行競合修正（--no-write-lock-file）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `97f2ea4` | docs: compress cache sections, add ARM CI runner, update AGENTS.md |
 | `6d581ac` | fix(ci): fix YAML syntax - merge duplicate strategy keys, add runs-on |
@@ -1884,7 +1884,7 @@
 
 **Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 戻移（修正書類依存）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `89f5441` | fix(pkgs): update mcp-searxng source hash + npmDepsHash |
 | `303b1fa` | fix(pkgs): update mcp-searxng hash, restore ruyi overlay postPatch |
@@ -1893,7 +1893,7 @@
 
 **Summary**：docs — 緩衝除外警告追加（上乗及部品+修正条目）、README 緩衝説明圧縮、flake.nix nixConfig 自動宣言追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6be660e` | fix: add nixConfig auto-discovery, remove hardcoded package count, clarify arch support |
 | `b28c126` | docs: add cache-exclusion warnings for overlays and module+patch entries |
@@ -1902,7 +1902,7 @@
 
 **Summary**：docs — 全 30 篇包文書 `## 緩衝` 節追加、CI badge 配置改善、技能同期
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7071893` | docs: improve CI badge layout, add cache config options, update skills |
 | `02b355c` | docs: add binary cache section to all 30 package docs + template sync |
@@ -1911,7 +1911,7 @@
 
 **Summary**：CI/CD — GitHub Actions 構築行列（Cachix 推送）追加、二進緩衝、AGENTS.md
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6956af1` | feat: add CI/CD workflow, binary cache, and AGENTS.md |
 
@@ -1919,7 +1919,7 @@
 
 **Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 辞書及雛形分割、SKILL.md 60-80 行圧縮
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `5367452` | refactor(skills): split dictionaries, compress SKILL.md to ~60-80 lines |
 
@@ -1927,7 +1927,7 @@
 
 **Summary**：docs — MAINTENANCE 時刻精確化（29 節）、30 重複節削除（SHA 去重）、nix-kits→nixkits 全量置換（183 箇所）、部品文書同期
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `61cc470` | docs: fix MAINTENANCE timestamps, dedup 30 sections, rename nix-kits→nixkits |
 
@@ -1935,7 +1935,7 @@
 
 **Summary**：patches — ruyi-nixos-compat.patch 清浄複製基再構築（1223→426 行）、flake.lock 自参照 artifact 清除
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `1be2e84` | fix(patches): rebuild ruyi-nixos-compat.patch from clean clone (1223→426 lines) |
 
@@ -1943,7 +1943,7 @@
 
 **Summary**：overlays — patches 一覧 lib.unique 去重、ruyi-nixos-compat 精簡、llama-cpp-rocm curried 形式注釈追加
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `81bb2ef` | fix(overlays): lib.unique dedup on patches, simplify ruyi-nixos-compat, add llama-cpp-rocm comment |
 
@@ -1951,7 +1951,7 @@
 
 **Summary**：modules — 4 部品 enable 選項追加、comfyui-strix-halo assertions 追加、名前空間 nixkits.* 統一（含後方互換）、llama-cpp-rocm hfCacheDir 動的導出
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `d21db2a` | refactor(modules): add enable options, assertions, migrate to nixkits.* namespace |
 
@@ -1959,7 +1959,7 @@
 
 **Summary**：codewhale 0.8.63 — 多構造予編集二進（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 包統合；meta 欄補完
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `c9e7fc5` | feat(pkgs): codewhale multi-arch + 0.8.63, meta fixes, ruyi postPatch merge |
 
@@ -1967,7 +1967,7 @@
 
 **Summary**：flake — mihomo-alpha 幽霊入力及上乗除去（書類未存在）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `26ce2be` | fix(flake): remove mihomo-alpha ghost input and overlay |
 
@@ -1975,18 +1975,18 @@
 
 **Summary**：言語切替器札規則汎化 — display_name 意味修正言語自称、言語名称不局所化規則 write-project-docs / translate-katalish / translate-pseudocn 三技能追加；修正 zh/katalish/pcn 全文書切替器中残留局所化名称
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `f5aee43` | docs(skill): write-project-docs — 添加语言名称不本地化规则 |
 | `7ba8c1d` | fix(katalish): 语言切换器中 English 不应本地化为片假名 |
-| `5ce9f7d` | fix: display_name 语义修正 — 语言自称与切换器标签分离 |
-| `aa8634b` | fix(docs): zh 文档切换器残留旧名称修正 + MAINTENANCE 翻译补全 + translate-* 技能泛化 |
+| `5ce9f7d` | fix: display_name 语义修正 — 语言自称與切换器标签分离 |
+| `aa8634b` | fix(docs): zh 文檔切换器残留旧名称修正 + MAINTENANCE 翻訳补全 + translate-* 技能泛化 |
 
 ## 2026-06-21T00:07:44+09:00
 
 **Summary**：codewhale 0.8.62 — 上流修復；mcp-searxng 1.7.1 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `57f6a4a` | chore(pkgs): bump codewhale 0.8.62, mcp-searxng 1.7.1 |
 
@@ -1999,7 +1999,7 @@
 
 **Summary**：技能体系再構築 — translate-katakana→translate-katalish 改名、新規 translate-pseudocn（偽中国語）追加、write-project-docs 及 write-maintenance-log 言語拡張自動発見、文書符号五語対応表
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `0588ee0` | skill: write-project-docs 新增伪中国语(pcn)语言支持 |
 | `c5fb218` | docs: write-project-docs 英日文版同步更新四语(pcn)支持 |
@@ -2015,7 +2015,7 @@
 
 **Summary**：codewhale 0.8.61 — 上流修復；mcp-searxng 1.6.0 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `719e16e` | chore(pkgs): bump codewhale 0.8.61 |
 | `d6717c1` | chore(pkgs): bump mcp-searxng 1.6.0 |
@@ -2032,7 +2032,7 @@
 
 **Summary**：ruyi — NixOS 互換性修正（`patches/ruyi-nixos-compat.patch`）、透過的処理予編集 RISC-V 道具連動的連結器路、GCC 子工程 ELF interpreter 修復及 console_scripts argv0 問題
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `d814550` | feat(ruyi): add autoUpdate and declarative venvs to module |
 
@@ -2040,7 +2040,7 @@
 
 **Summary**：ruyi — NixOS 部品（`services.ruyi`）、宣言的生成 `/etc/xdg/ruyi/config.toml` 及環境変数
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `5cea307` | feat(ruyi): add NixOS module for declarative configuration |
 | `ef377e4` | fix(ruyi): correct config path to /etc/xdg/ruyi (XDG spec) |
@@ -2051,7 +2051,7 @@
 
 **Summary**：ruyi — 新規 devShell 支援追加、`nix develop github:Kihara777/NixKits#ruyi` 環境入可能
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `975295d` | refactor(flake): remove default package alias |
 
@@ -2059,7 +2059,7 @@
 
 **Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理者、新包（Python / Poetry 構築、ruff + mypy + 320 単体試験 + 52 統合試験全通過）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `622a5e2` | feat(pkg): add ruyi — RuyiSDK package manager |
 
@@ -2071,7 +2071,7 @@
 
 **Summary**：write-maintenance-log 技能 — nixkits-check-updates 自保守記録書式変更抽出独立技能化；MAINTENANCE.md 再生成（動的名称 + 精密時刻 + LIFO + hash 省略）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `b77170a` | docs(skill): re-apply flake.lock sync and build verification steps |
 | `be2239b` | docs(skill): add .gitignore pre-check to flake.lock sync step |
@@ -2090,7 +2090,7 @@
 
 **Summary**：fix(mcp-searxng): 入口書類誤修正 — dist/index.js → dist/cli.js、MCP 伺服器正常起動可能
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `73a3b10` | fix(mcp-searxng): use dist/cli.js as entry point instead of dist/index.js |
 
@@ -2098,7 +2098,7 @@
 
 **摘要**: llama-cpp-rocm — builtins.fetchurl 代替 flake input 動的版取得試行（既撤回、方案不可用）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `9e94305` | refactor(llama-cpp-rocm): replace flake input with builtins.fetchurl |
 | `b3d9c05` | fix(llama-cpp-rocm): use bare builtins.fetchurl without hash param |
@@ -2107,7 +2107,7 @@
 
 **摘要**: mcp-searxng 文書 — CodeWhale MCP 構成指南、常見罠警告（env 既定{}）、故障排查章節
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
 
@@ -2115,7 +2115,7 @@
 
 **摘要**: nixos-modern-cli 技能 — Nix Store 路罠章節（gh auth setup-git 硬碼路失效診断汎用修正pattern）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `bd42478` | docs(skill): add Nix Store path trap section to nixos-modern-cli |
 
@@ -2123,7 +2123,7 @@
 
 **摘要**: opencode-telegram 0.21.2 — 上流修正及依存更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `17252ea` | chore(pkgs): bump opencode-telegram 0.21.2 |
 | `3b05a32` | docs(MAINTENANCE): record 2026-06-16 update (opencode-telegram 0.21.2) |
@@ -2138,7 +2138,7 @@
 
 **摘要**: codewhale 0.8.60 — 上流修正
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `5c74dcf` | chore(pkgs): bump codewhale 0.8.60 |
 | `3cef0a8` | docs(MAINTENANCE): record 2026-06-15 update (codewhale 0.8.60) |
@@ -2153,7 +2153,7 @@
 
 **摘要**: comfyui-strix-halo 文書 — 線上統合 mode 説明 文件構造図
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `c1fd014` | docs(comfyui-strix-halo): update integration mode and file structure |
 
@@ -2161,7 +2161,7 @@
 
 **摘要**: codewhale 0.8.59 — 若干 TUI 描画問題修正；mcp-searxng 1.4.0 — HTTP 伝送 mode 新規
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `a71aae7` | chore(pkgs): bump codewhale 0.8.59 |
 | `e8f0299` | chore(pkgs): bump mcp-searxng 1.4.0 |
@@ -2180,7 +2180,7 @@
 
 **摘要**: llama-cpp-rocm 模块 — modelsPreset 支持復旧（nixpkgs 既削除）、名前空間 nixkits 移行、三言語移行指南
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6f52ddf` | feat(llama-cpp-rocm): restore modelsPreset via nixkits namespace, migrate from services |
 | `56ff235` | docs(llama-cpp-rocm): add trilingual migration guide |
@@ -2193,7 +2193,7 @@
 
 **摘要**: codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `b995798` | chore(pkgs): bump codewhale 0.8.58 |
 | `ef9daae` | chore(pkgs): bump mcp-searxng 1.3.4 |
@@ -2212,7 +2212,7 @@
 
 **摘要**: 技能文書 — 維護記録格式規則系列（自動発見汎化、記述的標題、正確git commit時間印、禁止T00:00:00占位符）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7680adf` | docs(skill): enforce exact git commit timestamps, ban T00:00:00 placeholder |
 | `487e18f` | docs(skills): sync descriptive title rule to trilingual docs |
@@ -2223,7 +2223,7 @@
 
 **摘要**: other — 2件更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `4876547` | docs: add missing rog-control-center-fix trilingual module docs |
 | `f891ad2` | docs: fix DeepSeek V4 Pro casing in author credits |
@@ -2232,7 +2232,7 @@
 
 **Summary**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `543bcf9` | chore(pkgs): bump codewhale 0.8.57, mcp-searxng 1.3.2 |
 | `7902bd1` | docs(MAINTENANCE): fix timestamps to exact commit times |
@@ -2249,7 +2249,7 @@
 
 **摘要**: opencode-telegram — KillMode process変更、TimeoutStopSec 追加防止 shutdown 掛起
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `fbcf15c` | fix(opencode-telegram): add TimeoutStopSec and KillMode to prevent shutdown hang |
 | `6cda338` | fix(opencode-telegram): change KillMode from mixed to process |
@@ -2258,7 +2258,7 @@
 
 **Summary**：codewhale 0.8.55 — 上流修復；mcp-searxng 1.3.1 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `397e4ee` | chore(pkgs): bump codewhale 0.8.55, mcp-searxng 1.3.1 |
 
@@ -2272,7 +2272,7 @@
 
 **摘要**: 文書再構 — 地域化文件 docs/ 目録移入；MAINTENANCE.md 初回合列規則追加、純表格形式、完全提交歴史逆填
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `b3d7d0f` | docs: switch MAINTENANCE.md to table-only format, drop trilingual prose |
 | `e4a3813` | docs: omit build status and unchanged hashes from MAINTENANCE.md |
@@ -2287,7 +2287,7 @@
 
 **Summary**：mcp-searxng 1.2.1 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `07b1ee5` | chore(pkgs): bump mcp-searxng 1.1.0 → 1.2.1 |
 | `db680df` | docs: add MAINTENANCE.md — software update changelog |
@@ -2305,7 +2305,7 @@
 
 **摘要**: rcc-fix — NixOS 模块（systemd 死鎖修正）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |
 
@@ -2313,7 +2313,7 @@
 
 **摘要**: 技能文書 — 源変更後文書同期規範；comfyui-strix-halo C 道具鎖説明；hash 計算注意事項汎化；基本情報規則多言語統一
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `7e22edd` | docs(skill): add skill doc template, sync rules, and staleness check |
 | `86fc7c2` | docs(skills): sync write-project-docs trilingual docs with SKILL.md |
@@ -2330,7 +2330,7 @@
 
 **Summary**：codewhale 0.8.53 — 上流修復；mcp-searxng 1.1.0 — 上流修復；opencode-telegram 0.21.1 — 上流修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `300a9a6` | chore(pkgs): bump codewhale 0.8.53, mcp-searxng 1.1.0, opencode-telegram 0.21.1 |
 
@@ -2349,7 +2349,7 @@
 
 **Summary**：comfyui-strix-halo 修正 — ROCm 7.2 wheels 内蔵支援
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `e11f899` | fix(docs): add missing ja doc and en/ja README entries for comfyui-strix-halo |
 | `48d842f` | docs(ja): add 基本情報 section to comfyui-strix-halo |
@@ -2364,7 +2364,7 @@
 
 **摘要**: 技能体系 — SKILL.md 全面中国語化；三言語対称性確認規則
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `8aa65da` | docs(skill): add trilingual symmetry checks and ja 基本情報 rule to write-project-docs |
 | `7dad578` | feat(skills): localize all SKILL.md to Chinese, declare in READMEs |
@@ -2373,7 +2373,7 @@
 
 **摘要**: other — 7件更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `3be4889` | docs: add recover-nixos-config skill with multi-language docs |
 | `fc5eca3` | docs: fix Skills section titles and generic agent descriptions |
@@ -2387,7 +2387,7 @@
 
 **摘要**: opencode-telegram — 8件更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `8fe0b3d` | feat(opencode-telegram): add NixOS module with declarative config |
 | `8fe3fae` | docs(opencode-telegram): simplify to flake module config only, remove manual systemd |
@@ -2419,7 +2419,7 @@
 
 **摘要**: nixos-modern-cli 技能 — POSIX 道具指南 nix 二進路提示
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `4b103e5` | docs(nixos-modern-cli): add POSIX tool guide and nix binary tip |
 
@@ -2427,7 +2427,7 @@
 
 **摘要**: write-project-docs — 新技能（NixKits 風任意 project 多語言文書体系作成）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `373da95` | feat(skills): add write-project-docs skill with trilingual docs |
 
@@ -2435,7 +2435,7 @@
 
 **摘要**: codewhale — stdenv 綴修正；llama-cpp-rocm 文書修正（内line連結削除、system.nix 完全 preset 使用）；opencode-telegram 初回設定流
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `aef12bc` | docs(llama-cpp-rocm): use complete modelsPreset from system.nix |
 | `15f956c` | docs(llama-cpp-rocm): replace Usage with upstream reference |
@@ -2447,7 +2447,7 @@
 
 **摘要**: other — 2件更新
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `358316c` | docs: add English and Japanese translations with I18n structure |
 | `bef3b4b` | docs: add English and Japanese README with language switcher |
@@ -2456,7 +2456,7 @@
 
 **Summary**：kitsfmt — 多修正（vendor 目録回復、冪等性、上書安全、with→builtins.attrValues 変換、--stdin 旗）；rcc-fix — D-Bus 熱挿抜検出書換；build — .vscode gitignore 範囲修正
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `6a42efd` | fix(kitsfmt): idempotency, inplace safety, output validation |
 | `1b7d0a9` | fix(build): restrict .vscode gitignore to repo root to not exclude vendored crate files |
@@ -2472,7 +2472,7 @@
 
 **摘要**: docs: codewhale 種別説明修正（事前構築済、非原始碼構築）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `14e060c` | docs: fix codewhale type description (pre-built, not source-built) |
 
@@ -2480,7 +2480,7 @@
 
 **Summary**：codewhale v0.8.47 — 新包
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `d5b1878` | feat: add codewhale (DeepSeek V4 TUI agent) v0.8.47 |
 | `979b75c` | refactor(codewhale): switch to pre-built binaries, remove cargoHash |
@@ -2492,7 +2492,7 @@
 
 **Summary**：fix(kitsfmt): inherit 逗号、字下文字列破損、lambda 空白等多整形問題修復；冪等性修復
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `f4b56ba` | fix(kitsfmt): inherit comma bug, indented string corruption, lambda spacing |
 | `d1ab491` | feat(kitsfmt): best-practice auto-corrections with env var support |
@@ -2507,7 +2507,7 @@
 
 **Summary**：llama-cpp-rocm — NixOS 部品（systemd 砂箱上書）；opencode-telegram — NixOS 部品（宣言的設定、自動導入）；rcc-fix — visible 属性修復；技能文書 — 動的発見表現
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `3d2c38c` | docs(skill): nixkits-check-updates — dynamic discovery, not hardcoded list |
 | `e5ee4ab` | docs(skill): remove hardcoded count from features, add exclusion note |
@@ -2521,7 +2521,7 @@
 
 **Summary**：技能体系 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三技能同期上線；llama-cpp-rocm 動的追跡説明
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `327291a` | feat(skills): add nixos-modern-cli skill with 3-language docs |
 | `f0e74d3` | feat(skills): add nixkits-skills installer with 3-language docs |
@@ -2532,7 +2532,7 @@
 
 **摘要**: 文書 — README 節名改名（快速開始→追加、包→軟件、License→許可）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `d869279` | docs(zh): rename sections 快速开始→添加 包→软件 License→许可 |
 
@@ -2540,7 +2540,7 @@
 
 **摘要**: mcp-searxng 文書 — SearXNG + lighttpd 逆代理完全 NixOS 構成
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `f3a6978` | docs(mcp-searxng): add full SearXNG + lighttpd reverse proxy config |
 
@@ -2548,7 +2548,7 @@
 
 **摘要**: llama-cpp-rocm — llama-cpp-ver flake 入力削除、nixpkgs 既定版使用
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `9e7f8e2` | fix(llama-cpp-rocm): remove llama-cpp-ver, use nixpkgs version directly |
 
@@ -2564,9 +2564,9 @@
 
 **摘要**: kitsfmt — match_ast! 宏構文誤修正、comments_before 関数簡略化、src 路修正
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
-| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路径 |
+| `e731eb7` | fix(kitsfmt): 修正 kitsfmt.nix 中的 src 路経 |
 | `314732c` | fix(kitsfmt): 修复 match_ast! 宏不支持通配符的问题 |
 | `1667e1d` | fix(kitsfmt): 修复 match_ast! 宏语法错误，简化 comments_before 函数 |
 
@@ -2574,7 +2574,7 @@
 
 **摘要**: kitsfmt — rnix AST 基盤格式化 engine v0.3.0 書換；Cargo.lock 生成
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `495415f` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
 | `378e8bb` | refactor(kitsfmt): 基于 rnix AST 重写格式化引擎 v0.3.0 |
@@ -2584,7 +2584,7 @@
 
 **Summary**：llama-cpp-rocm — 新包（動的追跡上流最新 Release）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `9cb24a3` | llama-cpp MTP |
 
@@ -2595,7 +2595,7 @@
 
 **Summary**：kitsfmt — 新包（自建 Nix 整形器）；obs-bilibili-stream v1.0.0 — 新包
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `2c917bd` | feat: Add kitsfmt formatter and modernize flake structure |
 
@@ -2607,7 +2607,7 @@
 
 **Summary**：rcc-fix — 新包（asusctl 修正）
 
-| 提交 | 说明 |
+| 提交 | 説明 |
 |------|------|
 | `e2d09a2` | RCC-Fix |
 

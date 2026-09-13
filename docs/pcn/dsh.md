@@ -10,16 +10,16 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.1.5-rc.1` |
+| 版 | `0.1.5-rc.1` |
 | 開発通道 | `dsh-alpha 0.1.5-alpha.2`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
-## 版本通道
+## 版通道
 
-NixKits 仿 ruyi 薄包装模式（本体定義 + 版本/hash 上書包装）複数 dsh 版本同時提供：
+NixKits 仿 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数 dsh 版同時提供：
 
-| 包 | 通道 | 版本 | 説明 |
+| 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.1.5-rc.1` | npm `latest` dist-tag、既定 |
 | `pkgs.dsh-alpha` | alpha | `0.1.5-alpha.2` | npm `alpha` dist-tag、最新開発版追跡 |
@@ -29,12 +29,12 @@ NixKits 仿 ruyi 薄包装模式（本体定義 + 版本/hash 上書包装）複
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> `dsh-alpha` 上流開発通道：内蔵拡張一覧版本毎変化（下文一覧 stable `0.1.5-rc.1` 対応。alpha 実行時実際読込基準）。更新前 [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) 確認推奨。
+> `dsh-alpha` 上流開発通道：内蔵拡張一覧版毎変化（下文一覧 stable `0.1.5-rc.1` 対応。alpha 実行時実際読込基準）。更新前 [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) 確認推奨。
 
 ## 導入
 
 ```nix
-# /etc/nixos/flake.nix — flake 入力追加与模組掛載
+# /etc/nixos/flake.nix — flake 入力追加與模組掛載
 {
   inputs.nixkits.url = "github:Kihara777/NixKits";
   # nixosConfigurations.<host>.modules 内:
@@ -102,11 +102,11 @@ dsh ≥ 0.1.2-alpha web UI 入口 Host authority 基盤 session cookie 認証使
 
 > **PATH**：部品 service 完全 NixOS PATH（`/run/current-system/sw/bin` 等）自動注入。無場合 systemd 既定 PATH bash 発見不能、内建 bash 工具 `spawn bash ENOENT` 失敗。
 
-> **HOME**：service HOME 実行用户実家（`users.users.<user>.home`、無場合 dshHome 回退）指、代理用户自身工具環境継承——git/gh 憑証（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定全 `$HOME` 解決。HOME dshHome 指向場合 git gh credential helper 憑証発見不能 push 失敗。
+> **HOME**：service HOME 実行利用者実家（`users.users.<user>.home`、無場合 dshHome 回退）指、代理利用者自身工具環境継承——git/gh 憑証（`~/.config/gh`）、`~/.gitconfig`、npm/ssh 設定全 `$HOME` 解決。HOME dshHome 指向場合 git gh credential helper 憑証発見不能 push 失敗。
 
 ## 插件宣言管理
 
-dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits.dsh.plugins` 宣言 on/off 与設定：
+dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits.dsh.plugins` 宣言 on/off 與設定：
 
 ```nix
 {
@@ -141,11 +141,11 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 > **dsh ≥ 0.1.2-alpha 插件互換性**：`ctx.connection.rpc.intercept` shared RPC channel interceptor 排他（1 channel 1 個限定、再登録 throw）、`/api` 内建 typert-gateway 既占有。RPC 方法提供第三者插件宜用精確 fetch route（`ctx.connection.fetch.register` `/api/<plugin>/<method>` 等登録、`{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` RPC envelope 契約自前実装）——channel interceptor 奪取時内建 interceptor 押退、全 llm/session 等 RPC 404。插件 `@deepseek-ai/dsh-tools` 等 peer 依存宿主 dsh 通道一致必要。
 
-### 插件更新与零再起活性化
+### 插件更新與零再起活性化
 
-插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体与插件樹）与 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 与 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
+插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体與插件樹）與 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 與 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
 
-代価与配套：dsh 長駐進程、插件更新反映需明示 `systemctl restart dsh`（`nixos_shell` 該命令自動分離瞬時単元、呼出先於再起返）。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
+代価與配套：dsh 長駐進程、插件更新反映需明示 `systemctl restart dsh`（`nixos_shell` 該命令自動分離瞬時単元、呼出先於再起返）。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
 
 ## NixKits 插件
 
@@ -154,7 +154,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
-| dsh-api-balance | webui 用量面板「用量 / 余额」切替：帳戶残高、日 / 月 / 30 日内消耗図表与音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
+| dsh-api-balance | webui 用量面板「用量 / 余额」切替：帳戶残高、日 / 月 / 30 日内消耗図表與音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## Agent 預設
 
@@ -171,10 +171,10 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 | 預設 | 説明 |
 |------|------|
-| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 理由明示全請求拒否）；`nixos_shell` / `nixos_cli` 与 NixOS 高效開発 prompt 読込 |
-| 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）与倉庫維護工作流 prompt 注入 |
+| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 理由明示全請求拒否）；`nixos_shell` / `nixos_cli` 與 NixOS 高效開発 prompt 読込 |
+| 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）與倉庫維護工作流 prompt 注入 |
 
-預設詳細動作、組合構造与派生維持規則 [dsh-nixos-shell.md](dsh-nixos-shell.md) 参照。
+預設詳細動作、組合構造與派生維持規則 [dsh-nixos-shell.md](dsh-nixos-shell.md) 参照。
 
 ## sudo 守護
 
@@ -189,14 +189,14 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 }
 ```
 
-> **安全模型**：套接字文件 dsh service 用戶所有 `0600`（`SocketUser`/`SocketMode`）— 該用戶接続可、実質該用戶向免密 root 実行。用戶与代理挙動双方信頼可場合有効化。
+> **安全模型**：套接字書類 dsh service 用戶所有 `0600`（`SocketUser`/`SocketMode`）— 該用戶接続可、実質該用戶向免密 root 実行。用戶與代理挙動双方信頼可場合有効化。
 
 
 ## 插件清單
 
 dsh 0.1.5-rc.1 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
 
-> **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版本輸出為准。本表対応 web profile 之 base + web-app patch 集。
+> **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版輸出為准。本表対応 web profile 之 base + web-app patch 集。
 
 ```text
   agent -> @deepseek-ai/dsh-agent
@@ -355,7 +355,7 @@ dsh 0.1.5-rc.1 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
 
 ## 設定宣言構成
 
-dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）格納。`nixkits.dsh.settings` 宣言構成（namespace → section）：
+dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）格納。`nixkits.dsh.settings` 宣言構成（namespace → section）：
 
 ```nix
 {
@@ -376,20 +376,20 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）�
 - JSON（合法 YAML）描画、hot reload；空 `{}` 或欠落 schema 既定値 fallback
 
 
-### 声明配置可能 host namespace
+### 声明設定可能 host namespace
 
-`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 配置、瀏覽器間一致。DSH 0.1.2-alpha 内建登録 namespace 与字段：
+`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 設定、瀏覽器間一致。DSH 0.1.2-alpha 内建登録 namespace 與字段：
 
 | namespace | 字段 | 説明 |
 |-----------|------|------|
 | `locale` | `language` 等 | 界面言語 |
-| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観与主題 |
+| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観與主題 |
 | `ui-chat` | `transcriptView` 等 | 会話視図 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | busy 時 Enter 動作 |
 | `ui-onboarding` | — | 引導 step 状態 |
 | `agent-presets` | — | Agent preset |
 
-> **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明配置。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内配置、或 device 別独立瀏覽器。
+> **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明設定。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内設定、或 device 別独立瀏覽器。
 
 
 ### 默認模型（defaultModel）
@@ -407,13 +407,13 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）�
 }
 ```
 
-#### reasoningEffort 段階与 cost
+#### reasoningEffort 段階與 cost
 
 | reasoningEffort | 動作 | 開銷 |
 |-----------------|------|------|
-| `off` | non-thinking：思考連鎖無、`thinking:disabled` 映射 | **最省**（reasoning token 無）、延遲最小；**FIM 補全僅此段支持** |
+| `off` | non-thinking：思考連鎖無、`thinking:disabled` 映射 | **最省**（reasoning token 無）、延遲最小；**FIM 補全僅此段対応** |
 | `low` | 思考開・最小力度 | off 稍高（少量 reasoning token） |
 | `high` | 默認段（dsh-llm-deepseek adapter 默認 high）、品質/速度均衡 | 出力含推論 segment、token 比率増 |
 | `max` | 最高力思考、品質最強 | **最高**（出力 token 比率最大） |
 
-> `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限支持」）。FIM 僅 `deepseek-v4-flash` 与 `deepseek-v4-pro` 支持、`deepseek-v4-flash-vision-exp` 不支援。
+> `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限対応」）。FIM 僅 `deepseek-v4-flash` 與 `deepseek-v4-pro` 対応、`deepseek-v4-flash-vision-exp` 不支援。
