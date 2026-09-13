@@ -104,8 +104,10 @@ nix registry add nixkits github:Kihara777/NixKits
 ## 作者
 
 - **狐莉 (キツのり)** — 创建和维护
-- **小爪 (キツのめ)** — 设计、开发 feat. DeepSeek V4 Flash · DeepSeek Harness (DSH) 生态（dsh-nixos-shell 插件与 NixOS模式/维护模式 Agent 预设）
-- **小小爪 (キツのめ)** — 硬件推理基础设施 feat. llama-cpp-rocm: Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+- **小爪 (キツのめ)** — 设计、开发 feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
+- **小小爪 (キツのめ)** — 硬件推理基础设施 feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S，core 面所用量化等级) · Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+
+> **Note**：小爪 亦参与 DeepSeek Harness (DSH) 生态 —— dsh-nixos-shell 插件，以及 NixOS模式 / 维护模式 Agent 预设。
 
 ## 许可
 
