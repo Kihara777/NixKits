@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:35:34+09:00
+
+**摘要**：docs(llama-cpp-rocm): 新增「统一内存环境变量的退化风险」章节 — 记录 StrixHalo 上设置 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 导致模型输出退化（token 重复）的四行实测对照，并说明该风险随量化精度降低而显著提升；README 补丁章节同步加入醒目警示（四语）
+
+| 提交 | 说明 |
+|------|------|
+| `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
+
 ## 2026-09-12T19:00:39+00:00
 
 **摘要**：修复 dsh 反代端口 403 — lighttpd 缺 mod_proxy/mod_setenv 模块，proxy.server/setenv 配置被忽略、反代端口请求无 handler；改为 reverseProxy.enable 时显式声明这两个模块（autoAuth 时再追加 mod_magnet）

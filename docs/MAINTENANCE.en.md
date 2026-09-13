@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:35:34+09:00
+
+**Summary**：docs(llama-cpp-rocm): Added a "Unified-Memory Environment Variable Degeneration Risk" section — records the four-row measured comparison showing `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` degenerates model output (token repetition) on StrixHalo, and notes that the risk rises significantly as quantisation precision drops; the README patch section gained a matching warning (all four languages)
+
+| Commit | Description |
+|--------|-------------|
+| `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
+
 ## 2026-09-12T19:00:39+00:00
 
 **Summary**：Fixed dsh reverse-proxy port returning 403 — lighttpd was missing mod_proxy/mod_setenv, so the proxy.server/setenv config was ignored and requests to the proxy port had no handler; both modules are now declared explicitly on reverseProxy.enable (mod_magnet appended when autoAuth is on)

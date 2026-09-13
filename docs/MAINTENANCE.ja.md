@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:35:34+09:00
+
+**概要**：docs(llama-cpp-rocm): 「ユニファイドメモリ環境変数による退化リスク」節を追加 — StrixHalo で `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` がモデル出力を退化（トークン反復）させる 4 行の実測対照を記録し、このリスクが量子化精度の低下とともに著しく増大することを明記；README のパッチ節にも対応する警告を追加（4 言語）
+
+| コミット | 説明 |
+|----------|------|
+| `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
+
 ## 2026-09-12T19:00:39+00:00
 
 **概要**：dsh リバースプロキシの 403 を修正 — lighttpd に mod_proxy/mod_setenv がなく、proxy.server/setenv 設定が無視され反代ポートのリクエストにハンドラがなかった；reverseProxy.enable 時にこの 2 モジュールを明示宣言するよう変更（autoAuth 時に mod_magnet を追加）
