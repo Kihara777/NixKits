@@ -26,10 +26,10 @@ platform_profile_on_battery: Quiet,
 **USB-C PD 分支無。** 故「插 PD 時用 Balanced、插桶形電源時用 Performance」
 此類策略不能用設定表現。
 
-問題在於 ACPI 層**僅暴露一個 AC 供給器** —— PD 與桶形充電在
+問題在於 ACPI 層**僅暴露一個 AC 供給元** —— PD 與桶形充電在
 `/sys/class/power_supply/AC0/online` 上皆為 `1`、看似不能区分。
 
-**但内核別把 USB-C PD 暴露為独立供給器**、本部品據此区分：
+**但内核別把 USB-C PD 暴露為独立供給元**、本部品據此区分：
 
 | 信号 | 経路 | PD 在線時 |
 |------|------|----------|
@@ -135,7 +135,7 @@ PlatformProfileOnAc already 0 (balanced), nothing to do
 on battery — asusd handles it (platform_profile_on_battery), no action
 ```
 
-> ⚠️ **窓口期陷阱**：`power_operation_mode` 與 USB 供給器之 `online`
+> ⚠️ **窓期陷阱**：`power_operation_mode` 與 USB 供給元之 `online`
 > **僅在拔插瞬間**変化。若在未接続 PD 時読取、`power_operation_mode`
 > 恒為 `default` —— 據此会誤判「内核不能区分 PD 與桶形」。
 > 判断前必須先確認當時確実處於 PD 給電。
