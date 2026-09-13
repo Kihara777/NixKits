@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T06:18:42+09:00
+
+**Summary**：docs(pcn): purged simplified-Chinese characters repo-wide — pseudocn is kana-stripped Japanese, so simplified characters are never legal in its body text. A full scan found and fixed: (1) `与`→`與`, 132 occurrences (including `README.pcn.md` / `MAINTENANCE.pcn.md`); (2) `说明`→`説明`, 120 occurrences (the table header was split between both forms, with only recent entries correct); (3) dictionary-mandated terms `文件`→`書類`, `版本`→`版`, `用户`→`利用者`, `支持`→`対応`; (4) simplified-only characters `档`→`檔`, `径`→`経`, `译`→`訳`, `实例`→`実例`. Two key judgements: **(a)** `端口` / `制御台` look Chinese but have Japanese counterparts, so they are **kept and added to the dictionary** (I had invented a `港` mapping for ポート, which the "strip when unmapped" rule forbids, and reverted it); **(b)** commit subjects in the maintenance logs' commit column stay **verbatim**, being immutable external references (the ja log keeps them in Chinese too) — the 4 rows the scanner flagged sit in that column and were deliberately left alone. Verified: zero residual kana, zero simplified-only characters outside the commit column, and byte-identical line counts against a pre-change baseline (nothing damaged). The skill gains 4 sections: classify before replacing (most "simplified" candidates are valid Japanese kanji), look up rather than invent when a katakana term is unmapped, commit subjects are exempt, and take a baseline before mass edits
+
+| Commit | Description |
+|--------|-------------|
+| `a915692` | docs(pcn): purge simplified-Chinese characters across all pcn documents |
+
 ## 2026-09-14T05:52:18+09:00
 
 **Summary**：docs(README): Updated the credits section — 小爪 gains **DeepSeek V4.1 Flash** (alongside the existing V4 Flash), and its DSH ecosystem work (dsh-nixos-shell plugin, NixOS-mode/maintenance-mode agent presets) moves out of the inline list into a **note at the end of the section**; 小小爪 now leads with **DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)**, annotated as the quantisation level actually used on the **core face**. Synced across four languages
