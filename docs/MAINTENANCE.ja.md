@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:00:46+09:00
+
+**概要**：docs(llama-cpp-rocm): IQ3_S の実測と消費電力プロファイルのデータを追加 — DeepSeek 展開の章を IQ1_S のみから二量子化の対照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）へ拡張；三つの実測知見を新規追加：①**量子化オーバーヘッドは固定値ではない**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB。事前の 3.7 GiB 推定は一桁近く外れており、量子化変更後は GPUActive を再実測すべき）；②**生成速度は依存レイテンシに制約される**、三つの独立した証拠（重み 1.56→3.44 bpw で生成は不変 12.8→12.9 t/s、3 並行リクエストの集約スループットも同じ 12.5 t/s、performance プロファイルは 54% 増の電力でわずか 2.4% の速度）；③**消費電力プロファイルの実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s に対し performance 76.7 W / 90–95 °C / 13.07 t/s — quiet は 49% の電力削減と 17~36 °C の降温を速度 5~7% の犠牲で実現）。併せて GPU メモリ指標を `/proc/meminfo` の `GPUActive` に修正（`mem_info_gtt_used` ではない）、IQ3_S の余裕限界（約 6 GiB、GTT 124.9 GiB）も記録。四言語同期
+
+| コミット | 説明 |
+|----------|------|
+| `85fec4e` | docs(llama-cpp-rocm): add IQ3_S data and power-profile measurements |
+
 ## 2026-09-13T11:59:48+09:00
 
 **概要**：feat(skill): `nixos-specialisation-tuning` を追加 — 一度きりの障害記録 `SPECIALISATION-CORE.md` を再利用可能な技能へ一般化：specialisation の三ファイル面構成と上書き衝突規則、設定を消費者に帰属させる原則、UMA デバイスでの llama.cpp パラメータ表と禁止項目、出力退化時の診断順序、ツール schema のコンテキスト費用の測定法、静黙故障の認識（サービスは active だが機能しない）、無効な対照実験の自己点検。技能文書は四言語、各 README の技能表に登録

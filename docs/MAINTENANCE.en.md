@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:00:46+09:00
+
+**Summary**：docs(llama-cpp-rocm): Added IQ3_S measurements and power-profile data — the DeepSeek deployment section expands from IQ1_S only to a two-quantisation comparison (IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw); three new measured findings: (1) **quantisation overhead is not a fixed value** (IQ1_S ≈6.5 GiB, IQ3_S ≈13.3 GiB — the pre-test 3.7 GiB estimate was off by nearly an order of magnitude, so GPUActive must be re-measured after changing quantisation); (2) **generation speed is dependency-latency bound**, with three independent proofs (1.56→3.44 bpw leaves generation unchanged at 12.8→12.9 t/s, three concurrent requests give the same 12.5 t/s aggregate, and the performance profile costs +54% power for only +2.4% speed); (3) **power-profile measurements** (quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s vs performance 76.7 W / 90–95 °C / 13.07 t/s — quiet saves 49% power and drops 17~36 °C for only 5~7% speed). Also corrects the GPU memory metric to `/proc/meminfo`'s `GPUActive` (not `mem_info_gtt_used`) and records the IQ3_S headroom limit (≈6 GiB, GTT 124.9 GiB). Synced across four languages
+
+| Commit | Description |
+|--------|-------------|
+| `85fec4e` | docs(llama-cpp-rocm): add IQ3_S data and power-profile measurements |
+
 ## 2026-09-13T11:59:48+09:00
 
 **Summary**：feat(skill): Added `nixos-specialisation-tuning` — generalises the one-off `SPECIALISATION-CORE.md` incident log into a reusable skill: the three-file specialisation face architecture and override-conflict rules, the ownership principle (settings live with their consumer), a llama.cpp parameter table and forbidden items on UMA devices, the diagnostic order for degenerate output, a method for measuring tool-schema context cost, silent-failure recognition (service active but not working), and self-checking an invalid control experiment. Skill docs in four languages, registered in every README's skill table

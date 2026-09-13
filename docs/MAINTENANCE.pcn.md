@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-14T05:00:46+09:00
+
+**摘要**：docs(llama-cpp-rocm): IQ3_S 実測与功耗檔位數據追加 — DeepSeek 展開章節 由 IQ1_S 唯 拡張為 二量子化対照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）；三項実測結論 新規追加：①**量子化開銷非固定値**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB。事前 3.7 GiB 推定 偏差近一量級、故 換量子化後 必須 GPUActive 再実測）；②**生成速度 受限於 依頼遅延**、三条独立証拠（重値 1.56→3.44 bpw 生成不変 12.8→12.9 t/s、3 並行請求 聚合吞吐 同 12.5 t/s、performance 檔 多耗 54% 功耗 僅換 2.4% 速度）；③**功耗檔位実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s、performance 76.7 W / 90–95 °C / 13.07 t/s — quiet 省 49% 功耗、降 17~36 °C 而速度僅損 5~7%）。併 顕存指標 /proc/meminfo `GPUActive` 修正（`mem_info_gtt_used` 非）、IQ3_S 余量限界（約 6 GiB、GTT 124.9 GiB）記録。四言語同期
+
+| 提交 | 説明 |
+|------|------|
+| `85fec4e` | docs(llama-cpp-rocm): add IQ3_S data and power-profile measurements |
+
 ## 2026-09-13T11:59:48+09:00
 
 **摘要**：feat(skill): `nixos-specialisation-tuning` 追加 — 一次性事故記録 `SPECIALISATION-CORE.md` 再利用可能技能汎化：specialisation 三文件面構成与上書き衝突規則、設定消費者帰属原則、UMA 機器 llama.cpp 参數表与禁止項目、輸出退化時診断順序、道具 schema 文脈費用測定法、静黙故障認識（服務 active 但機能不動作）、無効対照実験自己点検。技能文書四言語、各 README 技能表登録
