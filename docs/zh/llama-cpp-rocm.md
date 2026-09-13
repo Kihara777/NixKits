@@ -48,18 +48,18 @@
             group = "users";
             modelsPreset = {
               "*" = {
-                presence-penalty = "0.0";
-                repeat-penalty   = "1.0";
-                flash-attn       = "on";
-                n-gpu-layers     = "99";
+                # 批处理：实测最优点。512 → 2048 使 prefill 从 142.7 提升至
+                # 168.7 t/s（代价仅约 0.9 GiB 显存）。4096 反而退化至 116.8。
+                batch-size       = "2048";
+                ubatch-size      = "2048";
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                load-mode        = "none";
-                warmup           = "on";
+                parallel         = "1";
                 jinja            = "on";
-                fit              = "on";
-                prio             = "3";
+                # 以下为 llama 默认值，显式写出仅为表明立场，可按需省略：
+                # flash-attn（默认 on）、warmup（默认 on）、fit（默认 on）。
+                # 切勿写死 n-gpu-layers / load-mode：会让 fit 的自适应失效。
               };
               "Qwen3.6-27B-MTP" = {
                 hf-repo              = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
@@ -152,16 +152,16 @@
 
 | 参数 | 推荐值 | 说明 |
 |------|--------|------|
-| `fit` | `"on"` | 按设备可用内存自动调整未设置的参数。**设 `"off"` 会在显存受限时直接 OOM** |
+| `fit` | `"on"`（默认） | 按设备可用内存自动调整未设置的参数。**设 `"off"` 会在显存受限时直接 OOM**。不要写死 `n-gpu-layers`，否则自适应失效 |
 | `jinja` | `"on"` | 应用模型内建 chat template。**关闭会导致输出退化乱码** |
-| `load-mode` | `"none"` | 取代已弃用的 `mmap`；`"none"` 等价于旧 `--no-mmap` |
-| `n-gpu-layers` | `"99"` | 将全部层卸载到 GPU |
-| `flash-attn` | `"on"` | 启用 Flash Attention，降低注意力显存占用 |
-| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量化。**用 `iq4_nl` 会因缺 ROCm kernel 回退 CPU，速度降至约 1/2.6** |
-| `threads` | `"32"` | CPU 线程数 |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量化。**用 `iq4_nl` 会因缺 ROCm kernel 回退 CPU，速度降至约 1/2.6**；改 `f16` 实测 prefill 反降至 150.8 t/s |
+| `batch-size` | `"2048"` | 逻辑批大小。**实测最优点**：512 → 2048 使 prefill 142.7 → 168.7 t/s（+18%）；4096 退化至 116.8 |
+| `ubatch-size` | `"2048"` | 物理批大小，与 `batch-size` 对齐 |
 | `parallel` | `"1"` | 服务槽位数。多槽位会按槽位倍增 KV 预留 |
-| `batch-size` | `"512"` | 逻辑批大小，与 `ubatch-size` 默认值对齐以缩小计算缓冲 |
-| `warmup` | `"on"` | 加载后空跑一次，令首次真实请求更快 |
+| `threads` | `"32"` | CPU 线程数，与核心数一致 |
+| `warmup` | `"on"`（默认） | 加载后空跑一次，令首次真实请求更快 |
+
+> **不必设置的项**：`flash-attn`、`warmup`、`fit` 的默认值已是推荐值，显式写出仅表明立场；`presence-penalty`、`repeat-penalty`、`prio` 未实测出收益，写默认值属冗余。
 
 ### 禁用项
 
@@ -191,6 +191,61 @@
 后两行构成关键证据：**同一模型、同一预设、同一配置文件下，唯一变量即为该环境变量**，且可双向复现。
 
 **为何容易被误判**：`llama-cli` 默认 `--fit on`、`--n-gpu-layers auto`，而服务预设若显式设置 `fit off` 会 OOM；两者症状（输出异常 vs 加载失败）容易与量化、模板（`jinja`）等相关因素混淆。诊断时应**优先排除该环境变量**，再怀疑量化与模板。
+
+## DeepSeek 部署实测
+
+在 Strix Halo（Ryzen AI Max，128 GiB 统一内存）上部署 DeepSeek-V4-Flash-Vision 的实测记录。当前仅覆盖 **IQ1 量化**（1.5625 bpw）。
+
+### 测试对象
+
+| 项目 | 值 |
+|------|-----|
+| 模型 | `unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF:UD-IQ1_S` |
+| 量化 | IQ1_S，**1.5625 bpw**（82.4 GB） |
+| 参数 | 总 284 B（MoE） |
+| 硬件 | Strix Halo / Radeon 8060S（`gfx1151`，统一内存） |
+| 后端 | ROCm，llama.cpp 0.4.0 |
+
+### 优化成果
+
+| 优化项 | 改动 | 收益 | 成本 |
+|--------|------|------|------|
+| **批处理** | `batch-size`/`ubatch-size` 512 → **2048** | prefill **142.7 → 168.7 t/s**（+18%） | +0.9 GiB 显存 |
+| **KV 量化** | 保持 `q4_0`（未改 `f16`） | prefill 168.7 vs 150.8、生成 12.8 vs 10.6 t/s | 省 5.2 GiB |
+| **KV 类型** | 弃用 `iq4_nl` | 避免回退 CPU（5.54 → 14.14 t/s） | — |
+| **槽位数** | `parallel` auto(4) → **1** | 单槽 KV 预留降至 1/4，可载入 | 并发降为 1 |
+| **投机解码** | `--spec-type ngram-mod` | 生成 **12.8 → 30.8 t/s**（+141%，内容相关） | 零内存 |
+
+**prefill 实测明细**（11015 token，各 3 次）：
+
+| 配置 | prompt t/s |
+|------|-----------|
+| batch512 / ubatch512 | 142.7 |
+| batch2048 / ubatch1024 | 164.2 / 158.9 / 152.5 |
+| **batch2048 / ubatch2048** | **168.7 / 162.4 / 154.0** |
+| batch4096 / ubatch2048 | 156.4 / 157.3 / 151.9 |
+| batch2048 + KV `f16` | 165.7 / 159.0 / 153.5 |
+
+### 已排除的方向
+
+以下经实测确认**无收益**，不必再试：
+
+| 方向 | 结论 |
+|------|------|
+| GPU 未满载 | prefill 时 `GPU use = 100%`，已到硬件算力上限 |
+| ROCm 目标缺失 | `gfx1151` 在 nixpkgs `gpuTargets` 内，非通用回退 |
+| KV 改 `f16` | prefill 反降至 150.8 t/s，且多耗 5.2 GiB |
+| `cache-ram` | 默认 8192 是**上限**非预分配；禁用后 GPUActive 完全相同 |
+| 更大批处理 | `ubatch` 4096 退化至 116.8 t/s |
+| `draft-mtp` 投机 | 模型无 MTP 层（GGUF 无 `nextn`），不可用 |
+
+### 关键结论
+
+**1.56 bpw 极低量化的双面性**：低比特对**生成**有利（权重带宽小），但对 **prefill** 不利 —— 每层需反量化权重，而 prefill 是计算密集阶段，反量化算力占比随位宽降低而升高。实测 prefill 仅 142–169 t/s，而生成 12.8 t/s，比值约 11–13×（GPU 上健康值通常 15–30×）。
+
+**因此 prefill 是 agentic 场景的主要瓶颈**：一轮 6k token 上下文需约 35 秒预热，而生成 200 token 仅需约 8 秒。
+
+> ⚠️ 测试期间**务必确认 `GPUActive` 归零后再启动服务**。本机一次只能驻留一个大模型实例；遗留进程会占据数十 GiB 统一内存，导致服务 OOM 并伪装成配置错误。
 
 ## 迁移指南
 
@@ -257,6 +312,9 @@
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
       "LLAMA_CACHE=~/.cache/huggingface/hub"
+      # ⚠️ 此变量为历史配置，现已确认有害：在 StrixHalo 等统一内存设备上会
+      # 导致模型输出退化，且风险随量化精度降低而提升。迁移后务必移除。
+      # 详见「统一内存环境变量的退化风险」节。
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";

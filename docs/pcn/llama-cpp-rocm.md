@@ -48,18 +48,18 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
             group = "users";
             modelsPreset = {
               "*" = {
-                presence-penalty = "0.0";
-                repeat-penalty   = "1.0";
-                flash-attn       = "on";
-                n-gpu-layers     = "99";
+                # 批次処理：実測最適点。512 → 2048 使 prefill 従 142.7 至
+                # 168.7 t/s 向上（代価僅約 0.9 GiB）。4096 反退化至 116.8。
+                batch-size       = "2048";
+                ubatch-size      = "2048";
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                load-mode        = "none";
-                warmup           = "on";
+                parallel         = "1";
                 jinja            = "on";
-                fit              = "on";
-                prio             = "3";
+                # 以下 llama 既定値、立場表明為明記、省略可能：
+                # flash-attn（既定 on）、warmup（既定 on）、fit（既定 on）。
+                # n-gpu-layers / load-mode 書死禁止 —— fit 自動調整無効化。
               };
               "Qwen3.6-27B-MTP" = {
                 hf-repo              = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
@@ -150,16 +150,16 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
 
 | 参數 | 推奨値 | 説明 |
 |------|--------|------|
-| `fit` | `"on"` | 未設定引數を装置記憶体に合自動調整。**`"off"` は VRAM 制限下 OOM 発生** |
+| `fit` | `"on"`（既定） | 未設定引數を装置記憶体に合自動調整。**`"off"` は VRAM 制限下 OOM 発生**。`n-gpu-layers` 書死時、該自動調整無効 |
 | `jinja` | `"on"` | 模型内蔵 chat template 適用。**無効化時、輸出退化** |
-| `load-mode` | `"none"` | 非推奨 `mmap` 置換。`"none"` は旧 `--no-mmap` 相当 |
-| `n-gpu-layers` | `"99"` | 全層 GPU 転送 |
-| `flash-attn` | `"on"` | Flash Attention 有効化、attention 記憶体削減 |
-| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` は ROCm 核心不在 CPU 退回、約 2.6 倍遅** |
-| `threads` | `"32"` | CPU 執行糸数 |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` は ROCm 核心不在 CPU 退回、約 2.6 倍遅**；`f16` は実測 prefill 反低速（150.8 t/s） |
+| `batch-size` | `"2048"` | 論理批次。**実測最適点**：512 → 2048 使 prefill 142.7 → 168.7 t/s（+18%）；4096 退化至 116.8 |
+| `ubatch-size` | `"2048"` | 物理批次。`batch-size` 合致 |
 | `parallel` | `"1"` | 服務槽位数。増加時 KV 予約倍数増 |
-| `batch-size` | `"512"` | 論理批次。既定 `ubatch-size` 合計算緩衝縮小 |
-| `warmup` | `"on"` | 読込後空実行一回。最初実請求高速化 |
+| `threads` | `"32"` | CPU 執行糸数。核心数合致 |
+| `warmup` | `"on"`（既定） | 読込後空実行一回。最初実請求高速化 |
+
+> **設定不要項目**：`flash-attn`・`warmup`・`fit` 既定値既推奨値、明記立場表明のみ。`presence-penalty`・`repeat-penalty`・`prio` 実測効果無、既定値記述冗長。
 
 > **注意**：`modelsPreset` 値は**文字列**（`attrsOf (attrsOf str)`）必須。`"on"` / `"off"` 記述、`true` / `false` 使用不可。
 
@@ -191,6 +191,61 @@ StrixHalo 等統一記憶域（UMA）機器、**`GGML_CUDA_ENABLE_UNIFIED_MEMORY
 最後二行決定的証拠：**同模型・同預設・同設定文件**、唯一変数該環境変数、双方向再現。
 
 **誤診容易理由**：`llama-cli` 既定 `--fit on` 与 `--n-gpu-layers auto`、但預設 `fit off` 設定時 OOM 至。該二症状（輸出異常 vs 読込失敗）量子化・模板（`jinja`）問題混同容易。**先該変数除外**、後量子化・模板疑。
+
+## DeepSeek 展開実測
+
+Strix Halo（Ryzen AI Max、128 GiB 統一記憶域）上 DeepSeek-V4-Flash-Vision 展開実測記録。現在 **IQ1 量子化のみ**（1.5625 bpw）対象。
+
+### 測試対象
+
+| 項目 | 値 |
+|------|-----|
+| 模型 | `unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF:UD-IQ1_S` |
+| 量子化 | IQ1_S、**1.5625 bpw**（82.4 GB） |
+| 参數 | 総 284 B（MoE） |
+| 硬件 | Strix Halo / Radeon 8060S（`gfx1151`、統一記憶域） |
+| 後端 | ROCm、llama.cpp 0.4.0 |
+
+### 最適化成果
+
+| 最適化 | 変更 | 効果 | 代価 |
+|--------|------|------|------|
+| **批次処理** | `batch-size`/`ubatch-size` 512 → **2048** | prefill **142.7 → 168.7 t/s**（+18%） | +0.9 GiB VRAM |
+| **KV 量子化** | `q4_0` 維持（`f16` 非変更） | prefill 168.7 vs 150.8、生成 12.8 vs 10.6 t/s | 5.2 GiB 節約 |
+| **KV 型** | `iq4_nl` 破棄 | CPU 退回回避（5.54 → 14.14 t/s） | — |
+| **槽位数** | `parallel` auto(4) → **1** | 槽位毎 KV 予約 1/4 化、読込可能 | 並行度 1 |
+| **投機 decode** | `--spec-type ngram-mod` | 生成 **12.8 → 30.8 t/s**（+141%、内容依存） | 記憶域 zero |
+
+**prefill 実測詳細**（11015 token、各 3 回）：
+
+| 構成 | prompt t/s |
+|------|-----------|
+| batch512 / ubatch512 | 142.7 |
+| batch2048 / ubatch1024 | 164.2 / 158.9 / 152.5 |
+| **batch2048 / ubatch2048** | **168.7 / 162.4 / 154.0** |
+| batch4096 / ubatch2048 | 156.4 / 157.3 / 151.9 |
+| batch2048 + KV `f16` | 165.7 / 159.0 / 153.5 |
+
+### 除外済方向
+
+以下実測 **効果無** 確認済。再試行不要：
+
+| 方向 | 結論 |
+|------|------|
+| GPU 未飽和 | prefill 時 `GPU use = 100%`、既硬件演算限界 |
+| ROCm 目標欠落 | `gfx1151` nixpkgs `gpuTargets` 内、汎用退回非 |
+| KV `f16` 化 | prefill 反 150.8 t/s 低下、且 5.2 GiB 多消費 |
+| `cache-ram` | 既定 8192 **上限**非事前確保；無効化時 GPUActive 同一 |
+| 更大批次 | `ubatch` 4096 退化至 116.8 t/s |
+| `draft-mtp` | 模型 MTP 層無（GGUF `nextn` 無）；使用不可 |
+
+### 重要結論
+
+**1.56 bpw 二面性**：低 bit **生成**有利（重値帯域小）、但 **prefill** 不利 —— 各層重値逆量子化必要、prefill 計算集約段階故、逆量子化演算比率 bit 幅低下随増大。実測 prefill 142–169 t/s 対生成 12.8 t/s、比率約 11–13 倍（GPU 健全値通常 15–30 倍）。
+
+**故 agentic 用途 prefill 主要 bottleneck**：6k token 文脈約 35 秒 warmup 対、200 token 生成僅約 8 秒。
+
+> ⚠️ 測試中 **服務起動前 `GPUActive` 帰零必確認**。本機大型模型同時一 instance のみ保持可能。残留 process 数十 GiB 統一記憶域占、服務 OOM 陥、設定 error 装。
 
 ## 移行手引
 
@@ -257,6 +312,9 @@ StrixHalo 等統一記憶域（UMA）機器、**`GGML_CUDA_ENABLE_UNIFIED_MEMORY
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
       "LLAMA_CACHE=~/.cache/huggingface/hub"
+      # ⚠️ 歴史設定、現在有害確認済：StrixHalo 等統一記憶域機器模型輸出退化、
+      # 危険量子化精度低下随増大。移行時必削除。
+      # 「統一記憶域環境変数退化危険」節参照。
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";

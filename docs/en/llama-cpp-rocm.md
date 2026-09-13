@@ -48,18 +48,20 @@ See upstream llama.cpp docs.
             group = "users";
             modelsPreset = {
               "*" = {
-                presence-penalty = "0.0";
-                repeat-penalty   = "1.0";
-                flash-attn       = "on";
-                n-gpu-layers     = "99";
+                # Batching: the measured optimum. 512 -> 2048 raised prefill from
+                # 142.7 to 168.7 t/s (costing only ~0.9 GiB VRAM). 4096 regressed
+                # to 116.8.
+                batch-size       = "2048";
+                ubatch-size      = "2048";
                 cache-type-k     = "q4_0";
                 cache-type-v     = "q4_0";
                 threads          = "32";
-                load-mode        = "none";
-                warmup           = "on";
+                parallel         = "1";
                 jinja            = "on";
-                fit              = "on";
-                prio             = "3";
+                # The following are llama defaults, listed only to state a
+                # position; they may be omitted: flash-attn (on), warmup (on),
+                # fit (on). Never hard-code n-gpu-layers / load-mode — that
+                # disables fit's automatic sizing.
               };
               "Qwen3.6-27B-MTP" = {
                 hf-repo              = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
@@ -150,16 +152,16 @@ Parameters below are verified on Strix Halo (unified memory) with llama.cpp 0.4.
 
 | Parameter | Recommended | Notes |
 |-----------|-------------|-------|
-| `fit` | `"on"` | Auto-sizes unset arguments to device memory. **`"off"` OOMs on limited VRAM** |
+| `fit` | `"on"` (default) | Auto-sizes unset arguments to device memory. **`"off"` OOMs on limited VRAM**. Do not hard-code `n-gpu-layers`, which disables that sizing |
 | `jinja` | `"on"` | Applies the model's built-in chat template. **Disabling it produces degenerate output** |
-| `load-mode` | `"none"` | Replaces the deprecated `mmap`; `"none"` equals the old `--no-mmap` |
-| `n-gpu-layers` | `"99"` | Offload every layer to the GPU |
-| `flash-attn` | `"on"` | Enables Flash Attention, lowering attention memory |
-| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache quantisation. **`iq4_nl` falls back to CPU (no ROCm kernel) and runs ~2.6× slower** |
-| `threads` | `"32"` | CPU thread count |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache quantisation. **`iq4_nl` falls back to CPU (no ROCm kernel) and runs ~2.6× slower**; `f16` measured *slower* prefill (150.8 t/s) |
+| `batch-size` | `"2048"` | Logical batch. **The measured optimum**: 512 → 2048 raised prefill 142.7 → 168.7 t/s (+18%); 4096 regressed to 116.8 |
+| `ubatch-size` | `"2048"` | Physical batch, aligned with `batch-size` |
 | `parallel` | `"1"` | Server slots; more slots multiply KV reservation |
-| `batch-size` | `"512"` | Logical batch, matched to the default `ubatch-size` to shrink compute buffers |
-| `warmup` | `"on"` | One empty run after load, making the first real request faster |
+| `threads` | `"32"` | CPU thread count, matching the core count |
+| `warmup` | `"on"` (default) | One empty run after load, making the first real request faster |
+
+> **Need not be set**: `flash-attn`, `warmup` and `fit` already default to the recommended values — writing them out only states a position. `presence-penalty`, `repeat-penalty` and `prio` showed no measured benefit; setting them to defaults is redundant.
 
 > **Note**: `modelsPreset` values must be **strings** (`attrsOf (attrsOf str)`). Write `"on"` / `"off"`, not `true` / `false`.
 
@@ -191,6 +193,61 @@ On unified-memory (UMA) devices such as StrixHalo, **do not set `GGML_CUDA_ENABL
 The last two rows are the key evidence: with the **same model, same preset and same config file**, the only variable is this environment variable, and it reproduces in both directions.
 
 **Why it is easily misdiagnosed**: `llama-cli` defaults to `--fit on` and `--n-gpu-layers auto`, while a preset that sets `fit off` will OOM instead; the two symptoms (bad output vs. failed load) are easy to confuse with quantisation or template (`jinja`) issues. **Rule this variable out first**, before suspecting quantisation or templates.
+
+## DeepSeek Deployment Measurements
+
+Measured record of deploying DeepSeek-V4-Flash-Vision on Strix Halo (Ryzen AI Max, 128 GiB unified memory). Currently covers **IQ1 quantisation only** (1.5625 bpw).
+
+### Test Subject
+
+| Item | Value |
+|------|-------|
+| Model | `unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF:UD-IQ1_S` |
+| Quantisation | IQ1_S, **1.5625 bpw** (82.4 GB) |
+| Parameters | 284 B total (MoE) |
+| Hardware | Strix Halo / Radeon 8060S (`gfx1151`, unified memory) |
+| Backend | ROCm, llama.cpp 0.4.0 |
+
+### Optimisation Results
+
+| Optimisation | Change | Gain | Cost |
+|--------------|--------|------|------|
+| **Batching** | `batch-size`/`ubatch-size` 512 → **2048** | prefill **142.7 → 168.7 t/s** (+18%) | +0.9 GiB VRAM |
+| **KV quant** | kept `q4_0` (not `f16`) | prefill 168.7 vs 150.8, generation 12.8 vs 10.6 t/s | saves 5.2 GiB |
+| **KV type** | dropped `iq4_nl` | avoids CPU fallback (5.54 → 14.14 t/s) | — |
+| **Slots** | `parallel` auto(4) → **1** | per-slot KV reservation cut to ¼, loads at all | concurrency 1 |
+| **Speculative** | `--spec-type ngram-mod` | generation **12.8 → 30.8 t/s** (+141%, content-dependent) | zero memory |
+
+**Prefill detail** (11015 tokens, 3 runs each):
+
+| Configuration | prompt t/s |
+|---------------|-----------|
+| batch512 / ubatch512 | 142.7 |
+| batch2048 / ubatch1024 | 164.2 / 158.9 / 152.5 |
+| **batch2048 / ubatch2048** | **168.7 / 162.4 / 154.0** |
+| batch4096 / ubatch2048 | 156.4 / 157.3 / 151.9 |
+| batch2048 + KV `f16` | 165.7 / 159.0 / 153.5 |
+
+### Ruled Out
+
+Measured and confirmed to give **no benefit** — no need to retry:
+
+| Direction | Conclusion |
+|-----------|-----------|
+| GPU not saturated | `GPU use = 100%` during prefill; already at hardware compute ceiling |
+| Missing ROCm target | `gfx1151` is in nixpkgs' `gpuTargets`; not a generic fallback |
+| KV to `f16` | prefill degraded to 150.8 t/s *and* cost 5.2 GiB more |
+| `cache-ram` | default 8192 is a **cap**, not preallocation; disabling it left GPUActive identical |
+| Larger batching | `ubatch` 4096 regressed to 116.8 t/s |
+| `draft-mtp` | model has no MTP layers (no `nextn` in the GGUF); unavailable |
+
+### Key Findings
+
+**The two faces of 1.56 bpw**: low bit-width helps **generation** (small weight bandwidth) but hurts **prefill** — every layer must dequantise weights, and prefill is compute-bound, so the dequantisation share rises as bit-width falls. Measured prefill is only 142–169 t/s against 12.8 t/s generation, a ratio of about 11–13× (healthy GPU values are usually 15–30×).
+
+**So prefill is the main bottleneck for agentic use**: a 6k-token context costs ~35 s of warm-up, while generating 200 tokens takes only ~8 s.
+
+> ⚠️ During testing, **always confirm `GPUActive` has returned to zero before starting the service**. This box fits only one large model instance at a time; a leftover process holds tens of GiB of unified memory and makes the service OOM in a way that masquerades as a configuration error.
 
 ## Migration Guide
 
@@ -257,6 +314,10 @@ The last two rows are the key evidence: with the **same model, same preset and s
     Group = lib.mkForce "users";
     Environment = lib.mkForce [
       "LLAMA_CACHE=~/.cache/huggingface/hub"
+      # ⚠️ Historical setting, now confirmed harmful: on unified-memory devices
+      # such as StrixHalo it degenerates model output, and the risk rises as
+      # quantisation precision drops. Remove it when migrating.
+      # See the "Unified-Memory Environment Variable Degeneration Risk" section.
       "GGML_CUDA_ENABLE_UNIFIED_MEMORY=1"
     ];
     ProcSubset = lib.mkForce "all";
