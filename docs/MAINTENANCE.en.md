@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:44:48+09:00
+
+**Summary**：docs(llama-cpp-rocm): Corrected examples that contradicted the measured optimisations — `batch-size` changed from `"512"` to the measured optimum `"2048"`, added the missing `ubatch-size`, removed hard-coded `n-gpu-layers`/`load-mode` (which disable `fit`'s automatic sizing) and the benefit-free `prio`/`presence-penalty`/`repeat-penalty`; annotated `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` in the migration "before" example as harmful. Added a "DeepSeek Deployment Measurements" section covering the IQ1 (1.5625 bpw) work: five optimisations with gain and cost, the three-run prefill data, the ruled-out directions, and the low-bit quantisation prefill/generation trade-off (all four languages)
+
+| Commit | Description |
+|--------|-------------|
+| `bb11a30` | docs(llama-cpp-rocm): fix examples contradicting measured optimisations; add DeepSeek deployment data |
+
 ## 2026-09-13T11:35:34+09:00
 
 **Summary**：docs(llama-cpp-rocm): Added a "Unified-Memory Environment Variable Degeneration Risk" section — records the four-row measured comparison showing `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` degenerates model output (token repetition) on StrixHalo, and notes that the risk rises significantly as quantisation precision drops; the README patch section gained a matching warning (all four languages)

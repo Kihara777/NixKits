@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:44:48+09:00
+
+**概要**：docs(llama-cpp-rocm): 実測最適化に反する例を修正 — `batch-size` を `"512"` から実測最適の `"2048"` に変更、欠落していた `ubatch-size` を追加、`n-gpu-layers`/`load-mode` のハードコード（`fit` の自動調整を無効化）と効果のない `prio`/`presence-penalty`/`repeat-penalty` を削除；移行の「移行前」例にある `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` に有害である旨を注記。IQ1（1.5625 bpw）の作業を記録した「DeepSeek 展開の実測」節を追加 — 5 つの最適化の効果とコスト、prefill 3 回計測データ、除外済みの方向、低ビット量子化の prefill/生成トレードオフ（4 言語）
+
+| コミット | 説明 |
+|----------|------|
+| `bb11a30` | docs(llama-cpp-rocm): fix examples contradicting measured optimisations; add DeepSeek deployment data |
+
 ## 2026-09-13T11:35:34+09:00
 
 **概要**：docs(llama-cpp-rocm): 「ユニファイドメモリ環境変数による退化リスク」節を追加 — StrixHalo で `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` がモデル出力を退化（トークン反復）させる 4 行の実測対照を記録し、このリスクが量子化精度の低下とともに著しく増大することを明記；README のパッチ節にも対応する警告を追加（4 言語）
