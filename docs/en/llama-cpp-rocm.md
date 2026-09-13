@@ -196,17 +196,38 @@ The last two rows are the key evidence: with the **same model, same preset and s
 
 ## DeepSeek Deployment Measurements
 
-Measured record of deploying DeepSeek-V4-Flash-Vision on Strix Halo (Ryzen AI Max, 128 GiB unified memory). Currently covers **IQ1 quantisation only** (1.5625 bpw).
+Measured record of deploying DeepSeek-V4-Flash-Vision on Strix Halo (Ryzen AI Max, 128 GiB unified memory). Covers two quantisations: **IQ1_S (1.5625 bpw)** and **IQ3_S (3.4375 bpw)**.
 
 ### Test Subject
 
-| Item | Value |
-|------|-------|
-| Model | `unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF:UD-IQ1_S` |
-| Quantisation | IQ1_S, **1.5625 bpw** (82.4 GB) |
-| Parameters | 284 B total (MoE) |
-| Hardware | Strix Halo / Radeon 8060S (`gfx1151`, unified memory) |
-| Backend | ROCm, llama.cpp 0.4.0 |
+| Item | IQ1_S | IQ3_S |
+|------|-------|-------|
+| Model | `unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF:UD-IQ1_S` | `…:UD-IQ3_S` |
+| Quantisation | 1.5625 bpw (82.4 GB) | **3.4375 bpw (114.4 GB)** |
+| Parameters | 284 B total (MoE) | 284 B total (MoE) |
+| Hardware | Strix Halo / Radeon 8060S (`gfx1151`, unified memory) | same as left |
+| Backend | ROCm, llama.cpp 0.4.0 | same as left |
+
+### Quantisation Overhead Is Not a Fixed Value
+
+The estimate before loading IQ3_S was "a fixed overhead of about 3.7 GiB" — **the measurement was off by nearly an order of magnitude**:
+
+| Quantisation | Weight files | GPUActive after load | Overhead beyond the weights |
+|--------------|--------------|----------------------|------------------------------|
+| IQ1_S | 82.4 GiB | ≈ 88.9 GiB | **≈ 6.5 GiB** |
+| IQ3_S | 114.4 GiB | **112.8–112.9 GiB** | **≈ 13.3 GiB**† |
+
+> † IQ3_S's weights are split across 4 shards, so the on-disk footprint is slightly smaller than
+> the nominal figure; the overhead here is therefore computed as the difference between the
+> *actual shard footprint* and GPUActive.
+
+**Conclusion: never extrapolate overhead from a fixed constant.** Overhead varies with quantisation precision, the sharding scheme, the KV cache quantisation and `fit`'s automatic sizing. **After changing quantisation you must re-measure GPUActive**; the previous tier's figure does not carry over.
+
+**IQ3_S headroom**: at GPUActive 112.8–112.94 GiB the system has only about 5.8–6 GiB left, against a GTT cap of 124.9 GiB. Measured 15013-token and 40012-token prefills did not OOM, with only 179 pages swapped out. **But the headroom is already tight**, so:
+
+- do not raise `ubatch-size`
+- do not add `parallel`
+- do not change the KV cache to `f16`
 
 ### Optimisation Results
 
@@ -240,14 +261,41 @@ Measured and confirmed to give **no benefit** — no need to retry:
 | `cache-ram` | default 8192 is a **cap**, not preallocation; disabling it left GPUActive identical |
 | Larger batching | `ubatch` 4096 regressed to 116.8 t/s |
 | `draft-mtp` | model has no MTP layers (no `nextn` in the GGUF); unavailable |
+| **Higher quantisation precision** | IQ1_S 1.56 bpw → IQ3_S 3.44 bpw, **no change in generation speed** (12.8 → 12.9 t/s) |
+| **Higher GPU clock** | the performance profile costs 54% more power than balanced for only +2.4% generation |
+
+### Generation Speed: the Bottleneck Is Dependency Latency
+
+**Higher weight precision does not raise generation speed**: taking the weights from 1.56 bpw to 3.44 bpw (a 39% larger footprint) moved generation from 12.8 to 12.9 t/s — **within noise**. If the bottleneck were VRAM bandwidth, the precision increase should have slowed it down markedly.
+
+**Concurrency does not raise aggregate throughput**: three concurrent requests still aggregate 12.5 t/s, the same as a single request — so the bottleneck is not throughput capacity.
+
+**Clock barely affects generation**: the performance profile runs sclk 2778 MHz at 70.2 W for 12.9 t/s; balanced runs 2436 MHz at 45.6 W for 12.6 t/s. **54% more power buys only 2.4% more speed.**
+
+All three lines of evidence point the same way: **generation is limited by per-token dependency latency**, not by bandwidth, compute or power. That is also why low-bit quantisation barely affects generation while affecting prefill markedly.
+
+### Power Profile Measurements
+
+Same prompt, same session, 400-token generation:
+
+| Profile | Power | sclk | Temperature | Generation speed |
+|---------|-------|------|-------------|------------------|
+| quiet | **38.6–43.9 W** | 2228–2464 MHz | **59–78 °C** | 12.12–12.35 t/s |
+| balanced | 55.1 W | 2586–2731 MHz | 87–93 °C | 12.84 t/s |
+| performance | 76.7 W | 2753–2859 MHz | 90–95 °C | 13.07 t/s |
+
+**quiet versus performance: −49% power, −17~36 °C, only −5~7% speed.**
+Measured as throughput per watt, quiet is the most efficient of the three.
 
 ### Key Findings
 
-**The two faces of 1.56 bpw**: low bit-width helps **generation** (small weight bandwidth) but hurts **prefill** — every layer must dequantise weights, and prefill is compute-bound, so the dequantisation share rises as bit-width falls. Measured prefill is only 142–169 t/s against 12.8 t/s generation, a ratio of about 11–13× (healthy GPU values are usually 15–30×).
+**The two-sided nature of low-bit quantisation**: low bit-width helps **generation** (small weight bandwidth) but hurts **prefill** — every layer must dequantise weights, and prefill is compute-bound, so the dequantisation share rises as bit-width falls. Measured prefill is only 142–169 t/s against 12.8 t/s generation, a ratio of about 11–13× (healthy GPU values are usually 15–30×).
 
 **So prefill is the main bottleneck for agentic use**: a 6k-token context costs ~35 s of warm-up, while generating 200 tokens takes only ~8 s.
 
 > ⚠️ During testing, **always confirm `GPUActive` has returned to zero before starting the service**. This box fits only one large model instance at a time; a leftover process holds tens of GiB of unified memory and makes the service OOM in a way that masquerades as a configuration error.
+>
+> Note: the real VRAM metric is **`GPUActive`** in `/proc/meminfo`, **not** `mem_info_gtt_used` (the latter does not reflect actual usage on unified-memory devices).
 
 ## Migration Guide
 

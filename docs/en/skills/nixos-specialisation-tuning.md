@@ -41,3 +41,4 @@ Activated by an AI assistant in these situations:
 | Measure before claiming a gain | Never put an unmeasured number into advice |
 | Read the config log, not just systemd state | Config keys of unloaded modules are silently ignored |
 | When experiment contradicts production, suspect the experiment | Not the production environment |
+| More clock or precision does not speed up generation | Generation is dependency-latency bound; lower power profiles cost almost no throughput |

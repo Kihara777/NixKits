@@ -106,6 +106,67 @@ networking.wireless.iwd.enable = lib.mkForce true;
 
 > ⚠️ 实战教训：曾据 `cache-ram` 默认值 8192 推断"可省 8GB"，实测禁用后显存占用完全相同——该值是上限而非已分配。**未经实测的数字不应写入建议。**
 
+## 电源状态与平台档位
+
+### 生成速度的瓶颈是依赖延迟，不是频率
+
+在统一内存设备上调优推理时，**提频与提精度几乎都不提升生成速度**。三条独立证据：
+
+| 实验 | 结果 |
+|------|------|
+| 权重精度 1.56 → 3.44 bpw（体积 +39%） | 生成 12.8 → 12.9 t/s（**无变化**） |
+| 3 个并发请求 | 聚合吞吐 12.5 t/s，与单请求**相同** |
+| performance vs balanced 档 | 功耗 +54%（45.6 → 70.2 W），速度仅 +2.4% |
+
+三条共同指向：生成受限于**逐 token 的依赖延迟**。故：
+
+- 不要为提高生成速度而解锁功耗墙 / 提高平台档位
+- 不要为提高生成速度而改用更高精度量化（prefill 反而更慢，见上节）
+- 想要生成提速，唯一有效方向是 `ngram` 类投机解码（且内容相关）
+
+### 功耗档位实测（Strix Halo，400 token 生成）
+
+| 档位 | 功耗 | sclk | 温度 | 生成速度 |
+|------|------|------|------|---------|
+| quiet | **38.6–43.9 W** | 2228–2464 MHz | **59–78 °C** | 12.12–12.35 t/s |
+| balanced | 55.1 W | 2586–2731 MHz | 87–93 °C | 12.84 t/s |
+| performance | 76.7 W | 2753–2859 MHz | 90–95 °C | 13.07 t/s |
+
+**quiet 相对 performance：功耗 −49%、温度 −17~36 °C，速度仅 −5~7%。**
+按每瓦吞吐衡量 quiet 最优——降档几乎不损失吞吐，却能大幅省电降温。
+
+> ⚠️ 测量必须用 `hwmon` 的 `power1_average`（`/sys/class/drm/card*/device/hwmon/hwmon*/`），
+> BAT0 的 `power_now` 在 AC 供电下恒为 0，不能作为负载功耗来源。
+
+### 补足 asusd 缺失的第三态
+
+`asusd`（ASUS ROG 硬件守护进程）的 `asusd.ron` **只有两个档位键**：
+`platform_profile_on_ac` 与 `platform_profile_on_battery`，**没有 USB-C PD 分支**
+（可从 `asusctl` 二进制直接确认）。
+
+若要区分"USB-C PD 供电"与"原生/桶形 AC 供电"，需自行补 udev 监听器。两条要点：
+
+**1. PD 与 AC 是同一信号，但有独立旁证**——`AC0.online` 在两者下都为 1，
+必须读以下之一：
+
+| 信号 | 路径 | PD 在线值 |
+|------|------|----------|
+| PD 供应器 | `/sys/class/power_supply/ucsi-source-psy-USBC*/online` | `1` |
+| Type-C 模式 | `/sys/class/typec/port*/power_operation_mode` | `usb_power_delivery` |
+
+> ⚠️ **窗口期陷阱**：这两处只在插拔瞬间变化。未接 PD 时 `power_operation_mode`
+> 恒为 `default` —— 若此时采样会**误判"内核无法区分 PD 与 AC"**。
+> 判断能力前，务必先确认当时确实处于 PD 供电状态。
+
+**2. 不要直接写 `/sys/firmware/acpi/platform_profile`**——asusd 在每次 AC 事件时
+都会按 `platform_profile_on_ac` 重设档位（日志 `Setting ... before EPP` 可证），
+会立即覆盖外部写入。应改用 `asusctl profile set -a <档>` 修改
+**asusd 自己的持久化 AC 档位**，使二者意图一致。
+
+> ⚠️ 事件驱动可行：`udevadm monitor --subsystem-match=power_supply --subsystem-match=typec`
+> 在插拔时给出完整序列（`AC0 online` 变化 → `portN-partner` add/remove → `ucsi` online 变化），
+> 故无需轮询，用 `ENV{SYSTEMD_WANTS}` 触发 oneshot 服务即可。
+
 ## 上下文开销分析
 
 Agent 框架的工具 schema 是每轮固定开销，且可能包含**已失效的 MCP 工具**。
