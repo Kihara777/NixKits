@@ -73,6 +73,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | llama-cpp-rocm | 动态追踪上游最新 Release 的 ROCm 加速构建 | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 | asusd-pd-profile | 按供电类型选择平台档位（区分 USB-C PD 与原生 AC） | [docs/zh/asusd-pd-profile.md](docs/zh/asusd-pd-profile.md) |
+| asusd-thermal-guard | 温度看门狗：过热时自动降档，冷却后恢复 | [docs/zh/asusd-thermal-guard.md](docs/zh/asusd-thermal-guard.md) |
 | comfyui-rocm | 为 ComfyUI 提供 ROCm 功能补丁 | [docs/zh/comfyui-rocm.md](docs/zh/comfyui-rocm.md) |
 | efl-cross-fix | 修复 efl 交叉编译代码生成器缺失 | [docs/zh/efl-cross-fix.md](docs/zh/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高对比度 Breeze Black 无障碍主题 | [docs/zh/breeze-black.md](docs/zh/breeze-black.md) |

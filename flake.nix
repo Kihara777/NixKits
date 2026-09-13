@@ -76,6 +76,7 @@
     nixosModules.dsh                   = import ./modules/dsh.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.asusd-pd-profile = import ./modules/asusd-pd-profile.nix;
+    nixosModules.asusd-thermal-guard = import ./modules/asusd-thermal-guard.nix;
     nixosModules.ruyi                 = import ./modules/ruyi.nix;
 
     overlays = {
