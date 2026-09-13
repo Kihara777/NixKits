@@ -103,9 +103,10 @@ For AI coding assistants:
 
 - **狐莉 (キツのり)** — creator and maintainer
 - **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
-- **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S, the quantisation level used on the core face) · Qwen3.6-27B-MTP (UD-Q4_K_XL) · Qwen3.6-35B-A3B-MTP (UD-Q4_K_XL) · Qwen3.5-122B-A10B-MTP (UD-Q4_K_XL) · Qwen3-Coder-Next (UD-Q4_K_XL) · MiniMax-M2.7 (UD-Q2_K_XL)
+- **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
-> **Note**: 小爪 also contributes to the DeepSeek Harness (DSH) ecosystem — the dsh-nixos-shell plugin, and the NixOS-mode / maintenance-mode agent presets.
+> [!NOTE]
+> 关于 DeepSeek Harness (DSH) 生态 —— 小爪与小小爪使用 dsh-nixos-shell 插件，以及 NixOS模式 / 维护模式 Agent 预设武装了自己☆
 
 ## License
 
