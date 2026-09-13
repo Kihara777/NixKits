@@ -4,7 +4,7 @@
 
 ## 2026-09-13T11:44:48+09:00
 
-**摘要**：docs(llama-cpp-rocm): 実測最適化相違例修正 — `batch-size` 従 `"512"` 至実測最適 `"2048"` 変更、欠落 `ubatch-size` 追加、`n-gpu-layers`/`load-mode` 書死（`fit` 自動調整無効化）与効果無 `prio`/`presence-penalty`/`repeat-penalty` 削除；移行「移行前」例 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 有害注記。「DeepSeek 展開実測」節追加 — IQ1（1.5625 bpw）作業記録：五最適化効果与代価、prefill 三回計測数据、除外済方向、低 bit 量子化 prefill/生成 trade-off（四言語）
+**摘要**：docs(llama-cpp-rocm): 実測最適化相違例修正 — `batch-size` 従 `"512"` 至実測最適 `"2048"` 変更、欠落 `ubatch-size` 追加、`n-gpu-layers`/`load-mode` 書死（`fit` 自動調整無効化）与効果無 `prio`/`presence-penalty`/`repeat-penalty` 削除；移行「移行前」例 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 有害注記。「DeepSeek 展開実測」節追加 — IQ1（1.5625 bpw）作業記録：五最適化効果与代価、前置充填 三回計測資料、除外済方向、低 bit 量子化 前置充填/生成 相反関係（四言語）
 
 | 提交 | 説明 |
 |------|------|
@@ -155,7 +155,7 @@
 
 ## 2026-09-11T07:38:00+09:00
 
-**摘要**：fix(dsh-api-balance): 疑問 window 注入插件読込時移動、リング component lifecycle 独立 — 根因二：質問時 composer takeover 置換、conversation.input.right リング component unmount/remount、component effect 内注入該 lifecycle 追随消、style 頁面到達不可能；修正 CSS 注入 apply() 内 ctx.effect 移動、插件読込時一回実行（component mount 非依存）、component 側 toggle 状態限定保持；実 helper + 実 QuestionComposer CSS 抽出 Chromium 実行端到端検証、注入成功・卡片全体 scroll・header 吸着（body visible、card auto 変化）確認
+**摘要**：fix(dsh-api-balance): 疑問 window 注入插件読込時移動、環 component lifecycle 独立 — 根因二：質問時 composer takeover 置換、conversation.input.right 環 component unmount/remount、component effect 内注入該 lifecycle 追随消、style 頁面到達不可能；修正 CSS 注入 apply() 内 ctx.effect 移動、插件読込時一回実行（component mount 非依存）、component 側 toggle 状態限定保持；実 helper + 実 QuestionComposer CSS 抽出 Chromium 実行端到端検証、注入成功・卡片全体 scroll・header 吸着（body visible、card auto 変化）確認
 
 | 提交 | 説明 |
 |------|------|
@@ -177,7 +177,7 @@
 | `6809b3d` | docs(dsh-api-balance): 疑問 window 頁面全体 scroll 設定説明（四語） |
 ## 2026-09-02T10:29:20+09:00
 
-**摘要**：feat(dsh-api-balance): 峰赤自動入/解除 + 峰開始与終了両方通知 — 峰境界自動検出：公式峰時間帯 30 秒毎再検査、入/出 peakNow 同期一式赤表示（用量リング/進捗 bar/明細/spinner/chart）駆動、手動更新不要；境界通知：開始 `peak` segment（TTS 回退）、終了新設 `peakEnd` segment（TTS 回退）再生、30 秒 throttle 重複防止；音声 pack 作成器 `peakEnd` segment 追加（默認 TTS 回退一致 sample text 付）、speech.peakEndHint 文案与 voice.seg.peakEnd 標籤新設
+**摘要**：feat(dsh-api-balance): 峰赤自動入/解除 + 峰開始与終了両方通知 — 峰境界自動検出：公式峰時間帯 30 秒毎再検査、入/出 peakNow 同期一式赤表示（用量環/進捗 bar/明細/spinner/chart）駆動、手動更新不要；境界通知：開始 `peak` segment（TTS 回退）、終了新設 `peakEnd` segment（TTS 回退）再生、30 秒 throttle 重複防止；音声 pack 作成器 `peakEnd` segment 追加（默認 TTS 回退一致 sample text 付）、speech.peakEndHint 文案与 voice.seg.peakEnd 標籤新設
 
 | 提交 | 説明 |
 |------|------|
@@ -185,7 +185,7 @@
 | `9483c2c` | docs(dsh-api-balance): 峰自動起動/解除与 peakEnd segment（四語） |
 ## 2026-09-02T10:23:55+09:00
 
-**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 与明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量リング/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
+**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 与明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量環/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
 
 | 提交 | 説明 |
 |------|------|
@@ -240,7 +240,7 @@
 | `610c402` | docs(dsh-api-balance): 挨拶時機 + pager 高度回収説明（四語） |
 ## 2026-09-02T05:03:47+09:00
 
-**摘要**：fix(dsh-api-balance): 手機横屏 top bar 遮蔽 + 窄幅横 scroll 不具合 — 横屏修正：面板最大高「锚点上方可用空間」動態 clamp（リング自祖先 chain 辿最初縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 锚点上端 − clip 上端 − 12)、window size 変更時再計算）、面板自身縦 scroll 全内容表示；窄幅修正：pager 頁幅各頁内容実測幅（scrollWidth 最大、下限 220、px base 翻頁）変更固定 100% 廃止——利用可能幅不足時頁内容自身幅維持、面板 overflow-x:auto 横 scroll 表示、pager overflow:hidden clip 回避
+**摘要**：fix(dsh-api-balance): 手機横屏 top bar 遮蔽 + 窄幅横 scroll 不具合 — 横屏修正：面板最大高「锚点上方可用空間」動態 clamp（環自祖先 chain 辿最初縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 锚点上端 − clip 上端 − 12)、window size 変更時再計算）、面板自身縦 scroll 全内容表示；窄幅修正：pager 頁幅各頁内容実測幅（scrollWidth 最大、下限 220、px base 翻頁）変更固定 100% 廃止——利用可能幅不足時頁内容自身幅維持、面板 overflow-x:auto 横 scroll 表示、pager overflow:hidden clip 回避
 
 | 提交 | 説明 |
 |------|------|
@@ -272,7 +272,7 @@
 | `b8cd0b7` | docs(dsh-api-balance): 界面設定預設有効説明（四語）+ AGENTS Enter key 項目 |
 ## 2026-09-02T02:49:52+09:00
 
-**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量リング与 chart 紅色表示 + 「峰時課金」badge（面板 header 与 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
+**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00・14:00–18:00、其余週末終日含低谷）用量環与 chart 紅色表示 + 「峰時課金」badge（面板 header 与 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
 
 | 提交 | 説明 |
 |------|------|
@@ -303,7 +303,7 @@
 | `9dc7a5d` | feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 |
 ## 2026-09-01T11:34:40+09:00
 
-**摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API キー / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日与模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。
+**摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API 鍵 / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日与模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。
 
 | 提交 | 説明 |
 |------|------|
@@ -515,7 +515,7 @@
 
 ## 2026-08-27T07:28:58+09:00
 
-**摘要**: feat(dsh-api-balance): 面板刷新按鈕。面板頭部標籤行右側追加刷新按鈕（↻）：點擊 queryBalance(true) 強制繞宿主側 30s TTL 緩存重取余额 + 官方用量（按日/按月圖表同步更新）；載入中按鈕禁用 + 旋轉動畫（dshAbSpin 復用）。中英双語文案（刷新数据 / Refresh data）。検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映。
+**摘要**: feat(dsh-api-balance): 面板刷新按鈕。面板頭部標籤行右側追加刷新按鈕（↻）：點擊 queryBalance(true) 強制繞宿主側 30s TTL 緩存重取余额 + 官方用量（按日/按月圖表同步更新）；載入中按鈕禁用 + 旋轉動畫（dshAbSpin 復用）。中英双語文案（刷新資料 / Refresh data）。検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映。
 
 | 提交 | 説明 |
 |------|------|
@@ -555,7 +555,7 @@
 
 ## 2026-08-26T11:44:45+09:00
 
-**摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率与内訳維持、「余额」當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
+**摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率与内訳維持、「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -577,7 +577,7 @@
 
 ## 2026-09-11T06:15:33+09:00
 
-**摘要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 插件読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可（前端 Failed to fetch + agentId 欠如 commands/list 無限再試）。修正: 両 preset persona config prefix 変更、本機 3 preset 同期修正。検証: session/create ok:true + sessionId、session/list セッション一覧、llm/listProviders DeepSeek 提供方返。
+**摘要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 插件読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可（前端 Failed to fetch + agentId 欠如 commands/list 無限再試）。修正: 両 preset persona config prefix 変更、本機 3 preset 同期修正。検証: session/create ok:true + sessionId、session/list 会期一覧、llm/listProviders DeepSeek 提供方返。
 
 | 提交 | 説明 |
 |------|------|

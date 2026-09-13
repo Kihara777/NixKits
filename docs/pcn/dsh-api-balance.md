@@ -12,13 +12,13 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 | npm 名 | `@kihara777/dsh-api-balance` |
 | 版本 | `0.1.0` |
 | 許可 | MIT |
-| 數據來源 | DeepSeek 公式 `GET /user/balance`（API キー認証）+ platform 控制台用量 API（platform 会話 token 認証） |
+| 數據來源 | DeepSeek 公式 `GET /user/balance`（API 鍵認証）+ platform 控制台用量 API（platform 会話 token 認証） |
 
 ## 功能
 
 - **用量**：原内容（上下文占有率与内訳）
-- **余额**：當前 API KEY 帳戶情報（キー末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）、消耗明細与用量図表——消耗明細同一区域水平翻頁（1 頁目：当日 / 当月 / 30 日、2 頁目：模型別内訳 + 日別 / 月別 chart）、上方類手機主屏幕頁面指示 dot（tap 可、横 drag / swipe 翻頁）、区域高度當前頁内容応自動増減（切頁即回収）自身不 scroll（全内容面板自身縦 scroll 依存）
-- 宿主側 30 秒 TTL 緩存；API キー `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退
+- **余额**：當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付与残高）、消耗明細与用量図表——消耗明細同一区域水平翻頁（1 頁目：当日 / 当月 / 30 日、2 頁目：模型別内訳 + 日別 / 月別 chart）、上方類手機主屏幕頁面指示 dot（tap 可、横 drag / swipe 翻頁）、区域高度當前頁内容応自動増減（切頁即回収）自身不 scroll（全内容面板自身縦 scroll 依存）
+- 宿主側 30 秒 TTL 緩存；API 鍵 `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退
 
 ### platform token 取得（二段、全自動優先）
 
@@ -35,7 +35,7 @@ API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按
 
 ### 峰谷課金標記
 
-DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量リング（送信 key 左円形按鈕）、用量頁 context 進捗 bar 与各明細色塊、更新/load 動画、使用量 chart 一括紅色系表示——chart 内各 model 異紅 tone（紅但区分可、図例同同期）維持、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。紅表示官方峰時間帯合わせ自動入/解除（30 秒毎境界再検査）、手動更新不要。峰開始与終了両方通知自働再生（pack `peak` / `peakEnd` segment 優先、無時 TTS 回退）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
+DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量環（送信 key 左円形按鈕）、用量頁 context 進捗 bar 与各明細色塊、更新/load 動画、使用量 chart 一括紅色系表示——chart 内各 model 異紅 tone（紅但区分可、図例同同期）維持、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。紅表示官方峰時間帯合致自動入/解除（30 秒毎境界再検査）、手動更新不要。峰開始与終了両方通知自働再生（pack `peak` / `peakEnd` segment 優先、無時 TTS 回退）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
 
 ### 音声放送
 
@@ -127,7 +127,7 @@ voice-pack.zip
 
 ## 注意
 
-- 残高數據 DeepSeek 官方 API、用量數據 platform 控制台内部 API 由来——認証方式異（API キー / platform 会話 token）、一方欠時該当視図 error 非表示未登録状態表示。
+- 残高數據 DeepSeek 官方 API、用量數據 platform 控制台内部 API 由来——認証方式異（API 鍵 / platform 会話 token）、一方欠時該当視図 error 非表示未登録状態表示。
 - 自動掃描本機瀏覽器登録済 token 限定読取、瀏覽器外數據不採集。token file `0600` 権限落盤。
 - 面板頁面級 overlay（document 級 fixed portal、会話区域 clip 不、横屏/窄幅均画面外出不）；高度「锚点上方可用空間」自動 clamp（手機横屏 top bar 遮蔽回避）；横向可用幅不足時内容適応幅維持、面板横 scroll 表示、縦向同面板自身 scrollbar 表示。
 

@@ -58,7 +58,7 @@ dsh web   # 瀏覧器 UI 起動
 
 ## 服務設定
 
-常駐 web 服務実行 `nixkits.dsh` module 使用。dsh RCE 安全 loopback のみ（`127.0.0.1:8615`）監聽、lighttpd 反代对外端口 `8625` 公開（防火牆自動開放）：
+常駐 web 服務実行 `nixkits.dsh` module 使用。dsh RCE 安全 loopback 唯（`127.0.0.1:8615`）監聽、lighttpd 反代对外端口 `8625` 公開（防火牆自動開放）：
 
 ```nix
 {
@@ -371,8 +371,8 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（文件备份、hot reload）�
 }
 ```
 
-- namespace 設定 UI セクション対応（`web-search-deepseek`、`llm-deepseek`、`ui-onboarding` 等）
-- 値 JSON 互換データ（string/number/boolean/list/object）必須
+- namespace 設定 UI 節対応（`web-search-deepseek`、`llm-deepseek`、`ui-onboarding` 等）
+- 値 JSON 互換資料（string/number/boolean/list/object）必須
 - JSON（合法 YAML）描画、hot reload；空 `{}` 或欠落 schema 既定値 fallback
 
 

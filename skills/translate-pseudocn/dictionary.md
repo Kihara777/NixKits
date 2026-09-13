@@ -68,3 +68,17 @@
 | デプロイ | 配備 | deployment |
 | ナビゲーション | 導航 | navigation |
 | ショーケース | 展示 | showcase |
+| プレフィル | 前置充填 | prefill（LLM 推論の前段処理） |
+| ボトルネック | 隘路 | bottleneck |
+| トレードオフ | 相反関係 | trade-off |
+| ウォームアップ | 暖機 | warmup |
+| デコード | 復号 | decode |
+| インスタンス | 実例 | instance |
+| エラー | 誤謬 | error |
+| リング | 環 | ring（UI の環状表示） |
+| キー | 鍵 | key |
+| セッション | 会期 | session |
+| トークン | 語彙 | token（LLM の処理単位） |
+| クオンタイズ | 量子化 | quantize（既存文書の慣用に合わせる） |
+| セクション | 節 | section（設定 UI の節など） |
+| データ | 資料 | data |
