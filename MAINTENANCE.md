@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:55:58+09:00
+
+**摘要**：docs(pcn): 清除伪中国语残留假名并补齐术语 — 修复 llama-cpp/dsh/dsh-api-balance/MAINTENANCE 中的 `から`・`のみ`・`リング`・`キー`・`セッション`・`セクション`・`データ`・`合わせ`；新增术语伪中国语化（prefill→前置充填、bottleneck→隘路、trade-off→相反関係、warmup→暖機、decode→復号 等）；`token` 统一为既有惯用的「語彙」。词典扩充 16 条，SKILL.md 陷阱表补充 6 个会致空列的片假名。外部引用原文（AGENTS.md 节标题、git 提交信息）保持 verbatim 未改
+
+| 提交 | 说明 |
+|------|------|
+| `3758428` | docs(pcn): eliminate kana, pseudocn-ise new terms, extend dictionary |
+
 ## 2026-09-13T11:44:48+09:00
 
 **摘要**：docs(llama-cpp-rocm): 修正与实测优化相悖的示例 — `batch-size` 由 `"512"` 改为实测最优的 `"2048"`、补上缺失的 `ubatch-size`、移除写死 `n-gpu-layers`/`load-mode`（会令 `fit` 自适应失效）与无收益的 `prio`/`presence-penalty`/`repeat-penalty`；迁移「迁移前」示例中的 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 加注有害说明。新增「DeepSeek 部署实测」章节，记录 IQ1（1.5625 bpw）的五项优化收益与代价、prefill 三测数据、已排除方向与低比特量化的 prefill/生成权衡结论（四语）

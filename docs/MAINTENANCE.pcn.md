@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-13T11:55:58+09:00
+
+**摘要**：docs(pcn): 偽中国語文書残留仮名清除与用語補完 — llama-cpp / dsh / dsh-api-balance / MAINTENANCE 四文書之片仮名・平仮名残片全清除；新規用語偽中国語化（前置充填、隘路、相反関係、暖機、復号 等）、`token` 既存慣用「語彙」統一。辞書 16 項目追加、SKILL.md 陷阱表 空列生項目 6 件追加。外部引用原文（AGENTS.md 節題、git 提交信息 2 件）意図的 verbatim 維持
+
+| 提交 | 説明 |
+|------|------|
+| `3758428` | docs(pcn): eliminate kana, pseudocn-ise new terms, extend dictionary |
+
 ## 2026-09-13T11:44:48+09:00
 
 **摘要**：docs(llama-cpp-rocm): 実測最適化相違例修正 — `batch-size` 従 `"512"` 至実測最適 `"2048"` 変更、欠落 `ubatch-size` 追加、`n-gpu-layers`/`load-mode` 書死（`fit` 自動調整無効化）与効果無 `prio`/`presence-penalty`/`repeat-penalty` 削除；移行「移行前」例 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 有害注記。「DeepSeek 展開実測」節追加 — IQ1（1.5625 bpw）作業記録：五最適化効果与代価、前置充填 三回計測資料、除外済方向、低 bit 量子化 前置充填/生成 相反関係（四言語）

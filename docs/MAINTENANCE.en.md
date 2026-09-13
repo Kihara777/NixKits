@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:55:58+09:00
+
+**Summary**：docs(pcn): Removed residual kana from the pseudo-Chinese docs and filled terminology gaps — fixed `から`, `のみ`, `リング`, `キー`, `セッション`, `セクション`, `データ` and `合わせ` across llama-cpp / dsh / dsh-api-balance / MAINTENANCE; pseudocn-ised new terms (prefill→前置充填, bottleneck→隘路, trade-off→相反関係, warmup→暖機, decode→復号, etc.); unified `token` onto the existing 語彙 spelling. Dictionary extended by 16 entries and SKILL.md's pitfall table gained the six katakana that surface as empty table columns. Quoted external text (an AGENTS.md section title, two git commit messages) intentionally left verbatim
+
+| Commit | Description |
+|--------|-------------|
+| `3758428` | docs(pcn): eliminate kana, pseudocn-ise new terms, extend dictionary |
+
 ## 2026-09-13T11:44:48+09:00
 
 **Summary**：docs(llama-cpp-rocm): Corrected examples that contradicted the measured optimisations — `batch-size` changed from `"512"` to the measured optimum `"2048"`, added the missing `ubatch-size`, removed hard-coded `n-gpu-layers`/`load-mode` (which disable `fit`'s automatic sizing) and the benefit-free `prio`/`presence-penalty`/`repeat-penalty`; annotated `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` in the migration "before" example as harmful. Added a "DeepSeek Deployment Measurements" section covering the IQ1 (1.5625 bpw) work: five optimisations with gain and cost, the three-run prefill data, the ruled-out directions, and the low-bit quantisation prefill/generation trade-off (all four languages)
