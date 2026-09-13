@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:32:10+09:00
+
+**Summary**：feat(asusd-pd-profile): Added a NixOS module selecting the platform profile by power source — `asusd.ron` has only `platform_profile_on_ac` / `platform_profile_on_battery` and **no USB-C PD branch**, so "balanced on PD, performance on barrel AC" cannot be expressed in configuration; the ACPI layer also reports PD and barrel charging alike on `AC0.online`, making them appear indistinguishable. This module adds the missing third state via a udev-driven oneshot service, deciding from the Type-C port's `power_operation_mode` and any online supply whose `type` is `USB` (two redundant signals, both using **generic kernel attributes** rather than machine-specific device names such as `ucsi-source-psy-USBC000:001`). Two key constraints: (1) **do not write `/sys/firmware/acpi/platform_profile`**, since asusd overwrites it on every AC event — write asusd's own `PlatformProfileOnAc` property instead; (2) **go over D-Bus rather than parsing `asusctl` text output**, avoiding a dependency on the CLI's human-readable format. Measured profile enum (asusctl 6.4.0): `0`=balanced, `1`=performance, `2`=quiet, `3`=quiet (alias) — note `0` is balanced and the order **differs** from the ACPI sysfs `platform_profile_choices`. Battery power is deliberately left alone. Docs in four languages, registered in every README
+
+| Commit | Description |
+|--------|-------------|
+| `56293a9` | feat(asusd-pd-profile): add module selecting platform profile by power source |
+| `75391b2` | docs(pcn): align asusd-pd-profile wording with the Japanese sibling |
+
 ## 2026-09-14T05:00:46+09:00
 
 **Summary**：docs(llama-cpp-rocm): Added IQ3_S measurements and power-profile data — the DeepSeek deployment section expands from IQ1_S only to a two-quantisation comparison (IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw); three new measured findings: (1) **quantisation overhead is not a fixed value** (IQ1_S ≈6.5 GiB, IQ3_S ≈13.3 GiB — the pre-test 3.7 GiB estimate was off by nearly an order of magnitude, so GPUActive must be re-measured after changing quantisation); (2) **generation speed is dependency-latency bound**, with three independent proofs (1.56→3.44 bpw leaves generation unchanged at 12.8→12.9 t/s, three concurrent requests give the same 12.5 t/s aggregate, and the performance profile costs +54% power for only +2.4% speed); (3) **power-profile measurements** (quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s vs performance 76.7 W / 90–95 °C / 13.07 t/s — quiet saves 49% power and drops 17~36 °C for only 5~7% speed). Also corrects the GPU memory metric to `/proc/meminfo`'s `GPUActive` (not `mem_info_gtt_used`) and records the IQ3_S headroom limit (≈6 GiB, GTT 124.9 GiB). Synced across four languages

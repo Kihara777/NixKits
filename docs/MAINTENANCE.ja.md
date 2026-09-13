@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:32:10+09:00
+
+**概要**：feat(asusd-pd-profile): 電源種別でプラットフォームプロファイルを選択する NixOS モジュールを追加 — `asusd.ron` には `platform_profile_on_ac` / `platform_profile_on_battery` の二鍵しかなく **USB-C PD の分岐が存在しない**ため、「PD では Balanced、バレル AC では Performance」といった方針は設定で表現できない；さらに ACPI 層では PD とバレル給電がともに `AC0.online` 上に現れ、区別不能に見える。本モジュールは udev イベント駆動の oneshot サービスで第三の状態を補い、Type-C ポートの `power_operation_mode` と `type` が `USB` であるオンライン供給元を判定に用いる（二つの冗長な判定基準。いずれも `ucsi-source-psy-USBC000:001` のような機種固有のデバイス名ではなく**汎用カーネル属性**を使用）。二つの重要な制約：①**`/sys/firmware/acpi/platform_profile` へ書き込んではならない** — asusd が AC イベントのたびに上書きするため、asusd 自身の `PlatformProfileOnAc` プロパティへ書き込む；②**`asusctl` のテキスト出力を解析せず D-Bus 経由**で行い、CLI の人間可読な書式への依存を避ける。実測したプロファイル列挙値（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（別名）—— `0` は balanced であり、その順序は ACPI sysfs の `platform_profile_choices` とは**異なる**点に注意。バッテリ給電時は意図的に関与しない。四言語の文書を作成し、各 README に登録
+
+| コミット | 説明 |
+|----------|------|
+| `56293a9` | feat(asusd-pd-profile): add module selecting platform profile by power source |
+| `75391b2` | docs(pcn): align asusd-pd-profile wording with the Japanese sibling |
+
 ## 2026-09-14T05:00:46+09:00
 
 **概要**：docs(llama-cpp-rocm): IQ3_S の実測と消費電力プロファイルのデータを追加 — DeepSeek 展開の章を IQ1_S のみから二量子化の対照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）へ拡張；三つの実測知見を新規追加：①**量子化オーバーヘッドは固定値ではない**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB。事前の 3.7 GiB 推定は一桁近く外れており、量子化変更後は GPUActive を再実測すべき）；②**生成速度は依存レイテンシに制約される**、三つの独立した証拠（重み 1.56→3.44 bpw で生成は不変 12.8→12.9 t/s、3 並行リクエストの集約スループットも同じ 12.5 t/s、performance プロファイルは 54% 増の電力でわずか 2.4% の速度）；③**消費電力プロファイルの実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s に対し performance 76.7 W / 90–95 °C / 13.07 t/s — quiet は 49% の電力削減と 17~36 °C の降温を速度 5~7% の犠牲で実現）。併せて GPU メモリ指標を `/proc/meminfo` の `GPUActive` に修正（`mem_info_gtt_used` ではない）、IQ3_S の余裕限界（約 6 GiB、GTT 124.9 GiB）も記録。四言語同期

@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:32:10+09:00
+
+**摘要**：feat(asusd-pd-profile): 新增按供电类型选择平台档位的 NixOS 模块 — `asusd.ron` 只有 `platform_profile_on_ac` / `platform_profile_on_battery` 两键、**无 USB-C PD 分支**，故"PD 用 Balanced、桶形 AC 用 Performance"无法用配置表达；且 ACPI 层 PD 与桶形同在 `AC0.online` 上、看似不可区分。本模块用 udev 事件驱动的 oneshot 服务补足第三态，判据为 Type-C 端口 `power_operation_mode` 与 `type` 为 `USB` 的在线供应器（两级冗余，均用**通用内核属性**而非机型专属设备名如 `ucsi-source-psy-USBC000:001`）。两处关键约束：①**不得写 `/sys/firmware/acpi/platform_profile`** —— asusd 每次 AC 事件都会覆盖，改为写 asusd 自己的 `PlatformProfileOnAc` 属性；②**经 D-Bus 而非解析 `asusctl` 文本输出**，避免依赖 CLI 人类可读格式。实测档位枚举（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（别名），注意 `0` 为 balanced 且顺序与 ACPI sysfs `platform_profile_choices` **不同**。电池态刻意不介入。四语文档并在各 README 登记
+
+| 提交 | 说明 |
+|------|------|
+| `56293a9` | feat(asusd-pd-profile): add module selecting platform profile by power source |
+| `75391b2` | docs(pcn): align asusd-pd-profile wording with the Japanese sibling |
+
 ## 2026-09-14T05:00:46+09:00
 
 **摘要**：docs(llama-cpp-rocm): 补 IQ3_S 实测与功耗档位数据 — DeepSeek 部署章节由仅 IQ1_S 扩展为两种量化对照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）；新增三项实测结论：①**量化开销非固定值**（IQ1_S 约 6.5 GiB、IQ3_S 约 13.3 GiB，事前的 3.7 GiB 估算偏差近一个量级，故换量化后必须重测 GPUActive）；②**生成速度受限于依赖延迟**，三条独立证据（权重 1.56→3.44 bpw 生成不变 12.8→12.9 t/s、3 并发聚合吞吐同为 12.5 t/s、performance 档多耗 54% 功耗仅换 2.4% 速度）；③**功耗档位实测**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s，performance 76.7 W / 90–95 °C / 13.07 t/s，quiet 省 49% 功耗、降 17~36 °C 而速度仅损 5~7%）。同时修正显存指标应为 `/proc/meminfo` 的 `GPUActive`（而非 `mem_info_gtt_used`），并记录 IQ3_S 余量极限（约 6 GiB、GTT 124.9 GiB）。四语同步
