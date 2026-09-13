@@ -71,6 +71,7 @@ nix registry add nixkits github:Kihara777/NixKits
 |------|------|------|
 | llama-cpp-rocm | 上流最新版追跡 ROCm 加速 | [docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md) |
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
+| asusd-pd-profile | 供電種別 依 平台檔位選択（USB-C PD 与 原生 AC 区別） | [docs/pcn/asusd-pd-profile.md](pcn/asusd-pd-profile.md) |
 | comfyui-rocm | ComfyUI ROCm 機能修正提供 | [docs/pcn/comfyui-rocm.md](pcn/comfyui-rocm.md) |
 | efl-cross-fix | efl 交叉编译符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
 | codewhale-sudo | overlay — codewhale v0.9.12 sudo 机能复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |

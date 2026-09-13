@@ -71,6 +71,7 @@ Standalone overlays, not included in `default`:
 |------|------|------|
 | llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/en/llama-cpp-rocm.md](en/llama-cpp-rocm.md) |
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/en/rcc-fix.md](en/rcc-fix.md) |
+| asusd-pd-profile | Selects platform profile by power source (USB-C PD vs native AC) | [docs/en/asusd-pd-profile.md](en/asusd-pd-profile.md) |
 | comfyui-rocm | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm.md](en/comfyui-rocm.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
