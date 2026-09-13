@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:52:18+09:00
+
+**概要**：docs(README): クレジット欄を更新 — 小爪 に **DeepSeek V4.1 Flash** を追加（既存の V4 Flash と併記）、その DSH エコシステムへの貢献（dsh-nixos-shell プラグイン、NixOS模式/維護模式 Agent プリセット）は行内リストから**節末尾の Note へ移動**；小小爪 は **DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)** を先頭に置き、当該量子化が **core 面で実際に使用されているレベル**である旨を付記。四言語同期
+
+| コミット | 説明 |
+|----------|------|
+| `3c58280` | docs(README): update credits — add V4.1 Flash, list core quantisation |
+
 ## 2026-09-14T05:32:10+09:00
 
 **概要**：feat(asusd-pd-profile): 電源種別でプラットフォームプロファイルを選択する NixOS モジュールを追加 — `asusd.ron` には `platform_profile_on_ac` / `platform_profile_on_battery` の二鍵しかなく **USB-C PD の分岐が存在しない**ため、「PD では Balanced、バレル AC では Performance」といった方針は設定で表現できない；さらに ACPI 層では PD とバレル給電がともに `AC0.online` 上に現れ、区別不能に見える。本モジュールは udev イベント駆動の oneshot サービスで第三の状態を補い、Type-C ポートの `power_operation_mode` と `type` が `USB` であるオンライン供給元を判定に用いる（二つの冗長な判定基準。いずれも `ucsi-source-psy-USBC000:001` のような機種固有のデバイス名ではなく**汎用カーネル属性**を使用）。二つの重要な制約：①**`/sys/firmware/acpi/platform_profile` へ書き込んではならない** — asusd が AC イベントのたびに上書きするため、asusd 自身の `PlatformProfileOnAc` プロパティへ書き込む；②**`asusctl` のテキスト出力を解析せず D-Bus 経由**で行い、CLI の人間可読な書式への依存を避ける。実測したプロファイル列挙値（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（別名）—— `0` は balanced であり、その順序は ACPI sysfs の `platform_profile_choices` とは**異なる**点に注意。バッテリ給電時は意図的に関与しない。四言語の文書を作成し、各 README に登録

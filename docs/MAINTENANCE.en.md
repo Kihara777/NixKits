@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:52:18+09:00
+
+**Summary**：docs(README): Updated the credits section — 小爪 gains **DeepSeek V4.1 Flash** (alongside the existing V4 Flash), and its DSH ecosystem work (dsh-nixos-shell plugin, NixOS-mode/maintenance-mode agent presets) moves out of the inline list into a **note at the end of the section**; 小小爪 now leads with **DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)**, annotated as the quantisation level actually used on the **core face**. Synced across four languages
+
+| Commit | Description |
+|--------|-------------|
+| `3c58280` | docs(README): update credits — add V4.1 Flash, list core quantisation |
+
 ## 2026-09-14T05:32:10+09:00
 
 **Summary**：feat(asusd-pd-profile): Added a NixOS module selecting the platform profile by power source — `asusd.ron` has only `platform_profile_on_ac` / `platform_profile_on_battery` and **no USB-C PD branch**, so "balanced on PD, performance on barrel AC" cannot be expressed in configuration; the ACPI layer also reports PD and barrel charging alike on `AC0.online`, making them appear indistinguishable. This module adds the missing third state via a udev-driven oneshot service, deciding from the Type-C port's `power_operation_mode` and any online supply whose `type` is `USB` (two redundant signals, both using **generic kernel attributes** rather than machine-specific device names such as `ucsi-source-psy-USBC000:001`). Two key constraints: (1) **do not write `/sys/firmware/acpi/platform_profile`**, since asusd overwrites it on every AC event — write asusd's own `PlatformProfileOnAc` property instead; (2) **go over D-Bus rather than parsing `asusctl` text output**, avoiding a dependency on the CLI's human-readable format. Measured profile enum (asusctl 6.4.0): `0`=balanced, `1`=performance, `2`=quiet, `3`=quiet (alias) — note `0` is balanced and the order **differs** from the ACPI sysfs `platform_profile_choices`. Battery power is deliberately left alone. Docs in four languages, registered in every README

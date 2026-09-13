@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-14T05:52:18+09:00
+
+**摘要**：docs(README): 更新作者章节 — 小爪条目新增 **DeepSeek V4.1 Flash**（与既有 V4 Flash 并列），其 DSH 生态贡献（dsh-nixos-shell 插件、NixOS模式/维护模式 Agent 预设）由行内列表**移出为章节末尾的 Note**；小小爪条目改以 **DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)** 领衔，并标注该量化为 **core 面实际使用的等级**。四语同步
+
+| 提交 | 说明 |
+|------|------|
+| `3c58280` | docs(README): update credits — add V4.1 Flash, list core quantisation |
+
 ## 2026-09-14T05:32:10+09:00
 
 **摘要**：feat(asusd-pd-profile): 新增按供电类型选择平台档位的 NixOS 模块 — `asusd.ron` 只有 `platform_profile_on_ac` / `platform_profile_on_battery` 两键、**无 USB-C PD 分支**，故"PD 用 Balanced、桶形 AC 用 Performance"无法用配置表达；且 ACPI 层 PD 与桶形同在 `AC0.online` 上、看似不可区分。本模块用 udev 事件驱动的 oneshot 服务补足第三态，判据为 Type-C 端口 `power_operation_mode` 与 `type` 为 `USB` 的在线供应器（两级冗余，均用**通用内核属性**而非机型专属设备名如 `ucsi-source-psy-USBC000:001`）。两处关键约束：①**不得写 `/sys/firmware/acpi/platform_profile`** —— asusd 每次 AC 事件都会覆盖，改为写 asusd 自己的 `PlatformProfileOnAc` 属性；②**经 D-Bus 而非解析 `asusctl` 文本输出**，避免依赖 CLI 人类可读格式。实测档位枚举（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（别名），注意 `0` 为 balanced 且顺序与 ACPI sysfs `platform_profile_choices` **不同**。电池态刻意不介入。四语文档并在各 README 登记

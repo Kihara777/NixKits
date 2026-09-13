@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-14T05:52:18+09:00
+
+**摘要**：docs(README): 作者章節 更新 — 小爪 条目 **DeepSeek V4.1 Flash** 新規追加（既存 V4 Flash 與 併記）、其 DSH 生態 貢献（dsh-nixos-shell 插件、NixOS模式/維護模式 Agent 預設）行内 list **章節末尾 Note 移動**；小小爪 条目 **DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)** 先頭設定、当該量子化 **core 面 実際使用 等級** 旨 付記。四言語同期
+
+| 提交 | 説明 |
+|------|------|
+| `3c58280` | docs(README): update credits — add V4.1 Flash, list core quantisation |
+
 ## 2026-09-14T05:32:10+09:00
 
 **摘要**：feat(asusd-pd-profile): 供電種別 依 平台檔位選択 NixOS 部品 追加 — `asusd.ron` 僅 `platform_profile_on_ac` / `platform_profile_on_battery` 二鍵、**USB-C PD 分岐不存在**、故「PD 時 Balanced、桶形 AC 時 Performance」類方針 不能 設定表現；且 ACPI 層 PD 與 桶形給電 共 `AC0.online` 上現、見 区別不能。本部品 udev 事件駆動 oneshot 服務 第三状態 補、判定 Type-C 模式 `power_operation_mode` 與 `type` 為 `USB` 在線供給元 用（二重冗長判定基準、皆 `ucsi-source-psy-USBC000:001` 如 機種固有 機器名 非、**汎用内核属性**使用）。二重要制約：①**`/sys/firmware/acpi/platform_profile` 書込禁止** — asusd AC 事件毎 上書、asusd 自身 `PlatformProfileOnAc` 属性 書込；②**`asusctl` 文本輸出解析 非、D-Bus 経由**、CLI 人間可読書式 依存 避。実測檔位列挙値（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（別名）—— `0` balanced 而 順序 ACPI sysfs `platform_profile_choices` 與**異**注意。電池給電時 意図的 不関与。四言語文書作成、各 README 登録
