@@ -78,7 +78,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
 
-> ⚠️ 修正上乗、上流 nixpkgs 包変更、独立構築非。故二進緩衝未含。動的版追跡計画（llama-cpp-rocm 等）摘要毎上流版変化、緩衝固定不可。
+> ⚠️ **StrixHalo 機器 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` 設定禁止。** 該変数変更 GPU 記憶域割当経路、統一記憶域機器上模型輸出退化（単詞重複、文崩壊）招致。実測：該危険**模型量子化精度低下随著顕著増大** —— 低 bit 量子化（如 1.5 bpw）最重影響。詳細 [llama-cpp-rocm 文書](pcn/llama-cpp-rocm.md#統一記憶域環境変数退化危険)。
 
 ## 技能
 

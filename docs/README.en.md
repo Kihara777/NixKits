@@ -78,7 +78,7 @@ Standalone overlays, not included in `default`:
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 
-> ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
+> ⚠️ **Do not set `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` on StrixHalo devices.** The variable changes the GPU memory allocation path and causes degenerate model output (repeated words, broken sentences) on unified-memory hardware. Measured: the risk **increases significantly as model quantisation precision drops** — low-bit quants (e.g. 1.5 bpw) are affected most. See the [llama-cpp-rocm docs](en/llama-cpp-rocm.md#unified-memory-environment-variable-degeneration-risk).
 
 ## Skills
 

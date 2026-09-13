@@ -167,9 +167,30 @@ Parameters below are verified on Strix Halo (unified memory) with llama.cpp 0.4.
 
 | Item | Reason |
 |------|--------|
-| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **Corrupts model output** (repeated tokens, garbage). The same model and preset answer correctly without it |
+| `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` | **Corrupts model output** (repeated tokens, garbage). The same model and preset answer correctly without it. See the next section |
 | `mmap` | Deprecated; use `load-mode` |
 | `--no-mmproj` | Only a workaround when mmproj mismatches the quantisation; keep it for image input |
+
+### Unified-Memory Environment Variable Degeneration Risk
+
+On unified-memory (UMA) devices such as StrixHalo, **do not set `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1`**. The variable changes the GPU memory allocation path (from dedicated VRAM to unified-memory addressing) and degenerates model output on such hardware.
+
+> ⚠️ **The risk rises significantly as model quantisation precision drops.** Low-bit quants are affected worst — the more aggressive the quantisation, the narrower the weight distribution and the more sensitive it becomes to the noise this allocation change introduces.
+
+**Symptoms**: token repetition (`We need need need…`, `The user user user…`), broken sentences, failure to terminate.
+
+**Measured comparison** (Strix Halo / Ryzen AI Max, model `UD-IQ1_S` 1.5625 bpw):
+
+| Launch method | Variable set | Result |
+|---------------|-------------|--------|
+| systemd service | ✅ yes | ❌ **degenerate** (repeated tokens) |
+| Hand-started server (same ini/model) | ❌ no | ✅ correct |
+| `llama-cli` (same ini/model) | ❌ no | ✅ correct |
+| Hand-started server | ✅ yes | ❌ **degeneration reproduced** |
+
+The last two rows are the key evidence: with the **same model, same preset and same config file**, the only variable is this environment variable, and it reproduces in both directions.
+
+**Why it is easily misdiagnosed**: `llama-cli` defaults to `--fit on` and `--n-gpu-layers auto`, while a preset that sets `fit off` will OOM instead; the two symptoms (bad output vs. failed load) are easy to confuse with quantisation or template (`jinja`) issues. **Rule this variable out first**, before suspecting quantisation or templates.
 
 ## Migration Guide
 
