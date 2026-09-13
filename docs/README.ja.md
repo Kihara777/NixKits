@@ -96,6 +96,7 @@ AI コーディングアシスタント向け：
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/ja/skills/translate-pseudocn.md](ja/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様に沿った MAINTENANCE.md エントリの作成（ソフトウェア更新 + バグ修正） | [docs/ja/skills/write-maintenance-log.md](ja/skills/write-maintenance-log.md) |
 | write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを作成 | [docs/ja/skills/write-project-docs.md](ja/skills/write-project-docs.md) |
+| nixos-specialisation-tuning | NixOS の specialisation 面を設計し、ユニファイドメモリ機器で llama.cpp を最適化 | [docs/ja/skills/nixos-specialisation-tuning.md](ja/skills/nixos-specialisation-tuning.md) |
 
 ## クレジット
 

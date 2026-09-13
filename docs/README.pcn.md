@@ -96,6 +96,7 @@ AI 符号化代理向：
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/pcn/skills/translate-pseudocn.md](pcn/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様沿 MAINTENANCE.md 条目作成（軟体更新 + 誤修正） | [docs/pcn/skills/write-maintenance-log.md](pcn/skills/write-maintenance-log.md) |
 | write-project-docs | 任意計画 NixKits 式多言語文書作成 | [docs/pcn/skills/write-project-docs.md](pcn/skills/write-project-docs.md) |
+| nixos-specialisation-tuning | NixOS specialisation 面設計、統一記憶域機器 llama.cpp 最適化 | [docs/pcn/skills/nixos-specialisation-tuning.md](pcn/skills/nixos-specialisation-tuning.md) |
 
 ## 銘記
 

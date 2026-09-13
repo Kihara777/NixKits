@@ -96,6 +96,7 @@ For AI coding assistants:
 | translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/en/skills/translate-pseudocn.md](en/skills/translate-pseudocn.md) |
 | write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/en/skills/write-maintenance-log.md](en/skills/write-maintenance-log.md) |
 | write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/en/skills/write-project-docs.md](en/skills/write-project-docs.md) |
+| nixos-specialisation-tuning | Design NixOS specialisation faces and tune llama.cpp on unified-memory devices | [docs/en/skills/nixos-specialisation-tuning.md](en/skills/nixos-specialisation-tuning.md) |
 
 ## Credits
 

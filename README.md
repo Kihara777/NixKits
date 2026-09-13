@@ -98,6 +98,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | translate-pseudocn | 偽中国語翻译（日语假名剥离 + 语序转换） | [docs/zh/skills/translate-pseudocn.md](docs/zh/skills/translate-pseudocn.md) |
 | write-maintenance-log | 按 NixKits 规范撰写维护日志（软件更新 + 错误修复） | [docs/zh/skills/write-maintenance-log.md](docs/zh/skills/write-maintenance-log.md) |
 | write-project-docs | 按 NixKits 风格为任意项目编写多语言文档系统 | [docs/zh/skills/write-project-docs.md](docs/zh/skills/write-project-docs.md) |
+| nixos-specialisation-tuning | 设计 NixOS specialisation 分面并在统一内存设备上调优 llama.cpp | [docs/zh/skills/nixos-specialisation-tuning.md](docs/zh/skills/nixos-specialisation-tuning.md) |
 
 ## 作者
 
