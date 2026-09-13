@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:59:48+09:00
+
+**Summary**：feat(skill): Added `nixos-specialisation-tuning` — generalises the one-off `SPECIALISATION-CORE.md` incident log into a reusable skill: the three-file specialisation face architecture and override-conflict rules, the ownership principle (settings live with their consumer), a llama.cpp parameter table and forbidden items on UMA devices, the diagnostic order for degenerate output, a method for measuring tool-schema context cost, silent-failure recognition (service active but not working), and self-checking an invalid control experiment. Skill docs in four languages, registered in every README's skill table
+
+| Commit | Description |
+|--------|-------------|
+| `281e19b` | feat(skill): add nixos-specialisation-tuning |
+
 ## 2026-09-13T11:55:58+09:00
 
 **Summary**：docs(pcn): Removed residual kana from the pseudo-Chinese docs and filled terminology gaps — fixed `から`, `のみ`, `リング`, `キー`, `セッション`, `セクション`, `データ` and `合わせ` across llama-cpp / dsh / dsh-api-balance / MAINTENANCE; pseudocn-ised new terms (prefill→前置充填, bottleneck→隘路, trade-off→相反関係, warmup→暖機, decode→復号, etc.); unified `token` onto the existing 語彙 spelling. Dictionary extended by 16 entries and SKILL.md's pitfall table gained the six katakana that surface as empty table columns. Quoted external text (an AGENTS.md section title, two git commit messages) intentionally left verbatim

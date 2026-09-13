@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-13T11:59:48+09:00
+
+**概要**：feat(skill): `nixos-specialisation-tuning` を追加 — 一度きりの障害記録 `SPECIALISATION-CORE.md` を再利用可能な技能へ一般化：specialisation の三ファイル面構成と上書き衝突規則、設定を消費者に帰属させる原則、UMA デバイスでの llama.cpp パラメータ表と禁止項目、出力退化時の診断順序、ツール schema のコンテキスト費用の測定法、静黙故障の認識（サービスは active だが機能しない）、無効な対照実験の自己点検。技能文書は四言語、各 README の技能表に登録
+
+| コミット | 説明 |
+|----------|------|
+| `281e19b` | feat(skill): add nixos-specialisation-tuning |
+
 ## 2026-09-13T11:55:58+09:00
 
 **概要**：docs(pcn): 偽中国語文書の残留仮名を除去し用語を補完 — llama-cpp / dsh / dsh-api-balance / MAINTENANCE の `から`・`のみ`・`リング`・`キー`・`セッション`・`セクション`・`データ`・`合わせ` を修正；新規用語を偽中国語化（prefill→前置充填、bottleneck→隘路、trade-off→相反関係、warmup→暖機、decode→復号 等）；`token` は既存慣用の「語彙」に統一。辞書に 16 項目追加、SKILL.md の落とし穴表に空列を生む片仮名 6 件を追加。外部引用原文（AGENTS.md の節題、git コミットメッセージ 2 件）は意図的に verbatim のまま
