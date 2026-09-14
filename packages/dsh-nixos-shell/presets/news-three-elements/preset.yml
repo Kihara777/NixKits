@@ -1,0 +1,2 @@
+name: 新闻三要素模式
+description: 派生自极简模式的只读创作预设：每次会话启动时在线从 NixKits 仓库获取最新的完整「新闻三要素」技能包（网络不可用时回退预设内置副本），仅挂载查看类工具（read/read_image/glob/grep/web_search/web_fetch/skill/ask_user_question），写入类调用由运行时守卫以通讯社文风拒绝；鼓励基于用户自带素材（文本、工程目录资产、图片、文档）深度参与编造，其它请求一律以技能中的语言技巧回绝。

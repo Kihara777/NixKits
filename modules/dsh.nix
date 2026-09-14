@@ -381,6 +381,7 @@ in
     presets = {
       nixosMode = lib.mkEnableOption "seed the NixOS模式 agent preset (id `nixos`) into \$DSH_HOME/.agent-presets/nixos at service start";
       maintenanceMode = lib.mkEnableOption "seed the 维护模式 agent preset (id `maintenance`) into \$DSH_HOME/.agent-presets/maintenance at service start";
+      newsThreeElements = lib.mkEnableOption "seed the 新闻三要素模式 agent preset (id `news-three-elements`) into \$DSH_HOME/.agent-presets/news-three-elements at service start";
     };
   };
 
@@ -470,6 +471,16 @@ in
             mkdir -p ${cfg.dshHome}/.agent-presets
             cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
+          fi
+        ''}
+        # 新闻三要素模式（id `news-three-elements`）：派生自极简模式的只读
+        # 创作预设。预设自带插件（在线抓取技能包 / 开场问答 / 只读守卫 /
+        # 语言审查），故整目录复制即可用；技能包内置副本作为断网兜底。
+        ${lib.optionalString cfg.presets.newsThreeElements ''
+          if [ ! -e ${cfg.dshHome}/.agent-presets/news-three-elements ]; then
+            mkdir -p ${cfg.dshHome}/.agent-presets
+            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/news-three-elements ${cfg.dshHome}/.agent-presets/news-three-elements
+            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/news-three-elements
           fi
         ''}
         ${lib.optionalString (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) ''
