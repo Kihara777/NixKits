@@ -54,7 +54,7 @@
 
 ## 2026-09-13T11:59:48+09:00
 
-**摘要**：feat(skill): `nixos-specialisation-tuning` 追加 — 一次性事故記録 `SPECIALISATION-CORE.md` 再利用可能技能汎化：specialisation 三文件面構成與上書き衝突規則、設定消費者帰属原則、UMA 機器 llama.cpp 参數表與禁止項目、輸出退化時診断順序、道具 schema 文脈費用測定法、静黙故障認識（服務 active 但機能不動作）、無効対照実験自己点検。技能文書四言語、各 README 技能表登録
+**摘要**：feat(skill): `nixos-specialisation-tuning` 追加 — 一次性事故記録 `SPECIALISATION-CORE.md` 再利用可能技能汎化：specialisation 三文件面構成與上書衝突規則、設定消費者帰属原則、UMA 機器 llama.cpp 参數表與禁止項目、輸出退化時診断順序、道具 schema 文脈費用測定法、静黙故障認識（服務 active 但機能不動作）、無効対照実験自己点検。技能文書四言語、各 README 技能表登録
 
 | 提交 | 説明 |
 |------|------|
@@ -122,7 +122,7 @@
 | 　 | dsh 内蔵 plugin 数 | 137 → 152 |
 | 　 | dsh lock resolved | 560 → 580 |
 
-> **godot-ai 未更新**：上流之 3.2.5 → 4.0.4 は破壊的 major release。pyproject が 9 個之実行時依存を厳密固定、起動時 fail-closed 検証。其中 6 個（mcp 1.29.1 / websockets 17.1 / pydantic 2.13.5 / uvicorn 0.52.4 / starlette 1.6.0 / setuptools 84.0.0）は nixpkgs を超越、overlay で個別引上不可避。加之 v3 plugin 與 v4 server 相互運用不可、client は `godot-ai attach` 移行必須。今回 3.2.5 維持（上流 `release/v3` branch 依然保守）。
+> **godot-ai 未更新**：上流之 3.2.5 → 4.0.4 破壊的 major release。pyproject 9 個之実行時依存 厳密固定、起動時 fail-closed 検証。其中 6 個（mcp 1.29.1 / websockets 17.1 / pydantic 2.13.5 / uvicorn 0.52.4 / starlette 1.6.0 / setuptools 84.0.0） nixpkgs 超越、overlay 以個別引上不可避。加之 v3 plugin 與 v4 server 相互運用不可、client `godot-ai attach` 移行必須。今回 3.2.5 維持（上流 `release/v3` branch 依然保守）。
 
 ## 2026-09-04T07:21:36+09:00
 
@@ -1698,7 +1698,7 @@
 
 ## 2026-06-25T09:44:44+09:00
 
-**Summary**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
+**摘要**: CI — riscv64-cross ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
 
 | 提交 | 説明 |
 |------|------|
@@ -1707,7 +1707,7 @@
 
 ## 2026-06-25T09:29:43+09:00
 
-**Summary**: CI — build / riscv64-cross を包別 matrix 分割、独立徽章対応；docs — ruyi 徽章を 9 枚（3版本×3架構）拡張
+**摘要**: CI — build / riscv64-cross 包別 matrix 分割、独立徽章対応；docs — ruyi 徽章 9 枚（3版本×3架構）拡張
 
 | 提交 | 説明 |
 |------|------|
@@ -1716,7 +1716,7 @@
 
 ## 2026-06-25T09:24:43+09:00
 
-**Summary**: CI — build job に ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行に beta/alpha 版本番号追加
+**摘要**: CI — build job ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行 beta/alpha 版本番号追加
 
 | 提交 | 説明 |
 |------|------|
@@ -1725,7 +1725,7 @@
 
 ## 2026-06-25T09:09:26+09:00
 
-**Summary**: CI — ruyi を riscv64-cross 除外；overlays — default overlay に ruyi-beta/ruyi-alpha 追加＋nixConfig を flake 最上位層移行；docs — README 表に ruyi 3路版本表示
+**摘要**: CI — ruyi riscv64-cross 除外；overlays — default overlay ruyi-beta/ruyi-alpha 追加＋nixConfig flake 最上位層移行；docs — README 表 ruyi 3路版本表示
 
 | 提交 | 説明 |
 |------|------|

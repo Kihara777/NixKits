@@ -142,17 +142,17 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
 
 ## 模型説明
 
-`modelsPreset` 複数模型保持、服務起動時必要応読込。全局預設 `"*"` 全模型適用、個別模型項目特定参數上書き可能。`hf-repo` HuggingFace 自 GGUF 形式模型書類自動取得。
+`modelsPreset` 複数模型保持、服務起動時必要応読込。全局預設 `"*"` 全模型適用、個別模型項目特定参數上書可能。`hf-repo` HuggingFace 自 GGUF 形式模型書類自動取得。
 
 ## 参數詳解
 
-以下参數は Strix Halo（統合記憶体）上 llama.cpp 0.4.0 で実測検証済。
+以下参數、Strix Halo（統合記憶体）上 llama.cpp 0.4.0 以実測検証済。
 
 | 参數 | 推奨値 | 説明 |
 |------|--------|------|
-| `fit` | `"on"`（既定） | 未設定引數を装置記憶体に合自動調整。**`"off"` は VRAM 制限下 OOM 発生**。`n-gpu-layers` 書死時、該自動調整無効 |
+| `fit` | `"on"`（既定） | 未設定引數 装置記憶体 合自動調整。**`"off"` VRAM 制限下 OOM 発生**。`n-gpu-layers` 書死時、該自動調整無効 |
 | `jinja` | `"on"` | 模型内蔵 chat template 適用。**無効化時、輸出退化** |
-| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` は ROCm 核心不在 CPU 退回、約 2.6 倍遅**；`f16` は実測 前置充填 反低速（150.8 t/s） |
+| `cache-type-k` / `cache-type-v` | `"q4_0"` | KV cache 量子化。**`iq4_nl` ROCm 核心不在 CPU 退回、約 2.6 倍遅**；`f16` 実測 前置充填 反低速（150.8 t/s） |
 | `batch-size` | `"2048"` | 論理批次。**実測最適点**：512 → 2048 使 前置充填 142.7 → 168.7 t/s（+18%）；4096 退化至 116.8 |
 | `ubatch-size` | `"2048"` | 物理批次。`batch-size` 合致 |
 | `parallel` | `"1"` | 服務槽位数。増加時 KV 予約倍数増 |
@@ -161,7 +161,7 @@ llama.cpp ROCm GPU 加速有効化。構築時 GitHub 最新版動的取得、�
 
 > **設定不要項目**：`flash-attn`・`暖機`・`fit` 既定値既推奨値、明記立場表明唯。`presence-penalty`・`repeat-penalty`・`prio` 実測効果無、既定値記述冗長。
 
-> **注意**：`modelsPreset` 値は**文字列**（`attrsOf (attrsOf str)`）必須。`"on"` / `"off"` 記述、`true` / `false` 使用不可。
+> **注意**：`modelsPreset` 値 **文字列**（`attrsOf (attrsOf str)`）必須。`"on"` / `"off"` 記述、`true` / `false` 使用不可。
 
 ### 回避項目
 
