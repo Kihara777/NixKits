@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T08:06:35+09:00
+
+**摘要**：fix(skill): news-three-elements — 技能定位表 追加済「使用範囲」行 削除、原設計 復帰：技能 成果物用途 制限 設無
+
+| 提交 | 説明 |
+|------|------|
+| `16612e6` | fix(skills): drop the usage-scope line added to news-three-elements |
+
 ## 2026-09-15T08:02:33+09:00
 
 **摘要**：feat(skill): `news-three-elements` 追加 — 「報道三要素」創作筆記 標準技能化：SKILL.md 唯 実行文脈（起動、三步流程、形式厳格制約、行文結構最適化原則）保持、参考資料 必要時読込 四同梱書類 分離 —— `search-keywords.md`（露報道・遊技機構議論・報道機関文体 三類検索語）、`tables.md`（接続詞、公式回答、機構投射方向 9 類、逆転結末雛形 6 類）、`principles.md`（核心原則 12 条）、`checklist.md`（原稿完成後自己点検 10 項）。四言語技能文書 與 各 README 技能表 登録

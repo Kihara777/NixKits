@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:06:35+09:00
+
+**Summary**：fix(skill): news-three-elements — removed the "usage scope" row that had been added to the skill overview table, restoring the original design: the skill imposes no restriction on how its output is used
+
+| Commit | Description |
+|--------|-------------|
+| `16612e6` | fix(skills): drop the usage-scope line added to news-three-elements |
+
 ## 2026-09-15T08:02:33+09:00
 
 **Summary**：feat(skill): added `news-three-elements` — turned the "three elements of journalism" writing notes into a standard skill: SKILL.md keeps only execution context (triggers, the three-step flow, hard format rules, structural principles), while reference data is split into four companion files loaded on demand — `search-keywords.md` (queries for Russian news / game-mechanic controversies / media style), `tables.md` (transitions, official responses, 9 mechanic-projection targets, 6 twist-ending templates), `principles.md` (12 core principles) and `checklist.md` (10-item self-check). Four-language skill docs, registered in every README skill table

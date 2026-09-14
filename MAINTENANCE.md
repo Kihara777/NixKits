@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:06:35+09:00
+
+**摘要**：fix(skill): news-three-elements — 移除技能定位表中擅自添加的「使用范围」行，恢复原始设计：技能不附加产物用途限制
+
+| 提交 | 说明 |
+|------|------|
+| `16612e6` | fix(skills): drop the usage-scope line added to news-three-elements |
+
 ## 2026-09-15T08:02:33+09:00
 
 **摘要**：feat(skill): 新增 `news-three-elements` — 将「新闻学三要素时刻」的创作笔记转为标准技能：SKILL.md 只保留执行上下文（触发、三步流程、格式硬性要求、行文结构优化原则），参考数据拆为四个按需载入的配套文件 —— `search-keywords.md`（俄罗斯新闻/游戏机制争议/媒体风格三类搜索语）、`tables.md`（过渡词、官方回应、9 类机制投射方向、6 类结尾反转模板）、`principles.md`（核心原则 12 条）、`checklist.md`（成稿自查 10 项）。四语技能文档并登记入各 README 技能表
