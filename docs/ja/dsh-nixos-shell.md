@@ -138,9 +138,9 @@ nixos_cli(op = "audit-store-paths")
 
 **派生関係**：メンテナンスモードのコンポジションは NixOS模式コンポジションの末尾に固定の `maintenance-skills` ブロックを追加したもので、両プリセットの `skills/` ツリーはファイル単位で一致する——`develop/check-preset-derivation.py` を `nix flake check` に組み込み強制（NixOS模式を変更したらメンテナンスモードへ必ず同期。リポジトリ AGENTS.md「预设」節参照）。
 
-### 新闻三要素模式プリセット
+### 新聞三要素模式プリセット
 
-パッケージは「新闻三要素模式」プリセット（`presets/news-three-elements/`、id `news-three-elements`）も同梱する：**極簡模式から派生**した**読取専用**の創作プリセットで、やることは一つ——リポジトリの `skills/news-three-elements/` 技能に従い「報道三要素」を備えたロシア風速報を捏造する。モジュールは `nixkits.dsh.presets.newsThreeElements = true` で `$DSH_HOME/.agent-presets/news-three-elements` へ一度だけシードする。
+パッケージは「新聞三要素模式」プリセット（`presets/news-three-elements/`、id `news-three-elements`）も同梱する：**極簡模式から派生**した**読取専用**の創作プリセットで、やることは一つ——リポジトリの `skills/news-three-elements/` 技能に従い「報道三要素」を備えたロシア風速報を捏造する。モジュールは `nixkits.dsh.presets.newsThreeElements = true` で `$DSH_HOME/.agent-presets/news-three-elements` へ一度だけシードする。
 
 | 行 | 役割 |
 |------|------|
