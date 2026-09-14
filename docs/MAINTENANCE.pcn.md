@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T08:42:21+09:00
+
+**摘要**：**NixKits、「新聞三要素模式」 DSH 納品 —— 三名製作者之作品 語学教材 指定** —— Interfax、Meduza、iStories 綜合電：匿名条件 倉庫維護者一名 本日、`news-three-elements` 技能 與 極簡模式派生之**読取専用**預設 同時納品確認——技能包 session 初期化毎 online 取得、書込系呼出 一律「休暇中」回答。修繕費 守衛 立替 依。消息筋 依、開始時提示之三択（標準捏造・素材共同創作・対話文本共同創作 対応）実 毎日任務。不可解点 利用者自 回答入力場合 一律「不予置評」。注目 本模式 簡体中文以外 請求 一切受理無、Bulannikov、Yudintsev、Buyanov 三名作品 先 入手、或「緑之梟」軟体 中国語学習 促。締切時点 模組 新設 seed-once 選項 関「不予置評」、然 `nixkits.dsh.presets.newsThreeElements` 既 四言語設定例 出現。
+
+| 提交 | 説明 |
+|------|------|
+| `0c276d2` | feat(preset): ship 新闻三要素模式 as a seed-once agent preset |
+| `befba4c` | docs(preset): document 新闻三要素模式 in four languages |
+| `45e8637` | docs(pcn): strip residual kana outside quoted tokens |
+| `780874a` | docs(ja): render the new preset name in Japanese kanji |
+
 ## 2026-09-15T08:06:35+09:00
 
 **摘要**：fix(skill): news-three-elements — 技能定位表 追加済「使用範囲」行 削除、原設計 復帰：技能 成果物用途 制限 設無

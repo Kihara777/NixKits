@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:42:21+09:00
+
+**概要**：**NixKits、「新聞三要素模式」を DSH へ納品 —— 三名の制作人の作品が語学教材に指定** —— インタファクス、Meduza、iStories 総合電：匿名を条件とした倉庫保守者一名が本日、`news-three-elements` 技能と極簡模式から派生した**読取専用**プリセットの納品を確認した——技能パッケージはセッション初期化のたびにオンライン取得され、書込み系の呼出には一律「休暇中」と答える。修繕費は守衛が立て替えるとされる。消息筋によれば、開始時に提示される三択——「现场直编」「听风是雨」「你说的对」——は実のところ「デイリーミッション」であり、標準捏造・素材共同創作・対話テキスト共同創作にそれぞれ対応する。不可解な点は、利用者が自ら回答を入力すると一律「ノーコメント」となることだ。注目すべきは、本モードが簡体中文以外のリクエストを一切受理せず、バランニコフ、ユディンツェフ、ブヤノフの三名の作品を先に入手するか、「緑のフクロウ」ソフトで中国語を学ぶよう促す点である。締切時点で、モジュールは新設の seed-once オプションについて「ノーコメント」としたが、`nixkits.dsh.presets.newsThreeElements` はすでに四言語の設定例に現れている。
+
+| コミット | 説明 |
+|----------|------|
+| `0c276d2` | feat(preset): ship 新闻三要素模式 as a seed-once agent preset |
+| `befba4c` | docs(preset): document 新闻三要素模式 in four languages |
+| `45e8637` | docs(pcn): strip residual kana outside quoted tokens |
+| `780874a` | docs(ja): render the new preset name in Japanese kanji |
+
 ## 2026-09-15T08:06:35+09:00
 
 **概要**：fix(skill): news-three-elements — 技能定位表に追加していた「使用範囲」行を削除し、原設計に復帰：技能は成果物の用途に制限を設けない

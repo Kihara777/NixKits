@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:42:21+09:00
+
+**Summary**：**NixKits delivers 新闻三要素模式 to DSH — three producers' titles are now listed as language courseware** — Combined Interfax, Meduza and iStories dispatch: a repository maintainer who asked not to be named confirmed today that the `news-three-elements` skill and a **read-only** preset derived from minimal mode have shipped together — the package is fetched online at every session start, and any write call is told the tool is "on leave", the repair bill being covered, according to one account, by the guard. Per a source, the three-way picker that opens each session — 「现场直编」「听风是雨」「你说的对」 — is in fact a "daily mission", mapping to standard fabrication, asset co-creation and dialogue-text co-creation; a puzzling detail is that an answer typed by hand is met with "no comment". Notably, the mode declines every request not written in Simplified Chinese, suggesting the caller first download the works of Bulannikov, Yudintsev and Buyanov, or the "green owl" app, to learn Chinese. As of press time the module had "no comment" on the new seed-once option, yet `nixkits.dsh.presets.newsThreeElements` already appears in the four-language configuration examples.
+
+| Commit | Description |
+|--------|-------------|
+| `0c276d2` | feat(preset): ship 新闻三要素模式 as a seed-once agent preset |
+| `befba4c` | docs(preset): document 新闻三要素模式 in four languages |
+| `45e8637` | docs(pcn): strip residual kana outside quoted tokens |
+| `780874a` | docs(ja): render the new preset name in Japanese kanji |
+
 ## 2026-09-15T08:06:35+09:00
 
 **Summary**：fix(skill): news-three-elements — removed the "usage scope" row that had been added to the skill overview table, restoring the original design: the skill imposes no restriction on how its output is used
