@@ -463,6 +463,9 @@ in
           if [ ! -e ${cfg.dshHome}/.agent-presets/nixos ]; then
             mkdir -p ${cfg.dshHome}/.agent-presets
             cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
+            # 从 store 复制来的目录/文件是只读的，而 seed-once 的契约是「尊重
+            # 用户后续编辑」——不放开写权限，用户改不动自己那份预设。
+            chmod -R u+w ${cfg.dshHome}/.agent-presets/nixos
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/nixos
           fi
         ''}
@@ -470,6 +473,7 @@ in
           if [ ! -e ${cfg.dshHome}/.agent-presets/maintenance ]; then
             mkdir -p ${cfg.dshHome}/.agent-presets
             cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
+            chmod -R u+w ${cfg.dshHome}/.agent-presets/maintenance
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
           fi
         ''}
@@ -480,6 +484,7 @@ in
           if [ ! -e ${cfg.dshHome}/.agent-presets/news-three-elements ]; then
             mkdir -p ${cfg.dshHome}/.agent-presets
             cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/news-three-elements ${cfg.dshHome}/.agent-presets/news-three-elements
+            chmod -R u+w ${cfg.dshHome}/.agent-presets/news-three-elements
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/news-three-elements
           fi
         ''}
