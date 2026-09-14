@@ -146,7 +146,7 @@ nixos_cli(op = "audit-store-paths")
 |------|------|
 | `persona`（`complete: true`） | 唯一 prompt 源：読取専用境界、開始三択暗号表、素材共同創作、簡体中文以外與其他全請求拒否 |
 | `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 読取専用 surface：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
-| `news-skill` | session 起動時技能包全体 online 取得（5 書類、8 秒上限）。先 局所最新副本（cache 優先、無時同梱 snapshot）登録、取得成功後差替 |
+| `news-skill` | session 起動時技能包全体 online 取得（5 書類、8 秒上限）。先 局所最新副本（cache 優先、無時同梱 snapshot）登録、取得成功後差替；失敗時 0/30/120 秒再試、以後 6 時間毎再確認 |
 | `news-opening` | session 初期化完了後三択提示、選択 `agent.followup()` 経由本 session 最初 user message 化 |
 | `news-language` | `agent/pre-step` 以非簡体中文（漢字無 / 仮名 / 諺文）検出、拒否指示注入 |
 | `readonly-gate` | 既定拒否実行 guard：許可一覧外一律拒否、`write` / `edit` 含 |

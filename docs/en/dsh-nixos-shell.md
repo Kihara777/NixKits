@@ -146,7 +146,7 @@ The package also ships the "新闻三要素模式" preset (`presets/news-three-e
 |------|------|
 | `persona` (`complete: true`) | the only source of prompt text: the read-only boundary, the opening picker's code table, asset co-creation, and the refusal of non-Simplified-Chinese plus every other request |
 | `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | the read-only surface: `read`, `read_image`, `glob`, `grep`, `web_search`, `web_fetch`, `skill`, `ask_user_question` |
-| `news-skill` | fetches the whole skill package online at session start (5 files, 8-second cap); registers the freshest local copy first (cache before bundled snapshot) and swaps it in on success |
+| `news-skill` | fetches the whole skill package online at session start (5 files, 8-second cap); registers the freshest local copy first (cache before bundled snapshot) and swaps it in on success; a failed fetch retries after 0/30/120 s, and a long-lived session re-checks every 6 hours |
 | `news-opening` | raises the three-way picker once the session lifecycle begins; the choice becomes the session's first user message through `agent.followup()` |
 | `news-language` | detects non-Simplified-Chinese messages (no Han ideograph, or kana/hangul present) at `agent/pre-step` and injects the refusal instruction |
 | `readonly-gate` | a deny-by-default execution guard: everything outside the allowlist is refused, `write` / `edit` included |

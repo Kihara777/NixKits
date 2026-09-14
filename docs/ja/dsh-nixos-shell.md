@@ -146,7 +146,7 @@ nixos_cli(op = "audit-store-paths")
 |------|------|
 | `persona`（`complete: true`） | 唯一のプロンプト源：読取専用の境界、開始三択の暗号表、素材の共同創作、簡体中文以外とその他全リクエストの拒否 |
 | `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 読取専用サーフェス：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
-| `news-skill` | セッション起動時に技能パッケージ全体をオンライン取得（5 ファイル、8 秒上限）。先にローカルの最新副本（キャッシュ優先、無ければ同梱スナップショット）を登録し、取得成功後に差し替える |
+| `news-skill` | セッション起動時に技能パッケージ全体をオンライン取得（5 ファイル、8 秒上限）。先にローカルの最新副本（キャッシュ優先、無ければ同梱スナップショット）を登録し、取得成功後に差し替える；失敗時は 0/30/120 秒で再試行し、以後 6 時間ごとに再確認する |
 | `news-opening` | セッション初期化完了後に三択を提示し、選択は `agent.followup()` を通じて本セッション最初のユーザーメッセージになる |
 | `news-language` | `agent/pre-step` で非簡体中文（漢字なし / 仮名 / ハングル）を検出し、拒否指示を注入する |
 | `readonly-gate` | デフォルト拒否の実行ガード：許可リスト外は一律拒否、`write` / `edit` もその中 |

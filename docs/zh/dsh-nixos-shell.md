@@ -146,7 +146,7 @@ nixos_cli(op = "audit-store-paths")
 |------|------|
 | `persona`（`complete: true`） | 唯一提示词来源：只读边界、开场问答暗号表、素材共创、非简体中文与其余请求按技能拒绝 |
 | `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 只读表面：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
-| `news-skill` | 会话启动时在线抓取技能全包（5 个文件，8 秒超时）；先注册本地最新副本（缓存优先于内置快照），抓取成功后替换 |
+| `news-skill` | 会话启动时在线抓取技能全包（5 个文件，8 秒超时）；先注册本地最新副本（缓存优先于内置快照），抓取成功后替换；失败按 0/30/120 秒重试，此后每 6 小时复查一次 |
 | `news-opening` | 会话初始化完成后弹出三选一，用户的选择经 `agent.followup()` 成为本会话第一条用户消息 |
 | `news-language` | 在 `agent/pre-step` 检测非简体中文（无汉字 / 含假名 / 含谚文）并注入拒绝指令 |
 | `readonly-gate` | 默认拒绝的工具守卫：白名单之外一律拒绝，`write` / `edit` 也在其列 |

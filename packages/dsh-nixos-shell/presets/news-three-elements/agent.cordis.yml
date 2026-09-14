@@ -132,7 +132,9 @@
 # the freshest local copy (the cache of an earlier fetch, else the copy bundled
 # with this preset) is registered first, so the skill exists instantly and
 # offline; then the plugin fetches the live package from the NixKits repository
-# at session start and replaces it. It consumes the host `skills` seam and
+# at session start, retries a failed fetch on a fixed backoff, and re-checks the
+# repository every six hours so a long-lived session picks up a newer package
+# without a restart. It consumes the host `skills` and `timer` seams and
 # publishes no service, so it needs no realm.
 - id: news-skill
   name: './plugins/news-skill.js'

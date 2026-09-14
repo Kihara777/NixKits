@@ -18,8 +18,9 @@
  * against that base.
  *
  * The fetch is fire-and-forget. A slow or unavailable network must never delay a
- * session start, so `apply()` returns immediately; a failure keeps the local
- * copy and logs a warning.
+ * session start, so `apply()` returns immediately; a failure retries on a fixed
+ * backoff and then keeps the local copy, and a long-lived session re-checks the
+ * repository every {@link REFRESH_INTERVAL_MS} without restarting anything.
  *
  * Consumes the host `skills` seam; provides no service, so no realm is needed.
  *
@@ -32,7 +33,7 @@ import { fileURLToPath } from "node:url";
 
 export const name = "news-skill";
 
-export const inject = ["skills"];
+export const inject = ["skills", "timer"];
 
 /** Canonical skill id — also the package directory name in the NixKits repository. */
 const SKILL_ID = "news-three-elements";
@@ -45,6 +46,16 @@ const PACKAGE_FILES = ["SKILL.md", "tables.md", "search-keywords.md", "principle
 
 /** Bound on the whole refresh, so a captive portal cannot stall the session. */
 const FETCH_TIMEOUT_MS = 8000;
+
+/**
+ * Retry delays after a failed attempt, indexed by the attempt that failed: the
+ * first attempt is immediate, then one retry 30 s later and one 120 s later.
+ * Beyond the last entry the local copy simply stays.
+ */
+const RETRY_DELAYS_MS = [0, 30_000, 120_000];
+
+/** How often a long-lived session re-checks the repository for a newer package. */
+const REFRESH_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 /** The snapshot that travels with this preset, used first and as the fallback. */
 const BUNDLED_DIR = fileURLToPath(new URL(`../bundled/${SKILL_ID}/`, import.meta.url));
@@ -166,10 +177,10 @@ function warn(ctx, message) {
 }
 
 /**
- * Replace the bundled registration with the freshly fetched canonical package.
+ * Replace the local registration with the freshly fetched canonical package.
  * Same-name runtime registrations are first-wins, so the old registration is
  * disposed BEFORE the new one is attempted, and a failed re-registration falls
- * back to the bundled copy rather than leaving the session without a skill.
+ * back to the best local copy rather than leaving the session without a skill.
  * @param state - the holder for the live registration's disposer.
  */
 async function refresh(ctx, state) {
@@ -185,13 +196,47 @@ async function refresh(ctx, state) {
 	}
 }
 
+/**
+ * Refresh once, retrying a failure on a fixed backoff.
+ *
+ * A captive portal, a DNS hiccup or a sleeping laptop must not cost the session
+ * its update: the first attempt is immediate, then one retry after 30 s and one
+ * after 120 s, each still bounded by the fetch timeout. The retries ride the
+ * timer service, so they die with the session instead of outliving it, and the
+ * in-flight flag keeps a slow attempt from overlapping the periodic one.
+ *
+ * @param state - registration holder plus the in-flight flag.
+ * @param attempt - index into {@link RETRY_DELAYS_MS}, 0 on a fresh run.
+ */
+async function refreshWithRetry(ctx, state, attempt) {
+	if (state.refreshing) return;
+	state.refreshing = true;
+	try {
+		await refresh(ctx, state);
+	} catch (error) {
+		const detail = error?.message ?? error;
+		const delay = RETRY_DELAYS_MS[attempt + 1];
+		if (delay === undefined) {
+			warn(ctx, `keeping the local copy after ${attempt + 1} attempt(s): ${detail}`);
+			return;
+		}
+		warn(ctx, `attempt ${attempt + 1} failed (${detail}); retrying in ${Math.round(delay / 1000)}s`);
+		ctx.setTimeout(() => void refreshWithRetry(ctx, state, attempt + 1), delay);
+	} finally {
+		state.refreshing = false;
+	}
+}
+
 export function apply(ctx) {
 	// 1. Instant and offline-safe: the freshest package already on disk — the
 	//    cache from an earlier session when there is one, else the bundled copy.
-	const state = { dispose: registerPackage(ctx, bestLocalPackage()) };
+	const state = { dispose: registerPackage(ctx, bestLocalPackage()), refreshing: false };
 
-	// 2. Session-start refresh, bounded and non-blocking.
-	refresh(ctx, state).catch((error) => {
-		warn(ctx, `keeping the local copy: ${error?.message ?? error}`);
-	});
+	// 2. Session-start refresh, bounded and non-blocking, with retries.
+	void refreshWithRetry(ctx, state, 0);
+
+	// 3. A long-lived session re-checks the repository on a fixed interval, so a
+	//    package published mid-session lands without restarting anything. The
+	//    timer is owned by this fiber and unwinds with the session.
+	ctx.setInterval(() => void refreshWithRetry(ctx, state, 0), REFRESH_INTERVAL_MS);
 }
