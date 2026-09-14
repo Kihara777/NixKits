@@ -113,7 +113,7 @@ nixos_cli(op = "audit-store-paths")
 
 ### persona 行（預設身份）
 
-両預設は組合で `@deepseek-ai/dsh-persona` 行を掛載、該 session に身份 prompt 提供（部署既定 persona 遮蔽）:
+両預設 組合 `@deepseek-ai/dsh-persona` 行掛載、該 session 身份 prompt 提供（部署既定 persona 遮蔽）:
 
 ```yaml
 - id: persona
@@ -126,14 +126,29 @@ nixos_cli(op = "audit-store-paths")
 | 字段 | 型 | 既定値 | 説明 |
 |------|------|--------|------|
 | `prefix` | string | —（**必須**） | 身份 prompt 前置。欠落時 plugin 読込失敗（`$.prefix missing required value`） |
-| `suffix` | string | `""` | 実行時 context 之後に付加之後置 |
+| `suffix` | string | `""` | 実行時 context 之後 付加之後置 |
 | `complete` | boolean | `false` | `true` 時 persona 完全 prompt、実行時 context 付加無 |
 | `includeRuntimeContext` | boolean | `true` | 実行時 context（model、作業 directory 等）付加可否 |
 
-> **升級注意**：`prefix` は dsh 0.1.5-alpha.2 以降**必須**（従前字段名 `text`）。preset 依然 `text` 記述時、persona plugin 読込失敗が**session 生成経路全体を巻込**——`session/create` 失敗後、設定画面・llm 提供方一覧・session 履歴 全読込不可、前端 `llm/listProviders failed: Failed to fetch` 與 `commands/list` 無限再試と現。**該症状は「model 設定画面 error」與根本原因同一、network 或 reverse proxy 問題と誤診不可**（localhost 與 LAN 同受限、根本原因 server 側 session 生成、非入口認証）。dsh 升級後 preset 内各 plugin 行 config schema 検証必須。
+> **升級注意**：`prefix` dsh 0.1.5-alpha.2 以降**必須**（従前字段名 `text`）。preset 依然 `text` 記述時、persona plugin 読込失敗 **session 生成経路全体巻込**——`session/create` 失敗後、設定画面・llm 提供方一覧・session 履歴 全読込不可、前端 `llm/listProviders failed: Failed to fetch` 與 `commands/list` 無限再試現。**該症状「model 設定画面 error」與根本原因同一、network 或 reverse proxy 問題 誤診不可**（localhost 與 LAN 同受限、根本原因 server 側 session 生成、非入口認証）。dsh 升級後 preset 内各 plugin 行 config schema 検証必須。
 
 ### 維護模式預設
 
 包同梱「維護模式」預設（`presets/maintenance-mode/`、id `maintenance`）：NixOS模式基盤、追加 `maintenance-skills` 入口掛載——初期化時構築期嵌入倉庫 `skills/` 樹（単一來源、新規 session 常最新）自 runtime 技能 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates`、全 `translate-*` 言語拡張（apply 時自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。模組 `nixkits.dsh.presets.maintenanceMode = true` 一度限 seed `$DSH_HOME/.agent-presets/maintenance`。
 
 **派生関係**：維護模式組合書類 = NixOS模式組合末尾追加固定 `maintenance-skills` 行塊、両預設 `skills/` 目録逐書類一致——`develop/check-preset-derivation.py` 掛入 `nix flake check` 強制執行（NixOS模式変更後必須同步維護模式、見倉庫 AGENTS.md「预设」節）。
+
+### 新聞三要素模式預設
+
+包同梱「新聞三要素模式」預設（`presets/news-three-elements/`、id `news-three-elements`）：**極簡模式派生**之**読取専用**創作預設、為事唯一——倉庫 `skills/news-three-elements/` 技能従、「報道三要素」備之露風速報捏造。模組 `nixkits.dsh.presets.newsThreeElements = true` 一度限 seed `$DSH_HOME/.agent-presets/news-three-elements`。
+
+| 行 | 役割 |
+|------|------|
+| `persona`（`complete: true`） | 唯一 prompt 源：読取専用境界、開始三択暗号表、素材共同創作、簡体中文以外與其他全請求拒否 |
+| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 読取専用 surface：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
+| `news-skill` | session 起動時技能包全体 online 取得（5 書類、8 秒上限）。先 局所最新副本（cache 優先、無時同梱 snapshot）登録、取得成功後差替 |
+| `news-opening` | session 初期化完了後三択提示、選択 `agent.followup()` 経由本 session 最初 user message 化 |
+| `news-language` | `agent/pre-step` 以非簡体中文（漢字無 / 仮名 / 諺文）検出、拒否指示注入 |
+| `readonly-gate` | 既定拒否実行 guard：許可一覧外一律拒否、`write` / `edit` 含 |
+
+記録価値有之設計制約三：**読取専用 `tools.restrict()` 非、実行 guard 以担保**——制限 狭義 継承物（global 層與祖先層）唯濾過、同一預設兄弟行登録物 効無。`dsh-tool-fs` 必 `read`/`read_image` 與 `write`/`edit` 同時登録、故書込側 実行境界 以外拒否不能。**簡体字與繁体字判読 model 委譲**（同一規則 persona 保持）——plugin 硬検出 判読不要之「漢字無 / 仮名 / 諺文」唯、中国語話者 誤拒否無。**預設同梱 plugin 相対行名**（`./plugins/*.js`）且依存 Node 組込 module 唯——組合 `baseUrl` 即預設目録、目録毎 `$DSH_HOME` 複製後 依然解決可能。

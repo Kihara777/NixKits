@@ -137,3 +137,18 @@ nixos_cli(op = "audit-store-paths")
 パッケージは「維護模式」プリセット（`presets/maintenance-mode/`、id `maintenance`）も同梱する：NixOS模式基盤で、さらに `maintenance-skills` エントリをマウントする——初期化時に、ビルド時に埋め込まれたリポジトリの `skills/` ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates`、全 `translate-*` 言語拡張（apply 時に自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入する。モジュールは `nixkits.dsh.presets.maintenanceMode = true` で `$DSH_HOME/.agent-presets/maintenance` へ一度だけシードする。
 
 **派生関係**：メンテナンスモードのコンポジションは NixOS模式コンポジションの末尾に固定の `maintenance-skills` ブロックを追加したもので、両プリセットの `skills/` ツリーはファイル単位で一致する——`develop/check-preset-derivation.py` を `nix flake check` に組み込み強制（NixOS模式を変更したらメンテナンスモードへ必ず同期。リポジトリ AGENTS.md「预设」節参照）。
+
+### 新闻三要素模式プリセット
+
+パッケージは「新闻三要素模式」プリセット（`presets/news-three-elements/`、id `news-three-elements`）も同梱する：**極簡模式から派生**した**読取専用**の創作プリセットで、やることは一つ——リポジトリの `skills/news-three-elements/` 技能に従い「報道三要素」を備えたロシア風速報を捏造する。モジュールは `nixkits.dsh.presets.newsThreeElements = true` で `$DSH_HOME/.agent-presets/news-three-elements` へ一度だけシードする。
+
+| 行 | 役割 |
+|------|------|
+| `persona`（`complete: true`） | 唯一のプロンプト源：読取専用の境界、開始三択の暗号表、素材の共同創作、簡体中文以外とその他全リクエストの拒否 |
+| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 読取専用サーフェス：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
+| `news-skill` | セッション起動時に技能パッケージ全体をオンライン取得（5 ファイル、8 秒上限）。先にローカルの最新副本（キャッシュ優先、無ければ同梱スナップショット）を登録し、取得成功後に差し替える |
+| `news-opening` | セッション初期化完了後に三択を提示し、選択は `agent.followup()` を通じて本セッション最初のユーザーメッセージになる |
+| `news-language` | `agent/pre-step` で非簡体中文（漢字なし / 仮名 / ハングル）を検出し、拒否指示を注入する |
+| `readonly-gate` | デフォルト拒否の実行ガード：許可リスト外は一律拒否、`write` / `edit` もその中 |
+
+記録に値する設計制約が三つ：**読取専用は `tools.restrict()` ではなく実行ガードで担保する**——制限はスコープが継承するもの（グローバル層と祖先層）だけを濾過し、同一プリセットの兄弟行が登録したものには効かない。`dsh-tool-fs` は `read`/`read_image` と `write`/`edit` を必ず同時に登録するため、書込み側は実行境界でしか拒否できない。**簡体字と繁体字の判読はモデルに委ねる**（同一規則を persona に持たせる）——プラグインがハード検出するのは判読不要な「漢字なし / 仮名 / ハングル」だけで、ヒューリスティクスで中国語話者を誤って拒否しない。**プリセット同梱プラグインは相対行名**（`./plugins/*.js`）で、依存は Node 組み込みモジュールのみ——コンポジションの `baseUrl` はプリセットディレクトリ自身なので、ディレクトリごと `$DSH_HOME` へ複製しても解決できる。

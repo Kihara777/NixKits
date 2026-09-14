@@ -137,3 +137,18 @@ nixos_cli(op = "audit-store-paths")
 包内还分发「维护模式」预设（`presets/maintenance-mode/`，id `maintenance`）：基于 NixOS模式，额外挂载 `maintenance-skills` 入口——初始化时从构建期嵌入的仓库 `skills/` 树（内容单一来源，全新会话即最新）注册运行时技能 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates` 与全部 `translate-*` 语言扩展（apply 时自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）。模块经 `nixkits.dsh.presets.maintenanceMode = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/maintenance`。
 
 **派生关系**：维护模式的组合文件 = NixOS模式组合末尾追加固定 `maintenance-skills` 行块，两预设 `skills/` 目录逐文件一致——`develop/check-preset-derivation.py` 挂入 `nix flake check` 强制执行（修改 NixOS模式后必须同步维护模式，见仓库 AGENTS.md「预设」一节）。
+
+### 新闻三要素模式预设
+
+包内还分发「新闻三要素模式」预设（`presets/news-three-elements/`，id `news-three-elements`）：**派生自极简模式**的**只读**创作预设，只做一件事——按仓库 `skills/news-three-elements/` 技能编造带「新闻三要素」的俄式快讯。模块经 `nixkits.dsh.presets.newsThreeElements = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/news-three-elements`。
+
+| 行 | 作用 |
+|------|------|
+| `persona`（`complete: true`） | 唯一提示词来源：只读边界、开场问答暗号表、素材共创、非简体中文与其余请求按技能拒绝 |
+| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 只读表面：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
+| `news-skill` | 会话启动时在线抓取技能全包（5 个文件，8 秒超时）；先注册本地最新副本（缓存优先于内置快照），抓取成功后替换 |
+| `news-opening` | 会话初始化完成后弹出三选一，用户的选择经 `agent.followup()` 成为本会话第一条用户消息 |
+| `news-language` | 在 `agent/pre-step` 检测非简体中文（无汉字 / 含假名 / 含谚文）并注入拒绝指令 |
+| `readonly-gate` | 默认拒绝的工具守卫：白名单之外一律拒绝，`write` / `edit` 也在其列 |
+
+三处设计约束值得记录：**只读用执行守卫而非 `tools.restrict()`**——限制只过滤作用域继承来的工具（全局层与祖先层），对同预设兄弟行注册的工具无效，而 `dsh-tool-fs` 必然把 `read`/`read_image` 与 `write`/`edit` 一起注册，故写入侧只能在执行边界否决；**简体与繁体的判读留给模型**（人格内的同一条规则），插件只硬检测无汉字 / 假名 / 谚文这类不需判读的情形，避免启发式误伤中文用户；**预设自带插件用相对行名**（`./plugins/*.js`）且只依赖 Node 内置模块——组合的 `baseUrl` 即预设目录，整目录复制到 `$DSH_HOME` 后仍可解析。

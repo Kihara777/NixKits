@@ -153,7 +153,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 | 插件 | 説明 | 文書 |
 |------|------|------|
-| dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式 / 新聞三要素模式三 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量面板「用量 / 余额」切替：帳戶残高、日 / 月 / 30 日内消耗図表與音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## Agent 預設
@@ -165,6 +165,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
   nixkits.dsh.presets = {
     nixosMode = true;       # id `nixos` — NixOS模式
     maintenanceMode = true; # id `maintenance` — 維護模式（NixOS模式派生）
+    newsThreeElements = true; # id `news-three-elements` — 新聞三要素模式（極簡模式派生、読取専用）
   };
 }
 ```
@@ -173,6 +174,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 |------|------|
 | NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 理由明示全請求拒否）；`nixos_shell` / `nixos_cli` 與 NixOS 高效開発 prompt 読込 |
 | 維護模式（id `maintenance`） | NixOS模式 base；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（build 期嵌入倉庫 `skills/` tree、新 session 常最新）與倉庫維護工作流 prompt 注入 |
+| 新聞三要素模式（id `news-three-elements`） | 極簡模式派生；閲覧専用創作預設（書込系呼出守衛拒否）、session 起動時 `news-three-elements` 技能包 online 取得、開始時三択提示、簡体中文以外一律拒否 |
 
 預設詳細動作、組合構造與派生維持規則 [dsh-nixos-shell.md](dsh-nixos-shell.md) 参照。
 

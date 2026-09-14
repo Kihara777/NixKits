@@ -153,7 +153,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 | プラグイン | 説明 | ドキュメント |
 |------|------|------|
-| dsh-nixos-shell | NixOS シナリオ能力の統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）+ `nixos_cli` 読み取り専用診断；NixOS模式 / 維護模式の 2 つの Agent プリセットを同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS シナリオ能力の統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）+ `nixos_cli` 読み取り専用診断；NixOS模式 / 維護模式 / 新闻三要素模式の 3 つの Agent プリセットを同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量パネルの「用量 / 残高」切替：アカウント残高、日 / 月 / 30 日間の消費チャートと音声放送（音声パック形式ガイドを含む） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## Agent プリセット
@@ -165,6 +165,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
   nixkits.dsh.presets = {
     nixosMode = true;       # id `nixos` — NixOS模式
     maintenanceMode = true; # id `maintenance` — 維護模式（NixOS模式から派生）
+    newsThreeElements = true; # id `news-three-elements` — 新闻三要素模式（極簡模式から派生、読取専用）
   };
 }
 ```
@@ -173,6 +174,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 |------|------|
 | NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は理由を明示して全リクエストを拒否）；`nixos_shell` / `nixos_cli` と NixOS 効率開発プロンプトを読み込む |
 | 維護模式（id `maintenance`） | NixOS模式ベース；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` スキル（ビルド時埋め込みのリポジトリ `skills/` ツリー、新規セッションでも常に最新）とリポジトリ維護工作流プロンプトを注入する |
+| 新闻三要素模式（id `news-three-elements`） | 極簡模式から派生；閲覧のみの創作プリセット（書込み系呼出は守衛が拒否）、セッション起動時に `news-three-elements` 技能パッケージをオンライン取得、開始時に三択を提示、簡体中文以外は一律拒否 |
 
 プリセットの詳細な動作・コンポジション構造・派生維持ルールは [dsh-nixos-shell.md](dsh-nixos-shell.md) を参照。
 

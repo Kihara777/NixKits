@@ -51,6 +51,7 @@ DeepSeek Harness（DSH）组件与软件独立展示（挂载方式见 [docs/zh/
 |------|------|
 | NixOS模式（id `nixos`） | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 |
 | 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与仓库维护工作流提示词 |
+| 新闻三要素模式（id `news-three-elements`） | 派生自极简模式；**只读**创作（写入调用由守卫当场拒绝），会话启动在线抓取 `news-three-elements` 技能包，开场问答三选一，非简体中文一律拒绝 |
 
 ## 开发
 

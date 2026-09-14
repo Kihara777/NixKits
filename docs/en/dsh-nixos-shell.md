@@ -137,3 +137,18 @@ Both presets mount an `@deepseek-ai/dsh-persona` row in their composition, givin
 The package also ships the "维护模式" preset (`presets/maintenance-mode/`, id `maintenance`): based on NixOS模式, it additionally mounts the `maintenance-skills` entry — at initialization it registers runtime skills `write-project-docs`, `write-maintenance-log`, `nixkits-check-updates`, and every `translate-*` language extension (auto-discovered at apply time) from the repo's `skills/` tree embedded at build time (single source of truth, so a fresh session always gets the latest content), and injects the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization). The module seeds it once via `nixkits.dsh.presets.maintenanceMode = true` into `$DSH_HOME/.agent-presets/maintenance`.
 
 **Derivation**: the maintenance preset's composition equals the NixOS-mode composition with a fixed `maintenance-skills` block appended, and the two presets' `skills/` trees must match file for file — enforced by `develop/check-preset-derivation.py` under `nix flake check` (any change to NixOS mode must be mirrored to maintenance mode; see the "预设" section of the repo's AGENTS.md).
+
+### News-three-elements-mode preset
+
+The package also ships the "新闻三要素模式" preset (`presets/news-three-elements/`, id `news-three-elements`): a **read-only** creation preset **derived from minimal mode** that does exactly one thing — fabricate Russian-style news flashes carrying the "three elements of news", following the repo's `skills/news-three-elements/` skill. The module seeds it once via `nixkits.dsh.presets.newsThreeElements = true` into `$DSH_HOME/.agent-presets/news-three-elements`.
+
+| Row | Purpose |
+|------|------|
+| `persona` (`complete: true`) | the only source of prompt text: the read-only boundary, the opening picker's code table, asset co-creation, and the refusal of non-Simplified-Chinese plus every other request |
+| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | the read-only surface: `read`, `read_image`, `glob`, `grep`, `web_search`, `web_fetch`, `skill`, `ask_user_question` |
+| `news-skill` | fetches the whole skill package online at session start (5 files, 8-second cap); registers the freshest local copy first (cache before bundled snapshot) and swaps it in on success |
+| `news-opening` | raises the three-way picker once the session lifecycle begins; the choice becomes the session's first user message through `agent.followup()` |
+| `news-language` | detects non-Simplified-Chinese messages (no Han ideograph, or kana/hangul present) at `agent/pre-step` and injects the refusal instruction |
+| `readonly-gate` | a deny-by-default execution guard: everything outside the allowlist is refused, `write` / `edit` included |
+
+Three design constraints are worth recording: **read-only is enforced by an execution guard, not `tools.restrict()`** — a restriction filters only what a scope inherits (the global layer and its ancestors) and never what the preset's own sibling rows register, while `dsh-tool-fs` necessarily registers `read`/`read_image` together with `write`/`edit`, so the mutation half can only be denied at the execution boundary; **Simplified-versus-Traditional Chinese is left to the model** (the same rule lives in the persona), and the plugin hard-detects only the cases that need no reading at all (no Han, kana, hangul), so a heuristic never refuses a Chinese-speaking user; and **the preset's own plugins are named relatively** (`./plugins/*.js`) and import nothing but Node builtins — a composition's `baseUrl` is the preset directory, so the whole directory keeps resolving after being copied into `$DSH_HOME`.

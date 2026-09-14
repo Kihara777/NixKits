@@ -153,7 +153,7 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
 
 | Plugin | Description | Doc |
 |------|------|------|
-| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode / 新闻三要素模式 Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | 「Usage / Balance」 tab switch in the webui usage panel: account balance, daily / monthly / 30-day consumption charts and voice broadcast (incl. the voice-pack format guide) | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## Agent presets
@@ -165,6 +165,7 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
   nixkits.dsh.presets = {
     nixosMode = true;       # id `nixos` — NixOS mode
     maintenanceMode = true; # id `maintenance` — maintenance mode (derived from NixOS mode)
+    newsThreeElements = true; # id `news-three-elements` — 新闻三要素模式 (derived from minimal mode, read-only)
   };
 }
 ```
@@ -173,6 +174,7 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
 |------|------|
 | NixOS mode (id `nixos`) | validates the NixOS host at initialization (non-NixOS rejects all requests with an explicit reason); loads `nixos_shell` / `nixos_cli` and the NixOS development prompts |
 | Maintenance mode (id `maintenance`) | based on NixOS mode; injects `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` skills (the repo `skills/` tree embedded at build time — always current in a fresh session) and the repo-maintenance workflow prompts |
+| 新闻三要素模式 (id `news-three-elements`) | derived from minimal mode; a view-only creation preset (mutating calls are denied by a guard), fetches the `news-three-elements` skill package online at session start, opens with a three-way picker, refuses anything not written in Simplified Chinese |
 
 Detailed preset behavior, composition structure, and derivation maintenance rules: see [dsh-nixos-shell.md](dsh-nixos-shell.md).
 
