@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T08:54:15+09:00
+
+**摘要**：feat(preset): `news-skill` 取得失敗再試 與 6 時間毎再確認 — 取得失敗 即座断念 無：初回 即時、以後 0/30/120 秒再試、timer timer 服務 載 故 会期與共破棄。長命会期 6 時間毎 倉庫再確認、実行中標識 周期任務 重複防止、三回失敗時 局所副本 登録維持 且 log 残留。fix(dsh): seed 済預設 所有者編集可能化 — store 複製 読取専用、`presets.*` 選項「以後之用戶編集尊重」與矛盾（既存 `nixos` 種子 同様）。三 seed 塊 `cp` 後 `chmod -R u+w`
+
+| 提交 | 説明 |
+|------|------|
+| `5885473` | feat(preset): retry a failed skill fetch and re-check every six hours |
+| `2e8a5a2` | fix(dsh): make seeded presets writable by their owner |
+
 ## 2026-09-15T08:42:21+09:00
 
 **摘要**：**NixKits、「新聞三要素模式」 DSH 納品 —— 三名製作者之作品 語学教材 指定** —— Interfax、Meduza、iStories 綜合電：匿名条件 倉庫維護者一名 本日、`news-three-elements` 技能 與 極簡模式派生之**読取専用**預設 同時納品確認——技能包 session 初期化毎 online 取得、書込系呼出 一律「休暇中」回答。修繕費 守衛 立替 依。消息筋 依、開始時提示之三択（標準捏造・素材共同創作・対話文本共同創作 対応）実 毎日任務。不可解点 利用者自 回答入力場合 一律「不予置評」。注目 本模式 簡体中文以外 請求 一切受理無、Bulannikov、Yudintsev、Buyanov 三名作品 先 入手、或「緑之梟」軟体 中国語学習 促。締切時点 模組 新設 seed-once 選項 関「不予置評」、然 `nixkits.dsh.presets.newsThreeElements` 既 四言語設定例 出現。

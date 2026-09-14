@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:54:15+09:00
+
+**摘要**：feat(preset): `news-skill` 失败重试与 6 小时定时复查 — 抓取失败不再一次性放弃：首次立即尝试，随后按 0/30/120 秒重试，定时器挂在 timer 服务上随会话销毁；长会话每 6 小时复查仓库，进行中标志避免慢请求与周期任务重叠；三次仍失败则保留本地副本并记日志。fix(dsh): seed-once 预设副本改为可写 — store 复制来的目录/文件是只读的，与 `presets.*` 选项「尊重用户后续编辑」的承诺矛盾（既有 `nixos` 种子同样受影响），三个 seed 块在 `cp` 后统一 `chmod -R u+w`
+
+| 提交 | 说明 |
+|------|------|
+| `5885473` | feat(preset): retry a failed skill fetch and re-check every six hours |
+| `2e8a5a2` | fix(dsh): make seeded presets writable by their owner |
+
 ## 2026-09-15T08:42:21+09:00
 
 **摘要**：**NixKits 向 DSH 交付「新闻三要素模式」 三名制作人的作品被列为语言教材** —— 综合国际文传电讯社、Meduza、iStories 电：一名要求匿名的仓库维护者今日确认，`news-three-elements` 技能与派生自极简模式的**只读**预设已一并交付——会话初始化即在线上抓取技能全包，写入类调用一律答「正在休假」，据称维修费由守卫垫付。据消息人士称，开场弹出的三选一——「现场直编」「听风是雨」「你说的对」——实为一份「每日任务」，分别对应标准编造、素材共创与对话文本共创；令人费解的细节是，用户若自行输入答案，一律「不予置评」。值得注意的是，该模式对非简体中文的请求概不受理，并建议对方先去下载巴兰尼科夫、尤丁采夫、布亚诺夫三人的作品，或下载「绿色的猫头鹰」软件学中文。截至发稿，模块方对新增的 seed-once 选项表示「不予置评」，但 `nixkits.dsh.presets.newsThreeElements` 已经出现在四语文档的配置示例里。

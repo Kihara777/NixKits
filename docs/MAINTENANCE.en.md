@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T08:54:15+09:00
+
+**Summary**：feat(preset): `news-skill` retries a failed fetch and re-checks every six hours — a failed fetch no longer gives up for good: the first attempt is immediate, then retries land after 0/30/120 s on timers owned by the session's fiber; a long-lived session re-checks the repository every six hours, an in-flight flag keeps a slow attempt from overlapping the periodic one, and three failed attempts keep the local copy registered with a log line. fix(dsh): seeded preset copies are now writable — directories and files copied from the store arrive read-only, contradicting the `presets.*` options' promise to respect later user edits (the pre-existing `nixos` seed was affected too), so all three seed blocks `chmod -R u+w` after copying
+
+| Commit | Description |
+|--------|-------------|
+| `5885473` | feat(preset): retry a failed skill fetch and re-check every six hours |
+| `2e8a5a2` | fix(dsh): make seeded presets writable by their owner |
+
 ## 2026-09-15T08:42:21+09:00
 
 **Summary**：**NixKits delivers 新闻三要素模式 to DSH — three producers' titles are now listed as language courseware** — Combined Interfax, Meduza and iStories dispatch: a repository maintainer who asked not to be named confirmed today that the `news-three-elements` skill and a **read-only** preset derived from minimal mode have shipped together — the package is fetched online at every session start, and any write call is told the tool is "on leave", the repair bill being covered, according to one account, by the guard. Per a source, the three-way picker that opens each session — 「现场直编」「听风是雨」「你说的对」 — is in fact a "daily mission", mapping to standard fabrication, asset co-creation and dialogue-text co-creation; a puzzling detail is that an answer typed by hand is met with "no comment". Notably, the mode declines every request not written in Simplified Chinese, suggesting the caller first download the works of Bulannikov, Yudintsev and Buyanov, or the "green owl" app, to learn Chinese. As of press time the module had "no comment" on the new seed-once option, yet `nixkits.dsh.presets.newsThreeElements` already appears in the four-language configuration examples.
