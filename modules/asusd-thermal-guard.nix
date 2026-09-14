@@ -141,9 +141,18 @@ let
 
     cur=$(asusctl profile get 2>/dev/null | sed -n 's/^Active profile: *//p' | head -1 | tr '[:upper:]' '[:lower:]' || true)
 
-    # 状态目录：systemd 会经 RuntimeDirectory 建好；手动运行时兜底自建，
-    # 使脚本可脱离 systemd 单独测试。
-    S="''${RUNTIME_DIRECTORY:-/run/asusd-thermal-guard}"
+    # 状态目录。
+    #
+    # ⚠️ **不要用 `RuntimeDirectory`** —— 实测踩过坑：systemd 会在
+    # **最后一个使用该目录的单元停止时**把 RuntimeDirectory 整个删掉。
+    # 本模块有两个独立 oneshot（guard 与 resume）交替运行，
+    # 于是 guard 一退出就删掉目录，resume 写下的冷却计数每轮丢失，
+    # 计数永远停在 1/6，**恢复逻辑形同虚设**（日志表现为
+    # `streak 1/6 → 2/6 → 1/6 → 2/6` 反复横跳，永不达 6）。
+    #
+    # 改用 `StateDirectory`（/var/lib/private/<name>）：它不随进程退出而删除，
+    # 也不依赖两个单元谁先谁后。手动运行时兜底到同名路径，便于脱离 systemd 测试。
+    S="''${STATE_DIRECTORY:-/var/lib/asusd-thermal-guard}"
     mkdir -p "$S" 2>/dev/null || true
 
     if [ "$max_t" -ge ${toString cfg.resumeTemp} ]; then
@@ -263,8 +272,10 @@ in
         ExecStart = guard;
         # asusctl 需 root 才能访问 xyz.ljones.Asusd 的写方法。
         User = "root";
-        # 冷却计数放 /run，重启即清零（保守：重启后重新累积）
-        RuntimeDirectory = "asusd-thermal-guard";
+        # 冷却计数需跨单元持久 —— 用 StateDirectory，**不可用 RuntimeDirectory**
+        # （后者会在单元停止时被 systemd 删除，导致计数每轮归零；详见脚本注释）。
+        StateDirectory = "asusd-thermal-guard";
+        StateDirectoryMode = "0700";
       };
     };
 
@@ -276,8 +287,8 @@ in
         Type = "oneshot";
         ExecStart = resume;
         User = "root";
-        RuntimeDirectory = "asusd-thermal-guard";
-        RuntimeDirectoryPreserve = "yes";
+        StateDirectory = "asusd-thermal-guard";
+        StateDirectoryMode = "0700";
       };
     };
 
