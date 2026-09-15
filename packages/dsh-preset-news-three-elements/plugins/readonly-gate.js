@@ -28,6 +28,7 @@
  */
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export const name = "readonly-gate";
 
@@ -66,10 +67,19 @@ const PATH_ARGUMENTS = {
 };
 
 /**
+ * The mode's own skill package: the fetched copy in the cache, and the snapshot
+ * this preset ships for offline sessions. Both must stay readable — they are
+ * what `read` is pointed at when the model opens `tables.md` or `checklist.md`,
+ * and scoping them out made the mode narrate "配套文件读不到" instead.
+ */
+const SKILL_CACHE_DIR = join(process.env.DSH_HOME ?? join(homedir(), ".dsh"), ".cache", "news-three-elements");
+const PRESET_ROOT = fileURLToPath(new URL("..", import.meta.url));
+
+/**
  * Where the mode is allowed to look: the session's working directory, the
- * attachment store, and the temp directory. Paths are absolute in the args, so a
- * relative path is left to the filesystem backend, which resolves it under the
- * session root.
+ * attachment store, the temp directory, and its own skill package (cache plus
+ * the bundled snapshot). Paths are absolute in the args, so a relative path is
+ * left to the filesystem backend, which resolves it under the session root.
  */
 function readableRoots(exec) {
 	const roots = [];
@@ -80,7 +90,7 @@ function readableRoots(exec) {
 		// An unreadable session header simply drops the workspace root.
 	}
 	const home = process.env.DSH_HOME ?? join(homedir(), ".dsh");
-	roots.push(join(home, "attachments"), "/tmp");
+	roots.push(join(home, "attachments"), "/tmp", SKILL_CACHE_DIR, PRESET_ROOT);
 	return roots;
 }
 
@@ -109,7 +119,7 @@ export function apply(ctx) {
 		}
 		const denied = outOfScopePath(exec);
 		if (denied !== undefined) {
-			return `${REFUSAL}\n\n被拒绝的路径：${denied}（本模式只允许查看会话工作区、附件目录与 /tmp）`;
+			return `${REFUSAL}\n\n被拒绝的路径：${denied}（本模式只允许查看会话工作区、附件目录、/tmp 与自身技能包目录）`;
 		}
 		return undefined;
 	});

@@ -223,6 +223,16 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 	check("gate: viewing an attachment is allowed", call("read", { file_path: join(process.env.DSH_HOME ?? join(homedir(), ".dsh"), "attachments/x.png") }) === undefined);
 	check("gate: viewing /tmp is allowed", call("glob", { path: "/tmp" }) === undefined);
 	check("gate: a relative path is left to the backend", call("read", { file_path: "docs/zh/dsh.md" }) === undefined);
+	// Regression: scoping the reads without these two roots made the mode narrate
+	// 「配套文件读不到」 — it must always be able to open its own skill package.
+	check(
+		"gate: the fetched skill package is readable",
+		call("read", { file_path: join(process.env.DSH_HOME, ".cache/news-three-elements/tables.md") }) === undefined,
+	);
+	check(
+		"gate: the bundled skill snapshot is readable",
+		call("read", { file_path: join(ROOT, "bundled/news-three-elements/checklist.md") }) === undefined,
+	);
 	const denied = call("read", { file_path: "/etc/shadow" });
 	check("gate: viewing outside those roots is refused", typeof denied === "string" && denied.includes("/etc/shadow"));
 	const deniedGrep = call("grep", { path: "/etc" });
