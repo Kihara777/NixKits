@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:19:12+09:00
+
+**摘要**：fix(codewhale): 刷新 riscv64 的 Cargo lock — 补齐源码哈希后，riscv64 构建随即在依赖 vendoring 阶段报「cargoHash or cargoSha256 is out of date」：仓库内固定的 `codewhale-src-Cargo.lock` 与上游 v0.9.12 不一致（549 行差异，`ansi-to-tui` 等条目缺失），说明它是按另一个修订生成的。改用源码树自带的 `Cargo.lock`——`rquickjs-sys` 仍为 0.12.2（bindings 的 `postPatch` 继续有效），且上游无 git 源依赖，无需额外固定。x86_64 / aarch64 走预编译二进制路径，不受影响；CI 因此首次进入编译阶段
+
+| 提交 | 说明 |
+|------|------|
+| `b8fd5b1` | fix(codewhale): refresh the riscv64 Cargo lock |
+
 ## 2026-09-15T10:12:41+09:00
 
 **摘要**：feat(preset): 「模式」独立成章节 + 新闻三要素模式改由独立包分发 — Agent 预设更名为「模式」，主文档中与插件同级，三种模式各有独立文档（`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`，四语）。分发方式二分：NixOS模式 / 维护模式仍随 dsh-nixos-shell 包 seed-once；新闻三要素模式移入**独立包** `dsh-preset-news-three-elements`（新增 flake 输出、overlay 条目与 x86_64 / aarch64 构建 workflow），模块新增 `presets.newsThreeElementsPackage` 并把包内 `share/dsh-agent-presets` 注册为 `agent-presets` roster 的额外根——预设从 store 直读，不再复制进 `$DSH_HOME`（`- id:` 行替换**整份** config，故发出的 JSON 必须带上必填的 `default`）。同轮措辞修正：仪式句结尾改为两个全角叹号「我们从不制造 FAKE NEWS！！」；语言审查的回绝改为**《好心》附上用户所用语言的本地化版本**（中文正文在前，译文在后）；「绿色的猫头鹰」在语境合适时可简称「绿毛鸡」。另修一处既存死链：`docs/README.<lang>.md` 在 `docs/` 内，ruyi 行原先指向 `docs/docs/<lang>/ruyi.md`（en / ja 的修复随本批一并入库）。CI：新包 x86_64 / aarch64 构建成功，`nix flake check` 通过。本机随之重锁并 apply（代际 560），手工种子副本已删除

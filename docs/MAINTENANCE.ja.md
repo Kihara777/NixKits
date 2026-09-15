@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:19:12+09:00
+
+**概要**：fix(codewhale): riscv64 の Cargo lock を刷新 — ソースハッシュを補った直後、riscv64 ビルドは依存 vendoring 段階で「cargoHash or cargoSha256 is out of date」で失敗した：リポジトリに固定していた `codewhale-src-Cargo.lock` は上流 v0.9.12 と一致せず（549 行差分、`ansi-to-tui` などの項目が欠落）、別のリビジョンから生成されたものと判明。ソースツリー同梱の `Cargo.lock` に差し替えた——`rquickjs-sys` は 0.12.2 のまま（bindings の `postPatch` は引き続き有効）で、上流に git 源依存はなく追加固定も不要。x86_64 / aarch64 はプリビルドバイナリ経路で無影響；CI は初めてコンパイル段階へ進んだ
+
+| コミット | 説明 |
+|----------|------|
+| `b8fd5b1` | fix(codewhale): refresh the riscv64 Cargo lock |
+
 ## 2026-09-15T10:12:41+09:00
 
 **概要**：feat(preset): 「モード」が独立した節になり、新闻三要素模式は独立パッケージ配布へ — Agent プリセットは「模式（モード）」と改称し、主文書ではプラグインと同格の節となり、3 モードがそれぞれ独立文書を持つ（`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`、四言語）。配布は二系統に分かれる：NixOS模式 / 維護模式は従来どおり dsh-nixos-shell パッケージ内で seed-once、新闻三要素模式は**独立パッケージ** `dsh-preset-news-three-elements` へ移行（flake 出力・overlay 項目・x86_64 / aarch64 ビルド workflow を追加）。モジュールは `presets.newsThreeElementsPackage` を新設し、パッケージ内 `share/dsh-agent-presets` を `agent-presets` roster の追加 root として登録する——プリセットは store から直接読まれ、`$DSH_HOME` へ複製されない（`- id:` 行は config **全体**を置換するため、送出 JSON には必須の `default` を必ず含める）。同ラウンドの文言修正：儀式文の末尾を全角二重感嘆符「我们从不制造 FAKE NEWS！！」に変更；言語審査の拒否は**《好意で》ユーザーが使う言語のローカライズ版を添える**方式に（中国語本文が先、訳文が後）；「绿色的猫头鹰」は文脈に応じて「绿毛鸡」と略せる。既存のデッドリンクも一件修正：`docs/README.<lang>.md` は `docs/` 内にあるため、ruyi 行は `docs/docs/<lang>/ruyi.md` を指していた（en / ja の修正は本バッチに同梱）。CI：新パッケージの x86_64 / aarch64 ビルド成功、`nix flake check` 通過。本機も再ロックして apply 済み（世代 560）、手置きの種子コピーは削除

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:19:12+09:00
+
+**Summary**：fix(codewhale): refreshed the riscv64 Cargo lock — right after the source hash was filled in, the riscv64 build failed at the dependency vendoring step with "cargoHash or cargoSha256 is out of date": the lock pinned in the repo (`codewhale-src-Cargo.lock`) does not match upstream v0.9.12 (549 diff lines, entries such as `ansi-to-tui` missing), so it had been generated from a different revision. It is replaced with the source tree's own `Cargo.lock` — `rquickjs-sys` stays at 0.12.2 (the bindings `postPatch` still applies) and upstream has no git-sourced dependencies to pin. x86_64 and aarch64 use the prebuilt-binary path and are unaffected; CI entered the compile stage for the first time
+
+| Commit | Description |
+|--------|-------------|
+| `b8fd5b1` | fix(codewhale): refresh the riscv64 Cargo lock |
+
 ## 2026-09-15T10:12:41+09:00
 
 **Summary**：feat(preset): modes become a section of their own, and 新闻三要素模式 ships as an independent package — agent presets are now called 「模式」 (modes) and sit at the same level as plugins in the main docs, each with its own standalone doc (`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`, four languages). Distribution splits in two: NixOS mode / maintenance mode keep their seed-once delivery inside dsh-nixos-shell, while the news mode moves into the **independent package** `dsh-preset-news-three-elements` (new flake output, overlay entry and x86_64 / aarch64 build workflows), and the module gains `presets.newsThreeElementsPackage`, registering the package's `share/dsh-agent-presets` as an extra `agent-presets` roster root — the preset is read straight from the store and is never copied into `$DSH_HOME` (a `- id:` row replaces the WHOLE config, so the emitted JSON must carry the required `default`). Wording changes in the same round: the ritual line now ends with two full-width exclamation marks (我们从不制造 FAKE NEWS！！); a language-gate refusal is followed by a localized version of the same refusal in the user's language (Chinese text first, translation after); 「绿色的猫头鹰」 may be shortened to 「绿毛鸡」 where the context fits. One pre-existing dead link fixed: `docs/README.<lang>.md` lives inside `docs/`, so the ruyi row pointed at `docs/docs/<lang>/ruyi.md` (en and ja fixes landed with this batch). CI: the new package builds on x86_64 / aarch64 and `nix flake check` passes. The machine was relocked and applied accordingly (generation 560) and the hand-placed seed copy was removed
