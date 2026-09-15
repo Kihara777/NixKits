@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:57:15+09:00
+
+**Summary**：feat(skill): the skill gains a refusal service of its own — the refusal flow is promoted from "one preset's persona" to the **skill itself**: `SKILL.md` gains a 「拒绝服务」 section (requests that are not fabrication or a rewrite of supplied material are refused there; **search for that day's material before every refusal**; the reason, sentence pattern, paragraph order, twist ending and transitions may not repeat the previous one; three to five sentences in wire style; the 「一本正经胡说八道」 register throughout; refuse and stop), [`tables.md`](skills/news-three-elements/tables.md) marks its templates as skeletons whose material must be sourced per use, and [`checklist.md`](skills/news-three-elements/checklist.md) gains a five-item refusal self-check; the four-language skill docs and the README rows follow, the package's bundled snapshot is regenerated and the persona's two refusal paths now cite the section by name
+
+| Commit | Description |
+|--------|-------------|
+| `f120a3d` | feat(skill): give the skill a refusal service of its own |
+| `8c28f03` | chore(preset): sync the bundled skill snapshot and point the persona at the section |
+
 ## 2026-09-15T10:50:26+09:00
 
 **Summary**：feat(preset): the refusal translation is scoped to the language gate and must match the caller's language — a localized copy belongs to the "not Simplified Chinese" rule alone: when a Simplified-Chinese caller's request is refused for any other reason, the reply carries **the Chinese text only** — no translation, no gloss (the language was legitimate, so there is nothing to translate). The translation must also be **in the very language the caller used** (English for English, Japanese for Japanese, Traditional Chinese for Traditional Chinese), never swapped for a third language and never a mixed-script text. Both rules are promoted from "unstated, left to the model" to explicit lines in the persona and the injected notice (the persona's other section now says outright that it does not translate), with the four language docs updated; the self-test gains six assertions

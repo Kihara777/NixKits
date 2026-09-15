@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T10:57:15+09:00
+
+**摘要**：feat(skill): 技能「拒否服務」節 新設 — 拒否流程「某預設 persona 限定」自 **技能本体** 昇格：`SKILL.md` 「拒否服務」章 追加（捏造 非・提供素材改稿 非 之請求 同節 拒否、**拒否毎 当日素材 online 取得**；理由・文型・段落順・結末反転・接続詞 前回 反復 不可；三〜五句 通信社文体；底色「至極真面目 出鱈目」；拒否 即止）、[`tables.md`](skills/news-three-elements/tables.md) 冒頭 雛形 骨格 唯・素材 当次取得 明記、[`checklist.md`](skills/news-three-elements/checklist.md) 「拒否服務自己点検」5 項 追加。四言語技能文書 與 各 README 技能行 同期、package 同梱 snapshot 再生成、persona 二箇所 節名 参照 変更
+
+| 提交 | 説明 |
+|------|------|
+| `f120a3d` | feat(skill): give the skill a refusal service of its own |
+| `8c28f03` | chore(preset): sync the bundled skill snapshot and point the persona at the section |
+
 ## 2026-09-15T10:50:26+09:00
 
 **摘要**：feat(preset): 訳文 言語審査限定・相手言語一致化 — localize 版 添付 「簡体中文以外」規則 拒否 時 唯：簡体中文 利用者 他理由 拒否 場合、返 物 **中国語本文 唯**、訳文 注記 共 添付無（言語自体 正当、訳対象 無）。訳文 更 **相手 実際使用言語 其物** 必須（英語 英語、日語 日語、繁体中文 繁体中文）。第三言語 置換 與 中英混排 不可。此二点「明文化 無・model 判断 委譲」状態 自、persona 與 注入指示 明示規則 昇格（persona 別節「本節 翻訳 無」明記）、四言語文書 同期。自測 6 項 assertion 追加

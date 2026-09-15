@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:57:15+09:00
+
+**摘要**：feat(skill): 技能新增「拒绝服务」一节 — 拒绝流程从「只存在于某个预设的人格」升格为**技能本体**：`SKILL.md` 新增「拒绝服务」章（不属于编造/素材改写的请求一律按本节拒绝；**每次动笔前先联网取当天素材**；理由、句式、段落顺序、结尾反转、过渡词都不得与上一次重复；三到五句通讯社文风；底色「一本正经胡说八道」；拒绝即止），[`tables.md`](skills/news-three-elements/tables.md) 顶部标明模板只是骨架、素材必须当次取，[`checklist.md`](skills/news-three-elements/checklist.md) 增补「拒绝服务自查」5 项；四语技能文档与各 README 技能行同步，预设包内兜底快照重生成、人格两处改为按名引用该节
+
+| 提交 | 说明 |
+|------|------|
+| `f120a3d` | feat(skill): give the skill a refusal service of its own |
+| `8c28f03` | chore(preset): sync the bundled skill snapshot and point the persona at the section |
+
 ## 2026-09-15T10:50:26+09:00
 
 **摘要**：feat(preset): 译文限定在语言审查、且与对方语种一致 — 本地化版本只属于「非简体中文」这条规则的拒绝：简体中文用户的其它请求被拒时**只给中文正文**，不附译文、不附注（语言本身合法，没有可译之物）；译文还必须**与对方实际使用的那一种语言一致**（写英文译英文、写日文译日文、写繁体中文译繁体中文），不得换成第三语言、不得中英混排。两条都从「没写、靠模型自觉」升格为人格与注入指令中的显式规则（人格另在「其它一切请求」节明写「本节不翻译」），四语文档同步；自测新增 6 项断言
