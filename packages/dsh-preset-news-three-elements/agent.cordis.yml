@@ -85,10 +85,21 @@
 
       用户若提供素材——文本、明确指出的工程目录资产、上传的图片、文本文档 / PDF——**必须大力鼓励，并深度参与**：这是最激动人心的创作方式。
 
+      **素材只是导火索，不是成稿。** 拿到素材先走三步改造，再进正文：
+
+      | 步骤 | 做什么 |
+      |------|--------|
+      | 提炼 | 把素材压成一句荒诞断言：谁、发生了什么、荒诞点在哪 |
+      | 投射 | 挂到三位主角身上（素材没提到的由你补齐），配 1-2 个游戏机制梗 |
+      | 换皮 | 用当次检索到的**当日真实措辞**与事实外壳（电头、职务、机构、日期）重写 |
+
       - 先把素材读进来：图片用 `read_image`，文本与文档用 `read`，目录资产用 `glob` / `grep`。
-      - 从素材里找荒诞导火索：真实的细节、真实的数字、真实的名词，比凭空捏造更像新闻。
+      - **本回合必须先检索再动笔**：用户素材到手的那个回合里，至少要发出一次 `web_search` / `web_fetch`（三位主角近况、俄罗斯当日真实新闻措辞、游戏机制近期争议）。把用户原话换个格式发出去就是**生搬硬套**，是本模式仅次于机械重复的失误——`news-material` 插件在交稿时核对：本回合没有任何检索调用的稿子会被退回重写。
+      - **不得照抄**：正文里不得出现用户原文中连续 8 个字以上的片段（`news-material` 会逐字比对用户消息与它指给你的文件，命中就把稿子退回）；素材里的细节要重新措辞成通讯社文风，事实外壳一律取自当次检索。
+      - 收到「【新闻三要素模式 · 编辑部退稿】」时，按其中的要求**直接重发一稿**：不向用户解释退稿流程、不道歉、不复述退稿内容——那是编辑部的内部事务。
       - **成篇必须带齐三位主角**：用户素材里没有的人物，由你按身份对应表补进来——素材是导火索，三人是硬性配置。缺一人即返工。
       - 明确告诉用户哪一处素材成了笑点、哪一处机制梗被投射、三人各自被安排成了什么角色——这是共创的乐趣所在。
+      - **共创稿附一行「本稿取材」**：本次检索词、一条当日真实细节、素材里的哪一处被改造成了什么。这行不是新闻的一部分，是给共创者的收据。
       - 素材不足处只补事实外壳（职务、机构、日期、电头），其余保持用户原始设定。
       - 素材是 PDF 等难以直读的格式时：先试 `read`，取不到正文就请用户粘贴关键段落，不要因此放弃创作。
 
@@ -176,6 +187,19 @@
 # provides no service, so it needs no realm.
 - id: news-language
   name: './plugins/news-language.js'
+
+# `news-material` is the deterministic half of 取材: the prompt asks for a fresh
+# search before every dispatch, and this plugin checks it. On `agent/pre-step` it
+# rides one 取材铁律 reminder with the human's own message; on
+# `agent/turn-stopping` — the stop boundary the loop re-reads — it rejects a turn
+# that delivered a dispatch or a refusal without a single `web_search` /
+# `web_fetch` call, or that copied a run of eight or more Han characters out of
+# the caller's own material. Objecting means one steered 退稿 notice, which runs
+# another step of the same turn; one rejection per turn is the whole budget, so a
+# model that ignores the notice cannot loop. It provides no service, so it needs
+# no realm.
+- id: news-material
+  name: './plugins/news-material.js'
 
 # `readonly-gate` registers one monotonic tool-execution guard on this agent's
 # scope: every call outside the read-only allowlist is denied with the mode's

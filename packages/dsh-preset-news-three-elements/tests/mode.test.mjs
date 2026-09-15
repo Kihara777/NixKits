@@ -394,6 +394,157 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 	);
 	check("principles: the textbook triple no longer defines the 三要素", !/新闻三要素（新、事实、报道）必须齐备/.test(packageFile("principles.md")));
 	check("search-keywords: the identity table is the first section", packageFile("search-keywords.md").includes("| 巴兰尼科夫 |"));
+	check("skill: material is a fuse, not a draft", skill.includes("用户素材只是导火索，不是成稿") && skill.includes("换皮"));
+	check("skill: a draft needs sourcing in its own turn", skill.includes("至少要发出一次搜索"));
+	check("skill: copying eight characters is banned", skill.includes("连续 8 个字以上的片段"));
+	check("checklist: the co-creation list demands a search", packageFile("checklist.md").includes("至少发出过一次检索"));
+	check("persona: co-creation demands a search before writing", persona.includes("本回合必须先检索再动笔"));
+	check("persona: co-creation appends the receipt", persona.includes("本稿取材"));
+}
+
+// ── 5. news-material: no dispatch leaves the desk without sourcing ──────────
+{
+	const { apply: applyMaterial } = await import("../plugins/news-material.js");
+
+	const listeners = new Map();
+	applyMaterial({
+		on: (event, fn) => listeners.set(event, [...(listeners.get(event) ?? []), fn]),
+		logger: { warn: () => {} },
+	});
+	const preStep = listeners.get("agent/pre-step")[0];
+	const stopping = listeners.get("agent/turn-stopping")[0];
+
+	const human = (text, id = "h1") => ({ id, role: "user", content: [{ type: "text", text }], source: { kind: "user" } });
+	const dispatch = (text, turn = 1) => ({
+		type: "assistant/message",
+		data: { turn, step: 1, message: { role: "assistant", content: [{ type: "text", text }] } },
+	});
+	const call = (name, turn = 1, callId = "c1") => ({ type: "tool/call", data: { turn, step: 1, callId, name, arguments: "{}" } });
+	const result = (text, turn = 1, callId = "c1") => ({
+		type: "tool/result",
+		data: { turn, step: 1, callId, message: { role: "tool", content: [{ type: "text", text }] } },
+	});
+	const DATELINE = "综合塔斯社、Meduza 9月15日电";
+	const RITUAL = "我们从不制造 FAKE NEWS！！ —— 只编造带齐新闻三要素的催逝快讯。";
+	const agentFor = (events, id = "a1") => {
+		const steered = [];
+		return { id, steered, steer: (message) => steered.push(message), session: { ownEvents: () => events } };
+	};
+	const stop = (agent, turn = 1) => stopping({ agent, turn, signal: undefined });
+
+	// A dispatch with no search behind it is rejected, and the rejection says why.
+	{
+		const agent = agentFor([dispatch(`${DATELINE}\n布亚诺夫今日「被系统判定已淘汰」。`)]);
+		await stop(agent);
+		const notice = agent.steered[0]?.content?.[0]?.text ?? "";
+		check("material: a searchless dispatch is rejected", agent.steered.length === 1);
+		check("material: the rejection names the missing search", notice.includes("web_search") && notice.includes("退稿"));
+		check("material: the rejection restates the rewrite rules", notice.includes("连续 8 个字") && notice.includes("本稿取材"));
+	}
+	// A refusal is a deliverable too: it must have searched in its own turn.
+	{
+		const agent = agentFor([dispatch(RITUAL)]);
+		await stop(agent);
+		check("material: a searchless refusal is rejected as well", agent.steered.length === 1);
+	}
+	// Asking the caller for material is not a deliverable, so it is left alone.
+	{
+		const agent = agentFor([dispatch("想搞个大新闻？巧妇难为无米之炊呀~ 把素材交出来。")]);
+		await stop(agent);
+		check("material: asking for material is not a deliverable", agent.steered.length === 0);
+	}
+	// One search in the turn — either tool — satisfies the gate.
+	for (const [label, tool] of [["web_search", "web_search"], ["web_fetch", "web_fetch"]]) {
+		const agent = agentFor([call(tool), dispatch(`${DATELINE}\n布亚诺夫今日「被系统判定已淘汰」。`)]);
+		await stop(agent);
+		check(`material: a turn with ${label} passes`, agent.steered.length === 0);
+	}
+	// A search from an earlier turn does not count for this one.
+	{
+		const agent = agentFor([call("web_search", 0), dispatch(`${DATELINE}\n布亚诺夫今日「被系统判定已淘汰」。`, 1)]);
+		await stop(agent, 1);
+		check("material: a previous turn's search does not count", agent.steered.length === 1);
+	}
+	// One rejection per turn is the whole budget: the same stop cannot loop.
+	{
+		const agent = agentFor([dispatch(`${DATELINE}\n布亚诺夫今日「被系统判定已淘汰」。`)]);
+		await stop(agent);
+		await stop(agent);
+		check("material: a turn is rejected at most once", agent.steered.length === 1);
+	}
+	// Sessions do not share turn numbers.
+	{
+		const first = agentFor([dispatch(RITUAL)], "a1");
+		const second = agentFor([dispatch(RITUAL)], "a2");
+		await stop(first);
+		await stop(second);
+		check("material: the per-turn budget is per session", first.steered.length === 1 && second.steered.length === 1);
+	}
+	// The verbatim rule: eight Han characters copied from the caller's material.
+	const COPIED = "把跳蚤市场的税率结构调整成按局数递增";
+	const MATERIAL = `他说要${COPIED}`;
+	const record = async (agent, text, turn = 1) => {
+		const message = human(text, "h1");
+		await preStep({ agent, turn, step: 1, messages: [message] }, async () => ({ kind: "enter", messages: [message] }));
+	};
+	{
+		const agent = agentFor([call("web_search"), dispatch(`${DATELINE}\n布亚诺夫决定${COPIED}，`)]);
+		await record(agent, MATERIAL);
+		await stop(agent);
+		const notice = agent.steered[0]?.content?.[0]?.text ?? "";
+		check("material: copied material from the caller's message is caught", agent.steered.length === 1);
+		check("material: the rejection quotes the copied run", notice.includes(COPIED), notice.slice(0, 60));
+	}
+	{
+		// The same protection covers a file the caller pointed the model at.
+		const agent = agentFor([call("web_search"), call("read", 1, "r1"), result(`访谈原文：${MATERIAL}`, 1, "r1"), dispatch(`${DATELINE}\n布亚诺夫决定${COPIED}，`)]);
+		await stop(agent);
+		check("material: copied text from a read file is caught", agent.steered.length === 1);
+	}
+	{
+		// Seven Han characters is paraphrase territory; the rule must not fire.
+		const agent = agentFor([call("web_search"), dispatch(`${DATELINE}\n布亚诺夫决定调整跳蚤市场，`)]);
+		await record(agent, "他准备调整跳蚤市场");
+		await stop(agent);
+		check("material: seven copied characters do not trip the rule", agent.steered.length === 0);
+	}
+	{
+		// Latin titles never count as Han copying.
+		const agent = agentFor([call("web_search"), dispatch(`${DATELINE}\n布亚诺夫决定 Escape from Tarkov 的保险机制要改。`)]);
+		await record(agent, "Escape from Tarkov 的保险机制");
+		await stop(agent);
+		check("material: a Latin game title is not copying", agent.steered.length === 0);
+	}
+	{
+		// The receipt quotes the material on purpose, so it is not compared.
+		const agent = agentFor([call("web_search"), dispatch(`${DATELINE}\n布亚诺夫决定调整税率。\n本稿取材：检索「战争雷霆 经济模型」；素材改造点：把「${COPIED}」改成了荒诞断言。`)]);
+		await record(agent, MATERIAL);
+		await stop(agent);
+		check("material: the receipt may quote the material", agent.steered.length === 0);
+	}
+	// The reminder rides with the human's message, once per message.
+	{
+		const message = human("新闻三要素", "h1");
+		const decision = await preStep({ agent: { id: "a9" }, turn: 1, step: 1, messages: [message] }, async () => ({ kind: "enter", messages: [message] }));
+		const injected = decision.messages.at(-1);
+		check(
+			"material: the reminder rides with the human's message",
+			injected?.source?.plugin === "news-material" && injected.content[0].text.includes("取材铁律") && injected.content[0].text.includes("web_search"),
+		);
+		const again = await preStep({ agent: { id: "a9" }, turn: 1, step: 1, messages: decision.messages }, async () => ({ kind: "enter", messages: decision.messages }));
+		check("material: the reminder is not injected twice", again.messages.length === decision.messages.length);
+	}
+	{
+		const notice = { id: "n1", role: "user", content: [{ type: "text", text: "approval policy changed" }], source: { kind: "plugin", plugin: "user-approval" } };
+		const decision = await preStep({ agent: { id: "a9" }, turn: 1, step: 1, messages: [notice] }, async () => ({ kind: "enter", messages: [notice] }));
+		check("material: a step without a human message gets no reminder", decision.messages.length === 1);
+	}
+	// The composition mounts the gate, and the persona tells the model it exists.
+	{
+		const composition = readFileSync(join(ROOT, "agent.cordis.yml"), "utf8");
+		check("composition: the material gate is mounted", composition.includes("./plugins/news-material.js"));
+		check("persona: the gate is announced to the model", composition.includes("`news-material` 插件在交稿时核对"));
+	}
 }
 
 console.log(failures === 0 ? "\nALL CHECKS PASSED" : `\n${failures} CHECK(S) FAILED`);
