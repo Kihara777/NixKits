@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:12:41+09:00
+
+**概要**：feat(preset): 「モード」が独立した節になり、新闻三要素模式は独立パッケージ配布へ — Agent プリセットは「模式（モード）」と改称し、主文書ではプラグインと同格の節となり、3 モードがそれぞれ独立文書を持つ（`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`、四言語）。配布は二系統に分かれる：NixOS模式 / 維護模式は従来どおり dsh-nixos-shell パッケージ内で seed-once、新闻三要素模式は**独立パッケージ** `dsh-preset-news-three-elements` へ移行（flake 出力・overlay 項目・x86_64 / aarch64 ビルド workflow を追加）。モジュールは `presets.newsThreeElementsPackage` を新設し、パッケージ内 `share/dsh-agent-presets` を `agent-presets` roster の追加 root として登録する——プリセットは store から直接読まれ、`$DSH_HOME` へ複製されない（`- id:` 行は config **全体**を置換するため、送出 JSON には必須の `default` を必ず含める）。同ラウンドの文言修正：儀式文の末尾を全角二重感嘆符「我们从不制造 FAKE NEWS！！」に変更；言語審査の拒否は**《好意で》ユーザーが使う言語のローカライズ版を添える**方式に（中国語本文が先、訳文が後）；「绿色的猫头鹰」は文脈に応じて「绿毛鸡」と略せる。既存のデッドリンクも一件修正：`docs/README.<lang>.md` は `docs/` 内にあるため、ruyi 行は `docs/docs/<lang>/ruyi.md` を指していた（en / ja の修正は本バッチに同梱）。CI：新パッケージの x86_64 / aarch64 ビルド成功、`nix flake check` 通過。本機も再ロックして apply 済み（世代 560）、手置きの種子コピーは削除
+
+| コミット | 説明 |
+|----------|------|
+| `fbfebeb` | feat(preset): ship 新闻三要素模式 as an independent package |
+| `e6654f5` | feat(preset): localize the language-gate refusal, fix the ritual bangs |
+| `c0a9616` | docs(modes): give every preset its own doc, zh/en/ja |
+| `cc9bd31` | docs(pcn): mirror the mode docs and the Modes section |
+
 ## 2026-09-15T09:09:08+09:00
 
 **概要**：fix(codewhale): riscv64 ソースハッシュを補完 — `packages/codewhale-src.nix` の `fetchFromGitHub` が依然 `lib.fakeHash` を渡していたため fixed-output の取得段階が構造的に失敗し、riscv64 ビルドは **29 回連続**で赤だった（x86_64 / aarch64 はプリビルドバイナリ経路で無影響）。ハッシュはリポジトリの既定手法どおり CI の hash mismatch 報告（`got:`）から取得し、`nix store prefetch-file --unpack` で fetchzip 意味論により本機で再計算してバイト一致を確認：`sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`。修正後、CI は初めて取得段階を越えてコンパイルに入った

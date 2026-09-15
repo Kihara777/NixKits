@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:12:41+09:00
+
+**Summary**：feat(preset): modes become a section of their own, and 新闻三要素模式 ships as an independent package — agent presets are now called 「模式」 (modes) and sit at the same level as plugins in the main docs, each with its own standalone doc (`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`, four languages). Distribution splits in two: NixOS mode / maintenance mode keep their seed-once delivery inside dsh-nixos-shell, while the news mode moves into the **independent package** `dsh-preset-news-three-elements` (new flake output, overlay entry and x86_64 / aarch64 build workflows), and the module gains `presets.newsThreeElementsPackage`, registering the package's `share/dsh-agent-presets` as an extra `agent-presets` roster root — the preset is read straight from the store and is never copied into `$DSH_HOME` (a `- id:` row replaces the WHOLE config, so the emitted JSON must carry the required `default`). Wording changes in the same round: the ritual line now ends with two full-width exclamation marks (我们从不制造 FAKE NEWS！！); a language-gate refusal is followed by a localized version of the same refusal in the user's language (Chinese text first, translation after); 「绿色的猫头鹰」 may be shortened to 「绿毛鸡」 where the context fits. One pre-existing dead link fixed: `docs/README.<lang>.md` lives inside `docs/`, so the ruyi row pointed at `docs/docs/<lang>/ruyi.md` (en and ja fixes landed with this batch). CI: the new package builds on x86_64 / aarch64 and `nix flake check` passes. The machine was relocked and applied accordingly (generation 560) and the hand-placed seed copy was removed
+
+| Commit | Description |
+|--------|-------------|
+| `fbfebeb` | feat(preset): ship 新闻三要素模式 as an independent package |
+| `e6654f5` | feat(preset): localize the language-gate refusal, fix the ritual bangs |
+| `c0a9616` | docs(modes): give every preset its own doc, zh/en/ja |
+| `cc9bd31` | docs(pcn): mirror the mode docs and the Modes section |
+
 ## 2026-09-15T09:09:08+09:00
 
 **Summary**：fix(codewhale): fill the riscv64 source hash — `packages/codewhale-src.nix` still passed `lib.fakeHash` to `fetchFromGitHub`, so the fixed-output fetch failed by construction and the riscv64 build was red **29 runs in a row** (x86_64 and aarch64 use the prebuilt-binary path and were unaffected). Following the repository's established practice the hash comes from the CI hash-mismatch report (`got:`), and `nix store prefetch-file --unpack` recomputed it locally with fetchzip semantics — byte-identical: `sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`. With the fix, CI passed the fetch stage and entered compilation for the first time
