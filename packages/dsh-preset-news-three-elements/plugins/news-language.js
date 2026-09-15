@@ -46,6 +46,24 @@ const HANGUL = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7FF]/u;
 const WORDISH = /\p{L}/u;
 
 /**
+ * Characters whose Traditional form differs from the Simplified one, and the
+ * Simplified forms they differ from. A message is read as Traditional Chinese
+ * when it carries a Traditional-marked character and NOT one Simplified-only
+ * character — so Simplified prose quoting a Traditional name still passes, while
+ * 「請幫我修改這個檔案」 does not.
+ *
+ * Deliberately narrow: a wrong guess refuses a Chinese-speaking user, so only
+ * high-confidence pairs are listed and the caller can widen the list here.
+ */
+const TRADITIONAL_MARKED = /[們這說學會讓邊錢麼樣產發點覺應該實際網陸險驗與為從請幫檔]/u;
+const SIMPLIFIED_ONLY = /[们这说学会让边钱么样产发点觉应该实际网陆险验与为从请帮档]/u;
+
+/** Whether one text block is a letter-bearing script the mode cannot read. */
+function hasLetters(text) {
+	return WORDISH.test(text);
+}
+
+/**
  * Who the refusal sends the caller to: the draw is over the three PRODUCERS, and
  * the game follows the person — Yudintsev (Gaijin's founder) and Bulannikov
  * (War Thunder's producer) both lead to War Thunder, Buyanov (Battlestate's
@@ -64,9 +82,21 @@ const RECOMMENDATIONS = [
 	"「绿色的猫头鹰」语言学习软件（语境合适时可写作「绿毛鸡」）",
 ];
 
-/** Draw this refusal's nudge; every entry, owl included, is equally likely. */
+/** The entry drawn for the previous refusal, so the next one cannot repeat it. */
+let lastDrawn = undefined;
+
+/**
+ * Draw this refusal's nudge. Every entry is equally likely, except the one the
+ * previous refusal already used: that one is removed from the pool for this draw,
+ * so two refusals in a row never send the caller to the same person or the same
+ * owl. With a single entry left (or a first-ever draw) nothing is excluded.
+ * @returns the drawn entry.
+ */
 function drawRecommendation() {
-	return RECOMMENDATIONS[Math.floor(Math.random() * RECOMMENDATIONS.length)];
+	const pool = RECOMMENDATIONS.filter((entry) => entry !== lastDrawn);
+	const candidates = pool.length > 0 ? pool : RECOMMENDATIONS;
+	lastDrawn = candidates[Math.floor(Math.random() * candidates.length)];
+	return lastDrawn;
 }
 
 /**
@@ -88,11 +118,19 @@ function refusalNotice() {
 	].join("\n");
 }
 
-/** Whether one text block is clearly not Simplified Chinese. */
+/**
+ * Whether one text block is clearly not Simplified Chinese.
+ *
+ * Three detections need no reading: kana (Japanese), hangul (Korean), and text
+ * with letters but no Han ideograph at all. The fourth is the narrow Traditional
+ * test: Traditional-marked characters present, not one Simplified-only character
+ * to balance them.
+ */
 function isClearlyNotChinese(text) {
 	if (!WORDISH.test(text)) return false;
 	if (KANA.test(text) || HANGUL.test(text)) return true;
-	return !HAN.test(text);
+	if (!HAN.test(text)) return true;
+	return TRADITIONAL_MARKED.test(text) && !SIMPLIFIED_ONLY.test(text);
 }
 
 /** The concatenated text of a message, ignoring non-text blocks. */

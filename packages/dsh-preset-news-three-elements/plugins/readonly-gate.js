@@ -16,11 +16,18 @@
  * Deny-by-default rather than deny-by-name: a row added to this preset later
  * cannot widen the surface by accident.
  *
+ * The view itself is scoped too: the read-side tools carry a path argument, and
+ * an absolute path outside the session workspace, the attachment store and the
+ * temp directory is refused as well. Relative paths are left to the filesystem
+ * backend, which resolves them under the session root.
+ *
  * It consumes the host `tools` seam and provides no service, so it needs no
  * realm.
  *
  * @module readonly-gate
  */
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 export const name = "readonly-gate";
 
@@ -50,9 +57,60 @@ const REFUSAL = [
 	"我们从不制造 FAKE NEWS！！ —— 你忠诚的新闻学三要素助手，只编造带齐新闻三要素（新、事实、报道）的俄式快讯。",
 ].join("\n");
 
+/** Tools whose path argument is checked against the readable roots below. */
+const PATH_ARGUMENTS = {
+	read: "file_path",
+	read_image: "file_path",
+	glob: "path",
+	grep: "path",
+};
+
+/**
+ * Where the mode is allowed to look: the session's working directory, the
+ * attachment store, and the temp directory. Paths are absolute in the args, so a
+ * relative path is left to the filesystem backend, which resolves it under the
+ * session root.
+ */
+function readableRoots(exec) {
+	const roots = [];
+	try {
+		const cwd = exec?.agent?.session?.header?.cwd;
+		if (typeof cwd === "string" && cwd !== "") roots.push(cwd);
+	} catch {
+		// An unreadable session header simply drops the workspace root.
+	}
+	const home = process.env.DSH_HOME ?? join(homedir(), ".dsh");
+	roots.push(join(home, "attachments"), "/tmp");
+	return roots;
+}
+
+/** Whether `candidate` is inside one of `roots` (or is one of them). */
+function within(candidate, roots) {
+	return roots.some((root) => candidate === root || candidate.startsWith(root.endsWith("/") ? root : `${root}/`));
+}
+
+/**
+ * The path the mode is not allowed to look at, or `undefined` when the call is
+ * fine. Only absolute paths are judged: a relative one belongs to the session's
+ * own root and the fs backend vets it.
+ */
+function outOfScopePath(exec) {
+	const argument = PATH_ARGUMENTS[exec?.name];
+	if (argument === undefined) return undefined;
+	const value = exec?.arguments?.[argument];
+	if (typeof value !== "string" || value === "" || !value.startsWith("/")) return undefined;
+	return within(value, readableRoots(exec)) ? undefined : value;
+}
+
 export function apply(ctx) {
 	ctx.tools.guard((exec) => {
-		if (READ_ONLY_TOOLS.has(exec.name)) return undefined;
-		return `${REFUSAL}\n\n被拒绝的调用：${exec.name}`;
+		if (!READ_ONLY_TOOLS.has(exec.name)) {
+			return `${REFUSAL}\n\n被拒绝的调用：${exec.name}`;
+		}
+		const denied = outOfScopePath(exec);
+		if (denied !== undefined) {
+			return `${REFUSAL}\n\n被拒绝的路径：${denied}（本模式只允许查看会话工作区、附件目录与 /tmp）`;
+		}
+		return undefined;
 	});
 }

@@ -63,6 +63,9 @@ const BUNDLED_DIR = fileURLToPath(new URL(`../bundled/${SKILL_ID}/`, import.meta
 /** Session-independent cache of the last successful fetch. */
 const CACHE_DIR = join(process.env.DSH_HOME ?? join(homedir(), ".dsh"), ".cache", SKILL_ID);
 
+/** Sidecar remembering each file's ETag, so an unchanged file costs one 304. */
+const ETAG_FILE = join(CACHE_DIR, ".etags.json");
+
 /**
  * Split a skill markdown document into frontmatter metadata and body, matching
  * the canonical parser the repository's own skill plugins use.
@@ -125,46 +128,79 @@ function registerPackage(ctx, directory) {
 
 /**
  * Fetch the whole package from the repository, or throw.
- * @returns every package file, keyed by file name.
+ *
+ * The five files go out together — one round trip's worth of latency instead of
+ * five, inside the same total bound — and each request carries the ETag of the
+ * copy already in the cache, so a cheap `304 Not Modified` keeps the previous
+ * bytes and skips the write. A cold cache simply omits the header.
+ *
+ * @returns the file contents plus the ETags to remember, and how many files the
+ *          server reported unchanged.
  */
 async function fetchPackage() {
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 	try {
-		const files = new Map();
-		for (const file of PACKAGE_FILES) {
-			const response = await fetch(`${REMOTE_BASE}${file}`, {
-				signal: controller.signal,
-				headers: { "cache-control": "no-cache", pragma: "no-cache" },
-			});
-			if (!response.ok) {
-				throw new Error(`${file}: HTTP ${response.status} ${response.statusText}`);
-			}
-			files.set(file, await response.text());
-		}
+		const known = readEtags();
+		const results = await Promise.all(
+			PACKAGE_FILES.map(async (file) => {
+				const cached = join(CACHE_DIR, file);
+				const headers = { "cache-control": "no-cache", pragma: "no-cache" };
+				if (typeof known[file] === "string" && existsSync(cached)) {
+					headers["if-none-match"] = known[file];
+				}
+				const response = await fetch(`${REMOTE_BASE}${file}`, { signal: controller.signal, headers });
+				if (response.status === 304) {
+					return { file, text: readFileSync(cached, "utf8"), etag: known[file], unchanged: true };
+				}
+				if (!response.ok) {
+					throw new Error(`${file}: HTTP ${response.status} ${response.statusText}`);
+				}
+				return { file, text: await response.text(), etag: response.headers.get("etag") ?? undefined, unchanged: false };
+			}),
+		);
+		const files = new Map(results.map((result) => [result.file, result.text]));
 		// A captive portal answers 200 with somebody else's page: validate the body.
 		const { metadata } = parseSkillDocument(files.get("SKILL.md"));
 		if (metadata.name !== SKILL_ID) {
 			throw new Error(`remote SKILL.md declares name "${metadata.name ?? "(none)"}"`);
 		}
-		return files;
+		return { files, etags: results, unchanged: results.filter((result) => result.unchanged).length };
 	} finally {
 		clearTimeout(timer);
 	}
 }
 
+/** The ETags remembered from the last successful fetch, or an empty map. */
+function readEtags() {
+	try {
+		const parsed = JSON.parse(readFileSync(ETAG_FILE, "utf8"));
+		return parsed !== null && typeof parsed === "object" ? parsed : {};
+	} catch {
+		return {};
+	}
+}
+
 /**
  * Write a fetched package into the cache directory, one staged rename per file,
- * so a reader never observes a half-written package.
- * @param files - every package file, keyed by file name.
+ * so a reader never observes a half-written package. Files the server reported
+ * unchanged are not rewritten; their ETag is carried over verbatim.
+ * @param fetched - the fetch result: package files plus per-file ETags.
  */
-function writeCache(files) {
+function writeCache(fetched) {
 	mkdirSync(CACHE_DIR, { recursive: true });
-	for (const [file, text] of files) {
-		const staging = join(CACHE_DIR, `${file}.staging`);
-		writeFileSync(staging, text);
-		renameSync(staging, join(CACHE_DIR, file));
+	for (const result of fetched.etags) {
+		if (result.unchanged) continue;
+		const staging = join(CACHE_DIR, `${result.file}.staging`);
+		writeFileSync(staging, result.text);
+		renameSync(staging, join(CACHE_DIR, result.file));
 	}
+	const etags = {};
+	for (const result of fetched.etags) {
+		if (typeof result.etag === "string") etags[result.file] = result.etag;
+	}
+	writeFileSync(`${ETAG_FILE}.staging`, `${JSON.stringify(etags, null, "\t")}\n`);
+	renameSync(`${ETAG_FILE}.staging`, ETAG_FILE);
 }
 
 /** Log without ever letting logging break the mode. */
@@ -184,12 +220,12 @@ function warn(ctx, message) {
  * @param state - the holder for the live registration's disposer.
  */
 async function refresh(ctx, state) {
-	const files = await fetchPackage();
-	writeCache(files);
+	const fetched = await fetchPackage();
+	writeCache(fetched);
 	state.dispose();
 	try {
 		state.dispose = registerPackage(ctx, CACHE_DIR);
-		warn(ctx, `skill package refreshed from ${REMOTE_BASE}`);
+		warn(ctx, `skill package refreshed from ${REMOTE_BASE} (${fetched.unchanged}/${PACKAGE_FILES.length} unchanged)`);
 	} catch (error) {
 		state.dispose = registerPackage(ctx, bestLocalPackage());
 		throw error;

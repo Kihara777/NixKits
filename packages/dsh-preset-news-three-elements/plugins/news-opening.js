@@ -80,22 +80,42 @@ function openingLine(answer) {
 
 /**
  * Ask, then hand the answer to the loop as the session's first user message.
+ *
+ * The question is withdrawn the moment the human starts talking on their own:
+ * a pending picker in front of a typed request is noise, so a user message
+ * admitted to any step aborts the ask, and that first message simply becomes the
+ * session's opener instead.
+ *
  * @param ctx - the plugin's agent-scoped context.
  * @param agent - the agent whose session just started.
  */
 async function open(ctx, agent) {
 	if (alreadyOpened(agent)) return;
+	const controller = new AbortController();
+	const stopWatching = ctx.on("agent/pre-step", ({ messages }) => {
+		const typed = (messages ?? []).some(
+			(message) => message?.source?.kind === "user" && !String(message?.id ?? "").startsWith("news-opening-"),
+		);
+		if (typed) controller.abort();
+	});
 	let answer;
 	try {
 		answer = await ctx.userQuestions.ask({
 			agent,
 			questions: [{ id: QUESTION_ID, header: HEADER, question: QUESTION, options: OPTIONS }],
+			signal: controller.signal,
 		});
 	} catch (error) {
-		// No answerer attached (headless, a client-less session, an aborted ask):
-		// the mode still works when the user types the trigger word themselves.
+		// Withdrawn by the user's own opening line, or no answerer attached
+		// (headless, a client-less session): the mode still works by typing.
 		warn(ctx, `opening question not answered: ${error?.message ?? error}`);
 		return;
+	} finally {
+		try {
+			stopWatching();
+		} catch {
+			// ignore
+		}
 	}
 	const line = openingLine(answer);
 	if (line === undefined) return;
