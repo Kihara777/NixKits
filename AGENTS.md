@@ -49,6 +49,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 - **`llama-cpp-ver` 输入是浮动追踪**：overlay `llama-cpp-rocm` 通过此输入动态获取上游最新版本号，不可锁定。
 - **overlay `llama-cpp-rocm` 的 curried 形式是有意的**：`{ llama-cpp-ver }: (final: prev: ...)` — 勿改为标准 overlay。
 - **新模块/包/overlay 加入 `flake.nix` 后必须 `nix flake check` 验证**。
+- **新增文件先 `git add` 再跑 `nix flake check`**：flake 源＝git 跟踪的文件集合，未跟踪的新文件不会进入 store——典型症状是检查里报 `ERR_MODULE_NOT_FOUND` 或「文件缺失」，而本地直接跑同一脚本却通过。先暂存（`git add -A <路径>`）再检查；CI 只看跟踪文件，所以这一步只在本地生效。
 - **Overlay 的 `patches` 列表必须用 `lib.unique` 去重**。
 
 ### 包
