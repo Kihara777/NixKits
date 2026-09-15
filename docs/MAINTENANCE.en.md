@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:39:08+09:00
+
+**Summary**：feat(preset): the draw is over producers, not games, and every refusal re-sources its material — the recommendation pool changes from three titles to the **three producers**: whoever is drawn, their game comes with them (Yudintsev and Bulannikov → "War Thunder", Buyanov → "Escape from Tarkov"), plus the 「绿色的猫头鹰」 software, four equally likely entries, never more than one per refusal; Enlisted is dropped. More importantly, refusals no longer recycle a single reason: both the persona and the injected notice order a `web_search` for that day's material (real news phrasing, official excuses, agency statements) before every refusal, forbid reusing the previous reason, sentence pattern, closing twist or transition, and name mechanical repetition as this mode's worst failure — all delivered in the deadpan 「一本正经胡说八道」 register. The self-test verifies the person-to-game pairing draw by draw across 400 refusals and checks the distribution (23 / 29 / 25 / 23%)
+
+| Commit | Description |
+|--------|-------------|
+| `1a046d3` | feat(preset): draw a producer, not a game, and re-source every refusal |
+
 ## 2026-09-15T10:31:30+09:00
 
 **Summary**：feat(preset): the refusal's recommendation is drawn at random from four — the language gate's learn-Chinese nudge no longer keeps pointing at the same two titles. The pool is War Thunder (Gaijin's founder Yudintsev and its producer Bulannikov), Escape from Tarkov (Battlestate's Buyanov), Enlisted (Gaijin's third house) and the 「绿色的猫头鹰」 software; the plugin draws once per refusal, all four equally likely, and writes the result into the injected instruction. That instruction names ONLY the drawn entry — the first draft's wording would have let a reply list two, and the self-test caught it — so one refusal never recommends two things. For the cases the plugin does not detect (Traditional Chinese, say), the persona carries the same rule. Measured over 400 draws: 23 / 24 / 28 / 25%

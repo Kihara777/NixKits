@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T10:39:08+09:00
+
+**摘要**：feat(preset): 抽選「遊技」非「人」化 + 拒否毎 素材再取得 — 推薦 pool 三本遊技 自 **三名製作者** 移行：引 人 遊技 随伴（Yudintsev、Bulannikov → 『War Thunder』、Buyanov → 『Escape from Tarkov』）。此「緑之梟」軟体 加 四通等確率、一回拒否 必 一物 唯。『Enlisted』削除。更重要 拒否文 単一理由 反復 終了：persona 與 注入指示 双方 **拒否毎 `web_search` 以当日素材**（実際報道表現・公式言訳・機関発表）取得 義務化、理由・文型・結末反転・接続詞 前回 再利用 禁止、機械的反復「本模式最重大失態」明記。語調 常「至極真面目 出鱈目」底色。自測 400 回抽選 人與遊技 対応 毎回検証、分布（23 / 29 / 25 / 23%）確認
+
+| 提交 | 説明 |
+|------|------|
+| `1a046d3` | feat(preset): draw a producer, not a game, and re-source every refusal |
+
 ## 2026-09-15T10:31:30+09:00
 
 **摘要**：feat(preset): 拒否時推薦 四択無作為抽選化 — 言語審査之中国語学習示唆 同一二本 連続推薦 終了。候補 『War Thunder』（Gaijin 創業者 Yudintsev 與制作人 Bulannikov）、『Escape from Tarkov』（Battlestate Buyanov）、『Enlisted』（Gaijin 第三作）、及「緑之梟」軟体 四点、plugin 拒否毎 一度抽選（等確率）、結果 注入指示 書込。該指示 指名 抽選済一点 **唯**——初稿文言 一度 二本 挙 可能、自測 差戻——故 一回拒否 二物推薦 無。plugin 検出無場合（繁体中文等）persona 同一規則 保持。400 回実測分布 23 / 24 / 28 / 25%
