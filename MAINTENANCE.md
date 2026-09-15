@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:31:30+09:00
+
+**摘要**：feat(preset): 回绝推荐改为随机四选一 — 语言审查的学中文暗示不再固定推那两款：《战争雷霆》（Gaijin 创始人尤丁采夫与其制作人巴兰尼科夫）、《逃离塔科夫》（Battlestate 布亚诺夫）、《从军》（Gaijin 第三作）三款，或「绿色的猫头鹰」软件——插件**每次回绝现掷一次**，四者等概率，并把抽到的结果写进注入指令；该指令**只提抽到的那一样**（写成「提第二样」的初稿已被自测拦下），一次回绝不会报两款。插件不检测的情形（如繁体中文）由人格携带同一规则。实测 400 次抽取分布 23 / 24 / 28 / 25%
+
+| 提交 | 说明 |
+|------|------|
+| `28f161a` | feat(preset): draw the refusal's recommendation at random |
+
 ## 2026-09-15T10:19:12+09:00
 
 **摘要**：fix(codewhale): 刷新 riscv64 的 Cargo lock — 补齐源码哈希后，riscv64 构建随即在依赖 vendoring 阶段报「cargoHash or cargoSha256 is out of date」：仓库内固定的 `codewhale-src-Cargo.lock` 与上游 v0.9.12 不一致（549 行差异，`ansi-to-tui` 等条目缺失），说明它是按另一个修订生成的。改用源码树自带的 `Cargo.lock`——`rquickjs-sys` 仍为 0.12.2（bindings 的 `postPatch` 继续有效），且上游无 git 源依赖，无需额外固定。x86_64 / aarch64 走预编译二进制路径，不受影响；CI 因此首次进入编译阶段

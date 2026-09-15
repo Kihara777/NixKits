@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:31:30+09:00
+
+**概要**：feat(preset): 拒否時の推薦を四択の無作為抽選に — 言語審査の中国語学習示唆は同じ二本を推し続けなくなった。候補は『War Thunder』（Gaijin 創業者ユディンツェフと制作人バランニコフ）、『Escape from Tarkov』（Battlestate ブヤノフ）、『Enlisted』（Gaijin の第三作）、および「緑のフクロウ」ソフトの四点で、プラグインが拒否ごとに一度抽選し（等確率）、結果を注入指示に書き込む。その指示が名指しするのは**抽選された一点のみ**——初稿の文言では一度に二本を挙げ得たため自測で差し戻した——ので、1 回の拒否が二つを推薦することはない。プラグインが検出しない場合（繁体中文など）は persona が同じ規則を持つ。400 回の実測分布は 23 / 24 / 28 / 25%
+
+| コミット | 説明 |
+|----------|------|
+| `28f161a` | feat(preset): draw the refusal's recommendation at random |
+
 ## 2026-09-15T10:19:12+09:00
 
 **概要**：fix(codewhale): riscv64 の Cargo lock を刷新 — ソースハッシュを補った直後、riscv64 ビルドは依存 vendoring 段階で「cargoHash or cargoSha256 is out of date」で失敗した：リポジトリに固定していた `codewhale-src-Cargo.lock` は上流 v0.9.12 と一致せず（549 行差分、`ansi-to-tui` などの項目が欠落）、別のリビジョンから生成されたものと判明。ソースツリー同梱の `Cargo.lock` に差し替えた——`rquickjs-sys` は 0.12.2 のまま（bindings の `postPatch` は引き続き有効）で、上流に git 源依存はなく追加固定も不要。x86_64 / aarch64 はプリビルドバイナリ経路で無影響；CI は初めてコンパイル段階へ進んだ

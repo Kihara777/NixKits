@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:31:30+09:00
+
+**Summary**：feat(preset): the refusal's recommendation is drawn at random from four — the language gate's learn-Chinese nudge no longer keeps pointing at the same two titles. The pool is War Thunder (Gaijin's founder Yudintsev and its producer Bulannikov), Escape from Tarkov (Battlestate's Buyanov), Enlisted (Gaijin's third house) and the 「绿色的猫头鹰」 software; the plugin draws once per refusal, all four equally likely, and writes the result into the injected instruction. That instruction names ONLY the drawn entry — the first draft's wording would have let a reply list two, and the self-test caught it — so one refusal never recommends two things. For the cases the plugin does not detect (Traditional Chinese, say), the persona carries the same rule. Measured over 400 draws: 23 / 24 / 28 / 25%
+
+| Commit | Description |
+|--------|-------------|
+| `28f161a` | feat(preset): draw the refusal's recommendation at random |
+
 ## 2026-09-15T10:19:12+09:00
 
 **Summary**：fix(codewhale): refreshed the riscv64 Cargo lock — right after the source hash was filled in, the riscv64 build failed at the dependency vendoring step with "cargoHash or cargoSha256 is out of date": the lock pinned in the repo (`codewhale-src-Cargo.lock`) does not match upstream v0.9.12 (549 diff lines, entries such as `ansi-to-tui` missing), so it had been generated from a different revision. It is replaced with the source tree's own `Cargo.lock` — `rquickjs-sys` stays at 0.12.2 (the bindings `postPatch` still applies) and upstream has no git-sourced dependencies to pin. x86_64 and aarch64 use the prebuilt-binary path and are unaffected; CI entered the compile stage for the first time

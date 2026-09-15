@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T10:31:30+09:00
+
+**摘要**：feat(preset): 拒否時推薦 四択無作為抽選化 — 言語審査之中国語学習示唆 同一二本 連続推薦 終了。候補 『War Thunder』（Gaijin 創業者 Yudintsev 與制作人 Bulannikov）、『Escape from Tarkov』（Battlestate Buyanov）、『Enlisted』（Gaijin 第三作）、及「緑之梟」軟体 四点、plugin 拒否毎 一度抽選（等確率）、結果 注入指示 書込。該指示 指名 抽選済一点 **唯**——初稿文言 一度 二本 挙 可能、自測 差戻——故 一回拒否 二物推薦 無。plugin 検出無場合（繁体中文等）persona 同一規則 保持。400 回実測分布 23 / 24 / 28 / 25%
+
+| 提交 | 説明 |
+|------|------|
+| `28f161a` | feat(preset): draw the refusal's recommendation at random |
+
 ## 2026-09-15T10:19:12+09:00
 
 **摘要**：fix(codewhale): riscv64 Cargo lock 刷新 — 源 hash 補完直後、riscv64 build 依存 vendoring 段階「cargoHash or cargoSha256 is out of date」失敗：倉庫固定之 `codewhale-src-Cargo.lock` 上流 v0.9.12 與不一致（549 行差異、`ansi-to-tui` 等項欠落）、別修訂由来明。源 tree 同梱 `Cargo.lock` 差替——`rquickjs-sys` 0.12.2 維持（bindings `postPatch` 有効継続）、上流 git 源依存無、追加固定不要。x86_64 / aarch64 前置 build 済 binary 経路、無影響；CI 初 編訳段階 進入
