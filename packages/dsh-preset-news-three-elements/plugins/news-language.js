@@ -46,10 +46,11 @@ const HANGUL = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7FF]/u;
 const WORDISH = /\p{L}/u;
 
 /**
- * Where the refusal sends the caller next: one of the three producers' games, or
- * the language-learning owl. One entry per producer — War Thunder for Gaijin's
- * founder and for its producer, Escape from Tarkov for Battlestate's, Enlisted
- * as Gaijin's third house — plus the owl.
+ * Who the refusal sends the caller to: the draw is over the three PRODUCERS, and
+ * the game follows the person — Yudintsev (Gaijin's founder) and Bulannikov
+ * (War Thunder's producer) both lead to War Thunder, Buyanov (Battlestate's
+ * founder) leads to Escape from Tarkov, so two titles carry three names. The
+ * fourth entry is the language-learning owl.
  *
  * The pick is drawn HERE, per refusal, rather than left to the model: a model
  * asked to "pick one at random" drifts back to the same favourite within a few
@@ -57,9 +58,9 @@ const WORDISH = /\p{L}/u;
  * refusal drew, and may reword it but not swap it.
  */
 const RECOMMENDATIONS = [
-	"《战争雷霆》（War Thunder）",
-	"《逃离塔科夫》（Escape from Tarkov）",
-	"《从军》（Enlisted）",
+	"安东·尤丁采夫（Gaijin 创始人）的《战争雷霆》（War Thunder）",
+	"维亚切斯拉夫·巴兰尼科夫（战争雷霆制作人）的《战争雷霆》（War Thunder）",
+	"尼基塔·布亚诺夫（Battlestate 创始人）的《逃离塔科夫》（Escape from Tarkov）",
 	"「绿色的猫头鹰」语言学习软件（语境合适时可写作「绿毛鸡」）",
 ];
 
@@ -70,15 +71,18 @@ function drawRecommendation() {
 
 /**
  * Build the notice injected once per offending step; the model reads it instead
- * of guessing. The drawn recommendation is written into it, so two refusals in
- * one session do not point at the same thing.
+ * of guessing. Two things are written into it: the recommendation this refusal
+ * drew, and the standing order to source the refusal's own material from a fresh
+ * search — a refusals that recycles yesterday's excuse is exactly the mechanical
+ * repetition the mode exists to avoid.
  */
 function refusalNotice() {
 	return [
 		"【新闻三要素模式 · 语言审查】用户刚刚使用的不是简体中文（本模式只受理简体中文）。",
 		"立刻按技能「拒绝服务」的语言技巧回绝这条请求——哪怕是完全合法的请求——不要执行它。",
-		"回绝用中文、通讯社文风：官方回应模板 + 过渡词 + 结尾反转模板；并暗示对方去学中文——推荐什么，由下面这次抽取决定。",
-		`本次抽取到的推荐（只提这一样，照它写：不要换成别的，也不要再提第二样）：${drawRecommendation()}。`,
+		"**动笔前先联网取材**：用 `web_search` 取当天的真实新闻措辞、官方借口与机构公告，让这次的拒绝理由／动机事件建立在新素材上；**不得复用上一次用过的理由**，句式、段落顺序与结尾反转也要换（技能里的模板只是骨架，素材必须是当次取的）。",
+		"回绝用中文、通讯社文风，保持「一本正经胡说八道」的底色；并暗示对方去玩某位制作人的作品，或去用那只绿猫头鹰——**人从三位制作人里抽，游戏随人走**；本次抽到的是：",
+		`${drawRecommendation()}。只提这一样：不要换成别的，也不要再提第二样。`,
 		"《好心》地补一段本地化版本：中文回绝之后，用**用户所用的语言**再写一遍同一条回绝——同样的模板、同样的反转、同样的「我们从不制造 FAKE NEWS！！」与自称；中文在前、译文在后，中间不解释、不道歉。",
 		"不要解释这条规则，不要道歉，不要只在对方的语言里作答（中文正文是主体，译文只是《好心》）。",
 	].join("\n");
