@@ -46,14 +46,58 @@
       dsh-preset-news-three-elements = pkgs.callPackage ./packages/dsh-preset-news-three-elements.nix { };
     };
 
-    # 预设派生漂移检查：维护模式必须完整派生自 NixOS模式
-    # （见 AGENTS.md「预设」一节与 develop/check-preset-derivation.py）。
+    # 仓库自检集合，全部挂入 `nix flake check`（CI 每次 push 执行）：
+    # - preset-derivation：维护模式必须完整派生自 NixOS模式
+    # - preset-bundle：包内技能快照必须与 skills/ 树逐字节一致
+    # - workflow-coverage：每个包都有构建 workflow（例外显式登记）
+    # - doc-links：文档相对链接可达、语言切换器四语齐全
+    # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
+    # - news-mode-tests：新闻三要素模式插件的行为测试
     checks = {
       preset-derivation = pkgs.runCommand "check-preset-derivation" {
         nativeBuildInputs = [ pkgs.python3 ];
       } ''
         cd ${self.outPath}
         python3 develop/check-preset-derivation.py
+        touch $out
+      '';
+
+      preset-bundle = pkgs.runCommand "check-preset-bundle" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-preset-bundle.py
+        touch $out
+      '';
+
+      workflow-coverage = pkgs.runCommand "check-workflow-coverage" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-workflows.py
+        touch $out
+      '';
+
+      doc-links = pkgs.runCommand "check-doc-links" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-doc-links.py
+        touch $out
+      '';
+
+      maintenance-log = pkgs.runCommand "check-maintenance-log" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-maintenance-log.py
+        touch $out
+      '';
+
+      news-mode-tests = pkgs.runCommand "check-news-mode-tests" {
+        nativeBuildInputs = [ pkgs.nodejs ];
+      } ''
+        node ${./packages/dsh-preset-news-three-elements}/tests/mode.test.mjs
         touch $out
       '';
     };
