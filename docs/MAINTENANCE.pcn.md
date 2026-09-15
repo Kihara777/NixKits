@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-16T01:45:07+09:00
+
+**摘要**：docs: 預設包更新 要 `daemon-reload` 後 `restart dsh` — 本次配備実測 落穴：`nixos apply` 設計上 dsh 不再起（安定掛載点）。一方 `systemctl restart dsh` 単独 時 **前世代** pre-start 脚本 実行 有、其 工程 正 `cordis.patch.yml` `$DSH_HOME` 複製 段（預設根 該文件 記載）。症状「服務確 再起（ActiveEnterTimestamp 更新）、session 仍 旧預設 読」：世代 570 配備後、最初 restart `$DSH_HOME/profiles/web/cordis.patch.yml` 旧 store 路 残、`systemctl daemon-reload` 後 再起 初 新路 翻（新副本 `news-material.js` 含、倉庫 逐 byte 一致）。AGENTS.md「本機配備」操作順序 與 確認方法（再起後 patch 文件 store 路 見）追記、`docs/{zh,en,ja,pcn}/dsh.md`「代価與配套」一段 同様 書換
+
+| 提交 | 説明 |
+|------|------|
+| `a167aae` | docs: 预设包更新要 daemon-reload 再 restart dsh |
+
 ## 2026-09-15T23:47:01+09:00
 
 **摘要**：feat(preset+skill): 取材門 `news-material` — 実際 session 共創時「生搬硬套」露見：利用者素材 形式 唯変 其儘出稿、検索工程 飛。prompt 記載 唯 規則 劣化、故「先 検索、次 書直」実行時検証可能 形 化。新 plugin `plugins/news-material.js` 二箇所 掛：`agent/pre-step` 人 message 受理 step「取材鉄律」同送（message id 冪等、再試 重 無）、`agent/turn-stopping`（loop 回合閉前 読直 停止境界）其回合自身 log 読——**`web_search` / `web_fetch` 呼出 一度 無 回合、或 本文 利用者原文 写 回合** `agent.steer()` 「編輯部退稿」返、`dsh-agent-loop` 同回合 別 step 走。**退稿 回合毎 一度**（agent 単位 WeakMap + 回合番号）、故 無視 model 無限 loop 無。写 判定 利用者 message 與 其 model 指示 文件（其回合 `read` 結果）一字毎照合、漢字 唯 数 **連続 8 字**命中：拉丁文字 作品名 誤爆無、三人主人公 名前（最大 5 字）閾値下、検索結果 素材 含 無（通信社 言回 再利用 本模式 目的）、共創稿末尾「本稿取材」設計上 素材引用、故 照合前 剥離。技能側 同 三検証可能規則 備：第 2 步「抽出 → 投射 → 張替」表 與 8 字紅線・受領書一行 追加、検索記録 必須化（捏造 拒否 同様）、`checklist.md` 素材共創自己点検 3 → 7 項。persona 素材共創節 書換、退稿 編輯部内部事項——其儘再送、利用者 説明無——明記。assertion 31 件追加（検索無 退稿、何 一方 検索 通過、前回合 検索 無効、退稿 回合毎 一度、session 単位分離、8 字命中・7 字非命中、`read` 文件 亦対象、拉丁文字 題名 非命中、受領書 素材引用 可、reminder 一度 唯 同送）。**記録 値 落穴**：`nix flake check` 最初 `news-mode-tests` `ERR_MODULE_NOT_FOUND` 出——flake 源 git 追跡 文件集合、新 plugin `git add` 前 store 入 無（同一 script 局所直走 全通過）。此教訓 AGENTS.md flake 規則 記入。`nix flake check` 6 項 全通過、四言語文書（技能 / 模式 / README / `dsh.md`）同期

@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T01:45:07+09:00
+
+**摘要**：docs: 预设包更新要 `daemon-reload` 再 `restart dsh` — 本次部署实测到的坑：`nixos apply` 按设计不重启 dsh（稳定挂载点），而单跑 `systemctl restart dsh` 时系统仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里。症状是「服务确实重启了（ActiveEnterTimestamp 已更新）、会话里还是旧预设」：gen 570 部署后第一次 restart，`$DSH_HOME/profiles/web/cordis.patch.yml` 仍指向旧 store 路径，加 `systemctl daemon-reload` 再 restart 才翻到新路径（新副本含 `news-material.js`，与仓库逐字节一致）。AGENTS.md「本机部署」补上操作次序与核对方法（重启后查 patch 文件里的 store 路径），`docs/{zh,en,ja,pcn}/dsh.md` 的「代价与配套」一段同步改写
+
+| 提交 | 说明 |
+|------|------|
+| `a167aae` | docs: 预设包更新要 daemon-reload 再 restart dsh |
+
 ## 2026-09-15T23:47:01+09:00
 
 **摘要**：feat(preset+skill): 取材门 `news-material` — 实际会话里暴露出「共创时生搬硬套」：用户给的素材被换个格式直接发出去，检索那一步常被跳过。提示词里写死的规则会漂，于是把「先检索再改写」做成运行时能核对的门。新插件 `plugins/news-material.js` 挂两个钩子：`agent/pre-step` 在受理人力消息的那一步随行注入一条「取材铁律」（按消息 id 幂等，重试不叠加）；`agent/turn-stopping`（回合封锁前、可被驳回的那一刻）读本回合自己的日志——**整个回合没有一次 `web_search` / `web_fetch` 调用，或正文照抄了用户原文**，就 `agent.steer()` 一纸「编辑部退稿」，`dsh-agent-loop` 据此在同一回合再走一步重写。**每回合只退一次**（agent 级 WeakMap + 回合号），不听话的模型也不会死循环。照抄判定＝与用户消息及它指给模型的文件（本回合 `read` 的结果）逐字比对，只数汉字、**连续 8 字**以上命中：拉丁文作品名不误伤、三位主角的名字（至多 5 字）在阈下、搜索结果不算素材（复用通讯社原句正是本模式的目的）、共创稿末尾的「本稿取材」收据按设计引用素材故先剥离。技能侧同步三条可核对规则：第 2 步新增「提炼 → 投射 → 换皮」三步改造表与 8 字红线 + 收据行，检索记录升为硬性要求（编造与拒绝一视同仁），`checklist.md` 的素材共创自查 3 → 7 项；persona 改写素材共创一节，并写明收到退稿时直接重发、不向用户解释。新增 31 条断言（无检索退稿、单次检索放行、上一回合的检索不算数、每回合只退一次、按 session 隔离、8 字命中／7 字不命中、`read` 文件同样受检、拉丁标题不误伤、收据可引用素材、提醒随人力消息注入且不重复）。**踩坑记录**：`nix flake check` 首次在 `news-mode-tests` 报 `ERR_MODULE_NOT_FOUND`——flake 源是 git 跟踪的文件集合，新增的插件文件未 `git add` 就没进 store（本地直跑同一脚本却全过），已把这条写进 AGENTS.md 的 flake 规则。`nix flake check` 6 项全过，四语文档（技能 / 模式 / README / `dsh.md`）同步
