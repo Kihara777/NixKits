@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T09:03:39+09:00
+
+**Summary**：Correcting some reporting deviations that will have to be accounted for later. — The 新闻三要素模式 section in all four languages now introduces itself as a wire dispatch: a dateline, an anonymous source, one mechanic projection (a write call is "on leave"; the guard covers the repair bill) and an O'Henry close (the module had "no comment", yet the option already appears in the configuration example). The row table and the three design constraints stay the factual record, untouched
+
+| Commit | Description |
+|--------|-------------|
+| `b18d229` | docs(preset): write the preset section as a wire dispatch |
+
 ## 2026-09-15T08:54:15+09:00
 
 **Summary**：feat(preset): `news-skill` retries a failed fetch and re-checks every six hours — a failed fetch no longer gives up for good: the first attempt is immediate, then retries land after 0/30/120 s on timers owned by the session's fiber; a long-lived session re-checks the repository every six hours, an in-flight flag keeps a slow attempt from overlapping the periodic one, and three failed attempts keep the local copy registered with a log line. fix(dsh): seeded preset copies are now writable — directories and files copied from the store arrive read-only, contradicting the `presets.*` options' promise to respect later user edits (the pre-existing `nixos` seed was affected too), so all three seed blocks `chmod -R u+w` after copying
