@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:38:02+09:00
+
+**Summary**：fix(preset): the ritual line now says 催逝快讯 — the sentence that closes every refusal read "只编造带齐新闻三要素（新、事实、报道）的俄式快讯", whose parenthetical is the journalism-textbook meaning: spoken aloud it sounded like a citation and flattened the joke. It becomes 「只编造带齐新闻三要素的**催逝快讯**」, matching the 催逝 vocabulary the opening picker already uses. Two occurrences, both fixed prompts (the persona and the `readonly-gate` refusal text); the definitional "product" lines in the skill and the docs are untouched. Four assertions pin it: both places carry the new wording, and the old gloss may not come back
+
+| Commit | Description |
+|--------|-------------|
+| `bfb0ed4` | fix(preset): say 催逝快讯 in the ritual line, not the academic gloss |
+
 ## 2026-09-15T11:24:49+09:00
 
 **Summary**：fix(preset): the language gate now judges only the human's messages — in a fresh session the user saw a legitimate Simplified-Chinese request refused with an English translation attached. The session transcript (`session-efc87486`) showed why: besides the user's Chinese message the step carried a harness-injected **English system message** (`source.kind = plugin`: 'The approval policy changed from "never" to "ask"…') and a `skill-catalog` entry; the guard scanned **every** message admitted to the step, read the English notice as "the user is not writing Simplified Chinese", injected the language review, and the model — following the rule that the localized copy matches the caller's language — produced an English version. `withNotice` now takes only messages with `source.kind === "user"` (approval notices, skill catalogs and tool results never count), with two regression tests (the English-notice-plus-Chinese-request combination no longer fires; a step without a human message is left alone) and the four language docs note the boundary

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T11:38:02+09:00
+
+**摘要**：fix(preset): 儀式文「催逝快訊」化 — 拒否締 一文 原「只编造带齐新闻三要素（新、事实、报道）的俄式快讯」、括弧内 報道学教科書 原義、読上 定義引用 如 響、落 潰。改「只编造带齐新闻三要素 **催逝快訊**」、開始三択 既存「催逝員」語彙 整合。修正 二箇所（persona 與 `readonly-gate` 拒否文本）、共 固定 prompt；技能 與 文書 「成果物」定義行 未変更。assertion 四件 固定（両箇所 新文言 有・旧原義括注 復帰無）
+
+| 提交 | 説明 |
+|------|------|
+| `bfb0ed4` | fix(preset): say 催逝快讯 in the ritual line, not the academic gloss |
+
 ## 2026-09-15T11:24:49+09:00
 
 **摘要**：fix(preset): 言語審査 人 発言 唯 判定化 — 新 session 以利用者「簡体中文 正当請求 拒否、且 英文訳文 添付」観測。session 記録（`session-efc87486`）以原因特定：当該 step 利用者 中文 message 之外、harness 注入 **英文系統 message**（`source.kind = plugin`：The approval policy changed…）與 `skill-catalog` 同居。guard **該 step 全 message** 審査 故、英文通知「利用者 簡体中文 使用 無」読、言語審査 注入——model「訳文 相手言語 一致」規則 従、英文版 添付。`withNotice` `source.kind === "user"` message 唯 対象化（承認通知・技能目録・工具結果 不算）、回帰 test 二件 追加（英文通知 + 中文依頼 組合 発火無／人 発言 無 step 不変）。四言語文書 該境界 明記
