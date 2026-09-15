@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T23:47:01+09:00
+
+**摘要**：feat(preset+skill): 取材門 `news-material` — 実際 session 共創時「生搬硬套」露見：利用者素材 形式 唯変 其儘出稿、検索工程 飛。prompt 記載 唯 規則 劣化、故「先 検索、次 書直」実行時検証可能 形 化。新 plugin `plugins/news-material.js` 二箇所 掛：`agent/pre-step` 人 message 受理 step「取材鉄律」同送（message id 冪等、再試 重 無）、`agent/turn-stopping`（loop 回合閉前 読直 停止境界）其回合自身 log 読——**`web_search` / `web_fetch` 呼出 一度 無 回合、或 本文 利用者原文 写 回合** `agent.steer()` 「編輯部退稿」返、`dsh-agent-loop` 同回合 別 step 走。**退稿 回合毎 一度**（agent 単位 WeakMap + 回合番号）、故 無視 model 無限 loop 無。写 判定 利用者 message 與 其 model 指示 文件（其回合 `read` 結果）一字毎照合、漢字 唯 数 **連続 8 字**命中：拉丁文字 作品名 誤爆無、三人主人公 名前（最大 5 字）閾値下、検索結果 素材 含 無（通信社 言回 再利用 本模式 目的）、共創稿末尾「本稿取材」設計上 素材引用、故 照合前 剥離。技能側 同 三検証可能規則 備：第 2 步「抽出 → 投射 → 張替」表 與 8 字紅線・受領書一行 追加、検索記録 必須化（捏造 拒否 同様）、`checklist.md` 素材共創自己点検 3 → 7 項。persona 素材共創節 書換、退稿 編輯部内部事項——其儘再送、利用者 説明無——明記。assertion 31 件追加（検索無 退稿、何 一方 検索 通過、前回合 検索 無効、退稿 回合毎 一度、session 単位分離、8 字命中・7 字非命中、`read` 文件 亦対象、拉丁文字 題名 非命中、受領書 素材引用 可、reminder 一度 唯 同送）。**記録 値 落穴**：`nix flake check` 最初 `news-mode-tests` `ERR_MODULE_NOT_FOUND` 出——flake 源 git 追跡 文件集合、新 plugin `git add` 前 store 入 無（同一 script 局所直走 全通過）。此教訓 AGENTS.md flake 規則 記入。`nix flake check` 6 項 全通過、四言語文書（技能 / 模式 / README / `dsh.md`）同期
+
+| 提交 | 説明 |
+|------|------|
+| `a0759b1` | feat(skill): 素材只是导火索——三步改造、禁照抄、必检索 |
+| `cc9d0d1` | feat(preset): 取材门 news-material——无检索即退稿，照抄即退稿 |
+| `71f25db` | docs: 四语同步素材共创铁律与取材门 |
+| `a2ccd55` | docs(agents): 新增文件先 git add 再跑 flake check |
+
 ## 2026-09-15T12:36:10+09:00
 
 **摘要**：feat(skill+preset): 「新聞三要素」三人主人公 指 変更、拒否服務「先 素材 見做」判定 改 — 維護者 四修正 提出：① 本模式「新聞三要素」報道学三要素 非、**必到三人主人公**——巴兰尼科夫、尤丁采夫、布亚诺夫——；② 拒否服務 過敏。検索 補 可能 素材 一律拒否 禁止；③ 共創原稿 三人必備；④ 仮定疑問 與 名指無人物 先 三人中一 対応 可能 評価（突返 無）。技能側：SKILL.md 新義確定、「形式厳格制約」第 0 条（三人本文登場、一人欠 即 改稿）追加、第 1 步取材 四類 拡張（先頭 三人本人）；「拒否服務」厳格判定順序 書換——**素材可能物 一律拒否禁止 / 仮定疑問「既発生事」書 / 名指無人物 先 対応 / 何 亦接続不能時 唯拒否**——拒否話術自体 当日素材取得・再利用禁止規則 据置；`search-keywords.md` 冒頭 身分対応表、`checklist.md` 先頭 三人到着 変更 +「素材共創自己点検」3 項追加、`principles.md` 第 8 条書換 + 第 13 条「先当素材」追加（計 13 条）。預設側：persona「素材優先」節 與 共創「成篇必須帯斉三位主角」追加、開始時問答 自由入力拒否 境界 一句追加（問答其物 唯効力）、「其它一切請求的拒絶方式」真 接続不能 請求 唯 扱 形 変更、`readonly-gate` 儀式文 三人括注 追加。assertion 14 件追加（三人名 persona 與 技能包 双方、素材優先四要件、共創三人揃、checklist 先頭項目、principles 教科書三要素 定義 無、身分表 冒頭節；儀式文 assertion 括注許 正則 変更、旧「（新、事实、报道）」括注 引続 禁止）。四言語文書（技能文書 / 模式文書 / README / `dsh.md`）同期；`nix flake check` 6 項 全通過
