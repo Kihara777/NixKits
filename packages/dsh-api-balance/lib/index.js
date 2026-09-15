@@ -1595,10 +1595,23 @@ export function apply(ctx, config = {}) {
     // fetch route（fetchRoutes 优先于 interceptor 命中），自行实现 dsh 的
     // RPC envelope 约定：{ rpcId, method, payload } →
     // { type: "server-response", rpcId, result }。
+    const rateLimitHits = new Map();
+    const RATE_LIMIT_WINDOW_MS = 60_000;
+    const RATE_LIMIT_MAX = 30;
     const dispose = ctx.connection.fetch.register({
       path: "/api/api-balance/query",
       methods: ["POST"],
       fetch: async (request) => {
+        const clientKey = request.headers.get("x-forwarded-for") ?? "unknown";
+        const now = Date.now();
+        const recentHits = (rateLimitHits.get(clientKey) ?? []).filter(
+          (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
+        );
+        if (recentHits.length >= RATE_LIMIT_MAX) {
+          return new Response("Too Many Requests", { status: 429 });
+        }
+        recentHits.push(now);
+        rateLimitHits.set(clientKey, recentHits);
         let body;
         try {
           body = await request.json();
