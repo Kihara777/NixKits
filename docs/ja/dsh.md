@@ -145,7 +145,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 プラグインパッケージは**安定マウントポイント**経由で読み込む：activation script が毎回の switch/boot で `/run/dsh/current`（dsh 本体とプラグイン木）と `/run/dsh/nixos-shell`（sudo 実行スクリプト）のシンボリックリンクを現在世代の store パスへ張り替える（GC 安全：リンク先は常に現在の toplevel 閉包内にあり、ロールバック時は旧世代のパスへ自動で戻る）。`dsh.service` と `nixkits-sudo@.service` のユニット定義はこれら安定パスのみを参照するため、**プラグインパッケージの更新でユニット内容は変わらない**——switch-to-configuration は dsh を再起動せず、sudo socket も stop/start しない。活性化は実行中のツール呼び出しを一切中断しない。
 
-トレードオフ：dsh は長寿命プロセスのため、プラグイン更新の反映には明示的な `systemctl restart dsh` が必要（`nixos_shell` はこのコマンドを一時ユニットへ自動分離し、再起動前に呼び出しが返る）。sudo 実行器は接続ごとに生成されるため、新規接続は自動的に新スクリプトを使用し、再起動は一切不要。
+トレードオフ：dsh は長寿命プロセスのため、プラグイン／プリセットパッケージの更新反映には明示的な再起動が必要——**まず `systemctl daemon-reload`、次に `systemctl restart dsh`**（`nixos_shell` は後者を一時ユニットへ自動分離し、再起動前に呼び出しが返る）。restart だけでは前世代の pre-start スクリプトが実行されることがあり、それこそが `cordis.patch.yml` を `$DSH_HOME` へコピーする工程（プリセットルートはそのファイルに書かれている）なので、「サービスは再起動したのにプリセットが古いまま」という症状になる。再起動後は `$DSH_HOME/profiles/<profile>/cordis.patch.yml` の store パスが実際に切り替わったか確認する。sudo 実行器は接続ごとに生成されるため、新規接続は自動的に新スクリプトを使用し、再起動は一切不要。
 
 ## NixKits プラグイン
 

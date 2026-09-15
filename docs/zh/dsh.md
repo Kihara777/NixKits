@@ -145,7 +145,7 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 插件包通过**稳定挂载点**加载：activation script 在每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell`（sudo 守护脚本）符号链接翻到当前代的 store 路径（GC 安全：目标始终处于当前 toplevel 闭包内，回滚自动翻回旧代路径）。`dsh.service` 与 `nixkits-sudo@.service` 的单元定义只引用这些稳定路径，因此**插件包更新不再改变 unit 内容**——switch-to-configuration 既不重启 dsh、也不 stop/start sudo socket，激活阶段对在途工具调用零中断。
 
-代价与配套：dsh 是长驻进程，插件更新后需显式 `systemctl restart dsh` 才生效（`nixos_shell` 会把该命令自动分离到瞬态单元，调用先于重启返回）；sudo 守护按连接生成，新连接自动使用新脚本，无需任何重启。
+代价与配套：dsh 是长驻进程，插件／预设包更新后需显式重启才生效——**先 `systemctl daemon-reload`，再 `systemctl restart dsh`**（`nixos_shell` 会把后者自动分离到瞬态单元，调用先于重启返回）。只 restart 有时仍执行上一代的 pre-start 脚本，而它正是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步（预设根写在那份文件里），症状是「服务确实重启了、预设还是旧的」；重启后核对 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 里的 store 路径已翻新。sudo 守护按连接生成，新连接自动使用新脚本，无需任何重启。
 
 ## NixKits 插件
 

@@ -112,6 +112,7 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 - **仓库变更后必须重锁**：`nix flake lock /etc/nixos --update-input nixkits` 并清 eval 缓存，否则 `nixos apply` 静默 no-op（path-input 锁定后不自动拾取仓库新状态）。
 - **部署命令**：`nixos apply -y /etc/nixos`（nixos 0.16.1 无 `rebuild` 子命令）。
+- **预设／插件包更新后：先 `systemctl daemon-reload`，再 `systemctl restart dsh`**。`nixos apply` 不重启 dsh（稳定挂载点），而单跑 restart 有时仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里，症状为「服务确实重启了、预设还是旧的」。重启后必须核对 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 里的 store 路径已翻新（本次实测：gen 570 部署后第一次 restart 后仍指向旧路径，daemon-reload 后再 restart 才翻）。
 - **`nix build --no-link` 产物可能被 GC 立即回收**：需要产物时同调用内复制出 store，或改用带链接的构建。
 
 ## 工作流

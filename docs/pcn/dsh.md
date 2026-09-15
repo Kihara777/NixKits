@@ -145,7 +145,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体與插件樹）與 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 與 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
 
-代価與配套：dsh 長駐進程、插件更新反映需明示 `systemctl restart dsh`（`nixos_shell` 該命令自動分離瞬時単元、呼出先於再起返）。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
+代価與配套：dsh 長駐進程、插件／預設包更新反映需明示再起——**先 `systemctl daemon-reload`、次 `systemctl restart dsh`**（`nixos_shell` 後者自動分離瞬時単元、呼出先於再起返）。restart 単独 時 前世代 pre-start 脚本 実行 有、其 工程 正 `cordis.patch.yml` `$DSH_HOME` 複製 段（預設根 該文件 記載）、症状「服務確 再起、預設 仍旧」。再起後 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` store 路 翻新 確認。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
 
 ## NixKits 插件
 
