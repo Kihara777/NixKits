@@ -41,6 +41,9 @@
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
       dsh-api-balance      = pkgs.callPackage ./packages/dsh-api-balance.nix { };
+      # 独立分发的 Agent 预设包（新闻三要素模式）：只装预设数据，模块把它
+      # 注册为 agent-presets roster 的额外 root。
+      dsh-preset-news-three-elements = pkgs.callPackage ./packages/dsh-preset-news-three-elements.nix { };
     };
 
     # 预设派生漂移检查：维护模式必须完整派生自 NixOS模式

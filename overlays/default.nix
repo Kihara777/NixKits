@@ -20,5 +20,7 @@ final: prev: {
   dsh-nixos-shell      = final.callPackage ../packages/dsh-nixos-shell.nix { };
   # API 用量余额插件: webui 用量显示旁添加「用量 / 开销」标签切换。
   dsh-api-balance      = final.callPackage ../packages/dsh-api-balance.nix { };
+  # 独立分发的 Agent 预设包（新闻三要素模式）。
+  dsh-preset-news-three-elements = final.callPackage ../packages/dsh-preset-news-three-elements.nix { };
   # NixKits skills as native dsh skill plugins (one plugin entry per skill).
 }

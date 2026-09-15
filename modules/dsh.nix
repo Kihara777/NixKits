@@ -65,6 +65,26 @@ let
           name: ${builtins.toJSON p.name}
         ${lib.optionalString (p.config != { }) "config: ${builtins.toJSON p.config}\n"}
     '') cfg.plugins.packages}
+    ${lib.optionalString cfg.presets.newsThreeElements ''
+      # 新闻三要素模式：独立包（dsh-preset-news-three-elements）只把预设
+      # 安装到 store，这里把它注册为 agent-presets roster 的额外 root——
+      # roster 每次调用都重扫 root，故预设直接取 store 内容，无需复制，也不
+      # 会与 $DSH_HOME 里的旧副本漂移。配置根先于用户根被扫描，同名 id 由
+      # 本 root 胜出（用户要改动请用 roster 的 copy() 另存为新 id）。
+      # config 用 JSON 发出（JSON 是 YAML 子集，同 plugins.settings 的做法），
+      # 免去手写嵌套 YAML 的缩进风险。注意 `- id:` 行替换**整份** config 而非
+      # 合并：schema 里 `default` 必填，故必须一并带上（值取本模块 settings 里
+      # 的 agent-presets.default，缺省沿用上游的 "standard"；settings.yaml 存在
+      # 时仍以它为准）。
+      - id: agent-presets
+        config: ${builtins.toJSON {
+          default = cfg.settings."agent-presets".default or "standard";
+          roots = [{
+            path = "${cfg.presets.newsThreeElementsPackage}/share/dsh-agent-presets";
+            trust = "system";
+          }];
+        }}
+    ''}
   '';
 
   # Generated settings.yaml: declarative per-namespace dsh settings, JSON
@@ -381,7 +401,19 @@ in
     presets = {
       nixosMode = lib.mkEnableOption "seed the NixOS模式 agent preset (id `nixos`) into \$DSH_HOME/.agent-presets/nixos at service start";
       maintenanceMode = lib.mkEnableOption "seed the 维护模式 agent preset (id `maintenance`) into \$DSH_HOME/.agent-presets/maintenance at service start";
-      newsThreeElements = lib.mkEnableOption "seed the 新闻三要素模式 agent preset (id `news-three-elements`) into \$DSH_HOME/.agent-presets/news-three-elements at service start";
+      newsThreeElements = lib.mkEnableOption "register the 新闻三要素模式 agent preset (id `news-three-elements`) as an extra agent-presets roster root from its own package (no copy into \$DSH_HOME)";
+      newsThreeElementsPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.dsh-preset-news-three-elements;
+        defaultText = lib.literalExpression "pkgs.dsh-preset-news-three-elements";
+        description = ''
+          Package shipping the 新闻三要素模式 preset tree.  The directory it
+          installs (`share/dsh-agent-presets`) is registered as an extra
+          `agent-presets` roster root, so the preset is read straight out of the
+          store on every roster call and is never copied into
+          `$DSH_HOME/.agent-presets` — a rebuild is what updates it.
+        '';
+      };
     };
   };
 
@@ -475,17 +507,6 @@ in
             cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
             chmod -R u+w ${cfg.dshHome}/.agent-presets/maintenance
             chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
-          fi
-        ''}
-        # 新闻三要素模式（id `news-three-elements`）：派生自极简模式的只读
-        # 创作预设。预设自带插件（在线抓取技能包 / 开场问答 / 只读守卫 /
-        # 语言审查），故整目录复制即可用；技能包内置副本作为断网兜底。
-        ${lib.optionalString cfg.presets.newsThreeElements ''
-          if [ ! -e ${cfg.dshHome}/.agent-presets/news-three-elements ]; then
-            mkdir -p ${cfg.dshHome}/.agent-presets
-            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/news-three-elements ${cfg.dshHome}/.agent-presets/news-three-elements
-            chmod -R u+w ${cfg.dshHome}/.agent-presets/news-three-elements
-            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/news-three-elements
           fi
         ''}
         ${lib.optionalString (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) ''
