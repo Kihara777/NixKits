@@ -351,6 +351,14 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 	check("persona: cites the skill's refusal section", persona.includes("「拒绝服务」一节"));
 	check("persona: no half-width ritual bangs", !/FAKE NEWS!!/.test(persona));
 	check("plugin: no half-width ritual bangs", !/FAKE NEWS!!/.test(plugin));
+	// The ritual line says what this desk actually produces (催逝快讯) rather than
+	// restating the academic gloss of 新闻三要素, which read as a definition and
+	// flattened the joke.
+	const gateSource = readFileSync(join(ROOT, "plugins/readonly-gate.js"), "utf8");
+	check("persona: the ritual line names 催逝快讯", persona.includes("带齐新闻三要素的催逝快讯"));
+	check("gate: the ritual line names 催逝快讯", gateSource.includes("带齐新闻三要素的催逝快讯"));
+	check("persona: the ritual line drops the academic gloss", !/带齐新闻三要素（新、事实、报道）/.test(persona));
+	check("gate: the ritual line drops the academic gloss", !/带齐新闻三要素（新、事实、报道）/.test(gateSource));
 }
 
 console.log(failures === 0 ? "\nALL CHECKS PASSED" : `\n${failures} CHECK(S) FAILED`);
