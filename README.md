@@ -45,13 +45,17 @@ DeepSeek Harness（DSH）组件与软件独立展示（挂载方式见 [docs/zh/
 | dsh-nixos-shell | NixOS 场景能力整合（shell 执行、工具引导、sudo 守护路由、NixOS 诊断） | [docs/zh/dsh-nixos-shell.md](docs/zh/dsh-nixos-shell.md) |
 | dsh-api-balance | API 用量余额——webui 用量圆圈（发送按钮左侧）添加「用量 / 余额」标签切换，展示账户余额、当日 / 当月 / 30 日消耗与图表；平台令牌默认从本机浏览器登录态自动扫描获取（手动连接回退） | [docs/zh/dsh-api-balance.md](docs/zh/dsh-api-balance.md) |
 
-**Agent 预设**（随 dsh-nixos-shell 分发，经 `nixkits.dsh.presets` seed-once 写入 DSH）：
+## 模式
 
-| 预设 | 说明 |
-|------|------|
-| NixOS模式（id `nixos`） | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 |
-| 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与仓库维护工作流提示词 |
-| 新闻三要素模式（id `news-three-elements`） | 派生自极简模式；**只读**创作（写入调用由守卫当场拒绝），会话启动在线抓取 `news-three-elements` 技能包，开场问答三选一，非简体中文一律拒绝 |
+Agent 预设（会话形态）与插件同级，各自独立文档：
+
+| 模式 | id | 说明 | 分发方式 | 文档 |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/nixos.md](docs/zh/modes/nixos.md) |
+| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
+| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的**只读**创作模式：在线抓取技能包、开场问答三选一、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements` | [docs/zh/modes/news-three-elements.md](docs/zh/modes/news-three-elements.md) |
+
+> 前两者随 dsh-nixos-shell 包经 `nixkits.dsh.presets.nixosMode` / `.maintenanceMode` seed-once 写入 `$DSH_HOME/.agent-presets`；新闻三要素模式由独立包 `dsh-preset-news-three-elements` 分发，`nixkits.dsh.presets.newsThreeElements` 把它的 `share/dsh-agent-presets` 注册为预设根（不复制）。详见 [docs/zh/dsh.md](docs/zh/dsh.md) 的「模式」章节。
 
 ## 开发
 

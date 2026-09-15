@@ -29,7 +29,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/ja/ruyi.md](docs/ja/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
 
 ## プラグイン
@@ -41,13 +41,17 @@ DeepSeek Harness（DSH）コンポーネントはソフトウェアと分けて�
 | dsh-nixos-shell | NixOS 操作統合（シェル実行、ツールブートストラップ、sudo デーモンルーティング、NixOS 診断） | [docs/ja/dsh-nixos-shell.md](ja/dsh-nixos-shell.md) |
 | dsh-api-balance | API 使用量残高——webui の使用量リング（送信ボタン左）に「用量 / 残高」タブ切替を追加。残高・当日 / 当月 / 30 日消費とチャートを表示。プラットフォームトークンはデフォルトで本機ブラウザのログイン状態から自動スキャン取得（手動接続はフォールバック） | [docs/ja/dsh-api-balance.md](ja/dsh-api-balance.md) |
 
-**Agent プリセット**（dsh-nixos-shell に同梱、`nixkits.dsh.presets` で DSH へ一度だけシード）：
+## モード
 
-| プリセット | 説明 |
-|------------|------|
-| NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は全拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発ガイドをロード |
-| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフローを注入 |
-| 新聞三要素模式（id `news-three-elements`） | 極簡模式から派生；**読取専用**の創作（書込み呼出は守衛が拒否）、セッション起動時に `news-three-elements` 技能パッケージをオンライン取得、開始時に三択を提示、簡体中文以外は一律拒否 |
+Agent プリセット（セッション形態）はプラグインと同級で、それぞれ独立したドキュメントを持つ：
+
+| モード | id | 説明 | 配布方式 | ドキュメント |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | 初期化時に NixOS ホストを検証（非 NixOS は全リクエスト拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発プロンプトを読み込む | dsh-nixos-shell パッケージ内、seed-once | [docs/ja/modes/nixos.md](ja/modes/nixos.md) |
+| 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフロープロンプトを注入 | dsh-nixos-shell パッケージ内、seed-once | [docs/ja/modes/maintenance.md](ja/modes/maintenance.md) |
+| 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した**読取専用**の創作モード：技能パッケージをオンライン取得、開始時問答は三択、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements` | [docs/ja/modes/news-three-elements.md](ja/modes/news-three-elements.md) |
+
+> 前二者は dsh-nixos-shell パッケージに同梱され、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` により seed-once で `$DSH_HOME/.agent-presets` へ書き込まれる；新聞三要素模式は独立パッケージ `dsh-preset-news-three-elements` が配布し、`nixkits.dsh.presets.newsThreeElements` がその `share/dsh-agent-presets` をプリセットルートとして登録する（コピーなし）。詳細は [docs/ja/dsh.md](ja/dsh.md) の「モード」節を参照。
 
 ## 開発
 

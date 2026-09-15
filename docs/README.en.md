@@ -29,7 +29,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/en/ruyi.md](docs/en/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/en/ruyi.md](en/ruyi.md) |
 
 
 ## Plugins
@@ -41,13 +41,17 @@ DeepSeek Harness (DSH) components are listed separately from software (mounting 
 | dsh-nixos-shell | Consolidated NixOS operations (shell execution, tool bootstrap, sudo daemon routing, NixOS diagnostics) | [docs/en/dsh-nixos-shell.md](en/dsh-nixos-shell.md) |
 | dsh-api-balance | API usage balance — adds a 「Usage / Balance」 tab switch to the webui usage ring (left of the send button): account balance, today / this-month / 30-day consumption with charts; the platform token is auto-scanned from local browser sessions by default (manual connect as fallback) | [docs/en/dsh-api-balance.md](en/dsh-api-balance.md) |
 
-**Agent presets** (shipped with dsh-nixos-shell, seeded once into DSH via `nixkits.dsh.presets`):
+## Modes
 
-| Preset | Description |
-|--------|-------------|
-| NixOS模式 (id `nixos`) | Verifies a NixOS host at init (refuses everything otherwise); loads `nixos_shell`/`nixos_cli` plus the NixOS development guidance |
-| 维护模式 (id `maintenance`) | Based on NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` skills plus the repo-maintenance workflow |
-| 新闻三要素模式 (id `news-three-elements`) | Derived from minimal mode; **read-only** creation (mutations denied by a guard), fetches the `news-three-elements` skill package online at session start, opens with a three-way picker, refuses anything not written in Simplified Chinese |
+Agent presets (session shapes) sit at the same level as plugins, each with its own dedicated doc:
+
+| Mode | id | Description | Distribution | Doc |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | Verifies a NixOS host at init (refuses everything otherwise); loads `nixos_shell`/`nixos_cli` plus the NixOS development guidance | inside the dsh-nixos-shell package, seed-once | [docs/en/modes/nixos.md](en/modes/nixos.md) |
+| 维护模式 | `maintenance` | Derived from NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` skills plus the repo-maintenance workflow prompts | inside the dsh-nixos-shell package, seed-once | [docs/en/modes/maintenance.md](en/modes/maintenance.md) |
+| 新闻三要素模式 | `news-three-elements` | **read-only** creation mode derived from minimal mode: fetches the skill package online, opens with a three-way picker, refuses anything not written in Simplified Chinese | **standalone package** `dsh-preset-news-three-elements` | [docs/en/modes/news-three-elements.md](en/modes/news-three-elements.md) |
+
+> The first two ship inside the dsh-nixos-shell package and are seeded once into `$DSH_HOME/.agent-presets` via `nixkits.dsh.presets.nixosMode` / `.maintenanceMode`; 新闻三要素模式 comes from the standalone package `dsh-preset-news-three-elements`, and `nixkits.dsh.presets.newsThreeElements` registers its `share/dsh-agent-presets` as a preset root (no copy). See the "Modes" section of [docs/en/dsh.md](en/dsh.md).
 
 ## Development
 

@@ -153,30 +153,30 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
 
 | Plugin | Description | Doc |
 |------|------|------|
-| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode / 新闻三要素模式 Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | 「Usage / Balance」 tab switch in the webui usage panel: account balance, daily / monthly / 30-day consumption charts and voice broadcast (incl. the voice-pack format guide) | [dsh-api-balance.md](dsh-api-balance.md) |
 
-## Agent presets
+## Modes
 
-`nixkits.dsh.presets` writes the Agent presets shipped with dsh-nixos-shell into `$DSH_HOME/.agent-presets/<id>` **seed-once** (copied only when the target does not exist, respecting later user edits):
+A "mode" is a dsh **Agent preset**: each mode is one session shape with its own identity prompt, tool surface, and prompt sections. They sit at the same level as plugins, each with its own dedicated doc, and do not affect one another:
+
+| Mode | id | Description | Distribution | Doc |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | validates the NixOS host at initialization (non-NixOS denies all execution); loads `nixos_shell` / `nixos_cli` and the development prompts | inside the dsh-nixos-shell package, seed-once | [modes/nixos.md](modes/nixos.md) |
+| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, seed-once | [modes/maintenance.md](modes/maintenance.md) |
+| 新闻三要素模式 | `news-three-elements` | a read-only creation mode derived from minimal mode: online skill package, opening picker, anything not in Simplified Chinese refused | **standalone package** `dsh-preset-news-three-elements`, registered as a roster preset root | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
-    nixosMode = true;       # id `nixos` — NixOS mode
-    maintenanceMode = true; # id `maintenance` — maintenance mode (derived from NixOS mode)
-    newsThreeElements = true; # id `news-three-elements` — 新闻三要素模式 (derived from minimal mode, read-only)
+    nixosMode = true;         # id `nixos` — NixOS模式
+    maintenanceMode = true;   # id `maintenance` — 维护模式 (derived from NixOS模式)
+    newsThreeElements = true; # id `news-three-elements` — standalone package, registers a preset root
   };
 }
 ```
 
-| Preset | Description |
-|------|------|
-| NixOS mode (id `nixos`) | validates the NixOS host at initialization (non-NixOS rejects all requests with an explicit reason); loads `nixos_shell` / `nixos_cli` and the NixOS development prompts |
-| Maintenance mode (id `maintenance`) | based on NixOS mode; injects `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` skills (the repo `skills/` tree embedded at build time — always current in a fresh session) and the repo-maintenance workflow prompts |
-| 新闻三要素模式 (id `news-three-elements`) | derived from minimal mode; a view-only creation preset (mutating calls are denied by a guard), fetches the `news-three-elements` skill package online at session start, opens with a three-way picker, refuses anything not written in Simplified Chinese |
-
-Detailed preset behavior, composition structure, and derivation maintenance rules: see [dsh-nixos-shell.md](dsh-nixos-shell.md).
+> **Two distribution mechanisms**: `nixosMode` / `maintenanceMode` are **seed-once** copied by the dsh-nixos-shell package into `$DSH_HOME/.agent-presets/<id>` (an existing target is not overwritten, respecting later user edits); `newsThreeElements` comes from the **standalone package** `dsh-preset-news-three-elements` — the module registers its `share/dsh-agent-presets` as an extra root of the `agent-presets` roster, so the preset is read straight from the store: no copy, no seeding, and an upgrade is the update. Each mode's behavior, composition structure, and maintenance rules live in the docs linked above.
 
 ## Sudo daemon
 

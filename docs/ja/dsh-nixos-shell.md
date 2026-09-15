@@ -92,9 +92,16 @@ nixos_cli(op = "journal", unit = "dsh", lines = 30)
 nixos_cli(op = "audit-store-paths")
 ```
 
-## Agent プリセット
+## 配布するモード
 
-パッケージは「NixOS模式」プリセット（`presets/nixos-mode/`、id `nixos`）を同梱する：創造モード基盤で、セッション初期化時にホストが NixOS であることを検証する——非 NixOS では全実行を拒否するツールガードと拒否プロンプト節を登録し、NixOS では開発ガイドのプロンプト節を注入して本プラグインの 2 ツール（`nixos_shell` / `nixos_cli`）をマウントする。モジュールは `nixkits.dsh.presets.nixosMode = true` で `$DSH_HOME/.agent-presets/nixos` へ一度だけシードする（ユーザーの後続編集は尊重）：
+本パッケージは 2 つの **Agent プリセット（モード）** を同梱する。両者の挙動・コンポジション構造・persona 行 schema・派生保守ルール・インストール断片は、それぞれの独立ドキュメントにある：
+
+| モード | id | 説明 | ドキュメント |
+|------|-----|------|------|
+| NixOS模式 | `nixos` | ホスト検証 + `nixos_shell` / `nixos_cli` + 開発プロンプト | [modes/nixos.md](modes/nixos.md) |
+| 維護模式 | `maintenance` | NixOS模式から派生；ドキュメント / ログ / 更新チェック技能 + 保守ワークフロー | [modes/maintenance.md](modes/maintenance.md) |
+
+両者はいずれもモジュールが `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode` を通じて **seed-once** で `$DSH_HOME/.agent-presets/<id>` へ書き込む：
 
 ```nix
 {
@@ -105,50 +112,10 @@ nixos_cli(op = "audit-store-paths")
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
+    presets.maintenanceMode = true;
   };
 }
 ```
 
-ゲートはパッケージ内サブパス `@kihara777/dsh-nixos-shell/nixos-gate` で、プリセットのコンポジションでのみマウントされ、グローバルセッションには影響しない。
+ゲート入口はパッケージ内サブパス `@kihara777/dsh-nixos-shell/nixos-gate` で、プリセットのコンポジションでのみマウントされ、グローバルセッションには影響しない。第三のモード「新聞三要素模式」は**本パッケージでは配布されず**、独立パッケージ `dsh-preset-news-three-elements` が提供する —— [modes/news-three-elements.md](modes/news-three-elements.md) を参照。
 
-### persona 行（プリセットのアイデンティティ）
-
-両プリセットはコンポジションで `@deepseek-ai/dsh-persona` 行をマウントし、そのセッションのアイデンティティプロンプトを与える（デプロイ既定の persona を上書き）:
-
-```yaml
-- id: persona
-  name: '@deepseek-ai/dsh-persona'
-  config:
-    prefix: |-
-      …
-```
-
-| フィールド | 型 | 既定値 | 説明 |
-|------|------|--------|------|
-| `prefix` | string | —（**必須**） | アイデンティティプロンプトの前置き。欠落時はプラグインの読込に失敗（`$.prefix missing required value`） |
-| `suffix` | string | `""` | ランタイムコンテキストの後に付加する後置き |
-| `complete` | boolean | `false` | `true` のとき persona を完全なプロンプトとして扱い、ランタイムコンテキストを付加しない |
-| `includeRuntimeContext` | boolean | `true` | ランタイムコンテキスト（モデル、作業ディレクトリ等）を付加するか |
-
-> **アップグレード時の注意**: `prefix` は dsh 0.1.5-alpha.2 以降**必須**（従前のフィールド名は `text`）。プリセットが依然 `text` を書いていると、persona プラグインの読込失敗が**セッション生成経路全体を巻き込む**——`session/create` が失敗すると、設定画面・llm 提供方一覧・セッション履歴がすべて読込不可となり、前端では `llm/listProviders failed: Failed to fetch` と `commands/list` の無限リトライとして現れる。**この症状は「モデル設定画面のエラー」と根本原因を同じくするため、ネットワークやリバースプロキシの問題と誤診しないこと**（localhost と LAN がいずれも影響を受けるのは、根本原因が入口認証ではなくサーバー側のセッション生成にあるため）。dsh 更新後はプリセット内の各プラグイン行の config schema を検証すること。
-
-### メンテナンスモードプリセット
-
-パッケージは「維護模式」プリセット（`presets/maintenance-mode/`、id `maintenance`）も同梱する：NixOS模式基盤で、さらに `maintenance-skills` エントリをマウントする——初期化時に、ビルド時に埋め込まれたリポジトリの `skills/` ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates`、全 `translate-*` 言語拡張（apply 時に自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入する。モジュールは `nixkits.dsh.presets.maintenanceMode = true` で `$DSH_HOME/.agent-presets/maintenance` へ一度だけシードする。
-
-**派生関係**：メンテナンスモードのコンポジションは NixOS模式コンポジションの末尾に固定の `maintenance-skills` ブロックを追加したもので、両プリセットの `skills/` ツリーはファイル単位で一致する——`develop/check-preset-derivation.py` を `nix flake check` に組み込み強制（NixOS模式を変更したらメンテナンスモードへ必ず同期。リポジトリ AGENTS.md「预设」節参照）。
-
-### 新聞三要素模式プリセット
-
-**タス通信、Meduza、iStories 総合電** —— 匿名を条件とした倉庫保守者一名が本日、コードネーム `news-three-elements` のプリセット（`presets/news-three-elements/`）の同梱を確認した：**極簡模式から派生**、**読取専用**——書込み系の呼出には一律「休暇中」と答え、修繕費は守衛が立て替えるとされる。セッション初期化のたびに倉庫 `skills/news-three-elements/` の技能パッケージ全体をオンライン取得し（失敗時は 0/30/120 秒で再試行、以後 6 時間ごとに再確認）、開始時に三択を提示し、簡体中文以外のリクエストは一切受理しない。消息筋によれば、三択以外の自由入力は何を書いても一律「ノーコメント」となる。注目すべきは、モジュールが `nixkits.dsh.presets.newsThreeElements = true` で `$DSH_HOME/.agent-presets/news-three-elements` へ一度だけシードする点である；締切時点でモジュールは同オプションについて「ノーコメント」としたが、すでに下の設定例に現れている。
-
-| 行 | 役割 |
-|------|------|
-| `persona`（`complete: true`） | 唯一のプロンプト源：読取専用の境界、開始三択の暗号表、素材の共同創作、簡体中文以外とその他全リクエストの拒否 |
-| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | 読取専用サーフェス：`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question` |
-| `news-skill` | セッション起動時に技能パッケージ全体をオンライン取得（5 ファイル、8 秒上限）。先にローカルの最新副本（キャッシュ優先、無ければ同梱スナップショット）を登録し、取得成功後に差し替える；失敗時は 0/30/120 秒で再試行し、以後 6 時間ごとに再確認する |
-| `news-opening` | セッション初期化完了後に三択を提示し、選択は `agent.followup()` を通じて本セッション最初のユーザーメッセージになる |
-| `news-language` | `agent/pre-step` で非簡体中文（漢字なし / 仮名 / ハングル）を検出し、拒否指示を注入する |
-| `readonly-gate` | デフォルト拒否の実行ガード：許可リスト外は一律拒否、`write` / `edit` もその中 |
-
-本倉庫の engineering desk の通報によれば、記録に値する設計制約が三つ：**読取専用は `tools.restrict()` ではなく実行ガードで担保する**——制限はスコープが継承するもの（グローバル層と祖先層）だけを濾過し、同一プリセットの兄弟行が登録したものには効かない。`dsh-tool-fs` は `read`/`read_image` と `write`/`edit` を必ず同時に登録するため、書込み側は実行境界でしか拒否できない。**簡体字と繁体字の判読はモデルに委ねる**（同一規則を persona に持たせる）——プラグインがハード検出するのは判読不要な「漢字なし / 仮名 / ハングル」だけで、ヒューリスティクスで中国語話者を誤って拒否しない。**プリセット同梱プラグインは相対行名**（`./plugins/*.js`）で、依存は Node 組み込みモジュールのみ——コンポジションの `baseUrl` はプリセットディレクトリ自身なので、ディレクトリごと `$DSH_HOME` へ複製しても解決できる。

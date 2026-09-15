@@ -92,9 +92,16 @@ nixos_cli(op = "journal", unit = "dsh", lines = 30)
 nixos_cli(op = "audit-store-paths")
 ```
 
-## Agent preset
+## Distributed modes
 
-The package ships the "NixOS模式" preset (`presets/nixos-mode/`, id `nixos`): based on the creation-mode preset, it verifies at session initialization that the host is NixOS — on a non-NixOS host it registers a tool guard denying all execution plus a refusal prompt section; on NixOS it installs the development-guidance prompt section and mounts this plugin's two tools (`nixos_shell` / `nixos_cli`). The module seeds it (once) into `$DSH_HOME/.agent-presets/nixos` via `nixkits.dsh.presets.nixosMode = true` (later user edits are respected):
+This package ships two **Agent presets (modes)**; their behavior, composition structure, persona row schema, derivation maintenance rules, and install snippets all live in their own dedicated docs:
+
+| Mode | id | Description | Doc |
+|------|-----|------|------|
+| NixOS模式 | `nixos` | host validation + `nixos_shell` / `nixos_cli` + development prompts | [modes/nixos.md](modes/nixos.md) |
+| 维护模式 | `maintenance` | derived from NixOS模式; doc / log / update-check skills + maintenance workflow | [modes/maintenance.md](modes/maintenance.md) |
+
+Both are written **seed-once** into `$DSH_HOME/.agent-presets/<id>` by the module through `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode`:
 
 ```nix
 {
@@ -105,50 +112,9 @@ The package ships the "NixOS模式" preset (`presets/nixos-mode/`, id `nixos`): 
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
+    presets.maintenanceMode = true;
   };
 }
 ```
 
-The gate is the package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected.
-
-### The persona row (preset identity)
-
-Both presets mount an `@deepseek-ai/dsh-persona` row in their composition, giving that session its identity prompt (shadowing the deployment-level default persona):
-
-```yaml
-- id: persona
-  name: '@deepseek-ai/dsh-persona'
-  config:
-    prefix: |-
-      …
-```
-
-| Field | Type | Default | Description |
-|------|------|--------|------|
-| `prefix` | string | — (**required**) | Identity prompt prefix; when missing the plugin fails to load (`$.prefix missing required value`) |
-| `suffix` | string | `""` | Suffix appended after the runtime context |
-| `complete` | boolean | `false` | When `true` the persona is the complete prompt and no runtime context is appended |
-| `includeRuntimeContext` | boolean | `true` | Whether to append runtime context (model, working directory, …) |
-
-> **Upgrade note**: `prefix` is **required** as of dsh 0.1.5-alpha.2 (the field was previously named `text`). If a preset still writes `text`, the persona plugin fails to load and takes down **the whole session creation path** — once `session/create` fails, the settings UI, the llm provider catalog, and session history all become unloadable, surfacing in the frontend as `llm/listProviders failed: Failed to fetch` plus an infinite `commands/list` retry. **That symptom shares a root cause with a "model settings page error"; do not misdiagnose it as a network or reverse-proxy problem** (localhost and LAN are affected alike, because the root cause is server-side session creation, not entry authentication). After upgrading dsh, verify the config schema of every plugin row in your presets.
-
-### Maintenance-mode preset
-
-The package also ships the "维护模式" preset (`presets/maintenance-mode/`, id `maintenance`): based on NixOS模式, it additionally mounts the `maintenance-skills` entry — at initialization it registers runtime skills `write-project-docs`, `write-maintenance-log`, `nixkits-check-updates`, and every `translate-*` language extension (auto-discovered at apply time) from the repo's `skills/` tree embedded at build time (single source of truth, so a fresh session always gets the latest content), and injects the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization). The module seeds it once via `nixkits.dsh.presets.maintenanceMode = true` into `$DSH_HOME/.agent-presets/maintenance`.
-
-**Derivation**: the maintenance preset's composition equals the NixOS-mode composition with a fixed `maintenance-skills` block appended, and the two presets' `skills/` trees must match file for file — enforced by `develop/check-preset-derivation.py` under `nix flake check` (any change to NixOS mode must be mirrored to maintenance mode; see the "预设" section of the repo's AGENTS.md).
-
-### News-three-elements-mode preset
-
-**Combined TASS, Meduza and iStories dispatch** — a repository maintainer who asked not to be named confirmed today that a preset codenamed `news-three-elements` has shipped inside the package (`presets/news-three-elements/`): **derived from minimal mode**, and **read-only** — any write call is told the tool is "on leave", the repair bill being covered, according to one account, by the guard. The repo's whole skill package under `skills/news-three-elements/` is fetched online at session start (a failed fetch retries after 0/30/120 s and re-checks every six hours), a three-way picker opens the session, and any request not written in Simplified Chinese is declined. Per a source, whatever a caller types into the picker's custom field meets with "no comment". Notably, the module seeds it once via `nixkits.dsh.presets.newsThreeElements = true` into `$DSH_HOME/.agent-presets/news-three-elements`; as of press time the module had "no comment" on the option, yet it already appears in the configuration example below.
-
-| Row | Purpose |
-|------|------|
-| `persona` (`complete: true`) | the only source of prompt text: the read-only boundary, the opening picker's code table, asset co-creation, and the refusal of non-Simplified-Chinese plus every other request |
-| `tool-fs` / `tool-fs-search` / `tool-web` / `tool-skill` / `tool-ask-user` | the read-only surface: `read`, `read_image`, `glob`, `grep`, `web_search`, `web_fetch`, `skill`, `ask_user_question` |
-| `news-skill` | fetches the whole skill package online at session start (5 files, 8-second cap); registers the freshest local copy first (cache before bundled snapshot) and swaps it in on success; a failed fetch retries after 0/30/120 s, and a long-lived session re-checks every 6 hours |
-| `news-opening` | raises the three-way picker once the session lifecycle begins; the choice becomes the session's first user message through `agent.followup()` |
-| `news-language` | detects non-Simplified-Chinese messages (no Han ideograph, or kana/hangul present) at `agent/pre-step` and injects the refusal instruction |
-| `readonly-gate` | a deny-by-default execution guard: everything outside the allowlist is refused, `write` / `edit` included |
-
-Three design constraints are worth recording, per the repository's engineering desk: **read-only is enforced by an execution guard, not `tools.restrict()`** — a restriction filters only what a scope inherits (the global layer and its ancestors) and never what the preset's own sibling rows register, while `dsh-tool-fs` necessarily registers `read`/`read_image` together with `write`/`edit`, so the mutation half can only be denied at the execution boundary; **Simplified-versus-Traditional Chinese is left to the model** (the same rule lives in the persona), and the plugin hard-detects only the cases that need no reading at all (no Han, kana, hangul), so a heuristic never refuses a Chinese-speaking user; and **the preset's own plugins are named relatively** (`./plugins/*.js`) and import nothing but Node builtins — a composition's `baseUrl` is the preset directory, so the whole directory keeps resolving after being copied into `$DSH_HOME`.
+The gate entry is the in-package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected. The third mode, 新闻三要素模式, is **not shipped by this package** but by the standalone package `dsh-preset-news-three-elements` — see [modes/news-three-elements.md](modes/news-three-elements.md).

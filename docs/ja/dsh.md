@@ -153,30 +153,30 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 | プラグイン | 説明 | ドキュメント |
 |------|------|------|
-| dsh-nixos-shell | NixOS シナリオ能力の統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）+ `nixos_cli` 読み取り専用診断；NixOS模式 / 維護模式 / 新聞三要素模式の 3 つの Agent プリセットを同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS シナリオ能力の統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）+ `nixos_cli` 読み取り専用診断；NixOS模式 / 維護模式の 2 つの Agent プリセットを同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量パネルの「用量 / 残高」切替：アカウント残高、日 / 月 / 30 日間の消費チャートと音声放送（音声パック形式ガイドを含む） | [dsh-api-balance.md](dsh-api-balance.md) |
 
-## Agent プリセット
+## モード
 
-`nixkits.dsh.presets` は dsh-nixos-shell パッケージ同梱の Agent プリセットを **seed-once** 方式で `$DSH_HOME/.agent-presets/<id>` へ書き込む（対象が存在しない場合のみコピーし、ユーザーの後からの編集を尊重する）：
+「モード」は dsh の **Agent プリセット**である：各モードは一つのセッション形態であり、専用のアイデンティティプロンプト、ツール面、プロンプト節を備える。プラグインと同級で、それぞれ独立したドキュメントを持ち、互いに影響しない：
+
+| モード | id | 説明 | 配布方式 | ドキュメント |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | 初期化時に NixOS ホストを検証（非 NixOS は全実行を拒否）；`nixos_shell` / `nixos_cli` と開発プロンプトを読み込む | dsh-nixos-shell パッケージ内、seed-once | [modes/nixos.md](modes/nixos.md) |
+| 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` スキルと保守ワークフローを注入 | dsh-nixos-shell パッケージ内、seed-once | [modes/maintenance.md](modes/maintenance.md) |
+| 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した読取専用の創作モード：オンライン技能パッケージ、開始時問答、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements`、roster のプリセットルートとして登録 | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
-    nixosMode = true;       # id `nixos` — NixOS模式
-    maintenanceMode = true; # id `maintenance` — 維護模式（NixOS模式から派生）
-    newsThreeElements = true; # id `news-three-elements` — 新聞三要素模式（極簡模式から派生、読取専用）
+    nixosMode = true;         # id `nixos` — NixOS模式
+    maintenanceMode = true;   # id `maintenance` — 維護模式（NixOS模式から派生）
+    newsThreeElements = true; # id `news-three-elements` — 独立パッケージ、プリセットルートを登録
   };
 }
 ```
 
-| プリセット | 説明 |
-|------|------|
-| NixOS模式（id `nixos`） | 初期化時に NixOS ホストを検証（非 NixOS は理由を明示して全リクエストを拒否）；`nixos_shell` / `nixos_cli` と NixOS 効率開発プロンプトを読み込む |
-| 維護模式（id `maintenance`） | NixOS模式ベース；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` スキル（ビルド時埋め込みのリポジトリ `skills/` ツリー、新規セッションでも常に最新）とリポジトリ維護工作流プロンプトを注入する |
-| 新聞三要素模式（id `news-three-elements`） | 極簡模式から派生；閲覧のみの創作プリセット（書込み系呼出は守衛が拒否）、セッション起動時に `news-three-elements` 技能パッケージをオンライン取得、開始時に三択を提示、簡体中文以外は一律拒否 |
-
-プリセットの詳細な動作・コンポジション構造・派生維持ルールは [dsh-nixos-shell.md](dsh-nixos-shell.md) を参照。
+> **二つの配布方式**：`nixosMode` / `maintenanceMode` は dsh-nixos-shell パッケージが **seed-once** で `$DSH_HOME/.agent-presets/<id>` へコピーする（対象が既に存在すれば上書きせず、ユーザーの後続編集を尊重する）；`newsThreeElements` は**独立パッケージ** `dsh-preset-news-three-elements` が提供する——モジュールはその `share/dsh-agent-presets` を `agent-presets` roster の追加ルートとして登録し、プリセットは store から直接読まれ、コピーも書込みもなく、更新即最新となる。各モードの挙動・コンポジション構造・保守ルールは上表のドキュメントを参照。
 
 ## sudo デーモン
 

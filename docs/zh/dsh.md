@@ -153,30 +153,30 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 | 插件 | 说明 | 文档 |
 |------|------|------|
-| dsh-nixos-shell | NixOS 场景能力整合：`nixos_shell` 执行器（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）+ `nixos_cli` 只读诊断；随包分发 NixOS模式 / 维护模式 / 新闻三要素模式三个 Agent 预设 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS 场景能力整合：`nixos_shell` 执行器（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）+ `nixos_cli` 只读诊断；随包分发 NixOS模式 / 维护模式两个 Agent 预设 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量面板「用量 / 余额」切换：账户余额、日 / 月 / 30 日消耗图表与语音播报（含语音包格式指南） | [dsh-api-balance.md](dsh-api-balance.md) |
 
-## Agent 预设
+## 模式
 
-`nixkits.dsh.presets` 把随 dsh-nixos-shell 包分发的 Agent 预设以 **seed-once** 方式写入 `$DSH_HOME/.agent-presets/<id>`（仅目标不存在时复制，尊重用户后续编辑）：
+「模式」是 dsh 的 **Agent 预设**：每个模式就是一个会话形态，自带身份提示词、工具面与提示词节。它们与插件同级、各自独立文档，互不影响：
+
+| 模式 | id | 说明 | 分发方式 | 文档 |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切执行）；加载 `nixos_shell` / `nixos_cli` 与开发提示词 | dsh-nixos-shell 包内，seed-once | [modes/nixos.md](modes/nixos.md) |
+| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能与维护工作流 | dsh-nixos-shell 包内，seed-once | [modes/maintenance.md](modes/maintenance.md) |
+| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的只读创作模式：在线技能包、开场问答、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements`，注册为 roster 预设根 | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
-    nixosMode = true;       # id `nixos` —— NixOS模式
-    maintenanceMode = true; # id `maintenance` —— 维护模式（派生自 NixOS模式）
-    newsThreeElements = true; # id `news-three-elements` —— 新闻三要素模式（派生自极简模式，只读）
+    nixosMode = true;         # id `nixos` —— NixOS模式
+    maintenanceMode = true;   # id `maintenance` —— 维护模式（派生自 NixOS模式）
+    newsThreeElements = true; # id `news-three-elements` —— 独立包，注册预设根
   };
 }
 ```
 
-| 预设 | 说明 |
-|------|------|
-| NixOS模式（id `nixos`） | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求并明确告知理由）；加载 `nixos_shell` / `nixos_cli` 与 NixOS 高效开发提示词 |
-| 维护模式（id `maintenance`） | 基于 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能（构建期嵌入的仓库 `skills/` 树，全新会话即最新）与仓库维护工作流提示词 |
-| 新闻三要素模式（id `news-three-elements`） | 派生自极简模式；仅可查看的创作预设（写入类调用由守卫拒绝），会话启动在线抓取 `news-three-elements` 技能包，开场问答三选一，非简体中文一律拒绝 |
-
-预设的详细行为、组合结构与派生维护规则见 [dsh-nixos-shell.md](dsh-nixos-shell.md)。
+> **两种分发方式**：`nixosMode` / `maintenanceMode` 由 dsh-nixos-shell 包 **seed-once** 复制到 `$DSH_HOME/.agent-presets/<id>`（目标已存在则不覆盖，尊重用户后续编辑）；`newsThreeElements` 由**独立包** `dsh-preset-news-three-elements` 提供——模块把它的 `share/dsh-agent-presets` 注册为 `agent-presets` roster 的额外根，预设从 store 直接读取，不复制、不落盘，升级即最新。各模式的行为、组合结构与维护规则见上表文档。
 
 ## sudo 守护
 
