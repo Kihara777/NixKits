@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T10:50:26+09:00
+
+**Summary**：feat(preset): the refusal translation is scoped to the language gate and must match the caller's language — a localized copy belongs to the "not Simplified Chinese" rule alone: when a Simplified-Chinese caller's request is refused for any other reason, the reply carries **the Chinese text only** — no translation, no gloss (the language was legitimate, so there is nothing to translate). The translation must also be **in the very language the caller used** (English for English, Japanese for Japanese, Traditional Chinese for Traditional Chinese), never swapped for a third language and never a mixed-script text. Both rules are promoted from "unstated, left to the model" to explicit lines in the persona and the injected notice (the persona's other section now says outright that it does not translate), with the four language docs updated; the self-test gains six assertions
+
+| Commit | Description |
+|--------|-------------|
+| `00a0088` | feat(preset): scope the refusal translation to the language gate |
+
 ## 2026-09-15T10:39:08+09:00
 
 **Summary**：feat(preset): the draw is over producers, not games, and every refusal re-sources its material — the recommendation pool changes from three titles to the **three producers**: whoever is drawn, their game comes with them (Yudintsev and Bulannikov → "War Thunder", Buyanov → "Escape from Tarkov"), plus the 「绿色的猫头鹰」 software, four equally likely entries, never more than one per refusal; Enlisted is dropped. More importantly, refusals no longer recycle a single reason: both the persona and the injected notice order a `web_search` for that day's material (real news phrasing, official excuses, agency statements) before every refusal, forbid reusing the previous reason, sentence pattern, closing twist or transition, and name mechanical repetition as this mode's worst failure — all delivered in the deadpan 「一本正经胡说八道」 register. The self-test verifies the person-to-game pairing draw by draw across 400 refusals and checks the distribution (23 / 29 / 25 / 23%)
