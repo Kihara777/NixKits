@@ -143,6 +143,22 @@ function textOf(message) {
 }
 
 /**
+ * The messages this gate is allowed to judge: the human's own.
+ *
+ * A step also carries what the harness injects — approval notices, skill
+ * catalogs, context reminders, tool results — and those are written in the
+ * harness's own language, not the user's. Judging them refused a Simplified-
+ * Chinese user whose step happened to contain an English approval notice, with
+ * an English "localized" refusal to match. Only `source.kind === "user"` counts.
+ *
+ * @param message - one admitted message.
+ * @returns whether the human wrote it.
+ */
+function isHumanMessage(message) {
+	return message?.source?.kind === "user";
+}
+
+/**
  * Append the review instruction to a step's admitted messages.
  *
  * The injected id is derived from the offending message, not from a counter, so
@@ -152,8 +168,8 @@ function textOf(message) {
  */
 function withNotice(agent, decision) {
 	if (decision?.kind !== "enter" || !Array.isArray(decision.messages)) return decision;
-	if (decision.messages.some((message) => message?.source?.plugin === name)) return decision;
-	const offender = decision.messages.find((message) => isClearlyNotChinese(textOf(message)));
+	const human = decision.messages.filter(isHumanMessage);
+	const offender = human.find((message) => isClearlyNotChinese(textOf(message)));
 	if (offender === undefined) return decision;
 	return {
 		...decision,

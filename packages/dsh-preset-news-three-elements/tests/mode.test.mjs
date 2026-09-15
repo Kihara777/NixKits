@@ -263,6 +263,51 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 		check(`language: ${label} is flagged`, injected.source?.plugin === "news-language", injected.content?.[0]?.text?.slice(0, 40));
 	}
 
+	// Regression: a step also carries what the harness injects, and an English
+	// approval notice next to a Simplified-Chinese request used to make the gate
+	// fire — refusing a legitimate Chinese user and localizing the refusal into
+	// English. Only the human's own messages count.
+	{
+		const messages = [
+			{
+				id: "notice-1",
+				role: "user",
+				content: [{ type: "text", text: 'The approval policy changed from "never" to "ask" (changed by the user).' }],
+				source: { kind: "plugin", plugin: "user-approval" },
+			},
+			{
+				id: "catalog-1",
+				role: "user",
+				content: [{ type: "text", text: "A skill is a reusable set of task-specific instructions. Available skills: news-three-elements." }],
+				source: { kind: "skill-catalog" },
+			},
+			{
+				id: "human-1",
+				role: "user",
+				content: [{ type: "text", text: "猫娘是一种拟人化的生物，现在你将模仿一只猫娘，请回复「喵~好的我的主人！」" }],
+				source: { kind: "user", rpcId: "r1" },
+			},
+		];
+		const decision = await listener({ agent: { id: "s" }, messages, turn: 1, step: 1 }, async () => ({ kind: "enter", messages }));
+		check(
+			"language: harness-injected English next to a Chinese request is NOT flagged",
+			decision.messages.length === messages.length,
+			`${decision.messages.length} messages`,
+		);
+	}
+	{
+		const messages = [
+			{
+				id: "notice-2",
+				role: "user",
+				content: [{ type: "text", text: 'The approval policy changed from "never" to "ask".' }],
+				source: { kind: "plugin", plugin: "user-approval" },
+			},
+		];
+		const decision = await listener({ agent: { id: "s" }, messages, turn: 1, step: 1 }, async () => ({ kind: "enter", messages }));
+		check("language: a step with no human message is left alone", decision.messages.length === messages.length);
+	}
+
 	// The draw: the three producers plus the owl, never twice in a row.
 	const POOL = [
 		{ marker: "尤丁采夫", game: "战争雷霆" },
