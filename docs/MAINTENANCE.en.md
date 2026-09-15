@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:24:49+09:00
+
+**Summary**：fix(preset): the language gate now judges only the human's messages — in a fresh session the user saw a legitimate Simplified-Chinese request refused with an English translation attached. The session transcript (`session-efc87486`) showed why: besides the user's Chinese message the step carried a harness-injected **English system message** (`source.kind = plugin`: 'The approval policy changed from "never" to "ask"…') and a `skill-catalog` entry; the guard scanned **every** message admitted to the step, read the English notice as "the user is not writing Simplified Chinese", injected the language review, and the model — following the rule that the localized copy matches the caller's language — produced an English version. `withNotice` now takes only messages with `source.kind === "user"` (approval notices, skill catalogs and tool results never count), with two regression tests (the English-notice-plus-Chinese-request combination no longer fires; a step without a human message is left alone) and the four language docs note the boundary
+
+| Commit | Description |
+|--------|-------------|
+| `9557707` | fix(preset): judge only the human's messages in the language gate |
+
 ## 2026-09-15T11:08:06+09:00
 
 **Summary**：feat(preset)+test: a repository self-check suite and four behaviour hardenings — `nix flake check` grows from one check to **six**: `preset-bundle` (the bundled skill snapshot must match `skills/` byte for byte), `workflow-coverage` (every package has a build workflow; exemptions are explicit), `doc-links` (relative links resolve, four-language switchers complete, pseudocn kana-free), `maintenance-log` (equal entry counts, second-precision timestamps, unique commit ids) and `news-mode-tests` (the mode's plugin behaviour, **offline**: a stubbed fetch serves the bundled snapshot and answers 304 on the second pass, covering the ETag path). On the day it landed the suite found and fixed a batch of pre-existing defects: twelve translated documents pointed their switcher at a same-directory `<name>.<lang>.md`, three codewhale docs had a wrong cross-document link, one section title carried a `+00:00` timestamp, and `dsh-api-balance` had no build workflow. Four behaviour hardenings in the same round: **scoped reads** (absolute paths only under the workspace, the attachment store or `/tmp`), **no consecutive repeat** in the draw, **the picker withdrawn when the caller speaks first**, and **a parallel fetch with ETag conditional requests** (an unchanged package answers 304 and nothing is rewritten); the persona hands its standing refusal rules back to the skill's 「拒绝服务」 section so the two cannot drift apart

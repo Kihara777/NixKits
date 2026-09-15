@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T11:24:49+09:00
+
+**摘要**：fix(preset): 言語審査 人 発言 唯 判定化 — 新 session 以利用者「簡体中文 正当請求 拒否、且 英文訳文 添付」観測。session 記録（`session-efc87486`）以原因特定：当該 step 利用者 中文 message 之外、harness 注入 **英文系統 message**（`source.kind = plugin`：The approval policy changed…）與 `skill-catalog` 同居。guard **該 step 全 message** 審査 故、英文通知「利用者 簡体中文 使用 無」読、言語審査 注入——model「訳文 相手言語 一致」規則 従、英文版 添付。`withNotice` `source.kind === "user"` message 唯 対象化（承認通知・技能目録・工具結果 不算）、回帰 test 二件 追加（英文通知 + 中文依頼 組合 発火無／人 発言 無 step 不変）。四言語文書 該境界 明記
+
+| 提交 | 説明 |
+|------|------|
+| `9557707` | fix(preset): judge only the human's messages in the language gate |
+
 ## 2026-09-15T11:08:06+09:00
 
 **摘要**：feat(preset)+test: 倉庫自検体系 與 模式挙動四加固 — `nix flake check` 一項 自 **六項** 移行：`preset-bundle`（同梱技能 snapshot `skills/` 與 byte 単位一致）、`workflow-coverage`（全 package 構築 workflow 有、例外 明示登録）、`doc-links`（相対 link 到達可能・四言語切替器完備・pcn 假名無）、`maintenance-log`（四言語条目数一致・秒精度 timestamp・SHA 重複無）、`news-mode-tests`（模式 plugin 挙動 test、**network 無**：fetch stub 同梱 snapshot 供給、二度目 304 返 故 ETag 経路 亦覆）。導入当日 既存欠陥 検出・修正：翻訳文書十二件 切替器 同目録 `<name>.<lang>.md` 指、codewhale 文書三件 相互 link 誤、`+00:00` timestamp 一件、`dsh-api-balance` 構築 workflow 無。同 round 挙動四加固：**読取範囲限定**（絶対 path 工作区 / 添付目録 / `/tmp` 唯）、**抽選連続重複防止**、**利用者先発言時 問撤回**、**取得並列化 + ETag 条件付請求**（内容不変時 304、書直無）。persona 常設拒否条款 技能「拒否服務」節 返、二重管理 解消

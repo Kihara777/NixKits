@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:24:49+09:00
+
+**摘要**：fix(preset): 语言审查只审人写的消息 — 用户新开会话观察到「简体中文的合法请求被回绝、且附带英文译文」。查会话记录（`session-efc87486`）取证：该 step 里除用户的中文消息外，还混有一条 harness 注入的**英文系统消息**（`source.kind = plugin`：「The approval policy changed from "never" to "ask"…」）与 `skill-catalog` 消息；守卫原先审「本步准入的**全部**消息」，遂把英文系统提示当成「用户未用简体中文」→ 注入语言审查 → 模型按规则回绝并按「与对方语言一致」补了英文译文。修法：`withNotice` 仅取 `source.kind === "user"` 的消息判定（harness 注入的批准提示、技能目录、工具结果一律不计），并补两条回归测试（英文批准提示 + 中文请求的组合不再触发；无人类消息的 step 不动）；四语文档同步说明该边界
+
+| 提交 | 说明 |
+|------|------|
+| `9557707` | fix(preset): judge only the human's messages in the language gate |
+
 ## 2026-09-15T11:08:06+09:00
 
 **摘要**：feat(preset)+test: 仓库自检体系与模式行为加固 — `nix flake check` 由 1 项扩到 **6 项**：新增 `preset-bundle`（包内技能快照必须与 `skills/` 逐字节一致）、`workflow-coverage`（每个包都有构建 workflow，例外显式登记）、`doc-links`（相对链接可达 + 四语切换器齐全 + pcn 无假名）、`maintenance-log`（四语条目数一致、时间戳精确到秒、SHA 去重）、`news-mode-tests`（模式插件行为测试，**无网络**：打桩 fetch 用包内快照供源并在第二次返回 304，顺带覆盖 ETag 路径）。检查上线当天即抓出并修复一批既存缺陷：12 个翻译文档的切换器指向同目录 `<name>.<lang>.md`、3 处 codewhale 跨文档链接写错、1 条 `+00:00` 时间戳、`dsh-api-balance` 缺构建 workflow。同轮四项行为加固：**只读限范围**（绝对路径仅工作区 / 附件目录 / `/tmp`）、**抽取不连续重复**、**弹窗在用户先开口时自动撤回**、**技能抓取并行 + ETag 条件请求**（内容不变即 304，不重写盘）；人格把常设拒绝条款交还给技能「拒绝服务」一节，避免两处漂移
