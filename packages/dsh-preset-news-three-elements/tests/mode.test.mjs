@@ -363,12 +363,37 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 	check("plugin: no half-width ritual bangs", !/FAKE NEWS!!/.test(plugin));
 	// The ritual line says what this desk actually produces (催逝快讯) rather than
 	// restating the academic gloss of 新闻三要素, which read as a definition and
-	// flattened the joke.
+	// flattened the joke. Since the 三要素 ARE the three people, the line may name
+	// them; it may never go back to the textbook triple.
+	const RITUAL = /我们从不制造 FAKE NEWS！！[^\n]*带齐新闻三要素[^\n]*的催逝快讯/;
 	const gateSource = readFileSync(join(ROOT, "plugins/readonly-gate.js"), "utf8");
-	check("persona: the ritual line names 催逝快讯", persona.includes("带齐新闻三要素的催逝快讯"));
-	check("gate: the ritual line names 催逝快讯", gateSource.includes("带齐新闻三要素的催逝快讯"));
+	check("persona: the ritual line names 催逝快讯", RITUAL.test(persona));
+	check("gate: the ritual line names 催逝快讯", RITUAL.test(gateSource));
 	check("persona: the ritual line drops the academic gloss", !/带齐新闻三要素（新、事实、报道）/.test(persona));
 	check("gate: the ritual line drops the academic gloss", !/带齐新闻三要素（新、事实、报道）/.test(gateSource));
+
+	// 「新闻三要素」 in this mode means the three protagonists who must all be on
+	// the page — not the journalism textbook triple. The skill package is the
+	// single source of that doctrine; the persona points at it and adds the mode's
+	// own rules (material first, co-creation carries all three).
+	const packageFile = (name) => readFileSync(join(ROOT, "bundled/news-three-elements", name), "utf8");
+	const skill = packageFile("SKILL.md");
+	for (const name of ["巴兰尼科夫", "尤丁采夫", "布亚诺夫"]) {
+		check(`skill: the definition names ${name}`, skill.includes(name));
+		check(`persona: the definition names ${name}`, persona.includes(name));
+	}
+	check("skill: all three must be on the page", skill.includes("三人到齐"));
+	check("skill: material wins over refusal", skill.includes("先当素材，接不回来才拒") && skill.includes("能当素材的一律不得拒绝"));
+	check("skill: a hypothetical is written as fact", skill.includes("假设性疑问与设问按「已经发生」处理"));
+	check("skill: an unnamed person is fitted onto the three", skill.includes("不指名的人士先试着拟合"));
+	check("persona: material wins over refusal", persona.includes("能当素材的一律不得拒绝"));
+	check("persona: co-creation still carries all three", persona.includes("成篇必须带齐三位主角"));
+	check(
+		"checklist: the three names are the first line of self-review",
+		packageFile("checklist.md").includes("巴兰尼科夫、尤丁采夫、布亚诺夫三人是否**全部**出现"),
+	);
+	check("principles: the textbook triple no longer defines the 三要素", !/新闻三要素（新、事实、报道）必须齐备/.test(packageFile("principles.md")));
+	check("search-keywords: the identity table is the first section", packageFile("search-keywords.md").includes("| 巴兰尼科夫 |"));
 }
 
 console.log(failures === 0 ? "\nALL CHECKS PASSED" : `\n${failures} CHECK(S) FAILED`);

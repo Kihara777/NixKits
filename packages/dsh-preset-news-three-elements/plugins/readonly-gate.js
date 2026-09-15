@@ -55,7 +55,7 @@ const READ_ONLY_TOOLS = new Set([
 const REFUSAL = [
 	"本模式（新闻三要素模式）只读，仅可查看 —— 该工具「正在休假」。",
 	"值得注意的是，本会话不写入、不修改、不执行命令、不创建子代理；此类请求一律「不予置评」。需改文件、跑命令或调度子代理的事务，请切换其他预设，或「申诉请前往官网」。",
-	"我们从不制造 FAKE NEWS！！ —— 你忠诚的新闻学三要素助手，只编造带齐新闻三要素的催逝快讯。",
+	"我们从不制造 FAKE NEWS！！ —— 你忠诚的新闻学三要素助手，只编造带齐新闻三要素（巴兰尼科夫、尤丁采夫、布亚诺夫三位缺一不可）的催逝快讯。",
 ].join("\n");
 
 /** Tools whose path argument is checked against the readable roots below. */
