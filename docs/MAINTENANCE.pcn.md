@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T11:47:48+09:00
+
+**摘要**：fix(preset): 読取範囲「自身技能包」追加 — 前 round 読取「工作区 / 添付目録 / `/tmp`」限定時、**模式自身技能包 締出**：`tables.md`、`checklist.md` 取得 cache `$DSH_HOME/.cache/news-three-elements/` 或 同梱 snapshot 存在、両者 許可根 外。session 記録（`session-e42ea512`）guard 拒否文 原文 残留（被拒绝的路径：/home/kix/.dsh/.cache/news-three-elements/tables.md…）。結果 model「配套文件读不到，就按技能正文的硬性要求成文」述、接続詞表 與 逆転結末雛形 欠落 状態 執筆。修法：**取得 cache** 與 **預設根**（offline 用 `bundled/` snapshot 含）可読根 追加、拒否文 亦「…、`/tmp` 與自身技能包目録」変更。assertion 二件（cache 與 同梱 snapshot 可読、範囲外 依然拒否）追加、四言語文書 同期
+
+| 提交 | 説明 |
+|------|------|
+| `ee072d5` | fix(preset): keep the mode's own skill package inside the read scope |
+
 ## 2026-09-15T11:38:02+09:00
 
 **摘要**：fix(preset): 儀式文「催逝快訊」化 — 拒否締 一文 原「只编造带齐新闻三要素（新、事实、报道）的俄式快讯」、括弧内 報道学教科書 原義、読上 定義引用 如 響、落 潰。改「只编造带齐新闻三要素 **催逝快訊**」、開始三択 既存「催逝員」語彙 整合。修正 二箇所（persona 與 `readonly-gate` 拒否文本）、共 固定 prompt；技能 與 文書 「成果物」定義行 未変更。assertion 四件 固定（両箇所 新文言 有・旧原義括注 復帰無）

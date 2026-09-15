@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:47:48+09:00
+
+**Summary**：fix(preset): the read scope now admits the mode's own skill package — scoping reads to "workspace / attachments / `/tmp`" locked the mode out of its own skill: `tables.md` and `checklist.md` live in the fetched cache (`$DSH_HOME/.cache/news-three-elements/`) or the bundled snapshot, and neither was an allowed root. The session transcript (`session-e42ea512`) carries the guard's refusal verbatim ("被拒绝的路径：/home/kix/.dsh/.cache/news-three-elements/tables.md（本模式只允许查看会话工作区、附件目录与 /tmp）"), after which the model reported 「配套文件读不到，就按技能正文的硬性要求成文」 — the transition table and every twist-ending template went missing. Both the **fetched cache directory** and the **preset root** (which holds the offline `bundled/` snapshot) are readable roots now, the refusal text says "…、`/tmp` 与自身技能包目录", and two assertions pin it (cache and bundled snapshot readable, out-of-scope still refused); the four language docs follow
+
+| Commit | Description |
+|--------|-------------|
+| `ee072d5` | fix(preset): keep the mode's own skill package inside the read scope |
+
 ## 2026-09-15T11:38:02+09:00
 
 **Summary**：fix(preset): the ritual line now says 催逝快讯 — the sentence that closes every refusal read "只编造带齐新闻三要素（新、事实、报道）的俄式快讯", whose parenthetical is the journalism-textbook meaning: spoken aloud it sounded like a citation and flattened the joke. It becomes 「只编造带齐新闻三要素的**催逝快讯**」, matching the 催逝 vocabulary the opening picker already uses. Two occurrences, both fixed prompts (the persona and the `readonly-gate` refusal text); the definitional "product" lines in the skill and the docs are untouched. Four assertions pin it: both places carry the new wording, and the old gloss may not come back
