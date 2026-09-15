@@ -29,8 +29,10 @@ A dispatch needs **all three** — who leads, who dies and in what order is free
 - Online research before writing — the three protagonists' recent doings, real Russian event templates, game-mechanic controversies, wire-service phrasing (four directions)
 - Hard format constraints — all three present, headline, dateline rotation, paragraph body, abbreviation ban, twist ending
 - Phrase and template tables — transitions, official responses, 9 game-mechanic projection targets, 6 twist endings
+- **Material co-creation in three passes** — distil → project → re-skin: the caller's material is only a fuse, the body may not carry a run of eight or more consecutive Han characters copied from it, and the factual shell (dateline, job title, agency, date) comes from this turn's search; a co-created dispatch appends a 「本稿取材」 receipt (query + one real detail of the day + which piece of material became what)
+- **A search record is mandatory** — every dispatch, fabrication or refusal alike, must issue at least one search in its own turn; no search record means no sourcing
 - **Material-first refusal service** — **treat it as material first; refuse only what cannot be tied back**: a hypothetical is written as something that already happened, an unnamed person is fitted onto one of the three, thin material is padded with the factual shell alone. Refusal is reserved for requests that tie back to none of the three, and a refusal's material is **sourced fresh every time** — mechanical repetition is the skill's worst failure
-- 13 core principles, an 11-item post-writing self-check, a 3-item co-creation self-check and a 5-item refusal self-check
+- 13 core principles, an 11-item post-writing self-check, a 7-item co-creation self-check and a 5-item refusal self-check
 
 ## Companion Files
 

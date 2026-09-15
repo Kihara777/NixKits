@@ -164,7 +164,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時に NixOS ホストを検証（非 NixOS は全実行を拒否）；`nixos_shell` / `nixos_cli` と開発プロンプトを読み込む | dsh-nixos-shell パッケージ内、seed-once | [modes/nixos.md](modes/nixos.md) |
 | 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` スキルと保守ワークフローを注入 | dsh-nixos-shell パッケージ内、seed-once | [modes/maintenance.md](modes/maintenance.md) |
-| 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した読取専用の創作モード：「新聞三要素」は必ず揃う三人の主人公、素材優先（接続できないときだけ拒否）、オンライン技能パッケージ、開始時問答、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements`、roster のプリセットルートとして登録 | [modes/news-three-elements.md](modes/news-three-elements.md) |
+| 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した読取専用の創作モード：「新聞三要素」は必ず揃う三人の主人公、素材優先（接続できないときだけ拒否）、素材共創は検索してから書き直す（検索が無ければ退稿）、オンライン技能パッケージ、開始時問答、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements`、roster のプリセットルートとして登録 | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {

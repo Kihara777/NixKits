@@ -49,7 +49,7 @@ Agent 預設（session 形態）插件同等級、各自独立文書持：
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全請求拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発 prompt 読込 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/nixos.md](pcn/modes/nixos.md) |
 | 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流 prompt 注入 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/maintenance.md](pcn/modes/maintenance.md) |
-| 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
+| 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
 
 > 前二者 dsh-nixos-shell 包同梱、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` 経由 seed-once 方式 `$DSH_HOME/.agent-presets` 書込；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets` 預設 root 登録（copy 無）。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。
 
