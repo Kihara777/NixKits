@@ -29,7 +29,7 @@ inputs.nixkits.url = "~/NixKits";
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/pcn/ruyi.md](docs/pcn/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 
 
 ## 插件
@@ -41,13 +41,17 @@ DeepSeek Harness（DSH）组件與軟体分開掲載（掛載方式 [docs/pcn/ds
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
 | dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
 
-**Agent 預設**（dsh-nixos-shell 同梱、`nixkits.dsh.presets` 一度限 DSH seed）：
+## 模式
 
-| 預設 | 説明 |
-|------|------|
-| NixOS模式（id `nixos`） | 初期化時 NixOS 宿主検証（非 NixOS 全拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発指南負載 |
-| 維護模式（id `maintenance`） | NixOS模式基盤；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流注入 |
-| 新聞三要素模式（id `news-three-elements`） | 極簡模式派生；**読取専用**創作（書込呼出守衛拒否）、session 起動時 `news-three-elements` 技能包 online 取得、開始時三択提示、簡体中文以外一律拒否 |
+Agent 預設（session 形態）插件同等級、各自独立文書持：
+
+| 模式 | id | 説明 | 配布方式 | 文書 |
+|------|-----|------|---------|------|
+| NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全請求拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発 prompt 読込 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/nixos.md](pcn/modes/nixos.md) |
+| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流 prompt 注入 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/maintenance.md](pcn/modes/maintenance.md) |
+| 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
+
+> 前二者 dsh-nixos-shell 包同梱、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` 経由 seed-once 方式 `$DSH_HOME/.agent-presets` 書込；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets` 預設 root 登録（copy 無）。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。
 
 ## 開発
 
