@@ -24,6 +24,26 @@
 #          comfyui-nix, apply this patch, and point your flake's comfyui-nix
 #          input at the fork (e.g. url = "path:/path/to/patched").
 #
+#   3. ../patches/comfyui-nix-stdenv-api.patch
+#        — ALSO applied to the comfyui-nix repository (flake.nix +
+#          nix/{packages,python-overrides,vendored-packages,checks}.nix).
+#          Migrates 44 uses of the short-form platform predicates
+#          (`stdenv.isLinux` / `isDarwin` / `isx86_64`) to the canonical
+#          `stdenv.hostPlatform.*`.
+#
+#          Why this matters beyond cosmetics: nixpkgs 2026-05-09 turned
+#          those old names into `lib.warn` aliases, and this flake's overlay
+#          is evaluated for `nixpkgs.overlays` — so the warning leaked into
+#          EVERY downstream build, including ones that never enable ComfyUI:
+#
+#              evaluation warning: stdenv.isLinux is deprecated, use
+#              stdenv.hostPlatform.isLinux instead
+#
+#          Note `nixpkgs.config.allowAliases = false` is NOT an alternative
+#          fix: it removes the aliases outright, then breaks evaluation both
+#          here and in configs still using aliased package names
+#          (e.g. `nettools`).
+#
 # This module extends services.comfyui; enable with:
 #
 #   nixkits.comfyui-rocm.enable = true;
