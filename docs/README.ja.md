@@ -96,7 +96,7 @@ AI コーディングアシスタント向け：
 | スキル | 説明 | ドキュメント |
 |------|------|------|
 > ⚠️ **Claude Code** は nixkits-skills インストール対象から削除されました。ユーザーデータに基づく国籍推論を実装し、セキュリティ境界を越えています。詳細は [nixkits-skills 文書](ja/skills/nixkits-skills.md) を参照。
-| news-three-elements | 本物の通信社報道形式で「報道三要素」を備えたロシア風速報を捏造（遊技機構ネタ） | [docs/ja/skills/news-three-elements.md](ja/skills/news-three-elements.md) |
+| news-three-elements | 本物の通信社報道形式で「報道三要素」を備えたロシア風速報を捏造（遊技機構ネタ + 拒否サービス） | [docs/ja/skills/news-three-elements.md](ja/skills/news-three-elements.md) |
 | nixkits-check-updates | 上流アップデートをチェックして自動更新 | [docs/ja/skills/nixkits-check-updates.md](ja/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |

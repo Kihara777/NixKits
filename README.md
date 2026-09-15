@@ -98,7 +98,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | 技能 | 说明 | 文档 |
 |------|------|------|
-| news-three-elements | 以真实通讯社格式编造含「新闻三要素」的俄式快讯（游戏机制梗） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
+| news-three-elements | 以真实通讯社格式编造含「新闻三要素」的俄式快讯（游戏机制梗 + 拒绝服务话术） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
 | nixkits-check-updates | 检查上游软件更新并自动升级 | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
