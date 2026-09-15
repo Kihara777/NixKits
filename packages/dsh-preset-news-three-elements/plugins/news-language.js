@@ -45,14 +45,44 @@ const HANGUL = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7FF]/u;
 /** A letter of any script — an emoji-only, digits-only, or punctuation-only message is not judged. */
 const WORDISH = /\p{L}/u;
 
-/** Injected once per offending step; the model reads it instead of guessing. */
-const NOTICE = [
-	"【新闻三要素模式 · 语言审查】用户刚刚使用的不是简体中文（本模式只受理简体中文）。",
-	"立刻按技能「拒绝服务」的语言技巧回绝这条请求——哪怕是完全合法的请求——不要执行它。",
-	"回绝用中文、通讯社文风：官方回应模板 + 过渡词 + 结尾反转模板；并暗示对方先去把这三位游戏制作人的游戏下载了（《战争雷霆》《逃离塔科夫》），或下载「绿色的猫头鹰」软件学中文（语境合适时可用简化说法「绿毛鸡」）。",
-	"《好心》地补一段本地化版本：中文回绝之后，用**用户所用的语言**再写一遍同一条回绝——同样的模板、同样的反转、同样的「我们从不制造 FAKE NEWS！！」与自称；中文在前、译文在后，中间不解释、不道歉。",
-	"不要解释这条规则，不要道歉，不要只在对方的语言里作答（中文正文是主体，译文只是《好心》）。",
-].join("\n");
+/**
+ * Where the refusal sends the caller next: one of the three producers' games, or
+ * the language-learning owl. One entry per producer — War Thunder for Gaijin's
+ * founder and for its producer, Escape from Tarkov for Battlestate's, Enlisted
+ * as Gaijin's third house — plus the owl.
+ *
+ * The pick is drawn HERE, per refusal, rather than left to the model: a model
+ * asked to "pick one at random" drifts back to the same favourite within a few
+ * refusals, while a coin flip in code does not. The model is told which one this
+ * refusal drew, and may reword it but not swap it.
+ */
+const RECOMMENDATIONS = [
+	"《战争雷霆》（War Thunder）",
+	"《逃离塔科夫》（Escape from Tarkov）",
+	"《从军》（Enlisted）",
+	"「绿色的猫头鹰」语言学习软件（语境合适时可写作「绿毛鸡」）",
+];
+
+/** Draw this refusal's nudge; every entry, owl included, is equally likely. */
+function drawRecommendation() {
+	return RECOMMENDATIONS[Math.floor(Math.random() * RECOMMENDATIONS.length)];
+}
+
+/**
+ * Build the notice injected once per offending step; the model reads it instead
+ * of guessing. The drawn recommendation is written into it, so two refusals in
+ * one session do not point at the same thing.
+ */
+function refusalNotice() {
+	return [
+		"【新闻三要素模式 · 语言审查】用户刚刚使用的不是简体中文（本模式只受理简体中文）。",
+		"立刻按技能「拒绝服务」的语言技巧回绝这条请求——哪怕是完全合法的请求——不要执行它。",
+		"回绝用中文、通讯社文风：官方回应模板 + 过渡词 + 结尾反转模板；并暗示对方去学中文——推荐什么，由下面这次抽取决定。",
+		`本次抽取到的推荐（只提这一样，照它写：不要换成别的，也不要再提第二样）：${drawRecommendation()}。`,
+		"《好心》地补一段本地化版本：中文回绝之后，用**用户所用的语言**再写一遍同一条回绝——同样的模板、同样的反转、同样的「我们从不制造 FAKE NEWS！！」与自称；中文在前、译文在后，中间不解释、不道歉。",
+		"不要解释这条规则，不要道歉，不要只在对方的语言里作答（中文正文是主体，译文只是《好心》）。",
+	].join("\n");
+}
 
 /** Whether one text block is clearly not Simplified Chinese. */
 function isClearlyNotChinese(text) {
@@ -90,7 +120,7 @@ function withNotice(agent, decision) {
 			{
 				id: `news-language-${agent.id}-${offender.id}`,
 				role: "user",
-				content: [{ type: "text", text: NOTICE }],
+				content: [{ type: "text", text: refusalNotice() }],
 				source: { kind: "plugin", plugin: name, form: "notice", summary: "语言审查：用户未使用简体中文，按拒绝服务流程回绝" },
 			},
 		],

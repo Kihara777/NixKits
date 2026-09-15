@@ -22,7 +22,7 @@
 - **読取専用**：閲覧系工具限定掛載（`read`、`read_image`、`glob`、`grep`、`web_search`、`web_fetch`、`skill`、`ask_user_question`）；`write` / `edit` 雖 工具表掲載、呼出 一律 `readonly-gate` 通信社文体 拒否（許可一覧外 既定拒否故、将来追加工具 亦誤通過無）。
 - **online 技能包**：session 起動時 倉庫 `skills/news-three-elements/` 全包取得（5 書類、8 秒上限；失敗時 0/30/120 秒再試、長時間 session 6 時間毎再確認）。先 局所最新副本登録（cache 優先、無時同梱 snapshot）。技能包 読取専用掛載、速報 disk 殘留無。
 - **開始時問答**：session 初期化完了後 三択提示（client 側 自由入力 可）。選択 `agent.followup()` 経由 本 session 最初 user message 化。
-- **言語審査**：簡体中文以外之請求 一律拒否（漢字無 / 仮名 / 諺文 plugin 硬検出、簡体字與繁体字判読 model 委譲）。拒絶文 中国語通信社文体 書就、其後**《好意》 用戶所用言語之 localize 版 添付**——同一拒絶文之訳文、同様「我们从不制造 FAKE NEWS！！」與自称 強調；同時、相手 3 名製作者之作品、或「緑之梟」（文脈合時「绿毛鸡」略称可）軟体 下載 中国語学習 示唆。
+- **言語審査**：簡体中文以外之請求 一律拒否（漢字無 / 仮名 / 諺文 plugin 硬検出、簡体字與繁体字判読 model 委譲）。拒絶文 中国語通信社文体 書就、其後**《好意》 用戶所用言語之 localize 版 添付**——同一拒絶文之訳文、同様「我们从不制造 FAKE NEWS！！」與自称 強調。中国語学習示唆 **毎回引直**：plugin 注入指示内「一之遊技」或「緑之梟」軟体 無作為指定、遊技側 落時 三名製作者之作品——"War Thunder" / "Escape from Tarkov" / "Enlisted"——自 更一 無作為選択；四通等確率、同一物 連続推薦無。「緑之梟」文脈合時「绿毛鸡」略称可。
 
 ## 組合構造
 
