@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T09:09:08+09:00
+
+**概要**：fix(codewhale): riscv64 ソースハッシュを補完 — `packages/codewhale-src.nix` の `fetchFromGitHub` が依然 `lib.fakeHash` を渡していたため fixed-output の取得段階が構造的に失敗し、riscv64 ビルドは **29 回連続**で赤だった（x86_64 / aarch64 はプリビルドバイナリ経路で無影響）。ハッシュはリポジトリの既定手法どおり CI の hash mismatch 報告（`got:`）から取得し、`nix store prefetch-file --unpack` で fetchzip 意味論により本機で再計算してバイト一致を確認：`sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`。修正後、CI は初めて取得段階を越えてコンパイルに入った
+
+| コミット | 説明 |
+|----------|------|
+| `01bd1b9` | fix(codewhale): fill the riscv64 source hash |
+
 ## 2026-09-15T09:03:39+09:00
 
 **概要**：将来責任を負うことになる報道偏差をいくつか修正。—— 四言語の「新聞三要素模式」節を現場直編の通信社文体に改稿：電頭、匿名の消息筋、機構投射を一つ（書込み呼出は「休暇中」、修繕費は守衛が立替）とオー・ヘンリー風の結び（モジュールは「ノーコメント」、然るに選択肢はすでに設定例に登場）。行表と三つの設計制約は事実記録のまま据え置き

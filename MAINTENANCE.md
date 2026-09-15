@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T09:09:08+09:00
+
+**摘要**：fix(codewhale): 补齐 riscv64 源码哈希 — `packages/codewhale-src.nix` 的 `fetchFromGitHub` 仍写着 `lib.fakeHash`，fixed-output 取源阶段必然失败，riscv64 构建因此连续 **29 次**红灯（x86_64/aarch64 走预编译二进制路径，不受影响）。哈希按仓库既有做法取自 CI 的 hash mismatch 报告（`got:`），并用 `nix store prefetch-file --unpack` 在本机按 fetchzip 语义复算，两者逐字节一致：`sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`。修复后 CI 首次越过取源阶段进入编译
+
+| 提交 | 说明 |
+|------|------|
+| `01bd1b9` | fix(codewhale): fill the riscv64 source hash |
+
 ## 2026-09-15T09:03:39+09:00
 
 **摘要**：修复一些将来需要负责任的报道偏差。—— 四语文档中「新闻三要素模式预设」一节改写为现场直编的通讯社文风：电头、匿名消息人士、一处机制投射（写入类调用「正在休假」，维修费由守卫垫付）与欧·亨利式收尾（模块方「不予置评」，而该选项已经出现在配置示例里）；行表与三处设计约束仍为事实记录，未动

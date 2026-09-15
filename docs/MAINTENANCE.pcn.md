@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T09:09:08+09:00
+
+**摘要**：fix(codewhale): riscv64 源 hash 補完 — `packages/codewhale-src.nix` 之 `fetchFromGitHub` 依然 `lib.fakeHash` 渡、fixed-output 取得段階 構造的失敗、riscv64 build **29 回連続**赤（x86_64 / aarch64 前置 build 済 binary 経路、無影響）。hash 倉庫既定手法 従 CI 之 hash mismatch 報告（`got:`）自取得、且 `nix store prefetch-file --unpack` 以 fetchzip 意味論 本機再算、byte 一致確認：`sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`。修正後、CI 初 取得段階 越 編訳 進入
+
+| 提交 | 説明 |
+|------|------|
+| `01bd1b9` | fix(codewhale): fill the riscv64 source hash |
+
 ## 2026-09-15T09:03:39+09:00
 
 **摘要**：将来責任負担必要之報道偏差 若干修正。—— 四言語「新聞三要素模式」節 現場直編之通信社文体 改稿：電頭、匿名消息筋、機構投射一（書込呼出「休暇中」、修繕費 守衛 立替）與 欧·亨利式結（模組「不予置評」、然 選択肢 既 設定例 登場）。行表 與 三設計制約 事実記録 維持、未動

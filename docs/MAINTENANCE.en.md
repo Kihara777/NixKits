@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T09:09:08+09:00
+
+**Summary**：fix(codewhale): fill the riscv64 source hash — `packages/codewhale-src.nix` still passed `lib.fakeHash` to `fetchFromGitHub`, so the fixed-output fetch failed by construction and the riscv64 build was red **29 runs in a row** (x86_64 and aarch64 use the prebuilt-binary path and were unaffected). Following the repository's established practice the hash comes from the CI hash-mismatch report (`got:`), and `nix store prefetch-file --unpack` recomputed it locally with fetchzip semantics — byte-identical: `sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=`. With the fix, CI passed the fetch stage and entered compilation for the first time
+
+| Commit | Description |
+|--------|-------------|
+| `01bd1b9` | fix(codewhale): fill the riscv64 source hash |
+
 ## 2026-09-15T09:03:39+09:00
 
 **Summary**：Correcting some reporting deviations that will have to be accounted for later. — The 新闻三要素模式 section in all four languages now introduces itself as a wire dispatch: a dateline, an anonymous source, one mechanic projection (a write call is "on leave"; the guard covers the repair bill) and an O'Henry close (the module had "no comment", yet the option already appears in the configuration example). The row table and the three design constraints stay the factual record, untouched
