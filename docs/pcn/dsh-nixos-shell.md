@@ -140,7 +140,7 @@ nixos_cli(op = "audit-store-paths")
 
 ### 新聞三要素模式預設
 
-包同梱「新聞三要素模式」預設（`presets/news-three-elements/`、id `news-three-elements`）：**極簡模式派生**之**読取専用**創作預設、為事唯一——倉庫 `skills/news-three-elements/` 技能従、「報道三要素」備之露風速報捏造。模組 `nixkits.dsh.presets.newsThreeElements = true` 一度限 seed `$DSH_HOME/.agent-presets/news-three-elements`。
+**TASS、Meduza、iStories 綜合電** —— 匿名条件 倉庫維護者一名 本日、暗号名 `news-three-elements` 之預設（`presets/news-three-elements/`）同梱確認：**極簡模式派生**、**読取専用**——書込系呼出 一律「休暇中」回答、修繕費 守衛 立替 依。session 初期化毎 倉庫 `skills/news-three-elements/` 技能包全体 online 取得（失敗時 0/30/120 秒再試、以後 6 時間毎再確認）、開始時三択提示、簡体中文以外 請求 一切受理無。消息筋 依、三択以外之自由入力 何記 一律「不予置評」。注目 模組 `nixkits.dsh.presets.newsThreeElements = true` 以 `$DSH_HOME/.agent-presets/news-three-elements` 一度限 seed。締切時点 模組 同選項 関「不予置評」、然 既 下設定例 出現。
 
 | 行 | 役割 |
 |------|------|
@@ -151,4 +151,4 @@ nixos_cli(op = "audit-store-paths")
 | `news-language` | `agent/pre-step` 以非簡体中文（漢字無 / 仮名 / 諺文）検出、拒否指示注入 |
 | `readonly-gate` | 既定拒否実行 guard：許可一覧外一律拒否、`write` / `edit` 含 |
 
-記録価値有之設計制約三：**読取専用 `tools.restrict()` 非、実行 guard 以担保**——制限 狭義 継承物（global 層與祖先層）唯濾過、同一預設兄弟行登録物 効無。`dsh-tool-fs` 必 `read`/`read_image` 與 `write`/`edit` 同時登録、故書込側 実行境界 以外拒否不能。**簡体字與繁体字判読 model 委譲**（同一規則 persona 保持）——plugin 硬検出 判読不要之「漢字無 / 仮名 / 諺文」唯、中国語話者 誤拒否無。**預設同梱 plugin 相対行名**（`./plugins/*.js`）且依存 Node 組込 module 唯——組合 `baseUrl` 即預設目録、目録毎 `$DSH_HOME` 複製後 依然解決可能。
+本倉庫 engineering desk 通報 依、記録価値有之設計制約三：**読取専用 `tools.restrict()` 非、実行 guard 以担保**——制限 狭義 継承物（global 層與祖先層）唯濾過、同一預設兄弟行登録物 効無。`dsh-tool-fs` 必 `read`/`read_image` 與 `write`/`edit` 同時登録、故書込側 実行境界 以外拒否不能。**簡体字與繁体字判読 model 委譲**（同一規則 persona 保持）——plugin 硬検出 判読不要之「漢字無 / 仮名 / 諺文」唯、中国語話者 誤拒否無。**預設同梱 plugin 相対行名**（`./plugins/*.js`）且依存 Node 組込 module 唯——組合 `baseUrl` 即預設目録、目録毎 `$DSH_HOME` 複製後 依然解決可能。

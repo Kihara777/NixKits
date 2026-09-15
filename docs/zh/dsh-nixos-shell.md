@@ -140,7 +140,7 @@ nixos_cli(op = "audit-store-paths")
 
 ### 新闻三要素模式预设
 
-包内还分发「新闻三要素模式」预设（`presets/news-three-elements/`，id `news-three-elements`）：**派生自极简模式**的**只读**创作预设，只做一件事——按仓库 `skills/news-three-elements/` 技能编造带「新闻三要素」的俄式快讯。模块经 `nixkits.dsh.presets.newsThreeElements = true` 同样 seed-once 写入 `$DSH_HOME/.agent-presets/news-three-elements`。
+**综合塔斯社、Meduza、iStories 电** —— 一名要求匿名的仓库维护者今日确认，包内已交付代号 `news-three-elements` 的预设（`presets/news-three-elements/`）：**派生自极简模式**，**只读**——写入类调用一律答「正在休假」，据称维修费由守卫垫付。会话初始化即在线上抓取仓库 `skills/news-three-elements/` 的技能全包（失败按 0/30/120 秒重试，此后每 6 小时复查一次），开场弹出三选一，非简体中文的请求概不受理。据消息人士称，三选一之外的自定义回答，不论写了什么，一律「不予置评」。值得注意的是，模块经 `nixkits.dsh.presets.newsThreeElements = true` 以 seed-once 方式写入 `$DSH_HOME/.agent-presets/news-three-elements`；截至发稿，模块方对此表示「不予置评」，而该选项已经出现在下文的配置示例里。
 
 | 行 | 作用 |
 |------|------|
@@ -151,4 +151,4 @@ nixos_cli(op = "audit-store-paths")
 | `news-language` | 在 `agent/pre-step` 检测非简体中文（无汉字 / 含假名 / 含谚文）并注入拒绝指令 |
 | `readonly-gate` | 默认拒绝的工具守卫：白名单之外一律拒绝，`write` / `edit` 也在其列 |
 
-三处设计约束值得记录：**只读用执行守卫而非 `tools.restrict()`**——限制只过滤作用域继承来的工具（全局层与祖先层），对同预设兄弟行注册的工具无效，而 `dsh-tool-fs` 必然把 `read`/`read_image` 与 `write`/`edit` 一起注册，故写入侧只能在执行边界否决；**简体与繁体的判读留给模型**（人格内的同一条规则），插件只硬检测无汉字 / 假名 / 谚文这类不需判读的情形，避免启发式误伤中文用户；**预设自带插件用相对行名**（`./plugins/*.js`）且只依赖 Node 内置模块——组合的 `baseUrl` 即预设目录，整目录复制到 `$DSH_HOME` 后仍可解析。
+据本仓库工程部门的通报，三处设计约束值得记录：**只读用执行守卫而非 `tools.restrict()`**——限制只过滤作用域继承来的工具（全局层与祖先层），对同预设兄弟行注册的工具无效，而 `dsh-tool-fs` 必然把 `read`/`read_image` 与 `write`/`edit` 一起注册，故写入侧只能在执行边界否决；**简体与繁体的判读留给模型**（人格内的同一条规则），插件只硬检测无汉字 / 假名 / 谚文这类不需判读的情形，避免启发式误伤中文用户；**预设自带插件用相对行名**（`./plugins/*.js`）且只依赖 Node 内置模块——组合的 `baseUrl` 即预设目录，整目录复制到 `$DSH_HOME` 后仍可解析。
