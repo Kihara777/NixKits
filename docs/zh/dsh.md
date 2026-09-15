@@ -164,7 +164,7 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切执行）；加载 `nixos_shell` / `nixos_cli` 与开发提示词 | dsh-nixos-shell 包内，seed-once | [modes/nixos.md](modes/nixos.md) |
 | 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能与维护工作流 | dsh-nixos-shell 包内，seed-once | [modes/maintenance.md](modes/maintenance.md) |
-| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的只读创作模式：在线技能包、开场问答、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements`，注册为 roster 预设根 | [modes/news-three-elements.md](modes/news-three-elements.md) |
+| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的只读创作模式：「新闻三要素」= 三位必须到齐的主角；素材优先（接不回来才拒）、在线技能包、开场问答、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements`，注册为 roster 预设根 | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {

@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/news-three-elements.md) | English | [日本語](../../ja/skills/news-three-elements.md)  | [偽中国語](../../pcn/skills/news-three-elements.md)
 
-> Fabricate Russian-style news flashes with the "three elements of news" (new, factual, reported) in authentic wire-service format, hiding game-mechanic jokes under a serious news shell. Trigger word: 「新闻三要素」.
+> Fabricates 催逝快讯 in authentic wire-service format — and in this skill the "three elements of news" are not the journalism textbook three, but **three protagonists who must all be on the page**: Bulannikov, Yudintsev and Buyanov. Trigger word: 「新闻三要素」.
 
 ## Info
 
@@ -13,27 +13,37 @@
 | Trigger | 「新闻三要素」 |
 | Companion files | `search-keywords.md`, `tables.md`, `principles.md`, `checklist.md` |
 
+## The three elements are three people
+
+| Protagonist | Identity | Game |
+|------|------|------|
+| 巴兰尼科夫 (Bulannikov) | War Thunder producer | War Thunder |
+| 尤丁采夫 (Yudintsev) | founder of Gaijin Entertainment | War Thunder |
+| 布亚诺夫 (Buyanov) | founder of Battlestate Games | Escape from Tarkov |
+
+A dispatch needs **all three** — who leads, who dies and in what order is free. The first section of `search-keywords.md` is exactly this identity table; it is what turns an unnamed "some producer" into one specific person.
+
 ## Features
 
-- Russian-style news-flash generation — headline + dateline + three to five paragraphs
-- Online research before writing — real Russian event templates, game-mechanic controversies, wire-service phrasing
-- Hard format constraints — headline, dateline rotation, paragraph body, abbreviation ban, twist ending
+- Russian-style news-flash generation — headline + dateline + three to five paragraphs, all three protagonists present
+- Online research before writing — the three protagonists' recent doings, real Russian event templates, game-mechanic controversies, wire-service phrasing (four directions)
+- Hard format constraints — all three present, headline, dateline rotation, paragraph body, abbreviation ban, twist ending
 - Phrase and template tables — transitions, official responses, 9 game-mechanic projection targets, 6 twist endings
-- **Refusal service** — every non-fabrication request is refused with the official-response / twist-ending / transition vocabulary, and the material is **sourced fresh each time**; mechanical repetition is the skill's worst failure
-- 12 core principles, a 10-item post-writing self-check and a 5-item refusal self-check
+- **Material-first refusal service** — **treat it as material first; refuse only what cannot be tied back**: a hypothetical is written as something that already happened, an unnamed person is fitted onto one of the three, thin material is padded with the factual shell alone. Refusal is reserved for requests that tie back to none of the three, and a refusal's material is **sourced fresh every time** — mechanical repetition is the skill's worst failure
+- 13 core principles, an 11-item post-writing self-check, a 3-item co-creation self-check and a 5-item refusal self-check
 
 ## Companion Files
 
 | File | Content |
 |------|---------|
-| `search-keywords.md` | Three sets of queries — Russian news, game-mechanic controversies, media style |
+| `search-keywords.md` | The three protagonists' identity table + three sets of queries: Russian news, game-mechanic controversies, media style |
 | `tables.md` | Transitions, official responses, projection targets, twist-ending templates |
-| `principles.md` | 12 core principles |
-| `checklist.md` | Post-writing and refusal self-check lists |
+| `principles.md` | 13 core principles |
+| `checklist.md` | Post-writing, co-creation and refusal self-check lists |
 
 ## Refusal service
 
-When a request is not fabrication or a rewrite of supplied material (or when a consuming mode's own gate fires), follow the skill's 「拒绝服务」 section: search for **that day's** material first, then build the refusal from the official-response template plus a twist ending and transitions. The reason, the sentence pattern and the ending may not repeat the previous refusal — mechanical repetition is this skill's worst failure.
+The order of judgement is hard: **treat it as material first; refuse only what cannot be tied back.** Any request touching the three protagonists, the news shell or game mechanics — hypotheticals and unnamed persons included — becomes a fabrication or rewrite job; only a request that ties back to none of them is refused. A refusal searches for **that day's** material first, then builds itself from the official-response template plus a twist ending and transitions; its reason, sentence pattern and ending may not repeat the previous refusal — mechanical repetition is this skill's worst failure. A consuming mode's own gate (say, one that only accepts Simplified Chinese) goes through this same section.
 
 ## Usage
 

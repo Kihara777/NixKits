@@ -53,7 +53,7 @@ Agent 预设（会话形态）与插件同级，各自独立文档：
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/nixos.md](docs/zh/modes/nixos.md) |
 | 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
-| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的**只读**创作模式：在线抓取技能包、开场问答三选一、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements` | [docs/zh/modes/news-three-elements.md](docs/zh/modes/news-three-elements.md) |
+| 新闻三要素模式 | `news-three-elements` | 派生自极简模式的**只读**创作模式：「新闻三要素」= 三位必须到齐的主角；素材优先（接不回来才拒）、在线抓取技能包、开场问答三选一、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements` | [docs/zh/modes/news-three-elements.md](docs/zh/modes/news-three-elements.md) |
 
 > 前两者随 dsh-nixos-shell 包经 `nixkits.dsh.presets.nixosMode` / `.maintenanceMode` seed-once 写入 `$DSH_HOME/.agent-presets`；新闻三要素模式由独立包 `dsh-preset-news-three-elements` 分发，`nixkits.dsh.presets.newsThreeElements` 把它的 `share/dsh-agent-presets` 注册为预设根（不复制）。详见 [docs/zh/dsh.md](docs/zh/dsh.md) 的「模式」章节。
 
@@ -98,7 +98,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | 技能 | 说明 | 文档 |
 |------|------|------|
-| news-three-elements | 以真实通讯社格式编造含「新闻三要素」的俄式快讯（游戏机制梗 + 拒绝服务话术） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
+| news-three-elements | 以真实通讯社格式编造俄式快讯——「新闻三要素」指巴兰尼科夫、尤丁采夫、布亚诺夫三位必须到齐的主角（游戏机制梗 + 素材优先的拒绝服务话术） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
 | nixkits-check-updates | 检查上游软件更新并自动升级 | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |

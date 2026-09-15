@@ -49,7 +49,7 @@ Agent presets (session shapes) sit at the same level as plugins, each with its o
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | Verifies a NixOS host at init (refuses everything otherwise); loads `nixos_shell`/`nixos_cli` plus the NixOS development guidance | inside the dsh-nixos-shell package, seed-once | [docs/en/modes/nixos.md](en/modes/nixos.md) |
 | 维护模式 | `maintenance` | Derived from NixOS模式; injects `write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` skills plus the repo-maintenance workflow prompts | inside the dsh-nixos-shell package, seed-once | [docs/en/modes/maintenance.md](en/modes/maintenance.md) |
-| 新闻三要素模式 | `news-three-elements` | **read-only** creation mode derived from minimal mode: fetches the skill package online, opens with a three-way picker, refuses anything not written in Simplified Chinese | **standalone package** `dsh-preset-news-three-elements` | [docs/en/modes/news-three-elements.md](en/modes/news-three-elements.md) |
+| 新闻三要素模式 | `news-three-elements` | **read-only** creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear, material comes first (only what cannot be tied back is refused), it fetches the skill package online, opens with a three-way picker, and refuses anything not written in Simplified Chinese | **standalone package** `dsh-preset-news-three-elements` | [docs/en/modes/news-three-elements.md](en/modes/news-three-elements.md) |
 
 > The first two ship inside the dsh-nixos-shell package and are seeded once into `$DSH_HOME/.agent-presets` via `nixkits.dsh.presets.nixosMode` / `.maintenanceMode`; 新闻三要素模式 comes from the standalone package `dsh-preset-news-three-elements`, and `nixkits.dsh.presets.newsThreeElements` registers its `share/dsh-agent-presets` as a preset root (no copy). See the "Modes" section of [docs/en/dsh.md](en/dsh.md).
 
@@ -96,7 +96,7 @@ For AI coding assistants:
 | Skill | Description | Docs |
 |------|------|------|
 > ⚠️ **Claude Code** has been removed from nixkits-skills install targets. The software implements nationality inference based on user data, crossing a security boundary. See [nixkits-skills docs](en/skills/nixkits-skills.md).
-| news-three-elements | Fabricate Russian-style news flashes with the "three elements of news" (game-mechanic jokes + refusal service) | [docs/en/skills/news-three-elements.md](en/skills/news-three-elements.md) |
+| news-three-elements | Fabricate Russian-style news flashes — the "three elements of news" are Bulannikov, Yudintsev and Buyanov, the three protagonists who must all appear (game-mechanic jokes + a material-first refusal service) | [docs/en/skills/news-three-elements.md](en/skills/news-three-elements.md) |
 | nixkits-check-updates | Check for upstream updates and auto-upgrade | [docs/en/skills/nixkits-check-updates.md](en/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits skill installer (local/online) | [docs/en/skills/nixkits-skills.md](en/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/en/skills/nixos-modern-cli.md](en/skills/nixos-modern-cli.md) |
