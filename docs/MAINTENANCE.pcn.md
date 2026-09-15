@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-15T11:08:06+09:00
+
+**摘要**：feat(preset)+test: 倉庫自検体系 與 模式挙動四加固 — `nix flake check` 一項 自 **六項** 移行：`preset-bundle`（同梱技能 snapshot `skills/` 與 byte 単位一致）、`workflow-coverage`（全 package 構築 workflow 有、例外 明示登録）、`doc-links`（相対 link 到達可能・四言語切替器完備・pcn 假名無）、`maintenance-log`（四言語条目数一致・秒精度 timestamp・SHA 重複無）、`news-mode-tests`（模式 plugin 挙動 test、**network 無**：fetch stub 同梱 snapshot 供給、二度目 304 返 故 ETag 経路 亦覆）。導入当日 既存欠陥 検出・修正：翻訳文書十二件 切替器 同目録 `<name>.<lang>.md` 指、codewhale 文書三件 相互 link 誤、`+00:00` timestamp 一件、`dsh-api-balance` 構築 workflow 無。同 round 挙動四加固：**読取範囲限定**（絶対 path 工作区 / 添付目録 / `/tmp` 唯）、**抽選連続重複防止**、**利用者先発言時 問撤回**、**取得並列化 + ETag 条件付請求**（内容不変時 304、書直無）。persona 常設拒否条款 技能「拒否服務」節 返、二重管理 解消
+
+| 提交 | 説明 |
+|------|------|
+| `9260dd5` | test: guard the repo with six flake checks and an in-repo test suite |
+| `ac4b05c` | feat(preset): scope reads, harden the draw, and make the fetch incremental |
+| `0af079c` | docs(preset): record the scoped reads, incremental fetch and hardened draw |
+| `9810af5` | fix(docs): repair the switchers and dead links the new check found |
+
 ## 2026-09-15T10:57:15+09:00
 
 **摘要**：feat(skill): 技能「拒否服務」節 新設 — 拒否流程「某預設 persona 限定」自 **技能本体** 昇格：`SKILL.md` 「拒否服務」章 追加（捏造 非・提供素材改稿 非 之請求 同節 拒否、**拒否毎 当日素材 online 取得**；理由・文型・段落順・結末反転・接続詞 前回 反復 不可；三〜五句 通信社文体；底色「至極真面目 出鱈目」；拒否 即止）、[`tables.md`](../skills/news-three-elements/tables.md) 冒頭 雛形 骨格 唯・素材 当次取得 明記、[`checklist.md`](../skills/news-three-elements/checklist.md) 「拒否服務自己点検」5 項 追加。四言語技能文書 與 各 README 技能行 同期、package 同梱 snapshot 再生成、persona 二箇所 節名 参照 変更

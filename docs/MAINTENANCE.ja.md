@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:08:06+09:00
+
+**概要**：feat(preset)+test: リポジトリ自検体系とモード挙動の四つの加固 — `nix flake check` は 1 項から **6 項**へ：`preset-bundle`（同梱技能スナップショットは `skills/` とバイト単位で一致）、`workflow-coverage`（全パッケージにビルド workflow、例外は明示登録）、`doc-links`（相対リンク到達可能・四言語切替器完備・pcn 假名無）、`maintenance-log`（四言語の条目数一致・秒精度タイムスタンプ・SHA 重複無）、`news-mode-tests`（モードプラグインの挙動テスト、**ネットワーク無**：fetch をスタブして同梱スナップショットを供給し二度目は 304 を返すため ETag 経路も覆う）。導入当日に既存欠陥を検出・修正：翻訳文書 12 件の切替器が同ディレクトリの `<name>.<lang>.md` を指し、codewhale 文書 3 件の相互リンクが誤り、`+00:00` のタイムスタンプが 1 件、`dsh-api-balance` にビルド workflow が無かった。同ラウンドで挙動を四点加固：**読取範囲の限定**（絶対パスはワークスペース / 添付ディレクトリ / `/tmp` のみ）、**抽選の連続重複防止**、**利用者が先に話したら問いを撤回**、**取得の並列化 + ETag 条件付きリクエスト**（内容不変なら 304 で書き直さない）。persona は常設の拒否条款を技能「拒否サービス」節へ返し、二重管理を解消
+
+| コミット | 説明 |
+|----------|------|
+| `9260dd5` | test: guard the repo with six flake checks and an in-repo test suite |
+| `ac4b05c` | feat(preset): scope reads, harden the draw, and make the fetch incremental |
+| `0af079c` | docs(preset): record the scoped reads, incremental fetch and hardened draw |
+| `9810af5` | fix(docs): repair the switchers and dead links the new check found |
+
 ## 2026-09-15T10:57:15+09:00
 
 **概要**：feat(skill): スキルに「拒否サービス」節を新設 — 拒否の流れを「あるプリセットの persona だけ」から**スキル本体**へ格上げ：`SKILL.md` に「拒否サービス」章を追加（捏造でも提供素材の改稿でもないリクエストは同節で拒否し、**拒否のたびに当日の素材をオンラインで取る**；理由・文型・段落順・結末の反転・接続詞を前回から繰り返さない；三〜五句の通信社文体；底色は「至極真面目にデタラメを言う」；拒否したらそこで終わり）、[`tables.md`](../skills/news-three-elements/tables.md) は冒頭で雛形は骨格にすぎず素材は当次取得と明記、[`checklist.md`](../skills/news-three-elements/checklist.md) に「拒否サービスの自己点検」5 項を追加。四言語の技能文書と各 README の技能行を同期し、パッケージ同梱のスナップショットを再生成、persona の二か所を節名で参照するよう変更

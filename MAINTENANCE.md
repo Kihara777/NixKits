@@ -2,6 +2,17 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:08:06+09:00
+
+**摘要**：feat(preset)+test: 仓库自检体系与模式行为加固 — `nix flake check` 由 1 项扩到 **6 项**：新增 `preset-bundle`（包内技能快照必须与 `skills/` 逐字节一致）、`workflow-coverage`（每个包都有构建 workflow，例外显式登记）、`doc-links`（相对链接可达 + 四语切换器齐全 + pcn 无假名）、`maintenance-log`（四语条目数一致、时间戳精确到秒、SHA 去重）、`news-mode-tests`（模式插件行为测试，**无网络**：打桩 fetch 用包内快照供源并在第二次返回 304，顺带覆盖 ETag 路径）。检查上线当天即抓出并修复一批既存缺陷：12 个翻译文档的切换器指向同目录 `<name>.<lang>.md`、3 处 codewhale 跨文档链接写错、1 条 `+00:00` 时间戳、`dsh-api-balance` 缺构建 workflow。同轮四项行为加固：**只读限范围**（绝对路径仅工作区 / 附件目录 / `/tmp`）、**抽取不连续重复**、**弹窗在用户先开口时自动撤回**、**技能抓取并行 + ETag 条件请求**（内容不变即 304，不重写盘）；人格把常设拒绝条款交还给技能「拒绝服务」一节，避免两处漂移
+
+| 提交 | 说明 |
+|------|------|
+| `9260dd5` | test: guard the repo with six flake checks and an in-repo test suite |
+| `ac4b05c` | feat(preset): scope reads, harden the draw, and make the fetch incremental |
+| `0af079c` | docs(preset): record the scoped reads, incremental fetch and hardened draw |
+| `9810af5` | fix(docs): repair the switchers and dead links the new check found |
+
 ## 2026-09-15T10:57:15+09:00
 
 **摘要**：feat(skill): 技能新增「拒绝服务」一节 — 拒绝流程从「只存在于某个预设的人格」升格为**技能本体**：`SKILL.md` 新增「拒绝服务」章（不属于编造/素材改写的请求一律按本节拒绝；**每次动笔前先联网取当天素材**；理由、句式、段落顺序、结尾反转、过渡词都不得与上一次重复；三到五句通讯社文风；底色「一本正经胡说八道」；拒绝即止），[`tables.md`](skills/news-three-elements/tables.md) 顶部标明模板只是骨架、素材必须当次取，[`checklist.md`](skills/news-three-elements/checklist.md) 增补「拒绝服务自查」5 项；四语技能文档与各 README 技能行同步，预设包内兜底快照重生成、人格两处改为按名引用该节

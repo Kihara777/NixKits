@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-15T11:08:06+09:00
+
+**Summary**：feat(preset)+test: a repository self-check suite and four behaviour hardenings — `nix flake check` grows from one check to **six**: `preset-bundle` (the bundled skill snapshot must match `skills/` byte for byte), `workflow-coverage` (every package has a build workflow; exemptions are explicit), `doc-links` (relative links resolve, four-language switchers complete, pseudocn kana-free), `maintenance-log` (equal entry counts, second-precision timestamps, unique commit ids) and `news-mode-tests` (the mode's plugin behaviour, **offline**: a stubbed fetch serves the bundled snapshot and answers 304 on the second pass, covering the ETag path). On the day it landed the suite found and fixed a batch of pre-existing defects: twelve translated documents pointed their switcher at a same-directory `<name>.<lang>.md`, three codewhale docs had a wrong cross-document link, one section title carried a `+00:00` timestamp, and `dsh-api-balance` had no build workflow. Four behaviour hardenings in the same round: **scoped reads** (absolute paths only under the workspace, the attachment store or `/tmp`), **no consecutive repeat** in the draw, **the picker withdrawn when the caller speaks first**, and **a parallel fetch with ETag conditional requests** (an unchanged package answers 304 and nothing is rewritten); the persona hands its standing refusal rules back to the skill's 「拒绝服务」 section so the two cannot drift apart
+
+| Commit | Description |
+|--------|-------------|
+| `9260dd5` | test: guard the repo with six flake checks and an in-repo test suite |
+| `ac4b05c` | feat(preset): scope reads, harden the draw, and make the fetch incremental |
+| `0af079c` | docs(preset): record the scoped reads, incremental fetch and hardened draw |
+| `9810af5` | fix(docs): repair the switchers and dead links the new check found |
+
 ## 2026-09-15T10:57:15+09:00
 
 **Summary**：feat(skill): the skill gains a refusal service of its own — the refusal flow is promoted from "one preset's persona" to the **skill itself**: `SKILL.md` gains a 「拒绝服务」 section (requests that are not fabrication or a rewrite of supplied material are refused there; **search for that day's material before every refusal**; the reason, sentence pattern, paragraph order, twist ending and transitions may not repeat the previous one; three to five sentences in wire style; the 「一本正经胡说八道」 register throughout; refuse and stop), [`tables.md`](../skills/news-three-elements/tables.md) marks its templates as skeletons whose material must be sourced per use, and [`checklist.md`](../skills/news-three-elements/checklist.md) gains a five-item refusal self-check; the four-language skill docs and the README rows follow, the package's bundled snapshot is regenerated and the persona's two refusal paths now cite the section by name
