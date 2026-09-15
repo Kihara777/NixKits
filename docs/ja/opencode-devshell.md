@@ -1,6 +1,6 @@
 # opencode (devShell)
 
-[中文](../zh/opencode-devshell.md) | [English](opencode-devshell.en.md) | 日本語  | [偽中国語](opencode-devshell.pcn.md)
+[中文](../zh/opencode-devshell.md) | [English](../en/opencode-devshell.md) | 日本語  | [偽中国語](../pcn/opencode-devshell.md)
 
 完全な AI コーディングアシスタント開発環境：
 

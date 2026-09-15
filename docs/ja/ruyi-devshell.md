@@ -1,6 +1,6 @@
 # ruyi (devShell)
 
-[中文](../zh/ruyi-devshell.md) | [English](ruyi-devshell.en.md) | 日本語  | [偽中国語](ruyi-devshell.pcn.md)
+[中文](../zh/ruyi-devshell.md) | [English](../en/ruyi-devshell.md) | 日本語  | [偽中国語](../pcn/ruyi-devshell.md)
 
 RuyiSDK パッケージマネージャ開発環境（stable / beta / alpha の 3 チャンネルで利用可能）：
 

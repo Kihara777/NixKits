@@ -1,6 +1,6 @@
 # opencode (devShell)
 
-[中文](../zh/opencode-devshell.md) | English | [日本語](opencode-devshell.ja.md)  | [偽中国語](opencode-devshell.pcn.md)
+[中文](../zh/opencode-devshell.md) | English | [日本語](../ja/opencode-devshell.md)  | [偽中国語](../pcn/opencode-devshell.md)
 
 Full AI coding assistant development environment:
 

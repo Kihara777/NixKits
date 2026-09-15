@@ -1,6 +1,6 @@
 # breeze-black
 
-[中文](../zh/breeze-black.md) | [English](breeze-black.en.md) | 日本語  | [偽中国語](breeze-black.pcn.md)
+[中文](../zh/breeze-black.md) | [English](../en/breeze-black.md) | 日本語  | [偽中国語](../pcn/breeze-black.md)
 
 Plasma 6 向け高コントラスト Breeze Black アクセシビリティテーマ。グローバル Plasma look-and-feel + GTK テーマ + カラースキームを含む。
 

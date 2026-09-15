@@ -172,7 +172,7 @@
 |------|------|
 | `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
 
-## 2026-09-12T19:00:39+00:00
+## 2026-09-13T04:00:39+09:00
 
 **摘要**：修复 dsh 反代端口 403 — lighttpd 缺 mod_proxy/mod_setenv 模块，proxy.server/setenv 配置被忽略、反代端口请求无 handler；改为 reverseProxy.enable 时显式声明这两个模块（autoAuth 时再追加 mod_magnet）
 

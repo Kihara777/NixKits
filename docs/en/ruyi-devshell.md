@@ -1,6 +1,6 @@
 # ruyi (devShell)
 
-[中文](../zh/ruyi-devshell.md) | English | [日本語](ruyi-devshell.ja.md)  | [偽中国語](ruyi-devshell.pcn.md)
+[中文](../zh/ruyi-devshell.md) | English | [日本語](../ja/ruyi-devshell.md)  | [偽中国語](../pcn/ruyi-devshell.md)
 
 RuyiSDK package manager development environment (available in stable / beta / alpha channels):
 

@@ -47,7 +47,7 @@ codewhale auth set --provider deepseek # API キー保存
 
 ## sudo の有効化
 
-codewhale v0.9.12 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.ja.md) を参照。
+codewhale v0.9.12 はデフォルトで `sudo` をブロックします。 [codewhale-sudo パッチ文書](codewhale-sudo.md) を参照。
 
 ## 既知の問題
 

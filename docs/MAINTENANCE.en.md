@@ -4,7 +4,7 @@
 
 ## 2026-09-15T10:57:15+09:00
 
-**Summary**：feat(skill): the skill gains a refusal service of its own — the refusal flow is promoted from "one preset's persona" to the **skill itself**: `SKILL.md` gains a 「拒绝服务」 section (requests that are not fabrication or a rewrite of supplied material are refused there; **search for that day's material before every refusal**; the reason, sentence pattern, paragraph order, twist ending and transitions may not repeat the previous one; three to five sentences in wire style; the 「一本正经胡说八道」 register throughout; refuse and stop), [`tables.md`](skills/news-three-elements/tables.md) marks its templates as skeletons whose material must be sourced per use, and [`checklist.md`](skills/news-three-elements/checklist.md) gains a five-item refusal self-check; the four-language skill docs and the README rows follow, the package's bundled snapshot is regenerated and the persona's two refusal paths now cite the section by name
+**Summary**：feat(skill): the skill gains a refusal service of its own — the refusal flow is promoted from "one preset's persona" to the **skill itself**: `SKILL.md` gains a 「拒绝服务」 section (requests that are not fabrication or a rewrite of supplied material are refused there; **search for that day's material before every refusal**; the reason, sentence pattern, paragraph order, twist ending and transitions may not repeat the previous one; three to five sentences in wire style; the 「一本正经胡说八道」 register throughout; refuse and stop), [`tables.md`](../skills/news-three-elements/tables.md) marks its templates as skeletons whose material must be sourced per use, and [`checklist.md`](../skills/news-three-elements/checklist.md) gains a five-item refusal self-check; the four-language skill docs and the README rows follow, the package's bundled snapshot is regenerated and the persona's two refusal paths now cite the section by name
 
 | Commit | Description |
 |--------|-------------|
@@ -172,7 +172,7 @@
 |--------|-------------|
 | `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
 
-## 2026-09-12T19:00:39+00:00
+## 2026-09-13T04:00:39+09:00
 
 **Summary**：Fixed dsh reverse-proxy port returning 403 — lighttpd was missing mod_proxy/mod_setenv, so the proxy.server/setenv config was ignored and requests to the proxy port had no handler; both modules are now declared explicitly on reverseProxy.enable (mod_magnet appended when autoAuth is on)
 

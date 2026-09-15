@@ -48,7 +48,7 @@ Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first r
 
 ## Enabling sudo
 
-codewhale v0.9.12 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.en.md).
+codewhale v0.9.12 blocks `sudo` by default. See [codewhale-sudo patch doc](codewhale-sudo.md).
 
 ## Known Issues
 

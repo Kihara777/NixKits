@@ -47,7 +47,7 @@ codewhale auth set --provider deepseek # API 鍵保存
 
 ## sudo 有効化
 
-codewhale v0.9.12 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale-sudo.pcn.md) 参照。
+codewhale v0.9.12 既定 `sudo` 遮断。 [codewhale-sudo 補丁文書](codewhale-sudo.md) 参照。
 
 ## 既知問題
 

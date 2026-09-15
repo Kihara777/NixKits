@@ -1,6 +1,6 @@
 # codewhale-sudo
 
-[中文](../zh/codewhale-sudo.md) | [English](codewhale-sudo.en.md) | [日本語](codewhale-sudo.ja.md)  | 偽中国語
+[中文](../zh/codewhale-sudo.md) | [English](../en/codewhale-sudo.md) | [日本語](../ja/codewhale-sudo.md)  | 偽中国語
 
 codewhale v0.9.0 既定 `prctl(PR_SET_NO_NEW_PRIVS)` 防禦縦深有効、`sudo` 遮断。codewhale 静的連結故 `LD_PRELOAD` 不能。此補丁 ptrace 方式 syscall 傍受 内核境界 prctl 書換、sudo 機能復元。
 

@@ -1,6 +1,6 @@
 # ruyi (devShell)
 
-[中文](../zh/ruyi-devshell.md) | [English](ruyi-devshell.en.md) | [日本語](ruyi-devshell.ja.md)  | 偽中国語
+[中文](../zh/ruyi-devshell.md) | [English](../en/ruyi-devshell.md) | [日本語](../ja/ruyi-devshell.md)  | 偽中国語
 
 RuyiSDK 包管理開発環境（安定 / β / α 三通道利用可能）：
 

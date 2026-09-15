@@ -1,6 +1,6 @@
 # breeze-black
 
-[中文](../zh/breeze-black.md) | [English](breeze-black.en.md) | [日本語](breeze-black.ja.md)  | 偽中国語
+[中文](../zh/breeze-black.md) | [English](../en/breeze-black.md) | [日本語](../ja/breeze-black.md)  | 偽中国語
 
 Plasma 6 向高対比 Breeze Black 障碍支援主題。包括全局 Plasma look-and-feel + GTK 主題 + 配色方案。
 

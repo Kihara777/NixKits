@@ -4,7 +4,7 @@
 
 ## 2026-09-15T10:57:15+09:00
 
-**摘要**：feat(skill): 技能「拒否服務」節 新設 — 拒否流程「某預設 persona 限定」自 **技能本体** 昇格：`SKILL.md` 「拒否服務」章 追加（捏造 非・提供素材改稿 非 之請求 同節 拒否、**拒否毎 当日素材 online 取得**；理由・文型・段落順・結末反転・接続詞 前回 反復 不可；三〜五句 通信社文体；底色「至極真面目 出鱈目」；拒否 即止）、[`tables.md`](skills/news-three-elements/tables.md) 冒頭 雛形 骨格 唯・素材 当次取得 明記、[`checklist.md`](skills/news-three-elements/checklist.md) 「拒否服務自己点検」5 項 追加。四言語技能文書 與 各 README 技能行 同期、package 同梱 snapshot 再生成、persona 二箇所 節名 参照 変更
+**摘要**：feat(skill): 技能「拒否服務」節 新設 — 拒否流程「某預設 persona 限定」自 **技能本体** 昇格：`SKILL.md` 「拒否服務」章 追加（捏造 非・提供素材改稿 非 之請求 同節 拒否、**拒否毎 当日素材 online 取得**；理由・文型・段落順・結末反転・接続詞 前回 反復 不可；三〜五句 通信社文体；底色「至極真面目 出鱈目」；拒否 即止）、[`tables.md`](../skills/news-three-elements/tables.md) 冒頭 雛形 骨格 唯・素材 当次取得 明記、[`checklist.md`](../skills/news-three-elements/checklist.md) 「拒否服務自己点検」5 項 追加。四言語技能文書 與 各 README 技能行 同期、package 同梱 snapshot 再生成、persona 二箇所 節名 参照 変更
 
 | 提交 | 説明 |
 |------|------|
@@ -172,7 +172,7 @@
 |------|------|
 | `307e64b` | docs: warn against GGML_CUDA_ENABLE_UNIFIED_MEMORY on StrixHalo |
 
-## 2026-09-12T19:00:39+00:00
+## 2026-09-13T04:00:39+09:00
 
 **摘要**：dsh 逆代理端口 403 修正 — lighttpd 無 mod_proxy/mod_setenv、proxy.server/setenv 設定無視、反代端口要求無 handler；reverseProxy.enable 時此 2 模組明示宣言変更（autoAuth 時 mod_magnet 追加）
 
