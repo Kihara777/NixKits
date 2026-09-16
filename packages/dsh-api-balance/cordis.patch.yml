@@ -1,0 +1,20 @@
+# dsh-api-balance bundle patch — applied as a profile layer when this package
+# is installed with `dsh plugin add`.
+#
+# Registered as a bundle so the plugin reaches users who install it the DSH
+# way (`dsh plugin --profile web add ...`), not only those who mount it
+# declaratively through the NixOS module. The NixOS module writes its own row
+# into the profile's cordis.patch.yml instead; use one route or the other, not
+# both, since each registers the same `api-balance` entry id.
+#
+# `name` must be a RELATIVE path: the bundler anchors a name starting with
+# `./` beside this patch file and hands the loader an absolute `file://` URL.
+# A bare package name would instead be resolved from the dsh installation
+# tree, which does not contain this package, and fail with
+# "Cannot find package '@kihara777/dsh-api-balance'". The path points at the
+# implementation file rather than the package name because that is what makes
+# the entry resolvable from wherever pnpm placed the package.
+
+- insert:
+    - id: api-balance
+      name: './lib/index.js'

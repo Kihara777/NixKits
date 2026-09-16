@@ -21,7 +21,8 @@
   },
   "files": [
     "lib/index.js",
-    "lib/client.js"
+    "lib/client.js",
+    "cordis.patch.yml"
   ],
   "publishConfig": {
     "access": "public"
@@ -30,6 +31,9 @@
     "@deepseek-ai/dsh-credentials": "0.1.1-rc.2"
   },
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "inject": [
         "@deepseek-ai/dsh-client-connection",
