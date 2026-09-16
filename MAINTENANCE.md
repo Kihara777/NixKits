@@ -2,6 +2,16 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T13:44:09+09:00
+
+**摘要**：refactor(dsh-plugins): 移除两个插件未使用的 `peerDependencies` — 起因是评估 issue #3 的收录邀请时，为验证 dsh 插件能否经 `dsh plugin add` 安装而做的实测。实测发现两个插件的 peer 声明**与实际 import 完全不符**：`dsh-nixos-shell` 声明 `cordis` / `dsh-subprocess` / `dsh-timer`，`dsh-api-balance` 声明 `cordis` / `dsh-client-connection`，而两者实际只 import 各自的真实依赖（`dsh-tools` + `schemastery` / `dsh-credentials`）。其中 **`@deepseek-ai/dsh-timer` 在 npm（404）与宿主 dsh 树中都不存在**——宿主由 `cordis-plugin-timer` 提供 `timer` 服务，而插件 `inject` 的是服务名而非包名；`dsh-client-connection` 则已由 `dsh.client.inject` 正确声明，属重复。**影响判断**：这些死声明在声明式路径下**从不生效**（`buildNpmPackage` 用 `--legacy-peer-deps` 跳过 peer 解析，已实测构建产物仅含真实依赖），故本改动不影响任何现有部署、无版本变更；但它们在 pnpm 路径下会**直接阻断安装**（`dsh-timer` 404），且向生态传递误导性信号。lock 与 `npmDepsHash` 同步重生成（已验证 vendored lock 与 npm-deps 的 fixup 产物逐字节一致）。**路线取舍记录**：本轮曾评估为 `dsh-nixos-shell` 补齐 `dsh.bundle` 以投 awesome-ai-plugins 的 DeepSeek Harness 节，实测确认插件本体可经 `github:...#path:` 安装并进入 profile layer stack（无需发 npm），但 **Agent 预设无法经 bundle patch 注册**——`agent-presets.roots[].path` 需绝对路径，而 patch 只能锚定 `insert[].name`、`!!js` 作用域仅有 `dshHomePath`（且反引号会致 js-yaml 解析失败）。绕开该限制需让插件写用户 `$DSH_HOME` 来种子预设，牺牲声明式与不可变性。**结论：放弃 dsh.bundle 路线**——本项目插件面向 NixOS，经 flake/NixOS 模块声明式分发（版本由 Nix 锁定、随系统代际更新、可复现）更符合 NixOS 哲学且维护成本更低；相关改动已全部回退，未进入历史
+
+| 提交 | 说明 |
+|------|------|
+| `d14146c` | refactor(dsh-plugins): 移除未使用的 peerDependencies |
+
+**相关外部报告**：issue #3（@zerocodefast）——awesome-ai-plugins 收录邀请，保持 open 未提交 PR。
+
 ## 2026-09-16T12:39:12+09:00
 
 **摘要**：refactor(skills)!: 拆分 `nixkits-check-updates` 为「通用核心 + 仓库适配层」 — 起因是评估 issue #3（awesome-ai-plugins 收录邀请）。该邀请本身无技术争议，但促使我们审查被推荐技能的可移植性：原 `nixkits-check-updates`（299 行）与 NixKits 强耦合——第 5 步**硬编码** `for lang in zh en ja pcn` 与 `docs/$lang/<pkg>.md` 路径、整节 dsh 插件清单同步、第 8 步强制调用 `write-maintenance-log`。**这使它对其他 nix flake 仓库不可直接用**：非 NixKits 仓库执行到第 5 步会去 `sed` 不存在的 `docs/pcn/`，到第 8 步会调用不存在的技能——不是措辞不够通用，而是执行会直接失败。本次按「通用核心 + 仓库适配层」拆分：新增 `nix-flake-update-check`（314 行，不绑定任何仓库）承载包发现、包型分流 hash 流程、flake.lock 三路处置、补丁内版本检查与 nixpkgs 漂移陷阱，第 5/8 步改为「按仓库实际结构选择」而非硬编码；`nixkits-check-updates` 瘦身为适配层（299 → 115 行），只留四语文档、dsh 插件清单、维护日志与历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败、Rust Cargo.lock）。定义**适配层契约**（文档同步 / 变更记录 / 动态输入 / 事故教训 / 额外同步项由适配层声明，冲突时以适配层为准）。**关键取舍**：此前担心泛化会稀释具体经验而让技能在主场变弱——拆分正是为规避该代价，事故教训与仓库约定**原样留在适配层**，通用核心只保留与仓库无关的方法论，两端各得其所。维护模式注入同步补入通用技能（二者均注册）；四语新增通用技能文档，README / dsh.md / modes/maintenance.md 注入清单与技能表同步

@@ -2,6 +2,16 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T13:44:09+09:00
+
+**摘要**：refactor(dsh-plugins): 両 plugin 未使用 `peerDependencies` 削除 — 発端 issue #3 収録招待 評価 際、dsh plugin `dsh plugin add` 導入 可能 否 実測。実測 結果、両 plugin peer 宣言 **実際 import 完全 不一致** 判明：`dsh-nixos-shell` `cordis` / `dsh-subprocess` / `dsh-timer` 宣言、`dsh-api-balance` `cordis` / `dsh-client-connection` 宣言、但 実際 import 各自 実依存（`dsh-tools` + `schemastery` / `dsh-credentials`）限定。特 **`@deepseek-ai/dsh-timer` npm（404）也 host dsh tree 也 不存在**——host `cordis-plugin-timer` 以 `timer` service 提供、plugin `inject` package 名 非 service 名 指。`dsh-client-connection` 既 `dsh.client.inject` 正宣言済、peer 側 重複。**影響判断**：此等 死 宣言 宣言的経路 **決 効 無**（`buildNpmPackage` `--legacy-peer-deps` peer 解決 省略。build 成果物 検査 実依存 限定 含 確認済）。故 本変更 既存 deploy 影響 無、版本変更 伴 無。但 pnpm 経路 **install 直接 阻害**（`dsh-timer` 404）、且 ecosystem 誤 signal 送。lock 與 `npmDepsHash` 同時 再生成（vendored lock npm-deps fixup 成果物 byte 単位 一致 検証済）。**路線 取捨 記録**：本 回 `dsh-nixos-shell` 対 `dsh.bundle` 補 awesome-ai-plugins DeepSeek Harness 節 投稿 案 評価。実測 plugin 本体 `github:...#path:` 導入 可能 profile layer stack 入 事（npm 公開 不要）確認、但 **Agent preset bundle patch 登録 不可**——`agent-presets.roots[].path` 絶対 path 要 一方、patch anchor 可能 `insert[].name` 限定、`!!js` 作用域 `dshHomePath` 限定（更 反引号 js-yaml 解析 壊）。此 回避 為 plugin 利用者 `$DSH_HOME` 書込 preset seed 必要、宣言性 與 不変性 犠牲。**結論：dsh.bundle 路線 断念**——本 project plugin NixOS 向、flake / NixOS module 宣言的配布（版本 Nix 固定、system 世代 共 更新、再現可能）方 NixOS 哲学 適、保守 cost 低。関連 変更 全部 撤回済、履歴 入 無
+
+| 提交 | 説明 |
+|------|------|
+| `d14146c` | refactor(dsh-plugins): 移除未使用的 peerDependencies |
+
+**関連 外部報告**：issue #3（@zerocodefast）——awesome-ai-plugins 収録招待、open 維持 PR 提出 無。
+
 ## 2026-09-16T12:39:12+09:00
 
 **摘要**：refactor(skills)!: `nixkits-check-updates` 「汎用核心 + 倉庫適配層」分割 — 発端 issue #3（awesome-ai-plugins 収録招待）評価。招待 自体 技術 争点 無、但 推薦 技能 移植性 精査 契機。元 `nixkits-check-updates`（299 行）NixKits 強結合——第 5 步 `for lang in zh en ja pcn` 與 `docs/$lang/<pkg>.md` path **硬符号**、dsh 插件一覧同期 節 丸抱、第 8 步 `write-maintenance-log` 強制呼出。**故 他 nix flake 倉庫 其 侭 使用 不可**：NixKits 以外 倉庫 第 5 步 到達 時 不存在 `docs/pcn/` 對 `sed`、第 8 步 不存在 技能 呼出——言回 問題 非、実行 失敗。今回「汎用核心 + 倉庫適配層」分割：新規 `nix-flake-update-check`（314 行、何 倉庫 非結合）包検出、builder 別 hash flow、flake.lock 三路分岐、修正内蔵版確認、nixpkgs 漂移 罠 担当、第 5/8 步 硬符号 非「倉庫 実際 構造 応 選択」書換。`nixkits-check-updates` 適配層 痩（299 → 115 行）——四言語文書、dsh 插件一覧、保守記録、過去 事故教訓（comfyui 漂移、codewhale-riscv64 CI 失敗、Rust Cargo.lock）限定 残。**適配層 契約** 定義（文書同期 / 変更記録 / 動的入力 / 事故教訓 / 追加同期項 適配層 宣言、衝突 時 適配層 優先）。**重要 取捨**：以前 汎化 具体 経験 希薄化 本拠地 技能 弱化 懸念——此 分割 正 其 代償 回避 手段、事故教訓 與 倉庫規約 **其 侭 適配層 残**、汎用核心 倉庫非依存 方法論 限定 保持、双方 得 物 有。保守 mode 注入 汎用技能 追加（両者 登録）；四言語 汎用技能 document 新設、README / dsh.md / modes/maintenance.md 注入一覧 與 技能表 同期
