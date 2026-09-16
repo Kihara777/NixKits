@@ -18,6 +18,7 @@
 - **llama.cpp tuning**: parameter quick-reference and forbidden items on UMA devices
 - **Diagnostic order**: rule out the environment variable before suspecting quantisation or templates
 - **Context-cost analysis**: detect the per-turn fixed cost of agent tool schemas
+- **Power profiles and thermal management**: pick a profile by supply type (PD / native AC / battery), diagnose fan-curve defects, and use the control-experiment criterion for overheating shutdowns (once the fan saturates, lowering power is the only lever); EC thresholds are invisible to the OS
 - **Silent-failure diagnosis**: recognise "service is active but does not work" problems
 - **Experiment validity check**: recognise an invalid control experiment
 

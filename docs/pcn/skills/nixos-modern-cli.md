@@ -20,6 +20,7 @@
 - 体系保守、記録確認、塵集回收網羅
 - NixOS 固有注意点（PATH、nix-env 永続性等）列挙
 - Nix Store 路罠診断：GC 回收以無効化 `/nix/store/` 路特定・修正（例：`gh auth setup-git` 認証補助器）
+- 機密 整理：git 管理下 flake 倉庫内 機密 置 不可 理由、倉庫外目録 + `path:` input 導入方法、及 其 二 罠（`flake.lock` 固定、`...` 引数 束縛 不）
 
 ## 使用
 

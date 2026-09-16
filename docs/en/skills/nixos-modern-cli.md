@@ -20,6 +20,7 @@
 - Covers system maintenance, log viewing, and garbage collection
 - Lists NixOS-specific gotchas (PATH, nix-env persistence, etc.)
 - Diagnoses Nix Store path traps: identifies and fixes stale `/nix/store/` paths in config files (e.g. `gh auth setup-git` credential helper breaking after GC)
+- Secret organisation: why secrets cannot stay inside a git-managed flake repository, and the out-of-repo directory + `path:` input approach with its two traps (`flake.lock` pinning, and `...` not binding the argument)
 
 ## Usage
 
