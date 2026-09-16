@@ -112,6 +112,10 @@ All segments are optional: missing ones fall back to TTS during playback. Panel 
 
 ## Install
 
+Two install routes are supported. **NixOS users should prefer the declarative one** (the version is locked by Nix, updates with system generations, and is reproducible); DSH users elsewhere can use `dsh plugin add`. **Pick one** — both register the same `api-balance` entry id.
+
+### Route A: declarative (NixOS module, recommended)
+
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
@@ -126,6 +130,18 @@ All segments are optional: missing ones fall back to TTS during playback. Panel 
   }];
 }
 ```
+
+### Route B: `dsh plugin add` (native DSH)
+
+```bash
+dsh plugin --profile web add 'github:Kihara777/NixKits#path:packages/dsh-api-balance'
+```
+
+The package's `dsh.bundle` points at `cordis.patch.yml`, so it activates as a profile layer once installed. Remove it with `dsh plugin --profile web remove @kihara777/dsh-api-balance`.
+
+> **Why `name` is a relative path**: the patch registers `./lib/index.js` rather than the package name. When a bundle entry name starts with `./`, dsh anchors it to an absolute `file://` URL **beside the patch**; a bare package name would instead be resolved from the dsh installation tree, where this package does not exist (`Cannot find package`), because pnpm places it in the profile directory rather than the dsh tree.
+
+> **Version reproducibility**: route B resolves through git and is **not locked by `flake.lock`**; use route A when you need a reproducible environment.
 
 ## Notes
 

@@ -112,6 +112,10 @@ voice-pack.zip
 
 ## 安装
 
+本插件支持两种安装方式。**NixOS 用户推荐声明式**（版本由 Nix 锁定、随系统代际更新、可复现）；其他平台的 DSH 用户可用 `dsh plugin add`。**两者择一即可**——它们都会注册同一个 `api-balance` entry id。
+
+### 方式 A：声明式（NixOS 模块，推荐）
+
 ```nix
 {
   nixkits.dsh.plugins.packages = [{
@@ -126,6 +130,22 @@ voice-pack.zip
   }];
 }
 ```
+
+### 方式 B：`dsh plugin add`（DSH 原生）
+
+```bash
+dsh plugin --profile web add 'github:Kihara777/NixKits#path:packages/dsh-api-balance'
+```
+
+包内 `dsh.bundle` 指向 `cordis.patch.yml`，安装后即作为 profile 的一个 layer 激活。
+卸载用 `dsh plugin --profile web remove @kihara777/dsh-api-balance`。
+
+> **`name` 为何是相对路径**：patch 内注册的是 `./lib/index.js` 而非包名。bundle 的
+> entry 名以 `./` 开头时，dsh 会将其锚定为**该 patch 所在目录**下的绝对 `file://` URL；
+> 若写裸包名，则会从 dsh 安装树解析而找不到本包（`Cannot find package`），因为 pnpm
+> 把包放在 profile 目录而非 dsh 树内。
+
+> **版本可复现性**：方式 B 经 git 解析，**不受 `flake.lock` 锁定**；需要可复现环境请用方式 A。
 
 ## 注意
 
