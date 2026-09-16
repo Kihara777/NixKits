@@ -46,6 +46,8 @@ DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜
 - 音声 pack library 管理（複数 zip import、行 click 使用 pack 切替、複数選択一括削除；各 pack 展開「音声試聴」——該 pack 対応全音声一条毎試聴可；`$DSH_HOME/api-balance-voicepack/` 保存全 device 共有）
 - 「音声 pack 管理」次級 menu 内作成器（瀏覽器録音或音声 file import、録音中可視化浮窗與 sample text 表示、言語跨録音可能、打包 download / compile 適用）
 
+> **自訂 TTS proxy 的 SSRF 防護**：host proxy 僅 `http(s)` target 受付、loopback / private / link-local / 予約 address（DNS 解決結果含）拒否——`localhost`、`10.x`、`192.168.x`、`169.254.169.254`（cloud metadata）、`*.internal` 等一律 400。転送可能 自訂 request header 内容 negotiation 系（`content-type` / `accept` / `accept-language` / `user-agent`）限定。
+
 #### 音声 pack 形式指南
 
 音声 pack **zip archive**（配布共有便利）、`manifest.json` 與音声 file 含。面板「⚙ 設定 → 音声」.zip import 即有効、削除即預設全文 TTS 放送復帰。

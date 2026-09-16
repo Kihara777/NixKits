@@ -46,6 +46,8 @@ Clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching 
 - voice-pack library management (import multiple zips, switch the active pack by clicking rows, multi-select removal; each pack expands into an 「audition」 view to play all of its supported audio one by one; stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices)
 - a creator inside the 「Voice pack management」 sub-menu (browser recording or audio-file import, with a visual recording float window and sample texts; cross-language recording; package & download / compile & apply)
 
+> **SSRF protection for the custom TTS proxy**: the host proxy accepts only `http(s)` targets and rejects loopback / private / link-local / reserved addresses (including DNS resolution results) — `localhost`, `10.x`, `192.168.x`, `169.254.169.254` (cloud metadata), `*.internal` and the like all return 400. Forwardable custom request headers are limited to content-negotiation ones (`content-type` / `accept` / `accept-language` / `user-agent`).
+
 #### Voice pack format guide
 
 A voice pack is a **zip archive** (easy to deploy and share) containing a `manifest.json` and audio files. Import the .zip in 「⚙ Settings → Voice」 to enable it; clearing restores the default whole-sentence TTS broadcast.

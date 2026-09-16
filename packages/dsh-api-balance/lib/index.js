@@ -34,6 +34,8 @@ import { credentialRef } from "@deepseek-ai/dsh-credentials";
 import { readFileSync, writeFileSync, rmSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { join, basename } from "node:path";
 import { homedir } from "node:os";
+import { isIP } from "node:net";
+import { lookup } from "node:dns/promises";
 
 export const name = "api-balance";
 
@@ -68,6 +70,19 @@ const VOICEPACK_MAX_FILES = 32;
 const VOICEPACK_MAX_FILE_BYTES = 2 * 1024 * 1024;
 /** TTS 代理响应上限。 */
 const TTS_MAX_BYTES = 2 * 1024 * 1024;
+/**
+ * TTS 代理的 SSRF 防线：自定义 TTS 后端本可指向任意主机（自托管场景，
+ * 属于用户显式配置的意图），但**不得**成为内网探测或云元数据读取的跳板。
+ * 阻断回环 / 私有 / 链路本地 / 保留地址；字面量 IP 与域名解析结果均经
+ * `resolveTtsTarget` 判定（该函数注释中说明残余的 TOCTOU 风险）。
+ */
+const TTS_BLOCKED_HOST_RE =
+  /^(?:localhost|.*\.localhost|.*\.local|.*\.internal|metadata\.google\.internal)$/i;
+/**
+ * TTS 代理可转发的自定义请求头白名单：只允许影响**内容协商**的头，
+ * 阻断 host / cookie / authorization / x-forwarded-* 等可放大 SSRF 的头。
+ */
+const TTS_ALLOWED_HEADER_RE = /^(?:content-type|accept|accept-language|user-agent)$/i;
 /** 响应短缓存：30 秒内重复查询不重打上游。 */
 const CACHE_TTL_MS = 30_000;
 /** 上游请求超时。 */
@@ -312,6 +327,73 @@ function num(value) {
   if (typeof value === "number") return Number.isFinite(value) ? value : 0;
   const n = parseFloat(String(value));
   return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * 判定 IP 字面量是否属于「不得由 TTS 代理访问」的地址空间：
+ * 回环 / 私有 / 链路本地 / 唯一本地 / 保留 / 组播，含 IPv4-mapped IPv6。
+ */
+function isBlockedAddress(ip) {
+  const version = isIP(ip);
+  if (version === 4) {
+    const [a, b] = ip.split(".").map(Number);
+    if (a === 0 || a === 10 || a === 127) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 100 && b >= 64 && b <= 127) return true;
+    if (a >= 224) return true;
+    return false;
+  }
+  if (version === 6) {
+    const lower = ip.toLowerCase();
+    // IPv4-mapped（::ffff:a.b.c.d）按 IPv4 规则复用判定。
+    const mapped = lower.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+    if (mapped !== null) return isBlockedAddress(mapped[1]);
+    if (lower === "::" || lower === "::1") return true;
+    if (/^f[cd]/.test(lower)) return true;
+    if (/^fe[89ab]/.test(lower)) return true;
+    if (/^ff/.test(lower)) return true;
+    return false;
+  }
+  return false;
+}
+
+/**
+ * 校验 TTS 目标 URL 的 SSRF 安全性。
+ * 返回 `{ reason }` 表示拒绝；返回 `{}` 表示放行。
+ *
+ * 覆盖面：字面量 IP（含 IPv4-mapped IPv6）与域名解析结果都会被比对地址
+ * 类别，故 `http://169.254.169.254/`、`http://localhost/` 以及解析到内网
+ * 的域名均被拒绝。
+ *
+ * 已知残余风险：校验与实际 fetch 之间存在 DNS 重解析窗口（TOCTOU），
+ * 理论上可被 DNS rebinding 利用。此处**不**通过「连接固定到已校验 IP」
+ * 来消除：Node 的 fetch 强制以 URL 的 host 作为 Host 头与 TLS SNI，
+ * 无法在不破坏虚拟主机路由与证书校验的前提下覆写目标地址——那个代价
+ * （合法 HTTPS TTS 后端全部失效）高于本端点残余风险。本端点是本机
+ * 自托管 dsh 的辅助代理，非多租户边界。
+ */
+async function resolveTtsTarget(parsed) {
+  const host = parsed.hostname.replace(/^\[|\]$/g, "");
+  if (TTS_BLOCKED_HOST_RE.test(host)) {
+    return { reason: "tts url must not target a local or internal host" };
+  }
+  if (isIP(host) !== 0) {
+    return isBlockedAddress(host)
+      ? { reason: "tts url must not target a private or reserved address" }
+      : {};
+  }
+  let records;
+  try {
+    records = await lookup(host, { all: true });
+  } catch {
+    return { reason: "tts url host could not be resolved" };
+  }
+  if (records.some((record) => isBlockedAddress(record.address))) {
+    return { reason: "tts url must not resolve to a private or reserved address" };
+  }
+  return {};
 }
 
 /** 本地时区的日期键（YYYY-MM-DD）。 */
@@ -1479,10 +1561,26 @@ export function apply(ctx, config = {}) {
           res.end(JSON.stringify({ ok: false, error: "tts url must be http(s)" }));
           return;
         }
-        const headers =
+        // SSRF 防线：拒绝内网 / 回环 / 元数据地址（详见 resolveTtsTarget）。
+        const target = await resolveTtsTarget(parsed);
+        if (target.reason !== void 0) {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: target.reason }));
+          return;
+        }
+        // 仅转发安全的自定义头：客户端从不发送 headers 字段（自定义 TTS
+        // 后端经 URL 模板配置），故此字段是纯粹的注入面——借 host 身份补
+        // host / cookie / authorization 等头会放大 SSRF 后果。按白名单放行。
+        const rawHeaders =
           payload?.headers !== null && typeof payload?.headers === "object" && !Array.isArray(payload.headers)
             ? payload.headers
             : {};
+        const headers = {};
+        for (const [key, value] of Object.entries(rawHeaders)) {
+          if (typeof value !== "string") continue;
+          if (!TTS_ALLOWED_HEADER_RE.test(key)) continue;
+          headers[key] = value;
+        }
         try {
           const upstream = await fetch(url, {
             method,
