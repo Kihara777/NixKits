@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T16:45:03+09:00
+
+**概要**：fix(dsh-nixos-shell): 本機へ配備して初めて露見した `skills-nixos` のパス断裂を修正した — `559e841` が持ち込んだ欠陥であり、**実際に配備しなければ見えない**種類のものである。当該コミットは NixOS模式 プリセットに第二のスキルルートを追加し、`../../skills-nixos/`（プリセットディレクトリ相対）と書いた。私は「ビルド成果物内で相対パスが到達可能」だけを検証して成功と判断した。しかし NixOS モジュールのシード処理は `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）であり、**プリセットディレクトリの外にある内容は複製されない**。ゆえにシード後、当該ルートは `~/.dsh/skills-nixos`（不存在）へ解決され、新規追加した 3 つの NixOS スキルは NixOS模式/维护模式 で**実際には読み込まれていなかった**。本機が `bf9c21e` から `95fc09b` へ同期しプリセットを再シードした時点で発覚した。**修正**：`postPatch` を改め、ホワイトリストのサブセットを各プリセットディレクトリの**内側**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`）へ生成し、プリセットの `customSkillDirs` ルートを `skills-nixos/`（プリセットディレクトリ自身からの相対）へ変更した。これはプリセット自身の `skills/` ルートと同じ扱いであり、そちらもプリセットディレクトリ内にあるためシード後も有効である。`package.json` の `files` からは存在しなくなったパッケージ直下の `skills-nixos` を削除し、モジュールとプリセットの責務コメントも訂正して「スキルルートはプリセットディレクトリ内に置かねばならない」という制約を明記した。**検証**：シードを模擬した後で `skills-nixos` が到達可能（修正前はこの段階で失敗）；`check-preset-derivation` を含む 5 項目の flake check がすべて通過；配備後、新規セッションのスキル一覧に `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config` が実際に現れた。**教訓**：プリセットがシーダーによって複製される設計では、検証は**シード後の相対位置**で行わねばならない。store 内のパスだけを確認すると、まさにこの種の断裂を見落とす
+
+| コミット | 説明 |
+|----------|------|
+| `96b589c` | fix(dsh-nixos-shell): skills-nixos 移入预设目录，修复 seed 后路径断裂 |
+
 ## 2026-09-16T14:54:53+09:00
 
 **概要**：refactor(dsh-api-balance)!: 独立リポジトリへ移転し、本リポジトリは薄いラッパーへ — 本リポジトリ**初**のコンポーネント分割である。監査により、当該サブプロジェクトがここで唯一の**プラットフォーム非依存**（NixOS 専用ではない）の本格的なプロジェクトであり（`lib/index.js` 1733 行 + `lib/client.js` 4922 行、39 コミット）、NixKits との**コードレベルの結合がゼロ**（`@deepseek-ai/dsh-credentials` と Node 組み込みモジュールのみを import し、リポジトリ内参照は皆無）、かつ npm パッケージングの必要が明確であることを確認した——三つの基準すべてを満たす。**結果**：新リポジトリ <https://github.com/Kihara777/dsh-api-balance>（公開、git 履歴を持たず単一の初期コミットから開始）がソース・四言語の完全なドキュメント・npm 公開 CI（release トリガ、provenance 付き）を保持し、**実測**により実リモートから 1 コマンドで導入できることを確認した（`dsh plugin add github:Kihara777/dsh-api-balance` → `dsh.profile.bundles` に入る → web profile が `exit=0`・エラーゼロで起動）。本リポジトリ側の変更：`packages/dsh-api-balance/` を削除；`packages/dsh-api-balance.nix` を薄いラッパーへ（`fetchFromGitHub` で rev と 2 つの hash を固定、**`npmDepsHash` は不変**——移転前後でソース内容がバイト単位で同一であることを裏付ける）；`docs/<lang>/dsh-api-balance.md` を各 161 行から短いページへ圧縮（移転を明示し新リポジトリの完全なドキュメントへリンク、本リポジトリ固有の宣言的インストール節のみ保持）；四言語の README プラグイン表に移転とラッパーの役割を明記。**CI workflow は意図的に保持**——ビルドする flake 出力 `#dsh-api-balance` が現在は薄いラッパーであり、保持することで宣言的ユーザーが引き続き Cachix キャッシュにヒットできる。**`write-project-docs` スキルも同時に更新**：「メインリポジトリの薄いラッパー + サブリポジトリの完全なドキュメント」というアーキテクチャ（分担表、移転の基準、短いページの標準構造、メイン側の残る同期点）を新節として追加し、「移転済みコンポーネントの完全なドキュメント複製をメインに残す」をアンチパターン表に追加——今回の分割を一度きりの作業ではなく再利用可能な手順とした

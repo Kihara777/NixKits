@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T16:45:03+09:00
+
+**摘要**：fix(dsh-nixos-shell): 修复 `skills-nixos` 在本机部署后才暴露的路径断裂 — 这是 `559e841` 引入的缺陷，且**只有真正部署到本机才会显形**。该提交为 NixOS模式 增设第二个技能根，写作 `../../skills-nixos/`（相对预设目录），我当时只验证了「构建产物内相对路径可达」就判定成功。但 NixOS 模块的种子逻辑是 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）——**预设目录之外的内容不会被复制**，于是种子后该根解析为 `~/.dsh/skills-nixos`（不存在），新增的 3 个 NixOS 技能在 NixOS模式/维护模式 下**实际加载不到**。触发条件是本机从 `bf9c21e` 同步到 `95fc09b` 并重种子预设后才被发现。**修复**：`postPatch` 改为把白名单子集生成到各预设目录**内**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`），预设的 `customSkillDirs` 根相应改为 `skills-nixos/`（相对预设目录自身）——这与预设自带的 `skills/` 根一致，后者同样位于预设目录内，故种子后仍有效。`package.json` 的 `files` 移除已不存在的包根 `skills-nixos`；模块与预设中的职责注释同步订正，并明确记入「技能根必须位于预设目录内」这一约束。**验证**：模拟 seed 后 `skills-nixos` 可达（修复前此步失败）；`check-preset-derivation` 等 5 项 flake check 全通过；部署后新会话的技能目录已实际列出 `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config`。**教训**：涉及「预设随种子复制」的设计，验证必须在**种子之后**的相对位置进行，只验 store 内路径会漏掉此类断裂
+
+| 提交 | 说明 |
+|------|------|
+| `96b589c` | fix(dsh-nixos-shell): skills-nixos 移入预设目录，修复 seed 后路径断裂 |
+
 ## 2026-09-16T14:54:53+09:00
 
 **摘要**：refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改为薄封装 — 这是本仓**首次**组件拆分。审计确认该子项目是本仓唯一一个**平台无关**（非 NixOS 专项）的严肃项目（`lib/index.js` 1733 行 + `lib/client.js` 4922 行，39 次提交），且**代码层与 NixKits 零耦合**（仅 import `@deepseek-ai/dsh-credentials` 与 Node 内置模块，无任何仓库内引用），同时已有明确的 npm 打包需求——三项判据齐备。**执行结果**：新仓库 <https://github.com/Kihara777/dsh-api-balance>（公开，不带 git 历史，从单次初始提交开始），承载源码 + 四语完整文档 + npm 发布 CI（release 触发，含 provenance）；**已实测**从真实远端一行安装可用（`dsh plugin add github:Kihara777/dsh-api-balance` → 进入 `dsh.profile.bundles` → web profile 启动 `exit=0`、零错误）。本仓侧改动：删除 `packages/dsh-api-balance/`；`packages/dsh-api-balance.nix` 改为薄封装（`fetchFromGitHub` 固定 rev + 两个 hash，**`npmDepsHash` 未变**——证实迁出前后源码内容逐字节一致）；`docs/<lang>/dsh-api-balance.md` 各由 161 行压为短页（说明迁出、指向新仓完整文档，只保留本仓独有的声明式安装一节）；README 四语插件表标注迁出与薄封装角色。**CI workflow 有意保留**——它构建的 flake 输出 `#dsh-api-balance` 现即薄封装，保留可让声明式用户继续命中 Cachix 缓存。**同时更新 `write-project-docs` 技能**：新增「主仓薄封装 + 子仓完整文档」一节的架构约定（分工表、迁出判据、短页标准结构、主仓侧其余同步点），并把「已迁出组件在主仓保留完整文档副本」列入反模式表——使本次拆分沉淀为可复用流程而非一次性操作

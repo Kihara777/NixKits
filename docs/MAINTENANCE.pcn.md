@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T16:45:03+09:00
+
+**摘要**：fix(dsh-nixos-shell): 本機 配備 後 初 露見 `skills-nixos` path 断裂 修正 — `559e841` 持込 欠陥、且 **実際 配備 無 可視 不可** 種類。当該 commit NixOS模式 預設 第二 技能 root 追加、`../../skills-nixos/`（預設目録 相対）記載。私「build 成果物 内 相対 path 到達可能」限定 検証 成功 判断。但 NixOS module seed 処理 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）、**預設目録 外 内容 複製 不**。故 seed 後 当該 root `~/.dsh/skills-nixos`（不存在）解決、新規追加 3 NixOS 技能 NixOS模式/維護模式 於 **実際 読込 不**。本機 `bf9c21e` 自 `95fc09b` 同期 預設 再 seed 時点 発覚。**修正**：`postPatch` 改、whitelist subset 各預設目録 **内側**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`）生成、預設 `customSkillDirs` root `skills-nixos/`（預設目録 自身 自 相対）変更。此 預設 自身 `skills/` root 同 扱、其 也 預設目録 内 有 故 seed 後 有効。`package.json` `files` 自 存在 無 成 包直下 `skills-nixos` 削除、module 與 預設 責務 comment 訂正、「技能 root 預設目録 内 置 必須」制約 明記。**検証**：seed 模擬 後 `skills-nixos` 到達可能（修正前 此段階 失敗）；`check-preset-derivation` 含 5 項 flake check 全部 通過；配備 後 新規 session 技能一覧 `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config` 実際 出現。**教訓**：預設 seeder 依 複製 設計、検証 **seed 後 相対位置** 行 必要。store 内 path 限定 確認 場合 正 此 種 断裂 見落
+
+| 提交 | 説明 |
+|------|------|
+| `96b589c` | fix(dsh-nixos-shell): skills-nixos 移入预设目录，修复 seed 后路径断裂 |
+
 ## 2026-09-16T14:54:53+09:00
 
 **摘要**：refactor(dsh-api-balance)!: 独立 repo 移転、本 repo 薄 wrapper 化 — 本 repo **初** component 分割。監査 当該 sub project 此処 唯一 **platform 非依存**（NixOS 専用 非）本格的 project 事（`lib/index.js` 1733 行 + `lib/client.js` 4922 行、39 commit）、NixKits 與 **code level 結合 零**（`@deepseek-ai/dsh-credentials` 與 Node 組込 module 限定 import、repo 内参照 皆無）、且 npm packaging 必要 明確 事 確認——三 基準 全部 満。**結果**：新 repo <https://github.com/Kihara777/dsh-api-balance>（公開、git 履歴 持 不 単一 初期 commit 開始）source・四言語 完全 document・npm 公開 CI（release trigger、provenance 付）保持、**実測** 実 remote 自 一 command 導入 可能 事 確認（`dsh plugin add github:Kihara777/dsh-api-balance` → `dsh.profile.bundles` 入 → web profile `exit=0`・error 零 起動）。本 repo 側 変更：`packages/dsh-api-balance/` 削除；`packages/dsh-api-balance.nix` 薄 wrapper 化（`fetchFromGitHub` rev 與 二 hash 固定、**`npmDepsHash` 不変**——移転前後 source 内容 byte 単位 同一 裏付）；`docs/<lang>/dsh-api-balance.md` 各 161 行 自 短 page 圧縮（移転 明示 新 repo 完全 document 連結、本 repo 固有 宣言的 install 節 限定 保持）；四言語 README plugin 表 移転 與 wrapper 役割 明記。**CI workflow 意図的 保持**——build flake 出力 `#dsh-api-balance` 現在 薄 wrapper、保持 宣言的利用者 引続 Cachix cache hit 可能。**`write-project-docs` 技能 同時 更新**：「main repo 薄 wrapper + sub repo 完全 document」architecture（分担表、移転基準、短 page 標準構造、main 側 残 同期点）新節 追加、「移転済 component 完全 document 複製 main 残」anti-pattern 表 追加——今回 分割 一度 限 作業 非 再利用可能 手順 化
