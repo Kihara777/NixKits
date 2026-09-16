@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T12:39:12+09:00
+
+**摘要**：refactor(skills)!: 拆分 `nixkits-check-updates` 为「通用核心 + 仓库适配层」 — 起因是评估 issue #3（awesome-ai-plugins 收录邀请）。该邀请本身无技术争议，但促使我们审查被推荐技能的可移植性：原 `nixkits-check-updates`（299 行）与 NixKits 强耦合——第 5 步**硬编码** `for lang in zh en ja pcn` 与 `docs/$lang/<pkg>.md` 路径、整节 dsh 插件清单同步、第 8 步强制调用 `write-maintenance-log`。**这使它对其他 nix flake 仓库不可直接用**：非 NixKits 仓库执行到第 5 步会去 `sed` 不存在的 `docs/pcn/`，到第 8 步会调用不存在的技能——不是措辞不够通用，而是执行会直接失败。本次按「通用核心 + 仓库适配层」拆分：新增 `nix-flake-update-check`（314 行，不绑定任何仓库）承载包发现、包型分流 hash 流程、flake.lock 三路处置、补丁内版本检查与 nixpkgs 漂移陷阱，第 5/8 步改为「按仓库实际结构选择」而非硬编码；`nixkits-check-updates` 瘦身为适配层（299 → 115 行），只留四语文档、dsh 插件清单、维护日志与历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败、Rust Cargo.lock）。定义**适配层契约**（文档同步 / 变更记录 / 动态输入 / 事故教训 / 额外同步项由适配层声明，冲突时以适配层为准）。**关键取舍**：此前担心泛化会稀释具体经验而让技能在主场变弱——拆分正是为规避该代价，事故教训与仓库约定**原样留在适配层**，通用核心只保留与仓库无关的方法论，两端各得其所。维护模式注入同步补入通用技能（二者均注册）；四语新增通用技能文档，README / dsh.md / modes/maintenance.md 注入清单与技能表同步
+
+| 提交 | 说明 |
+|------|------|
+| `667bf6e` | refactor(skills)!: 拆分更新检查为通用核心 + NixKits 适配层 |
+| `93fe67e` | feat(dsh-nixos-shell): 维护模式注入 nix-flake-update-check 技能 |
+| `6af37e7` | docs: 同步技能拆分——四语新增通用技能文档、README 技能表与注入清单 |
+
+**相关外部报告**：issue #3（@zerocodefast）——awesome-ai-plugins 收录邀请。经评估，其推荐语把 NixKits 定位为「包含中文技能的包合集」而未提及它同时是 Nix 包/模块/补丁合集，且「Chinese-language skills」易被误读为仅对中文用户有用；收录本身与技术无关，故保持 open，未提交 PR。
+
 ## 2026-09-16T12:20:57+09:00
 
 **摘要**：ci: 为 31 个构建 workflow 补全顶层 `permissions` — 特别感谢外部贡献者 **@begininvoke**（RedGem 扫描报告）提交的 issue #1、#2：这两条报告经核验为误报（同一扫描器对 `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 重复报告，正文逐字节相同），规则命中虽属实但威胁模型在本仓库不成立——被调方 `./.github/workflows/build-package.yml` 是**同仓库、同 commit、同 review 流程**的本地可复用工作流，不存在 issue 假设的「untrusted source」；本仓库**总共只有 2 个** secret（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`），显式传递与 `inherit` 传递的集合**完全相同**，故对攻击者**不产生任何增益**——能篡改被调 workflow 的人本来就能直接读 `secrets.*`；且只改报告点名的那一处会在 31 个同构调用方之间造成不一致，故两条 issue 均不予采纳并已附详细证据关闭——**但正是这两条报告促使我们去做了一次完整的权限边界复核**，报告把注意力引向「可复用 workflow 的 secret/权限传递」这一正确方向，顺着该线索逐条核对调用链后，**发现并修复了一处真实的安全风险**：31 个 `build-*.yml` 调用方**均未声明 `permissions`**，因而继承仓库默认（可能为读写），而它们实际只做 checkout + `nix build` + 推送 Cachix，全部只需 `contents: read`。本次即为这 31 个调用方补上顶层 `permissions: contents: read`，与被调方 `build-package.yml:17-18` 已声明的权限保持一致。**取舍说明**：Cachix 推送使用独立的 `CACHIX_AUTH_TOKEN`，不依赖 `GITHUB_TOKEN` 的权限范围，故收紧后 CI 行为不变（`nix flake check` 中 `check-workflow-coverage` 通过）。**未采纳的部分**：不将 31 处 `secrets: inherit` 改为显式列举——那是形式合规而无实质安全收益的改动，且 `CACHIX_AUTH_TOKEN` 必须传给被调方，最小权限在此没有可削减余量

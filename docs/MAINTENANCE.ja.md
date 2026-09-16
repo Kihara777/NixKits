@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T12:39:12+09:00
+
+**概要**：refactor(skills)!: `nixkits-check-updates` を「汎用コア + リポジトリ適応層」に分割した — 発端は issue #3（awesome-ai-plugins への収録招待）の評価である。招待自体に技術的な争点はないが、推薦されたスキルの移植性を精査する契機となった：元の `nixkits-check-updates`（299 行）は NixKits と強く結合していた——第 5 ステップは `for lang in zh en ja pcn` と `docs/$lang/<pkg>.md` パスを**ハードコード**し、dsh プラグイン一覧同期の節を丸ごと抱え、第 8 ステップは `write-maintenance-log` を強制呼び出ししていた。**このため他の nix flake リポジトリではそのまま使えなかった**：NixKits 以外のリポジトリが第 5 ステップに達すると存在しない `docs/pcn/` を `sed` し、第 8 ステップでは存在しないスキルを呼び出す——言い回しの問題ではなく、実行が失敗する。今回「汎用コア + リポジトリ適応層」に分割した：新規 `nix-flake-update-check`（314 行、どのリポジトリにも非結合）がパッケージ検出、ビルダー別 hash フロー、flake.lock の三者分岐、パッチ内蔵バージョン確認、nixpkgs ドリフトの罠を担い、第 5/8 ステップはハードコードではなく「リポジトリの実際の構造に応じて選択」へ書き換えた。`nixkits-check-updates` は適応層へと痩せた（299 → 115 行）——四言語ドキュメント、dsh プラグイン一覧、メンテナンスログ、過去の事故教訓（comfyui ドリフト、codewhale-riscv64 CI 失敗、Rust Cargo.lock）のみを残す。**適応層の契約**を定義した（ドキュメント同期 / 変更記録 / 動的入力 / 事故教訓 / 追加同期項目は適応層が宣言し、衝突時は適応層を優先）。**重要なトレードオフ**：以前は汎化が具体的経験を薄め、本拠地での技能を弱めることを懸念していた——この分割はまさにその代償を避ける手段であり、事故教訓とリポジトリ規約は**そのまま適応層に残り**、汎用コアはリポジトリ非依存の方法論のみを保持するため、双方が得るものを持つ。メンテナンスモードの注入に汎用スキルを追加（両者を登録）；四言語で汎用スキルのドキュメントを新設し、README / dsh.md / modes/maintenance.md の注入一覧と技能表を同期した
+
+| コミット | 説明 |
+|----------|------|
+| `667bf6e` | refactor(skills)!: 拆分更新检查为通用核心 + NixKits 适配层 |
+| `93fe67e` | feat(dsh-nixos-shell): 维护模式注入 nix-flake-update-check 技能 |
+| `6af37e7` | docs: 同步技能拆分——四语新增通用技能文档、README 技能表与注入清单 |
+
+**関連する外部レポート**：issue #3（@zerocodefast）——awesome-ai-plugins への収録招待。検討の結果、提案された推薦文は NixKits を「中国語スキルを含むパッケージ集」と位置づけ、Nix パッケージ / モジュール / パッチの集合でもあることに触れておらず、「Chinese-language skills」は中国語ユーザーにしか有用でないかのように読める。収録自体は技術と無関係のため、issue は open のまま維持し PR は提出しない。
+
 ## 2026-09-16T12:20:57+09:00
 
 **概要**：ci: 31 本のビルド workflow にトップレベル `permissions` を補完した — 外部コントリビュータ **@begininvoke**（RedGem のスキャンレポート）による issue #1・#2 に特別の謝意を表する：両レポートは検証の結果いずれも誤検出であった（同一スキャナが `build-blender-mcp-aarch64.yml:10` の `secrets: inherit` を二重に報告したもので、本文はバイト単位で同一）。ルールの指摘自体は事実だが、脅威モデルは本リポジトリでは成立しない——被呼び出し側 `./.github/workflows/build-package.yml` は**同一リポジトリ・同一コミット・同一レビュー工程**にあるローカルの再利用可能 workflow であり、issue が仮定する「untrusted source」は存在しない。本リポジトリの secret は**合計 2 つだけ**（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`）で、明示的に渡しても `inherit` で渡しても**集合は完全に同一**であり、攻撃者に**いかなる利得も生まない**——被呼び出し workflow を改竄できる者は、そもそも `secrets.*` を直接読める。またレポートが名指しした 1 箇所だけを変更すれば、構造の同一な 31 の呼び出し側の間に不整合を生む。ゆえに両 issue とも採用せず、詳細な証拠を添えてクローズした——**しかし、まさにこの 2 本のレポートが我々に完全な権限境界レビューを促した**。レポートは「再利用可能 workflow への secret／権限の受け渡し」という正しい方向へ注意を向けており、その手掛かりに沿って呼び出し連鎖を 1 つずつ照合した結果、**真のセキュリティリスクを発見し修正した**：31 本の `build-*.yml` 呼び出し側は**いずれも `permissions` を宣言しておらず**、そのためリポジトリ既定（読み書きの可能性あり）を継承していた。しかしこれらの workflow は checkout + `nix build` + Cachix への push のみを行い、必要なのは `contents: read` だけである。今回この 31 本の呼び出し側にトップレベル `permissions: contents: read` を付与し、被呼び出し側 `build-package.yml:17-18` が既に宣言している権限と一致させた。**トレードオフの説明**：Cachix への push は独立した `CACHIX_AUTH_TOKEN` を使用し、`GITHUB_TOKEN` の権限範囲に依存しないため、締め付け後も CI の挙動は変わらない（`nix flake check` の `check-workflow-coverage` が通過）。**採用しなかった部分**：31 箇所の `secrets: inherit` を明示列挙へ変更することは行わない——形式上の適合だけで実質的なセキュリティ利得がなく、`CACHIX_AUTH_TOKEN` は被呼び出し側へ必ず渡す必要があるため、最小権限に削る余剰が残っていない

@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T12:39:12+09:00
+
+**摘要**：refactor(skills)!: `nixkits-check-updates` 「汎用核心 + 倉庫適配層」分割 — 発端 issue #3（awesome-ai-plugins 収録招待）評価。招待 自体 技術 争点 無、但 推薦 技能 移植性 精査 契機。元 `nixkits-check-updates`（299 行）NixKits 強結合——第 5 步 `for lang in zh en ja pcn` 與 `docs/$lang/<pkg>.md` path **硬符号**、dsh 插件一覧同期 節 丸抱、第 8 步 `write-maintenance-log` 強制呼出。**故 他 nix flake 倉庫 其 侭 使用 不可**：NixKits 以外 倉庫 第 5 步 到達 時 不存在 `docs/pcn/` 對 `sed`、第 8 步 不存在 技能 呼出——言回 問題 非、実行 失敗。今回「汎用核心 + 倉庫適配層」分割：新規 `nix-flake-update-check`（314 行、何 倉庫 非結合）包検出、builder 別 hash flow、flake.lock 三路分岐、修正内蔵版確認、nixpkgs 漂移 罠 担当、第 5/8 步 硬符号 非「倉庫 実際 構造 応 選択」書換。`nixkits-check-updates` 適配層 痩（299 → 115 行）——四言語文書、dsh 插件一覧、保守記録、過去 事故教訓（comfyui 漂移、codewhale-riscv64 CI 失敗、Rust Cargo.lock）限定 残。**適配層 契約** 定義（文書同期 / 変更記録 / 動的入力 / 事故教訓 / 追加同期項 適配層 宣言、衝突 時 適配層 優先）。**重要 取捨**：以前 汎化 具体 経験 希薄化 本拠地 技能 弱化 懸念——此 分割 正 其 代償 回避 手段、事故教訓 與 倉庫規約 **其 侭 適配層 残**、汎用核心 倉庫非依存 方法論 限定 保持、双方 得 物 有。保守 mode 注入 汎用技能 追加（両者 登録）；四言語 汎用技能 document 新設、README / dsh.md / modes/maintenance.md 注入一覧 與 技能表 同期
+
+| 提交 | 説明 |
+|------|------|
+| `667bf6e` | refactor(skills)!: 拆分更新检查为通用核心 + NixKits 适配层 |
+| `93fe67e` | feat(dsh-nixos-shell): 维护模式注入 nix-flake-update-check 技能 |
+| `6af37e7` | docs: 同步技能拆分——四语新增通用技能文档、README 技能表与注入清单 |
+
+**関連 外部報告**：issue #3（@zerocodefast）——awesome-ai-plugins 収録招待。検討 結果、提案 推薦文 NixKits 「中国語技能 含 包集」位置付、Nix 包 / 模組 / 補丁 集合 也有 事 触 無、且「Chinese-language skills」中国語 利用者 限 有用 如 読。収録 自体 技術 無関係 故、issue open 維持、PR 提出 不。
+
 ## 2026-09-16T12:20:57+09:00
 
 **摘要**：ci: 31 本 建構 workflow 頂層 `permissions` 補完 — 外部貢献者 **@begininvoke**（RedGem 掃描報告）提出 issue #1 / #2 特別感謝：両報告 検証 結果 共 誤報（同一 scanner `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 二重報告、本文 byte 単位 同一）。規則 指摘 自体 事実、但 脅威 model 本 repo 不成立——被呼出側 `./.github/workflows/build-package.yml` **同一 repo / 同一 commit / 同一 review 工程** 的 本地 再利用可能 workflow、issue 仮定「untrusted source」不存在。本 repo secret **合計 2 個 限定**（`GITHUB_TOKEN` / `CACHIX_AUTH_TOKEN`）、明示 渡 与 `inherit` 渡 **集合 完全同一**、攻撃者 **何 利得 生 無**——被呼出 workflow 改竄 可能 者、本来 `secrets.*` 直接 読 可能。且 報告 指名 1 箇所 限定 変更 構造 同一 31 呼出側 間 不整合 生。故 両 issue 共 不採用、詳細 証拠 添 閉鎖——**但 正 此 二本 報告 我々 完全 権限境界 review 促**。報告「再利用可能 workflow 的 secret / 権限 受渡」正方向 注意 向、其 手掛 沿 呼出連鎖 一 一 照合 結果、**真 安全 risk 発見 且 修正**：31 本 `build-*.yml` 呼出側 **共 `permissions` 宣言 無**、故 repo 既定（読書 可能）継承。但 此等 workflow checkout + `nix build` + Cachix push 限定 行、必要 `contents: read` 限定。今回 此 31 本 呼出側 頂層 `permissions: contents: read` 付与、被呼出側 `build-package.yml:17-18` 既宣言 権限 一致 化。**取捨 説明**：Cachix push 独立 `CACHIX_AUTH_TOKEN` 使用、`GITHUB_TOKEN` 権限範囲 依存 無、故 締付 後 CI 挙動 不変（`nix flake check` 的 `check-workflow-coverage` 通過）。**不採用 部分**：31 箇所 `secrets: inherit` 明示列挙 変更 不実施——形式上 適合 限定 実質 安全 利得 無、且 `CACHIX_AUTH_TOKEN` 被呼出側 必渡 必要、最小権限 削 余剰 残 無
