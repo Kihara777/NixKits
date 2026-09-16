@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T11:38:20+09:00
+
+**摘要**：docs(deprecated): `DEPRECATED.md` 索引化并四语本地化 — 原先这一份中文文档同时承担两个职责：**索引**与**单个项目的完整说明**。只有一条时无妨，但它注定要长——项目一多，读者无法一眼看全，且整份文档没有本地化路径（既有的 `docs/<lang>/` 体系无处安放它）。本次按仓库既有约定重构：根 `DEPRECATED.md` 退化为**纯索引**（列表 + 指向各项目详情的链接），并按 `README`/`MAINTENANCE` 的成法出三份镜像 `docs/DEPRECATED.{en,ja,pcn}.md`；各废弃项目的详情移入 `docs/<lang>/deprecated/<name>.md`，四语各一份，顶部带语言切换器与返回索引的链接。首批迁移 comfyui-rocm 的完整说明（含逐字致敬句、三补丁对照表、scipy 误判复盘、废弃后配置示例、历史版本对照）。四语 `README` 新增「废弃项目」章节，`docs/<lang>/comfyui.md` 的引用改指详情页。**踩坑记录**：`docs/DEPRECATED.*.md` 自身位于 `docs/` 内，故其指向语言目录的链接必须写 `zh/...` 而非 `../zh/...`——`nix flake check` 首次即抓出 6 条死链（en/ja/pcn 各指向另外三语），已全部修正。这正是 `check-doc-links` 存在的价值：它拦下的恰是"照着上层文件的习惯写相对路径"这类只有人工翻页才会发现的错误。重构后新增项目只需在索引加一行、再补四份详情文档
+
+| 提交 | 说明 |
+|------|------|
+| `8ff91eb` | docs(deprecated): 索引化 + 四语本地化，详情拆到独立文档 |
+
 ## 2026-09-16T11:05:32+09:00
 
 **摘要**：refactor(comfyui)!: 退役 comfyui-rocm 补丁工程，模块改名 `nixkits.comfyui` — 上游已积极维护并把 ROCm 支持组件更新到能很好支持 StrixHalo 的版本，本补丁的历史使命完成，故整体移除：三个补丁（`strix-halo` / `nixpkgs-compat` / `stdenv-api`，本地补丁目录清空）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、选项 `nixkits.comfyui-rocm` → `nixkits.comfyui`（去掉已无意义的 `-rocm` 后缀），四语文档 `comfyui-rocm.md` → `comfyui.md`，新增根目录 `DEPRECATED.md` 并把它列为第一条。**本次最值得记的是那个被误判了三轮的根因**：早先的「补丁已不再需要」结论建立在一轮 717-derivation 构建「全部成功」之上，**但那次 `scipy` 是二进制缓存命中、从未真正构建**——判据应当是日志里出现 `building '…'`，而不是「构建退出码为 0」。真正的原因是本机 `/etc/nixos` 把 comfyui-nix 的 `inputs.nixpkgs` 钉死在 `6438090`（2026-08-02）而顶层走 `nixos-unstable`：滚动的顶层让 `scipy` 命中公共缓存，被钉住的子 flake 则要现建，于是触发 `test_support_moments_sample` 的浮点断言失败，**看起来像「补丁仍然必要」**。删掉那行 pin 后 comfyui-nix 与顶层共用 `dc5d91f`，`scipy` 直接缓存命中、构建全绿。教训：**额外的 pin 会让子 flake 脱离主 nixpkgs 的缓存覆盖**，把缓存本来能解决的问题暴露成需要打补丁的问题。补丁过时性另有两条独立佐证：上游 `stdenv` 弃用读法计数为 **0**（34 处用 `hostPlatform`）；上游 `nix/versions.nix` 的 `rocm71` torch **2.10.0** 与 `strix-halo` 补丁逐字节一致（版本 / URL / hash 三者皆同），上游模块亦已支持 `gpuSupport = "rocm"`。**本机侧同步**：`system/software/comfyui.nix` 改用新选项路径、`flake.nix` 删 pin 行并重写注释、`flake.lock` 中 comfyui-nix 由 `path:` 变 github；两面 `nix build` 仅 10 个 derivation 待建、切至 generation 572，`comfyui.service` 仅存在于 plasma specialisation，`ExecStart` 为 `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` 仍由本模块的 `rocmGfxOverride` 提供。另删除了 `/home/kix/comfyui-nix-patched`（17 MB 陈旧 fork，仅剩注释引用）

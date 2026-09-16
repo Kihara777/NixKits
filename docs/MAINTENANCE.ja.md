@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T11:38:20+09:00
+
+**概要**：docs(deprecated): `DEPRECATED.md` を索引化し四言語化した — 従来この一本の中国語文書が**索引**と**単一プロジェクトの完全な説明**という二つの役割を兼ねていた。項目が一つなら問題はないが、増えることは確実であり、そうなれば読者は全体を一望できず、そもそもこの文書にはローカライズの受け皿がなかった（既存の `docs/<lang>/` 体系に置き場所がない）。今回リポジトリ既存の規約に沿って再構成した：ルート `DEPRECATED.md` は**純粋な索引**（一覧 + 各プロジェクト詳細へのリンク）へ後退し、`README`/`MAINTENANCE` と同じ成法で三つの鏡像 `docs/DEPRECATED.{en,ja,pcn}.md` を用意する。各廃止プロジェクトの詳細は `docs/<lang>/deprecated/<name>.md` へ移し、四言語それぞれに一份、冒頭に言語切り替え器と索引へ戻るリンクを置く。第一陣として comfyui-rocm の完全な説明（逐字の致敬句、三パッチ対照表、scipy 誤判定の回顧、廃止後の設定例、歴史バージョン対照）を移行した。四言語の `README` に「廃止プロジェクト」節を追加し、`docs/<lang>/comfyui.md` の参照は詳細ページへ向け直した。**記録に値する落とし穴**：`docs/DEPRECATED.*.md` 自身が `docs/` の内側にあるため、言語ディレクトリへのリンクは `../zh/...` ではなく `zh/...` と書かねばならない——最初の `nix flake check` が 6 本の死リンクを検出した（en/ja/pcn がそれぞれ他の三言語を指していた）。すべて修正済み。これこそ `check-doc-links` の存在意義である：一段上のファイルの習慣で相対パスを書くという、人間が頁を繰らなければ気づけない類の誤りを、まさにこれが止めた。この再構成後、プロジェクトの追加は索引一行と四份の詳細文書で済む
+
+| コミット | 説明 |
+|----------|------|
+| `8ff91eb` | docs(deprecated): 索引化 + 四语本地化，详情拆到独立文档 |
+
 ## 2026-09-16T11:05:32+09:00
 
 **概要**：refactor(comfyui)!: comfyui-rocm パッチ事業を退役、モジュール名を `nixkits.comfyui` に — 上流が積極的に保守を続け、ROCm 対応コンポーネントを StrixHalo をよく支える版まで更新したため、本パッチは歴史的使命を終えた。よって全体を削除：三つのパッチ（`strix-halo` / `nixpkgs-compat` / `stdenv-api`、ローカルのパッチ置き場は空に）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、オプション `nixkits.comfyui-rocm` → `nixkits.comfyui`（意味を失った `-rocm` 接尾辞を削除）、四言語の文書 `comfyui-rocm.md` → `comfyui.md`、ルートに `DEPRECATED.md` を新設しその第一条に記載。**今回最も記録に値するのは、三度にわたって誤判定したあの根因である**：以前の「パッチはもう不要」という結論は、717 derivation のビルドが「すべて成功した」ことに依っていた——**しかしその回の `scipy` はバイナリキャッシュ命中で、実際には一度もビルドされていない**。判定材料はログの `building '…'` 行であるべきで、「ビルドの終了コードが 0」ではない。真の原因は、本機の `/etc/nixos` が comfyui-nix の `inputs.nixpkgs` を `6438090`（2026-08-02）に釘打ちし、トップレベルは `nixos-unstable` を追っていたこと： rolling なトップレベルは `scipy` を公共キャッシュに命中させるが、釘打ちされた子 flake は現にビルドする必要があり、`test_support_moments_sample` の浮動小数点アサーション失敗を引き起こして、**「パッチが依然必要」に見えてしまう**。その pin 行を消すと comfyui-nix はトップレベルと `dc5d91f` を共有し、`scipy` はそのままキャッシュ命中、ビルドは全て通る。教訓：**余分な pin は子 flake を主 nixpkgs のキャッシュ被覆から切り離し**、キャッシュが解決したはずの問題をパッチが必要な問題に見せかける。パッチの陳腐化には独立した裏付けが二つある：上流の `stdenv` 非推奨の読みは **0** 件（34 箇所が `hostPlatform` を使用）、上流 `nix/versions.nix` の `rocm71` torch **2.10.0** は `strix-halo` パッチと逐バイト一致（版・URL・hash の三者とも同一）、上流モジュールは既に `gpuSupport = "rocm"` を支持する。**本機側の同期**：`system/software/comfyui.nix` は新しい選択肢パスへ、`flake.nix` は pin 行を削除しコメントを書き換え、`flake.lock` の comfyui-nix は `path:` から github へ；両面の `nix build` は残り 10 derivation のみ、generation 572 へ切替、`comfyui.service` は plasma specialisation にのみ存在し、`ExecStart` は `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` は依然として本モジュールの `rocmGfxOverride` が供給する。あわせて `/home/kix/comfyui-nix-patched`（コメントからのみ参照される 17 MB の陳腐な fork）を削除

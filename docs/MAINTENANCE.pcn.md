@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-16T11:38:20+09:00
+
+**摘要**：docs(deprecated): `DEPRECATED.md` 索引化 且 四言語化 — 従来 此 一本 中国語文書 **索引** 與 **単一工程 完全 説明** 二 役割 兼。項目 一 唯 無妨、但 増 確実、然 読者 全体 一望 不能、且 此 文書 局所化 受皿 無（既存 `docs/<lang>/` 体系 置場 無）。今回 倉庫 既存 規約 沿 再構成：根 `DEPRECATED.md` **純粋 索引**（一覧 + 各工程 詳細 連結）後退、`README`/`MAINTENANCE` 同 成法 三鏡像 `docs/DEPRECATED.{en,ja,pcn}.md` 用意。各廃止工程 詳細 `docs/<lang>/deprecated/<name>.md` 移、四言語 各一份、冒頭 言語切替器 與 索引 戻 連結 置。第一陣 comfyui-rocm 完全 説明（逐字 致敬句、三補丁 対照表、scipy 誤判定 回顧、廃止後 設定例、歴史版本 対照）移行。四言語 `README`「廃止工程」節 追加、`docs/<lang>/comfyui.md` 参照 詳細頁 向直。**記録 値 落穴**：`docs/DEPRECATED.*.md` 自身 `docs/` 内側 在、故 言語目録 連結 `../zh/...` 非 `zh/...` 書 必須——最初 `nix flake check` 6 本 死連結 検出（en/ja/pcn 各自 他 三言語 指）。全部 修正 済。此 正 `check-doc-links` 存在意義：一段上 文件 習慣 相対 path 書 類 誤、人間 頁 繰 無 気付 能 無 誤 正 此 止。此 再構成 後、工程 追加 索引 一行 與 四份 詳細文書 済
+
+| 提交 | 説明 |
+|------|------|
+| `8ff91eb` | docs(deprecated): 索引化 + 四语本地化，详情拆到独立文档 |
+
 ## 2026-09-16T11:05:32+09:00
 
 **摘要**：refactor(comfyui)!: comfyui-rocm 補丁工程 退役、模組改名 `nixkits.comfyui` — 上流積極保守 續、ROCm 支持組件 StrixHalo 良支持 版 更新 済、故 本補丁 歴史使命 完成、全削除：三補丁（`strix-halo` / `nixpkgs-compat` / `stdenv-api`、局所補丁置場 空化）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、選項 `nixkits.comfyui-rocm` → `nixkits.comfyui`（意義 失 `-rocm` 接尾辞 削除）、四言語文書 `comfyui-rocm.md` → `comfyui.md`、根 `DEPRECATED.md` 新設 其第一条 記載。**今回最 記録 値 是 三度 誤判定 其根因**：以前「補丁 既 不要」結論 717 derivation build「全部成功」依拠——**但 其回 `scipy` binary cache 命中、実際 一度 未 build**。判定材料 log `building '…'` 行 応、非「build 終了 code 0」。真原因 本機 `/etc/nixos` comfyui-nix `inputs.nixpkgs` `6438090`（2026-08-02）釘死、一方 top level `nixos-unstable` 追：rolling top level `scipy` 公共 cache 命中 使、釘死 子 flake 現 build 要、故 `test_support_moments_sample` 浮動小数点 assertion 失敗 招、**「補丁 依然必要」見**。其 pin 行 削除 後 comfyui-nix top level `dc5d91f` 共有、`scipy` 直 cache 命中、build 全通過。教訓：**余分 pin 子 flake 主 nixpkgs cache 被覆 切離**、cache 解決 可能 問題 補丁 必要 問題 見做。補丁 陳腐化 独立裏付 二：上流 `stdenv` 非推奨 読 **0** 件（34 箇所 `hostPlatform` 使用）、上流 `nix/versions.nix` `rocm71` torch **2.10.0** `strix-halo` 補丁 逐 byte 一致（版・URL・hash 三者 同）、上流模組 既 `gpuSupport = "rocm"` 支持。**本機側 同期**：`system/software/comfyui.nix` 新選項 path 移行、`flake.nix` pin 行 削除 注釈 書換、`flake.lock` comfyui-nix `path:` 由 github 変；兩面 `nix build` 残 10 derivation 唯、generation 572 切替、`comfyui.service` plasma specialisation 唯存在、`ExecStart` `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` 依然 本模組 `rocmGfxOverride` 供給。併 `/home/kix/comfyui-nix-patched`（注釈 由 唯参照 陳腐 fork 17 MB）削除
