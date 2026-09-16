@@ -20,7 +20,7 @@
 - ソフトウェア更新記録の作成（概要 + コミット ID 表 + バージョン表）
 - バグ修正記録の作成（概要 + コミット ID 表）
 - メンテナンスログの 全言語同期（zh/en/ja/pcn）
-- 先行スキル（nixkits-check-updates）や git commit メッセージから概要を自動抽出
+- 先行スキル（更新チェック、NixKits は nixkits-check-updates）や git commit メッセージから概要を自動抽出
 - 統一フォーマット：ISO 8601 精密時刻、LIFO 順序、未変更 hash 省略
 
 ## エントリポイント

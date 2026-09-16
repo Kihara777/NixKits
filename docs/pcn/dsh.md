@@ -163,7 +163,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 | 模式 | id | 説明 | 配布方式 | 文書 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全実行拒否）；`nixos_shell` / `nixos_cli` 與開発 prompt 読込 | dsh-nixos-shell 包内、seed-once | [modes/nixos.md](modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs` / `write-maintenance-log` / `nixkits-check-updates` / `translate-*` 技能與維護工作流注入 | dsh-nixos-shell 包内、seed-once | [modes/maintenance.md](modes/maintenance.md) |
+| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能與維護工作流注入 | dsh-nixos-shell 包内、seed-once | [modes/maintenance.md](modes/maintenance.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式派生之読取専用創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、online 技能包、開始時問答、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements`、roster 之預設 root 登録 | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix

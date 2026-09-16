@@ -18,7 +18,7 @@
 
 NixOS模式全能力 + 以下：
 
-- **実行時技能**：`maintenance-skills` entry apply 時、**build 期埋込**倉庫 `skills/` tree 自 `write-project-docs`、`write-maintenance-log`、`nixkits-check-updates` 登録、全 `translate-*` 言語拡張自動発見——技能内容 倉庫 `skills/` 単一來源、新規 session 常最新。
+- **実行時技能**：`maintenance-skills` entry apply 時、**build 期埋込**倉庫 `skills/` tree 自 `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates` 登録、全 `translate-*` 言語拡張自動発見——技能内容 倉庫 `skills/` 単一來源、新規 session 常最新。
 - **維護工作流 prompt**：分割 commit → push 後維護日誌追記（全言語同期）→ 文書同期 → 技能汎化。
 - 其他（系統検証、`nixos_shell` / `nixos_cli`、開発 prompt）NixOS模式同一。
 

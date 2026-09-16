@@ -48,7 +48,7 @@ Agent 預設（session 形態）插件同等級、各自独立文書持：
 | 模式 | id | 説明 | 配布方式 | 文書 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全請求拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発 prompt 読込 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/nixos.md](pcn/modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流 prompt 注入 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/maintenance.md](pcn/modes/maintenance.md) |
+| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流 prompt 注入 | dsh-nixos-shell 包内、seed-once | [docs/pcn/modes/maintenance.md](pcn/modes/maintenance.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
 
 > 前二者 dsh-nixos-shell 包同梱、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` 経由 seed-once 方式 `$DSH_HOME/.agent-presets` 書込；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets` 預設 root 登録（copy 無）。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。
@@ -105,7 +105,8 @@ AI 符号化代理向：
 |------|------|------|
 > ⚠️ **Claude Code** nixkits-skills 導入対象削除。利用者資料基国籍推論実装、安全境界越。参照 [nixkits-skills 文書](pcn/skills/nixkits-skills.md)。
 | news-three-elements | 本物通信社報道形式 露風速報捏造——「報道三要素」必到三人主人公 巴兰尼科夫・尤丁采夫・布亚诺夫 指（遊技機構要素 + 素材優先拒否服務） | [docs/pcn/skills/news-three-elements.md](pcn/skills/news-three-elements.md) |
-| nixkits-check-updates | 上流更新確認自動更新 | [docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md) |
+| nix-flake-update-check | **汎用**：任意 nix flake 倉庫 的 上流更新確認 自動更新（builder 別 hash flow / flake.lock / 修正内蔵版 / nixpkgs 漂移 罠） | [docs/pcn/skills/nix-flake-update-check.md](pcn/skills/nix-flake-update-check.md) |
+| nixkits-check-updates | NixKits 更新適配層：四言語文書、插件一覧、保守記録、過去 事故教訓（nix-flake-update-check 依存） | [docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS 現代 CLI 手引（AI 模型向） | [docs/pcn/skills/nixos-modern-cli.md](pcn/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 削除済 /etc/nixos 設定 Nix store 自復元 | [docs/pcn/skills/recover-nixos-config.md](pcn/skills/recover-nixos-config.md) |

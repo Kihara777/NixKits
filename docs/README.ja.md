@@ -48,7 +48,7 @@ Agent プリセット（セッション形態）はプラグインと同級で�
 | モード | id | 説明 | 配布方式 | ドキュメント |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時に NixOS ホストを検証（非 NixOS は全リクエスト拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発プロンプトを読み込む | dsh-nixos-shell パッケージ内、seed-once | [docs/ja/modes/nixos.md](ja/modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs`/`write-maintenance-log`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフロープロンプトを注入 | dsh-nixos-shell パッケージ内、seed-once | [docs/ja/modes/maintenance.md](ja/modes/maintenance.md) |
+| 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフロープロンプトを注入 | dsh-nixos-shell パッケージ内、seed-once | [docs/ja/modes/maintenance.md](ja/modes/maintenance.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した**読取専用**の創作モード：「新聞三要素」は必ず揃う三人の主人公、素材優先（接続できないときだけ拒否）、素材共創は検索してから書き直す（検索が無ければ退稿）、技能パッケージをオンライン取得、開始時問答は三択、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements` | [docs/ja/modes/news-three-elements.md](ja/modes/news-three-elements.md) |
 
 > 前二者は dsh-nixos-shell パッケージに同梱され、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` により seed-once で `$DSH_HOME/.agent-presets` へ書き込まれる；新聞三要素模式は独立パッケージ `dsh-preset-news-three-elements` が配布し、`nixkits.dsh.presets.newsThreeElements` がその `share/dsh-agent-presets` をプリセットルートとして登録する（コピーなし）。詳細は [docs/ja/dsh.md](ja/dsh.md) の「モード」節を参照。
@@ -105,7 +105,8 @@ AI コーディングアシスタント向け：
 |------|------|------|
 > ⚠️ **Claude Code** は nixkits-skills インストール対象から削除されました。ユーザーデータに基づく国籍推論を実装し、セキュリティ境界を越えています。詳細は [nixkits-skills 文書](ja/skills/nixkits-skills.md) を参照。
 | news-three-elements | 本物の通信社報道形式でロシア風速報を捏造——「報道三要素」とは必ず揃う三人の主人公、バランニコフ・ユディンツェフ・ブヤノフを指す（遊技機構ネタ + 素材優先の拒否サービス） | [docs/ja/skills/news-three-elements.md](ja/skills/news-three-elements.md) |
-| nixkits-check-updates | 上流アップデートをチェックして自動更新 | [docs/ja/skills/nixkits-check-updates.md](ja/skills/nixkits-check-updates.md) |
+| nix-flake-update-check | **汎用**：任意の nix flake リポジトリの上流更新をチェックして自動更新（ビルダー別 hash フロー / flake.lock / パッチ内蔵版 / nixpkgs ドリフトの罠） | [docs/ja/skills/nix-flake-update-check.md](ja/skills/nix-flake-update-check.md) |
+| nixkits-check-updates | NixKits 更新アダプタ層：四言語ドキュメント、プラグイン一覧、メンテナンスログ、過去の事故教訓（nix-flake-update-check に依存） | [docs/ja/skills/nixkits-check-updates.md](ja/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
 | nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/ja/skills/recover-nixos-config.md](ja/skills/recover-nixos-config.md) |

@@ -20,7 +20,7 @@ Language extension skills are discovered via the `translate-*` naming convention
 - Writes software update records (summary + commit ID table + version table)
 - Writes bug fix records (summary + commit ID table)
 - Sync across all available languages (auto-discovered via translate-* skills)
-- Auto-extracts summary from preceding skill (nixkits-check-updates) or git commit message
+- Auto-extracts summary from preceding skill (update check; nixkits-check-updates for NixKits) or git commit message
 - Unified format: ISO 8601 precise time, LIFO order, omit unchanged hashes
 
 ## Entry Points

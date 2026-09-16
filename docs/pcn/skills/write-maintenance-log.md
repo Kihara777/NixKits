@@ -20,7 +20,7 @@
 - 軟体更新記録作成（概要 + 送信 ID 表 + 版表）
 - 誤修正記録作成（概要 + 送信 ID 表）
 - 保守記録全言語同期（zh/en/ja/pcn）
-- 先行技能（nixkits-check-updates）及 git commit 消息自概要自動抽出
+- 先行技能（更新確認、NixKits 用 nixkits-check-updates）及 git commit 消息自概要自動抽出
 - 統一書式：ISO 8601 精密時刻、LIFO 順序、未変更 hash 省略
 
 ## 入口点
