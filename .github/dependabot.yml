@@ -1,0 +1,38 @@
+# Dependabot —— 覆盖本仓库的「自动化表面」。
+#
+# 本仓库是 Nix flake，主要依赖由 flake.lock 管理（且刻意不提交），
+# 因此 Dependabot 的价值集中在 GitHub Actions 与 npm 包定义上：
+# workflow 里引用的 action 一旦有安全更新，应能自动提出升级。
+#
+# 注意：本仓库把 action 固定在提交 SHA（见 .github/workflows/），
+# Dependabot 会在保留 SHA 固定的前提下更新 SHA 并同步注释中的版本号。
+
+version: 2
+updates:
+  # GitHub Actions —— 覆盖 .github/workflows/ 下所有 workflow
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "ci"
+
+  # npm —— 覆盖以 package.json 定义的包。目前仅 dsh-nixos-shell 一个
+  # （其余包为纯 Nix 定义或纯数据包，无 npm 依赖）。
+  - package-ecosystem: "npm"
+    directory: "/packages/dsh-nixos-shell"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+    # dsh 生态的 peer 声明针对同版本 prerelease，升级需同步校验
+    # npmDepsHash；交由人工 review 而非自动合并。
+    allow:
+      - dependency-type: "direct"
