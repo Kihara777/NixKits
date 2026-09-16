@@ -119,7 +119,7 @@
     nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
-    nixosModules.comfyui-rocm          = import ./modules/comfyui-rocm.nix;
+    nixosModules.comfyui               = import ./modules/comfyui.nix;
     nixosModules.dsh                   = import ./modules/dsh.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.asusd-pd-profile = import ./modules/asusd-pd-profile.nix;

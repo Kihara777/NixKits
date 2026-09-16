@@ -78,7 +78,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/ja/rcc-fix.md](ja/rcc-fix.md) |
 | asusd-pd-profile | 電源種別でプラットフォームプロファイルを選択（USB-C PD と原生 AC を区別） | [docs/ja/asusd-pd-profile.md](ja/asusd-pd-profile.md) |
 | asusd-thermal-guard | 温度監視：過熱時にプロファイルを降格し、冷却後に復帰 | [docs/ja/asusd-thermal-guard.md](ja/asusd-thermal-guard.md) |
-| comfyui-rocm | ComfyUI に ROCm 機能パッチを提供 | [docs/ja/comfyui-rocm.md](ja/comfyui-rocm.md) |
+| comfyui | ComfyUI の ROCm 統合（GFX override / デバイス権限 / カーネルパラメータ） | [docs/ja/comfyui.md](ja/comfyui.md) |
 | efl-cross-fix | efl クロスコンパイルのコード生成ツール不足を修正 | [docs/ja/efl-cross-fix.md](ja/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高コントラスト Breeze Black アクセシビリティテーマ | [docs/ja/breeze-black.md](ja/breeze-black.md) |
 | codewhale-sudo | overlay — codewhale v0.9.12 の sudo 機能を復元（ptrace インターセプター） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |

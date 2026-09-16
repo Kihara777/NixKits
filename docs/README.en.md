@@ -78,7 +78,7 @@ Standalone overlays, not included in `default`:
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/en/rcc-fix.md](en/rcc-fix.md) |
 | asusd-pd-profile | Selects platform profile by power source (USB-C PD vs native AC) | [docs/en/asusd-pd-profile.md](en/asusd-pd-profile.md) |
 | asusd-thermal-guard | Thermal watchdog: steps the profile down when overheating, restores after cooling | [docs/en/asusd-thermal-guard.md](en/asusd-thermal-guard.md) |
-| comfyui-rocm | ComfyUI ROCm functional patch | [docs/en/comfyui-rocm.md](en/comfyui-rocm.md) |
+| comfyui | ComfyUI ROCm integration (GFX override / device access / kernel params) | [docs/en/comfyui.md](en/comfyui.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
 | codewhale-sudo | overlay — restore sudo under codewhale v0.9.12 (ptrace interceptor) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
