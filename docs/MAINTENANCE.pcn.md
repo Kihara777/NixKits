@@ -4,13 +4,13 @@
 
 ## 2026-09-16T12:20:57+09:00
 
-**摘要**：ci: 31 本 建構 workflow 頂層 `permissions` 補完 — 発端 issue #1 / #2 監査（同一 scanner 同一行 重複報告、`build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 指）。規則 指摘 自体 事実、但 本 repo 危険 過大評価：被呼出側 `./.github/workflows/build-package.yml` **同一 repo / 同一 commit / 同一 review 工程** 的 本地 再利用可能 workflow、issue 仮定「untrusted source」不存在。本 repo secret **合計 2 個 限定**（`GITHUB_TOKEN` / `CACHIX_AUTH_TOKEN`）、明示 渡 与 `inherit` 渡 **集合 完全同一**、攻撃者 **何 利得 生 無**——被呼出 workflow 改竄 可能 者、本来 `secrets.*` 直接 読 可能。実際 削減可能 権限 余剰 `inherit` 側 非 呼出側 在：31 本 `build-*.yml` 共 `permissions` 宣言 無、故 repo 既定（読書 可能）継承。但 此等 workflow checkout + `nix build` + Cachix push 限定 行、必要 `contents: read` 限定。今回 此 31 本 呼出側 頂層 `permissions: contents: read` 付与、被呼出側 `build-package.yml` 既宣言 権限 一致 化。**取捨 説明**：Cachix push 独立 `CACHIX_AUTH_TOKEN` 使用、`GITHUB_TOKEN` 権限範囲 依存 無、故 締付 後 CI 挙動 不変（`nix flake check` 的 `check-workflow-coverage` 通過）。**不採用 部分**：31 箇所 `secrets: inherit` 明示列挙 変更 不実施——形式上 適合 限定 実質 安全 利得 無、且 `CACHIX_AUTH_TOKEN` 被呼出側 必渡 必要、最小権限 削 余剰 残 無
+**摘要**：ci: 31 本 建構 workflow 頂層 `permissions` 補完 — 外部貢献者 **@begininvoke**（RedGem 掃描報告）提出 issue #1 / #2 特別感謝：両報告 検証 結果 共 誤報（同一 scanner `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 二重報告、本文 byte 単位 同一）。規則 指摘 自体 事実、但 脅威 model 本 repo 不成立——被呼出側 `./.github/workflows/build-package.yml` **同一 repo / 同一 commit / 同一 review 工程** 的 本地 再利用可能 workflow、issue 仮定「untrusted source」不存在。本 repo secret **合計 2 個 限定**（`GITHUB_TOKEN` / `CACHIX_AUTH_TOKEN`）、明示 渡 与 `inherit` 渡 **集合 完全同一**、攻撃者 **何 利得 生 無**——被呼出 workflow 改竄 可能 者、本来 `secrets.*` 直接 読 可能。且 報告 指名 1 箇所 限定 変更 構造 同一 31 呼出側 間 不整合 生。故 両 issue 共 不採用、詳細 証拠 添 閉鎖——**但 正 此 二本 報告 我々 完全 権限境界 review 促**。報告「再利用可能 workflow 的 secret / 権限 受渡」正方向 注意 向、其 手掛 沿 呼出連鎖 一 一 照合 結果、**真 安全 risk 発見 且 修正**：31 本 `build-*.yml` 呼出側 **共 `permissions` 宣言 無**、故 repo 既定（読書 可能）継承。但 此等 workflow checkout + `nix build` + Cachix push 限定 行、必要 `contents: read` 限定。今回 此 31 本 呼出側 頂層 `permissions: contents: read` 付与、被呼出側 `build-package.yml:17-18` 既宣言 権限 一致 化。**取捨 説明**：Cachix push 独立 `CACHIX_AUTH_TOKEN` 使用、`GITHUB_TOKEN` 権限範囲 依存 無、故 締付 後 CI 挙動 不変（`nix flake check` 的 `check-workflow-coverage` 通過）。**不採用 部分**：31 箇所 `secrets: inherit` 明示列挙 変更 不実施——形式上 適合 限定 実質 安全 利得 無、且 `CACHIX_AUTH_TOKEN` 被呼出側 必渡 必要、最小権限 削 余剰 残 無
 
 | 提交 | 説明 |
 |------|------|
 | `445eb4b` | ci: 为 31 个构建 workflow 补全顶层 permissions（最小权限） |
 
-**関連 外部報告**：issue #1 / #2（@begininvoke / RedGem）——byte 単位 完全重複。規則 指摘 事実、但 危険判断 本 repo 該当 無。対応：現時点 comment 也 close 也 不、結論 此 記録。
+**関連 外部報告**：issue #1 / #2（@begininvoke / RedGem）——byte 単位 完全重複、誤報 確認、詳細 技術 証拠 comment 添 not planned 閉鎖。手掛 価値 謝意 表。
 
 ## 2026-09-16T11:58:25+09:00
 

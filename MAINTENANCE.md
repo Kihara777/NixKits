@@ -4,13 +4,13 @@
 
 ## 2026-09-16T12:20:57+09:00
 
-**摘要**：ci: 为 31 个构建 workflow 补全顶层 `permissions` — 起因是审计 issue #1、#2（同一扫描器对同一行的重复报告，指向 `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit`）。两条 issue 的规则命中属实，但风险在本仓库被高估：被调方 `./.github/workflows/build-package.yml` 是**同仓库、同 commit、同 review 流程**的本地可复用工作流，不存在 issue 假设的「untrusted source」；本仓库**总共只有 2 个** secret（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`），显式传递与 `inherit` 传递的集合**完全相同**，故对攻击者**不产生任何增益**——能篡改被调 workflow 的人本来就能直接读 `secrets.*`。真正可削减的权限余量不在 `inherit` 而在调用方：31 个 `build-*.yml` 均未声明 `permissions`，因而继承仓库默认（可能为读写），而这些 workflow 只做 checkout + `nix build` + 推送 Cachix，全部只需 `contents: read`。本次即为 31 个调用方补上顶层 `permissions: contents: read`，与被调方 `build-package.yml` 已声明的权限保持一致。**取舍说明**：Cachix 推送使用独立的 `CACHIX_AUTH_TOKEN`，不依赖 `GITHUB_TOKEN` 的权限范围，故收紧后 CI 行为不变（`nix flake check` 中 `check-workflow-coverage` 通过）。**未采纳的部分**：不将 31 处 `secrets: inherit` 改为显式列举——那是形式合规而无实质安全收益的改动，且 `CACHIX_AUTH_TOKEN` 必须传给被调方，最小权限在此没有可削减余量
+**摘要**：ci: 为 31 个构建 workflow 补全顶层 `permissions` — 特别感谢外部贡献者 **@begininvoke**（RedGem 扫描报告）提交的 issue #1、#2：这两条报告经核验为误报（同一扫描器对 `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 重复报告，正文逐字节相同），规则命中虽属实但威胁模型在本仓库不成立——被调方 `./.github/workflows/build-package.yml` 是**同仓库、同 commit、同 review 流程**的本地可复用工作流，不存在 issue 假设的「untrusted source」；本仓库**总共只有 2 个** secret（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`），显式传递与 `inherit` 传递的集合**完全相同**，故对攻击者**不产生任何增益**——能篡改被调 workflow 的人本来就能直接读 `secrets.*`；且只改报告点名的那一处会在 31 个同构调用方之间造成不一致，故两条 issue 均不予采纳并已附详细证据关闭——**但正是这两条报告促使我们去做了一次完整的权限边界复核**，报告把注意力引向「可复用 workflow 的 secret/权限传递」这一正确方向，顺着该线索逐条核对调用链后，**发现并修复了一处真实的安全风险**：31 个 `build-*.yml` 调用方**均未声明 `permissions`**，因而继承仓库默认（可能为读写），而它们实际只做 checkout + `nix build` + 推送 Cachix，全部只需 `contents: read`。本次即为这 31 个调用方补上顶层 `permissions: contents: read`，与被调方 `build-package.yml:17-18` 已声明的权限保持一致。**取舍说明**：Cachix 推送使用独立的 `CACHIX_AUTH_TOKEN`，不依赖 `GITHUB_TOKEN` 的权限范围，故收紧后 CI 行为不变（`nix flake check` 中 `check-workflow-coverage` 通过）。**未采纳的部分**：不将 31 处 `secrets: inherit` 改为显式列举——那是形式合规而无实质安全收益的改动，且 `CACHIX_AUTH_TOKEN` 必须传给被调方，最小权限在此没有可削减余量
 
 | 提交 | 说明 |
 |------|------|
 | `445eb4b` | ci: 为 31 个构建 workflow 补全顶层 permissions（最小权限） |
 
-**相关外部报告**：issue #1、#2（@begininvoke / RedGem）——内容逐字节重复；规则命中属实但风险判断不适用于本仓库，处置方式为暂不对其评论或关闭，结论记录于此。
+**相关外部报告**：issue #1、#2（@begininvoke / RedGem）——内容逐字节重复，经核验为误报，已附详细技术证据评论后以 not planned 关闭；其线索价值已致谢。
 
 ## 2026-09-16T11:58:25+09:00
 
