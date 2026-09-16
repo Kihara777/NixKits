@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-16T11:58:25+09:00
+
+**摘要**：fix(dsh-api-balance): 自訂 TTS 代理 的 SSRF 與 請求 header 注入面 修正 — 発端 倉庫内 二本 外部貢献 PR 監査（#4 `/token`・`/voicepack`・`/tts` 四 endpoint 速率制限 欠 主張、但 diff 第五 `/query` のみ 変更；#5 `/query` 請求 body 体積上限 欠 主張、但 此 防護 `readJsonBody` 64 KiB 上限 既存）。両者 共 安全 scanner 誤報 産物、但 其 指 `/tts` endpoint 実際 **真** 利用可能面 存在、且 二本 共 不触：此 代理 任意 `http(s)` URL 受、host 身分 請求 発行、故 内網 探査 與 cloud metadata（`169.254.169.254`）読取 踏台 可能；同時 請求 body 内 用户制御 `headers` 原様 転送、攻撃者 host 身分 借 `host` / `cookie` / `authorization` header 補 影響 増幅 可能。今回 実際 脅威 model 沿 修正：`resolveTtsTarget` 與 `isBlockedAddress` 新設、loopback / private / link-local / 予約 address 拒否（RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8` 含、IPv4-mapped IPv6 含）、literal IP 直接 判定、域名 DNS 解決結果 照合；自訂 請求 header whitelist 化（`content-type` / `accept` / `accept-language` / `user-agent` のみ）。**判断 根拠 與 取捨**：DNS rebinding TOCTOU 窓 完全 消 為「連接 検証済 IP 固定」案 先 試——実測 Node `fetch` URL host 強制 `Host` header 與 TLS SNI 使用、`host` header 上書 黙 無視、URL hostname 書換 正当 HTTPS TTS backend 仮想 host routing 與 証明書検証 全部 無効 化。此 代償 本 endpoint 残余 risk（本機 self-host dsh 補助代理、multi-tenant 境界 非）超、故此 制限 明示 保持 且 source comment 記録——「修正済」覆隠 非。四言語 document 防護 説明 追記
+
+| 提交 | 説明 |
+|------|------|
+| `e1a6e66` | fix(dsh-api-balance): 修复 TTS 代理的 SSRF 与请求头注入面 |
+
 ## 2026-09-16T11:38:20+09:00
 
 **摘要**：docs(deprecated): `DEPRECATED.md` 索引化 且 四言語化 — 従来 此 一本 中国語文書 **索引** 與 **単一工程 完全 説明** 二 役割 兼。項目 一 唯 無妨、但 増 確実、然 読者 全体 一望 不能、且 此 文書 局所化 受皿 無（既存 `docs/<lang>/` 体系 置場 無）。今回 倉庫 既存 規約 沿 再構成：根 `DEPRECATED.md` **純粋 索引**（一覧 + 各工程 詳細 連結）後退、`README`/`MAINTENANCE` 同 成法 三鏡像 `docs/DEPRECATED.{en,ja,pcn}.md` 用意。各廃止工程 詳細 `docs/<lang>/deprecated/<name>.md` 移、四言語 各一份、冒頭 言語切替器 與 索引 戻 連結 置。第一陣 comfyui-rocm 完全 説明（逐字 致敬句、三補丁 対照表、scipy 誤判定 回顧、廃止後 設定例、歴史版本 対照）移行。四言語 `README`「廃止工程」節 追加、`docs/<lang>/comfyui.md` 参照 詳細頁 向直。**記録 値 落穴**：`docs/DEPRECATED.*.md` 自身 `docs/` 内側 在、故 言語目録 連結 `../zh/...` 非 `zh/...` 書 必須——最初 `nix flake check` 6 本 死連結 検出（en/ja/pcn 各自 他 三言語 指）。全部 修正 済。此 正 `check-doc-links` 存在意義：一段上 文件 習慣 相対 path 書 類 誤、人間 頁 繰 無 気付 能 無 誤 正 此 止。此 再構成 後、工程 追加 索引 一行 與 四份 詳細文書 済

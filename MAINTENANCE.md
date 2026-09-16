@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T11:58:25+09:00
+
+**摘要**：fix(dsh-api-balance): 修复自定义 TTS 代理的 SSRF 与请求头注入面 — 起因是审计仓库内两条外部贡献 PR（#4 声称 `/token`、`/voicepack`、`/tts` 四个端点缺少限流，diff 却只改了第五个端点 `/query`；#5 声称 `/query` 缺少请求体体积上限，而该防护早已由 `readJsonBody` 的 64 KiB 上限提供）。两条均为安全扫描器的误报产物，但其指向的 `/tts` 端点确实存在**真实**的可利用面，且两条 PR 都未触及：该代理接受任意 `http(s)` URL 并以 host 身份发起请求，可被用作内网探测与云元数据（`169.254.169.254`）读取的跳板；同时它把请求体中用户可控的 `headers` 原样转发，攻击者可借 host 身份补 `host` / `cookie` / `authorization` 头放大后果。本次按真实威胁模型修复：新增 `resolveTtsTarget` 与 `isBlockedAddress`，拒绝回环 / 私有 / 链路本地 / 保留地址（覆盖 RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8`，含 IPv4-mapped IPv6），字面量 IP 直接判定、域名比对 DNS 解析结果；自定义请求头改为白名单（仅 `content-type` / `accept` / `accept-language` / `user-agent`）。**判断依据与取舍**：曾尝试「把连接固定到已校验 IP」以彻底消除 DNS rebinding 的 TOCTOU 窗口——实测 Node 的 `fetch` 强制以 URL 的 host 作为 `Host` 头与 TLS SNI，覆写 `host` 头被静默忽略，改 URL 主机名则会让合法 HTTPS TTS 后端的虚拟主机路由与证书校验全部失效。该代价高于本端点残余风险（本机自托管 dsh 的辅助代理，非多租户边界），故显式保留并在源码注释中记录该限制，而非以「已修复」掩盖。四语文档同步补充防护说明
+
+| 提交 | 说明 |
+|------|------|
+| `e1a6e66` | fix(dsh-api-balance): 修复 TTS 代理的 SSRF 与请求头注入面 |
+
 ## 2026-09-16T11:38:20+09:00
 
 **摘要**：docs(deprecated): `DEPRECATED.md` 索引化并四语本地化 — 原先这一份中文文档同时承担两个职责：**索引**与**单个项目的完整说明**。只有一条时无妨，但它注定要长——项目一多，读者无法一眼看全，且整份文档没有本地化路径（既有的 `docs/<lang>/` 体系无处安放它）。本次按仓库既有约定重构：根 `DEPRECATED.md` 退化为**纯索引**（列表 + 指向各项目详情的链接），并按 `README`/`MAINTENANCE` 的成法出三份镜像 `docs/DEPRECATED.{en,ja,pcn}.md`；各废弃项目的详情移入 `docs/<lang>/deprecated/<name>.md`，四语各一份，顶部带语言切换器与返回索引的链接。首批迁移 comfyui-rocm 的完整说明（含逐字致敬句、三补丁对照表、scipy 误判复盘、废弃后配置示例、历史版本对照）。四语 `README` 新增「废弃项目」章节，`docs/<lang>/comfyui.md` 的引用改指详情页。**踩坑记录**：`docs/DEPRECATED.*.md` 自身位于 `docs/` 内，故其指向语言目录的链接必须写 `zh/...` 而非 `../zh/...`——`nix flake check` 首次即抓出 6 条死链（en/ja/pcn 各指向另外三语），已全部修正。这正是 `check-doc-links` 存在的价值：它拦下的恰是"照着上层文件的习惯写相对路径"这类只有人工翻页才会发现的错误。重构后新增项目只需在索引加一行、再补四份详情文档
