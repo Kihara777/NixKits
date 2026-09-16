@@ -4,11 +4,14 @@
 
 ## 2026-09-16T11:58:25+09:00
 
-**摘要**：fix(dsh-api-balance): 修复自定义 TTS 代理的 SSRF 与请求头注入面 — 起因是审计仓库内两条外部贡献 PR（#4 声称 `/token`、`/voicepack`、`/tts` 四个端点缺少限流，diff 却只改了第五个端点 `/query`；#5 声称 `/query` 缺少请求体体积上限，而该防护早已由 `readJsonBody` 的 64 KiB 上限提供）。两条均为安全扫描器的误报产物，但其指向的 `/tts` 端点确实存在**真实**的可利用面，且两条 PR 都未触及：该代理接受任意 `http(s)` URL 并以 host 身份发起请求，可被用作内网探测与云元数据（`169.254.169.254`）读取的跳板；同时它把请求体中用户可控的 `headers` 原样转发，攻击者可借 host 身份补 `host` / `cookie` / `authorization` 头放大后果。本次按真实威胁模型修复：新增 `resolveTtsTarget` 与 `isBlockedAddress`，拒绝回环 / 私有 / 链路本地 / 保留地址（覆盖 RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8`，含 IPv4-mapped IPv6），字面量 IP 直接判定、域名比对 DNS 解析结果；自定义请求头改为白名单（仅 `content-type` / `accept` / `accept-language` / `user-agent`）。**判断依据与取舍**：曾尝试「把连接固定到已校验 IP」以彻底消除 DNS rebinding 的 TOCTOU 窗口——实测 Node 的 `fetch` 强制以 URL 的 host 作为 `Host` 头与 TLS SNI，覆写 `host` 头被静默忽略，改 URL 主机名则会让合法 HTTPS TTS 后端的虚拟主机路由与证书校验全部失效。该代价高于本端点残余风险（本机自托管 dsh 的辅助代理，非多租户边界），故显式保留并在源码注释中记录该限制，而非以「已修复」掩盖。四语文档同步补充防护说明
+**摘要**：fix(dsh-api-balance): 修复自定义 TTS 代理的 SSRF 与请求头注入面 — 特别感谢外部贡献者 **@anupamme**（OrbisAI Security 扫描报告）提交的 PR #4、#5：这两条报告本身经核验为误报（#4 声称 `/token`、`/voicepack`、`/tts` 四个端点缺少限流，diff 却只改了第五个端点 `/query`，且以可伪造的 `x-forwarded-for` 为限流键会让本机同源客户端坍缩到单一桶而自我 429；#5 声称 `/query` 缺少请求体体积上限，而该防护早已由 `readJsonBody` 的 64 KiB 上限提供，其新增的 `content-length` 检查可被 chunked 绕过、`text.length` 又是 UTF-16 码元数而非字节数），故两条均不予合并并已附详细证据关闭——**但正是这两条报告唤醒了我们的安全边界复核意识**，促使我们逐端点核对本插件的输入与出网约束，并在其提及的 `/tts` 处理逻辑上**发现并修复了一个真实的安全威胁**：该代理接受任意 `http(s)` URL 并以 host 身份发起请求，可被用作内网探测与云元数据（`169.254.169.254`）读取的跳板；同时它把请求体中用户可控的 `headers` 原样转发，攻击者可借 host 身份补 `host` / `cookie` / `authorization` 头放大后果。本次按真实威胁模型修复：新增 `resolveTtsTarget` 与 `isBlockedAddress`，拒绝回环 / 私有 / 链路本地 / 保留地址（覆盖 RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8`，含 IPv4-mapped IPv6），字面量 IP 直接判定、域名比对 DNS 解析结果；自定义请求头改为白名单（仅 `content-type` / `accept` / `accept-language` / `user-agent`）。**判断依据与取舍**：曾尝试「把连接固定到已校验 IP」以彻底消除 DNS rebinding 的 TOCTOU 窗口——实测 Node 的 `fetch` 强制以 URL 的 host 作为 `Host` 头与 TLS SNI，覆写 `host` 头被静默忽略，改 URL 主机名则会让合法 HTTPS TTS 后端的虚拟主机路由与证书校验全部失效。该代价高于本端点残余风险（本机自托管 dsh 的辅助代理，非多租户边界），故显式保留并在源码注释中记录该限制，而非以「已修复」掩盖。四语文档同步补充防护说明
 
 | 提交 | 说明 |
 |------|------|
-| `e1a6e66` | fix(dsh-api-balance): 修复 TTS 代理的 SSRF 与请求头注入面 |
+| `e1a6e66` | fix(dsh-api-balance): 修复 TTS 代理的 SSRF 与请求头注入面（含四语文档同步） |
+| `72cb6ae` | fix(docs): pcn 维护条目去除残留假名（のみ → 限定） |
+
+**相关外部报告**：PR #4、#5（@anupamme / OrbisAI Security）——经核验为误报，已附详细技术证据评论后关闭；其线索价值已致谢。
 
 ## 2026-09-16T11:38:20+09:00
 

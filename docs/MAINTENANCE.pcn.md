@@ -4,11 +4,14 @@
 
 ## 2026-09-16T11:58:25+09:00
 
-**摘要**：fix(dsh-api-balance): 自訂 TTS 代理 的 SSRF 與 請求 header 注入面 修正 — 発端 倉庫内 二本 外部貢献 PR 監査（#4 `/token` / `/voicepack` / `/tts` 四 endpoint 速率制限 欠 主張、但 diff 第五 `/query` 限定 変更；#5 `/query` 請求 body 体積上限 欠 主張、但 此 防護 `readJsonBody` 64 KiB 上限 既存）。両者 共 安全 scanner 誤報 産物、但 其 指 `/tts` endpoint 実際 **真** 利用可能面 存在、且 二本 共 不触：此 代理 任意 `http(s)` URL 受、host 身分 請求 発行、故 内網 探査 與 cloud metadata（`169.254.169.254`）読取 踏台 可能；同時 請求 body 内 用户制御 `headers` 原様 転送、攻撃者 host 身分 借 `host` / `cookie` / `authorization` header 補 影響 増幅 可能。今回 実際 脅威 model 沿 修正：`resolveTtsTarget` 與 `isBlockedAddress` 新設、loopback / private / link-local / 予約 address 拒否（RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8` 含、IPv4-mapped IPv6 含）、literal IP 直接 判定、域名 DNS 解決結果 照合；自訂 請求 header whitelist 化（`content-type` / `accept` / `accept-language` / `user-agent` 限定）。**判断 根拠 與 取捨**：DNS rebinding TOCTOU 窓 完全 消 為「連接 検証済 IP 固定」案 先 試——実測 Node `fetch` URL host 強制 `Host` header 與 TLS SNI 使用、`host` header 上書 黙 無視、URL hostname 書換 正当 HTTPS TTS backend 仮想 host routing 與 証明書検証 全部 無効 化。此 代償 本 endpoint 残余 risk（本機 self-host dsh 補助代理、multi-tenant 境界 非）超、故此 制限 明示 保持 且 source comment 記録——「修正済」覆隠 非。四言語 document 防護 説明 追記
+**摘要**：fix(dsh-api-balance): 自訂 TTS 代理 的 SSRF 與 請求 header 注入面 修正 — 外部貢献者 **@anupamme**（OrbisAI Security 掃描報告）提出 PR #4 / #5 特別感謝：両報告 検証 結果 共 誤報（#4 `/token` / `/voicepack` / `/tts` 四 endpoint 速率制限 欠 主張、但 diff 第五 `/query` 限定 変更、且 偽造可能 `x-forwarded-for` 速率制限鍵 使用 本機 同源 client 単一 bucket 集約 自己 429 招；#5 `/query` 請求 body 体積上限 欠 主張、但 此 防護 `readJsonBody` 64 KiB 上限 既存、其 追加 `content-length` 検査 chunked 回避 可能、`text.length` byte 数 非 UTF-16 code unit 数）。故 両者 共 不 merge、詳細 証拠 添 閉鎖——**但 正 此 二本 報告 我々 安全境界 review 意識 喚醒**、此 機 本 plugin 入力 與 外向 通信 制約 endpoint 単位 照合、報告 指 `/tts` 処理 logic 於 **真 安全脅威 発見 且 修正**：此 代理 任意 `http(s)` URL 受、host 身分 請求 発行、故 内網 探査 與 cloud metadata（`169.254.169.254`）読取 踏台 可能；同時 請求 body 内 用户制御 `headers` 原様 転送、攻撃者 host 身分 借 `host` / `cookie` / `authorization` header 補 影響 増幅 可能。今回 実際 脅威 model 沿 修正：`resolveTtsTarget` 與 `isBlockedAddress` 新設、loopback / private / link-local / 予約 address 拒否（RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8` 含、IPv4-mapped IPv6 含）、literal IP 直接 判定、域名 DNS 解決結果 照合；自訂 請求 header whitelist 化（`content-type` / `accept` / `accept-language` / `user-agent` 限定）。**判断 根拠 與 取捨**：DNS rebinding TOCTOU 窓 完全 消 為「連接 検証済 IP 固定」案 先 試——実測 Node `fetch` URL host 強制 `Host` header 與 TLS SNI 使用、`host` header 上書 黙 無視、URL hostname 書換 正当 HTTPS TTS backend 仮想 host routing 與 証明書検証 全部 無効 化。此 代償 本 endpoint 残余 risk（本機 self-host dsh 補助代理、multi-tenant 境界 非）超、故此 制限 明示 保持 且 source comment 記録——「修正済」覆隠 非。四言語 document 防護 説明 追記
 
 | 提交 | 説明 |
 |------|------|
 | `e1a6e66` | fix(dsh-api-balance): 修复 TTS 代理的 SSRF 与请求头注入面 |
+| `72cb6ae` | fix(docs): pcn 维护条目去除残留假名（のみ → 限定） |
+
+**関連 外部報告**：PR #4 / #5（@anupamme / OrbisAI Security）——誤報 確認、詳細 技術 証拠 comment 添 閉鎖。手掛 価値 謝意 表。
 
 ## 2026-09-16T11:38:20+09:00
 
