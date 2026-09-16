@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T01:40:58+09:00
+
+**摘要**：docs(security): `SECURITY.md` 「重複投稿」扱 境界 明示（四言語）——前回 commit 評価済 外部報告 4 件 掲載、但 文言 説明的 止。今回「重複投稿 就」小節 追加 拘束力 持——**上表 既 記載 同一 結論、新 証拠 無 再投稿 場合、本節 指 示 其 侭 close**。同時 正当 報告 巻込 無 様 受理 與 close 境界 引——**受理**：上表 含 無 新規 問題、上表 何 結論 誤 指摘（再現可能 証拠 添 場合）、同一 主題 但 異 脅威 model 又 攻撃経路；**其 侭 close**：上表 既 有 結論 単 再述、同一 規則 再度 出力 自動 scan。末尾「結論 誤 指摘 常 歓迎」残——上表 4 件 也 精査 上 判断、根拠 誤 場合 訂正 可 故。四言語 同期。
+
+| 提交 | 説明 |
+|------|------|
+| `94bd95c` | docs(security): 明确重复提交的处理界限（四语） |
+
 ## 2026-09-17T01:34:13+09:00
 
 **摘要**：docs(security): `SECURITY.md` 「評価済 外部報告」節 追加 且 四言語 local 化 組入 — 目的 **精査 上 close 済 4 件 外部報告** 公開、後続 報告者 同種 問題 再提出 無 済 様 為。各項目 結論 與 根拠 記録：**PR #4**（@anupamme、`/token` / `/voicepack` / `/tts` rate 制限 無 主張——誤検出：説明 diff 不一致、実際 変更 `/query` 限定。rate 制限 key `x-forwarded-for` client 偽造 可能、local 同一 origin RPC 此 header 送 無 故、全 local traffic 単一 bucket 集約 利用者 自身 panel 制限）；**PR #5**（@anupamme、`/query` request body 上限 無 主張——誤検出：其 防御 `readJsonBody` 64 KiB 上限 既存、`content-length` 検査 chunked 回避 可能、`text.length` byte 数 非 UTF-16 code 単位 数）；**issue #1**（@begininvoke、`secrets: inherit` 最小権限 違反 主張——誤検出：被呼出側 同一 repo 内 local workflow、secret 合計 2 個 限定、明示受渡 也 `inherit` 也 集合 完全同一）；**issue #2**（#1 同一、byte 単位 重複）。同節 此等 **導 2 件 実際 堅牢化** 也 記録：`/tts` endpoint SSRF（何 報告 也 言及 無、endpoint 精査 中 発見。当該 endpoint `dsh-api-balance` 共 新 repo 移転 済）與 31 build workflow 最小権限 補完。**立場 表明**：此等 報告 規則 概 事実 突、但 脅威 model 本 project 配備形態 該当 不。方針「先 精査、再現可能 証拠 添 回答」、**誤検出 迷惑 扱 不**——上記 4 件 最終的 2 件 実際 堅牢化 生。local 化 面 `docs/SECURITY.{en,ja,pcn}.md` 追加、四言語 切替器 相互 link、四言語 README 也 許諾節 後 link 追加。**注**：issue #1/#2 其後 削除（現存 issue #3 限定）。追跡 為 歴史的 番号 此処 保持。
