@@ -1601,7 +1601,16 @@ export function apply(ctx, config = {}) {
       fetch: async (request) => {
         let body;
         try {
-          body = await request.json();
+          const maxBytes = 64 * 1024;
+          const contentLength = Number(request.headers.get("content-length") || 0);
+          if (contentLength > maxBytes) {
+            return new Response("payload too large", { status: 413 });
+          }
+          const text = await request.text();
+          if (text.length > maxBytes) {
+            return new Response("payload too large", { status: 413 });
+          }
+          body = JSON.parse(text);
         } catch {
           return new Response("body is not JSON", { status: 400 });
         }
