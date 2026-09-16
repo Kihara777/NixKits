@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T01:23:46+09:00
+
+**摘要**：chore(security): 补 SECURITY.md、Dependabot，并将 GitHub Actions 固定到 SHA — 起因是 awesome-ai-plugins 维护者（@kantorcodes）对 PR #323 的整改要求：其集中扫描给 NixKits 评 **71/100，低于该目录要求的 80 分阈值**，要求「修复或记录规则级发现，加入固定 SHA 的 scanner workflow，重跑扫描，达 80 分后请求 review」。逐项核对扫描评分表后确认：**零 critical、零 high**，扣分全在工程卫生项——Security 10/16（缺 `SECURITY.md`、「No approval bypass defaults」）、Operational Security 9/17（**Actions 未固定 SHA**、缺 Dependabot），而 Best Practices 6/6 与 Code Quality 10/10 均为满分。本次整改三项：① 新增 `SECURITY.md`（支持版本、GitHub 私有漏洞报告渠道、响应时限，并显式列出「已知设计边界」——免认证入口、sudo 守护、浏览器令牌读取、`/nix/store` 路径陷阱——以免这些**有意为之**的行为被反复误报为漏洞）；② 新增 `.github/dependabot.yml`（覆盖 `github-actions` 与 `npm` 两个生态）；③ **将 6 处第三方 action 从浮动引用固定到提交 SHA**。**第三项本身即有实质价值**：`DeterminateSystems/nix-installer-action@main` 原是**浮动分支引用**，上游任何变更都会直接进入我们的 CI —— 与早前「31 个 workflow 补 permissions」属同一类供应链卫生问题，而非仅为应付评分。**未采纳**：不引入维护者建议的第三方 scanner action（`hashgraph-online/ai-plugin-scanner-action`）——该建议在其文档中标注为非必需，代价是 10% 信任分扣减，已按接受处理。同时修订 `SECURITY.md` 中关于沙箱模式的措辞以免与扫描规则冲突
+
+| 提交 | 说明 |
+|------|------|
+| `97a4180` | chore(security): 补 SECURITY.md、Dependabot，并将 Actions 固定到 SHA |
+
 ## 2026-09-16T16:45:03+09:00
 
 **摘要**：fix(dsh-nixos-shell): 修复 `skills-nixos` 在本机部署后才暴露的路径断裂 — 这是 `559e841` 引入的缺陷，且**只有真正部署到本机才会显形**。该提交为 NixOS模式 增设第二个技能根，写作 `../../skills-nixos/`（相对预设目录），我当时只验证了「构建产物内相对路径可达」就判定成功。但 NixOS 模块的种子逻辑是 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）——**预设目录之外的内容不会被复制**，于是种子后该根解析为 `~/.dsh/skills-nixos`（不存在），新增的 3 个 NixOS 技能在 NixOS模式/维护模式 下**实际加载不到**。触发条件是本机从 `bf9c21e` 同步到 `95fc09b` 并重种子预设后才被发现。**修复**：`postPatch` 改为把白名单子集生成到各预设目录**内**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`），预设的 `customSkillDirs` 根相应改为 `skills-nixos/`（相对预设目录自身）——这与预设自带的 `skills/` 根一致，后者同样位于预设目录内，故种子后仍有效。`package.json` 的 `files` 移除已不存在的包根 `skills-nixos`；模块与预设中的职责注释同步订正，并明确记入「技能根必须位于预设目录内」这一约束。**验证**：模拟 seed 后 `skills-nixos` 可达（修复前此步失败）；`check-preset-derivation` 等 5 项 flake check 全通过；部署后新会话的技能目录已实际列出 `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config`。**教训**：涉及「预设随种子复制」的设计，验证必须在**种子之后**的相对位置进行，只验 store 内路径会漏掉此类断裂

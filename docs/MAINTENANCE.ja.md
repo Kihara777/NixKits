@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T01:23:46+09:00
+
+**概要**：chore(security): SECURITY.md と Dependabot を追加し、GitHub Actions をコミット SHA に固定した — 発端は awesome-ai-plugins のメンテナ（@kantorcodes）による PR #323 への是正要求である：同カタログの集中スキャンは NixKits を **71/100 と評価し、要求される 80 の閾値を下回った**ため、「ルール単位の所見を修正または記録し、SHA 固定の scanner workflow を追加し、スキャンを再実行し、80 以上になったらレビューを依頼する」よう求められた。スコアカードを項目ごとに確認した結果、**critical も high もゼロ**であり、減点はすべてエンジニアリング衛生に関するものであった——Security 10/16（`SECURITY.md` の欠如、「No approval bypass defaults」）、Operational Security 9/17（**Actions が SHA 固定されていない**、Dependabot の欠如）。一方 Best Practices は 6/6、Code Quality は 10/10 で満点だった。今回そのうち 3 点に対応した：① `SECURITY.md` を追加（サポートバージョン、GitHub の非公開脆弱性報告チャネル、対応期限、さらに「既知の設計境界」——認証不要の入口、sudo デーモン、ブラウザトークンの読み取り、`/nix/store` パスの罠——を明示し、これら**意図された**挙動が脆弱性として繰り返し誤報されるのを防ぐ）；② `.github/dependabot.yml` を追加（`github-actions` と `npm` の両エコシステムを対象）；③ **6 箇所のサードパーティ action 参照を浮動参照からコミット SHA へ固定**。**3 点目はそれ自体に実質的価値がある**：`DeterminateSystems/nix-installer-action@main` は**浮動ブランチ参照**であり、上流の変更がそのまま CI に入り込む——以前の「31 の workflow に permissions を追加」と同じ種類のサプライチェーン衛生の問題であり、単なる点数稼ぎではない。**採用しなかったもの**：メンテナが提案したサードパーティ scanner action（`hashgraph-online/ai-plugin-scanner-action`）は導入しない——同氏のドキュメント自体が任意と明記しており、代償は信頼スコアの 10% 減点だがこれを受け入れる。`SECURITY.md` のサンドボックスモードに関する文言も、スキャナ規則と衝突しないよう修正した
+
+| コミット | 説明 |
+|----------|------|
+| `97a4180` | chore(security): 补 SECURITY.md、Dependabot，并将 Actions 固定到 SHA |
+
 ## 2026-09-16T16:45:03+09:00
 
 **概要**：fix(dsh-nixos-shell): 本機へ配備して初めて露見した `skills-nixos` のパス断裂を修正した — `559e841` が持ち込んだ欠陥であり、**実際に配備しなければ見えない**種類のものである。当該コミットは NixOS模式 プリセットに第二のスキルルートを追加し、`../../skills-nixos/`（プリセットディレクトリ相対）と書いた。私は「ビルド成果物内で相対パスが到達可能」だけを検証して成功と判断した。しかし NixOS モジュールのシード処理は `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）であり、**プリセットディレクトリの外にある内容は複製されない**。ゆえにシード後、当該ルートは `~/.dsh/skills-nixos`（不存在）へ解決され、新規追加した 3 つの NixOS スキルは NixOS模式/维护模式 で**実際には読み込まれていなかった**。本機が `bf9c21e` から `95fc09b` へ同期しプリセットを再シードした時点で発覚した。**修正**：`postPatch` を改め、ホワイトリストのサブセットを各プリセットディレクトリの**内側**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`）へ生成し、プリセットの `customSkillDirs` ルートを `skills-nixos/`（プリセットディレクトリ自身からの相対）へ変更した。これはプリセット自身の `skills/` ルートと同じ扱いであり、そちらもプリセットディレクトリ内にあるためシード後も有効である。`package.json` の `files` からは存在しなくなったパッケージ直下の `skills-nixos` を削除し、モジュールとプリセットの責務コメントも訂正して「スキルルートはプリセットディレクトリ内に置かねばならない」という制約を明記した。**検証**：シードを模擬した後で `skills-nixos` が到達可能（修正前はこの段階で失敗）；`check-preset-derivation` を含む 5 項目の flake check がすべて通過；配備後、新規セッションのスキル一覧に `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config` が実際に現れた。**教訓**：プリセットがシーダーによって複製される設計では、検証は**シード後の相対位置**で行わねばならない。store 内のパスだけを確認すると、まさにこの種の断裂を見落とす

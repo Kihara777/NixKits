@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T01:23:46+09:00
+
+**摘要**：chore(security): SECURITY.md 與 Dependabot 追加、GitHub Actions commit SHA 固定 — 発端 awesome-ai-plugins 維護者（@kantorcodes）PR #323 是正要求：同目録 集中 scan NixKits **71/100 評価、要求 80 閾値 下回**、故「規則単位 所見 修正 又 記録、SHA 固定 scanner workflow 追加、scan 再実行、80 以上 成 後 review 依頼」要求。scorecard 項目毎 確認 結果、**critical 也 high 也 零**、減点 全部 engineering 衛生 関 物——Security 10/16（`SECURITY.md` 欠如、「No approval bypass defaults」）、Operational Security 9/17（**Actions SHA 固定 無**、Dependabot 欠如）。一方 Best Practices 6/6、Code Quality 10/10 満点。今回 内 3 点 対応：① `SECURITY.md` 追加（support 版本、GitHub 非公開脆弱性報告 channel、対応期限、更「既知 設計境界」——認証不要 入口、sudo daemon、browser token 読取、`/nix/store` path 罠——明示、此等 **意図 済** 挙動 脆弱性 繰返 誤報 防）；② `.github/dependabot.yml` 追加（`github-actions` 與 `npm` 両 ecosystem 対象）；③ **6 箇所 第三者 action 参照 浮動参照 自 commit SHA 固定**。**3 点目 自体 実質 価値 有**：`DeterminateSystems/nix-installer-action@main` **浮動 branch 参照**、上流 変更 其 侭 CI 入込——以前「31 workflow permissions 追加」同種 supply chain 衛生 問題、単 点数稼 非。**採用 不**：維護者 提案 第三者 scanner action（`hashgraph-online/ai-plugin-scanner-action`）導入 不——同 documentation 自体 任意 明記、代償 信頼 score 10% 減点 受入。`SECURITY.md` sandbox mode 文言 也 scanner 規則 衝突 無 様 修正。
+
+| 提交 | 説明 |
+|------|------|
+| `97a4180` | chore(security): 补 SECURITY.md、Dependabot，并将 Actions 固定到 SHA |
+
 ## 2026-09-16T16:45:03+09:00
 
 **摘要**：fix(dsh-nixos-shell): 本機 配備 後 初 露見 `skills-nixos` path 断裂 修正 — `559e841` 持込 欠陥、且 **実際 配備 無 可視 不可** 種類。当該 commit NixOS模式 預設 第二 技能 root 追加、`../../skills-nixos/`（預設目録 相対）記載。私「build 成果物 内 相対 path 到達可能」限定 検証 成功 判断。但 NixOS module seed 処理 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）、**預設目録 外 内容 複製 不**。故 seed 後 当該 root `~/.dsh/skills-nixos`（不存在）解決、新規追加 3 NixOS 技能 NixOS模式/維護模式 於 **実際 読込 不**。本機 `bf9c21e` 自 `95fc09b` 同期 預設 再 seed 時点 発覚。**修正**：`postPatch` 改、whitelist subset 各預設目録 **内側**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`）生成、預設 `customSkillDirs` root `skills-nixos/`（預設目録 自身 自 相対）変更。此 預設 自身 `skills/` root 同 扱、其 也 預設目録 内 有 故 seed 後 有効。`package.json` `files` 自 存在 無 成 包直下 `skills-nixos` 削除、module 與 預設 責務 comment 訂正、「技能 root 預設目録 内 置 必須」制約 明記。**検証**：seed 模擬 後 `skills-nixos` 到達可能（修正前 此段階 失敗）；`check-preset-derivation` 含 5 項 flake check 全部 通過；配備 後 新規 session 技能一覧 `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config` 実際 出現。**教訓**：預設 seeder 依 複製 設計、検証 **seed 後 相対位置** 行 必要。store 内 path 限定 確認 場合 正 此 種 断裂 見落
