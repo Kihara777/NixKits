@@ -69,6 +69,20 @@ if you believe one of these conclusions is wrong, say so and we will re-evaluate
 > Most of these reports **did hit a real rule**, but the threat model does not apply to how this project is deployed.
 > We handle them by reviewing first, replying with reproducible evidence — not by accepting them uncritically.
 
+### On duplicate submissions
+
+**The same conclusion already listed above, resubmitted without new evidence, will be closed directly with a pointer to this section.**
+
+This is not a refusal of security reports; it draws a line:
+
+| Will be accepted | Will be closed directly |
+|------------------|-------------------------|
+| A **new** issue not covered above | A duplicate report reaching a conclusion already listed above, with no new evidence |
+| A claim that one of the conclusions above is **wrong**, with reproducible evidence | A mere restatement of a conclusion already listed |
+| The same topic but with a **different** threat model or exploit path | Another automated scan emitting the same rule |
+
+**"Your conclusion is wrong" is always welcome** — the four entries above are themselves reviewed judgements, and if the reasoning was faulty we will correct it.
+
 ### The improvements they led to
 
 These reports **produced two genuine hardenings** — even though the reports themselves were false positives, the direction they pointed at was worth pursuing:
