@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T14:11:18+09:00
+
+**概要**：feat(dsh-nixos-shell): NixOS模式 が 3 つの NixOS 運用スキルを同梱するようになった — 発端はリポジトリの `skills/` ツリー（10 件）と各プリセットの同梱内容との適合性をスキル単位でレビューしたことである。レビューの結論：`nixos-modern-cli`（現代 Nix/NixOS CLI、shell 能力、sudo フロー）、`recover-nixos-config`（誤削除した `/etc/nixos` を store から復元）、`nixos-specialisation-tuning`（specialisation 分面 + UMA デバイスでの llama.cpp 調整）を**追加**——いずれも「NixOS 上で作業する」汎用能力であり NixOS模式 の守備範囲に合致する。`nixkits-skills`（スキルインストーラであり、作業方法ではなくツール）と `news-three-elements`（創作系で、独立パッケージ `dsh-preset-news-three-elements` が専用プリセットを提供済み）は**追加しない**。维护模式 は NixOS模式 からの派生であり、3 つとも**自動的に継承**される。**実装（重複を避ける）**：スキルを `presets/<mode>/skills/` へ複製しない——同ディレクトリは両プリセット間でバイト単位に鏡像されており、そこへ置けばリポジトリ `skills/` ツリーが既に所有する内容の第二の複製となり、ドリフトしうる。代わりに `postPatch` で同一のリポジトリツリーからホワイトリスト方式のビルド期サブセット `skills-nixos/` を生成し、プリセットの `skill-filesystem` 行に第二の `customSkillDirs` ルートを追加して相対パス `../../skills-nixos/` で解決する（`baseUrl` = プリセットディレクトリ）。**`skills-embedded/` を直接指さずサブセットディレクトリを使う理由**：`skill-filesystem` は設定された各ルートの**全ての**子ディレクトリを登録するため、埋め込みツリーを直接指すと `write-project-docs` ほかの保守系スキルまで NixOS模式 に入り、今回の選定範囲を超える。検証済み：ビルド成果物の `skills-nixos/` は正確に 3 スキルを含みリポジトリのソースとバイト単位で一致し、`../../skills-nixos/` はプリセットディレクトリから到達可能、`skills-embedded/` は 10 件すべてを保持し、5 項目の flake check（`check-preset-derivation` を含む）がすべて通過した
+
+| コミット | 説明 |
+|----------|------|
+| `559e841` | feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 |
+| `7971689` | docs(dsh-nixos-shell): 记录 NixOS模式 新增的 3 个同捆技能（四语） |
+
 ## 2026-09-16T13:57:56+09:00
 
 **概要**：feat(dsh-api-balance): `dsh.bundle` を追加し、`dsh plugin add` によるネイティブ導入に対応した — `dsh-api-balance` は `dsh-nixos-shell` と性質が異なるためである：前者は**プラットフォーム非依存の UI／機能拡張**（`inject = ["connection", "webServer"]` のみ、プリセット無し、スキル無し、`$DSH_HOME` への書き込み無し）であり、後者の核心的価値はまさに Agent プリセットである。前ラウンドで `dsh-nixos-shell` の bundle 路線は不可能と結論した（プリセット root は絶対パスを要し、`./` のアンカーは `insert[].name` にのみ作用する）。**重要な発見（従来の結論を覆す）**：`cordis-plugin-loader/lib/index.js:269-284` を読むと、entry 名が `./` で始まる場合 `anchorInsertedPluginNames` が**その patch と同じディレクトリ**の絶対 `file://` URL にアンカーするため、正常に import される——「loader は dsh ツリーからのみ解決するので profile 内のパッケージは読めない」という以前の判断は誤りであった。今回これに基づき実装：新規 `cordis.patch.yml` が `name: './lib/index.js'` でプラグインを登録し（裸のパッケージ名は**不可**。dsh インストールツリーから解決され `Cannot find package` で失敗する）、`package.json` に `dsh.bundle.patch` を追加し `files` に当該ファイルを補った。**実測**：インストール後 `dsh.profile.bundles` に入り、`--dump-config` は entry が profile 内の絶対 URL にアンカーされることを示し、web profile は `exit=0`・エラーゼロで起動した。Nix ビルドと `nix flake check` は影響を受けない。**二経路の併存**：各経路は独立に動作する（宣言的経路は `$DSH_HOME/profiles/web/cordis.patch.yml` を書き、bundle は `dsh.profile.bundles` を書く）が、**両方を有効にすると同一 entry id が二重登録される**ため、ドキュメントはどちらか一方を選ぶよう明記し、方式 B が git 経由で解決され `flake.lock` に固定されない点も記した

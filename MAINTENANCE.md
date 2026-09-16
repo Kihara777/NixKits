@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T14:11:18+09:00
+
+**摘要**：feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 — 起因是逐技能评审仓库 `skills/` 树（10 个）与两预设同捆内容的匹配度。评审结论：**加入** `nixos-modern-cli`（现代 Nix/NixOS CLI、shell 能力、sudo 流程）、`recover-nixos-config`（从 store 恢复误删的 /etc/nixos）、`nixos-specialisation-tuning`（specialisation 分面 + UMA 上 llama.cpp 调优）——三者均为「在 NixOS 上做事」的通用能力，正合 NixOS模式 定位；**不加** `nixkits-skills`（技能安装器，是工具而非工作方法）与 `news-three-elements`（创作类，且已由独立包 `dsh-preset-news-three-elements` 提供专属预设）。维护模式为 NixOS模式 的派生，**自动继承**这 3 个。**实现方式（避免副本）**：不把技能复制进 `presets/<mode>/skills/`——该目录在两预设间逐字节镜像，再放一份会成为仓库 `skills/` 之外的第二副本而可能漂移。改为在 `postPatch` 中按白名单从同一仓库树生成构建期子集 `skills-nixos/`，预设的 `skill-filesystem` 行增加第二个 `customSkillDirs` 根，以 `../../skills-nixos/` 相对路径解析（`baseUrl` = 预设目录）。**为何用子集目录而非直接挂 `skills-embedded/`**：`skill-filesystem` 会注册每个配置根下的**全部**子目录，直接挂嵌入树会把 `write-project-docs` 等维护类技能一并带进 NixOS模式，超出本次选定范围。已实测：构建产物中 `skills-nixos/` 恰含 3 个技能、与仓库源逐字节一致，`../../skills-nixos/` 从预设目录可达，`skills-embedded/` 仍完整保留 10 个；`check-preset-derivation` 等 5 项 flake check 全通过
+
+| 提交 | 说明 |
+|------|------|
+| `559e841` | feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 |
+| `7971689` | docs(dsh-nixos-shell): 记录 NixOS模式 新增的 3 个同捆技能（四语） |
+
 ## 2026-09-16T13:57:56+09:00
 
 **摘要**：feat(dsh-api-balance): 新增 `dsh.bundle`，支持 `dsh plugin add` 原生安装 — 因 `dsh-api-balance` 与 `dsh-nixos-shell` 性质不同：前者是**平台无关的界面/功能增强**（仅 `inject = ["connection", "webServer"]`，无预设、无技能、不写 `$DSH_HOME`），而后者的核心价值正是 Agent 预设。前一轮已确认 `dsh-nixos-shell` 的 bundle 路线不可行（预设 root 需绝对路径，`./` 锚定只作用于 `insert[].name`）。**关键发现（推翻此前结论）**：读 `cordis-plugin-loader/lib/index.js:269-284` 得知，entry 名以 `./` 开头时会被 `anchorInsertedPluginNames` 锚定为**该 patch 所在目录**下的绝对 `file://` URL，从而正常 import——此前的"loader 只从 dsh 树解析、profile 里的包装不上"的判断是错的。本次据此实现：新增 `cordis.patch.yml` 以 `name: './lib/index.js'` 注册插件（**不可**写裸包名，否则从 dsh 安装树解析报 `Cannot find package`），`package.json` 加 `dsh.bundle.patch` 并在 `files` 补该文件。**实测**：安装后成功进入 `dsh.profile.bundles`，`--dump-config` 显示 entry 锚定为 profile 内的绝对 URL，web profile 启动 `exit=0` 且零错误；Nix 构建与 `nix flake check` 均不受影响。**双轨并存**：两条路径均可独立工作（声明式写 `$DSH_HOME/profiles/web/cordis.patch.yml`，bundle 写 `dsh.profile.bundles`），但**同时启用会重复注册同一 entry id**，故文档明确要求二者择一，并说明方式 B 经 git 解析、不受 `flake.lock` 锁定

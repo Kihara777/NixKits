@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T14:11:18+09:00
+
+**摘要**：feat(dsh-nixos-shell): NixOS模式 3 個 NixOS 運維技能 同梱 — 発端 倉庫 `skills/` 樹（10 件）與 各預設 同梱内容 的 適合性 技能単位 review。review 結論：`nixos-modern-cli`（現代 Nix/NixOS CLI、shell 能力、sudo flow）、`recover-nixos-config`（誤削除 `/etc/nixos` 自 store 復元）、`nixos-specialisation-tuning`（specialisation 分面 + UMA 機器 llama.cpp 調優）**追加**——三者 共「NixOS 上 作業」汎用能力、NixOS模式 守備範囲 合致。`nixkits-skills`（技能 installer、作業方法 非 工具）與 `news-three-elements`（創作系、独立 package `dsh-preset-news-three-elements` 専用預設 提供済）**追加 不**。維護模式 NixOS模式 派生、3 個 **自動継承**。**実装（重複 回避）**：技能 `presets/<mode>/skills/` 複製 不——同目録 両預設 間 byte 単位 鏡像、其処 置 場合 倉庫 `skills/` 樹 既所有 内容 的 第二複製 成、drift 可能。代 `postPatch` 同一 倉庫樹 自 whitelist 方式 建構期 subset `skills-nixos/` 生成、預設 `skill-filesystem` 行 第二 `customSkillDirs` root 追加、相対 path `../../skills-nixos/` 解決（`baseUrl` = 預設目録）。**`skills-embedded/` 直接 指 非 subset 目録 使用 理由**：`skill-filesystem` 設定 各 root 的 **全部** 子目録 登録、埋込樹 直接 指 場合 `write-project-docs` 等 保守系技能 迄 NixOS模式 入、今回 選定範囲 超。検証済：build 成果物 `skills-nixos/` 正確 3 技能 含 倉庫 source byte 単位 一致、`../../skills-nixos/` 預設目録 自 到達可能、`skills-embedded/` 10 件 全部 保持、5 項 flake check（`check-preset-derivation` 含）全部 通過。
+
+| 提交 | 説明 |
+|------|------|
+| `559e841` | feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 |
+| `7971689` | docs(dsh-nixos-shell): 记录 NixOS模式 新增的 3 个同捆技能（四语） |
+
 ## 2026-09-16T13:57:56+09:00
 
 **摘要**：feat(dsh-api-balance): `dsh.bundle` 追加、`dsh plugin add` native 導入 対応 — `dsh-api-balance` `dsh-nixos-shell` 性質 異 故：前者 **platform 非依存 UI / 機能 拡張**（`inject = ["connection", "webServer"]` 限定、preset 無、技能 無、`$DSH_HOME` 書込 無）、後者 核心 価値 正 Agent preset。前回 `dsh-nixos-shell` bundle 路線 不可能 結論（preset root 絶対 path 要、`./` anchor `insert[].name` 限定 作用）。**重要 発見（従来 結論 覆）**：`cordis-plugin-loader/lib/index.js:269-284` 読 結果、entry 名 `./` 開始 場合 `anchorInsertedPluginNames` **其 patch 同目録** 絶対 `file://` URL anchor、故 正常 import——「loader dsh tree 自 限定 解決、故 profile 内 package 読 不可」以前 判断 誤。今回 此 基 実装：新規 `cordis.patch.yml` `name: './lib/index.js'` 使用 plugin 登録（裸 包名 **不可**。dsh install tree 自 解決 `Cannot find package` 失敗）、`package.json` `dsh.bundle.patch` 追加、`files` 当該 file 補。**実測**：導入後 `dsh.profile.bundles` 入、`--dump-config` entry profile 内 絶対 URL anchor 示、web profile `exit=0` 且 error 零 起動。Nix build 與 `nix flake check` 影響 無。**二経路 併存**：各経路 独立 動作（宣言的経路 `$DSH_HOME/profiles/web/cordis.patch.yml` 書、bundle `dsh.profile.bundles` 書）、但 **両方 有効 同一 entry id 二重登録**、故 document 何方 一 選択 明記、且 方式 B git 経由 解決 `flake.lock` 固定 受 無 点 記。
