@@ -24,6 +24,7 @@
 - 分類 README 作成（言語切替付）
 - 部品文書作成（基本情報表 + 導入 + 参照）
 - 統一雛形以技能文書作成（基本情報 → 機能 → 使用）
+- **分割 component 文書分担**：component 独立 repo 移転 場合、sub repo 完全 document 持、main repo 短 pointer page（移転 明示・連結・main 固有節 限定 保持）残——同一 document 二重管理 不
 - 子代理部品種別並列化対応
 
 ## 技能文書同期規則

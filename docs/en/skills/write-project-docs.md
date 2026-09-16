@@ -24,6 +24,7 @@ Language extension skills are discovered via the `translate-*` naming convention
 - Writes categorized READMEs with language switchers
 - Writes per-module docs (info table + install + usage)
 - Writes skill docs using the unified template (Info → Features → Usage)
+- **Split-component doc division**: when a component moves to its own repository, the sub-repo carries the full docs while the main repo keeps a short pointer page (states the move, links out, and retains only the sections unique to the main repo) — so the same docs are never maintained twice
 - Supports sub-agent parallelization by module category
 
 ## Skill Doc Sync Rules
