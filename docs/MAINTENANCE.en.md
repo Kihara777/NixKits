@@ -1,6 +1,16 @@
 # Maintenance Log
 
-[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md)  | [偽中国語](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
+
+## 2026-09-16T12:20:57+09:00
+
+**Summary**：ci: added top-level `permissions` to 31 build workflows — the trigger was auditing issues #1 and #2 (duplicate reports from the same scanner against the same line, pointing at `secrets: inherit` on `build-blender-mcp-aarch64.yml:10`). The rule hit is factual, but the risk is overstated for this repository: the callee `./.github/workflows/build-package.yml` is a local reusable workflow in the **same repository, same commit, same review process**, so the "untrusted source" the issue assumes does not exist; the repository holds **only 2** secrets in total (`GITHUB_TOKEN`, `CACHIX_AUTH_TOKEN`), and explicit passing yields **exactly the same set** as `inherit`, so it gives an attacker **no gain whatsoever** — anyone able to tamper with the callee could already read `secrets.*` directly. The real reducible privilege margin is not in `inherit` but in the callers: all 31 `build-*.yml` files declared no `permissions` and therefore inherited the repository default (possibly read-write), while these workflows only run checkout + `nix build` + a Cachix push, all of which need nothing beyond `contents: read`. This change adds a top-level `permissions: contents: read` to those 31 callers, consistent with what the callee `build-package.yml` already declares. **Trade-off note**: the Cachix push uses the separate `CACHIX_AUTH_TOKEN` and does not depend on `GITHUB_TOKEN`'s scope, so CI behaviour is unchanged (the `check-workflow-coverage` flake check passes). **What was not adopted**: converting the 31 `secrets: inherit` usages into explicit listings — a formal-compliance change with no substantive security benefit, since `CACHIX_AUTH_TOKEN` must reach the callee anyway and there is no least-privilege margin left to trim
+
+| Commit | Description |
+|--------|-------------|
+| `445eb4b` | ci: 为 31 个构建 workflow 补全顶层 permissions（最小权限） |
+
+**Related external reports**: issues #1 and #2 (@begininvoke / RedGem) — byte-for-byte duplicates; the rule hit is factual but the risk assessment does not apply to this repository. Disposition: left uncommented and open for now, with the conclusion recorded here.
 
 ## 2026-09-16T11:58:25+09:00
 

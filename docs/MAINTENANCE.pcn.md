@@ -1,6 +1,16 @@
 # 維護記録
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
+
+## 2026-09-16T12:20:57+09:00
+
+**摘要**：ci: 31 本 建構 workflow 頂層 `permissions` 補完 — 発端 issue #1 / #2 監査（同一 scanner 同一行 重複報告、`build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 指）。規則 指摘 自体 事実、但 本 repo 危険 過大評価：被呼出側 `./.github/workflows/build-package.yml` **同一 repo / 同一 commit / 同一 review 工程** 的 本地 再利用可能 workflow、issue 仮定「untrusted source」不存在。本 repo secret **合計 2 個 限定**（`GITHUB_TOKEN` / `CACHIX_AUTH_TOKEN`）、明示 渡 与 `inherit` 渡 **集合 完全同一**、攻撃者 **何 利得 生 無**——被呼出 workflow 改竄 可能 者、本来 `secrets.*` 直接 読 可能。実際 削減可能 権限 余剰 `inherit` 側 非 呼出側 在：31 本 `build-*.yml` 共 `permissions` 宣言 無、故 repo 既定（読書 可能）継承。但 此等 workflow checkout + `nix build` + Cachix push 限定 行、必要 `contents: read` 限定。今回 此 31 本 呼出側 頂層 `permissions: contents: read` 付与、被呼出側 `build-package.yml` 既宣言 権限 一致 化。**取捨 説明**：Cachix push 独立 `CACHIX_AUTH_TOKEN` 使用、`GITHUB_TOKEN` 権限範囲 依存 無、故 締付 後 CI 挙動 不変（`nix flake check` 的 `check-workflow-coverage` 通過）。**不採用 部分**：31 箇所 `secrets: inherit` 明示列挙 変更 不実施——形式上 適合 限定 実質 安全 利得 無、且 `CACHIX_AUTH_TOKEN` 被呼出側 必渡 必要、最小権限 削 余剰 残 無
+
+| 提交 | 説明 |
+|------|------|
+| `445eb4b` | ci: 为 31 个构建 workflow 补全顶层 permissions（最小权限） |
+
+**関連 外部報告**：issue #1 / #2（@begininvoke / RedGem）——byte 単位 完全重複。規則 指摘 事実、但 危険判断 本 repo 該当 無。対応：現時点 comment 也 close 也 不、結論 此 記録。
 
 ## 2026-09-16T11:58:25+09:00
 

@@ -1,6 +1,16 @@
 # メンテナンスログ
 
-[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語  | [偽中国語](MAINTENANCE.pcn.md)
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
+
+## 2026-09-16T12:20:57+09:00
+
+**概要**：ci: 31 本のビルド workflow にトップレベル `permissions` を補完した — 発端は issue #1・#2 の監査である（同一スキャナが同一行に対して重複報告したもので、`build-blender-mcp-aarch64.yml:10` の `secrets: inherit` を指す）。ルールの指摘自体は事実だが、本リポジトリではリスクが過大評価されている：被呼び出し側 `./.github/workflows/build-package.yml` は**同一リポジトリ・同一コミット・同一レビュー工程**にあるローカルの再利用可能 workflow であり、issue が仮定する「untrusted source」は存在しない。本リポジトリの secret は**合計 2 つだけ**（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`）で、明示的に渡しても `inherit` で渡しても**集合は完全に同一**であり、攻撃者に**いかなる利得も生まない**——被呼び出し workflow を改竄できる者は、そもそも `secrets.*` を直接読める。実際に削減可能な権限の余剰は `inherit` 側ではなく呼び出し側にある：31 本の `build-*.yml` はいずれも `permissions` を宣言しておらず、そのためリポジトリ既定（読み書きの可能性あり）を継承していた。しかしこれらの workflow は checkout + `nix build` + Cachix への push のみを行い、必要なのは `contents: read` だけである。今回この 31 本の呼び出し側にトップレベル `permissions: contents: read` を付与し、被呼び出し側 `build-package.yml` が既に宣言している権限と一致させた。**トレードオフの説明**：Cachix への push は独立した `CACHIX_AUTH_TOKEN` を使用し、`GITHUB_TOKEN` の権限範囲に依存しないため、締め付け後も CI の挙動は変わらない（`nix flake check` の `check-workflow-coverage` が通過）。**採用しなかった部分**：31 箇所の `secrets: inherit` を明示列挙へ変更することは行わない——形式上の適合だけで実質的なセキュリティ利得がなく、`CACHIX_AUTH_TOKEN` は被呼び出し側へ必ず渡す必要があるため、最小権限に削る余剰が残っていない
+
+| コミット | 説明 |
+|----------|------|
+| `445eb4b` | ci: 为 31 个构建 workflow 补全顶层 permissions（最小权限） |
+
+**関連する外部レポート**：issue #1・#2（@begininvoke / RedGem）——バイト単位で完全に重複。ルールの指摘は事実だがリスク判断は本リポジトリに当てはまらない。対応：現時点ではコメントもクローズもせず、結論をここに記録する。
 
 ## 2026-09-16T11:58:25+09:00
 
