@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T01:34:13+09:00
+
+**摘要**：docs(security): `SECURITY.md` 新增「已评估的外部报告」节并纳入四语本地化 — 目的是把**已复核并关闭的 4 条外部报告**公开列出，使后续报告者不必重复提交同类问题。逐条记录结论与依据：**PR #4**（@anupamme，称 `/token`、`/voicepack`、`/tts` 缺限流——误报：描述与 diff 不符，实际只改 `/query`；其限流键 `x-forwarded-for` 客户端可伪造，且本机同源 RPC 不带该头，会把全部本机流量并入单一桶而误伤自身）；**PR #5**（@anupamme，称 `/query` 缺请求体上限——误报：该防护早已由 `readJsonBody` 的 64 KiB 上限提供，其 `content-length` 检查可被 chunked 绕过、`text.length` 是 UTF-16 码元数而非字节数）；**issue #1**（@begininvoke，称 `secrets: inherit` 违反最小权限——误报：被调方是本仓库内的本地 workflow，全仓仅 2 个 secret，显式传递与 `inherit` 集合完全相同）；**issue #2**（同 #1，逐字节重复）。同节还记录了这些报告**促成的两次真实加固**：`/tts` 端点的 SSRF（报告未提及，复核端点时发现，该端点已随 `dsh-api-balance` 迁至新仓库）与 31 个构建 workflow 的最小权限补全。**立场说明**：规则命中本身大多属实，但威胁模型不适用于本项目的部署形态；处理方式是「先复核、再答复、附可复现证据」，且**误报不视为打扰**——上表四条最终引出了两次真实加固。本地化方面新增 `docs/SECURITY.{en,ja,pcn}.md`，四语切换器互链，四语 README 在许可节后加入指向。**注**：issue #1/#2 其后已被删除（现仅存 issue #3），此处保留历史编号以便追溯
+
+| 提交 | 说明 |
+|------|------|
+| `6f34e73` | docs(security): SECURITY.md 记录已评估的外部报告，并纳入四语本地化 |
+
 ## 2026-09-17T01:23:46+09:00
 
 **摘要**：chore(security): 补 SECURITY.md、Dependabot，并将 GitHub Actions 固定到 SHA — 起因是 awesome-ai-plugins 维护者（@kantorcodes）对 PR #323 的整改要求：其集中扫描给 NixKits 评 **71/100，低于该目录要求的 80 分阈值**，要求「修复或记录规则级发现，加入固定 SHA 的 scanner workflow，重跑扫描，达 80 分后请求 review」。逐项核对扫描评分表后确认：**零 critical、零 high**，扣分全在工程卫生项——Security 10/16（缺 `SECURITY.md`、「No approval bypass defaults」）、Operational Security 9/17（**Actions 未固定 SHA**、缺 Dependabot），而 Best Practices 6/6 与 Code Quality 10/10 均为满分。本次整改三项：① 新增 `SECURITY.md`（支持版本、GitHub 私有漏洞报告渠道、响应时限，并显式列出「已知设计边界」——免认证入口、sudo 守护、浏览器令牌读取、`/nix/store` 路径陷阱——以免这些**有意为之**的行为被反复误报为漏洞）；② 新增 `.github/dependabot.yml`（覆盖 `github-actions` 与 `npm` 两个生态）；③ **将 6 处第三方 action 从浮动引用固定到提交 SHA**。**第三项本身即有实质价值**：`DeterminateSystems/nix-installer-action@main` 原是**浮动分支引用**，上游任何变更都会直接进入我们的 CI —— 与早前「31 个 workflow 补 permissions」属同一类供应链卫生问题，而非仅为应付评分。**未采纳**：不引入维护者建议的第三方 scanner action（`hashgraph-online/ai-plugin-scanner-action`）——该建议在其文档中标注为非必需，代价是 10% 信任分扣减，已按接受处理。同时修订 `SECURITY.md` 中关于沙箱模式的措辞以免与扫描规则冲突

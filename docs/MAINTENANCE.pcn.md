@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T01:34:13+09:00
+
+**摘要**：docs(security): `SECURITY.md` 「評価済 外部報告」節 追加 且 四言語 local 化 組入 — 目的 **精査 上 close 済 4 件 外部報告** 公開、後続 報告者 同種 問題 再提出 無 済 様 為。各項目 結論 與 根拠 記録：**PR #4**（@anupamme、`/token` / `/voicepack` / `/tts` rate 制限 無 主張——誤検出：説明 diff 不一致、実際 変更 `/query` 限定。rate 制限 key `x-forwarded-for` client 偽造 可能、local 同一 origin RPC 此 header 送 無 故、全 local traffic 単一 bucket 集約 利用者 自身 panel 制限）；**PR #5**（@anupamme、`/query` request body 上限 無 主張——誤検出：其 防御 `readJsonBody` 64 KiB 上限 既存、`content-length` 検査 chunked 回避 可能、`text.length` byte 数 非 UTF-16 code 単位 数）；**issue #1**（@begininvoke、`secrets: inherit` 最小権限 違反 主張——誤検出：被呼出側 同一 repo 内 local workflow、secret 合計 2 個 限定、明示受渡 也 `inherit` 也 集合 完全同一）；**issue #2**（#1 同一、byte 単位 重複）。同節 此等 **導 2 件 実際 堅牢化** 也 記録：`/tts` endpoint SSRF（何 報告 也 言及 無、endpoint 精査 中 発見。当該 endpoint `dsh-api-balance` 共 新 repo 移転 済）與 31 build workflow 最小権限 補完。**立場 表明**：此等 報告 規則 概 事実 突、但 脅威 model 本 project 配備形態 該当 不。方針「先 精査、再現可能 証拠 添 回答」、**誤検出 迷惑 扱 不**——上記 4 件 最終的 2 件 実際 堅牢化 生。local 化 面 `docs/SECURITY.{en,ja,pcn}.md` 追加、四言語 切替器 相互 link、四言語 README 也 許諾節 後 link 追加。**注**：issue #1/#2 其後 削除（現存 issue #3 限定）。追跡 為 歴史的 番号 此処 保持。
+
+| 提交 | 説明 |
+|------|------|
+| `6f34e73` | docs(security): SECURITY.md 记录已评估的外部报告，并纳入四语本地化 |
+
 ## 2026-09-17T01:23:46+09:00
 
 **摘要**：chore(security): SECURITY.md 與 Dependabot 追加、GitHub Actions commit SHA 固定 — 発端 awesome-ai-plugins 維護者（@kantorcodes）PR #323 是正要求：同目録 集中 scan NixKits **71/100 評価、要求 80 閾値 下回**、故「規則単位 所見 修正 又 記録、SHA 固定 scanner workflow 追加、scan 再実行、80 以上 成 後 review 依頼」要求。scorecard 項目毎 確認 結果、**critical 也 high 也 零**、減点 全部 engineering 衛生 関 物——Security 10/16（`SECURITY.md` 欠如、「No approval bypass defaults」）、Operational Security 9/17（**Actions SHA 固定 無**、Dependabot 欠如）。一方 Best Practices 6/6、Code Quality 10/10 満点。今回 内 3 点 対応：① `SECURITY.md` 追加（support 版本、GitHub 非公開脆弱性報告 channel、対応期限、更「既知 設計境界」——認証不要 入口、sudo daemon、browser token 読取、`/nix/store` path 罠——明示、此等 **意図 済** 挙動 脆弱性 繰返 誤報 防）；② `.github/dependabot.yml` 追加（`github-actions` 與 `npm` 両 ecosystem 対象）；③ **6 箇所 第三者 action 参照 浮動参照 自 commit SHA 固定**。**3 点目 自体 実質 価値 有**：`DeterminateSystems/nix-installer-action@main` **浮動 branch 参照**、上流 変更 其 侭 CI 入込——以前「31 workflow permissions 追加」同種 supply chain 衛生 問題、単 点数稼 非。**採用 不**：維護者 提案 第三者 scanner action（`hashgraph-online/ai-plugin-scanner-action`）導入 不——同 documentation 自体 任意 明記、代償 信頼 score 10% 減点 受入。`SECURITY.md` sandbox mode 文言 也 scanner 規則 衝突 無 様 修正。
