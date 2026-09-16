@@ -57,7 +57,8 @@ ComfyUI 向け ROCm 機能パッチ。
 > **教訓その二：余分な `inputs.*` pin は子 flake を主 nixpkgs のキャッシュ被覆から切り離す。**
 > 加える前にそれが何を解決するのか問い、問題が消えたら削除すること。
 
-**詳細な記録はリポジトリルートの [`DEPRECATED.md`](../../DEPRECATED.md) を参照。**
+**詳細な記録は [`deprecated/comfyui-rocm.md`](deprecated/comfyui-rocm.md) を参照**
+（索引：[`DEPRECATED.md`](../../DEPRECATED.md)）。
 
 > **fork は不要に**：以前は「comfyui-nix をフォークしてパッチを適用」を推奨していたが、現在は不要 ——
 > `comfyui-nix` input を上流に向けるだけでよい。

@@ -53,7 +53,8 @@ ComfyUI 向 ROCm 機能補丁提供。
 > **教訓二：余分 `inputs.*` pin 子 flake 主 nixpkgs 緩衝被覆 切離。**
 > 加 前 先問 其 何 解決；問題 消 後 削除 忘 無。
 
-**完整記録見倉庫根目録 [`DEPRECATED.md`](../../DEPRECATED.md)。**
+**完整記録 見 [`deprecated/comfyui-rocm.md`](deprecated/comfyui-rocm.md)**
+（索引：[`DEPRECATED.md`](../../DEPRECATED.md)）。
 
 > **分叉不再必要**：此前建議「fork comfyui-nix 並適用補丁」、今已無必要 ——
 > 直接將 `comfyui-nix` input 指向上流即可。

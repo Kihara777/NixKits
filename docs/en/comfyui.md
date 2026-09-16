@@ -55,7 +55,8 @@ This module **used to ship three patches, all of which have now been removed**:
 > **Lesson two: an extra `inputs.*` pin detaches a sub-flake from the main nixpkgs cache
 > coverage.** Before adding one, ask what it solves; once the problem is gone, remove it.
 
-**The complete record lives in [`DEPRECATED.md`](../../DEPRECATED.md) at the repository root.**
+**The complete record lives in [`deprecated/comfyui-rocm.md`](deprecated/comfyui-rocm.md)**
+(index: [`DEPRECATED.md`](../../DEPRECATED.md)).
 
 > **No fork needed anymore**: this document previously advised forking comfyui-nix and applying a patch — that is no longer necessary —
 > just point the `comfyui-nix` input at upstream.

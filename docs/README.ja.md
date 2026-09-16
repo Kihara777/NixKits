@@ -87,6 +87,14 @@ nix registry add nixkits github:Kihara777/NixKits
 
 > ⚠️ **StrixHalo デバイスでは `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` を設定しないでください。** この変数は GPU メモリ割り当て経路を変更し、ユニファイドメモリ環境でモデル出力の退化（単語の繰り返し、文の崩壊）を引き起こします。実測により、このリスクは**モデルの量子化精度が下がるほど著しく増大**します —— 低ビット量子化（例：1.5 bpw）が最も影響を受けます。詳細は [llama-cpp-rocm ドキュメント](ja/llama-cpp-rocm.md#ユニファイドメモリ環境変数による退化リスク) を参照。
 
+## 廃止プロジェクト
+
+かつて保守され、現在は廃止されたプロジェクト（多くは上流が同等の能力を内蔵したため）。索引：[`DEPRECATED.md`](../DEPRECATED.md)：
+
+| プロジェクト | 説明 | 詳細 |
+|--------------|------|------|
+| comfyui-rocm | ComfyUI の ROCm パッチプロジェクト —— 上流が内蔵済み、パッチはすべて削除 | [ja/deprecated/comfyui-rocm.md](ja/deprecated/comfyui-rocm.md) |
+
 ## スキル
 
 AI コーディングアシスタント向け：

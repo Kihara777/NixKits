@@ -87,6 +87,14 @@ Standalone overlays, not included in `default`:
 
 > ⚠️ **Do not set `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` on StrixHalo devices.** The variable changes the GPU memory allocation path and causes degenerate model output (repeated words, broken sentences) on unified-memory hardware. Measured: the risk **increases significantly as model quantisation precision drops** — low-bit quants (e.g. 1.5 bpw) are affected most. See the [llama-cpp-rocm docs](en/llama-cpp-rocm.md#unified-memory-environment-variable-degeneration-risk).
 
+## Retired Projects
+
+Projects once maintained and now retired (most because upstream ships equivalent capability). Index: [`DEPRECATED.md`](../DEPRECATED.md):
+
+| Project | Description | Details |
+|---------|-------------|---------|
+| comfyui-rocm | The ComfyUI ROCm patch project — upstream built it in, all patches removed | [en/deprecated/comfyui-rocm.md](en/deprecated/comfyui-rocm.md) |
+
 ## Skills
 
 For AI coding assistants:

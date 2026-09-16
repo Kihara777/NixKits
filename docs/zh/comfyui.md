@@ -53,7 +53,8 @@
 > **教训二：额外的 `inputs.*` pin 会让子 flake 失去主 nixpkgs 的缓存覆盖。**
 > 加 pin 前先问它解决了什么；问题消失后记得删。
 
-**完整记录见仓库根目录 [`DEPRECATED.md`](../../DEPRECATED.md)。**
+**完整记录见 [`deprecated/comfyui-rocm.md`](deprecated/comfyui-rocm.md)**
+（索引：[`DEPRECATED.md`](../../DEPRECATED.md)）。
 
 > **不再需要 fork**：此前建议"fork comfyui-nix 并应用补丁"，现已无必要 ——
 > 直接把 `comfyui-nix` input 指向上游即可。
