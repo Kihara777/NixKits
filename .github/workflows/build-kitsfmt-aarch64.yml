@@ -1,5 +1,11 @@
 name: Build kitsfmt (aarch64)
 on: [push, pull_request]
+
+# 最小权限：调用方只需读取仓库内容（Cachix 推送凭据经 secrets 传入，
+# 与 GITHUB_TOKEN 的权限无关）。显式声明可避免继承仓库默认的读写权限。
+permissions:
+  contents: read
+
 jobs:
   call:
     uses: ./.github/workflows/build-package.yml
