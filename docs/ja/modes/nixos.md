@@ -19,6 +19,7 @@
 - **ホスト検証**：`nixos-gate` は apply 時に `/etc/NIXOS` と `/etc/os-release` を読む；非 NixOS なら全実行を拒否するツールガードを登録し、拒否プロンプト節（他モードへの切替を要求）を注入する——NixOS を入れていないマシンでも安全にマウントできる。
 - **ツール**：`nixos_shell`（PATH 注入 / `nix shell` ツールブートストラップ / sudo デーモンルーティング）と `nixos_cli`（読み取り専用診断：capabilities / system-status / generations / journal / audit-store-paths）。
 - **プロンプト**：NixOS 効率開発ガイド（宣言的システムの本質、パッケージ管理、パスの落とし穴）。
+- **スキル**（5 個）：プリセット自身の `cordis-plugin-development`、`editing-cordis-compositions` に加え、リポジトリの `skills/` ツリーからビルド期のサブセット `skills-nixos/` 経由で登録される `nixos-modern-cli`、`recover-nixos-config`、`nixos-specialisation-tuning`。
 - **コンポジション**：創造モードの完全なツール面 + `persona` 行（`complete: true`）+ `nixos-gate` + `nixos-shell` の 2 行。
 
 ## persona 行（プリセットのアイデンティティ）

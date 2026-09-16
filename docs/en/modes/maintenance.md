@@ -20,7 +20,7 @@ On top of everything NixOS模式 provides:
 
 - **Runtime skills**: the `maintenance-skills` entry registers `write-project-docs`, `write-maintenance-log`, `nix-flake-update-check`, and `nixkits-check-updates` at apply time from the repo `skills/` tree **embedded at build time**, and auto-discovers every `translate-*` language extension — the repo `skills/` is the single source of truth, so a fresh session is always current.
 - **Maintenance workflow prompts**: batched commits → maintenance-log entry after push (all languages synced) → doc sync → generalization into skills.
-- Everything else (system validation, `nixos_shell` / `nixos_cli`, development prompts) matches NixOS模式.
+- Everything else (system validation, `nixos_shell` / `nixos_cli`, development prompts, and the 5 skills bundled with NixOS模式) matches NixOS模式.
 
 ## Derivation
 

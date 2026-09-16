@@ -19,6 +19,7 @@
 - **Host validation**: `nixos-gate` reads `/etc/NIXOS` and `/etc/os-release` at apply time; on a non-NixOS host it registers a tool guard denying all execution and injects the refusal prompt (telling the user to switch back to another mode), so it mounts safely on a machine without NixOS.
 - **Tools**: `nixos_shell` (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) and `nixos_cli` (read-only diagnostics: capabilities / system-status / generations / journal / audit-store-paths).
 - **Prompts**: the NixOS efficient-development guide (declarative immutable system, package management, path pitfalls).
+- **Skills** (5): the preset's own `cordis-plugin-development` and `editing-cordis-compositions`, plus `nixos-modern-cli`, `recover-nixos-config` and `nixos-specialisation-tuning`, registered from the repository `skills/` tree through the build-time subset `skills-nixos/`.
 - **Composition**: creation mode's full tool surface + the `persona` row (`complete: true`) + the `nixos-gate` and `nixos-shell` rows.
 
 ## The persona row (preset identity)

@@ -19,6 +19,7 @@
 - **宿主検証**：`nixos-gate` apply 時 `/etc/NIXOS` 與 `/etc/os-release` 読取；非 NixOS 則全実行拒否工具 guard 登録、拒否 prompt 節（他模式切替要求）注入——NixOS 未導入機器 安全掛載可能。
 - **工具**：`nixos_shell`（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）與 `nixos_cli`（読取専用診断：capabilities / system-status / generations / journal / audit-store-paths）。
 - **prompt**：NixOS 効率開発指南（宣言式系統之本質、包管理、路徑陷阱）。
+- **技能**（5 個）：預設自身 的 `cordis-plugin-development`、`editing-cordis-compositions`、加 倉庫 `skills/` 樹 自 建構期 subset `skills-nixos/` 経由 登録 的 `nixos-modern-cli`、`recover-nixos-config`、`nixos-specialisation-tuning`。
 - **組合**：創造模式完全工具面 + `persona` 行（`complete: true`）+ `nixos-gate` + `nixos-shell` 二行。
 
 ## persona 行（預設身份）

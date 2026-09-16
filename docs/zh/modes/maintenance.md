@@ -20,7 +20,7 @@
 
 - **运行时技能**：`maintenance-skills` 入口在 apply 时从**构建期嵌入**的仓库 `skills/` 树注册 `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates`，并自动发现全部 `translate-*` 语言扩展——技能内容以仓库 `skills/` 为单一来源，全新会话即最新。
 - **维护工作流提示词**：分批提交 → 推送后补记维护日志（全语言同步）→ 文档同步 → 泛化到技能。
-- 其余（系统校验、`nixos_shell` / `nixos_cli`、开发提示词）与 NixOS模式一致。
+- 其余（系统校验、`nixos_shell` / `nixos_cli`、开发提示词、NixOS模式同捆的 5 个技能）与 NixOS模式一致。
 
 ## 派生关系
 
