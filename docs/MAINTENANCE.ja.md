@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T14:27:33+09:00
+
+**概要**：refactor(skills): `/etc/nixos/AGENTS.md` の実践から未カバーの 2 つの缺口を汎化した — 発端は同ファイル（HarukaX のマシン設定規則 670 行）の業務ロジックと経験の汎化価値の監査である。**監査結論：約 75% は既存スキルがカバー済み**——分面アーキテクチャと上書き衝突、`mkForce` 誤用の事故、消費者帰属原則、`mkDefault`、llama.cpp のパラメータ禁止項と診断順序、実測した電力プロファイル、MCP schema の毎ターン費用、静黙故障の診断（設定ログを読む）などは、すでに `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` に存在していた。**監査中に自己修正が 1 件**：初回は「`mkForce` 誤用が未カバー」と判断したが、語単位で再確認したところ既に 4 箇所でカバーされており（`mkForce` が `systemPackages` を上書きして `bash`/`systemd` を削除しログイン不能になった完全な事故例を含む）、缺口一覧から除外した。真の缺口は 2 つのみ：**① 機密と `path:` input**（`nixos-modern-cli` に新節）——Nix は git 追跡ファイルのみを store へコピーするため、機密をリポジトリ内に留める道はない（コミットすれば漏洩、gitignore すれば評価が `Path ... is not tracked by Git` で失敗する）。ゆえにリポジトリ外ディレクトリ + `path:` input で導入し、2 つの罠を付す：`path:` input は `flake.lock` に固定されるため内容変更には `--update-input` が必要、`{ nixosSecrets, ... }` の `...` は当該引数を**束縛しない**ため明示列挙が必要。**② 熱管理の方法論**（`nixos-specialisation-tuning` に新節）——2 つの手段は代償が異なる（曲線を上げるのは騒音のみ、プロファイルを下げるのは速度を失う）；曲線の終点が低すぎると最も危険な領域でファンが一定になる；`enabled: false` はプロファイルと曲線を乖離させる（最高電力プロファイルに最弱のファン方針）；ファームウェアは温控点を厳密に 8 点に制限し、panic は**書き込み後**に発生する；`asusctl` の書き込みは一時的で、検証にはデーモンを再起動してファイルから再読込することを確認する必要がある；決定的な判据は緩い曲線と攻撃的な曲線で温度と回転数が**完全に同一** → ファンは飽和 → 有効な手段は消費電力の低減のみ、かつ EC 閾値は OS から不可視。**汎化しなかったもの**：機種、数値表、`triggerTemp`、mihomo 購読の詳細、`g41.moe`、`toface` スクリプトなどマシン依存の内容は `/etc/nixos/AGENTS.md` に残す。両スキルの `description` と四言語ドキュメントを同時に更新した
+
+| コミット | 説明 |
+|----------|------|
+| `a33a3cf` | refactor(skills): 泛化 /etc/nixos 实践的两个未覆盖缺口 |
+| `fba7b38` | docs(skills): 同步两技能扩展后的功能清单（四语） |
+
 ## 2026-09-16T14:11:18+09:00
 
 **概要**：feat(dsh-nixos-shell): NixOS模式 が 3 つの NixOS 運用スキルを同梱するようになった — 発端はリポジトリの `skills/` ツリー（10 件）と各プリセットの同梱内容との適合性をスキル単位でレビューしたことである。レビューの結論：`nixos-modern-cli`（現代 Nix/NixOS CLI、shell 能力、sudo フロー）、`recover-nixos-config`（誤削除した `/etc/nixos` を store から復元）、`nixos-specialisation-tuning`（specialisation 分面 + UMA デバイスでの llama.cpp 調整）を**追加**——いずれも「NixOS 上で作業する」汎用能力であり NixOS模式 の守備範囲に合致する。`nixkits-skills`（スキルインストーラであり、作業方法ではなくツール）と `news-three-elements`（創作系で、独立パッケージ `dsh-preset-news-three-elements` が専用プリセットを提供済み）は**追加しない**。维护模式 は NixOS模式 からの派生であり、3 つとも**自動的に継承**される。**実装（重複を避ける）**：スキルを `presets/<mode>/skills/` へ複製しない——同ディレクトリは両プリセット間でバイト単位に鏡像されており、そこへ置けばリポジトリ `skills/` ツリーが既に所有する内容の第二の複製となり、ドリフトしうる。代わりに `postPatch` で同一のリポジトリツリーからホワイトリスト方式のビルド期サブセット `skills-nixos/` を生成し、プリセットの `skill-filesystem` 行に第二の `customSkillDirs` ルートを追加して相対パス `../../skills-nixos/` で解決する（`baseUrl` = プリセットディレクトリ）。**`skills-embedded/` を直接指さずサブセットディレクトリを使う理由**：`skill-filesystem` は設定された各ルートの**全ての**子ディレクトリを登録するため、埋め込みツリーを直接指すと `write-project-docs` ほかの保守系スキルまで NixOS模式 に入り、今回の選定範囲を超える。検証済み：ビルド成果物の `skills-nixos/` は正確に 3 スキルを含みリポジトリのソースとバイト単位で一致し、`../../skills-nixos/` はプリセットディレクトリから到達可能、`skills-embedded/` は 10 件すべてを保持し、5 項目の flake check（`check-preset-derivation` を含む）がすべて通過した

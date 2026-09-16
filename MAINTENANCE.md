@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T14:27:33+09:00
+
+**摘要**：refactor(skills): 泛化 `/etc/nixos/AGENTS.md` 实践中的两个未覆盖缺口 — 起因是审计该文件（670 行，HarukaX 本机系统配置规则）中业务逻辑与经验的泛化价值。**审计结论：约 75% 已被现有技能覆盖**——分面架构与覆盖冲突、`mkForce` 误用事故、消费者归属原则、`mkDefault`、llama.cpp 参数禁用项与诊断顺序、平台档位实测、MCP schema 每轮开销、静默故障诊断（须读配置日志）等，均已在 `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` 中。**过程中修正一处自身误判**：初审认为「`mkForce` 误用未被覆盖」，逐词复核后发现该技能已有 4 处覆盖（含 `mkForce` 覆盖 `systemPackages` 导致删掉 `bash`/`systemd`、无法登录的完整事故案例），故从缺口清单中剔除。真正的缺口只有两个：**① 密钥与 `path:` input**（`nixos-modern-cli` 新增一节）——Nix 只把 git 跟踪的文件拷进 store，故密钥留在仓库内没有出路（提交则泄露；gitignore 则求值报 `Path ... is not tracked by Git`），须放仓库外用 `path:` input 引入，附两个陷阱：`path:` input 受 `flake.lock` 锁定、改内容需 `--update-input`；`{ nixosSecrets, ... }` 中 `...` **不绑定**该参数须显式列出。**② 热管理方法论**（`nixos-specialisation-tuning` 新增一节）——两类手段代价不同（抬高曲线只增噪音 vs 降档损失速度）；曲线末点封顶过致使最危险区间风扇恒定；`enabled: false` 致档位与曲线脱节（最高功耗档配最弱策略）；固件硬限恰好 8 个温控点且 panic 发生在**写入之后**；`asusctl` 写入是临时的、验证须重启守护进程确认从文件重读；决定性判据为温和 vs 激进曲线温度转速**完全相同** → 风扇已饱和 → 唯一有效手段是降功耗，且 EC 阈值对 OS 不可见。**未泛化**：机器型号、数值表、`triggerTemp`、mihomo 订阅细节、`g41.moe`、`toface` 脚本等强绑定本机的内容一律留在 `/etc/nixos/AGENTS.md`。两技能 `description` 与四语文档同步更新
+
+| 提交 | 说明 |
+|------|------|
+| `a33a3cf` | refactor(skills): 泛化 /etc/nixos 实践的两个未覆盖缺口 |
+| `fba7b38` | docs(skills): 同步两技能扩展后的功能清单（四语） |
+
 ## 2026-09-16T14:11:18+09:00
 
 **摘要**：feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 — 起因是逐技能评审仓库 `skills/` 树（10 个）与两预设同捆内容的匹配度。评审结论：**加入** `nixos-modern-cli`（现代 Nix/NixOS CLI、shell 能力、sudo 流程）、`recover-nixos-config`（从 store 恢复误删的 /etc/nixos）、`nixos-specialisation-tuning`（specialisation 分面 + UMA 上 llama.cpp 调优）——三者均为「在 NixOS 上做事」的通用能力，正合 NixOS模式 定位；**不加** `nixkits-skills`（技能安装器，是工具而非工作方法）与 `news-three-elements`（创作类，且已由独立包 `dsh-preset-news-three-elements` 提供专属预设）。维护模式为 NixOS模式 的派生，**自动继承**这 3 个。**实现方式（避免副本）**：不把技能复制进 `presets/<mode>/skills/`——该目录在两预设间逐字节镜像，再放一份会成为仓库 `skills/` 之外的第二副本而可能漂移。改为在 `postPatch` 中按白名单从同一仓库树生成构建期子集 `skills-nixos/`，预设的 `skill-filesystem` 行增加第二个 `customSkillDirs` 根，以 `../../skills-nixos/` 相对路径解析（`baseUrl` = 预设目录）。**为何用子集目录而非直接挂 `skills-embedded/`**：`skill-filesystem` 会注册每个配置根下的**全部**子目录，直接挂嵌入树会把 `write-project-docs` 等维护类技能一并带进 NixOS模式，超出本次选定范围。已实测：构建产物中 `skills-nixos/` 恰含 3 个技能、与仓库源逐字节一致，`../../skills-nixos/` 从预设目录可达，`skills-embedded/` 仍完整保留 10 个；`check-preset-derivation` 等 5 项 flake check 全通过

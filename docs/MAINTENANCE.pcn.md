@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T14:27:33+09:00
+
+**摘要**：refactor(skills): `/etc/nixos/AGENTS.md` 実践 自 未 cover 二 缺口 汎化 — 発端 同 file（HarukaX 機器設定規則 670 行）的 業務 logic 與 経験 汎化価値 監査。**監査結論：約 75% 既存技能 cover 済**——分面 architecture 與 上書衝突、`mkForce` 誤用 事故、消費者帰属原則、`mkDefault`、llama.cpp parameter 禁止項 與 診断順序、実測 電力 profile、MCP schema 毎回費用、静黙故障 診断（設定 log 読）等、既 `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` 存在。**監査中 自己修正 一 件**：初回「`mkForce` 誤用 未 cover」判断、但 語単位 再確認 結果 既 4 箇所 cover（`mkForce` `systemPackages` 上書 `bash`/`systemd` 削除  login 不能 完全 事故例 含）、故 缺口一覧 自 除外。真 缺口 二 限定：**① 機密 與 `path:` input**（`nixos-modern-cli` 新節）——Nix git 追跡 file 限定 store 対 copy、故 機密 repo 内 留 道 無（commit 漏洩、gitignore 評価 `Path ... is not tracked by Git` 失敗）。故 repo 外目録 + `path:` input 導入、二 罠 付：`path:` input `flake.lock` 固定 故 内容変更 `--update-input` 必要、`{ nixosSecrets, ... }` 的 `...` 当該引数 **束縛 不** 故 明示列挙 必要。**② 熱管理 方法論**（`nixos-specialisation-tuning` 新節）——二 手段 代償 異（曲線 上 噪音 限定、profile 下 速度 失）；曲線 終点 低 過 最 危険 領域 fan 一定；`enabled: false` profile 與 曲線 乖離（最高電力 profile 最弱 fan 方針）；firmware 温控点 厳密 8 点 制限、panic **書込 後** 発生；`asusctl` 書込 一時的、検証 daemon 再起動 file 自 再読込 確認 必要；決定的 判据 緩 曲線 與 攻撃的 曲線 温度 回転数 **完全同一** → fan 飽和 → 有効 手段 消費電力 低減 限定、且 EC 閾値 OS 自 不可視。**汎化 不**：機種、数値表、`triggerTemp`、mihomo 購読 詳細、`g41.moe`、`toface` script 等 machine 依存 内容 `/etc/nixos/AGENTS.md` 残。両技能 `description` 與 四言語 document 同時 更新。
+
+| 提交 | 説明 |
+|------|------|
+| `a33a3cf` | refactor(skills): 泛化 /etc/nixos 实践的两个未覆盖缺口 |
+| `fba7b38` | docs(skills): 同步两技能扩展后的功能清单（四语） |
+
 ## 2026-09-16T14:11:18+09:00
 
 **摘要**：feat(dsh-nixos-shell): NixOS模式 3 個 NixOS 運維技能 同梱 — 発端 倉庫 `skills/` 樹（10 件）與 各預設 同梱内容 的 適合性 技能単位 review。review 結論：`nixos-modern-cli`（現代 Nix/NixOS CLI、shell 能力、sudo flow）、`recover-nixos-config`（誤削除 `/etc/nixos` 自 store 復元）、`nixos-specialisation-tuning`（specialisation 分面 + UMA 機器 llama.cpp 調優）**追加**——三者 共「NixOS 上 作業」汎用能力、NixOS模式 守備範囲 合致。`nixkits-skills`（技能 installer、作業方法 非 工具）與 `news-three-elements`（創作系、独立 package `dsh-preset-news-three-elements` 専用預設 提供済）**追加 不**。維護模式 NixOS模式 派生、3 個 **自動継承**。**実装（重複 回避）**：技能 `presets/<mode>/skills/` 複製 不——同目録 両預設 間 byte 単位 鏡像、其処 置 場合 倉庫 `skills/` 樹 既所有 内容 的 第二複製 成、drift 可能。代 `postPatch` 同一 倉庫樹 自 whitelist 方式 建構期 subset `skills-nixos/` 生成、預設 `skill-filesystem` 行 第二 `customSkillDirs` root 追加、相対 path `../../skills-nixos/` 解決（`baseUrl` = 預設目録）。**`skills-embedded/` 直接 指 非 subset 目録 使用 理由**：`skill-filesystem` 設定 各 root 的 **全部** 子目録 登録、埋込樹 直接 指 場合 `write-project-docs` 等 保守系技能 迄 NixOS模式 入、今回 選定範囲 超。検証済：build 成果物 `skills-nixos/` 正確 3 技能 含 倉庫 source byte 単位 一致、`../../skills-nixos/` 預設目録 自 到達可能、`skills-embedded/` 10 件 全部 保持、5 項 flake check（`check-preset-derivation` 含）全部 通過。
