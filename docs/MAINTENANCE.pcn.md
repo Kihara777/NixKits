@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T14:54:53+09:00
+
+**摘要**：refactor(dsh-api-balance)!: 独立 repo 移転、本 repo 薄 wrapper 化 — 本 repo **初** component 分割。監査 当該 sub project 此処 唯一 **platform 非依存**（NixOS 専用 非）本格的 project 事（`lib/index.js` 1733 行 + `lib/client.js` 4922 行、39 commit）、NixKits 與 **code level 結合 零**（`@deepseek-ai/dsh-credentials` 與 Node 組込 module 限定 import、repo 内参照 皆無）、且 npm packaging 必要 明確 事 確認——三 基準 全部 満。**結果**：新 repo <https://github.com/Kihara777/dsh-api-balance>（公開、git 履歴 持 不 単一 初期 commit 開始）source・四言語 完全 document・npm 公開 CI（release trigger、provenance 付）保持、**実測** 実 remote 自 一 command 導入 可能 事 確認（`dsh plugin add github:Kihara777/dsh-api-balance` → `dsh.profile.bundles` 入 → web profile `exit=0`・error 零 起動）。本 repo 側 変更：`packages/dsh-api-balance/` 削除；`packages/dsh-api-balance.nix` 薄 wrapper 化（`fetchFromGitHub` rev 與 二 hash 固定、**`npmDepsHash` 不変**——移転前後 source 内容 byte 単位 同一 裏付）；`docs/<lang>/dsh-api-balance.md` 各 161 行 自 短 page 圧縮（移転 明示 新 repo 完全 document 連結、本 repo 固有 宣言的 install 節 限定 保持）；四言語 README plugin 表 移転 與 wrapper 役割 明記。**CI workflow 意図的 保持**——build flake 出力 `#dsh-api-balance` 現在 薄 wrapper、保持 宣言的利用者 引続 Cachix cache hit 可能。**`write-project-docs` 技能 同時 更新**：「main repo 薄 wrapper + sub repo 完全 document」architecture（分担表、移転基準、短 page 標準構造、main 側 残 同期点）新節 追加、「移転済 component 完全 document 複製 main 残」anti-pattern 表 追加——今回 分割 一度 限 作業 非 再利用可能 手順 化
+
+| 提交 | 説明 |
+|------|------|
+| `0bb7fc1` | refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改为薄封装 |
+| `0760612` | feat(skill): write-project-docs 支持「主仓薄封装 + 子仓完整文档」架构 |
+
+**未対応**：npm 公開 未実行——本機 npm 資格情報 無（未 login、token 無、`@kihara777` scope 不存在）。先 npmjs.com 平台 account 與 scope 作成 必要。package 自体 公開可能 状態（`npm pack` 70.8 kB / 4 file 確認）。
+
 ## 2026-09-16T14:27:33+09:00
 
 **摘要**：refactor(skills): `/etc/nixos/AGENTS.md` 実践 自 未 cover 二 缺口 汎化 — 発端 同 file（HarukaX 機器設定規則 670 行）的 業務 logic 與 経験 汎化価値 監査。**監査結論：約 75% 既存技能 cover 済**——分面 architecture 與 上書衝突、`mkForce` 誤用 事故、消費者帰属原則、`mkDefault`、llama.cpp parameter 禁止項 與 診断順序、実測 電力 profile、MCP schema 毎回費用、静黙故障 診断（設定 log 読）等、既 `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` 存在。**監査中 自己修正 一 件**：初回「`mkForce` 誤用 未 cover」判断、但 語単位 再確認 結果 既 4 箇所 cover（`mkForce` `systemPackages` 上書 `bash`/`systemd` 削除  login 不能 完全 事故例 含）、故 缺口一覧 自 除外。真 缺口 二 限定：**① 機密 與 `path:` input**（`nixos-modern-cli` 新節）——Nix git 追跡 file 限定 store 対 copy、故 機密 repo 内 留 道 無（commit 漏洩、gitignore 評価 `Path ... is not tracked by Git` 失敗）。故 repo 外目録 + `path:` input 導入、二 罠 付：`path:` input `flake.lock` 固定 故 内容変更 `--update-input` 必要、`{ nixosSecrets, ... }` 的 `...` 当該引数 **束縛 不** 故 明示列挙 必要。**② 熱管理 方法論**（`nixos-specialisation-tuning` 新節）——二 手段 代償 異（曲線 上 噪音 限定、profile 下 速度 失）；曲線 終点 低 過 最 危険 領域 fan 一定；`enabled: false` profile 與 曲線 乖離（最高電力 profile 最弱 fan 方針）；firmware 温控点 厳密 8 点 制限、panic **書込 後** 発生；`asusctl` 書込 一時的、検証 daemon 再起動 file 自 再読込 確認 必要；決定的 判据 緩 曲線 與 攻撃的 曲線 温度 回転数 **完全同一** → fan 飽和 → 有効 手段 消費電力 低減 限定、且 EC 閾値 OS 自 不可視。**汎化 不**：機種、数値表、`triggerTemp`、mihomo 購読 詳細、`g41.moe`、`toface` script 等 machine 依存 内容 `/etc/nixos/AGENTS.md` 残。両技能 `description` 與 四言語 document 同時 更新。

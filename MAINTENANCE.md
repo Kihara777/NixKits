@@ -2,6 +2,17 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T14:54:53+09:00
+
+**摘要**：refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改为薄封装 — 这是本仓**首次**组件拆分。审计确认该子项目是本仓唯一一个**平台无关**（非 NixOS 专项）的严肃项目（`lib/index.js` 1733 行 + `lib/client.js` 4922 行，39 次提交），且**代码层与 NixKits 零耦合**（仅 import `@deepseek-ai/dsh-credentials` 与 Node 内置模块，无任何仓库内引用），同时已有明确的 npm 打包需求——三项判据齐备。**执行结果**：新仓库 <https://github.com/Kihara777/dsh-api-balance>（公开，不带 git 历史，从单次初始提交开始），承载源码 + 四语完整文档 + npm 发布 CI（release 触发，含 provenance）；**已实测**从真实远端一行安装可用（`dsh plugin add github:Kihara777/dsh-api-balance` → 进入 `dsh.profile.bundles` → web profile 启动 `exit=0`、零错误）。本仓侧改动：删除 `packages/dsh-api-balance/`；`packages/dsh-api-balance.nix` 改为薄封装（`fetchFromGitHub` 固定 rev + 两个 hash，**`npmDepsHash` 未变**——证实迁出前后源码内容逐字节一致）；`docs/<lang>/dsh-api-balance.md` 各由 161 行压为短页（说明迁出、指向新仓完整文档，只保留本仓独有的声明式安装一节）；README 四语插件表标注迁出与薄封装角色。**CI workflow 有意保留**——它构建的 flake 输出 `#dsh-api-balance` 现即薄封装，保留可让声明式用户继续命中 Cachix 缓存。**同时更新 `write-project-docs` 技能**：新增「主仓薄封装 + 子仓完整文档」一节的架构约定（分工表、迁出判据、短页标准结构、主仓侧其余同步点），并把「已迁出组件在主仓保留完整文档副本」列入反模式表——使本次拆分沉淀为可复用流程而非一次性操作
+
+| 提交 | 说明 |
+|------|------|
+| `0bb7fc1` | refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改为薄封装 |
+| `0760612` | feat(skill): write-project-docs 支持「主仓薄封装 + 子仓完整文档」架构 |
+
+**待办**：npm 发布尚未执行——本机无 npm 凭据（未登录、无 token、`@kihara777` scope 不存在），需先在 npmjs.com 注册账号并创建 scope；包本身已 publish-ready（`npm pack` 确认 70.8 kB / 4 文件）。
+
 ## 2026-09-16T14:27:33+09:00
 
 **摘要**：refactor(skills): 泛化 `/etc/nixos/AGENTS.md` 实践中的两个未覆盖缺口 — 起因是审计该文件（670 行，HarukaX 本机系统配置规则）中业务逻辑与经验的泛化价值。**审计结论：约 75% 已被现有技能覆盖**——分面架构与覆盖冲突、`mkForce` 误用事故、消费者归属原则、`mkDefault`、llama.cpp 参数禁用项与诊断顺序、平台档位实测、MCP schema 每轮开销、静默故障诊断（须读配置日志）等，均已在 `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` 中。**过程中修正一处自身误判**：初审认为「`mkForce` 误用未被覆盖」，逐词复核后发现该技能已有 4 处覆盖（含 `mkForce` 覆盖 `systemPackages` 导致删掉 `bash`/`systemd`、无法登录的完整事故案例），故从缺口清单中剔除。真正的缺口只有两个：**① 密钥与 `path:` input**（`nixos-modern-cli` 新增一节）——Nix 只把 git 跟踪的文件拷进 store，故密钥留在仓库内没有出路（提交则泄露；gitignore 则求值报 `Path ... is not tracked by Git`），须放仓库外用 `path:` input 引入，附两个陷阱：`path:` input 受 `flake.lock` 锁定、改内容需 `--update-input`；`{ nixosSecrets, ... }` 中 `...` **不绑定**该参数须显式列出。**② 热管理方法论**（`nixos-specialisation-tuning` 新增一节）——两类手段代价不同（抬高曲线只增噪音 vs 降档损失速度）；曲线末点封顶过致使最危险区间风扇恒定；`enabled: false` 致档位与曲线脱节（最高功耗档配最弱策略）；固件硬限恰好 8 个温控点且 panic 发生在**写入之后**；`asusctl` 写入是临时的、验证须重启守护进程确认从文件重读；决定性判据为温和 vs 激进曲线温度转速**完全相同** → 风扇已饱和 → 唯一有效手段是降功耗，且 EC 阈值对 OS 不可见。**未泛化**：机器型号、数值表、`triggerTemp`、mihomo 订阅细节、`g41.moe`、`toface` 脚本等强绑定本机的内容一律留在 `/etc/nixos/AGENTS.md`。两技能 `description` 与四语文档同步更新
