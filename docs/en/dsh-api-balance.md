@@ -1,120 +1,39 @@
 # dsh-api-balance
 
-[中文](../zh/dsh-api-balance.md) | English | [日本語](../ja/dsh-api-balance.md) | [偽中国語](../pcn/dsh-api-balance.md)
+[中文](../zh/dsh-api-balance.md) | English | [日本語](../ja/dsh-api-balance.md)  | [偽中国語](../pcn/dsh-api-balance.md)
 
-API usage balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab switch to the popover panel of the webui usage ring (the context-usage circle left of the send button).
+API usage-balance plugin (DeepSeek Harness) — adds a 「Usage / Balance」 tab switch to the popup panel on the webui usage ring (the context-used display left of the send button).
 
-## Basic Info
+> **This project has moved to its own repository**: <https://github.com/Kihara777/dsh-api-balance>
+>
+> It is a **platform-agnostic DSH plugin** (not NixOS-specific), so it is distributed independently and published to npm.
+> **The full documentation (four languages) lives in the new repository**: <https://github.com/Kihara777/dsh-api-balance#文档>
+>
+> This page keeps only the one section unique to NixKits — **declarative installation**.
 
-| Field | Value |
-|------|-----|
-| Type | DSH Host + Client plugin (npm package) |
+## Info
+
+| Item | Value |
+|------|-------|
+| Source repository | <https://github.com/Kihara777/dsh-api-balance> |
 | npm name | `@kihara777/dsh-api-balance` |
-| Version | `0.1.0` |
+| Type | DSH Host + Client plugin |
 | License | MIT |
-| Data sources | DeepSeek official `GET /user/balance` (API-key auth) + the platform console usage API (platform session token auth) |
-
-## Features
-
-- **Usage**: the original content (context occupancy and its breakdown)
-- **Balance**: the current API key's account info (key hint, availability, per-currency total / top-up / granted balance), plus consumption details and usage charts — the consumption detail is one horizontally-paged area (page 1: today / this-month / 30-day; page 2: per-model breakdown + daily / monthly chart), with a phone-home-screen-style dot indicator above it (tappable, swipe/drag to flip); the area height grows and shrinks with the current page's content (reclaimed on page switch) and never scrolls itself (full content relies on the panel's own vertical scroll)
-- Host-side 30-second TTL cache; the API key is resolved through the `credentials` service using `apiKeyEnv` (default `DEEPSEEK_API_KEY`), falling back to the process environment
-
-### Platform token acquisition (two tiers, fully automatic first)
-
-- **Local browser auto-scan (on by default)**: the host reads the `Local Storage/leveldb` of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) — parsing the LevelDB tables exactly (footer → index → data blocks → snappy decompression → entry walk) to read `userToken`, falling back to raw-byte heuristics if parsing fails — and saves the first hit to `$DSH_HOME/api-balance-token` (0600). Signing in to the platform once in a local browser is all it takes. Throttled to one scan per 6 hours by default (`browserScanIntervalMs` configurable, `browserScan = false` disables); after token invalidation (40003/401) the next query rescans immediately.
-- **Not-signed-in detection and login guidance**: when the scan finds nothing, the panel pops up 「Platform login not detected」 — 「Go to login」 opens the login page in a new tab and picks up the token automatically via polling; manual token entry is only a secondary option inside the prompt (for those who don't want to log in). Once connected, a greyed 「✓ Signed in」 button and the token source (auto from local browser / manual) are shown; every manual refresh also auto-quick-scans the login state when no token exists — no button clicks needed.
-
-### Interface settings (⚙ Settings → Interface)
-
-- **Bottom stats bar**: overflowing content scrolls horizontally with the scrollbar hidden (on by default); turning it off restores the ellipsis truncation (hovering shows the full line in a tooltip).
-- **Enter key behavior**: Enter = newline, Shift+Enter = send (on by default; DSH's native behavior is Enter = send); turning it off restores the native behavior. Composer only; other inputs unaffected.
-- **Mobile: no keyboard on session switch**: on touch devices, switching sessions via the sidebar no longer auto-focuses the composer, so the soft keyboard doesn't pop up by itself; tapping the composer still works. Enabled by default, can be turned off here.
-- **Question dialog: whole-page scroll**: with a long prompt, the title scrolls together with the options (instead of only the option list scrolling); the action and footer buttons stay pinned, so a long prompt no longer squeezes the options. On by default.
-All four settings are on by default and persist in browser localStorage.
-
-### Peak pricing marker
-
-DeepSeek's current peak/off-peak rule (official pricing footnote): **peak = Mon–Fri 09:00–12:00 and 14:00–18:00 Beijing time; all other hours — including weekends — are off-peak**. During peak hours: the usage ring (the circular button left of the send key), the usage page's context progress bar and its detail color chips, the refresh/loading spinner, and the usage chart all turn into a unified red family — within the chart each model keeps a distinct red shade (red yet distinguishable, legend synced) — and a red 「Peak pricing」 badge appears next to the chart title (hover for the window details). The red effect engages and clears automatically on the official peak windows (re-checked every 30 s across the boundary), no manual refresh needed; both the start and end of a peak window speak a notification (pack `peak` / `peakEnd` segments first, TTS fallback otherwise). The greeting audio on each 「Balance」-tab click (manual refresh) is also followed by a peak hint (pack `peak` segment first, TTS fallback otherwise).
-
-### Voice broadcast
-
-Clicking the usage chart's 「Daily / Monthly」 toggle broadcasts the matching view's voice usage (pack segments + TTS numbers), covering: in (uncached input), cache hit, out, and cost (currency) — matching the official usage page's itemization; broadcast language and voice follow the DSH UI language (zh / en). The 「⚙ Settings → Voice」 tab provides:
-
-- an auto-broadcast toggle (balance alerts when below the threshold, with a 30-minute rate limit)
-- TTS backend selection (browser built-in / custom TTS API proxied through the host to avoid CORS, URL template placeholders `{text}` `{lang}` `{rate}`)
-- voice-pack library management (import multiple zips, switch the active pack by clicking rows, multi-select removal; each pack expands into an 「audition」 view to play all of its supported audio one by one; stored under `$DSH_HOME/api-balance-voicepack/`, shared by all devices)
-- a creator inside the 「Voice pack management」 sub-menu (browser recording or audio-file import, with a visual recording float window and sample texts; cross-language recording; package & download / compile & apply)
-
-> **SSRF protection for the custom TTS proxy**: the host proxy accepts only `http(s)` targets and rejects loopback / private / link-local / reserved addresses (including DNS resolution results) — `localhost`, `10.x`, `192.168.x`, `169.254.169.254` (cloud metadata), `*.internal` and the like all return 400. Forwardable custom request headers are limited to content-negotiation ones (`content-type` / `accept` / `accept-language` / `user-agent`).
-
-#### Voice pack format guide
-
-A voice pack is a **zip archive** (easy to deploy and share) containing a `manifest.json` and audio files. Import the .zip in 「⚙ Settings → Voice」 to enable it; clearing restores the default whole-sentence TTS broadcast.
-
-Zip layout:
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
-{
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "My pack",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "peak": "audio/peak.mp3",
-    "peakEnd": "audio/peakEnd.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // optional: greeting clips (a random one plays on every page refresh)
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
-}
-```
-
-| Segment | Purpose |
-|------|------|
-| `dead` | whole-sentence out-of-tokens alert |
-| `low` | whole-sentence low-balance alert |
-| `peak` | peak-pricing hint (appended after the greeting audio) |
-| `peakEnd` | peak-pricing-end hint (spoken when the red effect auto-clears) |
-| `today` | 「Today」 broadcast prefix |
-| `month` | 「This month」 broadcast prefix |
-| `inLabel` | 「in」 label |
-| `outLabel` | 「out」 label |
-| `cacheHitLabel` | 「cache hit」 label |
-| `costLabel` | 「cost」 label |
-| `tokenUnit` | unit after numbers (e.g. 「tokens」), reusable |
-| `suffix` | broadcast ending |
-
-All segments are optional: missing ones fall back to TTS during playback. Panel presentation matches the official usage page: 「in」 counts only uncached input, and cache hits are listed separately (token and cost data come from the official API's daily-granularity buckets without secondary merging). The creator's sample texts match the default TTS fallback strings exactly (so recorded packs stay close to the default TTS experience); dynamic numbers (token counts, cost and currency) are synthesized by the current TTS backend and concatenated as 「pack segment + TTS numbers」. The optional `greetings` is an array of file paths (0–32): when voice broadcast is enabled, a random one plays as a greeting/landing sound on each 「Balance」-tab click (manual refresh); without greeting audio, a random TTS greeting is used instead.
-
-**Create & share**: 「Settings → Voice → Voice pack management」 → 「Create a voice pack」 opens the creator — first pick the pack language (zh-CN / en / ja; drives the sample texts and the manifest `lang`, so packs can be recorded across languages); record each segment with the browser microphone, and record greetings list entry by entry («Add greeting» extends the list, ✕ removes a slot, sample texts mirror the default TTS greeting pool); or import local audio files; while recording, a visual float window appears in the corner (level meter + elapsed time + sample text + stop/discard). Finish with 「Package & download」 to produce a shareable zip, or 「Compile & apply」 to import into the local library and activate it. When a voice pack is already imported, the first edit shows an overwrite warning that must be confirmed (once per session).
-
-**Limits**: segment keys `[A-Za-z0-9_-]{1,32}`; segments ≤ 32, greetings ≤ 32 (≤ 64 zip entries total), ≤ 2 MB per audio file; mp3 / wav / ogg / webm recommended, ≤ 2 s per segment, 22.05/44.1 kHz mono. Dynamic parts (balance numbers, token counts) are not in the pack — they are synthesized live by the current TTS backend (browser built-in or custom TTS API proxied through the host), then concatenated with the pack segments into the complete broadcast.
+| Role in NixKits | Thin wrapper package (provides declarative installation); carries no source |
 
 ## Install
 
-Two install routes are supported. **NixOS users should prefer the declarative one** (the version is locked by Nix, updates with system generations, and is reproducible); DSH users elsewhere can use `dsh plugin add`. **Pick one** — both register the same `api-balance` entry id.
+### Route A: `dsh plugin add` (native DSH)
 
-### Route A: declarative (NixOS module, recommended)
+```bash
+dsh plugin --profile web add github:Kihara777/dsh-api-balance
+# or from npm
+dsh plugin --profile web add @kihara777/dsh-api-balance
+```
+
+### Route B: declarative (NixOS module — unique to this page)
+
+NixKits keeps a thin `pkgs.dsh-api-balance` wrapper (building from the new repository's source) so NixOS users can install declaratively — the version is pinned by Nix, updates with system generations, and is reproducible:
 
 ```nix
 {
@@ -131,31 +50,18 @@ Two install routes are supported. **NixOS users should prefer the declarative on
 }
 ```
 
-### Route B: `dsh plugin add` (native DSH)
+> ⚠️ **Do not combine with route A** — both register the same entry id and would duplicate it.
 
-```bash
-dsh plugin --profile web add 'github:Kihara777/NixKits#path:packages/dsh-api-balance'
-```
+## Updating the thin wrapper
 
-The package's `dsh.bundle` points at `cordis.patch.yml`, so it activates as a profile layer once installed. Remove it with `dsh plugin --profile web remove @kihara777/dsh-api-balance`.
+`packages/dsh-api-balance.nix` pins one `rev` of the new repository plus two hashes (source and `npmDepsHash`). Upgrades must update all three; the general flow is in the `nix-flake-update-check` skill.
 
-> **Why `name` is a relative path**: the patch registers `./lib/index.js` rather than the package name. When a bundle entry name starts with `./`, dsh anchors it to an absolute `file://` URL **beside the patch**; a bare package name would instead be resolved from the dsh installation tree, where this package does not exist (`Cannot find package`), because pnpm places it in the profile directory rather than the dsh tree.
+## Feature overview
 
-> **Version reproducibility**: route B resolves through git and is **not locked by `flake.lock`**; use route A when you need a reproducible environment.
+Full feature documentation lives in the [new repository](https://github.com/Kihara777/dsh-api-balance). Summary:
 
-## Notes
-
-- Balance data comes from the official DeepSeek API, usage data from the platform console's internal API — the two use different auth (API key / platform session token); when either is missing, the corresponding view shows a not-signed-in state instead of an error.
-- Auto-scan only reads tokens already signed in on this machine's browsers and collects nothing beyond them; the token file is written with `0600` permissions.
-- The panel is a page-level overlay (a document-level fixed portal, never clipped by the conversation area and never off-screen in landscape or narrow widths); its height clamps automatically to the space above the anchor (avoiding the top bar in phone landscape); when the horizontal space is too narrow, content keeps its adapted width and scrolls horizontally via the panel, and vertically via the panel's own scrollbar.
-
-
-### Settings storage layer
-
-The interface and voice settings (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state**: independent per browser, enabled by default, persisted the moment you toggle them in the plugin's `⚙ Settings` panel. They do **not** go through the DSH host settings system (`settings.register` / `settings.yaml`), so `nixkits.dsh.settings` provides **no declarative override** for them — configure these per-browser preferences in the panel per device. Host-side plugin parameters (`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`) remain declaratively set via `nixkits.dsh.plugins.packages[].config`.
-
-### Upstream proposal and ecosystem
-
-- This plugin's **horizontal-scroll** optimization for the host `StatsLine` session-stats strip (in-place scrolling instead of ellipsis truncation, for mobile / portrait touch and large-font readers) has been proposed to DeepSeek Harness upstream: GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458). The official `CONTRIBUTING.md` does not yet accept external pull requests, so it currently lands as a discussion plus a ready branch.
-- The PR-ready change lives on branch `draft/statline-overflow-scroll` in the project's fork `Kihara777/deepseek-harness` (local commit `e5ece63`, touching three files under `packages/client/ui-chat` — CSS + TSX + two component tests); it can be promoted to a PR once upstream accepts external pulls. The plugin can then drop its runtime style injection over the host `.root` and follow the upstream behavior instead.
-- This repository is tagged with the official `dsh-plugin` ecosystem topic so the plugin stays discoverable within the plugin ecosystem.
+- **Balance**: DeepSeek's official `GET /user/balance` (API key auth)
+- **Usage**: today / this-month / 30-day consumption (cost + tokens + per-model breakdown) with daily / monthly charts
+- **Platform token**: auto-scanned from local browser sessions by default, manual connect as fallback
+- **Voice**: voice packs + TTS (browser built-in / custom API), with automatic peak/off-peak billing notices
+- **UI enhancements**: peak-hour red marking, question-window scroll fixes, bottom stats-bar scrolling, and more

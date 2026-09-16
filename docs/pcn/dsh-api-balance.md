@@ -1,120 +1,39 @@
 # dsh-api-balance
 
-[中文](../zh/dsh-api-balance.md) | [English](../en/dsh-api-balance.md) | [日本語](../ja/dsh-api-balance.md) | 偽中国語
+[中文](../zh/dsh-api-balance.md) | [English](../en/dsh-api-balance.md) | [日本語](../ja/dsh-api-balance.md)  | 偽中国語
 
-API 用量残高插件（DeepSeek Harness）——webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替提供。
+API 用量残高 plugin（DeepSeek Harness）——webui 用量圓環（送信按鈕左 的 文脈使用量表示）的 popup panel 対「用量 / 残高」tab 切替 追加。
+
+> **本 project 独立 repo 移転 済**：<https://github.com/Kihara777/dsh-api-balance>
+>
+> 此 **platform 非依存 DSH plugin**（NixOS 専用 非）故、独立配布 且 npm 公開。
+> **完全 document（四言語）新 repo 内 有**：<https://github.com/Kihara777/dsh-api-balance#文档>
+>
+> 本 page NixKits 固有 一節——**宣言的 install**——限定 保持。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| 類型 | DSH Host + Client 插件（npm package） |
+| source repo | <https://github.com/Kihara777/dsh-api-balance> |
 | npm 名 | `@kihara777/dsh-api-balance` |
-| 版 | `0.1.0` |
-| 許可 | MIT |
-| 數據來源 | DeepSeek 公式 `GET /user/balance`（API 鍵認証）+ platform 制御台用量 API（platform 会話 token 認証） |
-
-## 功能
-
-- **用量**：原内容（上下文占有率與内訳）
-- **余额**：當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付與残高）、消耗明細與用量図表——消耗明細同一区域水平翻頁（1 頁目：当日 / 当月 / 30 日、2 頁目：模型別内訳 + 日別 / 月別 chart）、上方類手機主屏幕頁面指示 dot（tap 可、横 drag / swipe 翻頁）、区域高度當前頁内容応自動増減（切頁即回収）自身不 scroll（全内容面板自身縦 scroll 依存）
-- 宿主側 30 秒 TTL 緩存；API 鍵 `credentials` service `apiKeyEnv`（預設 `DEEPSEEK_API_KEY`）解決、進程環境変數回退
-
-### platform token 取得（二段、全自動優先）
-
-- **本機瀏覽器自動掃描（預設有効）**：宿主本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）`Local Storage/leveldb` 読取、LevelDB 表構造精確解析（footer → index → 數據 block → snappy 解凍 → entry 走査）`userToken` 取出（解析失敗時生 byte 啓発式回退）、初命中 `$DSH_HOME/api-balance-token`（0600）保存。本機瀏覽器一度 platform 登録済即無感取得；節流預設 6 時間最多一回（`browserScanIntervalMs` 設定可、`browserScan = false` 無効）、token 失効（40003/401）後次回 query 即再掃描。
-- **未登録検出與登録案内**：scan 不命中時面板「platform 未登録」prompt 自動表示——「前往登録」新標籤開登録頁、polling token 自動取得。手動輸入 prompt 内二級 option 限定（登録不要時備）。接続後灰顯「✓ 登録済」按鈕與 token 取得元（本機瀏覽器自動取得 / 手動連接）表示、手動更新毎 token 未取得時自動快掃登録状態確認——按鈕操作不要。
-
-### 界面設定（⚙ 設定 → 界面）
-
-- **底部統計条**：越界内容横向 scroll 表示、scrollbar 隠蔽（預設有効）。無効時省略号截断（hover 全文表示）復帰。
-- **Enter key 動作**：Enter = 改行、Shift+Enter = 送信（預設有効；DSH 原生動作 Enter = 送信）。無効時原生動作復帰。会話入力欄限定作用、他入力欄不影響。
-- **移動端 session 切替 keyboard 不弹出**：觸屏 device 側欄 session 切替時入力欄自動聚焦阻止、軟 keyboard 自動表示防。入力欄 tap 通常入力可。預設有効、此処無効化可。
-- **疑問 window 頁面全体 scroll**：対話式質問 window 題干過長時、標題選択肢與一括 scroll（選択肢区限定 scroll 非）、操作按鈕與底部按鈕追従表示維持、長題干選択肢圧迫不。預設有効。
-四設定預設有効、瀏覽器 localStorage 永続化。
-
-### 峰谷課金標記
-
-DeepSeek 現行峰谷課金規則（官方価格頁脚注）：**峰 = 週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余（週末終日含）低谷価格**。峰時間帯：用量環（送信 key 左円形按鈕）、用量頁 context 進捗 bar 與各明細色塊、更新/load 動画、使用量 chart 一括紅色系表示——chart 内各 model 異紅 tone（紅但区分可、図例同同期）維持、chart 標題横赤「峰時課金」badge 表示（hover 時間帯説明）。紅表示官方峰時間帯合致自動入/解除（30 秒毎境界再検査）、手動更新不要。峰開始與終了両方通知自働再生（pack `peak` / `peakEnd` segment 優先、無時 TTS 回退）。「余额」標籤 click（手動更新）挨拶音声後峰提示追加（pack `peak` segment 優先、無時 TTS 回退）。
-
-### 音声放送
-
-使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack segment + TTS 數字連結）。内容：入（未命中輸入）、缓存命中、出、金額（幣種）——官方使用量頁分項基準一致。放送語言與音色 DSH 界面語言（zh / en）追従。「⚙ 設定 → 音声」標籤備：
-
-- 自動放送 switch（残高閾値下通知、30 分 rate 制限）
-- TTS backend 選択（瀏覽器内蔵 / 自訂 TTS API——host 経由 proxy CORS 回避、URL template placeholder `{text}` `{lang}` `{rate}`）
-- 音声 pack library 管理（複数 zip import、行 click 使用 pack 切替、複数選択一括削除；各 pack 展開「音声試聴」——該 pack 対応全音声一条毎試聴可；`$DSH_HOME/api-balance-voicepack/` 保存全 device 共有）
-- 「音声 pack 管理」次級 menu 内作成器（瀏覽器録音或音声 file import、録音中可視化浮窗與 sample text 表示、言語跨録音可能、打包 download / compile 適用）
-
-> **自訂 TTS proxy 的 SSRF 防護**：host proxy 僅 `http(s)` target 受付、loopback / private / link-local / 予約 address（DNS 解決結果含）拒否——`localhost`、`10.x`、`192.168.x`、`169.254.169.254`（cloud metadata）、`*.internal` 等一律 400。転送可能 自訂 request header 内容 negotiation 系（`content-type` / `accept` / `accept-language` / `user-agent`）限定。
-
-#### 音声 pack 形式指南
-
-音声 pack **zip archive**（配布共有便利）、`manifest.json` 與音声 file 含。面板「⚙ 設定 → 音声」.zip import 即有効、削除即預設全文 TTS 放送復帰。
-
-zip 構造：
-
-```
-voice-pack.zip
-├── manifest.json
-└── audio/
-    ├── dead.mp3
-    ├── low.mp3
-    └── …
-```
-
-```json
-// manifest.json
-{
-  "format": "dsh-api-balance-voice-pack",
-  "version": 1,
-  "name": "我的 pack",
-  "lang": "zh-CN",
-  "segments": {
-    "dead": "audio/dead.mp3",
-    "low": "audio/low.mp3",
-    "peak": "audio/peak.mp3",
-    "peakEnd": "audio/peakEnd.mp3",
-    "today": "audio/today.mp3",
-    "month": "audio/month.mp3",
-    "inLabel": "audio/inLabel.mp3",
-    "outLabel": "audio/outLabel.mp3",
-    "cacheHitLabel": "audio/cacheHitLabel.mp3",
-    "costLabel": "audio/costLabel.mp3",
-    "tokenUnit": "audio/tokenUnit.mp3",
-    "suffix": "audio/suffix.mp3",
-    // 任意：挨拶音声配列（頁面更新時 random 再生）
-    "greetings": ["audio/greet0.mp3", "audio/greet1.mp3"]
-  }
-}
-```
-
-| segment | 用途 |
-|------|------|
-| `dead` | 残高不足警告全文 |
-| `low` | 低残高警告全文 |
-| `peak` | 峰時課金提示（挨拶音声後追加） |
-| `peakEnd` | 峰時課金終了提示（紅表示自動解除時再生） |
-| `today` | 「当日消耗」放送 prefix |
-| `month` | 「当月消耗」放送 prefix |
-| `inLabel` | 「入」標籤 |
-| `outLabel` | 「出」標籤 |
-| `cacheHitLabel` | 「缓存命中」標籤 |
-| `costLabel` | 「金額」標籤 |
-| `tokenUnit` | 数字後単位（例「個 token」、再利用可） |
-| `suffix` | 放送結尾 |
-
-全 segment 任意：欠落 segment 放送時 TTS 回退。面板呈現與官方使用量頁基準一致：「入」未命中輸入限定計上、缓存命中別列（token 與金額數據官方 API 日粒度 bucket 取得、二次合算不）。作成器 sample text 預設 TTS 兜底文案一字不差（録音 pack 預設 TTS 体験接近保証）；動的數字（token 数、金額與幣種）當前 TTS backend 合成、「pack segment + TTS 數字」順連結。任意 `greetings` file 路配列（0–32 個）：音声放送有効時、「余额」標籤 click（手動更新）毎 random 一個挨拶/着地音再生。挨拶音声無時 TTS 挨拶 pool random 再生。
-
-**作成與共有**：「設定 → 音声 → 音声 pack 管理」→「音声 pack 作成」作成器開——先 pack 語言（zh-CN / en / ja）選択（sample text 與 manifest `lang` 決定、言語跨録音可能）；segment 逐段瀏覽器 mic 録音、挨拶 list 逐条録音（「添加挨拶」list 拡張、✕ slot 削除、sample text 預設 TTS 挨拶 pool 対応）；或 local 音声 file import。録音中右下可視化浮窗（level meter + 経過時間 + sample text + 停止/破棄）表示。完了後「打包 download」共有 zip 生成、「compile & 適用」本機 library import 即適用可。音声 pack import 済時、初回編集時上書警告表示確認必要（session 内一回）。
-
-**制約**：segment key `[A-Za-z0-9_-]{1,32}`；segments ≤ 32 個、greetings ≤ 32 個（zip entry 合計 ≤ 64）、音声 1 file ≤ 2 MB。音声 mp3 / wav / ogg / webm 推奨、1 segment 2 秒以内、22.05/44.1 kHz mono。動的部分（残高數字、token 数等）pack 不含——當前 TTS backend（瀏覽器内蔵或 host 経由 proxy 自訂 TTS API）実時合成、「pack segment + TTS 數字」順連結完全放送。
+| 種別 | DSH Host + Client plugin |
+| license | MIT |
+| NixKits 役割 | 薄 wrapper package（宣言的 install 提供）。source 保持 不 |
 
 ## 導入
 
-本 plugin 二 導入方式 対応。**NixOS 利用者 宣言的方式 推奨**（版本 Nix 固定、system 世代 共 更新、再現可能）。他 DSH 利用者 `dsh plugin add` 利用可能。**何方 一 選択**——両者 同一 `api-balance` entry id 登録。
+### 方式 A：`dsh plugin add`（DSH native）
 
-### 方式 A：宣言的（NixOS module、推奨）
+```bash
+dsh plugin --profile web add github:Kihara777/dsh-api-balance
+# 又 npm 自
+dsh plugin --profile web add @kihara777/dsh-api-balance
+```
+
+### 方式 B：宣言的（NixOS module——本 page 固有）
+
+NixKits 薄 `pkgs.dsh-api-balance` wrapper（新 repo source 自 build）保持、NixOS 利用者 宣言的 install 可能——版 Nix 固定、system 世代 共 更新、再現可能：
 
 ```nix
 {
@@ -131,31 +50,18 @@ voice-pack.zip
 }
 ```
 
-### 方式 B：`dsh plugin add`（DSH native）
+> ⚠️ **方式 A 與 併用 不**——両者 同一 entry id 登録 故 重複。
 
-```bash
-dsh plugin --profile web add 'github:Kihara777/NixKits#path:packages/dsh-api-balance'
-```
+## 薄 wrapper 更新
 
-package 的 `dsh.bundle` `cordis.patch.yml` 指、導入後 profile layer 有効化。削除 `dsh plugin --profile web remove @kihara777/dsh-api-balance`。
+`packages/dsh-api-balance.nix` 新 repo 的 一 `rev` 與 二 hash（source 與 `npmDepsHash`）固定。更新時 三 全部 同期 必要、一般手順 `nix-flake-update-check` 技能 有。
 
-> **`name` 相対 path 理由**：patch 登録 包名 非 `./lib/index.js`。bundle entry 名 `./` 開始 場合、dsh 其 **patch 同目録** 絶対 `file://` URL anchor。裸 包名 書 場合 dsh install tree 自解決、本 package 其処 不存在 故 `Cannot find package` 失敗——pnpm package dsh tree 非 profile 目録 配置 故。
+## 機能概要
 
-> **版本 再現性**：方式 B git 経由 解決、**`flake.lock` 固定 受 無**。再現可能 環境 必要 場合 方式 A 使用。
+完全 機能説明 [新 repo](https://github.com/Kihara777/dsh-api-balance) 有。概要：
 
-## 注意
-
-- 残高數據 DeepSeek 官方 API、用量數據 platform 制御台内部 API 由来——認証方式異（API 鍵 / platform 会話 token）、一方欠時該当視図 error 非表示未登録状態表示。
-- 自動掃描本機瀏覽器登録済 token 限定読取、瀏覽器外數據不採集。token file `0600` 権限落盤。
-- 面板頁面級 overlay（document 級 fixed portal、会話区域 clip 不、横屏/窄幅均画面外出不）；高度「锚点上方可用空間」自動 clamp（手機横屏 top bar 遮蔽回避）；横向可用幅不足時内容適応幅維持、面板横 scroll 表示、縦向同面板自身 scrollbar 表示。
-
-
-### 設定存儲層
-
-界面與語音設定（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**：毎瀏覽器独立、既定有効、插件 `⚙ 設定` panel 内切替即時永続化。此等 DSH host 設定系統（`settings.register` / `settings.yaml`）**不経由**、故 `nixkits.dsh.settings` 此等文書化 override **提供無**——此類「毎瀏覽器偏好」device 別 panel 内設定。host 側插件参數（`apiKeyEnv` / `baseURL` / `browserScan` / `browserScanIntervalMs`）依然 `nixkits.dsh.plugins.packages[].config` 声明設定。
-
-### 上流提案與生態
-
-- 本插件 host `StatsLine` 会話統計条之**横 scroll** 最適化（mobile / 縦向 touch 及大字体環境向、省略記号切詰代行内 scroll 全可視）DeepSeek Harness 上流提案済：GitHub Discussion [deepseek-ai/deepseek-harness #5458](https://github.com/deepseek-ai/deepseek-harness/discussions/5458)。公式 `CONTRIBUTING.md` 現時外部 PR 不承、故「Discussion + 準備済 branch」形公開。
-- PR 準備済変更本 repo fork `Kihara777/deepseek-harness` branch `draft/statline-overflow-scroll` 所在（local commit `e5ece63`、`packages/client/ui-chat` 下 3 書類 — CSS・TSX・component test 2 件変更）。上流外部 PR 受入開始次第正式 PR 昇格可。插件側上流挙動追従後、host `.root` runtime style 注入撤去可。
-- 本 repo 公式 `dsh-plugin` 生態 topic 付與済、plugin 生態内発見容易。
+- **残高**：DeepSeek 公式 `GET /user/balance`（API key 認証）
+- **使用量**：当日 / 当月 / 30 日消費（金額 + token + model 別明細）與 日別 / 月別 chart
+- **platform token**：預設 本機瀏覽器 登録状態 自 自動 scan、手動接続 fallback
+- **音声**：音声 pack + TTS（瀏覽器内蔵 / 自訂 API）、peak・off-peak 課金 自動通知
+- **UI 強化**：peak 時 赤表示、疑問 window scroll 修正、下部統計 bar scroll 等

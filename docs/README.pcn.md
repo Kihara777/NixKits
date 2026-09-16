@@ -39,7 +39,7 @@ DeepSeek Harness（DSH）组件與軟体分開掲載（掛載方式 [docs/pcn/ds
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退） | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
+| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退）。**独立[repo](https://github.com/Kihara777/dsh-api-balance) 移転 済。本 repo 宣言的 install 用 薄 wrapper package 保持** | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
 
 ## 模式
 
