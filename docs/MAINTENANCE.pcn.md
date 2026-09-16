@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md)  | 偽中国語
 
+## 2026-09-16T11:05:32+09:00
+
+**摘要**：refactor(comfyui)!: comfyui-rocm 補丁工程 退役、模組改名 `nixkits.comfyui` — 上流積極保守 續、ROCm 支持組件 StrixHalo 良支持 版 更新 済、故 本補丁 歴史使命 完成、全削除：三補丁（`strix-halo` / `nixpkgs-compat` / `stdenv-api`、局所補丁置場 空化）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、選項 `nixkits.comfyui-rocm` → `nixkits.comfyui`（意義 失 `-rocm` 接尾辞 削除）、四言語文書 `comfyui-rocm.md` → `comfyui.md`、根 `DEPRECATED.md` 新設 其第一条 記載。**今回最 記録 値 是 三度 誤判定 其根因**：以前「補丁 既 不要」結論 717 derivation build「全部成功」依拠——**但 其回 `scipy` binary cache 命中、実際 一度 未 build**。判定材料 log `building '…'` 行 応、非「build 終了 code 0」。真原因 本機 `/etc/nixos` comfyui-nix `inputs.nixpkgs` `6438090`（2026-08-02）釘死、一方 top level `nixos-unstable` 追：rolling top level `scipy` 公共 cache 命中 使、釘死 子 flake 現 build 要、故 `test_support_moments_sample` 浮動小数点 assertion 失敗 招、**「補丁 依然必要」見**。其 pin 行 削除 後 comfyui-nix top level `dc5d91f` 共有、`scipy` 直 cache 命中、build 全通過。教訓：**余分 pin 子 flake 主 nixpkgs cache 被覆 切離**、cache 解決 可能 問題 補丁 必要 問題 見做。補丁 陳腐化 独立裏付 二：上流 `stdenv` 非推奨 読 **0** 件（34 箇所 `hostPlatform` 使用）、上流 `nix/versions.nix` `rocm71` torch **2.10.0** `strix-halo` 補丁 逐 byte 一致（版・URL・hash 三者 同）、上流模組 既 `gpuSupport = "rocm"` 支持。**本機側 同期**：`system/software/comfyui.nix` 新選項 path 移行、`flake.nix` pin 行 削除 注釈 書換、`flake.lock` comfyui-nix `path:` 由 github 変；兩面 `nix build` 残 10 derivation 唯、generation 572 切替、`comfyui.service` plasma specialisation 唯存在、`ExecStart` `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` 依然 本模組 `rocmGfxOverride` 供給。併 `/home/kix/comfyui-nix-patched`（注釈 由 唯参照 陳腐 fork 17 MB）削除
+
+| 提交 | 説明 |
+|------|------|
+| `5015bcc` | refactor(comfyui)!: retire the comfyui-rocm patch project, rename module |
+
 ## 2026-09-16T01:45:07+09:00
 
 **摘要**：docs: 預設包更新 要 `daemon-reload` 後 `restart dsh` — 本次配備実測 落穴：`nixos apply` 設計上 dsh 不再起（安定掛載点）。一方 `systemctl restart dsh` 単独 時 **前世代** pre-start 脚本 実行 有、其 工程 正 `cordis.patch.yml` `$DSH_HOME` 複製 段（預設根 該文件 記載）。症状「服務確 再起（ActiveEnterTimestamp 更新）、session 仍 旧預設 読」：世代 570 配備後、最初 restart `$DSH_HOME/profiles/web/cordis.patch.yml` 旧 store 路 残、`systemctl daemon-reload` 後 再起 初 新路 翻（新副本 `news-material.js` 含、倉庫 逐 byte 一致）。AGENTS.md「本機配備」操作順序 與 確認方法（再起後 patch 文件 store 路 見）追記、`docs/{zh,en,ja,pcn}/dsh.md`「代価與配套」一段 同様 書換

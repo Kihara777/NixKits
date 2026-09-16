@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md)  | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T11:05:32+09:00
+
+**摘要**：refactor(comfyui)!: 退役 comfyui-rocm 补丁工程，模块改名 `nixkits.comfyui` — 上游已积极维护并把 ROCm 支持组件更新到能很好支持 StrixHalo 的版本，本补丁的历史使命完成，故整体移除：三个补丁（`strix-halo` / `nixpkgs-compat` / `stdenv-api`，本地补丁目录清空）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、选项 `nixkits.comfyui-rocm` → `nixkits.comfyui`（去掉已无意义的 `-rocm` 后缀），四语文档 `comfyui-rocm.md` → `comfyui.md`，新增根目录 `DEPRECATED.md` 并把它列为第一条。**本次最值得记的是那个被误判了三轮的根因**：早先的「补丁已不再需要」结论建立在一轮 717-derivation 构建「全部成功」之上，**但那次 `scipy` 是二进制缓存命中、从未真正构建**——判据应当是日志里出现 `building '…'`，而不是「构建退出码为 0」。真正的原因是本机 `/etc/nixos` 把 comfyui-nix 的 `inputs.nixpkgs` 钉死在 `6438090`（2026-08-02）而顶层走 `nixos-unstable`：滚动的顶层让 `scipy` 命中公共缓存，被钉住的子 flake 则要现建，于是触发 `test_support_moments_sample` 的浮点断言失败，**看起来像「补丁仍然必要」**。删掉那行 pin 后 comfyui-nix 与顶层共用 `dc5d91f`，`scipy` 直接缓存命中、构建全绿。教训：**额外的 pin 会让子 flake 脱离主 nixpkgs 的缓存覆盖**，把缓存本来能解决的问题暴露成需要打补丁的问题。补丁过时性另有两条独立佐证：上游 `stdenv` 弃用读法计数为 **0**（34 处用 `hostPlatform`）；上游 `nix/versions.nix` 的 `rocm71` torch **2.10.0** 与 `strix-halo` 补丁逐字节一致（版本 / URL / hash 三者皆同），上游模块亦已支持 `gpuSupport = "rocm"`。**本机侧同步**：`system/software/comfyui.nix` 改用新选项路径、`flake.nix` 删 pin 行并重写注释、`flake.lock` 中 comfyui-nix 由 `path:` 变 github；两面 `nix build` 仅 10 个 derivation 待建、切至 generation 572，`comfyui.service` 仅存在于 plasma specialisation，`ExecStart` 为 `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` 仍由本模块的 `rocmGfxOverride` 提供。另删除了 `/home/kix/comfyui-nix-patched`（17 MB 陈旧 fork，仅剩注释引用）
+
+| 提交 | 说明 |
+|------|------|
+| `5015bcc` | refactor(comfyui)!: retire the comfyui-rocm patch project, rename module |
+
 ## 2026-09-16T01:45:07+09:00
 
 **摘要**：docs: 预设包更新要 `daemon-reload` 再 `restart dsh` — 本次部署实测到的坑：`nixos apply` 按设计不重启 dsh（稳定挂载点），而单跑 `systemctl restart dsh` 时系统仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里。症状是「服务确实重启了（ActiveEnterTimestamp 已更新）、会话里还是旧预设」：gen 570 部署后第一次 restart，`$DSH_HOME/profiles/web/cordis.patch.yml` 仍指向旧 store 路径，加 `systemctl daemon-reload` 再 restart 才翻到新路径（新副本含 `news-material.js`，与仓库逐字节一致）。AGENTS.md「本机部署」补上操作次序与核对方法（重启后查 patch 文件里的 store 路径），`docs/{zh,en,ja,pcn}/dsh.md` 的「代价与配套」一段同步改写
