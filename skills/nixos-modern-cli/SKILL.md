@@ -1,6 +1,6 @@
 ---
 name: nixos-modern-cli
-description: 在 NixOS 系统上工作时使用。确保正确使用现代 Nix/NixOS CLI、完整的 shell 能力、sudo 权限和正确的系统维护流程。
+description: 在 NixOS 系统上工作时使用。确保正确使用现代 Nix/NixOS CLI、完整的 shell 能力、sudo 权限和正确的系统维护流程；含 Nix store 路径陷阱与密钥/`path:` input 的仓库外组织方式。
 ---
 
 # NixOS 现代 CLI 指南
@@ -207,3 +207,57 @@ grep -rn '/nix/store/' ~/.gitconfig ~/.bashrc ~/.zshrc ~/.config/ 2>/dev/null
 | `gem install` | 同 pip，二进制 stub 指向特定 Ruby 版本 | 使用 nixpkgs 中的 Ruby 包或 `bundler` |
 | `cargo install` | 二进制 hardcode 了构建时的 Nix store rpath | 使用 nixpkgs 中的 Rust 包或 `nix build` |
 | systemd unit `ExecStart=` | 指向 `/nix/store/…` 的绝对路径 | 使用 `lib.getExe pkg` 或在 `$PATH` 中引用 |
+
+## 密钥与 flake 组合：为什么必须放在仓库外
+
+**Nix 只把 git 跟踪的文件拷进 store。** 这一条与"`/etc/nixos` 是 git 仓库"叠加后，
+使密钥文件**没有留在仓库内的出路**：
+
+| 做法 | 后果 |
+|------|------|
+| 提交密钥文件 | 密钥进入版本库（若仓库有 remote 则已泄露） |
+| 加进 `.gitignore` | flake 求值**直接报错**——store 里拿不到该文件 |
+
+```
+error: Path 'credentials/config.nix' in the repository is not tracked by Git.
+```
+
+### 正确做法：仓库外 + `path:` input
+
+把密钥放在仓库**之外**的普通目录（同样受 git 管理更好，但不进本仓库），
+再用 `path:` input 引入：
+
+```nix
+# flake.nix
+inputs = {
+  nixos-secrets = { flake = false; url = "path:/home/<user>/.nixos-secrets"; };
+};
+```
+
+```nix
+# 消费侧模块——注意 `...` 并**不会**绑定该参数，必须显式列出
+{ nixosSecrets, ... }:
+{
+  imports = [ "${nixosSecrets}/config.nix" ];
+}
+```
+
+> ⚠️ **陷阱 1：`path:` input 被 `flake.lock` 锁定，内容改动不会自动生效。**
+> `path:` 锁的是路径，但 Nix 仍按 lock 里的记录取内容。改了密钥文件后必须：
+>
+> ```bash
+> nix flake lock --update-input nixos-secrets
+> ```
+>
+> 否则新密钥不生效，表现为"改了配置却没变化"——极易误判为配置写错。
+
+> ⚠️ **陷阱 2：`{ nixosSecrets, ... }` 中的 `...` 不绑定该参数。**
+> 必须像上面那样**显式列出**所需 input；只写 `{ ... }` 会在引用时报
+> `undefined variable`。
+
+### 判据
+
+- 任何**含凭据**的值（API key、token、session key、密码）→ 仓库外 + `path:` input
+- 任何**不含凭据**的配置 → 正常入库
+- 不要把"整份配置"移出仓库来图省事——只移出真正敏感的那部分
+

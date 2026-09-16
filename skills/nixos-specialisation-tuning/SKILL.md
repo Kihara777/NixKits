@@ -1,6 +1,6 @@
 ---
 name: nixos-specialisation-tuning
-description: 为 NixOS 设计 specialisation 分面（默认 headless + 可选桌面），并在统一内存（UMA）设备上调优 llama.cpp 本地推理。覆盖分面架构、模型服务参数、思考等级映射、上下文开销分析与静默故障诊断方法论。
+description: 为 NixOS 设计 specialisation 分面（默认 headless + 可选桌面），并在统一内存（UMA）设备上调优 llama.cpp 本地推理。覆盖分面架构、模型服务参数、思考等级映射、电源档位与热管理（风扇曲线、过热关机排查）、上下文开销分析与静默故障诊断方法论。
 ---
 
 # NixOS 分面设计与本地推理调优
@@ -166,6 +166,86 @@ networking.wireless.iwd.enable = lib.mkForce true;
 > ⚠️ 事件驱动可行：`udevadm monitor --subsystem-match=power_supply --subsystem-match=typec`
 > 在插拔时给出完整序列（`AC0 online` 变化 → `portN-partner` add/remove → `ucsi` online 变化），
 > 故无需轮询，用 `ENV{SYSTEMD_WANTS}` 触发 oneshot 服务即可。
+
+### 热管理：风扇曲线只在未饱和前有意义
+
+性能档重载下的**过热关机**，排查时须区分两类手段——它们代价完全不同：
+
+| 手段 | 代价 |
+|------|------|
+| 抬高风扇曲线 | 只增加噪音 |
+| 降低功耗档位 | **损失推理速度** |
+
+**所以先修曲线，再考虑降档**——但前提是风扇尚未饱和（见下文决定性判据）。
+
+#### 缺陷 ①：曲线末点封顶过低，最危险区间里风扇恒定
+
+曲线常见错误是把最后一个温控点定在**远低于实际重载温度**的位置（如 80 °C），
+而性能档实测可达 90–95 °C。后果是**在温度最高的区间里，风扇恒为终点 PWM 值**，
+最后一段散热能力从未被使用。
+
+> **只能抬高终点值，不能延长点数**——见下方固件限制。
+
+#### 缺陷 ②：`enabled: false` 使档位与曲线脱节
+
+若某些 profile 未启用（`enabled: false`），会出现**最高功耗档配最弱风扇策略**：
+sysfs 显示 `platform_profile = performance`，而生效曲线值恰是另一组（如 balanced）。
+
+**三个 profile 必须全部 `enabled: true`**。
+
+#### ⚠️ 固件硬限制：恰好 8 个温控点
+
+写成 **9 个**会 panic：
+
+```
+thread 'main' panicked at fan_curve_set.rs:91:21:
+index out of bounds: the len is 8 but the index is 8
+```
+
+> ⚠️ 该 panic 发生在**写入之后**——命令报错但曲线其实已生效，
+> 容易误判为"没改成功"而反复重试。
+
+#### ⚠️ `asusctl` 的写入是临时的
+
+`asusctl fan-curve` 只改运行时状态，**重启即失效**。必须写进声明式配置
+（如 `environment.etc."asusd/fan_curves.ron"`）才算生效。
+
+**验证必须重启守护进程**，确认它从文件重读——只看 `asusctl` 输出无法证明声明式生效：
+
+```bash
+systemctl restart asusd
+journalctl -u asusd --since '1 min ago' | grep write_profile_curve
+```
+
+#### 决定性判据：风扇是否已饱和
+
+修好曲线后**若仍关机**，用**对照实验**判断瓶颈：把曲线改得更激进，比较同负载下的
+温度与转速。
+
+```
+温和曲线（80 °C→满转）:  85.4 °C @ 52 W,  8700–8800 RPM
+激进曲线（65 °C→满转）:  85.6 °C @ 55 W,  8700–8800 RPM
+```
+
+**两者温度与转速完全相同** → 风扇一旦饱和，曲线形状不再重要，
+**唯一有效手段是降低功耗**。
+
+两条旁证可强化该结论：
+
+- 关机前温度**平稳贴着上限持续很久**（数十个采样、Δ ≈ 0）→ 不是失控升温，而是长时间超限
+- 内核暴露的 trip 点（如 103/110/120 °C）**远高于**实际切断点 → 真实保护阈值在
+  **EC 内部，对 OS 不可见**，不能靠 `/sys` 读数推断安全边界
+
+#### 结论：动态降档优于写死
+
+"多低才安全"随机型、环境、积灰而变，**写死一个更低的功耗上限既保守又僵硬**。
+更稳的做法是**动态监测 + 超标降档**：按温度采样，超阈值降一档，回落后恢复；
+按供电类型（PD / 原生 AC / 电池）另行选档。
+
+> ⚠️ 改档位用 `asusctl profile set <档>`，**不要**写 sysfs —— 见上文「补足 asusd 缺失的第三态」。
+
+> ⚠️ **hwmon 编号在重启后会变**（同一传感器可能从 `hwmonN` 变为 `hwmonM`）。
+> 脚本必须**按 `name` 解析**传感器，写死 `hwmonN` 必然读错。
 
 ## 上下文开销分析
 
