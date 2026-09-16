@@ -1,5 +1,7 @@
 # 安全政策
 
+中文 | [English](docs/SECURITY.en.md) | [日本語](docs/SECURITY.ja.md)  | [偽中国語](docs/SECURITY.pcn.md)
+
 ## 支持的版本
 
 本项目以 flake 形式分发，**只有最新的 `main` 分支**接受安全修复。
@@ -51,11 +53,38 @@
 | `dsh-api-balance` 读取浏览器 Local Storage | 用于提取平台会话令牌，**默认开启且可关闭**；仅读取令牌，不采集浏览器内其他数据，令牌以 `0600` 落盘 |
 | `/nix/store` 绝对路径 | 配置中硬编码 store 路径会在 GC 后失效——属已知陷阱而非漏洞，仓库提供 `nixos_cli op=audit-store-paths` 审计 |
 
+## 已评估的外部报告（含关闭项）
+
+以下报告均已经**逐条复核**并公开回复证据。**列出它们是为了让后续报告者不必重复提交同类问题**——
+若你认为某条结论有误，欢迎指出，我们会重新评估。
+
+| 编号 | 报告内容 | 结论 | 依据 |
+|------|---------|------|------|
+| PR #4（@anupamme） | 称 `/token`、`/voicepack`、`/tts` 缺少限流 | **误报，未合并** | 描述与 diff 不符（实际只改了 `/query`）；其限流键 `x-forwarded-for` 客户端可伪造，且本机同源 RPC 不带该头，会把全部本机流量并入单一桶而误伤自己 |
+| PR #5（@anupamme） | 称 `/query` 缺少请求体体积上限 | **误报，未合并** | 该防护早已由 `readJsonBody` 的 64 KiB 上限提供；其新增的 `content-length` 检查可被 chunked 绕过，`text.length` 又是 UTF-16 码元数而非字节数 |
+| issue #1（@begininvoke） | 称 `secrets: inherit` 违反最小权限 | **误报，已关闭** | 被调方是本仓库内的本地 workflow（非 issue 假设的外部来源）；全仓仅 2 个 secret，显式传递与 `inherit` 集合完全相同，对攻击者零增益 |
+| issue #2（@begininvoke） | 同 issue #1（内容逐字节重复） | **重复，已关闭** | 同上 |
+
+> 这四条报告**规则命中本身大多属实**，但威胁模型不适用于本项目的部署形态。
+> 我们按「先复核、再答复、附可复现证据」处理，而非直接照单接受。
+
+### 它们带来的真实改进
+
+这些报告**促成了两次真实的加固**——虽然报告本身是误报，但其指向的方向值得追查：
+
+| 加固 | 内容 |
+|------|------|
+| **`/tts` 端点 SSRF** | 报告未提及，但复核端点时发现：该代理接受任意 `http(s)` URL 并以 host 身份请求，且原样转发用户可控的 `headers`。已修复——拒绝回环 / 私有 / 链路本地 / 保留地址（含 IPv4-mapped IPv6），自定义请求头改为白名单。**该端点已随 `dsh-api-balance` 迁至[独立仓库](https://github.com/Kihara777/dsh-api-balance)** |
+| **CI 最小权限** | 复核 issue 时发现：31 个构建 workflow 未声明 `permissions`，因而继承仓库默认（可能为读写），而它们只需 `contents: read`。已全部补上 |
+
+**含义**：本仓库欢迎报告，也会认真复核；误报不会被视为打扰——上表四条报告最终引出了两次真实加固。
+
 ## 供应链说明
 
 - 本仓库的 CI 将第三方 GitHub Actions **固定到提交 SHA**（非浮动标签）
 - 仓库**不含**任何密钥；凭据一律置于仓库之外并经 `path:` input 引入
 - 构建产物推送到公开的 Cachix 二进制缓存
+- 构建 workflow 显式声明最小权限（`contents: read`）
 
 ## 致谢
 

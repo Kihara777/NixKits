@@ -129,3 +129,5 @@ nix registry add nixkits github:Kihara777/NixKits
 ## 许可
 
 [MIT](LICENSE)
+
+安全政策（含**已评估的外部报告清单**——误报不再重复受理）见 [`SECURITY.md`](SECURITY.md)。

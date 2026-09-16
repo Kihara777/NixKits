@@ -127,3 +127,5 @@ For AI coding assistants:
 ## License
 
 [MIT](../LICENSE)
+
+See [`SECURITY.md`](../SECURITY.md) for the security policy, including the list of **already-evaluated external reports** — resolved false positives are not re-litigated.
