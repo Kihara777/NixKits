@@ -9,8 +9,11 @@
  *
  * - `write-project-docs` (multi-language documentation authoring);
  * - `write-maintenance-log` (MAINTENANCE.md authoring per NixKits rules);
- * - `nixkits-check-updates` (upstream version bump + docs sync for all
- *   repository packages, so a maintenance session can run it directly);
+ * - `nix-flake-update-check` (generic upstream version bump flow for any
+ *   nix flake repo: per-builder hash handling, flake.lock, drift traps);
+ * - `nixkits-check-updates` (the NixKits adapter layer on top of it: this
+ *   repo's four-language doc sync, dsh plugin inventory, maintenance log,
+ *   historical incident lessons);
  * - every `translate-*` language-extension skill (auto-discovered at apply
  *   time from the embedded tree, so new language extensions are picked up
  *   without code changes).
@@ -80,6 +83,9 @@ export function apply(ctx) {
   // Fixed maintenance/doc skills.
   registerSkill("write-project-docs");
   registerSkill("write-maintenance-log");
+  // Update checking is split into a repo-agnostic core plus a NixKits adapter
+  // layer; both are registered so a maintenance session can load either.
+  registerSkill("nix-flake-update-check");
   registerSkill("nixkits-check-updates");
 
   // Language-extension skills, auto-discovered (translate-*).
