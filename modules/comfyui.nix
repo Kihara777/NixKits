@@ -20,13 +20,15 @@
 #                                新写法 34 处）—— 静态可证
 #   - comfyui-nix-strix-halo   : 上游已内置 ROCm 7.1 / PyTorch 2.10.0
 #                                wheels（版本、URL、hash 逐字节一致）
-#   - comfyui-nix-nixpkgs-compat: ⚠️ **此项判定曾出错**。初次结论是
-#                                "不需要"，依据是一次 717-derivation 的
-#                                构建 —— 但那次 scipy 是**缓存命中**，
-#                                从未真正构建。实际在本地钉定的 nixpkgs
-#                                组合下，scipy 的 test_support_moments_sample
-#                                会因浮点断言失败。该补丁的价值依 nixpkgs
-#                                组合而定，我们的组合恰好需要它。
+#   - comfyui-nix-nixpkgs-compat: ⚠️ **此项判定曾出错两次，教训在此**。
+#                                初次结论是"不需要"，依据是一次 717-derivation
+#                                的构建 —— 但那次 scipy 是**缓存命中**，从未真正
+#                                构建；判据应是日志里的 `building '…'` 行。
+#                                二次结论是"我们的组合恰好需要它" —— 仍是错的。
+#                                真因是本机给 comfyui-nix 多钉了一个
+#                                inputs.nixpkgs（旧 rev），使其脱离主 nixpkgs 的
+#                                缓存覆盖而需现建 scipy，触发浮点断言失败。
+#                                **删掉那行 pin 后构建全绿，无需任何补丁。**
 #                                详见 DEPRECATED.md。
 #
 # This module extends services.comfyui; enable with:

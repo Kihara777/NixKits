@@ -35,19 +35,25 @@ This module **used to ship three patches, all of which have now been removed**:
 |--------------|----------|
 | `comfyui-nix-strix-halo` | Upstream already ships equivalent ROCm 7.1 / PyTorch 2.10.0 wheels (identical version, URL and hash) |
 | `comfyui-nix-stdenv-api` | Upstream migrated to `stdenv.hostPlatform.*` itself (0 remaining deprecated uses) |
-| `comfyui-nix-nixpkgs-compat` | **Depends on the nixpkgs combination** — see the warning below |
+| `comfyui-nix-nixpkgs-compat` | Previously judged "may still be needed"; **that judgement has been overturned** — see the warning below |
 
 > ⚠️ **The `nixpkgs-compat` judgement was initially wrong, and it is worth taking to heart.**
 > In the first "full build verification" (all 717 derivations succeeding), `scipy` was actually
 > **served from the binary cache and never really built**; after upgrading it failed immediately on
-> `test_support_moments_sample` — a floating-point assertion, exactly the test that patch skipped.
-> The root cause is that the nixpkgs combination differs: upstream uses `nixos-unstable`
-> (which hits the public cache), while downstream often `follow`s nixpkgs to a locally pinned
-> revision (which must be built).
+> `test_support_moments_sample` — which made it look like exactly the test that patch skipped.
 >
-> **Lesson: build verification must confirm the target derivation was really built.** Only a
+> **The real cause was one stray pin left on this machine**: it pinned `comfyui-nix`'s
+> `inputs.nixpkgs` to an old revision while the top level tracked rolling `nixos-unstable`.
+> The top level hit the public cache, while the pinned sub-flake had to build — so
+> "a problem the cache would have solved" looked like "a problem needing a patch".
+> **Delete that pin line and the build is green with no patches at all.**
+>
+> **Lesson one: build verification must confirm the target derivation was really built.** Only a
 > `building '…'` line in the log counts; "the build succeeded" cannot distinguish
 > "it built and passed" from "it never needed building".
+>
+> **Lesson two: an extra `inputs.*` pin detaches a sub-flake from the main nixpkgs cache
+> coverage.** Before adding one, ask what it solves; once the problem is gone, remove it.
 
 **The complete record lives in [`DEPRECATED.md`](../../DEPRECATED.md) at the repository root.**
 

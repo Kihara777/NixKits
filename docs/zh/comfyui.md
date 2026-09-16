@@ -35,17 +35,23 @@
 |--------------|----------|
 | `comfyui-nix-strix-halo` | 上游已自带等效的 ROCm 7.1 / PyTorch 2.10.0 wheels（版本、URL、hash 完全一致） |
 | `comfyui-nix-stdenv-api` | 上游已自行迁移到 `stdenv.hostPlatform.*`（旧写法 0 处） |
-| `comfyui-nix-nixpkgs-compat` | **依 nixpkgs 组合而定** —— 详见下方警示 |
+| `comfyui-nix-nixpkgs-compat` | 此前判定为"仍可能需要"，**该判定已被推翻** —— 详见下方警示 |
 
 > ⚠️ **`nixpkgs-compat` 的判定曾出错，值得引以为戒。**
 > 初次评估的"完整构建验证"（717 derivation 全成功）中，`scipy` 其实是
 > **缓存命中、从未真正构建**；升级后立即因 `test_support_moments_sample`
-> 浮点断言失败 —— 正是该补丁要跳过的测试。
-> 根因是 nixpkgs 组合不同：上游用 `nixos-unstable`（命中公共缓存），
-> 而下游常把 nixpkgs `follow` 到本地钉定版本（需现建）。
+> 浮点断言失败 —— 当时误以为这正是该补丁要跳过的测试。
 >
-> **教训：构建验证必须确认目标 derivation 真的被构建。** 日志中出现
+> **真因是本地遗留的一个多余 pin**：本机把 `comfyui-nix` 的
+> `inputs.nixpkgs` 钉死在旧 rev，而顶层走滚动 `nixos-unstable`。
+> 顶层命中公共缓存，被钉住的子 flake 则需现建 —— 于是"缓存本可解决的
+> 问题"看起来像"需要打补丁"。**删掉那行 pin 后构建全绿，无需任何补丁。**
+>
+> **教训一：构建验证必须确认目标 derivation 真的被构建。** 日志中出现
 > `building '…'` 才算数；"构建成功"无法区分"构建通过"与"无需构建"。
+>
+> **教训二：额外的 `inputs.*` pin 会让子 flake 失去主 nixpkgs 的缓存覆盖。**
+> 加 pin 前先问它解决了什么；问题消失后记得删。
 
 **完整记录见仓库根目录 [`DEPRECATED.md`](../../DEPRECATED.md)。**
 

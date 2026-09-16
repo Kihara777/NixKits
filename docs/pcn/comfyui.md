@@ -35,17 +35,23 @@ ComfyUI 向 ROCm 機能補丁提供。
 |--------------|----------|
 | `comfyui-nix-strix-halo` | 上流已自帯等效之 ROCm 7.1 / PyTorch 2.10.0 wheels（版、URL、hash 完全一致） |
 | `comfyui-nix-stdenv-api` | 上流已自行移行至 `stdenv.hostPlatform.*`（旧写法 0 処） |
-| `comfyui-nix-nixpkgs-compat` | **依 nixpkgs 組合而定** —— 詳見下方警示 |
+| `comfyui-nix-nixpkgs-compat` | 以前判定「依然必要 有 可能」、**該判定 既 覆** —— 詳見下方警示 |
 
 > ⚠️ **`nixpkgs-compat` 之判定曾出錯、值得引以為戒。**
 > 初次評価之「完整構築検証」（717 個 derivation 全成功）中、`scipy` 実為
 > **緩衝命中、従未真実構築**；昇級後即因 `test_support_moments_sample`
-> 浮点断言失敗 —— 正是該補丁欲跳過之測試。
-> 根因為 nixpkgs 組合不同：上流用 `nixos-unstable`（命中公共緩衝）、
-> 而下游常將 nixpkgs `follow` 至本地釘定版（需現建）。
+> 浮点断言失敗 —— 当時 誤認 正是該補丁欲跳過之測試。
 >
-> **教訓：構築検証必須確認目標 derivation 真実被構築。** 日誌中出現
+> **真因 本機 残留 一 余分 pin**：`comfyui-nix` 之 `inputs.nixpkgs`
+> 釘死 旧 rev、一方 top level 追 rolling `nixos-unstable`。
+> top level 命中公共緩衝、釘死 子 flake 則 需現建 —— 故「緩衝 本可解決
+> 之問題」見做「補丁 必要 之問題」。**該 pin 行 削除 後 構築全通過、補丁 一切 不要。**
+>
+> **教訓一：構築検証必須確認目標 derivation 真実被構築。** 日誌中出現
 > `building '…'` 才算数；「構築成功」無法区別「構築通過」與「無需構築」。
+>
+> **教訓二：余分 `inputs.*` pin 子 flake 主 nixpkgs 緩衝被覆 切離。**
+> 加 前 先問 其 何 解決；問題 消 後 削除 忘 無。
 
 **完整記録見倉庫根目録 [`DEPRECATED.md`](../../DEPRECATED.md)。**
 
