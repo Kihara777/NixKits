@@ -26,7 +26,7 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 
 基于当前对话中完成的软件更新或错误修复，撰写单条维护记录并插入 `MAINTENANCE.md`。
 
-> 此入口被 `nixkits-check-updates` 技能在软件更新完成后**自动调用**。
+> 此入口被更新检查技能（NixKits 用 `nixkits-check-updates`）在软件更新完成后**自动调用**。
 
 ### 入口 2：更新维护记录
 
@@ -313,7 +313,7 @@ git commit -m "docs(MAINTENANCE): record <date> — <summary>"
 
 本技能被以下技能自动调用：
 
-- **nixkits-check-updates**：软件更新完成后自动记录
+- **更新检查技能**（通用 `nix-flake-update-check` / NixKits 适配层 `nixkits-check-updates`）：软件更新完成后自动记录
 - 用户执行**任何修复**后，可通过「记录本次修复」触发
 
 > 自动触发时，摘要从前置技能的输出或最新 commit message 提取，无需重复确认。
