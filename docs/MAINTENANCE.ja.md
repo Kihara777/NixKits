@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-16T13:57:56+09:00
+
+**概要**：feat(dsh-api-balance): `dsh.bundle` を追加し、`dsh plugin add` によるネイティブ導入に対応した — `dsh-api-balance` は `dsh-nixos-shell` と性質が異なるためである：前者は**プラットフォーム非依存の UI／機能拡張**（`inject = ["connection", "webServer"]` のみ、プリセット無し、スキル無し、`$DSH_HOME` への書き込み無し）であり、後者の核心的価値はまさに Agent プリセットである。前ラウンドで `dsh-nixos-shell` の bundle 路線は不可能と結論した（プリセット root は絶対パスを要し、`./` のアンカーは `insert[].name` にのみ作用する）。**重要な発見（従来の結論を覆す）**：`cordis-plugin-loader/lib/index.js:269-284` を読むと、entry 名が `./` で始まる場合 `anchorInsertedPluginNames` が**その patch と同じディレクトリ**の絶対 `file://` URL にアンカーするため、正常に import される——「loader は dsh ツリーからのみ解決するので profile 内のパッケージは読めない」という以前の判断は誤りであった。今回これに基づき実装：新規 `cordis.patch.yml` が `name: './lib/index.js'` でプラグインを登録し（裸のパッケージ名は**不可**。dsh インストールツリーから解決され `Cannot find package` で失敗する）、`package.json` に `dsh.bundle.patch` を追加し `files` に当該ファイルを補った。**実測**：インストール後 `dsh.profile.bundles` に入り、`--dump-config` は entry が profile 内の絶対 URL にアンカーされることを示し、web profile は `exit=0`・エラーゼロで起動した。Nix ビルドと `nix flake check` は影響を受けない。**二経路の併存**：各経路は独立に動作する（宣言的経路は `$DSH_HOME/profiles/web/cordis.patch.yml` を書き、bundle は `dsh.profile.bundles` を書く）が、**両方を有効にすると同一 entry id が二重登録される**ため、ドキュメントはどちらか一方を選ぶよう明記し、方式 B が git 経由で解決され `flake.lock` に固定されない点も記した
+
+| コミット | 説明 |
+|----------|------|
+| `ac3cb3e` | feat(dsh-api-balance): 支持 dsh.bundle，可经 dsh plugin add 安装 |
+| `bee12d7` | docs(dsh-api-balance): 补充两种安装方式与 bundle 机制说明（四语） |
+
+**関連する外部レポート**：issue #3（@zerocodefast）——awesome-ai-plugins への収録招待。`dsh-api-balance` は DeepSeek Harness 節へ投稿する技術的条件を満たしたが、`dsh-nixos-shell` は宣言的のままとする（その理由は `d14146c` のエントリに記録済み）。
+
 ## 2026-09-16T13:44:09+09:00
 
 **概要**：refactor(dsh-plugins): 両プラグインから未使用の `peerDependencies` を削除した — 発端は issue #3 の収録招待を評価する際、dsh プラグインが `dsh plugin add` で導入可能かを実測したことである。実測の結果、両プラグインの peer 宣言は**実際の import と全く一致していない**ことが判明した：`dsh-nixos-shell` は `cordis` / `dsh-subprocess` / `dsh-timer` を、`dsh-api-balance` は `cordis` / `dsh-client-connection` を宣言していたが、実際に import しているのは各自の実依存（`dsh-tools` + `schemastery` / `dsh-credentials`）のみである。とくに **`@deepseek-ai/dsh-timer` は npm（404）にもホスト dsh ツリーにも存在しない**——ホストは `cordis-plugin-timer` で `timer` サービスを提供しており、プラグインの `inject` はパッケージ名ではなくサービス名を指す。`dsh-client-connection` は既に `dsh.client.inject` で正しく宣言済みで、peer 側は重複であった。**影響判断**：これらの死んだ宣言は宣言的経路では**決して効かない**（`buildNpmPackage` は `--legacy-peer-deps` で peer 解決を省略する。ビルド成果物を検査し実依存のみを含むことを確認済み）。ゆえに本変更は既存のデプロイに影響せず、バージョン変更も伴わない。しかし pnpm 経路では**インストールを直接阻害し**（`dsh-timer` 404）、エコシステムに誤った signal を送る。lock と `npmDepsHash` は同時に再生成した（vendored lock が npm-deps の fixup 成果物とバイト単位で一致することを検証済み）。**路線の取捨を記録**：本ラウンドでは `dsh-nixos-shell` に `dsh.bundle` を補い awesome-ai-plugins の DeepSeek Harness 節へ投稿する案を評価した。実測により、プラグイン本体は `github:...#path:` で導入でき profile layer stack に入ること（npm 公開は不要）を確認したが、**Agent プリセットは bundle patch では登録できない**——`agent-presets.roots[].path` は絶対パスを要する一方、patch がアンカーできるのは `insert[].name` のみで、`!!js` の作用域には `dshHomePath` しか無い（さらにバッククォートは js-yaml の解析を壊す）。これを回避するにはプラグインがユーザーの `$DSH_HOME` へ書き込んでプリセットを seed する必要があり、宣言性と不変性を犠牲にする。**結論：dsh.bundle 路線は断念する**——本プロジェクトのプラグインは NixOS 向けであり、flake / NixOS モジュールによる宣言的配布（バージョンは Nix が固定、システム世代とともに更新、再現可能）のほうが NixOS の哲学に適い、保守コストも低い。関連する変更はすべて撤回済みで、履歴には入っていない

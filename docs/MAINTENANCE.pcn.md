@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-16T13:57:56+09:00
+
+**摘要**：feat(dsh-api-balance): `dsh.bundle` 追加、`dsh plugin add` native 導入 対応 — `dsh-api-balance` `dsh-nixos-shell` 性質 異 故：前者 **platform 非依存 UI / 機能 拡張**（`inject = ["connection", "webServer"]` 限定、preset 無、技能 無、`$DSH_HOME` 書込 無）、後者 核心 価値 正 Agent preset。前回 `dsh-nixos-shell` bundle 路線 不可能 結論（preset root 絶対 path 要、`./` anchor `insert[].name` 限定 作用）。**重要 発見（従来 結論 覆）**：`cordis-plugin-loader/lib/index.js:269-284` 読 結果、entry 名 `./` 開始 場合 `anchorInsertedPluginNames` **其 patch 同目録** 絶対 `file://` URL anchor、故 正常 import——「loader dsh tree 自 限定 解決、故 profile 内 package 読 不可」以前 判断 誤。今回 此 基 実装：新規 `cordis.patch.yml` `name: './lib/index.js'` 使用 plugin 登録（裸 包名 **不可**。dsh install tree 自 解決 `Cannot find package` 失敗）、`package.json` `dsh.bundle.patch` 追加、`files` 当該 file 補。**実測**：導入後 `dsh.profile.bundles` 入、`--dump-config` entry profile 内 絶対 URL anchor 示、web profile `exit=0` 且 error 零 起動。Nix build 與 `nix flake check` 影響 無。**二経路 併存**：各経路 独立 動作（宣言的経路 `$DSH_HOME/profiles/web/cordis.patch.yml` 書、bundle `dsh.profile.bundles` 書）、但 **両方 有効 同一 entry id 二重登録**、故 document 何方 一 選択 明記、且 方式 B git 経由 解決 `flake.lock` 固定 受 無 点 記。
+
+| 提交 | 説明 |
+|------|------|
+| `ac3cb3e` | feat(dsh-api-balance): 支持 dsh.bundle，可经 dsh plugin add 安装 |
+| `bee12d7` | docs(dsh-api-balance): 补充两种安装方式与 bundle 机制说明（四语） |
+
+**関連 外部報告**：issue #3（@zerocodefast）——awesome-ai-plugins 収録招待。`dsh-api-balance` DeepSeek Harness 節 投稿 技術的 条件 満 但、`dsh-nixos-shell` 宣言的 維持（其 理由 `d14146c` entry 記録済）。
+
 ## 2026-09-16T13:44:09+09:00
 
 **摘要**：refactor(dsh-plugins): 両 plugin 未使用 `peerDependencies` 削除 — 発端 issue #3 収録招待 評価 際、dsh plugin `dsh plugin add` 導入 可能 否 実測。実測 結果、両 plugin peer 宣言 **実際 import 完全 不一致** 判明：`dsh-nixos-shell` `cordis` / `dsh-subprocess` / `dsh-timer` 宣言、`dsh-api-balance` `cordis` / `dsh-client-connection` 宣言、但 実際 import 各自 実依存（`dsh-tools` + `schemastery` / `dsh-credentials`）限定。特 **`@deepseek-ai/dsh-timer` npm（404）也 host dsh tree 也 不存在**——host `cordis-plugin-timer` 以 `timer` service 提供、plugin `inject` package 名 非 service 名 指。`dsh-client-connection` 既 `dsh.client.inject` 正宣言済、peer 側 重複。**影響判断**：此等 死 宣言 宣言的経路 **決 効 無**（`buildNpmPackage` `--legacy-peer-deps` peer 解決 省略。build 成果物 検査 実依存 限定 含 確認済）。故 本変更 既存 deploy 影響 無、版本変更 伴 無。但 pnpm 経路 **install 直接 阻害**（`dsh-timer` 404）、且 ecosystem 誤 signal 送。lock 與 `npmDepsHash` 同時 再生成（vendored lock npm-deps fixup 成果物 byte 単位 一致 検証済）。**路線 取捨 記録**：本 回 `dsh-nixos-shell` 対 `dsh.bundle` 補 awesome-ai-plugins DeepSeek Harness 節 投稿 案 評価。実測 plugin 本体 `github:...#path:` 導入 可能 profile layer stack 入 事（npm 公開 不要）確認、但 **Agent preset bundle patch 登録 不可**——`agent-presets.roots[].path` 絶対 path 要 一方、patch anchor 可能 `insert[].name` 限定、`!!js` 作用域 `dshHomePath` 限定（更 反引号 js-yaml 解析 壊）。此 回避 為 plugin 利用者 `$DSH_HOME` 書込 preset seed 必要、宣言性 與 不変性 犠牲。**結論：dsh.bundle 路線 断念**——本 project plugin NixOS 向、flake / NixOS module 宣言的配布（版本 Nix 固定、system 世代 共 更新、再現可能）方 NixOS 哲学 適、保守 cost 低。関連 変更 全部 撤回済、履歴 入 無

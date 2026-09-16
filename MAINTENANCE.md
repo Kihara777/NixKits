@@ -2,6 +2,17 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-16T13:57:56+09:00
+
+**摘要**：feat(dsh-api-balance): 新增 `dsh.bundle`，支持 `dsh plugin add` 原生安装 — 因 `dsh-api-balance` 与 `dsh-nixos-shell` 性质不同：前者是**平台无关的界面/功能增强**（仅 `inject = ["connection", "webServer"]`，无预设、无技能、不写 `$DSH_HOME`），而后者的核心价值正是 Agent 预设。前一轮已确认 `dsh-nixos-shell` 的 bundle 路线不可行（预设 root 需绝对路径，`./` 锚定只作用于 `insert[].name`）。**关键发现（推翻此前结论）**：读 `cordis-plugin-loader/lib/index.js:269-284` 得知，entry 名以 `./` 开头时会被 `anchorInsertedPluginNames` 锚定为**该 patch 所在目录**下的绝对 `file://` URL，从而正常 import——此前的"loader 只从 dsh 树解析、profile 里的包装不上"的判断是错的。本次据此实现：新增 `cordis.patch.yml` 以 `name: './lib/index.js'` 注册插件（**不可**写裸包名，否则从 dsh 安装树解析报 `Cannot find package`），`package.json` 加 `dsh.bundle.patch` 并在 `files` 补该文件。**实测**：安装后成功进入 `dsh.profile.bundles`，`--dump-config` 显示 entry 锚定为 profile 内的绝对 URL，web profile 启动 `exit=0` 且零错误；Nix 构建与 `nix flake check` 均不受影响。**双轨并存**：两条路径均可独立工作（声明式写 `$DSH_HOME/profiles/web/cordis.patch.yml`，bundle 写 `dsh.profile.bundles`），但**同时启用会重复注册同一 entry id**，故文档明确要求二者择一，并说明方式 B 经 git 解析、不受 `flake.lock` 锁定
+
+| 提交 | 说明 |
+|------|------|
+| `ac3cb3e` | feat(dsh-api-balance): 支持 dsh.bundle，可经 dsh plugin add 安装 |
+| `bee12d7` | docs(dsh-api-balance): 补充两种安装方式与 bundle 机制说明（四语） |
+
+**相关外部报告**：issue #3（@zerocodefast）——awesome-ai-plugins 收录邀请；`dsh-api-balance` 现具备投 DeepSeek Harness 节的技术条件，`dsh-nixos-shell` 仍保持声明式（其理由已记录于 `d14146c` 条目）。
+
 ## 2026-09-16T13:44:09+09:00
 
 **摘要**：refactor(dsh-plugins): 移除两个插件未使用的 `peerDependencies` — 起因是评估 issue #3 的收录邀请时，为验证 dsh 插件能否经 `dsh plugin add` 安装而做的实测。实测发现两个插件的 peer 声明**与实际 import 完全不符**：`dsh-nixos-shell` 声明 `cordis` / `dsh-subprocess` / `dsh-timer`，`dsh-api-balance` 声明 `cordis` / `dsh-client-connection`，而两者实际只 import 各自的真实依赖（`dsh-tools` + `schemastery` / `dsh-credentials`）。其中 **`@deepseek-ai/dsh-timer` 在 npm（404）与宿主 dsh 树中都不存在**——宿主由 `cordis-plugin-timer` 提供 `timer` 服务，而插件 `inject` 的是服务名而非包名；`dsh-client-connection` 则已由 `dsh.client.inject` 正确声明，属重复。**影响判断**：这些死声明在声明式路径下**从不生效**（`buildNpmPackage` 用 `--legacy-peer-deps` 跳过 peer 解析，已实测构建产物仅含真实依赖），故本改动不影响任何现有部署、无版本变更；但它们在 pnpm 路径下会**直接阻断安装**（`dsh-timer` 404），且向生态传递误导性信号。lock 与 `npmDepsHash` 同步重生成（已验证 vendored lock 与 npm-deps 的 fixup 产物逐字节一致）。**路线取舍记录**：本轮曾评估为 `dsh-nixos-shell` 补齐 `dsh.bundle` 以投 awesome-ai-plugins 的 DeepSeek Harness 节，实测确认插件本体可经 `github:...#path:` 安装并进入 profile layer stack（无需发 npm），但 **Agent 预设无法经 bundle patch 注册**——`agent-presets.roots[].path` 需绝对路径，而 patch 只能锚定 `insert[].name`、`!!js` 作用域仅有 `dshHomePath`（且反引号会致 js-yaml 解析失败）。绕开该限制需让插件写用户 `$DSH_HOME` 来种子预设，牺牲声明式与不可变性。**结论：放弃 dsh.bundle 路线**——本项目插件面向 NixOS，经 flake/NixOS 模块声明式分发（版本由 Nix 锁定、随系统代际更新、可复现）更符合 NixOS 哲学且维护成本更低；相关改动已全部回退，未进入历史
