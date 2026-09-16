@@ -255,11 +255,20 @@
 # Both rows register into THIS preset's layer of the host skill registry, so
 # they need no realm; the agent's merged catalog also carries whatever the
 # deployment registered globally (repository plugins).
+#
+# The second root carries the NixOS operations skills from the repository
+# tree (`skills-nixos/`, the whitelisted subset built alongside
+# `skills-embedded/`). They are not copied into `presets/*/skills/` because
+# that directory is mirrored byte-for-byte between the two presets and would
+# become a second copy of content the repo tree already owns. The provider
+# registers every child of each root, which is why the subset exists as its
+# own directory rather than pointing at the whole embedded tree.
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
   config:
     customSkillDirs:
       - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('../../skills-nixos/', baseUrl))"
 
 - id: tool-skill
   name: '@deepseek-ai/dsh-tool-skill'

@@ -30,7 +30,8 @@
     "lib/maintenance-skills.js",
     "bin/nixkits-sudo-exec.js",
     "presets",
-    "skills-embedded"
+    "skills-embedded",
+    "skills-nixos"
   ],
   "publishConfig": {
     "access": "public"
