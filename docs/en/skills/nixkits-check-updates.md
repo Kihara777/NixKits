@@ -62,6 +62,12 @@ Reads `flake.nix` dynamically, excluding:
 
 All remaining external packages are checked automatically.
 
+
+## Repo-specific traps
+
+- **godot-ai v4 fail-closed verification**: it compares the exact versions of nine runtime packages at startup and refuses to start on any mismatch. This needs **two chained overlays** (`fastmcp` + `godot-ai-v4-deps`), and **both** `flake.nix` and `overlays/default.nix` must chain them — changing only one leaves the build output on the old dependencies
+- **codewhale-src's Cargo.lock**: a Rust package upgrade must sync the lock (take it straight from the upstream tag); this package is **not a flake output**, so fetching its hash requires the `--expr` form
+- **dsh-alpha's vendored lock**: the tarball ships no lock, and when generating one you must **not** pass `--legacy-peer-deps`, or the peer entries are missing and the build fails with `ENOTCACHED`
 ## Hash Gotchas
 
 Full rules live in `nix-flake-update-check`; the essentials:

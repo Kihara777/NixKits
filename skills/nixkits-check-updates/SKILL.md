@@ -109,6 +109,51 @@ nixpkgs 漂移到 `f13ff45` 后 `diffusers-0.38.0` 构建失败。根因是
 `codewhale-src` 的升级暴露出「只改 version + hash 会漏掉 Cargo.lock」的问题，
 已泛化为通用技能中 Rust 包流程的第 3 步。
 
+**实测复现（0.9.12 → 0.9.13）**：本地 lock 7073 行、上游 7347 行，上游新增
+`wl-clipboard-rs` / `jobserver` 等依赖。**从上游 tag 直接取 lock 覆盖**即可：
+
+```bash
+gh api "repos/Hmbown/CodeWhale/contents/Cargo.lock?ref=v<version>" \
+  --jq '.content' | base64 -d > packages/codewhale-src-Cargo.lock
+```
+
+> ⚠️ `codewhale-src` **不是 flake 输出**（`flake.nix` 只在 riscv64 条件下经
+> `codewhale` 引用它），故 `nix build .#codewhale-src` 会报
+> `does not provide attribute`。取 hash 时用：
+
+```bash
+nix build --impure --no-link --expr '
+let f = builtins.getFlake (toString ./.);
+    pkgs = f.inputs.nixpkgs.legacyPackages.x86_64-linux;
+in pkgs.callPackage ./packages/codewhale-src.nix { }'
+```
+
+### godot-ai v4 的 fail-closed 运行时校验（2026-09-17 实测）
+
+godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒绝启动。本仓用
+**两个链式 overlay** 满足它（通用方法见通用技能陷阱第 5 条）：
+
+| overlay | 作用 |
+|---|---|
+| `overlays/fastmcp.nix` | fastmcp 3.3.1 → 3.4.7（3.3.x 有 circular-import bug） |
+| `overlays/godot-ai-v4-deps.nix` | mcp / pydantic(+core) / starlette / uvicorn / websockets 抬到上游要求 |
+
+> ⚠️ **两处必须同步**：`flake.nix` 的 `godotPkgs` 与 `overlays/default.nix` 的
+> `godot-ai` 各自链了这两个 overlay。**只改一处会导致 `nix build .#godot-ai`
+> 与经 overlay 消费的结果不一致**——本次就踩到：flake.nix 只链了 fastmcp，
+> 构建产物仍用旧依赖，`--version` 直接 RuntimeError。
+>
+> 另：`pythonRuntimeDepsCheckHook` 相关的 `dontCheckRuntimeDeps = true` 只解决
+> **构建期**；**运行期**校验必须靠 overlay 真正抬版本，不能靠它绕过。
+
+### dsh-alpha 的 vendored lock（2026-09-17 实测）
+
+dsh tarball **不含** lock，需自行生成。踩到的坑：用
+`npm install --package-lock-only --legacy-peer-deps` 生成的 lock **不含
+`"peer": true` 条目**，构建报 `ENOTCACHED`。**去掉该 flag** 后 npm 才写入
+peer 条目（与仓库既有可工作的 `dsh-package-lock.json` 结构一致，均为 24 条）。
+详见通用技能 npm 节的「vendored lock 必须包含 peer 依赖条目」。
+
 ## 第 9 步补充：本仓的子项目引用关系
 
 通用技能第 9 步给出「同账户子项目链式检查」的方法与前提判据。**本仓的实际

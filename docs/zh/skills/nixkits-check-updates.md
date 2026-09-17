@@ -65,6 +65,12 @@
 
 其余外部包均自动纳入更新检查。
 
+## 本仓特有陷阱
+
+- **godot-ai v4 的 fail-closed 校验**：启动时比对 9 个运行时包的精确版本，不匹配即拒绝启动。需**两个链式 overlay**（`fastmcp` + `godot-ai-v4-deps`），且 `flake.nix` 与 `overlays/default.nix` **两处都要链**——只改一处会导致构建产物仍用旧依赖
+- **codewhale-src 的 Cargo.lock**：Rust 包升级必须同步 lock（从上游 tag 直接取）；该包**不是 flake 输出**，取 hash 需用 `--expr` 形式
+- **dsh-alpha 的 vendored lock**：tarball 不含 lock，生成时**不要**加 `--legacy-peer-deps`，否则 peer 条目缺失、构建报 `ENOTCACHED`
+
 ## hash 计算注意事项
 
 完整规则见 `nix-flake-update-check`，要点：

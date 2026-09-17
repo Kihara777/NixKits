@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、同 account 子 project 連鎖並列確認、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -25,7 +25,9 @@
 - **同 account 子 project 連鎖確認**：本倉 参照 同 account 子倉（薄包装 / input / submodule）検出、循環無・依存衝突無・独立昇級可能 先 検証 上 連鎖並列 実行。子 project 結果 主倉 結果 視、各自 倉庫 記録 計上、主倉 子 project 条目 対 連結
   - **追従 判据 field 単位**：子倉 `rev` 固定値 與 異 雖 直 昇級 不可——変更 **build 入力** 落 可否 判断 要。release metadata（`publishConfig` / `repository` / `keywords`）與 文書 意味的入力 非 故 **追従 不**；`dependencies` / `files` / `main` / `exports` / `version` 意味的入力 故 **必 追従**。判別 不能 場合「追従」側 倒
 - **外部自働化 PR 処置**：`npmDepsHash` 不知故 npm 更新 PR 必 失敗。branch 取回 後 hash 補完 且 merge
+- **対話的確認**：着手前 一度 批次質問 全 保留事項 解決（大版跨、依存衝突 解法、channel 選択、配備可否）。「推測 → 訂正 → 再実行」往復 避；質問機構 無 代理 保留 list 一度 輸出 停止
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
+- **fail-closed 実行時依存検証**：上流 起動時 正確 版 照合 故、build 成功 ≠ 使用可能。必 一度 実行 検証
 
 ## 設計：何故 二 技能 分割
 

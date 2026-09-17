@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、同账户子项目的链式并行检查、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -25,7 +25,9 @@
 - **同账户子项目链式检查**：发现本仓引用的同账户子仓（薄封装 / input / submodule），先验证无回环、无依赖冲突、可独立升级，再链式并行执行；子仓结果视为主仓结果，分别计入两仓日志并由主仓链接到子仓条目
   - **跟进判据落到字段级**：子仓 `rev` 不等于钉住值时不可直接升级——须判断改动是否落在**构建输入**上。发布元数据（`publishConfig` / `repository` / `keywords`）与文档不属语义输入，**不跟进**；`dependencies` / `files` / `main` / `exports` / `version` 属语义输入，**必须跟进**。不确定时按「跟进」处理
 - **外部自动化 PR 的处置**：其 npm 更新 PR 因不知 `npmDepsHash` 而必然失败，取回后补 hash 再合并
+- **交互式澄清**：开工前用一次批量提问解决所有待定项（跨大版本、依赖冲突解法、通道选择、是否部署），避免「猜一次→被纠正→重来」的多轮往返；不支持提问的智能体则一次性输出待定清单并停下
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
+- **fail-closed 运行时依赖校验**：上游启动时比对精确版本，构建成功 ≠ 可用，必须实际运行一次验证
 
 ## 设计：为什么拆成两个技能
 

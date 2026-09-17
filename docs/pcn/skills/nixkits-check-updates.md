@@ -61,6 +61,12 @@
 
 残余外部包 全自動確認対象。
 
+
+## 本倉庫固有 罠
+
+- **godot-ai v4 fail-closed 検証**：起動時 九 実行時包 正確 版 照合、不一致 則 起動 拒否。**二 連鎖 overlay**（`fastmcp` + `godot-ai-v4-deps`）必要、且 `flake.nix` 與 `overlays/default.nix` **両方** 連鎖 必要——片方 限定 則 build 成果物 旧依存 残
+- **codewhale-src Cargo.lock**：Rust 包 更新 lock 同期 必須（上流 tag 直接 取得）。此 包 **flake 輸出 非**、hash 取得 `--expr` 形式 必要
+- **dsh-alpha vendored lock**：tarball lock 含 無、生成時 `--legacy-peer-deps` **付与 不可**。peer 条目 欠落 且 build `ENOTCACHED` 失敗
 ## hash 注意点
 
 完全 規則 `nix-flake-update-check` 参照。要点：

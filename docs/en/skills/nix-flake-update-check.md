@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, chained parallel checks of same-account subprojects, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -25,7 +25,9 @@
 - **Chained checks for same-account subprojects**: discover same-account sub-repos this repo references (thin wrapper / input / submodule), first verify no cycle, no dependency conflict, and independent upgradability, then run them chained and in parallel; subproject results count as the main repo's results, each is recorded in its own repository's log, and the main repo links to the subproject's entry
   - **The follow-up criterion is field-level**: when a sub-repo's `rev` differs from the pinned value you must not simply upgrade — judge whether the change lands on a **build input**. Release metadata (`publishConfig` / `repository` / `keywords`) and docs are not semantic inputs, so **do not follow up**; `dependencies` / `files` / `main` / `exports` / `version` are semantic inputs, so you **must follow up**. When unsure, treat it as "follow up"
 - **Handling external-automation PRs**: their npm update PRs always fail because they cannot know `npmDepsHash`; check the branch out, patch the hash, then merge
+- **Interactive clarification**: settle every open decision in one batched round of questions before starting (cross-major upgrades, dependency-conflict remedies, channel choice, whether to deploy), avoiding the "guess → get corrected → redo" loop; agents without interactive questions should emit the open list once and stop
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
+- **Fail-closed runtime dependency verification**: upstream compares exact versions at startup, so a successful build is not a working binary — always run it once to verify
 
 ## Design: why two skills
 

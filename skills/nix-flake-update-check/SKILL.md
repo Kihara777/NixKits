@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、同账户子项目的链式并行检查（含回环与依赖冲突防护）、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -9,6 +9,49 @@ description: 检查任意 nix flake 仓库中软件包的上游版本更新并�
 
 本技能只包含**与仓库无关**的通用方法。仓库特有的环节（文档同步、维护日志、
 内置插件清单等）由**仓库适配层**提供——见文末「仓库适配层」。
+
+## 交互式澄清：一次流程内解决所有待定项
+
+**在开始前先判断所运行的智能体是否支持交互式提问**（如 DSH 提供
+`ask_user_question`，可一次提出多个问题并等待用户选择）。**支持就积极使用**
+——凡是不确定、有多种合理做法、或必须由用户拍板的事项，**当场问**，不要
+先按自己的猜测执行完、再让用户在下一条消息里纠正。
+
+**为什么这条是强要求**：软件更新是**多决策点**流程（升级策略、跨大版本取舍、
+依赖冲突的解法、通道选择、是否部署）。若每个决策点都退化成「猜一次 → 被纠正
+→ 重来」，一次更新会膨胀成多轮往返，且**每次重来都要重跑构建**——而构建是
+本流程最贵的环节（Rust/python 包动辄数十分钟）。把决策点前置到开始之前，
+整个流程才可能**一次跑完**。
+
+### 必须提问的情形
+
+| 情形 | 为什么必须问 |
+|---|---|
+| **跨大版本升级**（3.x → 4.x） | 可能含 breaking change、新的硬性要求，或需要用户接受行为变化 |
+| **依赖冲突有两种以上合理解法** | 如「抬依赖版本」vs「跳过该包」vs「打补丁放宽校验」——代价与风险差别很大，且有的会破坏上游安全契约 |
+| **需要新增 overlay / 补丁 / 额外 vendored 包** | 增加维护面，属结构性改动 |
+| **构建时长或体积显著增加** | 用户可能宁愿暂缓 |
+| **通道选择**（stable / next / alpha） | 取决于用户想跟哪条线，技能无法推断 |
+| **是否部署到运行中的系统** | 影响生产环境 |
+| **发现的信息与文档记载冲突** | 可能是文档过时，也可能是现状异常，需用户判断 |
+
+### 提问的写法
+
+- **一次问全**：把本轮所有待定项**合并成一批**提问，不要挤牙膏式地一问一等。
+- **给出可选项与代价**：每个选项写清影响（尤其「破坏上游契约」这类后果）。
+- **给出推荐项并说明理由**：把推荐项放第一位，标注「推荐」。
+- **能自己查证的不要问**：先查 release notes / 上游源码 / 构建报错，
+  把问题收敛到真正需要人决策的那几个。
+
+> **不支持交互式提问时**（如纯命令行 agent）：把上述待定项**汇总成一份清单**
+> 一次性输出，并说明每项的影响与推荐做法，然后**停下等待**——同样避免
+> 「猜完再被纠正」的多轮往返。宁可一次问完，不要边做边猜。
+
+### 与「先做完再汇报」的取舍
+
+默认行为是自主推进，本技能是**例外**：因为更新流程的返工成本极高（重建代价），
+**提问的成本远低于猜测的错误成本**。但**只问真正需要决策的**——机械步骤
+（取 hash、改版本号、同步文档、记日志）自行完成，不要拿流程细节去打扰用户。
 
 ## 适用前提
 
@@ -93,6 +136,30 @@ check() {
 4. 运行 `nix build .#<pkg>` 两次 — 第一次获取源码 hash，第二次获取 npmDepsHash
 5. 用实际值更新两个 hash
 6. 运行 `nix build .#<pkg>` 验证构建成功
+
+#### vendored lock 必须包含 peer 依赖条目
+
+当上游 tarball **不带** lock（需自己生成 vendored lock）时，注意 npm 的
+`--legacy-peer-deps` 会**不写入 `"peer": true` 条目**，导致沙箱内离线构建报：
+
+```
+npm error code ENOTCACHED
+npm error request to https://registry.npmjs.org/<pkg> failed:
+cache mode is 'only-if-cached' but no cached response is available
+```
+
+**判据**：生成的 lock 里 `grep -c '"peer": true'` 应为非零（与仓库既有可工作
+的 lock 对照该数值）。**对策**：生成 vendored lock 时**不要**加
+`--legacy-peer-deps`：
+
+```bash
+npm install --package-lock-only --ignore-scripts      # ✅ 记录 peer 条目
+npm install --package-lock-only --legacy-peer-deps    # ❌ peer 条目缺失
+```
+
+> 注意区分两处 `--legacy-peer-deps` 的用途：**生成 vendored lock 时不要用**
+> （会丢 peer 条目）；而 `buildNpmPackage` 的 `npmFlags`/`npm install` 阶段
+> 用它跳过 peer 解析是**另一回事**，由包定义决定。
 
 #### 若仓库启用了外部依赖自动化（如 Dependabot）
 
@@ -624,6 +691,53 @@ follows/url 定义，并验证 eval 出的实际 nixpkgs rev。
 > 判断方法：报错含 `pythonRuntimeDepsCheckHook` / `not installed` /
 > `GLIBC_ABI_GNU2_TLS` 且位于 python 包构建阶段 → 命中陷阱 2 或 3；
 > 位于服务启动阶段 → 命中陷阱 1。
+
+### 5. 上游的「fail-closed 运行时依赖校验」：构建通过 ≠ 可用
+
+有些项目在**启动时**校验依赖的精确版本，不匹配就直接拒绝启动。此时
+`nix build` **会成功**，但你第一次运行才炸——典型的假成功。
+
+实测样本（godot-ai v4）：`verify_runtime_dependencies()` 比对 9 个包的精确
+版本，任一不符即 `RuntimeError: unsupported godot-ai runtime dependency set`。
+nixpkgs（含 unstable/master）在 5 个包上落后，故构建产物**根本起不来**。
+
+**识别**：上游把依赖写成 `==x.y.z` 硬 pin，且源码中有 `verify_*`/
+`check_*version*` 一类的启动期校验函数。
+
+**验证**：构建后**必须实际运行一次**（`--version` 即可），不能只看构建成功：
+
+```bash
+OUT=$(nix build .#<pkg> --print-out-paths --no-link)
+"$OUT/bin/<pkg>" --version        # 构建成功但此处抛错 = 命中本陷阱
+```
+
+**对策（按优先级）**：
+
+1. **抬依赖版本对齐上游**（推荐）——建 overlay 把 nixpkgs 的包改到上游要求
+   的版本。nixpkgs 落后不代表不能改：用 `overridePythonAttrs` 改
+   `version` + `src` + `hash` 即可（Rust 构建的包还要改 `cargoDeps`）。
+2. **确认无法对齐时**（如多个包需大改），向用户提问取舍，不要自行打补丁
+   绕过校验——那会**破坏上游有意的安全契约**，而 v4 的校验恰恰是为安全
+   边界服务的。
+
+> ⚠️ **不要把 `dontCheckRuntimeDeps = true` 当成万能解**：它只静默
+> **构建期**的 `pythonRuntimeDepsCheckHook`，对**运行期**的自校验完全无效。
+> 两者名字相似但作用阶段不同——构建期过了，运行时照样拒绝启动。
+
+### 6. `overridePythonAttrs` 改动 Rust 构建的包时，`cargoDeps` 要一并重取
+
+python 包若含原生扩展（如 `pydantic-core` 由 Rust 构建），改 `version`/`src`
+后 `cargoDeps` 也必须重算，否则 vendor 阶段失败。取 hash 的报错路径：
+
+```bash
+# sourceRoot 用 fetchFromGitHub 解包后的实际目录名（通常是 "source/<子目录>"），
+# 不是 "<pname>-<version>/<子目录>"——写错会报
+# "chmod: cannot access '...': No such file or directory"
+```
+
+> 顺带：若包的测试套件在新版本中新增依赖（如 websockets 17.1 新增
+> `tests/trio/` 而 nixpkgs 的 check inputs 没有 trio），报
+> `ModuleNotFoundError` 时给 `nativeCheckInputs` 补上即可。
 
 ## 仓库适配层
 
