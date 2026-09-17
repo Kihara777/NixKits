@@ -23,6 +23,7 @@
 - Three-way `flake.lock` handling: already gitignored → skip; has dynamic versions → must exclude; otherwise → commit alongside hashes
 - Identifying and updating versions hardcoded inside `.patch` files (version / url / hash)
 - **Chained checks for same-account subprojects**: discover same-account sub-repos this repo references (thin wrapper / input / submodule), first verify no cycle, no dependency conflict, and independent upgradability, then run them chained and in parallel; subproject results count as the main repo's results, each is recorded in its own repository's log, and the main repo links to the subproject's entry
+  - **The follow-up criterion is field-level**: when a sub-repo's `rev` differs from the pinned value you must not simply upgrade — judge whether the change lands on a **build input**. Release metadata (`publishConfig` / `repository` / `keywords`) and docs are not semantic inputs, so **do not follow up**; `dependencies` / `files` / `main` / `exports` / `version` are semantic inputs, so you **must follow up**. When unsure, treat it as "follow up"
 - **Handling external-automation PRs**: their npm update PRs always fail because they cannot know `npmDepsHash`; check the branch out, patch the hash, then merge
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
 

@@ -23,6 +23,7 @@
 - `flake.lock` 三路处置：已 gitignore → 跳过；有动态版本 → 必须排除；其他 → 随 hash 一并提交
 - 补丁文件内硬编码版本（`.patch` 中的 version / url / hash）的识别与更新流程
 - **同账户子项目链式检查**：发现本仓引用的同账户子仓（薄封装 / input / submodule），先验证无回环、无依赖冲突、可独立升级，再链式并行执行；子仓结果视为主仓结果，分别计入两仓日志并由主仓链接到子仓条目
+  - **跟进判据落到字段级**：子仓 `rev` 不等于钉住值时不可直接升级——须判断改动是否落在**构建输入**上。发布元数据（`publishConfig` / `repository` / `keywords`）与文档不属语义输入，**不跟进**；`dependencies` / `files` / `main` / `exports` / `version` 属语义输入，**必须跟进**。不确定时按「跟进」处理
 - **外部自动化 PR 的处置**：其 npm 更新 PR 因不知 `npmDepsHash` 而必然失败，取回后补 hash 再合并
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
 
