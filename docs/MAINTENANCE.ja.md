@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T11:21:34+09:00
+
+**概要**：chore(security): `dependabot.yml` を完全に削除し「外部自動化を導入しない」安全境界を確立 — 前回は npm エコシステムが**構造的に無効**である理由のみでそれを削り `github-actions` を残したが、今回の判断はさらに厳しくする：**Dependabot そのものが我々の導入したくないものである**。実行不能・PR を作るのみ・secrets を得られないとしても、それは依然として**外部自動化統合**であり——GitHub プラットフォームが実行し、挙動は我々の制御下にない——本リポジトリの「開発と保守は保守者（狐莉）と小爪のみで完結する」という境界と衝突する。ゆえに `.github/dependabot.yml` を丸ごと削除し、`AGENTS.md` に「## 安全境界：外部自動化を導入しない」節を新設して規則として固定した：拒否リスト（第三者の CI スキャナ、純粋な設定形態を含む Dependabot）、判断基準（自動化能力が必要になったら、まず**リポジトリ内に既にある `gh`/`git`/`nix` で自行実装できるか**を問う。可能ならスキルに書き、不可能なら人手で行う）、受け入れた代償（action の安全更新は PR を自動で受け取るのではなく、スキル検査を能動的に走らせる必要がある）。**能力は失われない**：かつて「action を SHA 固定すると更新通知が届かなくなる」盲点を埋めていたのは Dependabot だったが、現在は `nix-flake-update-check` スキルが自行実装する——「## GitHub Actions の更新を確認する」節を新設（`grep` で固定 action を列挙 → `gh api` で latest tag を照会 → tag の commit SHA を取得し annotated tag を処理 → SHA とコメント版数を書き戻す → 検証）。旧「Dependabot の自動 PR は直接マージできない」小節は他リポジトリ向けの汎用指針に書き換え、本リポジトリは当該統合を使用しない旨を注記した。四語のドキュメントを同期。**実測**：新フローで現在の 3 つの固定 action を照合し、`actions/checkout` は最新 `v7.0.1`（`3d3c42e5…`）、`cachix/cachix-action` は最新 `v17`（`38b08261…`）でいずれもリポジトリの現行値と一致——すなわち現在はすべて最新である
+
+| コミット | 説明 |
+|------|------|
+| `3421c1f` | chore(security): 移除 dependabot.yml 并确立「不引入外部自动化」安全边界 |
+
 ## 2026-09-17T11:03:51+09:00
 
 **概要**：chore(ci): Dependabot から npm エコシステムを削除し、`github-actions` のみ残した — PR #7 の実測結果に基づく調整である：npm エコシステムは本リポジトリにとって**構造的に無効**である。本リポジトリの npm パッケージは `buildNpmPackage` で包装されており、その `npmDepsHash` はメインビルドが npm-deps 成果物と**バイト単位**で照合する。一方 Dependabot は `package.json`/`package-lock.json` しか変更せず、`.nix` 内のその hash を認識できない——ゆえに**それが開く npm 更新 PR は必ず CI に失敗する**（`npmDepsHash is out of date`）。このエコシステムを残すことはマージ不能な PR を生み続けることを意味するため削除し、npm 依存の更新は `nix-flake-update-check` スキルによる手動対応に戻した（同スキルは `npmDepsHash` の補修と `next`/`alpha` チャネルの確認を既に含む）。**削除理由は設定内のコメントとして完整に記録した**（PR #7 で観測した症状と「Dependabot は dist-tag を跨がない」という制約を含む）ため、後日これを漏れと誤認して再追加されることはない。`github-actions` エコシステムは維持する——本リポジトリで有効性が実証済みである（PR #6 の checkout 更新はこれが生み、SHA 固定も正しく維持した）

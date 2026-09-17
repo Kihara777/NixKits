@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T11:21:34+09:00
+
+**摘要**：chore(security): 完全移除 `dependabot.yml` 并确立「不引入外部自动化」安全边界 — 上一轮只为 npm 生态**结构性无效**而砍掉该生态、保留 `github-actions`，本次判断进一步收紧：**Dependabot 本身就是我们不愿引入的东西**。即便它不可执行、只能开 PR、也拿不到 secrets，它仍是**外部自动化集成**——由 GitHub 平台运行、行为不由我们掌控，与本仓库「开发维护纯粹由维护者（狐莉）与小爪完成」的边界冲突。故整份 `.github/dependabot.yml` 删除，`AGENTS.md` 新增「## 安全边界：不引入外部自动化」章节将其固定为规则：给出拒绝清单（第三方 CI 扫描器、Dependabot 含纯配置形态）、判据（需要一项自动化能力时，先问**能否用仓库内已有的 `gh`/`git`/`nix` 自行实现**，可以就自己写进技能、不可以就人工执行）与已接受代价（action 的安全更新需主动跑技能检查，而非自动收到 PR）。**能力不丢**：此前「action 固定到 SHA 后收不到更新通知」这处盲点本由 Dependabot 填补，现改由 `nix-flake-update-check` 技能自行实现——新增「## 检查 GitHub Actions 的更新」章节（`grep` 列出固定 action → `gh api` 查 latest tag → 取 tag 的 commit SHA 并处理 annotated tag → 回写 SHA 与注释版本号 → 验证），原「Dependabot 的自动 PR 不能直接合并」小节改写为面向其他仓库的通用指引并加注本仓库不使用该类集成；四语文档同步。**实测**：按新流程核对现有 3 个固定 action，`actions/checkout` 最新 `v7.0.1`（`3d3c42e5…`）、`cachix/cachix-action` 最新 `v17`（`38b08261…`）均与仓库现值一致——即当前全部为最新
+
+| 提交 | 说明 |
+|------|------|
+| `3421c1f` | chore(security): 移除 dependabot.yml 并确立「不引入外部自动化」安全边界 |
+
 ## 2026-09-17T11:03:51+09:00
 
 **摘要**：chore(ci): Dependabot 移除 npm 生态，仅保留 `github-actions` — 基于 PR #7 的实测结论作出的调整：npm 生态对本仓库**结构性无效**。本仓库的 npm 包由 `buildNpmPackage` 包装，其 `npmDepsHash` 会被主构建与 npm-deps 产物**逐字节**校验，而 Dependabot 只改 `package.json`/`package-lock.json`、无法感知 `.nix` 里的该 hash，故它开出的**每个 npm 更新 PR 必然 CI 失败**（`npmDepsHash is out of date`）。保留该生态等于持续产生不可合并的 PR，故移除之；npm 依赖升级改由 `nix-flake-update-check` 技能人工处理（该技能已涵盖补 `npmDepsHash` 与核对 `next`/`alpha` 通道两步）。**配置内以注释完整记录了移除理由**（含 PR #7 的实测现象与「Dependabot 不跨 dist-tag」的限制），避免日后被误当作遗漏而重新加回。`github-actions` 生态保留——它在本仓库验证有效（PR #6 的 checkout 升级即由它产出，且正确保留了 SHA 固定）

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T11:21:34+09:00
+
+**摘要**：chore(security): `dependabot.yml` 完全削除 且「外部自働化 導入 不」安全境界 確立 — 前回 npm ecosystem **構造的 無効** 理由 限定 該 ecosystem 削、`github-actions` 残。今回 判断 更 厳格化：**Dependabot 自体 我々 導入 不欲 物**。実行不能、PR 作 限定、secrets 取得 不能 雖、依然 **外部自働化 統合**——GitHub platform 実行、挙動 我々 制御 下 無——本 repo「開発 保守 保守者（狐莉）與 小爪 限定 完結」境界 與 衝突。故 `.github/dependabot.yml` 全体 削除、`AGENTS.md` 新設「## 安全境界：外部自働化 導入 不」節 規則 固定：拒否 list（第三者 CI scanner、純設定 形態 含 Dependabot）、判断基準（自働化 能力 必要 時、先 **repo 内 既存 `gh`/`git`/`nix` 自行実装 可否** 問。可能 則 skill 記入、不可 則 人手 執行）、受容 代償（action 安全更新 PR 自動 受取 無、skill 検査 能動 実行 必要）。**能力 不喪失**：且 昔「action SHA 固定 後 更新通知 届 無」盲点 埋 者 Dependabot、現在 `nix-flake-update-check` skill 自行実装——新設「## GitHub Actions 更新 確認」節（`grep` 固定 action 列挙 → `gh api` latest tag 照会 → tag commit SHA 取得 且 annotated tag 処理 → SHA 與 comment 版数 書戻 → 検証）。旧「Dependabot 自動 PR 直接 merge 不能」小節 他 repo 向 汎用 指針 書換、本 repo 当該 統合 使用 不 注記。四語 document 同期。**実測**：新 flow 現行 3 固定 action 照合、`actions/checkout` 最新 `v7.0.1`（`3d3c42e5…`）、`cachix/cachix-action` 最新 `v17`（`38b08261…`）何 及 repo 現行値 一致——即 現在 全部 最新
+
+| 提交 | 説明 |
+|------|------|
+| `3421c1f` | chore(security): 移除 dependabot.yml 并确立「不引入外部自动化」安全边界 |
+
 ## 2026-09-17T11:03:51+09:00
 
 **摘要**：chore(ci): Dependabot npm ecosystem 削除、`github-actions` 限定 残 — PR #7 実測結果 基 調整：npm ecosystem 本 repo 対 **構造的 無効**。本 repo npm package `buildNpmPackage` 包装、其 `npmDepsHash` main build npm-deps 成果物 與 **byte 単位** 照合。一方 Dependabot `package.json`/`package-lock.json` 限定 変更、`.nix` 内 其 hash 感知 不可——故 **其 開 npm 更新 PR 必 CI 失敗**（`npmDepsHash is out of date`）。此 ecosystem 残 事 merge 不能 PR 生続 意味 故 削除、npm 依存 更新 `nix-flake-update-check` 技能 手動対応 戻。**削除理由 設定 内 comment 完全 記録**（PR #7 観測 症状 與「Dependabot dist-tag 跨 無」制約 含）故、後日 此 漏 誤認 再追加 無。`github-actions` ecosystem 維持——本 repo 有効性 実証済（PR #6 checkout 更新 此 生成、SHA 固定 正 維持）。
