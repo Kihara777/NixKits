@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T11:31:32+09:00
+
+**摘要**：feat(skills): 同 account 子 project 連鎖確認 與 倉庫横断 保守条目 連結 対応 — 新特性：倉庫 参照 **同 account 子 project**（典型 薄包装） 也 軟件更新確認 纳入、前提 成立 場合 **連鎖並列 実行**。子 project 結果 **主倉 結果 視**、但 各自 倉庫 log 別々 計上、主倉 条目 **子 project 条目 節 対 連結**。**帰属 先 評価 後 執筆**——汎用 logic 汎用技能 入、倉庫固有 内容 適配層 切下：**`nix-flake-update-check`（汎用）** 新設 第 9 步「同 account 子 project 連鎖確認」、参照関係 検出（`fetchFromGitHub` / flake input / submodule 三形態）、**四 前提検証**（循環 無 / 版衝突 無 / 独立昇級 可能 / account 一致——一 不成立 則 連鎖 不 通知 退化）、循環 與 深度上限 検出、依存衝突 判据、連鎖並列 與 失敗 隔離、結果 帰属、且「**子倉 何時 追従 要**」分岐判断（版番号 変更 → 追従 必須；文書 限定 変更 → 追従 無意味）含。**`write-maintenance-log`（汎用）** 新設 類型 5「倉庫横断 子 project 連鎖更新」：主倉 薄包装 座標変更（`rev` / hash）限定 記録 且 子倉 条目 対 連結、子倉 自身 完全 変更 記録——両者 内容 異、重複 非。**`write-project-docs`（汎用）** 新設「子倉 参照関係 明示記録」：主倉 短 page source repo + main 側 役割 + 固定 座標 + 同期方法 明記。**`nixkits-check-updates`（適配層）** 本倉 固有 事実 限定 担：子倉 座標、build 体系、peer 依存 判据、歴史 座標表。**先 dry run 検証、三 実欠陥 発見 修正**：①技能 内 検出 command `-h` 無、`awk` field 番号 錯位 為 **無言 空 返**（「本倉 子 project 無」誤認）；②依存衝突 判据「両者 相等 可否」記載、実測 子倉 `0.1.1-rc.2` 宣言 且 host `0.1.5-rc.2` 提供——**peer 性質 依存 下 host 高 方 正常状態**、判据「子倉 要求 host 提供 比 高 可否」為 必要；③GitHub anchor 導出規則「`:` 與 `+` 除去」記載、実際 **一文字 毎 `-` 置換**（`:` 與 `+` 各 一 `-` 化、既存 `-` 保持）。**dry run 同時 一 実 保留事項 発見**：主倉 固定 `dsh-api-balance` 的 `rev` 子倉 HEAD 比 二 commit 遅、但 **版番号 未変更 且 何 及 文書 commit** 故、新判据 再固定 **発生 不**——正 此 分岐条項 防 誤昇級
+
+| 提交 | 説明 |
+|------|------|
+| `b7e9717` | feat(skills): 支持同账户子项目链式检查与跨仓维护条目链接 |
+
 ## 2026-09-17T11:21:34+09:00
 
 **摘要**：chore(security): `dependabot.yml` 完全削除 且「外部自働化 導入 不」安全境界 確立 — 前回 npm ecosystem **構造的 無効** 理由 限定 該 ecosystem 削、`github-actions` 残。今回 判断 更 厳格化：**Dependabot 自体 我々 導入 不欲 物**。実行不能、PR 作 限定、secrets 取得 不能 雖、依然 **外部自働化 統合**——GitHub platform 実行、挙動 我々 制御 下 無——本 repo「開発 保守 保守者（狐莉）與 小爪 限定 完結」境界 與 衝突。故 `.github/dependabot.yml` 全体 削除、`AGENTS.md` 新設「## 安全境界：外部自働化 導入 不」節 規則 固定：拒否 list（第三者 CI scanner、純設定 形態 含 Dependabot）、判断基準（自働化 能力 必要 時、先 **repo 内 既存 `gh`/`git`/`nix` 自行実装 可否** 問。可能 則 skill 記入、不可 則 人手 執行）、受容 代償（action 安全更新 PR 自動 受取 無、skill 検査 能動 実行 必要）。**能力 不喪失**：且 昔「action SHA 固定 後 更新通知 届 無」盲点 埋 者 Dependabot、現在 `nix-flake-update-check` skill 自行実装——新設「## GitHub Actions 更新 確認」節（`grep` 固定 action 列挙 → `gh api` latest tag 照会 → tag commit SHA 取得 且 annotated tag 処理 → SHA 與 comment 版数 書戻 → 検証）。旧「Dependabot 自動 PR 直接 merge 不能」小節 他 repo 向 汎用 指針 書換、本 repo 当該 統合 使用 不 注記。四語 document 同期。**実測**：新 flow 現行 3 固定 action 照合、`actions/checkout` 最新 `v7.0.1`（`3d3c42e5…`）、`cachix/cachix-action` 最新 `v17`（`38b08261…`）何 及 repo 現行値 一致——即 現在 全部 最新
