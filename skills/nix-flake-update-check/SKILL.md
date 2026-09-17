@@ -391,6 +391,7 @@ wait
 | **版本号变更**（`version` 字段变了） | **必须跟进**——更新薄封装的 `version` + `rev` + 两侧 hash |
 | **仅源码变更、版本未变**（同为 docs/修复提交） | 分情况：<br>• 变更影响**运行时行为** → 跟进 `rev` + src hash（`npmDepsHash` 可能不变）<br>• 仅改文档/README/注释 → **不跟进**，主仓无需重新钉住文档 |
 | **仅依赖变更** | 跟进，且需重算 `npmDepsHash`（依赖集变了） |
+| **仅清单文件的发布元数据变更**（`package.json` 的 `publishConfig` / `repository` / `keywords` 等） | **不跟进**——文件字节变了但语义输入未变，详细字段分界见下 |
 
 > ⚠️ **别把「子仓 HEAD ≠ 主仓 rev」直接当成待办**。薄封装钉的是**版本坐标**，
 > 不是「子仓最新提交」。子仓的 README 改动对主仓构建产物毫无影响，为它重钉
@@ -406,6 +407,41 @@ gh api "repos/$OWNER/$SUB/compare/$PINNED_REV...$SUB_HEAD" \
 gh api "repos/$OWNER/$SUB/contents/package.json" --jq '.content' |
   base64 -d | grep -oP '"version":\s*"\K[^"]+'
 ```
+
+#### ⚠️ 判据的真实分界：不是「有没有变」，而是「变的是不是构建输入」
+
+版本号未变时，**不能只看「是否只有文档」**——`package.json` 这类**清单文件**
+的改动尤其容易误导。必须进一步判断改动是否落在**构建输入**上：
+
+| 子仓改动 | 是否构建输入 | 主仓动作 |
+|---|---|---|
+| `README` / `docs/` / 注释 | 否 | **不跟进** |
+| `.github/workflows/`、`.gitignore` | 否（主仓薄封装不消费子仓 CI） | **不跟进** |
+| **清单文件中的发布元数据**（`publishConfig`、`repository`、`keywords`、`description`、`bugs`、`homepage`） | **否** | **不跟进** |
+| `dependencies` / `devDependencies` / `peerDependencies` / 锁文件 | **是** → 影响 `npmDepsHash` | **跟进** |
+| `files` / `main` / `exports` / `scripts` | **是** → 影响打包产物 | **跟进** |
+| `version` | **是**（最硬的信号） | **必须跟进** |
+| `lib/`、`src/` 等源码 | **是** → 影响产物 | **跟进** |
+
+**关键区分**：`package.json` **整个文件**都是构建输入的一部分（它进 tarball，
+src hash 会变），但**它的诸多字段中只有一部分是语义输入**。判据落在**字段级**：
+
+```bash
+# 提取 package.json 的实际 diff，逐字段判定
+gh api "repos/$OWNER/$SUB/compare/$PINNED_REV...$SUB_HEAD" \
+  --jq '.files[] | select(.filename=="package.json") | .patch'
+```
+
+> **两种结论的取舍**：
+>
+> - **不跟进**（仅发布元数据/文档变化）：主仓薄封装确实与子仓 HEAD 不再逐字节
+>   一致，但**构建产物与运行时行为完全相同**。重钉只会制造一次无意义的全架构
+>   重建与缓存失效。这是**正确的**选择。
+> - **跟进**（任何语义字段变化）：必须重钉 `rev`；依赖相关字段变了还要重算
+>   `npmDepsHash`；仅源码/元数据变了则 `npmDepsHash` 通常不变。
+>
+> 若无法确定某字段是否影响产物，**按「跟进」处理**——多一次构建远好过漏掉
+> 一次真实变更。
 
 ### 结果归属
 
