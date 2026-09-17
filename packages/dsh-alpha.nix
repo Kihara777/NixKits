@@ -3,9 +3,9 @@
 # Thin wrapper around the stable dsh.nix with version + hash overrides.
 { callPackage, lib, allowLanSettings ? false }:
 callPackage ./dsh.nix {
-  version = "0.1.5-alpha.2";
-  hash = "sha256-dY58jb6ykhWVyMobGtXN+G/u0RVm1DGsXVoW8F3PsFA=";
-  npmDepsHash = "sha256-SVYhLVZwiseq4zgy4yoDBn+rIhHj3mMVE/Hez0LT+Ac=";
+  version = "0.1.6-alpha.1";
+  hash = "sha256-9K/QE9p0mJygaNN9sdBNVS1/nI1Slv9mxQ1nGApjhPg=";
+  npmDepsHash = "sha256-qAlIccAJG/FEMRL1JWtjZQ/MvyIeWORFDWo8+pQ5Xk4=";
   lockFile = ./dsh-package-lock-alpha.json;
   inherit allowLanSettings;
 }

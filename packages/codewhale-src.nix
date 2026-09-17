@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "Hmbown";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     # fetchFromGitHub 的哈希按 fetchzip 语义（解包后的树），无法离线预算：
     # 取自 CI 的 hash mismatch 报告，并用 `nix store prefetch-file --unpack`
     # 在本机复算，两者一致（sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=）。
-    hash = "sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=";
+    hash = "sha256-AYs2v/XLNoPOhNT6W2WuWdgWw9v1Brog+EYDRFXV9vI=";
   };
 
   # Cargo.lock is in workspace root
