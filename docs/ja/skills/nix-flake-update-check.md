@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | 日本語  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> **任意の nix flake リポジトリ**におけるパッケージの上流更新を確認してアップグレードする——ビルダー別 hash フロー、flake.lock の扱い、パッチ内蔵バージョン確認、nixpkgs ドリフトの罠。
+> **任意の nix flake リポジトリ**におけるパッケージの上流更新を確認してアップグレードする——ビルダー別 hash フロー、GitHub Actions の SHA 固定更新チェック、flake.lock の扱い、パッチ内蔵バージョン確認、nixpkgs ドリフトの罠。
 
 ## 基本情報
 
@@ -17,11 +17,12 @@
 
 - `flake.nix` から外部パッケージを**動的に検出**し、セルフホスト / 動的バージョン / nixpkgs 追従 / パッチ内蔵を除外
 - **ビルダー別**の hash 更新フロー（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
-- **Dependabot の自動 PR の扱い**：npm の更新 PR は `npmDepsHash` を bot が認識できないため必ず CI が失敗する。ブランチを取得して hash を補う手順と、「対象バージョンが `next` / `alpha` チャネルより遅れていないか」の確認を含む
+- **GitHub Actions の更新チェック**：自行実装（`gh api` で tag 解決 → commit SHA 取得 → 書き戻しとコメント版数の同期）。action を SHA 固定すると更新通知が届かなくなる盲点を補う；**Dependabot などの外部自動化に依存しない**
 - hash の罠：SRI 形式、`fetchFromGitHub` と archive tarball の不一致、`lib.fakeHash`、npm の 2 回ビルド
 - Rust パッケージは **`Cargo.lock` の同期**が必要（最も漏れやすい）
 - `flake.lock` の三者分岐：gitignore 済み → スキップ；動的バージョンあり → 除外必須；その他 → hash と共にコミット
 - `.patch` ファイル内にハードコードされたバージョン（version / url / hash）の識別と更新フロー
+- **外部自動化 PR の処置**：`npmDepsHash` を知らないため npm 更新 PR は必ず失敗する。ブランチを取り込んで hash を補ってからマージする
 - nixpkgs ドリフトの罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数なし `nix flake lock`
 
 ## 設計：なぜ二つのスキルに分割したか

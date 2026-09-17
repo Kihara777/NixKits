@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -17,11 +17,12 @@
 
 - 从 `flake.nix` **动态发现**外部包，排除自建包 / 动态版本 / 跟随 nixpkgs / 补丁内版本
 - 按**包型**（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）分流的 hash 更新流程
-- **Dependabot 自动 PR 的处置**：npm 更新 PR 因 `npmDepsHash` 无法被 bot 感知而必然 CI 失败；附取回分支补 hash 的流程与「目标版本是否落后于 next/alpha 通道」的核对
+- **GitHub Actions 更新检查**：自行实现（`gh api` 查 tag → 取 commit SHA → 回写并同步注释版本号），覆盖「action 固定 SHA 后收不到更新通知」这处盲点；**不依赖 Dependabot 等外部自动化**
 - hash 计算陷阱：SRI 格式、`fetchFromGitHub` 与 archive tarball hash 不一致、`lib.fakeHash`、npm 两次构建
 - Rust 包需**同步 `Cargo.lock`**（最易遗漏）
 - `flake.lock` 三路处置：已 gitignore → 跳过；有动态版本 → 必须排除；其他 → 随 hash 一并提交
 - 补丁文件内硬编码版本（`.patch` 中的 version / url / hash）的识别与更新流程
+- **外部自动化 PR 的处置**：其 npm 更新 PR 因不知 `npmDepsHash` 而必然失败，取回后补 hash 再合并
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
 
 ## 设计：为什么拆成两个技能

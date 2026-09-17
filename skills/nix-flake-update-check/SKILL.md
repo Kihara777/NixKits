@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、Dependabot 自动 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -94,11 +94,13 @@ check() {
 5. 用实际值更新两个 hash
 6. 运行 `nix build .#<pkg>` 验证构建成功
 
-#### Dependabot 的自动 PR 不能直接合并
+#### 若仓库启用了外部依赖自动化（如 Dependabot）
 
-若仓库启用了 Dependabot，它的 npm 更新 PR **必然无法通过 CI**——这是结构性错配，不是配置错误：
+> **NixKits 不使用这类外部自动化**（见仓库 AGENTS.md「安全边界」），本节保留
+> 供**其他仓库**参考——若你所在的仓库启用了，其 npm 更新 PR **必然无法通过
+> CI**，这是结构性错配，不是配置错误：
 
-| Dependabot 会改 | Dependabot 不知道 |
+| 它会改 | 它不知道 |
 |---|---|
 | `package.json` | `.nix` 文件里的 `npmDepsHash` |
 | `package-lock.json` | `buildNpmPackage` 会把 src 的 lock 与 npm-deps 产物**逐字节**校验 |
@@ -293,6 +295,87 @@ nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
 
 > **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的
 > 构建测试。涉及 GPU/硬件相关补丁时，需在目标硬件上实测验证。
+
+## 检查 GitHub Actions 的更新
+
+若仓库把第三方 action 固定到提交 SHA（供应链卫生的常见做法），
+**固定之后就收不到更新通知了**——这是一处必须主动检查的盲点。
+
+**为什么要自己查而不是靠外部自动化**：Dependabot 一类工具是外部自动化集成，
+由 GitHub 平台运行、我们无法审计其行为。若仓库的安全边界要求"不引入
+外部自动化"，就应自行实现同等能力——下面的流程只用到 `gh api` 与 `git`，
+完全可审计。
+
+### 第 1 步：列出所有固定的 action
+
+```bash
+grep -rhoE 'uses: [^ ]+@[0-9a-f]{40}' .github/workflows/*.yml |
+  sed 's/uses: //' | sort -u
+```
+
+输出形如 `actions/checkout@3d3c42e5…`。**同时记下注释里的版本号**
+（如 `# v7.0.1`），流程末尾需要同步更新它。
+
+### 第 2 步：查最新版本
+
+```bash
+check_action() {
+  local repo="$1"          # 如 actions/checkout
+  echo "=== $repo ==="
+  gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null ||
+    gh api "repos/$repo/tags" --jq '.[0].name' 2>/dev/null ||
+    echo "（无 release/tag，改用分支：见下）"
+}
+```
+
+> ⚠️ **有些 action 不用 release**（如 `DeterminateSystems/nix-installer-action`
+> 直接跟踪 `main`）。这类要查分支头：
+>
+> ```bash
+> gh api repos/DeterminateSystems/nix-installer-action/commits/main --jq '.sha'
+> ```
+
+### 第 3 步：取 tag 对应的提交 SHA
+
+**必须取 tag 指向的 commit，不能取分支头**——否则会把未发布状态引入 CI：
+
+```bash
+gh api repos/<owner>/<repo>/git/ref/tags/<tag> --jq '.object.sha'
+```
+
+> ⚠️ **若返回 `type: "tag"`（annotated tag）**，再取一层：
+>
+> ```bash
+> gh api repos/<owner>/<repo>/git/tags/<sha> --jq '.object.sha'
+> ```
+
+### 第 4 步：更新并写回注释
+
+```diff
+-      - uses: actions/checkout@11d5960a…  # v4
++      - uses: actions/checkout@3d3c42e5…  # v7.0.1
+```
+
+**注释中的版本号必须一并更新**——它是下次检查时的比对基准，不同步会让
+后续核对失去参照。
+
+### 第 5 步：验证
+
+```bash
+nix flake check          # 语法与结构
+```
+
+并确认 CI 通过。**注意区分偶发失败**：GitHub API 限流（`HTTP error 403`
+拉取 `api.github.com`）与 action 升级无关，重跑即可——判断方法是看**失败
+的是否只有涉及该 API 的 job、其余 job 是否通过**。
+
+### 判据：何时该升级
+
+| 情况 | 处理 |
+|------|------|
+| 跨大版本（如 v4 → v7） | 读 release notes 确认 breaking change 与安全修复 |
+| 仅 patch/minor | 通常可直接升 |
+| action 跟踪浮动分支（`@main`） | **优先固定到 SHA**，而非被动跟随 |
 
 ## 常见陷阱（nixpkgs 漂移）
 

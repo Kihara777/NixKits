@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -17,11 +17,12 @@
 
 - **Dynamically discovers** external packages from `flake.nix`, excluding self-hosted / dynamic-version / nixpkgs-following / patch-embedded ones
 - Per-builder hash update flows (npm / cmake / Rust `buildRustPackage` / `fetchurl` / python)
-- **Handling Dependabot's automated PRs**: an npm bump PR always fails CI because the bot cannot know about `npmDepsHash`, so the flow for checking out the branch and fixing the hash is included, along with checking whether the target version lags the `next` / `alpha` channels
+- **GitHub Actions update checking**: self-implemented (`gh api` to resolve tags → take the commit SHA → write it back and sync the version comment), covering the blind spot that appears once actions are pinned to SHAs; **no reliance on external automation such as Dependabot**
 - Hash gotchas: SRI format, `fetchFromGitHub` vs archive tarball mismatch, `lib.fakeHash`, npm's two build passes
 - Rust packages must **sync `Cargo.lock`** (the most commonly missed step)
 - Three-way `flake.lock` handling: already gitignored → skip; has dynamic versions → must exclude; otherwise → commit alongside hashes
 - Identifying and updating versions hardcoded inside `.patch` files (version / url / hash)
+- **Handling external-automation PRs**: their npm update PRs always fail because they cannot know `npmDepsHash`; check the branch out, patch the hash, then merge
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
 
 ## Design: why two skills

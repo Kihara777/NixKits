@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -17,11 +17,12 @@
 
 - `flake.nix` 自 外部包 **動的検出**、自己 hosting / 動的版 / nixpkgs 追従 / 修正内蔵 除外
 - **builder 別** hash 更新 flow（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
-- **Dependabot 自動 PR 扱**：npm 更新 PR `npmDepsHash` bot 感知 不可 故 必 CI 失敗。branch 取得 hash 補 手順 與「target 版本 `next` / `alpha` channel 比 遅 無 否」確認 含
+- **GitHub Actions 更新確認**：自行実装（`gh api` tag 解決 → commit SHA 取得 → 書戻 與 comment 版数 同期）。action SHA 固定 後 更新通知 届 無 盲点 補；**Dependabot 等 外部自動化 依存 不**
 - hash 罠：SRI 形式、`fetchFromGitHub` 與 archive tarball 不一致、`lib.fakeHash`、npm 2 回構築
 - Rust 包 **`Cargo.lock` 同期**必要（最 漏 易）
 - `flake.lock` 三路分岐：gitignore 済 → skip；動的版 有 → 除外必須；他 → hash 與 共 commit
 - `.patch` 文件内 硬符号版（version / url / hash）識別 與 更新 flow
+- **外部自働化 PR 処置**：`npmDepsHash` 不知故 npm 更新 PR 必 失敗。branch 取回 後 hash 補完 且 merge
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
 
 ## 設計：何故 二 技能 分割
