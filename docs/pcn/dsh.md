@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版 | `0.1.5-rc.1` |
-| 開発通道 | `dsh-alpha 0.1.5-alpha.2`（npm `alpha` dist-tag） |
+| 開発通道 | `dsh-alpha 0.1.6-alpha.1`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,7 +22,7 @@ NixKits 仿 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数
 | 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.1.5-rc.1` | npm `latest` dist-tag、既定 |
-| `pkgs.dsh-alpha` | alpha | `0.1.5-alpha.2` | npm `alpha` dist-tag、最新開発版追跡 |
+| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.1` | npm `alpha` dist-tag、最新開発版追跡 |
 
 ```nix
 # 本機最新開発版切替

@@ -23,7 +23,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.5-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.6-alpha.1） | [docs/pcn/dsh.md](pcn/dsh.md) |
 | godot-ai | Godot 引擎 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
@@ -80,7 +80,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | asusd-thermal-guard | 溫度監視：過熱時 檔位降格、冷卻後 復帰 | [docs/pcn/asusd-thermal-guard.md](pcn/asusd-thermal-guard.md) |
 | comfyui | ComfyUI 之 ROCm 統合（GFX override / 機器権限 / 内核参數） | [docs/pcn/comfyui.md](pcn/comfyui.md) |
 | efl-cross-fix | efl 交叉编訳符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
-| codewhale-sudo | overlay — codewhale v0.9.12 sudo 机能复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.0 以降 阻止 sudo 机能 复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
 | breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。

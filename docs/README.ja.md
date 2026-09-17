@@ -23,7 +23,7 @@ inputs.nixkits.url = "~/NixKits";
 | blender-mcp | Blender 向け MCP サーバー（自然言語による Blender 操作） | [docs/ja/blender-mcp.md](ja/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— すべてがプラグイン | [docs/ja/dsh.md](ja/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— アルファ開発チャネル（0.1.5-alpha.2） | [docs/ja/dsh.md](ja/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— アルファ開発チャネル（0.1.6-alpha.1） | [docs/ja/dsh.md](ja/dsh.md) |
 | godot-ai | Godot エンジン向けの MCP サーバーと AI ツール | [docs/ja/godot-ai.md](ja/godot-ai.md) |
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
@@ -81,7 +81,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | comfyui | ComfyUI の ROCm 統合（GFX override / デバイス権限 / カーネルパラメータ） | [docs/ja/comfyui.md](ja/comfyui.md) |
 | efl-cross-fix | efl クロスコンパイルのコード生成ツール不足を修正 | [docs/ja/efl-cross-fix.md](ja/efl-cross-fix.md) |
 | breeze-black | Plasma 6 高コントラスト Breeze Black アクセシビリティテーマ | [docs/ja/breeze-black.md](ja/breeze-black.md) |
-| codewhale-sudo | overlay — codewhale v0.9.12 の sudo 機能を復元（ptrace インターセプター） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.0 以降で阻まれた sudo 機能を復元（ptrace インターセプター） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
 
 > ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。動的バージョン追跡プロジェクト（llama-cpp-rocm など）はハッシュが上流リリースごとに変化し、キャッシュ固定不可です。
 

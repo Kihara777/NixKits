@@ -23,7 +23,7 @@ All packages follow nixpkgs platform support by default (`lib.platforms.linux`).
 | blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | dsh | DeepSeek Harness (DSH) — Everything is a Plugin | [docs/en/dsh.md](en/dsh.md) |
-| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.1.5-alpha.2) | [docs/en/dsh.md](en/dsh.md) |
+| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.1.6-alpha.1) | [docs/en/dsh.md](en/dsh.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
@@ -81,7 +81,7 @@ Standalone overlays, not included in `default`:
 | comfyui | ComfyUI ROCm integration (GFX override / device access / kernel params) | [docs/en/comfyui.md](en/comfyui.md) |
 | efl-cross-fix | Fixes efl cross-compilation code-gen tooling | [docs/en/efl-cross-fix.md](en/efl-cross-fix.md) |
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
-| codewhale-sudo | overlay — restore sudo under codewhale v0.9.12 (ptrace interceptor) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
+| codewhale-sudo | overlay — restore sudo (blocked since codewhale v0.9.0) (ptrace interceptor) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 

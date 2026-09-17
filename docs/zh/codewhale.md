@@ -1,8 +1,8 @@
 # codewhale
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.12)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.12)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.12)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-x86_64.yml?branch=main&label=x86_64%20v0.9.13)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-aarch64.yml?branch=main&label=aarch64%20v0.9.13)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-codewhale-riscv64.yml?branch=main&label=riscv64%20v0.9.13)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 中文 | [English](../en/codewhale.md) | [日本語](../ja/codewhale.md)  | [偽中国語](../pcn/codewhale.md)
 
@@ -12,7 +12,7 @@ DeepSeek V4 专用的终端编码代理（TUI 工具）。
 
 | 项目 | 值 |
 |------|-----|
-| 版本 | 0.9.12 |
+| 版本 | 0.9.13 |
 | 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
 | 类型 | 预编译二进制（x86_64 / aarch64）；源码构建（riscv64） |
 | 平台 | x86_64 / aarch64 / riscv64 |
@@ -48,7 +48,7 @@ codewhale auth set --provider deepseek # 保存 API key
 
 ## 启用 sudo
 
-codewhale v0.9.12 默认阻止 `sudo` 执行。解决方案见 [codewhale-sudo 补丁文档](../zh/codewhale-sudo.md)。
+codewhale v0.9.13 默认阻止 `sudo` 执行。解决方案见 [codewhale-sudo 补丁文档](../zh/codewhale-sudo.md)。
 
 ## 已知问题
 
