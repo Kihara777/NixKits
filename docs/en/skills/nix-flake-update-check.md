@@ -9,7 +9,7 @@
 | Item | Value |
 |------|-------|
 | Type | Coding Agent Skill |
-| Path | `skills/nix-flake-update-check/SKILL.md` |
+| Path | `skills/nix-flake-update-check/` (`SKILL.md` + `builders.md` + `traps.md`) |
 | Scope | **Generic** (bound to no specific repository) |
 | Companion | Repo-specific steps come from an adapter-layer skill (NixKits uses `nixkits-check-updates`) |
 
@@ -59,3 +59,17 @@ When the two conflict, **the adapter layer wins**.
 
 Activated when the user asks to "check for updates" or "update package versions".
 If the current repository has an adapter-layer skill, load the adapter first, then run this skill.
+
+## Structure: main flow + two companion references
+
+A single file had grown to 918 lines, making it hard to find things while executing. It is now split per the "extract standalone data into companion files" rule:
+
+| File | Contents | When to read |
+|------|----------|--------------|
+| `SKILL.md` | Interactive clarification + steps 1–10 + adapter contract | Always |
+| `builders.md` | Per-builder hash flows, `flake.lock` handling | Step 4 |
+| `traps.md` | nixpkgs drift traps, fail-closed checks, dead-link audit, Actions updates, patch-embedded versions | When a step-7 self-check hits |
+
+**Step 7 gained a "six questions before committing" self-check**: multiple variants? dependency table consistent? source fetch still valid? actually ran it? doc wording still true? should `flake.lock` be committed? — all six distilled from incidents measured the same day; a hit leads into `traps.md` instead of reading the whole file.
+
+**Closing step 10** (adapter): a process retrospective plus spec audit; it specifically requires that **generic lessons produced on a test branch be carried back into main immediately** — those branches are never merged by agreement, and the lessons must not be stranded with them.

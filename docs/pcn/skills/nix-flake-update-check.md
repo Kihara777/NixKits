@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | 種別 | 符号化代理技能 |
-| 路 | `skills/nix-flake-update-check/SKILL.md` |
+| 路 | `skills/nix-flake-update-check/`（`SKILL.md` + `builders.md` + `traps.md`）|
 | 定位 | **汎用**（特定倉庫 非結合） |
 | 相棒 | 倉庫固有 工程 適配層技能 補完（NixKits 用 `nixkits-check-updates`） |
 
@@ -59,3 +59,17 @@
 
 利用者「更新確認」又「包版更新」依頼時起動。
 現倉庫 適配層技能 有 場合、先 適配層 load 後 本技能 実行。
+
+## 構造：主 flow + 二 配套参考
+
+単一 file 曾 918 行 達、実行中 目的 箇所 探 難。「独立 data 配套 file 分割」規則 従 再構成：
+
+| file | 内容 | 読 時機 |
+|------|------|--------|
+| `SKILL.md` | 対話的確認 + 第 1〜10 步 主 flow + 適配層契約 | 常時 |
+| `builders.md` | builder 別 hash 更新 flow、`flake.lock` 処理 | 第 4 步 |
+| `traps.md` | nixpkgs 漂移 罠、fail-closed 検証、外部 link 失効監査、Actions 更新、修正内蔵版 | 第 7 步 自検 該当 時 |
+
+**第 7 步「commit 前 六 自問」新設**：変体 複数 有 可否？依存表 一致 可否？source 取得 仍 有効 可否？実際 実行 可否？文書 記述 仍 成立 可否？`flake.lock` commit 可否？——六 何 及 同日 実測 事故 抽出、該当 則 `traps.md` 進 可、全文 読 不要。
+
+**締 第 10 步**（適配層）：process 振返 與 規範 検証。特 **test branch 生 汎用 教訓 即座 main 戻 要**——当該 branch 取決 依 merge 不、教訓 残 不可。

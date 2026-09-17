@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、版本语义变化时文档须重写而非机械替换、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程与自托管 forge（Gitea）取源、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、版本语义变化时文档须重写而非机械替换、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -9,6 +9,19 @@ description: 检查任意 nix flake 仓库中软件包的上游版本更新并�
 
 本技能只包含**与仓库无关**的通用方法。仓库特有的环节（文档同步、维护日志、
 内置插件清单等）由**仓库适配层**提供——见文末「仓库适配层」。
+
+## 本技能的文件构成
+
+**主流程在本文档**；两份配套参考按需查阅，不必通读：
+
+| 文件 | 内容 | 何时读 |
+|---|---|---|
+| **`SKILL.md`**（本文） | 交互式澄清 + 第 1~10 步主流程 + 适配层契约 | 始终 |
+| [`builders.md`](builders.md) | 按 builder 的 hash 更新流程、`flake.lock` 处置 | 第 4 步 |
+| [`traps.md`](traps.md) | nixpkgs 漂移陷阱、fail-closed 校验、外链审计、Actions 更新、补丁内版本 | 第 7 步自检命中时 |
+
+
+
 
 ## 交互式澄清：一次流程内解决所有待定项
 
@@ -93,7 +106,7 @@ done < /tmp/all_pkgs.txt
 - **动态版本追踪**：`version` 从外部输入动态读取，如 `builtins.readFile`、URL 抓取、flake input
 - **跟随 nixpkgs 版本**：使用 `overrideAttrs` 仅追加 patch，不定义独立 version
 - **补丁内硬编码版本**：`.patch` 文件中直接包含 `${version}` 或 wheel URL 及 hash
-  （见下方「检查补丁内版本」节）
+  （见配套文件 [`traps.md`](traps.md) 的「检查补丁内版本」节）
 
 ## 第 3 步：检查上游版本
 
@@ -116,174 +129,24 @@ check() {
 
 ## 第 4 步：更新构建配置
 
-> **⚠️ hash 计算注意事项**
+**按包型选择流程**——包型由 `.nix` 文件中的 builder 决定，不是由包名决定。
+
+> **📖 详见配套文件 [`builders.md`](builders.md)**，其中按 builder 列出：
 >
-> - SRI hash 格式必须使用标准 base64（`+` `/` `=`），**不能**使用 URL-safe base64（`-` `_`）。
->   用 `nix hash to-sri --type sha256 <hash>` 或 `nix-prefetch-url --type sha256 <url>` 获取正确格式
-> - `fetchFromGitHub` 的 source hash **不能**从 GitHub archive tarball（`/archive/refs/tags/`）预计算 —
->   两者可能不同。必须通过 `nix build` 的 hash mismatch 错误获取
-> - `npmDepsHash` 不能设为空字符串 `""`。清空时使用 `lib.fakeHash` 占位
-> - npm 包需要两次 `nix build`：第一次获取 source hash，第二次获取 npmDepsHash。
->   如果 source hash 已知正确，可只清空 npmDepsHash 一次构建完成
-
-按包型选择对应流程。**包型由 `.nix` 文件中的 builder 决定**，不是由包名决定。
-
-### npm 包
-
-1. 更新 `.nix` 文件中的 `version` 字符串
-2. 将 `fetchFromGitHub` 的 `hash` 置为空占位符
-3. 将 `npmDepsHash` 置为空占位符
-4. 运行 `nix build .#<pkg>` 两次 — 第一次获取源码 hash，第二次获取 npmDepsHash
-5. 用实际值更新两个 hash
-6. 运行 `nix build .#<pkg>` 验证构建成功
-
-#### vendored lock 必须包含 peer 依赖条目
-
-当上游 tarball **不带** lock（需自己生成 vendored lock）时，注意 npm 的
-`--legacy-peer-deps` 会**不写入 `"peer": true` 条目**，导致沙箱内离线构建报：
-
-```
-npm error code ENOTCACHED
-npm error request to https://registry.npmjs.org/<pkg> failed:
-cache mode is 'only-if-cached' but no cached response is available
-```
-
-**判据**：生成的 lock 里 `grep -c '"peer": true'` 应为非零（与仓库既有可工作
-的 lock 对照该数值）。**对策**：生成 vendored lock 时**不要**加
-`--legacy-peer-deps`：
-
-```bash
-npm install --package-lock-only --ignore-scripts      # ✅ 记录 peer 条目
-npm install --package-lock-only --legacy-peer-deps    # ❌ peer 条目缺失
-```
-
-> 注意区分两处 `--legacy-peer-deps` 的用途：**生成 vendored lock 时不要用**
-> （会丢 peer 条目）；而 `buildNpmPackage` 的 `npmFlags`/`npm install` 阶段
-> 用它跳过 peer 解析是**另一回事**，由包定义决定。
-
-#### 若仓库启用了外部依赖自动化（如 Dependabot）
-
-> **NixKits 不使用这类外部自动化**（见仓库 AGENTS.md「安全边界」），本节保留
-> 供**其他仓库**参考——若你所在的仓库启用了，其 npm 更新 PR **必然无法通过
-> CI**，这是结构性错配，不是配置错误：
-
-| 它会改 | 它不知道 |
-|---|---|
-| `package.json` | `.nix` 文件里的 `npmDepsHash` |
-| `package-lock.json` | `buildNpmPackage` 会把 src 的 lock 与 npm-deps 产物**逐字节**校验 |
-
-症状固定为：
-
-```
-ERROR: npmDepsHash is out of date
-The package-lock.json in src is not the same as the in /nix/store/...-npm-deps
-```
-
-**处置**：不要直接合并，也不要简单地关掉。取回分支后补一次 hash：
-
-```bash
-gh pr checkout <n>
-sed -i 's|npmDepsHash = "sha256-[^"]*";|npmDepsHash = lib.fakeHash;|' packages/<pkg>.nix
-nix build .#<pkg> 2>&1 | grep -oP 'got:\s+\Ksha256-[A-Za-z0-9+/=]+'   # 取实际值回填
-```
-
-> ⚠️ **同时核对目标版本是否落后**：Dependabot 只在其配置的 semver 通道内推进
-> （如 `0.1.2-alpha.2` → `0.1.2-rc.1`），不会跨到 `next` / `alpha` 这类 dist-tag。
-> 若宿主或生态已用更新的通道，直接手动指定该版本更有意义：
+> | builder | 流程要点 |
+> |---|---|
+> | `buildNpmPackage` | 两次构建取 source hash + `npmDepsHash`；vendored lock 须含 peer 条目 |
+> | `stdenv.mkDerivation` + cmake | 单次构建取 hash |
+> | `buildRustPackage` | **必须同步 `Cargo.lock`**（最易遗漏） |
+> | `fetchurl`（预编译二进制） | 逐个 URL 取 hash，可能需多次构建 |
+> | `fetchzip` / `fetchFromGitea` | 自托管 forge：**取源路径可能整体 403**，见下 |
 >
-> ```bash
-> npm view <pkg> dist-tags          # 查看 latest / next / alpha 各指向何处
-> ```
->
-> 判据：**被包装的库若在运行时与宿主交互**（如插件依赖宿主框架），应让版本与宿主对齐，
-> 而非停留在旧通道——否则插件内嵌的副本会长期落后于宿主树。
+> 同文件还包含 `flake.lock` 的三路处置（已 gitignore → 跳过；有动态版本 →
+> 必须排除；其他 → 随 hash 一并提交）。
 
-### cmake 包
-
-1. 更新 `version` 字符串
-2. 将 `fetchFromGitHub` 的 `hash` 置空
-3. 运行 `nix build .#<pkg>` 获取正确的 hash
-4. 更新 hash
-5. 运行 `nix build .#<pkg>` 验证构建成功
-
-### Rust 包（buildRustPackage）
-
-`rustPlatform.buildRustPackage` 通过 `cargoLock.lockFile` 声明式锁定依赖，
-不会自动生成 lock 文件。**版本升级必须同步三处**：
-
-1. 更新 `version` 字符串
-2. 将 `fetchFromGitHub` 的 `hash` 置空，`nix build` 获取正确 hash 后更新
-3. **同步 `Cargo.lock`**（最容易遗漏）：
-   - 上游发布新 tag 时，源码中的 `Cargo.lock` 依赖集可能变化
-   - 从上游仓库下载对应 tag 的 lock 文件覆盖本地副本：
-     ```bash
-     curl -sL "https://raw.githubusercontent.com/<owner>/<repo>/v<version>/Cargo.lock" \
-       -o <local-lock-file>
-     ```
-   - 验证条目数是否变化（`grep -c '^name = '`），变化即说明依赖集更新，必须同步
-   - 本地 lock 副本名通常形如 `<pkg>-src-Cargo.lock`，与上游内容不一致时构建报
-     `lock file ... needs to be updated` 或 hash 校验失败
-4. 运行 `nix build .#<pkg>` 验证构建成功
-
-### 预编译二进制包（fetchurl）
-
-1. 更新 `version` 字符串及所有下载 URL
-2. 将所有 `hash` 值置空
-3. 运行 `nix build .#<pkg>` 获取各二进制 hash（可能需要多次，每次获取一个 hash）
-4. 逐一更新 hash
-5. 运行 `nix build .#<pkg>` 验证构建成功
-
-> **交叉编译注意**：riscv64 等交叉构建 eval 可能超时。获取 `fetchFromGitHub`
-> source hash 的正确姿势：
-> - **禁止**用 `nix-prefetch-url` 预取
->   `https://github.com/<owner>/<repo>/archive/v<version>.tar.gz` 的 hash ——
->   archive tarball 与 `fetchFromGitHub`（git 协议）hash **不一致**，会导致 CI
->   构建失败（`hash mismatch ... got:` 与本地预取值不同）。
-> - 正确方法：用任意 nixpkgs 的 `fetchFromGitHub` + 占位 hash 构建一次，从报错中获取 got 值：
->   ```bash
->   nix build --impure --expr '
->   let pkgs = import (builtins.getFlake "/path/to/flake").inputs.nixpkgs.legacyPackages.x86_64-linux;
->   in pkgs.fetchFromGitHub { owner = "<owner>"; repo = "<repo>"; rev = "v<version>"; hash = lib.fakeHash; }
->   ' 2>&1 | grep got:
->   ```
-
-### flake.lock 同步
-
-#### 前置检测
-
-根据仓库状态决定如何处理 `flake.lock`：
-
-```bash
-# 情况 1：flake.lock 已被 .gitignore 排除 → 跳过，无需提交
-if grep -qx 'flake.lock' .gitignore 2>/dev/null; then
-  echo "SKIP: flake.lock 已在 .gitignore 中，无需提交"
-  exit 0
-fi
-
-# 情况 2：仓库包含动态版本包 → 必须排除 flake.lock
-# 检测特征：builtins.fetchurl 无 hash 参数、flake input 指向 API URL 等
-if grep -rq 'builtins.fetchurl.*releases/latest\|\.url\s*=\s*"https\?://api\.' \
-   overlays/ flake.nix 2>/dev/null; then
-  echo "WARN: 检测到动态版本包，flake.lock 不可复现"
-  if ! grep -qx 'flake.lock' .gitignore 2>/dev/null; then
-    echo "flake.lock" >> .gitignore
-    echo "已添加 flake.lock 到 .gitignore"
-  fi
-  exit 0
-fi
-```
-
-> **判断逻辑**：已排除 → 跳过；有动态版本 → 必须排除；其他情况 → 正常提交。
-
-#### 提交要求
-
-在不属于上述两种情况时，每次 `nix build` 后 Nix 会根据实际获取的资源更新
-`flake.lock` 中的 input hash。**必须在提交 hash 变更的同时提交 `flake.lock`**，
-确保锁文件与包定义一致。
-
-```bash
-git diff flake.lock
-```
+**通用 hash 注意**（无论包型）：SRI 用标准 base64、`fetchFromGitHub` 的
+hash 不能从 archive tarball 预算、`npmDepsHash` 用 `lib.fakeHash` 占位。
+完整说明见 `builders.md` 开头。
 
 ## 第 5 步：更新文档
 
@@ -345,6 +208,26 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 ## 第 7 步：输出汇总报告
 
 以表格呈现：包名、旧版本 → 新版本、构建状态、本地安装版本。
+
+### 提交前的六问自检
+
+**构建通过 ≠ 升级完成**。下面六条都是从「已通过构建、却仍然出错」的实际
+事故中提炼的，逐条问过再提交——它们比通读全部陷阱章节更快命中要害：
+
+| # | 自问 | 若不查会怎样 |
+|---|---|---|
+| 1 | **这个包有几个变体？** `ref`/换行搜索包名，看 `flake.nix` 是否按架构或通道分流到多个文件 | 只改一个变体 → 本机构建通过，**另一架构部署后版本没变**（实测发生） |
+| 2 | **包定义里的依赖列表，与文档依赖表一致吗？** 数目与语义都要对 | 文档写「≥ 范围」而实际是精确锁 → 读者照做撞 `RuntimeError`（实测发生） |
+| 3 | **取源方式还有效吗？** 对 `fetchFromGitea` 等非 GitHub 源，逐 tag 探测 `archive` 与 `api` 两条路径 | 上游改了路径 → 缓存掩盖问题，**干净环境才失败**（实测发生） |
+| 4 | **真的运行过产物吗？** `nix build` 成功只说明能构建 | 上游 fail-closed 校验会在**运行时**拒绝启动（实测发生） |
+| 5 | **版本号之外的文档表述还成立吗？** 见「何时必须重写文档……」的触发判据 | 版本号升了、描述没跟着变语义 → 文档成为事实错误（实测发生） |
+| 6 | **`flake.lock` 该不该提交？** 按本文档「flake.lock 同步」的前置检测 | 该提交而未提交 → 复现不一致；不该提交而提交 → 锁死浮动输入（见该节） |
+
+> **这六问的来源**：全部是 2026-09-17 一天之内在同一仓库实际踩到的坑，
+> 每一问都对应一次真实返工或缺陷。**不是假想的检查表。**
+>
+> 第 1、3、5 问尤其值得单独跑一条命令确认——它们的共同特征是
+> **构建与 CI 都不会失败**，只有主动核对才看得见。
 
 ## 第 8 步：记录变更
 
@@ -560,257 +443,6 @@ gh api "repos/$OWNER/$SUB/compare/$PINNED_REV...$SUB_HEAD" \
 > 唯一，且子仓与主仓都用同一套标题格式时可直接推导。**推导规则与易错点见
 > `write-maintenance-log` 技能「主仓条目的链接写法」**（逐字符替换，不是删除
 > 分隔符）。给不出锚点就退化为给日志文件链接 + 条目标题文本。
-
-## 检查补丁内版本
-
-部分补丁在上游项目的 `.patch` 文件中直接硬编码了依赖的版本号和 hash。
-这类补丁的版本更新需要手动处理。
-
-### 识别
-
-```bash
-# 搜索 patch 文件中的版本号模式（目录名按仓库实际调整）
-grep -rln -E '[0-9]+\.[0-9]+\.[0-9]+' patches/*.patch | sort -u
-
-for patch in $(grep -rln -E '[0-9]+\.[0-9]+\.[0-9]+' patches/*.patch); do
-  echo "=== $patch ==="
-  grep -n -E 'version|hash|url.*http' "$patch" | head -10
-done
-```
-
-### 通用更新流程
-
-1. 从 patch 中提取上游资源 URL 和当前版本
-2. 检查上游是否有新版本：
-
-```bash
-# GitHub Release（如适用）
-curl -s "https://api.github.com/repos/<owner>/<repo>/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+'
-
-# PyPI / wheel 目录（如适用）
-curl -s "<wheel-index-url>" | grep -oP '<package>-[0-9]+\.[0-9]+\.[0-9]+' | sort -Vu | tail -1
-```
-
-3. 下载新资源获取 SRI hash：
-
-```bash
-nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
-```
-
-4. 更新 patch 文件中对应的 `version`、`url`、`hash` 字段
-5. 重新生成 patch：在上游仓库中修改后执行 `git diff > patches/<name>.patch`
-6. 在目标环境测试构建
-
-> **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的
-> 构建测试。涉及 GPU/硬件相关补丁时，需在目标硬件上实测验证。
-
-## 审计文档中的外部链接
-
-更新流程结束前，检查文档里的上游链接是否仍然有效。**上游项目会改名、迁移
-组织、归档仓库**——这些变化不产生任何构建错误，只让文档里的链接悄悄失效，
-而链接恰恰是读者追溯来源的唯一入口。
-
-```bash
-# 抽取所有外部链接（含各语言文档），逐个探测
-grep -rhoP 'https://[a-zA-Z0-9.-]+/[a-zA-Z0-9._/%#-]+' --include="*.md" . |
-  sed 's/[.,)]*$//' | sort -u | while read u; do
-    code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$u")
-    case "$code" in 200|301|302|429) ;; *) echo "$code  $u";; esac
-  done
-```
-
-**判定与处置**：
-
-| 结果 | 含义 | 处置 |
-|---|---|---|
-| `404` | 目标确实不存在（项目迁移/改名） | **查证新地址并修正**（见下） |
-| `403` | 常有反爬（如 `projects.blender.org`） | **不是死链**，用浏览器或 `gh api` 复核 |
-| `429` | 被限流 | 稍后重试，**不要**据此判定失效 |
-| `301/302` | 正常重定向 | 可保留 |
-
-> ⚠️ **`curl` 的 404 不足以定案**：GitHub 对某些请求返回 404 也可能是
-> 权限或限流所致。用 `gh api repos/<owner>/<repo>` 复核——
-> **能取到仓库信息才是确证**。
-
-**查证迁移去向**：项目改名后旧地址通常 404，新地址可用以下方式找到：
-
-```bash
-gh api repos/<old-owner>/<repo> --jq '.full_name'   # 404 → 已迁移
-gh search repos <repo-name> --limit 5 --json fullName,stargazersCount
-```
-
-**修正时同步改「链接文字」**：显示文本若含 `owner/repo`，必须与新地址一致
-（只改 URL 会让读者看到与实际不符的来源）。**多语言文档全部同步。**
-
-> **不要改 vendored 第三方内容**：若链接出现在 `vendor/`、`*-src/` 等随上游
-> 一同引入的路径中（如依赖包的 CHANGELOG），那是上游的文档，**其链接失效
-> 不属我们的维护范围**，强行改写反而偏离上游。
-
-## 检查 GitHub Actions 的更新
-
-若仓库把第三方 action 固定到提交 SHA（供应链卫生的常见做法），
-**固定之后就收不到更新通知了**——这是一处必须主动检查的盲点。
-
-**为什么要自己查而不是靠外部自动化**：Dependabot 一类工具是外部自动化集成，
-由 GitHub 平台运行、我们无法审计其行为。若仓库的安全边界要求"不引入
-外部自动化"，就应自行实现同等能力——下面的流程只用到 `gh api` 与 `git`，
-完全可审计。
-
-### 第 1 步：列出所有固定的 action
-
-```bash
-grep -rhoE 'uses: [^ ]+@[0-9a-f]{40}' .github/workflows/*.yml |
-  sed 's/uses: //' | sort -u
-```
-
-输出形如 `actions/checkout@3d3c42e5…`。**同时记下注释里的版本号**
-（如 `# v7.0.1`），流程末尾需要同步更新它。
-
-### 第 2 步：查最新版本
-
-```bash
-check_action() {
-  local repo="$1"          # 如 actions/checkout
-  echo "=== $repo ==="
-  gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null ||
-    gh api "repos/$repo/tags" --jq '.[0].name' 2>/dev/null ||
-    echo "（无 release/tag，改用分支：见下）"
-}
-```
-
-> ⚠️ **有些 action 不用 release**（如 `DeterminateSystems/nix-installer-action`
-> 直接跟踪 `main`）。这类要查分支头：
->
-> ```bash
-> gh api repos/DeterminateSystems/nix-installer-action/commits/main --jq '.sha'
-> ```
-
-### 第 3 步：取 tag 对应的提交 SHA
-
-**必须取 tag 指向的 commit，不能取分支头**——否则会把未发布状态引入 CI：
-
-```bash
-gh api repos/<owner>/<repo>/git/ref/tags/<tag> --jq '.object.sha'
-```
-
-> ⚠️ **若返回 `type: "tag"`（annotated tag）**，再取一层：
->
-> ```bash
-> gh api repos/<owner>/<repo>/git/tags/<sha> --jq '.object.sha'
-> ```
-
-### 第 4 步：更新并写回注释
-
-```diff
--      - uses: actions/checkout@11d5960a…  # v4
-+      - uses: actions/checkout@3d3c42e5…  # v7.0.1
-```
-
-**注释中的版本号必须一并更新**——它是下次检查时的比对基准，不同步会让
-后续核对失去参照。
-
-### 第 5 步：验证
-
-```bash
-nix flake check          # 语法与结构
-```
-
-并确认 CI 通过。**注意区分偶发失败**：GitHub API 限流（`HTTP error 403`
-拉取 `api.github.com`）与 action 升级无关，重跑即可——判断方法是看**失败
-的是否只有涉及该 API 的 job、其余 job 是否通过**。
-
-### 判据：何时该升级
-
-| 情况 | 处理 |
-|------|------|
-| 跨大版本（如 v4 → v7） | 读 release notes 确认 breaking change 与安全修复 |
-| 仅 patch/minor | 通常可直接升 |
-| action 跟踪浮动分支（`@main`） | **优先固定到 SHA**，而非被动跟随 |
-
-## 常见陷阱（nixpkgs 漂移）
-
-更新后若系统切换（`nixos-rebuild switch` / `darwin-rebuild switch`）失败，
-优先排查以下 nixpkgs 漂移陷阱。
-
-### 1. 恢复旧 generation / flake.lock 时必须核对 `inputs.*.follows`
-
-只复制旧 `flake.lock` 而忽略 `flake.nix` 会丢失 `inputs.<x>.follows` 配置，
-导致子 flake 重新用独立锁定的旧 nixpkgs（如 glibc 2.40）→ 运行时
-`GLIBC_ABI_GNU2_TLS` 崩溃。恢复时需同时核对 `flake.nix` 中子 flake 的
-follows/url 定义，并验证 eval 出的实际 nixpkgs rev。
-
-### 2. python 包跳过测试用 `doInstallCheck = false`，不是 `doCheck = false`
-
-`pytestCheckHook` 把 pytest 套件跑在 **installCheckPhase**，`doCheck=false`
-无效（测试仍执行）。跳过测试必须设置 `doInstallCheck = false`。
-
-### 3. nixpkgs ≥ 2026-08-05 的 `pythonRuntimeDepsCheckHook` 破坏 wheel 构建
-
-新版 nixpkgs 引入 `pythonRuntimeDepsCheckHook`：wheel 的 METADATA 声明了运行时
-依赖（由运行环境提供）时构建失败。对策：在 vendored wheel 的 mkWheel 中加
-`dontCheckRuntimeDeps = true`。
-
-### 4. 无参数 `nix flake lock` 会刷新所有浮动 input（nixpkgs 漂移重演）
-
-`nix flake lock`（不带参数）会把所有浮动引用的 input（如
-`nixpkgs.url = ".../nixos-unstable"`）更新到最新版本。恢复旧 generation /
-固定依赖后若需重新 lock：
-
-- ✅ 用 `nix flake lock --update-input <name>` 只更新目标 input
-- ✅ 或直接在 `flake.nix` 中把 nixpkgs 固定到已验证 rev（`github:nixos/nixpkgs/<full-rev>`）
-- ❌ 避免无参数 `nix flake lock` —— 会把 nixpkgs 漂移到新版本，触发新的
-  `pythonRuntimeDepsCheckHook` / flaky 测试失败
-
-> 判断方法：报错含 `pythonRuntimeDepsCheckHook` / `not installed` /
-> `GLIBC_ABI_GNU2_TLS` 且位于 python 包构建阶段 → 命中陷阱 2 或 3；
-> 位于服务启动阶段 → 命中陷阱 1。
-
-### 5. 上游的「fail-closed 运行时依赖校验」：构建通过 ≠ 可用
-
-有些项目在**启动时**校验依赖的精确版本，不匹配就直接拒绝启动。此时
-`nix build` **会成功**，但你第一次运行才炸——典型的假成功。
-
-实测样本（godot-ai v4）：`verify_runtime_dependencies()` 比对 9 个包的精确
-版本，任一不符即 `RuntimeError: unsupported godot-ai runtime dependency set`。
-nixpkgs（含 unstable/master）在 5 个包上落后，故构建产物**根本起不来**。
-
-**识别**：上游把依赖写成 `==x.y.z` 硬 pin，且源码中有 `verify_*`/
-`check_*version*` 一类的启动期校验函数。
-
-**验证**：构建后**必须实际运行一次**（`--version` 即可），不能只看构建成功：
-
-```bash
-OUT=$(nix build .#<pkg> --print-out-paths --no-link)
-"$OUT/bin/<pkg>" --version        # 构建成功但此处抛错 = 命中本陷阱
-```
-
-**对策（按优先级）**：
-
-1. **抬依赖版本对齐上游**（推荐）——建 overlay 把 nixpkgs 的包改到上游要求
-   的版本。nixpkgs 落后不代表不能改：用 `overridePythonAttrs` 改
-   `version` + `src` + `hash` 即可（Rust 构建的包还要改 `cargoDeps`）。
-2. **确认无法对齐时**（如多个包需大改），向用户提问取舍，不要自行打补丁
-   绕过校验——那会**破坏上游有意的安全契约**，而 v4 的校验恰恰是为安全
-   边界服务的。
-
-> ⚠️ **不要把 `dontCheckRuntimeDeps = true` 当成万能解**：它只静默
-> **构建期**的 `pythonRuntimeDepsCheckHook`，对**运行期**的自校验完全无效。
-> 两者名字相似但作用阶段不同——构建期过了，运行时照样拒绝启动。
-
-### 6. `overridePythonAttrs` 改动 Rust 构建的包时，`cargoDeps` 要一并重取
-
-python 包若含原生扩展（如 `pydantic-core` 由 Rust 构建），改 `version`/`src`
-后 `cargoDeps` 也必须重算，否则 vendor 阶段失败。取 hash 的报错路径：
-
-```bash
-# sourceRoot 用 fetchFromGitHub 解包后的实际目录名（通常是 "source/<子目录>"），
-# 不是 "<pname>-<version>/<子目录>"——写错会报
-# "chmod: cannot access '...': No such file or directory"
-```
-
-> 顺带：若包的测试套件在新版本中新增依赖（如 websockets 17.1 新增
-> `tests/trio/` 而 nixpkgs 的 check inputs 没有 trio），报
-> `ModuleNotFoundError` 时给 `nativeCheckInputs` 补上即可。
 
 ## 仓库适配层
 

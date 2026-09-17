@@ -172,6 +172,25 @@ godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒�
 > 另：`pythonRuntimeDepsCheckHook` 相关的 `dontCheckRuntimeDeps = true` 只解决
 > **构建期**；**运行期**校验必须靠 overlay 真正抬版本，不能靠它绕过。
 
+### blender-mcp 的 Gitea 取源（2026-09-17 实测）
+
+`blender-mcp` 是**本仓唯一使用自托管 Gitea**（`projects.blender.org`）的包。
+2026-09-17 升级 1.0.0 → 1.0.3 时发现：`fetchFromGitea` 生成的
+`/archive/<rev>.tar.gz` 路径**对全部 tag 返回 403**，而
+`/api/v1/repos/lab/blender_mcp/archive/<rev>.tar.gz` 返回 200。
+
+**「1.0.0 还能构建」是假象**——它的 source 早在 Cachix / Nix store 里，
+`nix build` 命中的是缓存，**根本没发请求**。用 `--rebuild` 才会暴露。
+
+**本仓的处置**：改用 `fetchzip` 指向 API 端点 + `stripRoot = true`
+（复现 fetchFromGitea 剥掉顶层目录的语义，使 `preConfigure = "cd mcp"` 仍成立）。
+通用判据与验证方法见通用技能「非 GitHub 源」一节。
+
+> ⚠️ 该包**有独立 workflow**（`build-blender-mcp-{x86_64,aarch64}.yml`，不在
+> `check-workflows.py` 的 `EXEMPT` 登记中），故 CI 会构建它。但 **CI 同样可能
+> 命中二进制缓存**——`--rebuild` 只是清本地缓存，不可靠。改完取源方式后
+> **必须确认 CI 真的重新构建了**（看 workflow 日志是否有 fetch 阶段，
+> 而非全部 `copying path ... from cache`）。
 ### dsh-alpha 的 vendored lock（2026-09-17 实测）
 
 dsh tarball **不含** lock，需自行生成。踩到的坑：用
@@ -260,6 +279,29 @@ peer 条目（与仓库既有可工作的 `dsh-package-lock.json` 结构一致�
 
 **产出必须落到具体位置**（按 10.3 的归属判据），**不允许「知道了但没写」**
 ——没写下来的教训在下一次流程中等于不存在。
+
+#### ⚠️ 若本次在**测试分支**上作业：教训必须当场搬回 main
+
+实测验证技能、或任何「改了不打算合并」的分支作业，都会产生**真实且通用**的
+教训——但如果只在分支上写，这些教训会**随着分支一起被遗忘**。
+
+**本仓的真实损失（2026-09-17 实测）**：blender-mcp 实测分支上写出了
+70 行「自托管 forge（Gitea）取源」章节与 21 行适配层记录——`fetchFromGitea`
+的 `/archive/` 路径可能整体 403、须改用 API 端点 + `stripRoot = true`——
+这是**可复现、可追溯、任何自托管 forge 仓库都适用**的知识。但测试分支按
+约定永不合并，该知识**险些永久滞留**，直到事后审计才发现。
+
+| 情形 | 处置 |
+|---|---|
+| 测试分支产生了**通用**教训 | **当场**用第 10.3 判据归属，**手工写入 main**（禁止 cherry-pick——须核验证据在 main 上可复现） |
+| 测试分支产生了**本仓特有**教训 | 同上，写入本适配层 |
+| 纯属该次实验的临时产物（如回退基线） | 留在分支，不搬运 |
+
+**判据（与 10.3 一致）**：把这条教训搬到另一个 nix flake 仓库还成立吗？
+成立就搬——**「分支不会合并」不是「教训不重要」的理由**。
+
+> **不要等到分支结束再搬**：分支可能永远不会「结束」，而上下文一旦丢失，
+> 重建这条知识就要重新踩一遍坑。**在发现的那一刻搬运。**
 
 ### 10.2 校验规范文件的内容是否仍然成立
 
