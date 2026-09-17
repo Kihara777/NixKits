@@ -3,6 +3,16 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T00:38:59+09:00
+
+**摘要**：sandbox 段階 記述 書換、外部 scanner `RISKY_APPROVAL_DEFAULT` 解消（88 → 94） — 外部 catalog `awesome-ai-plugins` scanner 本 repo 対 `RISKY_APPROVAL_DEFAULT`（medium）五 件 報告。**制御実験** 依 trigger 語 `danger-full-access` 特定：空 repo 零 件、当該語 一行 注入 限定 finding 出現。**此 実際 risk 非**——本 repo 利用者 任意 選択 可能 挙動 「既知 設計境界」表 與 CLI 使用例 記述、既定値 設定 非。但 scanner pattern 照合 故、「文書 記述」與「設定 有効化」区別 不能。**修正 情報 一切 削 不 措辞 限定 変更**、結果 読者 対 更 正確 化（「既定 緩 不」明示）：四言語 `SECURITY.md`「sandbox 権限段階 利用者 明示的 選択、**既定 一切 緩 不**」化、`docs/zh/codewhale.md` CLI 例 `--sandbox <tier>` 化。**既存 記述誤 同時 修正**：例 `--sandbox` 記載、但 此 package 実際 引数 `--sandbox-mode`（`codewhale --help` 実行 確認）。正 形式 改。**実測 検証**（公式 scanner、CI 同一）：修正前 **88/100**（Security 13/16、medium 五）、修正後 **94/100（A - Excellent）**、Security **16/16**、medium 零。**意図的 行 不 最適化**：残 六 点 `Dependabot configured for automation surfaces` 由来。本 repo Dependabot **意図的 削除**（AGENTS.md「安全境界：外部自働化 導入 不」参照）、**点数 上 為 其 境界 破 不**。四言語 同期、`nix flake check` 全通過
+
+| 提交 | 説明 |
+|------|------|
+| `e386dfc` | docs(security): 改写沙箱档位表述，消除扫描器 RISKY_APPROVAL_DEFAULT（88 → 94） |
+
+> **注**：文言 限定 文書修正、`packages/` 與 `overlays/` 未変更。
+
 ## 2026-09-17T18:15:40+09:00
 
 **摘要**：汎用技能「主 flow + 二 配套参考」再構成、且 branch 分離 滞留 Gitea 教訓 回収 — 本 session 更新技能 **性能評価 基 改善**。**① 既知 知識損失 回収**：監査 依、blender-mcp 実測 branch 記載 70 行「自 host forge（Gitea）source 取得」節 與 21 行 適配層記録 **永続 滞留 寸前** 判明。test branch 取決 依 merge 不、但 其 知識（`fetchFromGitea` `fetchFromGitHub` 委譲 `/archive/` 経路 生成、自 host instance **全 tag 403** 返 可能、対策 API endpoint + `stripRoot = true`、且「旧版 仍 build 可能」単  cache 命中 可能）**再現可能・追跡可能 且 全 自 host forge 倉庫 該当**。持込 前 **main 上 証拠 逐一 再現**（403 対 200 実測、nixpkgs fetcher source 確認）機械的 cherry-pick 非。**② 回収 慣例 強化**：適配層 第 10 步 **test branch 生 汎用 教訓 其場 手作業 main 書** 要求 小節 追加——「branch merge 不」  「教訓 重要 非」理由 成 不——今回 実際 損失 根拠 記録。**③ 技能 再構成**：単一 file 918 行 実行中 目的 箇所 探 難、AGENTS.md「独立 data 配套 file 分割」従 主 flow `SKILL.md`（462 行）+ `builders.md`（254 行：builder 別 hash flow 與 `flake.lock` 処理）+ `traps.md`（271 行：漂移 罠、fail-closed、外部 link 失効監査、Actions、修正内蔵版）化。**完全性 四通 照合**（`##` 節、`###`/`####` 子節、行単位 比較、行数）。其中 **三 節 実際 取 落**（「修正内蔵版 確認」「外部 link 監査」「GitHub Actions 更新確認」——`sed` 境界 適配層 節 手前 化、此 三節 其 更 前 位置）見出  level 照合 発見 復元。最終 行単位 比較 差分 四 行 限定、何 及 意図的 書換 確認済。**④「commit 前 六 自問」新設**（第 7 步）：変体 複数 可否？依存表 一致 可否？source 取得 有効 可否？実際 実行 可否？文書 記述 成立 可否？`flake.lock` commit 可否？——**六 何 及 同日 実測 事故 抽出**、各問 一回 再実行 又 欠陥 対応。該当 則 `traps.md` 進 可、全文 読 不要。**評価 根拠**：本 session 実測 三 回、六 package 更新、初回成功率 4/6、且 三 回 再実行 **何 及 技能 記録済 又 記録 要 罠 原因**——故 改善 方向「教訓 正 場所 発見 可能 化」且 更 積増 非。四言語 文書 同期
