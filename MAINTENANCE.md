@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T13:53:26+09:00
+
+**摘要**：blender-mcp 1.0.0 → 1.0.3 — 在测试分支实测验证改进后的更新技能，暴露出技能的一处空白并修复。**技能有效性的正面验证**：①第 3 步版本核对**无假阳性**（上一轮同一命令对上 8 个包产生 6 个误报 UPDATE，根因是未按各包真实上游来源取版本，本次修正后 7 个包仅 1 个真实 UPDATE）；②第 9 步链式检查正常（前提校验 + 字段级跟进判据）；③多变体检查生效（确认 blender-mcp 为单定义文件，无 codewhale 式双变体风险）；④陷阱 5「构建成功 ≠ 可用」已执行（实际跑 `--help` 确认可用）。**本次暴露的技能空白**：`fetchFromGitea` 生成的 `/archive/<rev>.tar.gz` 路径**对全部 tag 返回 403**，而 `/api/v1/repos/lab/blender_mcp/archive/<rev>.tar.gz` 返回 200——根因是该 fetcher **委托给 `fetchFromGitHub`**（源码仅一层 `makeOverridable`，把 `domain` 映射为 `githubBase`），路径是 GitHub 风格，自托管 Gitea 不一定接受。**关键陷阱**：「1.0.0 仍能构建」是**假象**——source 早在 Cachix / Nix store 中，`nix build` 命中缓存**根本不发请求**，`--rebuild` 才暴露，故**不能以「旧版本能构建」推断旧路径可用**。**处置**：改用 `fetchzip` 指向 API 端点 + `stripRoot = true`（复现 fetchFromGitea 剥掉顶层目录的语义，使 `preConfigure = "cd mcp"` 仍成立——实测 `stripRoot` 取值错误会使路径变为 `blender_mcp/mcp` 而构建失败）。**证据（可复现）**：①4 个 tag × 2 条路径的 HTTP 状态矩阵（archive 全 403 / api 全 200）；②旧方式构建报 `curl: (22) ... 403` 与 `cannot download source`；③新方式成功产出 source；④产物核对 `bin/blender-mcp` 存在、addon 随包分发、`METADATA` Version 为 1.0.3；⑤**CI 实证**（run `35183624795`）日志显示实际执行了构建阶段而非 `copying path ... from cache`，证明新取源在干净环境真实可用。**泛化**：按第 10 步 10.3 判据（搬到别的 nix flake 仓库仍成立），通用技能新增「非 GitHub 源（Gitea 等自托管 forge）」章节，含判定矩阵（全 tag 403 vs 单 tag 403 vs UA 反爬）、`stripRoot` 语义陷阱、新旧 fetcher 布局对比的验证方法，并在包型分节补充「自托管 forge」入口；适配层记录本仓处置。四语文档同步（版本号 + 徽章标签 + 功能列表）
+
+| 提交 | 说明 |
+|------|------|
+| `8e4f66e` | test(skill): blender-mcp 1.0.0 → 1.0.3，实测验证改进后的更新技能 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| 　 | 取源方式 | `fetchFromGitea`（403）→ `fetchzip` + `stripRoot = true` |
+| 　 | src hash | `nt+sHozi` → `pYeByO4O` |
+
 ## 2026-09-17T13:00:09+09:00
 
 **摘要**：feat(skills): 适配层新增第 10 步「流程复盘与规范校验」 — 每次更新流程**全部完成后**执行，审计的**不是软件而是决定软件如何被更新的规范本身**（技能 / `AGENTS.md` / `SECURITY.md` / develop 脚本），即对更新流程自身做一次「检查更新」。六个子步：**10.1 复盘**（哪里第一次就失败 / 需要问用户 / 返工，逐条追根因）、**10.2 校验**（`AGENTS.md` / `SECURITY.md` 的断言是否仍成立，含外部链接可达性）、**10.3 归属**（按可移植性分流到通用技能 / 适配层 / `AGENTS.md` / `SECURITY.md`，判据是「搬到另一个 nix flake 仓库还成立吗」）、**10.4 体验**（复盘让用户等了几轮，收敛可自行查证项）、**10.5 证据纪律**、**10.6 产出**。**10.5 是硬约束**：规范改动须**可复现、可追溯、允许质疑**——禁止凭印象改规范、把一次偶发当规律、为已写对的内容「再优化」、删除仍有约束力但看似无用的条目，除非能证明其前提已消失。**首次执行即发现两处真实缺陷**（均**不产生构建错误**，只有主动审计才能发现）：①`SECURITY.md` 指向子仓 `SECURITY.md` 的**死链**——子仓根本没建该文件（已用 `gh api` 与 `curl` 双重确证 404），四语同步改为「该子项目尚未自建安全政策，漏洞请报至本仓库」；②**12 处** `Asus-linux/asusctl` 失效链接（3 份文档 × 4 语）——项目已迁移至 `OpenGamingCollective/asusctl`（`gh api` 确证 602 stars、HTTP 200），按「改 URL 同时改显示文本」的要求，链接文字一并更新。**泛化**：链接审计方法进通用技能「审计文档中的外部链接」，含三条判据——`curl` 的 404 须经 `gh api` 复核才定案（可能是权限/限流）、`403` 常为反爬不算死链、**vendored 第三方内容不改写**（如 `packages/kitsfmt-src/vendor/` 内的上游 CHANGELOG）。四语文档同步

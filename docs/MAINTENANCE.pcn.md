@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T13:53:26+09:00
+
+**摘要**：blender-mcp 1.0.0 → 1.0.3 — test branch 上 改良後 更新技能 実戦検証、技能 空白 一 露呈 且 修正。**技能有効性 肯定検証**：①第 3 步 版照合 **偽陽性 零**（前回 同一 command 八 包 対 六 誤 UPDATE 出、根因 各包 実際 上流 source 読 無。修正後 七 包 真 UPDATE 一 限定）；②第 9 步 連鎖確認 正常（前提検証 + field 単位 追従判据）；③多変体確認 有効（blender-mcp 単一定義 file、codewhale 型 双変体 risk 無 確認）；④罠 5「build 成功 ≠ 使用可能」実行（実際 `--help` 走 確認）。**今回 露呈 技能 空白**：`fetchFromGitea` 生成 `/archive/<rev>.tar.gz` 経路 **全 tag 403** 返、`/api/v1/repos/lab/blender_mcp/archive/<rev>.tar.gz` 200 返——根因 此 fetcher **`fetchFromGitHub` 委譲**（source `domain` `githubBase` 写 一層 `makeOverridable` 限定）。経路 GitHub 形式 故、自 host Gitea 受入 限 不。**重要 罠**：「1.0.0 仍 build 可能」**錯覚**——其 source 既 Cachix / Nix store 在、`nix build` cache 当 **一切 request 発行 不**。`--rebuild` 初 露呈。故 **「旧版 build 可能」 旧経路 使用 可能 推論 不可**。**処置**：API endpoint 対 `fetchzip` + `stripRoot = true` 変更（fetchFromGitea 最上位 dir 剥離 意味論 再現、`preConfigure = "cd mcp"` 成立——実測 `stripRoot` 値 誤 則 経路 `blender_mcp/mcp` 化 build 失敗）。**証拠（再現可能）**：①四 tag × 二 経路 HTTP 状態行列（archive 全 403 / api 全 200）；②旧方式 build `curl: (22) ... 403` 與 `cannot download source` 報告；③新方式 source 生成 成功；④成果物照合 `bin/blender-mcp` 存在、addon 同梱、`METADATA` Version 1.0.3；⑤**CI 実証**（run `35183624795`）log `copying path ... from cache` 非 実際 build 段階 実行 示、新 source 取得 clean 環境 真 機能 証明。**汎化**：第 10 步 10.3 判据（別 nix flake 倉庫 移 也 成立 可否）依、汎用技能「非 GitHub source（Gitea 等 自 host forge）」節 新設。判定行列（全 tag 403 / 単一 tag 403 / UA 依 反爬）、`stripRoot` 意味論 罠、新旧 fetcher layout 比較 依 検証方法 含、package 型 分節 也「自 host forge」入口 追加。適配層 本 repo 処置 記録。四言語 文書 同期（版番号 + badge label + 機能一覧）
+
+| 提交 | 説明 |
+|------|------|
+| `8e4f66e` | test(skill): blender-mcp 1.0.0 → 1.0.3，实测验证改进后的更新技能 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| 　 | source 取得方式 | `fetchFromGitea`（403）→ `fetchzip` + `stripRoot = true` |
+| 　 | src hash | `nt+sHozi` → `pYeByO4O` |
+
 ## 2026-09-17T13:00:09+09:00
 
 **摘要**：feat(skills): 適配層 第 10 步「process 振返 與 規範 検証」新設 — 更新 flow **完全 終了 後** 実行、監査 対象 **軟件 非、軟件 如何 更新 決定 規範 自体**（技能 / `AGENTS.md` / `SECURITY.md` / develop script）——即 更新 process 自身 対 更新確認。六 子步：**10.1 振返**（初回 失敗 箇所 / 利用者 問 必要 有 箇所 / 再実行 箇所 根本原因 迄 辿）、**10.2 検証**（`AGENTS.md` / `SECURITY.md` 記述 今 成立 可否。外部 link 到達性 含）、**10.3 帰属**（可搬性 依 汎用技能 / 適配層 / `AGENTS.md` / `SECURITY.md` 振分。判据「別 nix flake 倉庫 移 也 成立 可否」）、**10.4 体験**（利用者 何往復 待 為 振返、自行検証 可能 事項 潰）、**10.5 証拠規律**、**10.6 成果**。**10.5 硬性 制約**：規範 変更 **再現可能・追跡可能・異議申立 可能** 必要——印象 依 規範 変更、一度 偶発 法則 視、既 正 書 内容 対「更 最適化」、役 立 無 見 但 拘束力 残 条目 削除、前提 消 証明 不能 限 禁止。**初回 実行 二 実欠陥 発見**（何 及 **build error 生 不**、能動的 監査 限定 炙出 可能）：①`SECURITY.md` 子倉 `SECURITY.md` 指 **dead link**——当該 file 未作成（`gh api` 與 `curl` 双方 404 確証）。四言語「同 sub project 独自 安全政策 未整備。脆弱性 本 repo 報告 願」変更；②**十二 箇所** `Asus-linux/asusctl` 失効 link（三 文書 × 四 言語）——project `OpenGamingCollective/asusctl` 移転（`gh api` 602 stars、HTTP 200 確証）。「URL 修正 時 表示 text 也 修正」要求 従 連結 文言 也 更新。**汎化**：link 監査 手法 汎用技能「文書 外部 link 監査」入。三 判据 含——`curl` 404 `gh api` 再確認 後 初 確定（権限 又 制限 可能 性 有）、`403` 多 場合 scraping 対策 且 dead link 非、**vendored 第三者 content 書換 不**（`packages/kitsfmt-src/vendor/` 内 上流 CHANGELOG 等）。四言語 文書 同期
