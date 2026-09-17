@@ -2,6 +2,16 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T17:22:50+09:00
+
+**摘要**：`check-doc-versions` 検査 新設、「文書 版 = 包定義 版」断言化 — 今回 連続 発見 五 文書 版 不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）対 **構造的 防御**。此 種 不一致 **何 及 build 失敗 不** 故 人手 文書 読 非 則 発見 不能。故 `nix flake check` 第六 検査（従来 五）固定。**検査内容**：①`docs/<lang>/<pkg>.md`「版」行（四言語）包定義 宣言値 一致 必要；②多 channel 包（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）**channel 表** 版 也 四言語 検査；③版 他所 読 場合 也 追跡（`kitsfmt` `Cargo.toml` 読）；④例外 script `EXEMPT` 明示登録（`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不、`codewhale-src` 独立包 非、`dsh`/`dsh-alpha` channel 表 記載）。**定義 自 機械的 読出 可能 部分（版番号）限定 検査**。依存表・platform 対応・install 手順 自動比較 不能 故、明示的 範囲外——判定 人 判断 要 検査 書 不 為。**回帰 test（要点）**：今回 **実際 遭遇** 五 種類 欠陥 一 一 注入、全部 検出。message「何 file 何 記載、何 定義 何 宣言」明示——codewhale 0.9.12（zh）、godot-ai 3.2.5（zh）、mcp-searxng 2.2.0（en）、opencode-telegram 0.25.1（ja）版行 検査 捕捉、dsh-alpha channel 行 0.1.5-alpha.2（四言語）channel 検査 捕捉。**end-to-end 検証**：欠陥 注入 後 `nix flake check` **実際 経路** 失敗 確認（`failed to build attribute 'checks.x86_64-linux.doc-versions'`）——script 直接 実行 時 限定 失敗 非。**CI 確認**：push 後 `CI` workflow 成功（run `35199359526`）、log `evaluating 'checks.x86_64-linux.doc-versions'` 出現、検査 skip 非 実際 実行 示。`AGENTS.md` 規約・例外登録方法・適用範囲 記録
+
+| 提交 | 説明 |
+|------|------|
+| `072ab87` | feat(ci): 新增 check-doc-versions，把「文档版本 = 包定义版本」固化为断言 |
+
+> **注**：検査 script `develop/check-doc-versions.py` 追加 且 `flake.nix` `checks` 接続（検査数 五 → 六）。`packages/` 與 文書内容 未変更。
+
 ## 2026-09-17T16:12:06+09:00
 
 **摘要**：五 包 文書 版番号 修正（内容品質 修正） — **全 服務型包** 対象「文書 版 vs 包定義 版」体系的 照合、五 不一致 発見。何 及 既更新 但 文書 追随 未 事例：**codewhale** 0.9.12 → **0.9.13**（預編訳変体 與 source 変体 双方 0.9.13）、**mcp-searxng** 2.2.0 → **2.3.0**、**opencode-telegram** 0.25.1 → **0.25.2**、**dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1**（文書 與 README 二 箇所）、**codewhale-sudo** v0.9.12 → **v0.9.0 以降**。**最後 一件 機械的置換 非 判断 要**：当該 overlay 実際 **版 依存 不**（`codewhale.override { allowSudo = true; }`）、v0.9.0 導入 `prctl(PR_SET_NO_NEW_PRIVS)` 傍受 物。README「v0.9.12」古 限定 非 文書 本文（v0.9.0 記載）與 **自己矛盾** 故、偶 存在 版 固定 非 機能 由来 記述 形 改——且 **当該 overlay 0.9.13 也 正常 動作 実測**（codewhale 0.9.13 與 codew/codewhale-tui 三 binary 生成）。**意図的 残 歴史的参照**：`docs/*/modes/nixos.md`「`prefix` dsh 0.1.5-alpha.2 以降 必須」**出来事 記述**（field 何時 変化 記録）且 現在 版 標識 非 故、変更 則 反 記録 歪。**照合方法**：包 毎 定義 版 `grep` 四言語 比較、修正後 全体 再照合（10/10 一致。残 三「不一致」精査 結果 何 及 grep 誤検出——`dsh`/`ruyi` `version ?` 形式、`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不）。**併 実施 整合性検査**：文書 参照 九 file path 全部 実在、`nixkits.*` module option 全部 有効（疑 三 精査 結果 module option 非 flake 輸出）、文書中 包名 全部 実際 flake 輸出。`nix flake check` 全通過、四言語 同期

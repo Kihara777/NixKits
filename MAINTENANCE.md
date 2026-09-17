@@ -2,6 +2,16 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T17:22:50+09:00
+
+**摘要**：新增 `check-doc-versions` 检查，把「文档版本 = 包定义版本」固化为断言 — 对本轮连续发现的 5 处文档版本失配（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）的**结构性防御**：这类失配**不会让任何构建失败**，只有人工翻文档才发现，故固化为 `nix flake check` 的第 6 项检查（原 5 项）。**检查内容**：①`docs/<lang>/<pkg>.md` 的「版本」行（四语）须等于包定义声明的版本；②多通道包的**通道表**版本同样校验（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）且四语逐一检查；③版本从别处读出的同样跟踪（`kitsfmt` 读 `Cargo.toml`）；④例外须在脚本 `EXEMPT` 显式登记（`dsh-api-balance` 薄封装刻意不标版本、`codewhale-src` 非独立包、`dsh`/`dsh-alpha` 多通道记于通道表）。**只校验能从定义机械读出的部分**（版本号）；依赖表、平台支持、安装步骤无法自动比对，明确排除在范围外——避免把检查写成需要人判断的东西。**回归测试（关键）**：逐一注入本轮**实际发现过的** 5 类缺陷，全部被捕获且报错指明「哪个文件写了什么、哪个定义声明了什么」——codewhale 0.9.12（zh）、godot-ai 3.2.5（zh）、mcp-searxng 2.2.0（en）、opencode-telegram 0.25.1（ja）由版本行校验各自捕获，dsh-alpha 通道行 0.1.5-alpha.2（四语）由通道校验捕获。**端到端验证**：注入缺陷后经 `nix flake check` **真实路径**确认失败（`failed to build attribute 'checks.x86_64-linux.doc-versions'`），而非只在直接运行脚本时失败。**CI 确认**：推送后 `CI` workflow 成功（run `35199359526`），日志显示 `evaluating 'checks.x86_64-linux.doc-versions'`——检查确实被执行而非跳过。`AGENTS.md` 同步记录该约定、例外登记方式与适用范围
+
+| 提交 | 说明 |
+|------|------|
+| `072ab87` | feat(ci): 新增 check-doc-versions，把「文档版本 = 包定义版本」固化为断言 |
+
+> **说明**：本次新增检查脚本 `develop/check-doc-versions.py` 并挂入 `flake.nix` 的 `checks`（检查数 5 → 6），`packages/` 与文档内容未改动。
+
 ## 2026-09-17T16:12:06+09:00
 
 **摘要**：修正五个包的文档版本号（内容质量修复）— 对**全部服务型包**做「文档版本 vs 包定义版本」系统性核对，发现 5 处不一致、均已升级而文档未跟：**codewhale** 0.9.12 → **0.9.13**（预编译与源码两变体均为 0.9.13）、**mcp-searxng** 2.2.0 → **2.3.0**、**opencode-telegram** 0.25.1 → **0.25.2**、**dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1**（文档 + README 两处）、**codewhale-sudo** v0.9.12 → **v0.9.0 起**。**最后一项是判断问题而非机械替换**：该 overlay 实为**版本无关**（`codewhale.override { allowSudo = true; }`），拦截的是 v0.9.0 引入的 `prctl(PR_SET_NO_NEW_PRIVS)`；README 表写「v0.9.12」既过时又与文档正文（写 v0.9.0）**自相矛盾**，故改为描述特性来源而非钉住某个恰好存在的版本——并**实测该 overlay 在 0.9.13 上仍正常**（产出 codewhale 0.9.13 + codew/codewhale-tui 三个二进制）。**刻意保留的历史引用**：`docs/*/modes/nixos.md` 中「`prefix` 自 dsh 0.1.5-alpha.2 起为必填」是**事件描述**（记录字段何时变更），不是当前版本标识，改了反而失真。**核对方式**：逐包 `grep` 取包定义版本与四语文档比对，修正后再全量复核一遍（10/10 一致；剩余 3 处「不一致」经核查均为 grep 误报——`dsh`/`ruyi` 用 `version ?` 语法、`dsh-api-balance` 作为薄封装刻意不标版本）。**同时验证的完整性检查**：文档引用的 9 个文件路径全部存在、`nixkits.*` 模块选项全部有效（3 处疑似无效经复核为 flake 输出而非模块选项）、文档中的包名均在 flake 输出中。`nix flake check` 全通过，四语同步
