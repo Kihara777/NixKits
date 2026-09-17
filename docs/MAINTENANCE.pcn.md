@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T16:12:06+09:00
+
+**摘要**：五 包 文書 版番号 修正（内容品質 修正） — **全 服務型包** 対象「文書 版 vs 包定義 版」体系的 照合、五 不一致 発見。何 及 既更新 但 文書 追随 未 事例：**codewhale** 0.9.12 → **0.9.13**（預編訳変体 與 source 変体 双方 0.9.13）、**mcp-searxng** 2.2.0 → **2.3.0**、**opencode-telegram** 0.25.1 → **0.25.2**、**dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1**（文書 與 README 二 箇所）、**codewhale-sudo** v0.9.12 → **v0.9.0 以降**。**最後 一件 機械的置換 非 判断 要**：当該 overlay 実際 **版 依存 不**（`codewhale.override { allowSudo = true; }`）、v0.9.0 導入 `prctl(PR_SET_NO_NEW_PRIVS)` 傍受 物。README「v0.9.12」古 限定 非 文書 本文（v0.9.0 記載）與 **自己矛盾** 故、偶 存在 版 固定 非 機能 由来 記述 形 改——且 **当該 overlay 0.9.13 也 正常 動作 実測**（codewhale 0.9.13 與 codew/codewhale-tui 三 binary 生成）。**意図的 残 歴史的参照**：`docs/*/modes/nixos.md`「`prefix` dsh 0.1.5-alpha.2 以降 必須」**出来事 記述**（field 何時 変化 記録）且 現在 版 標識 非 故、変更 則 反 記録 歪。**照合方法**：包 毎 定義 版 `grep` 四言語 比較、修正後 全体 再照合（10/10 一致。残 三「不一致」精査 結果 何 及 grep 誤検出——`dsh`/`ruyi` `version ?` 形式、`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不）。**併 実施 整合性検査**：文書 参照 九 file path 全部 実在、`nixkits.*` module option 全部 有効（疑 三 精査 結果 module option 非 flake 輸出）、文書中 包名 全部 実際 flake 輸出。`nix flake check` 全通過、四言語 同期
+
+| 提交 | 説明 |
+|------|------|
+| `0a0d8ce` | docs: 修正五个包的文档版本号（内容质量修复） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale（文書） | 0.9.12 | 0.9.13 |
+| mcp-searxng（文書） | 2.2.0 | 2.3.0 |
+| opencode-telegram（文書） | 0.25.1 | 0.25.2 |
+| dsh-alpha（文書 + README） | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| codewhale-sudo（README 表現） | 「v0.9.12 sudo 機能」 | 「v0.9.0 以降 阻止 sudo 機能」 |
+
+> **注**：今回 **文書 限定 修正**、`packages/` 與 `overlays/` 未変更。
+
 ## 2026-09-17T15:56:56+09:00
 
 **摘要**：godot-ai 四言語文書 版番号 與 依存表 修正；汎用技能 第 5 步「機械的置換 非 書直」判据 新設 — **内容品質 修正 主**：main godot-ai **code** `2a06bbf` 既 4.1.0 到達 且 機能 完全（実測 `godot-ai --version` → 4.1.0、exit 0）、但 **文書 同期 未**、二 事実誤 残：①版番号 依然 `3.2.5`；②依存表 **六** 項 且 全「≥ 範囲」、実際 **九** 項 fail-closed 厳密固定。**② 方 有害**——v4 起動時 此 九 包 **正確 版** 検証、不一致 則 起動 拒否。文書「≥」記載 則 読者 版 自由 浮動 可能 誤解、其 通 行 則 `RuntimeError` 直撃。修正 依存表「版 + 提供元」二列 化 九 項 逐一 列挙、且 pydantic-core 連動 要求（`==2.46.5`）、build 時 `setuptools==84.0.0` pin 緩和 説明、「何故 検証 打消 修正 書 不」理由 補足。**照合**：文書 中 九 版番号 `nix eval` 以 **overlay 含 実際 閉包** 自 測定、**推測 非**。文書値 與 逐一 比較 **九/九 完全一致**；四言語 同期、`nix flake check` 全通過。**技能改善**：汎用技能 第 5 步「**文書 機械的置換 非 書直 時**」触发判据 新設（依存 範囲 厳密固定 化 / 起動時・build 時 硬 検証 追加 / 依存 増減 / build 方式 変更 / 対応 platform 狭）。**手作業 main 書込**（cherry-pick 非）。書込 前 各主張 検証 且 証拠 参照先 書換 main 上 自包含 且 再現可能 化：初稿「当該表 其後 書直 済」記述 也 削除——照合 結果 main 当時 尚未 書直、残 則 証拠 虚偽申告 成 故

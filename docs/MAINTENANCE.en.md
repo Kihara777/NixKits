@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T16:12:06+09:00
+
+**Summary**：Fixed the documented version numbers of five packages (a content-quality fix) — A systematic "documented version vs package-definition version" audit across **every service package** turned up 5 mismatches, all cases of an upgrade landing without the docs following: **codewhale** 0.9.12 → **0.9.13** (both the prebuilt and source variants are 0.9.13), **mcp-searxng** 2.2.0 → **2.3.0**, **opencode-telegram** 0.25.1 → **0.25.2**, **dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1** (two places: the doc and the README), and **codewhale-sudo** v0.9.12 → **since v0.9.0**. **The last one was a judgement call, not a mechanical substitution**: that overlay is in fact **version-agnostic** (`codewhale.override { allowSudo = true; }`) and intercepts the `prctl(PR_SET_NO_NEW_PRIVS)` introduced in v0.9.0; the README's "v0.9.12" was both stale and **self-contradictory with the doc body** (which says v0.9.0), so it now describes where the feature came from rather than pinning a version that merely happened to exist — and the overlay was **measured to still work on 0.9.13** (producing codewhale 0.9.13 plus the codew/codewhale-tui binaries). **Historical references deliberately left alone**: "`prefix` has been required since dsh 0.1.5-alpha.2" in `docs/*/modes/nixos.md` is an **event description** (recording when a field changed), not a current-version marker, so changing it would falsify the record. **How it was checked**: per package, `grep` the definition's version and compare against all four languages, then re-verify the whole set after fixing (10/10 consistent; the three remaining "mismatches" all turned out to be grep artifacts — `dsh`/`ruyi` use the `version ?` form, and `dsh-api-balance` deliberately carries no version as a thin wrapper). **Integrity checks performed alongside**: all 9 file paths referenced by the docs exist, every `nixkits.*` module option is valid (3 apparent misses were flake outputs rather than module options), and every package name named in the docs is a real flake output. `nix flake check` passes and all four languages are synced
+
+| Commit | Description |
+|------|------|
+| `0a0d8ce` | docs: 修正五个包的文档版本号（内容质量修复） |
+
+| Package | Old | New |
+|--------|--------|--------|
+| codewhale (docs) | 0.9.12 | 0.9.13 |
+| mcp-searxng (docs) | 2.2.0 | 2.3.0 |
+| opencode-telegram (docs) | 0.25.1 | 0.25.2 |
+| dsh-alpha (docs + README) | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| codewhale-sudo (README wording) | "sudo under v0.9.12" | "sudo blocked since v0.9.0" |
+
+> **Note**: this was a **documentation-only fix**; neither `packages/` nor `overlays/` changed.
+
 ## 2026-09-17T15:56:56+09:00
 
 **Summary**：Fixed godot-ai's four-language version number and dependency table; the generic skill's step 5 gained a "rewrite rather than mechanically substitute" criterion — **primarily a content-quality fix**: godot-ai's **code** on main had already reached 4.1.0 in `2a06bbf` and is fully functional (measured: `godot-ai --version` → 4.1.0, exit 0), but the **docs were never synced**, leaving two factual errors: (1) the version still read `3.2.5`; (2) the dependency table listed **6** entries, all as "≥ ranges", while the reality is **9** fail-closed exact pins. **The second is the more damaging** — v4 verifies the **exact version** of those nine packages at startup and refuses to start on any mismatch, so a "≥" table tells readers versions may float freely and following it walks straight into `RuntimeError`. The fix rewrites the table as "version + source" with all nine listed, and adds pydantic-core's coupled requirement (`==2.46.5`), an explanation of the relaxed build-time `setuptools==84.0.0` pin, and the rationale for not patching the check out. **Verification**: the nine documented versions were measured with `nix eval` from the **actual closure including the overlays** — **not inferred** — and compared one by one against the docs: **9/9 identical**; all four languages synced and `nix flake check` passes. **Skill improvement**: the generic skill's step 5 gained a trigger criterion for "**when docs must be rewritten rather than mechanically substituted**" (dependencies moving from ranges to exact pins / new startup or build-time hard checks / added or removed dependencies / changed build method / narrowed platform requirements), **written into main by hand** (not cherry-picked). Before writing, each claim was verified and its evidence pointer rewritten to be self-contained and reproducible on main; this also removed a draft sentence claiming "that table has since been rewritten" — checking showed main had *not* rewritten it at the time, so keeping it would have been a false claim of evidence
