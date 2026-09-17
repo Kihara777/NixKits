@@ -12,7 +12,7 @@ Production-grade MCP server and AI tools for the Godot engine — connects MCP c
 |------|-------|
 | Type | Python application (MCP server) |
 | Upstream | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| Version | `3.2.5` |
+| Version | `4.1.0` |
 | License | MIT |
 | Python | ≥ 3.11 |
 
@@ -27,16 +27,25 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## Dependencies
 
-| Dependency | Source | Requirement |
-|------------|--------|-------------|
-| fastmcp | NixKits overlay | ≥ 3.4.0 (nixpkgs pins 3.3.1 which has a circular-import bug) |
-| websockets | nixpkgs | ≥ 13.0 |
-| pydantic | nixpkgs | ≥ 2.0 |
-| httpx | nixpkgs | ≥ 0.27 |
-| uvicorn | nixpkgs | ≥ 0.23 |
-| starlette | nixpkgs | ≥ 0.40 |
+**Fail-closed exact pins since v4**: at startup it verifies the **exact version** of the nine packages below and raises `RuntimeError` on any mismatch, refusing to start. nixpkgs lags on five of them, so `overlays/godot-ai-v4-deps.nix` raises them to what upstream requires.
 
-> **fastmcp 3.4 upgrade**: nixpkgs fastmcp 3.3.1 has a circular-import bug (`fastmcp.server` fails to import). NixKits bumps it to 3.4.7 via `overlays/fastmcp.nix`, with cascading fastmcp-slim + py-key-value-aio 0.4.5 upgrades.
+| Dependency | Version | Source |
+|------------|---------|--------|
+| fastmcp | `3.4.7` | `overlays/fastmcp.nix` |
+| anyio | `4.14.2` | nixpkgs |
+| mcp | `1.29.1` | `overlays/godot-ai-v4-deps.nix` |
+| websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
+| pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
+| httpx | `0.28.1` | nixpkgs |
+| uvicorn | `0.52.4` | `overlays/godot-ai-v4-deps.nix` |
+| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
+| h11 | `0.16.0` | nixpkgs |
+
+> **pydantic-core**: pydantic 2.13.5 requires `pydantic-core==2.46.5` (nixpkgs ships 2.46.4). That package is Rust-built, so bumping it means re-fetching `cargoDeps` as well.
+
+> **Build-time pin**: upstream hardcodes `setuptools==84.0.0` in `[build-system].requires` (nixpkgs ships 83.0.0); the package's `postPatch` relaxes it — that pin is a reproducibility guard, not a feature requirement.
+
+> **Why not patch the check out**: v4's exact pins serve its security boundaries (connection / body / frame / session budgets), so relaxing `runtime_dependencies.py` would silently weaken that boundary. We raise the dependencies to match upstream rather than bending the check to nixpkgs.
 
 ## Install & Usage
 
