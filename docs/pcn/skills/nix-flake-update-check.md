@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、版意味論 変化 時 文書 機械的置換 非 書直 、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -19,6 +19,7 @@
 - **builder 別** hash 更新 flow（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
 - **GitHub Actions 更新確認**：自行実装（`gh api` tag 解決 → commit SHA 取得 → 書戻 與 comment 版数 同期）。action SHA 固定 後 更新通知 届 無 盲点 補；**Dependabot 等 外部自動化 依存 不**
 - **文書 外部 link 失効監査**：全（多言語 含）外部 link 抽出 個別 探査。`404` `gh api` 再確認 後 初 確定（`curl` 404 権限 又 制限 可能 性 有）。`403` 多 場合 scraping 対策 且 dead link 非。修正 時 **表示 text 也 同期** 全言語 一度 修正。vendored 第三者 content 書換 不
+- **機械的置換 非 文書 書直 触发判据**：依存 範囲 厳密固定 化、起動時／build 時 硬 検証 追加、依存 増減、build 方式 変更、対応 platform 狭——一 該当 則 人 文書 読 必要。「何時 書直」規定 且「如何 書」規定 不 明記
 - hash 罠：SRI 形式、`fetchFromGitHub` 與 archive tarball 不一致、`lib.fakeHash`、npm 2 回構築
 - Rust 包 **`Cargo.lock` 同期**必要（最 漏 易）
 - `flake.lock` 三路分岐：gitignore 済 → skip；動的版 有 → 除外必須；他 → hash 與 共 commit

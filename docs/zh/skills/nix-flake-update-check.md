@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、版本语义变化时文档须重写而非机械替换、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -19,6 +19,7 @@
 - 按**包型**（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）分流的 hash 更新流程
 - **GitHub Actions 更新检查**：自行实现（`gh api` 查 tag → 取 commit SHA → 回写并同步注释版本号），覆盖「action 固定 SHA 后收不到更新通知」这处盲点；**不依赖 Dependabot 等外部自动化**
 - **文档外部链接失效审计**：抽取全部（含多语言）外部链接逐个探测；`404` 用 `gh api` 复核后才定案（`curl` 的 404 可能是权限/限流），`403` 常为反爬不算死链；修正时**同步改显示文本**且四语一起改，vendored 第三方内容不改
+- **文档须重写而非机械替换的触发判据**：依赖由范围变精确锁、新增启动/构建期硬校验、依赖项增删、构建方式变化、平台要求收窄——命中任一条就要人读文档；只规定「何时重写」，明确声明不规定「怎么写」
 - hash 计算陷阱：SRI 格式、`fetchFromGitHub` 与 archive tarball hash 不一致、`lib.fakeHash`、npm 两次构建
 - Rust 包需**同步 `Cargo.lock`**（最易遗漏）
 - `flake.lock` 三路处置：已 gitignore → 跳过；有动态版本 → 必须排除；其他 → 随 hash 一并提交

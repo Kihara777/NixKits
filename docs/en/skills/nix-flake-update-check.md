@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, rewriting (not mechanically substituting) docs when version semantics change, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -19,6 +19,7 @@
 - Per-builder hash update flows (npm / cmake / Rust `buildRustPackage` / `fetchurl` / python)
 - **GitHub Actions update checking**: self-implemented (`gh api` to resolve tags → take the commit SHA → write it back and sync the version comment), covering the blind spot that appears once actions are pinned to SHAs; **no reliance on external automation such as Dependabot**
 - **Dead-link audit for documented external links**: extract every external link (including all languages) and probe each; a `404` is only confirmed after re-checking with `gh api` (a `curl` 404 can be permissions or rate limiting), and `403` is usually anti-scraping rather than a dead link; when fixing, **update the display text too** across every language, and never rewrite vendored third-party content
+- **Triggers for rewriting docs instead of mechanically substituting**: dependencies moving from ranges to exact pins, new startup/build-time hard checks, added or removed dependencies, changed build method, narrowed platform requirements — hitting any one means a human must read the docs; it governs "when to rewrite" and explicitly disclaims "how to write"
 - Hash gotchas: SRI format, `fetchFromGitHub` vs archive tarball mismatch, `lib.fakeHash`, npm's two build passes
 - Rust packages must **sync `Cargo.lock`** (the most commonly missed step)
 - Three-way `flake.lock` handling: already gitignored → skip; has dynamic versions → must exclude; otherwise → commit alongside hashes
