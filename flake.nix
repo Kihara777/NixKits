@@ -53,6 +53,7 @@
     # - preset-bundle：包内技能快照必须与 skills/ 树逐字节一致
     # - workflow-coverage：每个包都有构建 workflow（例外显式登记）
     # - doc-links：文档相对链接可达、语言切换器四语齐全
+    # - doc-versions：文档版本号与包定义一致（四语 + 通道表）
     # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
     # - news-mode-tests：新闻三要素模式插件的行为测试
     checks = {
@@ -85,6 +86,14 @@
       } ''
         cd ${self.outPath}
         python3 develop/check-doc-links.py
+        touch $out
+      '';
+
+      doc-versions = pkgs.runCommand "check-doc-versions" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-doc-versions.py
         touch $out
       '';
 
