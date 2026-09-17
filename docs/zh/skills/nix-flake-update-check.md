@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、版本语义变化时文档须重写而非机械替换、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -29,6 +29,7 @@
 - **交互式澄清**：开工前用一次批量提问解决所有待定项（跨大版本、依赖冲突解法、通道选择、是否部署），避免「猜一次→被纠正→重来」的多轮往返；不支持提问的智能体则一次性输出待定清单并停下
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
 - **fail-closed 运行时依赖校验**：上游启动时比对精确版本，构建成功 ≠ 可用，必须实际运行一次验证
+- **文档须重写而非机械替换的触发判据**：依赖由范围变精确锁、新增启动/构建期硬校验、依赖项增删、构建方式变化、平台要求收窄——命中任一条就要人读文档；只规定「何时重写」，不规定「怎么写」
 
 ## 设计：为什么拆成两个技能
 

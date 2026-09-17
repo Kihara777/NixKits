@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、版意味論 変化 時 文書 機械的置換 非 書直 、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -29,6 +29,7 @@
 - **対話的確認**：着手前 一度 批次質問 全 保留事項 解決（大版跨、依存衝突 解法、channel 選択、配備可否）。「推測 → 訂正 → 再実行」往復 避；質問機構 無 代理 保留 list 一度 輸出 停止
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
 - **fail-closed 実行時依存検証**：上流 起動時 正確 版 照合 故、build 成功 ≠ 使用可能。必 一度 実行 検証
+- **機械的置換 非 文書 書直 触发判据**：依存 範囲 厳密固定 化、起動時／build 時 硬 検証 追加、依存 増減、build 方式 変更、対応 platform 狭——一 該当 則 人 文書 読 必要。「何時 書直」規定、「如何 書」規定 不
 
 ## 設計：何故 二 技能 分割
 

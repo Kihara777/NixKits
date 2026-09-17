@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, rewriting (not mechanically substituting) docs when version semantics change, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -29,6 +29,7 @@
 - **Interactive clarification**: settle every open decision in one batched round of questions before starting (cross-major upgrades, dependency-conflict remedies, channel choice, whether to deploy), avoiding the "guess → get corrected → redo" loop; agents without interactive questions should emit the open list once and stop
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
 - **Fail-closed runtime dependency verification**: upstream compares exact versions at startup, so a successful build is not a working binary — always run it once to verify
+- **Triggers for rewriting docs instead of mechanically substituting**: dependencies moving from ranges to exact pins, new startup/build-time hard checks, added or removed dependencies, changed build method, narrowed platform requirements — hitting any one means a human must read the docs; it governs "when to rewrite", not "how to write"
 
 ## Design: why two skills
 
