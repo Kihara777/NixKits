@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T12:52:54+09:00
+
+**摘要**：fix(codewhale): x86_64/aarch64 預編訳変体 也 0.9.13 迄 — **配備後 照合 初 判明** 変更漏：前 条目 `codewhale-src`（riscv64 源 build 変体、Cargo.lock 同期 含）限定 更新、**`codewhale.nix` 漏**——x86_64/aarch64 GitHub Releases 預編訳 binary 経路、`flake.nix` `hostPlatform.isRiscV` 依 分岐。症状「局部 build 通過 且 dsh 也 0.1.6-alpha.1 化、但 系統上 `codewhale --version` 依然 0.9.12」。**本 repo codewhale 同名同輸出 二 変体 持**：`codewhale.nix`（預編訳。`version` 與 cli/tui × x64/arm64 **四 hash** 必要）與 `codewhale-src.nix`（源 build。`version` + `hash` + `Cargo.lock` 同期 必要）——**更新 時 両方 変更 必要**。実測 0.9.13 cli 與 tui 資産 hash 同一（`WTriVnVv…` / `BgUnHSo0…`）、0.9.12 時 同様、但 四 値 各自 記入 故 結果 二 二 一致。**汎化**：此 罠 適配層「本倉庫固有 罠」記載、判据 添——**配備後 変体 毎 其 architecture 上 実際 版 照合。build 通過 限定 判断 不**
+
+| 提交 | 説明 |
+|------|------|
+| `ecb28c4` | fix(codewhale): 同步升级 x86_64/aarch64 的预编译二进制变体至 0.9.13 |
+| `f8c8265` | docs(skills): 记录 codewhale 双变体陷阱（四语） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale（x86_64/aarch64 預編訳） | 0.9.12 | 0.9.13 |
+| 　 | cli/tui hash x64 | `nQt02NO/` → `WTriVnVv` |
+| 　 | cli/tui hash arm64 | `Gkje9AMu` → `BgUnHSo0` |
+
 ## 2026-09-17T12:41:29+09:00
 
 **摘要**：五 包昇級 + 更新技能「対話的確認」追加 — 生産環境 実戦 承認済 更新 全部 実行：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（大版跨）。**godot-ai v4 今回 最難 項目**：**fail-closed 実行時依存検証** 導入、起動時 九 包 正確 版 照合、一 不一致 則 `RuntimeError: unsupported godot-ai runtime dependency set` 起動 拒否。nixpkgs（unstable 與 master 含）五 遅（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1）、故 新規 `overlays/godot-ai-v4-deps.nix` 追加 此 五 上流 要求版 迄 引上（pydantic-core 連動 2.46.5 化、Rust `cargoDeps` 再取得）、既存 `fastmcp` overlay 與 **連鎖**。**上流 安全契約 破壊 不 方向 先 利用者 確認 承認 取得**——検証 打消 修正 書 不。**踏 罠**：`flake.nix` 的 `godotPkgs` 與 `overlays/default.nix` 二 独立 overlay 連鎖、初版 前者 限定 変更 為 `--version` 依然 RuntimeError。両方 同期 後 通過。又 上流 `setuptools==84.0.0` build 時 pin 緩和（nixpkgs 83.0.0。此 pin 再現性 守 非 機能要件）。**codewhale** 更新 技能 要求 通 **Cargo.lock 同期**（7073 → 7347 行、上流 `wl-clipboard-rs` 等 追加）——漏 則 build 失敗。**dsh-alpha** vendored lock 罠 踏：`npm install --package-lock-only --legacy-peer-deps` 生成 lock **`"peer": true` 条目 含 無**、build `ENOTCACHED` 失敗。此 flag 外 則 npm peer 条目 書込（既存 動作 lock 與 構造 一致、何 及 24 条）。**技能 汎化**：`nix-flake-update-check` 新設「対話的確認」節——質問機構 有 代理（DSH 等）**着手前 保留事項 一度 総 問** 必要、「推測 → 訂正 → 再実行」往復 避（再実行 毎 再 build、build 本 flow 最 高価 工程）。併 罠 5（fail-closed 実行時検証：build 成功 ≠ 使用可能。必 一度 実行 検証）與 罠 6（`overridePythonAttrs` Rust build 包 変更 際 `cargoDeps` 也 再取得 必要）追加、npm 節 peer 条目 要件 補足。適配層 本 repo 実測 三 罠 追加。**検証**：五 全部 build 通過 且 実際 実行 確認（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）。`nix flake check` 全部 通過

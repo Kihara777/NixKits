@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T12:52:54+09:00
+
+**摘要**：fix(codewhale): 补齐 x86_64/aarch64 预编译变体至 0.9.13 — **部署后核对才发现**的漏改：前一条目只升级了 `codewhale-src`（riscv64 的源构建变体，含 Cargo.lock 同步），**漏掉了 `codewhale.nix`**——x86_64/aarch64 走的是 GitHub Releases 预编译二进制路径，由 `flake.nix` 按 `hostPlatform.isRiscV` 分流。症状是「本机构建通过、dsh 也已升到 0.1.6-alpha.1，但系统上 `codewhale --version` 仍是 0.9.12」。**本仓 codewhale 有两个变体同名同输出**：`codewhale.nix`（预编译，需改 `version` + cli/tui × x64/arm64 **四个 hash**）与 `codewhale-src.nix`（源构建，需改 `version` + `hash` + 同步 `Cargo.lock`）——**升级必须两个都改**。实测 0.9.13 的 cli 与 tui 资产 hash 相同（`WTriVnVv…` / `BgUnHSo0…`），与 0.9.12 时一致；但四个值仍分别填入，故四值两两相同。**泛化**：该陷阱已写入适配层「本仓特有陷阱」，并附判据——**部署后逐个变体所在架构核对实际版本，不要只看构建通过**
+
+| 提交 | 说明 |
+|------|------|
+| `ecb28c4` | fix(codewhale): 同步升级 x86_64/aarch64 的预编译二进制变体至 0.9.13 |
+| `f8c8265` | docs(skills): 记录 codewhale 双变体陷阱（四语） |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale（x86_64/aarch64 预编译） | 0.9.12 | 0.9.13 |
+| 　 | cli/tui hash x64 | `nQt02NO/` → `WTriVnVv` |
+| 　 | cli/tui hash arm64 | `Gkje9AMu` → `BgUnHSo0` |
+
 ## 2026-09-17T12:41:29+09:00
 
 **摘要**：五个软件包升级 + 更新技能追加「交互式澄清」 — 生产环境实战执行全部批准升级：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（跨大版本）。**godot-ai v4 是本次最难的一项**：它引入 **fail-closed 运行时依赖校验**——启动时比对 9 个包的精确版本，任一不符即 `RuntimeError: unsupported godot-ai runtime dependency set` 拒绝启动。nixpkgs（含 unstable 与 master）在 5 个包上落后（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1），故新增 `overlays/godot-ai-v4-deps.nix` 把这 5 个包抬到上游要求（pydantic-core 连带抬到 2.46.5 并重取 Rust 的 `cargoDeps`），与既有 `fastmcp` overlay **链式叠加**。**先按「不破坏上游安全契约」的方向征询并取得批准**，而非打补丁绕过校验。**踩坑**：`flake.nix` 的 `godotPkgs` 与 `overlays/default.nix` 是两处独立的 overlay 链，初版只改了前者，导致 `--version` 仍 RuntimeError；两处同步后才通过。另放宽上游 `setuptools==84.0.0` 构建期 pin（nixpkgs 为 83.0.0，该 pin 是可复现性守卫而非功能需求）。**codewhale** 升级按技能要求**同步 Cargo.lock**（7073 → 7347 行，上游新增 `wl-clipboard-rs` 等）——漏掉即构建失败。**dsh-alpha** 踩到 vendored lock 陷阱：用 `npm install --package-lock-only --legacy-peer-deps` 生成的 lock **不含 `"peer": true` 条目**，构建报 `ENOTCACHED`；去掉该 flag 后 npm 才写入 peer 条目（与既有可工作的 lock 结构一致，均 24 条）。**技能泛化**：`nix-flake-update-check` 新增「交互式澄清」章节——支持提问的智能体（如 DSH）须**开工前批量问全**待定项，避免「猜一次→被纠正→重来」的多轮往返（每次重来都要重跑构建，而构建是本流程最贵的环节）；同时新增陷阱 5（fail-closed 运行时校验：构建成功 ≠ 可用，必须实际运行一次验证）与陷阱 6（`overridePythonAttrs` 改 Rust 构建包时 `cargoDeps` 须一并重取），并在 npm 节补充 peer 条目要求。适配层补充本仓三处实测陷阱。**验证**：五包全部构建通过并实际运行确认（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）；`nix flake check` 全通过

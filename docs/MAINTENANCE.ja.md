@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T12:52:54+09:00
+
+**概要**：fix(codewhale): x86_64/aarch64 のプリビルド変体も 0.9.13 へ — **配備後の照合で初めて判明した**変更漏れ：前の条目は `codewhale-src`（riscv64 のソースビルド変体、Cargo.lock 同期を含む）だけを更新し、**`codewhale.nix` を漏らしていた**——x86_64/aarch64 は GitHub Releases のプリビルドバイナリ経路であり、`flake.nix` が `hostPlatform.isRiscV` で分岐している。症状は「ローカルのビルドは通り dsh も 0.1.6-alpha.1 になっているのに、システム上の `codewhale --version` は依然 0.9.12」。**本リポジトリの codewhale は同名同出力の二つの変体を持つ**：`codewhale.nix`（プリビルド。`version` と cli/tui × x64/arm64 の **4 つの hash** が必要）と `codewhale-src.nix`（ソースビルド。`version` + `hash` + `Cargo.lock` の同期が必要）——**更新時は両方を変更せねばならない**。実測では 0.9.13 の cli と tui の資産 hash は同一（`WTriVnVv…` / `BgUnHSo0…`）で、0.9.12 のときと同じであったが、4 つの値はそれぞれ記入するため結果として二つずつ一致する。**汎化**：この罠は適応層の「本リポジトリ固有の罠」に記載し、判据を添えた——**配備後は変体ごとにそのアーキテクチャ上で実際の版を照合する。ビルド通過だけで判断しない**
+
+| コミット | 説明 |
+|------|------|
+| `ecb28c4` | fix(codewhale): 同步升级 x86_64/aarch64 的预编译二进制变体至 0.9.13 |
+| `f8c8265` | docs(skills): 记录 codewhale 双变体陷阱（四语） |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| codewhale（x86_64/aarch64 プリビルド） | 0.9.12 | 0.9.13 |
+| 　 | cli/tui hash x64 | `nQt02NO/` → `WTriVnVv` |
+| 　 | cli/tui hash arm64 | `Gkje9AMu` → `BgUnHSo0` |
+
 ## 2026-09-17T12:41:29+09:00
 
 **概要**：五つのパッケージ更新 + 更新スキルに「対話的確認」を追加 — 本番環境での実戦として承認済みの更新を全て実行した：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（大版本跨ぎ）。**godot-ai v4 が今回最难の項目**であった：**fail-closed な実行時依存検証**を導入しており、起動時に九つのパッケージの正確な版を照合し、一つでも不一致なら `RuntimeError: unsupported godot-ai runtime dependency set` で起動を拒否する。nixpkgs（unstable と master を含む）は五つで遅れており（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1）、そのため新たに `overlays/godot-ai-v4-deps.nix` を追加してこの五つを上流の要求版まで引き上げ（pydantic-core も連動して 2.46.5 へ、Rust の `cargoDeps` も再取得）、既存の `fastmcp` overlay と**連鎖**させた。**上流のセキュリティ契約を壊さない方向で先にユーザーへ確認し承認を得た**——検証を打ち消すパッチは書かない。**踏んだ罠**：`flake.nix` の `godotPkgs` と `overlays/default.nix` は二つの独立した overlay 連鎖であり、初版は前者だけを変更したため `--version` が依然 RuntimeError となった。両方を同期させて初めて通過した。また上流の `setuptools==84.0.0` というビルド時 pin を緩和した（nixpkgs は 83.0.0。この pin は再現性の守りであって機能要件ではない）。**codewhale** の更新ではスキルの要求どおり **Cargo.lock を同期**した（7073 → 7347 行、上流が `wl-clipboard-rs` 等を追加）——漏らせばビルドが失敗する。**dsh-alpha** では vendored lock の罠を踏んだ：`npm install --package-lock-only --legacy-peer-deps` で生成した lock は **`"peer": true` 条目を含まず**、ビルドが `ENOTCACHED` で失敗する。このフラグを外すと npm が peer 条目を書き込む（既存の動作する lock と構造が一致し、いずれも 24 条）。**スキルの汎化**：`nix-flake-update-check` に「対話的確認」の節を新設——質問機構を持つエージェント（DSH など）は**着手前に保留事項を一度にまとめて問う**必要があり、「推測 → 訂正 → やり直し」の往復を避ける（やり直しの度にビルドを再実行することになり、ビルドは本フローで最も高価な工程である）。併せて罠 5（fail-closed 実行時検証：ビルド成功 ≠ 使用可能。必ず一度実行して検証する）と罠 6（`overridePythonAttrs` で Rust ビルドのパッケージを変更する際は `cargoDeps` も再取得が必要）を追加し、npm の節に peer 条目要件を補足した。適応層には本リポジトリで実測した三つの罠を追加。**検証**：五つ全てがビルドを通過し、実際に実行して確認（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）。`nix flake check` は全て通過
