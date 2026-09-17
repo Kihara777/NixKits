@@ -12,7 +12,7 @@ Godotエンジン向けの本格的なMCPサーバーおよびAIツール — MC
 |------|-----|
 | タイプ | Python アプリ（MCPサーバー）|
 | 上流 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| バージョン | `3.2.5` |
+| バージョン | `4.1.0` |
 | ライセンス | MIT |
 | Python | ≥ 3.11 |
 
@@ -27,16 +27,25 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## 依存関係
 
-| 依存 | 提供元 | 要件 |
-|------|--------|-----|
-| fastmcp | NixKits overlay | ≥ 3.4.0（nixpkgs の 3.3.1 には循環 import バグ）|
-| websockets | nixpkgs | ≥ 13.0 |
-| pydantic | nixpkgs | ≥ 2.0 |
-| httpx | nixpkgs | ≥ 0.27 |
-| uvicorn | nixpkgs | ≥ 0.23 |
-| starlette | nixpkgs | ≥ 0.40 |
+**v4 以降は fail-closed な厳密固定**：起動時に以下の 9 パッケージの**正確な版**を照合し、一つでも異なれば `RuntimeError` を送出して起動を拒否します。nixpkgs は 5 つで遅れているため、`overlays/godot-ai-v4-deps.nix` が上流の要求まで引き上げます。
 
-> **fastmcp 3.4 アップグレード**: nixpkgs の fastmcp 3.3.1 には `fastmcp.server` の循環 import バグがあります。NixKits は `overlays/fastmcp.nix` で 3.4.7 にアップグレードし、fastmcp-slim + py-key-value-aio 0.4.5 も連動アップグレードします。
+| 依存 | 上流の要求 | nixpkgs | 提供元 |
+|------|-----------|---------|--------|
+| fastmcp | `==3.4.7` | 3.4.7 | `overlays/fastmcp.nix` |
+| anyio | `==4.14.2` | 4.14.2 | nixpkgs |
+| mcp | `==1.29.1` | 1.29.0 | **overlay で引上げ** |
+| websockets | `==17.1` | 16.1 | **overlay で引上げ** |
+| pydantic | `==2.13.5` | 2.13.4 | **overlay で引上げ** |
+| httpx | `==0.28.1` | 0.28.1 | nixpkgs |
+| uvicorn | `==0.52.4` | 0.51.0 | **overlay で引上げ** |
+| starlette | `==1.6.0` | 1.3.1 | **overlay で引上げ** |
+| h11 | `==0.16.0` | 0.16.0 | nixpkgs |
+
+> **pydantic-core**：pydantic 2.13.5 は `pydantic-core==2.46.5` を要求します（nixpkgs は 2.46.4）。同パッケージは Rust ビルドのため、引上げ時は `cargoDeps` も再取得が必要です。
+
+> **ビルド時の pin**：上流は `[build-system].requires` に `setuptools==84.0.0` を固定しています（nixpkgs は 83.0.0）。パッケージ内の `postPatch` で緩和しています——この pin は再現性の守りであり機能要件ではありません。
+
+> **検証を打ち消すパッチにしない理由**：v4 の厳密固定はその安全境界（接続／本文／フレーム／セッションの予算）に奉仕するものです。`runtime_dependencies.py` を緩めればその境界を静かに弱めることになります。ゆえに「検証を nixpkgs に合わせる」のではなく「依存を上流に合わせて引き上げる」方を採ります。
 
 ## インストールと使用方法
 

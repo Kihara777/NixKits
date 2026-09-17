@@ -19,8 +19,10 @@
     allSystems = flake-utils.lib.defaultSystems ++ [ "riscv64-linux" ];
   in flake-utils.lib.eachSystem allSystems (system: let
     pkgs = nixpkgs.legacyPackages.${system};
-    # godot-ai needs fastmcp >= 3.4 (3.3.x has circular-import bug)
-    godotPkgs = pkgs.extend self.overlays.fastmcp;
+    # godot-ai needs both overlays chained: fastmcp >= 3.4 (3.3.x has the
+    # circular-import bug) plus the exact runtime versions its v4 fail-closed
+    # contract verifies at startup.  Keep in sync with overlays/default.nix.
+    godotPkgs = (pkgs.extend self.overlays.fastmcp).extend self.overlays.godot-ai-v4-deps;
     kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
     packages = rec {
@@ -135,6 +137,7 @@
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
       breeze-black       = import ./overlays/breeze-black.nix;
       fastmcp            = import ./overlays/fastmcp.nix;
+      godot-ai-v4-deps   = import ./overlays/godot-ai-v4-deps.nix;
     };
 
   };

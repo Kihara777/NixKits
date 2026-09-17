@@ -12,7 +12,7 @@ Production-grade MCP server 和 AI 工具，用于 Godot 引擎 — 连接 MCP �
 |------|-----|
 | 类型 | Python 应用（MCP server）|
 | 上游 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| 版本 | `3.2.5` |
+| 版本 | `4.1.0` |
 | 许可 | MIT |
 | Python | ≥ 3.11 |
 
@@ -27,16 +27,25 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## 依赖
 
-| 依赖 | 来源 | 版本要求 |
-|------|------|--------|
-| fastmcp | NixKits overlay | ≥ 3.4.0（nixpkgs 锁定 3.3.1 有 circular-import bug）|
-| websockets | nixpkgs | ≥ 13.0 |
-| pydantic | nixpkgs | ≥ 2.0 |
-| httpx | nixpkgs | ≥ 0.27 |
-| uvicorn | nixpkgs | ≥ 0.23 |
-| starlette | nixpkgs | ≥ 0.40 |
+**v4 起为 fail-closed 精确锁定**：启动时校验下列 9 个包的**精确版本**，任一不符即 `RuntimeError` 拒绝启动。nixpkgs 在 5 个包上落后，故由 `overlays/godot-ai-v4-deps.nix` 抬到上游要求。
 
-> **fastmcp 3.4 升级**：nixpkgs 的 fastmcp 3.3.1 有 circular-import bug（`fastmcp.server` 无法导入）。NixKits 通过 `overlays/fastmcp.nix` 升级到 3.4.7，联动升级 fastmcp-slim + py-key-value-aio 0.4.5。
+| 依赖 | 上游要求 | nixpkgs 提供 | 来源 |
+|------|---------|-------------|------|
+| fastmcp | `==3.4.7` | 3.4.7 | `overlays/fastmcp.nix` |
+| anyio | `==4.14.2` | 4.14.2 | nixpkgs |
+| mcp | `==1.29.1` | 1.29.0 | **overlay 抬版** |
+| websockets | `==17.1` | 16.1 | **overlay 抬版** |
+| pydantic | `==2.13.5` | 2.13.4 | **overlay 抬版** |
+| httpx | `==0.28.1` | 0.28.1 | nixpkgs |
+| uvicorn | `==0.52.4` | 0.51.0 | **overlay 抬版** |
+| starlette | `==1.6.0` | 1.3.1 | **overlay 抬版** |
+| h11 | `==0.16.0` | 0.16.0 | nixpkgs |
+
+> **pydantic-core**：pydantic 2.13.5 要求 `pydantic-core==2.46.5`（nixpkgs 为 2.46.4），该包由 Rust 构建，抬版时 `cargoDeps` 须一并重取。
+
+> **构建期 pin**：上游 `[build-system].requires` 写死 `setuptools==84.0.0`（nixpkgs 为 83.0.0），由包内 `postPatch` 放宽——该 pin 是可复现性守卫而非功能需求。
+
+> **为什么不是打补丁绕过校验**：v4 的精确锁是为其安全边界（连接/消息体/帧/会话预算）服务的，放宽 `runtime_dependencies.py` 会静默削弱该边界。故采用「抬依赖对齐上游」而非「改校验迁就 nixpkgs」。
 
 ## 安装与使用
 
