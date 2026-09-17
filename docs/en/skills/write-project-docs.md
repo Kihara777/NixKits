@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-project-docs.md) | English | [日本語](../../ja/skills/write-project-docs.md)  | [偽中国語](../../pcn/skills/write-project-docs.md)
 
-> Generates complete multi-language documentation in the NixKits style — concise, table-driven.
+> Generates complete multi-language documentation in the NixKits style — concise, table-driven; covers the main-repo thin-wrapper / sub-repo doc division and explicit sub-repo reference records.
 
 ## Auto-Discovery Contract
 
@@ -25,6 +25,7 @@ Language extension skills are discovered via the `translate-*` naming convention
 - Writes per-module docs (info table + install + usage)
 - Writes skill docs using the unified template (Info → Features → Usage)
 - **Split-component doc division**: when a component moves to its own repository, the sub-repo carries the full docs while the main repo keeps a short pointer page (states the move, links out, and retains only the sections unique to the main repo) — so the same docs are never maintained twice
+- **Explicit sub-repo reference record**: when the main repo references a same-account sub-repo (thin wrapper / flake input / submodule), the main repo's short page must state **source repository + main-repo-side role + pinned coordinate + sync method** — otherwise no one can find the source from the main repo, or ends up re-implementing what the sub-repo already has
 - Supports sub-agent parallelization by module category
 
 ## Skill Doc Sync Rules

@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, chained parallel checks of same-account subprojects, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -22,6 +22,7 @@
 - Rust packages must **sync `Cargo.lock`** (the most commonly missed step)
 - Three-way `flake.lock` handling: already gitignored → skip; has dynamic versions → must exclude; otherwise → commit alongside hashes
 - Identifying and updating versions hardcoded inside `.patch` files (version / url / hash)
+- **Chained checks for same-account subprojects**: discover same-account sub-repos this repo references (thin wrapper / input / submodule), first verify no cycle, no dependency conflict, and independent upgradability, then run them chained and in parallel; subproject results count as the main repo's results, each is recorded in its own repository's log, and the main repo links to the subproject's entry
 - **Handling external-automation PRs**: their npm update PRs always fail because they cannot know `npmDepsHash`; check the branch out, patch the hash, then merge
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
 
@@ -45,6 +46,7 @@ This skill covers the flow up to "record the change"; repo-specific steps come f
 | Dynamic version inputs | Whether the repo has an unlockable floating input |
 | Known incident lessons | Past update-induced failures and their workarounds |
 | Extra sync items | Built-in inventories, generated files, etc. |
+| Subproject list | Which same-account sub-repos this repo references, their build systems, and the sub-repo log's path and language conventions |
 
 When the two conflict, **the adapter layer wins**.
 

@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、同 account 子 project 連鎖並列確認、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -22,6 +22,7 @@
 - Rust 包 **`Cargo.lock` 同期**必要（最 漏 易）
 - `flake.lock` 三路分岐：gitignore 済 → skip；動的版 有 → 除外必須；他 → hash 與 共 commit
 - `.patch` 文件内 硬符号版（version / url / hash）識別 與 更新 flow
+- **同 account 子 project 連鎖確認**：本倉 参照 同 account 子倉（薄包装 / input / submodule）検出、循環無・依存衝突無・独立昇級可能 先 検証 上 連鎖並列 実行。子 project 結果 主倉 結果 視、各自 倉庫 記録 計上、主倉 子 project 条目 対 連結
 - **外部自働化 PR 処置**：`npmDepsHash` 不知故 npm 更新 PR 必 失敗。branch 取回 後 hash 補完 且 merge
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
 
@@ -45,6 +46,7 @@
 | 動的版入力 | lock 不可 浮動 input 有無 |
 | 既知 事故教訓 | 過去 更新起因 障害 與 回避策 |
 | 追加同期項 | 内蔵一覧、生成文件 等 |
+| 子 project 一覧 | 本倉 参照 同 account 子倉、各自 build 体系、子倉 log 用 path 與 言語規約 |
 
 衝突 場合 **適配層 優先**。
 

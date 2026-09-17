@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-project-docs.md) | [English](../../en/skills/write-project-docs.md) | [日本語](../../ja/skills/write-project-docs.md)  | 偽中国語
 
-> NixKits 式完全多言語文書生成 — 中英日+偽中国語四言語、簡潔、表駆動。
+> NixKits 式完全多言語文書生成 — 中英日+偽中国語四言語、簡潔、表駆動；main repo 薄包装／sub repo 文書分担 與 sub repo 参照関係 明示記録 含。
 
 ## 自動発見契約
 
@@ -25,6 +25,7 @@
 - 部品文書作成（基本情報表 + 導入 + 参照）
 - 統一雛形以技能文書作成（基本情報 → 機能 → 使用）
 - **分割 component 文書分担**：component 独立 repo 移転 場合、sub repo 完全 document 持、main repo 短 pointer page（移転 明示・連結・main 固有節 限定 保持）残——同一 document 二重管理 不
+- **sub repo 参照関係 明示記録**：main repo 同 account sub repo（薄包装 / flake input / submodule）参照 場合、main repo 短 page **source repo + main 側 役割 + 固定 座標 + 同期方法**明記——否 則 main repo 自 source 発見 不能、sub repo 既存 物 再実装
 - 子代理部品種別並列化対応
 
 ## 技能文書同期規則

@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、同账户子项目的链式并行检查（含回环与依赖冲突防护）、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -253,6 +253,180 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 按仓库约定记录本次更新（维护日志 / CHANGELOG / 无）。NixKits 仓库的对应
 技能为 `write-maintenance-log`，由仓库适配层指定。
 
+## 第 9 步：同账户子项目链式检查
+
+当仓库引用了**同一账户下的其他仓库**（典型形态是薄封装：本仓只固定子仓的
+`rev` + hash，源码与文档都在子仓），则**子仓自身的上游版本也要检查**——
+否则子仓会长期停在旧版本，而主仓的薄封装只是忠实地钉住那个旧版本。
+
+```bash
+# 本仓属于哪个账户
+OWNER=$(git remote get-url origin | sed -E 's#.*[:/]([^/]+)/[^/]+(\.git)?$#\1#')
+
+# 本仓引用了同账户的哪些仓库（薄封装坐标 = owner + repo）
+# 注意用 -h 去掉 "文件名:行号:" 前缀，否则 awk 的字段号会错位
+grep -rh -B2 -A4 'fetchFromGitHub {' packages/*.nix 2>/dev/null |
+  awk -v o="$OWNER" '
+    /owner[[:space:]]*=/ {owner=$3; gsub(/[";]/,"",owner)}
+    /repo[[:space:]]*=/  {repo=$3;  gsub(/[";]/,"",repo);
+      if (owner==o) print repo}' | sort -u
+```
+
+> ⚠️ **必须 `-h`**：带 `-n` 时输出为 `path:line:content`，`content` 会落到
+> 第 3 个字段之后，`$3` 取到的是行号而非值——症状是**匹配结果为空**（而非报错），
+> 极易误判为「本仓没有子项目」。
+
+**引用关系不止 `fetchFromGitHub`**：flake input（`github:<owner>/<repo>`）、
+git submodule、vendored 源码目录都算。以实际引用方式为准，逐个核对。
+
+### 前提：确认不会引发回环或依赖冲突
+
+链式检查**先验证再执行**。以下任何一条不成立，就**不链式**，退化为在报告里
+提示「子仓 X 存在更新，请单独在其仓库内运行」：
+
+| 前提 | 判据 |
+|---|---|
+| **无回环** | 沿引用关系展开形成的是 **DAG**，不是环。子仓不得（直接或间接）引用回本仓 |
+| **无版本冲突** | 子仓的升级目标版本与主仓的其他依赖不冲突（如两包共享同一 peer 版本约束） |
+| **可独立升级** | 子仓有独立的上游发布，且升级不需要主仓同步改代码（否则属主仓的普通升级） |
+| **账户一致** | 沿链展开时维持同一账户，不越界到第三方仓（第三方的升级由第 3 步照常处理，不属本条） |
+
+#### 回环检测
+
+```bash
+# 收集链条；每进入一层前，检查该仓是否已在访问集合中
+declare -A VISITED
+MAX_DEPTH=3
+
+chain_check() {
+  local repo="$1" depth="$2"
+  if [ -n "${VISITED[$repo]}" ]; then
+    echo "ABORT: 回环 — $repo 已在访问集合中（链条: ${!VISITED[*]}）"; return 1
+  fi
+  if [ "$depth" -gt "$MAX_DEPTH" ]; then
+    echo "ABORT: 超出深度上限 $MAX_DEPTH — 疑似意外的长链"; return 1
+  fi
+  VISITED[$repo]=1
+}
+```
+
+> **深度上限是安全网，不是配额**：真正的薄封装链通常只有 1~2 层。命中上限
+> 往往意味着引用关系被误读（如把 vendored 的第三方源码当成子仓）。
+
+**回环的实际形态**（子仓可能不是 flake，所以不能只查 flake input）：
+
+```bash
+# 子仓以任何方式引用回本仓，都构成回环——逐个检查子仓的引用面
+SUB=<sub-repo>
+gh api "repos/$OWNER/$SUB/contents" --jq '.[].name' | grep -E '^(flake\.nix|\.gitmodules)$' \
+  && echo "有 flake.nix / submodule → 必须展开核对"
+gh api "repos/$OWNER/$SUB/contents/package.json" --jq '.content' 2>/dev/null |
+  base64 -d | grep -E '"(@[^"]*/)?'"$MAIN_REPO"'[^"]*":'   # 依赖名里出现主仓名
+```
+
+> 子仓**没有** `flake.nix` 也**不等于**不可能回环——它仍可能以 submodule、
+> 依赖名、CI 脚本等方式拉回主仓。判据是「子仓的任何引用面是否指向主仓」，
+> 不是「子仓是否是我认识的形态」。
+
+#### 依赖冲突检测
+
+子仓与主仓共享同一依赖时，**比对两边的目标版本**：
+
+```bash
+# 主仓侧该依赖的版本约束
+grep -rn '<dep-name>' packages/*.nix | grep -oP 'version\s*=\s*"\K[^"]+'
+# 子仓侧的目标版本
+gh api "repos/$OWNER/<sub-repo>/contents/package.json" --jq '.content' |
+  base64 -d | grep -oP '"<dep-name>":\s*"\K[^"]+'
+```
+
+两侧指向同一大版本 → 可并行升级。若子仓升级会把主仓的 peer 约束顶到
+不兼容区间，**先升主仓侧**（或同步升），不要并行。
+
+> ⚠️ **运行时由宿主解析的依赖不构成冲突**——这是最容易误报的一类。
+> 当子仓声明的是 `peerDependencies`（或实际表现为 peer：声明版本低于宿主、
+> 由宿主树在运行时解析，如 dsh 生态的 `@deepseek-ai/dsh-*`），则
+>
+> | 现象 | 判定 |
+> |---|---|
+> | 子仓声明 `0.1.1-rc.2`，宿主提供 `0.1.5-rc.2` | **不冲突**——运行时取宿主树 |
+> | 子仓声明 `0.2.0`，宿主提供 `0.1.5-rc.2`（子仓要求**更高**） | 冲突——宿主满足不了 |
+>
+> 判据：**只查「子仓要求的版本是否高于宿主能提供的版本」**，而不是「两侧是否相等」。
+> 宿主版本更高是正常状态，不是漂移。主仓侧薄封装一律用 `--legacy-peer-deps`
+> 跳过 peer 解析，正因如此它才能正常工作。
+
+### 执行：链式并行
+
+前提全部成立时，各子仓的检查**并行**执行，互不阻塞：
+
+| 规则 | 说明 |
+|---|---|
+| **并行** | 多个子仓（及其各自的子仓）同时展开，无依赖的检查不必串行等待 |
+| **各自独立** | 子仓的检查在**子仓自己的工作副本**中进行，不得在主仓目录内改子仓文件 |
+| **失败隔离** | 某个子仓失败不阻断其他子仓；失败项进入报告，其余照常推进 |
+| **不越权提交** | 子仓的 commit / push 在子仓仓库内进行；主仓只提交自己的薄封装更新 |
+
+```bash
+# 并行展开（每个子仓一个工作副本）
+for sub in $SUBPROJECTS; do
+  ( git -C "/tmp/$sub" fetch -q origin &&
+    cd "/tmp/$sub" && <本技能第 1~8 步> ) &
+done
+wait
+```
+
+> **子项目不一定是 nix flake**：被引用的子仓常常是普通 npm / python / rust
+> 项目（主仓的薄封装只负责用 `buildNpmPackage` 等包装它）。此时**不要**套用
+> 本技能的 flake 专属步骤（`nix flake check`、flake.lock 处置）——按子仓
+> 自身的构建体系升级（`npm version` / `pyproject.toml` / `Cargo.toml`），
+> 只在主仓侧重新计算薄封装的 `rev` + hash。
+
+### 判据：子仓何时需要在主仓侧跟进
+
+子仓有新提交 ≠ 主仓薄封装要动。按子仓变更的**性质**分流：
+
+| 子仓变更 | 主仓侧动作 |
+|---|---|
+| **版本号变更**（`version` 字段变了） | **必须跟进**——更新薄封装的 `version` + `rev` + 两侧 hash |
+| **仅源码变更、版本未变**（同为 docs/修复提交） | 分情况：<br>• 变更影响**运行时行为** → 跟进 `rev` + src hash（`npmDepsHash` 可能不变）<br>• 仅改文档/README/注释 → **不跟进**，主仓无需重新钉住文档 |
+| **仅依赖变更** | 跟进，且需重算 `npmDepsHash`（依赖集变了） |
+
+> ⚠️ **别把「子仓 HEAD ≠ 主仓 rev」直接当成待办**。薄封装钉的是**版本坐标**，
+> 不是「子仓最新提交」。子仓的 README 改动对主仓构建产物毫无影响，为它重钉
+> rev 只会制造无意义的构建与缓存失效。
+>
+> 判据：**先 diff 判断变更性质，再决定是否跟进**——而不是 rev 不等就升级。
+
+```bash
+# 判断子仓在 pin 之后改了什么
+gh api "repos/$OWNER/$SUB/compare/$PINNED_REV...$SUB_HEAD" \
+  --jq '.files[] | "\(.status)  \(.filename)"'
+# 版本号是否变了（最硬的判据）
+gh api "repos/$OWNER/$SUB/contents/package.json" --jq '.content' |
+  base64 -d | grep -oP '"version":\s*"\K[^"]+'
+```
+
+### 结果归属
+
+| 场合 | 归属 |
+|---|---|
+| 汇总报告 | 子仓结果**视为主仓结果**，一并呈现（报告读者关心的是主仓最终钉住的版本） |
+| 主仓维护日志 | 记录**薄封装坐标变更**（`rev` / hash），并提供**指向子仓维护条目章节的链接** |
+| 子仓维护日志 | 记录**子仓自身的版本变更**（它是该项目的完整记录所在） |
+
+主仓条目里的链接必须**锚定到具体章节**，而不是只给日志文件：
+
+```markdown
+**摘要**：dsh-api-balance 0.1.0 → 0.2.0 — 薄封装 rev/hash 同步（子仓变更见
+[子仓维护日志](https://github.com/<owner>/<sub>/blob/main/MAINTENANCE.md#<timestamp-anchor>)）
+```
+
+> 锚点用子仓条目的**时间戳**（如 `#2026-09-17t11-21-34-09-00`）——它在该仓库内
+> 唯一，且子仓与主仓都用同一套标题格式时可直接推导。**推导规则与易错点见
+> `write-maintenance-log` 技能「主仓条目的链接写法」**（逐字符替换，不是删除
+> 分隔符）。给不出锚点就退化为给日志文件链接 + 条目标题文本。
+
 ## 检查补丁内版本
 
 部分补丁在上游项目的 `.patch` 文件中直接硬编码了依赖的版本号和 hash。
@@ -430,3 +604,4 @@ follows/url 定义，并验证 eval 出的实际 nixpkgs rev。
 | 动态版本输入 | 仓库是否有不可锁定的浮动 input，及其影响 |
 | 已知事故教训 | 该仓库历史上因更新导致的故障与规避方式 |
 | 额外同步项 | 内置清单、生成文件等需随版本一并更新的内容 |
+| 子项目清单（第 9 步） | 本仓引用了哪些同账户子仓、各自的构建体系、子仓日志的路径与语言约定 |

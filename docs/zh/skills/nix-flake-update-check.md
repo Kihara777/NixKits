@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、同账户子项目的链式并行检查、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -22,6 +22,7 @@
 - Rust 包需**同步 `Cargo.lock`**（最易遗漏）
 - `flake.lock` 三路处置：已 gitignore → 跳过；有动态版本 → 必须排除；其他 → 随 hash 一并提交
 - 补丁文件内硬编码版本（`.patch` 中的 version / url / hash）的识别与更新流程
+- **同账户子项目链式检查**：发现本仓引用的同账户子仓（薄封装 / input / submodule），先验证无回环、无依赖冲突、可独立升级，再链式并行执行；子仓结果视为主仓结果，分别计入两仓日志并由主仓链接到子仓条目
 - **外部自动化 PR 的处置**：其 npm 更新 PR 因不知 `npmDepsHash` 而必然失败，取回后补 hash 再合并
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
 
@@ -46,6 +47,7 @@ dsh 插件清单、维护日志技能）。这使它对其他 nix flake 仓库**
 | 动态版本输入 | 仓库是否有不可锁定的浮动 input |
 | 已知事故教训 | 该仓库历史上因更新导致的故障与规避方式 |
 | 额外同步项 | 内置清单、生成文件等 |
+| 子项目清单 | 本仓引用了哪些同账户子仓、各自构建体系、子仓日志的路径与语言约定 |
 
 冲突时**以适配层为准**。
 

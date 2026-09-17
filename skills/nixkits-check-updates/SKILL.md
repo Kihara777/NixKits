@@ -1,6 +1,6 @@
 ---
 name: nixkits-check-updates
-description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的四语文档同步、dsh 内置插件清单同步、维护日志记录与历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败）。
+description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的四语文档同步、dsh 内置插件清单同步、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录与历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败）。
 ---
 
 # NixKits 软件包更新（仓库适配层）
@@ -26,6 +26,7 @@ NixKits 特有环节。
 | 变更记录 | `MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`，由 `write-maintenance-log` 技能维护 |
 | 不可锁定输入 | `llama-cpp-ver`（浮动追踪 llama.cpp 最新版），故 **`flake.lock` 不提交** |
 | 额外同步 | 升级 `dsh` 时须同步内置插件清单（见下） |
+| 子项目 | `dsh-api-balance` 薄封装引用同账户子仓 `Kihara777/dsh-api-balance`（见下） |
 | 泛化要求 | 修复后评估可泛化内容，更新回 `nix-flake-update-check` |
 
 ## 第 5 步补充：四语文档同步
@@ -107,6 +108,55 @@ nixpkgs 漂移到 `f13ff45` 后 `diffusers-0.38.0` 构建失败。根因是
 
 `codewhale-src` 的升级暴露出「只改 version + hash 会漏掉 Cargo.lock」的问题，
 已泛化为通用技能中 Rust 包流程的第 3 步。
+
+## 第 9 步补充：本仓的子项目引用关系
+
+通用技能第 9 步给出「同账户子项目链式检查」的方法与前提判据。**本仓的实际
+引用关系**只有这里知道：
+
+| 包 | 引用的子仓 | 引用方式 | 子仓构建体系 | 可链式 |
+|---|---|---|---|---|
+| `dsh-api-balance` | `Kihara777/dsh-api-balance` | `fetchFromGitHub` 固定 `rev`（**不是** flake input） | 纯 JS npm 包（`package.json`，无 build script） | ✅ |
+| `dsh-preset-news-three-elements` | 无（源码在本仓 `packages/dsh-preset-news-three-elements/`） | 自建包 | — | — |
+| `dsh-nixos-shell` | 无（源码在本仓 `packages/dsh-nixos-shell/`） | 自建包 | — | — |
+
+**判据**：`grep -rn 'owner = "Kihara777"' packages/*.nix` 是本仓的完整答案——
+目前只有 `dsh-api-balance.nix` 一处。
+
+### 为什么本仓的子仓链必然是单层
+
+`dsh-api-balance` 是 **DSH 插件**，它的上游发布就是它自己（无更上游的同账户
+子仓）。故本仓的链式检查实际为「1 层、1 个节点」，回环与深度上限都不会触发
+——但**前提校验仍要跑**（见通用技能第 9 步），因为「目前只有一层」是现状而非
+结构保证，将来新增子仓时判据必须自动成立。
+
+### 子仓特有的注意点
+
+- **子仓不是 nix flake**：`dsh-api-balance` 无 `flake.nix`，**不要**对它跑
+  `nix flake check` 或 flake.lock 处置；按 npm 包处理（改 `package.json`
+  的 `version`、必要时 `npm install` 刷新 `package-lock.json`）。
+- **子仓有自己的四语文档体系**：与该子仓的 README 一样遵循 zh → en → ja → pcn。
+  子仓条目写在其 `MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`。
+- **两个 hash 都要重算**：薄封装钉住 `src` hash 与 `npmDepsHash`，改 `rev` 后
+  **两者都变**——按通用技能 npm 包流程走两次 `nix build`。
+- **子仓发布渠道无 npm**：该子仓**不发布到 npm**（维护者视障、无法完成
+  npm 的 2FA 流程），故不存在「子仓新版本是否已上 npm」这一步。安装走
+  `dsh plugin add github:Kihara777/dsh-api-balance` 或本仓薄封装。
+- **该子仓的依赖是 peer 性质**：它声明 `@deepseek-ai/dsh-credentials`
+  这类 `@deepseek-ai/dsh-*` 依赖，**版本低于宿主 dsh 提供的版本是正常状态**
+  （运行时从宿主树解析）。判据是「子仓要求是否**高于**宿主提供」，
+  不是「两侧是否相等」——详见通用技能「依赖冲突检测」的 ⚠️ 说明。
+  本仓薄封装为此使用 `npmFlags = [ "--legacy-peer-deps" ]`。
+
+### 本仓薄封装的历史坐标（写条目时对照）
+
+| 时间 | 薄封装 `rev` | 子仓 `version` |
+|---|---|---|
+| 迁出时 | `c47f857ccbd7ccefcce4d88c2e1c9a7d67c4b810` | `0.1.0` |
+
+> 该子仓迁出后已有**仅文档**的提交（`6e05c2b` 说明暂不提供 npm 打包并移除
+> npm 配置、`5d95480` 移除主 README 的「文档」章节），**版本号未变**。
+> 按通用技能「子仓何时需要在主仓侧跟进」的判据，这类变更**不触发薄封装重钉**。
 
 ## 泛化义务
 

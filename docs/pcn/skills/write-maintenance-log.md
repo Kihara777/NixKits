@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/write-maintenance-log.md) | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)  | 偽中国語
 
-> NixKits 規約基 MAINTENANCE.md 執筆・更新。軟体更新及誤修正両対応、全言語同期。
+> NixKits 規約基 MAINTENANCE.md 執筆・更新。軟体更新、誤修正、技能／文書変更、CI/CD 変更、倉庫横断 子 project 連鎖更新 五類対応、全言語同期。
 
 ## 自動発見契約
 
@@ -19,6 +19,8 @@
 
 - 軟体更新記録作成（概要 + 送信 ID 表 + 版表）
 - 誤修正記録作成（概要 + 送信 ID 表）
+- **倉庫横断 子 project 連鎖更新記録 作成**：主倉 条目 薄包装 座標変更（`rev` / hash）限定 記録、**子倉 該当条目 節 対 連結**。子倉 条目 自身 完全 版変更 記録——両者 内容 異、重複 非
+  - anchor 導出：ISO 8601 timestamp **小文字化 → `-` `_` 以外 各文字 `-` 置換**（`:` 與 `+` 各 一 `-` 化、既存 `-` 保持）
 - 保守記録全言語同期（zh/en/ja/pcn）
 - 先行技能（更新確認、NixKits 用 nixkits-check-updates）及 git commit 消息自概要自動抽出
 - 統一書式：ISO 8601 精密時刻、LIFO 順序、未変更 hash 省略
