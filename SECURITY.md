@@ -49,7 +49,7 @@
 | 项 | 说明 |
 |---|---|
 | `nixkits.dsh.reverseProxy.autoAuth` | 声明式**免认证入口**，仅应启用于可信局域网；风险由使用者的网络边界承担（见 `docs/zh/dsh.md`） |
-| `sudo` 守护进程 | 需 root 的操作经外部 sudo 守护进程执行并留痕；沙箱模式（`danger-full-access`）是使用者的显式选择 |
+| `sudo` 守护进程 | 需 root 的操作经外部 sudo 守护进程执行并留痕；沙箱权限档位由使用者在会话中显式选择，**默认不放开** |
 | `dsh-api-balance` 读取浏览器 Local Storage | 用于提取平台会话令牌，**默认开启且可关闭**；仅读取令牌，不采集浏览器内其他数据，令牌以 `0600` 落盘 |
 | `/nix/store` 绝对路径 | 配置中硬编码 store 路径会在 GC 后失效——属已知陷阱而非漏洞，仓库提供 `nixos_cli op=audit-store-paths` 审计 |
 

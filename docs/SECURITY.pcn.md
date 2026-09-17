@@ -49,7 +49,7 @@
 | 項目 | 説明 |
 |------|------|
 | `nixkits.dsh.reverseProxy.autoAuth` | 宣言的 **認証不要 入口**。信頼 LAN 限定 有効化 願。risk 利用者 network 境界 負担（`docs/zh/dsh.md` 参照） |
-| `sudo` daemon | root 必要 操作 外部 sudo daemon 経由 実行 記録。sandbox mode（`danger-full-access`）利用者 明示的 選択 |
+| `sudo` daemon | root 必要 操作 外部 sudo daemon 経由 実行 記録。sandbox 権限段階 利用者 session 毎 明示的 選択、**既定 一切 緩 不** |
 | `dsh-api-balance` browser Local Storage 読 | platform session token 取得 為。**既定 有効、無効化 可能**。token 限定 読、browser 内 他 data 収集 不。token `0600` 保存 |
 | `/nix/store` 絶対 path | 設定 埋込 store path GC 後 無効——既知 罠 脆弱性 非。`nixos_cli op=audit-store-paths` 監査 可能 |
 

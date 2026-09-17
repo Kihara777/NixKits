@@ -39,7 +39,7 @@ codewhale                              # 交互 TUI
 codew                                  # TUI 入口（v0.9.9 起上游更名，原 codewhale-tui）
 codewhale "explain this function"      # 单次提示
 codewhale --model auto "fix this bug"  # 自动选择模型
-codewhale --sandbox danger-full-access   # 扩大沙箱权限
+codewhale --sandbox <tier>             # 按需选择沙箱权限档位（默认不放开）
 codewhale doctor                       # 检查配置
 codewhale auth set --provider deepseek # 保存 API key
 ```

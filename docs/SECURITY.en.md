@@ -49,7 +49,7 @@ The following are **not** vulnerabilities but deliberate behaviour — please co
 | Item | Explanation |
 |---|---|
 | `nixkits.dsh.reverseProxy.autoAuth` | A declarative **unauthenticated entry point**; enable it only on a trusted LAN. The risk sits with the user's network boundary (see `docs/zh/dsh.md`) |
-| The `sudo` daemon | Operations needing root go through an external sudo daemon and are recorded; sandbox mode (`danger-full-access`) is an explicit user choice |
+| The `sudo` daemon | Operations needing root go through an external sudo daemon and are recorded; sandbox permission tiers are chosen explicitly by the user per session and **nothing is widened by default** |
 | `dsh-api-balance` reading browser Local Storage | Used to extract the platform session token; **enabled by default and can be turned off**; it reads only the token, collects nothing else from the browser, and writes the token with mode `0600` |
 | Hardcoded `/nix/store` paths | A store path baked into a config stops working after GC — a known trap, not a vulnerability; the repository offers an audit via `nixos_cli op=audit-store-paths` |
 
