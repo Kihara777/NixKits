@@ -2,6 +2,16 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T10:55:02+09:00
+
+**摘要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — 两条均由**前一轮加入的 `dependabot.yml` 自动生成**，本条目记录审计与处置。**PR #6（checkout）已合并**：Dependabot 正确地保留了 SHA 固定（而非退回浮动标签），我核对了新 SHA `3d3c42e5…` 确实指向 `v7.0.1` tag（提交 `prep v7.0.1 release`）；初次 CI 有 2 项失败，但原因是 `llama-cpp-ver` 输入访问 GitHub API 时的 **403 限流**（与升级无关，62 项其他构建均通过），重跑后 **64/64 全通过**即合并。**PR #7（dsh-tools）已关闭并改为手动升级**：该 PR **必然无法通过 CI** —— Dependabot 只改 `package.json`/`package-lock.json`，无法感知 `buildNpmPackage` 的 `npmDepsHash`，CI 固定报 `npmDepsHash is out of date`；这是 **bot 与 Nix 包装的结构性错配**，非配置错误。此外它提议的 `0.1.2-rc.1` **落后于活跃通道**（`next` 已是 0.1.5-rc.2、`alpha` 已是 0.1.6-alpha.1），而**宿主 dsh 自带的正是 0.1.5-rc.2**。故手动升到 0.1.5-rc.2 使插件内嵌副本与宿主树对齐，并同步更新 `npmDepsHash` 为 `sha256-5jd5O4…`。**验证**：构建通过；产物内 `dsh-tools` 为 0.1.5-rc.2（与宿主一致）；运行时加载 `exit=0`、零错误；`nix flake check` 全通过。**泛化**：把「Dependabot 自动 PR 的处置」写入 `nix-flake-update-check` 技能——固定症状、补 hash 流程，以及「必须核对目标版本是否落后于 next/alpha 通道」这一易漏判据
+
+| 提交 | 说明 |
+|------|------|
+| `dce26f2` | chore(dsh-nixos-shell): dsh-tools 0.1.2-alpha.2 → 0.1.5-rc.2 |
+| `5f4e9ec` | ci: bump actions/checkout from 4.4.0 to 7.0.1 (#6) |
+| `7b94d7c` | refactor(skill): nix-flake-update-check 补充 Dependabot 自动 PR 的处置 |
+
 ## 2026-09-17T01:40:58+09:00
 
 **摘要**：docs(security): 在 `SECURITY.md` 明确「重复提交」的处理界限（四语） — 前一提交列出了 4 条已评估的外部报告，但措辞仅为说明性；本次追加「关于重复提交」小节使其具备约束力：**上表已列出的同一结论，若无新证据再次提交，将直接关闭并指向本节**。同时划清受理与关闭的界限以免误伤正当报告——**受理**：上表未涵盖的新问题、指出上表某条结论有误（附可复现证据）、相同主题但不同的威胁模型或利用路径；**直接关闭**：仅重述上表已有结论、同一规则的再次自动扫描输出。并保留一句「『指出结论有误』始终欢迎」——上表四条本身亦是经复核作出的判断，判据若错则应改正。四语同步

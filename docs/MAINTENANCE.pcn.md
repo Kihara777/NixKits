@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T10:55:02+09:00
+
+**摘要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — 両者 共 **前回追加 `dependabot.yml` 自動生成**、本項目 其 監査 與 対応 記録。**PR #6（checkout）merge 済**：Dependabot SHA 固定 正 維持（浮動 tag 戻 無）、新 SHA `3d3c42e5…` `v7.0.1` tag（commit `prep v7.0.1 release`）実際 指 事 確認。初回 CI 2 件失敗、但 原因 `llama-cpp-ver` 入力 GitHub API 対 **403 rate 制限**（upgrade 無関係——他 62 件 build 通過）、再実行 **64/64 全通過** 故 merge。**PR #7（dsh-tools）close、手動 upgrade 切替**：此 PR **CI 通過 不可**——Dependabot `package.json`/`package-lock.json` 限定 変更、`buildNpmPackage` `npmDepsHash` 感知 不可 故、CI 必 `npmDepsHash is out of date` 報告。此 **bot 與 Nix wrapper 構造的不整合**、設定 誤 非。更 提案 `0.1.2-rc.1` **active channel 比 遅**（`next` 既 0.1.5-rc.2、`alpha` 0.1.6-alpha.1）、一方 **host dsh 同梱 正 0.1.5-rc.2**。故 手動 0.1.5-rc.2 上、plugin 内蔵 copy host tree 揃、`npmDepsHash` `sha256-5jd5O4…` 更新。**検証**：build 通過；成果物 内 `dsh-tools` 0.1.5-rc.2（host 一致）；実行時 load `exit=0`・error 零；`nix flake check` 全通過。**汎化**：「Dependabot 自動 PR 扱」`nix-flake-update-check` 技能 記載——固定 症状、hash 補修 手順、且 見落 易「target 版本 `next`/`alpha` channel 比 遅 無 否 確認 必要」判断基準。
+
+| 提交 | 説明 |
+|------|------|
+| `dce26f2` | chore(dsh-nixos-shell): dsh-tools 0.1.2-alpha.2 → 0.1.5-rc.2 |
+| `5f4e9ec` | ci: bump actions/checkout from 4.4.0 to 7.0.1 (#6) |
+| `7b94d7c` | refactor(skill): nix-flake-update-check 补充 Dependabot 自动 PR 的处置 |
 ## 2026-09-17T01:40:58+09:00
 
 **摘要**：docs(security): `SECURITY.md` 「重複投稿」扱 境界 明示（四言語）——前回 commit 評価済 外部報告 4 件 掲載、但 文言 説明的 止。今回「重複投稿 就」小節 追加 拘束力 持——**上表 既 記載 同一 結論、新 証拠 無 再投稿 場合、本節 指 示 其 侭 close**。同時 正当 報告 巻込 無 様 受理 與 close 境界 引——**受理**：上表 含 無 新規 問題、上表 何 結論 誤 指摘（再現可能 証拠 添 場合）、同一 主題 但 異 脅威 model 又 攻撃経路；**其 侭 close**：上表 既 有 結論 単 再述、同一 規則 再度 出力 自動 scan。末尾「結論 誤 指摘 常 歓迎」残——上表 4 件 也 精査 上 判断、根拠 誤 場合 訂正 可 故。四言語 同期。
