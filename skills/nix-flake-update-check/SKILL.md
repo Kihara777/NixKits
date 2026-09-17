@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程与自托管 forge（Gitea）取源、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -233,6 +233,13 @@ nix build .#<pkg> 2>&1 | grep -oP 'got:\s+\Ksha256-[A-Za-z0-9+/=]+'   # 取实�
 4. 逐一更新 hash
 5. 运行 `nix build .#<pkg>` 验证构建成功
 
+### 自托管 forge（`fetchFromGitea` 等）
+
+流程与包型无关（源结构照旧），但**取源路径可能被上游禁用**。升级前先按
+「非 GitHub 源（Gitea 等自托管 forge）」一节判定 `archive` 路径是否仍可用；
+若已 403 而 API 端点可用，改用 `fetchzip` + `stripRoot = true`，
+并**对比新旧 fetcher 的产物顶层目录**确认布局等价。
+
 > **交叉编译注意**：riscv64 等交叉构建 eval 可能超时。获取 `fetchFromGitHub`
 > source hash 的正确姿势：
 > - **禁止**用 `nix-prefetch-url` 预取
@@ -246,6 +253,67 @@ nix build .#<pkg> 2>&1 | grep -oP 'got:\s+\Ksha256-[A-Za-z0-9+/=]+'   # 取实�
 >   in pkgs.fetchFromGitHub { owner = "<owner>"; repo = "<repo>"; rev = "v<version>"; hash = lib.fakeHash; }
 >   ' 2>&1 | grep got:
 >   ```
+
+### 非 GitHub 源（Gitea 等自托管 forge）
+
+`fetchFromGitea` **委托给 `fetchFromGitHub`**（源码里只有一层 `makeOverridable`
+包装，把 `domain` 映射成 `githubBase`），所以它生成的是 GitHub 风格的
+`/archive/<rev>.tar.gz` 路径。**自托管的 Gitea 实例不一定接受该路径。**
+
+**症状**：
+
+```
+curl: (22) The requested URL returned error: 403
+error: cannot download source from any mirror
+```
+
+**先判定，再动手**——403 可能是反爬，也可能是该路径真的被禁用：
+
+```bash
+# 逐 tag 对比两条路径，避免把「某个 rev 写错」误判成「接口变了」
+for tag in v1.0.0 v1.0.1 v1.0.2 v1.0.3; do
+  a=$(curl -s -o /dev/null -w '%{http_code}' "https://<domain>/<owner>/<repo>/archive/$tag.tar.gz")
+  b=$(curl -s -o /dev/null -w '%{http_code}' "https://<domain>/api/v1/repos/<owner>/<repo>/archive/$tag.tar.gz")
+  echo "$tag archive=$a api=$b"
+done
+```
+
+| 观察 | 结论 |
+|---|---|
+| **所有 tag** 的 `archive` 都 403，而 `api/v1` 全 200 | **接口已变**（与 rev 无关），改用 API 端点 |
+| 只有目标 tag 403，旧 tag 正常 | rev/tag 名写错，去核对上游 |
+| 加浏览器 UA 后 200 | 纯反爬，保持原样即可 |
+
+> ⚠️ **「旧版本还能构建」不代表旧路径可用**：老的 source 早已在 Nix store 或
+> 二进制缓存里，`nix build` 直接命中缓存、**根本不发请求**。用
+> `nix build --rebuild` 或在干净机器上验证，才能看出真实情况。
+
+**对策**：改用 `fetchzip` 指向 API 端点，并用 `stripRoot` 复现原布局：
+
+```nix
+src = fetchzip {
+  url = "https://<domain>/api/v1/repos/<owner>/<repo>/archive/v${finalAttrs.version}.tar.gz";
+  stripRoot = true;   # 关键：见下
+  hash = "sha256-...";
+};
+```
+
+> ⚠️ **`stripRoot` 必须与原 fetcher 的语义一致**——这是最容易搞错的一步。
+> `fetchFromGitea` / `fetchFromGitHub` 产出的是**剥掉顶层目录**的树，
+> 而 `fetchzip` **默认保留**。若包定义里有 `preConfigure = "cd mcp"` 这类
+> 依赖原始布局的语句，`stripRoot` 写错会让路径变成 `<repo>/mcp`，构建失败。
+>
+> **验证方法**：对比新旧 fetcher 的产物顶层目录名
+>
+> ```bash
+> nix build --impure --no-link --print-out-paths --expr '
+> let pkgs = import (builtins.getFlake (toString ./.)).inputs.nixpkgs.legacyPackages.x86_64-linux;
+> in pkgs.fetchFromGitea { domain = "<domain>"; owner = "<owner>"; repo = "<repo>";
+>                          rev = "v<旧版本>"; hash = "<原 hash>"; }' | xargs ls
+> ```
+>
+> 两者列出的条目一致（如都直接是 `mcp/`）才算等价。**取两次 hash**
+> （`stripRoot` 两种取值各一次）确认行为，不要凭猜。
 
 ### flake.lock 同步
 

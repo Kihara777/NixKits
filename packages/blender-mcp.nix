@@ -1,21 +1,29 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchzip,
   makeWrapper,
   blender ? null,
 }:
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "blender-mcp";
-  version = "1.0.0";
+  version = "1.0.3";
 
-  src = fetchFromGitea {
-    domain = "projects.blender.org";
-    owner = "lab";
-    repo = "blender_mcp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-nt+sHozi+epJdu6GXcWGd33C9uewN+Ao8WP9Y2upPQc=";
+  # Blender's self-hosted Gitea rejects the `/archive/<rev>.tar.gz` path that
+  # `fetchFromGitea` (and the `fetchFromGitHub` it delegates to) generates —
+  # it answers 403 for *every* tag, including the previously working v1.0.0,
+  # so this is an upstream change rather than a bad revision.  The archive is
+  # still served from the API endpoint, which is what we fetch here.
+  #
+  # `stripRoot = true` reproduces fetchFromGitea's layout: the tarball's single
+  # top-level directory is stripped, so `preConfigure`'s `cd mcp` keeps working.
+  # (Verified against the v1.0.0 fetchFromGitea output, which lists `mcp/`
+  # directly at the root.)
+  src = fetchzip {
+    url = "https://projects.blender.org/api/v1/repos/lab/blender_mcp/archive/v${finalAttrs.version}.tar.gz";
+    stripRoot = true;
+    hash = "sha256-pYeByO4Oi5eyynsJhGVd1vBWXHvhGn+Y5LGit6Kazlw=";
   };
 
   preConfigure = ''

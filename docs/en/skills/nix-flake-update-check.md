@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | English | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows, an interactive clarification round before starting, chained parallel checks of same-account subprojects, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
+> Checks upstream package updates in **any nix flake repository** and upgrades them — per-builder hash flows plus self-hosted forge (Gitea) source fetching, an interactive clarification round before starting, chained parallel checks of same-account subprojects, dead-link audits of documented external links, GitHub Actions SHA-pin update checks, flake.lock handling, patch-embedded version checks, and nixpkgs drift traps.
 
 ## Info
 
@@ -28,6 +28,7 @@
 - **Handling external-automation PRs**: their npm update PRs always fail because they cannot know `npmDepsHash`; check the branch out, patch the hash, then merge
 - **Interactive clarification**: settle every open decision in one batched round of questions before starting (cross-major upgrades, dependency-conflict remedies, channel choice, whether to deploy), avoiding the "guess → get corrected → redo" loop; agents without interactive questions should emit the open list once and stop
 - nixpkgs drift traps: `inputs.*.follows`, `doInstallCheck`, `pythonRuntimeDepsCheckHook`, bare `nix flake lock`
+- **Self-hosted forge sources**: `fetchFromGitea` delegates to `fetchFromGitHub` and generates `/archive/<rev>.tar.gz`, which a self-hosted instance may 403; compare the `archive` and `api/v1` paths across tags to decide, then switch to `fetchzip` + `stripRoot = true` and verify the top-level layout; note that "the old version still builds" may just be a cache hit
 - **Fail-closed runtime dependency verification**: upstream compares exact versions at startup, so a successful build is not a working binary — always run it once to verify
 
 ## Design: why two skills

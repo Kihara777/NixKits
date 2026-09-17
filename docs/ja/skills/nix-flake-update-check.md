@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | 日本語  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> **任意の nix flake リポジトリ**におけるパッケージの上流更新を確認してアップグレードする——ビルダー別 hash フロー、着手前の対話的確認、同アカウント子プロジェクトの連鎖並列チェック、文書内の外部リンクの失効監査、GitHub Actions の SHA 固定更新チェック、flake.lock の扱い、パッチ内蔵バージョン確認、nixpkgs ドリフトの罠。
+> **任意の nix flake リポジトリ**におけるパッケージの上流更新を確認してアップグレードする——ビルダー別 hash フローと自ホスト forge（Gitea）のソース取得、着手前の対話的確認、同アカウント子プロジェクトの連鎖並列チェック、文書内の外部リンクの失効監査、GitHub Actions の SHA 固定更新チェック、flake.lock の扱い、パッチ内蔵バージョン確認、nixpkgs ドリフトの罠。
 
 ## 基本情報
 
@@ -28,6 +28,7 @@
 - **外部自動化 PR の処置**：`npmDepsHash` を知らないため npm 更新 PR は必ず失敗する。ブランチを取り込んで hash を補ってからマージする
 - **対話的確認**：着手前に一度のバッチ質問で全ての保留事項を解決する（大版本跨ぎ、依存衝突の解法、チャネル選択、配備可否）。「推測 → 訂正 → やり直し」の往復を避ける；質問機構のないエージェントは保留リストを一度に出力して停止する
 - nixpkgs ドリフトの罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数なし `nix flake lock`
+- **自ホスト forge のソース取得**：`fetchFromGitea` は `fetchFromGitHub` に委譲し `/archive/<rev>.tar.gz` を生成するが、自ホストのインスタンスは 403 を返すことがある。tag ごとに `archive` と `api/v1` の両経路を比較して判定し、`fetchzip` + `stripRoot = true` へ切り替えて最上位ディレクトリの構成を照合する。「旧版がまだビルドできる」のはキャッシュ命中にすぎない場合がある点に注意
 - **fail-closed な実行時依存検証**：上流が起動時に正確な版を照合するため、ビルド成功 ≠ 使用可能。必ず一度実行して検証する
 
 ## 設計：なぜ二つのスキルに分割したか

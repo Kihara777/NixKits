@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nix-flake-update-check.md) | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | 偽中国語
 
-> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow、着手前 対話的確認、同 account 子 project 連鎖並列確認、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
+> **任意 nix flake 倉庫** 的 包上流更新確認 且 昇級——builder 別 hash flow 與 自 host forge（Gitea）source 取得、着手前 対話的確認、同 account 子 project 連鎖並列確認、文書 外部 link 失効監査、GitHub Actions SHA 固定更新確認、flake.lock 扱、修正内蔵版確認、nixpkgs 漂移 罠。
 
 ## 基本情報
 
@@ -28,6 +28,7 @@
 - **外部自働化 PR 処置**：`npmDepsHash` 不知故 npm 更新 PR 必 失敗。branch 取回 後 hash 補完 且 merge
 - **対話的確認**：着手前 一度 批次質問 全 保留事項 解決（大版跨、依存衝突 解法、channel 選択、配備可否）。「推測 → 訂正 → 再実行」往復 避；質問機構 無 代理 保留 list 一度 輸出 停止
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
+- **自 host forge source 取得**：`fetchFromGitea` `fetchFromGitHub` 委譲 `/archive/<rev>.tar.gz` 生成、自 host instance 403 返 可能。tag 毎 `archive` 與 `api/v1` 両経路 比較 判定、`fetchzip` + `stripRoot = true` 切替 且 最上位 dir 構成 照合。「旧版 仍 build 可能」cache 命中 過 有 注意
 - **fail-closed 実行時依存検証**：上流 起動時 正確 版 照合 故、build 成功 ≠ 使用可能。必 一度 実行 検証
 
 ## 設計：何故 二 技能 分割

@@ -172,8 +172,27 @@ godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒�
 > 另：`pythonRuntimeDepsCheckHook` 相关的 `dontCheckRuntimeDeps = true` 只解决
 > **构建期**；**运行期**校验必须靠 overlay 真正抬版本，不能靠它绕过。
 
-### dsh-alpha 的 vendored lock（2026-09-17 实测）
 
+### blender-mcp 的 Gitea 取源（2026-09-17 实测）
+
+`blender-mcp` 是**本仓唯一使用自托管 Gitea**（`projects.blender.org`）的包。
+2026-09-17 升级 1.0.0 → 1.0.3 时发现：`fetchFromGitea` 生成的
+`/archive/<rev>.tar.gz` 路径**对全部 tag 返回 403**，而
+`/api/v1/repos/lab/blender_mcp/archive/<rev>.tar.gz` 返回 200。
+
+**「1.0.0 还能构建」是假象**——它的 source 早在 Cachix / Nix store 里，
+`nix build` 命中的是缓存，**根本没发请求**。用 `--rebuild` 才会暴露。
+
+**本仓的处置**：改用 `fetchzip` 指向 API 端点 + `stripRoot = true`
+（复现 fetchFromGitea 剥掉顶层目录的语义，使 `preConfigure = "cd mcp"` 仍成立）。
+通用判据与验证方法见通用技能「非 GitHub 源」一节。
+
+> ⚠️ 该包**有独立 workflow**（`build-blender-mcp-{x86_64,aarch64}.yml`，不在
+> `check-workflows.py` 的 `EXEMPT` 登记中），故 CI 会构建它。但 **CI 同样可能
+> 命中二进制缓存**——`--rebuild` 只是清本地缓存，不可靠。改完取源方式后
+> **必须确认 CI 真的重新构建了**（看 workflow 日志是否有 fetch 阶段，
+> 而非全部 `copying path ... from cache`）。
+### dsh-alpha 的 vendored lock（2026-09-17 实测）
 dsh tarball **不含** lock，需自行生成。踩到的坑：用
 `npm install --package-lock-only --legacy-peer-deps` 生成的 lock **不含
 `"peer": true` 条目**，构建报 `ENOTCACHED`。**去掉该 flag** 后 npm 才写入

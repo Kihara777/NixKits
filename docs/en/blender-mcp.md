@@ -1,7 +1,7 @@
 # blender-mcp
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-x86_64.yml?branch=main&label=x86_64%20v1.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-aarch64.yml?branch=main&label=aarch64%20v1.0.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-x86_64.yml?branch=main&label=x86_64%20v1.0.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-blender-mcp-aarch64.yml?branch=main&label=aarch64%20v1.0.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/blender-mcp.md) | English | [日本語](../ja/blender-mcp.md)  | [偽中国語](../pcn/blender-mcp.md)
 
@@ -11,7 +11,7 @@ An MCP (Model Context Protocol) server for Blender, providing AI assistants with
 
 | Item | Value |
 |------|-------|
-| Version | 1.0.0 |
+| Version | 1.0.3 |
 | Upstream | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | Type | Python package (setuptools) |
 | License | GPL-3.0-or-later |

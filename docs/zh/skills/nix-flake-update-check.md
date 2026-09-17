@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/nix-flake-update-check.md) | [日本語](../../ja/skills/nix-flake-update-check.md)  | [偽中国語](../../pcn/skills/nix-flake-update-check.md)
 
-> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程、开工前的交互式澄清、同账户子项目的链式并行检查、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
+> 检查**任意 nix flake 仓库**中软件包的上游版本更新并升级——按包型分流的 hash 更新流程与自托管 forge（Gitea）取源、开工前的交互式澄清、同账户子项目的链式并行检查、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。
 
 ## 基本信息
 
@@ -28,6 +28,7 @@
 - **外部自动化 PR 的处置**：其 npm 更新 PR 因不知 `npmDepsHash` 而必然失败，取回后补 hash 再合并
 - **交互式澄清**：开工前用一次批量提问解决所有待定项（跨大版本、依赖冲突解法、通道选择、是否部署），避免「猜一次→被纠正→重来」的多轮往返；不支持提问的智能体则一次性输出待定清单并停下
 - nixpkgs 漂移陷阱：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、无参数 `nix flake lock`
+- **自托管 forge 取源**：`fetchFromGitea` 委托 `fetchFromGitHub` 生成 `/archive/<rev>.tar.gz`，自托管实例可能 403；逐 tag 对比 `archive` 与 `api/v1` 两条路径判定，改用 `fetchzip` + `stripRoot = true` 并核对顶层目录布局；注意「旧版本仍能构建」可能只是命中缓存
 - **fail-closed 运行时依赖校验**：上游启动时比对精确版本，构建成功 ≠ 可用，必须实际运行一次验证
 
 ## 设计：为什么拆成两个技能
