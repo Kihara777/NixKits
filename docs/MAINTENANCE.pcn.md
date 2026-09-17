@@ -2,6 +2,13 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T11:03:51+09:00
+
+**摘要**：chore(ci): Dependabot npm ecosystem 削除、`github-actions` 限定 残 — PR #7 実測結果 基 調整：npm ecosystem 本 repo 対 **構造的 無効**。本 repo npm package `buildNpmPackage` 包装、其 `npmDepsHash` main build npm-deps 成果物 與 **byte 単位** 照合。一方 Dependabot `package.json`/`package-lock.json` 限定 変更、`.nix` 内 其 hash 感知 不可——故 **其 開 npm 更新 PR 必 CI 失敗**（`npmDepsHash is out of date`）。此 ecosystem 残 事 merge 不能 PR 生続 意味 故 削除、npm 依存 更新 `nix-flake-update-check` 技能 手動対応 戻。**削除理由 設定 内 comment 完全 記録**（PR #7 観測 症状 與「Dependabot dist-tag 跨 無」制約 含）故、後日 此 漏 誤認 再追加 無。`github-actions` ecosystem 維持——本 repo 有効性 実証済（PR #6 checkout 更新 此 生成、SHA 固定 正 維持）。
+
+| 提交 | 説明 |
+|------|------|
+| `4b997b3` | chore(ci): Dependabot 移除 npm 生态，仅保留 github-actions |
 ## 2026-09-17T10:55:02+09:00
 
 **摘要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — 両者 共 **前回追加 `dependabot.yml` 自動生成**、本項目 其 監査 與 対応 記録。**PR #6（checkout）merge 済**：Dependabot SHA 固定 正 維持（浮動 tag 戻 無）、新 SHA `3d3c42e5…` `v7.0.1` tag（commit `prep v7.0.1 release`）実際 指 事 確認。初回 CI 2 件失敗、但 原因 `llama-cpp-ver` 入力 GitHub API 対 **403 rate 制限**（upgrade 無関係——他 62 件 build 通過）、再実行 **64/64 全通過** 故 merge。**PR #7（dsh-tools）close、手動 upgrade 切替**：此 PR **CI 通過 不可**——Dependabot `package.json`/`package-lock.json` 限定 変更、`buildNpmPackage` `npmDepsHash` 感知 不可 故、CI 必 `npmDepsHash is out of date` 報告。此 **bot 與 Nix wrapper 構造的不整合**、設定 誤 非。更 提案 `0.1.2-rc.1` **active channel 比 遅**（`next` 既 0.1.5-rc.2、`alpha` 0.1.6-alpha.1）、一方 **host dsh 同梱 正 0.1.5-rc.2**。故 手動 0.1.5-rc.2 上、plugin 内蔵 copy host tree 揃、`npmDepsHash` `sha256-5jd5O4…` 更新。**検証**：build 通過；成果物 内 `dsh-tools` 0.1.5-rc.2（host 一致）；実行時 load `exit=0`・error 零；`nix flake check` 全通過。**汎化**：「Dependabot 自動 PR 扱」`nix-flake-update-check` 技能 記載——固定 症状、hash 補修 手順、且 見落 易「target 版本 `next`/`alpha` channel 比 遅 無 否 確認 必要」判断基準。

@@ -2,6 +2,13 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T11:03:51+09:00
+
+**概要**：chore(ci): Dependabot から npm エコシステムを削除し、`github-actions` のみ残した — PR #7 の実測結果に基づく調整である：npm エコシステムは本リポジトリにとって**構造的に無効**である。本リポジトリの npm パッケージは `buildNpmPackage` で包装されており、その `npmDepsHash` はメインビルドが npm-deps 成果物と**バイト単位**で照合する。一方 Dependabot は `package.json`/`package-lock.json` しか変更せず、`.nix` 内のその hash を認識できない——ゆえに**それが開く npm 更新 PR は必ず CI に失敗する**（`npmDepsHash is out of date`）。このエコシステムを残すことはマージ不能な PR を生み続けることを意味するため削除し、npm 依存の更新は `nix-flake-update-check` スキルによる手動対応に戻した（同スキルは `npmDepsHash` の補修と `next`/`alpha` チャネルの確認を既に含む）。**削除理由は設定内のコメントとして完整に記録した**（PR #7 で観測した症状と「Dependabot は dist-tag を跨がない」という制約を含む）ため、後日これを漏れと誤認して再追加されることはない。`github-actions` エコシステムは維持する——本リポジトリで有効性が実証済みである（PR #6 の checkout 更新はこれが生み、SHA 固定も正しく維持した）
+
+| コミット | 説明 |
+|----------|------|
+| `4b997b3` | chore(ci): Dependabot 移除 npm 生态，仅保留 github-actions |
 ## 2026-09-17T10:55:02+09:00
 
 **概要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — いずれも**前ラウンドで追加した `dependabot.yml` が自動生成したもの**であり、本項目はその監査と対応を記録する。**PR #6（checkout）はマージ済み**：Dependabot は SHA 固定を正しく維持し（浮動タグへ戻さなかった）、新しい SHA `3d3c42e5…` が `v7.0.1` タグ（コミット `prep v7.0.1 release`）を実際に指すことを確認した。初回 CI では 2 件失敗したが、原因は `llama-cpp-ver` 入力が GitHub API に当たった **403 レート制限**（アップグレードとは無関係——他 62 件のビルドは通過）であり、再実行で **64/64 全通過**となったためマージした。**PR #7（dsh-tools）はクローズし、手動アップグレードに切り替えた**：この PR は**CI を通過しようがない**——Dependabot は `package.json`/`package-lock.json` しか変更せず、`buildNpmPackage` の `npmDepsHash` を認識できないため、CI は必ず `npmDepsHash is out of date` を報告する。これは **bot と Nix ラッパーの構造的な不整合**であり、設定ミスではない。さらに提案された `0.1.2-rc.1` は**アクティブなチャネルより遅れている**（`next` は既に 0.1.5-rc.2、`alpha` は 0.1.6-alpha.1）一方、**ホスト dsh が同梱するのはまさに 0.1.5-rc.2** である。そこで手動で 0.1.5-rc.2 へ上げ、プラグイン内蔵のコピーをホストツリーに揃え、`npmDepsHash` を `sha256-5jd5O4…` に更新した。**検証**：ビルド通過；成果物内の `dsh-tools` は 0.1.5-rc.2（ホストと一致）；実行時ロードは `exit=0`・エラーゼロ；`nix flake check` 全通過。**汎化**：「Dependabot の自動 PR の扱い」を `nix-flake-update-check` スキルに記載した——固定された症状、hash 補修の手順、そして見落としやすい「対象バージョンが `next`/`alpha` チャネルより遅れていないかを確認すべき」という判断基準
