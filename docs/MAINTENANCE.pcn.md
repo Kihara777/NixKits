@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T11:34:39+09:00
+
+**摘要**：fix(skills): 子倉 追従 判据 field 単位 細分化（生産環境 実戦 起因） — 予定 通 dry run 終了 後、**軟件昇級技能 実際 一度 full 実行** 生産評価 行、実戦 即座 前 条目 判据 欠陥 露呈：旧判据「**文件** 変化 可否」分流、但 manifest file 多 数 field 中 意味的入力 一部 限定。実測 子倉 `dsh-api-balance` 的 `package.json` **確 byte 変化**（`publishConfig.access` 削除）、一方 `dependencies`、`files` 白名单、`version`、`main`/`exports` **何 及 未変更**——旧判据「manifest 変化 → 追従」誤判定、純 metadata 変更 為 全 architecture 再 build 與 cache 無効化 誘発 所。**修正**：判据 **field 単位** 変更——release metadata（`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`）、文書、CI 設定 build 入力 **非**、**追従 不**；`dependencies` 系 / `files` / `main` / `exports` / `scripts` / `version` / source build 入力 **是**、**必 追従**；加「某 field 成果物 影響 可否 判別 不能 場合 追従 側 倒」兜底原則（一回 多 build 方、実変更 一度 見落 比 遥 良）。適配層 今回 子倉 変更 記述 也 修正——原文「文書 限定 変更」誤記載、実際 `package.json` 也 変化、**判据 文件 非 field 落 必要**。**実戦 同時 新機能 正常 動作 確認**：実在 repo 上 第 9 步 account 識別、参照関係 検出、四 前提検証（循環 / 深度 / account / 独立昇級可能——**全部 PASS**）與 変更性質 判定 完了、更 主倉 側 実際 保留更新（`codewhale-src` 0.9.12→0.9.13、`godot-ai` 3.2.5→4.1.0、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1）與 既 最新 二 項目（`ruyi` / `obs-bilibili-stream`）発見。今回 評価 限定 更新 未実施
+
+| 提交 | 説明 |
+|------|------|
+| `c08f5c9` | fix(skills): 子仓跟进判据细化到字段级 |
+| `641830a` | docs(skills): 同步四语的子仓跟进字段级判据 |
+
 ## 2026-09-17T11:31:32+09:00
 
 **摘要**：feat(skills): 同 account 子 project 連鎖確認 與 倉庫横断 保守条目 連結 対応 — 新特性：倉庫 参照 **同 account 子 project**（典型 薄包装） 也 軟件更新確認 纳入、前提 成立 場合 **連鎖並列 実行**。子 project 結果 **主倉 結果 視**、但 各自 倉庫 log 別々 計上、主倉 条目 **子 project 条目 節 対 連結**。**帰属 先 評価 後 執筆**——汎用 logic 汎用技能 入、倉庫固有 内容 適配層 切下：**`nix-flake-update-check`（汎用）** 新設 第 9 步「同 account 子 project 連鎖確認」、参照関係 検出（`fetchFromGitHub` / flake input / submodule 三形態）、**四 前提検証**（循環 無 / 版衝突 無 / 独立昇級 可能 / account 一致——一 不成立 則 連鎖 不 通知 退化）、循環 與 深度上限 検出、依存衝突 判据、連鎖並列 與 失敗 隔離、結果 帰属、且「**子倉 何時 追従 要**」分岐判断（版番号 変更 → 追従 必須；文書 限定 変更 → 追従 無意味）含。**`write-maintenance-log`（汎用）** 新設 類型 5「倉庫横断 子 project 連鎖更新」：主倉 薄包装 座標変更（`rev` / hash）限定 記録 且 子倉 条目 対 連結、子倉 自身 完全 変更 記録——両者 内容 異、重複 非。**`write-project-docs`（汎用）** 新設「子倉 参照関係 明示記録」：主倉 短 page source repo + main 側 役割 + 固定 座標 + 同期方法 明記。**`nixkits-check-updates`（適配層）** 本倉 固有 事実 限定 担：子倉 座標、build 体系、peer 依存 判据、歴史 座標表。**先 dry run 検証、三 実欠陥 発見 修正**：①技能 内 検出 command `-h` 無、`awk` field 番号 錯位 為 **無言 空 返**（「本倉 子 project 無」誤認）；②依存衝突 判据「両者 相等 可否」記載、実測 子倉 `0.1.1-rc.2` 宣言 且 host `0.1.5-rc.2` 提供——**peer 性質 依存 下 host 高 方 正常状態**、判据「子倉 要求 host 提供 比 高 可否」為 必要；③GitHub anchor 導出規則「`:` 與 `+` 除去」記載、実際 **一文字 毎 `-` 置換**（`:` 與 `+` 各 一 `-` 化、既存 `-` 保持）。**dry run 同時 一 実 保留事項 発見**：主倉 固定 `dsh-api-balance` 的 `rev` 子倉 HEAD 比 二 commit 遅、但 **版番号 未変更 且 何 及 文書 commit** 故、新判据 再固定 **発生 不**——正 此 分岐条項 防 誤昇級
