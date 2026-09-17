@@ -2,6 +2,16 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+
+## 2026-09-17T18:15:40+09:00
+
+**摘要**：汎用技能「主 flow + 二 配套参考」再構成、且 branch 分離 滞留 Gitea 教訓 回収 — 本 session 更新技能 **性能評価 基 改善**。**① 既知 知識損失 回収**：監査 依、blender-mcp 実測 branch 記載 70 行「自 host forge（Gitea）source 取得」節 與 21 行 適配層記録 **永続 滞留 寸前** 判明。test branch 取決 依 merge 不、但 其 知識（`fetchFromGitea` `fetchFromGitHub` 委譲 `/archive/` 経路 生成、自 host instance **全 tag 403** 返 可能、対策 API endpoint + `stripRoot = true`、且「旧版 仍 build 可能」単  cache 命中 可能）**再現可能・追跡可能 且 全 自 host forge 倉庫 該当**。持込 前 **main 上 証拠 逐一 再現**（403 対 200 実測、nixpkgs fetcher source 確認）機械的 cherry-pick 非。**② 回収 慣例 強化**：適配層 第 10 步 **test branch 生 汎用 教訓 其場 手作業 main 書** 要求 小節 追加——「branch merge 不」  「教訓 重要 非」理由 成 不——今回 実際 損失 根拠 記録。**③ 技能 再構成**：単一 file 918 行 実行中 目的 箇所 探 難、AGENTS.md「独立 data 配套 file 分割」従 主 flow `SKILL.md`（462 行）+ `builders.md`（254 行：builder 別 hash flow 與 `flake.lock` 処理）+ `traps.md`（271 行：漂移 罠、fail-closed、外部 link 失効監査、Actions、修正内蔵版）化。**完全性 四通 照合**（`##` 節、`###`/`####` 子節、行単位 比較、行数）。其中 **三 節 実際 取 落**（「修正内蔵版 確認」「外部 link 監査」「GitHub Actions 更新確認」——`sed` 境界 適配層 節 手前 化、此 三節 其 更 前 位置）見出  level 照合 発見 復元。最終 行単位 比較 差分 四 行 限定、何 及 意図的 書換 確認済。**④「commit 前 六 自問」新設**（第 7 步）：変体 複数 可否？依存表 一致 可否？source 取得 有効 可否？実際 実行 可否？文書 記述 成立 可否？`flake.lock` commit 可否？——**六 何 及 同日 実測 事故 抽出**、各問 一回 再実行 又 欠陥 対応。該当 則 `traps.md` 進 可、全文 読 不要。**評価 根拠**：本 session 実測 三 回、六 package 更新、初回成功率 4/6、且 三 回 再実行 **何 及 技能 記録済 又 記録 要 罠 原因**——故 改善 方向「教訓 正 場所 発見 可能 化」且 更 積増 非。四言語 文書 同期
+
+| 提交 | 説明 |
+|------|------|
+| `e0b1a64` | refactor(skills)!: 通用技能拆分为主流程 + 两份配套参考，并补回丢失的 Gitea 教训 |
+
+> **注**：技能構造 変更（配套 file `builders.md` 與 `traps.md` 新設）。`packages/` 未変更。
 ## 2026-09-17T17:22:50+09:00
 
 **摘要**：`check-doc-versions` 検査 新設、「文書 版 = 包定義 版」断言化 — 今回 連続 発見 五 文書 版 不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）対 **構造的 防御**。此 種 不一致 **何 及 build 失敗 不** 故 人手 文書 読 非 則 発見 不能。故 `nix flake check` 第六 検査（従来 五）固定。**検査内容**：①`docs/<lang>/<pkg>.md`「版」行（四言語）包定義 宣言値 一致 必要；②多 channel 包（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）**channel 表** 版 也 四言語 検査；③版 他所 読 場合 也 追跡（`kitsfmt` `Cargo.toml` 読）；④例外 script `EXEMPT` 明示登録（`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不、`codewhale-src` 独立包 非、`dsh`/`dsh-alpha` channel 表 記載）。**定義 自 機械的 読出 可能 部分（版番号）限定 検査**。依存表・platform 対応・install 手順 自動比較 不能 故、明示的 範囲外——判定 人 判断 要 検査 書 不 為。**回帰 test（要点）**：今回 **実際 遭遇** 五 種類 欠陥 一 一 注入、全部 検出。message「何 file 何 記載、何 定義 何 宣言」明示——codewhale 0.9.12（zh）、godot-ai 3.2.5（zh）、mcp-searxng 2.2.0（en）、opencode-telegram 0.25.1（ja）版行 検査 捕捉、dsh-alpha channel 行 0.1.5-alpha.2（四言語）channel 検査 捕捉。**end-to-end 検証**：欠陥 注入 後 `nix flake check` **実際 経路** 失敗 確認（`failed to build attribute 'checks.x86_64-linux.doc-versions'`）——script 直接 実行 時 限定 失敗 非。**CI 確認**：push 後 `CI` workflow 成功（run `35199359526`）、log `evaluating 'checks.x86_64-linux.doc-versions'` 出現、検査 skip 非 実際 実行 示。`AGENTS.md` 規約・例外登録方法・適用範囲 記録
