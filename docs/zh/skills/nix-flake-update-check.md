@@ -17,6 +17,7 @@
 
 - 从 `flake.nix` **动态发现**外部包，排除自建包 / 动态版本 / 跟随 nixpkgs / 补丁内版本
 - 按**包型**（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）分流的 hash 更新流程
+- **Dependabot 自动 PR 的处置**：npm 更新 PR 因 `npmDepsHash` 无法被 bot 感知而必然 CI 失败；附取回分支补 hash 的流程与「目标版本是否落后于 next/alpha 通道」的核对
 - hash 计算陷阱：SRI 格式、`fetchFromGitHub` 与 archive tarball hash 不一致、`lib.fakeHash`、npm 两次构建
 - Rust 包需**同步 `Cargo.lock`**（最易遗漏）
 - `flake.lock` 三路处置：已 gitignore → 跳过；有动态版本 → 必须排除；其他 → 随 hash 一并提交

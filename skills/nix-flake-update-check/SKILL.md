@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、Dependabot 自动 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -93,6 +93,41 @@ check() {
 4. 运行 `nix build .#<pkg>` 两次 — 第一次获取源码 hash，第二次获取 npmDepsHash
 5. 用实际值更新两个 hash
 6. 运行 `nix build .#<pkg>` 验证构建成功
+
+#### Dependabot 的自动 PR 不能直接合并
+
+若仓库启用了 Dependabot，它的 npm 更新 PR **必然无法通过 CI**——这是结构性错配，不是配置错误：
+
+| Dependabot 会改 | Dependabot 不知道 |
+|---|---|
+| `package.json` | `.nix` 文件里的 `npmDepsHash` |
+| `package-lock.json` | `buildNpmPackage` 会把 src 的 lock 与 npm-deps 产物**逐字节**校验 |
+
+症状固定为：
+
+```
+ERROR: npmDepsHash is out of date
+The package-lock.json in src is not the same as the in /nix/store/...-npm-deps
+```
+
+**处置**：不要直接合并，也不要简单地关掉。取回分支后补一次 hash：
+
+```bash
+gh pr checkout <n>
+sed -i 's|npmDepsHash = "sha256-[^"]*";|npmDepsHash = lib.fakeHash;|' packages/<pkg>.nix
+nix build .#<pkg> 2>&1 | grep -oP 'got:\s+\Ksha256-[A-Za-z0-9+/=]+'   # 取实际值回填
+```
+
+> ⚠️ **同时核对目标版本是否落后**：Dependabot 只在其配置的 semver 通道内推进
+> （如 `0.1.2-alpha.2` → `0.1.2-rc.1`），不会跨到 `next` / `alpha` 这类 dist-tag。
+> 若宿主或生态已用更新的通道，直接手动指定该版本更有意义：
+>
+> ```bash
+> npm view <pkg> dist-tags          # 查看 latest / next / alpha 各指向何处
+> ```
+>
+> 判据：**被包装的库若在运行时与宿主交互**（如插件依赖宿主框架），应让版本与宿主对齐，
+> 而非停留在旧通道——否则插件内嵌的副本会长期落后于宿主树。
 
 ### cmake 包
 

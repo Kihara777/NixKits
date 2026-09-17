@@ -17,6 +17,7 @@
 
 - **Dynamically discovers** external packages from `flake.nix`, excluding self-hosted / dynamic-version / nixpkgs-following / patch-embedded ones
 - Per-builder hash update flows (npm / cmake / Rust `buildRustPackage` / `fetchurl` / python)
+- **Handling Dependabot's automated PRs**: an npm bump PR always fails CI because the bot cannot know about `npmDepsHash`, so the flow for checking out the branch and fixing the hash is included, along with checking whether the target version lags the `next` / `alpha` channels
 - Hash gotchas: SRI format, `fetchFromGitHub` vs archive tarball mismatch, `lib.fakeHash`, npm's two build passes
 - Rust packages must **sync `Cargo.lock`** (the most commonly missed step)
 - Three-way `flake.lock` handling: already gitignored → skip; has dynamic versions → must exclude; otherwise → commit alongside hashes

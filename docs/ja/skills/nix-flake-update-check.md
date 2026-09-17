@@ -17,6 +17,7 @@
 
 - `flake.nix` から外部パッケージを**動的に検出**し、セルフホスト / 動的バージョン / nixpkgs 追従 / パッチ内蔵を除外
 - **ビルダー別**の hash 更新フロー（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
+- **Dependabot の自動 PR の扱い**：npm の更新 PR は `npmDepsHash` を bot が認識できないため必ず CI が失敗する。ブランチを取得して hash を補う手順と、「対象バージョンが `next` / `alpha` チャネルより遅れていないか」の確認を含む
 - hash の罠：SRI 形式、`fetchFromGitHub` と archive tarball の不一致、`lib.fakeHash`、npm の 2 回ビルド
 - Rust パッケージは **`Cargo.lock` の同期**が必要（最も漏れやすい）
 - `flake.lock` の三者分岐：gitignore 済み → スキップ；動的バージョンあり → 除外必須；その他 → hash と共にコミット

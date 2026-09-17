@@ -17,6 +17,7 @@
 
 - `flake.nix` 自 外部包 **動的検出**、自己 hosting / 動的版 / nixpkgs 追従 / 修正内蔵 除外
 - **builder 別** hash 更新 flow（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
+- **Dependabot 自動 PR 扱**：npm 更新 PR `npmDepsHash` bot 感知 不可 故 必 CI 失敗。branch 取得 hash 補 手順 與「target 版本 `next` / `alpha` channel 比 遅 無 否」確認 含
 - hash 罠：SRI 形式、`fetchFromGitHub` 與 archive tarball 不一致、`lib.fakeHash`、npm 2 回構築
 - Rust 包 **`Cargo.lock` 同期**必要（最 漏 易）
 - `flake.lock` 三路分岐：gitignore 済 → skip；動的版 有 → 除外必須；他 → hash 與 共 commit
