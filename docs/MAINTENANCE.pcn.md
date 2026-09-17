@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T15:17:11+09:00
+
+**摘要**：godot-ai 3.2.5 → 4.1.0 破壊的昇級 実戦 test — test branch 上 `godot-ai` **破壊的更新前 3.2.5** 戻 基線 為、技能 再実行 且 cross-major fail-closed 契約 対処 監査。**昇級 内容**：`packages/godot-ai.nix` 4.1.0 迄 引上 且 上流 `setuptools==84.0.0` build 時 pin 緩和 `postPatch` 追加（nixpkgs 83.0.0）、実行時依存 九 補完（従来 六 限定）、`dontCheckRuntimeDeps` 追加；新規 `overlays/godot-ai-v4-deps.nix` mcp / pydantic(+core) / starlette / uvicorn / websockets 上流 厳密固定 要求 版 迄 引上；`flake.nix` 與 `overlays/default.nix` **両方** 連鎖 overlay 変更。**検証**：`godot-ai --version` → 4.1.0（起動時 fail-closed 検証 通過、exit 0）；`nix flake check` 全部 通過。**再現性 相互検証**：今回 **独立 再導出** 六 hash（五 package src + pydantic-core cargoDeps）main 既 merge 値 與 **一 一 一致**、此 昇級経路 安定 再現 示。**技能 実戦 結論**：①第 3 步 偽陽性 零（七 包 中 真 UPDATE 二 限定）；②対話的確認 機能——着手前 godot-ai 戦略（四択）確定、**邊做邊猜 発生 無**；③罠 5 機能——build 成功 後 実際 実行 fail-closed 契約 検証；④前回 記録「双 overlay 落所」教訓 **今回 再発 無**：記憶 従 三箇所（`godotPkgs` / `overlays/default.nix` / overlays 輸出登録）一度 変更、`diff <(git show origin/main:...)` 各所 空 確認——記録 有効 証拠。**第 10 步 振返 生 新 改善**：第 5 步 文書同期 **機械的置換 超**——依存表 旧「≥ 範囲」記述 v4 厳密固定 対 **事実誤**（条目数 六 対 実際 九）、「上流 要求 vs nixpkgs 提供」対照表 書直；此 依 汎用技能 第 5 步「**文書 機械的置換 非 書直 時**」触发判据 新設。此 変更 10.5 証拠規律 検証済：**再現可能**（`grep -A15 '^dependencies' packages/godot-ai.nix` 九 項、文書 元表 六 項——誰 也 再実行 可能）、**追跡可能**（今回 実戦 実際 発生、commit `db5b7cc`）、**異議申立 可能**（10.3 帰属分析 汎化 **反対 理由** 自発 記述——文書 品質 文書作成技能 職責——且 範囲 限定：「何時 書直」限定 規定、「如何 書」規定 不 明記）。四言語 文書 同期
+
+| 提交 | 説明 |
+|------|------|
+| `7e3bd88` | test(skill): 回退 godot-ai 至破坏性更新前的 3.2.5 作为技能实测基线 |
+| `db5b7cc` | test(skill): godot-ai 3.2.5 → 4.1.0 破坏性升级，审计技能处理能力 |
+| `b049bb1` | feat(skills): 通用技能第 5 步新增「文档须重写而非机械替换」的触发判据 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | 実行時依存 | 六 項「≥ 範囲」→ 九 項 fail-closed 厳密固定 |
+| 　 | 新規 overlay | `overlays/godot-ai-v4-deps.nix` |
+
+> **注**：本条 test branch `test/skill-validation-godot-ai-v4` 上、**取決 依 main 合并 不**（main godot-ai `2a06bbf` 既 4.1.0）。技能 実戦 手法 與 証拠 残 為 記録。
+
 ## 2026-09-17T13:00:09+09:00
 
 **摘要**：feat(skills): 適配層 第 10 步「process 振返 與 規範 検証」新設 — 更新 flow **完全 終了 後** 実行、監査 対象 **軟件 非、軟件 如何 更新 決定 規範 自体**（技能 / `AGENTS.md` / `SECURITY.md` / develop script）——即 更新 process 自身 対 更新確認。六 子步：**10.1 振返**（初回 失敗 箇所 / 利用者 問 必要 有 箇所 / 再実行 箇所 根本原因 迄 辿）、**10.2 検証**（`AGENTS.md` / `SECURITY.md` 記述 今 成立 可否。外部 link 到達性 含）、**10.3 帰属**（可搬性 依 汎用技能 / 適配層 / `AGENTS.md` / `SECURITY.md` 振分。判据「別 nix flake 倉庫 移 也 成立 可否」）、**10.4 体験**（利用者 何往復 待 為 振返、自行検証 可能 事項 潰）、**10.5 証拠規律**、**10.6 成果**。**10.5 硬性 制約**：規範 変更 **再現可能・追跡可能・異議申立 可能** 必要——印象 依 規範 変更、一度 偶発 法則 視、既 正 書 内容 対「更 最適化」、役 立 無 見 但 拘束力 残 条目 削除、前提 消 証明 不能 限 禁止。**初回 実行 二 実欠陥 発見**（何 及 **build error 生 不**、能動的 監査 限定 炙出 可能）：①`SECURITY.md` 子倉 `SECURITY.md` 指 **dead link**——当該 file 未作成（`gh api` 與 `curl` 双方 404 確証）。四言語「同 sub project 独自 安全政策 未整備。脆弱性 本 repo 報告 願」変更；②**十二 箇所** `Asus-linux/asusctl` 失効 link（三 文書 × 四 言語）——project `OpenGamingCollective/asusctl` 移転（`gh api` 602 stars、HTTP 200 確証）。「URL 修正 時 表示 text 也 修正」要求 従 連結 文言 也 更新。**汎化**：link 監査 手法 汎用技能「文書 外部 link 監査」入。三 判据 含——`curl` 404 `gh api` 再確認 後 初 確定（権限 又 制限 可能 性 有）、`403` 多 場合 scraping 対策 且 dead link 非、**vendored 第三者 content 書換 不**（`packages/kitsfmt-src/vendor/` 内 上流 CHANGELOG 等）。四言語 文書 同期

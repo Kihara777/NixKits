@@ -2,6 +2,24 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T15:17:11+09:00
+
+**摘要**：godot-ai 3.2.5 → 4.1.0 破坏性升级实测 — 在测试分支上把 `godot-ai` 回退到**破坏性更新前的 3.2.5** 作为基线，重跑技能审计其对跨大版本 fail-closed 契约的处理。**升级内容**：`packages/godot-ai.nix` 升到 4.1.0 并新增 `postPatch` 放宽上游 `setuptools==84.0.0` 构建期 pin（nixpkgs 为 83.0.0）、补全 9 个运行时依赖（原仅 6 个）、加 `dontCheckRuntimeDeps`；新增 `overlays/godot-ai-v4-deps.nix` 把 mcp / pydantic(+core) / starlette / uvicorn / websockets 抬到上游精确锁要求；`flake.nix` 与 `overlays/default.nix` **两处**均改为链式叠加。**验证**：`godot-ai --version` → 4.1.0（启动期 fail-closed 校验通过、exit 0）；`nix flake check` 全通过。**可复现性交叉验证**：本次**独立重新推导**的 6 个 hash（5 包 src + pydantic-core 的 cargoDeps）与 main 上已合并的值**逐一相同**，证明该升级路径可稳定复现。**技能实测结论**：①第 3 步无假阳性（7 包仅 2 个真 UPDATE）；②交互式澄清生效——开工前即问清 godot-ai 策略（4 选项），**未边做边猜**；③陷阱 5 生效——构建成功后实际运行验证 fail-closed 契约；④上轮记载的「双 overlay 落点」教训**本次未重演**：按记忆一次改满三处（`godotPkgs` / `overlays/default.nix` / overlays 输出注册），并用 `diff <(git show origin/main:...)` 逐处核对为空，说明记载有效。**第 10 步复盘产出的新改进**：第 5 步文档同步**超出机械替换**——发现文档依赖表「≥ 范围」的旧表述对 v4 的精确锁已构成**事实错误**（且条目数 6 vs 实际 9），故重写为「上游要求 vs nixpkgs 提供」对照表；据此在通用技能第 5 步新增「**何时必须重写文档而非机械替换版本号**」的触发判据。该改动经 10.5 证据纪律检验：**可复现**（`grep -A15 '^dependencies' packages/godot-ai.nix` 得 9 项，文档原表 6 项，任何人可重跑）、**可追溯**（本次实测实际发生，提交 `db5b7cc`）、**允许质疑**（10.3 归属分析中主动写了反对泛化的理由——文档质量属文档编写技能职责——并据此**限定范围**：只规定「何时重写」，明确声明不规定「怎么写」）。四语文档同步
+
+| 提交 | 说明 |
+|------|------|
+| `7e3bd88` | test(skill): 回退 godot-ai 至破坏性更新前的 3.2.5 作为技能实测基线 |
+| `db5b7cc` | test(skill): godot-ai 3.2.5 → 4.1.0 破坏性升级，审计技能处理能力 |
+| `b049bb1` | feat(skills): 通用技能第 5 步新增「文档须重写而非机械替换」的触发判据 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | 运行时依赖 | 6 项「≥ 范围」→ 9 项 fail-closed 精确锁 |
+| 　 | 新增 overlay | `overlays/godot-ai-v4-deps.nix` |
+
+> **注**：本条在测试分支 `test/skill-validation-godot-ai-v4` 上，**按约定不合并入 main**（main 上的 godot-ai 于 `2a06bbf` 已为 4.1.0）。记录此条是为留存技能实测的方法与证据。
+
 ## 2026-09-17T13:00:09+09:00
 
 **摘要**：feat(skills): 适配层新增第 10 步「流程复盘与规范校验」 — 每次更新流程**全部完成后**执行，审计的**不是软件而是决定软件如何被更新的规范本身**（技能 / `AGENTS.md` / `SECURITY.md` / develop 脚本），即对更新流程自身做一次「检查更新」。六个子步：**10.1 复盘**（哪里第一次就失败 / 需要问用户 / 返工，逐条追根因）、**10.2 校验**（`AGENTS.md` / `SECURITY.md` 的断言是否仍成立，含外部链接可达性）、**10.3 归属**（按可移植性分流到通用技能 / 适配层 / `AGENTS.md` / `SECURITY.md`，判据是「搬到另一个 nix flake 仓库还成立吗」）、**10.4 体验**（复盘让用户等了几轮，收敛可自行查证项）、**10.5 证据纪律**、**10.6 产出**。**10.5 是硬约束**：规范改动须**可复现、可追溯、允许质疑**——禁止凭印象改规范、把一次偶发当规律、为已写对的内容「再优化」、删除仍有约束力但看似无用的条目，除非能证明其前提已消失。**首次执行即发现两处真实缺陷**（均**不产生构建错误**，只有主动审计才能发现）：①`SECURITY.md` 指向子仓 `SECURITY.md` 的**死链**——子仓根本没建该文件（已用 `gh api` 与 `curl` 双重确证 404），四语同步改为「该子项目尚未自建安全政策，漏洞请报至本仓库」；②**12 处** `Asus-linux/asusctl` 失效链接（3 份文档 × 4 语）——项目已迁移至 `OpenGamingCollective/asusctl`（`gh api` 确证 602 stars、HTTP 200），按「改 URL 同时改显示文本」的要求，链接文字一并更新。**泛化**：链接审计方法进通用技能「审计文档中的外部链接」，含三条判据——`curl` 的 404 须经 `gh api` 复核才定案（可能是权限/限流）、`403` 常为反爬不算死链、**vendored 第三方内容不改写**（如 `packages/kitsfmt-src/vendor/` 内的上游 CHANGELOG）。四语文档同步
