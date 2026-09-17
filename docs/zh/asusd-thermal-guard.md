@@ -8,7 +8,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| 上游 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl)（`asusd` 守护进程） |
+| 上游 | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl)（`asusd` 守护进程） |
 | 模块 | `nixosModules.asusd-thermal-guard` |
 | 依赖 | `services.asusd.enable = true` |
 | 实现 | systemd timer + oneshot（无常驻进程） |

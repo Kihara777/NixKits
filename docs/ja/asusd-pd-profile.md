@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| アップストリーム | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl)（`asusd` デーモン） |
+| アップストリーム | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl)（`asusd` デーモン） |
 | モジュール | `nixosModules.asusd-pd-profile` |
 | 依存 | `services.asusd.enable = true` |
 | インターフェース | asusd D-Bus `xyz.ljones.Platform` + udev |

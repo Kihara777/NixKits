@@ -8,7 +8,7 @@ Selects the ASUS platform profile by power source — distinguishing **USB-C PD*
 
 | Item | Value |
 |------|-------|
-| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) (the `asusd` daemon) |
+| Upstream | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl) (the `asusd` daemon) |
 | Module | `nixosModules.asusd-pd-profile` |
 | Dependency | `services.asusd.enable = true` |
 | Interface | asusd D-Bus `xyz.ljones.Platform` + udev |

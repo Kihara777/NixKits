@@ -1,6 +1,6 @@
 ---
 name: nix-flake-update-check
-description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 检查任意 nix flake 仓库中软件包的上游版本更新并升级——按包型（npm / cmake / Rust / fetchurl / python）分流的 hash 更新流程、开工前的交互式澄清（支持提问的智能体须主动使用以确保一次跑完）、同账户子项目的链式并行检查（含回环与依赖冲突防护）、文档外部链接的失效审计、GitHub Actions 的 SHA 固定更新检查、外部自动化 PR 的 hash 修补、flake.lock 处置、补丁内版本检查与 nixpkgs 漂移陷阱。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # nix flake 软件包更新检查（通用）
@@ -572,6 +572,48 @@ nix hash to-sri sha256:$(curl -sL <new-url> | sha256sum | cut -d' ' -f1)
 
 > **⚠️ 警告**：补丁内版本更新后，旧的 hash 将失效。务必在提交前完成完整的
 > 构建测试。涉及 GPU/硬件相关补丁时，需在目标硬件上实测验证。
+
+## 审计文档中的外部链接
+
+更新流程结束前，检查文档里的上游链接是否仍然有效。**上游项目会改名、迁移
+组织、归档仓库**——这些变化不产生任何构建错误，只让文档里的链接悄悄失效，
+而链接恰恰是读者追溯来源的唯一入口。
+
+```bash
+# 抽取所有外部链接（含各语言文档），逐个探测
+grep -rhoP 'https://[a-zA-Z0-9.-]+/[a-zA-Z0-9._/%#-]+' --include="*.md" . |
+  sed 's/[.,)]*$//' | sort -u | while read u; do
+    code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$u")
+    case "$code" in 200|301|302|429) ;; *) echo "$code  $u";; esac
+  done
+```
+
+**判定与处置**：
+
+| 结果 | 含义 | 处置 |
+|---|---|---|
+| `404` | 目标确实不存在（项目迁移/改名） | **查证新地址并修正**（见下） |
+| `403` | 常有反爬（如 `projects.blender.org`） | **不是死链**，用浏览器或 `gh api` 复核 |
+| `429` | 被限流 | 稍后重试，**不要**据此判定失效 |
+| `301/302` | 正常重定向 | 可保留 |
+
+> ⚠️ **`curl` 的 404 不足以定案**：GitHub 对某些请求返回 404 也可能是
+> 权限或限流所致。用 `gh api repos/<owner>/<repo>` 复核——
+> **能取到仓库信息才是确证**。
+
+**查证迁移去向**：项目改名后旧地址通常 404，新地址可用以下方式找到：
+
+```bash
+gh api repos/<old-owner>/<repo> --jq '.full_name'   # 404 → 已迁移
+gh search repos <repo-name> --limit 5 --json fullName,stargazersCount
+```
+
+**修正时同步改「链接文字」**：显示文本若含 `owner/repo`，必须与新地址一致
+（只改 URL 会让读者看到与实际不符的来源）。**多语言文档全部同步。**
+
+> **不要改 vendored 第三方内容**：若链接出现在 `vendor/`、`*-src/` 等随上游
+> 一同引入的路径中（如依赖包的 CHANGELOG），那是上游的文档，**其链接失效
+> 不属我们的维护范围**，强行改写反而偏离上游。
 
 ## 检查 GitHub Actions 的更新
 

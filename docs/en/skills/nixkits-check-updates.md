@@ -77,6 +77,33 @@ Full rules live in `nix-flake-update-check`; the essentials:
 - Use `lib.fakeHash` for empty `npmDepsHash`, not the empty string `""`
 - npm packages need two `nix build` passes: first for source hash, second for npmDepsHash
 
+
+## Step 10 (closing): process retrospective and spec audit
+
+Run after the update flow is **entirely finished** (docs synced and the maintenance
+log pushed). This step does not look at software; it looks at **the very spec that
+decides how software gets updated** — the skills, `AGENTS.md`, `SECURITY.md` and the
+develop scripts. It is best understood as **running an update check on the update
+process itself**.
+
+| Sub-step | What it does |
+|------|--------|
+| 10.1 Retrospective | Revisit what failed on the first attempt, what needed the user, and what was redone — and trace each root cause |
+| 10.2 Audit | Verify that the assertions in `AGENTS.md` / `SECURITY.md` still hold (including external link reachability) |
+| 10.3 Attribution | Place each lesson by portability: generic skill / adapter layer / `AGENTS.md` / `SECURITY.md` |
+| 10.4 Experience | Review "how many rounds did the user wait", collapse what can be self-verified and merge steps that can be merged |
+| 10.5 Evidence | Spec changes must be **reproducible, traceable and open to challenge**; changing a spec on impression, or treating a one-off as a pattern, is forbidden |
+| 10.6 Output | Land the lesson where it belongs + commit spec corrections + record the process improvement in the maintenance log |
+
+> **Hard prohibitions**: changing a spec on impression, treating a single flake as a
+> rule, "further optimising" something already correct, or deleting an entry that
+> looks useless but still binds — unless you can prove its premise is gone.
+
+**Measured result**: on its first run this step found a **dead link** in
+`SECURITY.md` pointing at a sub-repo `SECURITY.md` (that file was never created),
+plus 12 broken `Asus-linux/asusctl` links (the project moved to
+`OpenGamingCollective/asusctl`). Neither produces a build error — only a deliberate
+audit surfaces them.
 ## Usage
 
 Activated when the user asks to "check for updates" or "update package versions".

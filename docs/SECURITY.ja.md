@@ -11,7 +11,7 @@
 |------|---------|
 | `main` ブランチ（最新） | ✅ セキュリティ修正を受け取る |
 | 公開済みの flake 出力（古い世代） | ❌ 最新へ更新してください |
-| `dsh-api-balance` サブプロジェクト | [独立リポジトリ](https://github.com/Kihara777/dsh-api-balance/blob/main/SECURITY.md)を参照 |
+| `dsh-api-balance` サブプロジェクト | 同サブプロジェクトは独自のセキュリティポリシーを未整備です。脆弱性は[本リポジトリ](https://github.com/Kihara777/NixKits/security/advisories/new)へご報告ください。または[独立リポジトリ](https://github.com/Kihara777/dsh-api-balance)を参照 |
 
 ## 脆弱性の報告
 

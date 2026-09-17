@@ -11,7 +11,7 @@
 |------|---------|
 | `main` branch（最新） | ✅ 安全修正 受取 |
 | 公開済 flake 出力（旧世代） | ❌ 最新 更新 願 |
-| `dsh-api-balance` sub project | [独立 repo](https://github.com/Kihara777/dsh-api-balance/blob/main/SECURITY.md) 参照 |
+| `dsh-api-balance` sub project | 同 sub project 独自 安全政策 未整備。脆弱性 [本 repo](https://github.com/Kihara777/NixKits/security/advisories/new) 報告 願。又 [独立 repo](https://github.com/Kihara777/dsh-api-balance) 参照 |
 
 ## 脆弱性 報告
 

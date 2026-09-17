@@ -8,7 +8,7 @@ A temperature watchdog — when the temperature cannot be held down it **automat
 
 | Item | Value |
 |------|-------|
-| Upstream | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl) (the `asusd` daemon) |
+| Upstream | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl) (the `asusd` daemon) |
 | Module | `nixosModules.asusd-thermal-guard` |
 | Dependency | `services.asusd.enable = true` |
 | Implementation | systemd timer + oneshot (no resident process) |

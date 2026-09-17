@@ -11,7 +11,7 @@ Historical commits are not maintained separately — if you need an older versio
 |-------|-----------|
 | `main` branch (latest) | ✅ receives security fixes |
 | Published flake outputs (older generations) | ❌ please upgrade to the latest |
-| The `dsh-api-balance` subproject | see its [own repository](https://github.com/Kihara777/dsh-api-balance/blob/main/SECURITY.md) |
+| The `dsh-api-balance` subproject | That subproject has not established its own security policy yet; report vulnerabilities to [this repository](https://github.com/Kihara777/NixKits/security/advisories/new), or see its [standalone repository](https://github.com/Kihara777/dsh-api-balance) |
 
 ## Reporting a vulnerability
 

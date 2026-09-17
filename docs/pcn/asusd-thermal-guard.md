@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 上流 | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl)（`asusd` 守護工程） |
+| 上流 | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl)（`asusd` 守護工程） |
 | 部品 | `nixosModules.asusd-thermal-guard` |
 | 依存 | `services.asusd.enable = true` |
 | 実装 | systemd timer + oneshot（常駐工程無） |

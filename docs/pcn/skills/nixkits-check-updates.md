@@ -76,6 +76,23 @@
 - `npmDepsHash` 空場合、空文字列 `""` 非 `lib.fakeHash` 使用
 - npm 包 2 回 `nix build` 必要：1 回目 source hash、2 回目 npmDepsHash
 
+
+## 第 10 步（締）：process 振返 與 規範 検証
+
+更新 flow **完全 終了 後**（文書同期 與 保守記録 push 含）実行。此 步 軟件 見 不、**軟件 如何 更新 決定 規範 自体**——技能、`AGENTS.md`、`SECURITY.md`、関連 develop script——見。**更新 process 自身 対 更新確認 行** 物 理解 可。
+
+| 子步 | 内容 |
+|------|--------|
+| 10.1 振返 | 初回 失敗 箇所、利用者 問 必要 有 箇所、再実行 箇所 辿、根本原因 究 |
+| 10.2 検証 | `AGENTS.md` / `SECURITY.md` 等 記述 今 成立 可否 照合（外部 link 到達性 含） |
+| 10.3 帰属 | 教訓 可搬性 依 振分——汎用技能 / 適配層 / `AGENTS.md` / `SECURITY.md` |
+| 10.4 体験 | 「利用者 何往復 待 為」振返、自行検証 可能 事項 潰、統合 可能 工程 統合 |
+| 10.5 証拠 | 規範 変更 **再現可能・追跡可能・異議申立 可能** 必要。印象 依 規範 変更、偶発 法則 視 禁止 |
+| 10.6 成果 | 教訓 帰属先 記述 + 規範 修正 併 commit + process 改善 保守記録 記録 |
+
+> **硬性禁止**：印象 依 規範 変更、一度 偶発 法則 視、既 正 書 内容 対「更 最適化」、役 立 無 見 但 拘束力 残 条目 削除——前提 消 証明 不能 限。
+
+**実測戦果**：本 步 初回 実行 `SECURITY.md` 子倉 `SECURITY.md` 指 **dead link**（当該 file 未作成）與 十二 箇所 `Asus-linux/asusctl` 失効 link（project `OpenGamingCollective/asusctl` 移転）発見。何 及 build error 生 不——能動的 監査 限定 炙出 可能。
 ## 使用
 
 利用者「更新確認」又「包版更新」依頼時起動。

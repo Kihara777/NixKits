@@ -11,7 +11,7 @@
 |------|------|
 | `main` 分支（最新） | ✅ 接受安全修复 |
 | 已发布的 flake 输出（旧代际） | ❌ 请升级到最新 |
-| `dsh-api-balance` 子项目 | 见其[独立仓库](https://github.com/Kihara777/dsh-api-balance/blob/main/SECURITY.md) |
+| `dsh-api-balance` 子项目 | 该子项目尚未自建安全政策，漏洞请报至[本仓库](https://github.com/Kihara777/NixKits/security/advisories/new)或见其[独立仓库](https://github.com/Kihara777/dsh-api-balance) |
 
 ## 报告漏洞
 

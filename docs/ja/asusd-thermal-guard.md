@@ -8,7 +8,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| アップストリーム | [Asus-linux/asusctl](https://github.com/Asus-linux/asusctl)（`asusd` デーモン） |
+| アップストリーム | [OpenGamingCollective/asusctl](https://github.com/OpenGamingCollective/asusctl)（`asusd` デーモン） |
 | モジュール | `nixosModules.asusd-thermal-guard` |
 | 依存 | `services.asusd.enable = true` |
 | 実装 | systemd timer + oneshot（常駐プロセスなし） |
