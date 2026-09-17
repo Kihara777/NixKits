@@ -66,7 +66,7 @@
 ## 本リポジトリ固有の罠
 
 - **godot-ai v4 の fail-closed 検証**：起動時に 9 つの実行時パッケージの正確な版を照合し、不一致なら起動を拒否する。**二つの連鎖 overlay**（`fastmcp` + `godot-ai-v4-deps`）が必要で、しかも `flake.nix` と `overlays/default.nix` の**両方**で連鎖させねばならない——片方だけではビルド成果物が古い依存のままになる
-- **codewhale-src の Cargo.lock**：Rust パッケージの更新では lock の同期が必須（上流 tag から直接取得する）。このパッケージは**flake 出力ではない**ため、hash の取得には `--expr` 形式が必要
+- **codewhale は同名同出力の二つの変体を持つ**：`codewhale.nix`（x86_64/aarch64 のプリビルドバイナリ、hash は 4 つ）と `codewhale-src.nix`（riscv64 のソースビルド、Cargo.lock の同期が必要）。更新時は**両方**を変更せねばならない——片方だけでは「ローカルのビルドは通るが、他アーキテクチャは配備後も旧版のまま」という症状になる。`codewhale-src` は**flake 出力ではない**ため、hash の取得には `--expr` 形式が必要
 - **dsh-alpha の vendored lock**：tarball に lock が含まれず、生成時に `--legacy-peer-deps` を**付けてはならない**。peer 条目が欠落しビルドが `ENOTCACHED` で失敗する
 ## hash の注意点
 

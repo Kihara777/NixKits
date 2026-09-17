@@ -128,6 +128,32 @@ let f = builtins.getFlake (toString ./.);
 in pkgs.callPackage ./packages/codewhale-src.nix { }'
 ```
 
+#### ⚠️ codewhale 有**两个变体同名同输出**，升级必须两个都改
+
+这是本仓最容易漏的一处——`flake.nix` 按架构分流，**两个文件都产出
+`codewhale`**：
+
+| 变体 | 适用架构 | 源 | 需改的字段 |
+|---|---|---|---|
+| `packages/codewhale.nix` | x86_64 / aarch64 | GitHub Releases 预编译二进制 | `version` + **4 个 hash**（cli/tui × x64/arm64） |
+| `packages/codewhale-src.nix` | riscv64 | `fetchFromGitHub` + `Cargo.lock` | `version` + `hash` + **同步 Cargo.lock** |
+
+```nix
+codewhale = if pkgs.stdenv.hostPlatform.isRiscV
+  then pkgs.callPackage ./packages/codewhale-src.nix { }   # ← riscv64
+  else pkgs.callPackage ./packages/codewhale.nix { };      # ← x86_64/aarch64
+```
+
+**只改一个的症状**：本地 `nix build .#codewhale` 可能成功（取决于构建机架构），
+但**部署后另一个架构上版本没变**。实测踩到：只改了 `-src` 变体，
+系统上 `codewhale --version` 仍是 0.9.12。
+
+> **核对方法**：部署后**逐个变体所在架构核对实际版本**，不要只看构建通过。
+> 本机（x86_64）应验证 `codewhale.nix`；riscv64 的 CI 会验证 `-src`。
+>
+> 取预编译 hash：`nix store prefetch-file <url> --json`（0.9.13 实测 cli 与
+> tui 资产 hash 相同，四值可两两相同，但**仍要分别填入**）。
+
 ### godot-ai v4 的 fail-closed 运行时校验（2026-09-17 实测）
 
 godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒绝启动。本仓用
