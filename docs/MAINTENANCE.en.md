@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T12:41:29+09:00
+
+**Summary**：five packages upgraded + "interactive clarification" added to the update skill — A production run executed all approved upgrades: **mcp-searxng** 2.2.0 → 2.3.0, **opencode-telegram** 0.25.1 → 0.25.2, **codewhale** 0.9.12 → 0.9.13, **dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1, **godot-ai** 3.2.5 → **4.1.0** (cross-major). **godot-ai v4 was the hardest item**: it introduces **fail-closed runtime dependency verification** — at startup it compares the exact versions of nine packages and refuses to start with `RuntimeError: unsupported godot-ai runtime dependency set` on any mismatch. nixpkgs (including unstable and master) lags on five of them (mcp 1.29.0→1.29.1, pydantic 2.13.4→2.13.5, starlette 1.3.1→1.6.0, uvicorn 0.51.0→0.52.4, websockets 16.1→17.1), so a new `overlays/godot-ai-v4-deps.nix` raises those five to what upstream requires (pulling pydantic-core to 2.46.5 along the way and re-fetching its Rust `cargoDeps`), chained with the existing `fastmcp` overlay. **The direction was confirmed with the user first — do not defeat upstream's security contract by patching the check out.** **Pitfall hit**: `flake.nix`'s `godotPkgs` and `overlays/default.nix` are two independent overlay chains; the first attempt changed only the former, so `--version` still raised RuntimeError, and both had to be updated. Upstream's `setuptools==84.0.0` build-time pin was also relaxed (nixpkgs ships 83.0.0; that pin is a reproducibility guard, not a feature requirement). The **codewhale** upgrade **synced Cargo.lock** as the skill requires (7073 → 7347 lines; upstream added `wl-clipboard-rs` and others) — missing it means a failed build. **dsh-alpha** hit the vendored-lock trap: a lock generated with `npm install --package-lock-only --legacy-peer-deps` **omits the `"peer": true` entries**, so the build fails with `ENOTCACHED`; dropping that flag makes npm write the peer entries (matching the existing working lock, 24 in both). **Skill generalisation**: `nix-flake-update-check` gains an "interactive clarification" section — agents that support questions (such as DSH) must **batch every open decision before starting**, avoiding the "guess → get corrected → redo" loop (each redo re-runs builds, and building is the most expensive part of this flow); plus trap 5 (fail-closed runtime verification: a successful build is not a working binary — always run it once) and trap 6 (`overridePythonAttrs` on a Rust-built package must re-fetch `cargoDeps`), and the npm section now covers peer-entry requirements. The adapter layer gained this repo's three measured traps. **Verified**: all five packages build and were actually executed (godot-ai `--version` → 4.1.0, codewhale → 0.9.13, mcp-searxng → 2.3.0, dsh-alpha → 0.1.6-alpha.1); `nix flake check` passes entirely
+
+| Commit | Description |
+|------|------|
+| `2a06bbf` | chore(pkgs): 升级 mcp-searxng 2.3.0、opencode-telegram 0.25.2、codewhale 0.9.13、dsh-alpha 0.1.6-alpha.1、godot-ai 4.1.0 |
+| `c7de9b6` | feat(skills): 更新技能追加交互式澄清，并计入本轮实战教训 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| mcp-searxng | 2.2.0 | 2.3.0 |
+| opencode-telegram | 0.25.1 | 0.25.2 |
+| codewhale | 0.9.12 | 0.9.13 |
+| dsh-alpha | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | git hash | `+0FJ+Grod` → `wNM/QNtF` |
+| 　 | npmDepsHash (mcp-searxng) | `WK28hNI3` → `MqVn66vC` |
+| 　 | npmDepsHash (opencode-telegram) | `Ai1hgKiv` → `NnvFOrS7` |
+| 　 | Cargo.lock (codewhale) | 7073 lines → 7347 lines |
+| 　 | npmDepsHash (dsh-alpha) | `SVYhLVZw` → `qAlIccAJ` |
+| 　 | new overlay | `overlays/godot-ai-v4-deps.nix` |
+
 ## 2026-09-17T11:34:39+09:00
 
 **Summary**：fix(skills): the sub-repo follow-up criterion was refined to field level (driven by a production run) — After completing the dry run as planned, the full software upgrade skill was **actually executed once** for a production assessment, and the live run immediately exposed a defect in the previous entry's criterion: it branched on whether a **file** changed, but only some fields of a manifest file are semantic inputs. Measurement showed the sub-repo `dsh-api-balance`'s `package.json` **did change bytes** (removing `publishConfig.access`), while `dependencies`, the `files` whitelist, `version` and `main`/`exports` were **all untouched** — by the old criterion this would be misread as "manifest file changed → follow up", triggering a full-architecture rebuild and cache invalidation for a purely metadata change. **Fix**: the criterion is now **field-level** — release metadata (`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`), docs and CI config are **not** build inputs, so **do not follow up**; the `dependencies` family / `files` / `main` / `exports` / `scripts` / `version` / source **are** build inputs, so you **must follow up**; plus a fallback principle: "when you cannot determine whether a field affects the output, treat it as follow up" (one extra build is far better than missing a real change). The adapter layer's description of this sub-repo change was corrected too — it previously called it a "docs-only change", but `package.json` changed as well, so **the criterion must land on fields, not files**. **The production run also confirmed the new feature works**: on the real repository, step 9 completed account detection, reference discovery, all four precondition checks (cycle / depth / account / independent upgradability **all PASS**) and the change-nature judgement; it also identified the main repo's real pending upgrades (`codewhale-src` 0.9.12→0.9.13, `godot-ai` 3.2.5→4.1.0, `mcp-searxng` 2.2.0→2.3.0, `opencode-telegram` 0.25.1→0.25.2, `dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1) and two already-current items (`ruyi` / `obs-bilibili-stream`); this run only assessed, it did not perform the upgrades

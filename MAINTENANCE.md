@@ -2,6 +2,29 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T12:41:29+09:00
+
+**摘要**：五个软件包升级 + 更新技能追加「交互式澄清」 — 生产环境实战执行全部批准升级：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（跨大版本）。**godot-ai v4 是本次最难的一项**：它引入 **fail-closed 运行时依赖校验**——启动时比对 9 个包的精确版本，任一不符即 `RuntimeError: unsupported godot-ai runtime dependency set` 拒绝启动。nixpkgs（含 unstable 与 master）在 5 个包上落后（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1），故新增 `overlays/godot-ai-v4-deps.nix` 把这 5 个包抬到上游要求（pydantic-core 连带抬到 2.46.5 并重取 Rust 的 `cargoDeps`），与既有 `fastmcp` overlay **链式叠加**。**先按「不破坏上游安全契约」的方向征询并取得批准**，而非打补丁绕过校验。**踩坑**：`flake.nix` 的 `godotPkgs` 与 `overlays/default.nix` 是两处独立的 overlay 链，初版只改了前者，导致 `--version` 仍 RuntimeError；两处同步后才通过。另放宽上游 `setuptools==84.0.0` 构建期 pin（nixpkgs 为 83.0.0，该 pin 是可复现性守卫而非功能需求）。**codewhale** 升级按技能要求**同步 Cargo.lock**（7073 → 7347 行，上游新增 `wl-clipboard-rs` 等）——漏掉即构建失败。**dsh-alpha** 踩到 vendored lock 陷阱：用 `npm install --package-lock-only --legacy-peer-deps` 生成的 lock **不含 `"peer": true` 条目**，构建报 `ENOTCACHED`；去掉该 flag 后 npm 才写入 peer 条目（与既有可工作的 lock 结构一致，均 24 条）。**技能泛化**：`nix-flake-update-check` 新增「交互式澄清」章节——支持提问的智能体（如 DSH）须**开工前批量问全**待定项，避免「猜一次→被纠正→重来」的多轮往返（每次重来都要重跑构建，而构建是本流程最贵的环节）；同时新增陷阱 5（fail-closed 运行时校验：构建成功 ≠ 可用，必须实际运行一次验证）与陷阱 6（`overridePythonAttrs` 改 Rust 构建包时 `cargoDeps` 须一并重取），并在 npm 节补充 peer 条目要求。适配层补充本仓三处实测陷阱。**验证**：五包全部构建通过并实际运行确认（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）；`nix flake check` 全通过
+
+| 提交 | 说明 |
+|------|------|
+| `2a06bbf` | chore(pkgs): 升级 mcp-searxng 2.3.0、opencode-telegram 0.25.2、codewhale 0.9.13、dsh-alpha 0.1.6-alpha.1、godot-ai 4.1.0 |
+| `c7de9b6` | feat(skills): 更新技能追加交互式澄清，并计入本轮实战教训 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | 2.2.0 | 2.3.0 |
+| opencode-telegram | 0.25.1 | 0.25.2 |
+| codewhale | 0.9.12 | 0.9.13 |
+| dsh-alpha | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | git hash | `+0FJ+Grod` → `wNM/QNtF` |
+| 　 | npmDepsHash (mcp-searxng) | `WK28hNI3` → `MqVn66vC` |
+| 　 | npmDepsHash (opencode-telegram) | `Ai1hgKiv` → `NnvFOrS7` |
+| 　 | Cargo.lock (codewhale) | 7073 行 → 7347 行 |
+| 　 | npmDepsHash (dsh-alpha) | `SVYhLVZw` → `qAlIccAJ` |
+| 　 | 新增 overlay | `overlays/godot-ai-v4-deps.nix` |
+
 ## 2026-09-17T11:34:39+09:00
 
 **摘要**：fix(skills): 子仓跟进判据细化到字段级（生产环境实战驱动） — 按计划完成 dry run 后**实际跑了一次完整的软件升级技能**做生产评估，实战立刻暴露出前一条目判据的缺陷：原判据按「**文件**是否变化」分流，但清单文件的众多字段中只有一部分是语义输入。实测子仓 `dsh-api-balance` 的 `package.json` **确实变了字节**（移除 `publishConfig.access`），而 `dependencies`、`files` 白名单、`version`、`main`/`exports` **均未动**——按原判据会被误判为「清单文件变了 → 跟进」，从而为一次纯元数据改动触发全架构重建与缓存失效。**修正**：判据改为**字段级**——发布元数据（`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`）与文档、CI 配置**不属**构建输入，**不跟进**；`dependencies` 系列 / `files` / `main` / `exports` / `scripts` / `version` / 源码**属**构建输入，**必须跟进**；并加入兜底原则「无法确定某字段是否影响产物时，按跟进处理」（多一次构建远好过漏掉一次真实变更）。适配层对本次子仓变更的描述同步修正——原文误称「仅文档变更」，实际 `package.json` 也变了，**判据必须落到字段而非文件**。**实战同时确认新特性工作正常**：第 9 步在真实仓库上完成了账户识别、引用关系发现、四项前提校验（回环 / 深度 / 账户 / 可独立升级**全部 PASS**）与变更性质判定；并发现主干侧的真实待升级项（`codewhale-src` 0.9.12→0.9.13、`godot-ai` 3.2.5→4.1.0、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1）与两处已最新项（`ruyi` / `obs-bilibili-stream`），本次仅评估不执行升级

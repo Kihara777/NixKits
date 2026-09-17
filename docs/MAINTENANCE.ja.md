@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-17T12:41:29+09:00
+
+**概要**：五つのパッケージ更新 + 更新スキルに「対話的確認」を追加 — 本番環境での実戦として承認済みの更新を全て実行した：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（大版本跨ぎ）。**godot-ai v4 が今回最难の項目**であった：**fail-closed な実行時依存検証**を導入しており、起動時に九つのパッケージの正確な版を照合し、一つでも不一致なら `RuntimeError: unsupported godot-ai runtime dependency set` で起動を拒否する。nixpkgs（unstable と master を含む）は五つで遅れており（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1）、そのため新たに `overlays/godot-ai-v4-deps.nix` を追加してこの五つを上流の要求版まで引き上げ（pydantic-core も連動して 2.46.5 へ、Rust の `cargoDeps` も再取得）、既存の `fastmcp` overlay と**連鎖**させた。**上流のセキュリティ契約を壊さない方向で先にユーザーへ確認し承認を得た**——検証を打ち消すパッチは書かない。**踏んだ罠**：`flake.nix` の `godotPkgs` と `overlays/default.nix` は二つの独立した overlay 連鎖であり、初版は前者だけを変更したため `--version` が依然 RuntimeError となった。両方を同期させて初めて通過した。また上流の `setuptools==84.0.0` というビルド時 pin を緩和した（nixpkgs は 83.0.0。この pin は再現性の守りであって機能要件ではない）。**codewhale** の更新ではスキルの要求どおり **Cargo.lock を同期**した（7073 → 7347 行、上流が `wl-clipboard-rs` 等を追加）——漏らせばビルドが失敗する。**dsh-alpha** では vendored lock の罠を踏んだ：`npm install --package-lock-only --legacy-peer-deps` で生成した lock は **`"peer": true` 条目を含まず**、ビルドが `ENOTCACHED` で失敗する。このフラグを外すと npm が peer 条目を書き込む（既存の動作する lock と構造が一致し、いずれも 24 条）。**スキルの汎化**：`nix-flake-update-check` に「対話的確認」の節を新設——質問機構を持つエージェント（DSH など）は**着手前に保留事項を一度にまとめて問う**必要があり、「推測 → 訂正 → やり直し」の往復を避ける（やり直しの度にビルドを再実行することになり、ビルドは本フローで最も高価な工程である）。併せて罠 5（fail-closed 実行時検証：ビルド成功 ≠ 使用可能。必ず一度実行して検証する）と罠 6（`overridePythonAttrs` で Rust ビルドのパッケージを変更する際は `cargoDeps` も再取得が必要）を追加し、npm の節に peer 条目要件を補足した。適応層には本リポジトリで実測した三つの罠を追加。**検証**：五つ全てがビルドを通過し、実際に実行して確認（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）。`nix flake check` は全て通過
+
+| コミット | 説明 |
+|------|------|
+| `2a06bbf` | chore(pkgs): 升级 mcp-searxng 2.3.0、opencode-telegram 0.25.2、codewhale 0.9.13、dsh-alpha 0.1.6-alpha.1、godot-ai 4.1.0 |
+| `c7de9b6` | feat(skills): 更新技能追加交互式澄清，并计入本轮实战教训 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| mcp-searxng | 2.2.0 | 2.3.0 |
+| opencode-telegram | 0.25.1 | 0.25.2 |
+| codewhale | 0.9.12 | 0.9.13 |
+| dsh-alpha | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | git hash | `+0FJ+Grod` → `wNM/QNtF` |
+| 　 | npmDepsHash (mcp-searxng) | `WK28hNI3` → `MqVn66vC` |
+| 　 | npmDepsHash (opencode-telegram) | `Ai1hgKiv` → `NnvFOrS7` |
+| 　 | Cargo.lock (codewhale) | 7073 行 → 7347 行 |
+| 　 | npmDepsHash (dsh-alpha) | `SVYhLVZw` → `qAlIccAJ` |
+| 　 | 新規 overlay | `overlays/godot-ai-v4-deps.nix` |
+
 ## 2026-09-17T11:34:39+09:00
 
 **概要**：fix(skills): 子リポジトリ追従の判据をフィールド単位に細分化（本番環境での実戦が契機） — 予定どおり dry run を終えた後、**ソフトウェア更新スキルを実際に一度フル実行**して本番評価を行ったところ、実戦が直前の条目における判据の欠陥を即座に露呈させた：旧判据は「**ファイル**が変化したか」で分流していたが、マニフェストファイルの多数のフィールドのうち意味的入力は一部にすぎない。実測では子リポジトリ `dsh-api-balance` の `package.json` は**確かにバイトが変化**しており（`publishConfig.access` の削除）、一方で `dependencies`、`files` ホワイトリスト、`version`、`main`/`exports` は**いずれも未変更**であった——旧判据では「マニフェストが変化 → 追従」と誤判定され、純粋なメタデータ変更のために全アーキテクチャの再ビルドとキャッシュ無効化を引き起こすところだった。**修正**：判据を**フィールド単位**に変更——リリースメタデータ（`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`）、ドキュメント、CI 設定はビルド入力では**なく**、**追従しない**；`dependencies` 系 / `files` / `main` / `exports` / `scripts` / `version` / ソースはビルド入力で**あり**、**必ず追従する**；さらに「あるフィールドが成果物に影響するか判別できない場合は追従側に倒す」という兜底原則を追加（一回多くビルドする方が、実変更を一度見落とすよりはるかに良い）。適応層における今回の子リポジトリ変更の記述も修正——原文は「ドキュメントのみの変更」と誤って述べていたが、実際には `package.json` も変化しており、**判据はファイルではなくフィールドに落ちなければならない**。**実戦は同時に新機能が正常に動作することを確認した**：実在のリポジトリ上で第 9 步がアカウント識別、参照関係の検出、四つの前提検証（循環 / 深さ / アカウント / 独立昇格可能——**すべて PASS**）と変更性質の判定を完了し、さらに主リポジトリ側の実際の保留更新（`codewhale-src` 0.9.12→0.9.13、`godot-ai` 3.2.5→4.1.0、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1）と既に最新の二項目（`ruyi` / `obs-bilibili-stream`）を発見した。今回は評価のみで更新は実施していない

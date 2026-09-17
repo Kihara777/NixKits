@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T12:41:29+09:00
+
+**摘要**：五 包昇級 + 更新技能「対話的確認」追加 — 生産環境 実戦 承認済 更新 全部 実行：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（大版跨）。**godot-ai v4 今回 最難 項目**：**fail-closed 実行時依存検証** 導入、起動時 九 包 正確 版 照合、一 不一致 則 `RuntimeError: unsupported godot-ai runtime dependency set` 起動 拒否。nixpkgs（unstable 與 master 含）五 遅（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1）、故 新規 `overlays/godot-ai-v4-deps.nix` 追加 此 五 上流 要求版 迄 引上（pydantic-core 連動 2.46.5 化、Rust `cargoDeps` 再取得）、既存 `fastmcp` overlay 與 **連鎖**。**上流 安全契約 破壊 不 方向 先 利用者 確認 承認 取得**——検証 打消 修正 書 不。**踏 罠**：`flake.nix` 的 `godotPkgs` 與 `overlays/default.nix` 二 独立 overlay 連鎖、初版 前者 限定 変更 為 `--version` 依然 RuntimeError。両方 同期 後 通過。又 上流 `setuptools==84.0.0` build 時 pin 緩和（nixpkgs 83.0.0。此 pin 再現性 守 非 機能要件）。**codewhale** 更新 技能 要求 通 **Cargo.lock 同期**（7073 → 7347 行、上流 `wl-clipboard-rs` 等 追加）——漏 則 build 失敗。**dsh-alpha** vendored lock 罠 踏：`npm install --package-lock-only --legacy-peer-deps` 生成 lock **`"peer": true` 条目 含 無**、build `ENOTCACHED` 失敗。此 flag 外 則 npm peer 条目 書込（既存 動作 lock 與 構造 一致、何 及 24 条）。**技能 汎化**：`nix-flake-update-check` 新設「対話的確認」節——質問機構 有 代理（DSH 等）**着手前 保留事項 一度 総 問** 必要、「推測 → 訂正 → 再実行」往復 避（再実行 毎 再 build、build 本 flow 最 高価 工程）。併 罠 5（fail-closed 実行時検証：build 成功 ≠ 使用可能。必 一度 実行 検証）與 罠 6（`overridePythonAttrs` Rust build 包 変更 際 `cargoDeps` 也 再取得 必要）追加、npm 節 peer 条目 要件 補足。適配層 本 repo 実測 三 罠 追加。**検証**：五 全部 build 通過 且 実際 実行 確認（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）。`nix flake check` 全部 通過
+
+| 提交 | 説明 |
+|------|------|
+| `2a06bbf` | chore(pkgs): 升级 mcp-searxng 2.3.0、opencode-telegram 0.25.2、codewhale 0.9.13、dsh-alpha 0.1.6-alpha.1、godot-ai 4.1.0 |
+| `c7de9b6` | feat(skills): 更新技能追加交互式澄清，并计入本轮实战教训 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| mcp-searxng | 2.2.0 | 2.3.0 |
+| opencode-telegram | 0.25.1 | 0.25.2 |
+| codewhale | 0.9.12 | 0.9.13 |
+| dsh-alpha | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
+| godot-ai | 3.2.5 | 4.1.0 |
+| 　 | git hash | `+0FJ+Grod` → `wNM/QNtF` |
+| 　 | npmDepsHash (mcp-searxng) | `WK28hNI3` → `MqVn66vC` |
+| 　 | npmDepsHash (opencode-telegram) | `Ai1hgKiv` → `NnvFOrS7` |
+| 　 | Cargo.lock (codewhale) | 7073 行 → 7347 行 |
+| 　 | npmDepsHash (dsh-alpha) | `SVYhLVZw` → `qAlIccAJ` |
+| 　 | 新規 overlay | `overlays/godot-ai-v4-deps.nix` |
+
 ## 2026-09-17T11:34:39+09:00
 
 **摘要**：fix(skills): 子倉 追従 判据 field 単位 細分化（生産環境 実戦 起因） — 予定 通 dry run 終了 後、**軟件昇級技能 実際 一度 full 実行** 生産評価 行、実戦 即座 前 条目 判据 欠陥 露呈：旧判据「**文件** 変化 可否」分流、但 manifest file 多 数 field 中 意味的入力 一部 限定。実測 子倉 `dsh-api-balance` 的 `package.json` **確 byte 変化**（`publishConfig.access` 削除）、一方 `dependencies`、`files` 白名单、`version`、`main`/`exports` **何 及 未変更**——旧判据「manifest 変化 → 追従」誤判定、純 metadata 変更 為 全 architecture 再 build 與 cache 無効化 誘発 所。**修正**：判据 **field 単位** 変更——release metadata（`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`）、文書、CI 設定 build 入力 **非**、**追従 不**；`dependencies` 系 / `files` / `main` / `exports` / `scripts` / `version` / source build 入力 **是**、**必 追従**；加「某 field 成果物 影響 可否 判別 不能 場合 追従 側 倒」兜底原則（一回 多 build 方、実変更 一度 見落 比 遥 良）。適配層 今回 子倉 変更 記述 也 修正——原文「文書 限定 変更」誤記載、実際 `package.json` 也 変化、**判据 文件 非 field 落 必要**。**実戦 同時 新機能 正常 動作 確認**：実在 repo 上 第 9 步 account 識別、参照関係 検出、四 前提検証（循環 / 深度 / account / 独立昇級可能——**全部 PASS**）與 変更性質 判定 完了、更 主倉 側 実際 保留更新（`codewhale-src` 0.9.12→0.9.13、`godot-ai` 3.2.5→4.1.0、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1）與 既 最新 二 項目（`ruyi` / `obs-bilibili-stream`）発見。今回 評価 限定 更新 未実施
