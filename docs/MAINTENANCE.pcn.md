@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-17T13:00:09+09:00
+
+**摘要**：feat(skills): 適配層 第 10 步「process 振返 與 規範 検証」新設 — 更新 flow **完全 終了 後** 実行、監査 対象 **軟件 非、軟件 如何 更新 決定 規範 自体**（技能 / `AGENTS.md` / `SECURITY.md` / develop script）——即 更新 process 自身 対 更新確認。六 子步：**10.1 振返**（初回 失敗 箇所 / 利用者 問 必要 有 箇所 / 再実行 箇所 根本原因 迄 辿）、**10.2 検証**（`AGENTS.md` / `SECURITY.md` 記述 今 成立 可否。外部 link 到達性 含）、**10.3 帰属**（可搬性 依 汎用技能 / 適配層 / `AGENTS.md` / `SECURITY.md` 振分。判据「別 nix flake 倉庫 移 也 成立 可否」）、**10.4 体験**（利用者 何往復 待 為 振返、自行検証 可能 事項 潰）、**10.5 証拠規律**、**10.6 成果**。**10.5 硬性 制約**：規範 変更 **再現可能・追跡可能・異議申立 可能** 必要——印象 依 規範 変更、一度 偶発 法則 視、既 正 書 内容 対「更 最適化」、役 立 無 見 但 拘束力 残 条目 削除、前提 消 証明 不能 限 禁止。**初回 実行 二 実欠陥 発見**（何 及 **build error 生 不**、能動的 監査 限定 炙出 可能）：①`SECURITY.md` 子倉 `SECURITY.md` 指 **dead link**——当該 file 未作成（`gh api` 與 `curl` 双方 404 確証）。四言語「同 sub project 独自 安全政策 未整備。脆弱性 本 repo 報告 願」変更；②**十二 箇所** `Asus-linux/asusctl` 失効 link（三 文書 × 四 言語）——project `OpenGamingCollective/asusctl` 移転（`gh api` 602 stars、HTTP 200 確証）。「URL 修正 時 表示 text 也 修正」要求 従 連結 文言 也 更新。**汎化**：link 監査 手法 汎用技能「文書 外部 link 監査」入。三 判据 含——`curl` 404 `gh api` 再確認 後 初 確定（権限 又 制限 可能 性 有）、`403` 多 場合 scraping 対策 且 dead link 非、**vendored 第三者 content 書換 不**（`packages/kitsfmt-src/vendor/` 内 上流 CHANGELOG 等）。四言語 文書 同期
+
+| 提交 | 説明 |
+|------|------|
+| `442e5d1` | feat(skills): 适配层新增第 10 步「流程复盘与规范校验」 |
+
 ## 2026-09-17T12:52:54+09:00
 
 **摘要**：fix(codewhale): x86_64/aarch64 預編訳変体 也 0.9.13 迄 — **配備後 照合 初 判明** 変更漏：前 条目 `codewhale-src`（riscv64 源 build 変体、Cargo.lock 同期 含）限定 更新、**`codewhale.nix` 漏**——x86_64/aarch64 GitHub Releases 預編訳 binary 経路、`flake.nix` `hostPlatform.isRiscV` 依 分岐。症状「局部 build 通過 且 dsh 也 0.1.6-alpha.1 化、但 系統上 `codewhale --version` 依然 0.9.12」。**本 repo codewhale 同名同輸出 二 変体 持**：`codewhale.nix`（預編訳。`version` 與 cli/tui × x64/arm64 **四 hash** 必要）與 `codewhale-src.nix`（源 build。`version` + `hash` + `Cargo.lock` 同期 必要）——**更新 時 両方 変更 必要**。実測 0.9.13 cli 與 tui 資産 hash 同一（`WTriVnVv…` / `BgUnHSo0…`）、0.9.12 時 同様、但 四 値 各自 記入 故 結果 二 二 一致。**汎化**：此 罠 適配層「本倉庫固有 罠」記載、判据 添——**配備後 変体 毎 其 architecture 上 実際 版 照合。build 通過 限定 判断 不**

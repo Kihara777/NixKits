@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-17T13:00:09+09:00
+
+**摘要**：feat(skills): 适配层新增第 10 步「流程复盘与规范校验」 — 每次更新流程**全部完成后**执行，审计的**不是软件而是决定软件如何被更新的规范本身**（技能 / `AGENTS.md` / `SECURITY.md` / develop 脚本），即对更新流程自身做一次「检查更新」。六个子步：**10.1 复盘**（哪里第一次就失败 / 需要问用户 / 返工，逐条追根因）、**10.2 校验**（`AGENTS.md` / `SECURITY.md` 的断言是否仍成立，含外部链接可达性）、**10.3 归属**（按可移植性分流到通用技能 / 适配层 / `AGENTS.md` / `SECURITY.md`，判据是「搬到另一个 nix flake 仓库还成立吗」）、**10.4 体验**（复盘让用户等了几轮，收敛可自行查证项）、**10.5 证据纪律**、**10.6 产出**。**10.5 是硬约束**：规范改动须**可复现、可追溯、允许质疑**——禁止凭印象改规范、把一次偶发当规律、为已写对的内容「再优化」、删除仍有约束力但看似无用的条目，除非能证明其前提已消失。**首次执行即发现两处真实缺陷**（均**不产生构建错误**，只有主动审计才能发现）：①`SECURITY.md` 指向子仓 `SECURITY.md` 的**死链**——子仓根本没建该文件（已用 `gh api` 与 `curl` 双重确证 404），四语同步改为「该子项目尚未自建安全政策，漏洞请报至本仓库」；②**12 处** `Asus-linux/asusctl` 失效链接（3 份文档 × 4 语）——项目已迁移至 `OpenGamingCollective/asusctl`（`gh api` 确证 602 stars、HTTP 200），按「改 URL 同时改显示文本」的要求，链接文字一并更新。**泛化**：链接审计方法进通用技能「审计文档中的外部链接」，含三条判据——`curl` 的 404 须经 `gh api` 复核才定案（可能是权限/限流）、`403` 常为反爬不算死链、**vendored 第三方内容不改写**（如 `packages/kitsfmt-src/vendor/` 内的上游 CHANGELOG）。四语文档同步
+
+| 提交 | 说明 |
+|------|------|
+| `442e5d1` | feat(skills): 适配层新增第 10 步「流程复盘与规范校验」 |
+
 ## 2026-09-17T12:52:54+09:00
 
 **摘要**：fix(codewhale): 补齐 x86_64/aarch64 预编译变体至 0.9.13 — **部署后核对才发现**的漏改：前一条目只升级了 `codewhale-src`（riscv64 的源构建变体，含 Cargo.lock 同步），**漏掉了 `codewhale.nix`**——x86_64/aarch64 走的是 GitHub Releases 预编译二进制路径，由 `flake.nix` 按 `hostPlatform.isRiscV` 分流。症状是「本机构建通过、dsh 也已升到 0.1.6-alpha.1，但系统上 `codewhale --version` 仍是 0.9.12」。**本仓 codewhale 有两个变体同名同输出**：`codewhale.nix`（预编译，需改 `version` + cli/tui × x64/arm64 **四个 hash**）与 `codewhale-src.nix`（源构建，需改 `version` + `hash` + 同步 `Cargo.lock`）——**升级必须两个都改**。实测 0.9.13 的 cli 与 tui 资产 hash 相同（`WTriVnVv…` / `BgUnHSo0…`），与 0.9.12 时一致；但四个值仍分别填入，故四值两两相同。**泛化**：该陷阱已写入适配层「本仓特有陷阱」，并附判据——**部署后逐个变体所在架构核对实际版本，不要只看构建通过**
