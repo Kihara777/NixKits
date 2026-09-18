@@ -9,7 +9,8 @@
 | 项目 | 值 |
 |------|-----|
 | 类型 | 编码助手技能（语言后端） |
-| 路径 | `skills/translate-pseudocn/SKILL.md` |
+| 路径 | `skills/translate-pseudocn/`（`SKILL.md` + `dictionary.md`）|
+| 配套文件 | `dictionary.md` —— 内置片假名→日文漢字映射词典（实测 **75** 条），翻译与残留假名自检时查 |
 | 语言代码 | pcn |
 | 调用者 | write-project-docs（自动发现） |
 
@@ -17,7 +18,7 @@
 
 - 伪中国语（pcn）翻译 — 日语文本假名剥离 + 语序转换
 - SOV→SVO 语序调整、助词替换、标点转换
-- 内置 ~13 条技术术语日→中映射词典
+- 内置片假名→日文漢字映射词典（`dictionary.md`，**75** 条：软件/硬件/版本/上流等常规词 + IT 术语）
 - 保留代码块、数字、符号
 
 ## 使用
