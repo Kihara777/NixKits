@@ -17,7 +17,7 @@
 ## 安装
 
 ```nix
-nixpkgs.overlays = [ (import ./overlay.nix) ];
+nixpkgs.overlays = [ inputs.nixkits.overlays.breeze-black ];
 ```
 
 ## 启用
