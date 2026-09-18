@@ -17,9 +17,11 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # ローカルパッケージ索引を更新
 ruyi list             # 利用可能パッケージ一覧
 ruyi install <pkg>    # パッケージのインストール
-ruyi extract <file>  # RISC-V AppImage を展開（root 不要）
-ruyi venv <name>      # 対応 RISC-V toolchain で Python virtualenv を作成
+ruyi extract <pkg>   # パッケージ内容を取得して展開（引数はパッケージ atom でファイルパスではない。root 不要）
+ruyi venv -t gnu-plct gnu-plct ./myvenv  # venv 作成：-t <toolchain> <profile> <dest>
 ruyi device provision # RISC-V デバイス仮想環境を作成
 ```
+
+> `ruyi venv` は三つとも必須です（`-t` で toolchain、`profile` と `dest` は位置引数）。また `profile` はローカル索引に存在する必要があるため、初回は先に `ruyi update` を実行してください。
 
 バージョン詳細は [ruyi パッケージ文書](../zh/ruyi.md) を参照。

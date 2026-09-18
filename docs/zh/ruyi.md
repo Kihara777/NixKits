@@ -55,7 +55,7 @@ environment.systemPackages = [
 ruyi --help
 ruyi list --all          # 列出所有可用软件包
 ruyi install <pkg>       # 安装软件包
-ruyi venv --toolchain <t> # 用指定 toolchain 创建 Python virtualenv
+ruyi venv -t <toolchain> <profile> <dest>  # 创建虚拟环境（三者缺一不可）
 ruyi device provision    # 创建 RISC-V 设备虚拟环境
 ```
 

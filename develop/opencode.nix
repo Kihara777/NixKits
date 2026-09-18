@@ -38,13 +38,20 @@ server:
   bind_address: "127.0.0.1"
   port: 42701
   secret_key: "opencode-devshell-searxng-key"
-  limiterSettings:
-    botdetection:
-      trusted_proxies:
-        - "127.0.0.1/32"
-    real_ip:
-      x_for: 1
 YML
+    # limiter 配置**必须**放在独立的 limiter.toml —— searxng 只从
+    # `<user_cfg_folder>/limiter.toml` 读取（searx/limiter.py 的 get_cfg），
+    # settings.yml 里写 limiterSettings 会被**静默忽略**（实测启动即警告
+    # "missing config file: .../limiter.toml"）。SEARXNG_SETTINGS_PATH 指向
+    # 文件时其所在目录即 user_cfg_folder，故 limiter.toml 与 settings.yml 同目录。
+    # trusted_proxies 让 searxng 信任本机 lighttpd 反代传来的 X-Forwarded-For/X-Real-IP。
+    cat > "$SEARXNG_SETTINGS_DIR/limiter.toml" << LT
+[botdetection]
+trusted_proxies = [
+  '127.0.0.0/8',
+  '::1',
+]
+LT
     redis-server --port 0 --unixsocket /tmp/searxng-redis-$$.sock --daemonize yes 2>/dev/null
     SEARXNG_SETTINGS_PATH="$SEARXNG_SETTINGS_DIR/settings.yml" \
       searxng-run &

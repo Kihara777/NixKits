@@ -56,7 +56,7 @@ environment.systemPackages = [
 ruyi --help
 ruyi list --all          # list all available packages
 ruyi install <pkg>       # install a package
-ruyi venv --toolchain <t> # create Python virtualenv with given toolchain
+ruyi venv -t <toolchain> <profile> <dest>  # create a venv (all three are required)
 ruyi device provision    # create RISC-V device virtual environment
 ```
 

@@ -56,7 +56,7 @@ environment.systemPackages = [
 ruyi --help
 ruyi list --all          # 利用可能な全パッケージを一覧表示
 ruyi install <pkg>       # ソフトウェアパッケージをインストール
-ruyi venv --toolchain <t> # 指定 toolchain で Python virtualenv を作成
+ruyi venv -t <toolchain> <profile> <dest>  # venv 作成（三つとも必須）
 ruyi device provision    # RISC-V デバイス仮想環境を作成
 ```
 

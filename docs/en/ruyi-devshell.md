@@ -17,9 +17,11 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # update local package index
 ruyi list             # list available packages
 ruyi install <pkg>    # install a package
-ruyi extract <file>  # unpack RISC-V AppImage (no root)
-ruyi venv <name>      # create Python virtualenv with paired RISC-V toolchain
+ruyi extract <pkg>   # fetch and unpack a package's contents (argument is a package atom, not a file path; no root)
+ruyi venv -t gnu-plct gnu-plct ./myvenv  # create a venv: -t <toolchain> <profile> <dest>
 ruyi device provision # create RISC-V device virtual environment
 ```
+
+> `ruyi venv` requires all three (`-t` for the toolchain, plus the `profile` and `dest` positionals), and the `profile` must already exist in the local index -- run `ruyi update` first.
 
 See [ruyi package docs](../zh/ruyi.md) for version details.

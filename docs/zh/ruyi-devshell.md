@@ -17,9 +17,12 @@ nix develop nixkits#ruyi-alpha  # alpha
 ruyi update           # 更新本地包索引
 ruyi list             # 列出可用包
 ruyi install <pkg>    # 安装软件包
-ruyi extract <file>  # 解压 RISC-V AppImage（无需 root）
-ruyi venv <name>      # 用对应 RISC-V toolchain 创建 Python virtualenv
+ruyi extract <pkg>   # 取出并解压软件包内容（参数是包名 atom，不是文件路径；无需 root）
+ruyi venv -t gnu-plct gnu-plct ./myvenv  # 创建虚拟环境：-t <toolchain> <profile> <dest>
 ruyi device provision # 创建 RISC-V 设备虚拟环境
 ```
+
+> `ruyi venv` 的三个参数缺一不可（`-t` 指定 toolchain、`profile` 与 `dest` 为位置参数）；
+> 且 `profile` 须已在本地索引中，故首次使用前先 `ruyi update`。
 
 版本详情见 [ruyi 软件包文档](../zh/ruyi.md)。
