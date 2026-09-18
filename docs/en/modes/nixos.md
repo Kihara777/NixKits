@@ -20,7 +20,7 @@
 - **Tools**: `nixos_shell` (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) and `nixos_cli` (read-only diagnostics: capabilities / system-status / generations / journal / audit-store-paths).
 - **Prompts**: the NixOS efficient-development guide (declarative immutable system, package management, path pitfalls).
 - **Skills** (5): the preset's own `cordis-plugin-development` and `editing-cordis-compositions`, plus `nixos-modern-cli`, `recover-nixos-config` and `nixos-specialisation-tuning`, registered from the repository `skills/` tree through the build-time subset `skills-nixos/`.
-- **Composition**: creation mode's full tool surface + the `persona` row (`complete: true`) + the `nixos-gate` and `nixos-shell` rows.
+- **Composition**: creation mode's full tool surface + the `persona` row (it sets only `prefix` and **does not** set `complete`, so runtime context is still appended) + the `nixos-gate` and `nixos-shell` rows.
 
 ## The persona row (preset identity)
 

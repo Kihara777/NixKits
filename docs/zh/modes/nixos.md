@@ -20,7 +20,7 @@
 - **工具**：`nixos_shell`（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）与 `nixos_cli`（只读诊断：capabilities / system-status / generations / journal / audit-store-paths）。
 - **提示词**：NixOS 高效开发指南（声明式系统本质、包管理、路径陷阱）。
 - **技能**（5 个）：预设自带的 `cordis-plugin-development`、`editing-cordis-compositions`，加上从仓库 `skills/` 树经构建期子集 `skills-nixos/` 注册的 `nixos-modern-cli`、`recover-nixos-config`、`nixos-specialisation-tuning`。
-- **组合**：创造模式的完整工具面 + `persona` 行（`complete: true`）+ `nixos-gate` + `nixos-shell` 两行。
+- **组合**：创造模式的完整工具面 + `persona` 行（仅设 `prefix`，**未设** `complete`，故仍会拼接运行时上下文）+ `nixos-gate` + `nixos-shell` 两行。
 
 ## persona 行（预设身份）
 
