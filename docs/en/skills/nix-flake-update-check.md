@@ -66,10 +66,10 @@ A single file had grown to 918 lines, making it hard to find things while execut
 
 | File | Contents | When to read |
 |------|----------|--------------|
-| `SKILL.md` | Interactive clarification + steps 1–10 + adapter contract | Always |
+| `SKILL.md` | Interactive clarification + steps 1–9 + adapter contract | Always |
 | `builders.md` | Per-builder hash flows, `flake.lock` handling | Step 4 |
 | `traps.md` | nixpkgs drift traps, fail-closed checks, dead-link audit, Actions updates, patch-embedded versions | When a step-7 self-check hits |
 
 **Step 7 gained a "six questions before committing" self-check**: multiple variants? dependency table consistent? source fetch still valid? actually ran it? doc wording still true? should `flake.lock` be committed? — all six distilled from incidents measured the same day; a hit leads into `traps.md` instead of reading the whole file.
 
-**Closing step 10** (adapter): a process retrospective plus spec audit; it specifically requires that **generic lessons produced on a test branch be carried back into main immediately** — those branches are never merged by agreement, and the lessons must not be stranded with them.
+**The closing step 10 is supplied by the adapter** (this skill itself ends at step 9): a process retrospective plus spec audit, defined by the adapter skill (for NixKits, see the "step 10 (closing)" section of `nixkits-check-updates`). It specifically requires that **generic lessons produced on a test branch be carried back into main immediately** — those branches are never merged by agreement, and the lessons must not be stranded with them.

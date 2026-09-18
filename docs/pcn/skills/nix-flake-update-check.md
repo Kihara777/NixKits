@@ -66,7 +66,7 @@
 
 | file | 内容 | 読 時機 |
 |------|------|--------|
-| `SKILL.md` | 対話的確認 + 第 1〜10 步 主 flow + 適配層契約 | 常時 |
+| `SKILL.md` | 対話的確認 + 第 1〜9 步 主 flow + 適配層契約 | 常時 |
 | `builders.md` | builder 別 hash 更新 flow、`flake.lock` 処理 | 第 4 步 |
 | `traps.md` | nixpkgs 漂移 罠、fail-closed 検証、外部 link 失効監査、Actions 更新、修正内蔵版 | 第 7 步 自検 該当 時 |
 
