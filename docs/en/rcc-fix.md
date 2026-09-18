@@ -33,10 +33,12 @@ Overlay (code patch) + NixOS module (systemd fix), recommended together:
 
   nixkits.rcc-fix.enable = true;
 
-  services.asusctl = {
+  services.asusd = {
     enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+    # Platform profiles and CPU power limits are declared via profileConfig
+    # (written to /etc/asusd/profile.ron); see the profiles section of the
+    # asusctl manual for the fields.
+    # profileConfig = { ... };
   };
 
   programs.rog-control-center = {

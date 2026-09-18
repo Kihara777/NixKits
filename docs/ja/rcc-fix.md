@@ -33,10 +33,12 @@ overlay（コードパッチ）+ NixOS モジュール（systemd 修正）、併
 
   nixkits.rcc-fix.enable = true;
 
-  services.asusctl = {
+  services.asusd = {
     enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+    # プラットフォームプロファイルと CPU 電力上限は profileConfig で宣言する
+    # （/etc/asusd/profile.ron に書き出される）。フィールドは asusctl マニュアルの
+    # profiles の節を参照。
+    # profileConfig = { ... };
   };
 
   programs.rog-control-center = {

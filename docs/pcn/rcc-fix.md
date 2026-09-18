@@ -33,10 +33,11 @@ ASUS ROG Control Center 2-in-1 脱着式鍵盤機器向修正。
 
   nixkits.rcc-fix.enable = true;
 
-  services.asusctl = {
+  services.asusd = {
     enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+    # 平台段階 與 CPU 電力上限 profileConfig 依 宣言（/etc/asusd/profile.ron 書出）。
+    # 字段 asusctl 手引 profiles 節 参照。
+    # profileConfig = { ... };
   };
 
   programs.rog-control-center = {

@@ -33,10 +33,11 @@ overlay（代码补丁）+ NixOS 模块（systemd 修复），推荐组合使用
 
   nixkits.rcc-fix.enable = true;
 
-  services.asusctl = {
+  services.asusd = {
     enable = true;
-    power-profile = true;
-    cpu-power-control = true;
+    # 平台档位与 CPU 功率上限经 profileConfig（写入 /etc/asusd/profile.ron）声明；
+    # 具体字段见 asusctl 手册的 profiles 一节。
+    # profileConfig = { ... };
   };
 
   programs.rog-control-center = {
