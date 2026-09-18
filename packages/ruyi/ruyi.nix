@@ -48,6 +48,10 @@ python.pkgs.buildPythonApplication {
     fastjsonschema
     jinja2
     python.pkgs.lz4         # Python bindings (import lz4.frame)
+    # ruyi ≥ 0.53.0 新增运行时依赖（pyproject dependencies）：ABI/ELF 构建
+    # 与校验走 pyelftools —— 0.52.x 及更早版本没有，缺它会因测试收集期
+    # `import elftools` 直接中断整个 pytest。
+    pyelftools
     pygit2
     pyyaml
     requests

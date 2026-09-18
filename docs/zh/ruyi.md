@@ -3,9 +3,9 @@
 [![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64%20v0.52.0-beta.20260824)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64%20v0.52.0-beta.20260824)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64%20v0.52.0-beta.20260824)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-x86_64.yml?branch=main&label=ruyi-alpha%20x86_64%20v0.52.0-alpha.20260714)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-aarch64.yml?branch=main&label=ruyi-alpha%20aarch64%20v0.52.0-alpha.20260714)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-alpha riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-alpha-riscv64.yml?branch=main&label=ruyi-alpha%20riscv64%20v0.52.0-alpha.20260714)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
@@ -21,7 +21,7 @@
 | 版本 | 0.52.0（稳定） |
 | 上游 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | 许可 | Apache 2.0 |
-| 通道 | stable 0.52.0 · beta 0.52.0-beta.20260824 · alpha 0.52.0-alpha.20260714 |
+| 通道 | stable 0.52.0 · beta 0.53.0-beta.20260917 · alpha 0.52.0-alpha.20260714 |
 
 ## 安装
 
@@ -42,7 +42,7 @@ ruyi 提供三个独立软件包：
 | 包名 | 版本 | 用途 |
 |------|------|------|
 | `ruyi` | 0.52.0（稳定）| 生产环境 |
-| `ruyi-beta` | 0.52.0-beta.20260824 | 尝鲜测试 |
+| `ruyi-beta` | 0.53.0-beta.20260917 | 尝鲜测试 |
 | `ruyi-alpha` | 0.52.0-alpha.20260714 | 前沿开发 |
 
 ```nix
@@ -119,7 +119,8 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 
 - 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
 - 二进制通过 wrapProgram 注入了 curl、gnutar、git、patchelf 等运行时依赖
-- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（320 项）、集成测试（52 项）——全部通过
+- Python 侧运行时依赖经 `propagatedBuildInputs` 提供；ruyi ≥ 0.53.0 新增 `pyelftools`（ELF/ABI 校验），缺失会导致 pytest 收集期 `import elftools` 失败
+- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（462 项）、集成测试（70 项）——全部通过
 
 ## 缓存
 
