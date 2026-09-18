@@ -3,6 +3,18 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:23:25+09:00
+
+**摘要**：文档验证启动 — 主文档 26 条断言复核 + 逐篇验证子文档，已修 7 处失实描述。**方法**：不读源码猜测，而是**部署实测** —— 起真实进程取权威数据（如向 blender-mcp 的 MCP stdio 发 `tools/list`），并做受控对照实验；每轮留证后清理（临时目录、registry 项、测试用 HOME），确认真实配置零改动。**① 主文档（README × 四语）2 处**：`inputs.nixkits.url = "~/NixKits"` **不可用**（Nix 不展开 flake input URL 的 `~`，实测报 `path '.../source/~/NixKits/flake.nix' does not exist`；`path:$HOME/...` 同样失败，改为 `git+file:///path/to/NixKits`，并附五种写法的受控对照结果）；「所有包默认跟随 `lib.platforms.linux`」**与事实不符** —— 实测 12 包 `meta.platforms`，9 包为 `lib.platforms.all`（含 darwin），仅 codewhale / obs-bilibili-stream / godot-ai 为 linux 限定。**② blender-mcp 3 处**：工具数标 22 但只列 17，**实测服务器注册 26 个**（缺 5 个摘要工具的 `_for_cli` 变体、2 个 jump 工具、`search_api_docs` / `search_manual_docs`）；Add-on 安装路径写 `blender/4.4/scripts/addons/`，实则该 add-on 是 **Blender Extension**（manifest `blender_version_min = "5.1.0"`，**4.x 根本加载不了**）且新版目录为 `extensions/user/`；**升级会静默失败**——store 内目录只读（`dr-xr-xr-x`），`cp -r` 连权限一起复制，故二次安装大批 `Permission denied` 并留下新旧混杂半成品（维护者本机停留 1.0.0 正是此现象），补充正确升级流程（`chmod` → `rm -rf` → `cp` → `chmod`，实测 1.0.0→1.0.3 与包内逐字节一致）。**③ codewhale 2 处（含一处回归）**：`codewhale --sandbox <tier>` 参数**不存在**（实测 `unexpected argument`），实为 `--sandbox-mode`；**这是回归** —— `e386dfc` 已修正过该参数名，但同提交为消除扫描器 `RISKY_APPROVAL_DEFAULT` 改写措辞时**重新引入了错误参数名**，说明当时只核对「措辞是否触发扫描器」而未复核改后参数是否仍可用；另 zh 独有该行而 en/ja/pcn 写的是合法的 `--yolo`，四语不一致，现统一四语均含 `--sandbox-mode <tier>` + 合法取值 + 「不是 `--sandbox`」提醒。**其余复核通过**：包/overlay/模块/devShell/技能目录（与 `skills/` **逐个比对完全一致**）、四语章节结构与版本号一致、缓存可达、模式分发的 seed-once 与「注册不复制」语义、Claude Code 移除理由确实存在于所指向文档
+
+| 提交 | 说明 |
+|------|------|
+| `82d8ed5` | fix(docs): 修正主文档两处失实描述（四语） |
+| `ead55d1` | fix(docs): blender-mcp 三处失实描述（四语） |
+| `6f40487` | fix(docs): codewhale 沙箱参数名回归错误 + 四语不一致（四语） |
+
+> **说明**：纯文档修正，`packages/` 与 `overlays/` 未改动。文档验证仍在进行（子文档按主文档顺序逐篇复核），后续发现将另记。
+
 ## 2026-09-18T13:09:18+09:00
 
 **摘要**：refactor(ruyi)! — 把 `ruyi-nixos-compat` 补丁并入包定义，移除已失效的 overlay。**① 发现的失配**：overlay 是 `prev.ruyi.overrideAttrs`，修补的是 **nixpkgs 的 `ruyi`**；但 nixpkgs 已不再提供该包（`builtins.attrNames pkgs` 搜 `ruyi` 返回 NOT-FOUND），overlay 因而**失去宿主**——`nixkits.ruyi` 模块的 `lib.mkPackageOption pkgs "ruyi"` 取不到包、`packages/ruyi/*.nix` 不引用该补丁（只有自己的 `postPatch` 往 `nixos_compat.py` 追加内容，注释却写「file is created by the overlay patch」）、**仅 `develop/ruyi.nix` 自套 overlay 才真正生效**。结果是四语文档宣称「打包版本包含该 overlay」，而 flake 包用户**实际拿不到 NixOS 兼容处理**；且这类失配**构建成功无法暴露**，只有逐项核对产物才发现。**② 改法**：把 overlay 的三件事全部搬进 `packages/ruyi/ruyi.nix`——`patches = [ …/ruyi-nixos-compat.patch ]`（三通道共用）、`substituteInPlace --replace-fail` 回填 `@nixLdSo@`/`@nixGlibcLib@`、补丁所需的 `ensure_toolchain_nixos_compat` 显式 import。**刻意用 `--replace-fail`**：占位符若因上游改名而消失会**构建立即失败**，而不是静默产出一个「补丁在、兼容性不在」的包。随之删除 overlay 文件与 flake 注册项，`develop/ruyi.nix` 不再套壳——devShell / flake 包 / NixOS 模块现在得到**同一个**构建。**③ 验证（逐项在产物中确认，非只看构建通过）**：三通道 ruyi / ruyi-beta / ruyi-alpha 全部构建成功；`nixos_compat.py` 存在且 `@nixLdSo@` **残留 0 次**、已替换为真实 store 路径（`glibc-2.42-84/ld-linux-x86-64.so.2`，实测存在）；`runtime.py` 含 `wrap_exec_for_nixos` 与注入的 import、`maker.py` 含 `expose_build_tools_in_venv` 调用点、`nuitka.py` 含 `RUYI_ARGV0` 分支；运行时冒烟 `ruyi --version`/`--help` 正常；beta(0.53.0) pytest 仍 **462 passed + 70 passed**。四语文档改写为「内置补丁 + 无需 overlay 配置」并保留历史沿革说明

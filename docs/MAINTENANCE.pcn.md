@@ -3,6 +3,18 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T13:23:25+09:00
+
+**摘要**：文書検証 開始 — 主文書 26 項目 主張 再確認、子文書 一篇 毎 検証、不正確 記述 七 件 修正。**手法**：source 依 推測 非、**実際 配備 計測**——実工程 起動 権威 data 取得（例：blender-mcp MCP stdio 対 `tools/list` 送信）、統制 比較実験 実施。各 round 証拠 残 後 cleanup（一時目録、registry 項目、試験用 HOME）、実設定 一切 変更 無 確認。**① 主文書（README × 四言語）二 件**：`inputs.nixkits.url = "~/NixKits"` **使用 不可**（Nix flake input URL `~` 展開 不。実測 error `path '.../source/~/NixKits/flake.nix' does not exist`。`path:$HOME/...` 同様 失敗。`git+file:///path/to/NixKits` 変更、五 通 書方 統制比較結果 添付）；「全包 既定 `lib.platforms.linux` 従」**事実 反**——十二 包 `meta.platforms` 実測、九 件 `lib.platforms.all`（darwin 含）宣言、Linux 限定 codewhale / obs-bilibili-stream / godot-ai 限定。**② blender-mcp 三 件**：道具数 22 称 但 十七 件 列挙 限定、**実 server 登録 二十六 件**（五 要約道具 `_for_cli` 変種、二 jump 道具、`search_api_docs` / `search_manual_docs` 欠落）；拡張 導入路 `blender/4.4/scripts/addons/` 記載、但 此拡張 **Blender Extension**（manifest `blender_version_min = "5.1.0"`、故 **4.x 読込 不能**）、新 Blender 目録 `extensions/user/`；更 **更新 無言 失敗**——store 内目録 読取専用（`dr-xr-xr-x`）、`cp -r` 権限 共 複製、故 第二回 導入 大量 `Permission denied` 出、新旧 混在 半端 状態 残留（保守者 環境 1.0.0 停留 正 此症状）。正 更新手順 追加（`chmod` → `rm -rf` → `cp` → `chmod`、1.0.0 → 1.0.3 実測、包内 與 byte 単位 一致）。**③ codewhale 二 件（内 一 件 退行）**：`codewhale --sandbox <tier>` 引数 **存在 不**（実測 `unexpected argument`）。実際 `--sandbox-mode`。**此 退行**——`e386dfc` 既 此引数名 修正、但 同一 commit scanner `RISKY_APPROVAL_DEFAULT` 消 為 文言 書換 際、**誤 引数名 再導入**。当時「文言 scanner 引 掛 否」限定 確認、「書換 引数 仍 使用 可 否」確認 不 示。又 zh 限定 此 行 持、en/ja/pcn 正当 `--yolo` 記載、故 四言語 不一致。現在 四言語 全部 `--sandbox-mode <tier>` 例・有効値・「`--sandbox` 非」注意 含。**其他 主張 確認済**：包 / overlay / 模組 / devShell / 技能目録（`skills/` 與 **一件 毎 照合**、完全一致）、四言語 章構成 與 version 番号 一致、cache 到達性、mode 配布 seed-once 與「複製 不 登録」意味論、Claude Code 削除 理由 参照先文書 実在。
+
+| 提交 | 説明 |
+|------|------|
+| `82d8ed5` | fix(docs): 主文書 不正確 記述 二 件 修正（四言語） |
+| `ead55d1` | fix(docs): blender-mcp 不正確 記述 三 件（四言語） |
+| `6f40487` | fix(docs): codewhale sandbox 引数名 退行 與 四言語 不一致（四言語） |
+
+> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。文書検証 継続中（子文書 主文書 順 一篇 毎 再確認）。以降 発見 別途 記録。
+
 ## 2026-09-18T13:09:18+09:00
 
 **摘要**：refactor(ruyi)! — `ruyi-nixos-compat` 修正 包定義 統合、無効 化 overlay 削除。**① 発見 不一致**：此 overlay `prev.ruyi.overrideAttrs`、**nixpkgs `ruyi`** 修正 物。但 nixpkgs 既 当該 package 提供 無（`builtins.attrNames pkgs` 依 `ruyi` NOT-FOUND）、overlay **宿主 失**——`nixkits.ruyi` 模組 `lib.mkPackageOption pkgs "ruyi"` 何 解決 不能、`packages/ruyi/*.nix` 此修正 参照 無（自前 `postPatch`  `nixos_compat.py` 追記 限定、却 注釈「file is created by the overlay patch」記載）、**実際 有効 自前 被 `develop/ruyi.nix` 限定**。結果、四言語 文書「包版 当該 overlay 含」述、flake 包 利用者 **NixOS 互換処理 実際 得 不能**。且 此種 不一致 **build 成功 露見 不能**——成果物 項目 毎 確認 初 判明。**② 修正**：overlay 行 三 事 全部 `packages/ruyi/ruyi.nix` 移——`patches = [ …/ruyi-nixos-compat.patch ]`（三 channel 共有）、`substituteInPlace --replace-fail` 依 `@nixLdSo@`/`@nixGlibcLib@` 埋込、並 修正 必要 `ensure_toolchain_nixos_compat` 明示 import。**`--replace-fail` 意図的**：上流 改名  placeholder 消 場合、**build 即座 失敗**、「修正 有 但 互換性 無」package 黙 産出 無。併 overlay file 與 flake 登録 削除、`develop/ruyi.nix` 被 中止——devShell・flake 包・NixOS 模組 **同一** build 得。**③ 検証（build 通過 限定 非、成果物内 項目 毎 確認）**：三 channel（ruyi / ruyi-beta / ruyi-alpha）全部 build 成功。`nixos_compat.py` 存在 且 `@nixLdSo@` **残存 零 回**、実際 store path（`glibc-2.42-84/ld-linux-x86-64.so.2`、存在 実測）置換済。`runtime.py` `wrap_exec_for_nixos` 與 注入 import、`maker.py` `expose_build_tools_in_venv` 呼出、`nuitka.py` `RUYI_ARGV0` 分岐 確認。実行時 smoke test `ruyi --version`/`--help` 正常。beta(0.53.0) pytest 依然 **462 passed + 70 passed**。四言語 文書「修正 内蔵・overlay 設定 不要」書換、経緯 保持。
