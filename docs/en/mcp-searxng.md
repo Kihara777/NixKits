@@ -43,7 +43,8 @@ in
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
-          real_ip.x_for = 1;
+          # NOTE: upstream searxng removed the real_ip section (use
+          # botdetection.ipv4_prefix / ipv6_prefix instead); do not set real_ip.x_for.
         };
       };
     };
@@ -101,7 +102,9 @@ CodeWhale stores MCP configuration in `~/.deepseek/mcp.json`. After adding mcp-s
 ```
 
 > **⚠️ Common pitfall**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` leaves `env` as `{}`.
-> Without `SEARXNG_URL` the MCP server fails silently — `codewhale mcp list` shows `[enabled]` but calls return no results.
+> Without `SEARXNG_URL` the server **still starts and lists its tools** (`codewhale mcp list` shows `[enabled]`), but every `tools/call` returns an error instead of a result -- measured: `isError: true` with the text `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., http://localhost:8080 or https://search.example.com)`, plus `SEARXNG_URL not set` on stderr.
+>
+> In other words the error **is explicit, not silent**: "the tool exists but every call reports a configuration error" is this cause.
 
 ## Troubleshooting
 

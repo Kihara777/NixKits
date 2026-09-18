@@ -43,7 +43,8 @@ in
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
-          real_ip.x_for = 1;
+          # 注意：上流 searxng real_ip 段 削除済（botdetection.ipv4_prefix /
+          # ipv6_prefix 使用）。real_ip.x_for 記載 不可。
         };
       };
     };
@@ -101,7 +102,9 @@ CodeWhale MCP 設定書類 `~/.deepseek/mcp.json` 所在。mcp-searxng 追加後
 ```
 
 > **⚠️ 多発落穴**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` 実行時 `env` `{}` 侭。
-> `SEARXNG_URL` 無場合、MCP 伺服器黙失敗 — `codewhale mcp list` `[enabled]` 表示、呼出結果不返。
+> `SEARXNG_URL` 無場合 也、伺服器 **起動 且 道具 列挙**（`codewhale mcp list` `[enabled]` 表示）。但 `tools/call` 毎回 結果 非 錯誤 返 — 実測 `isError: true`、文本 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., http://localhost:8080 or https://search.example.com)`、同時 stderr `SEARXNG_URL not set`。
+>
+> 即 錯誤 **明示、黙 非**。「道具 存在 但 呼出 必 設定錯誤」此 原因。
 
 ## 障害対処
 

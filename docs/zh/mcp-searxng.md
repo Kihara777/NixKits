@@ -45,7 +45,8 @@ in
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
-          real_ip.x_for = 1;
+          # 注意：上游 searxng 已移除 real_ip 段（IPv4/v6 前缀见
+          # botdetection.ipv4_prefix / ipv6_prefix），不要再写 real_ip.x_for.
         };
       };
     };
@@ -108,7 +109,9 @@ CodeWhale 的 MCP 配置文件位于 `~/.deepseek/mcp.json`。添加 mcp-searxng
 ```
 
 > **⚠️ 常见陷阱**：`codewhale mcp add SearXNG --command /path/to/mcp-searxng` 添加后 `env` 默认为 `{}`。
-> 缺少 `SEARXNG_URL` 时 MCP 服务器静默失败——`codewhale mcp list` 显示 `[enabled]` 但调用无结果。
+> 缺少 `SEARXNG_URL` 时**服务器仍会启动并列出工具**（`codewhale mcp list` 显示 `[enabled]`），但每次 `tools/call` 都返回错误而非结果 —— 实测返回 `isError: true`，文本为 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., http://localhost:8080 or https://search.example.com)`，同时 stderr 打印 `SEARXNG_URL not set`。
+>
+> 也就是说，**错误信息是明确的、不会静默**：看到「工具存在但调用总是报配置错误」即为此因。
 
 ## 故障排查
 

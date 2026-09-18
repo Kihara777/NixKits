@@ -43,7 +43,8 @@ in
         secret_key = searxKey;
         limiterSettings = {
           botdetection.trusted_proxies = [ "127.0.0.1/32" ];
-          real_ip.x_for = 1;
+          # 注意：上流 searxng は real_ip セクションを削除済み（botdetection.ipv4_prefix
+          # / ipv6_prefix を使用）。real_ip.x_for は書かないこと。
         };
       };
     };
@@ -101,7 +102,9 @@ CodeWhale の MCP 設定ファイルは `~/.deepseek/mcp.json` にあります�
 ```
 
 > **⚠️ よくある落とし穴**: `codewhale mcp add SearXNG --command /path/to/mcp-searxng` を実行すると `env` は `{}` のままです。
-> `SEARXNG_URL` がない場合、MCP サーバーはサイレントに失敗します — `codewhale mcp list` には `[enabled]` と表示されますが、呼び出しても結果が返りません。
+> `SEARXNG_URL` がない場合でもサーバーは**起動してツールを列挙します**（`codewhale mcp list` は `[enabled]`）。ただし `tools/call` は毎回結果ではなくエラーを返します — 実測では `isError: true`、テキストは `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., http://localhost:8080 or https://search.example.com)`、同時に stderr へ `SEARXNG_URL not set`。
+>
+> つまりエラーは**明示的でサイレントではありません**。「ツールは存在するのに呼び出すと必ず設定エラー」ならこれが原因です。
 
 ## トラブルシューティング
 
