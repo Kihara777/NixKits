@@ -3,6 +3,16 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T13:09:18+09:00
+
+**摘要**：refactor(ruyi)! — `ruyi-nixos-compat` 修正 包定義 統合、無効 化 overlay 削除。**① 発見 不一致**：此 overlay `prev.ruyi.overrideAttrs`、**nixpkgs `ruyi`** 修正 物。但 nixpkgs 既 当該 package 提供 無（`builtins.attrNames pkgs` 依 `ruyi` NOT-FOUND）、overlay **宿主 失**——`nixkits.ruyi` 模組 `lib.mkPackageOption pkgs "ruyi"` 何 解決 不能、`packages/ruyi/*.nix` 此修正 参照 無（自前 `postPatch`  `nixos_compat.py` 追記 限定、却 注釈「file is created by the overlay patch」記載）、**実際 有効 自前 被 `develop/ruyi.nix` 限定**。結果、四言語 文書「包版 当該 overlay 含」述、flake 包 利用者 **NixOS 互換処理 実際 得 不能**。且 此種 不一致 **build 成功 露見 不能**——成果物 項目 毎 確認 初 判明。**② 修正**：overlay 行 三 事 全部 `packages/ruyi/ruyi.nix` 移——`patches = [ …/ruyi-nixos-compat.patch ]`（三 channel 共有）、`substituteInPlace --replace-fail` 依 `@nixLdSo@`/`@nixGlibcLib@` 埋込、並 修正 必要 `ensure_toolchain_nixos_compat` 明示 import。**`--replace-fail` 意図的**：上流 改名  placeholder 消 場合、**build 即座 失敗**、「修正 有 但 互換性 無」package 黙 産出 無。併 overlay file 與 flake 登録 削除、`develop/ruyi.nix` 被 中止——devShell・flake 包・NixOS 模組 **同一** build 得。**③ 検証（build 通過 限定 非、成果物内 項目 毎 確認）**：三 channel（ruyi / ruyi-beta / ruyi-alpha）全部 build 成功。`nixos_compat.py` 存在 且 `@nixLdSo@` **残存 零 回**、実際 store path（`glibc-2.42-84/ld-linux-x86-64.so.2`、存在 実測）置換済。`runtime.py` `wrap_exec_for_nixos` 與 注入 import、`maker.py` `expose_build_tools_in_venv` 呼出、`nuitka.py` `RUYI_ARGV0` 分岐 確認。実行時 smoke test `ruyi --version`/`--help` 正常。beta(0.53.0) pytest 依然 **462 passed + 70 passed**。四言語 文書「修正 内蔵・overlay 設定 不要」書換、経緯 保持。
+
+| 提交 | 説明 |
+|------|------|
+| `87d3f7c` | refactor(ruyi)!: 修正 包定義 統合、無効 ruyi-nixos-compat overlay 削除 |
+
+> **説明**：破壊的変更——`nixkits.overlays.ruyi-nixos-compat` **存在 無**。外部 此 overlay 参照 場合 当該行 削除 要（修正 内蔵済、overlay 設定 不要）。ruyi 三 channel build 成果物 何 変化。
+
 ## 2026-09-18T12:41:08+09:00
 
 **摘要**：定例 更新 検査 — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` 実行時依存 追加）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2。**① ruyi 依存 追加（唯一 実質的 欠陥）**：上流 0.53.0 以降 `pyelftools` `pyproject.toml` **実行時**依存 記載（0.52.x 以前 無）、更 収集時 `import elftools` 為 `tests/ruyipkg/abi/test_elfbuilder.py` 追加——依存 欠 場合 pytest `Interrupted: 1 error during collection` 出、一件 skip 非、**套件全体 中断**。`propagatedBuildInputs` 追加 結果、`ruyi`/`ruyi-beta`/`ruyi-alpha` 三 channel 全部 通過、beta 試験数 320 unit + 52 統合 **462 unit + 70 統合** 増加。四言語 ruyi 文書 其 数 與 依存 説明 反映。**② dsh-alpha vendored lock 陳旧**：alpha.2 上流 四 拡張 package（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`）追加、一方 `dsh-package-lock-alpha.json` alpha.1 停 在——**version 限定 変更 場合 `npmDepsHash is out of date` 発生**。AGENTS.md 取決 従、**派生 `postPatch` 処理後** `package.json`（`devDependencies` 削除）対 `npm install --package-lock-only` lock 再生成、hash 書戻。**③ 内蔵拡張一覧 照合**：`dsh --profile web --dump-default-config` 依 stable rc.2 **152 件 `id -> name`** 再抽出、一行 逐 比較 結果 rc.1 與**完全 一致**（rc.1→rc.2 npm 依存集合 不変 故、既存 `npmDepsHash` 其 侭 使用 可）——故 文書 拡張表 変更 不要。**④ self-host forge 取得（教訓 再現）**：`projects.blender.org` Web path `/archive/<rev>.tar.gz` 非 browser user agent 対 **403** 返（API path `/api/v1/repos/.../archive/` 正常）、`fetchFromGitea` hash 換算 亦**既記録済 教訓**、今回 遠回 不：hash **展開後 NAR**（`stripRoot`）sha256、1.0.0 宣言値 対 換算方法**逆向 検証** 上 `nix build` 一発 成功。四言語 同期、`nix flake check` 全通過

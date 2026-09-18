@@ -3,6 +3,16 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:09:18+09:00
+
+**摘要**：refactor(ruyi)! — 把 `ruyi-nixos-compat` 补丁并入包定义，移除已失效的 overlay。**① 发现的失配**：overlay 是 `prev.ruyi.overrideAttrs`，修补的是 **nixpkgs 的 `ruyi`**；但 nixpkgs 已不再提供该包（`builtins.attrNames pkgs` 搜 `ruyi` 返回 NOT-FOUND），overlay 因而**失去宿主**——`nixkits.ruyi` 模块的 `lib.mkPackageOption pkgs "ruyi"` 取不到包、`packages/ruyi/*.nix` 不引用该补丁（只有自己的 `postPatch` 往 `nixos_compat.py` 追加内容，注释却写「file is created by the overlay patch」）、**仅 `develop/ruyi.nix` 自套 overlay 才真正生效**。结果是四语文档宣称「打包版本包含该 overlay」，而 flake 包用户**实际拿不到 NixOS 兼容处理**；且这类失配**构建成功无法暴露**，只有逐项核对产物才发现。**② 改法**：把 overlay 的三件事全部搬进 `packages/ruyi/ruyi.nix`——`patches = [ …/ruyi-nixos-compat.patch ]`（三通道共用）、`substituteInPlace --replace-fail` 回填 `@nixLdSo@`/`@nixGlibcLib@`、补丁所需的 `ensure_toolchain_nixos_compat` 显式 import。**刻意用 `--replace-fail`**：占位符若因上游改名而消失会**构建立即失败**，而不是静默产出一个「补丁在、兼容性不在」的包。随之删除 overlay 文件与 flake 注册项，`develop/ruyi.nix` 不再套壳——devShell / flake 包 / NixOS 模块现在得到**同一个**构建。**③ 验证（逐项在产物中确认，非只看构建通过）**：三通道 ruyi / ruyi-beta / ruyi-alpha 全部构建成功；`nixos_compat.py` 存在且 `@nixLdSo@` **残留 0 次**、已替换为真实 store 路径（`glibc-2.42-84/ld-linux-x86-64.so.2`，实测存在）；`runtime.py` 含 `wrap_exec_for_nixos` 与注入的 import、`maker.py` 含 `expose_build_tools_in_venv` 调用点、`nuitka.py` 含 `RUYI_ARGV0` 分支；运行时冒烟 `ruyi --version`/`--help` 正常；beta(0.53.0) pytest 仍 **462 passed + 70 passed**。四语文档改写为「内置补丁 + 无需 overlay 配置」并保留历史沿革说明
+
+| 提交 | 说明 |
+|------|------|
+| `87d3f7c` | refactor(ruyi)!: 补丁并入包定义，移除已失效的 ruyi-nixos-compat overlay |
+
+> **说明**：破坏性变更——`nixkits.overlays.ruyi-nixos-compat` **不再存在**，外部若引用过该 overlay 需删除该行（补丁现已内置，无需任何 overlay 配置）。`packages/` 中 ruyi 三通道构建产物均已改变。
+
 ## 2026-09-18T12:41:08+09:00
 
 **摘要**：例行更新检查 — blender-mcp 1.0.3；ruyi-beta 0.53.0-beta.20260917（并补 `pyelftools` 运行时依赖）；dsh 0.1.5-rc.2；dsh-alpha 0.1.6-alpha.2。**① ruyi 依赖新增（唯一实质缺陷）**：上游 0.53.0 起把 `pyelftools` 列入 `pyproject.toml` 的**运行时** dependencies（0.52.x 及更早没有），并新增 `tests/ruyipkg/abi/test_elfbuilder.py` 在**收集期** `import elftools`——缺依赖时 pytest 以 `Interrupted: 1 error during collection` **直接中断整个套件**，而非跳过单条用例。补入 `propagatedBuildInputs` 后 `ruyi`/`ruyi-beta`/`ruyi-alpha` 三通道均通过；beta 测试数随之由 320 单元 + 52 集成增至 **462 单元 + 70 集成**，四语 ruyi 文档同步该项与依赖说明。**② dsh-alpha 的 vendored lock 陈旧**：alpha.2 上游新增 4 个插件包（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`），而 `dsh-package-lock-alpha.json` 仍停在 alpha.1——**只改 version 会报 `npmDepsHash is out of date`**。按 AGENTS.md 约定以**派生 `postPatch` 处理后**的 `package.json`（删 `devDependencies`）重新 `npm install --package-lock-only` 生成 lock 再回填 hash。**③ 内置插件清单核对**：经 `dsh --profile web --dump-default-config` 重新提取 stable rc.2 的 **152 条 `id -> name`** 并逐行比对，与 rc.1 **完全一致**（rc.1→rc.2 的 npm 依赖集亦无变化，原 `npmDepsHash` 直接可用）——故文档插件表无需改动。**④ 自托管 forge 取源（教训复现）**：`projects.blender.org` 的 `/archive/<rev>.tar.gz` 网页路径对非浏览器 UA 返回 **403**（API 路径 `/api/v1/repos/.../archive/` 正常），与 `fetchFromGitea` 的 hash 换算方式**均为已记载教训**，本次未再走弯路：hash 取**解包后 NAR**（`stripRoot`）的 sha256，并用 1.0.0 已声明值**反向验证**换算方式后 `nix build` 一次通过。四语文档同步、`nix flake check` 全通过
