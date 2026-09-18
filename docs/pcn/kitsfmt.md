@@ -26,7 +26,7 @@ kitsfmt --no-best-practices  # 自動修正無効
 kitsfmt file1.nix file2.nix  # 複数書類
 ```
 
-環境変数: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_BEST_PRACTICES=0`
+環境変数: `KITSFMT_INPLACE=1`, `KITSFMT_CHECK=1`, `KITSFMT_STDIN=1`, `KITSFMT_BEST_PRACTICES=0`
 
 ## 導入
 
@@ -45,12 +45,26 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];  # → pkgs.kitsfmt
 ## 機能
 
 - 属性整序（APC `a.b.c` 折畳対応）
-- 注釈保持
+- **注釈保持（先行注釈 限定）**：属性／`let` 束縛／list 要素 **直前 行** 注釈、其 節点 與 共 整序 移動。制限 下記 参照
 - 冪等整形
 - **最善慣行自動修正**（既定有効、`-B` 以無効）:
   - 裸 URL 引用符化（RFC 45）
   - `rec` → `let-in` 変換
   - `with` → `builtins.attrValues` 変換
+
+### 注釈保持 制限
+
+「注釈保持」対象 **節点 直前 先行注釈**：属性／`let` 束縛／list 要素 直前 行 注釈、其 節点 與 共 整序 移動。kitsfmt 0.5.0 実測、**以下 位置 破棄**：
+
+| 注釈位置 | 結果 |
+|----------|------|
+| 属性／`let` 束縛／list 要素 **直前 行** | 節点 追随 保持 |
+| 属性 同行 末尾（**最後 以外**） | **次 属性 上** 移動 |
+| **最後** 属性 同行 末尾 | 破棄 |
+| 書類 先頭（上位 式 前） | 破棄 |
+| 書類 末尾（上位 式 後） | 破棄 |
+
+> 整形前、此等 位置 注釈 再生 不能 情報 含 無 確認、或 何 属性 上 移動。
 
 ## 緩衝
 

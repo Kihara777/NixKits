@@ -26,7 +26,7 @@ kitsfmt --no-best-practices  # 关闭自动修正
 kitsfmt file1.nix file2.nix  # 多文件
 ```
 
-环境变量：`KITSFMT_INPLACE=1`、`KITSFMT_CHECK=1`、`KITSFMT_BEST_PRACTICES=0`
+环境变量：`KITSFMT_INPLACE=1`、`KITSFMT_CHECK=1`、`KITSFMT_STDIN=1`、`KITSFMT_BEST_PRACTICES=0`
 
 ## 引用
 
@@ -47,12 +47,27 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ## 功能
 
 - 属性排序（含 APC 折叠 `a.b.c`）
-- 注释保持
+- **注释保持（仅限节点上方）**：写在属性／`let` 绑定／list 元素**上一行**的注释会跟随该节点一起排序；见下方限制
 - 幂等格式化
 - **Best-Practice 自动修正**（默认开启，`-B` 关闭）：
   - 裸 URL 引号化（RFC 45）：`https://x.com` → `"https://x.com"`
   - `rec` → `let-in`：`rec { a = 1; b = a + 2; }` → `let a=1; b=a+2; in { inherit a b; }`
   - `with` → `builtins.attrValues`：`with pkgs; [ a b ]` → `builtins.attrValues { inherit (pkgs) a b; }`
+
+### 注释保留的限制
+
+「注释保持」的适用范围是**节点上方的先行注释**：写在属性／`let` 绑定／list 元素
+上一行的注释会跟随该节点一起排序。实测（kitsfmt 0.5.0）**以下位置会被丢弃**：
+
+| 注释位置 | 结果 |
+|----------|------|
+| 属性／`let` 绑定／list 元素**上一行** | ✅ 跟随节点保留 |
+| 属性同行尾（**非**最后一条） | ⚠️ 移位到**下一条属性上方** |
+| 最后一条属性的同行尾 | ❌ 丢弃 |
+| 文件头（顶层表达式之前） | ❌ 丢弃 |
+| 文件尾（顶层表达式之后） | ❌ 丢弃 |
+
+> 格式化前请确保这些位置的注释没有承载不可再生的信息；或把它们挪到某个属性上方。
 
 ## 缓存
 
