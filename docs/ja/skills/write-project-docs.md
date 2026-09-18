@@ -13,7 +13,8 @@
 | 項目 | 値 |
 |------|-----|
 | タイプ | Coding Agent Skill |
-| パス | `skills/write-project-docs/SKILL.md` |
+| パス | `skills/write-project-docs/`（`SKILL.md` + `templates.md`）|
+| 配套ファイル | `templates.md` —— 完全なテンプレート集（ディレクトリ構成 / モジュール文書 / README / メンテナンスログ）。各種類の文書を初めて作る際に参照 |
 
 ## 機能
 

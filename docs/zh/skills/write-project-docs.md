@@ -13,7 +13,8 @@
 | 项目 | 值 |
 |------|-----|
 | 类型 | Coding Agent Skill |
-| 路径 | `skills/write-project-docs/SKILL.md` |
+| 路径 | `skills/write-project-docs/`（`SKILL.md` + `templates.md`）|
+| 配套文件 | `templates.md` —— 完整模板集（目录结构 / 模块文档 / README / 维护日志），首次搭建某类文档时查阅 |
 
 ## 功能
 

@@ -13,7 +13,8 @@ Language extension skills are discovered via the `translate-*` naming convention
 | Item | Value |
 |------|-------|
 | Type | Coding Agent Skill |
-| Path | `skills/write-project-docs/SKILL.md` |
+| Path | `skills/write-project-docs/` (`SKILL.md` + `templates.md`) |
+| Companion | `templates.md` -- the full template set (directory layout / module doc / README / maintenance log); consult it the first time you build each kind of document |
 
 ## Features
 

@@ -13,7 +13,8 @@
 | 項目 | 値 |
 |------|-----|
 | 種別 | 符号化代理技能 |
-| 路 | `skills/write-project-docs/SKILL.md` |
+| 路 | `skills/write-project-docs/`（`SKILL.md` + `templates.md`）|
+| 配套書類 | `templates.md` —— 完全 模板集（目録構成 / 模組文書 / README / 維護記録）。各種類 文書 初回 作成 時 参照 |
 
 ## 機能
 
