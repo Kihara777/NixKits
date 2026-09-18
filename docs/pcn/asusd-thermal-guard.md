@@ -118,7 +118,8 @@ journalctl -u asusd-thermal-guard-resume --since '5 min ago'
 # 當前有効檔位
 asusctl profile get
 
-# 手動跑一次（root 必要：狀態書於 /run、且 asusctl 需特権）
+# 手動跑一次（root 必要：asusctl 特権 必要、冷却計数 StateDirectory
+# （/var/lib/private/asusd-thermal-guard）書。systemd 外 /var/lib/asusd-thermal-guard 代替 使用）
 sudo "$(systemctl show asusd-thermal-guard -p ExecStart --value | cut -d';' -f1 | awk '{print $1}')"
 ```
 

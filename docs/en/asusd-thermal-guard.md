@@ -118,7 +118,9 @@ journalctl -u asusd-thermal-guard-resume --since '5 min ago'
 # Currently active profile
 asusctl profile get
 
-# Run it once by hand (needs root: state lives in /run, and asusctl needs privileges)
+# Run it once by hand (needs root: asusctl requires privileges, and the cooldown
+# counter lives in the StateDirectory -- /var/lib/private/asusd-thermal-guard,
+# falling back to /var/lib/asusd-thermal-guard outside systemd)
 sudo "$(systemctl show asusd-thermal-guard -p ExecStart --value | cut -d';' -f1 | awk '{print $1}')"
 ```
 

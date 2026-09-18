@@ -118,7 +118,9 @@ journalctl -u asusd-thermal-guard-resume --since '5 min ago'
 # 現在有効なプロファイル
 asusctl profile get
 
-# 手動で 1 回実行（root が必要：状態は /run に書き込まれ、asusctl にも特権が要る）
+# 手動で 1 回実行（root が必要：asusctl に特権が必要で、冷却カウントは
+# StateDirectory（/var/lib/private/asusd-thermal-guard）に置かれる。systemd 外では
+# /var/lib/asusd-thermal-guard にフォールバック）
 sudo "$(systemctl show asusd-thermal-guard -p ExecStart --value | cut -d';' -f1 | awk '{print $1}')"
 ```
 
