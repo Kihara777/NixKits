@@ -3,6 +3,18 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-19T07:51:05+09:00
+
+**摘要**：技能类文档核对（已完成 4 篇：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn），修 3 处。**① nix-flake-update-check：步骤数错误（四语）**。文档称「第 1~**10** 步主流程」，但通用技能 `SKILL.md` 实测只有**第 1~9 步**；「流程复盘与规范校验」及「测试分支教训须搬回 main」实际定义在**适配层技能** `nixkits-check-updates`（其「第 10 步（收尾）」，第 258 行起）。原文把两技能的步骤混为一体，会让读者在通用技能里找不到第 10 步。已改为「本技能自身止于第 9 步；收尾第 10 步由适配层补」。**② write-project-docs：配套文件 `templates.md` 未被技能自身声明（四语 + SKILL.md）**。`templates.md`（209 行完整模板集）确实存在且 `AGENTS.md` 第 88 行在引用它，但 `SKILL.md` 全文**未出现该文件名**、也无「配套文件」章节（对照 `nix-flake-update-check/SKILL.md` 有明确配套文件表），四语文档更把技能等同于单个文件。后果是执行时无从得知模板集存在——而它正是「首次搭建某类文档」最该先读的。已在 `SKILL.md` 开头新增配套文件表（格式与既有技能一致），四语文档补「路径=目录形式」与「配套文件」行。**③ translate-pseudocn：词典条目数与配套文件（四语）**。文档称「内置 ~**13** 条映射词典」，实测 `dictionary.md` 有 **75** 条；查历史可见该词典经多轮扩充（`4fbf387`「expand dictionary 7→46 entries」），13 停留在更早版本。另 `SKILL.md` 有三处引用 `dictionary.md`（查表翻译、片假名映射、残留假名回填），四语文档却只写单个 `SKILL.md` 路径、正文亦未提该文件。已补齐配套文件行并把条目数改为实测 75。**对照确认**：同批 `news-three-elements` 文档**已正确**声明 4 个配套文件（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）且 SKILL.md 有对应引用，故该缺陷非普遍性问题；`nixkits-check-updates` 文档经全项核对无误（子仓坐标 `fetchFromGitHub` 固定 rev / 非 flake input / 不发布 npm 均属实，三处特有陷阱 —— godot-ai 需**两处都链** overlay、codewhale 两变体、dsh-alpha vendored lock 的 `--legacy-peer-deps` 禁忌 —— 与源码逐一相符，第 10 步六个子步与技能原文一致）
+
+| 提交 | 说明 |
+|------|------|
+| `c9c9c0c` | fix(docs): nix-flake-update-check 技能文档步骤数错误（四语） |
+| `7f7363f` | fix(docs): write-project-docs 未声明配套文件 templates.md（四语 + SKILL.md） |
+| `cef09fe` | fix(docs): translate-pseudocn 词典条目数与配套文件失实（四语） |
+
+> **说明**：`7f7363f` 含 `skills/write-project-docs/SKILL.md` 改动（技能快照经 `check-preset-bundle` 验证与 `skills/` 树仍逐字节一致）；其余为四语文档。技能类尚余 6 篇（news-three-elements / nixkits-skills / nixos-modern-cli / nixos-specialisation-tuning / recover-nixos-config / write-maintenance-log），其后为未列入文档内容的核查。
+
 ## 2026-09-19T07:43:15+09:00
 
 **摘要**：废弃类文档核对 —— 查出一处**跨文件的事实错误**（同时存在于模块注释与四语废弃文档），已更正。**原判定**：「上游已迁移 hostPlatform（旧写法 **0 处**，新写法 34 处），不再产生弃用告警」。**实测否证**（下载上游 tarball 逐文件统计）：`stdenv.is<Platform>` 旧写法在 **0.34.0 为 38 处**、**0.30.2（补丁时代基版）亦为 38 处**，而 `hostPlatform.is*` 两版都只有 7 处 —— 两版完全相同，上游**从未**迁移该 API。并实测 nixpkgs 确认该写法确实被弃用（`evaluation warning: stdenv.isLinux is deprecated, use stdenv.hostPlatform.isLinux instead`），故「不再产生弃用告警」不成立。**错因推测**：原判定很可能把**我们自己的补丁**所做的事误记为上游所做的事 —— 旧 `comfyui-nix-stdenv-api.patch` 的提交信息正是「migrate stdenv.is<Platform> to stdenv.hostPlatform.is<Platform>」（迁移 36/44 处），与错误结论中的数字高度吻合。**更正后的准确表述**：补丁确已不需要，但真实理由是**我们不再覆盖上游代码** —— 旧补丁把该迁移施加给一个会被 overlay 求值的 fork，以消除污染下游构建的告警；改为直接指向上游后，本模块只做声明式接线，不再引入该求值路径。**同步更正两处**：`modules/comfyui.nix`「补丁删除的判定依据」注释（含 ⚠️ 标记与实测数字）、四语 `deprecated/comfyui-rocm.md`「为何可以废弃」段落。之所以坚持更正，是遵循本仓「记录判定依据以备回溯」的既有约定 —— 若留着错误结论，未来复核者会依据它继续推断。**其余废弃类断言通过**：模块确已更名为 `nixkits.comfyui`（源码注释与原文档一致）；`modules/comfyui-rocm.nix` 与三个补丁文件均已删除；`DEPRECATED.md` / `docs/DEPRECATED.{en,ja,pcn}.md` 四语索引均正确指向本文档；历史对照表所述上游版本经实测确为 **v0.34.0**（与文档一致），ROCm wheels 已由上游自带、输入来源已改为 `github:utensils/comfyui-nix`、补丁数 3 → 0

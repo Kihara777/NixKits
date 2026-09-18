@@ -3,6 +3,18 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-09-19T07:51:05+09:00
+
+**概要**：スキル文書の確認（4 篇完了：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn）で 3 件修正。**① nix-flake-update-check：ステップ数の誤り（四言語）**。文書は「第 1〜**10** 步の主フロー」としていましたが、汎用スキルの `SKILL.md` は実測で**第 1〜9 步のみ**です。「プロセスの振り返りと規範の検証」および「テストブランチの教訓を main へ戻す」は、実際には**適応層スキル** `nixkits-check-updates`（その「第 10 步（締め）」、258 行目以降）で定義されています。元の記述は 2 つのスキルのステップを混同しており、読者は汎用スキルで第 10 步を見つけられません。「本スキルは第 9 步まで。締めの第 10 步は適応層が補う」に改めました。**② write-project-docs：配套ファイル `templates.md` がスキル自身から宣言されていない（四言語 + SKILL.md）**。`templates.md`（209 行の完全なテンプレート集）は実在し、`AGENTS.md` の 88 行目も参照していますが、`SKILL.md` には**ファイル名が一切現れず**、「配套ファイル」節もありません（対照的に `nix-flake-update-check/SKILL.md` には明確な配套ファイル表があります）。四言語の文書はさらに進んで、スキルを単一ファイルと同一視していました。結果として、実行時にテンプレート集の存在を知る手段がなく——それは「ある種の文書を初めて作る」際に最も先に読むべきものです。`SKILL.md` の冒頭に配套ファイル表（既存スキルと同じ形式）を追加し、四言語の文書には「パス＝ディレクトリ形式」と「配套ファイル」の行を補いました。**③ translate-pseudocn：辞書の項目数と配套ファイル（四言語）**。文書は「内蔵 ~**13** 項目のマッピング辞書」としていましたが、`dictionary.md` は実測 **75** 項目です。履歴を見ると辞書は複数回拡張されており（`4fbf387`「expand dictionary 7→46 entries」）、13 はより早い版で止まっています。また `SKILL.md` は `dictionary.md` を 3 箇所で参照していますが（表引き翻訳、カタカナ対応、残存仮名の書き戻し）、四言語の文書は `SKILL.md` 単一パスしか書かず、本文でも同ファイルに触れていません。配套行を追加し、項目数を実測の 75 に改めました。**照合**：同梱の `news-three-elements` 文書は 4 つの配套ファイル（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）を**既に正しく**宣言し、SKILL.md にも対応する参照があるため、本欠陥は普遍的なものではありません。また `nixkits-check-updates` 文書は全項目一致でした（子倉座標——`fetchFromGitHub` 固定 rev / flake input ではない / npm 未公開——はいずれも事実で、3 つの固有の落とし穴——godot-ai は overlay を**2 箇所とも**連結する必要、codewhale の 2 変種、dsh-alpha の vendored lock における `--legacy-peer-deps` 禁止——もソースと一致し、第 10 步の 6 サブステップもスキル本文と一致）。
+
+| コミット | 説明 |
+|------|------|
+| `c9c9c0c` | fix(docs): nix-flake-update-check スキル文書のステップ数誤り（四言語） |
+| `7f7363f` | fix(docs): write-project-docs が配套ファイル templates.md を宣言していない（四言語 + SKILL.md） |
+| `cef09fe` | fix(docs): translate-pseudocn の辞書項目数と配套ファイルが不正確（四言語） |
+
+> **説明**：`7f7363f` は `skills/write-project-docs/SKILL.md` の変更を含みます（スキルスナップショットは `check-preset-bundle` により `skills/` ツリーとバイト単位で一致することを確認済み）。残りは四言語のドキュメントです。スキル文書は残り 6 篇（news-three-elements / nixkits-skills / nixos-modern-cli / nixos-specialisation-tuning / recover-nixos-config / write-maintenance-log）、その後は文書に載っていない内容の確認です。
+
 ## 2026-09-19T07:43:15+09:00
 
 **概要**：廃止文書の確認 — **ファイルをまたぐ事実誤り**（モジュールのコメントと四言語の廃止文書の双方に存在）を発見し、訂正しました。**元の判定**：「上流は hostPlatform へ移行済み（旧記法 **0 箇所**、新記法 34 箇所）で、非推奨警告は出ない」。**実測による反証**（上流 tarball を取得しファイル単位で計数）：非推奨の `stdenv.is<Platform>` 短記法は **0.34.0 で 38 箇所**、**0.30.2（パッチ時代の基版）でも 38 箇所**、一方 `hostPlatform.is*` は両版とも 7 箇所のみ——両版は完全に同一で、上流は**一度も**この API を移行していません。nixpkgs を実測してこの記法が実際に非推奨であることも確認済み（`evaluation warning: stdenv.isLinux is deprecated, use stdenv.hostPlatform.isLinux instead`）で、「非推奨警告は出ない」は成立しません。**原因の推測**：元の判定は、**私たち自身のパッチ**が行ったことを上流が行ったこととして記録してしまった可能性が高いです——旧 `comfyui-nix-stdenv-api.patch` のサブジェクトはまさに「migrate stdenv.is<Platform> to stdenv.hostPlatform.is<Platform>」（36/44 箇所を移行）で、誤った結論の数字とよく一致します。**訂正後の正確な記述**：パッチが不要になったのは事実ですが、本当の理由は**私たちが上流コードを上書きしなくなったこと**です——旧パッチは、overlay 経由で評価される fork にこの移行を適用し、下流ビルドを汚す警告を消していました。上流を直接指すようになった今、本モジュールは宣言的な配線のみを行います。**2 箇所を同時に訂正**：`modules/comfyui.nix` の「パッチ削除の判定根拠」コメント（警告マーカーと実測値を含む）と、四言語 `deprecated/comfyui-rocm.md` の「なぜ廃止できるか」の節。訂正にこだわったのは、本リポジトリの「判定根拠を後から辿れるように記録する」という既定の取り決めに従ったためです——誤った結論を残せば、将来の確認者がそれを前提に推論を続けてしまいます。**その他の廃止項目の主張は通過**：モジュールは実際に `nixkits.comfyui` へ改名済み（ソースコメントと文書が一致）。`modules/comfyui-rocm.nix` と 3 つのパッチファイルは削除済み。`DEPRECATED.md` / `docs/DEPRECATED.{en,ja,pcn}.md` の索引はいずれも本文書を正しく指しています。履歴対照表の上流バージョンは実測で **v0.34.0** と記載どおり、ROCm wheels は上流同梱、入力元は `github:utensils/comfyui-nix` に変更済み、パッチ数は 3 → 0。

@@ -3,6 +3,18 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-19T07:51:05+09:00
+
+**摘要**：技能文書 確認（四 篇 完了：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn）三 件 修正。**① nix-flake-update-check：步骤数 誤（四言語）**。文書「第 1〜**10** 步 主 flow」記載、但 汎用技能 `SKILL.md` 実測 **第 1〜9 步 限定**。「process 振返 與 規範 検証」及「test branch 教訓 main 戻」実際 **適配層技能** `nixkits-check-updates`（其「第 10 步（締）」258 行以降）定義。原文 二 技能 步骤 混同、読者 汎用技能 第 10 步 発見 不能。已「本技能 第 9 步 止。締 第 10 步 適配層 補」改。**② write-project-docs：配套書類 `templates.md` 技能自身 宣言 不（四言語 + SKILL.md）**。`templates.md`（209 行 完全 模板集）実在、`AGENTS.md` 八十八 行 参照、但 `SKILL.md` **file 名 一切 出現 不**、「配套書類」節 也 無（対照 `nix-flake-update-check/SKILL.md` 明確 配套表 有）。四言語 文書 更 技能 単一 file 同一視。結果 実行時 模板集 存在 知 手段 無——其 各種類 文書 初回 作成 際 最 先 読 可 物。`SKILL.md` 冒頭 配套表（既存技能 同 形式）追加、四言語 文書「路＝目録形式」與「配套書類」行 補。**③ translate-pseudocn：辞書 項目数 與 配套書類（四言語）**。文書「内蔵 ~**13** 項 対応辞書」記載、但 `dictionary.md` 実測 **75** 項。履歴 辞書 複数回 拡張（`4fbf387`「expand dictionary 7→46 entries」）、13 早 版 止。又 `SKILL.md` `dictionary.md` 三 箇所 参照（表引翻訳、片仮名対応、残存仮名 書戻）、四言語 文書 `SKILL.md` 単一 path 限定 記載、本文 亦 同 file 触 不。配套行 追加、項目数 実測 75 改。**照合**：同梱 `news-three-elements` 文書 四 配套書類（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）**既 正 宣言**、SKILL.md 対応参照 有、故 本欠陥 普遍的 非。`nixkits-check-updates` 文書 全項目 一致（子倉座標——`fetchFromGitHub` 固定 rev / flake input 非 / npm 未公開——何 事実、三 固有 落穴——godot-ai overlay **二 箇所 共** 連結 必要、codewhale 二 変種、dsh-alpha vendored lock `--legacy-peer-deps` 禁止——source 與 一致、第 10 步 六 sub-step 技能本文 與 一致）。
+
+| 提交 | 説明 |
+|------|------|
+| `c9c9c0c` | fix(docs): nix-flake-update-check 技能文書 步骤数 誤（四言語） |
+| `7f7363f` | fix(docs): write-project-docs 配套書類 templates.md 宣言 不（四言語 + SKILL.md） |
+| `cef09fe` | fix(docs): translate-pseudocn 辞書 項目数 與 配套書類 不正確（四言語） |
+
+> **説明**：`7f7363f` `skills/write-project-docs/SKILL.md` 変更 含（技能 snapshot `check-preset-bundle` 依 `skills/` tree 與 byte 単位 一致 確認済）。残 四言語 文書。技能文書 残 六 篇（news-three-elements / nixkits-skills / nixos-modern-cli / nixos-specialisation-tuning / recover-nixos-config / write-maintenance-log）、其後 文書 載 不 内容 確認。
+
 ## 2026-09-19T07:43:15+09:00
 
 **摘要**：廃止文書 確認 — **file 跨 事実 誤**（module 注釈 與 四言語 廃止文書 双方 存在）発見、訂正。**元 判定**：「上流 hostPlatform 移行 済（旧記法 **0 処**、新記法 34 処）、非推奨警告 無」。**実測 反証**（上流 tarball 取得 file 単位 計数）：非推奨 `stdenv.is<Platform>` 短記法 **0.34.0 三十八 処**、**0.30.2（patch 時代 基版）亦 三十八 処**、一方 `hostPlatform.is*` 両版 七 処 限定——両版 完全 同一、上流 **一度 也** 此 API 移行 不。nixpkgs 実測 此記法 実際 非推奨 確認（`evaluation warning: stdenv.isLinux is deprecated, use stdenv.hostPlatform.isLinux instead`）、故「非推奨警告 無」不成立。**原因 推測**：元判定 **我々 自身 patch** 行 事 上流 行 事 記録 可能性 高——旧 `comfyui-nix-stdenv-api.patch` subject 正「migrate stdenv.is<Platform> to stdenv.hostPlatform.is<Platform>」（三十六/四十四 処 移行）、誤 結論 数字 與 良 一致。**訂正後 正確 記述**：patch 不要 化 事実、但 真 理由 **我々 上流 code 上書 不 化**——旧 patch overlay 経由 評価 fork 対 此移行 適用、下流 build 汚 警告 消除。上流 直接 指 今、本 module 宣言 配線 限定 行。**二 箇所 同時 訂正**：`modules/comfyui.nix`「patch 削除 判定根拠」注釈（警告 marker 與 実測値 含）、四言語 `deprecated/comfyui-rocm.md`「何故 廃止 可」節。訂正 拘 理由 本 repo「判定根拠 後 辿 可 様 記録」既定 取決 従 為——誤 結論 残 場合、将来 確認者 其 前提 推論 続。**其他 廃止項目 主張 通過**：module 実際 `nixkits.comfyui` 改名済（source 注釈 與 文書 一致）。`modules/comfyui-rocm.nix` 與 三 patch file 削除済。`DEPRECATED.md` / `docs/DEPRECATED.{en,ja,pcn}.md` 索引 何 本文書 正 指。履歴対照表 上流 version 実測 **v0.34.0** 記載 通、ROCm wheels 上流 同梱、入力元 `github:utensils/comfyui-nix` 変更済、patch 数 三 → 零。
