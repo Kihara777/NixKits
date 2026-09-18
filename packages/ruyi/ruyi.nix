@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   makeWrapper,
@@ -33,6 +34,18 @@ let
 in
 python.pkgs.buildPythonApplication {
   inherit pname version src;
+
+  # NixOS 运行时兼容补丁：透明处理预编译 RISC-V 工具链的动态链接器路径、
+  # GCC 子进程（cc1/as/collect2）的 ELF interpreter，以及 console_scripts
+  # 包装下 argv0 丢失的问题。
+  #
+  # 历史上该补丁经 overlay `ruyi-nixos-compat` 挂到 **nixpkgs 的 ruyi** 上；
+  # 但 nixpkgs 已不再提供 ruyi 包，overlay 因此失去宿主（flake 包与模块都
+  # 读不到它）。现在直接并入包定义，成为三通道（stable/beta/alpha）共用的
+  # 唯一来源，不再依赖外部 overlay。
+  patches = [
+    ../../patches/ruyi-nixos-compat.patch
+  ];
 
   pyproject = true;
 
@@ -73,8 +86,22 @@ python.pkgs.buildPythonApplication {
   # every venv's bin/ directory as symlinks so that `make` works after
   # `source ruyi-activate` even though NixOS does not have make globally.
   postPatch = ''
+    # 补丁内的占位符换成实际构建期的 ld.so / glibc 路径。用
+    # --replace-fail：占位符若因上游改名而消失，构建立即失败而不是
+    # 静默产出一个「补丁在、兼容性不在」的包。
+    substituteInPlace ruyi/utils/nixos_compat.py \
+      --replace-fail '@nixLdSo@'     '${stdenv.cc.bintools.dynamicLinker}' \
+      --replace-fail '@nixGlibcLib@' '${stdenv.cc.libc}/lib'
+
+    # 补丁新增的 _maybe_fix_toolchain_sub_binaries 调用
+    # ensure_toolchain_nixos_compat，但该符号在补丁里是另一作用域导入的，
+    # 需在此显式补一条 import。
+    sed -i '/def _maybe_fix_toolchain_sub_binaries/,/ensure_toolchain_nixos_compat/{
+      /ensure_toolchain_nixos_compat/i\    from ..utils.nixos_compat import ensure_toolchain_nixos_compat
+    }' ruyi/mux/runtime.py
+
     # Append expose_build_tools_in_venv to nixos_compat.py
-    # (the file is created by the overlay patch — ruyi-nixos-compat.patch)
+    # (the file is created by ruyi-nixos-compat.patch)
 
     mkdir -p ruyi/utils
     touch ruyi/utils/__init__.py

@@ -142,7 +142,6 @@
       efl-cross-fix     = import ./overlays/efl-cross-fix.nix;
       llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rcc-fix.nix;
-      ruyi-nixos-compat = import ./overlays/ruyi-nixos-compat.nix;
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
       breeze-black       = import ./overlays/breeze-black.nix;
       fastmcp            = import ./overlays/fastmcp.nix;

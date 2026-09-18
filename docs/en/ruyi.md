@@ -95,14 +95,9 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS Compatibility
 
-The NixKits packaged version includes the overlay `ruyi-nixos-compat` (`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`), which transparently handles runtime incompatibilities on NixOS:
+The NixKits packaged version **ships the patch** `patches/ruyi-nixos-compat.patch` built in, which transparently handles runtime incompatibilities on NixOS. The patch now lives in `packages/ruyi/ruyi.nix` and is shared by all three channels (stable / beta / alpha) — **no overlay configuration is required**; it takes effect as soon as the package is installed.
 
-**Adding**
-```nix
-nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # standalone overlay
-];
-```
+> History: this patch used to be mounted via the overlay `ruyi-nixos-compat` onto **nixpkgs' `ruyi`**. nixpkgs later dropped the `ruyi` package, so the overlay lost its host — neither the flake package nor the NixOS module could see it (only the devShell, which wrapped it itself, worked). Declaring `patches = [...]` in the package removes the mismatch where the documentation claimed an inclusion that did not actually take effect.
 
 **Features**
 - **Dynamic linker redirection**: Prebuilt RISC-V toolchain binaries expect `/lib64/ld-linux-x86-64.so.2`, which does not exist on NixOS. The patch automatically redirects execution via NixOS's `ld.so`.
@@ -114,7 +109,7 @@ nixpkgs.overlays = [
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> This overlay is only enabled on NixOS. On non-NixOS systems the patch logic is fully short-circuited and does not interfere with other distributions. Required for users who use ruyi to download and execute RISC-V cross-compilation toolchains.
+> The patch logic is fully short-circuited on non-NixOS systems and does not interfere with other distributions. Required for users who use ruyi to download and execute RISC-V cross-compilation toolchains.
 
 ## Notes
 

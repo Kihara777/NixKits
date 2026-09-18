@@ -94,14 +94,9 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS 兼容性
 
-NixKits 打包版本包含 overlay `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`），在 NixOS 下透明处理运行时不兼容：
+NixKits 打包版本**内置**补丁 `patches/ruyi-nixos-compat.patch`，在 NixOS 下透明处理运行时不兼容。补丁已并入 `packages/ruyi/ruyi.nix`，由 stable / beta / alpha 三通道共用 —— **无需任何 overlay 配置**，装上即生效。
 
-**添加**
-```nix
-nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立 overlay
-];
-```
+> 历史沿革：该补丁原先经 overlay `ruyi-nixos-compat` 挂载到 **nixpkgs 的 `ruyi`** 上。nixpkgs 后续移除了 `ruyi` 包，overlay 因而失去宿主 —— flake 包与 NixOS 模块都读不到它（只有 devShell 自己套壳才生效）。现改为包内直接 `patches = [...]`，消除了「文档声称包含、实际未生效」的失配。
 
 **功能**
 - **动态链接器重定向**：预编译 RISC-V 工具链二进制期望 `/lib64/ld-linux-x86-64.so.2`，NixOS 不存在该路径。补丁自动以 NixOS `ld.so` 重定向执行。
@@ -113,7 +108,7 @@ nixpkgs.overlays = [
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> 仅 NixOS 环境启用此 overlay。非 NixOS 下补丁逻辑完全短路，不干扰其他发行版。对使用 ruyi 下载执行 RISC-V 交叉编译工具链的用户必需。
+> 补丁逻辑在非 NixOS 环境完全短路，不干扰其他发行版。对使用 ruyi 下载执行 RISC-V 交叉编译工具链的用户必需。
 
 ## 注意
 

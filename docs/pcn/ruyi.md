@@ -95,14 +95,9 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS 互換性
 
-NixKits 包版上乗 `ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）含、NixOS 上実行時非互換性透過処理：
+NixKits 包版 `patches/ruyi-nixos-compat.patch` **内蔵**、NixOS 上実行時非互換性透過処理。修正 `packages/ruyi/ruyi.nix` 組込、stable / beta / alpha 三 channel 共用——**overlay 設定 不要**、導入 即 有効。
 
-**追加**
-```nix
-nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立上乗
-];
-```
+> 経緯：此修正 以前 overlay `ruyi-nixos-compat` 依 **nixpkgs `ruyi`** 適用。後 nixpkgs `ruyi` 包 削除、overlay 宿主 失、flake 包 與 NixOS 模組 読 不能（自前 被 devShell 限定 有効）。包内 `patches = [...]` 宣言 依、「文書 含 述、実際 有効 非」不一致 解消。
 
 **機能**
 - **動的連結器転送**：予構築 RISC-V 工具鎖二進 `/lib64/ld-linux-x86-64.so.2` 期待、NixOS 当経路不存在。修正 NixOS `ld.so` 介実行自動転送。
@@ -114,7 +109,7 @@ nixpkgs.overlays = [
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> 当上乗 NixOS 限定有効。非 NixOS 環境修正論理完全短絡、他配布干渉不可。ruyi 使用 RISC-V 交叉編集工具鎖取得・実行利用者必須。
+> 修正論理 非 NixOS 完全短絡、他配布干渉不可。ruyi 使用 RISC-V 交叉編集工具鎖取得・実行利用者必須。
 
 ## 注意事項
 

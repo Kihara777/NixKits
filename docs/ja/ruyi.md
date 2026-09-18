@@ -95,14 +95,9 @@ nixkits.ruyi.venvs.riscv = {
 
 ## NixOS互換性
 
-NixKitsのパッケージバージョンにはoverlay`ruyi-nixos-compat`（`overlays/ruyi-nixos-compat.nix` + `patches/ruyi-nixos-compat.patch`）が含まれており、NixOS上でのランタイム非互換性を透過的に処理する：
+NixKitsのパッケージバージョンは`patches/ruyi-nixos-compat.patch`を**内蔵**しており、NixOS上でのランタイム非互換性を透過的に処理する。パッチは`packages/ruyi/ruyi.nix`に組み込まれ、stable / beta / alphaの三チャネルで共有される——**overlayの設定は不要**で、インストールすればそのまま有効になる。
 
-**追加**
-```nix
-nixpkgs.overlays = [
-  nixkits.overlays.ruyi-nixos-compat  # 独立したoverlay
-];
-```
+> 経緯：このパッチは以前、overlay`ruyi-nixos-compat`によって**nixpkgsの`ruyi`**に適用されていた。その後nixpkgsが`ruyi`パッケージを削除したため、overlayは宿主を失い、flakeパッケージもNixOSモジュールもこれを読めなくなった（自前で被せていたdevShellのみが有効）。パッケージ内で`patches = [...]`を宣言することで、「ドキュメントは含むと述べているが実際には効いていない」という不一致を解消した。
 
 **機能**
 - **動的リンカーリダイレクト**：プリビルドのRISC-Vツールチェーンバイナリは`/lib64/ld-linux-x86-64.so.2`を期待するが、NixOSにはこのパスが存在しない。パッチはNixOSの`ld.so`を介して実行を自動的にリダイレクトする。
@@ -114,7 +109,7 @@ nixpkgs.overlays = [
 find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 ```
 
-> このoverlayはNixOSでのみ有効。非NixOS環境ではパッチロジックが完全に短絡され、他のディストリビューションに干渉しない。ruyiを使用してRISC-Vクロスコンパイルツールチェーンをダウンロード・実行するユーザーに必須。
+> パッチロジックは非NixOS環境で完全に短絡され、他のディストリビューションに干渉しない。ruyiを使用してRISC-Vクロスコンパイルツールチェーンをダウンロード・実行するユーザーに必須。
 
 ## 注意事項
 
