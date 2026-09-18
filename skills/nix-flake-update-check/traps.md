@@ -265,7 +265,47 @@ python 包若含原生扩展（如 `pydantic-core` 由 Rust 构建），改 `ver
 # "chmod: cannot access '...': No such file or directory"
 ```
 
-> 顺带：若包的测试套件在新版本中新增依赖（如 websockets 17.1 新增
-> `tests/trio/` 而 nixpkgs 的 check inputs 没有 trio），报
-> `ModuleNotFoundError` 时给 `nativeCheckInputs` 补上即可。
+> 若包的测试套件在新版本中新增依赖（如 websockets 17.1 新增 `tests/trio/`
+> 而 nixpkgs 的 check inputs 没有 trio），见下条。
+
+### 7. 上游新增依赖：先分清「运行时依赖」与「测试依赖」，再看失败形态
+
+升级中「构建失败」的高频根因是上游**新增了一个依赖**，而包定义没有跟上。
+两处需要分别检查，**且不要只看报错表象**：
+
+| 上游写在哪 | 需要补到哪 | 不补的后果 |
+|---|---|---|
+| `dependencies` / `install_requires` | `propagatedBuildInputs`（python）/ `buildInputs` | 构建能过，**运行时**才炸——最难查 |
+| 测试目录内的 import（`tests/**`） | `nativeCheckInputs` / `checkInputs` | 构建期报 `ModuleNotFoundError` |
+
+**判断优先级**：先读上游 `pyproject.toml` / `package.json` 的 `dependencies`，
+**再**看测试目录。只按测试依赖处理、把运行时依赖漏掉，会得到「本地构建通过、
+用户装完启动即崩」的假成功。
+
+#### 失败形态决定了修复的紧迫度：collection error ≠ 单条失败
+
+pytest 在**收集期**（collection）遇到 `import` 失败，报的是
+`Interrupted: 1 error during collection`，**整个套件立即中止**，而不是把这一条
+标记为 failed。因此：
+
+- 看到 `Interrupted: ... error during collection` → 是**缺依赖**（导入期问题），
+  不是测试逻辑失败。**不要去改测试或加 `--ignore`**，补依赖即可。
+- 同一仓库的**其它通道**（stable / beta / alpha 共享一个 base 定义）会**一起**
+  失败——因为依赖列在共享的 `.nix` 里。修一处即修全部，但要**逐个通道复验**。
+
+```bash
+# 定位是哪条 import 失败（报错里会给出文件与行号）
+#   tests/ruyipkg/abi/test_elfbuilder.py:3: from elftools.elf.elffile import ELFFile
+# 再回查上游声明，确认它是「运行时」还是「仅测试」：
+curl -sL "https://raw.githubusercontent.com/<owner>/<repo>/<rev>/pyproject.toml" \
+  | sed -n '/^dependencies/,/^\]/p'
+```
+
+**验证闭环**：补完后除构建通过，还要**核对文档里的测试数量**——上游加测试会让
+文档中「pytest 单元测试（N 项）」这类硬编码数字过期。从构建日志直接取真值：
+
+```bash
+nix log .#<pkg> 2>/dev/null | grep -E '[0-9]+ passed'
+```
+
 

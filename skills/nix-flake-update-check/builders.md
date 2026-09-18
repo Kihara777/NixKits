@@ -60,6 +60,48 @@ npm install --package-lock-only --legacy-peer-deps    # ❌ peer 条目缺失
 > （会丢 peer 条目）；而 `buildNpmPackage` 的 `npmFlags`/`npm install` 阶段
 > 用它跳过 peer 解析是**另一回事**，由包定义决定。
 
+#### 升级时：vendored lock 是否随上游依赖集一起更新（易漏）
+
+`npmDepsHash` 是 **lock 文件内容的函数**。上游新版本若增删了依赖，而 vendored
+lock 仍是旧版生成的，则**只改 `version` + source hash 必然失败**：
+
+```
+error: hash mismatch in fixed-output derivation '...-<pkg>-<ver>-npm-deps.drv'
+```
+
+**这里有个会误导人的现象**：Nix 报出的 `got:` 有时**恰好等于**你原先写的
+`npmDepsHash`——因为旧 hash 本就是旧 lock 的正确 hash。此时别以为「hash 没变，
+所以依赖没变」，要**独立核对依赖集**：
+
+```bash
+# 直接对比新旧 tarball 的 dependencies（这是权威依据，不是 lock）
+for v in <old> <new>; do
+  curl -sL "https://registry.npmjs.org/<pkg>/-/<pkg>-$v.tgz" | tar xzO package/package.json \
+    | grep -oP '"@scope/[^"]*"' | sort -u > "/tmp/deps-$v.txt"
+done
+diff /tmp/deps-*.txt     # 有差异 → lock 必须重生成
+```
+
+**重生成 vendored lock 的唯一正确姿势**：必须对**包定义 `postPatch` 处理后**的
+`package.json` 生成——若包定义删了 `devDependencies`（未发布的 monorepo 内部包
+会 404），生成 lock 前要**执行同样的删除操作**，否则 lock 与构建期的
+`package.json` 不同源，仍会报 `npmDepsHash is out of date`：
+
+```bash
+# 1. 解包 tarball，复刻派生 postPatch 对 package.json 的改动
+tar xzf <pkg>.tgz && cd package
+sed -i '/^  "devDependencies": {/,$d' package.json
+sed -i '$s/,$//' package.json && echo '}' >> package.json
+# 2. 生成 lock（不加 --legacy-peer-deps，见上节）
+npm install --package-lock-only --ignore-scripts
+# 3. 覆盖仓库内的 vendored lock，再让 nix build 报出新的 npmDepsHash 并回填
+```
+
+> **多通道包尤其容易踩**：`stable` / `alpha` 各自带一份 vendored lock
+> （如 `<pkg>-package-lock.json` / `<pkg>-package-lock-alpha.json`）。升级
+> **其中一个通道**时，只有那一份需要重生成——但**两份都必须复验**，因为 base
+> 定义是共享的。
+
 #### 若仓库启用了外部依赖自动化（如 Dependabot）
 
 > **NixKits 不使用这类外部自动化**（见仓库 AGENTS.md「安全边界」），本节保留
