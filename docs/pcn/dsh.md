@@ -380,7 +380,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 
 ### 声明設定可能 host namespace
 
-`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 設定、瀏覽器間一致。DSH 0.1.2-alpha 内建登録 namespace 與字段：
+`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 設定、瀏覽器間一致。`0.1.5-rc.2` 内建登録 全 **十二** namespace 與字段：
 
 | namespace | 字段 | 説明 |
 |-----------|------|------|
@@ -389,7 +389,15 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 | `ui-chat` | `transcriptView` 等 | 会話視図 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | busy 時 Enter 動作 |
 | `ui-onboarding` | — | 引導 step 状態 |
-| `agent-presets` | — | Agent preset |
+| `agent-presets` | — | Agent 預設 |
+| `agent-default-model` | `provider`、`model`、`reasoningEffort`（全部 必須） | 新規会話 既定模型 |
+| `agent-loop` | `maxParallelToolCalls`（既定 十） | agent loop 並列道具呼出 上限 |
+| `permission` | `presets`（各項 `sandbox` + `approval`） | 権限預設 |
+| `shell` | `dshHome` | shell 道具 dsh home 目録 |
+| `subagent-model-selection` | `provider`、`model`（両方 必須） | 副 agent 模型 選択 |
+| `web-search-deepseek` | `apiKey`、`apiKeyEnv`、`baseURL`、`model`、`apiVersion`、`maxTokens` 等 | 聯網検索 backend |
+
+> 表中 字段 各 `installSection` schema（`z.object({...})`） 実測 抽出。`nixkits.dsh.defaultModel` 即 `agent-default-model` 書込、両方 設定 場合 **明示 `settings` 優先**。
 
 > **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明設定。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内設定、或 device 別独立瀏覽器。
 

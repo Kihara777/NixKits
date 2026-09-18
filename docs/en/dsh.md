@@ -380,7 +380,7 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 
 ### Declaratively configurable host namespaces
 
-`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.register`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. DSH 0.1.2-alpha ships these registered namespaces and fields:
+`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.register`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. All **12** namespaces registered in `0.1.5-rc.2`, with their fields:
 
 | namespace | fields | description |
 |-----------|--------|-------------|
@@ -390,6 +390,14 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 | `ui-conversation` | `busyEnter` (`queue`/`steer`) | Enter behavior while busy |
 | `ui-onboarding` | — | onboarding-step state |
 | `agent-presets` | — | agent presets |
+| `agent-default-model` | `provider`, `model`, `reasoningEffort` (all required) | default model for new sessions |
+| `agent-loop` | `maxParallelToolCalls` (default 10) | parallel tool-call ceiling for the agent loop |
+| `permission` | `presets` (each with `sandbox` + `approval`) | permission presets |
+| `shell` | `dshHome` | dsh home directory for the shell tool |
+| `subagent-model-selection` | `provider`, `model` (both required) | subagent model selection |
+| `web-search-deepseek` | `apiKey`, `apiKeyEnv`, `baseURL`, `model`, `apiVersion`, `maxTokens` etc. | web-search backend |
+
+> The fields above were extracted by measuring each `installSection` schema (`z.object({...})`); `nixkits.dsh.defaultModel` writes `agent-default-model`, and when both are set the **explicit `settings` wins**.
 
 > **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.register` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.
 
