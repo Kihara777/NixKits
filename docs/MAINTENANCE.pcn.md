@@ -3,6 +3,17 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T13:40:20+09:00
+
+**摘要**：文書検証 継続 — kitsfmt 與 mcp-searxng 各 二 件 修正。**① kitsfmt**：「注釈保持」記述 過広——0.5.0 実測 **節点 直前 先行注釈** 限定 整序時 追随、他 四 種 位置 消失 或 移動：最後 以外 属性 同行末尾 注釈 **次 属性 上 移動**、**最後** 属性 同行末尾 **破棄**、**書類 先頭**（上位 式 前）與 **書類 末尾**（其 後）破棄。source 裏付：注釈 `comments_before(<entry>)` 経由 限定 収集、故 先頭・末尾 収集点 無。四言語 「注釈保持 制限」節 追加、各行 実測 確認。又 漏  `KITSFMT_STDIN=1` 補完（`--help` env 四 表示、文書 三 限定）。其他 主張 全部 実測 通過：三 best-practice 変換 **文書 例 與 byte 単位 同一 出力**（裸 URL 引用符化 / rec → let-in / with → builtins.attrValues）、`--check` 終了 code 意味論（未整形 一、整形済 零）、`-i`/`-B`/複数書類（`---` 区切付）、冪等性、APC `a.b.c` 折畳、別 flake 依 `nix fmt` 端 端 動作。**② mcp-searxng**：第一 「即用設定」**廃止済** `real_ip.x_for = 1` 含——上流 searxng `limiter.toml` 既 `real_ip` 段 無（`[botdetection]` 下 ipv4_prefix/ipv6_prefix/trusted_proxies 限定）、上流 master 與 nixpkgs 該 option 同梱 example 二箇所 独立 裏付、community 記録 亦「replace real_ip by IPv4/v6 network」置換 示。四言語 削除。第二 「`SEARXNG_URL` 無 場合 **黙**失敗」実測 一致 不——server **正常 起動 且 `tools/list` 道具 返**、但 `tools/call` 毎回 `isError: true` 返、文本 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., ...)` 明示、同時 stderr `SEARXNG_URL not set` 出。即 錯誤 **明示 対処可能**（真 残 可 落穴 `mcp add` `env` 埋 不）。其他 主張 通過：version 2.3.0、wrapper nodejs 注入、本機 `~/.deepseek/mcp.json` `servers.SearXNG` 構造 文書 例 與 **字段 単位 一致**、nixpkgs searx 模組 `redisCreateLocally`/`settings`/`limiterSettings` 三 option 実際 持。
+
+| 提交 | 説明 |
+|------|------|
+| `0cb9f4f` | fix(docs): kitsfmt 注釈保持 記述 過広 + KITSFMT_STDIN 追加（四言語） |
+| `9f3c829` | fix(docs): mcp-searxng 不正確 記述 二 件（real_ip 廃止、失敗 黙 非）（四言語） |
+
+> **説明**：何 文書 限定 修正、`packages/` 與 `overlays/` 未変更。検証 継続中（軟件群 残 obs-bilibili-stream / opencode-telegram / ruyi、其後 plugin・mode・開発・修正・廃止・技能 各文書、最後 文書 載 不 内容 確認）。
+
 ## 2026-09-18T13:32:32+09:00
 
 **摘要**：文書検証 継続 — dsh 與 godot-ai 双方 問題 発見、内 godot-ai **実際 機能 欠陥**（文書 問題 非）。**① dsh（文書 一 件）**：「宣言設定可能 host namespace」表 六 件 限定、且「DSH 0.1.2-alpha」記載、但 該節 扱 物 `0.1.5-rc.2` —— 実測 此版 `installSection` 登録 namespace **十二 件**、`agent-default-model`（provider/model/reasoningEffort）、`agent-loop`（maxParallelToolCalls）、`permission`（presets）、`shell`（dshHome）、`subagent-model-selection`、`web-search-deepseek` 欠落。三重 裏付：`*_SETTINGS_NAMESPACE` 定数 全抽出 十二 件、各 `z.object({...})` schema 抽出 字段、実機 `settings.yaml` `permission` 存在 確認。dsh 其他 主張 全部 通過（live 服務 8615/8625、reverseProxy 三 選択肢 與 安全警告、`launchUrlFile` 実際 `/run/dsh/launch-urls` 生成、sudo 守護 socket `srw-------` kix:users 所有 且 `NIXKITS_SUDO_SOCKET` 注入済、拡張一覧 152 件 live dump 與 一行 毎 一致、reasoningEffort 四 段階 與 `high` 兜底既定）。**② godot-ai（機能 欠陥 一 件 + 文書 二 件）**：文書 記載 `godot-ai` 命令 **起動 直後 失敗**（`BACKEND_START_FAILED`、backend log `No module named godot_ai`）。根本原因 層 毎 特定：此 命令 既定 attach 橋 経由 **backend 更 一 spawn**（`sys.executable -m godot_ai`）。但 Nix 包装下 `sys.executable` **裸 CPython**、依存 包装 script 実行時 `site.addsitedir()` 注入 限定、**spawn 子工程 継承 不**。上流 `uvx`／実 venv 導入 故 此 落差 存在 不。修正 makeWrapper 依 PYTHONPATH 前置、検証中 三 必須点 実測 踏：`python312.sitePackages` **相対** path 故 `${placeholder "out"}/` 結合 必要、深 伝播依存（pydantic_core/platformdirs）`propagatedBuildInputs` fixpoint 展開 必要、`d.pythonPath` 使用 不可（nixpkgs 側 別 pydantic 2.13.4 指、本 repo overlay 引上 2.13.5 迂回 令 fail-closed 検証 失敗）。実測 A/B：修正前 ❌ / 修正後 ✅（backend 127.0.0.1:8000 待受、MCP `tools/list` 四十六 道具 返）。文書 更 二 件 修正：道具数 43 → **46**（上流 v4.1.0 README 亦 46 記載）、既定 WebSocket port 9876 → **9500**（`--help`、`__init__.py` argparse、`asgi.py` 三箇所 独立 裏付。9876 包内 一切 出現 不）。
