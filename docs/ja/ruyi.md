@@ -115,8 +115,12 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 
 - 上流は[ISCAS](https://www.iscas.ac.cn)がメンテナンスするRISC-V開発者ツール
 - バイナリにはwrapProgram経由でcurl、gnutar、git、patchelfなどのランタイム依存が注入されている
-- Python 側のランタイム依存は `propagatedBuildInputs` で供給される。ruyi ≥ 0.53.0 で `pyelftools`（ELF/ABI 検証）が追加 — 欠けると pytest の収集時に `import elftools` で失敗する
-- テストカバレッジ：ruff lint、mypy型チェック、pytestユニットテスト（462項目）、統合テスト（70項目）——すべて通過
+- Python 側のランタイム依存は `propagatedBuildInputs` で供給される。上流は 0.53.0 以降 `pyelftools`（ELF/ABI 検証）をランタイム依存に記載し、テスト収集時に `import elftools` する——欠けると pytest 全体が `Interrupted: 1 error during collection` で中断する。本パッケージは**共有ベースで無条件に**この依存を追加するため、上流では不要な 0.52.x チャネルも併せて持つ：冗長だが無害で、三チャネルの定義が同一になる
+- テストカバレッジ：ruff lint、mypy 型チェック、pytest のユニット／統合テスト——チャネルごとに件数が異なる（実測）：
+  - `ruyi`（0.52.0）：ユニット **368**、統合 **58**
+  - `ruyi-beta`（0.53.0-beta）：ユニット **462**、統合 **70**
+  - `ruyi-alpha`（0.52.0-alpha）：ユニット **346**、統合 **57**
+  - `checkPhase` の ruff / mypy は `|| true`（非ブロッキング）で、**実際にビルドを左右するのは pytest**
 
 ## キャッシュ
 

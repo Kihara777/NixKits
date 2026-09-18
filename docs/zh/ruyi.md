@@ -29,11 +29,11 @@
 environment.systemPackages = [ inputs.nixkits.packages.${pkgs.system}.ruyi ];
 
 # 或通过 overlay
-
-> 需要 beta 或 alpha 版本？见下方 [版本通道](#版本通道)。
 nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 environment.systemPackages = [ pkgs.ruyi ];
 ```
+
+> 需要 beta 或 alpha 版本？见下方 [版本通道](#版本通道)。
 
 ## 版本通道
 
@@ -114,8 +114,12 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 
 - 上游为 [ISCAS](https://www.iscas.ac.cn) 维护的 RISC-V 开发者工具
 - 二进制通过 wrapProgram 注入了 curl、gnutar、git、patchelf 等运行时依赖
-- Python 侧运行时依赖经 `propagatedBuildInputs` 提供；ruyi ≥ 0.53.0 新增 `pyelftools`（ELF/ABI 校验），缺失会导致 pytest 收集期 `import elftools` 失败
-- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试（462 项）、集成测试（70 项）——全部通过
+- Python 侧运行时依赖经 `propagatedBuildInputs` 提供。上游自 0.53.0 起把 `pyelftools`（ELF/ABI 校验）列为运行时依赖，并在测试收集期 `import elftools`——缺它会让整个 pytest 以 `Interrupted: 1 error during collection` 中断。本包在**共享 base 中无条件**加入该依赖，故 0.52.x 通道（上游不需要它）也一并带上：多余但无害，换来三通道定义一致
+- 测试覆盖：ruff lint、mypy 类型检查、pytest 单元测试与集成测试——各通道数量不同（实测）：
+  - `ruyi`（0.52.0）：单元 **368**、集成 **58**
+  - `ruyi-beta`（0.53.0-beta）：单元 **462**、集成 **70**
+  - `ruyi-alpha`（0.52.0-alpha）：单元 **346**、集成 **57**
+  - ruff / mypy 两步在 `checkPhase` 中为 `|| true`（不阻断），**真正把关的是 pytest**
 
 ## 缓存
 

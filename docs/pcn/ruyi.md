@@ -115,8 +115,12 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 
 - 上流 [ISCAS](https://www.iscas.ac.cn) 保守 RISC-V 開発者道具
 - 二進 wrapProgram 経由 curl、gnutar、git、patchelf 等実行時依存注入済
-- Python 側実行時依存 `propagatedBuildInputs` 供給。ruyi ≥ 0.53.0 新增 `pyelftools`（ELF/ABI 検証）、欠落時 pytest 収集期 `import elftools` 失敗
-- 試験覆蓋：ruff lint、mypy 型確認、pytest 単体試験（462項目）、統合試験（70項目）——全通過
+- Python 側実行時依存 `propagatedBuildInputs` 供給。上流 0.53.0 以降 `pyelftools`（ELF/ABI 検証）実行時依存 記載、試験収集期 `import elftools`——欠落 場合 pytest 全体 `Interrupted: 1 error during collection` 中断。本包 **共有 base 無条件** 此 依存 追加、故 上流 不要 0.52.x channel 也 併 持：冗長 但 無害、三 channel 定義 同一 化
+- 試験覆蓋：ruff lint、mypy 型確認、pytest 単体／統合試験——channel 毎 件数 異（実測）：
+  - `ruyi`（0.52.0）：単体 **368**、統合 **58**
+  - `ruyi-beta`（0.53.0-beta）：単体 **462**、統合 **70**
+  - `ruyi-alpha`（0.52.0-alpha）：単体 **346**、統合 **57**
+  - `checkPhase` ruff / mypy  `|| true`（非阻断）、**実際 build 左右 物 pytest**
 
 ## 緩衝
 

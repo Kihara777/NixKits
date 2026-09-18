@@ -115,8 +115,12 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 
 - Upstream is a RISC-V developer tool maintained by [ISCAS](https://www.iscas.ac.cn)
 - Binaries have runtime dependencies (curl, gnutar, git, patchelf) injected via wrapProgram
-- Python runtime dependencies come from `propagatedBuildInputs`; ruyi ≥ 0.53.0 adds `pyelftools` (ELF/ABI checks) — without it pytest fails to collect `import elftools`
-- Test coverage: ruff lint, mypy type checking, pytest unit tests (462 items), integration tests (70 items) — all passing
+- Python runtime dependencies come from `propagatedBuildInputs`. Upstream has listed `pyelftools` (ELF/ABI checks) as a runtime dependency since 0.53.0 and imports `elftools` at test collection time -- without it the whole pytest run aborts with `Interrupted: 1 error during collection`. This package adds the dependency **unconditionally in the shared base**, so the 0.52.x channels (which do not need it upstream) carry it too: redundant but harmless, in exchange for one identical definition across all three channels
+- Test coverage: ruff lint, mypy type checking, pytest unit and integration tests -- the counts differ per channel (measured):
+  - `ruyi` (0.52.0): **368** unit, **58** integration
+  - `ruyi-beta` (0.53.0-beta): **462** unit, **70** integration
+  - `ruyi-alpha` (0.52.0-alpha): **346** unit, **57** integration
+  - The ruff and mypy steps are `|| true` in `checkPhase` (non-blocking); **pytest is what actually gates the build**
 
 ## Cache
 
