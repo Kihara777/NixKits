@@ -4,7 +4,7 @@
 
 [中文](../zh/godot-ai.md) | English | [日本語](../ja/godot-ai.md)  | [偽中国語](../pcn/godot-ai.md)
 
-Production-grade MCP server and AI tools for the Godot engine — connects MCP clients to a **running Godot editor**, enabling AI assistants to build scenes, edit nodes/scripts, wire signals, configure UI/materials/animations, and more. 43 MCP tools / 120+ operations.
+Production-grade MCP server and AI tools for the Godot engine — connects MCP clients to a **running Godot editor**, enabling AI assistants to build scenes, edit nodes/scripts, wire signals, configure UI/materials/animations, and more. 46 MCP tools / 120+ operations.
 
 ## Basic Info
 
@@ -77,4 +77,4 @@ MCP client config (Claude Code / Codex / etc.):
 
 1. Godot 4.5+ editor (4.7+ recommended)
 2. Install the `hi-godot/godot-ai` plugin from the Godot Asset Library (editor **AssetLib** tab)
-3. Start the Godot editor; godot-ai auto-connects via WebSocket at `ws://127.0.0.1:9876`
+3. Start the Godot editor; godot-ai auto-connects via WebSocket at `ws://127.0.0.1:9500` (the default; change it with `--ws-port`)

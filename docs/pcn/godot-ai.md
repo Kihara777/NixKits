@@ -4,7 +4,7 @@
 
 [中文](../zh/godot-ai.md) | [English](../en/godot-ai.md) | [日本語](../ja/godot-ai.md)  | 偽中国語
 
-Godot 引擎 高品質 MCP server 與 AI 工具 — MCP client **実行中 Godot editor** 接続、AI 助手 場景構築・節點脚本編集・信号配線・UI材料動画設定可能。43 MCP 工具 / 120+ 操作。
+Godot 引擎 高品質 MCP server 與 AI 工具 — MCP client **実行中 Godot editor** 接続、AI 助手 場景構築・節點脚本編集・信号配線・UI材料動画設定可能。46 MCP 工具 / 120+ 操作。
 
 ## 基本情報
 
@@ -77,4 +77,4 @@ MCP client 設定（Claude Code / Codex 等）:
 
 1. Godot 4.5+ editor（4.7+ 推奨）
 2. Godot Asset Library 導入 `hi-godot/godot-ai` plugin（editor **AssetLib** tab）
-3. Godot editor 起動、godot-ai WebSocket（`ws://127.0.0.1:9876`）自動接続
+3. Godot editor 起動、godot-ai WebSocket（`ws://127.0.0.1:9500`、既定 port。`--ws-port` 変更可）自動接続

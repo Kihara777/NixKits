@@ -4,7 +4,7 @@
 
 中文 | [English](../en/godot-ai.md) | [日本語](../ja/godot-ai.md)  | [偽中国語](../pcn/godot-ai.md)
 
-Production-grade MCP server 和 AI 工具，用于 Godot 引擎 — 连接 MCP 客户端到**运行中的 Godot 编辑器**，让 AI 助手构建场景、编辑节点/脚本、连线信号、配置 UI/材质/动画等。43 个 MCP 工具 / 120+ 操作。
+Production-grade MCP server 和 AI 工具，用于 Godot 引擎 — 连接 MCP 客户端到**运行中的 Godot 编辑器**，让 AI 助手构建场景、编辑节点/脚本、连线信号、配置 UI/材质/动画等。46 个 MCP 工具 / 120+ 操作。
 
 ## 基本信息
 
@@ -77,5 +77,5 @@ MCP 客户端配置（Claude Code / Codex 等）：
 
 1. Godot 4.5+ 编辑器（推荐 4.7+）
 2. 从 Godot Asset Library 安装 `hi-godot/godot-ai` 插件（编辑器内 **AssetLib** 标签页）
-3. 启动 Godot 编辑器，godot-ai 自动通过 WebSocket 连接到 `ws://127.0.0.1:9876`
+3. 启动 Godot 编辑器，godot-ai 自动通过 WebSocket 连接到 `ws://127.0.0.1:9500`（默认端口，可用 `--ws-port` 更改）
 
