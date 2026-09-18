@@ -3,6 +3,16 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:43:54+09:00
+
+**摘要**：软件类九篇文档验证收官 — ruyi 修 2 处（其中一处是**上一轮我自己引入的**），至此主文档 + 全部软件类子文档核完。**① 测试数未区分通道（回归）**：上一轮把「320 单元 + 52 集成」整体改写为「462 单元 + 70 集成」，但那两个数**只是 beta 通道**的；实测三通道各不相同——`ruyi`（0.52.0）单元 **368** / 集成 **58**、`ruyi-beta` 单元 **462** / 集成 **70**、`ruyi-alpha` 单元 **346** / 集成 **57**。已改为按通道分列，并补充「`checkPhase` 中 ruff / mypy 为 `|| true`（不阻断），**真正把关的是 pytest**」，避免把「全部通过」误读为三项皆过。**② zh 安装段代码块破损**：```nix 围栏内混入一行 prose 提示（`> 需要 beta 或 alpha 版本？…`），致其被当 Nix 代码渲染且代码块截断；en/ja/pcn 无此问题，仅 zh 有。**③ 顺带修正 pyelftools 表述**：原写「ruyi ≥ 0.53.0 新增」，但本包是在**共享 base 中无条件**加入该依赖（无版本条件），故 0.52.x 通道也带（实测三通道均在，而上游 0.52.0 的 pyproject 出现 0 次）；已写明「上游自 0.53.0 起需要，本包无条件加入，多余但无害」。**其余断言实测通过**：`ruyi --help` 含 list/install/venv/device，`device provision`、`venv --toolchain`、`list --all` 均存在；模块选项 `settings.packages.prereleases`/`repo.remote`/`telemetry.mode`/`telemetryOptout`/`venvs.{profile,toolchain,dest}` 全在，生成 `/etc/xdg/ruyi/config.toml` 且激活时自动 `ruyi update`；NixOS 兼容段三项功能在产物中逐一确认（`wrap_exec_for_nixos`/`_maybe_fix_toolchain_sub_binaries`/`patchelf`/`RUYI_ARGV0`），文档给的验证命令实际可找到文件；许可 Apache-2.0；上游确为 ISCAS 维护。**CI 说明**：本轮末次推送后 `Build dsh-api-balance (aarch64)` 一度失败，查明为 `api.github.com/.../llama.cpp/releases/latest` 返回 **HTTP 403**（GitHub API 限流，命中浮动输入 `llama-cpp-ver`），属瞬时基础设施故障而非代码问题——`gh run rerun --failed` 后即成功，全仓 30/30 通过
+
+| 提交 | 说明 |
+|------|------|
+| `c30f2b6` | fix(docs): ruyi 测试数未区分通道 + zh 安装段代码块破损（四语） |
+
+> **说明**：纯文档修正。至此**主文档 + 软件类九篇**（blender-mcp / codewhale / dsh / godot-ai / kitsfmt / mcp-searxng / obs-bilibili-stream / opencode-telegram / ruyi）验证完毕，累计修 15 处（含 1 处真实功能缺陷与 2 处由本会话早前引入的回归）。后续待核：插件、模式、开发、补丁、废弃、技能类文档，以及未列入文档的内容。
+
 ## 2026-09-18T13:41:45+09:00
 
 **摘要**：文档验证续 — obs-bilibili-stream 修 1 处，opencode-telegram 全部相符（0 处改动）。**① obs-bilibili-stream**：「Home Manager」段给出的 `home.packages = [ ...obs-bilibili-stream ];` **装上但 OBS 不会加载插件** —— OBS 经 `OBS_PLUGINS_PATH` 查找插件，而该变量**只由 nixpkgs 的 `wrapOBS` 注入**（`pkgs/applications/video/obs-studio/wrapper.nix`：`wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`），即只走 `programs.obs-studio.plugins` 这条路；`home.packages` 仅把 `.so` 放进 profile，OBS 不扫描该路径，结果是「装上了、插件列表里没有」。四语补充警告并给出两条正确做法（NixOS 用模块或 `programs.obs-studio.plugins`；非 NixOS／仅 Home Manager 时须自行确保插件搜索路径含 `.../lib/obs-plugins`）。其余断言实测通过：版本 2.1.5、`meta.platforms` 为纯 Linux（无 darwin，与「Linux only」相符）、overlay `default` 确实导出该包、`nixosModules.obs-bilibili-stream` 已注册、模块选项名与文档一致且**模块 enable 时的赋值与文档「手动」写法逐字相同**、产物结构正确（`lib/obs-plugins/bilibili-stream-for-obs.so` + 对应 `share/obs/obs-plugins/` 目录）、徽章对应的 x86_64/aarch64 两个 workflow 存在。**② opencode-telegram（本轮唯一「零改动」文档）**：逐项核对**全部相符** —— 文档声称的 4 个子命令 `start`/`status`/`stop`/`config` 与 `--help` 输出一致；模块选项 `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（另含 `environment`/`package`）全部存在且语义相符；「start 自动拉起 opencode」属实 —— 包内 `dist/opencode/process.js` 的 `startLocalOpencodeServer` 确实 `spawn("opencode", ["serve", "--port", port])`，这也解释了文档为何强调服务 PATH；方案 A 的 `pkgs.opencode` 在 nixpkgs 中确实存在（1.18.30）；徽章对应的三个平台 workflow 均存在
