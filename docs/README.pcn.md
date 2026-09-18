@@ -11,12 +11,12 @@ NixKits — 軟体、修正、NixOS 部品、AI 符号化代理技能之蒐集�
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 局所
-inputs.nixkits.url = "~/NixKits";
+inputs.nixkits.url = "git+file:///path/to/NixKits";
 ```
 
 ## 軟体
 
-全包既定 nixpkgs 平台対応（`lib.platforms.linux`）。一部包構造支援上流影響 — 各包文書構築徽章参照。
+平台対応 二種 分類：多数包 `lib.platforms.all` 宣言（平台制限 無）、上流二進 或 模組 制約 受 物（`codewhale`、`obs-bilibili-stream`、`godot-ai`）Linux 限定。構造支援 亦 包毎 異 — 各包文書 構築徽章 参照。
 
 | 軟体 | 説明 | 文書 |
 |---|------|------|

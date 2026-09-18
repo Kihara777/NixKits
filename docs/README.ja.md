@@ -11,12 +11,12 @@ NixKits — ソフトウェア、パッチ、NixOS モジュール、AI コー�
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # ローカル
-inputs.nixkits.url = "~/NixKits";
+inputs.nixkits.url = "git+file:///path/to/NixKits";
 ```
 
 ## ソフトウェア
 
-全パッケージはデフォルトで nixpkgs プラットフォーム対応（`lib.platforms.linux`）。一部パッケージのアーキテクチャ対応は上流の影響を受ける — 各パッケージ文書のビルドバッジを参照。
+プラットフォーム対応は二種類に分かれる：大半のパッケージは `lib.platforms.all` を宣言（プラットフォーム制限なし）し、上流バイナリやモジュールの制約を受けるもの（`codewhale`、`obs-bilibili-stream`、`godot-ai`）は Linux 限定である。アーキテクチャ対応もパッケージごとに異なる — 各パッケージ文書のビルドバッジを参照。
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|

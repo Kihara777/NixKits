@@ -13,14 +13,14 @@ NixKits — 软件、补丁、NixOS 模块与 AI 编码助手的技能合集。
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # 本地
-inputs.nixkits.url = "~/NixKits";
+inputs.nixkits.url = "git+file:///path/to/NixKits";
 ```
 
 > **二进制缓存**：flake 已通过 `nixConfig` 自动声明。直接使用 flake input 时 Nix 自动提示。手动：`cachix use nixkits`。
 >
 ## 软件
 
-所有包默认跟随 nixpkgs 平台支持（`lib.platforms.linux`）。部分包的架构支持受上游影响，具体请查看各包文档中的构建徽章。
+平台支持分两类：多数包声明 `lib.platforms.all`（不限平台），受上游二进制或模块约束的包（`codewhale`、`obs-bilibili-stream`、`godot-ai`）限定为 Linux。另受各包构建架构影响，具体请查看各包文档中的构建徽章。
 
 | 软件 | 说明 | 文档 |
 |---|------|------|

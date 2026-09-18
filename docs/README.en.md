@@ -11,12 +11,12 @@ NixKits — a collection of software, patches, NixOS modules, and AI coding assi
 inputs.nixkits.url = "github:Kihara777/NixKits";
 
 # Local
-inputs.nixkits.url = "~/NixKits";
+inputs.nixkits.url = "git+file:///path/to/NixKits";
 ```
 
 ## Software
 
-All packages follow nixpkgs platform support by default (`lib.platforms.linux`). Some packages have architecture restrictions due to upstream — see build badges in each package's documentation.
+Platform support falls into two groups: most packages declare `lib.platforms.all` (no platform restriction), while those bound by upstream binaries or modules (`codewhale`, `obs-bilibili-stream`, `godot-ai`) are Linux-only. Architecture support also varies per package — see the build badges in each package's documentation.
 
 | Software | Description | Docs |
 |---|------|------|
