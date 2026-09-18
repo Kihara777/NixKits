@@ -39,12 +39,14 @@ codewhale                              # 交互 TUI
 codew                                  # TUI 入口（v0.9.9 起上游更名，原 codewhale-tui）
 codewhale "explain this function"      # 单次提示
 codewhale --model auto "fix this bug"  # 自动选择模型
-codewhale --sandbox <tier>             # 按需选择沙箱权限档位（默认不放开）
+codewhale --sandbox-mode <tier>        # 按需选择沙箱权限档位（默认不放开）
 codewhale doctor                       # 检查配置
 codewhale auth set --provider deepseek # 保存 API key
 ```
 
 首次运行需配置 [DeepSeek API Key](https://platform.deepseek.com/api_keys)。
+
+> 沙箱档位 `--sandbox-mode` 的合法取值：`read-only`、`workspace-write`、`danger-full-access`（实测 `codewhale --help`）。注意参数名是 **`--sandbox-mode`**，不是 `--sandbox`（后者不存在，会被拒绝）。
 
 ## 启用 sudo
 

@@ -38,12 +38,15 @@ codewhale                              # 対話型 TUI
 codew                                  # TUI 入口（v0.9.9 から上流で改名、旧 codewhale-tui）
 codewhale "explain this function"      # ワンショットプロンプト
 codewhale --model auto "fix this bug"  # 自動モデル選択
+codewhale --sandbox-mode <tier>        # サンドボックス段階を選択（既定では一切緩めない）
 codewhale --yolo                       # 自動承認モード
 codewhale doctor                       # セットアップ確認
 codewhale auth set --provider deepseek # API キー保存
 ```
 
 初回実行時に [DeepSeek API キー](https://platform.deepseek.com/api_keys) が必要です。
+
+> `--sandbox-mode` の有効な値：`read-only`、`workspace-write`、`danger-full-access`（`codewhale --help` で実測）。引数名は **`--sandbox-mode`** であり、`--sandbox` ではありません（後者は存在せず拒否されます）。
 
 ## sudo の有効化
 

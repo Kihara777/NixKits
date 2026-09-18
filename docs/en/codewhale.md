@@ -39,12 +39,15 @@ codewhale                              # interactive TUI
 codew                                  # TUI entry (renamed from codewhale-tui upstream in v0.9.9)
 codewhale "explain this function"      # one-shot prompt
 codewhale --model auto "fix this bug"  # auto-select model
+codewhale --sandbox-mode <tier>        # pick a sandbox tier (nothing is widened by default)
 codewhale --yolo                       # auto-approve tools
 codewhale doctor                       # check setup
 codewhale auth set --provider deepseek # save API key
 ```
 
 Requires a [DeepSeek API Key](https://platform.deepseek.com/api_keys) on first run.
+
+> Valid `--sandbox-mode` values: `read-only`, `workspace-write`, `danger-full-access` (verified with `codewhale --help`). The flag is **`--sandbox-mode`**, not `--sandbox` (the latter does not exist and is rejected).
 
 ## Enabling sudo
 
