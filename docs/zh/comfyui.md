@@ -1,7 +1,6 @@
 # comfyui
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=CI)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 中文 | [English](../en/comfyui.md) | [日本語](../ja/comfyui.md)  | [偽中国語](../pcn/comfyui.md)
 
@@ -107,7 +106,7 @@
 
 `cachix use nixkits`（flake 已通过 `nixConfig` 自动声明，直接使用 flake input 时自动提示）。
 
-> ⚠️ 本条目为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。
+> 本模块**不是 overlay** —— 它只做声明式配置（`boot.kernelParams`、`hardware.graphics.extraPackages`、systemd 服务加固），不覆盖或重建任何 nixpkgs 包，因此不产生需要缓存的构建产物。上方徽章对应 CI 中的模块求值检查。
 
 ## 注意
 

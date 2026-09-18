@@ -1,7 +1,6 @@
 # comfyui
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=CI)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/comfyui.md) | [English](../en/comfyui.md) | 日本語  | [偽中国語](../pcn/comfyui.md)
 
@@ -111,7 +110,7 @@ ComfyUI 向け ROCm 機能パッチ。
 
 `cachix use nixkits`（flake input として使用時に `nixConfig` で自動宣言）。
 
-> ⚠️ 本エントリは overlay であり、独立したビルドではなく上流 nixpkgs パッケージを変更するため、バイナリキャッシュに含まれません。
+> 本モジュールは **overlay ではありません** —— 宣言的な設定（`boot.kernelParams`、`hardware.graphics.extraPackages`、systemd サービスの堅牢化）のみを行い、nixpkgs パッケージを上書きも再ビルドもしないため、キャッシュすべきビルド成果物を生みません。上のバッジは CI におけるモジュール評価チェックに対応します。
 
 ## 注意
 

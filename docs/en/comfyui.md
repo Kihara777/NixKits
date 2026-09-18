@@ -1,7 +1,6 @@
 # comfyui
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=CI)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/comfyui.md) | English | [日本語](../ja/comfyui.md)  | [偽中国語](../pcn/comfyui.md)
 
@@ -109,7 +108,7 @@ Use upstream flake directly, overridden by local module patch (recommended):
 
 `cachix use nixkits` (auto-declared via `nixConfig` when used as a flake input).
 
-> ⚠️ This entry is an overlay — it modifies upstream nixpkgs packages rather than being an independent build, and is not in the binary cache.
+> This module is **not an overlay** -- it only applies declarative configuration (`boot.kernelParams`, `hardware.graphics.extraPackages`, systemd service hardening) and neither overrides nor rebuilds any nixpkgs package, so it produces no build outputs to cache. The badges above reflect the module's evaluation check in CI.
 
 ## Notes
 

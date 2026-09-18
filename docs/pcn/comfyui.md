@@ -1,7 +1,6 @@
 # comfyui
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=x86_64&job=build%20%28ubuntu-latest%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=aarch64&job=build%20%28ubuntu-24.04-arm%2C%20comfyui%29)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/check.yml?branch=main&label=CI)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/comfyui.md) | [English](../en/comfyui.md) | [日本語](../ja/comfyui.md)  | 偽中国語
 
@@ -107,7 +106,7 @@ ComfyUI 向 ROCm 機能補丁提供。
 
 `cachix use nixkits`（至 flake input 使用時自 `nixConfig` 自動宣言）。
 
-> ⚠️ 本条目為 overlay、修改上流 nixpkgs 包非独立構築、不在二進制緩衝中。
+> 本模組 **overlay 非** —— 宣言設定（`boot.kernelParams`、`hardware.graphics.extraPackages`、systemd 服務加固）限定 行、nixpkgs 包 上書 也 再構築 也 不、故 cache 必要 構築産物 生 不。上 徽章 CI 模組 評価 check 対応。
 
 ## 注意
 
