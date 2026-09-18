@@ -3,6 +3,16 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:41:45+09:00
+
+**摘要**：文档验证续 — obs-bilibili-stream 修 1 处，opencode-telegram 全部相符（0 处改动）。**① obs-bilibili-stream**：「Home Manager」段给出的 `home.packages = [ ...obs-bilibili-stream ];` **装上但 OBS 不会加载插件** —— OBS 经 `OBS_PLUGINS_PATH` 查找插件，而该变量**只由 nixpkgs 的 `wrapOBS` 注入**（`pkgs/applications/video/obs-studio/wrapper.nix`：`wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`），即只走 `programs.obs-studio.plugins` 这条路；`home.packages` 仅把 `.so` 放进 profile，OBS 不扫描该路径，结果是「装上了、插件列表里没有」。四语补充警告并给出两条正确做法（NixOS 用模块或 `programs.obs-studio.plugins`；非 NixOS／仅 Home Manager 时须自行确保插件搜索路径含 `.../lib/obs-plugins`）。其余断言实测通过：版本 2.1.5、`meta.platforms` 为纯 Linux（无 darwin，与「Linux only」相符）、overlay `default` 确实导出该包、`nixosModules.obs-bilibili-stream` 已注册、模块选项名与文档一致且**模块 enable 时的赋值与文档「手动」写法逐字相同**、产物结构正确（`lib/obs-plugins/bilibili-stream-for-obs.so` + 对应 `share/obs/obs-plugins/` 目录）、徽章对应的 x86_64/aarch64 两个 workflow 存在。**② opencode-telegram（本轮唯一「零改动」文档）**：逐项核对**全部相符** —— 文档声称的 4 个子命令 `start`/`status`/`stop`/`config` 与 `--help` 输出一致；模块选项 `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（另含 `environment`/`package`）全部存在且语义相符；「start 自动拉起 opencode」属实 —— 包内 `dist/opencode/process.js` 的 `startLocalOpencodeServer` 确实 `spawn("opencode", ["serve", "--port", port])`，这也解释了文档为何强调服务 PATH；方案 A 的 `pkgs.opencode` 在 nixpkgs 中确实存在（1.18.30）；徽章对应的三个平台 workflow 均存在
+
+| 提交 | 说明 |
+|------|------|
+| `4bea784` | fix(docs): obs-bilibili-stream 的 Home Manager 用法会装上但不生效（四语） |
+
+> **说明**：纯文档修正，`packages/` 与 `overlays/` 未改动。opencode-telegram 经核对无需改动（记录在案以备后续回归比对）。软件类仅剩 ruyi。
+
 ## 2026-09-18T13:40:20+09:00
 
 **摘要**：文档验证续 — kitsfmt 与 mcp-searxng 各 2 处修正。**① kitsfmt**：「注释保持」表述过宽 —— 实测（0.5.0）只有**节点上方的先行注释**会跟随排序，另有 4 类位置丢失或移位：非最后一条属性的同行尾**移位到下一属性上方**、最后一条属性的同行尾**丢弃**、**文件头**（顶层表达式之前）与**文件尾**丢弃。源码可印证：注释只经 `comments_before(<entry>)` 收集，故文件头/尾没有收集点。四语补「注释保留的限制」小节并逐行实测核对。另补漏掉的 `KITSFMT_STDIN=1`（`--help` 显示 4 个 env，文档只列 3 个）。其余断言全部实测通过：三个 best-practice 变换**输出与文档示例逐字相同**（裸 URL 引号化 / rec → let-in / with → builtins.attrValues）、`--check` 退出码语义（未格式化 1、已格式化 0）、`-i`/`-B`/多文件（带 `---` 分隔）、幂等性、APC 折叠 `a.b.c`，以及独立 flake 中 `nix fmt` 端到端可用。**② mcp-searxng**：一是「开箱即用配置」含**已废弃**的 `real_ip.x_for = 1` —— 上游 searxng 的 `limiter.toml` 已无 `real_ip` 段（`[botdetection]` 下仅 ipv4_prefix/ipv6_prefix/trusted_proxies），上游 master 与 nixpkgs 该选项自带 example 两处独立印证，社区记录亦显示其被「replace real_ip by IPv4/v6 network」取代，已从四语示例移除；二是「缺少 `SEARXNG_URL` 时**静默**失败」与实测不符 —— 实测服务器**正常启动且 tools/list 正常返回工具**，只是每次 `tools/call` 返回 `isError: true` 并在文本中明确给出 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., …)`，同时 stderr 打印 `SEARXNG_URL not set`；即错误**明确且可操作**（真正要保留的陷阱是 `mcp add` 不填 `env`）。其余断言通过：版本 2.3.0、wrapper 注入 nodejs、本机 `~/.deepseek/mcp.json` 的 `servers.SearXNG` 结构与文档示例**逐字段一致**、nixpkgs searx 模块确有 `redisCreateLocally`/`settings`/`limiterSettings` 三个 option

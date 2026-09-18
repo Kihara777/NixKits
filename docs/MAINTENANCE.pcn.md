@@ -3,6 +3,16 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T13:41:45+09:00
+
+**摘要**：文書検証 継続 — obs-bilibili-stream 一 件 修正、opencode-telegram 完全一致（変更 零）。**① obs-bilibili-stream**：「Home Manager」節 `home.packages = [ ...obs-bilibili-stream ];` **導入 及 但 OBS plugin 読込 不**——OBS `OBS_PLUGINS_PATH` 依 plugin 探索、此 変数 **nixpkgs `wrapOBS` 限定 注入**（`pkgs/applications/video/obs-studio/wrapper.nix`: `wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`）、即 `programs.obs-studio.plugins` 経由 限定。`home.packages` `.so` profile 置 限定、OBS 該 path 走査 不、「導入済 但 plugin 一覧 無」結果。四言語 警告 與 二 正 方法 追記（NixOS module 或 `programs.obs-studio.plugins`、非 NixOS／Home Manager 限定 場合 plugin 探索 path `.../lib/obs-plugins` 包含 様 自力 確保）。其他 主張 実測 通過：version 2.1.5、`meta.platforms` 純 Linux（darwin 無、「Linux only」一致）、`default` overlay 当該 package 実際 export、`nixosModules.obs-bilibili-stream` 登録済、module option 名 文書 一致 **且 module enable 時 代入 文書「手動」記載 與 byte 単位 同一**、成果物 構造 正（`lib/obs-plugins/bilibili-stream-for-obs.so` 與 対応 `share/obs/obs-plugins/`）、徽章 対応 x86_64/aarch64 workflow 存在。**② opencode-telegram（今回 唯一 変更 零 文書）**：全項目 一致——文書 記載 四 subcommand `start`/`status`/`stop`/`config` `--help` 出力 與 一致、module option `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（他 `environment`/`package`）全部 実在 意味 一致、「start opencode 自動起動」事実——包内 `dist/opencode/process.js` `startLocalOpencodeServer` 実際 `spawn("opencode", ["serve", "--port", port])` 呼出、此 文書 服務 PATH 強調 理由、方案 A `pkgs.opencode` nixpkgs 実在（1.18.30）、徽章 三 platform workflow 存在。
+
+| 提交 | 説明 |
+|------|------|
+| `4bea784` | fix(docs): obs-bilibili-stream Home Manager 用法 導入 及 効 不（四言語） |
+
+> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。opencode-telegram 変更 不要 確認（今後 退行 比較 為 記録）。軟件群 ruyi 限定。
+
 ## 2026-09-18T13:40:20+09:00
 
 **摘要**：文書検証 継続 — kitsfmt 與 mcp-searxng 各 二 件 修正。**① kitsfmt**：「注釈保持」記述 過広——0.5.0 実測 **節点 直前 先行注釈** 限定 整序時 追随、他 四 種 位置 消失 或 移動：最後 以外 属性 同行末尾 注釈 **次 属性 上 移動**、**最後** 属性 同行末尾 **破棄**、**書類 先頭**（上位 式 前）與 **書類 末尾**（其 後）破棄。source 裏付：注釈 `comments_before(<entry>)` 経由 限定 収集、故 先頭・末尾 収集点 無。四言語 「注釈保持 制限」節 追加、各行 実測 確認。又 漏  `KITSFMT_STDIN=1` 補完（`--help` env 四 表示、文書 三 限定）。其他 主張 全部 実測 通過：三 best-practice 変換 **文書 例 與 byte 単位 同一 出力**（裸 URL 引用符化 / rec → let-in / with → builtins.attrValues）、`--check` 終了 code 意味論（未整形 一、整形済 零）、`-i`/`-B`/複数書類（`---` 区切付）、冪等性、APC `a.b.c` 折畳、別 flake 依 `nix fmt` 端 端 動作。**② mcp-searxng**：第一 「即用設定」**廃止済** `real_ip.x_for = 1` 含——上流 searxng `limiter.toml` 既 `real_ip` 段 無（`[botdetection]` 下 ipv4_prefix/ipv6_prefix/trusted_proxies 限定）、上流 master 與 nixpkgs 該 option 同梱 example 二箇所 独立 裏付、community 記録 亦「replace real_ip by IPv4/v6 network」置換 示。四言語 削除。第二 「`SEARXNG_URL` 無 場合 **黙**失敗」実測 一致 不——server **正常 起動 且 `tools/list` 道具 返**、但 `tools/call` 毎回 `isError: true` 返、文本 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., ...)` 明示、同時 stderr `SEARXNG_URL not set` 出。即 錯誤 **明示 対処可能**（真 残 可 落穴 `mcp add` `env` 埋 不）。其他 主張 通過：version 2.3.0、wrapper nodejs 注入、本機 `~/.deepseek/mcp.json` `servers.SearXNG` 構造 文書 例 與 **字段 単位 一致**、nixpkgs searx 模組 `redisCreateLocally`/`settings`/`limiterSettings` 三 option 実際 持。

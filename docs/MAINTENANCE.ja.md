@@ -3,6 +3,16 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:41:45+09:00
+
+**概要**：ドキュメント検証の続き — obs-bilibili-stream で 1 件修正、opencode-telegram は完全一致（変更ゼロ）。**① obs-bilibili-stream**：「Home Manager」節の `home.packages = [ ...obs-bilibili-stream ];` は**インストールされるが OBS はプラグインを読み込みません**——OBS は `OBS_PLUGINS_PATH` でプラグインを探し、この変数は **nixpkgs の `wrapOBS` だけが注入**します（`pkgs/applications/video/obs-studio/wrapper.nix`: `wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`）。つまり `programs.obs-studio.plugins` 経由のみです。`home.packages` は `.so` をプロファイルに置くだけで、OBS はそのパスを走査せず、「入っているのにプラグイン一覧に出ない」となります。四言語に警告と二つの正しい方法を追記しました（NixOS ではモジュールか `programs.obs-studio.plugins`、非 NixOS／Home Manager のみならプラグイン探索パスに `.../lib/obs-plugins` を含めるよう自力で確保）。その他の主張は実測通過：バージョン 2.1.5、`meta.platforms` は純 Linux（darwin なし、「Linux only」と一致）、`default` overlay が当該パッケージを実際にエクスポート、`nixosModules.obs-bilibili-stream` が登録済み、モジュールのオプション名が文書と一致し**モジュール enable 時の代入が文書の「手動」記載とバイト単位で同一**、成果物構造が正しい（`lib/obs-plugins/bilibili-stream-for-obs.so` と対応する `share/obs/obs-plugins/`）、バッジに対応する x86_64/aarch64 の workflow が存在。**② opencode-telegram（今回唯一の変更ゼロ文書）**：全項目が一致——文書記載の 4 サブコマンド `start`/`status`/`stop`/`config` が `--help` 出力と一致、モジュールオプション `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（ほか `environment`/`package`）がすべて実在し意味も一致、「start が opencode を自動起動」は事実——パッケージ内 `dist/opencode/process.js` の `startLocalOpencodeServer` が実際に `spawn("opencode", ["serve", "--port", port])` を呼び、これが文書でサービス PATH を強調する理由でもある、方案 A の `pkgs.opencode` は nixpkgs に実在（1.18.30）、バッジの三プラットフォーム workflow も存在。
+
+| コミット | 説明 |
+|------|------|
+| `4bea784` | fix(docs): obs-bilibili-stream の Home Manager 用法は入るが効かない（四言語） |
+
+> **説明**：ドキュメントのみの修正で、`packages/` と `overlays/` は未変更。opencode-telegram は変更不要と確認（今後の退行比較のため記録）。ソフトウェア群は ruyi のみ。
+
 ## 2026-09-18T13:40:20+09:00
 
 **概要**：ドキュメント検証の続き — kitsfmt と mcp-searxng で各 2 件修正。**① kitsfmt**：「コメント保持」の記述が広すぎた——0.5.0 の実測では**ノード直前の先行コメント**だけがソート時に追随し、他に 4 種類の位置が失われるか移動する：最後以外の属性の同行末尾コメントは**次の属性の上へ移動**、**最後**の属性の同行末尾は**破棄**、**ファイル先頭**（トップレベル式の前）と**ファイル末尾**（その後）も破棄。ソースが裏付ける：コメントは `comments_before(<entry>)` 経由でのみ収集されるため、先頭・末尾には収集点がない。四言語に「コメント保持の制限」節を追加し、各行を実測で確認した。また漏れていた `KITSFMT_STDIN=1` を補完（`--help` は env を 4 つ表示するが、文書は 3 つだけだった）。その他の主張はすべて実測通過：3 つのベストプラクティス変換は**文書の例とバイト単位で同一の出力**（裸 URL 引用符化 / rec → let-in / with → builtins.attrValues）、`--check` の終了コード意味論（未整形 1、整形済 0）、`-i`/`-B`/複数ファイル（`---` 区切り付き）、冪等性、APC `a.b.c` 折りたたみ、そして別 flake からの `nix fmt` が端から端まで動作。**② mcp-searxng**：第一に「すぐ使える設定」に**廃止済み**の `real_ip.x_for = 1` が含まれていた——上流 searxng の `limiter.toml` にはもはや `real_ip` セクションがなく（`[botdetection]` 下は ipv4_prefix/ipv6_prefix/trusted_proxies のみ）、上流 master と nixpkgs がそのオプションに同梱する example の二箇所で独立に裏付けられ、コミュニティ記録も「replace real_ip by IPv4/v6 network」で置き換えられたことを示す。四言語から削除した。第二に「`SEARXNG_URL` がないと**サイレントに**失敗する」は実測と一致しない——サーバーは**正常に起動し `tools/list` もツールを返す**が、`tools/call` は毎回 `isError: true` を返し、テキストで `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., ...)` と明示し、同時に stderr へ `SEARXNG_URL not set` を出す。つまりエラーは**明示的で対処可能**である（本当に残すべき落とし穴は `mcp add` が `env` を埋めないこと）。その他の主張は通過：バージョン 2.3.0、wrapper が nodejs を注入、本機の `~/.deepseek/mcp.json` の `servers.SearXNG` 構造が文書の例と**フィールド単位で一致**、nixpkgs の searx モジュールが `redisCreateLocally`/`settings`/`limiterSettings` の 3 オプションを実際に持つこと。
