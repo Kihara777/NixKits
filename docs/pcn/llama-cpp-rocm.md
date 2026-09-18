@@ -398,7 +398,9 @@ GTT 上限 124.9 GiB。実測通過 15013 語彙 與 40012 語彙 前置充填 �
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "~/.cache/huggingface/hub";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";  # 絶対 path 必須：
+    # systemd Environment=LLAMA_CACHE 経由 注入、故 **~ 展開 不**。
+    # 省略 場合 既定 ${users.users.<user>.home}/.cache/huggingface/hub。
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";

@@ -391,7 +391,9 @@ IQ3_S をロードする前の予測は「固定オーバーヘッド約 3.7 GiB
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "~/.cache/huggingface/hub";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";  # 絶対パス必須：
+    # systemd の Environment=LLAMA_CACHE 経由で注入されるため **~ は展開されない**。
+    # 省略時は ${users.users.<user>.home}/.cache/huggingface/hub が既定値。
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";

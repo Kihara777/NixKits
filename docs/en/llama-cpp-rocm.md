@@ -392,7 +392,9 @@ Measured as throughput per watt, quiet is the most efficient of the three.
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "~/.cache/huggingface/hub";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";  # must be an absolute path:
+    # it is injected via systemd Environment=LLAMA_CACHE, which does **not**
+    # expand ~. Omit it and the default becomes ${users.users.<user>.home}/.cache/huggingface/hub.
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";

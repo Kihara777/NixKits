@@ -398,7 +398,9 @@ GTT 上限 124.9 GiB。实测通过 15013 token 与 40012 token 的 prefill 未 
     enable = true;
     user = "kix";
     group = "users";
-    hfCacheDir = "~/.cache/huggingface/hub";
+    hfCacheDir = "/home/kix/.cache/huggingface/hub";  # 必须是绝对路径：
+    # 该值经 systemd Environment=LLAMA_CACHE 注入，**不做 ~ 展开**。
+    # 省略此项则默认取 ${users.users.<user>.home}/.cache/huggingface/hub。
     modelsPreset = {
       "Qwen3-Coder-Next" = {
         hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
