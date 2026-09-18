@@ -16,6 +16,8 @@ Blender 的 MCP (Model Context Protocol) 服务器，为 AI 助手提供 Blender
 | 类型 | Python 包（setuptools） |
 | 许可 | GPL-3.0-or-later |
 | 平台 | x86_64 / aarch64（riscv64 不支持：依赖链交叉编译缺陷） |
+| Add-on 类型 | Blender Extension（带 `blender_manifest.toml`，`id = "mcp"`） |
+| Blender 版本要求 | ≥ 5.1（`blender_version_min = "5.1.0"`） |
 
 ## 架构
 
@@ -28,7 +30,7 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 
 ## 工具列表
 
-共 22 个 MCP 工具：
+共 26 个 MCP 工具（实测 `tools/list` 输出）：
 
 | 类别 | 工具 | 说明 |
 |------|------|------|
@@ -39,6 +41,7 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 |  | `get_blendfile_summary_of_linked_libraries` | 链接库依赖树 |
 |  | `get_blendfile_summary_path_info` | 路径、保存状态、备份 |
 |  | `get_blendfile_summary_usage_guess` | 猜测 blend 文件主要用途 |
+|  | 上述 5 项的 `_for_cli` 变体 | 同一摘要的后台 Blender 版本 |
 | 对象查询 | `get_object_detail_summary` | 指定对象的详细摘要 |
 |  | `get_objects_summary` | 场景集合层级与对象列表 |
 | 截屏 | `get_screenshot_of_area_as_image` | 单个区域截屏（PNG） |
@@ -50,7 +53,9 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 |  | `jump_to_view3d_object_data_by_name` | 聚焦到数据块对应对象 |
 | 渲染 | `render_thumbnail_to_path` | 渲染小尺寸缩略图 |
 |  | `render_viewport_to_path` | 渲染当前场景 |
-| 文档 | `get_python_api_docs` | 搜索 Blender Python API 文档 |
+| 文档 | `get_python_api_docs` | 查询指定标识符的 API 文档，或列出匹配模块 |
+|  | `search_api_docs` | 全文检索内置的 Blender Python API 参考 |
+|  | `search_manual_docs` | 全文检索内置的 Blender 用户手册 |
 
 > 带 `_for_cli` 后缀的工具无需预先连接 Blender，可对任意 .blend 文件执行（通过后台 Blender 进程）。
 
@@ -81,15 +86,28 @@ nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
 ## Add-on 安装
 
 ```bash
-# 安装路径
+# 包内路径
 $out/share/blender/scripts/addons/blender_mcp_addon/
 
-# 手动安装（从 nix 包复制）
+# 手动安装（从 nix 包复制到当前 Blender 版本的扩展目录）
 cp -r /nix/store/*-blender-mcp-*/share/blender/scripts/addons/blender_mcp_addon \
-  ~/.config/blender/4.4/scripts/addons/
+  ~/.config/blender/5.1/extensions/user/
 ```
 
-在 Blender 中：Edit → Preferences → Add-ons → 搜索 "Blender MCP" → 启用。
+> 把 `5.1` 换成你实际使用的 Blender 版本（目录形式为 `~/.config/blender/<版本>/`）。**Blender 4.x 无法加载**该 add-on —— manifest 要求 `blender_version_min = "5.1.0"`。
+
+> ⚠️ **升级时须先解除只读**：store 里的 add-on 目录是只读的（`dr-xr-xr-x`），`cp -r` 会**连权限一起复制**，因此第二次安装（目标已存在）会大批报 `Permission denied`，并可能留下新旧混杂的半成品。重新安装请先删除旧目录：
+>
+> ```bash
+> DEST=~/.config/blender/5.1/extensions/user/blender_mcp_addon
+> chmod -R u+w "$DEST" 2>/dev/null   # 旧副本是只读的，先放开写权限才能删
+> rm -rf "$DEST"
+> cp -r /nix/store/*-blender-mcp-*/share/blender/scripts/addons/blender_mcp_addon \
+>   ~/.config/blender/5.1/extensions/user/
+> chmod -R u+w "$DEST"               # 便于下次替换
+> ```
+
+在 Blender 中：Edit → Preferences → Add-ons → 搜索 "MCP" → 启用。
 
 ## 缓存
 

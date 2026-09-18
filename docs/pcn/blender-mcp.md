@@ -15,7 +15,9 @@ Blender 用 MCP (Model Context Protocol) 伺服器。AI 代理対自然言語接
 | 上流 | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | 種別 | Python 包（setuptools） |
 | 許諾 | GPL-3.0-or-later |
-| Platform | x86_64 / aarch64 (riscv64 unsupported: dependency chain cross-compilation defect) |
+| 平台 | x86_64 / aarch64（riscv64 非対応：依存鎖 交叉編譯 欠陥） |
+| 拡張種別 | Blender Extension（`blender_manifest.toml` 同梱、`id = "mcp"`） |
+| Blender 要件 | >= 5.1（`blender_version_min = "5.1.0"`） |
 
 ## 構成
 
@@ -28,7 +30,7 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 
 ## 道具一覧
 
-全 22 個 MCP 道具：
+全 26 個 MCP 道具（実際 `tools/list` 出力 依 計測）：
 
 | 分類 | 道具 | 説明 |
 |------|------|------|
@@ -39,6 +41,7 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 |  | `get_blendfile_summary_of_linked_libraries` | 連結庫依存木 |
 |  | `get_blendfile_summary_path_info` | 経路、保存状態、複製 |
 |  | `get_blendfile_summary_usage_guess` | 場面書類主用途推測 |
+|  | 上述 5 項 `_for_cli` 変種 | 同概要 背景 Blender 版 |
 | 物体 | `get_object_detail_summary` | 指定物体詳細摘要 |
 |  | `get_objects_summary` | 場面収集階層物体一覧 |
 | 画面取得 | `get_screenshot_of_area_as_image` | 単一区域 PNG 画面取得 |
@@ -50,7 +53,9 @@ MCP Client  ⇐ MCP/stdio ⇒  blender-mcp  ⇐ TCP socket ⇒  Blender Add-on
 |  | `jump_to_view3d_object_data_by_name` | 資料区画名焦中 |
 | 描画 | `render_thumbnail_to_path` | 小寸法縮小描画 |
 |  | `render_viewport_to_path` | 現在場面描画 |
-| 文書 | `get_python_api_docs` | Blender Python API 文書検索 |
+| 文書 | `get_python_api_docs` | 標識 API 文書 照会、或 一致 模組 列挙 |
+|  | `search_api_docs` | 同梱 Blender Python API 参考 全文検索 |
+|  | `search_manual_docs` | 同梱 Blender 利用者手引 全文検索 |
 
 > `_for_cli` 接尾辞付道具、Blender 事前接続不要、任意 .blend 書類対背景 Blender 経由動作。
 
@@ -86,10 +91,23 @@ $out/share/blender/scripts/addons/blender_mcp_addon/
 
 # 手動導入（nix 包複写）
 cp -r /nix/store/*-blender-mcp-*/share/blender/scripts/addons/blender_mcp_addon \
-  ~/.config/blender/4.4/scripts/addons/
+  ~/.config/blender/5.1/extensions/user/
 ```
 
-Blender 内：Edit → Preferences → Add-ons → "Blender MCP" 検索 → 有効化。
+> `5.1` 実際 使用 Blender 版 置換（目録形式 `~/.config/blender/<版>/`）。**Blender 4.x 読込 不能** — manifest `blender_version_min = "5.1.0"` 要求。
+
+> ⚠️ **更新時 先 読取専用 解除**：store 内 拡張目録 読取専用（`dr-xr-xr-x`）、`cp -r` **権限 共 複製**。故 第二回 導入（対象 既存）大量 `Permission denied` 失敗、新旧 混在 半端 状態 残留 恐。再導入時 先 旧目録 削除：
+>
+> ```bash
+> DEST=~/.config/blender/5.1/extensions/user/blender_mcp_addon
+> chmod -R u+w "$DEST" 2>/dev/null   # 旧複製 読取専用、削除前 書込権限 付与
+> rm -rf "$DEST"
+> cp -r /nix/store/*-blender-mcp-*/share/blender/scripts/addons/blender_mcp_addon \
+>   ~/.config/blender/5.1/extensions/user/
+> chmod -R u+w "$DEST"               # 次回 置換 為
+> ```
+
+Blender 内：Edit → Preferences → Add-ons → "MCP" 検索 → 有効化。
 
 ## 緩衝
 
