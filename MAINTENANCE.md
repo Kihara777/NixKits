@@ -3,6 +3,17 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T13:32:32+09:00
+
+**摘要**：文档验证续 — dsh 与 godot-ai 各查出问题，其中 godot-ai 是**真实功能缺陷**（非文档问题）。**① dsh（1 处文档）**：「可声明式配置的宿主 namespace」表只列 6 个且标注「DSH 0.1.2-alpha」，而该节讨论的是 `0.1.5-rc.2` —— 实测该版本经 `installSection` 注册的 namespace 共 **12 个**，缺 `agent-default-model`（provider/model/reasoningEffort）、`agent-loop`（maxParallelToolCalls）、`permission`（presets）、`shell`（dshHome）、`subagent-model-selection`、`web-search-deepseek`。三重印证：全量提取 `*_SETTINGS_NAMESPACE` 常量得 12 个、逐个取 `z.object({...})` schema 得字段、实机 `settings.yaml` 确认含 `permission`。dsh 其余断言全部通过（live 服务 8615/8625、reverseProxy 三选项与安全警告、launchUrlFile 实际产出 `/run/dsh/launch-urls`、sudo 守护 `srw-------` 归 kix:users 且 `NIXKITS_SUDO_SOCKET` 已注入、插件清单 152 条与 live dump 逐条一致、reasoningEffort 四档与 `high` 兜底默认）。**② godot-ai（1 功能缺陷 + 2 文档）**：文档声明的 `godot-ai` 命令**启动即失败**（`BACKEND_START_FAILED`，后端日志 `No module named godot_ai`）。根因逐层定位：该命令默认由 attach 桥**再 spawn 一个后端**（`sys.executable -m godot_ai`），而 Nix 包装下 `sys.executable` 是**裸 CPython**，依赖仅由包装脚本运行时经 `site.addsitedir()` 注入、**不被子进程继承**；上游用 `uvx`/真实 venv 故无此落差。修法为 makeWrapper 前置 PYTHONPATH，途中实测踩到三个必须做对的细节：`python312.sitePackages` 是**相对**路径须拼 `${placeholder "out"}/`、深层传递依赖（pydantic_core/platformdirs）须用 fixpoint 展开 `propagatedBuildInputs`、不可取 `d.pythonPath`（它指向 nixpkgs 的另一份 pydantic 2.13.4，绕开本仓 overlay 抬上的 2.13.5 会令 fail-closed 校验失败）。A/B 实测：修复前 ❌ / 修复后 ✅（后端监听 127.0.0.1:8000，MCP `tools/list` 返回 46 工具）。文档另修 2 处：工具数 43 → **46**（上游 v4.1.0 README 亦写 46）；WebSocket 默认端口 9876 → **9500**（`--help`、`__init__.py` argparse、`asgi.py` 三处独立印证，9876 在包内零出现）
+
+| 提交 | 说明 |
+|------|------|
+| `6b47f55` | fix(docs): dsh 设置 namespace 表不完整且版本标注过时（四语） |
+| `a54bd9d` | fix(godot-ai): 修复 attach 后端无法启动 + 文档两处失实（四语） |
+
+> **说明**：`a54bd9d` **改动 `packages/godot-ai.nix`**（新增 makeWrapper 与 postFixup），godot-ai 构建产物已变化；其余为纯文档修正。
+
 ## 2026-09-18T13:23:25+09:00
 
 **摘要**：文档验证启动 — 主文档 26 条断言复核 + 逐篇验证子文档，已修 7 处失实描述。**方法**：不读源码猜测，而是**部署实测** —— 起真实进程取权威数据（如向 blender-mcp 的 MCP stdio 发 `tools/list`），并做受控对照实验；每轮留证后清理（临时目录、registry 项、测试用 HOME），确认真实配置零改动。**① 主文档（README × 四语）2 处**：`inputs.nixkits.url = "~/NixKits"` **不可用**（Nix 不展开 flake input URL 的 `~`，实测报 `path '.../source/~/NixKits/flake.nix' does not exist`；`path:$HOME/...` 同样失败，改为 `git+file:///path/to/NixKits`，并附五种写法的受控对照结果）；「所有包默认跟随 `lib.platforms.linux`」**与事实不符** —— 实测 12 包 `meta.platforms`，9 包为 `lib.platforms.all`（含 darwin），仅 codewhale / obs-bilibili-stream / godot-ai 为 linux 限定。**② blender-mcp 3 处**：工具数标 22 但只列 17，**实测服务器注册 26 个**（缺 5 个摘要工具的 `_for_cli` 变体、2 个 jump 工具、`search_api_docs` / `search_manual_docs`）；Add-on 安装路径写 `blender/4.4/scripts/addons/`，实则该 add-on 是 **Blender Extension**（manifest `blender_version_min = "5.1.0"`，**4.x 根本加载不了**）且新版目录为 `extensions/user/`；**升级会静默失败**——store 内目录只读（`dr-xr-xr-x`），`cp -r` 连权限一起复制，故二次安装大批 `Permission denied` 并留下新旧混杂半成品（维护者本机停留 1.0.0 正是此现象），补充正确升级流程（`chmod` → `rm -rf` → `cp` → `chmod`，实测 1.0.0→1.0.3 与包内逐字节一致）。**③ codewhale 2 处（含一处回归）**：`codewhale --sandbox <tier>` 参数**不存在**（实测 `unexpected argument`），实为 `--sandbox-mode`；**这是回归** —— `e386dfc` 已修正过该参数名，但同提交为消除扫描器 `RISKY_APPROVAL_DEFAULT` 改写措辞时**重新引入了错误参数名**，说明当时只核对「措辞是否触发扫描器」而未复核改后参数是否仍可用；另 zh 独有该行而 en/ja/pcn 写的是合法的 `--yolo`，四语不一致，现统一四语均含 `--sandbox-mode <tier>` + 合法取值 + 「不是 `--sandbox`」提醒。**其余复核通过**：包/overlay/模块/devShell/技能目录（与 `skills/` **逐个比对完全一致**）、四语章节结构与版本号一致、缓存可达、模式分发的 seed-once 与「注册不复制」语义、Claude Code 移除理由确实存在于所指向文档
