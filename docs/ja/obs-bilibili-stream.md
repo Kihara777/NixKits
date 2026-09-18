@@ -47,6 +47,11 @@ OBS Studio の Bilibili ライブ配信プラグイン。
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
 
+> 警告 -- **`home.packages` で入れるだけでは OBS はこれを読み込みません**：OBS は `OBS_PLUGINS_PATH` でプラグインを探し、この変数は nixpkgs の `wrapOBS`（＝ `programs.obs-studio.plugins`）だけが注入します。`home.packages` は `.so` をプロファイルに置くだけで、OBS はそのパスを走査しません。したがって：
+>
+> - **NixOS では**上のモジュールか `programs.obs-studio.plugins` を使用（推奨）
+> - **非 NixOS / Home Manager のみ**の場合は、OBS のプラグイン探索パスに `.../lib/obs-plugins` が含まれるよう自分で確保してください（`wrapOBS` で包装する、または `.so` を手動配置）
+
 ## キャッシュ
 
 `cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。

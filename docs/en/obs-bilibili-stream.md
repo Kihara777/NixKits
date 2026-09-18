@@ -47,6 +47,11 @@ Bilibili live streaming plugin for OBS Studio.
 home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
 ```
 
+> Warning -- **installing the package via `home.packages` alone will not make OBS load it**: OBS finds plugins through `OBS_PLUGINS_PATH`, and that variable is only injected by nixpkgs' `wrapOBS` (i.e. `programs.obs-studio.plugins`). `home.packages` merely puts the `.so` into the profile; OBS never scans that path. Therefore:
+>
+> - **On NixOS** use the module above or `programs.obs-studio.plugins` (recommended)
+> - **Off NixOS / Home Manager only** you must ensure OBS's plugin search path includes `.../lib/obs-plugins` (e.g. wrap with `wrapOBS`, or place the `.so` manually)
+
 ## Cache
 
 `cachix use nixkits` (the flake auto-declares the cache via `nixConfig` when used as a flake input).
