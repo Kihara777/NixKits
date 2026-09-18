@@ -3,6 +3,29 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T12:41:08+09:00
+
+**摘要**：例行更新检查 — blender-mcp 1.0.3；ruyi-beta 0.53.0-beta.20260917（并补 `pyelftools` 运行时依赖）；dsh 0.1.5-rc.2；dsh-alpha 0.1.6-alpha.2。**① ruyi 依赖新增（唯一实质缺陷）**：上游 0.53.0 起把 `pyelftools` 列入 `pyproject.toml` 的**运行时** dependencies（0.52.x 及更早没有），并新增 `tests/ruyipkg/abi/test_elfbuilder.py` 在**收集期** `import elftools`——缺依赖时 pytest 以 `Interrupted: 1 error during collection` **直接中断整个套件**，而非跳过单条用例。补入 `propagatedBuildInputs` 后 `ruyi`/`ruyi-beta`/`ruyi-alpha` 三通道均通过；beta 测试数随之由 320 单元 + 52 集成增至 **462 单元 + 70 集成**，四语 ruyi 文档同步该项与依赖说明。**② dsh-alpha 的 vendored lock 陈旧**：alpha.2 上游新增 4 个插件包（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`），而 `dsh-package-lock-alpha.json` 仍停在 alpha.1——**只改 version 会报 `npmDepsHash is out of date`**。按 AGENTS.md 约定以**派生 `postPatch` 处理后**的 `package.json`（删 `devDependencies`）重新 `npm install --package-lock-only` 生成 lock 再回填 hash。**③ 内置插件清单核对**：经 `dsh --profile web --dump-default-config` 重新提取 stable rc.2 的 **152 条 `id -> name`** 并逐行比对，与 rc.1 **完全一致**（rc.1→rc.2 的 npm 依赖集亦无变化，原 `npmDepsHash` 直接可用）——故文档插件表无需改动。**④ 自托管 forge 取源（教训复现）**：`projects.blender.org` 的 `/archive/<rev>.tar.gz` 网页路径对非浏览器 UA 返回 **403**（API 路径 `/api/v1/repos/.../archive/` 正常），与 `fetchFromGitea` 的 hash 换算方式**均为已记载教训**，本次未再走弯路：hash 取**解包后 NAR**（`stripRoot`）的 sha256，并用 1.0.0 已声明值**反向验证**换算方式后 `nix build` 一次通过。四语文档同步、`nix flake check` 全通过
+
+| 提交 | 说明 |
+|------|------|
+| `0e220fd` | chore(blender-mcp): 升级 1.0.0 → 1.0.3（四语文档同步） |
+| `9b48078` | fix(ruyi): 升级 beta → 0.53.0-beta.20260917 并补 pyelftools 依赖 |
+| `80104c4` | chore(dsh): stable 0.1.5-rc.2 + alpha 0.1.6-alpha.2（四语文档同步） |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| ruyi-beta | 0.52.0-beta.20260824 | 0.53.0-beta.20260917 |
+| dsh | 0.1.5-rc.1 | 0.1.5-rc.2 |
+| dsh-alpha | 0.1.6-alpha.1 | 0.1.6-alpha.2 |
+| 　 | blender-mcp source hash | `sha256-nt+sHozi…` → `sha256-pYeByO4O…` |
+| 　 | ruyi-beta source hash | `sha256-vxu9AhRD…` → `sha256-w8NlCER3…` |
+| 　 | dsh source hash | `sha256-Gnlxnxx2…` → `sha256-9MVIOdae…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-qAlIccAJ…` → `sha256-p4uALt5v…` |
+
+> **说明**：`ruyi.nix` 共享 base 新增 `pyelftools` 一行（三通道共用）；`dsh-package-lock-alpha.json` 经上游 alpha.2 的依赖集重新生成。其余包经比对上游已为最新，未改动。
+
 ## 2026-09-18T00:38:59+09:00
 
 **摘要**：改写沙箱档位表述以消除外部扫描器的 `RISKY_APPROVAL_DEFAULT`（88 → 94 分）— 外部目录 `awesome-ai-plugins` 的扫描器对本仓报 5 处 `RISKY_APPROVAL_DEFAULT`（medium）。经**受控实验**定位触发词为 `danger-full-access`：空仓库 0 处 finding，仅注入该词一行即出现 finding。**这不是真实风险**——本仓是在「已知设计边界」表格与 CLI 用法示例中**描述**使用者可选的行为，而非**设置**默认值；但扫描器为模式匹配，无法区分「文档描述」与「配置启用」。**修复方式为保留全部信息、只改措辞**，改后表述对读者反而更准确（明确「默认不放开」）：四语 `SECURITY.md` 改为「沙箱权限档位由使用者显式选择，**默认不放开**」，`docs/zh/codewhale.md` 的 CLI 示例改为 `--sandbox <tier>`。**同时修正一处原有错误**：原示例写 `--sandbox`，而该包实际参数为 `--sandbox-mode`（实测 `codewhale --help` 确认），一并改为正确形式。**实测验证**（官方扫描器，与 CI 同源）：修复前 **88/100**（Security 13/16、5 medium），修复后 **94/100（A - Excellent）**、Security **16/16**、0 medium。**明确未做的优化**：剩余 6 分来自 `Dependabot configured for automation surfaces`；本仓**主动移除** Dependabot（见 AGENTS.md「安全边界：不引入外部自动化」），**不为提分而破例**。四语同步、`nix flake check` 全通过

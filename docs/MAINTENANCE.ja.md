@@ -3,6 +3,29 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T12:41:08+09:00
+
+**概要**：定例の更新チェック — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` ランタイム依存を追加）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2。**① ruyi の依存追加（唯一の実質的欠陥）**：上流は 0.53.0 から `pyelftools` を `pyproject.toml` の**ランタイム**依存に記載し（0.52.x 以前にはありませんでした）、さらに**収集時**に `import elftools` する `tests/ruyipkg/abi/test_elfbuilder.py` を追加しました——依存が欠けると pytest は `Interrupted: 1 error during collection` を出し、一件をスキップするのではなく**スイート全体を中断**します。`propagatedBuildInputs` に追加した結果、`ruyi`/`ruyi-beta`/`ruyi-alpha` の三チャネルすべてが通過し、beta のテスト数は 320 ユニット + 52 統合から **462 ユニット + 70 統合**へ増加しました。四言語の ruyi ドキュメントにその数と依存の説明を反映しています。**② dsh-alpha の vendored lock が古い**：alpha.2 では上流が 4 つのプラグインパッケージ（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`）を追加した一方、`dsh-package-lock-alpha.json` は alpha.1 のままでした——**version だけを変えると `npmDepsHash is out of date` になります**。AGENTS.md の取り決めに従い、**派生の `postPatch` 処理後**の `package.json`（`devDependencies` を削除）に対して `npm install --package-lock-only` で lock を再生成し、ハッシュを書き戻しました。**③ 内蔵プラグイン一覧の照合**：`dsh --profile web --dump-default-config` で stable rc.2 の **152 件の `id -> name`** を再抽出し、一行ずつ比較した結果、rc.1 と**完全に一致**しました（rc.1→rc.2 で npm 依存集合も変わらないため、既存の `npmDepsHash` がそのまま使えます）——よってドキュメントのプラグイン表に変更は不要でした。**④ セルフホスト forge からの取得（教訓の再現）**：`projects.blender.org` の Web パス `/archive/<rev>.tar.gz` は非ブラウザの user agent に **403** を返し（API パス `/api/v1/repos/.../archive/` は正常）、`fetchFromGitea` のハッシュ換算も**すでに記録済みの教訓**であったため、今回は遠回りしませんでした：ハッシュは**展開後の NAR**（`stripRoot`）の sha256 であり、1.0.0 の宣言値に対して換算方法を**逆向きに検証**したうえで `nix build` が一発で成功しています。四言語同期、`nix flake check` 全通過
+
+| コミット | 説明 |
+|------|------|
+| `0e220fd` | chore(blender-mcp): 1.0.0 → 1.0.3 へ更新（四言語同期） |
+| `9b48078` | fix(ruyi): beta → 0.53.0-beta.20260917 へ更新し pyelftools 依存を追加 |
+| `80104c4` | chore(dsh): stable 0.1.5-rc.2 + alpha 0.1.6-alpha.2（四言語同期） |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| ruyi-beta | 0.52.0-beta.20260824 | 0.53.0-beta.20260917 |
+| dsh | 0.1.5-rc.1 | 0.1.5-rc.2 |
+| dsh-alpha | 0.1.6-alpha.1 | 0.1.6-alpha.2 |
+| 　 | blender-mcp source hash | `sha256-nt+sHozi…` → `sha256-pYeByO4O…` |
+| 　 | ruyi-beta source hash | `sha256-vxu9AhRD…` → `sha256-w8NlCER3…` |
+| 　 | dsh source hash | `sha256-Gnlxnxx2…` → `sha256-9MVIOdae…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-qAlIccAJ…` → `sha256-p4uALt5v…` |
+
+> **説明**：共有ベースの `ruyi.nix` に `pyelftools` の一行を追加（三チャネル共通）。`dsh-package-lock-alpha.json` は alpha.2 の依存集合から再生成しました。残りのパッケージは上流と照合済みで既に最新のため変更していません。
+
 ## 2026-09-18T00:38:59+09:00
 
 **概要**：サンドボックス段階の記述を書き換え、外部スキャナの `RISKY_APPROVAL_DEFAULT` を解消（88 → 94） — 外部カタログ `awesome-ai-plugins` のスキャナが本リポジトリに対し `RISKY_APPROVAL_DEFAULT`（medium）を 5 件報告しました。**制御実験**によりトリガー語が `danger-full-access` であると特定：空のリポジトリでは 0 件、当該語を一行注入するだけで finding が出現します。**これは実際のリスクではありません**——本リポジトリは利用者が任意に選べる挙動を「既知の設計境界」の表と CLI の使用例で**記述**しているのであり、既定値を**設定**しているのではありません。ただしスキャナはパターン照合であり、「文書の記述」と「設定による有効化」を区別できません。**修正は情報を一切削らず措辞のみを変更**し、結果として読者にとってより正確になりました（「既定では緩めない」と明示）：四言語の `SECURITY.md` は「サンドボックス権限の段階は利用者が明示的に選択し、**既定では一切緩めません**」となり、`docs/zh/codewhale.md` の CLI 例は `--sandbox <tier>` になりました。**既存の記述誤りも同時に修正**：例では `--sandbox` としていましたが、このパッケージの実際の引数は `--sandbox-mode` です（`codewhale --help` の実行で確認）。正しい形式に改めました。**実測による検証**（公式スキャナ、CI と同一）：修正前 **88/100**（Security 13/16、medium 5 件）、修正後 **94/100（A - Excellent）**、Security **16/16**、medium 0 件。**意図的に行わなかった最適化**：残る 6 点は `Dependabot configured for automation surfaces` に由来します。本リポジトリは Dependabot を**意図的に削除**しており（AGENTS.md「安全境界：外部自動化を導入しない」参照）、**点数を上げるためにその境界を破ることはしません**。四言語同期、`nix flake check` 全通過

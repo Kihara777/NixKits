@@ -3,6 +3,29 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-18T12:41:08+09:00
+
+**摘要**：定例 更新 検査 — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` 実行時依存 追加）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2。**① ruyi 依存 追加（唯一 実質的 欠陥）**：上流 0.53.0 以降 `pyelftools` `pyproject.toml` **実行時**依存 記載（0.52.x 以前 無）、更 収集時 `import elftools` 為 `tests/ruyipkg/abi/test_elfbuilder.py` 追加——依存 欠 場合 pytest `Interrupted: 1 error during collection` 出、一件 skip 非、**套件全体 中断**。`propagatedBuildInputs` 追加 結果、`ruyi`/`ruyi-beta`/`ruyi-alpha` 三 channel 全部 通過、beta 試験数 320 unit + 52 統合 **462 unit + 70 統合** 増加。四言語 ruyi 文書 其 数 與 依存 説明 反映。**② dsh-alpha vendored lock 陳旧**：alpha.2 上流 四 拡張 package（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`）追加、一方 `dsh-package-lock-alpha.json` alpha.1 停 在——**version 限定 変更 場合 `npmDepsHash is out of date` 発生**。AGENTS.md 取決 従、**派生 `postPatch` 処理後** `package.json`（`devDependencies` 削除）対 `npm install --package-lock-only` lock 再生成、hash 書戻。**③ 内蔵拡張一覧 照合**：`dsh --profile web --dump-default-config` 依 stable rc.2 **152 件 `id -> name`** 再抽出、一行 逐 比較 結果 rc.1 與**完全 一致**（rc.1→rc.2 npm 依存集合 不変 故、既存 `npmDepsHash` 其 侭 使用 可）——故 文書 拡張表 変更 不要。**④ self-host forge 取得（教訓 再現）**：`projects.blender.org` Web path `/archive/<rev>.tar.gz` 非 browser user agent 対 **403** 返（API path `/api/v1/repos/.../archive/` 正常）、`fetchFromGitea` hash 換算 亦**既記録済 教訓**、今回 遠回 不：hash **展開後 NAR**（`stripRoot`）sha256、1.0.0 宣言値 対 換算方法**逆向 検証** 上 `nix build` 一発 成功。四言語 同期、`nix flake check` 全通過
+
+| 提交 | 説明 |
+|------|------|
+| `0e220fd` | chore(blender-mcp): 1.0.0 → 1.0.3 更新（四言語同期） |
+| `9b48078` | fix(ruyi): beta → 0.53.0-beta.20260917 更新 並 pyelftools 依存 追加 |
+| `80104c4` | chore(dsh): stable 0.1.5-rc.2 + alpha 0.1.6-alpha.2（四言語同期） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| ruyi-beta | 0.52.0-beta.20260824 | 0.53.0-beta.20260917 |
+| dsh | 0.1.5-rc.1 | 0.1.5-rc.2 |
+| dsh-alpha | 0.1.6-alpha.1 | 0.1.6-alpha.2 |
+| 　 | blender-mcp source hash | `sha256-nt+sHozi…` → `sha256-pYeByO4O…` |
+| 　 | ruyi-beta source hash | `sha256-vxu9AhRD…` → `sha256-w8NlCER3…` |
+| 　 | dsh source hash | `sha256-Gnlxnxx2…` → `sha256-9MVIOdae…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-qAlIccAJ…` → `sha256-p4uALt5v…` |
+
+> **説明**：共有 base `ruyi.nix`  `pyelftools` 一行 追加（三 channel 共用）。`dsh-package-lock-alpha.json` alpha.2 依存集合 再生成。残 package 上流 照合済 既 最新 故 変更 無。
+
 ## 2026-09-18T00:38:59+09:00
 
 **摘要**：sandbox 段階 記述 書換、外部 scanner `RISKY_APPROVAL_DEFAULT` 解消（88 → 94） — 外部 catalog `awesome-ai-plugins` scanner 本 repo 対 `RISKY_APPROVAL_DEFAULT`（medium）五 件 報告。**制御実験** 依 trigger 語 `danger-full-access` 特定：空 repo 零 件、当該語 一行 注入 限定 finding 出現。**此 実際 risk 非**——本 repo 利用者 任意 選択 可能 挙動 「既知 設計境界」表 與 CLI 使用例 記述、既定値 設定 非。但 scanner pattern 照合 故、「文書 記述」與「設定 有効化」区別 不能。**修正 情報 一切 削 不 措辞 限定 変更**、結果 読者 対 更 正確 化（「既定 緩 不」明示）：四言語 `SECURITY.md`「sandbox 権限段階 利用者 明示的 選択、**既定 一切 緩 不**」化、`docs/zh/codewhale.md` CLI 例 `--sandbox <tier>` 化。**既存 記述誤 同時 修正**：例 `--sandbox` 記載、但 此 package 実際 引数 `--sandbox-mode`（`codewhale --help` 実行 確認）。正 形式 改。**実測 検証**（公式 scanner、CI 同一）：修正前 **88/100**（Security 13/16、medium 五）、修正後 **94/100（A - Excellent）**、Security **16/16**、medium 零。**意図的 行 不 最適化**：残 六 点 `Dependabot configured for automation surfaces` 由来。本 repo Dependabot **意図的 削除**（AGENTS.md「安全境界：外部自働化 導入 不」参照）、**点数 上 為 其 境界 破 不**。四言語 同期、`nix flake check` 全通過

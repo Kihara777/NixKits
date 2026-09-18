@@ -3,6 +3,29 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-09-18T12:41:08+09:00
+
+**Summary**：Routine update check — blender-mcp 1.0.3; ruyi-beta 0.53.0-beta.20260917 (plus the `pyelftools` runtime dependency); dsh 0.1.5-rc.2; dsh-alpha 0.1.6-alpha.2. **① The ruyi dependency addition (the only real defect)**: as of 0.53.0 upstream lists `pyelftools` in `pyproject.toml`'s **runtime** dependencies (0.52.x and earlier did not) and adds `tests/ruyipkg/abi/test_elfbuilder.py`, which does `import elftools` at **collection time** — without the dependency pytest reports `Interrupted: 1 error during collection` and **aborts the whole suite** rather than skipping one case. Adding it to `propagatedBuildInputs` makes all three channels (`ruyi`/`ruyi-beta`/`ruyi-alpha`) pass; the beta test count accordingly rises from 320 unit + 52 integration to **462 unit + 70 integration**, and the ruyi docs in all four languages now record that count and the dependency note. **② A stale vendored lock for dsh-alpha**: alpha.2 adds four upstream plugin packages (`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`) while `dsh-package-lock-alpha.json` was still pinned to alpha.1 — **changing only the version yields `npmDepsHash is out of date`**. Following the AGENTS.md convention, the lock was regenerated with `npm install --package-lock-only` against the **derivation's `postPatch`-processed** `package.json` (devDependencies removed), then the hash was filled back in. **③ Built-in plugin inventory verified**: `dsh --profile web --dump-default-config` was used to re-extract stable rc.2's **152 `id -> name` entries** and compare them line by line — they are **identical** to rc.1 (rc.1→rc.2 also leaves the npm dependency set unchanged, so the existing `npmDepsHash` still works) — hence the documentation plugin table needed no edit. **④ Self-hosted forge sources (a lesson recurring)**: the web path `/archive/<rev>.tar.gz` on `projects.blender.org` returns **403** for non-browser user agents (the API path `/api/v1/repos/.../archive/` works), and the `fetchFromGitea` hash conversion is likewise **an already-recorded lesson**, so no detour was taken this time: the hash is the sha256 of the **unpacked NAR** (`stripRoot`), the conversion was **verified in reverse** against 1.0.0's declared value, and `nix build` then succeeded on the first try. All four languages synced; `nix flake check` passes
+
+| Commit | Description |
+|------|------|
+| `0e220fd` | chore(blender-mcp): upgrade 1.0.0 → 1.0.3 (all four languages synced) |
+| `9b48078` | fix(ruyi): upgrade beta → 0.53.0-beta.20260917 and add the pyelftools dependency |
+| `80104c4` | chore(dsh): stable 0.1.5-rc.2 + alpha 0.1.6-alpha.2 (all four languages synced) |
+
+| Package | Old | New |
+|--------|--------|--------|
+| blender-mcp | 1.0.0 | 1.0.3 |
+| ruyi-beta | 0.52.0-beta.20260824 | 0.53.0-beta.20260917 |
+| dsh | 0.1.5-rc.1 | 0.1.5-rc.2 |
+| dsh-alpha | 0.1.6-alpha.1 | 0.1.6-alpha.2 |
+| 　 | blender-mcp source hash | `sha256-nt+sHozi…` → `sha256-pYeByO4O…` |
+| 　 | ruyi-beta source hash | `sha256-vxu9AhRD…` → `sha256-w8NlCER3…` |
+| 　 | dsh source hash | `sha256-Gnlxnxx2…` → `sha256-9MVIOdae…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-qAlIccAJ…` → `sha256-p4uALt5v…` |
+
+> **Note**: the shared base `ruyi.nix` gained one `pyelftools` line (used by all three channels); `dsh-package-lock-alpha.json` was regenerated from alpha.2's dependency set. The remaining packages were compared against upstream and are already current, so they were left untouched.
+
 ## 2026-09-18T00:38:59+09:00
 
 **Summary**：Reworded the sandbox-tier description to clear an external scanner's `RISKY_APPROVAL_DEFAULT` (88 → 94) — The external catalog `awesome-ai-plugins` scans this repository and reported five `RISKY_APPROVAL_DEFAULT` (medium) findings. A **controlled experiment** located the trigger term as `danger-full-access`: an empty repository yields zero findings, and injecting just that one line makes the finding appear. **This is not a real risk** — the repository was **describing** a behaviour users may opt into (in the "known design boundaries" table and a CLI usage example), not **setting** a default; but the scanner matches patterns and cannot tell "documentation describing" from "configuration enabling". **The fix keeps every piece of information and only changes the wording**, which actually makes it more accurate for readers by stating plainly that nothing is widened by default: the four `SECURITY.md` files now read "sandbox permission tiers are chosen explicitly by the user and **nothing is widened by default**", and `docs/zh/codewhale.md`'s CLI example became `--sandbox <tier>`. **A pre-existing documentation error was corrected at the same time**: the example used `--sandbox` while the package's actual flag is `--sandbox-mode` (confirmed by running `codewhale --help`), so it now shows the correct form. **Measured verification** (the official scanner, the same one CI uses): before the fix **88/100** (Security 13/16, five medium), after **94/100 (A - Excellent)** with Security **16/16** and zero medium. **An optimisation deliberately not made**: the remaining 6 points come from `Dependabot configured for automation surfaces`; this repository **removed** Dependabot on purpose (see AGENTS.md, "security boundary: no external automation") and **will not break that boundary to raise a score**. All four languages synced; `nix flake check` passes
