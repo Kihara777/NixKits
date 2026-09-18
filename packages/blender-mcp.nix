@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "blender-mcp";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitea {
     domain = "projects.blender.org";
     owner = "lab";
     repo = "blender_mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nt+sHozi+epJdu6GXcWGd33C9uewN+Ao8WP9Y2upPQc=";
+    hash = "sha256-pYeByO4Oi5eyynsJhGVd1vBWXHvhGn+Y5LGit6Kazlw=";
   };
 
   preConfigure = ''
