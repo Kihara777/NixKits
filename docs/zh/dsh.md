@@ -10,8 +10,8 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.1.5-rc.1` |
-| 开发通道 | `dsh-alpha 0.1.6-alpha.1`（npm `alpha` dist-tag） |
+| 版本 | `0.1.5-rc.2` |
+| 开发通道 | `dsh-alpha 0.1.6-alpha.2`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
 
@@ -21,15 +21,15 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 
 | 包 | 通道 | 版本 | 说明 |
 |----|------|------|------|
-| `pkgs.dsh` | stable | `0.1.5-rc.1` | npm `latest` dist-tag，默认 |
-| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.1` | npm `alpha` dist-tag，跟踪最新开发版 |
+| `pkgs.dsh` | stable | `0.1.5-rc.2` | npm `latest` dist-tag，默认 |
+| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.2` | npm `alpha` dist-tag，跟踪最新开发版 |
 
 ```nix
 # 本机改用最新开发版本
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> `dsh-alpha` 为上游开发通道：内置插件清单随版本变化（下文插件清单对应 stable `0.1.5-rc.1`，alpha 以运行时实际加载为准），升级前建议查看 [changelog](https://github.com/deepseek-ai/deepseek-harness/releases)。
+> `dsh-alpha` 为上游开发通道：内置插件清单随版本变化（下文插件清单对应 stable `0.1.5-rc.2`，alpha 以运行时实际加载为准），升级前建议查看 [changelog](https://github.com/deepseek-ai/deepseek-harness/releases)。
 
 ## 安装
 
@@ -195,7 +195,7 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 
 ## 插件清单
 
-dsh 0.1.5-rc.1 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
+dsh 0.1.5-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
 
 > **清单生成方法**：`dsh --profile web --dump-default-config`（只读）输出即 `id -> name` 格式；升级 dsh 后用它重新生成本表，以所装版本的输出为准。本表对应 web profile 的 base + web-app 补丁集。
 

@@ -10,8 +10,8 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 |------|-------|
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| Version | `0.1.5-rc.1` |
-| Development channel | `dsh-alpha 0.1.6-alpha.1` (npm `alpha` dist-tag) |
+| Version | `0.1.5-rc.2` |
+| Development channel | `dsh-alpha 0.1.6-alpha.2` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -21,15 +21,15 @@ NixKits ships multiple dsh versions at once, following ruyi's thin-wrapper patte
 
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
-| `pkgs.dsh` | stable | `0.1.5-rc.1` | npm `latest` dist-tag, default |
-| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.1` | npm `alpha` dist-tag, tracks the latest development build |
+| `pkgs.dsh` | stable | `0.1.5-rc.2` | npm `latest` dist-tag, default |
+| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.2` | npm `alpha` dist-tag, tracks the latest development build |
 
 ```nix
 # Use the latest development version on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.5-rc.1`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
+> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.5-rc.2`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
 
 ## Install
 
@@ -196,7 +196,7 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 
 ## Plugin inventory
 
-Built-in plugin entry ids for dsh 0.1.5-rc.1 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+Built-in plugin entry ids for dsh 0.1.5-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 

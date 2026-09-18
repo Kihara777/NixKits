@@ -6,8 +6,8 @@
   makeWrapper,
   python3,
   # version/hash/lock overridden for other channels (e.g. dsh-alpha)
-  version ? "0.1.5-rc.1",
-  hash ? "sha256-Gnlxnxx2ORisMOgZTfeDqTMMaxLV8EyVBzGj+KHD2dA=",
+  version ? "0.1.5-rc.2",
+  hash ? "sha256-9MVIOdaegr8cOlpBqRDDzhQFzZ6dl9dTwMBPQGx9dIA=",
   npmDepsHash ? "sha256-+/9XAzsADxOI4D+w9P6HsoOv4hKLFTeSGYmvWRCnBTg=",
   lockFile ? ./dsh-package-lock.json,
   # 允许局域网（非 loopback）浏览器读写设置，见 postInstall 中的说明。
