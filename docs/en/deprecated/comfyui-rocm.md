@@ -28,8 +28,7 @@ Upstream `comfyui-nix` **0.34.0** has built all of the above in:
 - **ROCm support**: upstream ships ROCm 7.1 / PyTorch 2.10.0 wheels whose version,
   URL and hash in its `nix/versions.nix` are **byte-for-byte identical** to what our
   patches produced; its module natively supports `gpuSupport = "rocm"`.
-- **stdenv migration**: upstream moved wholesale to `stdenv.hostPlatform.*`
-  (**0** deprecated uses left, 34 new-style ones), so it no longer emits warnings.
+- **stdenv API**: warning -- **this assessment was wrong and has been corrected**. Upstream did **not** migrate: 0.34.0 still carries **38** deprecated `stdenv.is<Platform>` short forms (`hostPlatform.is*` appears only 7 times), identical to 0.30.2, so evaluating the upstream flake/overlay directly **still emits the deprecation warning**. The patch is genuinely no longer needed, but the real reason is that **we no longer override upstream code**: the old patch applied that migration to a fork evaluated through an overlay, to silence a warning that polluted downstream builds; pointing straight at upstream leaves this module doing declarative wiring only.
 - **nixpkgs compatibility**: upstream now covers most of the Python test-skip logic.
 
 ## ⚠️ A misjudgement worth recording

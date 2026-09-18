@@ -28,8 +28,11 @@
 - **ROCm 支持**：上流 ROCm 7.1 / PyTorch 2.10.0 wheel 自帯、其 `nix/versions.nix`
   中 版・URL・hash 我々 補丁 産物 与 **逐 byte 一致**；其 模組 原生
   `gpuSupport = "rocm"` 支持。
-- **stdenv 移行**：上流 全面 `stdenv.hostPlatform.*` 移行 済（旧記法 **0 処**、
-  新記法 34 処）、非推奨警告 無。
+- **stdenv API**：警告 -- **此 判定 誤、訂正済**。上流 **移行 不**：0.34.0 非推奨
+  `stdenv.is<Platform>` 短記法 **38 処** 残（`hostPlatform.is*` 僅 7 処）、0.30.2 與 完全 同一。
+  故 上流 flake/overlay 直接 評価 場合 非推奨警告 **依然 出**。修正 不要 真 理由
+  **我々 上流 code 上書 不 化**：旧修正 overlay 経由 評価 fork 対 此 移行 適用、
+  下流 build 汚 警告 消除。上流 直接 指 今、本 module 宣言 配線 限定 行。
 - **nixpkgs 互換**：上流 Python test 跳过 logic 大半 既 cover。
 
 ## ⚠️ 一度 誤判定（記録 値）

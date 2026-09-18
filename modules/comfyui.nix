@@ -16,8 +16,16 @@
 # 内核参数、工具链），而非修补上游代码。改名意在让名字与实际职责一致。
 #
 # 补丁删除的判定依据（保留在此以备回溯）：
-#   - comfyui-nix-stdenv-api   : 上游已迁移 hostPlatform（旧写法 0 处，
-#                                新写法 34 处）—— 静态可证
+#   - comfyui-nix-stdenv-api   : ⚠️ **原判定有误，已更正**。当时记为"上游已迁移
+#                                hostPlatform（旧写法 0 处，新写法 34 处）"，
+#                                但实测上游 0.34.0 仍保留 `stdenv.is<Platform>`
+#                                短写法 **38 处**（`hostPlatform.is*` 仅 7 处），
+#                                与 0.30.2 完全相同 —— 上游并未迁移该 API，弃用
+#                                告警在直接求值上游 flake/overlay 时仍会出现。
+#                                补丁确已不需要，但真实理由是**我们不再覆盖上游
+#                                代码**：旧补丁的作用是把该迁移施加给一个会被 overlay
+#                                求值的 fork，以消除污染下游构建的告警；改为直接指向
+#                                上游后本模块只做声明式接线，不再引入该求值路径。
 #   - comfyui-nix-strix-halo   : 上游已内置 ROCm 7.1 / PyTorch 2.10.0
 #                                wheels（版本、URL、hash 逐字节一致）
 #   - comfyui-nix-nixpkgs-compat: ⚠️ **此项判定曾出错两次，教训在此**。

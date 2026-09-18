@@ -28,8 +28,11 @@
 - **ROCm 支持**：上游自带 ROCm 7.1 / PyTorch 2.10.0 wheels，其 `nix/versions.nix`
   中的版本、URL、hash 与我们的补丁产出**逐字节一致**；其模块原生支持
   `gpuSupport = "rocm"`。
-- **stdenv 迁移**：上游已全面改用 `stdenv.hostPlatform.*`（旧写法 **0 处**，
-  新写法 34 处），不再产生弃用告警。
+- **stdenv API**：⚠️ **此项原判定有误，已更正**。上游 **并未**迁移 —— 实测 0.34.0 仍保留
+  `stdenv.is<Platform>` 短写法 **38 处**（`hostPlatform.is*` 仅 7 处），与 0.30.2 完全相同，
+  故直接求值上游 flake/overlay 时弃用告警**依然会出现**。补丁不再需要的真实理由是
+  **我们不再覆盖上游代码**：旧补丁把该迁移施加给一个会被 overlay 求值的 fork，以消除
+  污染下游构建的告警；改为直接指向上游后，本模块只做声明式接线。
 - **nixpkgs 兼容**：上游已覆盖大部分 Python 测试跳过逻辑。
 
 ## ⚠️ 一次判定失误（值得记录）
