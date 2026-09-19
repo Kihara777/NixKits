@@ -10,6 +10,12 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # main
         with:
           extra-conf: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            # `api.github.com` 必须单独列出：Nix 的 access-tokens 按 host 精确
+            # 匹配，而浮动输入 `llama-cpp-ver` 的 URL 正是 api.github.com ——
+            # 只写 github.com 时该请求仍是**未认证**（60 次/小时），每次 push
+            # 触发 ~34 个 workflow 会立即耗尽额度并报 HTTP 403。
+            # （实测失败响应体："API rate limit exceeded for <ip>. (But here's
+            # the good news: Authenticated requests get a higher rate limit.)"）
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Check
         run: nix flake check --no-write-lock-file
