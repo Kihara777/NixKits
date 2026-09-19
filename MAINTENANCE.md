@@ -3,6 +3,18 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-19T14:05:38+09:00
+
+**摘要**：CI 批量失败根因定位并修复 + 子仓补安全政策。**① CI 403 限流（`d224b18`）**：维护者收到批量 CI 失败邮件，排查后**根因是浮动输入 `llama-cpp-ver` 的请求一直是未认证的**。该输入指向 `https://api.github.com/...`，而 Nix 的 `access-tokens` **按 host 精确匹配**——`build-package.yml` 早已写成 `github.com=… api.github.com=…` 双 host，但 **`check.yml` 只写了 `github.com`**，于是该请求以未认证身份发出（额度 **60 次/小时**，认证后 **5000**）。**为何必然触发**：每次 push 触发 **~34 个 workflow**，每个都要解析该输入 → 一轮 push 即耗尽额度。失败响应体直接给出答案：`API rate limit exceeded for 52.165.58.41. (But here's the good news: Authenticated requests get a higher rate limit.)`。**修复**：`check.yml` 补上 `api.github.com=${{ secrets.GITHUB_TOKEN }}` 并加注释说明该易错点；已核实 31 个 `build-*.yml` 全部经 `build-package.yml`（本就正确），故 check.yml 是唯一缺口。**验证**：提交 `d224b18` 触发 **33 个 workflow 全部 success**，零 403。**不违反 AGENTS.md**：约束是 `llama-cpp-ver` **不可锁定**（须动态追踪上游最新发布），本改动只影响该请求的**认证方式**，输入仍浮动、不写入 `flake.lock`。**失败统计**（最近 100 次 run 分类）：403 限流 **24 次**、来自**未合并的 Dependabot 分支** `86843b4` 的 hash mismatch 4 次（正是 AGENTS.md「Dependabot 不知 `npmDepsHash` 必然失败」的实证，该分支不在 main 上、PR #7 已关闭）、Cachix 收尾阶段 1 次（构建本身已成功）；时间上 09-15/16 为高峰（28 + 49 次），与批量邮件吻合。**② 子仓安全政策（子仓提交 `2cce37b`，主仓 `39c9f10` 同步）**：子仓 `dsh-api-balance` 此前**没有 `SECURITY.md`**——正是本仓技能「外链审计」记录过的死链。已补四语 `SECURITY.md`，内容为对扫描器自动生成的 PR #4 / #5 两项主张的复核结论：**「缺少速率限制」与「缺少请求体体积上限」均判误报**。判断依据完整记录在案：报告描述与 diff 不符（声称 4 个端点，diff 只改 `/query`）；其 `x-forwarded-for` 限流键客户端可伪造、且**本机同源 RPC 不带该头**，会让全部本机请求落入同一 `"unknown"` 桶而**正常用户先被自己挡住**；`/token` 已有 **6 小时**服务端节流、语音播报有 **30 分钟**限流；**本插件无高频轮询**（唯一的 30 秒 `setInterval` 执行 `isPeakPricing()` 纯本地时间判断、**不发网络请求**），按人类操作频率估计最活跃约**每分钟 5~10 次**，扫描器建议的 30 次/分钟已是其 3~6 倍；真正的边界在 **DSH 宿主的认证 + Host authority**。**结论：不为此改动代码**——若将来需要，应按**认证主体**而非 IP 限流（IP 可伪造）、阈值远高于人类操作（如 60~120 次/分钟），定位为「防失控脚本」而非「防攻击」。主仓四语 `SECURITY.md` 的「该子项目**尚未**自建安全政策」一行随之过时，已同步更正为「已自建」并附子仓文档直达链接
+
+| 提交 | 说明 |
+|------|------|
+| `d224b18` | fix(ci): check.yml 的 access-tokens 漏了 api.github.com（403 限流根因） |
+| `2cce37b` | （子仓 dsh-api-balance）docs(security): 新增四语 SECURITY.md |
+| `39c9f10` | docs(security): 子仓已自建安全政策 —— 更新「尚未自建」的过时声明（四语） |
+
+> **说明**：`d224b18` 改动 `.github/workflows/check.yml`；`39c9f10` 为四语文档；子仓提交独立记录于其自身仓库。CI 修复后全绿。
+
 ## 2026-09-19T07:51:05+09:00
 
 **摘要**：技能类文档核对（已完成 4 篇：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn），修 3 处。**① nix-flake-update-check：步骤数错误（四语）**。文档称「第 1~**10** 步主流程」，但通用技能 `SKILL.md` 实测只有**第 1~9 步**；「流程复盘与规范校验」及「测试分支教训须搬回 main」实际定义在**适配层技能** `nixkits-check-updates`（其「第 10 步（收尾）」，第 258 行起）。原文把两技能的步骤混为一体，会让读者在通用技能里找不到第 10 步。已改为「本技能自身止于第 9 步；收尾第 10 步由适配层补」。**② write-project-docs：配套文件 `templates.md` 未被技能自身声明（四语 + SKILL.md）**。`templates.md`（209 行完整模板集）确实存在且 `AGENTS.md` 第 88 行在引用它，但 `SKILL.md` 全文**未出现该文件名**、也无「配套文件」章节（对照 `nix-flake-update-check/SKILL.md` 有明确配套文件表），四语文档更把技能等同于单个文件。后果是执行时无从得知模板集存在——而它正是「首次搭建某类文档」最该先读的。已在 `SKILL.md` 开头新增配套文件表（格式与既有技能一致），四语文档补「路径=目录形式」与「配套文件」行。**③ translate-pseudocn：词典条目数与配套文件（四语）**。文档称「内置 ~**13** 条映射词典」，实测 `dictionary.md` 有 **75** 条；查历史可见该词典经多轮扩充（`4fbf387`「expand dictionary 7→46 entries」），13 停留在更早版本。另 `SKILL.md` 有三处引用 `dictionary.md`（查表翻译、片假名映射、残留假名回填），四语文档却只写单个 `SKILL.md` 路径、正文亦未提该文件。已补齐配套文件行并把条目数改为实测 75。**对照确认**：同批 `news-three-elements` 文档**已正确**声明 4 个配套文件（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）且 SKILL.md 有对应引用，故该缺陷非普遍性问题；`nixkits-check-updates` 文档经全项核对无误（子仓坐标 `fetchFromGitHub` 固定 rev / 非 flake input / 不发布 npm 均属实，三处特有陷阱 —— godot-ai 需**两处都链** overlay、codewhale 两变体、dsh-alpha vendored lock 的 `--legacy-peer-deps` 禁忌 —— 与源码逐一相符，第 10 步六个子步与技能原文一致）
