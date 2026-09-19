@@ -3,6 +3,16 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-19T14:13:43+09:00
+
+**摘要**：文档验证收官 —— 核查「未列入文档的内容」，补 1 处结构性缺口，**全部文档验证任务完成**。**核查方法**：逐类清点仓库全部 git 跟踪文件（顶层条目 / `modules/` 9 / `overlays/` 8 / `patches/` 2 / `packages/` 13 包及变体 / `develop/` 10 / `skills/` 10 / `.github/` workflows），逐一比对 README、`AGENTS.md` 与 `docs/zh/` 的引用。**结果**：绝大多数内容已有文档覆盖，仅发现**一处结构性缺口** —— 仓库有 **7 项 `nix flake check`** 作为自检契约（任一项失败即阻断提交），但**没有任何地方集中说明**：信息只散落在 `flake.nix` 的注释里，`AGENTS.md` 仅顺带提到其中 2 项（`check-preset-derivation.py`、`check-doc-versions.py`），其余 4 个脚本（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）与第 7 项 `news-mode-tests`（**node 脚本，非 python**）**完全未被文档提及**。**已补**：`AGENTS.md` 的 `## CI` 章节新增 ① **7 项自检清单表**（检查名 / 脚本路径 / 校验内容），含「各脚本可单独本地运行以快速定位」与「**不要在文档中硬编码数量**——`check-doc-versions` 只校验版本号、不校验此类计数」两条提示（后者本会话已反复验证：词典条目数、测试数一类计数极易过时）；② **`access-tokens` 的 host 匹配陷阱**，即本轮 CI 批量失败的根因（`check.yml` 漏了 `api.github.com` → 浮动输入 `llama-cpp-ver` 一直未认证 → 60 次/小时额度被每轮 push 的 ~34 个 workflow 耗尽），写入以便后续改 workflow 者不再重犯。**核实**：表中 7 条路径全部实存、「可单独本地运行」经实测确认、`nix flake check` 全通过。**放置依据**：这些属**内部工程契约**（贡献者与代理需知道「改什么会触发哪项检查」），而非用户面向内容，故置于 `AGENTS.md` 而非 README 用户章节
+
+| 提交 | 说明 |
+|------|------|
+| `7766b88` | docs(agents): 补全 nix flake check 的 7 项自检清单与 CI 的 access-tokens 陷阱 |
+
+> **说明**：改动 `AGENTS.md`（该文件本身即代理约定文件，非用户文档）。至此**本会话的文档验证任务全部完成**：主文档 + 软件 9 + 插件 2 + 模式 3 + 开发 2 + 补丁 8 + 废弃 1 + 技能 10 + 未列入文档内容核查 —— 累计 36 个文件族、修 20 处，含 2 处源码缺陷与 3 处本会话早前引入的回归。
+
 ## 2026-09-19T14:05:38+09:00
 
 **摘要**：CI 批量失败根因定位并修复 + 子仓补安全政策。**① CI 403 限流（`d224b18`）**：维护者收到批量 CI 失败邮件，排查后**根因是浮动输入 `llama-cpp-ver` 的请求一直是未认证的**。该输入指向 `https://api.github.com/...`，而 Nix 的 `access-tokens` **按 host 精确匹配**——`build-package.yml` 早已写成 `github.com=… api.github.com=…` 双 host，但 **`check.yml` 只写了 `github.com`**，于是该请求以未认证身份发出（额度 **60 次/小时**，认证后 **5000**）。**为何必然触发**：每次 push 触发 **~34 个 workflow**，每个都要解析该输入 → 一轮 push 即耗尽额度。失败响应体直接给出答案：`API rate limit exceeded for 52.165.58.41. (But here's the good news: Authenticated requests get a higher rate limit.)`。**修复**：`check.yml` 补上 `api.github.com=${{ secrets.GITHUB_TOKEN }}` 并加注释说明该易错点；已核实 31 个 `build-*.yml` 全部经 `build-package.yml`（本就正确），故 check.yml 是唯一缺口。**验证**：提交 `d224b18` 触发 **33 个 workflow 全部 success**，零 403。**不违反 AGENTS.md**：约束是 `llama-cpp-ver` **不可锁定**（须动态追踪上游最新发布），本改动只影响该请求的**认证方式**，输入仍浮动、不写入 `flake.lock`。**失败统计**（最近 100 次 run 分类）：403 限流 **24 次**、来自**未合并的 Dependabot 分支** `86843b4` 的 hash mismatch 4 次（正是 AGENTS.md「Dependabot 不知 `npmDepsHash` 必然失败」的实证，该分支不在 main 上、PR #7 已关闭）、Cachix 收尾阶段 1 次（构建本身已成功）；时间上 09-15/16 为高峰（28 + 49 次），与批量邮件吻合。**② 子仓安全政策（子仓提交 `2cce37b`，主仓 `39c9f10` 同步）**：子仓 `dsh-api-balance` 此前**没有 `SECURITY.md`**——正是本仓技能「外链审计」记录过的死链。已补四语 `SECURITY.md`，内容为对扫描器自动生成的 PR #4 / #5 两项主张的复核结论：**「缺少速率限制」与「缺少请求体体积上限」均判误报**。判断依据完整记录在案：报告描述与 diff 不符（声称 4 个端点，diff 只改 `/query`）；其 `x-forwarded-for` 限流键客户端可伪造、且**本机同源 RPC 不带该头**，会让全部本机请求落入同一 `"unknown"` 桶而**正常用户先被自己挡住**；`/token` 已有 **6 小时**服务端节流、语音播报有 **30 分钟**限流；**本插件无高频轮询**（唯一的 30 秒 `setInterval` 执行 `isPeakPricing()` 纯本地时间判断、**不发网络请求**），按人类操作频率估计最活跃约**每分钟 5~10 次**，扫描器建议的 30 次/分钟已是其 3~6 倍；真正的边界在 **DSH 宿主的认证 + Host authority**。**结论：不为此改动代码**——若将来需要，应按**认证主体**而非 IP 限流（IP 可伪造）、阈值远高于人类操作（如 60~120 次/分钟），定位为「防失控脚本」而非「防攻击」。主仓四语 `SECURITY.md` 的「该子项目**尚未**自建安全政策」一行随之过时，已同步更正为「已自建」并附子仓文档直达链接
