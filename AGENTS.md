@@ -176,6 +176,33 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 ## CI
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
+
+> **`check.yml` 的 `access-tokens` 必须同时列出 `github.com` 与 `api.github.com`**：
+> Nix 的 `access-tokens` **按 host 精确匹配**，而浮动输入 `llama-cpp-ver` 的 URL 是
+> `api.github.com`。只写 `github.com` 时该请求仍是**未认证**（60 次/小时，认证后
+> 5000），而每次 push 触发 ~34 个 workflow、每个都要解析它 → 一轮 push 即耗尽额度，
+> 报 `HTTP error 403: API rate limit exceeded`。`build-package.yml` 已含双 host，
+> 修改 workflow 时务必保持一致。
+
+### `nix flake check` 的 7 项自检
+
+仓库的**自检契约**——任一项失败即阻断提交。6 项由 `develop/check-*.py` 实现，
+`news-mode-tests` 为 node 脚本：
+
+| 检查 | 脚本 | 校验内容 |
+|------|------|---------|
+| `preset-derivation` | `develop/check-preset-derivation.py` | 维护模式**完整派生**自 NixOS模式（末尾恰好追加固定块，`MAINTENANCE_DELTA` 常量） |
+| `preset-bundle` | `develop/check-preset-bundle.py` | 包内技能快照与仓库 `skills/` 树**逐字节一致** |
+| `workflow-coverage` | `develop/check-workflows.py` | 每个包都有 `build-<包>-<架构>.yml`（例外须在脚本内登记） |
+| `doc-links` | `develop/check-doc-links.py` | 文档相对链接可达 + 语言切换器四语齐全 |
+| `doc-versions` | `develop/check-doc-versions.py` | `docs/<lang>/<pkg>.md` 的版本行与包定义一致（含多通道表；例外在 `EXEMPT` 登记） |
+| `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名 |
+| `news-mode-tests` | `packages/dsh-preset-news-three-elements/tests/mode.test.mjs` | 新闻三要素模式插件的**行为测试**（node，非 python） |
+
+> 各脚本可**单独本地运行**（`python3 develop/check-doc-links.py`），便于快速定位而不必
+> 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——
+> 不要在文档中硬编码数量（`check-doc-versions` 只校验版本号，不校验此类计数）。
+
 构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`，每小时刷新）。
 
 ## 二进制缓存
