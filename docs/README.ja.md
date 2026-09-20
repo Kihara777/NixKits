@@ -29,7 +29,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.52.0 · beta 0.53.0-beta.20260917 · alpha 0.52.0-alpha.20260714 | [docs/ja/ruyi.md](ja/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.52.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
 
 ## プラグイン
