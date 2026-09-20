@@ -17,7 +17,7 @@
 
 - 从 `flake.nix` **动态发现**外部包，排除自建包 / 动态版本 / 跟随 nixpkgs / 补丁内版本
 - 按**包型**（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）分流的 hash 更新流程
-- **GitHub Actions 更新检查**：自行实现（`gh api` 查 tag → 取 commit SHA → 回写并同步注释版本号），覆盖「action 固定 SHA 后收不到更新通知」这处盲点；**不依赖 Dependabot 等外部自动化**
+- **GitHub Actions 更新检查**：自行实现（`gh api` 查 tag → 取 commit SHA → 回写并同步注释版本号），覆盖「action 固定 SHA 后收不到更新通知」这处盲点；**不依赖外部自动化**，任何有读权限的人都可跑（维护者例行检查、贡献者提交 CI 相关 PR 前核对、评估接手成本者皆适用）。命令只读，**发现 ≠ 必须升级**——无写权限或与手头任务无关时，指出即可，升级走 PR
 - **文档外部链接失效审计**：抽取全部（含多语言）外部链接逐个探测；`404` 用 `gh api` 复核后才定案（`curl` 的 404 可能是权限/限流），`403` 常为反爬不算死链；修正时**同步改显示文本**且四语一起改，vendored 第三方内容不改
 - **文档须重写而非机械替换的触发判据**：依赖由范围变精确锁、新增启动/构建期硬校验、依赖项增删、构建方式变化、平台要求收窄——命中任一条就要人读文档；只规定「何时重写」，明确声明不规定「怎么写」
 - hash 计算陷阱：SRI 格式、`fetchFromGitHub` 与 archive tarball hash 不一致、`lib.fakeHash`、npm 两次构建

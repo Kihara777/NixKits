@@ -27,7 +27,7 @@ NixKits 特有环节。
 | 不可锁定输入 | `llama-cpp-ver`（浮动追踪 llama.cpp 最新版），故 **`flake.lock` 不提交** |
 | 额外同步 | 升级 `dsh` 时须同步内置插件清单（见下） |
 | 子项目 | `dsh-api-balance` 薄封装引用同账户子仓 `Kihara777/dsh-api-balance`（见下） |
-| 固定 SHA 的 action | `actions/checkout` / `DeterminateSystems/nix-installer-action` / `cachix/cachix-action`——本仓**不用 Dependabot**，靠通用技能检查（见下） |
+| 固定 SHA 的 action | `actions/checkout` / `DeterminateSystems/nix-installer-action` / `cachix/cachix-action`——本仓**不启用任何外部依赖自动化**，全靠通用技能检查（见下） |
 | 泛化要求 | 修复后评估可泛化内容，更新回 `nix-flake-update-check` |
 
 ## 第 2 步补充：固定 SHA 的 Actions（本仓必查项）
@@ -37,8 +37,10 @@ NixKits 特有环节。
 更新」有完整流程，此处只记 NixKits 特有的两点：
 
 1. **这是本仓唯一的 action 更新途径**：AGENTS.md「安全边界：不引入外部自动化」
-   明确拒绝 Dependabot，固定 SHA 后又天然收不到通知——**漏掉这一步，这类更新
-   就彻底无人过问**。
+   明确拒绝任何外部依赖自动化（Dependabot 等），固定 SHA 后又天然收不到通知
+   ——**漏掉这一步，这类更新就彻底无人过问**。这条对本仓的**任何经手人都成立**：
+   维护者的例行检查、贡献者提交 CI 相关 PR 前的核对、以及评估接手成本的人，
+   都只能靠主动跑这一条命令。
 2. **改之前先看引用分布**：`build-package.yml` 是**可复用 workflow**，被 31 个
    `build-*.yml` 引用。若某 action 只在它里面出现，**只需改那一处**。
 

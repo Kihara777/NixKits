@@ -17,7 +17,7 @@
 
 - `flake.nix` 自 外部包 **動的検出**、自己 hosting / 動的版 / nixpkgs 追従 / 修正内蔵 除外
 - **builder 別** hash 更新 flow（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
-- **GitHub Actions 更新確認**：自行実装（`gh api` tag 解決 → commit SHA 取得 → 書戻 與 comment 版数 同期）。action SHA 固定 後 更新通知 届 無 盲点 補；**Dependabot 等 外部自動化 依存 不**
+- **GitHub Actions 更新確認**：自行実装（`gh api` tag 解決 → commit SHA 取得 → 書戻 與 comment 版数 同期）。action SHA 固定 後 更新通知 届 無 盲点 補；**外部自動化 依存 不**、読取権限 有 者 何 也 実行 可（維護者 定例検査、CI 関連 PR 前 貢献者 確認、引継 cost 評価）。命令 読取専用、**発見 ≠ 昇格義務** —— 書込権限 無 場合 又 目下 作業 無関係 場合 指摘 止、昇格 PR 行
 - **文書 外部 link 失効監査**：全（多言語 含）外部 link 抽出 個別 探査。`404` `gh api` 再確認 後 初 確定（`curl` 404 権限 又 制限 可能 性 有）。`403` 多 場合 scraping 対策 且 dead link 非。修正 時 **表示 text 也 同期** 全言語 一度 修正。vendored 第三者 content 書換 不
 - **機械的置換 非 文書 書直 触发判据**：依存 範囲 厳密固定 化、起動時／build 時 硬 検証 追加、依存 増減、build 方式 変更、対応 platform 狭——一 該当 則 人 文書 読 必要。「何時 書直」規定 且「如何 書」規定 不 明記
 - hash 罠：SRI 形式、`fetchFromGitHub` 與 archive tarball 不一致、`lib.fakeHash`、npm 2 回構築
