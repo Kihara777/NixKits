@@ -27,7 +27,30 @@ NixKits 特有环节。
 | 不可锁定输入 | `llama-cpp-ver`（浮动追踪 llama.cpp 最新版），故 **`flake.lock` 不提交** |
 | 额外同步 | 升级 `dsh` 时须同步内置插件清单（见下） |
 | 子项目 | `dsh-api-balance` 薄封装引用同账户子仓 `Kihara777/dsh-api-balance`（见下） |
+| 固定 SHA 的 action | `actions/checkout` / `DeterminateSystems/nix-installer-action` / `cachix/cachix-action`——本仓**不用 Dependabot**，靠通用技能检查（见下） |
 | 泛化要求 | 修复后评估可泛化内容，更新回 `nix-flake-update-check` |
+
+## 第 2 步补充：固定 SHA 的 Actions（本仓必查项）
+
+本仓的软件包检查之外，**每轮还要查 `.github/workflows/` 里固定 SHA 的
+第三方 action**——通用技能第 2 步末尾与 `traps.md`「检查 GitHub Actions 的
+更新」有完整流程，此处只记 NixKits 特有的两点：
+
+1. **这是本仓唯一的 action 更新途径**：AGENTS.md「安全边界：不引入外部自动化」
+   明确拒绝 Dependabot，固定 SHA 后又天然收不到通知——**漏掉这一步，这类更新
+   就彻底无人过问**。
+2. **改之前先看引用分布**：`build-package.yml` 是**可复用 workflow**，被 31 个
+   `build-*.yml` 引用。若某 action 只在它里面出现，**只需改那一处**。
+
+```bash
+# 本仓当前固定的 action 及其引用处（改前先看这个）
+grep -rhoE 'uses: [^ ]+@[0-9a-f]{40}' .github/workflows/*.yml | sort -u
+grep -rc '<owner>/<repo>@' .github/workflows/*.yml | grep -v ':0'
+```
+
+> **本仓实测（2026-09-20 首次执行该检查）**：3 个 action 共 6 处引用，
+> `actions/checkout` 分布在 `build-package.yml` / `check.yml` / `ci-summary.yml`
+> **三个独立文件**（不是单一可复用 workflow），故改它是 3 处而非 1 处。
 
 ## 第 5 步补充：四语文档同步
 
@@ -103,6 +126,23 @@ nixpkgs 漂移到 `f13ff45` 后 `diffusers-0.38.0` 构建失败。根因是
 曾因用 `nix-prefetch-url` 预取 archive tarball 的 hash 作为
 `fetchFromGitHub` 的 hash，导致 riscv64 CI **连续失败**——两者 hash 不一致。
 正确姿势见通用技能「交叉编译注意」节。
+
+### 匿名 curl 到 api.github.com 静默返回空（2026-09-20 实测）
+
+本机用**匿名 `curl`** 请求 `api.github.com` **返回空响应**（不报错），而管道
+下游的 `grep` 同样静默返回空——结果是**每个包都被判定为"已是最新"**，整轮
+检查给出虚假的"全部正常"。认证的 `gh api` 正常（额度 5000/小时）。
+
+**纪律**：本仓的版本检查一律走 `gh api`；**空结果必须当错误处理**，不能
+当成"最新"。首次运行先用已知仓库自检取数链路：
+
+```bash
+gh api repos/Kihara777/NixKits --jq .full_name || echo "取数链路异常 —— 停止检查"
+```
+
+**为何危险**：这是**不报错、只撒谎**的失败形态——比构建失败更难发现，因为
+报告看起来完全正常。已泛化为通用技能第 3 步的「用 `gh api` 而不是裸 `curl`」
+与第 7 步八问自检第 7 问。
 
 ### Rust 包 Cargo.lock 同步
 

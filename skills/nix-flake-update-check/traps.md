@@ -3,8 +3,9 @@
 本文件是 **`nix-flake-update-check` 技能**的参考部分：常见陷阱、以及不属于
 主流程编号步骤的专项检查。**主流程在 `SKILL.md`。**
 
-**第 7 步的「提交前六问自检」直接指向本文件**——六问中每一问都对应这里的
-一个章节，命中后再深入阅读，不必通读全文。
+**第 7 步的「提交前八问自检」直接指向本文件**——八问中每一问都对应这里的
+一个章节，命中后再深入阅读，不必通读全文。其中的 **Actions 更新**一节由
+**第 2 步末尾**主动指向（它不属于"命中才读"，而是每轮都应确认的一类更新）。
 
 ## 目录
 
@@ -13,7 +14,7 @@
 | [常见陷阱（nixpkgs 漂移）](#常见陷阱nixpkgs-漂移) | 构建失败或系统切换失败时 |
 | [检查补丁内版本](#检查补丁内版本) | 包依赖 `.patch` 文件时 |
 | [审计文档中的外部链接](#审计文档中的外部链接) | 收尾审计时 |
-| [检查 GitHub Actions 的更新](#检查-github-actions-的更新) | 定期维护、或 action 固定了 SHA 时 |
+| [检查 GitHub Actions 的更新](#检查-github-actions-的更新) | **每轮都要**（见 SKILL.md 第 2 步末尾） |
 
 ---
 
@@ -40,12 +41,16 @@ done
 2. 检查上游是否有新版本：
 
 ```bash
-# GitHub Release（如适用）
-curl -s "https://api.github.com/repos/<owner>/<repo>/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+'
+# GitHub Release（如适用）—— 用 gh api，空结果须报错而非当成"最新"
+gh api "repos/<owner>/<repo>/releases/latest" --jq .tag_name
 
 # PyPI / wheel 目录（如适用）
 curl -s "<wheel-index-url>" | grep -oP '<package>-[0-9]+\.[0-9]+\.[0-9]+' | sort -Vu | tail -1
 ```
+
+> ⚠️ **取到空值时必须报错**，不要继续往下走。见 `SKILL.md` 第 3 步的
+> 「用 `gh api` 而不是裸 `curl`」——**空结果被当成"已是最新"是本流程最危险的
+> 失败形态**：不报错、只撒谎。
 
 3. 下载新资源获取 SRI hash：
 
@@ -121,6 +126,15 @@ grep -rhoE 'uses: [^ ]+@[0-9a-f]{40}' .github/workflows/*.yml |
 
 输出形如 `actions/checkout@3d3c42e5…`。**同时记下注释里的版本号**
 （如 `# v7.0.1`），流程末尾需要同步更新它。
+
+> ⚠️ **先看清"谁在引用"**：若某 action 出现在**可复用的 workflow**
+> （如 `build-package.yml`）里、被其他几十个 workflow `uses:` 引用，
+> 那么**只需改那一处**——不要按引用次数重复修改，否则会产生大量重复 diff。
+
+```bash
+# 每个 action 的实际引用处数量（1 处 = 只改可复用 workflow，多出的是调用方）
+grep -rc '<owner>/<repo>@' .github/workflows/*.yml | grep -v ':0'
+```
 
 ### 第 2 步：查最新版本
 

@@ -18,7 +18,7 @@ description: 检查任意 nix flake 仓库中软件包的上游版本更新并�
 |---|---|---|
 | **`SKILL.md`**（本文） | 交互式澄清 + 第 1~10 步主流程 + 适配层契约 | 始终 |
 | [`builders.md`](builders.md) | 按 builder 的 hash 更新流程、`flake.lock` 处置 | 第 4 步 |
-| [`traps.md`](traps.md) | nixpkgs 漂移陷阱、fail-closed 校验、外链审计、Actions 更新、补丁内版本 | 第 7 步自检命中时 |
+| [`traps.md`](traps.md) | nixpkgs 漂移陷阱、fail-closed 校验、外链审计、Actions 更新、补丁内版本 | 第 2 步末尾（Actions）与第 7 步自检命中时 |
 
 
 
@@ -93,9 +93,60 @@ grep -oP '\./[a-zA-Z0-9_/-]+\.nix' flake.nix | sort -u > /tmp/all_pkgs.txt
 while read -r f; do
   grep -q 'src\s*=\s*\./\.\.\|src\s*=\s*\.\/' "$f" 2>/dev/null && echo "SKIP self-hosted: $f"
 done < /tmp/all_pkgs.txt
+
+# ⚠️ 提取版本号时必须同时匹配 `=` 与 `?`（参数默认值），否则漏包
+grep -oP '^\s*version\s*[?=]\s*"\K[^"]+' "$f"
 ```
 
+### ⚠️ 用 `version\s*=` 提版本会**静默漏掉**参数化默认值的包
+
+参数化包把版本写成**函数参数默认值**，而不是普通赋值：
+
+```nix
+# packages/dsh.nix —— 主定义，通道包装靠传参覆盖它
+{ version ? "0.1.5-rc.2", hash ? "sha256-...", ... }:
+```
+
+`version\s*=` **匹配不到** `version ? "..."`：该包会被当成"没有版本"而**从检查
+范围里消失**——不报错、不出现在报告里，与"已是最新"无法区分。
+
+```bash
+# 判定：同时匹配两种形态，并区分「默认值」与「覆盖值」
+grep -nP '^\s*version\s*[?=]\s*"' $(grep -oP '\./[a-zA-Z0-9_/-]+\.nix' flake.nix | sort -u)
+```
+
+| 形态 | 含义 | 检查对象 |
+|---|---|---|
+| `version ? "x"` | **参数默认值** —— 主定义，stable 通道的实际版本 | **主定义的默认值** |
+| `version = "x"` | **覆盖值** —— 厚封装调用主定义时传入（如 `dsh-alpha`、`ruyi-alpha`） | 该通道自身 |
+
+**覆盖值不是重复项**：主定义 + 各通道覆盖**都要逐个检查**，因为通道跟的是不同
+上游线（stable / beta / alpha 各自的发布节奏不同）。
+
+> 判据：**主定义里带 `?` 的那一行，就是 stable 通道的真版本**。文件顶部常有一句
+> `# version/hash overridden for other channels` 的注释——它正是识别此类包的标志。
+
 `flake.nix` 中 packages 段的其余包均纳入检查。
+
+### ⚠️ 软件包之外还有一类**必须检查**的更新：固定 SHA 的 GitHub Actions
+
+**只扫 `flake.nix` 的 `./*.nix` 会漏掉整整一类可更新项**——CI 工作流里固定到
+提交 SHA 的第三方 action。它们同样有上游版本、同样会过期，却**不在包定义的
+发现范围内**：发现脚本读的是 `flake.nix`，而 action 写在 `.github/workflows/`。
+
+```bash
+# 固定 SHA 的 action 有几处？为 0 才可跳过本节
+grep -rhoE 'uses: [^ ]+@[0-9a-f]{40}' .github/workflows/*.yml | sort -u
+```
+
+**不要凭"这仓库没有"跳过**——先跑上面这条命令看实际输出。完整检查流程
+（查最新 tag → 取 tag 指向的 commit → 回写 SHA 与注释版本号）见配套文件
+[`traps.md`](traps.md) 的「[检查 GitHub Actions 的更新](traps.md#检查-github-actions-的更新)」。
+
+> **为何强调这一条**：把 action 固定到 SHA 之后**就收不到更新通知了**
+> （这是固定 SHA 的固有代价）。若同时仓库还有"不引入外部自动化"的边界
+> （如不用 Dependabot），那么**本技能就是唯一会发现它过期的途径**——
+> 漏掉本节，这类更新就彻底无人过问。
 
 ## 排除的软件包
 
@@ -115,14 +166,44 @@ done < /tmp/all_pkgs.txt
 ```bash
 check() {
   local pkg="$1" current="$2" repo="$3"
-  latest=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+')
-  if [ "$current" != "$latest" ]; then
-    echo "UPDATE: $pkg  $current → $latest"
-  else
+  latest=$(gh api "repos/$repo/releases/latest" --jq .tag_name 2>/dev/null)
+  # 回退到 tag；仍取不到就显式报错，不要当成"最新"
+  [ -z "$latest" ] && latest=$(gh api "repos/$repo/tags" --jq '.[0].name' 2>/dev/null)
+  if [ -z "$latest" ]; then
+    echo "ERROR: $pkg  无法取得上游版本（网络/限流/仓库路径）—— 必须人工确认"
+  elif [ "${current#v}" = "${latest#v}" ]; then
     echo "OK: $pkg  $current"
+  else
+    echo "UPDATE: $pkg  $current → $latest"
   fi
 }
 ```
+
+### ⚠️ 用 `gh api` 而不是裸 `curl`
+
+**匿名 `curl` 到 `api.github.com` 可能返回空响应**，而管道下游的 `grep` 同样
+静默返回空——于是**每个包都被判成"已是最新"**，整轮检查给出虚假的"全部正常"。
+这是本流程最危险的失败形态：**不报错、只撒谎**。
+
+| 做法 | 结果 |
+|---|---|
+| ✅ `gh api repos/<owner>/<repo>/...` | 走已认证身份（5000 次/小时），失败时**非零退出** |
+| ❌ `curl -s https://api.github.com/...` | 未认证（60 次/小时，极易耗尽）；耗尽时**静默返回空** |
+
+**两条硬性纪律**：
+
+1. **空结果必须视为错误**，绝不能当作"已是最新"——上面 `check()` 的
+   `ERROR:` 分支就是为此存在。**整轮没有任何 `UPDATE:` 时，先怀疑取数失败**，
+   用一两个已知有更新的包回归验证取数链路是否真的通。
+2. **首次运行先自检取数链路**：
+
+```bash
+# 这条必须返回真实仓库信息；返回空或报错就说明取数链路不通，先修它
+gh api repos/<owner>/<known-repo> --jq .full_name || echo "取数链路异常 —— 停止检查"
+```
+
+> 非 GitHub 来源（PyPI、crates.io、自托管 forge）同理：**用能明确报错的取数方式，
+> 并把"空/异常响应"当作失败处理**，不要用 `curl -s | grep` 这种失败即静默的组合。
 
 上游不一定用 GitHub Release。按实际来源选择：GitHub tag（`/tags`）、PyPI
 （`/pypi/<pkg>/json`）、crates.io（`/api/v1/crates/<pkg>`）、上游 CHANGELOG 等。
@@ -209,9 +290,9 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 
 以表格呈现：包名、旧版本 → 新版本、构建状态、本地安装版本。
 
-### 提交前的六问自检
+### 提交前的八问自检
 
-**构建通过 ≠ 升级完成**。下面六条都是从「已通过构建、却仍然出错」的实际
+**构建通过 ≠ 升级完成**。下面八条都是从「已通过构建、却仍然出错」的实际
 事故中提炼的，逐条问过再提交——它们比通读全部陷阱章节更快命中要害：
 
 | # | 自问 | 若不查会怎样 |
@@ -222,12 +303,18 @@ which <binary> 2>/dev/null && <binary> --version 2>/dev/null
 | 4 | **真的运行过产物吗？** `nix build` 成功只说明能构建 | 上游 fail-closed 校验会在**运行时**拒绝启动（实测发生） |
 | 5 | **版本号之外的文档表述还成立吗？** 见「何时必须重写文档……」的触发判据 | 版本号升了、描述没跟着变语义 → 文档成为事实错误（实测发生） |
 | 6 | **`flake.lock` 该不该提交？** 按本文档「flake.lock 同步」的前置检测 | 该提交而未提交 → 复现不一致；不该提交而提交 → 锁死浮动输入（见该节） |
+| 7 | **取数链路真的通吗？** 本轮**没有任何 `UPDATE:`** 时，先怀疑是取数失败而非"全都最新"（见第 3 步的 `gh api` 纪律） | 匿名 `curl` 静默返回空 → 报告虚假的"全部最新"，**漏掉全部真实更新**（实测发生） |
+| 8 | **`.github/workflows/` 里固定 SHA 的 action 查过了吗？** 见第 2 步末节与 `traps.md` | 固定 SHA 后收不到通知，**这类更新彻底无人过问**（本轮实测：3 个 action 共 6 处从未被检查） |
 
-> **这六问的来源**：全部是 2026-09-17 一天之内在同一仓库实际踩到的坑，
+> **这八问的来源**：全部是 2026-09-17 ~ 09-20 在同一仓库实际踩到的坑，
 > 每一问都对应一次真实返工或缺陷。**不是假想的检查表。**
 >
 > 第 1、3、5 问尤其值得单独跑一条命令确认——它们的共同特征是
 > **构建与 CI 都不会失败**，只有主动核对才看得见。
+>
+> 第 7、8 问共享同一个特征：**它们的失败是"什么都没发现"**。前六问的疏漏
+> 会在构建或运行时报错，而后两问的疏漏**只会让报告看起来一片正常**——
+> 这也是它们最容易长期潜伏的原因。
 
 ## 第 8 步：记录变更
 
