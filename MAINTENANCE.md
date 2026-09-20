@@ -3,6 +3,14 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-20T17:28:32+09:00
+
+**摘要**：fix(skill): 修复 `nix-flake-update-check` 的三处缺陷 —— 均由本日更新检查的实际经历暴露，且**三者共同的失败形态都是「不报错、只漏掉」**。**① 固定 SHA 的 Actions 检查无法到达（最严重）**：`traps.md` 早已写好完整流程（列 action → 查 tag → 取 tag 的 commit → 回写 SHA 与注释），但 `SKILL.md` **没有任何一步指向它** —— 第 2 步只扫 `flake.nix` 引用的包定义，六问自检也无对应条目，于是这类检查从未被执行。**已补**：第 2 步末尾新增「软件包之外还有一类必须检查的更新」小节（含发现命令与「**先跑命令看实际输出，不要凭"这仓库没有"跳过**」的告诫）、自检扩为**八问**（第 8 问即 Actions）、`traps.md` 目录标注「**每轮都要**」。**② 版本发现启发式静默漏包**：第 2 步用 `version\s*=` 提版本，**匹配不到参数化主定义的 `version ? "0.1.5-rc.2"`**（`packages/dsh.nix`）—— 该包因此从检查范围里消失，且与「已是最新」无法区分。已改为 `version\s*[?=]`，并补表格说明 `?`＝主定义默认值（stable 真版本）与 `=`＝通道覆盖值**二者都要查**。**③ 裸 `curl` 到 `api.github.com` 静默返回空**：第 3 步示例用匿名 `curl`，耗尽 60 次/小时额度后**不报错、返回空**，下游 `grep` 同样静默 —— **每个包都被判成"已是最新"**，整轮给出虚假的「全部正常」。已统一改 `gh api`、显式加 `ERROR:` 分支、纳入自检第 7 问，并补「**空结果必须当错误**」纪律与链路自检命令。**泛化归属**：①②③ 均为**仓库无关**的通用缺陷，写入 `nix-flake-update-check`；`nixkits-check-updates` 适配层补本仓特有内容 —— 不用 Dependabot 故**本技能是 action 更新的唯一途径**、`build-package.yml` 是可复用 workflow（被 31 个 workflow 引用）、以及本机 `curl` 实测。**首次执行新流程的实测结果**：本仓 3 个 action（`actions/checkout` v7.0.1、`DeterminateSystems/nix-installer-action` main、`cachix/cachix-action` v17）共 6 处引用，**逐个比对 SHA 后确认全部为最新** —— 修复的价值不在"发现了更新"，而在**该检查从此会产生确定的结论，而不是被静默跳过**。**验证**：`nix flake check` 全通过（含 `preset-derivation` 漂移检查）
+
+| 提交 | 说明 |
+|------|------|
+| `34368c1` | fix(skill): 接入 Actions 检查、修正版本发现启发式、取数改用 gh api |
+
 ## 2026-09-20T17:05:51+09:00
 
 **摘要**：定期更新检查 —— opencode-telegram 0.25.3；ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm 包，按技能流程两次 `nix build` 分别取得 source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）与 npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`），构建通过。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄封装仅改 version + hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`），三通道共享 base 未动。**③ 实测数据刷新**：alpha 通道的 pytest 计数由 346 单元 / 57 集成升至 **462 单元（含 1 xfailed）/ 70 集成**（`nix log` 读取构建日志实测），已与 beta 通道同量级，四语文档同步更新。**④ 全量核查结论**：stable 通道的 12 个受检包中，仅上述 2 项落后于上游；`dsh`（0.1.5-rc.2，npm `latest` 一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917）均与上游对齐。**工具观察**：GitHub API 匿名请求（`curl` 直连 `api.github.com`）在本机返回空响应，认证的 `gh api` 正常（额度 5000/小时）——检查脚本应统一走 `gh api` 而非裸 `curl`。四语同步，`check-doc-versions` / `check-doc-links` / `check-maintenance-log` 三项自检通过

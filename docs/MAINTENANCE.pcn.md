@@ -3,6 +3,14 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-20T17:28:32+09:00
+
+**摘要**：fix(skill): `nix-flake-update-check` 之三欠陥修正 —— 何 本日更新検査 実体験 自露呈、**三者共通 失敗形態 何「錯誤 出 非、唯 取落」**。**① 固定 SHA 之 Actions 検査 到達不能（最深刻）**：`traps.md` 既 完全手順（action 列挙 → tag 照会 → tag 指 commit 取得 → SHA 與 注釈 書戻）記載済 但、**`SKILL.md` 何 段階 自 参照 無** —— 第 2 步 唯 `flake.nix` 参照 包定義 走査、六問自检 也 該当項目 無、故 此 検査 一度 也 実行 無。**対応**：第 2 步 末尾 新設「軟件包 以外 也 必 検査 更新 有」節（発見 命令 與「**先 命令 実行 実際 輸出 見。「此 倉庫 無」 決 付 飛 非**」戒 含）、自检 **八問** 拡張（第 8 問 即 Actions）、`traps.md` 目次 **毎回** 明記。**② 版本発見 启发式 静 包 落**：第 2 步 `version\s*=` 以 版本 抽出、故 **parameter 化 主定義 `version ? "0.1.5-rc.2"`**（`packages/dsh.nix`） 一致 不 —— 此 包 検査範囲 自 消、且 「最新」 與 区別 不能。`version\s*[?=]` 変更、`?`＝主定義 既定値（stable 真版本）與 `=`＝channel 上書値 **両者 検査 要** 旨 表 補足。**③ 生 `curl` `api.github.com` 静 空 返**：第 3 步 例 匿名 `curl` 使用、60 回/時 额度 使切 後 **錯誤 出 非 空 返**、下流 `grep` 同様 沈黙 —— **全 包 「最新」 判定**、偽 「全部正常」 輸出。`gh api` 統一、`ERROR:` 分岐 明示 追加、自检 第 7 問 組込、「**空 結果 錯誤 扱**」規律 與 鏈路自检 命令 補足。**泛化 帰属**：①②③ 何 也 **倉庫非依存** 汎用欠陥、`nix-flake-update-check` 記載。`nixkits-check-updates` 適配層 本倉庫固有 内容 補足 —— Dependabot 使 無 故 **本技能 action 更新 唯一 経路**、`build-package.yml` 再利用可能 workflow（31 workflow 自 参照）、本機 `curl` 実測。**新流程 初回実行 実測結果**：本倉庫 三 action（`actions/checkout` v7.0.1、`DeterminateSystems/nix-installer-action` main、`cachix/cachix-action` v17）計 6 箇所 **逐一 SHA 照合 結果 全 最新** 確認 —— 修正 価値 「更新 発見」 非、**此 検査 今後 確定的 結論 出、静 飛 非** 点 有。**検証**：`nix flake check` 全通過（`preset-derivation` drift 検査 含）
+
+| 提交 | 説明 |
+|------|------|
+| `34368c1` | fix(skill): 接入 Actions 检查、修正版本发现启发式、取数改用 gh api |
+
 ## 2026-09-20T17:05:51+09:00
 
 **摘要**：定例更新検査 —— opencode-telegram 0.25.3、ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm 包、技能手順通 `nix build` 二回実行、各 source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）與 npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`）取得、構築通過。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄包装 version 與 hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`）唯変更、三 channel 共有 base 未動。**③ 実測値刷新**：alpha channel pytest 件数 346 単体 / 57 統合 自 **462 単体（xfailed 1 件含）/ 70 統合** 至増加（`nix log` 構築記録読取 実測）、beta channel 與同程度、四言語文書 同期更新。**④ 全数調査結論**：stable channel 被検査 12 包 中、上流 遅延 上記 2 件 唯一。`dsh`（0.1.5-rc.2、npm `latest` 一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917） 何 上流 一致。**道具観察**：GitHub API 匿名請求（`curl` 直接 `api.github.com` 接続）本機 空応答 返、認証済 `gh api` 正常（额度 5000/時）——検査 script 生 `curl` 非 用、`gh api` 統一 使用 可。四言語同期、`check-doc-versions` / `check-doc-links` / `check-maintenance-log` 三項目 自检通過
