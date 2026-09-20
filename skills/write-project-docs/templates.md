@@ -6,21 +6,25 @@ NixKits 风格的完整文档模板集。正文参考 [`SKILL.md`](SKILL.md) 中
 
 ```
 <project>/
-├── README.md          # 主语言 README（中文）
-├── MAINTENANCE.md     # 维护记录（中文）
+├── README.md          # 基准语言 README
+├── MAINTENANCE.md     # 维护记录（基准语言）
 ├── docs/
 │   ├── README.en.md   # 英文 README
 │   ├── README.ja.md   # 日文 README
 │   ├── MAINTENANCE.en.md
 │   ├── MAINTENANCE.ja.md
-│   ├── zh/            # 中文文档
+│   ├── <base>/        # 基准语言文档（如 zh/、en/）
 │   │   ├── <module>.md
 │   │   └── skills/
 │   ├── en/            # 英文文档
 │   └── ja/            # 日文文档
 ```
 
-> **规则**：根目录仅保留中文（无语言后缀）`.md` 文件。所有本地化版本移入 `docs/`，文件名保持不变。扩展语言目录通过 `skills/translate-*/SKILL.md` frontmatter 自动发现。
+> **规则**：根目录保留**基准语言**（无语言后缀）的 `.md` 文件——基准语言由
+> 仓库自定（`zh` / `en` 等均可，**本技能不假定具体语言**）。所有本地化版本
+> 移入 `docs/`，文件名保持不变。扩展语言目录通过 `skills/translate-*/SKILL.md`
+> frontmatter 自动发现；**仓库未采用该约定时**（如已安装到助手目录、或压根
+> 没有该目录），改为读取仓库现有的语言清单。
 
 ## 模块文档模板
 

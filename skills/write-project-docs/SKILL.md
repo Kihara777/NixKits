@@ -101,7 +101,9 @@ submodule 都算），文档里必须能找到这条引用关系——否则维�
 
 ## 自动发现契约
 
-1. **扫描** — `skills/translate-*/` 下查找所有翻译技能
+1. **扫描** — 仓库根目录 `skills/translate-*/` 下查找所有翻译技能
+   （**仓库未采用该约定时**——如根本没有该目录、或技能已安装到助手目录而
+   当前 cwd 不是技能源仓库——改为读取仓库现有的语言清单文件或目录结构）
 2. **读取** — 解析 frontmatter 中的 `language_code`、`display_name`、`base_language`
 3. **注册** — 将发现的语言扩展纳入目录结构、语言切换器、列名映射等生成逻辑
 
@@ -145,7 +147,7 @@ submodule 都算），文档里必须能找到这条引用关系——否则维�
 | 软件 | `packages/*.nix` 中的 `callPackage` |
 | 模块 | `modules/*.nix` 中的 NixOS 模块定义 |
 | 覆盖层 | `overlays/*.nix` 中的 overlay 函数 |
-| 技能 | `skills/*/SKILL.md` 中的 frontmatter |
+| 技能（**仅当仓库发布 AI 代理技能时**） | `skills/*/SKILL.md` 中的 frontmatter |
 | 开发 | `devShells` 在 `flake.nix` 中 |
 
 ### 第 3 步：生成 README
@@ -196,17 +198,43 @@ sed -i "2s|$| ...|" docs/*/xxx.md
 
 ```bash
 # 验证所有语言目录下切换器完整性
-for d in docs/zh docs/en docs/ja docs/pcn; do
-  for f in $d/*.md; do
-    l=$(grep '^\[中文\]' "$f"); s=0
-    echo "$l"|grep -q '中文' && s=$((s+1))
-    echo "$l"|grep -q 'English' && s=$((s+1))
-    echo "$l"|grep -q '日本語' && s=$((s+1))
-    echo "$l"|grep -q '偽中国語' && s=$((s+1))
-    [ $s -lt 5 ] && echo "INCOMPLETE ($s/5): $f"
+# 语言集动态发现：skills/translate-*/ 的 display_name（勿写死 —— 这是本技能自己的反模式）
+EXTRA=$(for s in skills/translate-*/SKILL.md; do
+          [ -f "$s" ] && sed -n '/^display_name:/s/.*: *//p' "$s"
+        done)
+# 已知语言显示名（基准语言 + 固定三语 + 动态发现的扩展语言）
+NAMES="中文 English 日本語 $EXTRA"
+EXPECTED=$(printf '%s\n' $NAMES | grep -c .)
+
+# 切换器行的精确特征：行首即某个「语言显示名 + |」——用它锚定，避免命中代码/表格
+ANCHOR=$(printf '%s\n' $NAMES | paste -sd'|')
+for f in $(grep -rl --include='*.md' -E "^(\[?($ANCHOR)\]?) \|" docs MAINTENANCE.md 2>/dev/null); do
+  line=$(grep -m1 -E "^(\[?($ANCHOR)\]?) \|" "$f")
+  s=0
+  for name in $NAMES; do
+    # 宽松匹配：纯文本（基准语言自身）与 [名](链接) 都算
+    printf '%s' "$line" | grep -qF -- "$name" && s=$((s+1))
   done
+  [ "$s" -lt "$EXPECTED" ] && echo "INCOMPLETE ($s/$EXPECTED): $f"
 done
+echo "切换器检查完成"
 ```
+
+> ⚠️ **四个易错点**（前三个是实测踩到的）：
+>
+> 1. **`grep '^\[中文\]'` 匹配的不是字面量**：BRE 里 `[中文]` 是**字符类**
+>    （匹配单个「中」或「文」）。要字面量必须 `grep -F`。
+> 2. **别把基语言名写死**：基语言由仓库自定，硬写「中文」后在 `en` 为基准的
+>    仓库里永远匹配不到，检查会**静默通过**。
+> 3. **必须用"行首是已知语言名"锚定**，不能只找 ` | `：否则会命中 **shell
+>    管道**（`cat x | grep y`）与 **Markdown 表格行**，报出一堆假阳性；而
+>    `grep -m1` 取到的还会是**出错那一行**，让人误以为切换器坏了。
+> 4. **基语言自身在切换器里是纯文本**（如 `偽中国語`，无方括号），故匹配要
+>    宽松——只找 `[名]` 会把基准语言的文档判成缺条目。
+>
+> **更可靠的做法**：若仓库已有文档检查脚本（如本仓的
+> `develop/check-doc-links.py` 会同时校验链接可达性与切换器完整性），
+> **直接复用并将语言集改成动态发现**，比在文档里维护一份临时脚本更稳。
 
 ### 第 8.1 步：根目录与跨层级文件检查（⚠️ 三阶遗漏）
 
@@ -237,7 +265,7 @@ done
 README.md                          # 项目根
 MAINTENANCE.md                     # 项目根
 NOTICE.md                          # 项目根
-kits/README.md                     # 子目录根
+<子目录>/README.md                  # 子目录根（示例仓库用 kits/，按实际替换）
 docs/README.en.md                  # docs/ 根级（非 docs/en/ 内）
 docs/README.ja.md
 docs/MAINTENANCE.en.md
@@ -246,15 +274,19 @@ docs/NOTICE.en.md
 docs/NOTICE.ja.md
 ```
 
+> ⚠️ `<子目录>/README.md` 是**这类遗漏的典型代表**：任何"有自己 README 的
+> 子目录"都属此列（示例仓库是 `kits/`，你的仓库可能是 `lib/`、`src/` 等）。
+> 用 `find . -maxdepth 2 -name README.md` 按实际情况列出，**不要照抄示例路径**。
+
 **验证命令（覆盖全部层级）**：
 
 ```bash
-# 全项目切换器完整性检查（不遗漏根目录）
-for f in README.md MAINTENANCE.md NOTICE.md kits/README.md \
-         $(find docs -maxdepth 2 -name '*.md'); do
-  l=$(grep '\[中文\]\|\[English\]\|\[日本語\]' "$f" 2>/dev/null | head -1)
+# 全项目切换器完整性检查（不遗漏根目录与子目录根）
+# 先动态列出所有含切换器的文件，再逐个核对条目数（复用上文「切换器检查」脚本的逻辑）
+for f in $(grep -rl --include='*.md' -E '^(\[?(中文|English|日本語)\]?) \|' . 2>/dev/null); do
+  l=$(grep -m1 -E '^(\[?(中文|English|日本語)\]?) \|' "$f")
   [ -z "$l" ] && continue
-  echo "$l" | grep -q '偽中国語' || echo "MISSING pcn: $f"
+  echo "$f: $l"      # 逐条核对：条目数应等于「基准语言 + 已发现扩展语言」
 done
 ```
 

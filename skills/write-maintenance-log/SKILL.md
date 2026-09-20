@@ -1,22 +1,29 @@
 ---
 name: write-maintenance-log
-description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支持软件更新、错误修复、技能文档、CI/CD 与跨仓库子项目链式更新五类记录，自动关联 git commit、生成摘要、多语同步。
+description: 按统一规范撰写或更新 MAINTENANCE.md 维护日志。支持软件更新、错误修复、技能文档、CI/CD 与跨仓库子项目链式更新五类记录，自动关联 git commit、生成摘要、多语同步。
 ---
 
 # 维护日志撰写
 
-按 NixKits 统一规范撰写 `MAINTENANCE.md` 维护记录，确保格式一致、信息完整、多语同步。
+按统一规范撰写 `MAINTENANCE.md` 维护记录，确保格式一致、信息完整、多语同步。
+（该规范源自 NixKits，但本技能适用于任何采用同结构的仓库。）
 
 ## 自动发现契约
 
 本技能通过纯自然语言约定发现语言扩展：
 
 1. **扫描** — 在 `skills/translate-*/` 目录下查找所有翻译技能
+   （**已安装到助手目录时**同级路径为 `<助手目录>/skills/translate-*/`，
+   如 `~/.opencode/skills/`；两处都扫，扫不到则退回读取仓库现有的语言清单
+   ——**不要当成"没有扩展语言"**）
 2. **读取** — 解析各 SKILL.md frontmatter 中的 `language_code` / `display_name` / `base_language` 字段
 3. **注册** — 自动将发现的语言扩展纳入多语同步流程。各翻译技能的 SKILL.md 正文中定义翻译规则（词典、语序调整、假名剥离）和列名映射表（TITLE / SUBTITLE / SUMMARY 等多语对照）。
 
 ## 入口
-本技能由 AGENTS.md 规则强制触发：每次 `git push` 后必须执行入口 1 的 SHA 查重流程。
+
+**触发约定**：若当前仓库的代理规则文件（如 `AGENTS.md` / `CLAUDE.md`）规定
+「每次 `git push` 后补录维护日志」，则按其规则在每次 push 后执行入口 1 的
+SHA 查重流程；**仓库没有该规则时**，由用户显式触发（入口 1 / 入口 2 的触发词）。
 
 本技能提供两个独立入口，根据用户意图自动匹配。
 
@@ -26,7 +33,8 @@ description: 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志。支
 
 基于当前对话中完成的软件更新或错误修复，撰写单条维护记录并插入 `MAINTENANCE.md`。
 
-> 此入口被更新检查技能（NixKits 用 `nixkits-check-updates`）在软件更新完成后**自动调用**。
+> 此入口可由**仓库适配层的更新检查流程**在软件更新完成后自动调用
+> （NixKits 用 `nixkits-check-updates` 作为该适配层）。
 
 ### 入口 2：更新维护记录
 
@@ -322,10 +330,14 @@ done
 
 #### 多语映射表
 
+> ⚠️ `SUBTITLE` 行里的 `<项目名>` / `<project>` / `<プロジェクト名>` / `<計画名>`
+> 是**占位符**——首次在本仓库使用时，替换为当前仓库的实际名称。直接照抄会把
+> 别的项目名写进你的日志。
+
 | 标记 | zh | en | ja | pcn |
 |------|----|----|-----|-----|
 | `TITLE` | `# 维护日志` | `# Maintenance Log` | `# メンテナンスログ` | `# 維護記録` |
-| `SUBTITLE` | `NixKits 软件更新维护日志。` | `NixKits package update changelog.` | `NixKits パッケージ更新履歴。` | `NixKits 軟件更新維護記録。` |
+| `SUBTITLE` | `<项目名> 软件更新维护日志。` | `<project> package update changelog.` | `<プロジェクト名> パッケージ更新履歴。` | `<計画名> 軟件更新維護記録。` |
 | `SUMMARY` | `**摘要**` | `**Summary**` | `**概要**` | `**摘要**` |
 | `COMMIT_HDR` | `\| 提交 \| 说明 \|` | `\| Commit \| Description \|` | `\| コミット \| 説明 \|` | `\| 提交 \| 説明 \|` |
 | `SW_TABLE_HDR` | `\| 软件名 \| 旧版本 \| 新版本 \|` | `\| Package \| Old \| New \|` | `\| パッケージ \| 旧 \| 新 \|` | `\| 軟件名 \| 舊版本 \| 新版本 \|` |
@@ -372,7 +384,7 @@ git commit -m "docs(MAINTENANCE): record <date> — <summary>"
 
 本技能被以下技能自动调用：
 
-- **更新检查技能**（通用 `nix-flake-update-check` / NixKits 适配层 `nixkits-check-updates`）：软件更新完成后自动记录
+- **更新检查技能**（通用 `nix-flake-update-check`，或该仓库自己的适配层）：软件更新完成后自动记录
 - 用户执行**任何修复**后，可通过「记录本次修复」触发
 - **跨仓库链式更新**：更新检查技能在第 9 步链式检查子项目时，会为**子仓与主仓各触发一次**本技能（内容不同，见类型 5）
 

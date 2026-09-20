@@ -2,7 +2,7 @@
 
 中文 | [English](../../en/skills/write-maintenance-log.md) | [日本語](../../ja/skills/write-maintenance-log.md)  | [偽中国語](../../pcn/skills/write-maintenance-log.md)
 
-> 按 NixKits 规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新、错误修复、技能文档、CI/CD 与跨仓库子项目链式更新五类记录，自动发现语言扩展。
+> 按统一规范撰写或更新 MAINTENANCE.md 维护日志，支持软件更新、错误修复、技能文档、CI/CD 与跨仓库子项目链式更新五类记录，自动发现语言扩展。
 
 ## 自动发现契约
 
