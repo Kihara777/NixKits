@@ -3,6 +3,23 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-09-20T17:05:51+09:00
+
+**摘要**：定例更新検査 —— opencode-telegram 0.25.3、ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm 包、技能手順通 `nix build` 二回実行、各 source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）與 npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`）取得、構築通過。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄包装 version 與 hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`）唯変更、三 channel 共有 base 未動。**③ 実測値刷新**：alpha channel pytest 件数 346 単体 / 57 統合 自 **462 単体（xfailed 1 件含）/ 70 統合** 至増加（`nix log` 構築記録読取 実測）、beta channel 與同程度、四言語文書 同期更新。**④ 全数調査結論**：stable channel 被検査 12 包 中、上流 遅延 上記 2 件 唯一。`dsh`（0.1.5-rc.2、npm `latest` 一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917） 何 上流 一致。**道具観察**：GitHub API 匿名請求（`curl` 直接 `api.github.com` 接続）本機 空応答 返、認証済 `gh api` 正常（额度 5000/時）——検査 script 生 `curl` 非 用、`gh api` 統一 使用 可。四言語同期、`check-doc-versions` / `check-doc-links` / `check-maintenance-log` 三項目 自检通過
+
+| 提交 | 説明 |
+|------|------|
+| `1711331` | feat(pkgs): opencode-telegram 0.25.3 + ruyi-alpha 0.54.0-alpha.20260918 |
+| `14e565e` | docs: 同步 opencode-telegram 0.25.3 与 ruyi-alpha 0.54.0-alpha.20260918（四语） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.25.2 | 0.25.3 |
+| 　 | source hash | `sha256-wNM/QNtFaRaColS2MGqk2p94NpVeHXoqJ26RjNRVypU=` → `sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=` |
+| 　 | npmDepsHash | `sha256-NnvFOrS7Y7NFYoS/lWTb3tTs5xwHhzDLTzkdGN+f3vw=` → `sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=` |
+| ruyi-alpha | 0.52.0-alpha.20260714 | 0.54.0-alpha.20260918 |
+| 　 | source hash | `sha256-x6DGsnGgeClKXsS1kXP+3nIYGG2hJhyk6J1ENE2VD8s=` → `sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=` |
+
 ## 2026-09-19T14:13:43+09:00
 
 **摘要**：文書検証 締 —— 「文書 載 不 内容」確認 構造的 欠落 一 件 発見、**文档検証 task 全体 完了**。**方法**：git 追跡 全 file 分類別 棚卸（top level 項目 / `modules/` 九 / `overlays/` 八 / `patches/` 二 / `packages/` 十三 package 與 変種 / `develop/` 十 / `skills/` 十 / `.github/` workflows）、README・`AGENTS.md`・`docs/zh/` 参照 與 突合。**結果**：大半 既 文書化済、**構造的 欠落 一 件** 限定——本 repo **自検契約 七 件 `nix flake check`** 有（何 失敗 場合 commit 阻断）、但 **一 箇所 集 説明 無**。情報 `flake.nix` comment 散在 限定、`AGENTS.md` 其 内 二 件（`check-preset-derivation.py`、`check-doc-versions.py`）触 限定、残 四 script（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）與 七 件目 `news-mode-tests`（**node script、python 非**）**一切 言及 無**。**追加**：`AGENTS.md` `## CI` 節 ① **七 件 自検一覧表**（検査名 / script path / 検証内容）追加、「各 script 単独 local 実行 可、迅速 切分 使」及「**文書 数量 hardcode 不**——`check-doc-versions` version 番号 限定 検証、此種 計数 検証 不」二 点 注記（後者 本 session 繰返 確認済：辞書 項目数 與 test 数 一類 計数 非常 古 化 易）；② **`access-tokens` host 照合 落穴**（今回 CI 大量失敗 根本原因——`check.yml` `api.github.com` 欠、浮動入力 `llama-cpp-ver` 未認証 侭、六十 回/時 上限 push 毎 ~三十四 workflow 使切）記録、今後 workflow 編集 再発 防。**確認**：表 七 path 全部 実在、「単独実行 可」実測 確認、`nix flake check` 全通過。**配置 根拠**：此等 **内部 engineering 契約**（貢献者 與 agent「何 変更 何 検査 発火」知 必要）有、user 向 内容 非 故、README user 節 非 `AGENTS.md` 置 適切。

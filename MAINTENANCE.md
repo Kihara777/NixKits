@@ -3,6 +3,23 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-09-20T17:05:51+09:00
+
+**摘要**：定期更新检查 —— opencode-telegram 0.25.3；ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm 包，按技能流程两次 `nix build` 分别取得 source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）与 npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`），构建通过。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄封装仅改 version + hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`），三通道共享 base 未动。**③ 实测数据刷新**：alpha 通道的 pytest 计数由 346 单元 / 57 集成升至 **462 单元（含 1 xfailed）/ 70 集成**（`nix log` 读取构建日志实测），已与 beta 通道同量级，四语文档同步更新。**④ 全量核查结论**：stable 通道的 12 个受检包中，仅上述 2 项落后于上游；`dsh`（0.1.5-rc.2，npm `latest` 一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917）均与上游对齐。**工具观察**：GitHub API 匿名请求（`curl` 直连 `api.github.com`）在本机返回空响应，认证的 `gh api` 正常（额度 5000/小时）——检查脚本应统一走 `gh api` 而非裸 `curl`。四语同步，`check-doc-versions` / `check-doc-links` / `check-maintenance-log` 三项自检通过
+
+| 提交 | 说明 |
+|------|------|
+| `1711331` | feat(pkgs): opencode-telegram 0.25.3 + ruyi-alpha 0.54.0-alpha.20260918 |
+| `14e565e` | docs: 同步 opencode-telegram 0.25.3 与 ruyi-alpha 0.54.0-alpha.20260918（四语） |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | 0.25.2 | 0.25.3 |
+| 　 | source hash | `sha256-wNM/QNtFaRaColS2MGqk2p94NpVeHXoqJ26RjNRVypU=` → `sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=` |
+| 　 | npmDepsHash | `sha256-NnvFOrS7Y7NFYoS/lWTb3tTs5xwHhzDLTzkdGN+f3vw=` → `sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=` |
+| ruyi-alpha | 0.52.0-alpha.20260714 | 0.54.0-alpha.20260918 |
+| 　 | source hash | `sha256-x6DGsnGgeClKXsS1kXP+3nIYGG2hJhyk6J1ENE2VD8s=` → `sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=` |
+
 ## 2026-09-19T14:13:43+09:00
 
 **摘要**：文档验证收官 —— 核查「未列入文档的内容」，补 1 处结构性缺口，**全部文档验证任务完成**。**核查方法**：逐类清点仓库全部 git 跟踪文件（顶层条目 / `modules/` 9 / `overlays/` 8 / `patches/` 2 / `packages/` 13 包及变体 / `develop/` 10 / `skills/` 10 / `.github/` workflows），逐一比对 README、`AGENTS.md` 与 `docs/zh/` 的引用。**结果**：绝大多数内容已有文档覆盖，仅发现**一处结构性缺口** —— 仓库有 **7 项 `nix flake check`** 作为自检契约（任一项失败即阻断提交），但**没有任何地方集中说明**：信息只散落在 `flake.nix` 的注释里，`AGENTS.md` 仅顺带提到其中 2 项（`check-preset-derivation.py`、`check-doc-versions.py`），其余 4 个脚本（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）与第 7 项 `news-mode-tests`（**node 脚本，非 python**）**完全未被文档提及**。**已补**：`AGENTS.md` 的 `## CI` 章节新增 ① **7 项自检清单表**（检查名 / 脚本路径 / 校验内容），含「各脚本可单独本地运行以快速定位」与「**不要在文档中硬编码数量**——`check-doc-versions` 只校验版本号、不校验此类计数」两条提示（后者本会话已反复验证：词典条目数、测试数一类计数极易过时）；② **`access-tokens` 的 host 匹配陷阱**，即本轮 CI 批量失败的根因（`check.yml` 漏了 `api.github.com` → 浮动输入 `llama-cpp-ver` 一直未认证 → 60 次/小时额度被每轮 push 的 ~34 个 workflow 耗尽），写入以便后续改 workflow 者不再重犯。**核实**：表中 7 条路径全部实存、「可单独本地运行」经实测确认、`nix flake check` 全通过。**放置依据**：这些属**内部工程契约**（贡献者与代理需知道「改什么会触发哪项检查」），而非用户面向内容，故置于 `AGENTS.md` 而非 README 用户章节

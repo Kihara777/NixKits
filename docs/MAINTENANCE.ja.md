@@ -3,6 +3,23 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-09-20T17:05:51+09:00
+
+**概要**：定例の更新チェック —— opencode-telegram 0.25.3、ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm パッケージ。スキルの手順どおり `nix build` を二回実行し、それぞれ source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）と npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`）を取得、ビルド通過。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄いラッパーは version と hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`）のみ変更、三チャネル共有の base は未変更。**③ 実測値の更新**：alpha チャネルの pytest 件数が 346 ユニット / 57 統合から **462 ユニット（xfailed 1 件を含む）/ 70 統合**へ増加（`nix log` でビルドログを読んで実測）。beta チャネルと同程度になり、四言語の文書を同期更新しました。**④ 全数調査の結論**：stable チャネルの被検査 12 パッケージのうち、上流に遅れているのは上記 2 件のみ。`dsh`（0.1.5-rc.2、npm の `latest` と一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917）はいずれも上流と一致。**ツール上の観察**：GitHub API への匿名リクエスト（`curl` で `api.github.com` に直接アクセス）は本機で空の応答を返し、認証済みの `gh api` は正常（额度 5000/時）——検査スクリプトは生の `curl` ではなく `gh api` に統一すべきです。四言語同期、`check-doc-versions` / `check-doc-links` / `check-maintenance-log` の三項目の自检通過
+
+| コミット | 説明 |
+|------|------|
+| `1711331` | feat(pkgs): opencode-telegram 0.25.3 + ruyi-alpha 0.54.0-alpha.20260918 |
+| `14e565e` | docs: 同步 opencode-telegram 0.25.3 与 ruyi-alpha 0.54.0-alpha.20260918（四语） |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| opencode-telegram | 0.25.2 | 0.25.3 |
+| 　 | source hash | `sha256-wNM/QNtFaRaColS2MGqk2p94NpVeHXoqJ26RjNRVypU=` → `sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=` |
+| 　 | npmDepsHash | `sha256-NnvFOrS7Y7NFYoS/lWTb3tTs5xwHhzDLTzkdGN+f3vw=` → `sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=` |
+| ruyi-alpha | 0.52.0-alpha.20260714 | 0.54.0-alpha.20260918 |
+| 　 | source hash | `sha256-x6DGsnGgeClKXsS1kXP+3nIYGG2hJhyk6J1ENE2VD8s=` → `sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=` |
+
 ## 2026-09-19T14:13:43+09:00
 
 **概要**：ドキュメント検証の締めくくり——「文書に載っていない内容」の確認で構造的な欠落を 1 件発見し、**ドキュメント検証タスク全体が完了**しました。**方法**：git 追跡下の全ファイルをカテゴリ別に棚卸しし（トップレベル項目 / `modules/` 9 / `overlays/` 8 / `patches/` 2 / `packages/` 13 パッケージと変種 / `develop/` 10 / `skills/` 10 / `.github/` workflows）、README・`AGENTS.md`・`docs/zh/` の参照と突き合わせました。**結果**：ほとんどは既に文書化済みで、**構造的な欠落は 1 件**のみ——本リポジトリには**自検契約として 7 件の `nix flake check`** があり（いずれか失敗すればコミットが阻断されます）が、**それを一箇所にまとめた説明がありません**でした。情報は `flake.nix` のコメントに散在するのみで、`AGENTS.md` はそのうち 2 件（`check-preset-derivation.py`、`check-doc-versions.py`）に触れるだけであり、残る 4 スクリプト（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）と 7 件目の `news-mode-tests`（**node スクリプトで python ではない**）は**まったく言及されていません**でした。**追加**：`AGENTS.md` の `## CI` 節に ① **7 件の自検一覧表**（検査名 / スクリプトパス / 検証内容）を追加し、「各スクリプトは単独でローカル実行でき、素早い切り分けに使える」および「**文書に数量をハードコードしない**——`check-doc-versions` はバージョン番号のみを検証し、この種の計数は検証しない」という 2 点を注記（後者は本セッションで繰り返し確認済み：辞書の項目数やテスト数といった計数は非常に古くなりやすい）；② **`access-tokens` の host 照合の落とし穴**（今回の CI 大量失敗の根本原因——`check.yml` が `api.github.com` を欠き、浮動入力 `llama-cpp-ver` が未認証のまま、60 回/時の上限を push ごとの ~34 workflow が使い切っていた）を記録し、今後の workflow 編集で再発しないようにしました。**確認**：表の 7 パスはすべて実在し、「単独実行可能」は実測で確認、`nix flake check` は全通過。**配置の根拠**：これらは**内部のエンジニアリング契約**（貢献者とエージェントが「どの変更がどの検査を発火させるか」を知る必要がある）であり、ユーザー向け内容ではないため、README のユーザー節ではなく `AGENTS.md` に置くのが適切です。
