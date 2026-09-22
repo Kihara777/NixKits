@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-23T08:27:16+09:00
+
+**摘要**：refactor(preset): 维护模式提示词拆成「通用方法 + 本仓适配层」——`maintenance-skills` 此前把 NixKits 工作流**整块写死在公开预设里**，与 `skills/` 既有分法（`nix-flake-update-check` 通用 ← `nixkits-check-updates` 本仓适配）不一致。现拆为两段：`maintenance-workflow`（序号 901，通用——任何仓库都成立：按逻辑类别分批提交、推送后记录、文档与代码同步、修复泛化到技能、技能内容单一来源）与 `maintenance-workflow-repo`（序号 902，本仓约定：四语与 `docs/zh/` 基准、`write-maintenance-log` 为准绳、条目数一致的可核验判据、技能树单一来源）。判据只有一句「这条规矩换个仓库还成立吗」；通用层不出现任何本仓专名（NixKits / 四语 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`，已逐词核对）。新增组件选项 `repoWorkflow: false` 可只留通用层。四语文档同步
+
+| 提交 | 说明 |
+|------|------|
+| `78fb91b` | docs(modes): 维护模式提示词分层 —— 通用方法 + 本仓适配层（四语） |
+
 ## 2026-09-22T16:23:33+09:00
 
 **摘要**：docs(skill): 把「引导器配置不可命令式改写」事故写入 `nixos-specialisation-tuning` —— 这是一次**由我引入、实际导致系统无法启动**的故障。**需求**：上游 nixpkgs 把 Limine 默认项**硬编码**为"有 specialisation 就选第 3 项"（`limine-install.py:533`），故只要存在可选面，默认就进可选面而非默认面；为改回默认面，用 `extraInstallCommands`（nixpkgs 保证它在 install 脚本**之后**执行）`sed` 改写 `limine.conf` 的 `default_entry`。**失败机制**：该钩子执行在 limine **完成哈希固化之后** —— `limine-install.py:660` 在 `enrollConfig=true` 时对配置算 `blake2b(config_file.strip())` 并 `limine enroll-config` 固化进 EFI 二进制，而 `limine.nix:471` 的 `${install} "$@"` 完成固化、`:472` 的 `${extraInstallCommands}` 才改写配置。改写发生在固化之后 → **哈希不匹配** → Secure Boot 下引导器拒绝加载配置 → **系统无法启动**，现场只能靠外部镜像手动关闭 secure boot 与 `panicOnChecksumMismatch` 才进入系统。**通用形态**：`extraInstallCommands` 这类"install 之后"的钩子看似是安全的最终修补点，但 install 内部可能**已完成校验/固化** —— "钩子在最后执行" ≠ "钩子的修改会被所有校验接受"。**技能新增两节**：① `### 引导菜单与默认面` —— 通用规则（引导器配置必须声明式、不得 sed/cp 改写生成物）、完整事故记录与失败机制、改动前的正确排查顺序（先读 install 脚本完整流程、标出所有「写文件 → 计算校验/签名」的先后、确认修改落在固化之前；无安全入口则顺从上游逻辑而非对抗）、若必须固化后修改则须用**与上游逐字节相同**的算法重新固化、以及安全开关（`enrollConfig`/`validateChecksums`/`panicOnChecksumMismatch`）的降级纪律（nixpkgs 对三者均有断言，标注 "allows bypassing secure boot"）；② 分面切换的两个运行级故障 —— `### 分面切换后的运行级收敛`（`switch-to-configuration` 不改 active target；判据**不能**用 `is-active`，因 systemd target 是叠加的、`graphical` 依赖 `multi-user` 故恒真，须用 `default.target` 的**解析值**；且 `systemctl get-default` 返回 `default.target` 本身而非其指向）与 `### 用户级 systemd 实例跨面陈旧`（`user@<uid>.service` 跨面不重启致单元链接失效，`daemon-reload`/`daemon-reexec` 均无效、须整个 restart；含反向清理与验证判据 —— **不得用"合成器存在"当"桌面正常"**，黑屏时合成器正是在跑的）。同步更新 frontmatter `description` 与「适用场景」，使技能能被正确路由触发
