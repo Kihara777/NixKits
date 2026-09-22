@@ -2,7 +2,7 @@
 
 [中文](../../zh/modes/maintenance.md) | English | [日本語](../../ja/modes/maintenance.md)  | [偽中国語](../../pcn/modes/maintenance.md)
 
-> A repository-maintenance-specific agent based on NixOS模式: it injects the documentation-writing and maintenance-log skills plus the upstream update-check skill, and loads the NixKits repository-maintenance workflow prompts.
+> A repository-maintenance-specific agent based on NixOS模式: it injects the documentation-writing and maintenance-log skills plus the upstream update-check skill, and loads **two layers** of maintenance-workflow prompts — a generic method plus a repository (NixKits) adapter layer.
 
 ## Basic Info
 
@@ -19,7 +19,16 @@
 On top of everything NixOS模式 provides:
 
 - **Runtime skills**: the `maintenance-skills` entry registers `write-project-docs`, `write-maintenance-log`, `nix-flake-update-check`, and `nixkits-check-updates` at apply time from the repo `skills/` tree **embedded at build time**, and auto-discovers every `translate-*` language extension — the repo `skills/` is the single source of truth, so a fresh session is always current.
-- **Maintenance workflow prompts**: batched commits → maintenance-log entry after push (all languages synced) → doc sync → generalization into skills.
+- **Maintenance workflow prompts, in two layers** (the same split the skills above already use: generic method ← repository adapter layer):
+
+  | Section | Scope | Content |
+  |---------|-------|---------|
+  | `maintenance-workflow` (order 901) | **Generic** — true of any repository | batch commits by logical category, record after pushing, keep docs in sync with code, generalize fixes into skills, single source for skill content |
+  | `maintenance-workflow-repo` (order 902) | **This repository's (NixKits) conventions** | the four languages and their base (`docs/zh/` first), `write-maintenance-log` as the standard, a verifiable entry-count check, single source for the skill tree |
+
+  The only test is: **would this rule still hold in another repository?** If yes it stays in the generic layer; if no it goes to the adapter. The generic layer names no repository-specific thing (NixKits / the four languages / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`).
+
+  Component option `repoWorkflow: false` keeps only the generic layer, for a session maintaining a different repository.
 - Everything else (system validation, `nixos_shell` / `nixos_cli`, development prompts, and the 5 skills bundled with NixOS模式) matches NixOS模式.
 
 ## Derivation
