@@ -26,15 +26,29 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          # Fetch all completed workflow runs, pick the latest per workflow
-          RUNS=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed")
+          # 只统计**当前 HEAD** 的运行，避免读到已被取代的旧失败。
+          #
+          # 为什么必须限定 head_sha：本 workflow 由 push 触发，会在同一轮
+          # push 的构建**尚未完成**时启动。此时某些 workflow 的"最新已完成
+          # 运行"仍是**上一轮 push 的失败运行**——于是徽章错误地翻成 failing，
+          # 直到下一次 push 才恢复。实测徽章在 09-18 ~ 09-21 间反复
+          # failing→passing 成对出现（间隔 1~2 分钟），根因即此竞态。
+          #
+          # 限定 head_sha 后：只看本轮 commit 的运行。若某 workflow 本轮
+          # 尚未完成，它在本次统计中**不出现**（既不算通过也不算失败），
+          # 由该 workflow 自己完成后触发的下一次 ci-summary 补上。
+          HEAD_SHA="${GITHUB_SHA}"
 
-          # Find "Build *" workflows whose LATEST run failed. Group by
-          # workflow first and take the newest run per workflow, then filter
-          # failures — filtering failures first would let an old failed run
-          # mask a newer successful one forever (badge stuck on failing).
+          # 需鉴权：GITHUB_TOKEN 享 1000 次/小时（匿名仅 60），且必须带
+          # `-f`/`--fail`——否则 403 限流会返回 JSON 错误体，jq 取不到
+          # workflow_runs 而静默判为 0 个失败（假 passing）。
+          RUNS=$(curl -sS --fail \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed&head_sha=$HEAD_SHA" \
+            ) || { echo "::error::GitHub API 请求失败（限流或网络）—— 保留现有徽章，不写入错误状态"; exit 1; }
+
+          # Find "Build *" workflows whose LATEST run on this commit failed.
           # Filter out non-object entries (API may return error strings interleaved).
           FAILED=$(echo "$RUNS" | jq -r '
             [.workflow_runs[]? | select(type == "object")]

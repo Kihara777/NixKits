@@ -54,6 +54,30 @@ grep -rc '<owner>/<repo>@' .github/workflows/*.yml | grep -v ':0'
 > `actions/checkout` 分布在 `build-package.yml` / `check.yml` / `ci-summary.yml`
 > **三个独立文件**（不是单一可复用 workflow），故改它是 3 处而非 1 处。
 
+## 收尾：确认 CI 结果时不要被徽章误导
+
+本仓的 CI 徽章由 `ci-summary.yml` 生成（写入 `gh-pages/ci-status.json`），
+**它可能短暂显示 `failing` 而实际全绿**。判断真实状态请直接查运行记录：
+
+```bash
+# 以运行记录为准，不要只看 README 徽章
+gh run list --limit 40 --json name,conclusion --jq '[.[]|.conclusion]|group_by(.)|map({(.[0]//"running"):length})|add'
+```
+
+**根因（2026-09-21 定位并修复）**：该 workflow 由 push 触发，会在**同一轮 push
+的构建尚未完成时**启动。不加 `head_sha` 过滤时，某些 workflow 的"最新已完成
+运行"仍是**上一轮 push 的旧失败运行** → 徽章翻成 `failing`，直到下一次 push
+才恢复。实测 09-18~09-21 徽章反复 `failing → passing` **成对出现（间隔 1~2
+分钟）**，而当时所有构建全绿。已改为按 `head_sha` 过滤。
+
+> ⚠️ **反向陷阱更危险**：`curl` 不带 `--fail` 时，403 限流返回的 JSON 错误体
+> 让 jq 取不到 `workflow_runs` → `FAILED` 为空 → **静默写成 `passing`**。
+> 假绿比误报红更难发现：误报红会让人去查，假绿则无人察觉。
+
+**技能执行后的正确收尾**：不依赖徽章，**直接确认本轮 workflow 的结论**；
+若有失败，先区分**偶发**（如 `llama-cpp-ver` 的 403 限流，重跑即可）与**真失败**
+（hash 不符、构建错误）。
+
 ## 第 5 步补充：四语文档同步
 
 NixKits 的文档是**四语**体系。版本号变更必须同步全部语言，且

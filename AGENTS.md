@@ -203,7 +203,18 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 > 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——
 > 不要在文档中硬编码数量（`check-doc-versions` 只校验版本号，不校验此类计数）。
 
-构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`，每小时刷新）。
+构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`），触发条件为 push / 每小时 / 手动。
+
+> **⚠️ `ci-summary` 必须按 `head_sha` 过滤（竞态陷阱）**：该 workflow 由 push 触发，
+> 会在**同一轮 push 的构建尚未完成时**启动。若不加 `head_sha` 过滤，某些 workflow 的
+> "最新已完成运行"仍是**上一轮 push 的旧失败运行** → 徽章短暂误报 `failing`，待下一轮
+> 才恢复。实测 09-18 ~ 09-21 徽章反复 `failing → passing` 成对出现（间隔 1~2 分钟），
+> 而**当时所有构建实际全绿**。已改为只统计当前 commit 的运行；本轮未完成的 workflow
+> 在统计中不出现，由其完成后触发的下一次 `ci-summary` 补上。
+>
+> 另两点：`curl` 必须带 `--fail`——否则 403 限流返回的 JSON 错误体让 jq 取不到
+> `workflow_runs`，`FAILED` 为空 → **静默判为 passing**（假绿，比误报 failing 更危险）；
+> 请求失败时**保留现有徽章并退出非零**，不要写入一个错误的颜色。
 
 ## 二进制缓存
 
