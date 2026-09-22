@@ -1,6 +1,6 @@
 ---
 name: nixos-specialisation-tuning
-description: 为 NixOS 设计 specialisation 分面（默认 headless + 可选桌面），并在统一内存（UMA）设备上调优 llama.cpp 本地推理。覆盖分面架构、模型服务参数、思考等级映射、电源档位与热管理（风扇曲线、过热关机排查）、上下文开销分析与静默故障诊断方法论。
+description: 为 NixOS 设计 specialisation 分面（默认 headless + 可选桌面），并在统一内存（UMA）设备上调优 llama.cpp 本地推理。覆盖分面架构、引导菜单与默认面、分面切换后的运行级收敛与用户级 systemd 实例陈旧、模型服务参数、思考等级映射、电源档位与热管理（风扇曲线、过热关机排查）、上下文开销分析与静默故障诊断方法论。
 ---
 
 # NixOS 分面设计与本地推理调优
@@ -10,6 +10,8 @@ description: 为 NixOS 设计 specialisation 分面（默认 headless + 可选�
 ## 适用场景
 
 - 需要"默认精简 + 可选全功能"两套配置，开机菜单选择
+- 改动引导器 / 调整默认引导面后系统无法启动
+- 分面热切换后服务看似"切成功了"但功能不对（无桌面、D-Bus 服务无法激活）
 - 本地 llama.cpp 服务出现输出退化、加载失败、速度异常
 - 需要判断某项优化是否值得（要求给出成本/收益/代价，而非单一收益）
 
@@ -57,6 +59,141 @@ networking.wireless.iwd.enable = lib.mkForce true;
 
 > ⚠️ 实战案例：为给 mihomo 腾出 53 端口而设置的 `DNSStubListener=no`，起初写进了共用的 `base.nix`。这会让不使用 mihomo 的面也无谓地失去 DNS stub。
 > **判据：若某个面不启用该消费者，它就不该承受这个副作用。**
+
+### 引导菜单与默认面
+
+分面意味着**同一个系统有多个可引导入口**，故引导器的配置也属于分面设计的一部分。
+
+#### 不要用命令式手段改写引导器生成的文件
+
+**规则：引导器配置必须通过其 Nix 选项声明，不得用 `sed`/`cp` 等命令式手段在
+install 钩子里改写生成物。**
+
+> ⚠️ **实战事故（本机实际发生，导致系统无法启动）**
+>
+> 需求：上游 nixpkgs 把 Limine 默认项**硬编码**为"有 specialisation 就选第 3 项"
+> （`limine-install.py:533`），故只要存在可选面，默认就进可选面而非默认面。
+> 为改回默认面，用了 `extraInstallCommands` 在 install 之后 `sed` 改写
+> `limine.conf` 的 `default_entry`。
+>
+> **失败机制**——钩子执行在**哈希固化之后**：
+>
+> ```
+> limine-install.py:660  enrollConfig=true
+>   → b2sum = blake2b(config_file.strip())       # 对配置内容算哈希
+>   → limine enroll-config <BOOTX64.EFI> <hash>  # 固化进 EFI 二进制
+>
+> limine.nix:471         ${install} "$@"           ← 哈希固化在此完成
+> limine.nix:472         ${cfg.extraInstallCommands} ← sed 在此改写配置
+> ```
+>
+> 改写发生在固化之后 → **哈希不匹配** → Secure Boot 下引导器拒绝加载配置
+> → **系统无法启动**。现场只能靠外部镜像手动关闭 secure boot 与
+> `panicOnChecksumMismatch` 才进入系统。
+
+**这个坑的通用形态**：`extraInstallCommands` 这类"install 之后"的钩子，
+看起来是安全的最终修补点，但**它之后仍可能有 install 内部已完成的校验/固化步骤**。
+"钩子在最后执行"不等于"钩子的修改会被所有校验接受"。
+
+**正确的排查顺序**（做任何引导器改动前）：
+
+1. 读该引导器 install 脚本的**完整流程**，标出所有"写文件 → 计算校验/签名"的顺序
+2. 确认你的修改落在哪个阶段——**在固化之前**才安全
+3. 若无安全入口，优先**顺从上游逻辑**（如调整菜单顺序）而非对抗它
+
+**若确实必须在固化后修改**，必须**用与上游完全相同的算法重新固化**：
+
+```bash
+# 哈希输入是整个文件去首尾空白，不是某一行
+new_hash=$(python3 -c 'import hashlib,sys
+print(hashlib.blake2b(open(sys.argv[1],"rb").read().decode().strip().encode()).hexdigest())' "$f")
+limine enroll-config /boot/efi/limine/BOOTX64.EFI "$new_hash"
+```
+
+> ⚠️ 重新固化的算法必须**逐字节对齐上游**。本机验证方式：直接读上游
+> `limine-install.py` 的哈希计算行，照抄其输入构造（含 `.strip()` 语义）。
+
+#### 安全机制的开关不是普通选项
+
+`enrollConfig` / `validateChecksums` / `panicOnChecksumMismatch` 这三项
+nixpkgs 都有**断言**，明确标注 *"allows bypassing secure boot"*。
+
+- 关闭它们 = **降低系统安全等级**，只能作为**临时抢修**手段
+- 抢修后必须显式记录"当前处于降级状态"，并在问题修复后评估恢复
+- **不要在降级状态下继续做引导器改动**——你会失去唯一的失败信号
+
+### 分面切换后的运行级收敛
+
+`switch-to-configuration`（`toface`/`nixos-rebuild switch` 的底层）**只收敛
+systemd 单元集合，不改当前 active 的 target**。
+
+后果：从无头面切到桌面面时，单元都换对了，但系统仍停在 `multi-user.target`
+→ `graphical.target` 从未拉起 → `display-manager` 虽是 inactive-but-loaded
+却永不启动 → **没有桌面**。切换日志里**从头到尾不出现 graphical/display-manager**。
+
+**修法**：切换后按目标面是否自带 `display-manager.service` 决定 isolate 哪个 target。
+
+> ⚠️ **判据不能用 `systemctl is-active <target>`**：systemd 的 target 是**叠加**的
+> （`graphical.target` 本身 `Requires=multi-user.target`），两者会同时 active，
+> `is-active` **恒为真**，isolate 分支会变成死代码。
+> 应用 **`default.target` 的解析值**：
+>
+> ```bash
+> rt=$(readlink -f /etc/systemd/system/default.target); rt=${rt##*/}
+> [ "$rt" = "$want_target" ] || systemctl isolate "$want_target"
+> ```
+>
+> ⚠️ 注意 `systemctl get-default` 返回的是 **`default.target` 这个名字本身**，
+> 不是它指向的目标 —— 必须先解析符号链接再比较。
+
+### 用户级 systemd 实例跨面陈旧
+
+**症状**：切到桌面面后自动登录成功、合成器（`kwin_wayland`）也起来了
+（**所以有鼠标指针**），但桌面 shell 主动放弃加载：
+
+```
+plasmashell: Aborting shell load: The activity manager daemon
+             (kactivitymanagerd) is not running.
+```
+
+**根因**：`user@<uid>.service` 这个**用户级** systemd 实例**跨越多次面切换而
+从不重启**，其单元链接失效。实测：
+
+```
+/run/user/1000/systemd/user/ 不存在（或为空）
+但 systemctl --user is-enabled <unit> 报 linked-runtime   ← 状态与文件系统脱节
+```
+
+而许多 KDE 服务（如 `kactivitymanagerd`）的 D-Bus 服务文件带
+`SystemdService=<unit>` —— **激活走 systemd 而非直接 exec `Exec=`**。
+实例认不出该单元 → D-Bus 报 `not activatable` → shell 等不到 → 放弃加载。
+
+**修法**：切到桌面面后重启用户实例，并重启 display-manager 重建会话：
+
+```bash
+systemctl restart user@<uid>.service        # 恢复单元链接（会杀掉旧会话）
+systemctl restart display-manager.service   # 重新自动登录
+```
+
+> ⚠️ **`daemon-reload` 与 `daemon-reexec` 都无效** —— 实测两者都不恢复
+> 用户 unit 目录，**必须整个实例 restart**。
+>
+> ⚠️ 顺序不能颠倒：重启用户实例会杀掉正在运行的桌面会话（display-manager
+> 检测到会话消失会退回登录界面），故**必须紧接着重启 display-manager**。
+
+**反向**：桌面进程跑在**用户级**实例下，**不受面切换管辖** ——
+切回无头面时 `display-manager` 会被正确停掉，但桌面进程仍残留
+（实测占数百 MiB）。需检测到残留后同样重启用户实例收尾。
+
+#### ⚠️ 验证判据：不能用"合成器存在"当作"桌面正常"
+
+黑屏状态下**合成器正是在跑的**（所以才有鼠标指针）。必须断言
+**桌面 shell 与活动管理器同时存在**，并检查日志无 `Aborting shell load`。
+
+> ⚠️ 另一个假失败陷阱：NixOS 包装后的进程名带 `.` 前缀且被 Linux 的 15 字符
+> `comm` 上限截断（实为 `.kwin_wayland_w`、`.ksmserver-wrap`）。
+> 用 `pgrep -x kwin_wayland` **永远匹配不到**，会把"桌面正常"误判为失败。
+> 应改用 `pgrep -f`。
 
 ## llama.cpp 统一内存调优
 
