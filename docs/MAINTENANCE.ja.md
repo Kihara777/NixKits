@@ -2,6 +2,13 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-22T16:23:33+09:00
+
+**概要**：docs(skill): 「ブートローダ設定をコマンド式に改変してはならない」事故を `nixos-specialisation-tuning` に記録 —— これは**私が導入し、実際にシステムを起動不能にした**障害である。**要件**：上流 nixpkgs は Limine の既定項目を「specialisation が存在すれば 3 番目を選ぶ」と**ハードコード**している（`limine-install.py:533`）。そのため選択面が存在するだけで既定が選択面になる。既定を戻すため、`extraInstallCommands`（nixpkgs が install スクリプトの**後**に実行することを保証）で `limine.conf` の `default_entry` 行を `sed` で書き換えた。**失敗機構**：このフックは Limine が**設定ハッシュを固めた後**に実行される —— `limine-install.py:660` は `enrollConfig=true` のとき `blake2b(config_file.strip())` を計算し `limine enroll-config` で EFI バイナリに固め、`limine.nix:471` の `${install} "$@"` が固化を完了し、`:472` の `${extraInstallCommands}` がようやく設定を書き換える。固化後の書き換え → **ハッシュ不一致** → Secure Boot 下でブートローダが設定の読み込みを拒否 → **システム起動不能**。復旧には外部イメージで secure boot と `panicOnChecksumMismatch` を手動で無効化する必要があった。**一般化された形**：`extraInstallCommands` のような「install 後」のフックは安全な最終修正点に見えるが、install 内部で**すでに検証・固化が完了している**ことがある —— 「フックが最後に実行される」≠「フックの変更がすべての検証を通過する」。**スキルに二節を追加**：① `### 引导菜单与默认面` —— 一般規則（ブートローダ設定は宣言的であること、生成物を sed/cp で書き換えないこと）、事故の完全な記録と失敗機構、変更前の正しい調査順序（install スクリプトの全フローを読み、「ファイル書き込み → 検証/署名」の順序をすべて洗い出し、変更が固化前に落ちることを確認する。安全な入口がなければ上流の論理に従い、対抗しない）、固化後の変更が避けられない場合は**上流とバイト単位で同一**のアルゴリズムで再固化すること、およびセキュリティスイッチ（`enrollConfig`/`validateChecksums`/`panicOnChecksumMismatch`、いずれも nixpkgs が "allows bypassing secure boot" と断言）のダウングレード規律；② 面切り替え後の二つのランレベル障害 —— `### 分面切换后的运行级收敛`（`switch-to-configuration` は active target を変更しない。判定に `is-active` を**使ってはならない**。systemd の target は加算的で `graphical` は `multi-user` を要求するため常に真になる。`default.target` の**解決値**を使うこと。なお `systemctl get-default` は `default.target` 自体を返し、その指す先ではない）と `### 用户级 systemd 实例跨面陈旧`（`user@<uid>.service` は面を跨いでも再起動されず、ユニットリンクが失効する。`daemon-reload`/`daemon-reexec` はいずれも無効で、インスタンス全体の再起動が必要。逆方向の清理と検証判定基準を含む —— **「コンポジタが存在する」を「デスクトップが正常」と見なしてはならない**。黒画面のときこそコンポジタは動作している）。frontmatter の `description` と「适用场景」を同期更新し、スキルが正しくルーティング・起動されるようにした
+
+| コミット | 説明 |
+|----------|------|
+| `8c276c0` | docs(skill): 「ブートローダ設定をコマンド式に改変してはならない」事故を記録 —— 私が導入した起動不能障害 |
 
 ## 2026-09-22T09:37:07+09:00
 
