@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-24T05:45:11+09:00
+
+**摘要**：① `fix(pcn)` 偽中国語 残留仮名 除去 —— 前回 二 提交 pcn 文書 内 4 箇所 仮名 残留、`nix flake check` 之 `check-maintenance-log` 與 `check-doc-links` 双方 失敗（即 **CI 以来 常 赤**）、逐箇所 偽中国語 改写 後 二 検査 `exit 0` 復帰。② `feat(dsh)` 6 箇 構造化 settings 選項 新設 且 namespace 表 修正：上流 dsh 0.1.6-alpha 合計 12 箇 settings namespace 登録、然 模組 従来 唯 `agent-default-model` 対 構造化 選項 提供、其 余 唯 **無型 脱出経路** `settings` 経由 以外 不可 —— 字段名、列挙、範囲 誤記 也 **評価期 錯誤 発生 不**、dsh 実行時 検証 失敗 後 該当段 破棄 且 **静黙 schema 既定値 復帰**、記録 内 何 也 残 不。現在 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 対 Nix 側 鏡像 補完（語義 既存 `defaultModel` 與 一致：既定 `enable = false` 非書込、明示 `settings.<同名 namespace>` 優先）；`shell` 者 `cwd` schema 内 **既定値 無**、一部 宣言 検証 risk 有 故 意図的 提供 不。同時 文書 中 `0.1.5-rc.2` 依拠 転記 namespace 表 修正 —— 逐項 実測 後 **5 行 事実 與 不 合**：`locale` 字段 `preference` 有、`language` 非；`ui-theme` 唯 `preference`/`fontSize`（`dark`/`light` `preference` 之 取値 有 且 字段 非）；`shell` 内 `dshHome` 存在 不、実際 実行器 六項 制限；`subagent-model-selection` 頂層 `enabled`/`allowedModels`（`provider`/`model` 配列要素 字段）；`agent-default-model` 唯 `provider`/`model` 必須。**検証**：6 検査 全 green、四言語 構造 対等（名前空間 表 19 行、構造化 選項 表 7 行、code fence 30 箇所、四言語 一致）、pcn 仮名 0 命中、且 **end-to-end 描画 検証** 実施（全 6 項 有効化 後 生成 `settings.yaml` 正 6 新段 含、`subagent-model-selection.enabled` 設計 通 自動 true 設定）
+
+| 提交 | 説明 |
+|------|------|
+| `d2e8c10` | fix(pcn): 剔除偽中国語残留假名 —— 恢复 CI 绿灯 |
+| `55cbdbd` | feat(dsh): 6 个新结构化 settings 选项 + 修正 namespace 表（四语） |
+
 ## 2026-09-23T08:27:16+09:00
 
 **摘要**：refactor(preset): 維護模式 prompt 分割為「汎用方法 + 本倉適配層」—— `maintenance-skills` 従来 NixKits 工作流 **全體 硬编码 於 公開預設**、`skills/` 既存 分法（`nix-flake-update-check` 汎用 ← `nixkits-check-updates` 本倉適配）與 矛盾。現在 二 段：`maintenance-workflow`（序号 901、汎用——如何倉庫 皆 成立：論理類別 毎 分割 commit、push 後 記録、文書 與 code 同期、修正 技能 汎化、技能内容 単一來源）與 `maintenance-workflow-repo`（序号 902、本倉 約束：四言語 與 `docs/zh/` 基準、`write-maintenance-log` 準則、項目数 一致 之 検証可能 判据、技能 tree 単一來源）。判据 唯一「此規約、換倉庫 尚 成立 乎」。汎用層 本倉専名 一切 不出現（NixKits / 四言語 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`、逐詞 照合 済）。新 component 選項 `repoWorkflow: false` 唯 汎用層 残存 可。四言語 文書 同期

@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-24T05:45:11+09:00
+
+**概要**：① `fix(pcn)` 偽中国語に残留した仮名を除去——直前の二回のコミットが pcn ドキュメントに仮名を 4 箇所残し、`nix flake check` の `check-maintenance-log` と `check-doc-links` がともに失敗した（つまり **CI はそれ以降ずっと赤のまま**）。一箇所ずつ偽中国語に書き直したところ、両チェックとも exit 0 に復帰した。② `feat(dsh)` 構造化 settings オプションを 6 件追加し、ネームスペース表を修正：上流 dsh 0.1.6-alpha が登録する settings 名前空間は計 **12 件**である一方、モジュールが従来**構造化オプション**を提供していたのは `agent-default-model` のみで、残りは**型なしのエスケープハッチ** `settings` に頼るしかなかった——フィールド名・列挙値・範囲の書き間違いは**いずれも評価時のエラーにならず**、dsh は実行時の検証に失敗すると当該セクションを破棄して **schema デフォルトへ静かにフォールバック**し、ログには何も残らない。今回は `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` に Nix 側の写しを補完した（意味は既存の `defaultModel` と一貫：既定は `enable = false` で書き込まず、明示的な `settings.<同名ネームスペース>` が優先）；`shell` は `cwd` が schema に**既定値を持たず**、一部の宣言に検証リスクがあるため意図的に提供しない。同時に、ドキュメント中で `0.1.5-rc.2` に基づいて転記されていたネームスペース表も訂正した——項目ごとに実測した結果、**5 行が事実と異なっていた**：`locale` のフィールドは `language` ではなく `preference`；`ui-theme` は `preference`/`fontSize` のみ（`dark`/`light` はフィールドではなく `preference` の値）；`shell` に `dshHome` は存在せず、実際にはエグゼキュータの六項目制限；`subagent-model-selection` の最上位は `enabled`/`allowedModels`（`provider`/`model` は配列要素のフィールド）；`agent-default-model` は `provider`/`model` のみ必須。**検証**：6 つのチェックすべてグリーン、四言語の構造が対等（名前空間表 19 行、構造化オプション表 7 行、コードフェンス 30 箇所、いずれも四言語で一致）、pcn の仮名は 0 命中、さらに**エンドツーエンドのレンダリング検証**を実施（6 項目すべてを有効にすると生成される settings.yaml が 6 つの新セクションを正しく含み、`subagent-model-selection.enabled` は設計どおり自動的に true になる）
+
+| コミット | 説明 |
+|------|------|
+| `d2e8c10` | fix(pcn): 剔除偽中国語残留假名 —— 恢复 CI 绿灯 |
+| `55cbdbd` | feat(dsh): 6 个新结构化 settings 选项 + 修正 namespace 表（四语） |
+
 ## 2026-09-23T08:27:16+09:00
 
 **概要**：refactor(preset): 保守モードのプロンプトを「汎用の方法 + 本リポジトリ向け適配層」に分割 —— `maintenance-skills` は従来 NixKits のワークフローを**公開プリセットに丸ごとハードコード**しており、`skills/` で既に使われている分け方（`nix-flake-update-check` 汎用 ← `nixkits-check-updates` 本リポジトリ適配）と矛盾していた。現在は二つのセクション：`maintenance-workflow`（順序 901、汎用——どのリポジトリでも成立：論理カテゴリごとの分割コミット、push 後の記録、ドキュメントとコードの同期、修正の技能への汎化、技能内容の単一ソース）と `maintenance-workflow-repo`（順序 902、本リポジトリの約束：四言語と `docs/zh/` を基準とすること、`write-maintenance-log` を準則とすること、項目数の一致という検証可能な判定、技能ツリーの単一ソース）。判定はただ一つ「この規約は他のリポジトリでも成立するか」。汎用層には本リポジトリ固有の名前は一切現れない（NixKits / 四言語 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`、語ごとに照合済み）。新しいコンポーネントオプション `repoWorkflow: false` で汎用層のみを残せる。四言語ドキュメントを同期

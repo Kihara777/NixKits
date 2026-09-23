@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-24T05:45:11+09:00
+
+**摘要**：① `fix(pcn)` 剔除偽中国語残留假名——上两次提交在 pcn 文档留下 4 处假名，`nix flake check` 的 `check-maintenance-log` 与 `check-doc-links` 双双失败（即 **CI 自那时起一直是红的**），逐处改写为伪中国语后两检查恢复 exit 0。② `feat(dsh)` 新增 6 个结构化 settings 选项并修正 namespace 表：上游 dsh 0.1.6-alpha 共注册 12 个 settings namespace，而模块此前只为 `agent-default-model` 提供了结构化选项，其余只能走**无类型逃生舱** `settings`——字段名、枚举、范围写错都**不会在求值期报错**，dsh 运行时校验失败后丢弃该段并**静默回落 schema 默认值**，日志里什么都不留。现为 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 补齐 Nix 侧镜像（语义与既有 `defaultModel` 一致：默认 `enable = false` 不写入、显式 `settings.<同名 namespace>` 优先）；`shell` 因 `cwd` 在 schema 里**没有默认值**、部分声明有校验风险而刻意不提供。同时更正文档中按 `0.1.5-rc.2` 抄录的 namespace 表——逐项实测后 **5 行与事实不符**：`locale` 字段是 `preference` 而非 `language`；`ui-theme` 只有 `preference`/`fontSize`（`dark`/`light` 是 `preference` 的取值而非字段）；`shell` 不存在 `dshHome`，实际是执行器六项限制；`subagent-model-selection` 顶层是 `enabled`/`allowedModels`（`provider`/`model` 是数组元素字段）；`agent-default-model` 仅 `provider`/`model` 必填。**验证**：6 个检查全绿、四语结构对等（命名空间表 19 行、结构化选项表 7 行、代码围栏 30 处，四语一致）、pcn 假名 0 命中、并做**端到端渲染验证**（启用全部 6 项后生成的 settings.yaml 正确含 6 个新段，`subagent-model-selection.enabled` 按设计自动置 true）
+
+| 提交 | 说明 |
+|------|------|
+| `d2e8c10` | fix(pcn): 剔除偽中国語残留假名 —— 恢复 CI 绿灯 |
+| `55cbdbd` | feat(dsh): 6 个新结构化 settings 选项 + 修正 namespace 表（四语） |
+
 ## 2026-09-23T08:27:16+09:00
 
 **摘要**：refactor(preset): 维护模式提示词拆成「通用方法 + 本仓适配层」——`maintenance-skills` 此前把 NixKits 工作流**整块写死在公开预设里**，与 `skills/` 既有分法（`nix-flake-update-check` 通用 ← `nixkits-check-updates` 本仓适配）不一致。现拆为两段：`maintenance-workflow`（序号 901，通用——任何仓库都成立：按逻辑类别分批提交、推送后记录、文档与代码同步、修复泛化到技能、技能内容单一来源）与 `maintenance-workflow-repo`（序号 902，本仓约定：四语与 `docs/zh/` 基准、`write-maintenance-log` 为准绳、条目数一致的可核验判据、技能树单一来源）。判据只有一句「这条规矩换个仓库还成立吗」；通用层不出现任何本仓专名（NixKits / 四语 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`，已逐词核对）。新增组件选项 `repoWorkflow: false` 可只留通用层。四语文档同步
