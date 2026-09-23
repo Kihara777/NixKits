@@ -377,30 +377,85 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 - values must be JSON-compatible (string/number/boolean/list/object)
 - rendered as JSON (valid YAML), hot-reloaded; empty `{}` or missing falls back to schema defaults
 
-
 ### Declaratively configurable host namespaces
 
-`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.register`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. All **12** namespaces registered in `0.1.5-rc.2`, with their fields:
+`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.installSection`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. All **12** namespaces registered in `0.1.6-alpha`, with their fields (extracted one by one by measuring each plugin source's `z.object({...})` / `Schema.object({...})`):
 
 | namespace | fields | description |
 |-----------|--------|-------------|
-| `locale` | `language` etc. | interface language |
-| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` etc. | appearance & theme |
-| `ui-chat` | `transcriptView` etc. | conversation view |
+| `agent-default-model` | `provider`, `model`, `reasoningEffort` (`off`/`low`/`high`/`max`) | default model for new sessions |
+| `agent-loop` | `maxParallelToolCalls` (integer ≥1, default 10) | per-turn parallel tool-call ceiling |
+| `agent-presets` | `default` | agent presets |
+| `locale` | `preference` (BCP 47; built-in `zh`/`en`) | interface language |
+| `permission` | `defaultPreset` | permission presets |
+| `shell` | `cwd` (**no default**), `timeoutMs`, `maxTimeoutMs`, `maxOutputBytes`, `maxSpillBytes`, `graceMs` | local bash executor limits |
+| `subagent-model-selection` | `enabled` (boolean, default false), `allowedModels` (`{provider, model}` array) | subagent model selection |
+| `ui-chat` | `transcriptView` (`normal`/`compact`) | conversation-transcript display density |
 | `ui-conversation` | `busyEnter` (`queue`/`steer`) | Enter behavior while busy |
-| `ui-onboarding` | — | onboarding-step state |
-| `agent-presets` | — | agent presets |
-| `agent-default-model` | `provider`, `model`, `reasoningEffort` (all required) | default model for new sessions |
-| `agent-loop` | `maxParallelToolCalls` (default 10) | parallel tool-call ceiling for the agent loop |
-| `permission` | `presets` (each with `sandbox` + `approval`) | permission presets |
-| `shell` | `dshHome` | dsh home directory for the shell tool |
-| `subagent-model-selection` | `provider`, `model` (both required) | subagent model selection |
-| `web-search-deepseek` | `apiKey`, `apiKeyEnv`, `baseURL`, `model`, `apiVersion`, `maxTokens` etc. | web-search backend |
+| `ui-onboarding` | `welcomeNoticeVersion` | onboarding-step state (written by dsh itself) |
+| `ui-theme` | `preference` (`light`/`dark`/`system`), `fontSize` (12–17) | appearance & theme |
+| `web-search-deepseek` | `model`, `maxTokens` etc. | web-search backend |
 
-> The fields above were extracted by measuring each `installSection` schema (`z.object({...})`); `nixkits.dsh.defaultModel` writes `agent-default-model`, and when both are set the **explicit `settings` wins**.
+> ⚠️ This table was originally transcribed from `0.1.5-rc.2`, and **5 of its rows disagreed with measurement**; all were checked item by item and corrected on 2026-09-23:
+> `locale`'s field is `preference`, not `language`; `ui-theme` has only `preference`/`fontSize`
+> (there are no `dark`/`light`/`body` fields — `dark`/`light` are **values** of `preference`);
+> `shell` has no `dshHome` field: it is actually six executor limits; `subagent-model-selection`'s
+> top level is `enabled`/`allowedModels` (`provider`/`model` are fields of its **array elements**);
+> `agent-default-model` requires only `provider`/`model`, and `reasoningEffort` may be omitted.
+>
+> **The criterion**: this table can only be derived by reading the plugin sources — any "plausible-looking" field name may be a product of memory — so re-measure when dsh is next upgraded, and do not make incremental guesses on this table.
 
-> **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.register` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.
+> **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.installSection` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.
 
+### Structured options and the escape hatch
+
+All 12 namespaces in the table above can be written directly through `nixkits.dsh.settings.<namespace>` — that is the **untyped escape hatch**. Its cost: a misspelled field, a mistyped enum value, or an out-of-range number **never fails at evaluation time**; once dsh's runtime validation fails it **drops that section and silently falls back to the schema default**, leaving nothing at all in the log.
+
+So the module provides **structured options** for 7 of them (Nix-side mirrors of the upstream schemas, turning those mistakes into evaluation-time errors):
+
+| option | namespace written | plugin |
+|--------|-------------------|--------|
+| `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
+| `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
+| `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
+| `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
+| `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
+| `nixkits.dsh.ui.conversation` | `ui-conversation` | `@deepseek-ai/dsh-client-ui-conversation` |
+
+**All three follow the same semantics**: an option defaults to `enable = false` (nothing is written to settings.yaml, so that namespace falls back to the schema default); with `enable = true` the section is generated from its sub-options; and an **explicit `nixkits.dsh.settings.<same namespace>` always wins** over the value a structured option generates.
+
+`shell` has no structured option: its `cwd` **has no default**, so declaring it partially carries a validation risk (the upstream schema requires that field to exist) — leaving it to the escape hatch is safer.
+
+```nix
+{
+  nixkits.dsh = {
+    # default model for new sessions
+    defaultModel = {
+      enable = true;
+      provider = "deepseek-official";
+      model = "deepseek-v4-flash-vision-exp";  # declares the image modality, so image input works
+      reasoningEffort = "max";
+    };
+    # per-turn parallel tool-call ceiling
+    agentLoop = { enable = true; maxParallelToolCalls = 10; };
+    # allowlist of models a subagent may use (enable also turns the feature's own enabled on)
+    subagentModelSelection = {
+      enable = true;
+      allowedModels = [
+        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+      ];
+    };
+    # interface language pinned to Chinese; unset follows each browser's Accept-Language
+    locale = { enable = true; preference = "zh"; };
+    ui = {
+      theme = { enable = true; preference = "dark"; fontSize = 14; };
+      chat = { enable = true; transcriptView = "compact"; };
+      conversation = { enable = true; busyEnter = "queue"; };
+    };
+  };
+}
+```
 
 ### Default model (defaultModel)
 

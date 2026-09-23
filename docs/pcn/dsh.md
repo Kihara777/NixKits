@@ -380,26 +380,84 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 
 ### 声明設定可能 host namespace
 
-`nixkits.dsh.settings` **host 側 `settings.register` 登録済** namespace 唯一書込可——此等数値 `$DSH_HOME/settings.yaml` 設定、瀏覽器間一致。`0.1.5-rc.2` 内建登録 全 **十二** namespace 與字段：
+`nixkits.dsh.settings` **host 側 `settings.installSection` 経由登録済** namespace 唯一書込可——此等値 `$DSH_HOME/settings.yaml` 格納、瀏覽器間一致。`0.1.6-alpha` 内蔵登録 全 **12** namespace 與字段（插件源碼之 `z.object({...})` / `Schema.object({...})` 自 逐一 実測抽出）：
 
 | namespace | 字段 | 説明 |
-|-----------|------|------|
-| `locale` | `language` 等 | 界面言語 |
-| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観與主題 |
-| `ui-chat` | `transcriptView` 等 | 会話視図 |
+|-----------|-----------|------|
+| `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新規会話 既定模型 |
+| `agent-loop` | `maxParallelToolCalls`（整数 ≥1、既定 10） | 単輪 並列道具呼出 上限 |
+| `agent-presets` | `default` | Agent 預設 |
+| `locale` | `preference`（BCP 47；内蔵 `zh`/`en`） | 界面言語 |
+| `permission` | `defaultPreset` | 権限預設 |
+| `shell` | `cwd`（**既定値無**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 bash 実行器 制限 |
+| `subagent-model-selection` | `enabled`（真偽値、既定 false）、`allowedModels`（`{provider, model}` 配列） | 副 agent 模型選択 |
+| `ui-chat` | `transcriptView`（`normal`/`compact`） | 会話記録 表示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | busy 時 Enter 動作 |
-| `ui-onboarding` | — | 引導 step 状態 |
-| `agent-presets` | — | Agent 預設 |
-| `agent-default-model` | `provider`、`model`、`reasoningEffort`（全部 必須） | 新規会話 既定模型 |
-| `agent-loop` | `maxParallelToolCalls`（既定 十） | agent loop 並列道具呼出 上限 |
-| `permission` | `presets`（各項 `sandbox` + `approval`） | 権限預設 |
-| `shell` | `dshHome` | shell 道具 dsh home 目録 |
-| `subagent-model-selection` | `provider`、`model`（両方 必須） | 副 agent 模型 選択 |
-| `web-search-deepseek` | `apiKey`、`apiKeyEnv`、`baseURL`、`model`、`apiVersion`、`maxTokens` 等 | 聯網検索 backend |
+| `ui-onboarding` | `welcomeNoticeVersion` | 引導手順 状態（dsh 自 書込） |
+| `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外観與主題 |
+| `web-search-deepseek` | `model`、`maxTokens` 等 | 聯網検索 backend |
 
-> 表中 字段 各 `installSection` schema（`z.object({...})`） 実測 抽出。`nixkits.dsh.defaultModel` 即 `agent-default-model` 書込、両方 設定 場合 **明示 `settings` 優先**。
+> ⚠️ 本表 曾 `0.1.5-rc.2` 基準 転記、其中 **5 行 実測 不一致**、故 2026-09-23 逐項照合 修正：
+> `locale` 之字段 `language` 非、`preference`；`ui-theme` 唯 `preference`/`fontSize`
+> （`dark`/`light`/`body` 字段 無——`dark`/`light` 為 `preference` 之**値**）；
+> `shell` 之 `dshHome` 字段 不存在、実際 実行器 之制限 6 項；`subagent-model-selection`
+> 之頂層 `enabled`/`allowedModels`（`provider`/`model` 為**配列要素**之字段）；
+> `agent-default-model` 唯 `provider`/`model` 必須、`reasoningEffort` 省略可能。
+>
+> **判據**：本表 插件源碼読取 以外 得 不能。「合理外観」之字段名 皆 記憶之産物 可能性 有——
+> 次回 dsh 昇級時 再実測 願。本表 増分推測 重 不可。
 
-> **設置 menu 存儲層境界**：非設置 UI 全項目都能 `nixkits.dsh.settings` 声明設定。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定有効、UI 内切替）——`settings.register` 系統**不経由**、故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等**不覆盖**。此類「毎瀏覽器偏好」当該插件 `⚙ 設定` panel 内設定、或 device 別独立瀏覽器。
+> **設定 menu 存儲層境界**：非 設定 UI 全項目 皆 `nixkits.dsh.settings` 宣言設定 可能。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定 ON、UI 内切替）、`settings.installSection` 系統**不経由**——故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等 上書**不**。此類「毎瀏覽器設定」当該插件 `⚙ 設定` panel 内 実施、或 device 別 独立瀏覽器 用意。
+
+### 構造化選項與脱出艙之役割分担
+
+上表 12 namespace 皆 `nixkits.dsh.settings.<namespace>` 自 直接書込 可能——即 **無型脱出艙**。其代価：字段 誤記、列挙値 誤綴、数値 範囲外、**何 皆 評価時 誤 無**；dsh 実行時検証 失敗時 **該 section 破棄、schema 既定値 静黙 fallback**——日誌 何 残 不。
+
+故 本 module 其中 7 個 向 **構造化選項** 提供（Nix 側 上流 schema 写取、上述誤 評価時 之誤 化）：
+
+| 選項 | 書込 namespace | 対応插件 |
+|------|------------------|----------|
+| `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
+| `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
+| `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
+| `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
+| `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
+| `nixkits.dsh.ui.conversation` | `ui-conversation` | `@deepseek-ai/dsh-client-ui-conversation` |
+
+**三者 意味 一貫**：選項 既定 `enable = false`（settings.yaml 不書込、当該 namespace schema 既定 fallback）；`enable = true` 時 子選項 従 当該 section 生成；**`nixkits.dsh.settings.<同名 namespace>` 常 優先**、構造化選項生成値 勝。
+
+`shell` 構造化選項 不提供：其 `cwd` **既定値 持 不**、部分宣言 検証 risk 伴（上流 schema 当該字段 存在 要求）、脱出艙 委 方 安全。
+
+```nix
+{
+  nixkits.dsh = {
+    # 新規会話 既定模型
+    defaultModel = {
+      enable = true;
+      provider = "deepseek-official";
+      model = "deepseek-v4-flash-vision-exp";  # image modality 宣言、画像輸入 対応
+      reasoningEffort = "max";
+    };
+    # 単輪 並列道具呼出 上限
+    agentLoop = { enable = true; maxParallelToolCalls = 10; };
+    # 副 agent 選択可能模型 許可清單（enable 当該機能 之 enabled 同時 開）
+    subagentModelSelection = {
+      enable = true;
+      allowedModels = [
+        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+      ];
+    };
+    # 界面言語 中国語 固定；未設定 時 各瀏覽器 之 Accept-Language 従
+    locale = { enable = true; preference = "zh"; };
+    ui = {
+      theme = { enable = true; preference = "dark"; fontSize = 14; };
+      chat = { enable = true; transcriptView = "compact"; };
+      conversation = { enable = true; busyEnter = "queue"; };
+    };
+  };
+}
+```
 
 
 ### 默認模型（defaultModel）
@@ -424,6 +482,6 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 | `off` | non-thinking：思考連鎖無、`thinking:disabled` 映射 | **最省**（reasoning token 無）、延遲最小；**FIM 補全僅此段対応** |
 | `low` | 思考開・最小力度 | off 稍高（少量 reasoning token） |
 | `high` | 默認段（dsh-llm-deepseek adapter 默認 high）、品質/速度均衡 | 出力含推論 segment、token 比率増 |
-| `max` | 最高力思考、品質最強 | **最高**（出力 token 比率最大） |
+| `max` | 最高力思考、品質最強 | **最高額**（出力 token 比率最大） |
 
 > `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限対応」）。FIM 僅 `deepseek-v4-flash` 與 `deepseek-v4-pro` 対応、`deepseek-v4-flash-vision-exp` 不支援。

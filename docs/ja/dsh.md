@@ -380,26 +380,84 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 
 ### 宣言的に設定可能な host ネームスペース
 
-`nixkits.dsh.settings` は**host 側で `settings.register` により登録された**名前空間にのみ書き込める——これらの値は `$DSH_HOME/settings.yaml` に置かれ、ブラウザ間で一致する。`0.1.5-rc.2` が登録する全 **12** 名前空間とフィールド：
+`nixkits.dsh.settings` は**host 側で `settings.installSection` により登録された**名前空間にのみ書き込める——これらの値は `$DSH_HOME/settings.yaml` に置かれ、ブラウザ間で一致する。`0.1.6-alpha` が登録する全 **12** 名前空間とフィールド（プラグインソースの `z.object({...})` / `Schema.object({...})` から一つずつ実測抽出）：
 
 | namespace | フィールド | 説明 |
 |-----------|-----------|------|
-| `locale` | `language` 等 | インターフェース言語 |
-| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外観とテーマ |
-| `ui-chat` | `transcriptView` 等 | 会話ビュー |
+| `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新規セッションの既定モデル |
+| `agent-loop` | `maxParallelToolCalls`（整数 ≥1、既定 10） | 1 ターンあたりの並列ツール呼び出し上限 |
+| `agent-presets` | `default` | Agent プリセット |
+| `locale` | `preference`（BCP 47；内蔵 `zh`/`en`） | インターフェース言語 |
+| `permission` | `defaultPreset` | 権限プリセット |
+| `shell` | `cwd`（**既定値なし**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | ローカル bash 実行器の制限 |
+| `subagent-model-selection` | `enabled`（ブール、既定 false）、`allowedModels`（`{provider, model}` 配列） | サブエージェントのモデル選択 |
+| `ui-chat` | `transcriptView`（`normal`/`compact`） | 会話記録の表示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | ビジー時の Enter 動作 |
-| `ui-onboarding` | — | オンボーディング手順の状態 |
-| `agent-presets` | — | Agent プリセット |
-| `agent-default-model` | `provider`、`model`、`reasoningEffort`（すべて必須） | 新規セッションの既定モデル |
-| `agent-loop` | `maxParallelToolCalls`（既定 10） | agent ループの並列ツール呼び出し上限 |
-| `permission` | `presets`（各項目 `sandbox` + `approval`） | 権限プリセット |
-| `shell` | `dshHome` | shell ツールの dsh ホームディレクトリ |
-| `subagent-model-selection` | `provider`、`model`（両方必須） | サブエージェントのモデル選択 |
-| `web-search-deepseek` | `apiKey`、`apiKeyEnv`、`baseURL`、`model`、`apiVersion`、`maxTokens` 等 | Web 検索バックエンド |
+| `ui-onboarding` | `welcomeNoticeVersion` | オンボーディング手順の状態（dsh が自ら書き込む） |
+| `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外観とテーマ |
+| `web-search-deepseek` | `model`、`maxTokens` 等 | Web 検索バックエンド |
 
-> 表中のフィールドは各 `installSection` のスキーマ（`z.object({...})`）から実測抽出した。`nixkits.dsh.defaultModel` は `agent-default-model` を書き込み、両方を設定した場合は**明示的な `settings` が優先**される。
+> ⚠️ 本表はかつて `0.1.5-rc.2` に基づいて転記され、うち **5 行が実測と不一致**だったため、2026-09-23 に項目ごとに照合して修正した：
+> `locale` のフィールドは `language` ではなく `preference`；`ui-theme` は `preference`/`fontSize` のみ
+> （`dark`/`light`/`body` フィールドは無い——`dark`/`light` は `preference` の**値**）；
+> `shell` に `dshHome` フィールドは存在せず、実際は実行器の制限 6 項目；`subagent-model-selection`
+> のトップレベルは `enabled`/`allowedModels`（`provider`/`model` は**配列要素**のフィールド）；
+> `agent-default-model` は `provider`/`model` のみ必須で、`reasoningEffort` は省略可能。
+>
+> **判据**：本表はプラグインソースを読むことによってのみ得られる。「もっともらしく見える」フィールド名はどれも記憶の産物でありうる——
+> 次回 dsh をアップグレードする際は再実測すること。本表に増分の推測を重ねないこと。
 
-> **設定メニューのストレージ境界**：設定 UI の全項目が `nixkits.dsh.settings` で宣言的に設定できるわけではない。**dsh-api-balance の界面 / 音声設定**（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**（ブラウザごとの独立・既定 ON・UI 内で切替）であり、`settings.register` システムを経由しない——そのため `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` はこれらを上書き**しない**。こうした「ブラウザごとの設定」は当プラグインの `⚙ 設定` パネルで行うか、デバイスごとに別ブラウザを用意する。
+> **設定メニューのストレージ境界**：設定 UI の全項目が `nixkits.dsh.settings` で宣言的に設定できるわけではない。**dsh-api-balance の界面 / 音声設定**（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**（ブラウザごとの独立・既定 ON・UI 内で切替）であり、`settings.installSection` システムを経由しない——そのため `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` はこれらを上書き**しない**。こうした「ブラウザごとの設定」は当プラグインの `⚙ 設定` パネルで行うか、デバイスごとに別ブラウザを用意する。
+
+### 構造化オプションとエスケープハッチの役割分担
+
+上表の 12 名前空間はいずれも `nixkits.dsh.settings.<namespace>` から直接書き込める——それは**型なしのエスケープハッチ**である。その代償は、フィールドの書き間違い・列挙値の綴り誤り・数値の範囲外が**いずれも評価時のエラーにならない**こと；dsh は実行時の検証に失敗すると**そのセクションを破棄し、スキーマ既定値へ静かにフォールバックする**——ログには何も残らない。
+
+そこで本モジュールはこのうち 7 つに**構造化オプション**を提供する（Nix 側で上流スキーマを写し取り、上述の誤りを評価時のエラーに変える）：
+
+| オプション | 書き込む namespace | 対応プラグイン |
+|------|------------------|----------|
+| `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
+| `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
+| `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
+| `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
+| `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
+| `nixkits.dsh.ui.conversation` | `ui-conversation` | `@deepseek-ai/dsh-client-ui-conversation` |
+
+**三者は意味が一貫している**：オプションは既定で `enable = false`（settings.yaml に書き込まず、当該 namespace はスキーマ既定へフォールバック）；`enable = true` ならサブオプションに従って当該セクションを生成；**`nixkits.dsh.settings.<同名 namespace>` が常に優先**され、構造化オプションが生成した値に勝る。
+
+`shell` には構造化オプションを提供しない：その `cwd` は**既定値を持たず**、一部の宣言は検証リスクを伴う（上流スキーマは当該フィールドの存在を要求する）ため、エスケープハッチに委ねる方が安全である。
+
+```nix
+{
+  nixkits.dsh = {
+    # 新規セッションの既定モデル
+    defaultModel = {
+      enable = true;
+      provider = "deepseek-official";
+      model = "deepseek-v4-flash-vision-exp";  # image モダリティを宣言、画像入力に対応
+      reasoningEffort = "max";
+    };
+    # 1 ターンの並列ツール呼び出し上限
+    agentLoop = { enable = true; maxParallelToolCalls = 10; };
+    # サブエージェントが選べるモデルの許可リスト（enable は当該機能の enabled も同時に開く）
+    subagentModelSelection = {
+      enable = true;
+      allowedModels = [
+        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+      ];
+    };
+    # インターフェース言語を中国語に固定；未設定なら各ブラウザの Accept-Language に従う
+    locale = { enable = true; preference = "zh"; };
+    ui = {
+      theme = { enable = true; preference = "dark"; fontSize = 14; };
+      chat = { enable = true; transcriptView = "compact"; };
+      conversation = { enable = true; busyEnter = "queue"; };
+    };
+  };
+}
+```
 
 
 ### デフォルトモデル（defaultModel）

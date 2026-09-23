@@ -92,17 +92,60 @@ let
   # hot-reloads it.  Empty ({} or missing) resolves every namespace to
   # schema defaults.
   #
-  # effectiveSettings folds the declarative defaultModel (when enabled) under
-  # agent-default-model; an explicit cfg.settings."agent-default-model" wins
-  # over the injected default (left side of // loses).
-  defaultModelSection = if cfg.defaultModel.enable then {
-    "agent-default-model" = {
-      provider = cfg.defaultModel.provider;
-      model = cfg.defaultModel.model;
-      reasoningEffort = cfg.defaultModel.reasoningEffort;
+  # effectiveSettings folds the declarative structured options (when enabled)
+  # under their settings namespaces; an explicit cfg.settings.<namespace> wins
+  # over an injected section (left side of // loses).
+  #
+  # Why mirror upstream schemas as typed Nix options when cfg.settings already
+  # accepts any namespace: the raw escape hatch is untyped, so a typo or an
+  # out-of-range value only shows up at dsh runtime — the settings plugin drops
+  # the section and the namespace silently falls back to its schema default,
+  # with nothing in the journal.  These options turn those mistakes into
+  # evaluation-time errors.
+  #
+  # Each namespace below is registered upstream by the named plugin calling
+  # `settings.installSection(...)`; the field names and ranges are copied from
+  # that schema (dsh 0.1.6-alpha).
+  structuredSections =
+    lib.optionalAttrs cfg.defaultModel.enable {
+      "agent-default-model" = {
+        provider = cfg.defaultModel.provider;
+        model = cfg.defaultModel.model;
+        reasoningEffort = cfg.defaultModel.reasoningEffort;
+      };
+    }
+    // lib.optionalAttrs cfg.agentLoop.enable {
+      # @deepseek-ai/dsh-agent-loop — schema: int >= 1, default 10.
+      "agent-loop" = { maxParallelToolCalls = cfg.agentLoop.maxParallelToolCalls; };
+    }
+    // lib.optionalAttrs cfg.subagentModelSelection.enable {
+      # @deepseek-ai/dsh-tool-subagent — gates the per-subagent model picker
+      # and whitelists the routes it may offer.
+      "subagent-model-selection" = {
+        enabled = true;
+        allowedModels = cfg.subagentModelSelection.allowedModels;
+      };
+    }
+    // lib.optionalAttrs cfg.locale.enable {
+      # @deepseek-ai/dsh-client-locale — BCP 47 id; shipped ids are zh, en.
+      "locale" = { preference = cfg.locale.preference; };
+    }
+    // lib.optionalAttrs cfg.ui.theme.enable {
+      # @deepseek-ai/dsh-client-ui-theme
+      "ui-theme" = {
+        preference = cfg.ui.theme.preference;
+        fontSize = cfg.ui.theme.fontSize;
+      };
+    }
+    // lib.optionalAttrs cfg.ui.chat.enable {
+      # @deepseek-ai/dsh-client-ui-chat — completed-Turn transcript density.
+      "ui-chat" = { transcriptView = cfg.ui.chat.transcriptView; };
+    }
+    // lib.optionalAttrs cfg.ui.conversation.enable {
+      # @deepseek-ai/dsh-client-ui-conversation — plain Enter while busy.
+      "ui-conversation" = { busyEnter = cfg.ui.conversation.busyEnter; };
     };
-  } else { };
-  effectiveSettings = defaultModelSection // cfg.settings;
+  effectiveSettings = structuredSections // cfg.settings;
   settingsDoc = pkgs.writeText "settings.yaml" (builtins.toJSON effectiveSettings);
 
   # External launch authorities: dsh prints its tokenized startup URL for
@@ -396,6 +439,110 @@ in
         enable = true (backed by \@deepseek-ai/dsh-agent-default-model).  An
         explicit nixkits.dsh.settings."agent-default-model" always wins.
       '';
+    };
+
+    # ── 其余结构化 settings 命名空间 ────────────────────────────────────
+    # 下面每个选项镜像一个上游插件经 `settings.installSection(...)` 注册的
+    # settings schema（dsh 0.1.6-alpha）。语义一致：
+    #   · 未 enable 时**不写入** settings.yaml，该命名空间回落 schema 默认；
+    #   · 若 nixkits.dsh.settings 里显式给出同名命名空间，则以显式值为准。
+    # 想声明这里没镜像的命名空间，仍可用 nixkits.dsh.settings 逃生舱。
+
+    agentLoop = {
+      enable = lib.mkEnableOption "inject settings.agent-loop (backed by \@deepseek-ai/dsh-agent-loop)";
+      maxParallelToolCalls = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 10;
+        description = ''
+          Upper bound on how many tool calls one agent turn may run
+          concurrently.  Upstream schema: integer >= 1, default 10.
+        '';
+      };
+    };
+
+    subagentModelSelection = {
+      enable = lib.mkEnableOption "inject settings.subagent-model-selection (backed by \@deepseek-ai/dsh-tool-subagent)";
+      allowedModels = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
+          options = {
+            provider = lib.mkOption {
+              type = lib.types.str;
+              description = "Provider route id (e.g. deepseek-official, llama-local).";
+            };
+            model = lib.mkOption {
+              type = lib.types.str;
+              description = "Model id within that provider.";
+            };
+          };
+        });
+        default = [ ];
+        example = [
+          {
+            provider = "deepseek-official";
+            model = "deepseek-v4-flash";
+          }
+        ];
+        description = ''
+          Routes the per-subagent model picker may offer.  Empty (the upstream
+          default) means the roster is unrestricted.  Enabling this option also
+          turns the section's own `enabled` flag on — that flag is what enables
+          the feature at all, so the two cannot be set independently here.
+        '';
+      };
+    };
+
+    locale = {
+      enable = lib.mkEnableOption "inject settings.locale (backed by \@deepseek-ai/dsh-client-locale)";
+      preference = lib.mkOption {
+        type = lib.types.str;
+        default = "zh";
+        description = ''
+          Explicit UI language as a BCP 47 id; the browser client currently
+          ships `zh` and `en`.  Leaving the section out (the default) delegates
+          to the browser's Accept-Language, which makes the UI language depend
+          on whichever device opens it.
+        '';
+      };
+    };
+
+    ui = {
+      theme = {
+        enable = lib.mkEnableOption "inject settings.ui-theme (backed by \@deepseek-ai/dsh-client-ui-theme)";
+        preference = lib.mkOption {
+          type = lib.types.enum [ "light" "dark" "system" ];
+          default = "system";
+          description = "Built-in theme preference.  Upstream default: system.";
+        };
+        fontSize = lib.mkOption {
+          type = lib.types.ints.between 12 17;
+          default = 14;
+          description = "Conversation content font size in px.  Upstream range: 12-17.";
+        };
+      };
+      chat = {
+        enable = lib.mkEnableOption "inject settings.ui-chat (backed by \@deepseek-ai/dsh-client-ui-chat)";
+        transcriptView = lib.mkOption {
+          type = lib.types.enum [ "normal" "compact" ];
+          default = "compact";
+          description = ''
+            Presentation of a completed Turn's transcript: `compact` keeps the
+            collapsible process disclosure, `normal` expands it.  Upstream
+            default: compact.
+          '';
+        };
+      };
+      conversation = {
+        enable = lib.mkEnableOption "inject settings.ui-conversation (backed by \@deepseek-ai/dsh-client-ui-conversation)";
+        busyEnter = lib.mkOption {
+          type = lib.types.enum [ "queue" "steer" ];
+          default = "queue";
+          description = ''
+            What a plain Enter does while an agent is still busy: `queue` parks
+            the message for the next Turn, `steer` injects it into the running
+            one.  Upstream default: queue.
+          '';
+        };
+      };
     };
 
     presets = {

@@ -378,26 +378,84 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 
 ### 可声明式配置的宿主 namespace
 
-`nixkits.dsh.settings` 只能写入**宿主侧已通过 `settings.register` 注册**的命名空间——这些值存 `$DSH_HOME/settings.yaml`，跨浏览器一致。`0.1.5-rc.2` 内置注册的全部 **12 个** namespace 及字段：
+`nixkits.dsh.settings` 只能写入**宿主侧已通过 `settings.installSection` 注册**的命名空间——这些值存 `$DSH_HOME/settings.yaml`，跨浏览器一致。`0.1.6-alpha` 内置注册的全部 **12 个** namespace 及字段（逐个从插件源码的 `z.object({...})` / `Schema.object({...})` 实测提取）：
 
 | namespace | 字段 | 说明 |
 |-----------|------|------|
-| `locale` | `language` 等 | 界面语言 |
-| `ui-theme` | `dark`/`light`/`system`/`fontSize`/`preference`/`body` 等 | 外观与主题 |
-| `ui-chat` | `transcriptView` 等 | 会话视图 |
+| `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新会话默认模型 |
+| `agent-loop` | `maxParallelToolCalls`（整数 ≥1，默认 10） | 单轮并行工具调用上限 |
+| `agent-presets` | `default` | Agent 预设 |
+| `locale` | `preference`（BCP 47；内置 `zh`/`en`） | 界面语言 |
+| `permission` | `defaultPreset` | 权限预设 |
+| `shell` | `cwd`（**无默认值**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 bash 执行器限制 |
+| `subagent-model-selection` | `enabled`（布尔，默认 false）、`allowedModels`（`{provider, model}` 数组） | 子代理模型选择 |
+| `ui-chat` | `transcriptView`（`normal`/`compact`） | 会话记录展示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | 忙碌时 Enter 行为 |
-| `ui-onboarding` | — | 引导步骤状态 |
-| `agent-presets` | — | Agent 预设 |
-| `agent-default-model` | `provider`、`model`、`reasoningEffort`（均为必填） | 新会话默认模型 |
-| `agent-loop` | `maxParallelToolCalls`（默认 10） | agent 循环的并行工具调用上限 |
-| `permission` | `presets`（每项 `sandbox` + `approval`） | 权限预设 |
-| `shell` | `dshHome` | shell 工具的 dsh 主目录 |
-| `subagent-model-selection` | `provider`、`model`（均必填） | 子代理模型选择 |
-| `web-search-deepseek` | `apiKey`、`apiKeyEnv`、`baseURL`、`model`、`apiVersion`、`maxTokens` 等 | 联网搜索后端 |
+| `ui-onboarding` | `welcomeNoticeVersion` | 引导步骤状态（dsh 自写） |
+| `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外观与主题 |
+| `web-search-deepseek` | `model`、`maxTokens` 等 | 联网搜索后端 |
 
-> 表中字段由 `installSection` 的 schema 实测提取（`z.object({...})`）；`nixkits.dsh.defaultModel` 即写 `agent-default-model`，二者同时设置时**显式 `settings` 优先**。
+> ⚠️ 本表曾按 `0.1.5-rc.2` 抄录，其中 **5 行与实测不符**，已于 2026-09-23 逐项核对修正：
+> `locale` 的字段是 `preference` 而非 `language`；`ui-theme` 只有 `preference`/`fontSize`
+> （无 `dark`/`light`/`body` 字段——`dark`/`light` 是 `preference` 的**取值**）；
+> `shell` 不存在 `dshHome` 字段，实际是执行器限制六项；`subagent-model-selection`
+> 的顶层是 `enabled`/`allowedModels`（`provider`/`model` 是**数组元素**的字段）；
+> `agent-default-model` 仅 `provider`/`model` 必填，`reasoningEffort` 可省略。
+>
+> **判据**：该表只能靠读插件源码得出，任何"看起来合理"的字段名都可能是记忆的产物——
+> 下次升级 dsh 时请重新实测，不要在此表上做增量猜测。
 
-> **设置菜单的存储层边界**：并非设置 UI 里每一项都能用 `nixkits.dsh.settings` 声明式配置。**dsh-api-balance 的界面 / 语音设置**（语音提醒、底部统计条横向滚动、回车换行 + Shift+回车发送、移动端会话切换不弹键盘、TTS 后端）是**浏览器 localStorage 状态**（每浏览器独立、默认开启、UI 内切换），**不经过** `settings.register` 系统，因此 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` **不会**覆盖它们。这类"每浏览器偏好"请在该插件的 `⚙ 设置` 面板内配置，或按设备部署独立浏览器。
+> **设置菜单的存储层边界**：并非设置 UI 里每一项都能用 `nixkits.dsh.settings` 声明式配置。**dsh-api-balance 的界面 / 语音设置**（语音提醒、底部统计条横向滚动、回车换行 + Shift+回车发送、移动端会话切换不弹键盘、TTS 后端）是**浏览器 localStorage 状态**（每浏览器独立、默认开启、UI 内切换），**不经过** `settings.installSection` 系统，因此 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` **不会**覆盖它们。这类"每浏览器偏好"请在该插件的 `⚙ 设置` 面板内配置，或按设备部署独立浏览器。
+
+### 结构化选项与逃生舱的分工
+
+上表 12 个 namespace 都能经 `nixkits.dsh.settings.<namespace>` 直接写入——那是**无类型逃生舱**。它的代价是：字段写错、枚举值拼错、数值越界，**都不会在求值期报错**；dsh 运行时校验失败后会**丢弃该段并静默回落 schema 默认值**，日志里什么都不留。
+
+故本模块为其中 7 个提供了**结构化选项**（Nix 侧镜像上游 schema，把上述错误变成求值期报错）：
+
+| 选项 | 写入的 namespace | 对应插件 |
+|------|------------------|----------|
+| `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
+| `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
+| `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
+| `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
+| `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
+| `nixkits.dsh.ui.conversation` | `ui-conversation` | `@deepseek-ai/dsh-client-ui-conversation` |
+
+**三者语义一致**：选项默认 `enable = false`（不写入 settings.yaml，该 namespace 回落 schema 默认）；`enable = true` 时按子选项生成该段；**`nixkits.dsh.settings.<同名 namespace>` 始终优先**于结构化选项生成的值。
+
+`shell` 未提供结构化选项：其 `cwd` **没有默认值**，部分声明有校验风险（上游 schema 要求该字段存在），留给逃生舱更稳妥。
+
+```nix
+{
+  nixkits.dsh = {
+    # 新会话默认模型
+    defaultModel = {
+      enable = true;
+      provider = "deepseek-official";
+      model = "deepseek-v4-flash-vision-exp";  # 声明了 image 模态，支持图片输入
+      reasoningEffort = "max";
+    };
+    # 单轮并行工具调用上限
+    agentLoop = { enable = true; maxParallelToolCalls = 10; };
+    # 子代理可选模型白名单（enable 同时把该特性的 enabled 打开）
+    subagentModelSelection = {
+      enable = true;
+      allowedModels = [
+        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+      ];
+    };
+    # 界面语言固定为中文；不设则随各浏览器的 Accept-Language
+    locale = { enable = true; preference = "zh"; };
+    ui = {
+      theme = { enable = true; preference = "dark"; fontSize = 14; };
+      chat = { enable = true; transcriptView = "compact"; };
+      conversation = { enable = true; busyEnter = "queue"; };
+    };
+  };
+}
+```
 
 ### 默认模型（defaultModel）
 
