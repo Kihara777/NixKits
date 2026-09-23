@@ -27,9 +27,9 @@ NixOS模式全能力 + 以下：
   | `maintenance-workflow-repo`（序号 902） | **本倉（NixKits）約束** | 四言語與其基準（`docs/zh/` 先書）、`write-maintenance-log` 為準則、項目数一致之検証可能判据、技能 tree 単一來源 |
 
   判据唯一：**此規約、換倉庫尚成立乎？** 成立則留汎用層、不成立則入適配層。
-  汎用層に本倉専名一切不出現（NixKits / 四言語 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`）。
+  汎用層 本倉専名 一切 不出現（NixKits / 四言語 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`）。
 
-  Component 選項 `repoWorkflow: false` 汎用層のみ残存可——別倉庫維護 session 用。
+  Component 選項 `repoWorkflow: false` 唯 汎用層 残存 可——別倉庫維護 session 用。
 - 其他（系統検証、`nixos_shell` / `nixos_cli`、開発 prompt、NixOS模式 同梱 5 技能）NixOS模式同一。
 
 ## 派生関係
