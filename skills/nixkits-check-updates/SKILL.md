@@ -1,6 +1,6 @@
 ---
 name: nixkits-check-updates
-description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的四语文档同步、dsh 内置插件清单同步、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
+description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的四语文档同步、dsh 内置插件清单同步（含插件改名令预设硬失败的排查）、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
 ---
 
 # NixKits 软件包更新（仓库适配层）
@@ -110,6 +110,34 @@ done | sort -u)
 将提取的 `id -> name` 列表替换文档中「插件清单」代码块的内容
 （标题保留各语言本地化，清单正文 id/name 跨语言一致）。
 
+### ⚠️ 插件改名/删除会**真的坏掉**预设（不只是文档问题）
+
+上面同步的是**文档**；同一件事还有一处会**功能性地**炸掉：本仓
+`packages/dsh-nixos-shell/presets/` 下两个 Agent 预设的组合行，是按**包名**
+引用内置插件的（`name: '@deepseek-ai/dsh-…'`）。实测 2026-09-28：dsh 0.1.6
+把 `dsh-workflow-worker-thread` 改名为 `dsh-workflow-ptc`，而两预设仍写旧名——
+
+| dsh 版本 | 对无法解析的插件行 | 症状 |
+|---|---|---|
+| ≤ 0.1.6-alpha.1 | **静默忽略** | 预设照常加载、**不留任何痕迹**（旧名可潜伏很久）|
+| ≥ 0.1.6-alpha.2 | **硬失败** | 整份预设挂不起来：`preset "…" failed to mount: row "…" names a plugin that cannot be resolved`——界面上只表现为「预设消失了」|
+
+**升级 dsh 前跑两层判据**（缺一不可；来源仓库的实现在 `/etc/nixos/tests/`）：
+
+1. **行解析**（廉价、离线）：逐行查组合行里的包在插件树里存不存在 —— 抓改名/删除。
+   `preset-rows-test.sh`
+2. **真挂载**（权威）：起一次性 dsh（独立 `DSH_HOME` + 备用端口），调
+   `agentPresets/list`，逐条读**上游自己的** `broken` 字段 —— 这是唯一能抓住
+   「包在、行也解析得了、加载时才炸」的判据（先例：0.1.5-alpha.2 把 `dsh-persona`
+   的 `text` 改成必填 `prefix`，行扫描全绿而预设在建会话时死）。
+   `dsh-preset-mount-probe.sh`（`--self-test` 会塞一份故意坏掉的夹具做反证）。
+
+> ⚠️ **预设是 seed-once 播种的**（`modules/dsh.nix`：`if [ ! -e … ]`，并刻意
+> `chmod -R u+w` 尊重用户那一份）：修预设要修**两处**——包内源（管新机器与新 home）
+> 与已部署的 `$DSH_HOME/.agent-presets/<id>`（管现在这台）。只修一处＝半个修复。
+
+> 判据自身的方法论（为什么判据必须先能失败）已上移通用技能第 7 步自检**第 9 问**。
+
 ## 第 8 步补充：记录维护日志
 
 更新完成后**必须**调用 `write-maintenance-log` 技能：
@@ -168,7 +196,7 @@ gh api repos/Kihara777/NixKits --jq .full_name || echo "取数链路异常 —�
 
 **为何危险**：这是**不报错、只撒谎**的失败形态——比构建失败更难发现，因为
 报告看起来完全正常。已泛化为通用技能第 3 步的「用 `gh api` 而不是裸 `curl`」
-与第 7 步八问自检第 7 问。
+与第 7 步九问自检第 7 问。
 
 ### Rust 包 Cargo.lock 同步
 
