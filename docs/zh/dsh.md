@@ -141,6 +141,8 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 > **dsh ≥ 0.1.2-alpha 插件兼容**：`ctx.connection.rpc.intercept` 的 shared RPC channel interceptor 互斥（每 channel 仅一个，重复注册直接 throw），`/api` 已被内置 typert-gateway 占用。第三方插件提供 RPC 方法请改用精确 fetch route（`ctx.connection.fetch.register` 注册如 `/api/<plugin>/<method>`，自行实现 `{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` 的 RPC envelope 约定），避免顶掉内置 interceptor 导致所有 llm/session 等 RPC 404。插件依赖的 `@deepseek-ai/dsh-tools` 等 peer 版本需与宿主 dsh 通道对齐。
 
+> **dsh ≥ 0.1.6-alpha.2 插件改名会硬失败**：内置插件 `dsh-workflow-worker-thread` 在 0.1.6 改名为 `dsh-workflow-ptc`（`id` 与包名同时变，`config` 不变），旧名的组合行已无对应包目录。dsh ≤ alpha.1 对无法解析的插件行**静默忽略**——预设照常加载、问题不留任何痕迹；alpha.2 的插件解析器把它变成**硬失败**，整份 Agent 预设挂不起来，只在建会话时报 `preset "…" failed to mount: row "…" names a plugin that cannot be resolved`。升级 dsh 前可先用 API 自检：`agentPresets/list` 返回的每条预设都带 `broken` 字段（**无该字段即通过上游健康判定，可挂载**）。
+
 ### 插件更新与零重启激活
 
 插件包通过**稳定挂载点**加载：activation script 在每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell`（sudo 守护脚本）符号链接翻到当前代的 store 路径（GC 安全：目标始终处于当前 toplevel 闭包内，回滚自动翻回旧代路径）。`dsh.service` 与 `nixkits-sudo@.service` 的单元定义只引用这些稳定路径，因此**插件包更新不再改变 unit 内容**——switch-to-configuration 既不重启 dsh、也不 stop/start sudo socket，激活阶段对在途工具调用零中断。

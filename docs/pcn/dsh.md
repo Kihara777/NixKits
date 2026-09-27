@@ -141,6 +141,8 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 > **dsh ≥ 0.1.2-alpha 插件互換性**：`ctx.connection.rpc.intercept` shared RPC channel interceptor 排他（1 channel 1 個限定、再登録 throw）、`/api` 内建 typert-gateway 既占有。RPC 方法提供第三者插件宜用精確 fetch route（`ctx.connection.fetch.register` `/api/<plugin>/<method>` 等登録、`{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` RPC envelope 契約自前実装）——channel interceptor 奪取時内建 interceptor 押退、全 llm/session 等 RPC 404。插件 `@deepseek-ai/dsh-tools` 等 peer 依存宿主 dsh 通道一致必要。
 
+> **dsh ≥ 0.1.6-alpha.2 插件改名 硬失敗**：内建插件 `dsh-workflow-worker-thread` 於 0.1.6 `dsh-workflow-ptc` 改名（`id` 與 package 名同時変更、`config` 不変）、旧名 之行 対応先 既不存在。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**——preset 其侭 読込、問題 痕跡 皆無。alpha.2 插件 resolver 此 **硬失敗** 変更、Agent preset 全体 mount 不能、session 作成時 `preset "…" failed to mount: row "…" names a plugin that cannot be resolved` 出 而已。dsh 更新 前 API 以 自己検査 可能：`agentPresets/list` 返 各 preset `broken` field 有（**此 field 無 場合 上流 健全性判定 通過、mount 可能**）。
+
 ### 插件更新與零再起活性化
 
 插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体與插件樹）與 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 與 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。

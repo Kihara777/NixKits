@@ -141,6 +141,8 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 > **dsh ≥ 0.1.2-alpha プラグイン互換性**：`ctx.connection.rpc.intercept` の shared RPC channel interceptor は排他的（1 チャネルに 1 つのみ、再登録は throw）で、`/api` は内蔵 typert-gateway が既に占有している。RPC メソッドを提供するサードパーティプラグインは正確な fetch route（`ctx.connection.fetch.register` で `/api/<plugin>/<method>` などに登録し、`{ rpcId, method, payload }` → `{ type: "server-response", rpcId, result }` の RPC envelope 契約を自前実装）を使うこと——チャネル interceptor を奪うと内蔵の interceptor が押しのけられ、すべての llm/session 等の RPC が 404 になる。プラグインの `@deepseek-ai/dsh-tools` 等の peer 依存はホスト dsh のチャネルに合わせること。
 
+> **dsh ≥ 0.1.6-alpha.2 ではプラグイン改名がハード失敗になる**：内蔵プラグイン `dsh-workflow-worker-thread` は 0.1.6 で `dsh-workflow-ptc` に改名された（`id` とパッケージ名が同時に変わり、`config` は不変）。旧名の組合せ行には対応するパッケージディレクトリがもう存在しない。dsh ≤ alpha.1 は解決できないプラグイン行を**黙って無視**していた——プリセットはそのまま読み込まれ、問題は痕跡を残さない。alpha.2 のプラグインリゾルバはこれを**ハード失敗**に変え、Agent プリセット全体がマウントできず、セッション作成時に `preset "…" failed to mount: row "…" names a plugin that cannot be resolved` と出るだけになる。dsh を更新する前に API で自己検査できる：`agentPresets/list` が返す各プリセットには `broken` フィールドがあり（**このフィールドが無ければ上流の健全性判定を通過しており、マウント可能**）。
+
 ### プラグイン更新とゼロ再起動活性化
 
 プラグインパッケージは**安定マウントポイント**経由で読み込む：activation script が毎回の switch/boot で `/run/dsh/current`（dsh 本体とプラグイン木）と `/run/dsh/nixos-shell`（sudo 実行スクリプト）のシンボリックリンクを現在世代の store パスへ張り替える（GC 安全：リンク先は常に現在の toplevel 閉包内にあり、ロールバック時は旧世代のパスへ自動で戻る）。`dsh.service` と `nixkits-sudo@.service` のユニット定義はこれら安定パスのみを参照するため、**プラグインパッケージの更新でユニット内容は変わらない**——switch-to-configuration は dsh を再起動せず、sudo socket も stop/start しない。活性化は実行中のツール呼び出しを一切中断しない。
