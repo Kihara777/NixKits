@@ -206,8 +206,11 @@
         backgroundMode: one-shot
         maxDepth: provider-managed
 
-    - id: workflow-worker-thread
-      name: '@deepseek-ai/dsh-workflow-worker-thread'
+    # 旧名 workflow-worker-thread / @deepseek-ai/dsh-workflow-worker-thread
+    # 在 dsh 0.1.6 已不存在，现名 workflow-ptc（config 逐字相同）。dsh ≤ alpha.1
+    # 静默忽略无法解析的插件行，alpha.2 改为硬失败：预设整个挂不起来。
+    - id: workflow-ptc
+      name: '@deepseek-ai/dsh-workflow-ptc'
       config:
         provider: spawn
 
