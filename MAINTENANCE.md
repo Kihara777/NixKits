@@ -4,12 +4,13 @@
 
 ## 2026-09-28T08:04:31+09:00
 
-**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，而本仓两个预设的组合行与其中的技能文档示例仍写旧名。dsh ≤ alpha.1 对无法解析的插件行**静默忽略**（预设照常加载、问题不留痕迹），alpha.2 新增的插件解析器把它变成**硬失败**：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— 整份 Agent 预设挂不起来，维护者本机四个预设里三个死于此，症状表现为「预设凭空消失」。修复：`nixos-mode` / `maintenance-mode` 的组合行与 `editing-cordis-compositions` 技能示例同步改名（`config` 逐字不变，维护模式仍为 NixOS模式的完整派生）。**判据缺口**：既有流程只验证「包能否构建」，而「组合行能否解析」要到**建会话**才暴露——失败点比验证点晚了一整层。本次改为对**构建产物**直接做挂载验证：起一次性 dsh（独立 `DSH_HOME`/端口）调 `agentPresets/list`，读上游自己的 `broken` 健康判定，并塞入一份**故意坏掉的夹具**做反证，确认判据确有区分度（夹具必须被判 broken 且理由含假包名）。同一陷阱写入 `docs/*/dsh.md` 插件兼容段（四语）。
+**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，而本仓两个预设的组合行与其中的技能文档示例仍写旧名。dsh ≤ alpha.1 对无法解析的插件行**静默忽略**（预设照常加载、问题不留痕迹），alpha.2 新增的插件解析器把它变成**硬失败**：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— 整份 Agent 预设挂不起来，维护者本机四个预设里三个死于此，症状表现为「预设凭空消失」。修复：`nixos-mode` / `maintenance-mode` 的组合行与 `editing-cordis-compositions` 技能示例同步改名（`config` 逐字不变，维护模式仍为 NixOS模式的完整派生）。**判据缺口**：既有流程只验证「包能否构建」，而「组合行能否解析」要到**建会话**才暴露——失败点比验证点晚了一整层。本次改为对**构建产物**直接做挂载验证：起一次性 dsh（独立 `DSH_HOME`/端口）调 `agentPresets/list`，读上游自己的 `broken` 健康判定，并塞入一份**故意坏掉的夹具**做反证，确认判据确有区分度（夹具必须被判 broken 且理由含假包名）。同一陷阱写入 `docs/*/dsh.md` 插件兼容段（四语）。**另修正本仓 `AGENTS.md` 的「本机部署」前提**：本机是 **GitHub 引用而非 `path:` 输入**（原文写反了）——因此必须「先推送、再重锁」；本地提交不推送就锁不到，`nixos apply` 会看起来成功而没带上改动。同时记下重锁会重新解析本仓的浮动子输入（实测一次 `--update-input nixkits` 把 **llama-cpp 0.4.1 → 0.5.0** 一并拉了进来），修一行小事前先想清楚要不要连带升级 llama.cpp。
 
 | 提交 | 说明 |
 |------|------|
 | `c92e980` | fix(dsh-nixos-shell): 预设行改用 workflow-ptc（旧名在 0.1.6 已不存在） |
 | `7a12ff2` | docs(dsh): 记录 0.1.6-alpha.2 插件改名硬失败陷阱（四语） |
+| `5364ef1` | docs(agents): 修正本机部署前提（GitHub 引用而非 path 输入）+ 重锁的副作用 |
 
 ## 2026-09-24T05:45:11+09:00
 

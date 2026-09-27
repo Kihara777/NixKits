@@ -4,12 +4,13 @@
 
 ## 2026-09-28T08:04:31+09:00
 
-**摘要**：fix(dsh-nixos-shell): preset 行 `workflow-ptc` 変更 —— dsh 0.1.6 内建插件 `dsh-workflow-worker-thread` 改名、然 本 repo 二 preset 之 組合行 與 其 中 技能文書 例 旧名 侭。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**（preset 其侭 読込、問題 痕跡 皆無）、alpha.2 新規 插件 resolver 此 **硬失敗** 変更：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent preset 全体 mount 不能、維護者 本機 四 preset 中 三 此 死、「preset 消失」 如 見。修正：`nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時改名（`config` 不変、維護模式 NixOS模式 之 完全派生 侭）。**判定 欠落**：既存 流 「package build 可能 否」 而已 見、而「組合行 解決 可能 否」**session 作成時** 初 露見——失敗点 検証点 自 一層 下 在。今回 以後 **build 成果物** 直接 mount 検証：臨時 dsh 起動（独立 `DSH_HOME`/端口）、`agentPresets/list` 呼 上流 自身 之 `broken` 健全性判定 読、更 **故意 壊 夹具** 混 反証 為、判定 真 識別力 有 確認（夹具 broken 判定、理由 偽 package 名 含 必要）。同 罠 `docs/*/dsh.md` 插件互換性 注記 記載（四語）。
+**摘要**：fix(dsh-nixos-shell): preset 行 `workflow-ptc` 変更 —— dsh 0.1.6 内建插件 `dsh-workflow-worker-thread` 改名、然 本 repo 二 preset 之 組合行 與 其 中 技能文書 例 旧名 侭。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**（preset 其侭 読込、問題 痕跡 皆無）、alpha.2 新規 插件 resolver 此 **硬失敗** 変更：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent preset 全体 mount 不能、維護者 本機 四 preset 中 三 此 死、「preset 消失」 如 見。修正：`nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時改名（`config` 不変、維護模式 NixOS模式 之 完全派生 侭）。**判定 欠落**：既存 流 「package build 可能 否」 而已 見、而「組合行 解決 可能 否」**session 作成時** 初 露見——失敗点 検証点 自 一層 下 在。今回 以後 **build 成果物** 直接 mount 検証：臨時 dsh 起動（独立 `DSH_HOME`/端口）、`agentPresets/list` 呼 上流 自身 之 `broken` 健全性判定 読、更 **故意 壊 夹具** 混 反証 為、判定 真 識別力 有 確認（夹具 broken 判定、理由 偽 package 名 含 必要）。同 罠 `docs/*/dsh.md` 插件互換性 注記 記載（四語）。**併 本 repo `AGENTS.md` 之「本機展開」前提 修正**：本機 **GitHub 参照 而 非 `path:` 輸入**（原文 逆）、故「先 push、次 再鎖」之順 —— push 不 為 局所 commit 鎖 不能、`nixos apply` 成功 如 見 而 変更 運 不。再鎖 本 repo 浮動子輸入 再解析 事 亦 記録（実測：`--update-input nixkits` 一回 **llama-cpp 0.4.1 → 0.5.0** 巻 込）、一行 修正 為 再鎖 前 一考 要。
 
 | 提交 | 説明 |
 |------|------|
 | `c92e980` | fix(dsh-nixos-shell): 预设行改用 workflow-ptc（旧名在 0.1.6 已不存在） |
 | `7a12ff2` | docs(dsh): 记录 0.1.6-alpha.2 插件改名硬失败陷阱（四语） |
+| `5364ef1` | docs(agents): 修正本机部署前提（GitHub 引用而非 path 输入）+ 重锁的副作用 |
 
 ## 2026-09-24T05:45:11+09:00
 
