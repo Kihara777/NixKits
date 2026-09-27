@@ -2,6 +2,15 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-09-28T08:04:31+09:00
+
+**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，而本仓两个预设的组合行与其中的技能文档示例仍写旧名。dsh ≤ alpha.1 对无法解析的插件行**静默忽略**（预设照常加载、问题不留痕迹），alpha.2 新增的插件解析器把它变成**硬失败**：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— 整份 Agent 预设挂不起来，维护者本机四个预设里三个死于此，症状表现为「预设凭空消失」。修复：`nixos-mode` / `maintenance-mode` 的组合行与 `editing-cordis-compositions` 技能示例同步改名（`config` 逐字不变，维护模式仍为 NixOS模式的完整派生）。**判据缺口**：既有流程只验证「包能否构建」，而「组合行能否解析」要到**建会话**才暴露——失败点比验证点晚了一整层。本次改为对**构建产物**直接做挂载验证：起一次性 dsh（独立 `DSH_HOME`/端口）调 `agentPresets/list`，读上游自己的 `broken` 健康判定，并塞入一份**故意坏掉的夹具**做反证，确认判据确有区分度（夹具必须被判 broken 且理由含假包名）。同一陷阱写入 `docs/*/dsh.md` 插件兼容段（四语）。
+
+| 提交 | 说明 |
+|------|------|
+| `c92e980` | fix(dsh-nixos-shell): 预设行改用 workflow-ptc（旧名在 0.1.6 已不存在） |
+| `7a12ff2` | docs(dsh): 记录 0.1.6-alpha.2 插件改名硬失败陷阱（四语） |
+
 ## 2026-09-24T05:45:11+09:00
 
 **摘要**：① `fix(pcn)` 剔除偽中国語残留假名——上两次提交在 pcn 文档留下 4 处假名，`nix flake check` 的 `check-maintenance-log` 与 `check-doc-links` 双双失败（即 **CI 自那时起一直是红的**），逐处改写为伪中国语后两检查恢复 exit 0。② `feat(dsh)` 新增 6 个结构化 settings 选项并修正 namespace 表：上游 dsh 0.1.6-alpha 共注册 12 个 settings namespace，而模块此前只为 `agent-default-model` 提供了结构化选项，其余只能走**无类型逃生舱** `settings`——字段名、枚举、范围写错都**不会在求值期报错**，dsh 运行时校验失败后丢弃该段并**静默回落 schema 默认值**，日志里什么都不留。现为 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 补齐 Nix 侧镜像（语义与既有 `defaultModel` 一致：默认 `enable = false` 不写入、显式 `settings.<同名 namespace>` 优先）；`shell` 因 `cwd` 在 schema 里**没有默认值**、部分声明有校验风险而刻意不提供。同时更正文档中按 `0.1.5-rc.2` 抄录的 namespace 表——逐项实测后 **5 行与事实不符**：`locale` 字段是 `preference` 而非 `language`；`ui-theme` 只有 `preference`/`fontSize`（`dark`/`light` 是 `preference` 的取值而非字段）；`shell` 不存在 `dshHome`，实际是执行器六项限制；`subagent-model-selection` 顶层是 `enabled`/`allowedModels`（`provider`/`model` 是数组元素字段）；`agent-default-model` 仅 `provider`/`model` 必填。**验证**：6 个检查全绿、四语结构对等（命名空间表 19 行、结构化选项表 7 行、代码围栏 30 处，四语一致）、pcn 假名 0 命中、并做**端到端渲染验证**（启用全部 6 项后生成的 settings.yaml 正确含 6 个新段，`subagent-model-selection.enabled` 按设计自动置 true）

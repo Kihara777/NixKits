@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-28T08:04:31+09:00
+
+**摘要**：fix(dsh-nixos-shell): preset 行 `workflow-ptc` 変更 —— dsh 0.1.6 内建插件 `dsh-workflow-worker-thread` 改名、然 本 repo 二 preset 之 組合行 與 其 中 技能文書 例 旧名 侭。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**（preset 其侭 読込、問題 痕跡 皆無）、alpha.2 新規 插件 resolver 此 **硬失敗** 変更：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent preset 全体 mount 不能、維護者 本機 四 preset 中 三 此 死、「preset 消失」 如 見。修正：`nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時改名（`config` 不変、維護模式 NixOS模式 之 完全派生 侭）。**判定 欠落**：既存 流 「package build 可能 否」 而已 見、而「組合行 解決 可能 否」**session 作成時** 初 露見——失敗点 検証点 自 一層 下 在。今回 以後 **build 成果物** 直接 mount 検証：臨時 dsh 起動（独立 `DSH_HOME`/端口）、`agentPresets/list` 呼 上流 自身 之 `broken` 健全性判定 読、更 **故意 壊 夹具** 混 反証 為、判定 真 識別力 有 確認（夹具 broken 判定、理由 偽 package 名 含 必要）。同 罠 `docs/*/dsh.md` 插件互換性 注記 記載（四語）。
+
+| 提交 | 説明 |
+|------|------|
+| `c92e980` | fix(dsh-nixos-shell): 预设行改用 workflow-ptc（旧名在 0.1.6 已不存在） |
+| `7a12ff2` | docs(dsh): 记录 0.1.6-alpha.2 插件改名硬失败陷阱（四语） |
+
 ## 2026-09-24T05:45:11+09:00
 
 **摘要**：① `fix(pcn)` 偽中国語 残留仮名 除去 —— 前回 二 提交 pcn 文書 内 4 箇所 仮名 残留、`nix flake check` 之 `check-maintenance-log` 與 `check-doc-links` 双方 失敗（即 **CI 以来 常 赤**）、逐箇所 偽中国語 改写 後 二 検査 `exit 0` 復帰。② `feat(dsh)` 6 箇 構造化 settings 選項 新設 且 namespace 表 修正：上流 dsh 0.1.6-alpha 合計 12 箇 settings namespace 登録、然 模組 従来 唯 `agent-default-model` 対 構造化 選項 提供、其 余 唯 **無型 脱出経路** `settings` 経由 以外 不可 —— 字段名、列挙、範囲 誤記 也 **評価期 錯誤 発生 不**、dsh 実行時 検証 失敗 後 該当段 破棄 且 **静黙 schema 既定値 復帰**、記録 内 何 也 残 不。現在 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 対 Nix 側 鏡像 補完（語義 既存 `defaultModel` 與 一致：既定 `enable = false` 非書込、明示 `settings.<同名 namespace>` 優先）；`shell` 者 `cwd` schema 内 **既定値 無**、一部 宣言 検証 risk 有 故 意図的 提供 不。同時 文書 中 `0.1.5-rc.2` 依拠 転記 namespace 表 修正 —— 逐項 実測 後 **5 行 事実 與 不 合**：`locale` 字段 `preference` 有、`language` 非；`ui-theme` 唯 `preference`/`fontSize`（`dark`/`light` `preference` 之 取値 有 且 字段 非）；`shell` 内 `dshHome` 存在 不、実際 実行器 六項 制限；`subagent-model-selection` 頂層 `enabled`/`allowedModels`（`provider`/`model` 配列要素 字段）；`agent-default-model` 唯 `provider`/`model` 必須。**検証**：6 検査 全 green、四言語 構造 対等（名前空間 表 19 行、構造化 選項 表 7 行、code fence 30 箇所、四言語 一致）、pcn 仮名 0 命中、且 **end-to-end 描画 検証** 実施（全 6 項 有効化 後 生成 `settings.yaml` 正 6 新段 含、`subagent-model-selection.enabled` 設計 通 自動 true 設定）

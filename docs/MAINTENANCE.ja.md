@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-28T08:04:31+09:00
+
+**概要**：fix(dsh-nixos-shell): プリセット行を `workflow-ptc` に変更 —— dsh 0.1.6 で内蔵プラグイン `dsh-workflow-worker-thread` が改名されたが、本リポジトリの 2 プリセットの組合せ行とその中の技能ドキュメントの例は旧名のままだった。dsh ≤ alpha.1 は解決できないプラグイン行を**黙って無視**し（プリセットはそのまま読み込まれ、問題は痕跡を残さない）、alpha.2 の新しいプラグインリゾルバはこれを**ハード失敗**に変える：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent プリセット全体がマウントできず、メンテナ本機の 4 プリセットのうち 3 つがこれで死に、「プリセットが消えた」ように見えた。修正：`nixos-mode` / `maintenance-mode` の組合せ行と `editing-cordis-compositions` 技能の例を同時に改名（`config` は不変、維護モードは NixOSモードの完全派生のまま）。**判定の欠落**：既存の流れは「パッケージがビルドできるか」しか見ておらず、「組合せ行が解決できるか」は**セッション作成時**に初めて露見する——失敗点が検証点より一層下にある。今回から**ビルド成果物**を直接マウント検証する：使い捨ての dsh を起動し（独立 `DSH_HOME`/ポート）、`agentPresets/list` を呼んで上流自身の `broken` 健全性判定を読み、さらに**故意に壊したフィクスチャ**を混ぜて反証とし、判定に本当に識別力があることを確かめる（フィクスチャは broken と判定され、理由に偽パッケージ名を含むこと）。同じ罠を `docs/*/dsh.md` のプラグイン互換性の注記に記載（四語）。
+
+| コミット | 説明 |
+|------|------|
+| `c92e980` | fix(dsh-nixos-shell): 预设行改用 workflow-ptc（旧名在 0.1.6 已不存在） |
+| `7a12ff2` | docs(dsh): 记录 0.1.6-alpha.2 插件改名硬失败陷阱（四语） |
+
 ## 2026-09-24T05:45:11+09:00
 
 **概要**：① `fix(pcn)` 偽中国語に残留した仮名を除去——直前の二回のコミットが pcn ドキュメントに仮名を 4 箇所残し、`nix flake check` の `check-maintenance-log` と `check-doc-links` がともに失敗した（つまり **CI はそれ以降ずっと赤のまま**）。一箇所ずつ偽中国語に書き直したところ、両チェックとも exit 0 に復帰した。② `feat(dsh)` 構造化 settings オプションを 6 件追加し、ネームスペース表を修正：上流 dsh 0.1.6-alpha が登録する settings 名前空間は計 **12 件**である一方、モジュールが従来**構造化オプション**を提供していたのは `agent-default-model` のみで、残りは**型なしのエスケープハッチ** `settings` に頼るしかなかった——フィールド名・列挙値・範囲の書き間違いは**いずれも評価時のエラーにならず**、dsh は実行時の検証に失敗すると当該セクションを破棄して **schema デフォルトへ静かにフォールバック**し、ログには何も残らない。今回は `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` に Nix 側の写しを補完した（意味は既存の `defaultModel` と一貫：既定は `enable = false` で書き込まず、明示的な `settings.<同名ネームスペース>` が優先）；`shell` は `cwd` が schema に**既定値を持たず**、一部の宣言に検証リスクがあるため意図的に提供しない。同時に、ドキュメント中で `0.1.5-rc.2` に基づいて転記されていたネームスペース表も訂正した——項目ごとに実測した結果、**5 行が事実と異なっていた**：`locale` のフィールドは `language` ではなく `preference`；`ui-theme` は `preference`/`fontSize` のみ（`dark`/`light` はフィールドではなく `preference` の値）；`shell` に `dshHome` は存在せず、実際にはエグゼキュータの六項目制限；`subagent-model-selection` の最上位は `enabled`/`allowedModels`（`provider`/`model` は配列要素のフィールド）；`agent-default-model` は `provider`/`model` のみ必須。**検証**：6 つのチェックすべてグリーン、四言語の構造が対等（名前空間表 19 行、構造化オプション表 7 行、コードフェンス 30 箇所、いずれも四言語で一致）、pcn の仮名は 0 命中、さらに**エンドツーエンドのレンダリング検証**を実施（6 項目すべてを有効にすると生成される settings.yaml が 6 つの新セクションを正しく含み、`subagent-model-selection.enabled` は設計どおり自動的に true になる）
