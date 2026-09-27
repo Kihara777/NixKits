@@ -111,9 +111,10 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ## 本机部署
 
-维护者本机以 path-input 方式引用本仓库（`/etc/nixos`）：
+维护者本机通过 **GitHub 引用**本仓库（`/etc/nixos/flake.nix`：`nixkits.url = "github:Kihara777/NixKits"`；**曾是 `path:` 输入，2026-09-28 核实已改**）：
 
-- **仓库变更后必须重锁**：`nix flake lock /etc/nixos --update-input nixkits` 并清 eval 缓存，否则 `nixos apply` 静默 no-op（path-input 锁定后不自动拾取仓库新状态）。
+- **仓库变更后必须「先推送、再重锁」**：机器消费的是 GitHub 上的 rev，**本地提交不推送，重锁就锁不到它**——届时 `nixos apply` 看起来成功、实际没带上你的改动。推送后才执行 `nix flake lock --update-input nixkits /etc/nixos` 并清 eval 缓存。
+  > ⚠️ **重锁会顺带拖动本仓的浮动子输入**（本仓按约定不提交 `flake.lock`，故 `nixkits/nixpkgs` 的 `nixos-unstable` 与 `nixkits/llama-cpp-ver` 的 GitHub latest release 都会重新解析）。实测 2026-09-28：一次 `--update-input nixkits` 把 **llama-cpp 0.4.1 → 0.5.0** 一并拉了进来。所以「为了修一行预设而重锁」= 顺手升级 llama.cpp：要么接受它并**单独验证** llama.cpp（本机统一内存调优、模型服务参数另有一套，见 `nixos-specialisation-tuning`），要么就别为小事重锁，等例行更新一起走。
 - **部署命令**：`nixos apply -y /etc/nixos`（nixos 0.16.1 无 `rebuild` 子命令）。
 - **预设／插件包更新后：先 `systemctl daemon-reload`，再 `systemctl restart dsh`**。`nixos apply` 不重启 dsh（稳定挂载点），而单跑 restart 有时仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里，症状为「服务确实重启了、预设还是旧的」。重启后必须核对 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 里的 store 路径已翻新（本次实测：gen 570 部署后第一次 restart 后仍指向旧路径，daemon-reload 后再 restart 才翻）。
 - **`nix build --no-link` 产物可能被 GC 立即回收**：需要产物时同调用内复制出 store，或改用带链接的构建。
