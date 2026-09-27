@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-28T08:28:27+09:00
+
+**摘要**：refactor(skills): 本日 之 预设事故 二層 技能 泛化（`nixkits-check-updates` 第 10.3 步 之 帰属判据「別 nix flake repo 於 亦 成立 可」 以 振分）——**① 通用技能**（何 repo 亦 成立）：`nix-flake-update-check` 之「commit 前 自検」**八問 自 九問 増**、第 9 問「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加。前八問 與 質 異——問 者 「十分 調査 為 可」 非、**判定 自体 識別力 有 可** 也、決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、其 全緑 情報量 無。救済 判定 對 **既知 壊 夹具**（反証）添 事——壊 夹具 判別 可能 上 初 其 ✓ 意義 有。**② 適配層**（本 repo 特有）：`nixkits-check-updates` 之「dsh 内蔵插件一覧 同期」新節 追加——插件 改名/削除 文書 問題 而已 非、本 repo 二 preset **実際 壊**：組合行 **package 名** 以 内蔵插件 参照、dsh ≤ 0.1.6-alpha.1 解決不能 行 **黙 無視**（旧名 痕跡 残 不 長 潜伏 得）、≥ alpha.2 **硬失敗**（preset 全体 mount 不能、UI 上 「preset 消失」 如 見 而已）。同節 dsh 更新 前 走 二層 判定（安価 行解析 + 権威 実 mount。後者 上流 自身 之 `broken` field 読、「package 在、行 亦 解決 得、読込時 初 炸」 捉 得 唯一 者）與 seed-once 播種 之 帰結（package 内 源 與 既展開 複製 両方 直 必要）示。自検 番号 對 参照 三箇所 同期更新。
+
+| 提交 | 説明 |
+|------|------|
+| `c5022ea` | refactor(skills): 预设事故泛化 —— 通用技能加第 9 问，适配层加插件改名陷阱 |
+
 ## 2026-09-28T08:04:31+09:00
 
 **摘要**：fix(dsh-nixos-shell): preset 行 `workflow-ptc` 変更 —— dsh 0.1.6 内建插件 `dsh-workflow-worker-thread` 改名、然 本 repo 二 preset 之 組合行 與 其 中 技能文書 例 旧名 侭。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**（preset 其侭 読込、問題 痕跡 皆無）、alpha.2 新規 插件 resolver 此 **硬失敗** 変更：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent preset 全体 mount 不能、維護者 本機 四 preset 中 三 此 死、「preset 消失」 如 見。修正：`nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時改名（`config` 不変、維護模式 NixOS模式 之 完全派生 侭）。**判定 欠落**：既存 流 「package build 可能 否」 而已 見、而「組合行 解決 可能 否」**session 作成時** 初 露見——失敗点 検証点 自 一層 下 在。今回 以後 **build 成果物** 直接 mount 検証：臨時 dsh 起動（独立 `DSH_HOME`/端口）、`agentPresets/list` 呼 上流 自身 之 `broken` 健全性判定 読、更 **故意 壊 夹具** 混 反証 為、判定 真 識別力 有 確認（夹具 broken 判定、理由 偽 package 名 含 必要）。同 罠 `docs/*/dsh.md` 插件互換性 注記 記載（四語）。**併 本 repo `AGENTS.md` 之「本機展開」前提 修正**：本機 **GitHub 参照 而 非 `path:` 輸入**（原文 逆）、故「先 push、次 再鎖」之順 —— push 不 為 局所 commit 鎖 不能、`nixos apply` 成功 如 見 而 変更 運 不。再鎖 本 repo 浮動子輸入 再解析 事 亦 記録（実測：`--update-input nixkits` 一回 **llama-cpp 0.4.1 → 0.5.0** 巻 込）、一行 修正 為 再鎖 前 一考 要。
