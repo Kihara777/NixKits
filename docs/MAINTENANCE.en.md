@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-09-28T13:07:06+09:00
+
+**Summary**: dsh-api-balance 0.1.0 → 0.1.1 — thin-wrapper coordinate sync (the sub-repo keeps no maintenance log, so see its commit [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177)). **What was fixed**: voice selection now respects the **variety actually spoken** — the old implementation took the first voice whose primary language matched, and since `zh-HK` (Cantonese; Tracy/HiuGaai) and `zh-CN` (Mandarin; Xiaoxiao) share the `zh` primary tag, any system whose voice list puts Cantonese first **necessarily reads Mandarin text in Cantonese**; worse, **the text and the UI stay perfectly correct**, so it is invisible unless you listen (measured on this machine: Chinese UI, Cantonese speech). Fix: ① variety classification and ranking, so a Mandarin request only ever picks a Mandarin voice (and vice versa; `yue`/`zh-yue` are recognised too); ② wait for the voice list to be ready before speaking (the first `getVoices()` is often empty, and picking nothing hands the lang to the engine's own choice — the same wrong-language outcome); ③ align `utter.lang` with the chosen voice; ④ add a 「Voice」 setting (auto by default, explicit naming supported) showing the voice actually in use — turning "which voice got picked" into a visible fact. **Verdict**: the sub-repo gained `test/voice-selection.test.mjs` (25 assertions including **counter-evidence** — the old algorithm is first asserted to *indeed* pick Cantonese on a "Cantonese-first" fixture, then the new one is asserted not to), plus a real-browser run of the same extracted code against this machine's Edge (23 voices).
+
+| Commit | Description |
+|------|------|
+| `a4e6d54` | chore(pkgs): bump dsh-api-balance 0.1.0 → 0.1.1（音色按话的变体选择） |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.0 | 0.1.1 |
+| 　 | rev | `c47f857` → `76ea584` |
+
 ## 2026-09-28T08:28:27+09:00
 
 **Summary**: refactor(skills): today's preset incident generalized into the two skill layers (placed by `nixkits-check-updates` step 10.3's portability criterion, "does this still hold in another nix flake repo?") — **① Generic skill** (true for any repo): the pre-commit self-check in `nix-flake-update-check` grows from **eight questions to nine**, adding Q9 "Did 'I verified it' verify the layer where the failure actually happens — and can the verdict itself fail?". It differs in kind from the first eight: it does not ask "did you check enough" but "**does the verdict discriminate at all**" — a check that never fires cannot tell "no problem" from "nothing measured", so its green carries no information; the remedy is to give the verdict a **deliberately broken fixture** (counter-evidence), and only if it flags that fixture does its ✓ count. **② Adapter layer** (repo-specific): under "dsh built-in plugin inventory sync" in `nixkits-check-updates` a new section — a plugin rename/removal is not merely a docs problem, it **actually breaks** this repo's two presets: their composition rows reference built-in plugins by **package name**, and dsh ≤ 0.1.6-alpha.1 **silently ignores** unresolvable rows (the old name can lie dormant for a long time, leaving no trace) while ≥ alpha.2 makes it a **hard failure** (the whole preset fails to mount; the UI only shows "the preset vanished"). The section also gives the two verdict layers to run before upgrading dsh (cheap offline row resolution + authoritative real mounting, the latter reading upstream's own `broken` field — the only one able to catch "the package is there, the row resolves, yet loading blows up") and the corollary of seed-once seeding (fix both the in-package source and the deployed copy). Three references to the self-check numbering were updated accordingly.

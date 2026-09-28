@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-09-28T13:07:06+09:00
+
+**摘要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄 wrapper 座標同期（子 repo 維護記録 無、変更 同 repo commit [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177) 参照）。**修正内容**：音色 「**実際 話 変体**」 以 選 —— 旧実装 主言語 前方一致 以 最初 音色 取、然 `zh-HK`（広東語、Tracy/HiuGaai）與 `zh-CN`（普通話、Xiaoxiao）同 `zh` 主語言 属、故 音色一覧 広東語 先 来 系統 **必 普通話 text 広東語 読**。更 **text 與 界面 両方 正**、音 聞 限 気付 不能（本機実測：界面 中国語、放送 広東語）。修正：① 変体 分類 與 並替——普通話 要求 普通話 音色 之内 的 選（逆 亦 同、`yue`/`zh-yue` 認識）；② 発声 前 **音色一覧 準備 待**（初回 `getVoices()` 空 多、選 不能 時 lang engine 任 同 誤読）；③ `utter.lang` 選択 音色 合；④「音色」設定 追加（既定 自動、指名 指定 可能）與 実際 使用 音色 表示——「何 音色 選 為 可」 目 見 事実 化。**判定**：子 repo `test/voice-selection.test.mjs` 追加（25 assertion、**反証** 含——旧 algorithm 「広東語 先」 fixture 於 **確 広東語 選** 先 断言、其上 新 algorithm 不 選 断言）。更 本機 Edge 23 音色 対、同 抽出 code 実 browser 実行 実選択 確認。
+
+| 提交 | 説明 |
+|------|------|
+| `a4e6d54` | chore(pkgs): bump dsh-api-balance 0.1.0 → 0.1.1（音色按话的变体选择） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.0 | 0.1.1 |
+| 　 | rev | `c47f857` → `76ea584` |
+
 ## 2026-09-28T08:28:27+09:00
 
 **摘要**：refactor(skills): 本日 之 预设事故 二層 技能 泛化（`nixkits-check-updates` 第 10.3 步 之 帰属判据「別 nix flake repo 於 亦 成立 可」 以 振分）——**① 通用技能**（何 repo 亦 成立）：`nix-flake-update-check` 之「commit 前 自検」**八問 自 九問 増**、第 9 問「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加。前八問 與 質 異——問 者 「十分 調査 為 可」 非、**判定 自体 識別力 有 可** 也、決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、其 全緑 情報量 無。救済 判定 對 **既知 壊 夹具**（反証）添 事——壊 夹具 判別 可能 上 初 其 ✓ 意義 有。**② 適配層**（本 repo 特有）：`nixkits-check-updates` 之「dsh 内蔵插件一覧 同期」新節 追加——插件 改名/削除 文書 問題 而已 非、本 repo 二 preset **実際 壊**：組合行 **package 名** 以 内蔵插件 参照、dsh ≤ 0.1.6-alpha.1 解決不能 行 **黙 無視**（旧名 痕跡 残 不 長 潜伏 得）、≥ alpha.2 **硬失敗**（preset 全体 mount 不能、UI 上 「preset 消失」 如 見 而已）。同節 dsh 更新 前 走 二層 判定（安価 行解析 + 権威 実 mount。後者 上流 自身 之 `broken` field 読、「package 在、行 亦 解決 得、読込時 初 炸」 捉 得 唯一 者）與 seed-once 播種 之 帰結（package 内 源 與 既展開 複製 両方 直 必要）示。自検 番号 對 参照 三箇所 同期更新。
