@@ -365,7 +365,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 {
   nixkits.dsh.settings = {
     "web-search-deepseek" = {
-      model = "deepseek-v4-flash";
+      model = "deepseek-flash";
       maxTokens = 8192;
     };
     "llm-deepseek" = {
@@ -438,7 +438,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-v4-flash-vision-exp";  # image モダリティを宣言、画像入力に対応
+      model = "deepseek-flash";  # stable と alpha の両目録に存在し、image モダリティを宣言する唯一の flash 項目
       reasoningEffort = "max";
     };
     # 1 ターンの並列ツール呼び出し上限
@@ -447,7 +447,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
     subagentModelSelection = {
       enable = true;
       allowedModels = [
-        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+        { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
     };
     # インターフェース言語を中国語に固定；未設定なら各ブラウザの Accept-Language に従う
@@ -471,11 +471,24 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
   nixkits.dsh.defaultModel = {
     enable = true;
     provider = "deepseek-official";  # 既定
-    model = "deepseek-v4-flash";     # 既定
+    model = "deepseek-flash";        # 既定
     reasoningEffort = "off";         # 既定
   };
 }
 ```
+
+#### モデル目録は dsh のバージョンに追随する
+
+`deepseek-official` ルートのモデル目録はアダプタに**内蔵**されており（`dsh-llm-deepseek` の `DEFAULT_MODELS`）、設定ファイルからは読まれない。したがって dsh のバージョンごとに変化する：
+
+| dsh バージョン | 目録の項目 |
+|----------------|-----------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+
+上流が 2026-09-10 に DeepSeek-V4.1-Flash を公開した際、V4 Flash と V4 Flash Vision Exp を廃止し、モデル名は `deepseek-flash`（画像理解を備える）と `deepseek-v4-pro` に収束した。旧 id は互換のため引き続き呼び出せるが、処理は V4.1-Flash が行い、Flash の料金で課金される（[モデルと価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)の脚注を参照）。
+
+> ⚠️ **目録に無い id は「名前が違うだけの同じもの」ではない**：dsh は未収録の id を**テキスト専用**モデルとして扱い（`modelInfo` が `inputModalities: ["text"]` にフォールバックする）、その結果 `dsh-llm` が送信前に会話中の画像を**決定的なテキスト記述に無言で置き換える** —— エラーは出ず、モデルは画像を一度も見ていない。既定値を選ぶときは目録に存在する id を選ぶこと。
 
 #### reasoningEffort の段階とコスト
 
@@ -486,4 +499,4 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 | `high` | 既定段（dsh-llm-deepseek アダプタの default は high）、品質/速度均衡 | 出力に推論セグメントが含まれ token 比率増 |
 | `max` | 最高力の思考、品質最強 | **最高額**（出力 token 比率最大） |
 
-> `off` → `thinking:disabled` は FIM（Fill-In-The-Middle 補完）を有効化する前提条件（DeepSeek は FIM を「非思考モードのみ対応」と明記）。FIM は `deepseek-v4-flash` と `deepseek-v4-pro` のみ対応、`deepseek-v4-flash-vision-exp` は非対応。
+> `off` → `thinking:disabled` は FIM（Fill-In-The-Middle 補完）を有効化する前提条件（DeepSeek は FIM を「非思考モードのみ対応」と明記）。上流の [FIM 補完 API](https://api-docs.deepseek.com/api/create-completion/) で `model` に取れる値は `deepseek-flash` と `deepseek-v4-pro` の二つのみで、いずれも「非思考モードのみ対応」。

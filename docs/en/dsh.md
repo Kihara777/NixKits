@@ -365,7 +365,7 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 {
   nixkits.dsh.settings = {
     "web-search-deepseek" = {
-      model = "deepseek-v4-flash";
+      model = "deepseek-flash";
       maxTokens = 8192;
     };
     "llm-deepseek" = {
@@ -436,7 +436,7 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-v4-flash-vision-exp";  # declares the image modality, so image input works
+      model = "deepseek-flash";  # the one flash entry every channel catalogues, and the only one declaring image input
       reasoningEffort = "max";
     };
     # per-turn parallel tool-call ceiling
@@ -445,7 +445,7 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
     subagentModelSelection = {
       enable = true;
       allowedModels = [
-        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+        { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
     };
     # interface language pinned to Chinese; unset follows each browser's Accept-Language
@@ -468,11 +468,24 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
   nixkits.dsh.defaultModel = {
     enable = true;
     provider = "deepseek-official";  # default
-    model = "deepseek-v4-flash";     # default
+    model = "deepseek-flash";        # default
     reasoningEffort = "off";         # default
   };
 }
 ```
+
+#### The model catalogue moves with the dsh version
+
+The `deepseek-official` route's model catalogue is **built into** the adapter (`DEFAULT_MODELS` in `dsh-llm-deepseek`) rather than read from the settings document, so it changes with the dsh version:
+
+| dsh version | catalogue entries |
+|-------------|-------------------|
+| stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` |
+
+When upstream shipped DeepSeek-V4.1-Flash on 2026-09-10 it retired V4 Flash and V4 Flash Vision Exp, collapsing the model names to `deepseek-flash` (natively multimodal, image understanding included) and `deepseek-v4-pro`. The retired ids still answer for compatibility, but V4.1-Flash serves them and they bill at Flash rates (see the footnote on [Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing/)).
+
+> ⚠️ **An id the catalogue does not carry is not "the same thing under another name"**: dsh treats an uncatalogued id as a **text-only** model (`modelInfo` falls back to `inputModalities: ["text"]`), so before dispatch `dsh-llm` **silently replaces images in the conversation with text placeholders** — no error is raised, and the model never sees the picture. When choosing a default, pick an id the catalogue carries.
 
 #### reasoningEffort tiers and cost
 
@@ -483,4 +496,4 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
 | `high` | adapter default (dsh-llm-deepseek default is high), balanced quality/speed | output includes the reasoning segment, larger token share |
 | `max` | strongest reasoning, best quality | **most expensive** (largest output-token share) |
 
-> `off` mapping to `thinking:disabled` is the prerequisite for enabling FIM (fill-in-the-middle) completion — DeepSeek marks FIM "non-thinking mode only". FIM is supported only on `deepseek-v4-flash` and `deepseek-v4-pro`; `deepseek-v4-flash-vision-exp` does not support it.
+> `off` mapping to `thinking:disabled` is the prerequisite for enabling FIM (fill-in-the-middle) completion — DeepSeek marks FIM "non-thinking mode only". The upstream [FIM completion API](https://api-docs.deepseek.com/api/create-completion/) accepts only `deepseek-flash` and `deepseek-v4-pro` as `model`, and both are "non-thinking mode only".

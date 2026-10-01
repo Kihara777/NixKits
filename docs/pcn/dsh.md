@@ -365,7 +365,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 {
   nixkits.dsh.settings = {
     "web-search-deepseek" = {
-      model = "deepseek-v4-flash";
+      model = "deepseek-flash";
       maxTokens = 8192;
     };
     "llm-deepseek" = {
@@ -438,7 +438,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-v4-flash-vision-exp";  # image modality 宣言、画像輸入 対応
+      model = "deepseek-flash";  # stable 與 alpha 之 両目録 存在、image modality 宣言 唯一 之 flash 項目
       reasoningEffort = "max";
     };
     # 単輪 並列道具呼出 上限
@@ -447,7 +447,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
     subagentModelSelection = {
       enable = true;
       allowedModels = [
-        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+        { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
     };
     # 界面言語 中国語 固定；未設定 時 各瀏覽器 之 Accept-Language 従
@@ -471,11 +471,24 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
   nixkits.dsh.defaultModel = {
     enable = true;
     provider = "deepseek-official";  # 默認
-    model = "deepseek-v4-flash";     # 默認
+    model = "deepseek-flash";        # 默認
     reasoningEffort = "off";         # 默認
   };
 }
 ```
+
+#### 模型目録 dsh 版 追随
+
+`deepseek-official` route 之 模型目録 adapter **内蔵**（`dsh-llm-deepseek` 之 `DEFAULT_MODELS`）、設定書類 自 読取 無。故 dsh 版 毎 変化：
+
+| dsh 版 | 目録 之 項目 |
+|--------|-------------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+
+上流 2026-09-10 DeepSeek-V4.1-Flash 公開時、V4 Flash 與 V4 Flash Vision Exp 廃止、模型名 `deepseek-flash`（画像理解 備）與 `deepseek-v4-pro` 収束。旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行、Flash 料金 課金（[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 参照）。
+
+> ⚠️ **目録 無 id 「名 異 之 同物」 非**：dsh 未収録 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）、其結果 `dsh-llm` 送信前 会話中 画像 **決定的 文本記述 無言置換** —— 誤謬 不出、模型 画像 未見。既定値 選択時 目録 存在 id 選択 事。
 
 #### reasoningEffort 段階與 cost
 
@@ -486,4 +499,4 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 | `high` | 默認段（dsh-llm-deepseek adapter 默認 high）、品質/速度均衡 | 出力含推論 segment、token 比率増 |
 | `max` | 最高力思考、品質最強 | **最高額**（出力 token 比率最大） |
 
-> `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限対応」）。FIM 僅 `deepseek-v4-flash` 與 `deepseek-v4-pro` 対応、`deepseek-v4-flash-vision-exp` 不支援。
+> `off` → `thinking:disabled` 為 FIM（Fill-In-The-Middle 補全）有効化前提（DeepSeek FIM「非思考 mode 限対応」）。上流 [FIM 補全 API](https://api-docs.deepseek.com/api/create-completion/) 於 `model` 取得可能 値 僅 `deepseek-flash` 與 `deepseek-v4-pro` 二 者、両者 共「非思考 mode 限対応」。

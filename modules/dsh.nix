@@ -422,8 +422,22 @@ in
           };
           model = lib.mkOption {
             type = lib.types.str;
-            default = "deepseek-v4-flash";
-            description = "Default DeepSeek model id.";
+            default = "deepseek-flash";
+            description = ''
+              Default DeepSeek model id.  The upstream catalogue is built into
+              the dsh adapter and moves with the dsh version: stable
+              0.1.5-rc.2 and alpha 0.1.6-alpha.1 list four ids
+              (deepseek-flash, deepseek-v4-flash, deepseek-v4-pro,
+              deepseek-v4-flash-vision-exp), while alpha 0.1.6-alpha.2 lists
+              only deepseek-flash and deepseek-v4-pro — upstream retired the
+              other two on 2026-09-10 when DeepSeek-V4.1-Flash landed.
+
+              An id the catalogue does not carry is NOT equivalent: dsh treats
+              it as a text-only model, so images in the conversation are
+              silently replaced by text placeholders before dispatch.
+              deepseek-flash is the one flash entry both channels catalogue and
+              the only one declaring the image modality.
+            '';
           };
           reasoningEffort = lib.mkOption {
             type = lib.types.enum [ "off" "low" "high" "max" ];
@@ -479,7 +493,7 @@ in
         example = [
           {
             provider = "deepseek-official";
-            model = "deepseek-v4-flash";
+            model = "deepseek-flash";
           }
         ];
         description = ''

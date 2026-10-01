@@ -364,7 +364,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 {
   nixkits.dsh.settings = {
     "web-search-deepseek" = {
-      model = "deepseek-v4-flash";
+      model = "deepseek-flash";
       maxTokens = 8192;
     };
     "llm-deepseek" = {
@@ -436,7 +436,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-v4-flash-vision-exp";  # 声明了 image 模态，支持图片输入
+      model = "deepseek-flash";  # 两个通道的目录都在、且唯一声明 image 模态的 flash 条目
       reasoningEffort = "max";
     };
     # 单轮并行工具调用上限
@@ -445,7 +445,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
     subagentModelSelection = {
       enable = true;
       allowedModels = [
-        { provider = "deepseek-official"; model = "deepseek-v4-flash"; }
+        { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
     };
     # 界面语言固定为中文；不设则随各浏览器的 Accept-Language
@@ -468,11 +468,24 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
   nixkits.dsh.defaultModel = {
     enable = true;
     provider = "deepseek-official";  # 默认
-    model = "deepseek-v4-flash";     # 默认
+    model = "deepseek-flash";        # 默认
     reasoningEffort = "off";         # 默认
   };
 }
 ```
+
+#### 模型目录随 dsh 版本走
+
+`deepseek-official` 路由的模型目录是适配器**内置**的（`dsh-llm-deepseek` 的 `DEFAULT_MODELS`），不由设置文件决定，随 dsh 版本变化：
+
+| dsh 版本 | 目录条目 |
+|----------|----------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+
+上游 2026-09-10 发布 DeepSeek-V4.1-Flash 时下线了 V4 Flash 与 V4 Flash Vision Exp，模型名收敛为 `deepseek-flash`（原生多模态，支持图像理解）与 `deepseek-v4-pro`；旧 id 出于兼容仍可调用，但由 V4.1-Flash 承接并按 Flash 计费（见[模型与价格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)脚注）。
+
+> ⚠️ **目录里没有的 id 不等于"等价地用着"**：dsh 把未收录的 id 当**纯文本**模型（`modelInfo` 回落 `inputModalities: ["text"]`），于是 `dsh-llm` 在派发前把会话里的图片**静默替换成文本占位符** —— 不报错，模型也从未看到图。选默认值时务必挑目录里存在的 id。
 
 #### reasoningEffort 档位与开销
 
@@ -483,5 +496,5 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 | `high` | 默认档（dsh-llm-deepseek 适配器 default 即 high），质量/速度均衡 | 输出含推理段，token 占比上升 |
 | `max` | 最高档推理，质量最强 | **最贵**（输出 token 占比最大） |
 
-> `off` 映射为 `thinking:disabled` 是启用 FIM（Fill-In-The-Middle 补全）的前置条件（DeepSeek FIM 标注"仅非思考模式支持"）。FIM 仅在 `deepseek-v4-flash` 与 `deepseek-v4-pro` 上支持，`deepseek-v4-flash-vision-exp` 不支持。
+> `off` 映射为 `thinking:disabled` 是启用 FIM（Fill-In-The-Middle 补全）的前置条件（DeepSeek FIM 标注"仅非思考模式支持"）。上游 [FIM 补全 API](https://api-docs.deepseek.com/zh-cn/api/create-completion/) 的 `model` 只有 `deepseek-flash` 与 `deepseek-v4-pro` 两个取值，两者均为"仅非思考模式支持"。
 
