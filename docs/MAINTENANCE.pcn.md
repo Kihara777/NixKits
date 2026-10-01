@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T03:54:38+09:00
+
+**摘要**：fix(dsh): image modality 記述 訂正（四言語）— 前回 記録（`2ab7dda`）`modules/dsh.nix` option 説明 與 四言語 `dsh.md` 内、`deepseek-flash` 「**唯一** image modality 宣言 flash 項目」記、且 該断定 stable 與 alpha 両 channel 拡張。**store 内 二 構築済成果物**（`dsh-0.1.5-rc.2` 與 `dsh-0.1.6-alpha.1` 之 `dsh-llm-deepseek` → `DEFAULT_MODELS`）実査 結果、stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 目録 各 `inputModalities: ["text","image"]` 宣言 項目 **二** 持 —— `deepseek-flash` 與 `deepseek-v4-flash-vision-exp`、一条 収束 alpha `0.1.6-alpha.2` 限。断定 alpha.2 於 限 成立。**変更内容**：選択理由「三 目録 全部 収録、且 各目録 image modality 宣言 唯一 之 id」書換、目録表 内「内 image modality 宣言 者」列 追加 事実 直接照合 可能 化；併 低下時 警告「無言置換」自 **二経路** 訂正 —— 新規添付 画像 `session/prompt` 添付准入 於 **其場 拒否**、履歴 既存 画像 限 `projectImagesForTextModel` 依 **無言** 置換。既定値 自体（`deepseek-flash`）変更 無、依然 正 選択。
+
+| 提交 | 説明 |
+|------|------|
+| `067b296` | fix(dsh): 更正 image 模态断言 —— stable/alpha.1 目录实有两条声明（四语） |
+
 ## 2026-10-02T03:01:23+09:00
 
 **摘要**：fix(dsh): 既定模型 `deepseek-flash` 移行（四言語）— **上流 2026-09-10 既 V4 Flash 與 V4 Flash Vision Exp 廃止**：DeepSeek-V4.1-Flash 公開時 模型名 `deepseek-flash`（画像理解 含）與 `deepseek-v4-pro` 収束、旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行 Flash 料金 課金（上流[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 1）。dsh 内蔵目録（`dsh-llm-deepseek` 之 `DEFAULT_MODELS`）版 追随：stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 四条、alpha `0.1.6-alpha.2` 二条 収束 且 image modality `deepseek-flash` 統合。**問題**：本倉庫 `defaultModel.model` 既定値 `deepseek-v4-flash` alpha 目録 不存在、而 dsh 目録外 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）為、送信前 `projectImagesForTextModel` 会話中 画像 **無言 文本記述 置換** —— 誤謬 不出、模型 画像 未見（実機 実測：選択器 自 id 消失、但 既定値 依然 其 指）。**変更内容**：既定値 `deepseek-flash`（両目録 存在、image modality 宣言 唯一 之 flash 項目）変更、option 説明 内「目録 版 追随」「目録外 id 等価 非」明記；四言語 `dsh.md` 例 id 同期、「模型目録 dsh 版 追随」節 與 無言 機能低下 之 警告 追加、FIM 節 上流 FIM API 合 `deepseek-flash` / `deepseek-v4-pro` 改。

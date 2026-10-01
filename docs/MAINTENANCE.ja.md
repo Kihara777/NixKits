@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-02T03:54:38+09:00
+
+**概要**：fix(dsh): image モダリティの記述を訂正（四言語）— 前回の記録（`2ab7dda`）は `modules/dsh.nix` のオプション説明と四言語の `dsh.md` に、`deepseek-flash` が「**唯一** image モダリティを宣言する flash 項目」であると書き、その断定を stable と alpha の両チャネルに広げていた。**store にある二つのビルド済み成果物**（`dsh-0.1.5-rc.2` と `dsh-0.1.6-alpha.1` の `dsh-llm-deepseek` → `DEFAULT_MODELS`）を実査した結果、stable `0.1.5-rc.2` と alpha `0.1.6-alpha.1` の目録はそれぞれ `inputModalities: ["text","image"]` を宣言する項目を**二つ**持つ —— `deepseek-flash` と `deepseek-v4-flash-vision-exp` であり、一条に収束するのは alpha `0.1.6-alpha.2` のみである。断定は alpha.2 でのみ成立していた。**変更内容**：選択理由を「三つの目録すべてに収録され、いずれでも image モダリティを宣言する唯一の id」に書き換え、目録表に「うち image モダリティを宣言するもの」列を追加して事実を直接照合できるようにした；あわせて低下時の警告を「無言で置換」から**二経路**へ訂正 —— 新たに添付した画像は `session/prompt` の添付准入で**その場で拒否**され、履歴に既にある画像のみが `projectImagesForTextModel` により**無言で**置換される。既定値そのもの（`deepseek-flash`）は変更せず、依然として正しい選択である。
+
+| コミット | 説明 |
+|------|------|
+| `067b296` | fix(dsh): 更正 image 模态断言 —— stable/alpha.1 目录实有两条声明（四语） |
+
 ## 2026-10-02T03:01:23+09:00
 
 **概要**：fix(dsh): デフォルトモデルを `deepseek-flash` へ移行（四言語）— **上流は 2026-09-10 に V4 Flash と V4 Flash Vision Exp を廃止していた**：DeepSeek-V4.1-Flash の公開時にモデル名が `deepseek-flash`（ネイティブ・マルチモーダル、画像理解を含む）と `deepseek-v4-pro` に収束し、旧 id は互換のため引き続き呼び出せるが処理は V4.1-Flash が行い Flash の料金で課金される（上流[モデルと価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)の脚注 1）。dsh の内蔵目録（`dsh-llm-deepseek` の `DEFAULT_MODELS`）は版に追随する：stable `0.1.5-rc.2` と alpha `0.1.6-alpha.1` は四条、alpha `0.1.6-alpha.2` は二条に収束し image モダリティを `deepseek-flash` に統合した。**問題**：本リポジトリの `defaultModel.model` の既定値 `deepseek-v4-flash` は alpha の目録に存在せず、dsh は目録外の id を**テキスト専用**モデルとして扱う（`modelInfo` が `inputModalities: ["text"]` にフォールバック）ため、送信前に `projectImagesForTextModel` が会話中の画像を**無言でテキスト記述に置き換える** —— エラーは出ず、モデルは画像を一度も見ていない（実機で実測：選択器から id が消えたのに既定値は依然それを指していた）。**変更内容**：既定値を `deepseek-flash`（両目録に存在し、image モダリティを宣言する唯一の flash 項目）に変更し、オプション説明に「目録は版に追随する」「目録外の id は等価ではない」を明記；四言語の `dsh.md` は例の id を同期し、「モデル目録は dsh の版に追随する」節と無言で機能が落ちる旨の警告を追加、FIM の節は上流 FIM API に合わせて `deepseek-flash` / `deepseek-v4-pro` に改めた。

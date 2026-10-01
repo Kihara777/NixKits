@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T03:54:38+09:00
+
+**摘要**：fix(dsh): 更正 image 模态断言（四语）— 上一条记录（`2ab7dda`）在 `modules/dsh.nix` 的选项描述与四语 `dsh.md` 里写了 `deepseek-flash` 是「**唯一**声明 image 模态的 flash 条目」，并把该断言横跨 stable 与 alpha 两个通道。**实查 store 内两份已构建产物**（`dsh-0.1.5-rc.2`、`dsh-0.1.6-alpha.1` 的 `dsh-llm-deepseek` → `DEFAULT_MODELS`）后确认：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 的目录里**各有两条**声明 `inputModalities: ["text","image"]` —— `deepseek-flash` 与 `deepseek-v4-flash-vision-exp`；收敛为一条的只有 alpha `0.1.6-alpha.2`。该断言仅在 alpha.2 上成立。**改动**：选择理由改写为「三个目录都收录、且都声明 image 模态的唯一 id」，目录表新增「其中声明 image 模态」一列使该事实可直接核对；同时把降级警告从「静默替换」修正为**双路径**——新贴的图在 `session/prompt` 附件准入处**当场报错**（`MODEL_DOES_NOT_SUPPORT_IMAGES`），只有历史里已有的图才由 `projectImagesForTextModel` **静默**替换。默认值本身（`deepseek-flash`）不变，仍是正确选择。
+
+| 提交 | 说明 |
+|------|------|
+| `067b296` | fix(dsh): 更正 image 模态断言 —— stable/alpha.1 目录实有两条声明（四语） |
+
 ## 2026-10-02T03:01:23+09:00
 
 **摘要**：fix(dsh): 默认模型迁到 `deepseek-flash`（四语）— **上游早在 2026-09-10 就下线了 V4 Flash 与 V4 Flash Vision Exp**：发布 DeepSeek-V4.1-Flash 时模型名收敛为 `deepseek-flash`（原生多模态、带图像理解）与 `deepseek-v4-pro`，旧 id 为兼容仍可调用、但由 V4.1-Flash 承接并按 Flash 计费（上游[模型与价格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)脚注 1）。dsh 的内置目录（`dsh-llm-deepseek` 的 `DEFAULT_MODELS`）随版本走：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 是四条，alpha `0.1.6-alpha.2` 收敛为两条并把 image 模态并进 `deepseek-flash`。**问题**：本仓 `defaultModel.model` 的默认值 `deepseek-v4-flash` 在 alpha 通道上已不在目录中，而 dsh 对目录外的 id 按**纯文本**模型处理（`modelInfo` 回落 `inputModalities: ["text"]`），派发前经 `projectImagesForTextModel` 把会话里的图片**静默替换成文本占位符** —— 不报错，模型也没看到图（本机实测：选择器里该 id 消失、默认值却仍指向它）。**改动**：默认值改为 `deepseek-flash`（两个通道的目录都在、且唯一声明 image 模态的 flash 条目），选项描述写明目录随版本走与「目录外 id 不等价」；四语 `dsh.md` 同步示例 id、新增「模型目录随 dsh 版本走」小节与静默降级警告，FIM 一节的取值按上游 FIM API 改为 `deepseek-flash` / `deepseek-v4-pro`。
