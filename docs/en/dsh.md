@@ -436,7 +436,7 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-flash";  # the one flash entry every channel catalogues, and the only one declaring image input
+      model = "deepseek-flash";  # the only id all three catalogues carry, declaring image input in each
       reasoningEffort = "max";
     };
     # per-turn parallel tool-call ceiling
@@ -478,14 +478,21 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
 
 The `deepseek-official` route's model catalogue is **built into** the adapter (`DEFAULT_MODELS` in `dsh-llm-deepseek`) rather than read from the settings document, so it changes with the dsh version:
 
-| dsh version | catalogue entries |
-|-------------|-------------------|
-| stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` |
-| alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` |
+| dsh version | catalogue entries | of those, declaring image input |
+|-------------|-------------------|---------------------------------|
+| stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` | `deepseek-flash`, `deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
+
+`deepseek-flash` is the only id **present in all three** catalogues **and declaring the image modality in each** — which is why the module default picks it. The other image-capable id, `deepseek-v4-flash-vision-exp`, exists only in the two older catalogues and upstream retired it on 2026-09-10, so it cannot serve as a default.
 
 When upstream shipped DeepSeek-V4.1-Flash on 2026-09-10 it retired V4 Flash and V4 Flash Vision Exp, collapsing the model names to `deepseek-flash` (natively multimodal, image understanding included) and `deepseek-v4-pro`. The retired ids still answer for compatibility, but V4.1-Flash serves them and they bill at Flash rates (see the footnote on [Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing/)).
 
-> ⚠️ **An id the catalogue does not carry is not "the same thing under another name"**: dsh treats an uncatalogued id as a **text-only** model (`modelInfo` falls back to `inputModalities: ["text"]`), so before dispatch `dsh-llm` **silently replaces images in the conversation with text placeholders** — no error is raised, and the model never sees the picture. When choosing a default, pick an id the catalogue carries.
+> ⚠️ **An id the catalogue does not carry is not "the same thing under another name"**: dsh treats an uncatalogued id as a **text-only** model (`modelInfo` falls back to `inputModalities: ["text"]`), and the consequence splits into two paths — **one is loud, one is silent**:
+>
+> - **A newly attached image is rejected outright**: the attachment admission on `session/prompt` reads that same `inputModalities` and throws `MODEL_DOES_NOT_SUPPORT_IMAGES`, surfacing as "The current model does not support images; switch to a model that does".
+> - **An image already in the history is dropped silently**: before dispatch, `projectImagesForTextModel` swaps it for a text placeholder — no error is raised, and the model never sees the picture.
+>
+> When choosing a default, pick an id the catalogue carries. The verdict also moves with the dsh version — the same settings can go from "sees images" to "refuses images" across an upgrade.
 
 #### reasoningEffort tiers and cost
 

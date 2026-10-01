@@ -433,10 +433,18 @@ in
               other two on 2026-09-10 when DeepSeek-V4.1-Flash landed.
 
               An id the catalogue does not carry is NOT equivalent: dsh treats
-              it as a text-only model, so images in the conversation are
-              silently replaced by text placeholders before dispatch.
-              deepseek-flash is the one flash entry both channels catalogue and
-              the only one declaring the image modality.
+              it as a text-only model, and the two failure paths differ.  A
+              newly attached image is rejected outright at prompt admission
+              (MODEL_DOES_NOT_SUPPORT_IMAGES, surfaced in the UI), while images
+              already in the conversation are silently replaced by text
+              placeholders before dispatch.
+
+              deepseek-flash is the only id all three catalogues carry, and it
+              declares the image modality in all three.  The other
+              image-capable id, deepseek-v4-flash-vision-exp, appears only in
+              the two older catalogues (stable 0.1.5-rc.2 and alpha
+              0.1.6-alpha.1) and upstream retired it on 2026-09-10, so it is
+              not a safe default.
             '';
           };
           reasoningEffort = lib.mkOption {

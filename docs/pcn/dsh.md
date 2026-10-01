@@ -438,7 +438,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-flash";  # stable 與 alpha 之 両目録 存在、image modality 宣言 唯一 之 flash 項目
+      model = "deepseek-flash";  # 三 目録 全部 存在、且 各目録 image modality 宣言 唯一 之 id
       reasoningEffort = "max";
     };
     # 単輪 並列道具呼出 上限
@@ -481,14 +481,21 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 
 `deepseek-official` route 之 模型目録 adapter **内蔵**（`dsh-llm-deepseek` 之 `DEFAULT_MODELS`）、設定書類 自 読取 無。故 dsh 版 毎 変化：
 
-| dsh 版 | 目録 之 項目 |
-|--------|-------------|
-| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
-| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+| dsh 版 | 目録 之 項目 | 内 image modality 宣言 者 |
+|--------|-------------|--------------------------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+
+`deepseek-flash` 三 目録 **全部 存在**、且 **各目録 image modality 宣言** 唯一 之 id —— 此 模块 既定値 選択 理由。他 画像対応 id `deepseek-v4-flash-vision-exp` 古 二 目録 限 存在、上流 2026-09-10 廃止 為、既定値 使用 不可。
 
 上流 2026-09-10 DeepSeek-V4.1-Flash 公開時、V4 Flash 與 V4 Flash Vision Exp 廃止、模型名 `deepseek-flash`（画像理解 備）與 `deepseek-v4-pro` 収束。旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行、Flash 料金 課金（[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 参照）。
 
-> ⚠️ **目録 無 id 「名 異 之 同物」 非**：dsh 未収録 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）、其結果 `dsh-llm` 送信前 会話中 画像 **決定的 文本記述 無言置換** —— 誤謬 不出、模型 画像 未見。既定値 選択時 目録 存在 id 選択 事。
+> ⚠️ **目録 無 id 「名 異 之 同物」 非**：dsh 未収録 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）。其結果 二 経路 分、**片方 鳴、片方 無言**：
+>
+> - **新規添付 画像 其場 拒否**：`session/prompt` 之 添付准入 同 `inputModalities` 読、`MODEL_DOES_NOT_SUPPORT_IMAGES` 投。UI 上 画像 不支持 旨 表示。
+> - **履歴 既存 画像 無言 破棄**：送信前 `projectImagesForTextModel` 文本記述 置換 —— 誤謬 不出、模型 画像 未見。
+>
+> 既定値 選択時 目録 存在 id 選択 事。此 判定 dsh 版 毎 変化 —— 同 設定 更新後「画像 見」自「画像 拒」往 転 可能。
 
 #### reasoningEffort 段階與 cost
 

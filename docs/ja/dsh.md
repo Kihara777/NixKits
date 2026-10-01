@@ -438,7 +438,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-flash";  # stable と alpha の両目録に存在し、image モダリティを宣言する唯一の flash 項目
+      model = "deepseek-flash";  # 三つの目録すべてに存在し、いずれでも image モダリティを宣言する唯一の id
       reasoningEffort = "max";
     };
     # 1 ターンの並列ツール呼び出し上限
@@ -481,14 +481,21 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 
 `deepseek-official` ルートのモデル目録はアダプタに**内蔵**されており（`dsh-llm-deepseek` の `DEFAULT_MODELS`）、設定ファイルからは読まれない。したがって dsh のバージョンごとに変化する：
 
-| dsh バージョン | 目録の項目 |
-|----------------|-----------|
-| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
-| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+| dsh バージョン | 目録の項目 | うち image モダリティを宣言するもの |
+|----------------|-----------|-----------------------------------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+
+`deepseek-flash` は三つの目録**すべてに存在**し、かつ**いずれでも image モダリティを宣言する**唯一の id であり、モジュールの既定値がこれを選ぶ理由でもある。もう一方の画像対応 id `deepseek-v4-flash-vision-exp` は古い二つの目録にしか無く、上流が 2026-09-10 に廃止したため既定値には使えない。
 
 上流が 2026-09-10 に DeepSeek-V4.1-Flash を公開した際、V4 Flash と V4 Flash Vision Exp を廃止し、モデル名は `deepseek-flash`（画像理解を備える）と `deepseek-v4-pro` に収束した。旧 id は互換のため引き続き呼び出せるが、処理は V4.1-Flash が行い、Flash の料金で課金される（[モデルと価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)の脚注を参照）。
 
-> ⚠️ **目録に無い id は「名前が違うだけの同じもの」ではない**：dsh は未収録の id を**テキスト専用**モデルとして扱い（`modelInfo` が `inputModalities: ["text"]` にフォールバックする）、その結果 `dsh-llm` が送信前に会話中の画像を**決定的なテキスト記述に無言で置き換える** —— エラーは出ず、モデルは画像を一度も見ていない。既定値を選ぶときは目録に存在する id を選ぶこと。
+> ⚠️ **目録に無い id は「名前が違うだけの同じもの」ではない**：dsh は未収録の id を**テキスト専用**モデルとして扱う（`modelInfo` が `inputModalities: ["text"]` にフォールバックする）。その帰結は二つの経路に分かれ、**片方は鳴り、片方は無言である**：
+>
+> - **新しく添付した画像はその場で拒否される**：`session/prompt` の添付准入が同じ `inputModalities` を読み、`MODEL_DOES_NOT_SUPPORT_IMAGES` を投げる。UI には「現在のモデルは画像に対応していません」と表示される。
+> - **履歴に既にある画像は無言で捨てられる**：送信前に `projectImagesForTextModel` がテキスト記述に置き換える —— エラーは出ず、モデルは画像を一度も見ていない。
+>
+> 既定値を選ぶときは目録に存在する id を選ぶこと。この判定は dsh のバージョンで変わるため、同じ設定が更新後に「画像を見る」から「画像を拒む」へ転じうる。
 
 #### reasoningEffort の段階とコスト
 

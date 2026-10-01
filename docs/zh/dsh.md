@@ -436,7 +436,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
     defaultModel = {
       enable = true;
       provider = "deepseek-official";
-      model = "deepseek-flash";  # 两个通道的目录都在、且唯一声明 image 模态的 flash 条目
+      model = "deepseek-flash";  # 三个版本目录都在，且三个都声明 image 模态的唯一 id
       reasoningEffort = "max";
     };
     # 单轮并行工具调用上限
@@ -478,14 +478,21 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 
 `deepseek-official` 路由的模型目录是适配器**内置**的（`dsh-llm-deepseek` 的 `DEFAULT_MODELS`），不由设置文件决定，随 dsh 版本变化：
 
-| dsh 版本 | 目录条目 |
-|----------|----------|
-| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` |
-| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` |
+| dsh 版本 | 目录条目 | 其中声明 image 模态 |
+|----------|----------|--------------------|
+| stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
+| alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+
+`deepseek-flash` 是三个目录**都存在**、且在其中**都声明 image 模态**的唯一 id —— 这也是模块默认值选它的理由。另一个能看图的 `deepseek-v4-flash-vision-exp` 只存在于两个较旧目录，且上游已于 2026-09-10 下线，不能作为默认值。
 
 上游 2026-09-10 发布 DeepSeek-V4.1-Flash 时下线了 V4 Flash 与 V4 Flash Vision Exp，模型名收敛为 `deepseek-flash`（原生多模态，支持图像理解）与 `deepseek-v4-pro`；旧 id 出于兼容仍可调用，但由 V4.1-Flash 承接并按 Flash 计费（见[模型与价格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)脚注）。
 
-> ⚠️ **目录里没有的 id 不等于"等价地用着"**：dsh 把未收录的 id 当**纯文本**模型（`modelInfo` 回落 `inputModalities: ["text"]`），于是 `dsh-llm` 在派发前把会话里的图片**静默替换成文本占位符** —— 不报错，模型也从未看到图。选默认值时务必挑目录里存在的 id。
+> ⚠️ **目录里没有的 id 不等于"等价地用着"**：dsh 把未收录的 id 当**纯文本**模型（`modelInfo` 回落 `inputModalities: ["text"]`），后果分两条路径走，**一条响、一条不响**：
+>
+> - **新贴的图当场被拒**：`session/prompt` 的附件准入读的是同一个 `inputModalities`，直接抛 `MODEL_DOES_NOT_SUPPORT_IMAGES`，界面显示"当前模型不支持图片，请切换支持图片的模型"。
+> - **历史里已有的图被静默丢弃**：派发前 `projectImagesForTextModel` 把图片换成文本占位符，不报错，模型也从未看到图。
+>
+> 选默认值时务必挑目录里存在的 id。这个判定随 dsh 版本变化 —— 同一份设置在新版本上可能从"看图"变成"拒图"。
 
 #### reasoningEffort 档位与开销
 
