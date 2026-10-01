@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-02T03:01:23+09:00
+
+**概要**：fix(dsh): デフォルトモデルを `deepseek-flash` へ移行（四言語）— **上流は 2026-09-10 に V4 Flash と V4 Flash Vision Exp を廃止していた**：DeepSeek-V4.1-Flash の公開時にモデル名が `deepseek-flash`（ネイティブ・マルチモーダル、画像理解を含む）と `deepseek-v4-pro` に収束し、旧 id は互換のため引き続き呼び出せるが処理は V4.1-Flash が行い Flash の料金で課金される（上流[モデルと価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)の脚注 1）。dsh の内蔵目録（`dsh-llm-deepseek` の `DEFAULT_MODELS`）は版に追随する：stable `0.1.5-rc.2` と alpha `0.1.6-alpha.1` は四条、alpha `0.1.6-alpha.2` は二条に収束し image モダリティを `deepseek-flash` に統合した。**問題**：本リポジトリの `defaultModel.model` の既定値 `deepseek-v4-flash` は alpha の目録に存在せず、dsh は目録外の id を**テキスト専用**モデルとして扱う（`modelInfo` が `inputModalities: ["text"]` にフォールバック）ため、送信前に `projectImagesForTextModel` が会話中の画像を**無言でテキスト記述に置き換える** —— エラーは出ず、モデルは画像を一度も見ていない（実機で実測：選択器から id が消えたのに既定値は依然それを指していた）。**変更内容**：既定値を `deepseek-flash`（両目録に存在し、image モダリティを宣言する唯一の flash 項目）に変更し、オプション説明に「目録は版に追随する」「目録外の id は等価ではない」を明記；四言語の `dsh.md` は例の id を同期し、「モデル目録は dsh の版に追随する」節と無言で機能が落ちる旨の警告を追加、FIM の節は上流 FIM API に合わせて `deepseek-flash` / `deepseek-v4-pro` に改めた。
+
+| コミット | 説明 |
+|----------|------|
+| `2ab7dda` | fix(dsh): 默认模型改用 deepseek-flash —— 上游 09-10 下线旧 id（四语） |
+
 ## 2026-09-28T13:07:06+09:00
 
 **概要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄いラッパーの座標同期（子リポジトリはメンテナンスログを持たないため、変更は同リポジトリのコミット [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177) を参照）。**何を直したか**：音色を「**実際に話す変体**」で選ぶようにした —— 旧実装は主言語の前方一致で最初の音色を取っていたが、`zh-HK`（広東語、Tracy/HiuGaai）と `zh-CN`（普通話、Xiaoxiao）は同じ `zh` 主言語に属するため、音色一覧で広東語が先に来るシステムでは**必ず普通話のテキストを広東語で読む**。しかも**テキストも界面も正しい**ため、音を聞かない限り気付けない（本機実測：界面は中国語、放送は広東語）。修正：① 変体の分類と並び替え——普通話の要求は普通話の音色だけから選ぶ（逆も同様、`yue`/`zh-yue` も認識）；② 発声前に**音色一覧の準備を待つ**（初回の `getVoices()` は空のことが多く、選べないと lang をエンジン任せにして同じく誤読する）；③ `utter.lang` を選択した音色に合わせる；④ 「音色」設定を追加（既定は自動、指名指定も可）し、実際に使う音色を表示——「どの音色が選ばれたか」を目に見える事実にする。**判定**：子リポジトリに `test/voice-selection.test.mjs` を追加（25 のアサーション、**反証**を含む——旧アルゴリズムが「広東語が先」のフィクスチャで**確かに広東語を選ぶ**ことを先に断言し、そのうえで新アルゴリズムが選ばないことを断言）。さらに本機 Edge の 23 音色に対し、同じ抽出コードを実ブラウザで実行して実選択を確認した。

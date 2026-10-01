@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T03:01:23+09:00
+
+**摘要**：fix(dsh): 既定模型 `deepseek-flash` 移行（四言語）— **上流 2026-09-10 既 V4 Flash 與 V4 Flash Vision Exp 廃止**：DeepSeek-V4.1-Flash 公開時 模型名 `deepseek-flash`（画像理解 含）與 `deepseek-v4-pro` 収束、旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行 Flash 料金 課金（上流[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 1）。dsh 内蔵目録（`dsh-llm-deepseek` 之 `DEFAULT_MODELS`）版 追随：stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 四条、alpha `0.1.6-alpha.2` 二条 収束 且 image modality `deepseek-flash` 統合。**問題**：本倉庫 `defaultModel.model` 既定値 `deepseek-v4-flash` alpha 目録 不存在、而 dsh 目録外 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）為、送信前 `projectImagesForTextModel` 会話中 画像 **無言 文本記述 置換** —— 誤謬 不出、模型 画像 未見（実機 実測：選択器 自 id 消失、但 既定値 依然 其 指）。**変更内容**：既定値 `deepseek-flash`（両目録 存在、image modality 宣言 唯一 之 flash 項目）変更、option 説明 内「目録 版 追随」「目録外 id 等価 非」明記；四言語 `dsh.md` 例 id 同期、「模型目録 dsh 版 追随」節 與 無言 機能低下 之 警告 追加、FIM 節 上流 FIM API 合 `deepseek-flash` / `deepseek-v4-pro` 改。
+
+| 提交 | 説明 |
+|------|------|
+| `2ab7dda` | fix(dsh): 默认模型改用 deepseek-flash —— 上游 09-10 下线旧 id（四语） |
+
 ## 2026-09-28T13:07:06+09:00
 
 **摘要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄 wrapper 座標同期（子 repo 維護記録 無、変更 同 repo commit [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177) 参照）。**修正内容**：音色 「**実際 話 変体**」 以 選 —— 旧実装 主言語 前方一致 以 最初 音色 取、然 `zh-HK`（広東語、Tracy/HiuGaai）與 `zh-CN`（普通話、Xiaoxiao）同 `zh` 主語言 属、故 音色一覧 広東語 先 来 系統 **必 普通話 text 広東語 読**。更 **text 與 界面 両方 正**、音 聞 限 気付 不能（本機実測：界面 中国語、放送 広東語）。修正：① 変体 分類 與 並替——普通話 要求 普通話 音色 之内 的 選（逆 亦 同、`yue`/`zh-yue` 認識）；② 発声 前 **音色一覧 準備 待**（初回 `getVoices()` 空 多、選 不能 時 lang engine 任 同 誤読）；③ `utter.lang` 選択 音色 合；④「音色」設定 追加（既定 自動、指名 指定 可能）與 実際 使用 音色 表示——「何 音色 選 為 可」 目 見 事実 化。**判定**：子 repo `test/voice-selection.test.mjs` 追加（25 assertion、**反証** 含——旧 algorithm 「広東語 先」 fixture 於 **確 広東語 選** 先 断言、其上 新 algorithm 不 選 断言）。更 本機 Edge 23 音色 対、同 抽出 code 実 browser 実行 実選択 確認。

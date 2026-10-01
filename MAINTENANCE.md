@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T03:01:23+09:00
+
+**摘要**：fix(dsh): 默认模型迁到 `deepseek-flash`（四语）— **上游早在 2026-09-10 就下线了 V4 Flash 与 V4 Flash Vision Exp**：发布 DeepSeek-V4.1-Flash 时模型名收敛为 `deepseek-flash`（原生多模态、带图像理解）与 `deepseek-v4-pro`，旧 id 为兼容仍可调用、但由 V4.1-Flash 承接并按 Flash 计费（上游[模型与价格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)脚注 1）。dsh 的内置目录（`dsh-llm-deepseek` 的 `DEFAULT_MODELS`）随版本走：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 是四条，alpha `0.1.6-alpha.2` 收敛为两条并把 image 模态并进 `deepseek-flash`。**问题**：本仓 `defaultModel.model` 的默认值 `deepseek-v4-flash` 在 alpha 通道上已不在目录中，而 dsh 对目录外的 id 按**纯文本**模型处理（`modelInfo` 回落 `inputModalities: ["text"]`），派发前经 `projectImagesForTextModel` 把会话里的图片**静默替换成文本占位符** —— 不报错，模型也没看到图（本机实测：选择器里该 id 消失、默认值却仍指向它）。**改动**：默认值改为 `deepseek-flash`（两个通道的目录都在、且唯一声明 image 模态的 flash 条目），选项描述写明目录随版本走与「目录外 id 不等价」；四语 `dsh.md` 同步示例 id、新增「模型目录随 dsh 版本走」小节与静默降级警告，FIM 一节的取值按上游 FIM API 改为 `deepseek-flash` / `deepseek-v4-pro`。
+
+| 提交 | 说明 |
+|------|------|
+| `2ab7dda` | fix(dsh): 默认模型改用 deepseek-flash —— 上游 09-10 下线旧 id（四语） |
+
 ## 2026-09-28T13:07:06+09:00
 
 **摘要**：dsh-api-balance 0.1.0 → 0.1.1 — 薄封装坐标同步（子仓无维护日志，变更见其提交 [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177)）。**修的是什么**：音色改为按「**话的变体**」选择 —— 旧实现只按主语言前缀取第一个音色，而 `zh-HK`（粤语，Tracy/HiuGaai）与 `zh-CN`（普通话，Xiaoxiao）同属 `zh` 主语言，音色表里粤语排在前的系统**必然把普通话文本念成粤语**；更麻烦的是**文本与界面全对**，不听声音发现不了（本机实测：界面中文、播报却是粤语）。修复：① 变体归类与排序，普通话请求只在普通话音色里选（粤语请求同理，`yue`/`zh-yue` 亦识别）；② 发声前**等音色表就绪**（首次 `getVoices()` 常为空，选不到就把 lang 交给引擎自选，同样念错话）；③ `utter.lang` 与所选音色对齐；④ 新增「音色」设置项（默认自动、可点名指定）并显示当前实际使用的音色——把「选了哪个音色」变成看得见的事实。**判据**：子仓新增 `test/voice-selection.test.mjs`（25 条断言，含**反证**——先用旧算法在「粤语在前」的构造表上断言它**确实选到粤语**，再断言新算法不选），另用真实浏览器（本机 Edge 的 23 个音色）跑同一份抽取代码验证实选结果。
