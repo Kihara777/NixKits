@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T06:15:29+09:00
+
+**Summary**: filling in the maintenance log's **untranslated entries**: ja **80**, pcn **59** — their summary lines held the `**Summary**` marker plus an English or Chinese older draft, yet the day's five checks **let them all through** (counts, timestamps, SHA sets and the kana check — English has no kana). New finding: an older-draft summary **also disagrees in content with the current zh source**, so the whole line was **replaced from zh**, not just relabelled. The checker gains a 6th rule, "**the summary marker must be in that language**"; two counter-tests each turn red (ja with `**Summary**`; en with `**概要**`). The same pit was stepped in three times that day — **when the criterion is wrong, the numbers look just as confident** (the CJK-share threshold diluted by ASCII like `codewhale 0.8.49`; for pcn it took "many Han characters" for untranslated). **Verification**: `nix flake check` all green; 358 entries per language, ja / pcn 0 leftovers.
+
+| Commit | Description |
+|------|------|
+| `197099e` | fix(docs): 补齐 ja 80 条 / pcn 59 条未译条目，并修 pcn 一处错标签 |
+| `44793f3` | feat(develop): maintenance-log 检查补第 6 条 —— 摘要标记须是本语的 |
+
 ## 2026-10-03T05:16:47+09:00
 
 **Summary**: the maintenance log's **ratio criterion gains a second feature**: backtick share. CJK density alone overestimates — a measured entry of density 0.646: the density-only cohort (n=34) mean **2.37** ruled it "too short"; adding backtick share for a nearest-neighbor cohort (n=15) puts the mean at **1.98**, and the delivered 1.95 lands right there. Backticked content is copied verbatim, so a higher share sits closer to a ratio of 1 — **this mechanism was already written into the skill, but the criterion did not carry it, so the criterion fooled itself once**. It is now "same structure + same-density cohort comparison": **compare within the same structure first, then argue length**. **Verification**: `nix flake check` four-language self-checks all green.
