@@ -30,15 +30,9 @@
         description: '基于创造模式的 NixOS 专用 Agent 预设：初始化时校验宿主系统为 NixOS（非 NixOS 拒绝一切请求并明确告知理由），加载 nixos-shell 辅助工具（nixos_shell 执行器 + nixos_cli 诊断）并注入 NixOS 高效开发提示词。'
         order: 10
         plugins:
-          # ⚠️ **未决项（2026-10-02 落地阶段刻意未改）**：下面这段 persona 文案里的
-          # "预设住在 `$DSH_HOME/.agent-presets/<id>/` 目录"在 dsh 0.2.0 已不成立——
-          # 目录式**发现**通道被删除，预设改为 profile patch 层的一条
-          # `@deepseek-ai/dsh-agent-preset` 条目（upstream 0.2.0 的内置 cordis 预设因此
-          # 把 persona 缩到一句话，把细则交给 editing-cordis-compositions 技能）。
-          # 那句仍算「半真」的只剩一点：本部署确实还把若干预设的**内容**组装在那里
-          # （lampkeeper / ocean-spiral / news-three-elements），变的只是发现方式。
-          # 改写它是**行为变更**（改变送进模型的提示词），落地阶段的批准范围不含它，
-          # 故留待维护者单独决定——不是忘了改。
+          # 2026-10-02：persona 里「预设住在 `.agent-presets/<id>/` 目录」那句已按 dsh 0.2.0
+          # 改写。旧措辞在目录式**发现**通道被删除后已不成立；改写它等于改送进模型的提示词，
+          # 属行为变更，故由维护者单独批准（原为落地阶段刻意留下的未决项）。
           - id: persona
             name: '@deepseek-ai/dsh-persona'
             config:
@@ -49,7 +43,7 @@
 
                 Two planes decide where an edit belongs. The HOST composition holds the registries and anything shared across sessions — persistence, the sandbox and approval stack, the model route, the subagent registry and its backends. An AGENT PRESET holds what one session contributes to those registries: its tools, its persona, its prompt sections. A row that publishes a service belongs in the host composition, or inside an `isolate` realm if the preset genuinely owns that service and nothing outside one agent reads it.
 
-                Presets you author live one directory per preset under `${DSH_HOME:-$HOME/.dsh}/.agent-presets/<id>/`; the roster reports each preset's real path, so take the one you edit from there. NEVER edit or delete the shipped preset install (the `agent-presets` directory beside the deployment's own config): it belongs to the deployment, an upgrade overwrites it, and corrupting the `cordis` preset would disable this very mode. To change what a shipped preset does, copy its composition into a new preset directory and edit the copy.
+                Presets you author are rows in the profile's `cordis.patch.yml` — one `@deepseek-ai/dsh-agent-preset` entry each, whose plugin rows live in its `config.plugins`. Discovery is by that row; a preset may still keep its own files under `$DSH_HOME/.agent-presets/<id>/` and reference them by relative path from the profile, which is how the presets in this deployment carry their plugins and skills. The roster reports each preset's real path, so take the one you edit from there. NEVER edit or delete the shipped preset install (the presets that ship with the deployment's own config, supplying `standard`, `ptc`, `minimal`, and `cordis`): it belongs to the deployment, an upgrade overwrites it, and corrupting `cordis` would disable preset authoring itself. To change what a shipped preset does, author your own preset file and register it as another row — the `editing-cordis-compositions` skill carries the details.
 
                 Load the `editing-cordis-compositions` skill before writing or changing a composition.
 
@@ -276,21 +270,31 @@
           # The composition-authoring SKILLS stay (below), the self-modifying toolset
           # does not; NixOS mode needs the coding surface, not runtime surgery.
 
-          # 组合撰写技能随预设分发，而不是放在用户技能根：它记录的是本部署的两个平面，
-          # 而预设才是被复制、被编辑的单位。dsh 0.2.0 起 `baseUrl` **不再是预设目录**
-          # （实测为 profile 目录 `$DSH_HOME/profiles/<profile>/`），所以两个根都改为先解析
-          # `@kihara777/dsh-nixos-shell` 的包根，再拼 `presets/nixos-mode/`：预设目录与包一起
-          # 分发，根永远指得到实际内容。解析失败 = 该行挂不起来 = 预设变 broken，不会静默
-          # 退化成"没有技能"。两行都注册进本预设层的 host 技能注册表，故无需 realm；agent 的
-          # 合并目录还会带上部署在全局注册的东西（仓库插件）。
+          # ── 技能根 ──────────────────────────────────────────────────────────────────
           #
-          # 第二个根放仓库树里的 NixOS 运维技能（`skills-nixos/`，构建期生成的子集）。
-          # 子集单独成目录——而不是复用 `skills-embedded/`——是因为 provider 会注册每个根的
-          # 全部子项，直接指 `skills-embedded/` 会把文档/维护技能也拖进 NixOS模式。
+          # 两个根，都注册进**本预设层**的 host 技能注册表（故无需 realm）；agent 的合并
+          # 目录还会带上部署在全局注册的东西（仓库插件）。
           #
-          # 两个预设共用 `presets/nixos-mode/` 这一对根是刻意的：维护模式完整派生自 NixOS模式，
-          # 两目录的 `skills/` 由 check-preset-derivation.py 校验逐字节一致，`skills-nixos/`
-          # 由构建期同一个循环生成，故内容等价；这样新格式也能保持与旧格式相同的派生关系。
+          # ① 组合撰写技能（`cordis-plugin-development` / `editing-cordis-compositions`）
+          #    **自 2026-10-02 起不再自带副本**：dsh 0.2.0 把它们随
+          #    `@deepseek-ai/dsh-agent-preset` 分发，官方内置的 cordis 预设用的就是下面
+          #    一模一样的表达式。跟随上游的收益是**内容永远是最新的格式**——自带副本的
+          #    代价已经出现过一次：我们那份 `editing-cordis-compositions` 停在 0.1.x 的
+          #    目录式预设模型上，而 0.2.0 的它已改成 patch/bundle 模型并明说「那个目录
+          #    没人读了」，于是同名两份、其中一份在教废弃写法。
+          #    自带的那两份仍可从 `dsh-nixos-shell-stable.nix` 钉住的 rev 取用（0.1.x 兼容）。
+          #
+          # ② 仓库树里的 NixOS 运维技能（`skills-nixos/`，构建期从 `skills/` 生成的子集）。
+          #    这一份上游没有，只能自带。子集单独成目录——而不是复用 `skills-embedded/`——
+          #    是因为 provider 会注册每个根的**全部子项**，直接指 `skills-embedded/`
+          #    会把文档/维护技能也拖进 NixOS模式。
+          #
+          # `baseUrl` 在 0.2.0 **不再是预设目录**（实测为 profile 目录），故 ② 先解析
+          # `@kihara777/dsh-nixos-shell` 的包根再拼相对路径。解析失败 = 该行挂不起来 =
+          # 预设变 broken，**不会静默退化成「没有技能」**（存在性守卫是该行的一部分）。
+          #
+          # 两个预设共用 `presets/nixos-mode/` 这个根是刻意的：维护模式完整派生自 NixOS模式，
+          # `skills-nixos/` 由构建期同一个循环生成，故内容等价。
           - id: skill-filesystem
             name: '@deepseek-ai/dsh-skill-filesystem'
             config:
@@ -298,9 +302,13 @@
                 (() => {
                   const fs = process.getBuiltinModule('node:fs')
                   const path = process.getBuiltinModule('node:path')
-                  const shell = process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('@kihara777/dsh-nixos-shell')
-                  const root = path.dirname(path.dirname(shell))
-                  const dirs = ['presets/nixos-mode/skills', 'presets/nixos-mode/skills-nixos'].map((dir) => path.join(root, dir))
+                  const req = process.getBuiltinModule('node:module').createRequire(baseUrl)
+                  // ① 上游随 @deepseek-ai/dsh-agent-preset 分发的技能（与内置 cordis 预设同一写法）
+                  const upstream = path.join(path.dirname(req.resolve('@deepseek-ai/dsh-agent-preset/package.json')), 'skills')
+                  // ② 本部署自带的 NixOS 运维技能（上游没有这一份）
+                  const shell = req.resolve('@kihara777/dsh-nixos-shell')
+                  const own = path.join(path.dirname(path.dirname(shell)), 'presets/nixos-mode/skills-nixos')
+                  const dirs = [upstream, own]
                   const missing = dirs.filter((dir) => !fs.existsSync(dir))
                   if (missing.length > 0) throw new Error('nixos-mode skill roots missing: ' + missing.join(', '))
                   return dirs

@@ -233,9 +233,9 @@ dsh 0.2.0 Agent 預設 保持方式 再構築、**目録型預設経路 削除**
 1. **`baseUrl` 意味変化**。0.1.x 系 預設自身 目録、0.2.0 実測 **profile 目録**（`$DSH_HOME/profiles/<profile>/`）。旧 file 技能根 `new URL('skills/', baseUrl)` 記述、無修正移行 → `<profile>/skills/` 指、技能 **静黙消失**。本 repo 二預設 `baseUrl` 従 `@kihara777/dsh-nixos-shell` 包根 解析 `presets/<mode>/` 連結、私有 repo 二 `../../.agent-presets/<id>/` 逆算——両者 共 **存在 guard** 付、錨 誤 場 `broken` 化、「技能無」状態 退化 無。
 2. metadata（旧 `preset.yml` `name` / `description`）`config.name` / `config.description` 移。
 3. `config.order` 新 key。
-4. **插件行 相対経路 錨 書換 必要**：相対指定子 `.` 開始 必須（loader 該形 name 唯 `baseUrl` 以 解決。**絶対経路 裸 package 名 扱  import 失敗**）。加 `baseUrl` profile 目録 化 故、`./plugins/x.js` → `../../.agent-presets/<id>/plugins/x.js`。副作用：預設同梱 plugin file 裸 package 名 以 `@deepseek-ai/*` peer import 場合、模組 `@deepseek-ai` 也 `$DSH_HOME/node_modules` 張 必要。無 場合 該行 `… never started` 報告 唯（下文「預設 挂載判定」参照）。
+4. **插件行 相対経路 錨 書換 必要**：相対指定子 `.` 開始 必須（loader 該形 name 唯 `baseUrl` 以 解決。**絶対経路 裸 package 名 扱  import 失敗**）。加 `baseUrl` profile 目録 化 故、`./plugins/x.js` → `../../.agent-presets/<id>/plugins/x.js`。副作用：預設同梱 plugin file 裸 package 名 以 `@deepseek-ai/*` peer import 場合、模組 `@deepseek-ai` 也 `$DSH_HOME/node_modules` 張 必要。無 場合 該行 `… never started` 報告 唯（下文「預設 掛載判定」参照）。
 
-#### 預設 挂載判定（真 載 可否 如何 知）
+#### 預設 掛載判定（真 載 可否 如何 知）
 
 **「roster 内 存在」移行成功 非**：預設 載 不 時、0.2.0 `agentPresets/list` 各条目 `broken` 欄 返 唯——**該欄 無 即 上流 健全性判定 通過**。判定 実行可能：
 
@@ -256,7 +256,10 @@ curl -sS -b cookies -H 'content-type: application/json' \
 
 最後 一行 **今回 着地 実際 修正 罠**：預設同梱 plugin file `$DSH_HOME/.agent-presets/<id>/…` 存在、裸 package 名 以 peer import 時 Node **file 所在目録** 従 上 `node_modules` 探。模組 以前 `@kihara777` 唯 張、故「dsh 再起動後 掌灯模式 broken 化」——両者 同一 `$DSH_HOME` 内 相互 踏。現在 `@kihara777` 與 `@deepseek-ai` 二本 張。
 
-**未決項（意図的 未変更）**：新格式 file persona 内「預設 `$DSH_HOME/.agent-presets/<id>/` 目録 住」一句 0.2.0 成立 不（目録型 **検出** 経路 消、一部預設 **内容** 唯 今 也 彼所 組立）。書換 場合 **model 送 prompt** 変——本着地 批准範囲 外 挙動変更 故、file 内 `⚠️ 未決項（2026-10-02 着地段階 意図的 未変更）` 註 残、維護者 別途決定 待。
+**persona 與 同梱技能（2026-10-02 着地後 之 修正）**：二箇所 之 陳腐化 記述 変更。両者 共 既 未決項 非。
+
+- **persona**：新格式 file 之「預設 `$DSH_HOME/.agent-presets/<id>/` 目録 住」一句 0.2.0 之 正確 記述 変更——預設 = profile `cordis.patch.yml` 内 `@deepseek-ai/dsh-agent-preset` 条目 一本、**発見 担 者 該 一行 也**；預設 依然 自前 file `.agent-presets/<id>/` 下 置、profile 従 相対経路 参照 可能——本配備 之 一部 預設 正 此 様 插件 與 技能 同梱。此 書換 場合 **model 送 prompt** 変——挙動変更 該当 故、維護者 別途 批准 済。
+- **同梱技能**：二預設 以前 `cordis-plugin-development` 與 `editing-cordis-compositions` 之 副本 **同梱**。0.2.0 此 二（加 `agent-experience` / `cordis-composition-reference`）`@deepseek-ai/dsh-agent-preset` 與 共 配布、但 此方 之 二 0.1.x 目録式 預設 模型 上 留——故 同名 二 並、内 一 **廃止 書方** 教（上流 之 新版 *"Nothing reads that directory any more"* 明言）。現在 二預設 之 `skill-filesystem` 行 **上流 其 直接 掛載** 形 変更（内蔵 `cordis` 預設 與 同一 式）、上流 無 `skills-nixos/`（NixOS 運用技能）唯 残。`develop/check-preset-derivation.py`「既 副本 同梱 不」 断言 化 釘付；同梱 之 二 今 也 stable 通道 釘付 rev 従 取用 可能（0.1.x 互換）。
 
 ## sudo 守護
 

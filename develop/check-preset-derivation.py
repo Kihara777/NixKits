@@ -10,7 +10,9 @@ dsh 0.2.0 起预设只有一种格式：profile patch 层里的一条
   == nixos 的 plugins 正文 + 固定追加块
   （文件头里的 id/name/description/order 是每个预设各自的元数据，
    由 preset.yml 与 IDS/ORDERS 常量分别核对，不参与字节派生）
-- 两预设的 skills/ 目录逐文件一致
+- 两预设**都不自带** `skills/` 副本：组合撰写技能改挂上游
+  `@deepseek-ai/dsh-agent-preset` 分发的那份（自带副本会与上游新版同名冲突，
+  2026-10-02 实测到我们那份落后一整个格式）
 - 每个预设的 `config.name` / `config.description` 与同目录 `preset.yml` 逐字一致
 - 新闻三要素模式（独立包）的预设头自洽（id/name/description/order）
 - 修改 nixos-mode 后必须同步 maintenance-mode（见 AGENTS.md「预设」一节）
@@ -19,7 +21,6 @@ dsh 0.2.0 起预设只有一种格式：profile patch 层里的一条
 """
 import os
 import sys
-import hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRESETS = os.path.join(ROOT, "packages", "dsh-nixos-shell", "presets")
@@ -154,38 +155,25 @@ def fail(message: str) -> None:
     sys.exit(1)
 
 
-def tree_hashes(root: str) -> dict:
-    result = {}
-    for dirpath, dirnames, filenames in os.walk(root):
-        dirnames.sort()
-        for name in sorted(filenames):
-            path = os.path.join(dirpath, name)
-            rel = os.path.relpath(path, root)
-            with open(path, "rb") as f:
-                result[rel] = hashlib.sha256(f.read()).hexdigest()
-    return result
-
-
 def main() -> None:
     orders: list = []
     check_patch_pair(orders)
     check_news(orders)
 
-    nixos_skills = tree_hashes(os.path.join(PRESETS, "nixos-mode", "skills"))
-    maint_skills = tree_hashes(os.path.join(PRESETS, "maintenance-mode", "skills"))
-    if nixos_skills != maint_skills:
-        only_nixos = sorted(set(nixos_skills) - set(maint_skills))
-        only_maint = sorted(set(maint_skills) - set(nixos_skills))
-        changed = sorted(
-            k for k in set(nixos_skills) & set(maint_skills)
-            if nixos_skills[k] != maint_skills[k]
-        )
-        fail(
-            "两预设 skills/ 目录不一致：\n"
-            f"  仅 nixos-mode 存在: {only_nixos}\n"
-            f"  仅 maintenance-mode 存在: {only_maint}\n"
-            f"  内容不同: {changed}"
-        )
+    # 组合撰写技能曾**自带副本**；2026-10-02 起改为挂上游随
+    # `@deepseek-ai/dsh-agent-preset` 分发的那份（见 preset.patch.yml 的 `skill-filesystem` 行）。
+    # 自带副本的代价实测过一次：我们那份 `editing-cordis-compositions` 停在 0.1.x 的目录式
+    # 模型上，而 0.2.0 的它已改成 patch/bundle 模型并明说「那个目录没人读了」——于是同名两份，
+    # 其中一份在教废弃写法。故这里把「不再自带」钉成**断言**，而不是删掉就没人管：
+    # 谁把副本加回来，检查就响。0.1.x 兼容用的旧副本在 `dsh-nixos-shell-stable.nix` 钉住的 rev 里。
+    for mode in ("nixos-mode", "maintenance-mode"):
+        stray = os.path.join(PRESETS, mode, "skills")
+        if os.path.isdir(stray):
+            fail(
+                f"{os.path.relpath(stray, ROOT)} 又出现了：组合撰写技能不再自带副本，"
+                "改为挂上游 @deepseek-ai/dsh-agent-preset 的 skills/（见 preset.patch.yml "
+                "的 skill-filesystem 行）。旧副本仍在 dsh-nixos-shell-stable.nix 钉住的 rev 里。"
+            )
 
     print(
         "preset-derivation: OK（维护模式完整派生自 NixOS模式；nixos / maintenance / "

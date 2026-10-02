@@ -257,7 +257,10 @@ curl -sS -b cookies -H 'content-type: application/json' \
 
 最後の一行は**今回の落地で実際に直した罠**である：プリセット同梱のプラグインファイルは `$DSH_HOME/.agent-presets/<id>/…` にあり、裸のパッケージ名で peer を import すると Node は**ファイルのあるディレクトリ**から上へ `node_modules` を探す。モジュールは以前 `@kihara777` しか張っておらず、ゆえに「dsh を再起動すると掌灯模式が broken になる」——両者が同じ `$DSH_HOME` の中で互いを踏んでいた。現在は `@kihara777` と `@deepseek-ai` の二本を張る。
 
-**未決項（意図的に未変更）**：新形式ファイルの persona にある「プリセットは `$DSH_HOME/.agent-presets/<id>/` ディレクトリに住む」という一句は 0.2.0 では成立しない（ディレクトリ式の**発見**経路が消え、一部プリセットの**内容**だけが今もそこへ組み立てられる）。書き換えると**モデルへ送る提示詞**が変わる——本落地の批准範囲外の挙動変更であるため、ファイル内に `⚠️ 未決項（2026-10-02 落地段階で意図的に未変更）` の註を残し、保守者の別途決定を待つ。
+**persona と同梱技能（2026-10-02 落地後の修正）**：二箇所の陳腐化した記述を改めた。いずれももはや未決項ではない。
+
+- **persona**：新形式ファイルの「プリセットは `$DSH_HOME/.agent-presets/<id>/` ディレクトリに住む」という一句は 0.2.0 の正確な記述へ改めた——プリセットは profile `cordis.patch.yml` にある `@deepseek-ai/dsh-agent-preset` の条目であり、**発見を担うのはその一行である**；プリセットは依然として自分のファイルを `.agent-presets/<id>/` の下に置き、profile から相対経路で参照できる——本配備のいくつかのプリセットはまさにそうやってプラグインと技能を同梱している。これを書き換えれば**モデルへ送る提示詞**が変わる。挙動変更にあたるため、保守者が別途批准した。
+- **同梱技能**：二つのプリセットはかつて `cordis-plugin-development` と `editing-cordis-compositions` の複製を**同梱**していた。0.2.0 はこの二つ（加えて `agent-experience` / `cordis-composition-reference`）を `@deepseek-ai/dsh-agent-preset` とともに配布するが、こちらの二つは 0.1.x のディレクトリ式プリセットモデルに留まっていた——ゆえに同名が二つ並び、うち一つは廃止された書き方を教えていた（上流の新版は *"Nothing reads that directory any more"* と明言している）。現在、二つのプリセットの `skill-filesystem` 行は**上流のそれを直接マウント**する形に変わっており（内蔵 `cordis` プリセットと同一の式）、上流に無い `skills-nixos/`（NixOS 運用技能）だけを残している。`develop/check-preset-derivation.py` は「もはや複製を同梱しない」ことを断言として釘付けにした；同梱していた二つは今も stable チャネルがピン留めした rev から取用できる（0.1.x 互換）。
 
 ## sudo デーモン
 

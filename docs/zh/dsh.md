@@ -307,10 +307,20 @@ order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocea
 `@kihara777`，于是「重启 dsh 之后掌灯模式变 broken」——而两者在同一个 `$DSH_HOME` 下互相踩。
 现在模块同时链 `@kihara777` 与 `@deepseek-ai` 两条。
 
-**未决项（刻意未改）**：新格式文件里 persona 那句"预设住在 `$DSH_HOME/.agent-presets/<id>/` 目录"
-在 0.2.0 已不成立（目录式**发现**通道被删；只有若干预设的**内容**仍组装在那里）。改写它会改变
-**送进模型的提示词**，属行为变更，不在本次落地批准范围内——文件内留了
-`⚠️ 未决项（2026-10-02 落地阶段刻意未改）` 注释，等维护者单独决定。
+**persona 与打包技能（2026-10-02 落地后的修正）**：两处过期说法已改，都不再是未决项。
+
+- **persona**：新格式文件里那句"预设住在 `$DSH_HOME/.agent-presets/<id>/` 目录"已改成 0.2.0 的
+  准确表述——预设是 profile `cordis.patch.yml` 里的一条 `@deepseek-ai/dsh-agent-preset` 条目，
+  **发现靠那条行**；预设仍可把自己的文件放在 `.agent-presets/<id>/` 下、按相对路径从 profile 引用，
+  本部署的若干预设正是这么带插件与技能的。改写它等于改变**送进模型的提示词**，属行为变更，
+  已由维护者单独批准。
+- **打包技能**：两个预设曾**自带** `cordis-plugin-development` 与 `editing-cordis-compositions`
+  的副本。0.2.0 把这两份（外加 `agent-experience` / `cordis-composition-reference`）随
+  `@deepseek-ai/dsh-agent-preset` 分发，而我们那两份停在 0.1.x 的目录式预设模型上——于是同名两份，
+  其中一份在教废弃写法（上游新版明说 *"Nothing reads that directory any more"*）。现在两个预设的
+  `skill-filesystem` 行改为**直接挂上游那份**（与内置 `cordis` 预设同一表达式），只保留上游没有的
+  `skills-nixos/`（NixOS 运维技能）。`develop/check-preset-derivation.py` 把「不再自带副本」钉成断言；
+  自带的那两份仍可从 stable 通道钉住的 rev 取用（0.1.x 兼容）。
 
 ## sudo 守护
 

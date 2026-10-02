@@ -91,9 +91,16 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 
 - **维护模式必须完整派生自 NixOS模式**：`maintenance-mode/preset.patch.yml` 的
   `plugins:` 正文（该行之后到文件末尾）= `nixos-mode/preset.patch.yml` 的同段 + 固定的
-  `maintenance-skills` 行块（含注释），除此之外不得有任何差异；两预设的 `skills/` 目录
-  必须逐文件一致。文件头里的 `id` / `name` / `description` / `order` 是各自的元数据，
-  不参与字节派生（由脚本按 `preset.yml` 与常量核对）。
+  `maintenance-skills` 行块（含注释），除此之外不得有任何差异。文件头里的
+  `id` / `name` / `description` / `order` 是各自的元数据，不参与字节派生
+  （由脚本按 `preset.yml` 与常量核对）。
+- **预设不自带组合撰写技能副本**：`cordis-plugin-development` 与
+  `editing-cordis-compositions` 由上游随 `@deepseek-ai/dsh-agent-preset` 分发，两个预设的
+  `skill-filesystem` 行**直接挂上游那份**（与内置 `cordis` 预设同一表达式），只保留上游没有的
+  `skills-nixos/`。自带副本会与上游新版**同名冲突**，而且 2026-10-02 实测到我们那份落后一整个
+  格式（0.1.x 目录式 vs 0.2.0 patch/bundle，上游新版明说旧目录没人读了）。
+  `develop/check-preset-derivation.py` 把「不再自带」钉成断言——副本被加回来，检查即响。
+  旧副本仍可从 stable 通道钉住的 rev 取用（0.1.x 兼容）。
 - **修改 nixos 模式后必须同步维护模式**：改 `nixos-mode/` 的任意文件（行、元数据、技能）
   后，立即把相同改动镜像到 `maintenance-mode/`——注意：**`plugins:` 正文里连注释也算**，
   两边注释不一致同样判漂。
