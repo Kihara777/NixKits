@@ -2,6 +2,26 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:03:13+09:00
+
+**摘要**：上游更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四语文档同步）。**两项暂缓**：`dsh` 0.2.0-rc.2 与 `dsh-alpha` 0.1.7-alpha.2 虽已算出全部 hash 并构建通过，但**预设挂载验证未通过**——用本机探针（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）对 0.2.0-rc.2 构造的 with-plugins 实例，`agentPresets/list` 的 roster 里**没有这两份预设**（「送检 0 份」）；**对照实验**用同一探针、同一份预设跑当前 0.1.6-alpha.2，两预设 ✓ 且故意坏掉的夹具被判 broken —— 故判据本身有区分度，问题出在 0.2.0 侧，但**尚不能区分**是预设格式不兼容还是探针的极简 `DSH_HOME` 在新版本下不再够用。`godot-ai` 4.2.3 同样暂缓：其 fail-closed pin 表从 9 项扩到 14 项，`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `httpx2` / `httpcore2` / `mcp-types` / `sniffio`，其中 **`mcp-types` 在 nixpkgs 里不存在**——属结构性改动，需新增包定义与重写两个 overlay。**顺带修一处静默缺陷**：`dsh` 的 `postPatch` 原先按「从 `devDependencies` 截断到文件末尾」删除，该写法只在 devDependencies 是**最后一个**顶层字段时成立；0.2.0-rc.2 起 `exports` 排在它之后，照旧执行会把 `exports` 一并删掉（`./profile-boot` 等子路径导出失效，而**构建照样成功**）。已改为按块匹配 + 尾逗号修复的 awk，并在两份真实 tarball（0.1.5-rc.2 的「末尾」布局与 0.2.0-rc.2 的「中间」布局）上离线验证 JSON 均可解析。**另查**：`.github/workflows/` 三个固定 SHA 的 action 均已是上游最新，且 `nix-installer-action` 的 `# main` 注释经核对**准确**（该 SHA 同时是 main 的 HEAD 与 v23 tag）。**第 0 步实测**：开工前核对远端，0 个未关闭 issue、0 个未关闭 PR。
+
+| 提交 | 说明 |
+|------|------|
+| `16216d5` | chore(pkgs): 上游更新 —— codewhale 0.10.0 / ruyi 0.53.0 / mcp-searxng 2.5.0 / opencode-telegram 0.26.2（四语文档同步） |
+| `63e71cd` | fix(dsh): postPatch 按块删 devDependencies —— 0.2.0+ 的 exports 不再被误删 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.9.13 | 0.10.0 |
+| 　 | cli / tui hash（x64、arm64） | 四值全部重算（cli 与 tui 同值） |
+| 　 | codewhale-src `src` hash | `sha256-AYs2v/…` → `sha256-SsN/p+…`（Cargo.lock 同步至 7266 行） |
+| ruyi | 0.52.0 | 0.53.0 |
+| mcp-searxng | 2.3.0 | 2.5.0 |
+| 　 | src hash / npmDepsHash | 两者均重算 |
+| opencode-telegram | 0.25.3 | 0.26.2 |
+| 　 | src hash / npmDepsHash | 两者均重算 |
+
 ## 2026-10-02T16:26:56+09:00
 
 **摘要**：feat(skills): 更新检查新增「第 0 步」——开工前同步远端并核对活跃 issue / PR（四语）— **通用技能** `nix-flake-update-check` 的主流程改由第 0 步起头（编号取 0，以免打乱既有第 1~9 步的交叉引用）：`git fetch` 对齐本地后列出未关闭 issue / PR，并划清「空」与「取不到」的分野——`gh` 失败时**显式报错、非零退出**，实测三种形态：认证失效 / 仓库名写错 → `Could not resolve to a Repository`；仓库**未启用 issue 功能** → `repository has disabled issues`；确实没有 → 退出 0 且输出空列表。故判据是两步：先证仓库可读，再看列表；**「空列表」只在命令成功时才算「真的没有」**。**为何值得单独立一步**：issue 是「已知故障」的集合、PR 是「在途工作」的集合，且它把取数链路自检提早到第 3 步之前。**提交前自检由九问扩为十问**（第 10 问即此步），并**如实标注来源差异**——前九问是实测返工的产物，第 10 问来自维护者的前置要求，性质不同。**适配层补本仓形态**：仓库坐标、`has_issues=true`、实测现状（0 未关闭 issue / 0 未关闭 PR），以及**四条真实先例**——PR #6 改的正是固定 SHA 的 action、PR #7 升级的正是更新检查会碰的包（且注定过不了 CI，终以关闭改手动收场）、PR #4 / #5 两份误报促成了 `/tts` 的 SSRF 真实修复、issue #3 成为技能拆分的契机。**顺带修正两处失真**：`traps.md` 原称「九问中每一问都对应这里的一个章节」，实则第 9 问（判据区分度）无对应章节（上次扩充时漂移）；四语技能文档仍写着「六问自检」与「第 1~9 步」（落后两轮）。**第 9 问补上「怎么自证」**：`nix flake check` 输出 `running 0 flake checks... all checks passed!` 是**缓存命中**而非「跑过了」——实测往 `docs/pcn/` 注入一个片假名后，`doc-links` 立即以 `kana on line 124` 失败，这才证明闸门带着当前输入真的量过。**验证**：`nix flake check` 全通过（首轮 pcn 曾残留助词「が」，被仓库自己的检查脚本抓出后修正）。

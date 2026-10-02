@@ -2,6 +2,26 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T17:03:13+09:00
+
+**摘要**：上流更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四言語文書同期）。**二項 暫緩**：`dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 全 hash 算出 且 構築 通過 雖、**preset mount 検証 未通過** —— 以 0.2.0-rc.2 構成 with-plugins 実例、本機 探針（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）内 `agentPresets/list` roster **此 二 preset 出現 不**（「送検 0 份」）。**対照実験** 同一 探針・同一 preset 現行 0.1.6-alpha.2 対 実行、二 何 也 ✓ 且 故意 壊 夹具 broken 判定 —— 故 判据 自身 識別力 有、問題 0.2.0 側 在。然 **未 区別**：preset 形式 非互換 或 探針 最小限 `DSH_HOME` 新版 不足 之 何 也。`godot-ai` 4.2.3 同 暫緩：fail-closed pin 表 9 項 自 14 項 拡張、`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `httpx2` / `httpcore2` / `mcp-types` / `sniffio` 新規追加 —— 且 **`mcp-types` nixpkgs 内 存在 不**。構造的変更 故、新規 包定義 與 二 overlay 書直 必要。**併 静黙欠陥 一 修正**：`dsh` `postPatch` 元「`devDependencies` 自 文件末尾 迄 截断」削除、此 写法 devDependencies **最後** 頂層 field 場合 限 成立。0.2.0-rc.2 以降 `exports` 其 後 在 故、旧 侭 実行 則 `exports` 也 削除（`./profile-boot` 等 子 path 導出 失効、而 **構築 其侭 成功**）。按塊 匹配 且 末尾 comma 修復 awk 変更、二 実 tarball（0.1.5-rc.2「末尾」配置 與 0.2.0-rc.2「中間」配置）離線 検証 —— 何 也 JSON 解析 可能。**別途 確認**：`.github/workflows/` 固定 SHA action 三 何 也 上流 最新、且 `nix-installer-action` `# main` 注釈 照合 結果 **正確**（該 SHA main HEAD 且 v23 tag）。**第 0 步 実測**：着手前 遠端 照合 —— 未閉 issue 0、未閉 PR 0。
+
+| 提交 | 説明 |
+|------|------|
+| `16216d5` | chore(pkgs): 上游更新 —— codewhale 0.10.0 / ruyi 0.53.0 / mcp-searxng 2.5.0 / opencode-telegram 0.26.2（四语文档同步） |
+| `63e71cd` | fix(dsh): postPatch 按块删 devDependencies —— 0.2.0+ 的 exports 不再被误删 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| codewhale | 0.9.13 | 0.10.0 |
+| 　 | cli / tui hash（x64、arm64） | 四値 全部 再計算（cli 與 tui 同値） |
+| 　 | codewhale-src `src` hash | `sha256-AYs2v/…` → `sha256-SsN/p+…`（Cargo.lock 7266 行 同期） |
+| ruyi | 0.52.0 | 0.53.0 |
+| mcp-searxng | 2.3.0 | 2.5.0 |
+| 　 | src hash / npmDepsHash | 両者 再計算 |
+| opencode-telegram | 0.25.3 | 0.26.2 |
+| 　 | src hash / npmDepsHash | 両者 再計算 |
+
 ## 2026-10-02T16:26:56+09:00
 
 **摘要**：feat(skills): 更新確認 「第 0 步」 新設——着手前 遠端同期 且 未閉 issue / PR 確認（四言語）— **汎用技能** `nix-flake-update-check` 主 flow 第 0 步 自 開始（既存 第 1〜9 步 相互参照 崩 不 為 番号 0）：`git fetch` 作業 copy 整列 後、未閉 issue / PR 列挙、「空」 與「取得不能」 境界 引——`gh` **明示 error 終了（非零）**、実測 三形態：認証失効 / 倉庫名 誤 → `Could not resolve to a Repository`；**issue 機能 無効** 倉庫 → `repository has disabled issues`；真 無 → 終了 0 空 list。故 判据 二段階：先 倉庫 読 可能 証明、次 列表 見。**「空 list」「真 無」 意味 場合 命令 成功 時 限定**。**独立 工程 為 価値**：issue 「既知 故障」 集合、PR 「在途 作業」 集合、更 取得経路 自検 第 3 步 以前 引上。**commit 前 自検 九問 自 十問 至**（第 10 問 本 工程）、且 **出所 差異 正直 標記**——第 1〜9 問 実測 再実行 産物、第 10 問 維護者 要求 着手前 動作。**適配層 本倉 形態 補**：座標、`has_issues=true`、実測 現状（未閉 issue 0 / PR 0）、且 **四 実例**——PR #6 正 SHA 固定 action 変更、PR #7 正 更新確認 触 包 更新（CI 必 落 故 最終 close 手動更新 至）、PR #4 / #5 二 誤検出 `/tts` SSRF 実修正 導、issue #3 技能分割 契機。**併 二箇所 不正確 修正**：`traps.md` 「九問 何 也 此 対応 節 持」 記載、然 第 9 問（判据 識別力）対応 節 実際 存在 不（前回 拡張 時 漂移）；四言語 技能 文書 仍 「六問 自検」 與 「第 1〜9 步」 記載（二巡 遅）。**第 9 問 「如何 自証」 追加**：`nix flake check` `running 0 flake checks... all checks passed!` 出 場合 **cache 命中** 且 「検査 走」 非——`docs/pcn/` 片仮名 一 注入 則 `doc-links` 直 `kana on line 124` 失敗、此 依 閘門 現在 入力 実際 測 事 証明。**検証**：`nix flake check` 全通過（初回 pcn 平仮名 助詞 残留、倉庫 自身 検査 script 検出 後 修正）。
