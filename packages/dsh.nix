@@ -33,17 +33,32 @@ buildNpmPackage (finalAttrs: {
   # packages (dsh-experimental-agent-team & co. — 404 on the registry) and a
   # prebuilt package never needs dev deps at runtime: drop the field so
   # `npm install` (and lock generation) never tries to resolve them.
+  #
+  # ⚠️ 必须按**块**删除，且不假设它的位置：
+  #   · 0.2.0-rc.2 起 `exports` 排在 devDependencies **之后**，按「删到文件末尾」
+  #     截断会连 `exports` 一并删掉 —— `./profile-boot` 等子路径导出随之失效，
+  #     而构建照样成功（静默功能损坏）。
+  #   · 0.1.5-rc.2 及更早则相反：devDependencies 是**最后一个**顶层字段，删除后
+  #     必须同时去掉前一字段的尾逗号，否则 JSON 不闭合。
+  # 下面的 awk 两种布局都覆盖：匹配顶层 devDependencies 块的起止行，删除后再
+  # 按需修掉尾逗号。已在两份真实 tarball 上离线验证（JSON 均可解析、字段正确）。
   postPatch = ''
     cp ${lockFile} package-lock.json
-    # Drop devDependencies (the last top-level field in the npm tarball's
-    # package.json) so `npm install` never resolves the unpublished
-    # monorepo-internal dev deps.  Plain sed: neither node nor npm is on
-    # PATH during the npm-deps patchPhase.  The dependencies block's own
-    # closing `},` becomes the document tail — strip its comma, then close
-    # the top-level object again.
-    sed -i '/^  "devDependencies": {/,$d' package.json
-    sed -i '$s/,$//' package.json
-    echo '}' >> package.json
+    awk '
+      /^  "devDependencies": \{/ { skip = 1; next }
+      skip { if ($0 ~ /^  \},?$/) { skip = 0; deleted = 1 } next }
+      { buf[++n] = $0 }
+      END {
+        if (deleted) {
+          last = n
+          while (last > 0 && buf[last] ~ /^[[:space:]]*$/) last--
+          if (last >= 2 && buf[last] ~ /^\}[[:space:]]*$/ && buf[last-1] ~ /,[[:space:]]*$/)
+            sub(/,[[:space:]]*$/, "", buf[last-1])
+        }
+        for (i = 1; i <= n; i++) print buf[i]
+      }
+    ' package.json > package.json.tmp
+    mv package.json.tmp package.json
   '';
 
   # Native addon (node-addon-require-builtin) needs node-gyp during install.
