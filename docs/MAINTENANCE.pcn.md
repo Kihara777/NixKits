@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-03T05:13:21+09:00
+
+**摘要**：`blender-mcp` / `obs-bilibili-stream` 二 箇所 之 riscv64 排除、其 **理由 正確 改**：「依存 連鎖 交叉 編譯 欠陥」 非、而 **主 依存 nixpkgs 内 該 架構 宣言 無** 也。探針 実測 依、両者 皆 **評価 段階** 於 即 拒否 —— `blender 5.2.2` 之 `meta.platforms` 唯 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux` 三 種、`obs-studio 32.2.2` 同 唯 `x86_64-linux`/`i686-linux`/`aarch64-linux` 三 種、`Refusing to evaluate package …` 旨 報告 也。今 依存 名、上流 宣言 之 架構 一覧 與 拒否 原文 全部 明記、判据 `pkgs.<dep>.meta.platforms`（**編譯 錯誤 非**）。**検証**：`nix flake check` 四語 全緑。
+
+| 提交 | 説明 |
+|------|------|
+| `e454504` | docs(pkgs): 两处 riscv64 排除的理由改准 —— 上游没声明该架构，不是「交叉编译缺陷」（四语） |
+
 ## 2026-10-03T04:53:28+09:00
 
 **摘要**：`AGENTS.md` 之 部署 照合 判据 「文件 内容 見」 自 「単元 参照 見」 換。旧 文言 要求 再起 後 `cordis.patch.yml` 内 store 路徑 翻新 済 確認、而 実測 **dsh 0.2.0 起動 時 該 文件 重写**（preStart 17:33:10 1747 行 複製、dsh 17:33:11 1781 行 変更、其後 又 一 度 変）——落盤 者 dsh 自身 之 直列化 結果、内容 依 比較 **唯 偽陰性 得**、成功 一 回 之 部署 失敗 判定。新 判据：稼働 単元 pre-start 脚本 参照 之 store 路徑 與 現在 設定 生成 之 該 份 比較（二 条 命令 文書 書込）、本機 実測 一致 済。**検証**：`nix flake check` 全緑。

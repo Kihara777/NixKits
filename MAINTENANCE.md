@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-03T05:13:21+09:00
+
+**摘要**：把 `blender-mcp` / `obs-bilibili-stream` 两处 riscv64 排除的**理由改准**：不是「依赖链交叉编译缺陷」，而是**主依赖在 nixpkgs 里就没声明该架构**。探针实测两者都在**求值阶段**即被拒——`blender 5.2.2` 的 `meta.platforms` 只有 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`，`obs-studio 32.2.2` 只有 `x86_64-linux`/`i686-linux`/`aarch64-linux`，报 `Refusing to evaluate package …`。现写明依赖名、上游声明的架构列表与拒绝原文，判据是 `pkgs.<dep>.meta.platforms`（**不是编译报错**）。**验证**：`nix flake check` 四语全绿。
+
+| 提交 | 说明 |
+|------|------|
+| `e454504` | docs(pkgs): 两处 riscv64 排除的理由改准 —— 上游没声明该架构，不是「交叉编译缺陷」（四语） |
+
 ## 2026-10-03T04:53:28+09:00
 
 **摘要**：把 `AGENTS.md` 的部署核对判据从「看文件内容」换成「看单元引用」。原句要求重启后核对 `cordis.patch.yml` 里的 store 路径已翻新，而实测 **dsh 0.2.0 启动时会重写该文件**（preStart 于 17:33:10 拷入 1747 行，dsh 在 17:33:11 改成 1781 行，此后又变过一次）——落盘的是 dsh 自己的序列化结果，照内容比对**只会得到假阴性**，把一次成功的部署判成失败。新判据：比对运行单元 pre-start 脚本引用的 store 路径与当前配置生成的那份（两条命令写进文档），已在本机实测一致。**验证**：`nix flake check` 全绿。

@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T05:13:21+09:00
+
+**Summary**: correcting the **stated reason** for the two riscv64 exclusions, `blender-mcp` / `obs-bilibili-stream`: it is not "a cross-compilation defect in the dependency chain" but **the main dependency not declaring that architecture in nixpkgs at all**. Probing measured that both are rejected already at the **evaluation stage** — `blender 5.2.2`'s `meta.platforms` lists only `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`, and `obs-studio 32.2.2` only `x86_64-linux`/`i686-linux`/`aarch64-linux`, reporting `Refusing to evaluate package …`. The dependency names, the architecture lists declared upstream and the rejection text are now written out, with the criterion being `pkgs.<dep>.meta.platforms` (**not a compilation error**). **Verification**: `nix flake check` four-language self-checks all green.
+
+| Commit | Description |
+|------|------|
+| `e454504` | docs(pkgs): 两处 riscv64 排除的理由改准 —— 上游没声明该架构，不是「交叉编译缺陷」（四语） |
+
 ## 2026-10-03T04:53:28+09:00
 
 **Summary**: `AGENTS.md`'s deployment-check criterion goes from "look at the file contents" to "look at the unit reference". The original sentence required a post-restart check that the store path inside `cordis.patch.yml` had rolled over, but measurement shows **dsh 0.2.0 rewrites that file at startup** (preStart copied 1747 lines in at 17:33:10; dsh made it 1781 lines at 17:33:11, and it changed once more after that) — what lands on disk is dsh's own serialization, so comparing contents **only yields a false negative**, judging a successful deployment a failure. New criterion: compare the store path the running unit's pre-start script references against the one the current configuration generates (both commands written into the doc), measured consistent on this machine. **Verification**: `nix flake check` all green.
