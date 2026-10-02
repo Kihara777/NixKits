@@ -2237,7 +2237,7 @@
 
 ## 2026-07-22T16:31:26+09:00
 
-**Summary**: fix(modules) — rog-control-center-fix now forces SendSIGKILL=yes + TimeoutStopSec=30s to prevent stale asus-shutdown process from blocking systemd-switch. comfyui-strix-halo now asserts glibc >= 2.42 (ROCm 7.2 needs GLIBC_ABI_GNU2_TLS).
+**概要**：fix(modules) — rog-control-center-fix に SendSIGKILL=yes + TimeoutStopSec=30s を追加し、asus-shutdown の古いプロセス残留が systemd-switch を妨げる問題を解決。comfyui-strix-halo に glibc >= 2.42 の assertion を追加（ROCm 7.2 は GLIBC_ABI_GNU2_TLS を必要とする）。
 
 | コミット | 説明 |
 |------|------|
@@ -2245,7 +2245,7 @@
 
 ## 2026-07-22T09:00:00+09:00
 
-**Summary**：feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
+**概要**：feat(overlays) — 新規 overlay breeze-black を追加。Plasma 6 に高コントラストの Breeze Black アクセシビリティテーマを提供（グローバルな look-and-feel + GTK + 配色スキーム）。4 言語ドキュメントを含む。
 
 | コミット | 説明 |
 |------|------|
@@ -2253,7 +2253,7 @@
 
 ## 2026-07-22T05:39:31+09:00
 
-**Summary**: docs(devshell) — new devShell documentation (4 languages), describing opencode (full MCP stack) and ruyi (3 channels merged) environments. README devShell table now includes doc links.
+**概要**：docs(devshell) — devShell ドキュメントを新規追加（4 言語）。opencode（MCP フルスタック）と ruyi（三チャネル統合）の開発環境を記述。README の devShell 表にドキュメントリンク列を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2262,7 +2262,7 @@
 
 ## 2026-07-22T03:40:50+09:00
 
-**Summary**: docs — unified all user home directory paths across the repo to `~/` prefix (replaced hardcoded `/home/kix` and `/home/<user>` variants), covering 13 files.
+**概要**：docs — リポジトリ全体のドキュメントでユーザーホームディレクトリのパスを `~/` プレフィックスへ統一（ハードコードされた `/home/kix` および `/home/<user>` などの変体を置換）、13 ファイルに及ぶ。
 
 | コミット | 説明 |
 |------|------|
@@ -2271,7 +2271,7 @@
 
 ## 2026-07-22T03:14:27+09:00
 
-**Summary**: feat(shells) — opencode devShell iteration: SearXNG + lighttpd (matching system NixOS config) + blender-mcp + godot-mcp + godot + opencode + opencode-telegram. Auto-registers MCP config on first entry. Removed tryEval guards from godot packages.
+**概要**：feat(shells) — opencode devShell の反復改良：SearXNG + lighttpd（システムの NixOS 設定と一致）+ blender-mcp + godot-mcp + godot + opencode + opencode-telegram。初回進入時に MCP 設定を自動登録；godot パッケージの tryEval 保護を削除。
 
 | コミット | 説明 |
 |------|------|
@@ -2291,7 +2291,7 @@
 
 ## 2026-07-22T02:43:51+09:00
 
-**Summary**: feat(overlays) — new efl-cross-fix overlay, fixing efl cross-compilation failures on riscv64/riscv64-musl/aarch64 caused by missing native code-gen tools (eolian_gen, eet). Includes 4-language docs.
+**概要**：feat(overlays) — 新規 overlay efl-cross-fix を追加。efl（Enlightenment Foundation Libraries）が riscv64/riscv64-musl/aarch64 のクロスコンパイル時に、ネイティブコード生成ツール（eolian_gen、eet）の欠如によるビルド失敗を修正。4 言語ドキュメントを含む。
 
 | コミット | 説明 |
 |------|------|
@@ -2299,7 +2299,7 @@
 
 ## 2026-07-21T10:28:31+09:00
 
-**Summary**: codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — upstream updates (codewhale v0.9.0 still no riscv64 prebuilt binaries, continues source-build path)
+**概要**：codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — 上流更新（codewhale v0.9.0 は依然 riscv64 のプリビルドバイナリがなく、ソースビルド経路を継続）
 
 | コミット | 説明 |
 |------|------|
@@ -2741,7 +2741,7 @@
 
 ## 2026-06-23T04:04:32+09:00
 
-**Summary**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
+**概要**：AGENTS.md — ハードコードの除去、冗長な監査メモの削除、キャッシュ節をエージェント操作ガイドへ書き直し、ユーザー側の記述を削除、言語体系を自動検出へ変更
 
 | コミット | 説明 |
 |------|------|
@@ -2751,7 +2751,7 @@
 
 ## 2026-06-22T23:49:00+09:00
 
-**Summary**：mcp-searxng 1.7.2 — 上游修复
+**概要**：mcp-searxng 1.7.2 — 上流の修正
 
 | コミット | 説明 |
 |------|------|
@@ -2764,7 +2764,7 @@
 
 ## 2026-06-22T23:22:00+09:00
 
-**Summary**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
+**概要**：AGENTS.md — 初回起動監査規則を新規追加、アクセス制御を冒頭へ移動
 
 | コミット | 説明 |
 |------|------|
@@ -2863,7 +2863,7 @@
 
 ## 2026-06-22T05:13:31+09:00
 
-**Summary**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
+**概要**：patches — ruyi-nixos-compat.patch をクリーンなクローンから再構築（1223→426 行）、flake.lock の自己参照 artifact を除去
 
 | コミット | 説明 |
 |------|------|
@@ -2871,7 +2871,7 @@
 
 ## 2026-06-22T05:13:26+09:00
 
-**Summary**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
+**概要**：overlays — patches リストを lib.unique で重複排除、ruyi-nixos-compat を簡素化、llama-cpp-rocm に curried 形式のコメントを追加
 
 | コミット | 説明 |
 |------|------|
@@ -2879,7 +2879,7 @@
 
 ## 2026-06-22T05:13:22+09:00
 
-**Summary**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
+**概要**：modules — 4 モジュールに enable オプションを追加、comfyui-strix-halo に assertions を追加、ネームスペースを nixkits.* に統一（後方互換を含む）、llama-cpp-rocm の hfCacheDir を動的導出
 
 | コミット | 説明 |
 |------|------|
@@ -2887,7 +2887,7 @@
 
 ## 2026-06-22T05:13:16+09:00
 
-**Summary**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
+**概要**：codewhale 0.8.63 — マルチアーキテクチャのプリビルドバイナリ（x86_64 / aarch64 / riscv64）；ruyi — overlay の postPatch をパッケージへ統合；meta フィールドを補完
 
 | コミット | 説明 |
 |------|------|
@@ -2895,7 +2895,7 @@
 
 ## 2026-06-22T05:13:11+09:00
 
-**Summary**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
+**概要**：flake — mihomo-alpha のゴースト入力と overlay を削除（ファイルは一度も存在しなかった）
 
 | コミット | 説明 |
 |------|------|
@@ -2903,7 +2903,7 @@
 
 ## 2026-06-21T04:32:31+09:00
 
-**Summary**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
+**概要**：言語切り替え器のラベル規則を汎化 — display_name の意味を言語の自称に修正し、言語名をローカライズしない規則を write-project-docs / translate-katalish / translate-pseudocn の三技能に追加；zh/katalish/pcn の全ドキュメントの切り替え器に残っていたローカライズ名を修正
 
 | コミット | 説明 |
 |------|------|
@@ -2914,7 +2914,7 @@
 
 ## 2026-06-21T00:07:44+09:00
 
-**Summary**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
+**概要**：codewhale 0.8.62 — 上流修正；mcp-searxng 1.7.1 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -2927,7 +2927,7 @@
 
 ## 2026-06-20T18:36:33+09:00
 
-**Summary**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+**概要**：スキル体系の再構成 — translate-katakana→translate-katalish へ改名、translate-pseudocn（偽中国語）を新設、write-project-docs と write-maintenance-log の言語拡張自動発見、docs-as-code の五言語マッピング表
 
 | コミット | 説明 |
 |------|------|
@@ -2943,7 +2943,7 @@
 
 ## 2026-06-18T09:52:34+09:00
 
-**Summary**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
+**概要**：codewhale 0.8.61 — 上流修正；mcp-searxng 1.6.0 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -2960,7 +2960,7 @@
 
 ## 2026-06-18T09:03:48+09:00
 
-**Summary**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+**概要**：ruyi — NixOS 互換パッチ（`patches/ruyi-nixos-compat.patch`）、プリビルド RISC-V ツールチェーンの動的リンカのパス、GCC 子プロセスの ELF interpreter 修正、console_scripts argv0 問題を透過的に処理する
 
 | コミット | 説明 |
 |------|------|
@@ -2968,7 +2968,7 @@
 
 ## 2026-06-17T10:59:35+09:00
 
-**Summary**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
+**概要**：ruyi — NixOS モジュール（`services.ruyi`）、宣言的に `/etc/xdg/ruyi/config.toml` と環境変数を生成
 
 | コミット | 説明 |
 |------|------|
@@ -2979,7 +2979,7 @@
 
 ## 2026-06-17T10:03:05+09:00
 
-**Summary**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
+**概要**：ruyi — devShell サポートを追加、`nix develop github:Kihara777/NixKits#ruyi` で環境に入れます
 
 | コミット | 説明 |
 |------|------|
@@ -2987,7 +2987,7 @@
 
 ## 2026-06-17T09:48:33+09:00
 
-**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
+**概要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK パッケージマネージャ、新パッケージ（Python / Poetry で構築、ruff + mypy + 320 の単体テスト + 52 の統合テストが全て通過）
 
 | コミット | 説明 |
 |------|------|
@@ -2999,7 +2999,7 @@
 
 ## 2026-06-17T07:37:39+09:00
 
-**Summary**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
+**概要**：write-maintenance-log スキル — nixkits-check-updates から独立スキルとして切り出し、二重エントリポイント設計（修正を記録 + 更新维护记录）；flake.lock 同期の .gitignore 事前チェックと三路分岐ロジック
 
 | コミット | 説明 |
 |------|------|
@@ -3018,7 +3018,7 @@
 
 ## 2026-06-17T06:48:47+09:00
 
-**Summary**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
+**概要**：fix(mcp-searxng): 入口ファイルの誤りを修正 — dist/index.js → dist/cli.js、MCP サーバが正常に起動可能に
 
 | コミット | 説明 |
 |------|------|
@@ -3026,7 +3026,7 @@
 
 ## 2026-06-17T06:46:13+09:00
 
-**Summary**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
+**概要**：llama-cpp-rocm — builtins.fetchurl で flake input を置き換えてバージョンを動的取得する試み（既に巻き戻し済み、この方法は使用不可）
 
 | コミット | 説明 |
 |------|------|
@@ -3035,7 +3035,7 @@
 
 ## 2026-06-16T06:03:24+09:00
 
-**Summary**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
+**概要**：mcp-searxng ドキュメント — CodeWhale の MCP 設定ガイド、よくある落とし穴の警告（env の既定は {}）、トラブルシューティングの節
 
 | コミット | 説明 |
 |------|------|
@@ -3043,7 +3043,7 @@
 
 ## 2026-06-16T05:20:34+09:00
 
-**Summary**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
+**概要**：nixos-modern-cli スキル — Nix Store パスの落とし穴の節（gh auth setup-git のハードコードパスが失効する問題の診断と汎用的な修正パターン）
 
 | コミット | 説明 |
 |------|------|
@@ -3051,7 +3051,7 @@
 
 ## 2026-06-16T04:56:06+09:00
 
-**Summary**：opencode-telegram 0.21.2 — 上游修复及依赖更新
+**概要**：opencode-telegram 0.21.2 — 上流の修正と依存関係の更新
 
 | コミット | 説明 |
 |------|------|
@@ -3065,7 +3065,7 @@
 
 ## 2026-06-15T17:32:16+09:00
 
-**Summary**：codewhale 0.8.60 — 上游修复
+**概要**：codewhale 0.8.60 — 上流の修正
 
 | コミット | 説明 |
 |------|------|
@@ -3079,7 +3079,7 @@
 
 ## 2026-06-14T08:11:16+09:00
 
-**Summary**：comfyui-strix-halo 文档 — 在线集成模式说明与文件结构图
+**概要**：`comfyui-strix-halo` 文書 — オンライン統合モードの説明とファイル構造図
 
 | コミット | 説明 |
 |------|------|
@@ -3087,7 +3087,7 @@
 
 ## 2026-06-14T07:56:11+09:00
 
-**Summary**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
+**概要**：codewhale 0.8.59 — 若干の TUI レンダリング問題を修正；mcp-searxng 1.4.0 — HTTP 転送モードを追加
 
 | コミット | 説明 |
 |------|------|
@@ -3105,7 +3105,7 @@
 
 ## 2026-06-12T18:17:52+09:00
 
-**Summary**：llama-cpp-rocm 模块 — 恢复 modelsPreset 支持（nixpkgs 已移除）、命名空间迁移至 nixkits、三语迁移指南
+**概要**：`llama-cpp-rocm` モジュール — modelsPreset サポートを復元（nixpkgs では削除済み）、名前空間を nixkits へ移行、三言語の移行ガイド
 
 | コミット | 説明 |
 |------|------|
@@ -3114,11 +3114,11 @@
 
 ## 2026-06-12T17:29:59+09:00
 
-**Summary**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
+**概要**：feat(llama-cpp-rocm): modelsPreset サポートを復元（nixpkgs では削除済み）、名前空間を nixkits へ移行
 
 ## 2026-06-12T10:51:31+09:00
 
-**Summary**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
+**概要**：codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -3136,7 +3136,7 @@
 
 ## 2026-06-11T05:28:59+09:00
 
-**Summary**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
+**概要**：スキル文書 — メンテナンスログの書式ルール群（自動発見への汎化、記述的な標題、正確な git commit タイムスタンプ、`T00:00:00` プレースホルダの禁止）
 
 | コミット | 説明 |
 |------|------|
@@ -3147,7 +3147,7 @@
 
 ## 2026-06-11T05:13:39+09:00
 
-**Summary**：other — 2 项更新
+**概要**：その他 — 2 件の更新
 
 | コミット | 説明 |
 |------|------|
@@ -3156,7 +3156,7 @@
 
 ## 2026-06-11T04:52:16+09:00
 
-**Summary**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
+**概要**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -3173,7 +3173,7 @@
 
 ## 2026-06-10T04:31:20+09:00
 
-**Summary**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
+**概要**：opencode-telegram — KillMode を process に変更、TimeoutStopSec を追加してシャットダウン時のハングを防止
 
 | コミット | 説明 |
 |------|------|
@@ -3182,7 +3182,7 @@
 
 ## 2026-06-10T02:28:10+09:00
 
-**Summary**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
+**概要**：codewhale 0.8.55 — 上流修正；mcp-searxng 1.3.1 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -3196,7 +3196,7 @@
 
 ## 2026-06-08T15:12:39+09:00
 
-**Summary**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
+**概要**：ドキュメント再編 — ローカライズ済みファイルを `docs/` ディレクトリへ移動；`MAINTENANCE.md` に初めて合列規則と純テーブル格式を追加し、完全なコミット履歴を遡って補完
 
 | コミット | 説明 |
 |------|------|
@@ -3211,7 +3211,7 @@
 
 ## 2026-06-08T14:25:02+09:00
 
-**Summary**：mcp-searxng 1.2.1 — 上游修复
+**概要**：mcp-searxng 1.2.1 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -3229,7 +3229,7 @@
 
 ## 2026-06-08T14:22:25+09:00
 
-**Summary**：rcc-fix — NixOS 模块（systemd 死锁修复）
+**概要**：rcc-fix — NixOS モジュール（systemd デッドロック修正）
 
 | コミット | 説明 |
 |------|------|
@@ -3237,7 +3237,7 @@
 
 ## 2026-06-06T15:17:11+09:00
 
-**Summary**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
+**概要**：スキル文書 — ソース変更後のドキュメント同期規範；comfyui-strix-halo の C ツールチェーン説明；hash 計算の注意事項の泛化；基本情報ルールの多言語統一
 
 | コミット | 説明 |
 |------|------|
@@ -3254,7 +3254,7 @@
 
 ## 2026-06-06T13:58:47+09:00
 
-**Summary**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
+**概要**：codewhale 0.8.53 — 上流修正；mcp-searxng 1.1.0 — 上流修正；opencode-telegram 0.21.1 — 上流修正
 
 | コミット | 説明 |
 |------|------|
@@ -3273,7 +3273,7 @@
 
 ## 2026-06-06T12:51:46+09:00
 
-**Summary**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
+**概要**：comfyui-strix-halo パッチ — ROCm 7.2 wheels の内蔵サポート
 
 | コミット | 説明 |
 |------|------|
@@ -3288,7 +3288,7 @@
 
 ## 2026-06-04T13:07:30+09:00
 
-**Summary**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
+**概要**：スキルシステム — `SKILL.md` の全面的な中国語化；三言語対称性チェック規則
 
 | コミット | 説明 |
 |------|------|
@@ -3297,7 +3297,7 @@
 
 ## 2026-06-02T10:15:53+09:00
 
-**Summary**：other — 7 项更新
+**概要**：その他 — 7 件の更新
 
 | コミット | 説明 |
 |------|------|
@@ -3311,7 +3311,7 @@
 
 ## 2026-06-02T08:49:47+09:00
 
-**Summary**：opencode-telegram — 8 项更新
+**概要**：opencode-telegram — 8 件の更新
 
 | コミット | 説明 |
 |------|------|
@@ -3326,7 +3326,7 @@
 
 ## 2026-06-02T05:57:11+09:00
 
-**Summary**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
+**概要**：codewhale 0.8.49 — 上流修正；mcp-searxng 1.0.4 — 上流修正；obs-bilibili-stream 2.1.0 — 上流修正；opencode-telegram 0.21.0 — 上流修正
 
 |--------|--------|--------|
 | codewhale | 0.8.47 | 0.8.49 |
