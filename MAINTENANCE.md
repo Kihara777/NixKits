@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-03T05:16:47+09:00
+
+**摘要**：给维护日志的**倍率判据补第二个特征**：反引号占比。只看 CJK 密度会高估——实测一条密度 0.646 的条目，只按密度取队列（n=34）均值 **2.37**，据此判它「偏短」；把反引号占比加进来做最近邻（n=15）均值是 **1.98**，交付的 1.95 正落在那里。反引号内容是逐字照抄的，占比越高倍率越贴近 1——**这条机制技能里本来就写着，但判据里没带它，于是判据自己骗了自己一次**。现改为「同结构 + 同密度队列比较」，顺序是**先在同一结构里比，再谈长短**。**验证**：`nix flake check` 四语全绿。
+
+| 提交 | 说明 |
+|------|------|
+| `bad01c4` | refactor(skills): 倍率判据补第二个特征（反引号占比）—— 只看密度会高估，实测差 0.4 倍 |
+
 ## 2026-10-03T05:13:21+09:00
 
 **摘要**：把 `blender-mcp` / `obs-bilibili-stream` 两处 riscv64 排除的**理由改准**：不是「依赖链交叉编译缺陷」，而是**主依赖在 nixpkgs 里就没声明该架构**。探针实测两者都在**求值阶段**即被拒——`blender 5.2.2` 的 `meta.platforms` 只有 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`，`obs-studio 32.2.2` 只有 `x86_64-linux`/`i686-linux`/`aarch64-linux`，报 `Refusing to evaluate package …`。现写明依赖名、上游声明的架构列表与拒绝原文，判据是 `pkgs.<dep>.meta.platforms`（**不是编译报错**）。**验证**：`nix flake check` 四语全绿。
