@@ -227,7 +227,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 | `workflow-coverage` | `develop/check-workflows.py` | 每个包都有 `build-<包>-<架构>.yml`（例外须在脚本内登记） |
 | `doc-links` | `develop/check-doc-links.py` | 文档相对链接可达 + 语言切换器四语齐全（**`docs/` 下必须存在，且在全文里查找**；其余文件只看文件头） |
 | `doc-versions` | `develop/check-doc-versions.py` | `docs/<lang>/<pkg>.md` 的版本行与包定义一致（含多通道表；例外在 `EXEMPT` 登记） |
-| `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名 |
+| `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名、**结构对等**（每条目的提交 SHA 集合四语须与 zh 一致——只看总量会漏掉「某条目在某译文里整张表都没了」，2026-10-03 实测漏过一次） |
 | `news-mode-tests` | `packages/dsh-preset-news-three-elements/tests/mode.test.mjs` | 新闻三要素模式插件的**行为测试**（node，非 python） |
 
 > 各脚本可**单独本地运行**（`python3 develop/check-doc-links.py`），便于快速定位而不必

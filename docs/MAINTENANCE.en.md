@@ -6,6 +6,10 @@
 
 **Summary**: `write-maintenance-log` gains a **measurable length spec**; four self-written entries' summaries go from 1674–3784 characters back to 312–444. Cause: a summary became a full situation description — mechanism derivation, raw error text, CI logs all in — while details already have other homes (commit message / package-definition header / `AGENTS.md`). Three rules: a summary answers only "what changed / why / how verified", target ≤ 400 characters; **translation ratios match repo-wide measurements** (`en/zh` ≈ 1.84, `ja/zh` ≈ 1.21; clearly over ⇒ expansion-style padding); **explaining "why this error arises this way" in a summary does not belong here**. **Verification**: `nix flake check` four-language self-checks all green; the four compressed lose no information (details retrievable from the commit message and package-definition header).
 
+| Commit | Description |
+|------|------|
+| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
+
 ## 2026-10-03T04:27:03+09:00
 
 **Summary**: `opencode-telegram`'s riscv64 **goes from "dropped" back to "built"**, plus the criterion "**the artefact is really run once**". Both root causes share one shape — gyp took **the empty string** for another type: no bare `gcc` on the cross PATH ⇒ `"" >= 7` throws; `better-sqlite3`'s `prebuild_exists` empty too ⇒ the target degenerates to `type: none` and `make` only stamps. The fixes: a `gcc` shim aimed at the cross compiler, and an explicit `--force_build=1`. `build-package.yml` gains `smoke-test`: after the build it runs `develop/qemu-smoke-tests/<包名>.sh` (**the same file locally and in CI**), and a missing script or a missing binfmt handler is a failure. **Verification**: two pushes, 33 workflows each, all success.

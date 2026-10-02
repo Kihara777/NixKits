@@ -2,13 +2,20 @@
 """维护日志一致性检查。
 
 日志是四语手工/半自动同步的，最容易在细节上失守：条目数不齐、时间戳写成占位符、
-同一个 commit 被记两次、伪中国语里混进假名。这里把四条规则一次查完：
+同一个 commit 被记两次、伪中国语里混进假名。这里把五条规则一次查完：
 
 1. 四种语言的条目数一致（`^## 20` 行）。
 2. 每个节标题都是精确到秒的 JST 时间戳（`YYYY-MM-DDTHH:MM:SS+09:00`），且无
    `T00:00:00` 占位符。
 3. 提交表中的 7 位 SHA 在**同一文件内**不重复（日志按 SHA 全局去重）。
 4. `docs/MAINTENANCE.pcn.md` 正文无假名（反引号内的引用 token 与提交列豁免）。
+5. **结构对等**：同一条目在四语里的提交 SHA 集合必须与 zh 相同。
+
+第 5 条是补上的**盲区**：前四条都只看「总量」——条目数、全局 SHA 唯一性、行级假名——
+于是「某个条目在三种译文里整张提交表都没了」可以全绿地漏过去（2026-10-03 实测发生过：
+拼接新条目时只写了标题与摘要，三语都缺表，而本脚本当时打印的是「354 entries … all passed」）。
+判据取自中文基准：zh 有表则译文必须有同一组 SHA；zh 本就没有表的条目（历史上有 5 条）
+在译文里也不该有。
 
 挂入 `nix flake check`（checks.maintenance-log），CI 每次 push 执行。
 """
@@ -29,6 +36,21 @@ TIMESTAMP = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+09:00$")
 COMMIT_ROW = re.compile(r"^\| `([0-9a-f]{7})` \|")
 KANA = re.compile(r"[\u3041-\u3096\u30A1-\u30FA\uFF66-\uFF9D]")
 CODE_SPAN = re.compile(r"`[^`]*`")
+
+
+def entries_to_shas(text: str) -> dict:
+    """节标题 → 该节里出现的 7 位 SHA 列表（保持出现顺序）。"""
+    out = {}
+    current = None
+    for line in text.splitlines():
+        if line.startswith("## "):
+            current = line[3:].strip()
+            out.setdefault(current, [])
+        elif current is not None:
+            match = COMMIT_ROW.match(line)
+            if match is not None:
+                out[current].append(match.group(1))
+    return out
 
 
 def main() -> None:
@@ -86,6 +108,29 @@ def main() -> None:
             + ", ".join(f"{lang}={count}" for lang, count in sorted(counts.items()))
         )
 
+    # 规则 5：结构对等——每条目的 SHA 集合四语一致（以 zh 为基准）。
+    per_lang = {}
+    for lang, path in FILES.items():
+        if os.path.isfile(path):
+            with open(path, encoding="utf-8") as handle:
+                per_lang[lang] = entries_to_shas(handle.read())
+    if "zh" in per_lang:
+        base = per_lang["zh"]
+        for lang, mapping in per_lang.items():
+            if lang == "zh":
+                continue
+            rel = os.path.relpath(FILES[lang], ROOT)
+            for heading, shas in base.items():
+                if heading not in mapping:
+                    problems.append(f"{rel}: entry missing entirely: {heading}")
+                    continue
+                other = mapping[heading]
+                if other != shas:
+                    problems.append(
+                        f"{rel}: {heading} commit rows differ from zh "
+                        f"(zh={len(shas)} {shas}, {lang}={len(other)} {other})"
+                    )
+
     for problem in problems:
         print(f"maintenance-log: {problem}", file=sys.stderr)
     if problems:
@@ -94,7 +139,7 @@ def main() -> None:
     entries = next(iter(counts.values()))
     print(
         f"maintenance-log: {entries} entries in all {len(counts)} languages, "
-        "timestamps exact, commit ids unique, pcn kana-free"
+        "timestamps exact, commit ids unique, pcn kana-free, entry structure matches zh"
     )
 
 

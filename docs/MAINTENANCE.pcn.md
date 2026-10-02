@@ -6,6 +6,10 @@
 
 **摘要**：`write-maintenance-log` 対 **可測 之 長度 規範** 追加、且 自作 四 条 条目 之 摘要 1674–3784 文字 自 312–444 至 圧縮 回。原因 摘要 完全 状態 記述 化 —— 機構 導出、錯誤 原文、CI 日誌 全部 含、而 詳細 本来 別 之家 有（commit message / 包定義 冒頭 / `AGENTS.md`）。規範 三 条：摘要 唯 「何 変更 / 何故 / 如何 検証」 答、目標 ≤ 400 文字；**訳文 倍率 全倉 実測 値 整合**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明確 超過 即 展開式 冗長 属）；**摘要 内 「何故 此 錯誤 発生」 説明 場合、該 一 段 此処 置 適切 非**。**検証**：`nix flake check` 四語 自検 全緑；四 条 圧縮 後 情報 欠落 無（詳細 皆 commit message 與 包定義 冒頭 自 参照 可能）。
 
+| 提交 | 説明 |
+|------|------|
+| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
+
 ## 2026-10-03T04:27:03+09:00
 
 **摘要**：`opencode-telegram` 之 riscv64 **「摘除」 自 「構築」 改 回**、且 「**産物 真 実走 一 回**」 此 判据 追加。二 箇所 之 根因 同型 —— gyp **空串** 他 種別 扱：交叉 PATH 上 裸 `gcc` 無 ⇒ `"" >= 7` 例外 抛；`better-sqlite3` 之 `prebuild_exists` 同様 空串 化 ⇒ target `type: none` 至 退化、`make` 只 stamp 蓋。修法 各 交叉 編譯器 向 指 之 `gcc` shim 與 顕式 `--force_build=1`。`build-package.yml` `smoke-test` 新規 追加：構築 後 `develop/qemu-smoke-tests/<包名>.sh` 走（本地 與 CI 同一 份）、脚本 無 也 binfmt 処理器 無 也 共 失敗 判定。**検証**：二 回 push 各 33 個 workflow 全部 success。
