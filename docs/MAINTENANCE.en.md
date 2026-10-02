@@ -2,6 +2,15 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T04:43:18+09:00
+
+**Summary**: fixing two **guard failures I introduced myself**, both "totals green, detail missed". **① The checker missed "a whole table gone"**: `check-maintenance-log.py`'s four rules all read totals (entry count, SHA dedup, line-level kana), so my splice into the three translations — heading and summary only, **table dropped** — still printed "354 entries … all passed". Added a 5th rule, **structural parity**: every entry's commit SHA set must match zh across the four languages (the 5 table-less historic zh entries must have none either). **② The ratio criterion I wrote into the skill was itself wrong**: terseness judged by the repo-wide mean (`en/zh` ≈ 1.84), while measured CJK density correlates with ratio at **r = 0.90** — the same-density cohort's mean is 2.29, and the entry ruled "over" sits below it; the mean only forces **cutting content**, the same coin's other face as the padding it guards. Now: same-density cohort comparison, or the density-independent "en chars ÷ zh CJK chars". **Verification**: `nix flake check` all green; the checker's three counter-tests (drop a whole table / alter one SHA digit / delete an entry) turn red.
+
+| Commit | Description |
+|------|------|
+| `21993c8` | fix(develop): maintenance-log 检查补「结构对等」判据 —— 原有的四条只看总量，漏掉过「某条目在某译文里整张表都没了」 |
+| `1c6e4be` | refactor(skills): 修正倍率判据 —— 全库均值混着 CJK 密度这个强混杂因子（实测 r=0.90） |
+
 ## 2026-10-03T04:38:34+09:00
 
 **Summary**: `write-maintenance-log` gains a **measurable length spec**; four self-written entries' summaries go from 1674–3784 characters back to 312–444. Cause: a summary became a full situation description — mechanism derivation, raw error text, CI logs all in — while details already have other homes (commit message / package-definition header / `AGENTS.md`). Three rules: a summary answers only "what changed / why / how verified", target ≤ 400 characters; **translation ratios match repo-wide measurements** (`en/zh` ≈ 1.84, `ja/zh` ≈ 1.21; clearly over ⇒ expansion-style padding); **explaining "why this error arises this way" in a summary does not belong here**. **Verification**: `nix flake check` four-language self-checks all green; the four compressed lose no information (details retrievable from the commit message and package-definition header).
