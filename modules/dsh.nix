@@ -73,12 +73,15 @@ let
       # 本 root 胜出（用户要改动请用 roster 的 copy() 另存为新 id）。
       # config 用 JSON 发出（JSON 是 YAML 子集，同 plugins.settings 的做法），
       # 免去手写嵌套 YAML 的缩进风险。注意 `- id:` 行替换**整份** config 而非
-      # 合并：schema 里 `default` 必填，故必须一并带上（值取本模块 settings 里
-      # 的 agent-presets.default，缺省沿用上游的 "standard"；settings.yaml 存在
-      # 时仍以它为准）。
+      # 合并：schema 里 `default` 必填，故必须一并带上（值取显式
+      # settings."agent-presets".default，其次取结构化选项 agentPresets.default，
+      # 都未给才沿用上游 "standard"；settings.yaml 是用户层，存在时仍以它为准，
+      # 故两级声明不会互相打架）。
       - id: agent-presets
         config: ${builtins.toJSON {
-          default = cfg.settings."agent-presets".default or "standard";
+          default =
+            cfg.settings."agent-presets".default
+            or (if cfg.agentPresets.enable then cfg.agentPresets.default else "standard");
           roots = [{
             path = "${cfg.presets.newsThreeElementsPackage}/share/dsh-agent-presets";
             trust = "system";
@@ -97,15 +100,41 @@ let
   # over an injected section (left side of // loses).
   #
   # Why mirror upstream schemas as typed Nix options when cfg.settings already
-  # accepts any namespace: the raw escape hatch is untyped, so a typo or an
-  # out-of-range value only shows up at dsh runtime — the settings plugin drops
-  # the section and the namespace silently falls back to its schema default,
-  # with nothing in the journal.  These options turn those mistakes into
-  # evaluation-time errors.
+  # accepts any namespace: the raw escape hatch is untyped, and schemastery
+  # treats an object as open — an unknown key is *preserved* while the field it
+  # was meant to be keeps its schema default (verified against
+  # @deepseek-ai/schemastery in dsh 0.1.6-alpha.2:
+  #   schema({ maxParallelToolCall: 4 }) => { maxParallelToolCalls: 10, maxParallelToolCall: 4 }
+  # ), so a typo silently changes nothing AND says nothing.  A wrong type or an
+  # out-of-range value is refused instead — at load it fails the namespace
+  # registration outright, at runtime the settings plugin warns "keeping last
+  # good \"<ns>\" after invalid stored section".  These options turn the whole
+  # class into evaluation-time errors, typos included.
   #
   # Each namespace below is registered upstream by the named plugin calling
-  # `settings.installSection(...)`; the field names and ranges are copied from
-  # that schema (dsh 0.1.6-alpha).
+  # `settings.installSection(...)` (or `settings.register(...)`), and the field
+  # names, types and ranges are copied from that schema (dsh 0.1.6-alpha.2).
+  #
+  # 写入策略（哪些字段用具体默认值、哪些用 null 表示「不声明」）：
+  #   · schema 有默认值、且组合基线（内置 cordis.patch.yml 里该行的 config）
+  #     与之一致 → 用具体默认值无条件写入，语义与不声明等价；
+  #   · schema 无默认值（由部署/适配器/进程环境决定），或组合基线已偏离 schema
+  #     默认（写全量会把基线悄悄改掉）→ 用 null 表示不声明，经 dropNulls 剔除。
+  # 代价（有意接受）：第一类字段写进 settings.yaml 就成了显式用户值 —— 上游日后
+  # 若改这几项的 schema 默认值，本机不跟随；第二类字段则始终跟随组合基线。
+  # 每个字段的具体归属见其 description。
+  dropNulls = lib.filterAttrs (_: v: v != null);
+
+  # Node 定时器上限 MAX_TIMER_DELAY_MS = 2147483647：上游好几个字段的 schema 写
+  # `.max(2147483647)`，超出即拒绝。直接用 addCheck 会沿用底层类型名，对 3e9 这种
+  # 越界值报「必须是正数」——误导。模块系统渲染报错用的是 type.description，故这里
+  # 连 description 一并改写，让报错说清是哪条约束。
+  timerMs = lib.types.addCheck lib.types.numbers.positive (v: v <= 2147483647) // {
+    name = "timerMs";
+    description = "positive number no greater than 2147483647 (Node MAX_TIMER_DELAY_MS)";
+    descriptionClass = "noun";
+  };
+
   structuredSections =
     lib.optionalAttrs cfg.defaultModel.enable {
       "agent-default-model" = {
@@ -124,6 +153,87 @@ let
       "subagent-model-selection" = {
         enabled = true;
         allowedModels = cfg.subagentModelSelection.allowedModels;
+      };
+    }
+    // lib.optionalAttrs cfg.permission.enable {
+      # @deepseek-ai/dsh-permission-presets — 权限预设（`defaultPreset`，
+      # schema 里 `.required()`，必填）。
+      # 枚举不是上游常量：settingsSchema 是 z.union(presets 表**键名**)，表本身
+      # 来自组合行 config。内置 dsh-base 的表是三个预设
+      # read-only / workspace-write / danger-full-access（无 auto：auto 只进
+      # availablePresets，不进 settings 的 union）。若用
+      # plugins.settings."permission".presets 换了表，这里的 enum 即失效，
+      # 那时请改用 nixkits.dsh.settings."permission" 逃生舱。
+      "permission" = { defaultPreset = cfg.permission.defaultPreset; };
+    }
+    // lib.optionalAttrs cfg.agentPresets.enable {
+      # @deepseek-ai/dsh-agent-presets — AgentPresetSettingsSchema
+      # （default: string、modeSelectionEnabled: boolean）。
+      # 该插件走的是 settings.register 而非 installSection：base 层是组合行
+      # config 的 `default` 与 `modeSelectionEnabled = true`，settings.yaml 是
+      # 用户层，故本段**优先于** cordis.patch.yml 里 agent-presets 行的 default。
+      "agent-presets" = {
+        default = cfg.agentPresets.default;
+        modeSelectionEnabled = cfg.agentPresets.modeSelectionEnabled;
+      };
+    }
+    // lib.optionalAttrs cfg.subagent.enable {
+      # @deepseek-ai/dsh-subagent — SubagentRuntime.Config。两个字段都是整数：
+      # maxDepth 允许 0（不许再委派），maxActiveSubagents 至少 1。
+      "subagent" = {
+        maxDepth = cfg.subagent.maxDepth;
+        maxActiveSubagents = cfg.subagent.maxActiveSubagents;
+      };
+    }
+    // lib.optionalAttrs cfg.shell.enable {
+      # @deepseek-ai/dsh-shell 拥有 "shell" 这个 namespace（它命名的是 ctx.shell
+      # 能力而非某个实现），注册者是执行器：Linux 上是 dsh-bash-local（本机实际
+      # 挂载的 dsh-bash-sandbox 继承其 Config），win32 上是 dsh-pwsh-local
+      # （多一个 pwshPath，故那一个字段不镜像）。
+      # cwd 与 timeoutMs 为 nullable —— 见上方写入策略：cwd 的 schema 没有默认
+      # 值（回落进程工作目录），timeoutMs 的 schema 默认是 120000 但内置
+      # bash-sandbox 行把它配成 60000，无条件写入会把 60000 悄悄改成 120000。
+      "shell" = dropNulls {
+        cwd = cfg.shell.cwd;
+        timeoutMs = cfg.shell.timeoutMs;
+        maxTimeoutMs = cfg.shell.maxTimeoutMs;
+        maxOutputBytes = cfg.shell.maxOutputBytes;
+        maxSpillBytes = cfg.shell.maxSpillBytes;
+        graceMs = cfg.shell.graceMs;
+      };
+    }
+    // lib.optionalAttrs cfg.webSearchDeepSeek.enable {
+      # @deepseek-ai/dsh-web-search-deepseek — Config，七个字段：
+      # apiKey / apiKeyEnv / baseURL / model / apiVersion / maxTokens / maxUses。
+      # apiKey 刻意不镜像：它 role("secret")，写进 settings.yaml 就等于把 API key
+      # 落到 /nix/store（世界可读），该用 apiKeyEnv + 凭据库。
+      "web-search-deepseek" = dropNulls {
+        apiKeyEnv = cfg.webSearchDeepSeek.apiKeyEnv;
+        baseURL = cfg.webSearchDeepSeek.baseURL;
+        model = cfg.webSearchDeepSeek.model;
+        apiVersion = cfg.webSearchDeepSeek.apiVersion;
+        maxTokens = cfg.webSearchDeepSeek.maxTokens;
+        maxUses = cfg.webSearchDeepSeek.maxUses;
+      };
+    }
+    // lib.optionalAttrs cfg.llmDeepSeek.enable {
+      # @deepseek-ai/dsh-llm-deepseek — NS = "llm-deepseek"，Config 镜像了其中
+      # 连接与上限相关的字段。**未镜像**（需要时走逃生舱）：
+      #   · models：内置模型目录（DEFAULT_MODELS），随 dsh 版本漂移，与
+      #     defaultModel.model 同一类陷阱；
+      #   · retryPolicy：两种策略对象的 union + 未知键白名单校验，镜像进 Nix
+      #     收益低、腐化快；
+      #   · filesApi* / maxRequestFilesBytes / *Image* / imageOffload*Quantum：
+      #     文件 API 与图片卸载的内部字节预算，不是部署该调的旋钮。
+      "llm-deepseek" = dropNulls {
+        protocol = cfg.llmDeepSeek.protocol;
+        apiKeyEnv = cfg.llmDeepSeek.apiKeyEnv;
+        baseURL = cfg.llmDeepSeek.baseURL;
+        thinking = cfg.llmDeepSeek.thinking;
+        reasoningEffort = cfg.llmDeepSeek.reasoningEffort;
+        maxTokens = cfg.llmDeepSeek.maxTokens;
+        defaultContextWindow = cfg.llmDeepSeek.defaultContextWindow;
+        streamIdleTimeoutMs = cfg.llmDeepSeek.streamIdleTimeoutMs;
       };
     }
     // lib.optionalAttrs cfg.locale.enable {
@@ -513,6 +623,264 @@ in
       };
     };
 
+    # ── 宿主侧 settings 命名空间（自 2026-10-02 起补全）────────────────────
+    # 下列选项镜像的是宿主能力插件的 schema：permission / agent-presets /
+    # subagent / shell / web-search-deepseek / llm-deepseek。每个 description
+    # 都写明注册它的上游包与 schema 出处，字段约束照抄 schema，不放宽。
+
+    permission = {
+      enable = lib.mkEnableOption "注入 settings.permission（由 \@deepseek-ai/dsh-permission-presets 注册）";
+      defaultPreset = lib.mkOption {
+        type = lib.types.enum [ "read-only" "workspace-write" "danger-full-access" ];
+        default = "workspace-write";
+        description = ''
+          新会话默认使用的权限预设（sandbox + approval 打包）。上游 schema 是
+          `{ defaultPreset: <presets 表键名 union>.required() }`，故必填。
+
+          这里的三个取值来自内置 dsh-base 组合的 presets 表，**不是固定枚举**：
+          表由组合行 config 给出，schema 只认表里的键名。本机组合的
+          sandbox/approval 默认值（workspace-write + ask）推出的预设即
+          `workspace-write`，这也是本选项的默认值。用
+          `nixkits.dsh.plugins.settings."permission".presets` 换了表之后，
+          请改用 `nixkits.dsh.settings."permission"`（逃生舱）声明。
+
+          `auto`（按次审查）不在本枚举内：它只出现在客户端的可选列表里，不进
+          settings schema 的 union；`custom` 是"当前组合不匹配任何预设"的派生
+          状态，从来不是可写入的值。
+        '';
+      };
+    };
+
+    agentPresets = {
+      enable = lib.mkEnableOption "注入 settings.agent-presets（由 \@deepseek-ai/dsh-agent-presets 注册）";
+      default = lib.mkOption {
+        type = lib.types.str;
+        default = "standard";
+        description = ''
+          新会话默认挂载的预设 id。预设 id 由 roster 决定（内置 root 随 dsh 分发、
+          `$DSH_HOME/.agent-presets` 是用户自建、`nixkits.dsh.presets.*` 另注册
+          系统 root），无法在此枚举，故为自由字符串。
+
+          schema 里 `default: z.string()` **没有默认值**，靠组合行 config 的
+          `default: standard` 兜底；本选项因此显式写入。settings.yaml 是用户层，
+          优先级高于组合行，故本选项一旦 enable 就压过 cordis.patch.yml 里
+          agent-presets 行的 default（该行值仍会跟随本选项，见 cordisPatch）。
+        '';
+      };
+      modeSelectionEnabled = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          是否在界面上提供「会话级切换预设」的入口。上游组合基线（settings.register
+          的 base 层）为 true；本选项写入 settings.yaml 后覆盖它。
+        '';
+      };
+    };
+
+    subagent = {
+      enable = lib.mkEnableOption "注入 settings.subagent（由 \@deepseek-ai/dsh-subagent 注册）";
+      maxDepth = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 1;
+        description = ''
+          子代理可再派生子代理的最大深度；0 表示禁止再派生。上游 schema:
+          integer >= 0（上界 Number.MAX_SAFE_INTEGER），default 1。
+        '';
+      };
+      maxActiveSubagents = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 8;
+        description = ''
+          同时活跃的子代理上限。上游 schema: integer >= 1（上界
+          Number.MAX_SAFE_INTEGER），default 8。
+        '';
+      };
+    };
+
+    shell = {
+      enable = lib.mkEnableOption "注入 settings.shell（由 \@deepseek-ai/dsh-shell 拥有，执行器注册：Linux 走 \@deepseek-ai/dsh-bash-local / \@deepseek-ai/dsh-bash-sandbox，win32 走 \@deepseek-ai/dsh-pwsh-local）";
+      # cwd 与 timeoutMs 为 nullable，其余四项用 schema 默认值（它们的组合基线
+      # 与默认值一致，写入即等价）：本 namespace 的 cwd 无 schema 默认，而
+      # timeoutMs 被内置 bash-sandbox 行刻意配成 60000（schema 默认 120000）——
+      # 全量写入会把它悄悄改回 120000，正是本模块存在的意义所要防的「静默改值」。
+      cwd = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          命令的默认工作目录。上游 schema: string，**无默认值** —— 未给出时执行器
+          回落进程工作目录（本模块的服务单元把 dsh 的 WorkingDirectory 设为
+          DSH_HOME，故基线即 DSH_HOME）。null = 不声明。
+        '';
+      };
+      timeoutMs = lib.mkOption {
+        type = lib.types.nullOr lib.types.numbers.positive;
+        default = null;
+        description = ''
+          单条命令的默认超时（毫秒）。上游 schema: number，default 120000；但
+          校验函数要求正有限值，且内置 bash-sandbox 行把它配置为 60000，故本机基线
+          是 60 秒。null = 不声明（保留 60000）。填 120000 即显式改回上游默认。
+        '';
+      };
+      maxTimeoutMs = lib.mkOption {
+        type = lib.types.numbers.positive;
+        default = 600000;
+        description = ''
+          单条命令超时的上限（毫秒）：调用方请求的 timeoutMs 会被截到此值。上游
+          schema: number，default 600000（与内置组合基线一致）。
+        '';
+      };
+      maxOutputBytes = lib.mkOption {
+        type = lib.types.numbers.positive;
+        default = 64000;
+        description = ''
+          单条命令回传给模型的输出字节上限（超出部分落 spill 文件）。上游 schema:
+          number，default 64000（与内置组合基线一致）。
+        '';
+      };
+      maxSpillBytes = lib.mkOption {
+        type = lib.types.numbers.positive;
+        default = 67108864;
+        description = ''
+          单条命令 spill（截断输出转存）的字节上限。上游 schema: number，default
+          67108864（64 MiB，与内置组合基线一致）。
+        '';
+      };
+      graceMs = lib.mkOption {
+        type = timerMs;
+        default = 3000;
+        description = ''
+          超时后 SIGTERM → SIGKILL 的宽限时间（毫秒）。上游 schema: number，
+          default 3000（与内置组合基线一致）；校验另加一条
+          `graceMs <= 2147483647`（Node 定时器上限 MAX_TIMER_DELAY_MS），本选项用
+          共享类型 timerMs 照抄该上界（越界时报错会写明上界，而非只说"必须是正数"）。
+        '';
+      };
+    };
+
+    webSearchDeepSeek = {
+      enable = lib.mkEnableOption "注入 settings.web-search-deepseek（由 \@deepseek-ai/dsh-web-search-deepseek 注册）";
+      apiKeyEnv = lib.mkOption {
+        type = lib.types.str;
+        default = "DEEPSEEK_API_KEY";
+        description = ''
+          解析 API key 用的凭据引用（环境变量名）。上游 schema: string，
+          default DEEPSEEK_API_KEY（内置组合行也显式写了同一个值）。
+        '';
+      };
+      baseURL = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          辅助搜索接口地址。上游 schema: string，**无默认值**：未给出时的解析顺序是
+          `$DEEPSEEK_SEARCH_BASE_URL` → 字面量
+          https://api.deepseek.com/anthropic/v1。写死字面量会遮蔽环境变量，
+          故用 null 表示不声明。
+        '';
+      };
+      model = lib.mkOption {
+        type = lib.types.str;
+        default = "deepseek-v4-flash";
+        description = ''
+          搜索后端使用的模型 id。上游 schema: string，default deepseek-v4-flash
+          （模型 id 由接口侧决定，不在 schema 里枚举，故为自由字符串）。
+        '';
+      };
+      apiVersion = lib.mkOption {
+        type = lib.types.str;
+        default = "2023-06-01";
+        description = "Anthropic 兼容接口的 api-version 头。上游 schema: string，default 2023-06-01。";
+      };
+      maxTokens = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 4096;
+        description = "单次搜索请求的输出 token 上限。上游 schema: integer >= 1，default 4096。";
+      };
+      maxUses = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 5;
+        description = "一次请求里允许的搜索调用次数上限。上游 schema: integer >= 1，default 5。";
+      };
+    };
+
+    llmDeepSeek = {
+      enable = lib.mkEnableOption "注入 settings.llm-deepseek（由 \@deepseek-ai/dsh-llm-deepseek 注册）";
+      protocol = lib.mkOption {
+        type = lib.types.enum [ "chat-completions" "messages" ];
+        default = "messages";
+        description = ''
+          与 DeepSeek 通信的协议。上游 schema: union(chat-completions|messages)，
+          default messages。
+        '';
+      };
+      apiKeyEnv = lib.mkOption {
+        type = lib.types.str;
+        default = "DEEPSEEK_API_KEY";
+        description = ''
+          解析 API key 用的凭据引用。上游 schema: string，default
+          DEEPSEEK_API_KEY。密钥本身不经本模块（服务经 systemd
+          LoadCredential 注入环境变量）。
+        '';
+      };
+      baseURL = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          接口地址。上游 schema: string，**无默认值**：未给出时按
+          `$DEEPSEEK_BASE_URL` → https://api.deepseek.com 解析。写死字面量会遮蔽
+          环境变量，故用 null 表示不声明。
+        '';
+      };
+      thinking = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "enabled" "disabled" ]);
+        default = null;
+        description = ''
+          是否启用思考。上游 schema: union(enabled|disabled)，**无默认值** —— 上游
+          组合注释明确写着"Thinking defaults are a deployment choice"，故留 null
+          表示由部署/适配器决定，而非由 Nix 单方面拍板。
+
+          约束：`disabled` 只允许搭配 reasoningEffort = off（或省略）；二者冲突时
+          适配器会拒绝该段，本模块用 assertion 把它提前到求值期。
+        '';
+      };
+      reasoningEffort = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "off" "low" "high" "max" ]);
+        default = null;
+        description = ''
+          推理力度。上游 schema: union(off|low|high|max)，**无默认值**（适配器按
+          high 处理）。null = 不声明。
+
+          与 nixkits.dsh.defaultModel.reasoningEffort 的区别：那一项写的是
+          `agent-default-model`（新会话选择），本项写的是适配器自身的连接段。
+        '';
+      };
+      maxTokens = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 256000;
+        description = "单次请求的输出 token 上限。上游 schema: integer >= 1（上界 Number.MAX_SAFE_INTEGER），default 256000。";
+      };
+      defaultContextWindow = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 1000000;
+        description = ''
+          目录里未声明 contextWindow 的模型的回退上下文窗口。上游 schema:
+          integer >= 1，default 1000000。
+        '';
+      };
+      streamIdleTimeoutMs = lib.mkOption {
+        type = timerMs;
+        default = 300000;
+        description = ''
+          流式响应**相邻两块之间**的空闲超时（毫秒，不是整请求墙钟）。上游 schema:
+          number，default 300000（5 分钟，与内置组合基线一致）；校验另加
+          `<= 2147483647`（MAX_TIMER_DELAY_MS），共享类型 timerMs 照抄该上界。
+
+          注意它是「分块间隔」超时：服务端在 prefill 期间完全不发数据时，预填耗时
+          即空闲间隔 —— llama-server 之类的本地后端正因此需要显式放大（本机
+          llama-local 路由在 llm-pi-ai 行里调的是同一个旋钮）。
+        '';
+      };
+    };
+
     locale = {
       enable = lib.mkEnableOption "inject settings.locale (backed by \@deepseek-ai/dsh-client-locale)";
       preference = lib.mkOption {
@@ -795,12 +1163,30 @@ in
     # dsh rejects non-loopback hosts (RCE safety), so expose it via a lighttpd
     # reverse proxy.  Reuses the lighttpd instance enabled by SearXNG (or the
     # user); lighttpd's extraConfig is types.lines so it merges cleanly.
-    assertions = lib.mkIf cfg.reverseProxy.enable [
-      {
-        assertion = config.services.lighttpd.enable;
-        message = "nixkits.dsh.reverseProxy requires services.lighttpd.enable = true";
-      }
-    ];
+    assertions =
+      # `llm-deepseek` 段的跨字段约束：适配器 resolveAdapterOptions 里写着
+      # `thinking === "disabled"` 时只允许 reasoningEffort 为 off（或省略），
+      # 否则整段被拒绝。schema 表达不了这种耦合，故在求值期拦下 —— 与类型化
+      # 选项同一目的：让错误在这里报，而不是在 dsh 运行期变成「保留上一份好值」
+      # 的告警。
+      lib.optional
+        (cfg.llmDeepSeek.enable
+          && cfg.llmDeepSeek.thinking == "disabled"
+          && cfg.llmDeepSeek.reasoningEffort != null
+          && cfg.llmDeepSeek.reasoningEffort != "off")
+        {
+          assertion = false;
+          message = ''
+            nixkits.dsh.llmDeepSeek: thinking = "disabled" 只允许 reasoningEffort = "off"
+            （或省略 reasoningEffort）—— @deepseek-ai/dsh-llm-deepseek 会拒绝该段。
+          '';
+        }
+      ++ lib.optionals cfg.reverseProxy.enable [
+        {
+          assertion = config.services.lighttpd.enable;
+          message = "nixkits.dsh.reverseProxy requires services.lighttpd.enable = true";
+        }
+      ];
 
     # reverseProxy 依赖 mod_proxy（proxy.server/proxy.header）与 mod_setenv
     # （setenv.add-request-header）。早期版本依赖 SearXNG 模块顺带启用的这

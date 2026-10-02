@@ -382,22 +382,25 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 
 ### 宣言的に設定可能な host ネームスペース
 
-`nixkits.dsh.settings` は**host 側で `settings.installSection` により登録された**名前空間にのみ書き込める——これらの値は `$DSH_HOME/settings.yaml` に置かれ、ブラウザ間で一致する。`0.1.6-alpha` が登録する全 **12** 名前空間とフィールド（プラグインソースの `z.object({...})` / `Schema.object({...})` から一つずつ実測抽出）：
+`nixkits.dsh.settings` は**host 側で `settings.installSection` / `settings.register` により登録された**名前空間にのみ書き込める——これらの値は `$DSH_HOME/settings.yaml` に置かれ、ブラウザ間で一致する。`0.1.6-alpha.2` が登録する全 **15** 名前空間とフィールド（プラグインソースの `z.object({...})` / `Schema.object({...})` から一つずつ実測抽出）：
 
 | namespace | フィールド | 説明 |
 |-----------|-----------|------|
 | `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新規セッションの既定モデル |
 | `agent-loop` | `maxParallelToolCalls`（整数 ≥1、既定 10） | 1 ターンあたりの並列ツール呼び出し上限 |
-| `agent-presets` | `default` | Agent プリセット |
+| `agent-presets` | `default`（プリセット id；スキーマに既定値なし、組合行の `standard` が受け止める）、`modeSelectionEnabled`（ブール、基線 true） | Agent プリセットと切替入口 |
+| `llm-deepseek` | `protocol`、`apiKeyEnv`、`baseURL`、`thinking`、`reasoningEffort`、`maxTokens`、`defaultContextWindow`、`streamIdleTimeoutMs`、`models`、`retryPolicy`、ほかファイル/画像のバイト予算 | ネイティブ DeepSeek アダプタ |
+| `llm-pi-ai` | `providers`（辞書：ルート → プロバイダ profile） | pi-ai アダプタのプロバイダルート表（本機の llama-local ルートはここ） |
 | `locale` | `preference`（BCP 47；内蔵 `zh`/`en`） | インターフェース言語 |
-| `permission` | `defaultPreset` | 権限プリセット |
-| `shell` | `cwd`（**既定値なし**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | ローカル bash 実行器の制限 |
+| `permission` | `defaultPreset`（**必須**；値は presets 表のキー名） | 権限プリセット |
+| `shell` | `cwd`（**既定値なし**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | ローカル shell 実行器の制限（Linux は bash-local、win32 は pwsh-local で `pwshPath` が増える） |
+| `subagent` | `maxDepth`（整数 ≥0、既定 1）、`maxActiveSubagents`（整数 ≥1、既定 8） | サブエージェントの深さと同時実行上限 |
 | `subagent-model-selection` | `enabled`（ブール、既定 false）、`allowedModels`（`{provider, model}` 配列） | サブエージェントのモデル選択 |
 | `ui-chat` | `transcriptView`（`normal`/`compact`） | 会話記録の表示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | ビジー時の Enter 動作 |
 | `ui-onboarding` | `welcomeNoticeVersion` | オンボーディング手順の状態（dsh が自ら書き込む） |
 | `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外観とテーマ |
-| `web-search-deepseek` | `model`、`maxTokens` 等 | Web 検索バックエンド |
+| `web-search-deepseek` | `apiKey`（secret）、`apiKeyEnv`、`baseURL`、`model`（既定 `deepseek-v4-flash`）、`apiVersion`、`maxTokens`（≥1、既定 4096）、`maxUses`（≥1、既定 5） | Web 検索バックエンド |
 
 > ⚠️ 本表はかつて `0.1.5-rc.2` に基づいて転記され、うち **5 行が実測と不一致**だったため、2026-09-23 に項目ごとに照合して修正した：
 > `locale` のフィールドは `language` ではなく `preference`；`ui-theme` は `preference`/`fontSize` のみ
@@ -409,19 +412,41 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 > **判据**：本表はプラグインソースを読むことによってのみ得られる。「もっともらしく見える」フィールド名はどれも記憶の産物でありうる——
 > 次回 dsh をアップグレードする際は再実測すること。本表に増分の推測を重ねないこと。
 
+> ⚠️ **2026-10-02 の第 2 回照合（`0.1.6-alpha.2`）**：項目数は 12 から **15** に訂正——旧表は
+> **host 名前空間を 3 つ見落としていた**：`llm-deepseek`、`llm-pi-ai`、`subagent`（前二者は
+> モデルアダプタが、最後は `@deepseek-ai/dsh-subagent` が登録する。旧来の grep は
+> `installSection` の呼び出し箇所しか見ておらず、これらを取りこぼしていた）。同じ照合で
+> 旧判断を一つ覆した：「`shell` の `cwd` は既定値なし ⇒ 部分宣言は不可」は**誤り**——
+> schemastery で `.required()` を書いていないフィールドは元から任意である（実測：
+> `z.object({cwd: z.string()})({})` は通る）。欠落が `missing required value` になるのは
+> `.required()` を付けた場合だけである。
+>
+> 照合の口径：インストールツリー全体で `grep -rn 'settings\.installSection(\|settings\.register('`
+> の**呼び出し箇所**を正とする（`@deepseek-ai/dsh-settings` 自身とその読み手 `dsh-tool-cordis`
+> はこの API の**実装**であり、namespace を登録する側ではない）。
+
 > **設定メニューのストレージ境界**：設定 UI の全項目が `nixkits.dsh.settings` で宣言的に設定できるわけではない。**dsh-api-balance の界面 / 音声設定**（音声アラート、下部統計バー横スクロール、Enter改行 + Shift+Enter送信の交換、モバイルセッション切替時のキーボード抑止、TTS バックエンド）は**ブラウザ localStorage 状態**（ブラウザごとの独立・既定 ON・UI 内で切替）であり、`settings.installSection` システムを経由しない——そのため `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` はこれらを上書き**しない**。こうした「ブラウザごとの設定」は当プラグインの `⚙ 設定` パネルで行うか、デバイスごとに別ブラウザを用意する。
 
 ### 構造化オプションとエスケープハッチの役割分担
 
-上表の 12 名前空間はいずれも `nixkits.dsh.settings.<namespace>` から直接書き込める——それは**型なしのエスケープハッチ**である。その代償は、フィールドの書き間違い・列挙値の綴り誤り・数値の範囲外が**いずれも評価時のエラーにならない**こと；dsh は実行時の検証に失敗すると**そのセクションを破棄し、スキーマ既定値へ静かにフォールバックする**——ログには何も残らない。
+上表の 15 名前空間はいずれも `nixkits.dsh.settings.<namespace>` から直接書き込める——それは**型なしのエスケープハッチ**である。その代償は二種類あり、**一つは静かで、一つは音を立てる**：
 
-そこで本モジュールはこのうち 7 つに**構造化オプション**を提供する（Nix 側で上流スキーマを写し取り、上述の誤りを評価時のエラーに変える）：
+- **フィールド名の書き間違い → 完全に静か**。schemastery の `z.object` は**開いている**：未知のキーはそのまま保持され、本来書きたかったフィールドはスキーマ既定値を食べ続ける。実測（`0.1.6-alpha.2`）：`schema({ maxParallelToolCall: 4 })` は `{ maxParallelToolCalls: 10, maxParallelToolCall: 4 }` を返す——評価時のエラーも実行時のエラーもログも無く、**値が効かなかったことだけ**が残る。
+- **型の誤り / 範囲外の値 → 音は出るが、ログの中だけ**。dsh はそのセクションを拒否する：起動時は当該 namespace の登録自体が失敗し、実行中のホットリロードでは `settings: keeping last good "<ns>" after invalid stored section` の warn を出して直前の良い値を保持する。
+
+そこで本モジュールはこのうち 13 に**構造化オプション**を提供する（Nix 側で上流スキーマを写し取り、上述の二種類の誤りを評価時のエラーに変える）：
 
 | オプション | 書き込む namespace | 対応プラグイン |
 |------|------------------|----------|
 | `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
 | `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
 | `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.permission` | `permission` | `@deepseek-ai/dsh-permission-presets` |
+| `nixkits.dsh.agentPresets` | `agent-presets` | `@deepseek-ai/dsh-agent-presets` |
+| `nixkits.dsh.subagent` | `subagent` | `@deepseek-ai/dsh-subagent` |
+| `nixkits.dsh.shell` | `shell` | `@deepseek-ai/dsh-bash-local` / `dsh-pwsh-local`（namespace は `@deepseek-ai/dsh-shell` に属する） |
+| `nixkits.dsh.webSearchDeepSeek` | `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
+| `nixkits.dsh.llmDeepSeek` | `llm-deepseek` | `@deepseek-ai/dsh-llm-deepseek` |
 | `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
 | `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
 | `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
@@ -429,7 +454,19 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 
 **三者は意味が一貫している**：オプションは既定で `enable = false`（settings.yaml に書き込まず、当該 namespace はスキーマ既定へフォールバック）；`enable = true` ならサブオプションに従って当該セクションを生成；**`nixkits.dsh.settings.<同名 namespace>` が常に優先**され、構造化オプションが生成した値に勝る。
 
-`shell` には構造化オプションを提供しない：その `cwd` は**既定値を持たず**、一部の宣言は検証リスクを伴う（上流スキーマは当該フィールドの存在を要求する）ため、エスケープハッチに委ねる方が安全である。
+残る二つの namespace には**意図的に構造化オプションを与えない**。理由はそれぞれ異なる：
+
+- `ui-onboarding`：純粋にクライアント側のオンボーディング状態（`welcomeNoticeVersion` はユーザーがオンボーディングを終えた時に dsh 自身が書き込む）。宣言的に書く正当な用途が無く、書けば外部から与えたバージョン番号に従ってオンボーディングが再生または skip されるだけ——ユーザーがクリックして進むべき状態であって、Nix が決める状態ではない。
+- `llm-pi-ai`：フィールドは `providers` 辞書（ルート → プロバイダ profile）であり、profile は**深くネストしている**（`models` カタログ、`modelOverrides`、`compat`、`thinkingBudgets`、`retryPolicy` など）。しかも `api` の列挙は内蔵 pi-ai プロトコル登録簿 `supportedProtocols()` に由来する——**pi-ai のバージョンで動く開いた集合**なので、型化すれば「設定できるように見えて新しいプロトコルを拒む」形で即座に腐る。本機では既により適した置き場所がある：`nixkits.dsh.plugins.settings."llm-pi-ai".providers`（組合行 config。上の「プラグインの宣言的管理」節を参照）。
+
+フィールドの書き込み方針（どれが具体的な既定値を持ち、どれが `null` で「宣言しない」を表すか）：
+
+- スキーマに既定値があり、内蔵の組合行 config もそれと一致する → 具体的な既定値を無条件に書き込む（宣言しない場合と意味は同じ）；
+- スキーマに既定値が無い（デプロイ/アダプタ/プロセス環境が決める）、または組合基線がスキーマ既定から**逸れている** → `null` を「宣言しない」として使い、描画時に落とす。
+
+二つ目は潔癖ではない：`shell` の `timeoutMs` がその実例である——スキーマ既定は 120000 だが、内蔵 `bash-sandbox` 行は **60000** に設定している。「enable は全量書き込み」なら `shell.enable = true` が 60000 を静かに 120000 へ変えてしまい、それは本モジュールが防ぐために存在する静かな値の書き換えそのものである。だから `nixkits.dsh.shell.timeoutMs = null`（既定）は 60000 を保ち、明示的に 120000 を書いた時だけ上流既定に戻る。同様に `web-search-deepseek.baseURL` と `llm-deepseek.baseURL` は `null` のままにする：未指定時は `$DEEPSEEK_SEARCH_BASE_URL` / `$DEEPSEEK_BASE_URL` にフォールバックするため、リテラルを書き込むと環境変数を覆い隠す。
+
+また `web-search-deepseek.apiKey` は意図的に写し取らない：`role("secret")` を持つため、settings.yaml に書けば API キーが `/nix/store`（世界可読）に落ちる。鍵は `apiKeyEnv` と systemd `LoadCredential` を通す。
 
 ```nix
 {
@@ -449,6 +486,23 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
       allowedModels = [
         { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
+    };
+    # 新規セッションの既定権限プリセット（値は組合行の presets 表から）
+    permission = { enable = true; defaultPreset = "danger-full-access"; };
+    # 新規セッションが既定でマウントする Agent プリセット
+    agentPresets = { enable = true; default = "lampkeeper"; };
+    # サブエージェントの深さと同時実行上限
+    subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
+    # ローカル shell 実行器：変えたいフィールドだけ書く。未指定は組合基線のまま（timeoutMs の基線は 60000）
+    shell = { enable = true; timeoutMs = 300000; maxTimeoutMs = 1800000; };
+    # Web 検索バックエンド
+    webSearchDeepSeek = { enable = true; model = "deepseek-flash"; maxTokens = 8192; };
+    # ネイティブ DeepSeek アダプタ：思考とストリームのアイドルタイムアウト
+    llmDeepSeek = {
+      enable = true;
+      thinking = "enabled";
+      reasoningEffort = "high";
+      streamIdleTimeoutMs = 3600000;  # チャンク間の間隔タイムアウトであり、総所要時間ではない
     };
     # インターフェース言語を中国語に固定；未設定なら各ブラウザの Accept-Language に従う
     locale = { enable = true; preference = "zh"; };

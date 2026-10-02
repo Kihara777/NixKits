@@ -380,22 +380,25 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 
 ### 可声明式配置的宿主 namespace
 
-`nixkits.dsh.settings` 只能写入**宿主侧已通过 `settings.installSection` 注册**的命名空间——这些值存 `$DSH_HOME/settings.yaml`，跨浏览器一致。`0.1.6-alpha` 内置注册的全部 **12 个** namespace 及字段（逐个从插件源码的 `z.object({...})` / `Schema.object({...})` 实测提取）：
+`nixkits.dsh.settings` 只能写入**宿主侧已通过 `settings.installSection` / `settings.register` 注册**的命名空间——这些值存 `$DSH_HOME/settings.yaml`，跨浏览器一致。`0.1.6-alpha.2` 内置注册的全部 **15 个** namespace 及字段（逐个从插件源码的 `z.object({...})` / `Schema.object({...})` 实测提取）：
 
 | namespace | 字段 | 说明 |
 |-----------|------|------|
 | `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新会话默认模型 |
 | `agent-loop` | `maxParallelToolCalls`（整数 ≥1，默认 10） | 单轮并行工具调用上限 |
-| `agent-presets` | `default` | Agent 预设 |
+| `agent-presets` | `default`（预设 id；schema 无默认值，靠组合行 `standard` 兜底）、`modeSelectionEnabled`（布尔，基线 true） | Agent 预设与切换入口 |
+| `llm-deepseek` | `protocol`、`apiKeyEnv`、`baseURL`、`thinking`、`reasoningEffort`、`maxTokens`、`defaultContextWindow`、`streamIdleTimeoutMs`、`models`、`retryPolicy`、文件/图片字节预算若干 | 原生 DeepSeek 适配器 |
+| `llm-pi-ai` | `providers`（字典：路由 → 提供商 profile） | pi-ai 适配器的提供商路由表（本机 llama-local 路由在此） |
 | `locale` | `preference`（BCP 47；内置 `zh`/`en`） | 界面语言 |
-| `permission` | `defaultPreset` | 权限预设 |
-| `shell` | `cwd`（**无默认值**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 bash 执行器限制 |
+| `permission` | `defaultPreset`（**必填**；取值是 presets 表的键名） | 权限预设 |
+| `shell` | `cwd`（**无默认值**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 shell 执行器限制（Linux 走 bash-local，win32 走 pwsh-local 且多一个 `pwshPath`） |
+| `subagent` | `maxDepth`（整数 ≥0，默认 1）、`maxActiveSubagents`（整数 ≥1，默认 8） | 子代理深度与并发上限 |
 | `subagent-model-selection` | `enabled`（布尔，默认 false）、`allowedModels`（`{provider, model}` 数组） | 子代理模型选择 |
 | `ui-chat` | `transcriptView`（`normal`/`compact`） | 会话记录展示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | 忙碌时 Enter 行为 |
 | `ui-onboarding` | `welcomeNoticeVersion` | 引导步骤状态（dsh 自写） |
 | `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外观与主题 |
-| `web-search-deepseek` | `model`、`maxTokens` 等 | 联网搜索后端 |
+| `web-search-deepseek` | `apiKey`（secret）、`apiKeyEnv`、`baseURL`、`model`（默认 `deepseek-v4-flash`）、`apiVersion`、`maxTokens`（≥1，默认 4096）、`maxUses`（≥1，默认 5） | 联网搜索后端 |
 
 > ⚠️ 本表曾按 `0.1.5-rc.2` 抄录，其中 **5 行与实测不符**，已于 2026-09-23 逐项核对修正：
 > `locale` 的字段是 `preference` 而非 `language`；`ui-theme` 只有 `preference`/`fontSize`
@@ -407,19 +410,40 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 > **判据**：该表只能靠读插件源码得出，任何"看起来合理"的字段名都可能是记忆的产物——
 > 下次升级 dsh 时请重新实测，不要在此表上做增量猜测。
 
+> ⚠️ **2026-10-02 第二次核对（`0.1.6-alpha.2`）**：条目数由 12 更正为 **15** —— 旧表
+> **漏了三个宿主 namespace**：`llm-deepseek`、`llm-pi-ai`、`subagent`（前两者由
+> 模型适配器注册、第三者由 `@deepseek-ai/dsh-subagent` 注册，旧的 grep 只覆盖了
+> `installSection` 的调用点而漏看了它们）。同次核对还推翻了一条旧判断：
+> 「`shell` 的 `cwd` 无默认值 ⇒ 不能部分声明」**是错的**——schemastery 里没写
+> `.required()` 的字段本来就是可选的（实测 `z.object({cwd: z.string()})({})` 通过），
+> 只有 `.required()` 才会让缺字段报 `missing required value`。
+>
+> 核对口径：以整仓 `grep -rn 'settings\.installSection(\|settings\.register('` 的
+> **调用点**为准（`@deepseek-ai/dsh-settings` 自身与其读者 `dsh-tool-cordis` 是这套
+> API 的**实现**，不注册 namespace）。
+
 > **设置菜单的存储层边界**：并非设置 UI 里每一项都能用 `nixkits.dsh.settings` 声明式配置。**dsh-api-balance 的界面 / 语音设置**（语音提醒、底部统计条横向滚动、回车换行 + Shift+回车发送、移动端会话切换不弹键盘、TTS 后端）是**浏览器 localStorage 状态**（每浏览器独立、默认开启、UI 内切换），**不经过** `settings.installSection` 系统，因此 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` **不会**覆盖它们。这类"每浏览器偏好"请在该插件的 `⚙ 设置` 面板内配置，或按设备部署独立浏览器。
 
 ### 结构化选项与逃生舱的分工
 
-上表 12 个 namespace 都能经 `nixkits.dsh.settings.<namespace>` 直接写入——那是**无类型逃生舱**。它的代价是：字段写错、枚举值拼错、数值越界，**都不会在求值期报错**；dsh 运行时校验失败后会**丢弃该段并静默回落 schema 默认值**，日志里什么都不留。
+上表 15 个 namespace 都能经 `nixkits.dsh.settings.<namespace>` 直接写入——那是**无类型逃生舱**。它的代价分两种，**一种静默、一种响**：
 
-故本模块为其中 7 个提供了**结构化选项**（Nix 侧镜像上游 schema，把上述错误变成求值期报错）：
+- **字段名拼错 → 完全静默**。schemastery 的 `z.object` 是**开放**的：未知键被原样保留，而它本该写的那个字段照旧吃 schema 默认值。实测（`0.1.6-alpha.2`）`schema({ maxParallelToolCall: 4 })` 得到 `{ maxParallelToolCalls: 10, maxParallelToolCall: 4 }` —— 求值期不报错、运行期不报错、日志里也没有，**只有值没生效**。
+- **类型错 / 取值越界 → 会响，但只在日志里**。dsh 拒绝该段：启动时让该 namespace 的注册直接失败，运行期热加载则打 `settings: keeping last good "<ns>" after invalid stored section` 的 warn 并保留上一份好值。
+
+故本模块为其中 13 个提供了**结构化选项**（Nix 侧镜像上游 schema，把上述两类错误都变成求值期报错）：
 
 | 选项 | 写入的 namespace | 对应插件 |
 |------|------------------|----------|
 | `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
 | `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
 | `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.permission` | `permission` | `@deepseek-ai/dsh-permission-presets` |
+| `nixkits.dsh.agentPresets` | `agent-presets` | `@deepseek-ai/dsh-agent-presets` |
+| `nixkits.dsh.subagent` | `subagent` | `@deepseek-ai/dsh-subagent` |
+| `nixkits.dsh.shell` | `shell` | `@deepseek-ai/dsh-bash-local` / `dsh-pwsh-local`（namespace 归 `@deepseek-ai/dsh-shell`） |
+| `nixkits.dsh.webSearchDeepSeek` | `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
+| `nixkits.dsh.llmDeepSeek` | `llm-deepseek` | `@deepseek-ai/dsh-llm-deepseek` |
 | `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
 | `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
 | `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
@@ -427,7 +451,19 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 
 **三者语义一致**：选项默认 `enable = false`（不写入 settings.yaml，该 namespace 回落 schema 默认）；`enable = true` 时按子选项生成该段；**`nixkits.dsh.settings.<同名 namespace>` 始终优先**于结构化选项生成的值。
 
-`shell` 未提供结构化选项：其 `cwd` **没有默认值**，部分声明有校验风险（上游 schema 要求该字段存在），留给逃生舱更稳妥。
+剩下的两个 namespace **刻意不做结构化选项**，理由各自不同：
+
+- `ui-onboarding`：纯客户端引导状态（`welcomeNoticeVersion` 由 dsh 在用户走完引导时自己写入）。声明式写它没有正当用途，写进去只会让引导流程按一个外部指定的版本号回放或跳过——属于"该由用户点、不该由 Nix 定"的状态。
+- `llm-pi-ai`：字段是 `providers` 字典（路由 → 提供商 profile），而 profile 是**深层嵌套**的（`models` 目录、`modelOverrides`、`compat`、`thinkingBudgets`、`retryPolicy`…），其中 `api` 的枚举来自内置 pi-ai 协议注册表 `supportedProtocols()` —— **是一个随 pi-ai 版本漂移的开放集合**，类型化会立刻腐化成"看起来能配、实际拒绝新协议"。它在本机也已有更合适的落点：`nixkits.dsh.plugins.settings."llm-pi-ai".providers`（组合行 config，见上方「插件声明式管理」章节）。
+
+关于字段的写入策略（哪些字段有具体默认值、哪些以 `null` 表示"不声明"）：
+
+- schema 有默认值、且内置组合行 config 与之一致 → 用具体默认值无条件写入，语义与不声明等价；
+- schema 无默认值（由部署/适配器/进程环境决定），或组合基线**已偏离** schema 默认 → 用 `null` 表示不声明，渲染时剔除。
+
+第二条不是洁癖：`shell` 的 `timeoutMs` 就是实例——schema 默认 120000，而内置 `bash-sandbox` 行把它配成 **60000**。若"启用即全量写入"，`shell.enable = true` 会把 60000 悄悄改成 120000，正是本模块要防的那类静默改值。所以 `nixkits.dsh.shell.timeoutMs = null`（默认）保留 60000，显式填 120000 才是改回上游默认。同理 `web-search-deepseek.baseURL` 与 `llm-deepseek.baseURL` 留 `null`：它们未给出时会回落 `$DEEPSEEK_SEARCH_BASE_URL` / `$DEEPSEEK_BASE_URL`，写死字面量会遮蔽环境变量。
+
+另外，`web-search-deepseek.apiKey` 刻意不镜像：它带 `role("secret")`，写进 settings.yaml 就等于把 API key 落到 `/nix/store`（世界可读）。密钥走 `apiKeyEnv` + systemd `LoadCredential`。
 
 ```nix
 {
@@ -447,6 +483,23 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
       allowedModels = [
         { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
+    };
+    # 新会话默认权限预设（取值来自组合行的 presets 表）
+    permission = { enable = true; defaultPreset = "danger-full-access"; };
+    # 新会话默认挂载的 Agent 预设
+    agentPresets = { enable = true; default = "lampkeeper"; };
+    # 子代理深度与并发上限
+    subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
+    # 本地 shell 执行器：只写要改的字段，未写的不动组合基线（timeoutMs 基线 60000）
+    shell = { enable = true; timeoutMs = 300000; maxTimeoutMs = 1800000; };
+    # 联网搜索后端
+    webSearchDeepSeek = { enable = true; model = "deepseek-flash"; maxTokens = 8192; };
+    # 原生 DeepSeek 适配器：思考与流空闲超时
+    llmDeepSeek = {
+      enable = true;
+      thinking = "enabled";
+      reasoningEffort = "high";
+      streamIdleTimeoutMs = 3600000;  # 分块间隔超时，不是总时长
     };
     # 界面语言固定为中文；不设则随各浏览器的 Accept-Language
     locale = { enable = true; preference = "zh"; };

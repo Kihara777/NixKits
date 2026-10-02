@@ -382,22 +382,25 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 
 ### 声明設定可能 host namespace
 
-`nixkits.dsh.settings` **host 側 `settings.installSection` 経由登録済** namespace 唯一書込可——此等値 `$DSH_HOME/settings.yaml` 格納、瀏覽器間一致。`0.1.6-alpha` 内蔵登録 全 **12** namespace 與字段（插件源碼之 `z.object({...})` / `Schema.object({...})` 自 逐一 実測抽出）：
+`nixkits.dsh.settings` **host 側 `settings.installSection` / `settings.register` 経由登録済** namespace 唯一書込可——此等値 `$DSH_HOME/settings.yaml` 格納、瀏覽器間一致。`0.1.6-alpha.2` 内蔵登録 全 **15** namespace 與字段（插件源碼之 `z.object({...})` / `Schema.object({...})` 自 逐一 実測抽出）：
 
 | namespace | 字段 | 説明 |
 |-----------|-----------|------|
 | `agent-default-model` | `provider`、`model`、`reasoningEffort`（`off`/`low`/`high`/`max`） | 新規会話 既定模型 |
 | `agent-loop` | `maxParallelToolCalls`（整数 ≥1、既定 10） | 単輪 並列道具呼出 上限 |
-| `agent-presets` | `default` | Agent 預設 |
+| `agent-presets` | `default`（預設 id；schema 既定値 無、組合行 `standard` 受止）、`modeSelectionEnabled`（真偽値、基線 true） | Agent 預設 與 切替入口 |
+| `llm-deepseek` | `protocol`、`apiKeyEnv`、`baseURL`、`thinking`、`reasoningEffort`、`maxTokens`、`defaultContextWindow`、`streamIdleTimeoutMs`、`models`、`retryPolicy`、他 文件/画像 byte 予算 | 原生 DeepSeek adapter |
+| `llm-pi-ai` | `providers`（辞書：route → provider profile） | pi-ai adapter 之 provider route 表（本機 llama-local route 在此） |
 | `locale` | `preference`（BCP 47；内蔵 `zh`/`en`） | 界面言語 |
-| `permission` | `defaultPreset` | 権限預設 |
-| `shell` | `cwd`（**既定値無**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 bash 実行器 制限 |
+| `permission` | `defaultPreset`（**必須**；値 為 presets 表 之 key 名） | 権限預設 |
+| `shell` | `cwd`（**既定値無**）、`timeoutMs`、`maxTimeoutMs`、`maxOutputBytes`、`maxSpillBytes`、`graceMs` | 本地 shell 実行器 制限（Linux 為 bash-local、win32 為 pwsh-local 且 `pwshPath` 増） |
+| `subagent` | `maxDepth`（整数 ≥0、既定 1）、`maxActiveSubagents`（整数 ≥1、既定 8） | 副 agent 深 與 同時実行 上限 |
 | `subagent-model-selection` | `enabled`（真偽値、既定 false）、`allowedModels`（`{provider, model}` 配列） | 副 agent 模型選択 |
 | `ui-chat` | `transcriptView`（`normal`/`compact`） | 会話記録 表示密度 |
 | `ui-conversation` | `busyEnter`（`queue`/`steer`） | busy 時 Enter 動作 |
 | `ui-onboarding` | `welcomeNoticeVersion` | 引導手順 状態（dsh 自 書込） |
 | `ui-theme` | `preference`（`light`/`dark`/`system`）、`fontSize`（12–17） | 外観與主題 |
-| `web-search-deepseek` | `model`、`maxTokens` 等 | 聯網検索 backend |
+| `web-search-deepseek` | `apiKey`（secret）、`apiKeyEnv`、`baseURL`、`model`（既定 `deepseek-v4-flash`）、`apiVersion`、`maxTokens`（≥1、既定 4096）、`maxUses`（≥1、既定 5） | 聯網検索 backend |
 
 > ⚠️ 本表 曾 `0.1.5-rc.2` 基準 転記、其中 **5 行 実測 不一致**、故 2026-09-23 逐項照合 修正：
 > `locale` 之字段 `language` 非、`preference`；`ui-theme` 唯 `preference`/`fontSize`
@@ -409,25 +412,59 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 > **判據**：本表 插件源碼読取 以外 得 不能。「合理外観」之字段名 皆 記憶之産物 可能性 有——
 > 次回 dsh 昇級時 再実測 願。本表 増分推測 重 不可。
 
+> ⚠️ **2026-10-02 第二回 照合（`0.1.6-alpha.2`）**：項目数 12 自 **15** 訂正——旧表
+> **host namespace 三個 見落**：`llm-deepseek`、`llm-pi-ai`、`subagent`（前二者 模型 adapter
+> 登録、最後者 `@deepseek-ai/dsh-subagent` 登録。旧 grep 唯 `installSection` 呼出箇所 見、
+> 此等 取落）。同照合 旧判断 一個 覆：「`shell` 之 `cwd` 既定値 無 ⇒ 部分宣言 不可」**誤**——
+> schemastery 中 `.required()` 不書 字段 元 任意（実測：`z.object({cwd: z.string()})({})` 通過）、
+> 欠落 `missing required value` 化 唯 `.required()` 付 場合。
+>
+> 照合口径：install tree 全体 `grep -rn 'settings\.installSection(\|settings\.register('`
+> 之**呼出箇所** 正 為（`@deepseek-ai/dsh-settings` 自身 與 其読者 `dsh-tool-cordis` 此 API 之
+> **実装**、namespace 登録側 非）。
+
 > **設定 menu 存儲層境界**：非 設定 UI 全項目 皆 `nixkits.dsh.settings` 宣言設定 可能。**dsh-api-balance 界面 / 語音設定**（語音提醒、底部統計条横 scroll、Enter 改行 + Shift+Enter 送信交換、mobile 会話切替時 keyboard 抑止、TTS backend）為**瀏覽器 localStorage 状態**（毎瀏覽器独立、既定 ON、UI 内切替）、`settings.installSection` 系統**不経由**——故 `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` 此等 上書**不**。此類「毎瀏覽器設定」当該插件 `⚙ 設定` panel 内 実施、或 device 別 独立瀏覽器 用意。
 
 ### 構造化選項與脱出艙之役割分担
 
-上表 12 namespace 皆 `nixkits.dsh.settings.<namespace>` 自 直接書込 可能——即 **無型脱出艙**。其代価：字段 誤記、列挙値 誤綴、数値 範囲外、**何 皆 評価時 誤 無**；dsh 実行時検証 失敗時 **該 section 破棄、schema 既定値 静黙 fallback**——日誌 何 残 不。
+上表 15 namespace 皆 `nixkits.dsh.settings.<namespace>` 自 直接書込 可能——即 **無型脱出艙**。其代価 二種 有、**一種 静黙、一種 有声**：
 
-故 本 module 其中 7 個 向 **構造化選項** 提供（Nix 側 上流 schema 写取、上述誤 評価時 之誤 化）：
+- **字段名 誤記 → 完全 静黙**。schemastery 之 `z.object` 為**開放**：未知 key 原様 保持、本当 書 之字段 依然 schema 既定値 食。実測（`0.1.6-alpha.2`）：`schema({ maxParallelToolCall: 4 })` 得 `{ maxParallelToolCalls: 10, maxParallelToolCall: 4 }`——評価時 誤 無、実行時 誤 無、日誌 亦 無、**唯 値 不 有効**。
+- **型 誤 / 値 範囲外 → 有声、但 日誌 内 唯**。dsh 該 section 拒否：起動時 当該 namespace 登録 自体 失敗、実行中 hot reload 時 `settings: keeping last good "<ns>" after invalid stored section` 之 warn 出 且 直前 良値 保持。
+
+故 本 module 其中 13 個 向 **構造化選項** 提供（Nix 側 上流 schema 写取、上述 二類 誤 評価時 誤 化）：
 
 | 選項 | 書込 namespace | 対応插件 |
 |------|------------------|----------|
 | `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
 | `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
 | `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.permission` | `permission` | `@deepseek-ai/dsh-permission-presets` |
+| `nixkits.dsh.agentPresets` | `agent-presets` | `@deepseek-ai/dsh-agent-presets` |
+| `nixkits.dsh.subagent` | `subagent` | `@deepseek-ai/dsh-subagent` |
+| `nixkits.dsh.shell` | `shell` | `@deepseek-ai/dsh-bash-local` / `dsh-pwsh-local`（namespace `@deepseek-ai/dsh-shell` 属） |
+| `nixkits.dsh.webSearchDeepSeek` | `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
+| `nixkits.dsh.llmDeepSeek` | `llm-deepseek` | `@deepseek-ai/dsh-llm-deepseek` |
 | `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
 | `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
 | `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
 | `nixkits.dsh.ui.conversation` | `ui-conversation` | `@deepseek-ai/dsh-client-ui-conversation` |
 
 **三者 意味 一貫**：選項 既定 `enable = false`（settings.yaml 不書込、当該 namespace schema 既定 fallback）；`enable = true` 時 子選項 従 当該 section 生成；**`nixkits.dsh.settings.<同名 namespace>` 常 優先**、構造化選項生成値 勝。
+
+残 二 namespace **意図的 構造化選項 不與**、理由 各自 異：
+
+- `ui-onboarding`：純 client 側 引導状態（`welcomeNoticeVersion` 為 用者 引導 終了時 dsh 自身 書込）。宣言的 書 正当用途 無、書 時 外部 指定 版本号 従 引導 `replay` 或 `skip` 唯一——用者 点 進 可 状態、Nix 定 可 状態 非。
+- `llm-pi-ai`：字段 為 `providers` 辞書（route → provider profile）、且 profile **深層 嵌套**（`models` 目録、`modelOverrides`、`compat`、`thinkingBudgets`、`retryPolicy` 等）、其中 `api` 之列挙 内蔵 pi-ai 協議登録簿 `supportedProtocols()` 由来——**pi-ai version 随 動 開放集合**、型化 即「設定可能 外観、実際 新協議 拒」之形 腐。本機 既 更適 落点 有：`nixkits.dsh.plugins.settings."llm-pi-ai".providers`（組合行 config、上之「插件宣言式管理」節 参照）。
+
+字段 書込 方針（何 具体 既定値 持、何 `null` 以 「不宣言」 表）：
+
+- schema 既定値 有、且 内蔵 組合行 config 之 一致 → 具体 既定値 無条件 書込、不宣言 場合 與 意味 同等；
+- schema 既定値 無（deploy / adapter / process 環境 定）、或 組合基線 schema 既定 自 **逸脱** → `null` 以 「不宣言」 表、描画時 削除。
+
+二番目 潔癖 非：`shell` 之 `timeoutMs` 即 実例——schema 既定 120000、但 内蔵 `bash-sandbox` 行 **60000** 設定。「enable 即 全量書込」 然 也、`shell.enable = true` 60000 静黙 120000 変——即 本 module 防 為 存在 之 静黙 値 改。故 `nixkits.dsh.shell.timeoutMs = null`（既定）60000 保持、明示 120000 書 時 唯一 上流既定 復。同様 `web-search-deepseek.baseURL` 與 `llm-deepseek.baseURL` `null` 残留：未指定時 `$DEEPSEEK_SEARCH_BASE_URL` / `$DEEPSEEK_BASE_URL` fallback、literal 書込 環境変数 遮蔽。
+
+又 `web-search-deepseek.apiKey` 意図的 写取 不：`role("secret")` 持 故、settings.yaml 書 時 API key `/nix/store`（世界可読）落。鍵 `apiKeyEnv` 與 systemd `LoadCredential` 経由。
 
 `shell` 構造化選項 不提供：其 `cwd` **既定値 持 不**、部分宣言 検証 risk 伴（上流 schema 当該字段 存在 要求）、脱出艙 委 方 安全。
 
@@ -449,6 +486,23 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
       allowedModels = [
         { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
+    };
+    # 新規会話 既定 権限預設（値 組合行 presets 表 由来）
+    permission = { enable = true; defaultPreset = "danger-full-access"; };
+    # 新規会話 既定  mount 之 Agent 預設
+    agentPresets = { enable = true; default = "lampkeeper"; };
+    # 副 agent 深 與 同時実行 上限
+    subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
+    # 本地 shell 実行器：変 欲 字段 唯 書。未指定 組合基線 自重（timeoutMs 基線 60000）
+    shell = { enable = true; timeoutMs = 300000; maxTimeoutMs = 1800000; };
+    # 聯網検索 backend
+    webSearchDeepSeek = { enable = true; model = "deepseek-flash"; maxTokens = 8192; };
+    # 原生 DeepSeek adapter：思考 與 stream idle timeout
+    llmDeepSeek = {
+      enable = true;
+      thinking = "enabled";
+      reasoningEffort = "high";
+      streamIdleTimeoutMs = 3600000;  # 分塊間隔 timeout、総所要時間 非
     };
     # 界面言語 中国語 固定；未設定 時 各瀏覽器 之 Accept-Language 従
     locale = { enable = true; preference = "zh"; };

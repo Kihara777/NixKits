@@ -381,22 +381,25 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 
 ### Declaratively configurable host namespaces
 
-`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.installSection`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. All **12** namespaces registered in `0.1.6-alpha`, with their fields (extracted one by one by measuring each plugin source's `z.object({...})` / `Schema.object({...})`):
+`nixkits.dsh.settings` can only write into **namespaces registered host-side via `settings.installSection` / `settings.register`** — these values live in `$DSH_HOME/settings.yaml` and are consistent across browsers. All **15** namespaces registered in `0.1.6-alpha.2`, with their fields (extracted one by one by measuring each plugin source's `z.object({...})` / `Schema.object({...})`):
 
 | namespace | fields | description |
 |-----------|--------|-------------|
 | `agent-default-model` | `provider`, `model`, `reasoningEffort` (`off`/`low`/`high`/`max`) | default model for new sessions |
 | `agent-loop` | `maxParallelToolCalls` (integer ≥1, default 10) | per-turn parallel tool-call ceiling |
-| `agent-presets` | `default` | agent presets |
+| `agent-presets` | `default` (preset id; no schema default — the composition row's `standard` backstops it), `modeSelectionEnabled` (boolean, base true) | agent presets and the switch entry |
+| `llm-deepseek` | `protocol`, `apiKeyEnv`, `baseURL`, `thinking`, `reasoningEffort`, `maxTokens`, `defaultContextWindow`, `streamIdleTimeoutMs`, `models`, `retryPolicy`, plus file/image byte budgets | native DeepSeek adapter |
+| `llm-pi-ai` | `providers` (dict: route → provider profile) | the pi-ai adapter's provider route table (this machine's llama-local route lives here) |
 | `locale` | `preference` (BCP 47; built-in `zh`/`en`) | interface language |
-| `permission` | `defaultPreset` | permission presets |
-| `shell` | `cwd` (**no default**), `timeoutMs`, `maxTimeoutMs`, `maxOutputBytes`, `maxSpillBytes`, `graceMs` | local bash executor limits |
+| `permission` | `defaultPreset` (**required**; values are keys of the presets table) | permission presets |
+| `shell` | `cwd` (**no default**), `timeoutMs`, `maxTimeoutMs`, `maxOutputBytes`, `maxSpillBytes`, `graceMs` | local shell executor limits (bash-local on Linux; pwsh-local on win32, plus `pwshPath`) |
+| `subagent` | `maxDepth` (integer ≥0, default 1), `maxActiveSubagents` (integer ≥1, default 8) | subagent depth and concurrency ceilings |
 | `subagent-model-selection` | `enabled` (boolean, default false), `allowedModels` (`{provider, model}` array) | subagent model selection |
 | `ui-chat` | `transcriptView` (`normal`/`compact`) | conversation-transcript display density |
 | `ui-conversation` | `busyEnter` (`queue`/`steer`) | Enter behavior while busy |
 | `ui-onboarding` | `welcomeNoticeVersion` | onboarding-step state (written by dsh itself) |
 | `ui-theme` | `preference` (`light`/`dark`/`system`), `fontSize` (12–17) | appearance & theme |
-| `web-search-deepseek` | `model`, `maxTokens` etc. | web-search backend |
+| `web-search-deepseek` | `apiKey` (secret), `apiKeyEnv`, `baseURL`, `model` (default `deepseek-v4-flash`), `apiVersion`, `maxTokens` (≥1, default 4096), `maxUses` (≥1, default 5) | web-search backend |
 
 > ⚠️ This table was originally transcribed from `0.1.5-rc.2`, and **5 of its rows disagreed with measurement**; all were checked item by item and corrected on 2026-09-23:
 > `locale`'s field is `preference`, not `language`; `ui-theme` has only `preference`/`fontSize`
@@ -407,19 +410,32 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 >
 > **The criterion**: this table can only be derived by reading the plugin sources — any "plausible-looking" field name may be a product of memory — so re-measure when dsh is next upgraded, and do not make incremental guesses on this table.
 
+> ⚠️ **Second pass, 2026-10-02 (`0.1.6-alpha.2`)**: the entry count is corrected from 12 to **15** — the old table **missed three host namespaces**: `llm-deepseek`, `llm-pi-ai`, and `subagent` (the first two are registered by model adapters, the third by `@deepseek-ai/dsh-subagent`; the earlier grep only covered `installSection` call sites and overlooked them). The same pass overturned one old conclusion: "`shell`'s `cwd` has no default ⇒ it cannot be declared partially" **is wrong** — a schemastery field without `.required()` is optional to begin with (measured: `z.object({cwd: z.string()})({})` passes); only `.required()` makes a missing field fail with `missing required value`.
+>
+> Census criterion: trust the **call sites** of `grep -rn 'settings\.installSection(\|settings\.register('` across the install tree (`@deepseek-ai/dsh-settings` itself and its reader `dsh-tool-cordis` are the **implementations** of that API, not registrants of a namespace).
+
 > **Settings-menu storage boundary**: not every entry in the settings UI is declaratively configurable via `nixkits.dsh.settings`. The **dsh-api-balance interface / voice settings** (voice alerts, bottom stats-bar horizontal scroll, Enter-newline + Shift+Enter-send swap, mobile session-switch keyboard suppression, TTS backend) are **browser localStorage state** (per-browser, enabled by default, toggled in the UI) and do **not** go through the `settings.installSection` system — so `$DSH_HOME/settings.yaml` / `nixkits.dsh.settings` does **not** override them. Configure these per-browser preferences in the plugin's `⚙ Settings` panel, or deploy a separate browser per device.
 
 ### Structured options and the escape hatch
 
-All 12 namespaces in the table above can be written directly through `nixkits.dsh.settings.<namespace>` — that is the **untyped escape hatch**. Its cost: a misspelled field, a mistyped enum value, or an out-of-range number **never fails at evaluation time**; once dsh's runtime validation fails it **drops that section and silently falls back to the schema default**, leaving nothing at all in the log.
+All 15 namespaces in the table above can be written directly through `nixkits.dsh.settings.<namespace>` — that is the **untyped escape hatch**. Its cost comes in two kinds, **one silent and one audible**:
 
-So the module provides **structured options** for 7 of them (Nix-side mirrors of the upstream schemas, turning those mistakes into evaluation-time errors):
+- **A misspelled field name → completely silent.** schemastery's `z.object` is **open**: an unknown key is preserved as-is while the field it was meant to be keeps its schema default. Measured (`0.1.6-alpha.2`): `schema({ maxParallelToolCall: 4 })` yields `{ maxParallelToolCalls: 10, maxParallelToolCall: 4 }` — no evaluation error, no runtime error, nothing in the log, **only a value that never took effect**.
+- **A wrong type / out-of-range value → audible, but only in the log.** dsh refuses that section: at startup the namespace's registration fails outright; on a runtime hot-reload it logs the warn `settings: keeping last good "<ns>" after invalid stored section` and keeps the previous good value.
+
+So the module provides **structured options** for 13 of them (Nix-side mirrors of the upstream schemas, turning both classes into evaluation-time errors):
 
 | option | namespace written | plugin |
 |--------|-------------------|--------|
 | `nixkits.dsh.defaultModel` | `agent-default-model` | `@deepseek-ai/dsh-agent-default-model` |
 | `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
 | `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
+| `nixkits.dsh.permission` | `permission` | `@deepseek-ai/dsh-permission-presets` |
+| `nixkits.dsh.agentPresets` | `agent-presets` | `@deepseek-ai/dsh-agent-presets` |
+| `nixkits.dsh.subagent` | `subagent` | `@deepseek-ai/dsh-subagent` |
+| `nixkits.dsh.shell` | `shell` | `@deepseek-ai/dsh-bash-local` / `dsh-pwsh-local` (the namespace belongs to `@deepseek-ai/dsh-shell`) |
+| `nixkits.dsh.webSearchDeepSeek` | `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
+| `nixkits.dsh.llmDeepSeek` | `llm-deepseek` | `@deepseek-ai/dsh-llm-deepseek` |
 | `nixkits.dsh.locale` | `locale` | `@deepseek-ai/dsh-client-locale` |
 | `nixkits.dsh.ui.theme` | `ui-theme` | `@deepseek-ai/dsh-client-ui-theme` |
 | `nixkits.dsh.ui.chat` | `ui-chat` | `@deepseek-ai/dsh-client-ui-chat` |
@@ -427,7 +443,19 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
 
 **All three follow the same semantics**: an option defaults to `enable = false` (nothing is written to settings.yaml, so that namespace falls back to the schema default); with `enable = true` the section is generated from its sub-options; and an **explicit `nixkits.dsh.settings.<same namespace>` always wins** over the value a structured option generates.
 
-`shell` has no structured option: its `cwd` **has no default**, so declaring it partially carries a validation risk (the upstream schema requires that field to exist) — leaving it to the escape hatch is safer.
+The remaining two namespaces **deliberately get no structured option**, for different reasons:
+
+- `ui-onboarding`: pure client onboarding state (`welcomeNoticeVersion` is written by dsh itself once the user finishes onboarding). There is no legitimate declarative use; writing it only makes the onboarding flow replay or skip according to a version number handed in from outside — state the user should click through, not state Nix should dictate.
+- `llm-pi-ai`: its field is a `providers` dict (route → provider profile), and a profile is **deeply nested** (`models` catalogue, `modelOverrides`, `compat`, `thinkingBudgets`, `retryPolicy`, …); `api`'s enum comes from the bundled pi-ai protocol registry `supportedProtocols()` — **an open set that drifts with the pi-ai version**, so typing it would rot immediately into "looks configurable, actually rejects new protocols". It also already has a better home on this machine: `nixkits.dsh.plugins.settings."llm-pi-ai".providers` (a composition-row config, see the "Declarative plugin management" section above).
+
+On the write policy (which fields carry a concrete default and which use `null` for "not declared"):
+
+- the schema has a default **and** the built-in composition row agrees with it → write the concrete default unconditionally, which is semantically identical to omitting it;
+- the schema has no default (the deployment/adapter/process environment decides), or the composition baseline **deviates** from the schema default → use `null` for "not declared", dropped at render time.
+
+The second rule is not pedantry: `shell`'s `timeoutMs` is the case in point — the schema default is 120000, while the built-in `bash-sandbox` row configures **60000**. Were "enable means write everything", `shell.enable = true` would silently turn 60000 into 120000 — exactly the silent value change this module exists to prevent. So `nixkits.dsh.shell.timeoutMs = null` (the default) keeps 60000, and only an explicit 120000 restores the upstream default. Likewise `web-search-deepseek.baseURL` and `llm-deepseek.baseURL` stay `null`: when unset they fall back to `$DEEPSEEK_SEARCH_BASE_URL` / `$DEEPSEEK_BASE_URL`, and a hard-coded literal would shadow the environment variable.
+
+Also, `web-search-deepseek.apiKey` is deliberately not mirrored: it carries `role("secret")`, so writing it into settings.yaml would land the API key in `/nix/store` (world-readable). Keys go through `apiKeyEnv` plus systemd `LoadCredential`.
 
 ```nix
 {
@@ -447,6 +475,23 @@ So the module provides **structured options** for 7 of them (Nix-side mirrors of
       allowedModels = [
         { provider = "deepseek-official"; model = "deepseek-flash"; }
       ];
+    };
+    # default permission preset for new sessions (values come from the composition row's presets table)
+    permission = { enable = true; defaultPreset = "danger-full-access"; };
+    # agent preset mounted by default for new sessions
+    agentPresets = { enable = true; default = "lampkeeper"; };
+    # subagent depth and concurrency ceilings
+    subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
+    # local shell executor: declare only what you change; unset fields keep the composition baseline (timeoutMs baseline is 60000)
+    shell = { enable = true; timeoutMs = 300000; maxTimeoutMs = 1800000; };
+    # web-search backend
+    webSearchDeepSeek = { enable = true; model = "deepseek-flash"; maxTokens = 8192; };
+    # native DeepSeek adapter: thinking and stream idle timeout
+    llmDeepSeek = {
+      enable = true;
+      thinking = "enabled";
+      reasoningEffort = "high";
+      streamIdleTimeoutMs = 3600000;  # a per-chunk gap timeout, not a total-duration one
     };
     # interface language pinned to Chinese; unset follows each browser's Accept-Language
     locale = { enable = true; preference = "zh"; };
