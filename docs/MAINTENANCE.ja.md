@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-02T18:02:46+09:00
+
+**概要**：feat(dsh): プリセット移行の準備 —— 0.2.0 の新形式 `preset.patch.yml` と派生チェックの適応（四言語）— **0.2.0 はプリセット機構を作り直した**：プリセットは「`$DSH_HOME/.agent-presets/<id>/` ディレクトリ + `agent.cordis.yml`」ではなく**一本の loader patch 条目**（`- insert:` → `@deepseek-ai/dsh-agent-preset`、プラグイン行は `config.plugins` へ）であり、落点は `$DSH_HOME/profiles/<profile>/cordis.patch.yml`。**26 パッケージの schema をプラグイン単位で照合した結果、変化は 6 箇所ですべて新規の任意フィールドであり、既存設定を不正にするものは一つもなかった**；最も鋭いのは `dsh-tool-bash` / `dsh-tool-pwsh` に追加された `promoteOnTimeout`（既定 `true`）—— 前面 bash のタイムアウトが「殺される」から「背景ジョブへ昇格」に変わるのに、こちらのファイルはそのキーを一切書いていない。**旧ファイルをそのまま写すと壊れる三箇所**：① `baseUrl` は実測で `$DSH_HOME/profiles/<profile>/` を意味するようになり、旧来の書き方では**マウントは成功するのに技能が静黙で消える** —— 新ファイルはパッケージ根を解決し**存在ガード**を付けた；② メタデータは `config.name` / `description` へ移り、ファイル全体のバイト派生は不可能になったため派生は `plugins:` 本文へ載せ替えた；③ `config.order` は新しいキー。**実機検証**（使い捨ての 0.2.0 インスタンス）：組み込み 4 + `nixos` + `maintenance` + `lampkeeper` の 7 条目で、**すべての `broken` が空**；反証は**実ファイルを複製して一行だけ変える**方式で、四つの複製がそれぞれ具体的な `broken` を報告した。**本段階では実行時の変更を一切落地していない**：モジュール未着手、dsh の版も未変更、`news-three-elements` は未変換、挙動の既定値は記録のみ。**併せて判明：`ocean-spiral` はリポジトリも播種も持たない**ため、0.2.0 が来れば roster から丸ごと消える —— 移行にはまず「家」が必要。
+
+| コミット | 説明 |
+|------|------|
+| `3f92bb1` | feat(dsh): 预设迁移准备 —— 0.2.0 新格式 preset.patch.yml + 派生检查适配（四语） |
+
 ## 2026-10-02T17:39:30+09:00
 
 **概要**：feat(dsh): 宣言的な設定面の補完 —— 構造化オプション 7 → **13**、6 つの型付き namespace を新設（四言語）— 補ったのはまさに保守者の本機が使っている三つ：`permission`、`web-search-deepseek`、`agent-presets`（従来は無型の `cfg.settings.<ns>` 逃生口しかなかった）、加えて `subagent`、`shell`、`llm-deepseek`。**これらのオプションの意義**は「打ち間違いや範囲外は実行時に静黙で捨てられる」を**求値期のエラー**に変えることにある。**併せて実測で既存の判断を三箇所修正**：① namespace 総数 **12 → 15**（旧 grep は `installSection` しか見ておらず、`settings.register` の経路を漏らしていた）；② 「`shell.cwd` に既定値がない ⇒ 部分宣言できない」は**誤り** —— schemastery で `.required()` を書いていないフィールドはもともと任意である；③ モジュール冒頭の「typo も範囲外も静黙」は**半分しか正しくない** —— 実測すると object は**開放**で、typo は保持され（真のフィールドは既定値を食べ、完全に静黙）、型エラーや範囲外は**鳴る**（当該 namespace の登録が失敗し、ホットリロードが `keeping last good` を warn する）。コメントと四言語ドキュメントを正確な記述に改めた。**意図的に行わなかった**（理由はコメントに記載）：`llm-pi-ai`（`api` の列挙は pi-ai の版で移ろう開放集合であり、型付けすると腐る）、`ui-onboarding`（純粋なクライアント状態）、`web-search-deepseek.apiKey`（`role("secret")` —— settings.yaml に書くことは鍵を世界可読の `/nix/store` に置くことに等しい）。**検証**：最小の NixOS 設定（13 段すべて有効 + 逃生口で 1 箇所上書き）が求値通過；生成された `settings.yaml` は全新設段を含み、`builtins.fromJSON` で解析でき、逃生口が構造化値に優先する；負例（enum / 型 / 範囲 / 横断フィールド assertion）がそれぞれ求値期にエラー；`nix flake check` 全緑、しかも検査対象の source スナップショットが作業ツリーと**バイト単位で一致**することを確認（古いキャッシュツリーではない）。

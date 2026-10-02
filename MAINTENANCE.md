@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T18:02:46+09:00
+
+**摘要**：feat(dsh): 预设迁移准备 —— 0.2.0 新格式 `preset.patch.yml` + 派生检查适配（四语）— **0.2.0 重构了 preset 机制**：预设从「`$DSH_HOME/.agent-presets/<id>/` 目录 + `agent.cordis.yml`」变成**一条 loader patch 条目**（`- insert:` → `@deepseek-ai/dsh-agent-preset`，插件行搬进 `config.plugins`），落点是 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`。**逐插件核对 26 个包的 schema：6 处变化全部是新增可选字段，没有一处让现有配置变非法**；最要命的是 `dsh-tool-bash` / `dsh-tool-pwsh` 新增 `promoteOnTimeout`（默认 `true`）——前台 bash 超时从「被杀掉」变成「提升为后台任务」，而我们的文件一个字没写这个键。**三处「照抄会坏」**：① `baseUrl` 实测已变成 `$DSH_HOME/profiles/<profile>/`（不再是预设目录），旧写法会**挂载成功而技能静默消失**，新文件改为解析包根 + **存在性守卫**（指错即 broken）；② 元数据搬进 `config.name` / `description`，整文件字节派生在新格式下不可能，派生改落在 `plugins:` 正文；③ `config.order` 是新键。**实机验证**（0.2.0 一次性实例）：4 个内置 + `nixos` + `maintenance` + `lampkeeper` 共 7 条，**每一条 `broken` 均为空**；反证用**真文件复制后只改一行**（删必填项 / 换包名 / 换相对路径 / 换锚点），四条副本各报具体 broken。**本阶段不落地运行时**：模块侧一行未动、dsh 版本未动、`news-three-elements` 未转换、行为默认值只记录未钉。**另查明 `ocean-spiral` 无仓库也无播种**（其 `AGENTS.md` 自述部署副本即源本身），0.2.0 一到会从 roster 里整个消失——迁移它需先给它一个家。
+
+| 提交 | 说明 |
+|------|------|
+| `3f92bb1` | feat(dsh): 预设迁移准备 —— 0.2.0 新格式 preset.patch.yml + 派生检查适配（四语） |
+
 ## 2026-10-02T17:39:30+09:00
 
 **摘要**：feat(dsh): 声明式设置面补全 —— 结构化选项 7 → **13**，新增 6 个类型化 namespace（四语）— 补齐的正是维护者本机在用的三个：`permission`、`web-search-deepseek`、`agent-presets`（此前只能走无类型的 `cfg.settings.<ns>` 逃生舱），另加 `subagent`、`shell`、`llm-deepseek`。**这套选项的意义**是把「拼错或越界只在运行时被静默丢弃」变成**求值期报错**。**顺带用实测修正三处既有判断**：① namespace 总数 **12 → 15**（旧 grep 只看 `installSection`，漏了走 `settings.register` 的路径）；② 「`shell.cwd` 无默认值 ⇒ 不能部分声明」**是错的**——schemastery 里没写 `.required()` 的字段本就可选；③ 模块头部注释「typo 与越界都静默」**只对一半**——实测 object 是**开放**的，typo 被保留（真字段吃默认，完全静默），而类型错 / 越界**会响**（该 namespace 注册失败、热更新打 warn `keeping last good`）。注释与四语文档均已改为准确表述。**故意不做**（理由写入注释）：`llm-pi-ai`（`api` 枚举是随版本漂移的开放集合，类型化会腐化）、`ui-onboarding`（纯客户端状态）、`web-search-deepseek.apiKey`（`role("secret")`，写进 settings.yaml 等于落到世界可读的 `/nix/store`）。**验证**：最小 NixOS 配置（13 段全开 + 一处逃生舱覆盖）求值通过；生成的 `settings.yaml` 含全部新段、`builtins.fromJSON` 可解析、逃生舱优先于结构化值；负例（enum / 类型 / 范围 / 跨字段 assertion）各自在求值期报错；`nix flake check` 全绿，并核验被检查的 source 快照与工作区**逐字节一致**（不是缓存的旧树）。

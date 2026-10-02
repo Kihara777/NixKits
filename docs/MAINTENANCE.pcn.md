@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T18:02:46+09:00
+
+**摘要**：feat(dsh): preset 移行 準備 —— 0.2.0 新形式 `preset.patch.yml` 與 派生検査 適配（四言語）— **0.2.0 preset 機構 再構築**：preset 「`$DSH_HOME/.agent-presets/<id>/` 目录 + `agent.cordis.yml`」 非、**一本 loader patch 条目**（`- insert:` → `@deepseek-ai/dsh-agent-preset`、插件行 `config.plugins` 至）、落点 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`。**26 包 schema 插件単位 照合 結果、変化 6 箇所 全 新規 任意 field、既存設定 不正 化 者 一 也 無**；最 鋭 `dsh-tool-bash` / `dsh-tool-pwsh` 追加 `promoteOnTimeout`（既定 `true`）—— 前面 bash timeout 「殺」 自 「背景 job 昇格」 変、然 本 files 該 key 一 字 也 書 不。**旧 file 其侭 写 壊 三箇所**：① `baseUrl` 実測 `$DSH_HOME/profiles/<profile>/` 意味 化、旧 書方 **mount 成功 然 技能 静黙 消** —— 新 file 包根 解決 且 **存在 guard** 付；② metadata `config.name` / `description` 移、file 全体 byte 派生 不可 故 派生 `plugins:` 本文 載替；③ `config.order` 新 key。**実機検証**（使捨 0.2.0 実例）：組込 4 + `nixos` + `maintenance` + `lampkeeper` 7 条目、**全 `broken` 空**；反証 **実 file 複製 一行 限 変** 方式、四 複製 各 具体的 `broken` 報告。**本段階 実行時 変更 一切 落地 不**：module 未着手、dsh 版 未変更、`news-three-elements` 未変換、挙動 既定値 記録 限。**併 判明：`ocean-spiral` repo 也 播種 也 持 不** 故、0.2.0 来 則 roster 自 丸 消 —— 移行 先 「家」 必要。
+
+| 提交 | 説明 |
+|------|------|
+| `3f92bb1` | feat(dsh): 预设迁移准备 —— 0.2.0 新格式 preset.patch.yml + 派生检查适配（四语） |
+
 ## 2026-10-02T17:39:30+09:00
 
 **摘要**：feat(dsh): 宣言的設定面 補全 —— 構造化 option 7 → **13**、新規 6 型別 namespace（四言語）— 補 者 正 維護者 本機 使用 中 三：`permission`、`web-search-deepseek`、`agent-presets`（以前 無型 `cfg.settings.<ns>` 逃生口 限）、更 `subagent`、`shell`、`llm-deepseek`。**此 options 意義** 「誤記 / 範囲外 実行時 静黙 破棄」 **求值期 error** 化。**併 実測 依 既存判断 三箇所 修正**：① namespace 総数 **12 → 15**（旧 grep `installSection` 限 見、`settings.register` 経路 漏）；② 「`shell.cwd` 既定値 無 ⇒ 部分宣言 不可」**誤** —— schemastery 内 `.required()` 無 字段 本来 任意；③ module 冒頭 「typo 與 範囲外 何 也 静黙」**半分 限 正** —— 実測 object **開放**、typo 保持（真 field 既定値 食、完全 静黙）、然 型 誤 / 範囲外 **鳴**（該 namespace 登録 失敗、熱更新 `keeping last good` warn）。注釈 與 四言語文書 正確 記述 変更。**意図的 不実行**（理由 注釈 記載）：`llm-pi-ai`（`api` 列挙 pi-ai 版 依 移 開放集合、型付 腐）、`ui-onboarding`（純 client 状態）、`web-search-deepseek.apiKey`（`role("secret")` —— settings.yaml 記載 鍵 世界 読 可能 `/nix/store` 置 等）。**検証**：最小 NixOS 設定（13 段 全有効 + 逃生口 一箇所 上書）求值 通過；生成 `settings.yaml` 全 新設段 含、`builtins.fromJSON` 解析 可能、逃生口 構造化値 優先；負例（enum / 型 / 範囲 / 横断 field assertion）各 求值期 error；`nix flake check` 全緑、且 検査 対象 source snapshot 作業 tree 與 **byte 単位 一致** 確認（古 cache tree 非）。
