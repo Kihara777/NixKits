@@ -133,6 +133,28 @@ gh run list --limit 40 --json name,conclusion --jq '[.[]|.conclusion]|group_by(.
 | codewhale-riscv64 hash | 用 `nix-prefetch-url` 取 archive tarball 的 hash 充当 `fetchFromGitHub` 的 hash → **连续失败**（两者算法不同） | **真失败**：改用构建报错里的 `got:` 值 |
 | blender-mcp 取源 403 | `/archive/<rev>.tar.gz` 对全部 tag 403，`/api/v1/repos/.../archive/...` 200 | **真失败**：改 `fetchzip` 指向 API 端点 + `stripRoot = true` |
 | 「绿但全是缓存」 | 改完取源方式后，CI 仍可能通篇 `copying path … from cache` | **可疑**：必须**确认走了 fetch 阶段**，否则那次绿没有验证力 |
+| **靠缓存假绿一整版** | 2026-10-03 实测：`opencode-telegram (riscv64)` 连续 83 次 success，日志里**一行构建都没有**，取的是 `nixkits.cachix.org` 上**上一个版本 0.25.3** 的产物；包已升到 0.26.2，缓存未命中、真去构建，随即红。查 `gh api .../workflows/<wf>/runs` 的历史会以为「它本来能构建」 | **真失败（被缓存掩盖）**：判据是日志里有没有 `building '/nix/store/…'`。**版本一升，缓存必然失效**——所以「这个 job 一直是绿的」在版本更新后不构成任何证据 |
+| **构建成功，产物跑不起来** | 2026-10-03 实测：riscv64 产物构建通过，但它**直接依赖**的原生模块（`better-sqlite3`）没有 riscv64 预编译、加载器两条路径全空 ⇒ 一启动就抛 | **真失败，且最危险**：构建绿是**没有验证力**的。处置见下「产物能不能跑」一节 |
+
+### 产物能不能跑：`smoke-test` 与 `develop/qemu-smoke-tests/`
+
+**构建成功 ≠ 产物能跑。** 本仓为此加了一条机制：
+
+- workflow 传 `smoke-test: true` → `build-package.yml` 在构建之后**真的跑一遍产物**；
+- 判据脚本放 `develop/qemu-smoke-tests/<包名>.sh`，**本地与 CI 是同一份**；
+- 跨架构时 CI 装 `qemu-user-static` 并**断言 binfmt 处理器已注册**——没注册就失败，
+  **绝不静默跳过**；开了开关却没有脚本，同样判失败（「测试缺失即失败」）；
+- 包定义里应记明**该架构为什么需要现编**（本仓实例：`packages/opencode-telegram.nix`
+  头部写了两处 gyp 陷阱——交叉构建的 PATH 上没有裸 `gcc` 会让 `<!()` 命令展开成空串，
+  以及 `force_build=1` 必须显式给，否则 target 退化成 `type: none`、`make` 只盖 stamp）。
+
+**给判据脚本写反证**（本仓规矩）：临时删掉被依赖的东西再跑一遍，必须红。
+`opencode-telegram.sh` 当时的三个反证是：删 `better_sqlite3.node`、删整个模块目录、
+把 CLI 换成假的——三个都应失败。
+
+**新包加架构时**：`build-package.yml` 的「Resolve the package file」表是**唯一的出处**
+（riscv64 需要另一个构建文件时登记在那儿，先例 `codewhale` → `codewhale-src.nix`）；
+**能建就建，别急着摘**。
 
 ### 一次可用的检查流程
 
