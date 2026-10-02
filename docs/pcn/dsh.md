@@ -180,6 +180,49 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 > **二配布方式**：`nixosMode` / `maintenanceMode` dsh-nixos-shell 包 **seed-once** 方式 `$DSH_HOME/.agent-presets/<id>` copy（対象既存時 上書無、用戶後續編集尊重）；`newsThreeElements` **独立包** `dsh-preset-news-three-elements` 提供——模組 該 `share/dsh-agent-presets` `agent-presets` roster 之追加 root 登録、預設 store 直接読取、copy 無・書込無、更新即最新。各模式挙動・組合構造・維護規則 上表文書参照。
 
+### dsh 0.2.0 於 預設格式之変化（準備段階）
+
+dsh 0.2.0 Agent 預設 保持方式 再構築、**目録型預設経路 削除**：
+
+| | 0.1.x（現行 deploy 使用中） | 0.2.0 |
+|---|---|---|
+| 預設形態 | `$DSH_HOME/.agent-presets/<id>/` 目録 | profile 用戶 patch 層（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）内 loader patch 一條 |
+| 組合與 metadata | `agent.cordis.yml`（完全組合）+ `preset.yml`（`name` / `description`） | `@deepseek-ai/dsh-agent-preset` 行 `config.plugins`（插件行）+ `config.name` / `config.description` |
+| 検出方法 | `@deepseek-ai/dsh-agent-presets`（複数形）root 走査 | Loader 樹 自身；複数形包 0.2.0 既不存在 |
+| roster 並順 | 無 | `config.order`（内蔵預設 1–4 占有、預設間 一意必須） |
+
+**現在状態：準備段階、未移行。** 本 repo 新格式 file `packages/dsh-nixos-shell/presets/{nixos-mode,maintenance-mode}/preset.patch.yml` 追加、旧 `agent.cordis.yml` / `preset.yml` 與 **二重併存**（0.1.x 経路 依然 旧 file 使用）；`develop/check-preset-derivation.py` 両経路 派生関係 同時検証。`modules/dsh.nix` 依然 0.1.x seed-once 方式 `$DSH_HOME/.agent-presets/<id>` copy、`packages/dsh.nix` 亦 `0.1.5-rc.2` 維持——**現時点 module／runtime 変更 一切 未着地**。各模式自体 説明 上表文書参照。
+
+新格式 file 実機 `dsh 0.2.0-rc.2`（臨時 `DSH_HOME` + `agentPresets/list`）検証済：`nixos`（order 10）與 `maintenance`（order 11） `broken` 両者 空。一行 包名 不存在物 変更、或 `tool-fs-search` 必須項目 `sampleOverCapGlobResults` 削除 → 同一 entry 直 具体 `broken` 報告——判定基準自体 識別力 有。
+
+旧 file 対 **三必然差異**（無修正 copy 破損）：
+
+1. **`baseUrl` 意味変化**。0.1.x 系 預設自身 目録、0.2.0 系 実測 **profile 目録**（`$DSH_HOME/profiles/<profile>/`）。旧 file skills root `new URL('skills/', baseUrl)` 記述、無修正移行 → `<profile>/skills/` 指、技能 **静黙消失**；新 file `baseUrl` 従 `@kihara777/dsh-nixos-shell` 包 root 解析、`presets/<mode>/` 連結——解析失敗 全預設 `broken` 化、「技能無」状態 退化無。
+2. metadata（旧 `preset.yml` `name` / `description`）`config.name` / `config.description` 移動。
+3. `config.order` 新設。
+
+**插件行毎 config schema 差異**（両経路 build 産物 各插件 `Config` schema 一行毎比較、`0.1.6-alpha.2` → `0.2.0-rc.2`）：
+
+| 插件行 | 変化 | 本預設 影響 |
+|--------|------|-------------|
+| `dsh-tool-bash` / `dsh-tool-pwsh` | 任意項目 `promoteOnTimeout` 追加（既定 `true`） | 本預設 該 key 未設定 → 0.2.0 以降 foreground bash timeout 到達時 殺害無、**background job 昇格**。挙動変化、着地前 受入 或 明示固定 判断必要 |
+| `dsh-tool-workflow` | 任意項目 `enableRunInBackground` 追加（既定 `true`） | 未設定 → background 能力 増加 |
+| `dsh-tool-ask-user` | 「Config 無」 → `{ mode?: "legacy" \| "timed", timeout?: -1 \| number }`（既定 `legacy` / `120`） | 未設定 → 旧版 同挙動 |
+| `dsh-compaction-basic` | 任意項目 `headroomTokens` 追加（`modelPolicies[]` 内 同名 field 同時追加） | 未設定 → 調整項目 一個 増加 而已 |
+| `dsh-tool-jobs` | `maxConsecutiveWakes` field 残存、schema 既定値出力 出現無 | 未設定 |
+| `dsh-tool-fs-search` | **変化無**：`sampleOverCapGlobResults` **必須真偽値**、0.1.6 時点 既 如此 | 旧 file 既 `false` 持、新 file 同 引継 |
+| 残 20 插件行 | schema 逐字同一 | 変更不要 |
+
+> 比較対象：`dsh-tool-subagent` `backgroundMode` / `maxDepth` 合併型、`dsh-plan-mode` 自前実装 厳格 `{ section }` 検証（未知 key 即 error）、及 本 repo `@kihara777/dsh-nixos-shell` 三行 含、何 変化無。
+
+**着地迄 残作業**（本 repo 未実施）：
+
+- `modules/dsh.nix`：0.2.0 系 預設「目録 copy」非、「`$DSH_HOME/profiles/<profile>/cordis.patch.yml` patch entry 書込」也；
+- 宿主面：0.1.x `agent-presets`（複数形）宿主行 及 該 settings namespace、0.2.0 内 `agent-preset-registry` 化——`default` 該行 **必須 config**（settings key 非）、settings 残存 `selectedDefault` 唯一（namespace 名 = 行 id）、`roots` 機構 全面消失（`settings.yaml` 内 既存 `agent-presets.default` 書換必要）；
+- 独立包 `dsh-preset-news-three-elements` 亦 目録型預設、併 変換必要；
+- 新格式 file persona 内「預設 `.agent-presets/<id>/` 居住」文言 0.2.0 成立無（file 内 `⚠️ 移行 TODO` comment 残置、意図的未修正——改変 場合 model 送信 prompt 変化 故）；
+- 上表 挙動変化 既定値（`promoteOnTimeout` 等）一件毎 判断。
+
 ## sudo 守護
 
 dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`）。`sudo.enable` systemd **套接字激活型 root 実行器**（`nixkits-sudo@.service`、接続毎 `nixkits-sudo-exec` 実行）配備、dsh service `NIXKITS_SUDO_SOCKET` 注入。nixos-shell 插件初期化時該套接字検出、存在時 `sudo` 參數有効化請求路由：

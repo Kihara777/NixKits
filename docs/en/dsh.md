@@ -180,6 +180,49 @@ A "mode" is a dsh **Agent preset**: each mode is one session shape with its own 
 
 > **Two distribution mechanisms**: `nixosMode` / `maintenanceMode` are **seed-once** copied by the dsh-nixos-shell package into `$DSH_HOME/.agent-presets/<id>` (an existing target is not overwritten, respecting later user edits); `newsThreeElements` comes from the **standalone package** `dsh-preset-news-three-elements` — the module registers its `share/dsh-agent-presets` as an extra root of the `agent-presets` roster, so the preset is read straight from the store: no copy, no seeding, and an upgrade is the update. Each mode's behavior, composition structure, and maintenance rules live in the docs linked above.
 
+### Preset format changes in dsh 0.2.0 (preparation phase)
+
+dsh 0.2.0 reworked how an Agent preset is carried, and the **directory-based preset channel was removed**:
+
+| | 0.1.x (what the current deployment uses) | 0.2.0 |
+|---|---|---|
+| Preset shape | a `$DSH_HOME/.agent-presets/<id>/` directory | one loader patch entry in the profile's user patch layer (`$DSH_HOME/profiles/<profile>/cordis.patch.yml`) |
+| Composition and metadata | `agent.cordis.yml` (the full composition) + `preset.yml` (`name` / `description`) | the `config.plugins` of an `@deepseek-ai/dsh-agent-preset` row, plus `config.name` / `config.description` |
+| Discovery | `@deepseek-ai/dsh-agent-presets` (plural) scans roots | the Loader tree itself; the plural package **no longer exists** in 0.2.0 |
+| Roster ordering | none | `config.order` (built-ins occupy 1–4; must be unique across presets) |
+
+**Current state: preparation phase, not migrated.** This repository has added the new-format files `packages/dsh-nixos-shell/presets/{nixos-mode,maintenance-mode}/preset.patch.yml`, coexisting with the old `agent.cordis.yml` / `preset.yml` (the 0.1.x channel still uses the old files); `develop/check-preset-derivation.py` now checks the derivation relation in both channels. `modules/dsh.nix` still seed-once copies into `$DSH_HOME/.agent-presets/<id>` and `packages/dsh.nix` is still `0.1.5-rc.2` — **no module or runtime change has landed**. Each mode's own description lives in the docs linked above.
+
+The new-format files were verified on a real `dsh 0.2.0-rc.2` instance (throwaway `DSH_HOME` + `agentPresets/list`): the `broken` field of both `nixos` (order 10) and `maintenance` (order 11) is empty; replace one row's package name with a nonexistent one, or drop `tool-fs-search`'s required `sampleOverCapGlobResults`, and that same entry immediately reports a concrete `broken` — the criterion has discriminating power.
+
+**Three necessary differences** from the old file (copying it verbatim would break):
+
+1. **`baseUrl` changed meaning.** In 0.1.x it is the preset's own directory; in 0.2.0 it is measured to be the **profile directory** (`$DSH_HOME/profiles/<profile>/`). The old file writes its skill roots as `new URL('skills/', baseUrl)`, which would point at `<profile>/skills/` and make the skills **vanish silently**; the new file resolves the `@kihara777/dsh-nixos-shell` package root from `baseUrl` and appends `presets/<mode>/` — a resolution failure makes the whole preset `broken` instead of degrading into "no skills".
+2. Metadata (the old `preset.yml` `name` / `description`) moved into `config.name` / `config.description`.
+3. `config.order` is new.
+
+**Per-plugin config schema differences** (each plugin package's `Config` schema compared row by row across the two build artifacts, `0.1.6-alpha.2` → `0.2.0-rc.2`):
+
+| Plugin row | Change | Effect on this preset |
+|------------|--------|-----------------------|
+| `dsh-tool-bash` / `dsh-tool-pwsh` | new optional `promoteOnTimeout` (default `true`) | this preset sets no such key → from 0.2.0 a foreground bash call that hits its timeout is **promoted to a background job** instead of being killed. A behavior change; decide whether to accept or pin it before landing |
+| `dsh-tool-workflow` | new optional `enableRunInBackground` (default `true`) | unset → gains background capability |
+| `dsh-tool-ask-user` | from "no Config" to `{ mode?: "legacy" \| "timed", timeout?: -1 \| number }` (defaults `legacy` / `120`) | unset → behavior matches the old release |
+| `dsh-compaction-basic` | new optional `headroomTokens` (the same field is added inside `modelPolicies[]`) | unset → one more tunable only |
+| `dsh-tool-jobs` | `maxConsecutiveWakes` is retained, but no longer appears in the schema's default output | unset |
+| `dsh-tool-fs-search` | **unchanged**: `sampleOverCapGlobResults` is a **required boolean**, and has been since 0.1.6 | the old file already carries `false`; the new file copies it |
+| The other 20 plugin rows | schema is byte-identical | no change needed |
+
+> The comparison covers `dsh-tool-subagent`'s `backgroundMode` / `maxDepth` union, `dsh-plan-mode`'s hand-rolled strict `{ section }` validation (an unknown key is an error), and this repository's three `@kihara777/dsh-nixos-shell` rows — none changed.
+
+**Still to do before landing** (not done in this repository yet):
+
+- `modules/dsh.nix`: under 0.2.0 a preset is no longer "copy a directory" but "write patch entries into `$DSH_HOME/profiles/<profile>/cordis.patch.yml`";
+- host plane: the 0.1.x `agent-presets` (plural) host row and its settings namespace become `agent-preset-registry` in 0.2.0 — `default` becomes a **required config of that row** (no longer a settings key), settings keeps only `selectedDefault` (the namespace name is the row id), and the `roots` mechanism is gone entirely (an existing `agent-presets.default` in `settings.yaml` must be rewritten);
+- the standalone package `dsh-preset-news-three-elements` is also a directory-based preset and must be converted too;
+- in the new-format files the persona's "presets live under `.agent-presets/<id>/`" wording no longer holds on 0.2.0 (a `⚠️ migration TODO` comment marks it in the file; it is deliberately unchanged, because rewriting it changes the prompt sent to the model);
+- decide, one by one, on the behavior-changing defaults in the table above (`promoteOnTimeout` and friends).
+
 ## Sudo daemon
 
 Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The nixos-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:

@@ -180,6 +180,49 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 > **二つの配布方式**：`nixosMode` / `maintenanceMode` は dsh-nixos-shell パッケージが **seed-once** で `$DSH_HOME/.agent-presets/<id>` へコピーする（対象が既に存在すれば上書きせず、ユーザーの後続編集を尊重する）；`newsThreeElements` は**独立パッケージ** `dsh-preset-news-three-elements` が提供する——モジュールはその `share/dsh-agent-presets` を `agent-presets` roster の追加ルートとして登録し、プリセットは store から直接読まれ、コピーも書込みもなく、更新即最新となる。各モードの挙動・コンポジション構造・保守ルールは上表のドキュメントを参照。
 
+### dsh 0.2.0 におけるプリセット形式の変化（準備段階）
+
+dsh 0.2.0 は Agent プリセットの保持方式を作り直し、**ディレクトリ型プリセットの経路は削除された**：
+
+| | 0.1.x（現行デプロイが使用中） | 0.2.0 |
+|---|---|---|
+| プリセットの形態 | `$DSH_HOME/.agent-presets/<id>/` ディレクトリ | profile のユーザー patch 層（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）内の一つの loader patch エントリ |
+| コンポジションとメタデータ | `agent.cordis.yml`（完全なコンポジション）+ `preset.yml`（`name` / `description`） | `@deepseek-ai/dsh-agent-preset` 行の `config.plugins`（プラグイン行）+ `config.name` / `config.description` |
+| 検出方法 | `@deepseek-ai/dsh-agent-presets`（複数形）が root を走査 | Loader ツリーそのもの；複数形パッケージは 0.2.0 に**既に存在しない** |
+| roster の並び順 | なし | `config.order`（内蔵プリセットが 1–4 を占め、プリセット間で一意でなければならない） |
+
+**現在の状態：準備段階、未移行。** 本リポジトリには新形式ファイル `packages/dsh-nixos-shell/presets/{nixos-mode,maintenance-mode}/preset.patch.yml` を追加し、旧 `agent.cordis.yml` / `preset.yml` と**二重に併存**させている（0.1.x 経路は依然として旧ファイルを使う）；`develop/check-preset-derivation.py` は両経路の派生関係を同時に検査する。`modules/dsh.nix` は依然として 0.1.x の seed-once 方式で `$DSH_HOME/.agent-presets/<id>` へコピーし、`packages/dsh.nix` も `0.1.5-rc.2` のままで——**現時点でモジュール／ランタイムの変更は一切入っていない**。各モード自体の説明は上表のドキュメントを参照。
+
+新形式ファイルは実機の `dsh 0.2.0-rc.2`（使い捨て `DSH_HOME` + `agentPresets/list`）で検証済み：`nixos`（order 10）と `maintenance`（order 11）の `broken` はいずれも空。いずれか一行のパッケージ名を存在しないものに変える、あるいは `tool-fs-search` の必須項目 `sampleOverCapGlobResults` を削ると、同じエントリが直ちに具体的な `broken` を報告する——判定基準そのものに識別力がある。
+
+旧ファイルに対する**三つの必然的な差異**（そのまま持ってくると壊れる）：
+
+1. **`baseUrl` の意味が変わった**。0.1.x ではプリセット自身のディレクトリだったが、0.2.0 では実測で **profile ディレクトリ**（`$DSH_HOME/profiles/<profile>/`）である。旧ファイルは skills ルートを `new URL('skills/', baseUrl)` と書いており、そのまま移すと `<profile>/skills/` を指して技能が**静かに消える**；新ファイルは `baseUrl` から `@kihara777/dsh-nixos-shell` のパッケージルートを解決し `presets/<mode>/` を連結する——解決に失敗すればプリセット全体が `broken` になり、「技能が無い」状態へ退化しない。
+2. メタデータ（旧 `preset.yml` の `name` / `description`）は `config.name` / `config.description` へ移動した。
+3. `config.order` が新設された。
+
+**プラグイン行ごとの config schema 差分**（両経路のビルド成果物にある各プラグインの `Config` schema を一行ずつ比較、`0.1.6-alpha.2` → `0.2.0-rc.2`）：
+
+| プラグイン行 | 変化 | 本プリセットへの影響 |
+|--------------|------|----------------------|
+| `dsh-tool-bash` / `dsh-tool-pwsh` | 任意項目 `promoteOnTimeout` を追加（既定 `true`） | 本プリセットは当該キーを設定していない → 0.2.0 からはフォアグラウンドの bash がタイムアウトに達すると殺されず**バックグラウンドジョブへ昇格**する。挙動変化であり、着地前に受け入れるか明示的に固定するかを決める必要がある |
+| `dsh-tool-workflow` | 任意項目 `enableRunInBackground` を追加（既定 `true`） | 未設定 → バックグラウンド能力が増える |
+| `dsh-tool-ask-user` | 「Config なし」から `{ mode?: "legacy" \| "timed", timeout?: -1 \| number }`（既定 `legacy` / `120`）へ | 未設定 → 旧版と同じ挙動 |
+| `dsh-compaction-basic` | 任意項目 `headroomTokens` を追加（`modelPolicies[]` 内にも同名フィールドを追加） | 未設定 → 調整項目が一つ増えるだけ |
+| `dsh-tool-jobs` | `maxConsecutiveWakes` は残るが、schema の既定値出力には現れなくなった | 未設定 |
+| `dsh-tool-fs-search` | **変化なし**：`sampleOverCapGlobResults` は**必須の真偽値**で、0.1.6 の時点で既にそうだった | 旧ファイルが既に `false` を持つ；新ファイルもそのまま引き継ぐ |
+| 残り 20 のプラグイン行 | schema は逐字同一 | 変更不要 |
+
+> 比較対象には `dsh-tool-subagent` の `backgroundMode` / `maxDepth` の合併型、`dsh-plan-mode` が自前実装する厳格な `{ section }` 検証（未知のキーは即エラー）、および本リポジトリの `@kihara777/dsh-nixos-shell` 三行も含まれ、いずれも変化はない。
+
+**着地までに残る作業**（本リポジトリでは未実施）：
+
+- `modules/dsh.nix`：0.2.0 ではプリセットは「ディレクトリをコピーする」ものではなく、`$DSH_HOME/profiles/<profile>/cordis.patch.yml` へ patch エントリを書き込むものになる；
+- ホスト側：0.1.x の `agent-presets`（複数形）ホスト行とその settings ネームスペースは 0.2.0 で `agent-preset-registry` になる——`default` は**その行の必須 config**（settings キーではなくなる）となり、settings に残るのは `selectedDefault` のみ（ネームスペース名は行の id）、`roots` の仕組みは丸ごと消える（`settings.yaml` にある既存の `agent-presets.default` は書き換えが必要）；
+- 独立パッケージ `dsh-preset-news-three-elements` もディレクトリ型プリセットであり、併せて変換が必要；
+- 新形式ファイルの persona にある「プリセットは `.agent-presets/<id>/` に住む」という文言は 0.2.0 では成立しない（ファイル内に `⚠️ 移行 TODO` コメントを残してあり、意図的に未修正——書き換えるとモデルへ送るプロンプトが変わるため）；
+- 上表の挙動を変える既定値（`promoteOnTimeout` など）を一件ずつ判断する。
+
 ## sudo デーモン
 
 dsh サンドボックス内では `sudo` の setuid が失われ、エージェントは昇格できない（例：`nixos-rebuild`）。`sudo.enable` は systemd の**ソケットアクティベーション型 root 実行器**（`nixkits-sudo@.service`、接続ごとに `nixkits-sudo-exec` を実行）を配備し、dsh サービスへ `NIXKITS_SUDO_SOCKET` を注入する。nixos-shell プラグインは初期化時にこのソケットを検出し、存在すれば `sudo` パラメータを有効化してリクエストをルーティングする：
