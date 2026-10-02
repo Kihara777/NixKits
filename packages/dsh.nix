@@ -6,10 +6,29 @@
   makeWrapper,
   python3,
   # version/hash/lock overridden for other channels (e.g. dsh-alpha)
-  version ? "0.1.5-rc.2",
-  hash ? "sha256-9MVIOdaegr8cOlpBqRDDzhQFzZ6dl9dTwMBPQGx9dIA=",
-  npmDepsHash ? "sha256-+/9XAzsADxOI4D+w9P6HsoOv4hKLFTeSGYmvWRCnBTg=",
+  #
+  # ── 通道语义（2026-10-02 迁移到 0.2.0）────────────────────────────────────
+  # 本包 = stable 通道，跟 npm `latest`。
+  #
+  # ⚠️ npm 的 dist-tag 在这里**不按字面排序**：`alpha` = 0.1.7-alpha.2（0.1.x
+  # 线的尾巴），而 `latest` = `next` = 0.2.0-rc.2 —— 即 **alpha 比 stable 低**。
+  # 所以「alpha 通道跟 `alpha` tag」这条老语义已经失效：`dsh-alpha` 改跟 `next`
+  # （语义是 0.2.x 线的最新预发布，见 dsh-alpha.nix 的注释）。两个通道因此都跨了
+  # 0.1.x → 0.2.x 这条线。
+  #
+  # 0.2.0 同时是一次**预设格式断层**：0.1.x 的 Agent 预设是
+  # `$DSH_HOME/.agent-presets/<id>/` 目录（0.2.0 起该通道被删除），0.2.0 改成
+  # profile 用户 patch 层（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）里的
+  # 一条 `@deepseek-ai/dsh-agent-preset` 条目。仓库 HEAD 只维护新格式；旧格式的
+  # 内容冻结在 packages/dsh-nixos-shell-stable.nix 钉住的 commit 里。
+  #
+  # `dshChannel` 供 modules/dsh.nix 判断本包属于哪个通道：stable 的**预设内容**
+  # 取自钉住的 rev（冻结），alpha 的跟 HEAD。
+  version ? "0.2.0-rc.2",
+  hash ? "sha256-vSeEfERc1opWWsH5HAa7vMdjnvkwcfZ4u1nF66/ziFk=",
+  npmDepsHash ? "sha256-7QtZIz8oDKi2eVHfmbLkdww5XxPvY7NP8ZmP5RxBzNY=",
   lockFile ? ./dsh-package-lock.json,
+  dshChannel ? "stable",
   # 允许局域网（非 loopback）浏览器读写设置，见 postInstall 中的说明。
   allowLanSettings ? false,
 }:
@@ -134,6 +153,11 @@ buildNpmPackage (finalAttrs: {
       exit 1
     fi
 '';
+
+  # 通道标识（stable/alpha）：modules/dsh.nix 据此决定预设内容取自哪个
+  # dsh-nixos-shell 变体（stable → 钉住的 rev，alpha → 仓库 HEAD）。
+  # 放在 passthru 里而不是 meta：它不是包的元数据，是给本仓模块读的接线信息。
+  passthru = { inherit dshChannel; };
 
   meta = {
     description = "DeepSeek Harness (DSH) — Everything is a Plugin";
