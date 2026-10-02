@@ -45,6 +45,10 @@
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
+      # 同上，但预设内容**冻结**在 dsh-nixos-shell-stable.nix 钉住的 rev
+      # （stable 通道用；默认变体跟仓库 HEAD）。modules/dsh.nix 按 dsh 通道自动
+      # 二选一，不需要用户手写。
+      dsh-nixos-shell-stable = pkgs.callPackage ./packages/dsh-nixos-shell-stable.nix { };
       dsh-api-balance      = pkgs.callPackage ./packages/dsh-api-balance.nix { };
       # 独立分发的 Agent 预设包（新闻三要素模式）：只装预设数据，模块把它
       # 注册为 agent-presets roster 的额外 root。

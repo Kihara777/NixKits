@@ -19,6 +19,7 @@ WORKFLOWS = os.path.join(ROOT, ".github", "workflows")
 EXEMPT = {
     "dsh": "随 dsh 上游发布，仓库只做包装与补丁，无独立构建矩阵",
     "dsh-alpha": "同 dsh：alpha 通道的薄包装",
+    "dsh-nixos-shell-stable": "不是独立包：dsh-nixos-shell.nix 的钉-rev 变体（同一 npm 依赖树、同一构建脚本，只换 presets 数据），由 dsh-nixos-shell 的 workflow 覆盖主构建",
     "godot-ai": "受上游依赖限制（详见 AGENTS.md），暂无构建 workflow",
     "codewhale-src": "不是独立包，而是 codewhale.nix 在 riscv64 上的源构建分支",
 }

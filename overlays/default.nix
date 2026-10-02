@@ -26,6 +26,9 @@ final: prev: {
   dsh-alpha            = final.callPackage ../packages/dsh-alpha.nix { };
   # NixOS-aware shell tool plugin for dsh (fixes "spawn bash ENOENT").
   dsh-nixos-shell      = final.callPackage ../packages/dsh-nixos-shell.nix { };
+  # 同一插件的**预设内容冻结**变体（presets/ 取自钉住的 rev，stable 通道用）。
+  # modules/dsh.nix 按 dsh 通道自动二选一，见 nixkits.dsh.presets.package。
+  dsh-nixos-shell-stable = final.callPackage ../packages/dsh-nixos-shell-stable.nix { };
   # API 用量余额插件: webui 用量显示旁添加「用量 / 开销」标签切换。
   dsh-api-balance      = final.callPackage ../packages/dsh-api-balance.nix { };
   # 独立分发的 Agent 预设包（新闻三要素模式）。
