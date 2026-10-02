@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T17:09:33+09:00
+
+**摘要**：feat(skills): 更新確認 「push 後：CI 構築 検証」節 新設（四言語）— **独立 節 為 理由**：local 構築成功 CI 緑 意味 不 —— local Binary cache 命中 可能、且 現在 架構 限 覆。多架構 包 場合、他方 架構 検証 可能 者 **CI 限**。**判据 三 規律**：全 `status` `queued`/`in_progress` 離 迄 判定 不（未完 実行 集計 内「出現 不」、「失敗 無」 最 誤認 易）、`--commit` 依 絞（否則 前回 古 失敗 読）、失敗 必 **log 原文** 見。**先 分類 後 動**：rate 制限 與 揺 偶発、hash 不一致 與 lock 不自洽 真失敗、特定 架構 限 赤 判定保留、且 **「全緑 然 log `copying path … from cache` 尽」 可疑** —— CI 通 事 CI 構築 事 同 非。判据 log 内 実際 fetch / build 段 有無。**対話的選択肢**：失敗時 其場 問、**全** 失敗項 與 其 性質（偶発 / 真失敗 / 判定保留）一度 示、選択肢 再実行、修正 後 **commit 追加**（push 済 履歴 書換 不）、該 batch 巻戻 含、各形態 修復方案 併記。「修正 不 緑 迄 再実行」 明示的 禁 —— 判据 同一 失敗 **異 実行** 同 log 現 事。**適配層 本倉 形態 補**：`build-package.yml` 再利用可能 骨組、包×架構 毎 一 workflow、`ci-summary.yml` 徽章 描画。一度 push 約 34 workflow 起動 事 `llama-cpp-ver` 403 構造的原因。実測 四 失敗形態（403 偶発 / codewhale-riscv64 hash / blender-mcp 取源 403 / 緑 然 全 cache）與 各自 処置 技能 記録。
+
+| 提交 | 説明 |
+|------|------|
+| `6ff84e3` | feat(skills): 更新检查新增「推送后验证 CI 构建」环节（四语） |
+
 ## 2026-10-02T17:03:13+09:00
 
 **摘要**：上流更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四言語文書同期）。**二項 暫緩**：`dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 全 hash 算出 且 構築 通過 雖、**preset mount 検証 未通過** —— 以 0.2.0-rc.2 構成 with-plugins 実例、本機 探針（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）内 `agentPresets/list` roster **此 二 preset 出現 不**（「送検 0 份」）。**対照実験** 同一 探針・同一 preset 現行 0.1.6-alpha.2 対 実行、二 何 也 ✓ 且 故意 壊 夹具 broken 判定 —— 故 判据 自身 識別力 有、問題 0.2.0 側 在。然 **未 区別**：preset 形式 非互換 或 探針 最小限 `DSH_HOME` 新版 不足 之 何 也。`godot-ai` 4.2.3 同 暫緩：fail-closed pin 表 9 項 自 14 項 拡張、`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `httpx2` / `httpcore2` / `mcp-types` / `sniffio` 新規追加 —— 且 **`mcp-types` nixpkgs 内 存在 不**。構造的変更 故、新規 包定義 與 二 overlay 書直 必要。**併 静黙欠陥 一 修正**：`dsh` `postPatch` 元「`devDependencies` 自 文件末尾 迄 截断」削除、此 写法 devDependencies **最後** 頂層 field 場合 限 成立。0.2.0-rc.2 以降 `exports` 其 後 在 故、旧 侭 実行 則 `exports` 也 削除（`./profile-boot` 等 子 path 導出 失効、而 **構築 其侭 成功**）。按塊 匹配 且 末尾 comma 修復 awk 変更、二 実 tarball（0.1.5-rc.2「末尾」配置 與 0.2.0-rc.2「中間」配置）離線 検証 —— 何 也 JSON 解析 可能。**別途 確認**：`.github/workflows/` 固定 SHA action 三 何 也 上流 最新、且 `nix-installer-action` `# main` 注釈 照合 結果 **正確**（該 SHA main HEAD 且 v23 tag）。**第 0 步 実測**：着手前 遠端 照合 —— 未閉 issue 0、未閉 PR 0。

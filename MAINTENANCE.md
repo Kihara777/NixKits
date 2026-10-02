@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:09:33+09:00
+
+**摘要**：feat(skills): 更新检查新增「推送后：验证 CI 构建」环节（四语）— **为什么值得独立一节**：本地构建成功 ≠ CI 会绿——本地可能命中二进制缓存，且只覆盖当前架构；多架构包的另一个架构，CI 是**唯一**的验证途径。**判据三条纪律**：等 `status` 全部离开 `queued`/`in_progress` 再判定（未完成的运行在统计里「不出现」，最易被误当成「没有失败」）、按 `--commit` 过滤（否则读到上一轮的旧失败）、失败必须看到**日志原文**。**失败先分类再动手**：限流 / 抖动属偶发，hash 不符与 lock 不自洽属真失败，只有某架构红属待判，而**「全绿但日志全是 `copying path … from cache`」属可疑**——CI 通过 ≠ 它构建过，判据是日志里有没有实际的 fetch / build 阶段。**交互式选项**：失败时当场提问，一次列出**所有**失败项及各自性质（偶发 / 真失败 / 待判），选项含重跑、修补后**追加**提交（不改写已推送历史）、回退该批，并附各形态的修复方案；明确禁止「用重跑到绿代替修复」——判据是同一失败在**不同运行**里以同样日志出现。**适配层补本仓形态**：`build-package.yml` 为可复用骨架，每包每架构一个 workflow，`ci-summary.yml` 渲染徽章；一次 push 触发约 34 个 workflow 正是 `llama-cpp-ver` 403 的结构成因；四条实测失败形态（403 偶发 / codewhale-riscv64 hash / blender-mcp 取源 403 / 绿但全是缓存）与各自处置一并记入技能。
+
+| 提交 | 说明 |
+|------|------|
+| `6ff84e3` | feat(skills): 更新检查新增「推送后验证 CI 构建」环节（四语） |
+
 ## 2026-10-02T17:03:13+09:00
 
 **摘要**：上游更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四语文档同步）。**两项暂缓**：`dsh` 0.2.0-rc.2 与 `dsh-alpha` 0.1.7-alpha.2 虽已算出全部 hash 并构建通过，但**预设挂载验证未通过**——用本机探针（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）对 0.2.0-rc.2 构造的 with-plugins 实例，`agentPresets/list` 的 roster 里**没有这两份预设**（「送检 0 份」）；**对照实验**用同一探针、同一份预设跑当前 0.1.6-alpha.2，两预设 ✓ 且故意坏掉的夹具被判 broken —— 故判据本身有区分度，问题出在 0.2.0 侧，但**尚不能区分**是预设格式不兼容还是探针的极简 `DSH_HOME` 在新版本下不再够用。`godot-ai` 4.2.3 同样暂缓：其 fail-closed pin 表从 9 项扩到 14 项，`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `httpx2` / `httpcore2` / `mcp-types` / `sniffio`，其中 **`mcp-types` 在 nixpkgs 里不存在**——属结构性改动，需新增包定义与重写两个 overlay。**顺带修一处静默缺陷**：`dsh` 的 `postPatch` 原先按「从 `devDependencies` 截断到文件末尾」删除，该写法只在 devDependencies 是**最后一个**顶层字段时成立；0.2.0-rc.2 起 `exports` 排在它之后，照旧执行会把 `exports` 一并删掉（`./profile-boot` 等子路径导出失效，而**构建照样成功**）。已改为按块匹配 + 尾逗号修复的 awk，并在两份真实 tarball（0.1.5-rc.2 的「末尾」布局与 0.2.0-rc.2 的「中间」布局）上离线验证 JSON 均可解析。**另查**：`.github/workflows/` 三个固定 SHA 的 action 均已是上游最新，且 `nix-installer-action` 的 `# main` 注释经核对**准确**（该 SHA 同时是 main 的 HEAD 与 v23 tag）。**第 0 步实测**：开工前核对远端，0 个未关闭 issue、0 个未关闭 PR。
