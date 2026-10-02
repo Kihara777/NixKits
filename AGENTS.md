@@ -218,7 +218,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 | `preset-derivation` | `develop/check-preset-derivation.py` | 维护模式**完整派生**自 NixOS模式（末尾恰好追加固定块，`MAINTENANCE_DELTA` 常量） |
 | `preset-bundle` | `develop/check-preset-bundle.py` | 包内技能快照与仓库 `skills/` 树**逐字节一致** |
 | `workflow-coverage` | `develop/check-workflows.py` | 每个包都有 `build-<包>-<架构>.yml`（例外须在脚本内登记） |
-| `doc-links` | `develop/check-doc-links.py` | 文档相对链接可达 + 语言切换器四语齐全 |
+| `doc-links` | `develop/check-doc-links.py` | 文档相对链接可达 + 语言切换器四语齐全（**`docs/` 下必须存在，且在全文里查找**；其余文件只看文件头） |
 | `doc-versions` | `develop/check-doc-versions.py` | `docs/<lang>/<pkg>.md` 的版本行与包定义一致（含多通道表；例外在 `EXEMPT` 登记） |
 | `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名 |
 | `news-mode-tests` | `packages/dsh-preset-news-three-elements/tests/mode.test.mjs` | 新闻三要素模式插件的**行为测试**（node，非 python） |

@@ -10,6 +10,12 @@
 这里对仓库内全部 Markdown 逐个解析相对链接并核对目标存在，同时校验切换器行里
 四种语言的标签齐全。外部链接（http/https/mailto）与纯锚点不检查。
 
+**范围（2026-10-02 收紧）**：`docs/` 下的文档**必须**带切换器，且在**全文**里找它；
+其余文件只在文件头校验「找到了的」切换器。收紧的理由是一次注入实测：旧版只扫
+`lines[:8]`，而 `docs/*/ruyi.md` 的切换器在第 13–14 行（前面十行是 CI 徽章）——
+那四份文档的切换器**从来没被校验过**，检查却一直打印 "switchers consistent"；
+同理，整行删掉切换器也一直是静默通过。反证见仓库维护日志 2026-10-02 条目。
+
 挂入 `nix flake check`（checks.doc-links），CI 每次 push 执行。
 """
 import os
@@ -23,6 +29,24 @@ SWITCHER_LABELS = ("中文", "English", "日本語", "偽中国語")
 
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 SWITCHER_LINE = re.compile(r"\[?(中文|English|日本語|偽中国語)\]?")
+
+# 哪些目录下的文档**必须**带语言切换器（其余目录只校验「找到了的」切换器）。
+SWITCHER_REQUIRED_DIR = "docs"
+
+
+def find_switcher(lines: list):
+    """返回第一个形如切换器的行；找不到返回 None。
+
+    形状判据沿用旧版：至少 2 个竖线、至少含 3 个语言标签——门槛设在 3 是为了让
+    「只掉了一个标签」的残缺切换器仍被认出来（认出来后由标签完整性判据报错）；
+    掉到 2 个标签时不再被认作切换器，但 `docs/` 下会由「必须带切换器」兜住。
+    """
+    for line in lines:
+        if line.count("|") < 2:
+            continue
+        if len(SWITCHER_LINE.findall(line)) >= 3:
+            return line
+    return None
 
 # `skills/write-project-docs/templates.md` ships placeholder targets on purpose
 # (`](...)`, `../en/<module>.md`); a template is not a navigation target.
@@ -77,24 +101,38 @@ def check_links(path: str, text: str) -> list:
 
 def check_switcher(path: str, lines: list) -> list:
     problems = []
-    for line in lines[:8]:
-        if line.count("|") < 2:
-            continue
-        labels = SWITCHER_LINE.findall(line)
-        if len(labels) < 3:
-            continue
-        missing = [label for label in SWITCHER_LABELS if label not in labels]
-        if missing:
+    relative = os.path.relpath(path, ROOT)
+    in_docs = relative.split(os.sep)[0] == SWITCHER_REQUIRED_DIR
+
+    # `docs/` 下的文档：**必须**有切换器，且在**全文**里找。
+    # 为什么是全文：`docs/*/ruyi.md` 的切换器在第 13–14 行（前面十行是 CI 徽章），
+    # 而旧版只扫 `lines[:8]` —— 那四份文档的切换器因此**从来没被校验过**，
+    # 检查却一直打印 "switchers consistent"（2026-10-02 用注入发现）。
+    #
+    # 其余文件仍只看文件头：`skills/write-project-docs/templates.md` 这类正文会
+    # **示范**切换器写法（一个文件里出现多处），那是例子不是导航，全文匹配会抓错行。
+    line = find_switcher(lines) if in_docs else find_switcher(lines[:8])
+
+    if line is None:
+        if in_docs:
             problems.append(
-                f"{os.path.relpath(path, ROOT)}: switcher misses {', '.join(missing)}"
+                f"{relative}: docs/ 下的文档必须带语言切换器"
+                f"（{'、'.join(SWITCHER_LABELS)} 四个标签齐全，当前语言写成纯文本），未找到"
             )
-        linkless = [label for label in SWITCHER_LABELS if f"[{label}]" not in line]
-        if len(linkless) != 1:
-            problems.append(
-                f"{os.path.relpath(path, ROOT)}: switcher must leave exactly one label "
-                f"plain (the current language), found {len(linkless)}"
-            )
-        break
+        return problems
+
+    labels = SWITCHER_LINE.findall(line)
+    missing = [label for label in SWITCHER_LABELS if label not in labels]
+    if missing:
+        problems.append(
+            f"{relative}: switcher misses {', '.join(missing)}"
+        )
+    linkless = [label for label in SWITCHER_LABELS if f"[{label}]" not in line]
+    if len(linkless) != 1:
+        problems.append(
+            f"{relative}: switcher must leave exactly one label "
+            f"plain (the current language), found {len(linkless)}"
+        )
     return problems
 
 
