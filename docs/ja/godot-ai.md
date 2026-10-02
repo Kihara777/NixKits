@@ -12,9 +12,9 @@ Godotエンジン向けの本格的なMCPサーバーおよびAIツール — MC
 |------|-----|
 | タイプ | Python アプリ（MCPサーバー）|
 | 上流 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| バージョン | `4.1.0` |
+| バージョン | `4.2.3` |
 | ライセンス | MIT |
-| Python | ≥ 3.11 |
+| Python | ≥ 3.11, < 3.15 |
 
 ## アーキテクチャ
 
@@ -27,25 +27,36 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## 依存関係
 
-**v4 以降は fail-closed な厳密固定**：起動時に以下の 9 パッケージの**正確な版**を照合し、一つでも異なれば `RuntimeError` を送出して起動を拒否します。nixpkgs は 5 つで遅れているため、`overlays/godot-ai-v4-deps.nix` が上流の要求まで引き上げます。
+**v4 以降は fail-closed な厳密固定**：起動時に以下の 14 パッケージの**正確な版**を照合し、一つでも異なれば `RuntimeError` を送出して起動を拒否します。4.2.3 で 9 項目から 14 項目に増え（`fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` を追加）、`mcp` はメジャーバージョンをまたぎました（1.29.1 → 2.2.0：上流が wire types を独立ディストリビューション `mcp-types` に分離し、HTTP クライアントを `httpx2` に変更）。
 
 | 依存 | バージョン | 提供元 |
 |------|-----------|--------|
-| fastmcp | `3.4.7` | `overlays/fastmcp.nix` |
-| anyio | `4.14.2` | nixpkgs |
-| mcp | `1.29.1` | `overlays/godot-ai-v4-deps.nix` |
-| websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
-| pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
-| httpx | `0.28.1` | nixpkgs |
-| uvicorn | `0.52.4` | `overlays/godot-ai-v4-deps.nix` |
-| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
+| anyio | `4.15.1` | `overlays/godot-ai-v4-deps.nix` |
+| fastmcp | `4.0.5` | `overlays/fastmcp.nix` |
+| fastmcp-slim | `4.0.5` | `overlays/fastmcp.nix` |
 | h11 | `0.16.0` | nixpkgs |
+| httpx | `0.28.1` | nixpkgs |
+| httpx2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| httpcore2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| mcp | `2.2.0` | `overlays/godot-ai-v4-deps.nix` |
+| mcp-types | `2.2.0` | `overlays/godot-ai-v4-deps.nix`（nixpkgs に存在せず、上流ソースから新規定義） |
+| pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
+| sniffio | `1.3.1` | nixpkgs |
+| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
+| uvicorn | `0.53.0` | `overlays/godot-ai-v4-deps.nix` |
+| websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
+
+> 上表の 14 行は `packages/godot-ai.nix` の `dependencies` と**一対一に対応**し（数もバージョンも同一）、上流 `runtime_dependencies.py` の pin 表とも一致します。
+
+> **mcp-types**：nixpkgs に存在しないため、`overlays/godot-ai-v4-deps.nix` が上流の同一リポジトリ（`modelcontextprotocol/python-sdk` の `src/mcp-types/`）から新規定義しています。
 
 > **pydantic-core**：pydantic 2.13.5 は `pydantic-core==2.46.5` を要求します（nixpkgs は 2.46.4）。同パッケージは Rust ビルドのため、引上げ時は `cargoDeps` も再取得が必要です。
 
 > **ビルド時の pin**：上流は `[build-system].requires` に `setuptools==84.0.0` を固定しています（nixpkgs は 83.0.0）。パッケージ内の `postPatch` で緩和しています——この pin は再現性の守りであり機能要件ではありません。
 
 > **検証を打ち消すパッチにしない理由**：v4 の厳密固定はその安全境界（接続／本文／フレーム／セッションの予算）に奉仕するものです。`runtime_dependencies.py` を緩めればその境界を静かに弱めることになります。ゆえに「検証を nixpkgs に合わせる」のではなく「依存を上流に合わせて引き上げる」方を採ります。
+
+> **二つの overlay は両方とも実際に効いている必要があります**：`overlays/fastmcp.nix` と `overlays/godot-ai-v4-deps.nix` は 2 か所（`flake.nix` の `godotPkgs` と `overlays/default.nix`）で連結され、どちらも nixpkgs の `pythonPackagesExtensions` 経由で取り付けます。`python312.override { packageOverrides = …; }` を使うと後者が前者を**置き換え**、fastmcp の上書きが黙って捨てられたままビルドは成功します。
 
 ## インストールと使用方法
 

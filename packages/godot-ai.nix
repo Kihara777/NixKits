@@ -7,28 +7,29 @@
 
 python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
-  version = "4.1.0";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "hi-godot";
     repo = "godot-ai";
     tag = "v${version}";
-    hash = "sha256-9e88tOY2pOe/4iuy6W09PSgWmQpcbZ2Rc2/Z5AEUWKE=";
+    # ⚠️ 改 version 必须连 hash 一起改，且**先把 hash 置成 lib.fakeHash 再构建**取真值：
+    # 固定输出派生的输出路径由 hash 决定，留着旧 hash 改 version 会让 Nix 直接复用旧版本
+    # 的源码树——构建在一份与 version 不符的代码上跑完，而且**不报任何错**。
+    hash = "sha256-8OQsZycLSWR+jQ48S7V9Ckl4zBOPC0HM130BPVtjwQU=";
   };
 
   pyproject = true;
 
-  # godot-ai's pyproject.toml uses setuptools.build_meta; buildPythonApplication
-  # must declare build-system or the pypa build phase fails with
-  # "Backend 'setuptools.build_meta' is not available".
+  # 上游 pyproject.toml 用 setuptools.build_meta；buildPythonApplication 必须显式声明
+  # build-system，否则 pypa 构建阶段报
+  # "Backend 'setuptools.build_meta' is not available"。
   #
-  # v4 pins `setuptools==84.0.0` in [build-system].requires while nixpkgs ships
-  # 83.0.0, so the pypa build phase aborts with "Unmet dependencies
-  # (checked against .../python3.12): setuptools==84.0.0 wanted: ==84.0.0
-  # found: 83.0.0".  The pin is an upstream reproducibility guard, not a
-  # feature requirement — relax it to the nixpkgs-provided version instead of
-  # vendoring a second setuptools, so the build uses the toolchain the rest of
-  # the closure is built with.
+  # v4 在 [build-system].requires 里写死 `setuptools==84.0.0`，而 nixpkgs 提供的是
+  # 83.0.0，构建会中止于 "Unmet dependencies (checked against .../python3.12):
+  # setuptools==84.0.0 wanted: ==84.0.0 found: 83.0.0"。该 pin 是可复现性守卫、
+  # 不是功能需求——放宽到 nixpkgs 的版本，而不是再 vendor 一份 setuptools，
+  # 这样整个闭包都用同一套工具链构建。4.2.3 仍保留这个 pin，故 postPatch 继续有效。
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires = ["setuptools==84.0.0"]' 'requires = ["setuptools"]'
@@ -38,38 +39,43 @@ python312.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  # v4.0.0+ exact-pins every runtime distribution (see the [project].dependencies
-  # block) because its security limits touch narrow FastMCP/Uvicorn/websockets
-  # internals.  `godot_ai.runtime_dependencies.verify_runtime_dependencies()`
-  # re-checks all nine at process start and **raises** on any mismatch — it
-  # refuses to start rather than warn.
+  # v4.0.0+ 精确锁定每一个运行时发行版（见 pyproject 的 [project].dependencies），
+  # 因为它的安全上限触及 FastMCP / Uvicorn / websockets 的窄接口内部。
+  # `godot_ai.runtime_dependencies.verify_runtime_dependencies()` 在进程启动时
+  # **复查全部十四个**，任一不符即抛错——拒绝启动，而不是警告。
   #
-  # The five package versions below come from `overlays/godot-ai-v4-deps.nix`,
-  # which moves nixpkgs' copies up to exactly what upstream expects (mcp,
-  # pydantic + pydantic-core, starlette, uvicorn, websockets).  That overlay is
-  # what makes this package runnable; nothing here relaxes upstream's contract.
+  # 下面十四条与上游 pin 表**一一对应**。4.2.3 由 9 项增至 14 项：新增
+  # fastmcp-slim / httpx2 / httpcore2 / mcp-types / sniffio，且 mcp 跨大版本
+  # （1.29.1 → 2.2.0，上游把 wire types 拆成独立发行版）、fastmcp 3.4.7 → 4.0.5。
   #
-  # `fastmcp` comes from `overlays/fastmcp.nix` (nixpkgs pins 3.3.1, which has a
-  # circular-import bug in fastmcp.server); `anyio`/`httpx`/`h11` already match
-  # nixpkgs.  `dontCheckRuntimeDeps` silences `pythonRuntimeDepsCheckHook`
-  # (nixpkgs >= 2026-08-05), which would otherwise reject the build for the
-  # `setuptools` pin that `postPatch` relaxes above.
-  dontCheckRuntimeDeps = true;
-
+  # 版本来源分三处，缺一不可：
+  #   - overlays/fastmcp.nix        → fastmcp、fastmcp-slim
+  #   - overlays/godot-ai-v4-deps.nix → anyio、httpx2、httpcore2、mcp、mcp-types、
+  #                                     pydantic(+core)、starlette、uvicorn、websockets
+  #   - nixpkgs 直接满足            → h11 0.16.0、httpx 0.28.1、sniffio 1.3.1
+  #
+  # 这里**不设** `dontCheckRuntimeDeps`：构建期的 `pythonRuntimeDepsCheckHook` 会拿
+  # 本包的 wheel 元数据（即上面 14 个精确 pin）去比对 PYTHONPATH 上的实际版本，
+  # 不符就让构建失败——那是比「构建成功、运行时才崩」更早的一道判据。
+  # 它不能替代运行期校验（判据不同层），但让失败发生在更便宜的地方。
   dependencies = with python312.pkgs; [
     fastmcp
-    mcp
+    fastmcp-slim
     anyio
+    mcp
+    mcp-types
     websockets
     pydantic
     httpx
+    sniffio
+    httpx2
+    httpcore2
     uvicorn
     starlette
     h11
   ];
 
-  # Tests split into unit/ and integration/; integration tests require a
-  # live Godot editor instance, unavailable in the sandbox.
+  # 测试分 unit/ 与 integration/；后者需要活的 Godot 编辑器实例，沙箱里没有。
   doCheck = false;
 
   # `godot-ai` 默认走 attach 桥：主进程会**再 spawn 一个后端**，命令行是
@@ -93,9 +99,13 @@ python312.pkgs.buildPythonApplication rec {
   # `pydantic_core` / `platformdirs` 这类深层依赖同样必须在 PYTHONPATH 上。
   # 只展开一层是不够的（fastmcp → fastmcp-slim → platformdirs 有三层）。
   #
+  # ⚠️ 闭包必须覆盖 4.2.3 的**新**传递依赖（mcp-types、httpx2、httpcore2、
+  # sniffio……）。历史事故：只展开一层导致子进程 `No module named godot_ai`
+  # 或运行期 pin 校验读不到包——构建期一切正常，实跑才炸。
+  #
   # 注意不要用 `d.pythonPath`：那个属性来自 `python3.pkgs` 的**另一份**包
-  # （如 nixpkgs 的 pydantic 2.13.4），会绕开本包经 overlay 抬上去的精确
-  # 版本（2.13.5），导致 fail-closed 校验失败。故一律取 drv 自身的 outPath。
+  # （如 nixpkgs 的 pydantic 2.13.4），会绕开本包经 overlay 抬上去的精确版本
+  # （2.13.5），导致 fail-closed 校验失败。故一律取 drv 自身的 outPath。
   #
   # 闭包用 fixpoint 展开 `propagatedBuildInputs`；以 outPath 去重、排序，
   # 保证求值可复现（Nix 对 list 顺序敏感）。

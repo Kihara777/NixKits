@@ -12,9 +12,9 @@ Production-grade MCP server and AI tools for the Godot engine — connects MCP c
 |------|-------|
 | Type | Python application (MCP server) |
 | Upstream | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| Version | `4.1.0` |
+| Version | `4.2.3` |
 | License | MIT |
-| Python | ≥ 3.11 |
+| Python | ≥ 3.11, < 3.15 |
 
 ## Architecture
 
@@ -27,25 +27,36 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## Dependencies
 
-**Fail-closed exact pins since v4**: at startup it verifies the **exact version** of the nine packages below and raises `RuntimeError` on any mismatch, refusing to start. nixpkgs lags on five of them, so `overlays/godot-ai-v4-deps.nix` raises them to what upstream requires.
+**Fail-closed exact pins since v4**: at startup it verifies the **exact version** of the fourteen packages below and raises `RuntimeError` on any mismatch, refusing to start. 4.2.3 grew the list from nine to fourteen — adding `fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` — and moved `mcp` across a major version (1.29.1 → 2.2.0: upstream split the wire types into the standalone `mcp-types` distribution and switched its HTTP client to `httpx2`).
 
 | Dependency | Version | Source |
 |------------|---------|--------|
-| fastmcp | `3.4.7` | `overlays/fastmcp.nix` |
-| anyio | `4.14.2` | nixpkgs |
-| mcp | `1.29.1` | `overlays/godot-ai-v4-deps.nix` |
-| websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
-| pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
-| httpx | `0.28.1` | nixpkgs |
-| uvicorn | `0.52.4` | `overlays/godot-ai-v4-deps.nix` |
-| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
+| anyio | `4.15.1` | `overlays/godot-ai-v4-deps.nix` |
+| fastmcp | `4.0.5` | `overlays/fastmcp.nix` |
+| fastmcp-slim | `4.0.5` | `overlays/fastmcp.nix` |
 | h11 | `0.16.0` | nixpkgs |
+| httpx | `0.28.1` | nixpkgs |
+| httpx2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| httpcore2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| mcp | `2.2.0` | `overlays/godot-ai-v4-deps.nix` |
+| mcp-types | `2.2.0` | `overlays/godot-ai-v4-deps.nix` (absent from nixpkgs; definition built from upstream source) |
+| pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
+| sniffio | `1.3.1` | nixpkgs |
+| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
+| uvicorn | `0.53.0` | `overlays/godot-ai-v4-deps.nix` |
+| websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
+
+> The fourteen rows above map one-to-one onto `dependencies` in `packages/godot-ai.nix` (same count, same versions), and match the pin table in upstream's `runtime_dependencies.py`.
+
+> **mcp-types**: not present in nixpkgs; `overlays/godot-ai-v4-deps.nix` defines it from upstream's own repository (`src/mcp-types/` in `modelcontextprotocol/python-sdk`).
 
 > **pydantic-core**: pydantic 2.13.5 requires `pydantic-core==2.46.5` (nixpkgs ships 2.46.4). That package is Rust-built, so bumping it means re-fetching `cargoDeps` as well.
 
 > **Build-time pin**: upstream hardcodes `setuptools==84.0.0` in `[build-system].requires` (nixpkgs ships 83.0.0); the package's `postPatch` relaxes it — that pin is a reproducibility guard, not a feature requirement.
 
 > **Why not patch the check out**: v4's exact pins serve its security boundaries (connection / body / frame / session budgets), so relaxing `runtime_dependencies.py` would silently weaken that boundary. We raise the dependencies to match upstream rather than bending the check to nixpkgs.
+
+> **Both overlays must actually take effect**: `overlays/fastmcp.nix` and `overlays/godot-ai-v4-deps.nix` are chained in two places (`godotPkgs` in `flake.nix` and `overlays/default.nix`), and both attach through nixpkgs' `pythonPackagesExtensions`. With `python312.override { packageOverrides = …; }` the second one **replaces** the first, silently dropping the fastmcp overrides while the build still succeeds.
 
 ## Install & Usage
 

@@ -19,9 +19,12 @@
     allSystems = flake-utils.lib.defaultSystems ++ [ "riscv64-linux" ];
   in flake-utils.lib.eachSystem allSystems (system: let
     pkgs = nixpkgs.legacyPackages.${system};
-    # godot-ai needs both overlays chained: fastmcp >= 3.4 (3.3.x has the
-    # circular-import bug) plus the exact runtime versions its v4 fail-closed
-    # contract verifies at startup.  Keep in sync with overlays/default.nix.
+    # godot-ai 需要这两个 overlay **同时**链上：fastmcp/fastmcp-slim 要 4.0.5，
+    # 其余运行时包要与 v4 fail-closed 校验表逐项相等（4.2.3 共 14 项）。
+    # 两者缺一，`godot-ai --version` 都会崩在启动校验上。
+    # ⚠️ 这里与 overlays/default.nix 是**两个落点**，必须同步——只改一处时构建产物
+    # 仍用旧依赖：构建通过，运行即死（历史事故）。
+    # 两文件都经 nixpkgs 的 `pythonPackagesExtensions` 挂载（可叠加），故与先后顺序无关。
     godotPkgs = (pkgs.extend self.overlays.fastmcp).extend self.overlays.godot-ai-v4-deps;
     kitsfmtDrv = pkgs.callPackage ./packages/kitsfmt.nix { };
   in {
