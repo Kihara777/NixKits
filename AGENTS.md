@@ -234,7 +234,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 > 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——
 > 不要在文档中硬编码数量（`check-doc-versions` 只校验版本号，不校验此类计数）。
 
-构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`），触发条件为 push / 每小时 / 手动。
+构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；**opencode-telegram** 自 2026-10-02 起同样摘掉 riscv64——其直接依赖 `better-sqlite3` 没有 riscv64 预编译、且 v13 起不再带 `install` 脚本，本包又在启动时静态 import 它，于是「能构建、一启动就抛」，而本机没有 riscv64 硬件可验证运行；细节见 `packages/opencode-telegram.nix` 头部。godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`），触发条件为 push / 每小时 / 手动。
 
 > **⚠️ `ci-summary` 必须按 `head_sha` 过滤（竞态陷阱）**：该 workflow 由 push 触发，
 > 会在**同一轮 push 的构建尚未完成时**启动。若不加 `head_sha` 过滤，某些 workflow 的
