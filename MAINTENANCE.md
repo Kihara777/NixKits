@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:39:30+09:00
+
+**摘要**：feat(dsh): 声明式设置面补全 —— 结构化选项 7 → **13**，新增 6 个类型化 namespace（四语）— 补齐的正是维护者本机在用的三个：`permission`、`web-search-deepseek`、`agent-presets`（此前只能走无类型的 `cfg.settings.<ns>` 逃生舱），另加 `subagent`、`shell`、`llm-deepseek`。**这套选项的意义**是把「拼错或越界只在运行时被静默丢弃」变成**求值期报错**。**顺带用实测修正三处既有判断**：① namespace 总数 **12 → 15**（旧 grep 只看 `installSection`，漏了走 `settings.register` 的路径）；② 「`shell.cwd` 无默认值 ⇒ 不能部分声明」**是错的**——schemastery 里没写 `.required()` 的字段本就可选；③ 模块头部注释「typo 与越界都静默」**只对一半**——实测 object 是**开放**的，typo 被保留（真字段吃默认，完全静默），而类型错 / 越界**会响**（该 namespace 注册失败、热更新打 warn `keeping last good`）。注释与四语文档均已改为准确表述。**故意不做**（理由写入注释）：`llm-pi-ai`（`api` 枚举是随版本漂移的开放集合，类型化会腐化）、`ui-onboarding`（纯客户端状态）、`web-search-deepseek.apiKey`（`role("secret")`，写进 settings.yaml 等于落到世界可读的 `/nix/store`）。**验证**：最小 NixOS 配置（13 段全开 + 一处逃生舱覆盖）求值通过；生成的 `settings.yaml` 含全部新段、`builtins.fromJSON` 可解析、逃生舱优先于结构化值；负例（enum / 类型 / 范围 / 跨字段 assertion）各自在求值期报错；`nix flake check` 全绿，并核验被检查的 source 快照与工作区**逐字节一致**（不是缓存的旧树）。
+
+| 提交 | 说明 |
+|------|------|
+| `0f12640` | feat(dsh): 声明式设置面补全 —— 新增 6 个类型化 namespace（13 个结构化选项，四语） |
+
 ## 2026-10-02T17:33:52+09:00
 
 **摘要**：godot-ai 4.1.0 → 4.2.3（结构性升级）— fail-closed 运行时校验表从 **9 项扩到 14 项**：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `mcp-types` / `httpx2` / `httpcore2` / `sniffio`；其中 **`mcp-types` 在 nixpkgs 里不存在**（2.x 把 wire types 拆成独立发行版），取上游同仓库 `src/mcp-types/` 子项目新增定义。**本次最重要的发现是一处结构性缺陷**：两个 overlay 原先各自用 `python312.override { packageOverrides = …; }`，而链式 `.extend` 下**后者替换前者**——fastmcp overlay 的全部 Python 覆盖被**静默丢弃**（`fastmcp-slim` 实际仍是 nixpkgs 旧版），**而构建照样成功**；历史事故「只链一处导致旧依赖」的真根因就在这里。已改用 nixpkgs 官方可叠加扩展点 `pythonPackagesExtensions`（与顺序无关）。**验证四条**：构建通过；**实跑 `godot-ai --version` → `godot-ai 4.2.3`**（fail-closed 校验未拒绝启动）；用产物自身的 PYTHONPATH 查 `importlib.metadata` **14/14 精确命中**；`nix flake check` 全绿（真实构建了 6 个 check）。另**移除 `dontCheckRuntimeDeps`**——让构建期 hook 也判一次，同一张 pin 表多一道更早的判据。**泛化**：新增「陷阱 8 · 链式 overlay 的后一个 python 覆盖会静默替换前一个」，写进通用技能。

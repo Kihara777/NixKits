@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T17:39:30+09:00
+
+**摘要**：feat(dsh): 宣言的設定面 補全 —— 構造化 option 7 → **13**、新規 6 型別 namespace（四言語）— 補 者 正 維護者 本機 使用 中 三：`permission`、`web-search-deepseek`、`agent-presets`（以前 無型 `cfg.settings.<ns>` 逃生口 限）、更 `subagent`、`shell`、`llm-deepseek`。**此 options 意義** 「誤記 / 範囲外 実行時 静黙 破棄」 **求值期 error** 化。**併 実測 依 既存判断 三箇所 修正**：① namespace 総数 **12 → 15**（旧 grep `installSection` 限 見、`settings.register` 経路 漏）；② 「`shell.cwd` 既定値 無 ⇒ 部分宣言 不可」**誤** —— schemastery 内 `.required()` 無 字段 本来 任意；③ module 冒頭 「typo 與 範囲外 何 也 静黙」**半分 限 正** —— 実測 object **開放**、typo 保持（真 field 既定値 食、完全 静黙）、然 型 誤 / 範囲外 **鳴**（該 namespace 登録 失敗、熱更新 `keeping last good` warn）。注釈 與 四言語文書 正確 記述 変更。**意図的 不実行**（理由 注釈 記載）：`llm-pi-ai`（`api` 列挙 pi-ai 版 依 移 開放集合、型付 腐）、`ui-onboarding`（純 client 状態）、`web-search-deepseek.apiKey`（`role("secret")` —— settings.yaml 記載 鍵 世界 読 可能 `/nix/store` 置 等）。**検証**：最小 NixOS 設定（13 段 全有効 + 逃生口 一箇所 上書）求值 通過；生成 `settings.yaml` 全 新設段 含、`builtins.fromJSON` 解析 可能、逃生口 構造化値 優先；負例（enum / 型 / 範囲 / 横断 field assertion）各 求值期 error；`nix flake check` 全緑、且 検査 対象 source snapshot 作業 tree 與 **byte 単位 一致** 確認（古 cache tree 非）。
+
+| 提交 | 説明 |
+|------|------|
+| `0f12640` | feat(dsh): 声明式设置面补全 —— 新增 6 个类型化 namespace（13 个结构化选项，四语） |
+
 ## 2026-10-02T17:33:52+09:00
 
 **摘要**：godot-ai 4.1.0 → 4.2.3（構造的昇級）— fail-closed 実行時 pin 表 **9 項 自 14 項** 拡大：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `mcp-types` / `httpx2` / `httpcore2` / `sniffio` 新規追加。**`mcp-types` nixpkgs 内 存在 不**（2.x wire types 独立配布物 分割）故、上流 同一 repo `src/mcp-types/` 子 project 自 定義 新規追加。**今回 最 重要 発見 構造的欠陥**：二 overlay 以前 各自 `python312.override { packageOverrides = …; }` 記載、然 連鎖 `.extend` 下 **後者 前者 置換** —— fastmcp overlay Python 上書 全部 **静黙 破棄**（`fastmcp-slim` 実際 nixpkgs 旧版 侭）、**然 構築 成功 続**。過去 事故「片方 限 連鎖 古 依存 残」真 根因 此 在。nixpkgs 公式 重 合 可能 拡張点 `pythonPackagesExtensions`（順序 依存 不）変更。**検証 四**：構築 通過；**成果物 自身 実行** `godot-ai 4.2.3`（fail-closed 検証 起動 拒否 不）；成果物 自身 PYTHONPATH 以 `importlib.metadata` 照会 **14/14 正確 一致**；`nix flake check` 全緑（6 check 実際 構築）。`dontCheckRuntimeDeps` **削除**、構築期 hook 同 pin 表 一段 早 判定。**汎化**：汎用技能 「罠 8 · 連鎖 overlay 後 python 上書 前者 静黙 置換」追加。

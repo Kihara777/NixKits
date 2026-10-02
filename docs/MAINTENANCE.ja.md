@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:39:30+09:00
+
+**概要**：feat(dsh): 宣言的な設定面の補完 —— 構造化オプション 7 → **13**、6 つの型付き namespace を新設（四言語）— 補ったのはまさに保守者の本機が使っている三つ：`permission`、`web-search-deepseek`、`agent-presets`（従来は無型の `cfg.settings.<ns>` 逃生口しかなかった）、加えて `subagent`、`shell`、`llm-deepseek`。**これらのオプションの意義**は「打ち間違いや範囲外は実行時に静黙で捨てられる」を**求値期のエラー**に変えることにある。**併せて実測で既存の判断を三箇所修正**：① namespace 総数 **12 → 15**（旧 grep は `installSection` しか見ておらず、`settings.register` の経路を漏らしていた）；② 「`shell.cwd` に既定値がない ⇒ 部分宣言できない」は**誤り** —— schemastery で `.required()` を書いていないフィールドはもともと任意である；③ モジュール冒頭の「typo も範囲外も静黙」は**半分しか正しくない** —— 実測すると object は**開放**で、typo は保持され（真のフィールドは既定値を食べ、完全に静黙）、型エラーや範囲外は**鳴る**（当該 namespace の登録が失敗し、ホットリロードが `keeping last good` を warn する）。コメントと四言語ドキュメントを正確な記述に改めた。**意図的に行わなかった**（理由はコメントに記載）：`llm-pi-ai`（`api` の列挙は pi-ai の版で移ろう開放集合であり、型付けすると腐る）、`ui-onboarding`（純粋なクライアント状態）、`web-search-deepseek.apiKey`（`role("secret")` —— settings.yaml に書くことは鍵を世界可読の `/nix/store` に置くことに等しい）。**検証**：最小の NixOS 設定（13 段すべて有効 + 逃生口で 1 箇所上書き）が求値通過；生成された `settings.yaml` は全新設段を含み、`builtins.fromJSON` で解析でき、逃生口が構造化値に優先する；負例（enum / 型 / 範囲 / 横断フィールド assertion）がそれぞれ求値期にエラー；`nix flake check` 全緑、しかも検査対象の source スナップショットが作業ツリーと**バイト単位で一致**することを確認（古いキャッシュツリーではない）。
+
+| コミット | 説明 |
+|------|------|
+| `0f12640` | feat(dsh): 声明式设置面补全 —— 新增 6 个类型化 namespace（13 个结构化选项，四语） |
+
 ## 2026-10-02T17:33:52+09:00
 
 **概要**：godot-ai 4.1.0 → 4.2.3（構造的な昇格）— fail-closed な実行時 pin 表が **9 項から 14 項へ**拡大：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（いずれも大版本跨ぎ）、さらに `mcp-types` / `httpx2` / `httpcore2` / `sniffio` が新規追加。**`mcp-types` は nixpkgs に存在しない**（2.x で wire types が独立した配布物に分割された）ため、上流同一リポジトリの `src/mcp-types/` サブプロジェクトから定義を新規追加した。**今回最も重要な発見は構造的欠陥**：二つの overlay は以前それぞれ `python312.override { packageOverrides = …; }` を書いていたが、連鎖した `.extend` の下では**後者が前者を置換する** —— fastmcp overlay の Python 上書きはすべて**静黙で捨てられ**（`fastmcp-slim` は実際には nixpkgs の旧版のまま）、**それでもビルドは成功し続けていた**。過去の事故「片方しか連鎖させないと古い依存が残る」の真の根因はここにある。nixpkgs 公式の重ね合わせ可能な拡張点 `pythonPackagesExtensions`（順序に依存しない）へ変更した。**検証は四つ**：ビルド通過；**成果物そのものを実行**して `godot-ai 4.2.3`（fail-closed 検証が起動を拒否しなかった）；成果物自身の PYTHONPATH で `importlib.metadata` を照会し **14/14 が正確に一致**；`nix flake check` 全緑（6 つの check を実際にビルド）。`dontCheckRuntimeDeps` を**削除**し、ビルド期のフックにも同じ pin 表を一段早く判定させた。**泛化**：汎用技能に「罠 8 · 連鎖 overlay の後ろの python 上書きは前のものを静黙で置換する」を追加。
