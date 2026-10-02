@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T17:33:52+09:00
+
+**摘要**：godot-ai 4.1.0 → 4.2.3（構造的昇級）— fail-closed 実行時 pin 表 **9 項 自 14 項** 拡大：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `mcp-types` / `httpx2` / `httpcore2` / `sniffio` 新規追加。**`mcp-types` nixpkgs 内 存在 不**（2.x wire types 独立配布物 分割）故、上流 同一 repo `src/mcp-types/` 子 project 自 定義 新規追加。**今回 最 重要 発見 構造的欠陥**：二 overlay 以前 各自 `python312.override { packageOverrides = …; }` 記載、然 連鎖 `.extend` 下 **後者 前者 置換** —— fastmcp overlay Python 上書 全部 **静黙 破棄**（`fastmcp-slim` 実際 nixpkgs 旧版 侭）、**然 構築 成功 続**。過去 事故「片方 限 連鎖 古 依存 残」真 根因 此 在。nixpkgs 公式 重 合 可能 拡張点 `pythonPackagesExtensions`（順序 依存 不）変更。**検証 四**：構築 通過；**成果物 自身 実行** `godot-ai 4.2.3`（fail-closed 検証 起動 拒否 不）；成果物 自身 PYTHONPATH 以 `importlib.metadata` 照会 **14/14 正確 一致**；`nix flake check` 全緑（6 check 実際 構築）。`dontCheckRuntimeDeps` **削除**、構築期 hook 同 pin 表 一段 早 判定。**汎化**：汎用技能 「罠 8 · 連鎖 overlay 後 python 上書 前者 静黙 置換」追加。
+
+| 提交 | 説明 |
+|------|------|
+| `32bcf22` | chore(pkgs): godot-ai 4.1.0 → 4.2.3 —— 依赖表 9→14、mcp 2.2.0、fastmcp 4.0.5、新增 mcp-types（四语） |
+| `828af9c` | refactor(skills): 泛化链式 overlay 的替换语义陷阱（改用 pythonPackagesExtensions） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 4.1.0 | 4.2.3 |
+| 　 | 実行時依存 pin 表 | 9 項 → 14 項 |
+| 　 | src hash / overlay 掛方 | 再計算；両 overlay 重 合 可能 方式 至 |
+
 ## 2026-10-02T17:09:33+09:00
 
 **摘要**：feat(skills): 更新確認 「push 後：CI 構築 検証」節 新設（四言語）— **独立 節 為 理由**：local 構築成功 CI 緑 意味 不 —— local Binary cache 命中 可能、且 現在 架構 限 覆。多架構 包 場合、他方 架構 検証 可能 者 **CI 限**。**判据 三 規律**：全 `status` `queued`/`in_progress` 離 迄 判定 不（未完 実行 集計 内「出現 不」、「失敗 無」 最 誤認 易）、`--commit` 依 絞（否則 前回 古 失敗 読）、失敗 必 **log 原文** 見。**先 分類 後 動**：rate 制限 與 揺 偶発、hash 不一致 與 lock 不自洽 真失敗、特定 架構 限 赤 判定保留、且 **「全緑 然 log `copying path … from cache` 尽」 可疑** —— CI 通 事 CI 構築 事 同 非。判据 log 内 実際 fetch / build 段 有無。**対話的選択肢**：失敗時 其場 問、**全** 失敗項 與 其 性質（偶発 / 真失敗 / 判定保留）一度 示、選択肢 再実行、修正 後 **commit 追加**（push 済 履歴 書換 不）、該 batch 巻戻 含、各形態 修復方案 併記。「修正 不 緑 迄 再実行」 明示的 禁 —— 判据 同一 失敗 **異 実行** 同 log 現 事。**適配層 本倉 形態 補**：`build-package.yml` 再利用可能 骨組、包×架構 毎 一 workflow、`ci-summary.yml` 徽章 描画。一度 push 約 34 workflow 起動 事 `llama-cpp-ver` 403 構造的原因。実測 四 失敗形態（403 偶発 / codewhale-riscv64 hash / blender-mcp 取源 403 / 緑 然 全 cache）與 各自 処置 技能 記録。

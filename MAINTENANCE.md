@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:33:52+09:00
+
+**摘要**：godot-ai 4.1.0 → 4.2.3（结构性升级）— fail-closed 运行时校验表从 **9 项扩到 14 项**：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `mcp-types` / `httpx2` / `httpcore2` / `sniffio`；其中 **`mcp-types` 在 nixpkgs 里不存在**（2.x 把 wire types 拆成独立发行版），取上游同仓库 `src/mcp-types/` 子项目新增定义。**本次最重要的发现是一处结构性缺陷**：两个 overlay 原先各自用 `python312.override { packageOverrides = …; }`，而链式 `.extend` 下**后者替换前者**——fastmcp overlay 的全部 Python 覆盖被**静默丢弃**（`fastmcp-slim` 实际仍是 nixpkgs 旧版），**而构建照样成功**；历史事故「只链一处导致旧依赖」的真根因就在这里。已改用 nixpkgs 官方可叠加扩展点 `pythonPackagesExtensions`（与顺序无关）。**验证四条**：构建通过；**实跑 `godot-ai --version` → `godot-ai 4.2.3`**（fail-closed 校验未拒绝启动）；用产物自身的 PYTHONPATH 查 `importlib.metadata` **14/14 精确命中**；`nix flake check` 全绿（真实构建了 6 个 check）。另**移除 `dontCheckRuntimeDeps`**——让构建期 hook 也判一次，同一张 pin 表多一道更早的判据。**泛化**：新增「陷阱 8 · 链式 overlay 的后一个 python 覆盖会静默替换前一个」，写进通用技能。
+
+| 提交 | 说明 |
+|------|------|
+| `32bcf22` | chore(pkgs): godot-ai 4.1.0 → 4.2.3 —— 依赖表 9→14、mcp 2.2.0、fastmcp 4.0.5、新增 mcp-types（四语） |
+| `828af9c` | refactor(skills): 泛化链式 overlay 的替换语义陷阱（改用 pythonPackagesExtensions） |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| godot-ai | 4.1.0 | 4.2.3 |
+| 　 | 运行时依赖 pin 表 | 9 项 → 14 项 |
+| 　 | src hash / overlay 覆盖 | 重算；两个 overlay 改可叠加挂载 |
+
 ## 2026-10-02T17:09:33+09:00
 
 **摘要**：feat(skills): 更新检查新增「推送后：验证 CI 构建」环节（四语）— **为什么值得独立一节**：本地构建成功 ≠ CI 会绿——本地可能命中二进制缓存，且只覆盖当前架构；多架构包的另一个架构，CI 是**唯一**的验证途径。**判据三条纪律**：等 `status` 全部离开 `queued`/`in_progress` 再判定（未完成的运行在统计里「不出现」，最易被误当成「没有失败」）、按 `--commit` 过滤（否则读到上一轮的旧失败）、失败必须看到**日志原文**。**失败先分类再动手**：限流 / 抖动属偶发，hash 不符与 lock 不自洽属真失败，只有某架构红属待判，而**「全绿但日志全是 `copying path … from cache`」属可疑**——CI 通过 ≠ 它构建过，判据是日志里有没有实际的 fetch / build 阶段。**交互式选项**：失败时当场提问，一次列出**所有**失败项及各自性质（偶发 / 真失败 / 待判），选项含重跑、修补后**追加**提交（不改写已推送历史）、回退该批，并附各形态的修复方案；明确禁止「用重跑到绿代替修复」——判据是同一失败在**不同运行**里以同样日志出现。**适配层补本仓形态**：`build-package.yml` 为可复用骨架，每包每架构一个 workflow，`ci-summary.yml` 渲染徽章；一次 push 触发约 34 个 workflow 正是 `llama-cpp-ver` 403 的结构成因；四条实测失败形态（403 偶发 / codewhale-riscv64 hash / blender-mcp 取源 403 / 绿但全是缓存）与各自处置一并记入技能。

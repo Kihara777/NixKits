@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-02T17:33:52+09:00
+
+**Summary**: godot-ai 4.1.0 → 4.2.3 (a structural upgrade) — the fail-closed runtime pin table grew from **9 entries to 14**: `mcp` 1.29.1 → **2.2.0** and `fastmcp` 3.4.7 → **4.0.5** (both cross-major), plus new `mcp-types` / `httpx2` / `httpcore2` / `sniffio`; **`mcp-types` does not exist in nixpkgs** (2.x split the wire types into their own distribution), so a definition was added from the same upstream repo's `src/mcp-types/` subproject. **The most important find is a structural defect**: both overlays used to write `python312.override { packageOverrides = …; }`, and under chained `.extend` **the later one replaces the earlier** — every Python override from the fastmcp overlay was **silently dropped** (`fastmcp-slim` was still nixpkgs' old build) **while the build kept succeeding**; that is the real root cause behind the historical "chaining only one place leaves stale dependencies" incident. Both now use nixpkgs' official stackable `pythonPackagesExtensions` (order-independent). **Four verifications**: the build passes; **running the artifact itself** gives `godot-ai 4.2.3` (the fail-closed check did not refuse to start); querying `importlib.metadata` through the artifact's own PYTHONPATH hits **14/14**; and `nix flake check` is fully green (really building 6 checks). `dontCheckRuntimeDeps` was **removed**, letting the build-time hook judge the same pin table one stage earlier. **Generalised**: a new "trap 8 — the later python override in a chained overlay silently replaces the earlier one" in the generic skill.
+
+| Commit | Description |
+|------|------|
+| `32bcf22` | chore(pkgs): godot-ai 4.1.0 → 4.2.3 —— 依赖表 9→14、mcp 2.2.0、fastmcp 4.0.5、新增 mcp-types（四语） |
+| `828af9c` | refactor(skills): 泛化链式 overlay 的替换语义陷阱（改用 pythonPackagesExtensions） |
+
+| Package | Old | New |
+|--------|--------|--------|
+| godot-ai | 4.1.0 | 4.2.3 |
+| 　 | runtime dependency pin table | 9 entries → 14 |
+| 　 | src hash / overlay mounting | recomputed; both overlays switched to stackable mounting |
+
 ## 2026-10-02T17:09:33+09:00
 
 **Summary**: feat(skills): the update check gains an "after pushing: verify the CI build" section (four languages) — **Why it earns its own section**: a successful local build does not mean CI goes green — locally it may hit a binary cache, and it only covers the current architecture; for multi-architecture packages, CI is the **only** way the other architecture ever gets verified. **Three disciplines for the criterion**: wait until every `status` has left `queued`/`in_progress` (an unfinished run "does not appear" in summaries and is the easiest thing to mistake for "no failures"); filter by `--commit` (otherwise you read the previous round's old failure); and a failure must be seen in its **raw log**. **Classify before acting**: rate limits and flakiness are transient, hash mismatches and inconsistent locks are real, red on a single architecture is undetermined, and **"green but the log is all `copying path … from cache`" is suspect** — CI passing is not the same as CI having built anything; the criterion is whether the log actually contains fetch/build phases. **Interactive options**: on failure, ask right away and list **every** failing item with its nature (transient / real / undetermined) in one round, offering re-run, patch-then-**append** (never rewrite pushed history), or revert that batch, plus the repair path per shape; "re-running until green instead of fixing" is explicitly rejected — the criterion is the same failure with the same log across **different runs**. **The adapter adds this repo's shape**: `build-package.yml` is the reusable skeleton, one workflow per package per architecture, and `ci-summary.yml` renders the badge; ~34 workflows per push is the structural cause of the `llama-cpp-ver` 403s; four measured failure shapes (transient 403 / codewhale-riscv64 hash / blender-mcp fetch 403 / green-but-all-cache) are recorded with their handling.
