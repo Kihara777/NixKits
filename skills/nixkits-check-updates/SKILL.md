@@ -323,15 +323,18 @@ codewhale = if pkgs.stdenv.hostPlatform.isRiscV
 > 取预编译 hash：`nix store prefetch-file <url> --json`（0.9.13 实测 cli 与
 > tui 资产 hash 相同，四值可两两相同，但**仍要分别填入**）。
 
-### godot-ai v4 的 fail-closed 运行时校验（2026-09-17 实测）
+### godot-ai v4 的 fail-closed 运行时校验（2026-09-17 实测，2026-10-02 更新）
 
-godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒绝启动。本仓用
-**两个链式 overlay** 满足它（通用方法见通用技能陷阱第 5 条）：
+godot-ai 4.x 启动时校验运行时包的精确版本，不匹配即拒绝启动。**4.1.0 是 9 项，
+4.2.3 增至 14 项**（新增 `fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` /
+`sniffio`；`mcp` 1.29.1 → 2.2.0 跨大版本，wire types 拆成独立发行版
+`mcp-types`，HTTP 客户端换成 `httpx2`）。本仓用**两个 overlay** 满足它
+（通用方法见通用技能陷阱第 5 条）：
 
 | overlay | 作用 |
 |---|---|
-| `overlays/fastmcp.nix` | fastmcp 3.3.1 → 3.4.7（3.3.x 有 circular-import bug） |
-| `overlays/godot-ai-v4-deps.nix` | mcp / pydantic(+core) / starlette / uvicorn / websockets 抬到上游要求 |
+| `overlays/fastmcp.nix` | fastmcp / fastmcp-slim 抬到上游要求（4.0.5）；4.0.5 的 fastmcp 本体是空壳发行版，代码全在 slim |
+| `overlays/godot-ai-v4-deps.nix` | anyio / httpx2 / httpcore2 / mcp / **mcp-types（nixpkgs 无此包，源内新建定义）** / pydantic(+core) / starlette / uvicorn / websockets 抬到上游要求 |
 
 > ⚠️ **两处必须同步**：`flake.nix` 的 `godotPkgs` 与 `overlays/default.nix` 的
 > `godot-ai` 各自链了这两个 overlay。**只改一处会导致 `nix build .#godot-ai`
@@ -340,6 +343,15 @@ godot-ai 4.x 启动时校验 9 个运行时包的精确版本，不匹配即拒�
 >
 > 另：`pythonRuntimeDepsCheckHook` 相关的 `dontCheckRuntimeDeps = true` 只解决
 > **构建期**；**运行期**校验必须靠 overlay 真正抬版本，不能靠它绕过。
+> 4.2.3 升级时改回不设该开关（依赖表与闭包精确对齐时构建期钩子能过），
+> 于是同一个 pin 表多了一道**更早**的判据——但两者判据不同层，运行期实跑仍不可省。
+
+> ⚠️ **两个 overlay 必须真叠加，而不只是「都写了」**（2026-10-02 实测）：
+> 两文件原先各自 `python312.override { packageOverrides = …; }`，而链式 extend
+> 下**后者替换前者**——fastmcp overlay 的覆盖被静默丢弃，`python312.pkgs.fastmcp-slim`
+> 仍是 nixpkgs 旧版，**构建照样成功**。已改为 nixpkgs 的可叠加扩展点
+> `pythonPackagesExtensions`（与顺序无关）。通用机制与自查判据见通用技能
+> `traps.md` 第 8 条——那里同时给出了「一条 eval 就能判出覆盖是否被丢」的命令。
 
 ### blender-mcp 的 Gitea 取源（2026-09-17 实测）
 

@@ -364,4 +364,51 @@ curl -sL "https://raw.githubusercontent.com/<owner>/<repo>/<rev>/pyproject.toml"
 nix log .#<pkg> 2>/dev/null | grep -E '[0-9]+ passed'
 ```
 
+### 8. 链式 overlay：后一个 python 覆盖会**静默替换**前一个
+
+当一个仓库用两个 overlay 分别抬 python 包版本，再在 flake 里把它们链起来：
+
+```nix
+godotPkgs = (pkgs.extend self.overlays.fastmcp).extend self.overlays.godot-ai-v4-deps;
+```
+
+而两个 overlay 都各自写：
+
+```nix
+python312 = prev.python312.override { packageOverrides = pyFinal: pyPrev: { … }; };
+```
+
+那么**后一个会把前一个的 `packageOverrides` 整个替换掉**——前一个 overlay 的全部
+python 覆盖被静默丢弃，而**构建照样成功**。实测（2026-10-02，某仓 godot-ai
+4.1.0 → 4.2.3）：链式结果里 `python312.pkgs.fastmcp-slim` 仍是 nixpkgs 的旧版，
+fastmcp overlay 完全没生效；只有当**运行期**判据（`--version` 的 fail-closed 校验）
+打到时才会暴露。两个 overlay **单独**用都是对的——错只在「链起来」这一步。
+
+**修法**：改用 nixpkgs 官方的**可叠加**扩展点 `pythonPackagesExtensions`：
+
+```nix
+# 每个 overlay 各自追加一条，不需知道对方的 packageOverrides
+pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [ (pyFinal: pyPrev: { … }) ];
+```
+
+多个 overlay 各自 `++` 即自动叠加，**与先后顺序无关**；且 python 解释器自身的
+`outPath` 不变（`packageOverrides` 在派生属性里被显式过滤），不会引发无谓重建。
+
+**自查判据**（一条 eval，比构建便宜得多；先自证它能失败，再去判别人）：
+
+```bash
+nix eval --impure --json --expr '
+let f = builtins.getFlake (toString ./.);
+    pkgs = f.inputs.nixpkgs.legacyPackages.x86_64-linux;
+    a = pkgs.extend f.overlays.<overlay-1>;
+    b = a.extend f.overlays.<overlay-2>;
+in { single = a.python312.pkgs.<被抬的包>.version;
+     chained = b.python312.pkgs.<被抬的包>.version; }'
+# single = 新版本、chained = 旧版本  → overlay-1 的覆盖被丢掉了
+```
+
+> **同源教训**：凡「链式拼装」的机制，都要先问一句「是叠加还是替换？」
+> 答案是「替换」时，失败形态几乎总是**静默降级**（悄悄地用了旧版、少了覆盖），
+> 而不是报错。判据要落在**最终产物**上，不能落在「两份配置都写了」。
+
 
