@@ -1,6 +1,6 @@
 ---
 name: nixkits-check-updates
-description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的四语文档同步、dsh 内置插件清单同步（含插件改名令预设硬失败的排查）、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
+description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的远端 issue / PR 形态（含与更新重叠的历史先例）、四语文档同步、dsh 内置插件清单同步（含插件改名令预设硬失败的排查）、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
 ---
 
 # NixKits 软件包更新（仓库适配层）
@@ -26,9 +26,39 @@ NixKits 特有环节。
 | 变更记录 | `MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`，由 `write-maintenance-log` 技能维护 |
 | 不可锁定输入 | `llama-cpp-ver`（浮动追踪 llama.cpp 最新版），故 **`flake.lock` 不提交** |
 | 额外同步 | 升级 `dsh` 时须同步内置插件清单（见下） |
+| 远端信号 | 每轮开工前先核对未关闭 issue / PR（第 0 步）——本仓有与更新重叠的历史先例（见下） |
 | 子项目 | `dsh-api-balance` 薄封装引用同账户子仓 `Kihara777/dsh-api-balance`（见下） |
 | 固定 SHA 的 action | `actions/checkout` / `DeterminateSystems/nix-installer-action` / `cachix/cachix-action`——本仓**不启用任何外部依赖自动化**，全靠通用技能检查（见下） |
 | 泛化要求 | 修复后评估可泛化内容，更新回 `nix-flake-update-check` |
+
+## 第 0 步补充：远端 issue / PR（本仓坐标与形态）
+
+通用技能第 0 步的流程（fetch → issue → PR → 判据）对本仓完全适用，
+此处只补本仓特有的事实。
+
+| 项 | NixKits 的取值 |
+|---|---|
+| 仓库坐标 | `Kihara777/NixKits`（仓库内可用 `gh repo view` 从 remote 自动推导，不必写死） |
+| issue 功能 | **已启用**（`gh api repos/Kihara777/NixKits --jq .has_issues` → `true`） |
+| 实测现状 | **2026-10-02：0 个未关闭 issue、0 个未关闭 PR** |
+| 写权限校验 | AGENTS.md「访问控制」那条命令是**写操作**的前置；第 0 步只读，不重复它 |
+
+### 为什么本仓尤其不能跳过这一步：已经发生过
+
+下面全部是本仓**真实收到过**的外部信号——它们证明「issue / PR 与本轮更新重叠」
+是**先例**，不是理论风险：
+
+| 信号 | 与本轮工作的重叠点 |
+|---|---|
+| PR **#6**（`ci: bump actions/checkout 4.4.0 → 7.0.1`，已合并） | 正是**第 2 步末节**的 action 检查对象——若它当时仍在途，本轮就该先看它而不是重复升级 |
+| PR **#7**（`chore: bump @deepseek-ai/dsh-tools …`，**已关闭**） | 正是一个**升级同一个包**的 PR。它注定过不了 CI（外部自动化不认识 `npmDepsHash`），最终关闭改手动——先看 PR 能省下这轮试错 |
+| PR **#4** / **#5**（@anupamme / OrbisAI Security 的自动扫描报告，均关闭） | 两份**误报**，却**促成了 `/tts` 的 SSRF 真实修复**——外部信号的价值不在结论对错，在于它指向了哪里 |
+| issue **#3**（awesome-ai-plugins 收录邀请，已关闭） | 成为一次技能拆分的契机（`nixkits-check-updates` 拆为通用核心 + 适配层） |
+
+> ⚠️ **本仓已移除 Dependabot**（AGENTS.md「安全边界：不引入外部自动化」），
+> 所以**不会再有机器人 PR**——这恰恰是**更需要人读**的理由：没有任何自动化
+> 会在后台替你留意 PR 列表。外部贡献者与安全扫描仍会提 PR，而他们**看不到**
+> 本轮打算改什么。
 
 ## 第 2 步补充：固定 SHA 的 Actions（本仓必查项）
 
@@ -196,7 +226,7 @@ gh api repos/Kihara777/NixKits --jq .full_name || echo "取数链路异常 —�
 
 **为何危险**：这是**不报错、只撒谎**的失败形态——比构建失败更难发现，因为
 报告看起来完全正常。已泛化为通用技能第 3 步的「用 `gh api` 而不是裸 `curl`」
-与第 7 步九问自检第 7 问。
+与第 7 步十问自检第 7 问。
 
 ### Rust 包 Cargo.lock 同步
 
@@ -356,6 +386,7 @@ peer 条目（与仓库既有可工作的 `dsh-package-lock.json` 结构一致�
 以及相关的 develop 脚本。可以理解为**对更新流程自身做一次「检查更新」**。
 
 ```
+→ 第 0 步：同步远端 + 确认活跃 issue / PR
 → 第 1~9 步：更新软件
 → 第 10 步：更新「决定软件如何被更新」的规范
 ```

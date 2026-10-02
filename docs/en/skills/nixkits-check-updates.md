@@ -25,12 +25,36 @@ This split lets the generic method be reused directly by other nix flake reposit
 
 ## Repo-specific steps
 
+- **Remote issue / PR check**: before every round, `git fetch` and list the open issues / PRs (step 0); this repo has historical precedents where they overlapped the update work (below)
 - **Four-language doc sync**: `docs/<lang>/<pkg>.md` (zh baseline + en/ja/pcn), zh written first then translated
 - **dsh plugin inventory sync**: when upgrading `dsh`, sync the built-in `cordis.patch.yml` entry-id inventory
 - **Maintenance log**: invokes the `write-maintenance-log` skill, synced across four languages
 - **Same-account sub-repo chained check**: the `dsh-api-balance` thin wrapper references the sub-repo `Kihara777/dsh-api-balance`, whose own version changes must also be checked (coordinates below)
 - **`llama-cpp-ver` floating input**: cannot be locked, so `flake.lock` is not committed
 - **Generalisation duty**: when a generic improvement is found, update it back into `nix-flake-update-check`
+
+## Step 0: remote issues / PRs
+
+Before every round, `git fetch` to align with the remote and list the open issues / PRs.
+The generic flow and criteria (a failing `gh` exits loudly, so an empty list counts as
+"truly none" only when the command succeeded) are in `nix-flake-update-check` step 0;
+this repo's shape is:
+
+| Item | Value |
+|---|---|
+| Repo coordinates | `Kihara777/NixKits` (derivable from the remote inside the repo) |
+| Issues feature | enabled |
+| Measured state | 2026-10-02: 0 open issues, 0 open PRs |
+| External automation | **Dependabot removed** — no bot PRs will appear, which makes reading the PR list *more* necessary |
+
+**Why this repo cannot skip the step** — every signal below actually happened:
+
+| Signal | Overlap with the update check |
+|---|---|
+| PR #6 `actions/checkout 4.4.0 → 7.0.1` (merged) | exactly what the SHA-pinned Actions check looks at |
+| PR #7 `@deepseek-ai/dsh-tools` bump (closed) | upgrading the same package; it could never pass CI (`npmDepsHash`) and was closed in favour of a manual bump |
+| PR #4 / #5 (OrbisAI Security scan reports, both closed) | two false positives that nevertheless led to the real `/tts` SSRF fix |
+| issue #3 (awesome-ai-plugins listing invitation) | became the occasion for splitting the update skills |
 
 ## Sub-repo reference: dsh-api-balance
 

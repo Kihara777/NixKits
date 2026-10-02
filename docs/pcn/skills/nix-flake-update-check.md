@@ -15,6 +15,7 @@
 
 ## 機能
 
+- **着手前 遠端同期 且 未閉 issue / PR 確認**（第 0 步）：`git fetch` 整列 後、未閉 issue / PR 列挙。`gh` **失敗時 明示 error 終了**（認証失効、倉庫名 誤、issue 機能 無効 倉庫 何 也 非零終了）故、「空 list」 「真 無」 意味 場合 命令 成功 時 限定。今回 昇級対象 與 重 物 既知問題 明示、**在途 PR 作業 重複 不**
 - `flake.nix` 自 外部包 **動的検出**、自己 hosting / 動的版 / nixpkgs 追従 / 修正内蔵 除外
 - **builder 別** hash 更新 flow（npm / cmake / Rust `buildRustPackage` / `fetchurl` / python）
 - **GitHub Actions 更新確認**：自行実装（`gh api` tag 解決 → commit SHA 取得 → 書戻 與 comment 版数 同期）。action SHA 固定 後 更新通知 届 無 盲点 補；**外部自動化 依存 不**、読取権限 有 者 何 也 実行 可（維護者 定例検査、CI 関連 PR 前 貢献者 確認、引継 cost 評価）。命令 読取専用、**発見 ≠ 昇格義務** —— 書込権限 無 場合 又 目下 作業 無関係 場合 指摘 止、昇格 PR 行
@@ -66,10 +67,10 @@
 
 | file | 内容 | 読 時機 |
 |------|------|--------|
-| `SKILL.md` | 対話的確認 + 第 1〜9 步 主 flow + 適配層契約 | 常時 |
+| `SKILL.md` | 対話的確認 + 第 0〜9 步 主 flow + 適配層契約 | 常時 |
 | `builders.md` | builder 別 hash 更新 flow、`flake.lock` 処理 | 第 4 步 |
 | `traps.md` | nixpkgs 漂移 罠、fail-closed 検証、外部 link 失効監査、Actions 更新、修正内蔵版 | 第 7 步 自検 該当 時 |
 
-**第 7 步「commit 前 六 自問」新設**：変体 複数 有 可否？依存表 一致 可否？source 取得 仍 有効 可否？実際 実行 可否？文書 記述 仍 成立 可否？`flake.lock` commit 可否？——六 何 及 同日 実測 事故 抽出、該当 則 `traps.md` 進 可、全文 読 不要。
+**第 7 步「commit 前 十 自問」**：当初 六（変体 複数 有 可否？依存表 一致 可否？source 取得 仍 有効 可否？実際 実行 可否？文書 記述 仍 成立 可否？`flake.lock` commit 可否？）自 逐次拡張、現在 取得経路・SHA 固定 Actions・判定 識別力・**遠端 issue / PR** 四問 加。該当 則 `traps.md` 進 可、全文 読 不要。第 1〜9 問 実測 事故 自 抽出、**第 10 問 維護者 要求 着手前 動作**（毎回 確認前 遠端 issue / PR 照合）自 由来——出所 異 故、技能 内 両者 区別 記載。
 
 **締 第 10 步**（適配層）：process 振返 與 規範 検証。特 **test branch 生 汎用 教訓 即座 main 戻 要**——当該 branch 取決 依 merge 不、教訓 残 不可。

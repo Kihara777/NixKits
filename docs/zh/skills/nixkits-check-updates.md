@@ -26,12 +26,35 @@
 
 ## 本仓库特有环节
 
+- **远端 issue / PR 核对**：每轮开工前先 `git fetch` 对齐并列出未关闭 issue / PR（第 0 步），本仓有与更新重叠的历史先例（见下）
 - **四语文档同步**：`docs/<lang>/<pkg>.md`（zh 基准 + en/ja/pcn），zh 先写再翻译
 - **dsh 插件清单同步**：升级 `dsh` 时同步内置 `cordis.patch.yml` 的 entry id 清单
 - **同账户子仓链式检查**：`dsh-api-balance` 薄封装引用子仓 `Kihara777/dsh-api-balance`，其自身版本变更须一并检查（坐标见下）
 - **维护日志**：调用 `write-maintenance-log` 技能，四语同步
 - **`llama-cpp-ver` 浮动输入**：不可锁定，`flake.lock` 不提交
 - **泛化义务**：发现通用性改进时更新回 `nix-flake-update-check`
+
+## 第 0 步：远端 issue / PR
+
+每轮开工前先 `git fetch` 对齐远端，并列出未关闭 issue / PR。通用流程与判据
+（`gh` 失败即显式报错，故「空列表」只在命令成功时才算真的没有）见
+`nix-flake-update-check` 第 0 步；本仓的形态如下：
+
+| 项 | 值 |
+|---|---|
+| 仓库坐标 | `Kihara777/NixKits`（仓库内可从 remote 自动推导） |
+| issue 功能 | 已启用 |
+| 实测现状 | 2026-10-02：0 个未关闭 issue、0 个未关闭 PR |
+| 外部自动化 | **已移除 Dependabot**——不会再有机器人 PR，PR 列表更需人读 |
+
+**为什么本仓不能跳过这一步**——以下均为真实发生过的信号：
+
+| 信号 | 与更新检查的重叠 |
+|---|---|
+| PR #6 `actions/checkout 4.4.0 → 7.0.1`（已合并） | 正是固定 SHA 的 action 检查对象 |
+| PR #7 `@deepseek-ai/dsh-tools` 升级（已关闭） | 升级同一个包；注定过不了 CI（`npmDepsHash`），最终关闭改手动 |
+| PR #4 / #5（OrbisAI Security 扫描报告，均关闭） | 两份误报，却促成了 `/tts` 的 SSRF 真实修复 |
+| issue #3（awesome-ai-plugins 收录邀请） | 成为一次技能拆分的契机 |
 
 ## 子仓引用：dsh-api-balance
 

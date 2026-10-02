@@ -25,12 +25,35 @@
 
 ## 本倉庫固有 工程
 
+- **遠端 issue / PR 確認**：毎回 着手前 `git fetch` 整列 且 未閉 issue / PR 列挙（第 0 步）。本倉 更新作業 與 重 歴史的先例 有（下記）
 - **四言語文書同期**：`docs/<lang>/<pkg>.md`（zh 基準 + en/ja/pcn）、zh 先 書 後 翻訳
 - **dsh 插件一覧同期**：`dsh` 更新時 内蔵 `cordis.patch.yml` 的 entry id 一覧 同期
 - **保守記録**：`write-maintenance-log` 技能 呼出、四言語 同期
 - **同 account 子倉 連鎖確認**：`dsh-api-balance` 薄包装 子倉 `Kihara777/dsh-api-balance` 参照、其 自身 版変更 併 確認 要（座標 下記）
 - **`llama-cpp-ver` 浮動入力**：lock 不可 故 `flake.lock` commit 不
 - **汎化義務**：汎用性 改善 発見 時 `nix-flake-update-check` 書戻
+
+## 第 0 步：遠端 issue / PR
+
+毎回 着手前 `git fetch` 遠端 與 整列、未閉 issue / PR 列挙。汎用 flow 與 判据
+（`gh` 失敗時 明示 error 終了 故、「空 list」 「真 無」 意味 場合 命令 成功 時 限定）
+`nix-flake-update-check` 第 0 步 在、本倉 形態 以下：
+
+| 項目 | 値 |
+|---|---|
+| 倉庫座標 | `Kihara777/NixKits`（倉庫 内 remote 自 導出 可能） |
+| issue 機能 | 有効 |
+| 実測 現状 | 2026-10-02：未閉 issue 0 件、未閉 PR 0 件 |
+| 外部自動化 | **Dependabot 削除済**——bot PR 出現 不。故 PR 一覧 読 必要 **反 高** |
+
+**本倉 此 工程 飛 不可 理由**——以下 全 実際 起 信号：
+
+| 信号 | 更新確認 與 重 |
+|---|---|
+| PR #6 `actions/checkout 4.4.0 → 7.0.1`（merge 済） | 正 SHA 固定 action 確認対象 |
+| PR #7 `@deepseek-ai/dsh-tools` 更新（close） | 同包 更新；CI 必 落（`npmDepsHash`）故 close 手動更新 至 |
+| PR #4 / #5（OrbisAI Security scan 報告、何 也 close） | 二 誤検出 然、結果 `/tts` SSRF 実修正 導 |
+| issue #3（awesome-ai-plugins 収録招待） | 技能分割 契機 |
 
 ## 子倉参照：dsh-api-balance
 
