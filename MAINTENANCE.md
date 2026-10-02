@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-03T06:45:00+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 与 [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc)）。本次是**运行行为修复**，不是版本发布。**修的是什么**：① **回车交换的安装移出组件生命周期** —— dsh 0.2.0 把 composer 改成链式槽位（`conversation.composer`），提问 / 审批 / 子代理会接管整条 composer，那一刻圆圈组件随槽位卸载，交换器（Enter = 换行、Shift+Enter = 发送）被一并摘掉，而**界面当时看着完全正常**；现改为在 `apply()` 中安装，且只作用于**可编辑**的 composer（未选工作区时，同一个 `data-composer-input` 的 div 是工作区菜单的键盘触发器）。② **面板/弹窗材质按 0.2.0 原生配方重写** —— 0.2.0 把 `--dsw-specific-menu` 从实色（0.1.x 的 `--dsw-alias-bg-layer-3`）换成**半透明** menu surface fill（浅 `#f8f9fa94` / 深 `#43454a73`），原生浮层一律再叠 `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）才成形；插件只沿用旧配方，于是面板**真的透明**、背后的会话内容直接透出。主面板照抄原生 `JObwrW_panel`（fill + 模糊 + elevation + `border: 0`），三个模态弹窗改用原生 `VOzbGW_panel` 配方（不透明 `--dsw-alias-bg-layer-2` + elevation）——**两种材质不可混用**；两个新 token 均带 fallback，0.1.x 上不会退化成透明。**判据**（隔离实例 + 0.2.0-rc.2 + Playwright 实测 computed style，浅/深各一遍）：面板 `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同模糊；设置弹窗 `rgb(255,255,255)` / `rgb(44,44,46)`，与本机原生设置面板实测一致；回车交换在草稿 / 会话 / 触摸模拟三态下真实 Enter 均插入 `<br>`（无回归）。
+
+| 提交 | 说明 |
+|------|------|
+| `6a8f68f` | chore(pkgs): re-pin dsh-api-balance rev（回车交换 + 面板材质修复；版本仍 0.1.1） |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | rev | `76ea584` → `700fbbc` |
+| 　 | src hash | `sha256-7Yr9ALLN9hQTut5XziFLulmMde5GRgxTjBWidaxKqno=` → `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` |
+
 ## 2026-10-03T06:15:29+09:00
 
 **摘要**：补齐维护日志的**未译条目**：ja **80** 条、pcn **59** 条——它们的摘要行是 `**Summary**` 标记 + 英文或中文旧稿，而当时的五条检查**全部放行**（条目数齐、时间戳对、SHA 集合对、假名检查也过——英文没有假名）。新查明一点：摘要**是旧稿时内容本身也与现 zh 源不一致**，故按 zh 源**整行替换**，不是只换标签。检查器补第 6 条「**摘要标记须是本语的**」，两项反证各自翻红（ja 用 `**Summary**` → 红；en 用 `**概要**` → 红）。同一个坑当天踩了三次——**判据错的时候，数字看起来一样自信**（CJK 占比阈值被 `codewhale 0.8.49` 这类 ASCII 稀释；对 pcn 更把「汉字多」当成了未译）。**验证**：`nix flake check` 全绿；四语各 358 条，ja / pcn 均 0 条残留。

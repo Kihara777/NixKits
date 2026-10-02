@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T06:45:00+09:00
+
+**Summary**: dsh-api-balance thin-wrapper re-pin — rev `76ea584` → `700fbbc` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the changes live in its commits [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) and [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc)). This is a **runtime-behaviour fix**, not a release. **What was fixed**: ① **the Enter-swap install moved out of the component lifecycle** — dsh 0.2.0 turned the composer into a chain slot (`conversation.composer`), and a question / approval / subagent **takes over the whole composer**; at that moment the ring component unmounts with the slot and the swap (Enter = newline, Shift+Enter = send) is uninstalled along with it, while **the UI looks entirely normal at the time**; it is now installed inside `apply()` and applies only to an **editable** composer (before a workspace is chosen, the same `data-composer-input` div is the workspace menu's keyboard trigger). ② **panel/dialog materials rewritten to the 0.2.0 native recipes** — 0.2.0 changed `--dsw-specific-menu` from a solid colour (0.1.x's `--dsw-alias-bg-layer-3`) into a **translucent** menu surface fill (light `#f8f9fa94` / dark `#43454a73`), and every native popover layers `backdrop-filter: var(--dsw-menu-backdrop-filter)` (`blur(40px) saturate(150%)`) on top to take shape; the plugin kept only the old recipe, so the panel was **genuinely transparent** with the conversation showing through. The main panel now copies the native `JObwrW_panel` (fill + blur + elevation + `border: 0`), and the three modal dialogs take the native `VOzbGW_panel` recipe (opaque `--dsw-alias-bg-layer-2` + elevation) — **the two materials must not be mixed**; both new tokens carry fallbacks, so 0.1.x does not degrade to transparency. **Criteria** (isolated instance + 0.2.0-rc.2 + computed styles measured with Playwright, once in light and once in dark): the panel computes `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + the same blur; the settings dialog `rgb(255,255,255)` / `rgb(44,44,46)`, matching this machine's native settings panel; the Enter swap still inserts `<br>` on a real Enter in the draft / session / touch-emulation states (no regression).
+
+| Commit | Description |
+|------|------|
+| `6a8f68f` | chore(pkgs): re-pin dsh-api-balance rev（回车交换 + 面板材质修复；版本仍 0.1.1） |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `76ea584` → `700fbbc` |
+| 　 | src hash | `sha256-7Yr9ALLN9hQTut5XziFLulmMde5GRgxTjBWidaxKqno=` → `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` |
+
 ## 2026-10-03T06:15:29+09:00
 
 **Summary**: filling in the maintenance log's **untranslated entries**: ja **80**, pcn **59** — their summary lines held the `**Summary**` marker plus an English or Chinese older draft, yet the day's five checks **let them all through** (counts, timestamps, SHA sets and the kana check — English has no kana). New finding: an older-draft summary **also disagrees in content with the current zh source**, so the whole line was **replaced from zh**, not just relabelled. The checker gains a 6th rule, "**the summary marker must be in that language**"; two counter-tests each turn red (ja with `**Summary**`; en with `**概要**`). The same pit was stepped in three times that day — **when the criterion is wrong, the numbers look just as confident** (the CJK-share threshold diluted by ASCII like `codewhale 0.8.49`; for pcn it took "many Han characters" for untranslated). **Verification**: `nix flake check` all green; 358 entries per language, ja / pcn 0 leftovers.

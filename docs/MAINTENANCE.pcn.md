@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-03T06:45:00+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 與 [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc) 見）。本次 **実行時挙動 之 修正**、版本 発布 非。**何 修正 為**：① **回車交換 之 導入 部品 lifecycle 自 移出** —— dsh 0.2.0 composer chain slot（`conversation.composer`）化、質問 / 承認 / 子代理 **composer 全条 接管**。其 瞬間、環 部品 slot 與 共 卸载、交換器（Enter = 改行、Shift+Enter = 送信）也 同時 外、而 **画面 当時 完全 正常 見**。現在 `apply()` 内 導入、**編集可能** composer 之 的 作用（工作区 未選択 時、同一 `data-composer-input` 之 div 工作区 menu 之 keyboard trigger 也）。② **面板 / 弾窓 材質 0.2.0 原生 配方 依 書直** —— 0.2.0 `--dsw-specific-menu` 実色（0.1.x 之 `--dsw-alias-bg-layer-3`）自 **半透明** menu surface fill（明 `#f8f9fa94` / 暗 `#43454a73`）至 変更、原生 menu 層 必 `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）重 初 成立。插件 旧 配方 之 侭、結果 面板 **真 透明**、背後 会話 内容 透。主 面板 原生 `JObwrW_panel`（fill + blur 効果 + elevation + `border: 0`）踏襲、三 弾窓 原生 `VOzbGW_panel` 配方（不透明 `--dsw-alias-bg-layer-2` + elevation）至 —— **二 材質 混用 不可**。新 二 token fallback 付、0.1.x 透明 退行 無。**判定**（隔離実例 + 0.2.0-rc.2 + Playwright computed style 実測、明 / 暗 各）：面板 `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同 blur；設定 弾窓 `rgb(255,255,255)` / `rgb(44,44,46)`、本機 原生 設定 面板 與 一致；回車交換 新規 / 会話 / 触 模擬 三 状態 実 Enter `<br>` 追加（回帰 無）。
+
+| 提交 | 説明 |
+|------|------|
+| `6a8f68f` | chore(pkgs): re-pin dsh-api-balance rev（回车交换 + 面板材质修复；版本仍 0.1.1） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | rev | `76ea584` → `700fbbc` |
+| 　 | src hash | `sha256-7Yr9ALLN9hQTut5XziFLulmMde5GRgxTjBWidaxKqno=` → `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` |
+
 ## 2026-10-03T06:15:29+09:00
 
 **摘要**：維護日誌 之 **未訳条目** 補完：ja **80** 条、pcn **59** 条 —— 其等 之 摘要 行 `**Summary**` 標記 + 英文 或 中文 之 旧稿、而 当時 之 五 条 検査 **全部 通過**（条目数 斉、時間戳 正、SHA 集合 正、仮名 検査 也 通過 —— 英文 仮名 無）。新 查明 一 点：摘要 **旧稿 時 内容 本身 亦 現 zh 源 與 不一致**、故 zh 源 按 **行 全体 置換**、唯 標籤 交換 非。検査器 第 6 条 「**摘要 標記 本語 之 者 須**」 追加、二 項 反証 各自 赤 転（ja `**Summary**` 用 → 赤；en `**概要**` 用 → 赤）。同一 穴 当日 三 回 踏 —— **判据 誤 時、数字 同様 自信 見**（CJK 占比 閾値 `codewhale 0.8.49` 此 類 ASCII 依 希釈；pcn 対 更 「漢字 多」 未訳 当成）。**検証**：`nix flake check` 全緑；四語 各 358 条、ja / pcn 均 0 条 残留。

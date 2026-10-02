@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T06:45:00+09:00
+
+**概要**：dsh-api-balance 薄封裝 re-pin —— rev `76ea584` → `700fbbc`（バージョンは `0.1.1` のまま；子倉にメンテナンスログは無く、変更はそのコミット [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) と [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc) を参照）。今回は**実行時挙動の修正**であり、リリースではない。**何を直したか**：① **回車交換のインストールをコンポーネントのライフサイクルから外へ** —— dsh 0.2.0 は composer をチェーンスロット（`conversation.composer`）に変え、質問 / 承認 / 子エージェントが**composer 全体を接管**する。その瞬間、円環コンポーネントはスロットと共にアンマウントされ、交換器（Enter = 改行、Shift+Enter = 送信）も一緒に外れる——しかも**画面はその時まったく正常に見える**。現在は `apply()` 内でインストールし、**編集可能な** composer にのみ作用する（ワークスペース未選択時、同じ `data-composer-input` の div はワークスペースメニューのキーボードトリガーである）。② **パネル/ダイアログの材質を 0.2.0 の原生レシピで書き直した** —— 0.2.0 は `--dsw-specific-menu` を実色（0.1.x の `--dsw-alias-bg-layer-3`）から**半透明**の menu surface fill（明 `#f8f9fa94` / 暗 `#43454a73`）に変え、原生の浮層は必ず `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）を重ねて初めて成立する。プラグインは旧レシピのままで、結果パネルは**本当に透明**になり背後の中身が透けていた。メインパネルは原生 `JObwrW_panel`（fill + ぼかし + elevation + `border: 0`）をそのまま踏襲し、3 つのモーダルは原生 `VOzbGW_panel` のレシピ（不透明 `--dsw-alias-bg-layer-2` + elevation）へ——**二つの材質は混用できない**。新しい 2 つの token には fallback を付け、0.1.x では透明に退行しない。**判据**（隔離実例 + 0.2.0-rc.2 + Playwright で computed style を実測、明/暗それぞれ）：パネルは `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同ぼかし；設定ダイアログは `rgb(255,255,255)` / `rgb(44,44,46)` で本機の原生設定パネルと一致；回車交換は下書き / 会話 / タッチ模擬の三状態で実 Enter が `<br>` を挿入（回帰なし）。
+
+| コミット | 説明 |
+|------|------|
+| `6a8f68f` | chore(pkgs): re-pin dsh-api-balance rev（回车交换 + 面板材质修复；版本仍 0.1.1） |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `76ea584` → `700fbbc` |
+| 　 | src hash | `sha256-7Yr9ALLN9hQTut5XziFLulmMde5GRgxTjBWidaxKqno=` → `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` |
+
 ## 2026-10-03T06:15:29+09:00
 
 **概要**：メンテナンスログの**未訳条目**を補完した：ja **80** 条、pcn **59** 条——その概要行は `**Summary**` 標記 + 英語または中国語の旧稿で、当時の五条の検査は**すべて通過**（条目数が揃い、タイムスタンプも SHA 集合も合い、仮名検査も通った——英語に仮名は無い）。新たな判明点：概要**が旧稿なら内容そのものも現行 zh 源と食い違う**、ゆえに zh 源どおり**行ごと置換**し、ラベルだけを差し替えたのではない。チェッカーに第 6 条「**概要標記はその言語自身のものでなければならない**」を補い、二つの反証がそれぞれ赤に転じた（ja は `**Summary**` → 赤；en は `**概要**` → 赤）。同じ罠を当日三度踏んだ——**判据が誤っているとき、数字は同じように自信たっぷりに見える**（CJK 占比の閾値は `codewhale 0.8.49` のような ASCII に薄められ；pcn では「漢字が多い」ことを未訳と見なした）。**検証**：`nix flake check` は全緑；四語それぞれ 358 条、ja / pcn とも残留 0 条。
