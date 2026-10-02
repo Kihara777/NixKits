@@ -146,7 +146,29 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 - **仓库变更后必须「先推送、再重锁」**：机器消费的是 GitHub 上的 rev，**本地提交不推送，重锁就锁不到它**——届时 `nixos apply` 看起来成功、实际没带上你的改动。推送后才执行 `nix flake lock --update-input nixkits /etc/nixos` 并清 eval 缓存。
   > ⚠️ **重锁会顺带拖动本仓的浮动子输入**（本仓按约定不提交 `flake.lock`，故 `nixkits/nixpkgs` 的 `nixos-unstable` 与 `nixkits/llama-cpp-ver` 的 GitHub latest release 都会重新解析）。实测 2026-09-28：一次 `--update-input nixkits` 把 **llama-cpp 0.4.1 → 0.5.0** 一并拉了进来。所以「为了修一行预设而重锁」= 顺手升级 llama.cpp：要么接受它并**单独验证** llama.cpp（本机统一内存调优、模型服务参数另有一套，见 `nixos-specialisation-tuning`），要么就别为小事重锁，等例行更新一起走。
 - **部署命令**：`nixos apply -y /etc/nixos`（nixos 0.16.1 无 `rebuild` 子命令）。
-- **预设／插件包更新后：先 `systemctl daemon-reload`，再 `systemctl restart dsh`**。`nixos apply` 不重启 dsh（稳定挂载点），而单跑 restart 有时仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里，症状为「服务确实重启了、预设还是旧的」。重启后必须核对 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 里的 store 路径已翻新（本次实测：gen 570 部署后第一次 restart 后仍指向旧路径，daemon-reload 后再 restart 才翻）。
+- **预设／插件包更新后：先 `systemctl daemon-reload`，再 `systemctl restart dsh`**。`nixos apply` 不重启 dsh（稳定挂载点），而单跑 restart 有时仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里，症状为「服务确实重启了、预设还是旧的」。重启后要核对的是**单元引用**，不是文件内容：
+
+  ```bash
+  # ① 运行中的单元，其 pre-start 脚本引用哪一份 store 路径
+  S=$(systemctl show dsh.service -p ExecStartPre --no-pager \
+      | grep -o '/nix/store/[^ ;]*pre-start[^ ;]*' | head -1)
+  grep -o '/nix/store/[a-z0-9]*-cordis\.patch\.yml' "$S" | head -1
+
+  # ② 当前配置生成的那一份（主机名按实际替换）
+  nix eval --raw /etc/nixos#nixosConfigurations.<主机>.config.systemd.services.dsh.preStart \
+    | grep -o '/nix/store/[a-z0-9]*-cordis\.patch\.yml' | head -1
+  ```
+
+  两者**相同**即表示 pre-start 已随世代翻新。
+
+  > ⚠️ **不要拿 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 的「内容」去比对。**
+  > dsh 0.2.0 会在启动时**重写**这个文件（实测 2026-10-03：preStart 于 17:33:10 拷入 1747 行，
+  > dsh 在 17:33:11 就把它改成 1781 行；此后又变过一次，现为 1785 行）。
+  > 落盘的是 **dsh 自己的序列化结果**，与 store 那份本来就不会相等——照内容比对
+  > **只会得到假阴性**，把一次成功的部署判成失败。
+  >
+  > 历史记录仍然有效：gen 570 部署后第一次 restart 仍指向旧路径，daemon-reload 后再 restart 才翻——
+  > 所以「先 daemon-reload 再 restart」这条不变，**只是判据从「看文件内容」换成了「看单元引用」**。
 - **`nix build --no-link` 产物可能被 GC 立即回收**：需要产物时同调用内复制出 store，或改用带链接的构建。
 
 ## 工作流
