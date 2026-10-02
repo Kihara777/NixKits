@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-03T04:27:03+09:00
+
+**摘要**：`opencode-telegram` 的 riscv64 **由「摘掉」改回「建」**，并且加上了「**产物真的跑一遍**」这条判据——上一轮摘掉它的理由是「能构建、一启动就抛」，这一轮把两个根因都修了，然后让 CI 用 qemu-user 真跑。**① 两处 gyp 陷阱。**（a）`msgpackr-extract` 的 binding.gyp 用 `<!()` 命令展开去问 `gcc -dumpversion`，而交叉构建的 PATH 上**没有裸 `gcc`** ⇒ 展开成空串 ⇒ `"" >= 7` ⇒ `TypeError: '>=' not supported between instances of 'str' and 'int'` → 补一个指向**交叉**编译器的 `gcc` shim（指向宿主的会给 riscv64 包编出 x64 的 `.node`，比构建失败更糟）。（b）`better-sqlite3` 的 binding.gyp 写着 `'force_build%': 0` 与 `'prebuild_exists%': '<!(node lib/binding.js)'`，条件 `['force_build==1 or prebuild_exists==0', …真源码…, {'type': 'none'}]`——交叉构建里那句 `<!(node …)` 跑不起来 ⇒ 展开成**空串**，而空串既不等于 1 也不等于 0 ⇒ 两个条件都不成立 ⇒ target 退化成 `type: none` ⇒ `make` **只盖 stamp、一行都不编** → 显式 `--force_build=1`（上游自己的 `build-release` 脚本就是这么用的）；另：v13 起它取消了 `install` 脚本，所以 `npm rebuild` 根本不会碰它，得自己叫 node-gyp。修完实测两个模块都产出真正的 **UCB RISC-V** ELF。**② CI 新增 `smoke-test` 开关。** `build-package.yml` 加一个可选输入：开了就在构建之后**真的跑一遍产物**；判据脚本放 `develop/qemu-smoke-tests/<包名>.sh`（**本地与 CI 是同一份**，自带反证），跨架构时装 `qemu-user-static` 并**断言 binfmt 处理器已注册**——没注册就失败，开了开关却没有脚本也失败（「测试缺失即失败」）。`opencode-telegram` 的 riscv64 workflow 已开启。**③ CI 抓到一处我在本地看不见的缺陷。** 第一次跑，riscv64 红了：`node-gyp.js` 的 shebang `#!/usr/bin/env node` 解析到 `buildInputs` 里的 **riscv64 node**，在 x86_64 runner 上执行不了，shell 遂把它当脚本读（一串 `use strict: command not found`）。**本地测不出来——本机注册了 riscv64 的 binfmt，那些 riscv64 二进制能跑。** 修法是构建期改用**构建平台**的 node 并把 PATH 限定在子 shell 内；验证方式是把 **binfmt 摘掉**复现 CI 条件（构建通过、烟测也过），再还原。**④ 泛化**：`nixkits-check-updates` 技能补了「缓存假绿」（含本次 0.25.3 缓存实例）、「构建成功 ≠ 产物能跑」与「本机 binfmt 让构建条件比 CI 宽松」三节，并记下 binfmt 还原的坑（手写 register 会把 magic 当 **ASCII 文本**注册成一条永不匹配的规则；正确做法是删掉坏条目再让 `systemd-binfmt` 按 `/etc/binfmt.d/` 重注册）。**验证**：`nix flake check` 全部自检通过（含四语维护日志条目数一致）；本轮推送 **33 个 workflow 全部 success**，其中 riscv64 的烟测在 runner 上打出 `✓ CLI 能启动（--help 有 Usage）`、`✓ better-sqlite3 真实读写（sqlite=3.53.3 extract=ok）`、`✓ msgpackr-extract 可加载`、`qemu-smoke-tests/opencode-telegram: OK`。
+
+| 提交 | 说明 |
+|------|------|
+| `af82af7` | feat(ci): riscv64 产物改成「真的跑一遍」—— 修好两个 gyp 陷阱 + build-package 加 smoke-test 开关 |
+| `16bcc25` | refactor(skills): 泛化「缓存假绿」与「构建成功≠产物能跑」—— 含 smoke-test 机制与反证要求 |
+| `ab20373` | fix(opencode-telegram): 用构建平台的 node 跑 node-gyp —— PATH 上的 node 是 riscv64 的，x86_64 runner 上执行不了 |
+| `ab4e884` | refactor(skills): 记下「本机构建条件比 CI 宽松」—— binfmt 在本地让 riscv64 二进制能跑，于是本地绿掩盖了 CI 缺陷 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| opencode-telegram | — | 版本未变（0.26.2）；**构建矩阵**：x86_64 + aarch64 → x86_64 + aarch64 + riscv64（且 riscv64 带 qemu 烟测） |
+
 ## 2026-10-03T02:26:58+09:00
 
 **摘要**：`opencode-telegram` **摘掉 riscv64 构建** —— 这次 CI 转绿**不是靠修好构建**，而是**停建一个本就不可能可用的平台**。**① 那个 job 一直是靠缓存假绿**：最近一次「成功」的日志里**一行构建都没有**，全是从 `nixkits.cachix.org` 取包，取的还是**上一个版本 0.25.3** 的产物；包早已升到 0.26.2，于是缓存未命中、真去构建，随即红。这正是仓库自己记过的形态——「全绿但日志全是 `copying path`」是可疑信号，**CI 通过 ≠ 它构建过**。**② 真去构建时，先挂在 gyp 的一个版本探针上**：`msgpackr-extract` 的 `binding.gyp` 里有 `"gcc_version": "<!(<(os_linux_compiler) -dumpversion | cut -d '.' -f 1)"` 与条件 `["gcc_version>=7", …]`；`<!()` 是 gyp 的**命令展开**，真的去 shell out。而交叉构建的 PATH 上**没有裸 `gcc`**（实测 `command -v gcc` → 无），命令失败 ⇒ 展开成空串 ⇒ gyp 里变成 `"" >= 7` ⇒ `TypeError: '>=' not supported between instances of 'str' and 'int' while trying to load binding.gyp`。这一条**已定位并验证过修法**（补一个指向**交叉**编译器的 `gcc` shim 后，编出的 `extract.node` 确实是 `UCB RISC-V`；shim 指向宿主则会给 riscv64 包编出 x64 的 `.node`，更糟），但光修它不够——**③ 真正不可用的是 `better-sqlite3`**：它是本包的**直接依赖**，且在 `dist/app/services/session-cache-service.js` 里被**静态 import**（启动即加载）；它的 `prebuilds/` 只有 darwin/linux/musl/win32 × x64/arm64，**没有 riscv64**，而 v13 起又取消了 `install` 脚本（改成纯 prebuilds 分发），所以 `npm rebuild` 也不会编它——实测 riscv64 产物里根本没有 `better_sqlite3.node`（自己接一条 `node-gyp rebuild` 也只产出 stamp、没编出绑定），而它的 `lib/binding.js` 只认 `build/{Debug,Release}/better_sqlite3.node` 或 `prebuilds/<平台>-<架构>.node`，两条路在 riscv64 上都是空的。**结论**：riscv64 产物**能构建、一启动就抛**，而本机没有 riscv64 硬件可以验证运行——留一个「绿而不可用」的产物，比明确标记「不支持」更糟。故按 `blender-mcp` / `obs-bilibili-stream` 的**同一先例**摘掉该 workflow：四语文档去掉 riscv64 徽章、加一条平台说明（写明原因），证据与「将来要恢复该怎么做」一并写进 `packages/opencode-telegram.nix` 头部与 `AGENTS.md` 的 CI 一节。**验证**：`nix flake check` 全绿（7 项自检中 5 项真构建，另 2 项命中缓存）；x86_64 / aarch64 不受影响（该包上游 prebuilds 覆盖这两个架构）；riscv64 的两次实验产物都留在上面的叙述里——一次证明 gyp 那步可修，一次证明 `better-sqlite3` 那步不可修。
