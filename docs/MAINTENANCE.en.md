@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T04:53:28+09:00
+
+**Summary**: `AGENTS.md`'s deployment-check criterion goes from "look at the file contents" to "look at the unit reference". The original sentence required a post-restart check that the store path inside `cordis.patch.yml` had rolled over, but measurement shows **dsh 0.2.0 rewrites that file at startup** (preStart copied 1747 lines in at 17:33:10; dsh made it 1781 lines at 17:33:11, and it changed once more after that) — what lands on disk is dsh's own serialization, so comparing contents **only yields a false negative**, judging a successful deployment a failure. New criterion: compare the store path the running unit's pre-start script references against the one the current configuration generates (both commands written into the doc), measured consistent on this machine. **Verification**: `nix flake check` all green.
+
+| Commit | Description |
+|------|------|
+| `5df33e9` | docs(AGENTS): 部署核对判据换成「看单元引用」—— 原判据已失效：dsh 启动时会重写 cordis.patch.yml |
+
 ## 2026-10-03T04:43:18+09:00
 
 **Summary**: fixing two **guard failures I introduced myself**, both "totals green, detail missed". **① The checker missed "a whole table gone"**: `check-maintenance-log.py`'s four rules all read totals (entry count, SHA dedup, line-level kana), so my splice into the three translations — heading and summary only, **table dropped** — still printed "354 entries … all passed". Added a 5th rule, **structural parity**: every entry's commit SHA set must match zh across the four languages (the 5 table-less historic zh entries must have none either). **② The ratio criterion I wrote into the skill was itself wrong**: terseness judged by the repo-wide mean (`en/zh` ≈ 1.84), while measured CJK density correlates with ratio at **r = 0.90** — the same-density cohort's mean is 2.29, and the entry ruled "over" sits below it; the mean only forces **cutting content**, the same coin's other face as the padding it guards. Now: same-density cohort comparison, or the density-independent "en chars ÷ zh CJK chars". **Verification**: `nix flake check` all green; the checker's three counter-tests (drop a whole table / alter one SHA digit / delete an entry) turn red.
