@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T05:16:47+09:00
+
+**Summary**: the maintenance log's **ratio criterion gains a second feature**: backtick share. CJK density alone overestimates — a measured entry of density 0.646: the density-only cohort (n=34) mean **2.37** ruled it "too short"; adding backtick share for a nearest-neighbor cohort (n=15) puts the mean at **1.98**, and the delivered 1.95 lands right there. Backticked content is copied verbatim, so a higher share sits closer to a ratio of 1 — **this mechanism was already written into the skill, but the criterion did not carry it, so the criterion fooled itself once**. It is now "same structure + same-density cohort comparison": **compare within the same structure first, then argue length**. **Verification**: `nix flake check` four-language self-checks all green.
+
+| Commit | Description |
+|------|------|
+| `bad01c4` | refactor(skills): 倍率判据补第二个特征（反引号占比）—— 只看密度会高估，实测差 0.4 倍 |
+
 ## 2026-10-03T05:13:21+09:00
 
 **Summary**: correcting the **stated reason** for the two riscv64 exclusions, `blender-mcp` / `obs-bilibili-stream`: it is not "a cross-compilation defect in the dependency chain" but **the main dependency not declaring that architecture in nixpkgs at all**. Probing measured that both are rejected already at the **evaluation stage** — `blender 5.2.2`'s `meta.platforms` lists only `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`, and `obs-studio 32.2.2` only `x86_64-linux`/`i686-linux`/`aarch64-linux`, reporting `Refusing to evaluate package …`. The dependency names, the architecture lists declared upstream and the rejection text are now written out, with the criterion being `pkgs.<dep>.meta.platforms` (**not a compilation error**). **Verification**: `nix flake check` four-language self-checks all green.
