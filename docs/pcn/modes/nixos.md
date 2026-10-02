@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | 模式 id | `nixos` |
-| 配布方式 | dsh-nixos-shell 包内 `presets/nixos-mode/`、seed-once 方式 `$DSH_HOME/.agent-presets/nixos` copy |
+| 配布方式 | dsh-nixos-shell 包内 `presets/nixos-mode/preset.patch.yml`、`@deepseek-ai/dsh-agent-preset` patch 行一本、profile `cordis.patch.yml` 差込（dsh 0.2.0；0.1.x 曾 `$DSH_HOME/.agent-presets/nixos` seed-once copy） |
 | 有効化選項 | `nixkits.dsh.presets.nixosMode = true` |
 | 派生元 | 創造模式（dsh 同梱 `cordis` 預設） |
 | 文書 | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（本模式配布之包） |
@@ -54,5 +54,5 @@ rebuild 後、session 之模式選択器「NixOS模式」選択即可。
 
 ## 注意
 
-- **seed-once**：`$DSH_HOME/.agent-presets/nixos` 不存在場合限定 copy；以後該目録 用戶所有（模組書込権限開放）、倉庫更新 上書無。
+- **0.2.0 以降 目録 複製 不**：預設 profile patch 層 `@deepseek-ai/dsh-agent-preset` 行一本、本文 包内 `preset.patch.yml` 従 逐字 取（stable 通道 指定 rev、alpha HEAD 追随）。旧版 置 `$DSH_HOME/.agent-presets/nixos` 0.2.0 読 不 歴史残骸、模組 **意図的 削除 不**（旧契約 該副本 編集 尊重 約定済）。預設 変 場合 包内 `preset.patch.yml` 変 事。
 - 門控入口 包内子路 `@kihara777/dsh-nixos-shell/nixos-gate`、預設組合内限定掛載、全局 session 無影響。

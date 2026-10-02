@@ -10,26 +10,30 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 |------|-------|
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| Version | `0.1.5-rc.2` |
-| Development channel | `dsh-alpha 0.1.6-alpha.2` (npm `alpha` dist-tag) |
+| Version | `0.2.0-rc.2` |
+| Development channel | `dsh-alpha 0.2.0-rc.2` (npm `next` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
 ## Version Channels
 
-NixKits ships multiple dsh versions at once, following ruyi's thin-wrapper pattern (main definition + version/hash override wrappers):
+NixKits provides several dsh versions through the same thin-wrapper pattern as ruyi (one main definition plus wrappers that override version/hash):
 
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
-| `pkgs.dsh` | stable | `0.1.5-rc.2` | npm `latest` dist-tag, default |
-| `pkgs.dsh-alpha` | alpha | `0.1.6-alpha.2` | npm `alpha` dist-tag, tracks the latest development build |
+| `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
+| `pkgs.dsh-alpha` | alpha | `0.2.0-rc.2` | npm **`next`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
 
 ```nix
-# Use the latest development version on this machine
+# run the newest prerelease on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> `dsh-alpha` is the upstream development channel: its built-in plugin list changes between versions (the list below covers stable `0.1.5-rc.2`; for alpha, trust what the runtime actually loads). Check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) before upgrading.
+> **Why `dsh-alpha` follows `next` and not `alpha`** (changed 2026-10-02). Today the npm dist-tags read `latest` = `next` = `0.2.0-rc.2` while `alpha` = **`0.1.7-alpha.2`** — `alpha` sits on the older 0.1.x line and is **lower** than stable. Following it would pin the development channel to a line that has already fallen behind (which is what this repository did before the upgrade: stable pinned 0.1.5-rc.2, alpha pinned 0.1.6-alpha.2 — both channels had to cross the 0.1.x → 0.2.x line). Following `next` means "the newest prerelease on the 0.2.x line": today it is the same 0.2.0-rc.2 as stable, and when `npm publish --tag next` ships a 0.2.1-alpha.x it follows automatically without touching the criterion again.
+>
+> The two channels' **only behavioural difference today is not the dsh version but the preset content**: stable's presets are frozen at the commit pinned in `packages/dsh-nixos-shell-stable.nix`, alpha's follow repository HEAD (see "Modes" below).
+>
+> ⚠️ **0.2.0 is a preset-format break** and is incompatible with 0.1.x: the directory-based preset channel (`$DSH_HOME/.agent-presets/<id>/` + `agent.cordis.yml`) was removed upstream. Read the "Modes" and "Preset format changes in dsh 0.2.0" sections below before upgrading. The built-in plugin inventory moves with the version; check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) first.
 
 ## Install
 
@@ -164,48 +168,57 @@ A "mode" is a dsh **Agent preset**: each mode is one session shape with its own 
 
 | Mode | id | Description | Distribution | Doc |
 |------|-----|------|---------|------|
-| NixOS模式 | `nixos` | validates the NixOS host at initialization (non-NixOS denies all execution); loads `nixos_shell` / `nixos_cli` and the development prompts | inside the dsh-nixos-shell package, seed-once | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, seed-once | [modes/maintenance.md](modes/maintenance.md) |
-| 新闻三要素模式 | `news-three-elements` | a read-only creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear; material comes first (only what cannot be tied back is refused), co-created material is searched and re-skinned (no search, no dispatch), online skill package, opening picker, anything not in Simplified Chinese refused | **standalone package** `dsh-preset-news-three-elements`, registered as a roster preset root | [modes/news-three-elements.md](modes/news-three-elements.md) |
+| NixOS模式 | `nixos` | validates the NixOS host at initialization (non-NixOS denies all execution); loads `nixos_shell` / `nixos_cli` and the development prompts | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/nixos.md](modes/nixos.md) |
+| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/maintenance.md](modes/maintenance.md) |
+| 新闻三要素模式 | `news-three-elements` | a read-only creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear; material comes first (only what cannot be tied back is refused), co-created material is searched and re-skinned (no search, no dispatch), online skill package, opening picker, anything not in Simplified Chinese refused | **standalone package** `dsh-preset-news-three-elements`, as a **profile patch row + content directory** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
     nixosMode = true;         # id `nixos` — NixOS模式
     maintenanceMode = true;   # id `maintenance` — 维护模式 (derived from NixOS模式)
-    newsThreeElements = true; # id `news-three-elements` — standalone package, registers a preset root
+    newsThreeElements = true; # id `news-three-elements` — standalone package
+    # Preset content source: by default it follows the dsh channel (stable →
+    # dsh-nixos-shell-stable, presets frozen at the pinned rev; alpha →
+    # dsh-nixos-shell, following HEAD). You normally leave this alone; align it
+    # only when the @kihara777/dsh-nixos-shell injected via plugins.packages
+    # comes from a different variant.
+    # package = pkgs.dsh-nixos-shell;
   };
 }
 ```
 
-> **Two distribution mechanisms**: `nixosMode` / `maintenanceMode` are **seed-once** copied by the dsh-nixos-shell package into `$DSH_HOME/.agent-presets/<id>` (an existing target is not overwritten, respecting later user edits); `newsThreeElements` comes from the **standalone package** `dsh-preset-news-three-elements` — the module registers its `share/dsh-agent-presets` as an extra root of the `agent-presets` roster, so the preset is read straight from the store: no copy, no seeding, and an upgrade is the update. Each mode's behavior, composition structure, and maintenance rules live in the docs linked above.
+> **As of 0.2.0 there is exactly one distribution mechanism**: every mode is one `@deepseek-ai/dsh-agent-preset` patch row (the module splices it into `$DSH_HOME/profiles/<profile>/cordis.patch.yml`), with the plugin-row body taken **verbatim** from that package's `preset.patch.yml`. The two 0.1.x paths are gone with the upstream change (the `nixosMode`/`maintenanceMode` seed-once directory copy, and the extra roster root for `newsThreeElements`) — the `roots` mechanism no longer exists at all. News Three Elements mode is the only one that still needs a content directory: its plugins are files shipped with the preset rather than an npm package, so the module assembles them under `$DSH_HOME/.agent-presets/news-three-elements/` (rebuilt wholesale, not seed-once) and the patch row refers to them by relative path. Each mode's behavior, composition structure, and maintenance rules live in the docs linked above.
 
-### Preset format changes in dsh 0.2.0 (preparation phase)
+> **Two further modes on the deployment side are not distributed by this repository**: 掌灯模式 (`lampkeeper`, order 12) and Ocean Spiral (`ocean-spiral`, order 14). Their content source is a private repository (Kitsunome), but their 0.2.0 shape is exactly the same as the three above — one patch row plus a content directory assembled under `$DSH_HOME/.agent-presets/<id>/`, with the anchor written as `new URL('../../.agent-presets/<id>/', baseUrl)` (**Ocean Spiral only moved into a repository on 2026-10-02**; before that it existed solely as one deployed copy, with no repository and no seeding). Their consistency checks live there too: `develop/check-lampkeeper-derivation.py` and `develop/check-ocean-spiral-derivation.py`.
+
+### Preset format changes in dsh 0.2.0 (landed 2026-10-02)
 
 dsh 0.2.0 reworked how an Agent preset is carried, and the **directory-based preset channel was removed**:
 
-| | 0.1.x (what the current deployment uses) | 0.2.0 |
+| | 0.1.x (no longer used as of 0.2.0) | 0.2.0 (current) |
 |---|---|---|
 | Preset shape | a `$DSH_HOME/.agent-presets/<id>/` directory | one loader patch entry in the profile's user patch layer (`$DSH_HOME/profiles/<profile>/cordis.patch.yml`) |
 | Composition and metadata | `agent.cordis.yml` (the full composition) + `preset.yml` (`name` / `description`) | the `config.plugins` of an `@deepseek-ai/dsh-agent-preset` row, plus `config.name` / `config.description` |
 | Discovery | `@deepseek-ai/dsh-agent-presets` (plural) scans roots | the Loader tree itself; the plural package **no longer exists** in 0.2.0 |
 | Roster ordering | none | `config.order` (built-ins occupy 1–4; must be unique across presets) |
+| Host row | `agent-presets` (plural) with its `roots` table | `agent-preset-registry`; `default` is that row's **required config**, and settings keeps only `selectedDefault` |
 
-**Current state: preparation phase, not migrated.** This repository has added the new-format files `packages/dsh-nixos-shell/presets/{nixos-mode,maintenance-mode}/preset.patch.yml`, coexisting with the old `agent.cordis.yml` / `preset.yml` (the 0.1.x channel still uses the old files); `develop/check-preset-derivation.py` now checks the derivation relation in both channels. `modules/dsh.nix` still seed-once copies into `$DSH_HOME/.agent-presets/<id>` and `packages/dsh.nix` is still `0.1.5-rc.2` — **no module or runtime change has landed**. Each mode's own description lives in the docs linked above.
+**Repository HEAD maintains only the new format**: the 0.1.x `agent.cordis.yml` has been deleted from all three preset locations, so the two formats no longer coexist on HEAD — they diverge only at the point of use. The stable channel takes its preset content from the commit pinned in `packages/dsh-nixos-shell-stable.nix` (`0175f85`, **the last commit where both formats coexisted**; 0.1.x users take it by rev), while the alpha channel follows HEAD. Freezing does not mean "stable never updates": it means the update moment is decidable — a preset change on HEAD is exercised through the alpha channel first, and then `pinnedRev` is moved forward by one explicit single-line edit instead of drifting into the stable channel unnoticed.
 
-The new-format files were verified on a real `dsh 0.2.0-rc.2` instance (throwaway `DSH_HOME` + `agentPresets/list`): the `broken` field of both `nixos` (order 10) and `maintenance` (order 11) is empty; replace one row's package name with a nonexistent one, or drop `tool-fs-search`'s required `sampleOverCapGlobResults`, and that same entry immediately reports a concrete `broken` — the criterion has discriminating power.
+How the module side (`modules/dsh.nix`) is wired:
 
-**Three necessary differences** from the old file (copying it verbatim would break):
-
-1. **`baseUrl` changed meaning.** In 0.1.x it is the preset's own directory; in 0.2.0 it is measured to be the **profile directory** (`$DSH_HOME/profiles/<profile>/`). The old file writes its skill roots as `new URL('skills/', baseUrl)`, which would point at `<profile>/skills/` and make the skills **vanish silently**; the new file resolves the `@kihara777/dsh-nixos-shell` package root from `baseUrl` and appends `presets/<mode>/` — a resolution failure makes the whole preset `broken` instead of degrading into "no skills".
-2. Metadata (the old `preset.yml` `name` / `description`) moved into `config.name` / `config.description`.
-3. `config.order` is new.
+- the preset body is spliced **verbatim** into the `cordis.patch.yml` the module already generates (no second mechanism, no copied plugin rows — a copy would inevitably drift);
+- it reads the `dsh-nixos-shell` variant's `passthru.presetsSource` (the stable variant uses `builtins.fetchTarball` for the pinned rev, so this is an **evaluation-time read of a source path**, with no import-from-derivation);
+- the channel decision comes from the dsh package's own `passthru.dshChannel`, so switching channels is one `nixkits.dsh.package` line and the preset content follows;
+- `nixkits.dsh.agentPresets.*` now emits an `- id: agent-preset-registry` patch row; the old `settings."agent-presets"` **fails evaluation outright** — nothing reads that key any more, so leaving it would only lose your declared default silently;
+- note: the injected `@kihara777/dsh-nixos-shell` and `presets.package` must be the **same variant** (the preset body comes from the latter while the skill roots resolve to the former at runtime); a mismatch raises a `lib.warn` at evaluation time.
 
 **Per-plugin config schema differences** (each plugin package's `Config` schema compared row by row across the two build artifacts, `0.1.6-alpha.2` → `0.2.0-rc.2`):
 
 | Plugin row | Change | Effect on this preset |
 |------------|--------|-----------------------|
-| `dsh-tool-bash` / `dsh-tool-pwsh` | new optional `promoteOnTimeout` (default `true`) | this preset sets no such key → from 0.2.0 a foreground bash call that hits its timeout is **promoted to a background job** instead of being killed. A behavior change; decide whether to accept or pin it before landing |
+| `dsh-tool-bash` / `dsh-tool-pwsh` | new optional `promoteOnTimeout` (default `true`) | this preset **does not set that key** (decision: behaviour defaults follow upstream) → from 0.2.0 a foreground bash call that hits its timeout is **promoted to a background job** instead of being killed |
 | `dsh-tool-workflow` | new optional `enableRunInBackground` (default `true`) | unset → gains background capability |
 | `dsh-tool-ask-user` | from "no Config" to `{ mode?: "legacy" \| "timed", timeout?: -1 \| number }` (defaults `legacy` / `120`) | unset → behavior matches the old release |
 | `dsh-compaction-basic` | new optional `headroomTokens` (the same field is added inside `modelPolicies[]`) | unset → one more tunable only |
@@ -215,13 +228,38 @@ The new-format files were verified on a real `dsh 0.2.0-rc.2` instance (throwawa
 
 > The comparison covers `dsh-tool-subagent`'s `backgroundMode` / `maxDepth` union, `dsh-plan-mode`'s hand-rolled strict `{ section }` validation (an unknown key is an error), and this repository's three `@kihara777/dsh-nixos-shell` rows — none changed.
 
-**Still to do before landing** (not done in this repository yet):
+> ⚠️ **`promoteOnTimeout` is the only new default in this upgrade that changes day-to-day behavior** (decision: **not written into the preset**, following upstream). Its effect: a foreground bash call that hits its timeout is no longer killed but **promoted to a background job**, and the caller receives a job id; `job_output` / `job_list` / `job_kill` therefore become the way to finish up after a timeout. To get the old behaviour (kill on timeout), write `config.promoteOnTimeout = false` explicitly on that row in the preset — this repository deliberately does not pin it, so that upstream's default can still reach us.
 
-- `modules/dsh.nix`: under 0.2.0 a preset is no longer "copy a directory" but "write patch entries into `$DSH_HOME/profiles/<profile>/cordis.patch.yml`";
-- host plane: the 0.1.x `agent-presets` (plural) host row and its settings namespace become `agent-preset-registry` in 0.2.0 — `default` becomes a **required config of that row** (no longer a settings key), settings keeps only `selectedDefault` (the namespace name is the row id), and the `roots` mechanism is gone entirely (an existing `agent-presets.default` in `settings.yaml` must be rewritten);
-- the standalone package `dsh-preset-news-three-elements` is also a directory-based preset and must be converted too;
-- in the new-format files the persona's "presets live under `.agent-presets/<id>/`" wording no longer holds on 0.2.0 (a `⚠️ migration TODO` comment marks it in the file; it is deliberately unchanged, because rewriting it changes the prompt sent to the model);
-- decide, one by one, on the behavior-changing defaults in the table above (`promoteOnTimeout` and friends).
+**Four necessary differences from the old files** (copying them verbatim breaks):
+
+1. **`baseUrl` changed meaning.** In 0.1.x it is the preset's own directory; in 0.2.0 it is measured to be the **profile directory** (`$DSH_HOME/profiles/<profile>/`). The old file writes its skill roots as `new URL('skills/', baseUrl)`, which would point at `<profile>/skills/` and make the skills **vanish silently**. This repository's two presets resolve the `@kihara777/dsh-nixos-shell` package root from `baseUrl` and append `presets/<mode>/`; the two presets in the private repository derive `../../.agent-presets/<id>/` instead — both carry an **existence guard**, so a wrong anchor becomes `broken` rather than degrading into "no skills".
+2. Metadata (the old `preset.yml` `name` / `description`) moved into `config.name` / `config.description`.
+3. `config.order` is new.
+4. **Relative plugin paths must be re-anchored**: a relative specifier has to start with `.` (the loader resolves only those against `baseUrl`; **an absolute path is imported as a bare package name and fails**), and since `baseUrl` is now the profile directory, `./plugins/x.js` becomes `../../.agent-presets/<id>/plugins/x.js`. Consequence: if a preset's own plugin files import `@deepseek-ai/*` peers by bare name, the module must link `@deepseek-ai` into `$DSH_HOME/node_modules` too, or that row only reports `… never started` (see "How to tell a preset actually mounted" below).
+
+#### How to tell a preset actually mounted
+
+**"It is in the roster" does not mean the migration succeeded**: when a preset fails to mount, 0.2.0 only reports a `broken` field on that entry in `agentPresets/list` — **no such field means it passed the upstream health check**. The criterion is executable:
+
+```bash
+# how the throwaway instance does it: start dsh → grab the token from boot.log
+# → exchange it for a cookie → call the RPC
+curl -sS -b cookies -H 'content-type: application/json' \
+  -d '{"type":"client-request","rpcId":"1","method":"agentPresets/list","payload":{"args":{}}}' \
+  http://127.0.0.1:<port>/api/agentPresets/list
+```
+
+The 2026-10-02 landing acceptance (throwaway `DSH_HOME`, `dsh 0.2.0-rc.2`): **9 entries** (4 built-ins + `nixos` order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocean-spiral` 14) with **every `broken` empty**; three counterexamples each changed **one place in a real file**:
+
+| Counterexample | What was changed (one place) | The `broken` reported by `agentPresets/list` |
+|------|-----------------|-----------------------------------|
+| package name | `tool-fs-search`'s package name changed to the nonexistent `@deepseek-ai/dsh-tool-fs-searchX` | `tool-fs-search (@deepseek-ai/dsh-tool-fs-searchX): never started` (all 5 derived presets report it — they share the same row) |
+| anchor | Ocean Spiral's skill root `../../.agent-presets/ocean-spiral/` → `…ocean-spiral-typo/` | `skill-filesystem (…): ocean-spiral skill roots missing: <path>` + `oceanspiral-scene (…): never started` |
+| assembly | one missing `@deepseek-ai` link under `$DSH_HOME/node_modules` | `lampkeeper-shell (../../.agent-presets/lampkeeper/components/lib/index.js): never started` |
+
+That last row is **a real trap this landing fixed**: a preset's own plugin files live under `$DSH_HOME/.agent-presets/<id>/…`, and when they import peers by bare name Node walks up from the **file's own directory** looking for `node_modules`. The module used to link only `@kihara777`, so after a dsh restart 掌灯模式 turned `broken` — the two were stepping on each other inside one `$DSH_HOME`. The module now links both `@kihara777` and `@deepseek-ai`.
+
+**Undecided item (deliberately unchanged)**: in the new-format files, the persona's sentence "presets live under the `$DSH_HOME/.agent-presets/<id>/` directory" no longer holds on 0.2.0 (the directory-based **discovery** channel is gone; only the **content** of some presets is still assembled there). Rewriting it changes **the prompt sent to the model** — a behaviour change outside this landing's approval — so the files carry a `⚠️ undecided (deliberately unchanged in the 2026-10-02 landing)` comment, awaiting the maintainer's separate decision.
 
 ## Sudo daemon
 
@@ -241,163 +279,194 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 
 ## Plugin inventory
 
-Built-in plugin entry ids for dsh 0.1.5-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+Built-in plugin entry ids for dsh 0.2.0-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 
 ```text
-  agent -> @deepseek-ai/dsh-agent
-  agent-default-model -> @deepseek-ai/dsh-agent-default-model
-  agent-instructions -> @deepseek-ai/dsh-agent-instructions
-  agent-loop -> @deepseek-ai/dsh-agent-loop
-  agent-presets -> @deepseek-ai/dsh-agent-presets
-  api-remotes -> @deepseek-ai/dsh-api-remotes
-  approval -> @deepseek-ai/dsh-user-approval
-  attachment-local -> @deepseek-ai/dsh-attachment-local
-  bash-sandbox -> @deepseek-ai/dsh-bash-sandbox
-  client-hmr -> @deepseek-ai/dsh-client-hmr
-  code-runtime -> @deepseek-ai/dsh-code-runtime-worker-thread
-  command-compact -> @deepseek-ai/dsh-command-compact
-  command-feedback -> @deepseek-ai/dsh-command-feedback
-  command-goal -> @deepseek-ai/dsh-command-goal
-  commands -> @deepseek-ai/dsh-commands
-  compaction-basic -> @deepseek-ai/dsh-compaction-basic
-  connection -> @deepseek-ai/dsh-client-connection
-  cordis-client-runner -> @deepseek-ai/dsh-cordis-client-runner
-  cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
-  credentials -> @deepseek-ai/dsh-credentials-local
-  deepseek-llm-api-extensions -> @deepseek-ai/dsh-deepseek-llm-api-extensions
-  directory-picker -> @deepseek-ai/dsh-host-directory-picker-auto
-  file-reference-local -> @deepseek-ai/dsh-file-reference-local
-  file-upload -> @deepseek-ai/dsh-client-file-upload
-  fs-observation-policy -> @deepseek-ai/dsh-fs-observation-policy
-  fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
-  goal -> @deepseek-ai/dsh-goal
-  goal-round-driver -> @deepseek-ai/dsh-goal-round-driver
-  hmr -> @deepseek-ai/cordis-plugin-hmr
-  jobs -> @deepseek-ai/dsh-jobs-local
+  tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
+  plugin-manager -> @deepseek-ai/dsh-plugin-manager
+  timer -> @deepseek-ai/cordis-plugin-timer
+  hmr -> @deepseek-ai/dsh-hmr
   llm -> @deepseek-ai/dsh-llm
-  llm-deepseek -> @deepseek-ai/dsh-llm-deepseek
-  llm-pi-ai -> @deepseek-ai/dsh-llm-pi-ai
-  llm-retry -> @deepseek-ai/dsh-llm-retry
-  locale -> @deepseek-ai/dsh-client-locale
-  message-feedback -> @deepseek-ai/dsh-message-feedback
-  modules -> @deepseek-ai/dsh-client-modules
-  open-in-app -> @deepseek-ai/dsh-host-open-in-app
-  permission -> @deepseek-ai/dsh-permission-presets
-  plan-mode -> @deepseek-ai/dsh-plan-mode
-  plugin-inventory -> @deepseek-ai/dsh-host-plugin-inventory
-  plugin-package-inventory-deepseek -> @deepseek-ai/dsh-plugin-package-inventory-deepseek
-  pwsh-sandbox -> @deepseek-ai/dsh-pwsh-sandbox
-  repeat-tool-reminder -> @deepseek-ai/dsh-repeat-tool-reminder
-  resources -> @deepseek-ai/dsh-client-resources
-  sandbox -> @deepseek-ai/dsh-sandbox-local
-  sandbox-policy -> @deepseek-ai/dsh-sandbox-policy
-  session-checkpoint-policy -> @deepseek-ai/dsh-session-checkpoint-policy
-  session-controller -> @deepseek-ai/dsh-api-session-controller
+  deepseek-llm-api-extensions -> @deepseek-ai/dsh-deepseek-llm-api-extensions
   session -> @deepseek-ai/dsh-session
   session-log-deepseek -> @deepseek-ai/dsh-session-log-deepseek
-  session-log-download -> @deepseek-ai/dsh-session-log-export
-  session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
-  session-projection-cache -> @deepseek-ai/dsh-session-projection-cache
-  session-projection -> @deepseek-ai/dsh-session-projection
-  session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
-  session-reference -> @deepseek-ai/dsh-session-reference
-  session-stats -> @deepseek-ai/dsh-session-stats
-  session-telemetry-otel -> @deepseek-ai/dsh-session-telemetry-otel
+  typert -> @deepseek-ai/dsh-typert-registry
+  typert-loader -> @deepseek-ai/dsh-typert-loader
+  typert-gateway -> @deepseek-ai/dsh-api-gateway
   session-title -> @deepseek-ai/dsh-session-title
   session-title-llm -> @deepseek-ai/dsh-session-title-first-prompt-llm
-  session-turn-outline -> @deepseek-ai/dsh-session-turn-outline
-  settings-controller -> @deepseek-ai/dsh-api-settings-controller
-  settings -> @deepseek-ai/dsh-settings-file
-  shell-env -> @deepseek-ai/dsh-shell-env
-  skill-badge -> @deepseek-ai/dsh-skill-badge
-  skill -> @deepseek-ai/dsh-skill
-  skill-filesystem -> @deepseek-ai/dsh-skill-filesystem
-  spill-local -> @deepseek-ai/dsh-spill-local
-  spill-policy -> @deepseek-ai/dsh-spill-policy
+  user-questions -> @deepseek-ai/dsh-user-questions
+  agent -> @deepseek-ai/dsh-agent
+  plugin-package-inventory-deepseek -> @deepseek-ai/dsh-plugin-package-inventory-deepseek
+  agent-default-model -> @deepseek-ai/dsh-agent-default-model
+  jobs -> @deepseek-ai/dsh-jobs-local
+  llm-retry -> @deepseek-ai/dsh-llm-retry
+  config-editor -> @deepseek-ai/dsh-config-editor
+  settings -> @deepseek-ai/dsh-settings
+  authorization -> @deepseek-ai/dsh-authorization
+  deepseek-account -> @deepseek-ai/dsh-deepseek-account-platform
+  credentials -> @deepseek-ai/dsh-credentials-local
+  llm-pi-ai -> @deepseek-ai/dsh-llm-pi-ai
+  session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
+  attachment-local -> @deepseek-ai/dsh-attachment-local
+  session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
+  session-projection -> @deepseek-ai/dsh-session-projection
   storage -> @deepseek-ai/dsh-storage
-  storage-domain -> @deepseek-ai/dsh-storage-domain
   storage-json -> @deepseek-ai/dsh-storage-json
-  subagent -> @deepseek-ai/dsh-subagent
-  subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
-  subagent-model-selection-settings -> @deepseek-ai/dsh-tool-subagent/model-selection-settings
-  subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
+  storage-domain -> @deepseek-ai/dsh-storage-domain
+  session-projection-cache -> @deepseek-ai/dsh-session-projection-cache
+  otel -> @deepseek-ai/dsh-otel
+  session-telemetry-otel -> @deepseek-ai/dsh-session-telemetry-otel
   subprocess -> @deepseek-ai/dsh-subprocess-local
-  system-prompt -> @deepseek-ai/dsh-system-prompt
-  timeout-policy -> @deepseek-ai/dsh-tool-call-timeout-policy
-  timer -> @deepseek-ai/cordis-plugin-timer
-  token-meter -> @deepseek-ai/dsh-token-meter
+  sandbox -> @deepseek-ai/dsh-sandbox-local
+  sandbox-policy -> @deepseek-ai/dsh-sandbox-policy
+  bash-sandbox -> @deepseek-ai/dsh-bash-sandbox
+  pwsh-sandbox -> @deepseek-ai/dsh-pwsh-sandbox
+  approval -> @deepseek-ai/dsh-user-approval
+  permission -> @deepseek-ai/dsh-permission-presets
+  shell-env -> @deepseek-ai/dsh-shell-env
   tool-bash -> @deepseek-ai/dsh-tool-bash
+  tool-pwsh -> @deepseek-ai/dsh-tool-pwsh
+  tool-jobs -> @deepseek-ai/dsh-tool-jobs
+  fs-observation-policy -> @deepseek-ai/dsh-fs-observation-policy
   tool-fs -> @deepseek-ai/dsh-tool-fs
   tool-fs-search -> @deepseek-ai/dsh-tool-fs-search
-  tool-goal -> @deepseek-ai/dsh-tool-goal
-  tool-jobs -> @deepseek-ai/dsh-tool-jobs
-  tool-pwsh -> @deepseek-ai/dsh-tool-pwsh
-  tool-ralph -> @deepseek-ai/dsh-tool-ralph
-  tool-result-pruner -> @deepseek-ai/dsh-compaction-tool-result-pruner
-  tools -> @deepseek-ai/dsh-tools
+  agent-instructions -> @deepseek-ai/dsh-agent-instructions
+  skill -> @deepseek-ai/dsh-skill
+  skill-filesystem -> @deepseek-ai/dsh-skill-filesystem
+  skill-badge -> @deepseek-ai/dsh-skill-badge
   tool-skill -> @deepseek-ai/dsh-tool-skill
+  commands -> @deepseek-ai/dsh-commands
+  command-feedback -> @deepseek-ai/dsh-command-feedback
+  goal -> @deepseek-ai/dsh-goal
+  goal-round-driver -> @deepseek-ai/dsh-goal-round-driver
+  command-goal -> @deepseek-ai/dsh-command-goal
+  plan-mode -> @deepseek-ai/dsh-plan-mode
+  token-meter -> @deepseek-ai/dsh-token-meter
+  compaction-basic -> @deepseek-ai/dsh-compaction-basic
+  command-compact -> @deepseek-ai/dsh-command-compact
+  subagent -> @deepseek-ai/dsh-subagent
+  subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
+  subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
+  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control/list-agents
   tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-fork -> @deepseek-ai/dsh-tool-subagent
-  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control/list-agents
-  tool-todo -> @deepseek-ai/dsh-tool-todo
-  tool-web -> @deepseek-ai/dsh-tool-web
+  ptc-runtime -> @deepseek-ai/dsh-ptc-runtime-node
+  workflow-ptc -> @deepseek-ai/dsh-workflow-ptc
   tool-workflow -> @deepseek-ai/dsh-tool-workflow
-  typert -> @deepseek-ai/dsh-typert-registry
-  typert-gateway -> @deepseek-ai/dsh-api-gateway
-  typert-loader -> @deepseek-ai/dsh-typert-loader
-  ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
-  ui-approval -> @deepseek-ai/dsh-client-ui-approval
-  ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
-  ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
-  ui-chat -> @deepseek-ai/dsh-client-ui-chat
-  ui-commands -> @deepseek-ai/dsh-client-ui-commands
-  ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
-  ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
-  ui-deliverables -> @deepseek-ai/dsh-client-ui-deliverables
-  ui-goal -> @deepseek-ai/dsh-client-ui-goal
-  ui-input-trigger -> @deepseek-ai/dsh-client-ui-input-trigger
-  ui-jobs -> @deepseek-ai/dsh-client-ui-jobs
-  ui-layout -> @deepseek-ai/dsh-client-ui-layout
-  ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
-  ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
+  timeout-policy -> @deepseek-ai/dsh-tool-call-timeout-policy
+  spill-local -> @deepseek-ai/dsh-spill-local
+  spill-policy -> @deepseek-ai/dsh-spill-policy
+  session-checkpoint-policy -> @deepseek-ai/dsh-session-checkpoint-policy
+  tool-result-pruner -> @deepseek-ai/dsh-compaction-tool-result-pruner
+  image-offload -> @deepseek-ai/dsh-compaction-image-offload
+  tool-todo -> @deepseek-ai/dsh-tool-todo
+  tool-goal -> @deepseek-ai/dsh-tool-goal
+  tool-ralph -> @deepseek-ai/dsh-tool-ralph
+  repeat-tool-reminder -> @deepseek-ai/dsh-repeat-tool-reminder
+  web -> @deepseek-ai/dsh-web
+  web-search-deepseek -> @deepseek-ai/dsh-web-search-deepseek
+  web-fetch-http -> @deepseek-ai/dsh-web-fetch-http
+  tool-web -> @deepseek-ai/dsh-tool-web
+  mcp-resources -> @deepseek-ai/dsh-mcp-resources
+  tools -> @deepseek-ai/dsh-tools
+  system-prompt -> @deepseek-ai/dsh-system-prompt
+  agent-loop -> @deepseek-ai/dsh-agent-loop
+  fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
+  llm-deepseek -> @deepseek-ai/dsh-llm-deepseek-api-key
+  llm-deepseek-account -> @deepseek-ai/dsh-llm-deepseek-account
+  desktop-product-telemetry -> @deepseek-ai/dsh-host-product-telemetry-otel
+  product-analytics -> @deepseek-ai/dsh-client-product-analytics
+  subagent-model-selection-settings -> @deepseek-ai/dsh-tool-subagent/model-selection-settings
+  message-feedback -> @deepseek-ai/dsh-message-feedback
+  session-log-download -> @deepseek-ai/dsh-session-log-export
+  open-in-app -> @deepseek-ai/dsh-host-open-in-app
   ui-open-in-app -> @deepseek-ai/dsh-client-ui-open-in-app
-  ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
-  ui-plan -> @deepseek-ai/dsh-client-ui-plan
-  ui-reference -> @deepseek-ai/dsh-client-ui-reference
+  workspace -> @deepseek-ai/dsh-workspace
+  session-reference -> @deepseek-ai/dsh-session-reference
+  file-reference-local -> @deepseek-ai/dsh-file-reference-local
+  session-stats -> @deepseek-ai/dsh-session-stats
+  session-turn-outline -> @deepseek-ai/dsh-session-turn-outline
+  directory-picker -> @deepseek-ai/dsh-host-directory-picker-auto
+  plugin-inventory -> @deepseek-ai/dsh-host-plugin-inventory
+  session-controller -> @deepseek-ai/dsh-api-session-controller
+  job-controller -> @deepseek-ai/dsh-api-job-controller
+  terminal-controller -> @deepseek-ai/dsh-api-terminal-controller
+  workspace-files -> @deepseek-ai/dsh-api-workspace-files
+  ui-settings-account -> @deepseek-ai/dsh-client-ui-settings-account
+  account-controller -> @deepseek-ai/dsh-api-account-controller
+  settings-controller -> @deepseek-ai/dsh-api-settings-controller
+  workspace-controller -> @deepseek-ai/dsh-api-workspace-controller
+  cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
+  cordis-inspect-providers -> @deepseek-ai/dsh-tool-cordis/host
+  web-startup -> @deepseek-ai/dsh-web-app/startup
+  webserver -> @deepseek-ai/dsh-host-webserver
+  web-runtime -> @deepseek-ai/dsh-web-app
+  client-hmr -> @deepseek-ai/dsh-client-hmr
+  modules -> @deepseek-ai/dsh-client-modules
+  connection -> @deepseek-ai/dsh-client-connection
+  file-upload -> @deepseek-ai/dsh-client-file-upload
+  api-remotes -> @deepseek-ai/dsh-api-remotes
+  cordis-client-runner -> @deepseek-ai/dsh-cordis-client-runner
+  ui-theme -> @deepseek-ai/dsh-client-ui-theme
+  locale -> @deepseek-ai/dsh-client-locale
+  shortcuts -> @deepseek-ai/dsh-client-shortcuts
+  ui-shortcuts -> @deepseek-ai/dsh-client-ui-shortcuts
+  ui-layout -> @deepseek-ai/dsh-client-ui-layout
   ui-renderer -> @deepseek-ai/dsh-client-ui-renderer
-  ui-schedule -> @deepseek-ai/dsh-client-ui-schedule
   ui-session -> @deepseek-ai/dsh-client-ui-session
+  resources -> @deepseek-ai/dsh-client-resources
+  ui-sidebar -> @deepseek-ai/dsh-client-ui-sidebar
+  ui-sidebar-right -> @deepseek-ai/dsh-client-ui-sidebar-right
+  office-to-pdf -> @deepseek-ai/dsh-office-to-pdf
+  ui-sidebar-documentpreview -> @deepseek-ai/dsh-client-ui-sidebar-documentpreview
+  ui-sidebar-browser -> @deepseek-ai/dsh-client-ui-sidebar-browser
+  ui-sidebar-terminal -> @deepseek-ai/dsh-client-ui-sidebar-terminal
+  ui-sidebar-files -> @deepseek-ai/dsh-client-ui-sidebar-files
   ui-settings -> @deepseek-ai/dsh-client-ui-settings
   ui-settings-general -> @deepseek-ai/dsh-client-ui-settings-general
   ui-settings-models -> @deepseek-ai/dsh-client-ui-settings-models
+  ui-plugin-manager -> @deepseek-ai/dsh-client-ui-plugin-manager
   ui-settings-plugin-inventory -> @deepseek-ai/dsh-client-ui-settings-plugin-inventory
-  ui-settings-plugins -> @deepseek-ai/dsh-client-ui-settings-plugins
-  ui-sidebar -> @deepseek-ai/dsh-client-ui-sidebar
-  ui-sidebar-documentpreview -> @deepseek-ai/dsh-client-ui-sidebar-documentpreview
-  ui-sidebar-files -> @deepseek-ai/dsh-client-ui-sidebar-files
-  ui-sidebar-right -> @deepseek-ai/dsh-client-ui-sidebar-right
+  ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
+  ui-approval -> @deepseek-ai/dsh-client-ui-approval
+  ui-chat -> @deepseek-ai/dsh-client-ui-chat
+  ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
+  ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
+  ui-tool -> @deepseek-ai/dsh-client-ui-tool
+  ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
+  ui-deliverables -> @deepseek-ai/dsh-client-ui-deliverables
+  workspace-changes -> @deepseek-ai/dsh-workspace-changes
+  ui-workspace -> @deepseek-ai/dsh-client-ui-workspace
+  ui-workflow-run -> @deepseek-ai/dsh-client-ui-workflow-run
+  ui-input-trigger -> @deepseek-ai/dsh-client-ui-input-trigger
+  ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-skill -> @deepseek-ai/dsh-client-ui-skill
   ui-subagent -> @deepseek-ai/dsh-client-ui-subagent
-  ui-theme -> @deepseek-ai/dsh-client-ui-theme
-  ui-tool -> @deepseek-ai/dsh-client-ui-tool
-  ui-trajectory -> @deepseek-ai/dsh-client-ui-trajectory
+  ui-reference -> @deepseek-ai/dsh-client-ui-reference
+  ui-jobs -> @deepseek-ai/dsh-client-ui-jobs
+  ui-goal -> @deepseek-ai/dsh-client-ui-goal
+  ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
+  ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
+  ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
+  ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  ui-settings-session-log -> @deepseek-ai/dsh-client-ui-settings-session-log
+  ui-settings-plugins -> @deepseek-ai/dsh-client-ui-settings-plugins
+  ui-settings-shell -> @deepseek-ai/dsh-client-ui-settings-shell
+  ui-settings-agent-loop -> @deepseek-ai/dsh-client-ui-settings-agent-loop
+  ui-settings-subagent -> @deepseek-ai/dsh-client-ui-settings-subagent
+  ui-settings-web-search -> @deepseek-ai/dsh-client-ui-settings-web-search
+  ui-plan -> @deepseek-ai/dsh-client-ui-plan
   ui-user-questions -> @deepseek-ai/dsh-client-ui-user-questions
-  ui-workflow-run -> @deepseek-ai/dsh-client-ui-workflow-run
-  ui-workspace -> @deepseek-ai/dsh-client-ui-workspace
-  user-questions -> @deepseek-ai/dsh-user-questions
-  web -> @deepseek-ai/dsh-web
-  web-fetch-http -> @deepseek-ai/dsh-web-fetch-http
-  web-runtime -> @deepseek-ai/dsh-web-app
-  web-search-deepseek -> @deepseek-ai/dsh-web-search-deepseek
-  webserver -> @deepseek-ai/dsh-host-webserver
-  web-startup -> @deepseek-ai/dsh-web-app/startup
-  workflow-worker-thread -> @deepseek-ai/dsh-workflow-worker-thread
-  workspace-controller -> @deepseek-ai/dsh-api-workspace-controller
-  workspace -> @deepseek-ai/dsh-workspace
-  workspace-files -> @deepseek-ai/dsh-api-workspace-files
+  ui-trajectory -> @deepseek-ai/dsh-client-ui-trajectory
+  agent-preset-registry -> @deepseek-ai/dsh-agent-preset-registry
+  preset-standard -> @deepseek-ai/dsh-agent-preset
+  preset-ptc -> @deepseek-ai/dsh-agent-preset
+  preset-minimal -> @deepseek-ai/dsh-agent-preset
+  preset-cordis -> @deepseek-ai/dsh-agent-preset
 ```
 
 ## Declarative settings
@@ -430,7 +499,7 @@ dsh settings-menu options live in `$DSH_HOME/settings.yaml` (file-backed, hot-re
 |-----------|--------|-------------|
 | `agent-default-model` | `provider`, `model`, `reasoningEffort` (`off`/`low`/`high`/`max`) | default model for new sessions |
 | `agent-loop` | `maxParallelToolCalls` (integer ≥1, default 10) | per-turn parallel tool-call ceiling |
-| `agent-presets` | `default` (preset id; no schema default — the composition row's `standard` backstops it), `modeSelectionEnabled` (boolean, base true) | agent presets and the switch entry |
+| `agent-preset-registry` | `selectedDefault` (preset id, `.volatile()` — the only settings-side field; the row config's `default` is a **required row config**, not a settings field) | agent-preset registry. **0.1.x's `agent-presets` (plural) row and its whole `roots` mechanism are gone in 0.2.0**; the default preset is declared by this row's `config.default`, and a stale old key is read by nothing — this module turns a leftover into an evaluation error |
 | `llm-deepseek` | `protocol`, `apiKeyEnv`, `baseURL`, `thinking`, `reasoningEffort`, `maxTokens`, `defaultContextWindow`, `streamIdleTimeoutMs`, `models`, `retryPolicy`, plus file/image byte budgets | native DeepSeek adapter |
 | `llm-pi-ai` | `providers` (dict: route → provider profile) | the pi-ai adapter's provider route table (this machine's llama-local route lives here) |
 | `locale` | `preference` (BCP 47; built-in `zh`/`en`) | interface language |
@@ -474,7 +543,7 @@ So the module provides **structured options** for 13 of them (Nix-side mirrors o
 | `nixkits.dsh.agentLoop` | `agent-loop` | `@deepseek-ai/dsh-agent-loop` |
 | `nixkits.dsh.subagentModelSelection` | `subagent-model-selection` | `@deepseek-ai/dsh-tool-subagent` |
 | `nixkits.dsh.permission` | `permission` | `@deepseek-ai/dsh-permission-presets` |
-| `nixkits.dsh.agentPresets` | `agent-presets` | `@deepseek-ai/dsh-agent-presets` |
+| `nixkits.dsh.agentPresets` | **no longer a settings namespace**: it emits the `agent-preset-registry` row's `config.default` (row config). To write the settings-side `selectedDefault`, use the escape hatch `settings."agent-preset-registry".selectedDefault` | `agent-preset-registry` row = `@deepseek-ai/dsh-agent-preset-registry` (as of 0.2.0; 0.1.x's plural `@deepseek-ai/dsh-agent-presets` package no longer exists) |
 | `nixkits.dsh.subagent` | `subagent` | `@deepseek-ai/dsh-subagent` |
 | `nixkits.dsh.shell` | `shell` | `@deepseek-ai/dsh-bash-local` / `dsh-pwsh-local` (the namespace belongs to `@deepseek-ai/dsh-shell`) |
 | `nixkits.dsh.webSearchDeepSeek` | `web-search-deepseek` | `@deepseek-ai/dsh-web-search-deepseek` |
@@ -570,6 +639,7 @@ The `deepseek-official` route's model catalogue is **built into** the adapter (`
 |-------------|-------------------|---------------------------------|
 | stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` | `deepseek-flash`, `deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
+| **both channels `0.2.0-rc.2` (current)** | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` is the only id **present in all three** catalogues **and declaring the image modality in each** — which is why the module default picks it. The other image-capable id, `deepseek-v4-flash-vision-exp`, exists only in the two older catalogues and upstream retired it on 2026-09-10, so it cannot serve as a default.
 

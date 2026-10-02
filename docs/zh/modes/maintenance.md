@@ -9,7 +9,7 @@
 | 项目 | 值 |
 |------|-----|
 | 模式 id | `maintenance` |
-| 分发方式 | dsh-nixos-shell 包内 `presets/maintenance-mode/`，seed-once 复制到 `$DSH_HOME/.agent-presets/maintenance` |
+| 分发方式 | dsh-nixos-shell 包内 `presets/maintenance-mode/preset.patch.yml`，作为一条 `@deepseek-ai/dsh-agent-preset` patch 行（与 NixOS模式同路；0.1.x 曾是 seed-once 复制） |
 | 开启选项 | `nixkits.dsh.presets.maintenanceMode = true` |
 | 派生自 | [NixOS模式](nixos.md)（组合末尾追加固定行块） |
 | 文档 | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（分发本模式的包） |
@@ -61,5 +61,5 @@
 
 ## 注意
 
-- 与 NixOS模式同为 **seed-once**：`$DSH_HOME/.agent-presets/maintenance` 已存在时不覆盖，改动请直接编辑该目录（模块会放开写权限）。
+- 与 NixOS模式同路：**0.2.0 起不再复制目录**，预设是 profile patch 层的一条 patch 行（正文逐字来自 `presets/maintenance-mode/preset.patch.yml`）。旧版播下的 `$DSH_HOME/.agent-presets/maintenance` 是 0.2.0 不读的历史残留，模块刻意不删。
 - 修改 NixOS模式后必须把相同改动镜像到维护模式，否则 `nix flake check` 会因派生漂移失败。

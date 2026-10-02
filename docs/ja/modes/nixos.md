@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | モード id | `nixos` |
-| 配布方式 | dsh-nixos-shell パッケージ内 `presets/nixos-mode/`、seed-once で `$DSH_HOME/.agent-presets/nixos` へコピー |
+| 配布方式 | dsh-nixos-shell パッケージ内 `presets/nixos-mode/preset.patch.yml` を、`@deepseek-ai/dsh-agent-preset` patch 行一本として profile の `cordis.patch.yml` へ差し込む（dsh 0.2.0；0.1.x は `$DSH_HOME/.agent-presets/nixos` へ seed-once コピーしていた） |
 | 有効化オプション | `nixkits.dsh.presets.nixosMode = true` |
 | 派生元 | 創造モード（dsh 同梱の `cordis` プリセット） |
 | ドキュメント | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（本モードを配布するパッケージ） |
@@ -54,5 +54,5 @@ rebuild 後、セッションのモード選択器で「NixOS模式」を選べ�
 
 ## 注意
 
-- **seed-once**：`$DSH_HOME/.agent-presets/nixos` が存在しない場合のみコピーする；以後このディレクトリはユーザー所有（モジュールが書込み権限を開放）となり、リポジトリ更新でも上書きされない。
+- **0.2.0 以降はディレクトリを複製しない**：プリセットは profile patch 層の `@deepseek-ai/dsh-agent-preset` 行一本であり、本文はパッケージ内 `preset.patch.yml` から逐字取る（stable チャネルはピン留め rev、alpha は HEAD に追随）。旧版が置いた `$DSH_HOME/.agent-presets/nixos` は 0.2.0 が読まない歴史的残骸で、モジュールは**意図的に削除しない**（旧契約がその副本への編集を尊重すると約束していた）。プリセットを変えるにはパッケージ内の `preset.patch.yml` を変える。
 - ゲート入口はパッケージ内サブパス `@kihara777/dsh-nixos-shell/nixos-gate` で、プリセットのコンポジションでのみマウントされ、グローバルセッションには影響しない。

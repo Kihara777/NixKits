@@ -9,7 +9,7 @@
 | Item | Value |
 |------|-------|
 | Mode id | `maintenance` |
-| Distribution | `presets/maintenance-mode/` inside the dsh-nixos-shell package, seed-once copied to `$DSH_HOME/.agent-presets/maintenance` |
+| Distribution | `presets/maintenance-mode/preset.patch.yml` inside the dsh-nixos-shell package, as one `@deepseek-ai/dsh-agent-preset` patch row (same path as NixOS模式; 0.1.x seed-once copied it) |
 | Enable option | `nixkits.dsh.presets.maintenanceMode = true` |
 | Derived from | [NixOS模式](nixos.md) (a fixed row block appended to the end of the composition) |
 | Doc | [dsh-nixos-shell.md](../dsh-nixos-shell.md) (the package shipping this mode) |
@@ -60,5 +60,5 @@ The maintenance mode composition file = the NixOS模式 composition with a fixed
 
 ## Notes
 
-- Like NixOS模式 it is **seed-once**: `$DSH_HOME/.agent-presets/maintenance` is not overwritten when it already exists — edit that directory directly (the module makes it writable).
+- Same path as NixOS模式: **nothing is copied as of 0.2.0** — the preset is one patch row in the profile patch layer (its body taken verbatim from `presets/maintenance-mode/preset.patch.yml`). A `$DSH_HOME/.agent-presets/maintenance` left by an older release is a leftover 0.2.0 never reads, and the module deliberately does not delete it.
 - After changing NixOS模式, the same change must be mirrored to maintenance mode, otherwise `nix flake check` fails on derivation drift.

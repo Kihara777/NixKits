@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | モード id | `maintenance` |
-| 配布方式 | dsh-nixos-shell パッケージ内 `presets/maintenance-mode/`、seed-once で `$DSH_HOME/.agent-presets/maintenance` へコピー |
+| 配布方式 | dsh-nixos-shell パッケージ内 `presets/maintenance-mode/preset.patch.yml` を `@deepseek-ai/dsh-agent-preset` patch 行一本として差し込む（NixOS模式と同じ経路；0.1.x は seed-once コピー） |
 | 有効化オプション | `nixkits.dsh.presets.maintenanceMode = true` |
 | 派生元 | [NixOS模式](nixos.md)（コンポジション末尾に固定行ブロックを追加） |
 | ドキュメント | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（本モードを配布するパッケージ） |
@@ -61,5 +61,5 @@ NixOS模式の全能力に加えて：
 
 ## 注意
 
-- NixOS模式と同様 **seed-once**：`$DSH_HOME/.agent-presets/maintenance` が既に存在する場合は上書きしない。変更はそのディレクトリを直接編集する（モジュールが書込み権限を開放）。
+- NixOS模式と同じ経路：**0.2.0 以降はディレクトリを複製しない**——プリセットは profile patch 層の patch 行一本で、本文は `presets/maintenance-mode/preset.patch.yml` から逐字取る。旧版が置いた `$DSH_HOME/.agent-presets/maintenance` は 0.2.0 が読まない残骸であり、モジュールは意図的に削除しない。
 - NixOS模式を変更したら、同じ変更を維護模式へ必ずミラーすること。さもないと `nix flake check` が派生ドリフトで失敗する。

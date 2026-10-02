@@ -9,7 +9,7 @@
 | 项目 | 值 |
 |------|-----|
 | 模式 id | `nixos` |
-| 分发方式 | dsh-nixos-shell 包内 `presets/nixos-mode/`，seed-once 复制到 `$DSH_HOME/.agent-presets/nixos` |
+| 分发方式 | dsh-nixos-shell 包内 `presets/nixos-mode/preset.patch.yml`，作为一条 `@deepseek-ai/dsh-agent-preset` patch 行并进 profile 的 `cordis.patch.yml`（dsh 0.2.0；0.1.x 曾是 seed-once 复制到 `$DSH_HOME/.agent-presets/nixos`） |
 | 开启选项 | `nixkits.dsh.presets.nixosMode = true` |
 | 派生自 | 创造模式（随 dsh 分发的 `cordis` 预设） |
 | 文档 | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（分发本模式的包） |
@@ -54,5 +54,5 @@ rebuild 后在会话模式选择器里选「NixOS模式」即可。
 
 ## 注意
 
-- **seed-once**：仅当 `$DSH_HOME/.agent-presets/nixos` 不存在时才复制；此后该目录归用户所有（模块会放开写权限），仓库升级不再覆盖它。
+- **0.2.0 起不再复制目录**：预设是 profile patch 层的一条 `@deepseek-ai/dsh-agent-preset` 行，正文逐字来自包内 `preset.patch.yml`（stable 通道取钉住的 rev，alpha 跟 HEAD）。旧版播下的 `$DSH_HOME/.agent-presets/nixos` 是历史残留（0.2.0 不读），模块**刻意不删**（旧契约承诺过尊重你对那份副本的编辑）。要改预设，改包里的 `preset.patch.yml`。
 - 门控入口是包内子路径 `@kihara777/dsh-nixos-shell/nixos-gate`，只在预设组合中挂载，不影响全局会话。

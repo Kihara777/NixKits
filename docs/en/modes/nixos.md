@@ -9,7 +9,7 @@
 | Item | Value |
 |------|-------|
 | Mode id | `nixos` |
-| Distribution | `presets/nixos-mode/` inside the dsh-nixos-shell package, seed-once copied to `$DSH_HOME/.agent-presets/nixos` |
+| Distribution | `presets/nixos-mode/preset.patch.yml` inside the dsh-nixos-shell package, spliced into the profile's `cordis.patch.yml` as one `@deepseek-ai/dsh-agent-preset` patch row (dsh 0.2.0; 0.1.x seed-once copied it to `$DSH_HOME/.agent-presets/nixos`) |
 | Enable option | `nixkits.dsh.presets.nixosMode = true` |
 | Derived from | creation mode (the `cordis` preset shipped with dsh) |
 | Doc | [dsh-nixos-shell.md](../dsh-nixos-shell.md) (the package shipping this mode) |
@@ -54,5 +54,5 @@ After a rebuild, pick "NixOS模式" in the session mode selector.
 
 ## Notes
 
-- **seed-once**: copied only when `$DSH_HOME/.agent-presets/nixos` does not exist; from then on that directory belongs to the user (the module makes it writable) and repo upgrades no longer overwrite it.
+- **Nothing is copied as of 0.2.0**: the preset is one `@deepseek-ai/dsh-agent-preset` row in the profile patch layer, with its body taken verbatim from the `preset.patch.yml` in the package (the stable channel takes the pinned rev, alpha follows HEAD). A `$DSH_HOME/.agent-presets/nixos` left by an older release is a historical leftover 0.2.0 never reads, and the module **deliberately does not delete it** (the old contract promised to respect your edits to that copy). To change the preset, change the `preset.patch.yml` in the package.
 - The gate entry is the in-package subpath `@kihara777/dsh-nixos-shell/nixos-gate`, mounted only in the preset composition; global sessions are unaffected.
