@@ -75,11 +75,34 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ### 预设
 
-`packages/dsh-nixos-shell/presets/` 下的两个 Agent 预设（NixOS模式 → 维护模式）是**派生关系**，不是两份独立配置：
+dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
+（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）里的一条
+`@deepseek-ai/dsh-agent-preset` 条目（`preset.patch.yml`）。0.1.x 的目录式
+`agent.cordis.yml` **已从 HEAD 删除**——两套格式不并存于 HEAD，只在「取用点」分叉：
 
-- **维护模式必须完整派生自 NixOS模式**：`maintenance-mode/agent.cordis.yml` = `nixos-mode/agent.cordis.yml` 末尾追加固定的 `maintenance-skills` 行块（含注释），除此之外不得有任何差异；两预设的 `skills/` 目录必须逐文件一致。
-- **修改 nixos 模式后必须同步维护模式**：更新 `nixos-mode/` 的任意文件（组合、元数据、技能）后，立即把相同改动镜像到 `maintenance-mode/`。
-- **漂移检查**：`develop/check-preset-derivation.py` 校验上述派生关系，已挂入 `nix flake check`（CI 每次 push 执行）；漂移时检查失败，修复后才能提交。刻意变更追加块本身时，同步更新脚本内 `MAINTENANCE_DELTA` 常量。
+- **stable 通道**（`pkgs.dsh`，npm `latest`）的预设内容取
+  `packages/dsh-nixos-shell-stable.nix` 钉住的 rev（那个 rev 同时带着旧格式）；
+- **alpha 通道**（`pkgs.dsh-alpha`，npm `next`）的预设内容跟仓库 HEAD。
+- `modules/dsh.nix` 按 dsh 包自己声明的 `passthru.dshChannel` 二选一，
+  并把它读到的 `preset.patch.yml` **逐字**并进生成的 cordis.patch.yml。
+
+`packages/dsh-nixos-shell/presets/` 下的两个预设（NixOS模式 → 维护模式）是**派生关系**，
+不是两份独立配置：
+
+- **维护模式必须完整派生自 NixOS模式**：`maintenance-mode/preset.patch.yml` 的
+  `plugins:` 正文（该行之后到文件末尾）= `nixos-mode/preset.patch.yml` 的同段 + 固定的
+  `maintenance-skills` 行块（含注释），除此之外不得有任何差异；两预设的 `skills/` 目录
+  必须逐文件一致。文件头里的 `id` / `name` / `description` / `order` 是各自的元数据，
+  不参与字节派生（由脚本按 `preset.yml` 与常量核对）。
+- **修改 nixos 模式后必须同步维护模式**：改 `nixos-mode/` 的任意文件（行、元数据、技能）
+  后，立即把相同改动镜像到 `maintenance-mode/`——注意：**`plugins:` 正文里连注释也算**，
+  两边注释不一致同样判漂。
+- **漂移检查**：`develop/check-preset-derivation.py` 校验上述派生关系，已挂入
+  `nix flake check`（CI 每次 push 执行）；漂移时检查失败，修复后才能提交。刻意变更追加块
+  本身时，同步更新脚本内 `PATCH_MAINTENANCE_DELTA` 常量。
+- **`order` 必须在 roster 里唯一**：内置预设占 1–4；NixKits 的 nixos / maintenance 取
+  10 / 11；独立包 news-three-elements 取 13；私有仓（Kitsunome）的掌灯模式取 12、
+  Ocean Spiral 取 14。新增预设前先看这几个占用。
 - **回车键行为**：会话内的「回车换行 + Shift+回车发送」交换行为由 dsh-api-balance 客户端插件的「⚙ 设置 → 界面」开关实现（全局生效、浏览器 localStorage 持久化，默认开启；DSH 原生为回车发送）；预设组合文件本身不含该逻辑，无需在预设间同步。
 
 ### 文档
