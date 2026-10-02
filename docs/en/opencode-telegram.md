@@ -2,6 +2,7 @@
 
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-x86_64.yml?branch=main&label=x86_64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/opencode-telegram.md) | English | [日本語](../ja/opencode-telegram.md)  | [偽中国語](../pcn/opencode-telegram.md)
 
@@ -13,7 +14,7 @@ Telegram Bot client for [OpenCode](https://opencode.ai).
 |------|-------|
 | Version | 0.26.2 |
 | Upstream | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
-| Platforms | x86_64, aarch64 (**riscv64 unsupported**: upstream `better-sqlite3` ships no riscv64 prebuild, and this package **statically imports** it at startup — with no loadable binding the process cannot start. See the note in `packages/opencode-telegram.nix`) |
+| Platforms | x86_64, aarch64, **riscv64** (upstream ships no riscv64 prebuilds, so both native modules are compiled at build time; CI smoke-tests the artifact for real under qemu-user + binfmt — see `develop/qemu-smoke-tests/opencode-telegram.sh`) |
 
 ## Usage
 

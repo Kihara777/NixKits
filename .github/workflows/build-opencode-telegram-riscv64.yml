@@ -1,0 +1,22 @@
+name: Build opencode-telegram (riscv64)
+on: [push, pull_request]
+
+# 最小权限：调用方只需读取仓库内容（Cachix 推送凭据经 secrets 传入，
+# 与 GITHUB_TOKEN 的权限无关）。显式声明可避免继承仓库默认的读写权限。
+permissions:
+  contents: read
+
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "opencode-telegram"
+      runs-on: "ubuntu-latest"
+      riscv64-cross: true
+      # 这个包在 riscv64 上**必须**烟测：它的两个原生模块（better-sqlite3 /
+      # msgpackr-extract）上游都没有 riscv64 预编译，全靠构建期现编，而
+      # better-sqlite3 是直接依赖且被静态 import（启动即加载）。
+      # 判据见 develop/qemu-smoke-tests/opencode-telegram.sh 与
+      # packages/opencode-telegram.nix 的头部注释。
+      smoke-test: true
+    secrets: inherit

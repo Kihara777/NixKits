@@ -1,23 +1,34 @@
 # opencode-telegram —— OpenCode 的 Telegram Bot 客户端。
 #
-# ⚠️ **riscv64 不构建**（2026-10-02 决定，理由与证据见 AGENTS.md 的 CI 一节）：
-# 本包**直接依赖** `better-sqlite3`，且在 `dist/app/services/session-cache-service.js`
-# 里被**静态 import**（启动即加载）。而它：
-#   · `prebuilds/` 只有 darwin/linux/musl/win32 × x64/arm64，**没有 riscv64**；
-#   · v13 起取消了 `install` 脚本（改成纯 prebuilds 分发），所以 `npm rebuild`
-#     也不会把它编出来——实测 riscv64 产物里根本没有 `better_sqlite3.node`；
-#   · `lib/binding.js` 只认 `build/{Debug,Release}/better_sqlite3.node` 或
-#     `prebuilds/<平台>-<架构>.node`，两条路在 riscv64 上都是空的。
-# 结论：riscv64 产物**能构建、但一启动就抛**。本机也没有 riscv64 硬件可验证运行，
-# 留一个「绿而不可用」的产物，比明确标记「不支持」更糟——故摘掉该 workflow。
+# ── riscv64：**建**，而且必须**真跑过**才算数 ────────────────────────────────
+# 上游对 riscv64 没有预编译，两个原生模块都得在构建期现编，而它们是**硬需求**：
+# `better-sqlite3` 是本包的**直接依赖**、在 `dist/app/services/session-cache-service.js`
+# 里被**静态 import**（启动即加载），其 `prebuilds/` 只有 darwin/linux/musl/win32 ×
+# x64/arm64。少一个绑定 = 构建照样绿、一启动就抛。踩过并修掉的两处：
 #
-# 若要恢复 riscv64：先解决 SQLite 绑定（`deps/sqlite3/sqlite3.c` 随 npm 包分发，
-# 9 MB，可离线编，但需自己接一条构建步骤）。**顺带一个坑**：交叉构建的 PATH 上
-# **没有裸 `gcc`**，而 `msgpackr-extract` 的 binding.gyp 会 shell out 执行
-# `gcc -dumpversion | cut -d '.' -f 1`——命令失败 ⇒ 展开成空串 ⇒ gyp 里变成
-# `"" >= 7` ⇒ `TypeError: '>=' not supported between instances of 'str' and 'int'`。
-# 补一个指向**交叉**编译器的裸名 `gcc` shim 即可让那一步过（实测能产出真正的
-# riscv64 `extract.node`），但光有它不够——better-sqlite3 那道坎还在。
+# ① **gyp 的命令展开会拿到空串。** `msgpackr-extract` 的 binding.gyp 里有
+#       "gcc_version": "<!(<(os_linux_compiler) -dumpversion | cut -d '.' -f 1)"
+#       ["gcc_version>=7", { ... }]
+#    `<!()` 是真的 shell out，而交叉构建的 PATH 上**没有裸 `gcc`**（交叉编译器只以
+#    带前缀的名字出现；实测 `command -v gcc` → 无）⇒ 展开成空串 ⇒ gyp 里变成
+#    `"" >= 7` ⇒ `TypeError: '>=' not supported between instances of 'str' and 'int'`。
+#    → 补一个名为 `gcc` 的 shim 指向**交叉**编译器（指向宿主的会给 riscv64 包编出
+#      x64 的 `.node`，比构建失败更糟）。
+#
+# ② **`better-sqlite3` 会「构建成功但一行都不编」。** 它的 binding.gyp 写着
+#       'force_build%': 0,
+#       'prebuild_exists%': '<!(node lib/binding.js)',
+#       ['force_build==1 or prebuild_exists==0', { …真源码… }, { 'type': 'none' }]
+#    交叉构建里那句 `<!(node ...)` 跑不起来（PATH 上的 node 是 riscv64 的）⇒ 展开成
+#    **空串**，而空串既不等于 1 也不等于 0 ⇒ 两条件都不成立 ⇒ target 退化成
+#    `type: none` ⇒ `make` 只盖 stamp。→ 显式 `--force_build=1`（上游自己的
+#    `build-release` 脚本就是这么用的）。另：v13 起它取消了 `install` 脚本，
+#    所以 `npm rebuild` 根本不会碰它，得自己叫 node-gyp。
+#
+# 判据是**产物真的能跑**，不是「构建成功」：CI 的 riscv64 job 带 `smoke-test: true`，
+# 跑 `develop/qemu-smoke-tests/opencode-telegram.sh`（qemu-user + binfmt；开库建表
+# 写入读回，不是「能 require」）。那个 job 曾经长期靠 Cachix 缓存「成功」——
+# 取的是上一个版本的产物，一行都没构建过。
 
 {
   lib,
@@ -26,7 +37,16 @@
   nodejs,
   makeWrapper,
   python3,
+  pkgs,
+  stdenv,
 }:
+
+let
+  # 给 gyp 一个**裸名 `gcc`**，并让它指向**交叉**编译器。理由见 nativeBuildInputs。
+  gccShim = pkgs.writeShellScriptBin "gcc" ''
+    exec ${pkgs.stdenv.cc}/bin/${pkgs.stdenv.cc.targetPrefix}cc "$@"
+  '';
+in
 
 buildNpmPackage (finalAttrs: {
   pname = "opencode-telegram";
@@ -45,9 +65,35 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-  ];
+    # gcc shim 只在交叉构建时加：x86_64 与 aarch64 都在**原生 runner** 上构建
+    # （ubuntu-latest / ubuntu-24.04-arm），PATH 上本来就有裸 `gcc`，不需要它。
+    # 少动一个本来正常的构建路径。
+  ] ++ lib.optional stdenv.hostPlatform.isRiscV64 gccShim;
 
   buildInputs = [ nodejs ] ++ lib.optionals (lib.versionAtLeast nodejs.version "20") [ python3 ];
+
+  # ⚠️ riscv64：必须**显式**把两个原生模块编出来。
+  #
+  # 背景：这两个包**都没有 riscv64 预编译**（better-sqlite3 的 `prebuilds/` 只有
+  # darwin/linux/musl/win32 × x64/arm64），而 `better-sqlite3` 又是本包的**直接依赖**、
+  # 在 `dist/app/services/session-cache-service.js` 里被**静态 import**（启动即加载）。
+  #
+  # ① 为什么要 `--force_build=1`：`better-sqlite3/binding.gyp` 自己写着
+  #       'force_build%': 0,
+  #       'prebuild_exists%': '<!(node lib/binding.js)',
+  #       ['force_build==1 or prebuild_exists==0', { …真源码… }, { 'type': 'none' }]
+  #    交叉构建里那句 `<!(node ...)` **跑不起来**（PATH 上的 node 是 riscv64 的，
+  #    在这台 x86_64 builder 上执行不了）→ 展开成**空串**；而空串既不等于 1 也不等于 0
+  #    ⇒ 两个条件都不成立 ⇒ target 退化成 `type: none` ⇒ `make` **只盖 stamp、一行都不编**
+  #    （实测）。上游自己的 `build-release` 脚本用的就是 `--release --force_build=1`，照抄即可。
+  # ② 为什么 `npm rebuild` 指望不上：v13 取消了 `install` 脚本（改成纯 prebuilds 分发），
+  #    所以 npm 根本不会去编它——得我们自己叫 node-gyp。
+  preBuild = lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    echo "== 为 riscv64 编 better-sqlite3（上游无预编译）=="
+    ( cd node_modules/better-sqlite3 \
+      && ${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js \
+           rebuild --release --force_build=1 )
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/opencode-telegram" \

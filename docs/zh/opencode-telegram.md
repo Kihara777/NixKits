@@ -2,6 +2,7 @@
 
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-x86_64.yml?branch=main&label=x86_64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 中文 | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md)  | [偽中国語](../pcn/opencode-telegram.md)
 
@@ -13,7 +14,7 @@
 |------|-----|
 | 版本 | 0.26.2 |
 | 上游 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
-| 平台 | x86_64、aarch64（**riscv64 不支持**：上游 `better-sqlite3` 没有 riscv64 预编译，而本包在启动时**静态 import** 它——没有可加载的绑定，进程起不来。详见 `packages/opencode-telegram.nix` 里的说明） |
+| 平台 | x86_64、aarch64、**riscv64**（上游对 riscv64 没有预编译，两个原生模块由构建期现编；CI 用 qemu-user + binfmt **真的跑一遍**——见 `develop/qemu-smoke-tests/opencode-telegram.sh`） |
 
 ## 使用
 

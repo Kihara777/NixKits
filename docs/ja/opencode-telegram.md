@@ -2,6 +2,7 @@
 
 [![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-x86_64.yml?branch=main&label=x86_64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | 日本語  | [偽中国語](../pcn/opencode-telegram.md)
 
@@ -13,7 +14,7 @@
 |------|-----|
 | バージョン | 0.26.2 |
 | アップストリーム | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
-| プラットフォーム | x86_64、aarch64（**riscv64 非対応**：上流 `better-sqlite3` に riscv64 向けのプリビルドが無く、本パッケージは起動時にこれを**静的に import** する——読み込めるバインディングが無いためプロセスが起動しない。詳細は `packages/opencode-telegram.nix` の註記） |
+| プラットフォーム | x86_64、aarch64、**riscv64**（上流に riscv64 向けプリビルドが無く、二つのネイティブモジュールはビルド時に実コンパイルする。CI は qemu-user + binfmt で産物を実際に走らせて煙テストする——`develop/qemu-smoke-tests/opencode-telegram.sh`） |
 
 ## 使い方
 

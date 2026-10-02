@@ -13,6 +13,12 @@ on:
         required: false
         type: boolean
         default: false
+      # 构建完**真的跑一下**产物（见 develop/qemu-smoke-tests/）。
+      # 默认关：开启即要求同名的烟测脚本存在，缺了直接失败——不允许静默跳过。
+      smoke-test:
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -33,19 +39,75 @@ jobs:
           name: nixkits
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
+      # 包文件解析。riscv64 有时需要**另一个构建文件**（上游没有该架构的预编译时
+      # 改为源码构建），这张表是唯一的出处——构建步骤与烟测步骤都读它的输出。
+      - name: Resolve the package file
+        id: pkg
+        run: |
+          set -euo pipefail
+          pkg="./packages/${{ inputs.package }}.nix"
+          case "${{ inputs.package }}" in
+            ruyi)         pkg="./packages/ruyi/ruyi.nix" ;;
+            ruyi-beta)    pkg="./packages/ruyi/ruyi-beta.nix" ;;
+            ruyi-alpha)   pkg="./packages/ruyi/ruyi-alpha.nix" ;;
+            codewhale)    pkg="./packages/codewhale-src.nix" ;;
+          esac
+          echo "file=$pkg" >> "$GITHUB_OUTPUT"
+          echo "包文件：$pkg"
+
       - name: Build ${{ inputs.package }}
+        id: build
         if: ${{ !inputs.riscv64-cross }}
-        run: nix build --print-build-logs --no-write-lock-file ".#${{ inputs.package }}"
+        run: |
+          set -euo pipefail
+          out="$(nix build --print-build-logs --no-write-lock-file --print-out-paths ".#${{ inputs.package }}")"
+          echo "out=$out" >> "$GITHUB_OUTPUT"
+          echo "产物：$out"
 
       - name: Cross-compile ${{ inputs.package }} (riscv64)
+        id: build-cross
         if: ${{ inputs.riscv64-cross }}
         run: |
-          PKG=./packages/${{ inputs.package }}.nix
-          case "${{ inputs.package }}" in
-            ruyi)         PKG=./packages/ruyi/ruyi.nix ;;
-            ruyi-beta)    PKG=./packages/ruyi/ruyi-beta.nix ;;
-            ruyi-alpha)   PKG=./packages/ruyi/ruyi-alpha.nix ;;
-            codewhale)    PKG=./packages/codewhale-src.nix ;;
-          esac
-          nix build --no-link --print-build-logs --impure \
-            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage $PKG { }"
+          set -euo pipefail
+          out="$(nix build --no-link --print-build-logs --impure --print-out-paths \
+            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ${{ steps.pkg.outputs.file }} { }")"
+          echo "out=$out" >> "$GITHUB_OUTPUT"
+          echo "产物：$out"
+
+      # ── 烟测：判据是「产物真的能跑」，不是「构建成功」 ──────────────────────────
+      # 为什么必须有这一步：本仓库已经吃过两次亏——一个 job 长期靠 Cachix 缓存
+      # 「成功」（取的是上一个版本的产物，一行都没构建过），以及一个构建成功的
+      # riscv64 产物**一启动就抛**（直接依赖的原生模块没有该架构的绑定）。
+      # 判据与本地同一份脚本：develop/qemu-smoke-tests/<包名>.sh（那脚本自带反证）。
+      - name: Smoke-test the built artifact
+        if: ${{ inputs.smoke-test }}
+        run: |
+          set -euo pipefail
+          script="develop/qemu-smoke-tests/${{ inputs.package }}.sh"
+          if [ ! -f "$script" ]; then
+            echo "::error::smoke-test 已开启，但 $script 不存在——不允许静默跳过（「测试缺失即失败」）"
+            exit 1
+          fi
+
+          # 跨架构产物要 qemu-user + binfmt。Ubuntu 的 qemu-user-static 装上即
+          # 自动注册处理器（binfmt-support）。
+          if [ "${{ inputs.riscv64-cross }}" = "true" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq qemu-user-static binfmt-support
+            # 处理器没就位就必须失败：否则脚本会以「exec format error」失败，
+            # 或者更糟——被当成偶发而重跑掉。
+            if ! ls /proc/sys/fs/binfmt_misc/ | grep -qi riscv64; then
+              echo "::error::riscv64 的 binfmt 处理器没注册，无法运行构建物——拒绝报成功"
+              ls -la /proc/sys/fs/binfmt_misc/ || true
+              exit 1
+            fi
+            echo "binfmt：$(ls /proc/sys/fs/binfmt_misc/ | grep -i riscv64 | tr '\n' ' ')"
+          fi
+
+          OUT="${{ steps.build.outputs.out }}${{ steps.build-cross.outputs.out }}"
+          if [ -z "$OUT" ]; then
+            echo "::error::拿不到构建产物路径"
+            exit 1
+          fi
+          echo "烟测对象：$OUT"
+          bash "$script" "$OUT"
