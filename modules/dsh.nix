@@ -42,10 +42,59 @@ let
 
   dshPkg = if cfg.plugins.packages == [ ] then dshPackage else dshWithPlugins;
 
+  # ── 预设：0.2.0 的承载方式与内容来源 ──────────────────────────────────────
+  #
+  # 0.1.x 的 Agent 预设是 `$DSH_HOME/.agent-presets/<id>/` 目录，模块以 seed-once
+  # 复制下发。0.2.0 **删掉了那条通道**：预设改为 profile 用户 patch 层
+  # （`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）里的一条
+  # `@deepseek-ai/dsh-agent-preset` 条目，插件行进它的 `config.plugins`。故本模块
+  # 不再复制目录，而是把这条目**并进已经在生成的那份 cordis.patch.yml**。
+  #
+  # 内容来源随通道（维护者 2026-10-02 决定）：
+  #   · stable（`pkgs.dsh`，跟 npm `latest`）→ 预设内容**冻结**在
+  #     `packages/dsh-nixos-shell-stable.nix` 钉住的 commit，不随 HEAD 漂；
+  #   · alpha（`pkgs.dsh-alpha`，跟 npm `next`）→ 预设内容跟仓库 HEAD。
+  # 判据取自 dsh 包自己声明的 `passthru.dshChannel`（见 packages/dsh.nix），
+  # 所以「换通道」只需换 `nixkits.dsh.package` 一行，预设内容跟着走 —— 不会留下
+  # 「dsh 换了通道、预设还挂在另一边」这种两处各说一套的状态。
+  #
+  # 为什么读 dsh-nixos-shell 的 `passthru.presetsSource`，而不是自己拼 store 路径：
+  # 那份 `preset.patch.yml` 与同目录的 `skills/` `skills-nixos/` 是**同一棵树**，
+  # 而 skill-filesystem 行的技能根最终解析到被注入 node_modules 的
+  # `@kihara777/dsh-nixos-shell` 包根。也就是说：`presets.package` 与
+  # `plugins.packages` 里注入的那个变体必须是同一个，否则「行文来自 A、技能来自
+  # B」。两者 outPath 不一致时下面的 `lib.warn` 会在求值期喊出来（不阻断求值，
+  # 但绝不静默）。
+  presetPackage = cfg.presets.package;
+
+  presetSourceDir = presetPackage.presetsSource or (throw ''
+    nixkits.dsh: 预设来源包缺少 passthru.presetsSource，读不到 preset.patch.yml 正文。
+    NixKits 的 pkgs.dsh-nixos-shell 与 pkgs.dsh-nixos-shell-stable 都带该属性；
+    若传入自建 fork，请照 packages/dsh-nixos-shell.nix 补上（它同时决定
+    skill 根解析到哪棵树，不能省）。
+  '');
+
+  # 读某个预设的 0.2.0 patch 文件（`- insert:` 一条完整条目）。读的是**源路径**
+  # 而非构建产物：pinned 变体用 builtins.fetchTarball（定 hash，纯求值允许），
+  # 故这里没有 import-from-derivation。
+  presetRow = name: builtins.readFile "${presetSourceDir}/${name}/preset.patch.yml";
+
+  injectedNixosShell = lib.findFirst (p: p.name == "@kihara777/dsh-nixos-shell") null cfg.plugins.packages;
+
+  # 默认预设：0.2.0 起它是 `agent-preset-registry` 行的**必填** config.default
+  # （0.1.x 的 settings."agent-presets".default 已无人注册，见下方 assertions）。
+  # 逃生舱 plugins.settings."agent-preset-registry" 一旦声明就由它作准 —— 同一
+  # entry 发两条 patch 行的语义没保证，不如只发一条。
+  presetDefault =
+    if cfg.plugins.settings ? "agent-preset-registry" then null
+    else if cfg.agentPresets.enable then cfg.agentPresets.default
+    else null;
+
   # Generated cordis.patch.yml: user's extraPatch + declarative plugin
-  # off-switches (disabled), config overrides (settings), and rows for
-  # third-party plugin packages.  Written to $DSH_HOME/profiles/web by
-  # preStart; dsh hot-reloads it at runtime.
+  # off-switches (disabled), config overrides (settings), rows for
+  # third-party plugin packages, the default-preset row, and one
+  # `@deepseek-ai/dsh-agent-preset` row per enabled preset.  Written to
+  # $DSH_HOME/profiles/web by preStart; dsh hot-reloads it at runtime.
   #
   # Row verbs matter: a bare `- id: …` row PATCHES an existing entry and
   # dsh drops it with "patch: entry … not found" when the entry does not
@@ -55,7 +104,11 @@ let
   # user's extraPatch.  The entry object must live in the SAME '' string as
   # its `- insert:` line: a nested '' string is dedented by its own minimum
   # indent, which would push the rows back to column 0.
-  cordisPatch = pkgs.writeText "cordis.patch.yml" ''
+  #
+  # 预设条目整条来自 preset.patch.yml（`- insert:` 开头、单个条目），**逐字**
+  # 并进来：预设正文只此一份来源，模块不复制它的插件行 —— 复制出来的副本一定
+  # 会漂（见 AGENTS.md「技能内容单一来源」同一条理由）。
+  cordisPatchText = ''
     ${cfg.plugins.extraPatch}
     ${lib.concatMapStrings (id: "- id: ${id}\n  disabled: true\n") cfg.plugins.disabled}
     ${lib.concatStrings (lib.mapAttrsToList (id: conf: "- id: ${id}\n  config: ${builtins.toJSON conf}\n") cfg.plugins.settings)}
@@ -65,30 +118,40 @@ let
           name: ${builtins.toJSON p.name}
         ${lib.optionalString (p.config != { }) "config: ${builtins.toJSON p.config}\n"}
     '') cfg.plugins.packages}
-    ${lib.optionalString cfg.presets.newsThreeElements ''
-      # 新闻三要素模式：独立包（dsh-preset-news-three-elements）只把预设
-      # 安装到 store，这里把它注册为 agent-presets roster 的额外 root——
-      # roster 每次调用都重扫 root，故预设直接取 store 内容，无需复制，也不
-      # 会与 $DSH_HOME 里的旧副本漂移。配置根先于用户根被扫描，同名 id 由
-      # 本 root 胜出（用户要改动请用 roster 的 copy() 另存为新 id）。
-      # config 用 JSON 发出（JSON 是 YAML 子集，同 plugins.settings 的做法），
-      # 免去手写嵌套 YAML 的缩进风险。注意 `- id:` 行替换**整份** config 而非
-      # 合并：schema 里 `default` 必填，故必须一并带上（值取显式
-      # settings."agent-presets".default，其次取结构化选项 agentPresets.default，
-      # 都未给才沿用上游 "standard"；settings.yaml 是用户层，存在时仍以它为准，
-      # 故两级声明不会互相打架）。
-      - id: agent-presets
-        config: ${builtins.toJSON {
-          default =
-            cfg.settings."agent-presets".default
-            or (if cfg.agentPresets.enable then cfg.agentPresets.default else "standard");
-          roots = [{
-            path = "${cfg.presets.newsThreeElementsPackage}/share/dsh-agent-presets";
-            trust = "system";
-          }];
-        }}
+    ${lib.optionalString (presetDefault != null) ''
+      # 新会话默认预设：`agent-preset-registry` 行的 config.default（**必填**，
+      # 补丁会替换整份 config，故这一条就是完整值）。settings 侧的
+      # `selectedDefault` 属用户层，存在时仍压过这里。
+      - id: agent-preset-registry
+        config: ${builtins.toJSON { default = presetDefault; }}
     ''}
+    ${lib.optionalString cfg.presets.nixosMode (presetRow "nixos-mode")}
+    ${lib.optionalString cfg.presets.maintenanceMode (presetRow "maintenance-mode")}
+    ${lib.optionalString cfg.presets.newsThreeElements (builtins.readFile cfg.presets.newsThreeElementsPackage.presetPatch)}
   '';
+
+  # 两个变体混用时喊一声（不阻断求值）。判据：注入的那个 @kihara777/dsh-nixos-shell
+  # 与 presets.package 不是同一个 derivation。
+  cordisPatch =
+    let
+      mismatch =
+        (cfg.presets.nixosMode || cfg.presets.maintenanceMode)
+        && injectedNixosShell != null
+        && injectedNixosShell.package.outPath != presetPackage.outPath;
+    in
+    if mismatch
+    then
+      lib.warn ''
+        nixkits.dsh: plugins.packages 里注入的 @kihara777/dsh-nixos-shell 与
+        nixkits.dsh.presets.package 不是同一个变体（outPath 不同）：
+          注入：${injectedNixosShell.package.outPath}
+          预设：${presetPackage.outPath}
+        预设行的正文来自 presets.package，而 skill-filesystem 的技能根在运行期解析到
+        **注入**的那个包 —— 两个变体的 presets/ 不同（stable 冻结在钉住的 rev、
+        HEAD 跟仓库），技能内容就会与行文不同源。请把两者对齐（同一变体）。
+      '' (pkgs.writeText "cordis.patch.yml" cordisPatchText)
+    else pkgs.writeText "cordis.patch.yml" cordisPatchText;
+
 
   # Generated settings.yaml: declarative per-namespace dsh settings, JSON
   # (valid YAML).  Written to $DSH_HOME/settings.yaml by preStart; dsh
@@ -165,17 +228,6 @@ let
       # plugins.settings."permission".presets 换了表，这里的 enum 即失效，
       # 那时请改用 nixkits.dsh.settings."permission" 逃生舱。
       "permission" = { defaultPreset = cfg.permission.defaultPreset; };
-    }
-    // lib.optionalAttrs cfg.agentPresets.enable {
-      # @deepseek-ai/dsh-agent-presets — AgentPresetSettingsSchema
-      # （default: string、modeSelectionEnabled: boolean）。
-      # 该插件走的是 settings.register 而非 installSection：base 层是组合行
-      # config 的 `default` 与 `modeSelectionEnabled = true`，settings.yaml 是
-      # 用户层，故本段**优先于** cordis.patch.yml 里 agent-presets 行的 default。
-      "agent-presets" = {
-        default = cfg.agentPresets.default;
-        modeSelectionEnabled = cfg.agentPresets.modeSelectionEnabled;
-      };
     }
     // lib.optionalAttrs cfg.subagent.enable {
       # @deepseek-ai/dsh-subagent — SubagentRuntime.Config。两个字段都是整数：
@@ -627,6 +679,11 @@ in
     # 下列选项镜像的是宿主能力插件的 schema：permission / agent-presets /
     # subagent / shell / web-search-deepseek / llm-deepseek。每个 description
     # 都写明注册它的上游包与 schema 出处，字段约束照抄 schema，不放宽。
+    #
+    # ⚠️ dsh 0.2.0 起 `agent-presets`（复数）不再是 settings namespace：宿主行被
+    # `agent-preset-registry` 取代，默认预设是该行的 config.default（行配置），
+    # settings 侧只剩 `selectedDefault`。故本段少一个 namespace；`agentPresets`
+    # 选项组仍在，但改为下发那条补丁行（见 cordisPatchText）。
 
     permission = {
       enable = lib.mkEnableOption "注入 settings.permission（由 \@deepseek-ai/dsh-permission-presets 注册）";
@@ -652,27 +709,23 @@ in
     };
 
     agentPresets = {
-      enable = lib.mkEnableOption "注入 settings.agent-presets（由 \@deepseek-ai/dsh-agent-presets 注册）";
+      enable = lib.mkEnableOption "声明新会话默认预设（dsh 0.2.0：下发 `agent-preset-registry` 行的 config.default）";
       default = lib.mkOption {
         type = lib.types.str;
         default = "standard";
         description = ''
-          新会话默认挂载的预设 id。预设 id 由 roster 决定（内置 root 随 dsh 分发、
-          `$DSH_HOME/.agent-presets` 是用户自建、`nixkits.dsh.presets.*` 另注册
-          系统 root），无法在此枚举，故为自由字符串。
+          新会话默认挂载的预设 id。预设 id 由声明它的行决定（内置四个随
+          `dsh-web-app` 的 presets/*.patch.yml 分发，`nixkits.dsh.presets.*` 与
+          用户自建的 bundle patch 各自追加），无法在此枚举，故为自由字符串。
 
-          schema 里 `default: z.string()` **没有默认值**，靠组合行 config 的
-          `default: standard` 兜底；本选项因此显式写入。settings.yaml 是用户层，
-          优先级高于组合行，故本选项一旦 enable 就压过 cordis.patch.yml 里
-          agent-presets 行的 default（该行值仍会跟随本选项，见 cordisPatch）。
-        '';
-      };
-      modeSelectionEnabled = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          是否在界面上提供「会话级切换预设」的入口。上游组合基线（settings.register
-          的 base 层）为 true；本选项写入 settings.yaml 后覆盖它。
+          dsh 0.2.0 的落点：`agent-preset-registry` 行的 config.default，schema 里
+          `default: z.string().required()` **必填**（补丁替换整份 config，故这一条
+          就是完整值）。settings 侧只有 `selectedDefault`，属用户层，存在时压过
+          行配置 —— 要声明那个值请用逃生舱
+          `nixkits.dsh.settings."agent-preset-registry".selectedDefault`。
+
+          0.1.x 的 `settings."agent-presets".default` 在 0.2.0 无人注册，留着它
+          只会**静默丢掉**你声明的默认值；本模块对残留的旧键直接报错（见 assertions）。
         '';
       };
     };
@@ -936,19 +989,51 @@ in
     };
 
     presets = {
-      nixosMode = lib.mkEnableOption "seed the NixOS模式 agent preset (id `nixos`) into \$DSH_HOME/.agent-presets/nixos at service start";
-      maintenanceMode = lib.mkEnableOption "seed the 维护模式 agent preset (id `maintenance`) into \$DSH_HOME/.agent-presets/maintenance at service start";
-      newsThreeElements = lib.mkEnableOption "register the 新闻三要素模式 agent preset (id `news-three-elements`) as an extra agent-presets roster root from its own package (no copy into \$DSH_HOME)";
+      # dsh 0.2.0：预设不再是「复制一个目录」，而是并进 profile 的
+      # cordis.patch.yml 的一条 `@deepseek-ai/dsh-agent-preset` 条目。
+      nixosMode = lib.mkEnableOption "declare the NixOS模式 agent preset (id `nixos`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml";
+      maintenanceMode = lib.mkEnableOption "declare the 维护模式 agent preset (id `maintenance`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml";
+      newsThreeElements = lib.mkEnableOption "declare the 新闻三要素模式 agent preset (id `news-three-elements`) as a `@deepseek-ai/dsh-agent-preset` row, assembling its plugin files under \$DSH_HOME/.agent-presets/news-three-elements";
+      package = lib.mkOption {
+        type = lib.types.package;
+        default =
+          if (cfg.package.dshChannel or "stable") == "alpha"
+          then pkgs.dsh-nixos-shell
+          else pkgs.dsh-nixos-shell-stable;
+        defaultText = lib.literalExpression ''
+          if nixkits.dsh.package 声明的通道 == "alpha" then pkgs.dsh-nixos-shell
+          else pkgs.dsh-nixos-shell-stable
+        '';
+        description = ''
+          提供 `nixos` / `maintenance` 两个预设**正文与技能内容**的
+          dsh-nixos-shell 变体。默认跟随 dsh 通道（`nixkits.dsh.package` 的
+          `passthru.dshChannel`）：
+
+          | 通道 | 默认变体 | 预设内容 |
+          |------|---------|---------|
+          | stable（`pkgs.dsh`，npm `latest`） | `pkgs.dsh-nixos-shell-stable` | **冻结**在 `packages/dsh-nixos-shell-stable.nix` 钉住的 commit |
+          | alpha（`pkgs.dsh-alpha`，npm `next`） | `pkgs.dsh-nixos-shell` | 跟仓库 HEAD |
+
+          ⚠️ 它必须与 `plugins.packages` 里注入的 `@kihara777/dsh-nixos-shell`
+          是**同一个变体**：预设行的正文来自本选项，而 skill-filesystem 的
+          `customSkillDirs` 在运行期解析到被注入的那个包根 —— 两者不同源时技能内容
+          会与行文对不上。不一致会在求值期触发一条 lib.warn（不阻断）。
+        '';
+      };
       newsThreeElementsPackage = lib.mkOption {
         type = lib.types.package;
         default = pkgs.dsh-preset-news-three-elements;
         defaultText = lib.literalExpression "pkgs.dsh-preset-news-three-elements";
         description = ''
-          Package shipping the 新闻三要素模式 preset tree.  The directory it
-          installs (`share/dsh-agent-presets`) is registered as an extra
-          `agent-presets` roster root, so the preset is read straight out of the
-          store on every roster call and is never copied into
-          `$DSH_HOME/.agent-presets` — a rebuild is what updates it.
+          新闻三要素模式的独立包。它提供两样东西：`preset.patch.yml`（预设正文，
+          模块逐字并进 cordis.patch.yml）与
+          `share/dsh-agent-presets/news-three-elements/`（该模式的插件文件与内置
+          技能副本，激活时组装到 `$DSH_HOME/.agent-presets/news-three-elements/`，
+          供 patch 行里的相对路径引用）。
+
+          dsh 0.2.0 的**分发方式变了**：0.1.x 是把本包的 `share/dsh-agent-presets`
+          注册为 `agent-presets` roster 的一个额外 root（roots 机制随复数宿主行一起
+          被删除），现在它与另两个预设同路 —— 一条 patch 行 + 一份内容目录。
         '';
       };
     };
@@ -1021,30 +1106,42 @@ in
           rm -rf ${cfg.dshHome}/node_modules
           mkdir -p ${cfg.dshHome}/node_modules
           ln -sfn /run/dsh/current/lib/node_modules/@deepseek-ai/dsh/node_modules/@kihara777 ${cfg.dshHome}/node_modules/@kihara777
+          # ⚠️ `@deepseek-ai` 这一条**不是可选的**（2026-10-02 实测）：
+          # 预设自带的插件文件（掌灯模式的 `components/lib/*.js`、新闻三要素的
+          # `plugins/*.js`）用**裸包名** import `@deepseek-ai/schemastery`、
+          # `@deepseek-ai/dsh-tools`。Node 从**文件所在目录**向上找 node_modules，
+          # 而文件在 `$DSH_HOME/.agent-presets/<id>/…` 下 —— 只链 @kihara777 时它
+          # 解析不到，那一行的报错是 loader 的一句
+          # `lampkeeper-shell (…/components/lib/index.js): never started`
+          # （不是 "cannot find package"，很容易读成"配置不全"）。
+          # dsh-lampkeeper 的模块为此自己补了这条链接；本模块的 rm -rf 会把
+          # 它删掉，所以必须在这里一并建——否则「重启 dsh 之后掌灯模式变 broken」，
+          # 而两者都在同一个 $DSH_HOME 下互相踩。
+          ln -sfn /run/dsh/current/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai ${cfg.dshHome}/node_modules/@deepseek-ai
         ''}
 
-        # 种子预设（seed-once）：仅在目标不存在时复制，尊重用户后续对
-        # ~/.dsh/.agent-presets/<id> 的编辑。NixOS模式预设（id `nixos`）
-        # 随 dsh-nixos-shell 包分发（presets/nixos-mode：组合 + 元数据 +
-        # 创造模式技能目录），非 NixOS 宿主由预设内的 nixos-gate 插件
-        # 拒绝一切请求。
-        ${lib.optionalString cfg.presets.nixosMode ''
-          if [ ! -e ${cfg.dshHome}/.agent-presets/nixos ]; then
-            mkdir -p ${cfg.dshHome}/.agent-presets
-            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/nixos-mode ${cfg.dshHome}/.agent-presets/nixos
-            # 从 store 复制来的目录/文件是只读的，而 seed-once 的契约是「尊重
-            # 用户后续编辑」——不放开写权限，用户改不动自己那份预设。
-            chmod -R u+w ${cfg.dshHome}/.agent-presets/nixos
-            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/nixos
-          fi
-        ''}
-        ${lib.optionalString cfg.presets.maintenanceMode ''
-          if [ ! -e ${cfg.dshHome}/.agent-presets/maintenance ]; then
-            mkdir -p ${cfg.dshHome}/.agent-presets
-            cp -r /run/dsh/nixos-shell/lib/node_modules/@kihara777/dsh-nixos-shell/presets/maintenance-mode ${cfg.dshHome}/.agent-presets/maintenance
-            chmod -R u+w ${cfg.dshHome}/.agent-presets/maintenance
-            chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/maintenance
-          fi
+        # ── 预设 ────────────────────────────────────────────────────────────
+        # dsh 0.2.0 起预设是上面那份 cordis.patch.yml 里的 `- insert:` 行，
+        # **不再**复制到 $DSH_HOME/.agent-presets/<id>/（0.1.x 的目录式通道已删除，
+        # 那个目录 0.2.0 根本不读）。
+        #
+        # 旧版本播下的 $DSH_HOME/.agent-presets/{nixos,maintenance} 刻意**不删**：
+        # 旧契约是 seed-once「尊重你对那份副本的编辑」，我不能一边承诺一边在升级时
+        # 抹掉它。它们是历史残留（0.2.0 不读），确认无用后可自行删除。
+        ${lib.optionalString cfg.presets.newsThreeElements ''
+          # 新闻三要素模式是唯一需要内容目录的预设：它的插件是**预设自带的文件**
+          # （不是 npm 包），patch 行以相对路径引用
+          # `../../.agent-presets/news-three-elements/plugins/*.js` —— 0.2.0 只把以
+          # `.` 开头的 name 按 baseUrl（profile 目录）解析，绝对路径会被当裸包名
+          # import 而失败。故这里把包内那份组装到该路径。
+          #
+          # 契约是**整体重建**而不是 seed-once：包是唯一来源，改激活即生效，
+          # 手改会被覆盖（与 dsh-lampkeeper 组装 lampkeeper 目录同一契约）。
+          rm -rf ${cfg.dshHome}/.agent-presets/news-three-elements
+          mkdir -p ${cfg.dshHome}/.agent-presets
+          cp -r ${cfg.presets.newsThreeElementsPackage}/share/dsh-agent-presets/news-three-elements ${cfg.dshHome}/.agent-presets/news-three-elements
+          chmod -R u+w ${cfg.dshHome}/.agent-presets/news-three-elements
+          chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}/.agent-presets/news-three-elements
         ''}
         ${lib.optionalString (cfg.launchUrlFile != null && cfg.trustedHosts != [ ]) ''
           # Truncate the launch-URL capture log so ExecStartPost only sees
@@ -1186,7 +1283,27 @@ in
           assertion = config.services.lighttpd.enable;
           message = "nixkits.dsh.reverseProxy requires services.lighttpd.enable = true";
         }
-      ];
+      ]
+      # dsh 0.2.0 的破坏性改名：`agent-presets`（复数）宿主行连同它的 roots 机制
+      # 被 `agent-preset-registry` 取代，settings 里不再有这个名字空间。留着旧键
+      # **不会报错**——它只是没人读，于是你声明的默认预设静默失效（新会话回到
+      # `standard`），这正是最难发现的一类回归。故在求值期直接失败。
+      ++ lib.optional (cfg.settings ? "agent-presets") {
+        assertion = false;
+        message = ''
+          nixkits.dsh: settings."agent-presets" 在 dsh 0.2.0 已不存在。
+
+          0.1.x 的 `agent-presets`（复数）宿主行与它的 roots 机制被
+          `agent-preset-registry` 整条取代：默认预设是那条行的 config.default
+          （行配置，不是 settings 键），settings 侧只剩 `selectedDefault`。
+          旧键不会被任何插件读取——留着它，你声明的默认预设会**静默失效**。
+
+          请改为：
+              nixkits.dsh.agentPresets = { enable = true; default = "<预设 id>"; };
+          需要用户层覆盖时（压过行配置）：
+              nixkits.dsh.settings."agent-preset-registry".selectedDefault = "<预设 id>";
+        '';
+      };
 
     # reverseProxy 依赖 mod_proxy（proxy.server/proxy.header）与 mod_setenv
     # （setenv.add-request-header）。早期版本依赖 SearXNG 模块顺带启用的这
