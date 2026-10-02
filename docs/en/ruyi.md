@@ -1,8 +1,8 @@
 # ruyi
 
-[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
@@ -19,10 +19,10 @@ The package manager for [RuyiSDK](https://ruyisdk.org), used for toolchain insta
 
 | Item | Value |
 |------|-------|
-| Version | 0.52.0 (stable) |
+| Version | 0.53.0 (stable) |
 | Upstream | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | License | Apache 2.0 |
-| Channel | stable 0.52.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 |
+| Channel | stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 |
 
 ## Installation
 
@@ -40,7 +40,7 @@ ruyi provides three independent packages:
 
 | Package | Version | Purpose |
 |------|------|------|
-| `ruyi` | 0.52.0 (stable) | Production |
+| `ruyi` | 0.53.0 (stable) | Production |
 | `ruyi-beta` | 0.53.0-beta.20260917 | Preview |
 | `ruyi-alpha` | 0.54.0-alpha.20260918 | Bleeding edge |
 
@@ -117,7 +117,7 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 - Binaries have runtime dependencies (curl, gnutar, git, patchelf) injected via wrapProgram
 - Python runtime dependencies come from `propagatedBuildInputs`. Upstream has listed `pyelftools` (ELF/ABI checks) as a runtime dependency since 0.53.0 and imports `elftools` at test collection time -- without it the whole pytest run aborts with `Interrupted: 1 error during collection`. This package adds the dependency **unconditionally in the shared base**, so the 0.52.x channels (which do not need it upstream) carry it too: redundant but harmless, in exchange for one identical definition across all three channels
 - Test coverage: ruff lint, mypy type checking, pytest unit and integration tests -- the counts differ per channel (measured):
-  - `ruyi` (0.52.0): **368** unit, **58** integration
+  - `ruyi` (0.53.0): **368** unit, **58** integration
   - `ruyi-beta` (0.53.0-beta): **462** unit, **70** integration
   - `ruyi-alpha` (0.54.0-alpha): **462** unit (1 xfailed), **70** integration
   - The ruff and mypy steps are `|| true` in `checkPhase` (non-blocking); **pytest is what actually gates the build**

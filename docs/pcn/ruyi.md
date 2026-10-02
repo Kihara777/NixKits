@@ -1,8 +1,8 @@
 # ruyi
 
-[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.52.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-x86_64.yml?branch=main&label=ruyi%20x86_64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-aarch64.yml?branch=main&label=ruyi%20aarch64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![ruyi riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-riscv64.yml?branch=main&label=ruyi%20riscv64%20v0.53.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-x86_64.yml?branch=main&label=ruyi-beta%20x86_64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-aarch64.yml?branch=main&label=ruyi-beta%20aarch64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 [![ruyi-beta riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-ruyi-beta-riscv64.yml?branch=main&label=ruyi-beta%20riscv64%20v0.53.0-beta.20260917)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
@@ -19,10 +19,10 @@
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.52.0（安定版） |
+| 版 | 0.53.0（安定版） |
 | 上流 | [ruyisdk/ruyi](https://github.com/ruyisdk/ruyi) |
 | 許諾 | Apache 2.0 |
-| 通道 | stable 0.52.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 |
+| 通道 | stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 |
 
 ## 導入
 
@@ -40,7 +40,7 @@ ruyi 三独立包提供：
 
 | 包 | 版 | 用途 |
 |------|------|------|
-| `ruyi` | 0.52.0（安定版）| 本番環境 |
+| `ruyi` | 0.53.0（安定版）| 本番環境 |
 | `ruyi-beta` | 0.53.0-beta.20260917 | 予覧 |
 | `ruyi-alpha` | 0.54.0-alpha.20260918 | 先行開発 |
 
@@ -117,7 +117,7 @@ find /nix/store/*-ruyi-*/lib -name 'nixos_compat.py'
 - 二進 wrapProgram 経由 curl、gnutar、git、patchelf 等実行時依存注入済
 - Python 側実行時依存 `propagatedBuildInputs` 供給。上流 0.53.0 以降 `pyelftools`（ELF/ABI 検証）実行時依存 記載、試験収集期 `import elftools`——欠落 場合 pytest 全体 `Interrupted: 1 error during collection` 中断。本包 **共有 base 無条件** 此 依存 追加、故 上流 不要 0.52.x channel 也 併 持：冗長 但 無害、三 channel 定義 同一 化
 - 試験覆蓋：ruff lint、mypy 型確認、pytest 単体／統合試験——channel 毎 件数 異（実測）：
-  - `ruyi`（0.52.0）：単体 **368**、統合 **58**
+  - `ruyi`（0.53.0）：単体 **368**、統合 **58**
   - `ruyi-beta`（0.53.0-beta）：単体 **462**、統合 **70**
   - `ruyi-alpha`（0.54.0-alpha）：単体 **462**（xfailed 1 件含）、統合 **70**
   - `checkPhase` ruff / mypy  `|| true`（非阻断）、**実際 build 左右 物 pytest**

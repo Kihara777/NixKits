@@ -10,17 +10,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-searxng";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ihor-sokoliuk";
     repo = "MCP-searxng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMlbuPF8KuUZlD9HUjhunuHl2tmCMSeydBZiWuGWRHA=";
+    hash = "sha256-yfxnYD1onNw5J6yLq2RxqAtlNnH319DWD1Zu3JM8eq0=";
   };
 
   # v2.1.0 requires Node.js >= 22 (uses unpdf 1.8.1 for PDF extraction).
-  npmDepsHash = "sha256-MqVn66vCbB8+3o6KB6GCU9GxsPtqeCYjTbI5A3nfTVs=";
+  npmDepsHash = "sha256-QhUqB/+R3BGwx8gH0MDn+PiMEtira3vZdosJj8oMsaI=";
   npmBuildScript = "build";
 
   nativeBuildInputs = [
