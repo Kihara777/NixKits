@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-02T16:26:56+09:00
+
+**摘要**：feat(skills): 更新检查新增「第 0 步」——开工前同步远端并核对活跃 issue / PR（四语）— **通用技能** `nix-flake-update-check` 的主流程改由第 0 步起头（编号取 0，以免打乱既有第 1~9 步的交叉引用）：`git fetch` 对齐本地后列出未关闭 issue / PR，并划清「空」与「取不到」的分野——`gh` 失败时**显式报错、非零退出**，实测三种形态：认证失效 / 仓库名写错 → `Could not resolve to a Repository`；仓库**未启用 issue 功能** → `repository has disabled issues`；确实没有 → 退出 0 且输出空列表。故判据是两步：先证仓库可读，再看列表；**「空列表」只在命令成功时才算「真的没有」**。**为何值得单独立一步**：issue 是「已知故障」的集合、PR 是「在途工作」的集合，且它把取数链路自检提早到第 3 步之前。**提交前自检由九问扩为十问**（第 10 问即此步），并**如实标注来源差异**——前九问是实测返工的产物，第 10 问来自维护者的前置要求，性质不同。**适配层补本仓形态**：仓库坐标、`has_issues=true`、实测现状（0 未关闭 issue / 0 未关闭 PR），以及**四条真实先例**——PR #6 改的正是固定 SHA 的 action、PR #7 升级的正是更新检查会碰的包（且注定过不了 CI，终以关闭改手动收场）、PR #4 / #5 两份误报促成了 `/tts` 的 SSRF 真实修复、issue #3 成为技能拆分的契机。**顺带修正两处失真**：`traps.md` 原称「九问中每一问都对应这里的一个章节」，实则第 9 问（判据区分度）无对应章节（上次扩充时漂移）；四语技能文档仍写着「六问自检」与「第 1~9 步」（落后两轮）。**第 9 问补上「怎么自证」**：`nix flake check` 输出 `running 0 flake checks... all checks passed!` 是**缓存命中**而非「跑过了」——实测往 `docs/pcn/` 注入一个片假名后，`doc-links` 立即以 `kana on line 124` 失败，这才证明闸门带着当前输入真的量过。**验证**：`nix flake check` 全通过（首轮 pcn 曾残留助词「が」，被仓库自己的检查脚本抓出后修正）。
+
+| 提交 | 说明 |
+|------|------|
+| `c10de09` | feat(skills): 更新检查新增第 0 步 —— 开工前同步远端并核对活跃 issue / PR |
+
 ## 2026-10-02T03:54:38+09:00
 
 **摘要**：fix(dsh): 更正 image 模态断言（四语）— 上一条记录（`2ab7dda`）在 `modules/dsh.nix` 的选项描述与四语 `dsh.md` 里写了 `deepseek-flash` 是「**唯一**声明 image 模态的 flash 条目」，并把该断言横跨 stable 与 alpha 两个通道。**实查 store 内两份已构建产物**（`dsh-0.1.5-rc.2`、`dsh-0.1.6-alpha.1` 的 `dsh-llm-deepseek` → `DEFAULT_MODELS`）后确认：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 的目录里**各有两条**声明 `inputModalities: ["text","image"]` —— `deepseek-flash` 与 `deepseek-v4-flash-vision-exp`；收敛为一条的只有 alpha `0.1.6-alpha.2`。该断言仅在 alpha.2 上成立。**改动**：选择理由改写为「三个目录都收录、且都声明 image 模态的唯一 id」，目录表新增「其中声明 image 模态」一列使该事实可直接核对；同时把降级警告从「静默替换」修正为**双路径**——新贴的图在 `session/prompt` 附件准入处**当场报错**（`MODEL_DOES_NOT_SUPPORT_IMAGES`），只有历史里已有的图才由 `projectImagesForTextModel` **静默**替换。默认值本身（`deepseek-flash`）不变，仍是正确选择。

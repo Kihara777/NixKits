@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-02T16:26:56+09:00
+
+**摘要**：feat(skills): 更新確認 「第 0 步」 新設——着手前 遠端同期 且 未閉 issue / PR 確認（四言語）— **汎用技能** `nix-flake-update-check` 主 flow 第 0 步 自 開始（既存 第 1〜9 步 相互参照 崩 不 為 番号 0）：`git fetch` 作業 copy 整列 後、未閉 issue / PR 列挙、「空」 與「取得不能」 境界 引——`gh` **明示 error 終了（非零）**、実測 三形態：認証失効 / 倉庫名 誤 → `Could not resolve to a Repository`；**issue 機能 無効** 倉庫 → `repository has disabled issues`；真 無 → 終了 0 空 list。故 判据 二段階：先 倉庫 読 可能 証明、次 列表 見。**「空 list」「真 無」 意味 場合 命令 成功 時 限定**。**独立 工程 為 価値**：issue 「既知 故障」 集合、PR 「在途 作業」 集合、更 取得経路 自検 第 3 步 以前 引上。**commit 前 自検 九問 自 十問 至**（第 10 問 本 工程）、且 **出所 差異 正直 標記**——第 1〜9 問 実測 再実行 産物、第 10 問 維護者 要求 着手前 動作。**適配層 本倉 形態 補**：座標、`has_issues=true`、実測 現状（未閉 issue 0 / PR 0）、且 **四 実例**——PR #6 正 SHA 固定 action 変更、PR #7 正 更新確認 触 包 更新（CI 必 落 故 最終 close 手動更新 至）、PR #4 / #5 二 誤検出 `/tts` SSRF 実修正 導、issue #3 技能分割 契機。**併 二箇所 不正確 修正**：`traps.md` 「九問 何 也 此 対応 節 持」 記載、然 第 9 問（判据 識別力）対応 節 実際 存在 不（前回 拡張 時 漂移）；四言語 技能 文書 仍 「六問 自検」 與 「第 1〜9 步」 記載（二巡 遅）。**第 9 問 「如何 自証」 追加**：`nix flake check` `running 0 flake checks... all checks passed!` 出 場合 **cache 命中** 且 「検査 走」 非——`docs/pcn/` 片仮名 一 注入 則 `doc-links` 直 `kana on line 124` 失敗、此 依 閘門 現在 入力 実際 測 事 証明。**検証**：`nix flake check` 全通過（初回 pcn 平仮名 助詞 残留、倉庫 自身 検査 script 検出 後 修正）。
+
+| 提交 | 説明 |
+|------|------|
+| `c10de09` | feat(skills): 更新检查新增第 0 步 —— 开工前同步远端并核对活跃 issue / PR |
+
 ## 2026-10-02T03:54:38+09:00
 
 **摘要**：fix(dsh): image modality 記述 訂正（四言語）— 前回 記録（`2ab7dda`）`modules/dsh.nix` option 説明 與 四言語 `dsh.md` 内、`deepseek-flash` 「**唯一** image modality 宣言 flash 項目」記、且 該断定 stable 與 alpha 両 channel 拡張。**store 内 二 構築済成果物**（`dsh-0.1.5-rc.2` 與 `dsh-0.1.6-alpha.1` 之 `dsh-llm-deepseek` → `DEFAULT_MODELS`）実査 結果、stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 目録 各 `inputModalities: ["text","image"]` 宣言 項目 **二** 持 —— `deepseek-flash` 與 `deepseek-v4-flash-vision-exp`、一条 収束 alpha `0.1.6-alpha.2` 限。断定 alpha.2 於 限 成立。**変更内容**：選択理由「三 目録 全部 収録、且 各目録 image modality 宣言 唯一 之 id」書換、目録表 内「内 image modality 宣言 者」列 追加 事実 直接照合 可能 化；併 低下時 警告「無言置換」自 **二経路** 訂正 —— 新規添付 画像 `session/prompt` 添付准入 於 **其場 拒否**、履歴 既存 画像 限 `projectImagesForTextModel` 依 **無言** 置換。既定値 自体（`deepseek-flash`）変更 無、依然 正 選択。
