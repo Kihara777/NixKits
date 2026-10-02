@@ -2,6 +2,10 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T04:38:34+09:00
+
+**Summary**: `write-maintenance-log` gains a **measurable length spec**; four self-written entries' summaries go from 1674–3784 characters back to 312–444. Cause: a summary became a full situation description — mechanism derivation, raw error text, CI logs all in — while details already have other homes (commit message / package-definition header / `AGENTS.md`). Three rules: a summary answers only "what changed / why / how verified", target ≤ 400 characters; **translation ratios match repo-wide measurements** (`en/zh` ≈ 1.84, `ja/zh` ≈ 1.21; clearly over ⇒ expansion-style padding); **explaining "why this error arises this way" in a summary does not belong here**. **Verification**: `nix flake check` four-language self-checks all green; the four compressed lose no information (details retrievable from the commit message and package-definition header).
+
 ## 2026-10-03T04:27:03+09:00
 
 **Summary**: `opencode-telegram`'s riscv64 **goes from "dropped" back to "built"**, plus the criterion "**the artefact is really run once**". Both root causes share one shape — gyp took **the empty string** for another type: no bare `gcc` on the cross PATH ⇒ `"" >= 7` throws; `better-sqlite3`'s `prebuild_exists` empty too ⇒ the target degenerates to `type: none` and `make` only stamps. The fixes: a `gcc` shim aimed at the cross compiler, and an explicit `--force_build=1`. `build-package.yml` gains `smoke-test`: after the build it runs `develop/qemu-smoke-tests/<包名>.sh` (**the same file locally and in CI**), and a missing script or a missing binfmt handler is a failure. **Verification**: two pushes, 33 workflows each, all success.
@@ -19,7 +23,7 @@
 
 ## 2026-10-03T02:26:58+09:00
 
-**Summary**: `opencode-telegram` **drops the riscv64 build** — green **not from fixing the build** but from stopping a platform that could never be usable. Two facts: that job **was false-green through the cache** (no build line in the log at all; it fetched the previous 0.25.3 artefact); the real build sticks on `better-sqlite3` — a **direct dependency**, **statically imported**, no riscv64 prebuild upstream, `install` dropped in v13, both loader paths empty. The artefact **builds but throws on startup**, so it goes on the **same precedent** as `blender-mcp` / `obs-bilibili-stream`. **Verification**: x86_64 / aarch64 are unaffected.
+**Summary**: `opencode-telegram` **drops the riscv64 build** — green **not from fixing the build** but from no longer building a platform that could never be usable. Two facts: that job **was false-green through the cache** (no build line in the log at all; it fetched the previous 0.25.3 artefact); the real build sticks on `better-sqlite3` — a **direct dependency**, **statically imported**, no riscv64 prebuild upstream, `install` dropped in v13, both loader paths empty. The artefact **builds but throws on startup**, so it goes on the **same precedent** as `blender-mcp` / `obs-bilibili-stream`. **Verification**: x86_64 / aarch64 are unaffected.
 
 | Commit | Description |
 |------|------|
@@ -31,7 +35,7 @@
 
 ## 2026-10-02T20:38:40+09:00
 
-**Summary**: two **criterion blind spots** and one **same-name conflict**, all found by injection/control measurement. **① The `doc-links` switcher criterion closes its blind spot**: the old version checked only a switcher line **found** in `lines[:8]`, so a deleted line or one past line 8 passed silently — all four `docs/*/ruyi.md` went unverified; now `docs/` must carry one, searched **file-wide**. **② The presets no longer bundle composition-writing skill copies**: both are **same-named as upstream but forked**, ours still the 0.1.x directory-style model; they now mount upstream's, pinned by an assertion. **③ persona loses a stale claim** (rewriting the model-facing prompt is a behaviour change, maintainer-approved). **Verification**: `nix flake check` fully green; presets put into a throwaway `0.2.0-rc.2` instance, **all 9 presets' `broken` empty**.
+**Summary**: two **criterion blind spots**, one **same-name conflict** — all found by injection/control measurement. **① The `doc-links` switcher criterion closes its blind spot**: the old version only checked a switcher line **found** in `lines[:8]`, so a deleted line or one past line 8 passed silently — all four `docs/*/ruyi.md` unverified; now `docs/` must carry one, searched **file-wide**. **② The presets no longer bundle composition-writing skill copies**: both **same-named as upstream but forked**, ours still the 0.1.x directory-style model; now mounting upstream's, assertion-pinned. **③ persona loses a stale claim** (rewriting the model-facing prompt is a behaviour change, maintainer-approved). **Verification**: `nix flake check` fully green; presets in a throwaway `0.2.0-rc.2` instance, **all 9 presets' `broken` empty**.
 
 | Commit | Description |
 |------|------|

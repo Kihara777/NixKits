@@ -2,6 +2,10 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-03T04:38:34+09:00
+
+**摘要**：`write-maintenance-log` 対 **可測 之 長度 規範** 追加、且 自作 四 条 条目 之 摘要 1674–3784 文字 自 312–444 至 圧縮 回。原因 摘要 完全 状態 記述 化 —— 機構 導出、錯誤 原文、CI 日誌 全部 含、而 詳細 本来 別 之家 有（commit message / 包定義 冒頭 / `AGENTS.md`）。規範 三 条：摘要 唯 「何 変更 / 何故 / 如何 検証」 答、目標 ≤ 400 文字；**訳文 倍率 全倉 実測 値 整合**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明確 超過 即 展開式 冗長 属）；**摘要 内 「何故 此 錯誤 発生」 説明 場合、該 一 段 此処 置 適切 非**。**検証**：`nix flake check` 四語 自検 全緑；四 条 圧縮 後 情報 欠落 無（詳細 皆 commit message 與 包定義 冒頭 自 参照 可能）。
+
 ## 2026-10-03T04:27:03+09:00
 
 **摘要**：`opencode-telegram` 之 riscv64 **「摘除」 自 「構築」 改 回**、且 「**産物 真 実走 一 回**」 此 判据 追加。二 箇所 之 根因 同型 —— gyp **空串** 他 種別 扱：交叉 PATH 上 裸 `gcc` 無 ⇒ `"" >= 7` 例外 抛；`better-sqlite3` 之 `prebuild_exists` 同様 空串 化 ⇒ target `type: none` 至 退化、`make` 只 stamp 蓋。修法 各 交叉 編譯器 向 指 之 `gcc` shim 與 顕式 `--force_build=1`。`build-package.yml` `smoke-test` 新規 追加：構築 後 `develop/qemu-smoke-tests/<包名>.sh` 走（本地 與 CI 同一 份）、脚本 無 也 binfmt 処理器 無 也 共 失敗 判定。**検証**：二 回 push 各 33 個 workflow 全部 success。
@@ -19,7 +23,7 @@
 
 ## 2026-10-03T02:26:58+09:00
 
-**摘要**：`opencode-telegram` **riscv64 構築 摘除** —— 転緑 構築 修正 依 非、而 本来 使用 不可 能 之 平台 停止 構築 依。事実 二 件：該 job **一直 緩衝 依 仮緑**（日誌 内 一 行 構築 也 無、取 者 前 一 版 0.25.3 之 産物）；真 構築 則 `better-sqlite3` 於 卡 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 又 `install` script 取消、読込器 二 路 全 空。産物 **構築 能、一 起動 即 抛**、故 `blender-mcp` / `obs-bilibili-stream` 之 同一 先例 按 摘除。**検証**：x86_64 / aarch64 影響 無。
+**摘要**：`opencode-telegram` **riscv64 構築 摘除** —— 転緑 構築 修正 依 非、而 本来 使用 不可 能 之 平台 停止 構築 依。事実 二 件：該 job **一直 緩衝 依 仮緑**（日誌 内 一 行 構築 也 無、取得 者 前 一 版 0.25.3 之 産物）；真 構築 則 `better-sqlite3` 於 卡 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 又 `install` script 取消、読込器 二 路 全 空。産物 **構築 能、一 起動 即 抛**、故 `blender-mcp` / `obs-bilibili-stream` 之 同一 先例 按 摘除。**検証**：x86_64 / aarch64 影響 無。
 
 | 提交 | 説明 |
 |------|------|

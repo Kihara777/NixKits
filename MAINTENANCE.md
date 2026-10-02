@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-03T04:38:34+09:00
+
+**摘要**：给 `write-maintenance-log` 补上**可测的长度规范**，并把四条自撰条目的摘要从 1674–3784 字符压回 312–444。起因是摘要被写成了完整事态描述——机制推导、报错原文、CI 日志全在里面，而细节本就有别的家（commit message / 包定义头部 / `AGENTS.md`）。规范三条：摘要只答「变了什么 / 为什么 / 怎么验证」，目标 ≤ 400 字符；**译文倍率对齐全库实测值**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21，明显超出即属展开式加料）；**如果你在摘要里解释「这个报错为什么是这么来的」，那一段就不该在这里**。**验证**：`nix flake check` 四语自检全绿；四条压缩后信息无丢失（细节均可从 commit message 与包定义头部查到）。
+
+| 提交 | 说明 |
+|------|------|
+| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
+
 ## 2026-10-03T04:27:03+09:00
 
 **摘要**：`opencode-telegram` 的 riscv64 **由「摘掉」改回「建」**，并加上「**产物真的跑一遍**」这条判据。两处根因同型——gyp 把**空串**当成了别的类型：交叉 PATH 上没有裸 `gcc` ⇒ `"" >= 7` 抛异常；`better-sqlite3` 的 `prebuild_exists` 同样成空串 ⇒ target 退化成 `type: none`、`make` 只盖 stamp。修法分别是指向交叉编译器的 `gcc` shim 与显式 `--force_build=1`。`build-package.yml` 新增 `smoke-test`：构建后跑 `develop/qemu-smoke-tests/<包名>.sh`（本地与 CI 同一份），缺脚本或缺 binfmt 处理器都判失败。**验证**：两次推送各 33 个 workflow 全部 success。
