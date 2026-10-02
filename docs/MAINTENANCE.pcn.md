@@ -1044,7 +1044,7 @@
 
 ## 2026-09-03T04:41:42+09:00
 
-**概要**：docs(dsh-api-balance): 上流 StatsLine 横 scroll 最適化提案記録 — DeepSeek Harness Discussion #5458（上流現時外部 PR 不承、故 Discussion + 準備済 branch 形公開）；fork Kihara777/deepseek-harness 準備済 branch `draft/statline-overflow-scroll`（commit e5ece63）；本 repo 公式 `dsh-plugin` 生態 topic 追記（四言語 dsh-api-balance 文書同期）
+**摘要**：docs(dsh-api-balance): 上流 StatsLine 横 scroll 最適化提案記録 — DeepSeek Harness Discussion #5458（上流現時外部 PR 不承、故 Discussion + 準備済 branch 形公開）；fork Kihara777/deepseek-harness 準備済 branch `draft/statline-overflow-scroll`（commit e5ece63）；本 repo 公式 `dsh-plugin` 生態 topic 追記（四言語 dsh-api-balance 文書同期）
 
 | 提交 | 説明 |
 |------|------|
@@ -2237,7 +2237,7 @@
 
 ## 2026-07-22T16:31:26+09:00
 
-**Summary**: fix(modules) — rog-control-center-fix now forces SendSIGKILL=yes + TimeoutStopSec=30s to prevent stale asus-shutdown process from blocking systemd-switch. comfyui-strix-halo now asserts glibc >= 2.42 (ROCm 7.2 needs GLIBC_ABI_GNU2_TLS).
+**摘要**：fix(modules) — rog-control-center-fix、SendSIGKILL=yes + TimeoutStopSec=30s 追加、asus-shutdown 旧 process 残存 依 systemd-switch 阻塞 解決。comfyui-strix-halo、glibc >= 2.42 assertion 追加（ROCm 7.2 GLIBC_ABI_GNU2_TLS 必要）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2245,7 +2245,7 @@
 
 ## 2026-07-22T09:00:00+09:00
 
-**Summary**：feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
+**摘要**：feat(overlays) — breeze-black overlay 新規追加、Plasma 6 向 高対比 Breeze Black 障碍支援 主題 提供（全局 look-and-feel + GTK + 配色方案）。4 言語文書 含。
 
 | 提交 | 説明 |
 |------|------|
@@ -2253,7 +2253,7 @@
 
 ## 2026-07-22T05:39:31+09:00
 
-**Summary**: docs(devshell) — new devShell documentation (4 languages), describing opencode (full MCP stack) and ruyi (3 channels merged) environments. README devShell table now includes doc links.
+**摘要**：docs(devshell) — devShell 文書 新規追加（4 言語）、opencode（MCP 全構成）與 ruyi（三通道 統合）開発環境 記述。README devShell 表 文書 link 列 追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -2262,7 +2262,7 @@
 
 ## 2026-07-22T03:40:50+09:00
 
-**Summary**: docs — unified all user home directory paths across the repo to `~/` prefix (replaced hardcoded `/home/kix` and `/home/<user>` variants), covering 13 files.
+**摘要**：docs — 倉庫 全体 之 文書 内 利用者 目録 path `~/` 接頭辞 統一（直書 `/home/kix` 及 `/home/<user>` 等 変体 置換）、13 file 対象。
 
 | 提交 | 説明 |
 |------|------|
@@ -2271,7 +2271,7 @@
 
 ## 2026-07-22T03:14:27+09:00
 
-**Summary**: feat(shells) — opencode devShell iteration: SearXNG + lighttpd (matching system NixOS config) + blender-mcp + godot-mcp + godot + opencode + opencode-telegram. Auto-registers MCP config on first entry. Removed tryEval guards from godot packages.
+**摘要**：feat(shells) — opencode devShell 反復：SearXNG + lighttpd（系統 NixOS 設定 與 一致）+ blender-mcp + godot-mcp + godot + opencode + opencode-telegram、初回 進入 時 MCP 設定 自動登録；godot 包 之 tryEval 保護 削除。
 
 | 提交 | 説明 |
 |------|------|
@@ -2291,7 +2291,7 @@
 
 ## 2026-07-22T02:43:51+09:00
 
-**Summary**: feat(overlays) — new efl-cross-fix overlay, fixing efl cross-compilation failures on riscv64/riscv64-musl/aarch64 caused by missing native code-gen tools (eolian_gen, eet). Includes 4-language docs.
+**摘要**：feat(overlays) — efl-cross-fix overlay 新規追加、efl（Enlightenment Foundation Libraries）之 riscv64/riscv64-musl/aarch64 交叉編集 時 原生 符号生成 道具（eolian_gen、eet）不足 起因 構築失敗 修正。4 言語文書 含。
 
 | 提交 | 説明 |
 |------|------|
@@ -2299,7 +2299,7 @@
 
 ## 2026-07-21T10:28:31+09:00
 
-**Summary**: codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — upstream updates (codewhale v0.9.0 still no riscv64 prebuilt binaries, continues source-build path)
+**摘要**：codewhale 0.9.0 + ruyi 0.51.0 + ruyi-beta 0.51.0-beta.20260714 + ruyi-alpha 0.52.0-alpha.20260714 + opencode-telegram 0.22.3 — 上流更新（codewhale v0.9.0、依然 riscv64 預編訳 二進 無、源 構築 path 継続）
 
 | 提交 | 説明 |
 |------|------|
@@ -2332,7 +2332,7 @@
 
 ## 2026-07-16T04:54:55+09:00
 
-**Summary**: docs(nixkits-skills) — renamed 'Known Removals' to 'Risk Advisory' across 5-language skill docs.
+**摘要**：docs(nixkits-skills) —「既知 移除」章節「危険警告」改名、5 言語技能文書 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -2349,7 +2349,7 @@
 
 ## 2026-07-16T04:35:20+09:00
 
-**Summary**: skill(write-maintenance-log) — strengthened timestamp rules: mandatory `git log` for commit times, ban `T00:00:00` placeholders, add post-generation verification step. Generalized from the MAINTENANCE placeholder timestamp fix (`968df0e`).
+**摘要**：skill(write-maintenance-log) — timestamp 規則 強化：`git log` 使用 強制、`T00:00:00` 占位符 禁止、生成後 検証 手順 新設。維護日誌 占位 時間 修正 経験 自 汎化（`968df0e`）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2386,7 +2386,7 @@
 
 ## 2026-07-16T01:18:16+09:00
 
-**Summary**: codewhale 0.8.67 — dual-path build (prebuilt x86_64/aarch64 + source-built riscv64). Upstream removed riscv64 binaries from v0.8.67 release; riscv64 now built via rustPlatform.buildRustPackage from vendored Cargo.lock.
+**摘要**：codewhale 0.8.67 — 二経路 構築（預編訳 x86_64/aarch64 + 源 構築 riscv64）。上流 v0.8.67 自 riscv64 預編訳 二進 削除；riscv64 現在 rustPlatform.buildRustPackage 経由 本地 Cargo.lock 自 構築。
 
 | 提交 | 説明 |
 |------|------|
@@ -2397,7 +2397,7 @@
 
 ## 2026-07-15T08:32:13+09:00
 
-**Summary**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — upstream updates (codewhale skipped: v0.8.67 still missing riscv64 binaries)
+**摘要**：mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — 上流更新（codewhale 跳過：v0.8.67 従来 riscv64 二進 欠落）
 
 | 提交 | 説明 |
 |------|------|
@@ -2574,7 +2574,7 @@
 
 ## 2026-06-25T11:02:38+09:00
 
-**Summary**: ruyi — 交叉編訳修正（postPatch 使用 python.pythonOnBuildForHost）；CI — ruyi* riscv64-cross 復帰；docs — riscv64 徽章正確 job filter 復元
+**摘要**：ruyi — 交叉編譯 修正（postPatch 改用 python.pythonOnBuildForHost）；CI — ruyi 系列 riscv64-cross 復帰；docs — riscv64 徽章 恢復 精確 job filter
 
 | 提交 | 説明 |
 |------|------|
@@ -2584,7 +2584,7 @@
 
 ## 2026-06-25T10:12:02+09:00
 
-**Summary**: CI — riscv64-cross 恒久除去 ruyi*（Python postPatch 交叉編訳不可）；docs — riscv64 徽章 * 標記回落復帰 + 注記
+**摘要**：CI — riscv64-cross 恒久 除去 ruyi 系列（Python postPatch 交叉編譯 不可行）；docs — riscv64 徽章 恢復 * 標記 + 注釈 説明
 
 | 提交 | 説明 |
 |------|------|
@@ -2593,7 +2593,7 @@
 
 ## 2026-06-25T10:04:30+09:00
 
-**Summary**: CI — access-tokens 覆写 修正、GitHub API 速率限界超過解消（一行統合）；riscv64-cross 並列上限 4 設定
+**摘要**：CI — access-tokens 被覆 修正 引起 GitHub API rate limit 超過（合併 双行 一行）、riscv64-cross 並列 上限 4
 
 | 提交 | 説明 |
 |------|------|
@@ -2739,7 +2739,7 @@
 
 ## 2026-06-23T04:04:32+09:00
 
-**Summary**：AGENTS.md — 硬符号除去、冗長監査備忘削除、緩衝章代理操作手引書換、利用者側記述削除、言語体系自動発見変更
+**摘要**：AGENTS.md — 去 硬符号 化、冗長 監査 備忘 削除、緩衝 章 改 代理 操作 手引、利用者 側 記述 削除、言語体系 改 自動発見
 
 | 提交 | 説明 |
 |------|------|
@@ -2749,7 +2749,7 @@
 
 ## 2026-06-22T23:49:00+09:00
 
-**Summary**：mcp-searxng 1.7.2 — 上流修復
+**摘要**：mcp-searxng 1.7.2 — 上流 修復
 
 | 提交 | 説明 |
 |------|------|
@@ -2762,7 +2762,7 @@
 
 ## 2026-06-22T23:22:00+09:00
 
-**Summary**：AGENTS.md — 新規初回起動監査規則、接続制御頂部移動
+**摘要**：AGENTS.md — 新規 初回 起動 監査 規則、接続制御 移動 頂部
 
 | 提交 | 説明 |
 |------|------|
@@ -2771,7 +2771,7 @@
 
 ## 2026-06-22T07:20:50+09:00
 
-**Summary**：docs — README 重複行修復、write-project-docs 反模式補充
+**摘要**：docs — README 重複 行 修復、write-project-docs 反模式 補充
 
 | 提交 | 説明 |
 |------|------|
@@ -2780,7 +2780,7 @@
 
 ## 2026-06-22T06:41:50+09:00
 
-**Summary**：AGENTS.md — 新規接続制御、言語要求、送信規範、保守記録確認、文書同期、汎化、多構造緩衝規則
+**摘要**：AGENTS.md — 新規 接続制御、言語 要求、送信 規範、保守記録 確認、文書同期、汎化、多架構 緩衝 規則
 
 | 提交 | 説明 |
 |------|------|
@@ -2788,7 +2788,7 @@
 
 ## 2026-06-22T06:21:11+09:00
 
-**Summary**：docs — 毎包文書双構造 CI 徽章追加、技能雛形同期
+**摘要**：docs — 毎包 文書 追加 双架構 CI 徽章、技能 雛形 同期
 
 | 提交 | 説明 |
 |------|------|
@@ -2799,7 +2799,7 @@
 
 ## 2026-06-22T06:05:49+09:00
 
-**Summary**：CI — ARM runner 多構造構築追加、flake.lock 並行競合修正（--no-write-lock-file）
+**摘要**：CI — ARM runner 多架構 構築 追加、flake.lock 並行競合 修正（--no-write-lock-file）
 
 | 提交 | 説明 |
 |------|------|
@@ -2810,7 +2810,7 @@
 
 ## 2026-06-22T05:48:23+09:00
 
-**Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 戻移（修正書類依存）
+**摘要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 復帰（patch file 依存）
 
 | 提交 | 説明 |
 |------|------|
@@ -2819,7 +2819,7 @@
 
 ## 2026-06-22T05:39:33+09:00
 
-**Summary**：docs — 緩衝除外警告追加（上乗及部品+修正条目）、README 緩衝説明圧縮、flake.nix nixConfig 自動宣言追加
+**摘要**：docs — 緩衝 除外 警告 追加（overlay 與 模組 + patch 条目）、README 緩衝 説明 圧縮、flake.nix nixConfig 自動 宣言 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2828,7 +2828,7 @@
 
 ## 2026-06-22T05:27:50+09:00
 
-**Summary**：docs — 全 30 篇包文書 `## 緩衝` 節追加、CI badge 配置改善、技能同期
+**摘要**：docs — 全 30 篇 包 文書 `## 缓存` 節 追加、CI 徽章 配置 改善、技能 同期
 
 | 提交 | 説明 |
 |------|------|
@@ -2837,7 +2837,7 @@
 
 ## 2026-06-22T05:13:45+09:00
 
-**Summary**：CI/CD — GitHub Actions 構築行列（Cachix 推送）追加、二進緩衝、AGENTS.md
+**摘要**：CI/CD — GitHub Actions 構築 行列（Cachix push）追加、二進緩衝、AGENTS.md
 
 | 提交 | 説明 |
 |------|------|
@@ -2845,7 +2845,7 @@
 
 ## 2026-06-22T05:13:40+09:00
 
-**Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 辞書及雛形分割、SKILL.md 60-80 行圧縮
+**摘要**：skills — translate-katalish / translate-pseudocn / write-project-docs 辞書 與 雛形 分割、SKILL.md 60-80 行 迄 圧縮
 
 | 提交 | 説明 |
 |------|------|
@@ -2853,7 +2853,7 @@
 
 ## 2026-06-22T05:13:36+09:00
 
-**Summary**：docs — MAINTENANCE 時刻精確化（29 節）、30 重複節削除（SHA 去重）、nix-kits→nixkits 全量置換（183 箇所）、部品文書同期
+**摘要**：docs — MAINTENANCE 時刻 精確化（29 節）、30 重複 節 削除（SHA 重複 除去）、nix-kits→nixkits 全量 置換（183 箇所）、模組 文書 同期
 
 | 提交 | 説明 |
 |------|------|
@@ -2861,7 +2861,7 @@
 
 ## 2026-06-22T05:13:31+09:00
 
-**Summary**：patches — ruyi-nixos-compat.patch 清浄複製基再構築（1223→426 行）、flake.lock 自参照 artifact 清除
+**摘要**：patches — ruyi-nixos-compat.patch 清浄 複製 自 再構築（1223→426 行）、flake.lock 自己参照 artifact 除去
 
 | 提交 | 説明 |
 |------|------|
@@ -2869,7 +2869,7 @@
 
 ## 2026-06-22T05:13:26+09:00
 
-**Summary**：overlays — patches 一覧 lib.unique 去重、ruyi-nixos-compat 精簡、llama-cpp-rocm curried 形式注釈追加
+**摘要**：overlays — patches 一覧 lib.unique 以 重複 除去、ruyi-nixos-compat 簡略化、llama-cpp-rocm curried 形式 注釈 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2877,7 +2877,7 @@
 
 ## 2026-06-22T05:13:22+09:00
 
-**Summary**：modules — 4 部品 enable 選項追加、comfyui-strix-halo assertions 追加、名前空間 nixkits.* 統一（含後方互換）、llama-cpp-rocm hfCacheDir 動的導出
+**摘要**：modules — 4 模組 enable 選項 追加、comfyui-strix-halo assertions 追加、名前空間 nixkits.* 迄 統一（後方互換 含）、llama-cpp-rocm hfCacheDir 動的 導出
 
 | 提交 | 説明 |
 |------|------|
@@ -2885,7 +2885,7 @@
 
 ## 2026-06-22T05:13:16+09:00
 
-**Summary**：codewhale 0.8.63 — 多構造予編集二進（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 包統合；meta 欄補完
+**摘要**：codewhale 0.8.63 — 多構造 予構築 二進（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 包 内 統合；meta 欄 補完
 
 | 提交 | 説明 |
 |------|------|
@@ -2893,7 +2893,7 @@
 
 ## 2026-06-22T05:13:11+09:00
 
-**Summary**：flake — mihomo-alpha 幽霊入力及上乗除去（書類未存在）
+**摘要**：flake — mihomo-alpha 幽霊入力 與 overlay 削除（書類 一度 也 存在 不）
 
 | 提交 | 説明 |
 |------|------|
@@ -2901,7 +2901,7 @@
 
 ## 2026-06-21T04:32:31+09:00
 
-**Summary**：言語切替器札規則汎化 — display_name 意味修正言語自称、言語名称不局所化規則 write-project-docs / translate-katalish / translate-pseudocn 三技能追加；修正 zh/katalish/pcn 全文書切替器中残留局所化名称
+**摘要**：言語切替器 札 規則 之 汎化 — display_name 之 意味 言語自称 至 修正、言語名称 不局所化 之 規則 write-project-docs / translate-katalish / translate-pseudocn 三技能 於 追加；zh/katalish/pcn 全文書 之 切替器 内 残留 之 局所化 名称 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -2912,7 +2912,7 @@
 
 ## 2026-06-21T00:07:44+09:00
 
-**Summary**：codewhale 0.8.62 — 上流修復；mcp-searxng 1.7.1 — 上流修復
+**摘要**：codewhale 0.8.62 — 上流修正；mcp-searxng 1.7.1 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -2925,7 +2925,7 @@
 
 ## 2026-06-20T18:36:33+09:00
 
-**Summary**：技能体系再構築 — translate-katakana→translate-katalish 改名、新規 translate-pseudocn（偽中国語）追加、write-project-docs 及 write-maintenance-log 言語拡張自動発見、文書符号五語対応表
+**摘要**：技能体系 之 再構成 — translate-katakana→translate-katalish 改名、translate-pseudocn（偽中国語）新設、write-project-docs 與 write-maintenance-log 之 言語拡張自動発見、docs-as-code 五語 対照表
 
 | 提交 | 説明 |
 |------|------|
@@ -2941,7 +2941,7 @@
 
 ## 2026-06-18T09:52:34+09:00
 
-**Summary**：codewhale 0.8.61 — 上流修復；mcp-searxng 1.6.0 — 上流修復
+**摘要**：codewhale 0.8.61 — 上流修正；mcp-searxng 1.6.0 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -2958,7 +2958,7 @@
 
 ## 2026-06-18T09:03:48+09:00
 
-**Summary**：ruyi — NixOS 互換性修正（`patches/ruyi-nixos-compat.patch`）、透過的処理予編集 RISC-V 道具連動的連結器路、GCC 子工程 ELF interpreter 修復及 console_scripts argv0 問題
+**摘要**：ruyi — NixOS 互換性 補丁（`patches/ruyi-nixos-compat.patch`）、予構築 RISC-V 工具鎖 之 動的連結器 経路、GCC 副工程 ELF 解釈 修正 與 console_scripts argv0 問題 透過的 処理
 
 | 提交 | 説明 |
 |------|------|
@@ -2966,7 +2966,7 @@
 
 ## 2026-06-17T10:59:35+09:00
 
-**Summary**：ruyi — NixOS 部品（`services.ruyi`）、宣言的生成 `/etc/xdg/ruyi/config.toml` 及環境変数
+**摘要**：ruyi — NixOS 部品（`services.ruyi`）、宣言的 `/etc/xdg/ruyi/config.toml` 與 環境変数 生成
 
 | 提交 | 説明 |
 |------|------|
@@ -2977,7 +2977,7 @@
 
 ## 2026-06-17T10:03:05+09:00
 
-**Summary**：ruyi — 新規 devShell 支援追加、`nix develop github:Kihara777/NixKits#ruyi` 環境入可能
+**摘要**：ruyi — devShell 支援 新設、`nix develop github:Kihara777/NixKits#ruyi` 以 環境 進入 可能
 
 | 提交 | 説明 |
 |------|------|
@@ -2985,7 +2985,7 @@
 
 ## 2026-06-17T09:48:33+09:00
 
-**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理者、新包（Python / Poetry 構築、ruff + mypy + 320 単体試験 + 52 統合試験全通過）
+**摘要**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理者、新包（Python / Poetry 構築、ruff + mypy + 320 単体試験 + 52 統合試験 全通過）
 
 | 提交 | 説明 |
 |------|------|
@@ -2997,7 +2997,7 @@
 
 ## 2026-06-17T07:37:39+09:00
 
-**Summary**：write-maintenance-log 技能 — nixkits-check-updates 自保守記録書式変更抽出独立技能化；MAINTENANCE.md 再生成（動的名称 + 精密時刻 + LIFO + hash 省略）
+**摘要**：write-maintenance-log 技能 — nixkits-check-updates 自 独立 技能 至 分離、二重 入口 設計（記入 維護記録 + 更新 維護記録）；flake.lock 同期 .gitignore 事前 検査 與 三路 分岐 論理
 
 | 提交 | 説明 |
 |------|------|
@@ -3016,7 +3016,7 @@
 
 ## 2026-06-17T06:48:47+09:00
 
-**Summary**：fix(mcp-searxng): 入口書類誤修正 — dist/index.js → dist/cli.js、MCP 伺服器正常起動可能
+**摘要**：fix(mcp-searxng): 入口 書類 之 錯誤 修正 — dist/index.js → dist/cli.js、MCP 伺服器 正常 起動 可能
 
 | 提交 | 説明 |
 |------|------|
@@ -3115,7 +3115,7 @@
 
 ## 2026-06-12T17:29:59+09:00
 
-**Summary**：feat(llama-cpp-rocm): modelsPreset 支援復元（nixpkgs 既削除）、名前空間 nixkits 移行
+**摘要**：feat(llama-cpp-rocm): modelsPreset 支援 復元（nixpkgs 既 削除）、名前空間 nixkits 至 移行
 
 ## 2026-06-12T10:51:31+09:00
 
@@ -3158,7 +3158,7 @@
 
 ## 2026-06-11T04:52:16+09:00
 
-**Summary**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流修復
+**摘要**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3184,7 +3184,7 @@
 
 ## 2026-06-10T02:28:10+09:00
 
-**Summary**：codewhale 0.8.55 — 上流修復；mcp-searxng 1.3.1 — 上流修復
+**摘要**：codewhale 0.8.55 — 上流 修正；mcp-searxng 1.3.1 — 上流 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3213,7 +3213,7 @@
 
 ## 2026-06-08T14:25:02+09:00
 
-**Summary**：mcp-searxng 1.2.1 — 上流修復
+**摘要**：mcp-searxng 1.2.1 — 上流 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3256,7 +3256,7 @@
 
 ## 2026-06-06T13:58:47+09:00
 
-**Summary**：codewhale 0.8.53 — 上流修復；mcp-searxng 1.1.0 — 上流修復；opencode-telegram 0.21.1 — 上流修復
+**摘要**：codewhale 0.8.53 — 上流 修正；mcp-searxng 1.1.0 — 上流 修正；opencode-telegram 0.21.1 — 上流 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3275,7 +3275,7 @@
 
 ## 2026-06-06T12:51:46+09:00
 
-**Summary**：comfyui-strix-halo 修正 — ROCm 7.2 wheels 内蔵支援
+**摘要**：comfyui-strix-halo 補丁 — ROCm 7.2 wheels 内蔵 支援
 
 | 提交 | 説明 |
 |------|------|
@@ -3328,7 +3328,7 @@
 
 ## 2026-06-02T05:57:11+09:00
 
-**Summary**：codewhale 0.8.49 — 上流修復；mcp-searxng 1.0.4 — 上流修復；obs-bilibili-stream 2.1.0 — 上流修復；opencode-telegram 0.21.0 — 上流修復
+**摘要**：codewhale 0.8.49 — 上流 修正；mcp-searxng 1.0.4 — 上流 修正；obs-bilibili-stream 2.1.0 — 上流 修正；opencode-telegram 0.21.0 — 上流 修正
 
 |--------|--------|--------|
 | codewhale | 0.8.47 | 0.8.49 |
@@ -3382,7 +3382,7 @@
 
 ## 2026-05-29T15:25:12+09:00
 
-**Summary**：kitsfmt — 多修正（vendor 目録回復、冪等性、上書安全、with→builtins.attrValues 変換、--stdin 旗）；rcc-fix — D-Bus 熱挿抜検出書換；build — .vscode gitignore 範囲修正
+**摘要**：kitsfmt — 複数 修正（vendor 目録 復元、冪等性、就地 安全性、with→builtins.attrValues 変換、--stdin 旗）；rcc-fix — D-Bus 熱挿抜 検出 至 書換；build — .vscode gitignore 範囲 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3406,7 +3406,7 @@
 
 ## 2026-05-29T10:18:46+09:00
 
-**Summary**：codewhale v0.8.47 — 新包
+**摘要**：codewhale v0.8.47 — 新包
 
 | 提交 | 説明 |
 |------|------|
@@ -3418,7 +3418,7 @@
 
 ## 2026-05-29T06:28:50+09:00
 
-**Summary**：fix(kitsfmt): inherit 逗号、字下文字列破損、lambda 空白等多整形問題修復；冪等性修復
+**摘要**：fix(kitsfmt): inherit 読点、縮進字符串 破損、lambda 空白 等 複数 整形問題 修正；冪等性 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3429,11 +3429,11 @@
 
 ## 2026-05-29T05:57:55+09:00
 
-**Summary**：fix(build): .vscode gitignore 範囲過広 vendored crate 書類排除修正
+**摘要**：fix(build): .vscode gitignore 範囲 過広 故 vendored crate 書類 排除 修正
 
 ## 2026-05-28T08:29:27+09:00
 
-**Summary**：llama-cpp-rocm — NixOS 部品（systemd 砂箱上書）；opencode-telegram — NixOS 部品（宣言的設定、自動導入）；rcc-fix — visible 属性修復；技能文書 — 動的発見表現
+**摘要**：llama-cpp-rocm — NixOS 部品（systemd 沙箱 上書）；opencode-telegram — NixOS 部品（宣言的設定、自動 導入）；rcc-fix — visible 属性 修正；技能文書 — 動的発見 表現
 
 | 提交 | 説明 |
 |------|------|
@@ -3447,7 +3447,7 @@
 
 ## 2026-05-27T06:08:13+09:00
 
-**Summary**：技能体系 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三技能同期上線；llama-cpp-rocm 動的追跡説明
+**摘要**：技能体系 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能 同期 公開；llama-cpp-rocm 動的追跡 説明
 
 | 提交 | 説明 |
 |------|------|
@@ -3482,7 +3482,7 @@
 
 ## 2026-05-21T16:35:02+09:00
 
-**Summary**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
+**摘要**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
 
 |--------|--------|--------|
 | mcp-searxng | v1.0.3 |
@@ -3510,7 +3510,7 @@
 
 ## 2026-05-14T17:10:06+09:00
 
-**Summary**：llama-cpp-rocm — 新包（動的追跡上流最新 Release）
+**摘要**：llama-cpp-rocm — 新包（動的追跡 上流 最新 Release）
 
 | 提交 | 説明 |
 |------|------|
@@ -3521,7 +3521,7 @@
 
 ## 2026-05-14T07:38:08+09:00
 
-**Summary**：kitsfmt — 新包（自建 Nix 整形器）；obs-bilibili-stream v1.0.0 — 新包
+**摘要**：kitsfmt — 新包（自前 Nix 整形器）；obs-bilibili-stream v1.0.0 — 新包
 
 | 提交 | 説明 |
 |------|------|
@@ -3533,7 +3533,7 @@
 
 ## 2026-05-01T01:08:15+09:00
 
-**Summary**：rcc-fix — 新包（asusctl 修正）
+**摘要**：rcc-fix — 新包（asusctl 補丁）
 
 | 提交 | 説明 |
 |------|------|

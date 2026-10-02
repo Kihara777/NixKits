@@ -2773,7 +2773,7 @@
 
 ## 2026-06-22T07:20:50+09:00
 
-**Summary**：docs — README 重复行修复，write-project-docs 反模式补充
+**概要**：docs — README の重複行を修正、write-project-docs にアンチパターンを追加
 
 | コミット | 説明 |
 |------|------|
@@ -2782,7 +2782,7 @@
 
 ## 2026-06-22T06:41:50+09:00
 
-**Summary**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
+**概要**：AGENTS.md — アクセス制御、言語要件、コミット規範、メンテナンス記録の確認、文書同期、汎化、多アーキテクチャキャッシュ規則を新設
 
 | コミット | 説明 |
 |------|------|
@@ -2790,7 +2790,7 @@
 
 ## 2026-06-22T06:21:11+09:00
 
-**Summary**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
+**概要**：docs — パッケージごとの文書に双アーキテクチャの CI バッジを追加、スキルテンプレートを同期
 
 | コミット | 説明 |
 |------|------|
@@ -2801,7 +2801,7 @@
 
 ## 2026-06-22T06:05:49+09:00
 
-**Summary**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
+**概要**：CI — ARM runner の多アーキテクチャビルドを追加、flake.lock の並行競合を修正（--no-write-lock-file）
 
 | コミット | 説明 |
 |------|------|
@@ -2812,7 +2812,7 @@
 
 ## 2026-06-22T05:48:23+09:00
 
-**Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
+**概要**：mcp-searxng — source hash + npmDepsHash を更新（GitHub archive の変化）；ruyi — overlay postPatch を元に戻し（パッチファイル依存）
 
 | コミット | 説明 |
 |------|------|
@@ -2821,7 +2821,7 @@
 
 ## 2026-06-22T05:39:33+09:00
 
-**Summary**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
+**概要**：docs — キャッシュ除外の警告を追加（overlay とモジュール+パッチの条目）、README のキャッシュ説明を圧縮、flake.nix に nixConfig の自動宣言を追加
 
 | コミット | 説明 |
 |------|------|
@@ -2830,7 +2830,7 @@
 
 ## 2026-06-22T05:27:50+09:00
 
-**Summary**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
+**概要**：docs — 全 30 篇のパッケージ文書に `## 缓存` 節を追加、CI バッジのレイアウトを改善、スキルを同期
 
 | コミット | 説明 |
 |------|------|
@@ -2839,7 +2839,7 @@
 
 ## 2026-06-22T05:13:45+09:00
 
-**Summary**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
+**概要**：CI/CD — GitHub Actions のビルドマトリクス（Cachix への push）、バイナリキャッシュ、AGENTS.md を追加
 
 | コミット | 説明 |
 |------|------|
@@ -2847,7 +2847,7 @@
 
 ## 2026-06-22T05:13:40+09:00
 
-**Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
+**概要**：skills — translate-katalish / translate-pseudocn / write-project-docs で辞書とテンプレートを分割、SKILL.md を 60-80 行に圧縮
 
 | コミット | 説明 |
 |------|------|
@@ -2855,7 +2855,7 @@
 
 ## 2026-06-22T05:13:36+09:00
 
-**Summary**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
+**概要**：docs — MAINTENANCE のタイムスタンプを精密化（29 節）、30 個の重複節を削除（SHA による重複排除）、nix-kits→nixkits を全量置換（183 箇所）、モジュール文書を同期
 
 | コミット | 説明 |
 |------|------|
@@ -3343,7 +3343,7 @@
 
 ## 2026-06-02T03:42:25+09:00
 
-**Summary**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
+**概要**：nixos-modern-cli スキル — POSIX ツールガイドと nix バイナリのパスに関するヒント
 
 | コミット | 説明 |
 |------|------|
@@ -3351,7 +3351,7 @@
 
 ## 2026-05-31T03:42:18+09:00
 
-**Summary**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
+**概要**：write-project-docs — 新スキル（NixKits 流に任意プロジェクトの多言語ドキュメント体系を書く）
 
 | コミット | 説明 |
 |------|------|
@@ -3359,7 +3359,7 @@
 
 ## 2026-05-30T03:42:14+09:00
 
-**Summary**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
+**概要**：codewhale — stdenv のスペルミス修正；llama-cpp-rocm のドキュメント修正（インラインリンクを削除し、system.nix の完全なプリセットを使用）；opencode-telegram の初回セットアップ手順
 
 | コミット | 説明 |
 |------|------|
@@ -3371,7 +3371,7 @@
 
 ## 2026-05-30T03:19:48+09:00
 
-**Summary**：other — 2 项更新
+**概要**：other — 2 件の更新
 
 | コミット | 説明 |
 |------|------|
@@ -3380,7 +3380,7 @@
 
 ## 2026-05-29T15:25:12+09:00
 
-**Summary**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
+**概要**：kitsfmt — 複数の修正（vendor ディレクトリの復元、冪等性、就地での安全性、with→builtins.attrValues 変換、--stdin フラグ）；rcc-fix — D-Bus ホットプラグ検出へ書き直し；build — .vscode gitignore のスコープ修正
 
 | コミット | 説明 |
 |------|------|
@@ -3396,7 +3396,7 @@
 
 ## 2026-05-29T13:16:30+09:00
 
-**Summary**：docs: fix codewhale type description (pre-built, not source-built)
+**概要**：docs: codewhale の種別記述を修正（ソースビルドではなくビルド済みバイナリ）
 
 | コミット | 説明 |
 |------|------|
@@ -3404,7 +3404,7 @@
 
 ## 2026-05-29T10:18:46+09:00
 
-**Summary**：codewhale v0.8.47 — 新包
+**概要**：codewhale v0.8.47 — 新規パッケージ
 
 | コミット | 説明 |
 |------|------|
@@ -3416,7 +3416,7 @@
 
 ## 2026-05-29T06:28:50+09:00
 
-**Summary**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
+**概要**：fix(kitsfmt): inherit のカンマ、インデント文字列の破損、lambda の空白など複数のフォーマット問題を修正；冪等性も修正
 
 | コミット | 説明 |
 |------|------|
@@ -3427,11 +3427,11 @@
 
 ## 2026-05-29T05:57:55+09:00
 
-**Summary**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
+**概要**：fix(build): .vscode gitignore のスコープが広すぎて vendored crate のファイルが除外される問題を修正
 
 ## 2026-05-28T08:29:27+09:00
 
-**Summary**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
+**概要**：llama-cpp-rocm — NixOS モジュール（systemd サンドボックスの上書き）；opencode-telegram — NixOS モジュール（宣言的設定、自動インストール）；rcc-fix — visible プロパティの修正；スキルドキュメント — 動的発見の文言
 
 | コミット | 説明 |
 |------|------|
@@ -3445,7 +3445,7 @@
 
 ## 2026-05-27T06:08:13+09:00
 
-**Summary**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
+**概要**：スキルシステム — nixkits-check-updates、nixkits-skills、nixos-modern-cli の三大スキルを同時に導入；llama-cpp-rocm の動的追跡の説明
 
 | コミット | 説明 |
 |------|------|
@@ -3456,7 +3456,7 @@
 
 ## 2026-05-26T05:30:58+09:00
 
-**Summary**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
+**概要**：ドキュメント — README の節名を改名（快速开始→添加、包→软件、License→许可）
 
 | コミット | 説明 |
 |------|------|
@@ -3464,7 +3464,7 @@
 
 ## 2026-05-24T03:01:02+09:00
 
-**Summary**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
+**概要**：mcp-searxng のドキュメント — SearXNG + lighttpd リバースプロキシの完全な NixOS 設定
 
 | コミット | 説明 |
 |------|------|
@@ -3472,7 +3472,7 @@
 
 ## 2026-05-22T06:45:11+09:00
 
-**Summary**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
+**概要**：llama-cpp-rocm — llama-cpp-ver flake 入力を削除し、nixpkgs のデフォルト版を使用
 
 | コミット | 説明 |
 |------|------|
@@ -3480,7 +3480,7 @@
 
 ## 2026-05-21T16:35:02+09:00
 
-**Summary**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
+**概要**：mcp-searxng v1.0.3 — 新パッケージ；opencode-telegram v0.20.5 — 新パッケージ
 
 |--------|--------|--------|
 | mcp-searxng | v1.0.3 |
@@ -3488,7 +3488,7 @@
 
 ## 2026-05-16T19:07:54+09:00
 
-**Summary**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
+**概要**：kitsfmt — match_ast! マクロの構文エラーを修正、comments_before 関数を簡素化、src パスを修正
 
 | コミット | 説明 |
 |------|------|
@@ -3498,7 +3498,7 @@
 
 ## 2026-05-15T16:59:28+09:00
 
-**Summary**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
+**概要**：kitsfmt — rnix AST に基づきフォーマットエンジンを v0.3.0 へ書き直し；Cargo.lock を生成
 
 | コミット | 説明 |
 |------|------|
@@ -3508,7 +3508,7 @@
 
 ## 2026-05-14T17:10:06+09:00
 
-**Summary**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
+**概要**：llama-cpp-rocm — 新パッケージ（上流の最新 Release を動的に追跡）
 
 | コミット | 説明 |
 |------|------|
@@ -3519,7 +3519,7 @@
 
 ## 2026-05-14T07:38:08+09:00
 
-**Summary**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
+**概要**：kitsfmt — 新パッケージ（自前の Nix フォーマッタ）；obs-bilibili-stream v1.0.0 — 新パッケージ
 
 | コミット | 説明 |
 |------|------|
@@ -3531,7 +3531,7 @@
 
 ## 2026-05-01T01:08:15+09:00
 
-**Summary**：rcc-fix — 新包（asusctl 补丁）
+**概要**：rcc-fix — 新パッケージ（asusctl パッチ）
 
 | コミット | 説明 |
 |------|------|
