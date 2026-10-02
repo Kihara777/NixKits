@@ -3,17 +3,21 @@
 # dsh 0.2.0 起，Agent 预设不再是 `$DSH_HOME/.agent-presets/<id>/` 目录，而是 profile 的
 # 用户 patch 层（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`，一个顶层 YAML 数组）
 # 里的一条 loader patch 条目：`@deepseek-ai/dsh-agent-preset` 行，预设的插件行进它的
-# `config.plugins`。本文件与同目录的 `agent.cordis.yml`（0.1.x 的目录式预设）
-# **双份并存**：0.1.x 走后者，0.2.0 走前者；两者的插件行正文由
-# develop/check-preset-derivation.py 一起校验派生关系。
+# `config.plugins`。
 #
-# 相对 agent.cordis.yml 的三处必要差异（不是笔误）：
+# **这是本预设唯一的格式**（2026-10-02 落地）：0.1.x 的目录式 `agent.cordis.yml` 已从
+# 仓库 HEAD 删除——两套格式不并存于 HEAD，只在「取用点」分叉（stable 用
+# packages/dsh-nixos-shell-stable.nix 钉住的 rev，alpha 跟 HEAD）。
+# `modules/dsh.nix` 把本文件**逐字**并进它生成的 cordis.patch.yml。
+#
+# 相对旧格式的三处必要差异（不是笔误）：
 #   1. `baseUrl` 语义变了——不再是预设目录，而是 profile 目录，故 skills 根改为从
 #      baseUrl 解析 `@kihara777/dsh-nixos-shell` 包根（见下方 skill-filesystem 注释）。
 #   2. 元数据（原 preset.yml 的 name/description）搬进 `config.name`/`config.description`。
 #   3. `config.order` 是 0.2.0 新增的 roster 排序键；内置预设占 1–4，本预设取 11。
 #
-# 迁移状态（准备阶段，未落地）见 docs/zh/dsh.md「预设格式在 dsh 0.2.0 的变化」。
+# 派生关系仍由 develop/check-preset-derivation.py 核对：本文件 = nixos-mode 的
+# `plugins:` 正文 + 固定追加块（末尾的 maintenance-skills 行）。
 - insert:
     - id: preset-maintenance-mode
       name: '@deepseek-ai/dsh-agent-preset'
@@ -23,11 +27,15 @@
         description: '基于 NixOS模式的仓库维护专用 Agent 预设：初始化时注入最新的文档撰写技能（write-project-docs，含 translate-* 语言扩展自动发现）与维护日志技能（write-maintenance-log），并载入仓库维护工作流提示词，用于在全新会话中开箱即用地维护与开发仓库内容。'
         order: 11
         plugins:
-          # ⚠️ 迁移待办（准备阶段故意未改）：下面这段 persona 文案是 0.1.x 的措辞，其中"预设住在
-          # `$DSH_HOME/.agent-presets/<id>/` 目录"在 dsh 0.2.0 已不成立——目录式通道被删除，预设
-          # 改为 profile patch 层的一条 `@deepseek-ai/dsh-agent-preset` 条目（upstream 0.2.0 的内置
-          # cordis 预设因此把 persona 缩到一句话，把细则交给 editing-cordis-compositions 技能）。
-          # 改写它会改变送进模型的提示词，属于行为变更，留到落地阶段连同文档一起决定。
+          # ⚠️ **未决项（2026-10-02 落地阶段刻意未改）**：下面这段 persona 文案里的
+          # "预设住在 `$DSH_HOME/.agent-presets/<id>/` 目录"在 dsh 0.2.0 已不成立——
+          # 目录式**发现**通道被删除，预设改为 profile patch 层的一条
+          # `@deepseek-ai/dsh-agent-preset` 条目（upstream 0.2.0 的内置 cordis 预设因此
+          # 把 persona 缩到一句话，把细则交给 editing-cordis-compositions 技能）。
+          # 那句仍算「半真」的只剩一点：本部署确实还把若干预设的**内容**组装在那里
+          # （lampkeeper / ocean-spiral / news-three-elements），变的只是发现方式。
+          # 改写它是**行为变更**（改变送进模型的提示词），落地阶段的批准范围不含它，
+          # 故留待维护者单独决定——不是忘了改。
           - id: persona
             name: '@deepseek-ai/dsh-persona'
             config:

@@ -27,6 +27,12 @@ const { apply: applyGate } = await import("../plugins/readonly-gate.js");
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const BUNDLED = new URL("../bundled/news-three-elements/", import.meta.url);
 const CACHE_DIR = join(process.env.DSH_HOME, ".cache", "news-three-elements");
+// dsh 0.2.0 起预设正文住在 preset.patch.yml（`- insert:` 一条条目），不再有
+// agent.cordis.yml。相对插件行的锚点也变了：0.2.0 的 baseUrl 是 profile 目录，
+// loader 只把以 `.` 开头的 name 按它解析，故锚点是
+// `$DSH_HOME/.agent-presets/news-three-elements/`（模块组装出来的那份）。
+const COMPOSITION = join(ROOT, "preset.patch.yml");
+const PLUGIN_ANCHOR = "../../.agent-presets/news-three-elements/";
 
 let failures = 0;
 const check = (label, ok, detail = "") => {
@@ -241,7 +247,7 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 
 // ── 4. news-language: detection, the draw, and the notice's demands ─────────
 {
-	const persona = readFileSync(join(ROOT, "agent.cordis.yml"), "utf8");
+	const persona = readFileSync(COMPOSITION, "utf8");
 	const plugin = readFileSync(join(ROOT, "plugins/news-language.js"), "utf8");
 
 	let listener;
@@ -541,8 +547,11 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 	}
 	// The composition mounts the gate, and the persona tells the model it exists.
 	{
-		const composition = readFileSync(join(ROOT, "agent.cordis.yml"), "utf8");
-		check("composition: the material gate is mounted", composition.includes("./plugins/news-material.js"));
+		const composition = readFileSync(COMPOSITION, "utf8");
+		check(
+			"composition: the material gate is mounted at the preset's own anchor",
+			composition.includes(`${PLUGIN_ANCHOR}plugins/news-material.js`),
+		);
 		check("persona: the gate is announced to the model", composition.includes("`news-material` 插件在交稿时核对"));
 	}
 }
