@@ -88,11 +88,22 @@ buildNpmPackage (finalAttrs: {
   #    （实测）。上游自己的 `build-release` 脚本用的就是 `--release --force_build=1`，照抄即可。
   # ② 为什么 `npm rebuild` 指望不上：v13 取消了 `install` 脚本（改成纯 prebuilds 分发），
   #    所以 npm 根本不会去编它——得我们自己叫 node-gyp。
+  # ③ 用**构建平台**的 node 跑 node-gyp，并把 PATH 限定在这个子 shell 里。
+  #    原因：`node-gyp.js` 的 shebang 是 `#!/usr/bin/env node`，而 PATH 上的 `node`
+  #    是 **riscv64** 的（`buildInputs` 里那个，是给运行时 wrapper 用的）——在 x86_64
+  #    runner 上执行不了，shebang 失败后 shell 会把它当**脚本**读，报一串
+  #    `line 3: use strict: command not found`。binding.gyp 里还有
+  #    `<!@(node -p "require('node-addon-api').include")`，同样要靠 PATH 上的 node。
+  #    ⚠️ 本地测不出这个缺陷：本机注册了 riscv64 的 binfmt，那些 riscv64 二进制**能跑**。
+  #    所以「本地构建通过」在这件事上没有验证力——要么把 binfmt 摘掉测，要么在 CI 上测。
   preBuild = lib.optionalString stdenv.hostPlatform.isRiscV64 ''
     echo "== 为 riscv64 编 better-sqlite3（上游无预编译）=="
-    ( cd node_modules/better-sqlite3 \
-      && ${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js \
-           rebuild --release --force_build=1 )
+    (
+      export PATH="${pkgs.buildPackages.nodejs}/bin:$PATH"
+      cd node_modules/better-sqlite3
+      node ${pkgs.buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js \
+        rebuild --release --force_build=1
+    )
   '';
 
   postInstall = ''
