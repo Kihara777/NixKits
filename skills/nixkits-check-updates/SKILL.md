@@ -156,6 +156,28 @@ gh run list --limit 40 --json name,conclusion --jq '[.[]|.conclusion]|group_by(.
 （riscv64 需要另一个构建文件时登记在那儿，先例 `codewhale` → `codewhale-src.nix`）；
 **能建就建，别急着摘**。
 
+#### ⚠️ 本机的构建条件比 CI **宽松**（交叉构建尤其）
+
+本机注册了 `binfmt`（`boot/kernel.nix` 的 `binfmt.emulatedSystems`），
+**riscv64 二进制在本机能直接跑**。后果是：构建脚本里那句 `#!/usr/bin/env node`
+在本地会解析到 `buildInputs` 里的 riscv64 node 并**成功执行**，而在 x86_64 runner 上
+`execve` 失败 ⇒ shell 把 `.js` 当脚本读 ⇒ 一串 `use strict: command not found`。
+**2026-10-03 `opencode-telegram` 的 riscv64 构建就是这样「本地绿、CI 红」。**
+
+**要复现 CI 的条件，先摘掉 binfmt：**
+
+```bash
+echo -1 | sudo tee /proc/sys/fs/binfmt_misc/riscv64-linux   # 摘掉
+# …在这里跑构建…
+sudo systemctl restart systemd-binfmt.service               # 还原
+```
+
+> **还原别手写 register。** 手工 `echo ':riscv64-linux:M:0:7f454c46…:…'` 会把 magic
+> 当**ASCII 文本**注册进去（实测 magic 变成 `3766343534633436…`，一条永不匹配的规则）。
+> 正确做法是删掉写坏的条目再让 systemd 按 `/etc/binfmt.d/` 重新注册；
+> `binfmt.emulatedSystems` 是声明式的，**重启也一定会恢复**。
+
+
 ### 一次可用的检查流程
 
 ```bash
