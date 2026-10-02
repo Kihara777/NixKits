@@ -27,6 +27,7 @@
 ## 本仓库特有环节
 
 - **远端 issue / PR 核对**：每轮开工前先 `git fetch` 对齐并列出未关闭 issue / PR（第 0 步），本仓有与更新重叠的历史先例（见下）
+- **CI 构建验证**：本仓一次 push 触发约 34 个 workflow（`build-package.yml` 为可复用骨架，`ci-summary.yml` 渲染徽章）；实测失败形态与处置见技能——`llama-cpp-ver` 403 属偶发（重跑即可，根治靠 `access-tokens` 双 host）、codewhale-riscv64 与 blender-mcp 属真失败、徽章 `failing → passing` 成对出现是 `ci-summary` 竞态而非真实状态
 - **四语文档同步**：`docs/<lang>/<pkg>.md`（zh 基准 + en/ja/pcn），zh 先写再翻译
 - **dsh 插件清单同步**：升级 `dsh` 时同步内置 `cordis.patch.yml` 的 entry id 清单
 - **同账户子仓链式检查**：`dsh-api-balance` 薄封装引用子仓 `Kihara777/dsh-api-balance`，其自身版本变更须一并检查（坐标见下）

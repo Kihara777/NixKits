@@ -26,6 +26,7 @@
 ## 本リポジトリ固有の工程
 
 - **遠端 issue / PR の確認**：毎回の着手前に `git fetch` で整列し未クローズの issue / PR を列挙する（第 0 步）。本リポジトリには更新作業と重なった歴史的先例がある（下記）
+- **CI ビルド検証**：本リポジトリでは 1 回の push で約 34 の workflow が起動する（`build-package.yml` が再利用可能な骨組み、`ci-summary.yml` がバッジを描画）。実測した失敗形態と処置はスキル本文に —— `llama-cpp-ver` の 403 は偶発（再実行で足り、根治は `access-tokens` に両 host を記載すること）、codewhale-riscv64 と blender-mcp は真の失敗、バッジの `failing → passing` が対で現れるのは `ci-summary` の競合であって実状態ではない
 - **四言語ドキュメント同期**：`docs/<lang>/<pkg>.md`（zh 基準 + en/ja/pcn）、zh を先に書いてから翻訳
 - **dsh プラグイン一覧同期**：`dsh` 更新時に内蔵 `cordis.patch.yml` の entry id 一覧を同期
 - **メンテナンスログ**：`write-maintenance-log` スキルを呼び出し、四言語で同期

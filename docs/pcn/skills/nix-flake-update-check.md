@@ -29,6 +29,7 @@
   - **追従 判据 field 単位**：子倉 `rev` 固定値 與 異 雖 直 昇級 不可——変更 **build 入力** 落 可否 判断 要。release metadata（`publishConfig` / `repository` / `keywords`）與 文書 意味的入力 非 故 **追従 不**；`dependencies` / `files` / `main` / `exports` / `version` 意味的入力 故 **必 追従**。判別 不能 場合「追従」側 倒
 - **外部自働化 PR 処置**：`npmDepsHash` 不知故 npm 更新 PR 必 失敗。branch 取回 後 hash 補完 且 merge
 - **対話的確認**：着手前 一度 批次質問 全 保留事項 解決（大版跨、依存衝突 解法、channel 選択、配備可否）。「推測 → 訂正 → 再実行」往復 避；質問機構 無 代理 保留 list 一度 輸出 停止
+- **push 後 CI 構築検証**：local 構築成功 CI 緑 意味 不（local Binary cache 命中 可能、且 現在 架構 限 覆）。判据 **実行記録** 基準・commit 依 絞、**未完 実行「問題 無」 見做 不可**。失敗 先 **log 原文** 依 分類 —— rate 制限 與 揺 偶発、hash 不一致 與 lock 不自洽 真失敗、特定 架構 限 赤 判定保留、「全緑 然 log `copying path … from cache` 尽」 可疑（其 緑 何 也 構築 不 可能）。失敗時 **其場 問**、全 失敗項 與 其 性質 一度 示、選択肢 再実行・修正 後 commit 追加・該 batch 巻戻 含、各形態 修復方案 併記
 - nixpkgs 漂移 罠：`inputs.*.follows`、`doInstallCheck`、`pythonRuntimeDepsCheckHook`、引数無 `nix flake lock`
 - **fail-closed 実行時依存検証**：上流 起動時 正確 版 照合 故、build 成功 ≠ 使用可能。必 一度 実行 検証
 

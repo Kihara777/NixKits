@@ -26,6 +26,7 @@ This split lets the generic method be reused directly by other nix flake reposit
 ## Repo-specific steps
 
 - **Remote issue / PR check**: before every round, `git fetch` and list the open issues / PRs (step 0); this repo has historical precedents where they overlapped the update work (below)
+- **CI build verification**: one push here triggers ~34 workflows (`build-package.yml` is the reusable skeleton, `ci-summary.yml` renders the badge). The measured failure shapes and how to handle them live in the skill — a `llama-cpp-ver` 403 is transient (re-run is enough; the real fix is listing both hosts in `access-tokens`), codewhale-riscv64 and blender-mcp were genuine failures, and a badge flapping `failing → passing` is the `ci-summary` race rather than the actual state
 - **Four-language doc sync**: `docs/<lang>/<pkg>.md` (zh baseline + en/ja/pcn), zh written first then translated
 - **dsh plugin inventory sync**: when upgrading `dsh`, sync the built-in `cordis.patch.yml` entry-id inventory
 - **Maintenance log**: invokes the `write-maintenance-log` skill, synced across four languages

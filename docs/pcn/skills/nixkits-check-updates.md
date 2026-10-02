@@ -26,6 +26,7 @@
 ## 本倉庫固有 工程
 
 - **遠端 issue / PR 確認**：毎回 着手前 `git fetch` 整列 且 未閉 issue / PR 列挙（第 0 步）。本倉 更新作業 與 重 歴史的先例 有（下記）
+- **CI 構築検証**：本倉 一度 push 約 34 workflow 起動（`build-package.yml` 再利用可能 骨組、`ci-summary.yml` 徽章 描画）。実測 失敗形態 與 処置 技能 本文 在 —— `llama-cpp-ver` 403 偶発（再実行 足、根治 `access-tokens` 両 host 記載）、codewhale-riscv64 與 blender-mcp 真失敗、徽章 `failing → passing` 対 出現 是 `ci-summary` 競合 而 実状態 非
 - **四言語文書同期**：`docs/<lang>/<pkg>.md`（zh 基準 + en/ja/pcn）、zh 先 書 後 翻訳
 - **dsh 插件一覧同期**：`dsh` 更新時 内蔵 `cordis.patch.yml` 的 entry id 一覧 同期
 - **保守記録**：`write-maintenance-log` 技能 呼出、四言語 同期

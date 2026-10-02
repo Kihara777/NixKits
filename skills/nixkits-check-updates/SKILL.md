@@ -1,6 +1,6 @@
 ---
 name: nixkits-check-updates
-description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的远端 issue / PR 形态（含与更新重叠的历史先例）、四语文档同步、dsh 内置插件清单同步（含插件改名令预设硬失败的排查）、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
+description: NixKits 仓库的软件包更新适配层——在通用技能 nix-flake-update-check 之上，补充本仓库特有的远端 issue / PR 形态（含与更新重叠的历史先例）、CI 结构（可复用 build-package.yml + 每包每架构 workflow）与实测失败形态（llama-cpp-ver 403 限流、codewhale-riscv64 hash、blender-mcp 取源 403、徽章竞态）、四语文档同步、dsh 内置插件清单同步（含插件改名令预设硬失败的排查）、同账户子仓（dsh-api-balance）的链式检查坐标、维护日志记录、历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败），以及收尾的流程复盘与规范校验（AGENTS.md / SECURITY.md 等）。
 ---
 
 # NixKits 软件包更新（仓库适配层）
@@ -107,6 +107,51 @@ gh run list --limit 40 --json name,conclusion --jq '[.[]|.conclusion]|group_by(.
 **技能执行后的正确收尾**：不依赖徽章，**直接确认本轮 workflow 的结论**；
 若有失败，先区分**偶发**（如 `llama-cpp-ver` 的 403 限流，重跑即可）与**真失败**
 （hash 不符、构建错误）。
+
+## 推送后补充：本仓 CI 的结构与实测失败形态
+
+通用技能「推送后：验证 CI 构建」一节给出的是仓库无关的方法；本仓的具体形态如下。
+
+### 结构
+
+| 文件 | 角色 |
+|---|---|
+| `check.yml` | 每次 push / PR 跑 `nix flake check`（七项自检） |
+| `build-package.yml` | **可复用** workflow：构建 + `cachix-action` 推送 |
+| `build-<包>-<架构>.yml` | 每个包每架构一个，调用上面那个可复用 workflow |
+| `ci-summary.yml` | 渲染徽章（`gh-pages/ci-status.json`），push / 每小时 / 手动触发 |
+
+**一次 push 触发约 34 个 workflow**，每个都要解析 flake 输入——这是本仓 `403 限流`
+反复出现的直接原因：`llama-cpp-ver` 是浮动输入，每个 workflow 各打一次
+`api.github.com`，未认证额度（60 次/小时）一轮就耗尽。
+
+### 本仓实测过的失败形态
+
+| 形态 | 实测记录 | 性质与处置 |
+|---|---|---|
+| `llama-cpp-ver` 403 限流 | 一轮 push 里 2 个 workflow 失败、其余 62 个通过；**重跑后 64/64 全绿** | **偶发**：`gh run rerun --failed`。根治靠 `access-tokens` **同时列** `github.com` 与 `api.github.com`（Nix 按 host 精确匹配，只写前者时那个请求仍未认证） |
+| codewhale-riscv64 hash | 用 `nix-prefetch-url` 取 archive tarball 的 hash 充当 `fetchFromGitHub` 的 hash → **连续失败**（两者算法不同） | **真失败**：改用构建报错里的 `got:` 值 |
+| blender-mcp 取源 403 | `/archive/<rev>.tar.gz` 对全部 tag 403，`/api/v1/repos/.../archive/...` 200 | **真失败**：改 `fetchzip` 指向 API 端点 + `stripRoot = true` |
+| 「绿但全是缓存」 | 改完取源方式后，CI 仍可能通篇 `copying path … from cache` | **可疑**：必须**确认走了 fetch 阶段**，否则那次绿没有验证力 |
+
+### 一次可用的检查流程
+
+```bash
+SHA=$(git rev-parse HEAD)
+# 1. 本轮涉及的运行，按状态归类（未结束的不要当成"没问题"）
+gh run list --commit "$SHA" --limit 50 --json name,status,conclusion \
+  --jq '.[] | "\(.status)\t\(.conclusion // "-")\t\(.name)"' | sort
+# 2. 只看失败的，拿 id
+gh run list --commit "$SHA" --limit 50 --json name,conclusion,databaseId \
+  --jq '.[] | select(.conclusion == "failure") | "\(.databaseId)  \(.name)"'
+# 3. 读日志原文再分类（偶发 vs 真失败）
+gh run view <run-id> --log-failed | tail -60
+# 4. 判定为偶发后重跑失败 job
+gh run rerun <run-id> --failed
+```
+
+> ⚠️ **不要把徽章当判据**：本仓实测过徽章 `failing → passing` **成对出现、间隔 1~2 分钟**
+> 而当时所有构建实际全绿。根因与修法见本节上方的「收尾」一段。
 
 ## 第 5 步补充：四语文档同步
 
