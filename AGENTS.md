@@ -256,7 +256,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 > 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——
 > 不要在文档中硬编码数量（`check-doc-versions` 只校验版本号，不校验此类计数）。
 
-构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（部分包受上游限制无 riscv64 构建，如 blender-mcp、obs-bilibili-stream；godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`），触发条件为 push / 每小时 / 手动。
+构建由独立的 `build-<包>-<架构>.yml` workflow 完成：每个 workflow 调用共享的可复用 workflow `build-package.yml`，构建后经 `cachix-action` 推送到 Cachix 二进制缓存。覆盖情况以实际 workflow 文件为准（**riscv64 的取舍看「能不能建」，不是「有没有 workflow」**：`blender-mcp` 与 `obs-bilibili-stream` 无 riscv64 构建，原因是**主依赖在 nixpkgs 里没声明该架构**——`blender` 5.2.2 的 `meta.platforms` 只有 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`、`obs-studio` 32.2.2 只有 `x86_64-linux`/`i686-linux`/`aarch64-linux`，求值阶段就 `Refusing to evaluate package …`，绕不过去；**判据是 `pkgs.<dep>.meta.platforms`，不是编译报错**。godot-ai 与 dsh 当前无独立构建 workflow）。CI 状态徽章由 `ci-summary.yml` 生成（`gh-pages/ci-status.json`），触发条件为 push / 每小时 / 手动。
 
 #### 架构差异与「产物能不能跑」
 

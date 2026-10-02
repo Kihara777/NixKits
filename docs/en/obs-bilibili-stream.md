@@ -13,7 +13,7 @@ Bilibili live streaming plugin for OBS Studio.
 |------|-------|
 | Version | 2.1.5 |
 | Upstream | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| Platform | Linux only |
+| Platform | x86_64 / aarch64 (**riscv64 unsupported**: the primary dependency `obs-studio 32.2.2` declares `meta.platforms` = `x86_64-linux` / `i686-linux` / `aarch64-linux` only, so evaluation refuses outright: `Refusing to evaluate package 'obs-studio-32.2.2'`) |
 
 ## Install
 

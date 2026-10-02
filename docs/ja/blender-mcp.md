@@ -15,7 +15,7 @@ Blender 向け MCP (Model Context Protocol) サーバー。AI アシスタント
 | 上流 | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | タイプ | Python パッケージ（setuptools） |
 | ライセンス | GPL-3.0-or-later |
-| プラットフォーム | x86_64 / aarch64（riscv64 非対応：依存チェーンのクロスコンパイル不具合） |
+| プラットフォーム | x86_64 / aarch64（riscv64 非対応：**主依存の Blender が nixpkgs にこのアーキテクチャを宣言していない**——`blender 5.2.2` の `meta.platforms` は `aarch64-darwin` / `aarch64-linux` / `x86_64-linux` のみで、評価時点で拒否される：`Refusing to evaluate package 'blender-5.2.2'`。コンパイル不具合ではなく、回避できない） |
 | アドオン種別 | Blender Extension（`blender_manifest.toml` 同梱、`id = "mcp"`） |
 | Blender 要件 | >= 5.1（`blender_version_min = "5.1.0"`） |
 

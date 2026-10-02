@@ -13,7 +13,7 @@ OBS Studio の Bilibili ライブ配信プラグイン。
 |------|-----|
 | バージョン | 2.1.5 |
 | アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| プラットフォーム | Linux only |
+| プラットフォーム | x86_64 / aarch64（**riscv64 非対応**：主依存 `obs-studio 32.2.2` の `meta.platforms` は `x86_64-linux` / `i686-linux` / `aarch64-linux` のみで、評価時点で拒否：`Refusing to evaluate package 'obs-studio-32.2.2'`） |
 
 ## 参照
 

@@ -13,7 +13,7 @@ OBS Studio 的 Bilibili 直播推流插件。
 |------|-----|
 | 版本 | 2.1.5 |
 | 上游 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| 平台 | Linux only |
+| 平台 | x86_64 / aarch64（**riscv64 不支持**：主依赖 `obs-studio 32.2.2` 的 `meta.platforms` 只有 `x86_64-linux` / `i686-linux` / `aarch64-linux`，求值即拒绝：`Refusing to evaluate package 'obs-studio-32.2.2'`） |
 
 ## 引用
 

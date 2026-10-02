@@ -15,7 +15,7 @@ Blender 的 MCP (Model Context Protocol) 服务器，为 AI 助手提供 Blender
 | 上游 | [Blender Lab / blender_mcp](https://projects.blender.org/lab/blender_mcp) |
 | 类型 | Python 包（setuptools） |
 | 许可 | GPL-3.0-or-later |
-| 平台 | x86_64 / aarch64（riscv64 不支持：依赖链交叉编译缺陷） |
+| 平台 | x86_64 / aarch64（riscv64 不支持：**主依赖 Blender 在 nixpkgs 里就没声明该架构**——`blender 5.2.2` 的 `meta.platforms` 只有 `aarch64-darwin` / `aarch64-linux` / `x86_64-linux`，求值即拒绝：`Refusing to evaluate package 'blender-5.2.2'`。这不是编译缺陷，绕不过去） |
 | Add-on 类型 | Blender Extension（带 `blender_manifest.toml`，`id = "mcp"`） |
 | Blender 版本要求 | ≥ 5.1（`blender_version_min = "5.1.0"`） |
 

@@ -13,7 +13,7 @@ OBS Studio Bilibili 生配信拡張。
 |------|-----|
 | 版 | 2.1.5 |
 | 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| 基盤 | Linux only |
+| 基盤 | x86_64 / aarch64（**riscv64 非対応**：主依存 `obs-studio 32.2.2` 之 `meta.platforms` 唯 `x86_64-linux` / `i686-linux` / `aarch64-linux`、評価 時点 拒否：`Refusing to evaluate package 'obs-studio-32.2.2'`） |
 
 ## 参照
 
