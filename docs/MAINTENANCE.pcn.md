@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-03T09:49:14+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606) 見）。dsh 0.2.0 上 界面改善 逐項 確認 時、**静 失効** 二 件 発見：① 「下部 統計 条 横 scroll」 **dsh 0.1.5 以降 効 無** —— 上流 style module 自 `StatsLine.module.css` `StatsPills.module.css` 至 改名（実測：0.1.2 `StatsLine` 9 箇所、0.1.5 / 0.1.6 / 0.2.0 0 箇所）。插件 旧名 唯 見、style tag 見 無 侭 5 回 retry 後 自己 外、而 設定 其 行 On 表示 侭。現在 両名 試、諦 時 console 一度 警告 出。② 三 token 0.2.0 存在 無（実行時 実測 「未定義」）：`--dsw-alias-separator-primary`（18 箇所 境界線、**fallback 無** → `currentColor`＝文字色 退化）、`--dsw-alias-danger-primary` 與 `--dsw-alias-warning-primary`（hardcode 値 支、見 正）。現在 0.2.0 対応先 至 連鎖（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`）、末尾 元 hardcode 値 0.1.x 向 保存。**判定**（隔離実例 + 本地 stub model + Playwright、deploy 版 與 修正版 各 一度 実測）：統計条 「注入 tag 無・`overflow-x:visible`」 自 「tag 有、`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」 至；境界線 `rgb(97,102,107)` → `rgba(0,0,0,.1)`；peak ring `rgb(229,72,77)` → `rgb(236,19,19)`。同 確認 今 也 有効：質問 dialog 全頁 scroll、mobile keyboard 守護（A/B）、peak 赤 表示 與 aria 標識、ring 差替、panel 二 tab 與 設定 dialog 材質。
+
+| 提交 | 説明 |
+|------|------|
+| `18441ef` | chore(pkgs): re-pin dsh-api-balance rev（界面改进两项失效修复；版本仍 0.1.1） |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | rev | `700fbbc` → `8dab668` |
+| 　 | src hash | `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` → `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` |
+
 ## 2026-10-03T06:45:00+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 與 [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc) 見）。本次 **実行時挙動 之 修正**、版本 発布 非。**何 修正 為**：① **回車交換 之 導入 部品 lifecycle 自 移出** —— dsh 0.2.0 composer chain slot（`conversation.composer`）化、質問 / 承認 / 子代理 **composer 全条 接管**。其 瞬間、環 部品 slot 與 共 卸载、交換器（Enter = 改行、Shift+Enter = 送信）也 同時 外、而 **画面 当時 完全 正常 見**。現在 `apply()` 内 導入、**編集可能** composer 之 的 作用（工作区 未選択 時、同一 `data-composer-input` 之 div 工作区 menu 之 keyboard trigger 也）。② **面板 / 弾窓 材質 0.2.0 原生 配方 依 書直** —— 0.2.0 `--dsw-specific-menu` 実色（0.1.x 之 `--dsw-alias-bg-layer-3`）自 **半透明** menu surface fill（明 `#f8f9fa94` / 暗 `#43454a73`）至 変更、原生 menu 層 必 `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）重 初 成立。插件 旧 配方 之 侭、結果 面板 **真 透明**、背後 会話 内容 透。主 面板 原生 `JObwrW_panel`（fill + blur 効果 + elevation + `border: 0`）踏襲、三 弾窓 原生 `VOzbGW_panel` 配方（不透明 `--dsw-alias-bg-layer-2` + elevation）至 —— **二 材質 混用 不可**。新 二 token fallback 付、0.1.x 透明 退行 無。**判定**（隔離実例 + 0.2.0-rc.2 + Playwright computed style 実測、明 / 暗 各）：面板 `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同 blur；設定 弾窓 `rgb(255,255,255)` / `rgb(44,44,46)`、本機 原生 設定 面板 與 一致；回車交換 新規 / 会話 / 触 模擬 三 状態 実 Enter `<br>` 追加（回帰 無）。

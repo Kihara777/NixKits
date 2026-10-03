@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-03T09:49:14+09:00
+
+**概要**：dsh-api-balance 薄封裝 re-pin —— rev `700fbbc` → `8dab668`（バージョンは `0.1.1` のまま；子倉にメンテナンスログは無く、変更はそのコミット [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606) を参照）。dsh 0.2.0 上で UI 改善を一つずつ確認したところ、**静かな失効**が二件見つかった：① 「下部統計バーの横スクロール」は **dsh 0.1.5 以降ずっと効いていなかった** —— 上流がスタイルモジュールを `StatsLine.module.css` から `StatsPills.module.css` に改名（実測：0.1.2 は `StatsLine` が 9 箇所、0.1.5 / 0.1.6 / 0.2.0 は 0 箇所）。プラグインは旧名しか見ておらず、スタイルタグが見つからないまま 5 回リトライして自分を外していた——しかも設定のその行は On のまま表示されていた。現在は両方の名前を試し、諦める時はコンソールへ一度だけ出す。② 三つの token が 0.2.0 に存在しない（実行時に実測して「未定義」）：`--dsw-alias-separator-primary`（18 箇所の境界線、**fallback 無し** → `currentColor`＝文字色へ退化）、`--dsw-alias-danger-primary` と `--dsw-alias-warning-primary`（ハードコード値が支えていて、見た目は正しかった）。現在は 0.2.0 の対応先へ連鎖（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`）、末尾に元のハードコード値は 0.1.x 用として残置。**判据**（隔離実例 + ローカル stub モデル + Playwright、デプロイ版と修正版で各一度実測）：統計バーは「注入タグ無し・`overflow-x:visible`」から「タグ有り・`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」へ；境界線は `rgb(97,102,107)` → `rgba(0,0,0,.1)`；ピークのリングは `rgb(229,72,77)` → `rgb(236,19,19)`。同じ確認で**今も有効**と分かったもの：質問ダイアログの全頁スクロール、モバイル keyboard 守護（A/B：有効側は捕捉リスナーが 4 つ増え、合成 `focusin` が `preventDefault` される）、ピーク赤表示と aria 標識、リング差し替え、パネルの二タブと設定ダイアログの材質。
+
+| コミット | 説明 |
+|------|------|
+| `18441ef` | chore(pkgs): re-pin dsh-api-balance rev（界面改进两项失效修复；版本仍 0.1.1） |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `700fbbc` → `8dab668` |
+| 　 | src hash | `sha256-GEG3/ImXmo3BgO7AVh/rj1mIWsWMGB04Six+oIk9UIE=` → `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` |
+
 ## 2026-10-03T06:45:00+09:00
 
 **概要**：dsh-api-balance 薄封裝 re-pin —— rev `76ea584` → `700fbbc`（バージョンは `0.1.1` のまま；子倉にメンテナンスログは無く、変更はそのコミット [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) と [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc) を参照）。今回は**実行時挙動の修正**であり、リリースではない。**何を直したか**：① **回車交換のインストールをコンポーネントのライフサイクルから外へ** —— dsh 0.2.0 は composer をチェーンスロット（`conversation.composer`）に変え、質問 / 承認 / 子エージェントが**composer 全体を接管**する。その瞬間、円環コンポーネントはスロットと共にアンマウントされ、交換器（Enter = 改行、Shift+Enter = 送信）も一緒に外れる——しかも**画面はその時まったく正常に見える**。現在は `apply()` 内でインストールし、**編集可能な** composer にのみ作用する（ワークスペース未選択時、同じ `data-composer-input` の div はワークスペースメニューのキーボードトリガーである）。② **パネル/ダイアログの材質を 0.2.0 の原生レシピで書き直した** —— 0.2.0 は `--dsw-specific-menu` を実色（0.1.x の `--dsw-alias-bg-layer-3`）から**半透明**の menu surface fill（明 `#f8f9fa94` / 暗 `#43454a73`）に変え、原生の浮層は必ず `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）を重ねて初めて成立する。プラグインは旧レシピのままで、結果パネルは**本当に透明**になり背後の中身が透けていた。メインパネルは原生 `JObwrW_panel`（fill + ぼかし + elevation + `border: 0`）をそのまま踏襲し、3 つのモーダルは原生 `VOzbGW_panel` のレシピ（不透明 `--dsw-alias-bg-layer-2` + elevation）へ——**二つの材質は混用できない**。新しい 2 つの token には fallback を付け、0.1.x では透明に退行しない。**判据**（隔離実例 + 0.2.0-rc.2 + Playwright で computed style を実測、明/暗それぞれ）：パネルは `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同ぼかし；設定ダイアログは `rgb(255,255,255)` / `rgb(44,44,46)` で本機の原生設定パネルと一致；回車交換は下書き / 会話 / タッチ模擬の三状態で実 Enter が `<br>` を挿入（回帰なし）。
