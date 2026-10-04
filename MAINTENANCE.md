@@ -2,6 +2,14 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-04T09:23:29+09:00
+
+**摘要**：fix(dsh-preset-news-three-elements): 预设插件的会话消息来源改用 v4 形状 —— dsh 0.2.0 的会话格式 v4 只拒字面量 `kind: "plugin"`（v3 时代的插件来源形状），而本仓预设插件照抄了它，于是插件每写一条消息就被准入拒绝，症状是整个 session「本机运行失败」，错误只有一句 `format v4 message requires a producer-owned source kind`。2026-10-03 实测：掌灯模式（私有仓）的 `journal-catchup` 每个新会话开局都会 steer 一条提醒，在 0.2.0-rc.2 上「每开一个新会话崩一次」，会话文件里一条消息都没留下，维护者只能回滚系统才能继续对话（v4 会话旧版读不了）。本仓三处来源改为 `{ kind: `plugin:${name}`, form: "notice", summary }`（`news-language.js` ×1、`news-material.js` ×2），测试断言随之从 `source.plugin` 改为 `source.kind`，夹具里模拟 `user-approval` 的两处改用 `{ kind: "user-approval", form: "notice" }`；并新增自检 `session-sources`（`develop/check-session-sources.py`，挂进 `nix flake check`）钉住「预设插件里不许再出现 `kind: "plugin"`」，已做正反两向验证（注入旧形状 → 抓到并报行号）。四语 `docs/*/dsh.md` 增「会话格式 v4 对消息来源的准入」一节。
+
+| 提交 | 说明 |
+|------|------|
+| `d27e6ce` | fix(dsh-preset-news-three-elements): 会话来源改用 v4 形状（另含新增 `session-sources` 自检并挂进 `nix flake check`、四语 dsh 文档增 v4 来源准入一节、AGENTS 自检表 7 → 8 项） |
+
 ## 2026-10-03T09:49:14+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606)）。逐项复核 dsh 0.2.0 上的界面改进时查出两处**静默失效**：① 「底部统计条横向滚动」**自 dsh 0.1.5 起就没生效过** —— 上游把样式模块由 `StatsLine.module.css` 改名为 `StatsPills.module.css`（实测 0.1.2 有 StatsLine 9 处、0.1.5 / 0.1.6 / 0.2.0 均为 0），插件只认旧名 → 找不到样式标签 → 重试 5 次后自我移除，而设置里那行照样显示 On；现两个名字都试，并在放弃时于控制台出声一次。② 三个 token 在 0.2.0 已不存在（运行时逐个实测为「未定义」）：`--dsw-alias-separator-primary`（18 处边框、**无 fallback** → 退化为 `currentColor`＝文字色）、`--dsw-alias-danger-primary` 与 `--dsw-alias-warning-primary`（靠硬编码兜住，看着对）；现按 0.2.0 原生对应补链（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`），末尾保留原硬编码给 0.1.x。**判据**（隔离实例 + 本地桩模型 + Playwright，部署版与修复版各测一遍）：统计条由「注入标签不存在、`overflow-x:visible`」变为「标签存在、`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」；边框 `rgb(97,102,107)` → `rgba(0,0,0,.1)`；峰环 `rgb(229,72,77)` → `rgb(236,19,19)`。同轮复核确认仍然生效：疑问窗口整页滚动、移动端键盘守护（A/B：启用臂多注册 4 个捕获监听且合成 `focusin` 被 `preventDefault`）、峰时红色标识与 aria 徽标、圆圈替换、面板两标签与设置弹窗材质。

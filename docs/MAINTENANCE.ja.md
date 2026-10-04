@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-04T09:23:29+09:00
+
+**概要**：fix(dsh-preset-news-three-elements): プリセットプラグインの会話メッセージ来源を v4 形状へ —— dsh 0.2.0 の会話フォーマット v4 は字面量 `kind: "plugin"`（v3 時代のプラグイン来源形状）だけを拒む。本リポジトリのプリセットプラグインはそれを丸写ししていたため、プラグインがメッセージを一つ書くたびに准入で拒否され、症状は session 全体の「本機実行失敗」、エラーは `format v4 message requires a producer-owned source kind` の一句のみ。2026-10-03 の実測：掌灯模式（私有リポジトリ）の `journal-catchup` は新規 session の開始ごとに注意書きを一件 steer するため、0.2.0-rc.2 上では新規 session が作成のたびに崩れ、session ファイルにはメッセージが一件も残らず、保守者は会話を続けるためにシステムを巻き戻すしかなかった（v4 の会話は旧版では読めない）。本リポジトリの三箇所を `{ kind: `plugin:${name}`, form: "notice", summary }` へ変更（`news-language.js` ×1、`news-material.js` ×2）、テストの断言を `source.plugin` から `source.kind` へ、`user-approval` を模す二つの夹具を `{ kind: "user-approval", form: "notice" }` へ変更；さらに自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` に接続）を追加し「本リポジトリのプリセットプラグインに `kind: "plugin"` を出さない」ことを固定（正逆両方向で検証：旧形状を注入 → 行番号付きで捕捉）。四語の `docs/*/dsh.md` に「会話フォーマット v4 のメッセージ来源准入」の節を追加。
+
+| コミット | 説明 |
+|------|------|
+| `d27e6ce` | fix(dsh-preset-news-three-elements): 会話来源を v4 形状へ（自検 `session-sources` の追加と `nix flake check` への接続、四語 dsh 文書への v4 来源准入の節追加、AGENTS 自検表 7 項 → 8 項も含む） |
+
 ## 2026-10-03T09:49:14+09:00
 
 **概要**：dsh-api-balance 薄封裝 re-pin —— rev `700fbbc` → `8dab668`（バージョンは `0.1.1` のまま；子倉にメンテナンスログは無く、変更はそのコミット [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606) を参照）。dsh 0.2.0 上で UI 改善を一つずつ確認したところ、**静かな失効**が二件見つかった：① 「下部統計バーの横スクロール」は **dsh 0.1.5 以降ずっと効いていなかった** —— 上流がスタイルモジュールを `StatsLine.module.css` から `StatsPills.module.css` に改名（実測：0.1.2 は `StatsLine` が 9 箇所、0.1.5 / 0.1.6 / 0.2.0 は 0 箇所）。プラグインは旧名しか見ておらず、スタイルタグが見つからないまま 5 回リトライして自分を外していた——しかも設定のその行は On のまま表示されていた。現在は両方の名前を試し、諦める時はコンソールへ一度だけ出す。② 三つの token が 0.2.0 に存在しない（実行時に実測して「未定義」）：`--dsw-alias-separator-primary`（18 箇所の境界線、**fallback 無し** → `currentColor`＝文字色へ退化）、`--dsw-alias-danger-primary` と `--dsw-alias-warning-primary`（ハードコード値が支えていて、見た目は正しかった）。現在は 0.2.0 の対応先へ連鎖（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`）、末尾に元のハードコード値は 0.1.x 用として残置。**判据**（隔離実例 + ローカル stub モデル + Playwright、デプロイ版と修正版で各一度実測）：統計バーは「注入タグ無し・`overflow-x:visible`」から「タグ有り・`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」へ；境界線は `rgb(97,102,107)` → `rgba(0,0,0,.1)`；ピークのリングは `rgb(229,72,77)` → `rgb(236,19,19)`。同じ確認で**今も有効**と分かったもの：質問ダイアログの全頁スクロール、モバイル keyboard 守護（A/B：有効側は捕捉リスナーが 4 つ増え、合成 `focusin` が `preventDefault` される）、ピーク赤表示と aria 標識、リング差し替え、パネルの二タブと設定ダイアログの材質。

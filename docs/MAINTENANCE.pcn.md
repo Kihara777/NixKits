@@ -2,6 +2,14 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-04T09:23:29+09:00
+
+**摘要**：fix(dsh-preset-news-three-elements): 預設 插件 之 会話消息 来源 v4 形状 至 変更 —— dsh 0.2.0 之 会話格式 v4 字面量 `kind: "plugin"`（v3 時代 之 插件来源形状）唯 拒。本 repo 預設 插件 其 丸写、故 插件 消息 一件 書 毎 准入 拒否、症状 session 全体「本機実行失敗」、error 唯 `format v4 message requires a producer-owned source kind` 一句。2026-10-03 実測：掌灯模式（私有 repo）之 `journal-catchup` 新規 session 開始毎 注意書 一件 steer、故 0.2.0-rc.2 上 新規 session 作成毎 崩、session file 消息 一件 亦 残 不、維護者 会話 続 為 系統 巻戻 之外 無（v4 会話 旧版 読 不）。本 repo 三箇所 `{ kind: `plugin:${name}`, form: "notice", summary }` 至 変更（`news-language.js` ×1、`news-material.js` ×2）、test 断言 `source.plugin` 自 `source.kind` 至、`user-approval` 模 二 夹具 `{ kind: "user-approval", form: "notice" }` 至 変更；更 自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` 接続）追加、「本 repo 預設 插件 `kind: "plugin"` 出 不」固定（正逆 両方向 検証：旧形状 注入 → 行番号 付 捕捉）。四語 `docs/*/dsh.md`「会話格式 v4 之 消息来源 准入」節 追加。
+
+| 提交 | 説明 |
+|------|------|
+| `d27e6ce` | fix(dsh-preset-news-three-elements): 会話来源 v4 形状 至（自検 `session-sources` 追加 與 `nix flake check` 接続、四語 dsh 文書 v4 来源准入 節 追加、AGENTS 自検表 7 項 → 8 項 含） |
+
 ## 2026-10-03T09:49:14+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606) 見）。dsh 0.2.0 上 界面改善 逐項 確認 時、**静 失効** 二 件 発見：① 「下部 統計 条 横 scroll」 **dsh 0.1.5 以降 効 無** —— 上流 style module 自 `StatsLine.module.css` `StatsPills.module.css` 至 改名（実測：0.1.2 `StatsLine` 9 箇所、0.1.5 / 0.1.6 / 0.2.0 0 箇所）。插件 旧名 唯 見、style tag 見 無 侭 5 回 retry 後 自己 外、而 設定 其 行 On 表示 侭。現在 両名 試、諦 時 console 一度 警告 出。② 三 token 0.2.0 存在 無（実行時 実測 「未定義」）：`--dsw-alias-separator-primary`（18 箇所 境界線、**fallback 無** → `currentColor`＝文字色 退化）、`--dsw-alias-danger-primary` 與 `--dsw-alias-warning-primary`（hardcode 値 支、見 正）。現在 0.2.0 対応先 至 連鎖（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`）、末尾 元 hardcode 値 0.1.x 向 保存。**判定**（隔離実例 + 本地 stub model + Playwright、deploy 版 與 修正版 各 一度 実測）：統計条 「注入 tag 無・`overflow-x:visible`」 自 「tag 有、`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」 至；境界線 `rgb(97,102,107)` → `rgba(0,0,0,.1)`；peak ring `rgb(229,72,77)` → `rgb(236,19,19)`。同 確認 今 也 有効：質問 dialog 全頁 scroll、mobile keyboard 守護（A/B）、peak 赤 表示 與 aria 標識、ring 差替、panel 二 tab 與 設定 dialog 材質。
