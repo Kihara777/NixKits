@@ -2,6 +2,16 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T07:45:26+09:00
+
+**概要**：CI 修正 —— 浮動入力 `llama-cpp-ver` を「認証付き取得 + ローカル上書き」に変更し、`api.github.com` の 403 制限を根治した。当該入力は**通常の URL 入力**であり、実測によれば Nix は `access-tokens` / `netrc-file` をこの種の fetch に**付与しない**（判据：当該 host に**偽トークン**を配し、未取得の同 host URL を取得する——認証ヘッダが本当に送出されるなら GitHub は必ず 401 `Bad credentials` を返す。実測では fetch は**成功**し、未認証枠が 1 減った）。ゆえに各 job が未認証リクエストを 1 回ずつ打ち、runner IP が共有する 60 回/時の枠が尽きると 403：実測で 2 回赤、応答体はいずれも `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。現在は先に `gh api`（認証、5000 回/時）で同一の JSON を取得し、`--override-input llama-cpp-ver path:<json>` で Nix に渡す：意味は不変（overlay は `json.tag_name` のみ読む）。取得不能・`tag_name` 欠落は**明示的に失敗**し、上書きパラメータが空の場合も明示的に失敗する（未認証経路への暗黙の退避をしない）。`access-tokens` は残す——担当は `github:` 取源である。AGENTS.md と `nixkits-check-updates` 技能の「両 host で根治」という旧結論は実測に合わせて訂正した。
+
+| コミット | 説明 |
+|------|------|
+| `335dce9` | fix(ci): 浮動入力 llama-cpp-ver を「認証付き取得 + ローカル上書き」へ |
+| `e92cfe4` | fix(ci): 上書きパラメータが空なら明示的に失敗 —— 未認証取得へ暗黙に退避しない |
+| `35eec1e` | docs: 実測で否定された「access-tokens が llama-cpp-ver の 403 を治す」結論を訂正（AGENTS.md + 技能） |
+
 ## 2026-10-05T07:14:50+09:00
 
 **概要**：dsh-api-balance 薄ラッパー re-pin —— rev `8dab668` → `f805f4e`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208) にある）。モバイルの「セッション切替時にキーボードを出さない」が**依然として効いていなかった**：実際の `focusin` はキャンセル不可（プラグインの `preventDefault` は死んだコード）で、ソフトキーボードは `focus` の瞬間に要求されるため、後からの blur は事後処理にすぎない。入力欄はユーザーがタップするまで編集不可となり、プログラム的フォーカスではキーボードを呼び出せなくなった；タップ / キー入力で即座に復帰し、フォーカスが外れると再び武装する。判定は実際の因果チェーンに置き換えた：セッション切替中に「編集可能な入力欄に focus が落ちる」回数は 0（デプロイ版は 2）、タップ後も入力可能で、`develop/ab-ui/` の 14 項目の UI 判定は本パッケージの**ビルド成果物**を対象に実行した。

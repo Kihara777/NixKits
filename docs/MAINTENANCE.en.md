@@ -2,6 +2,16 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T07:45:26+09:00
+
+**Summary**: CI fix — the floating input `llama-cpp-ver` now goes through "authenticated fetch + local override", curing the `api.github.com` 403 rate limiting. That input is a **plain URL input**, and measurement shows Nix does **not** attach `access-tokens` / `netrc-file` to such fetches (criterion: configure a **bogus token** for that host and fetch a never-before-fetched URL on it — if the auth header were actually sent, GitHub would necessarily answer 401 `Bad credentials`; measured: the fetch **succeeded** and the unauthenticated budget dropped by one). So every job made one unauthenticated request, and once the 60/hour budget shared by the runner IPs ran out, the result was 403: measured twice, both with the body `API rate limit exceeded for <ip>` (`Build ruyi-beta (x86_64)` 2026-10-02, IP `68.220.61.199`; `Build kitsfmt (x86_64)` 2026-10-04, IP `64.236.142.132`). Now `gh api` (authenticated, 5000/hour) fetches the same JSON first and Nix receives it via `--override-input llama-cpp-ver path:<json>`: the semantics are unchanged (the overlay only reads `json.tag_name`), an unreachable API or a missing `tag_name` **fails explicitly**, and an empty override parameter fails explicitly too (no silent fallback to the unauthenticated path). `access-tokens` stays — it covers `github:` fetches; the old "both hosts is the cure" claim in AGENTS.md and the `nixkits-check-updates` skill has been corrected to match the measurement.
+
+| Commit | Description |
+|------|------|
+| `335dce9` | fix(ci): floating input llama-cpp-ver goes through "authenticated fetch + local override" |
+| `e92cfe4` | fix(ci): fail explicitly when the override parameter is empty — no silent fallback to the unauthenticated fetch |
+| `35eec1e` | docs: correct the "access-tokens cures the llama-cpp-ver 403" claim that measurement disproved (AGENTS.md + skill) |
+
 ## 2026-10-05T07:14:50+09:00
 
 **Summary**: dsh-api-balance thin-wrapper re-pin — rev `8dab668` → `f805f4e` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208)). The mobile "no keyboard on session switch" guard **still failed**: a real `focusin` is not cancelable (the plugin's `preventDefault` was dead code), and the soft keyboard is requested the moment `focus` lands, so a blur afterwards only patches things up. The composer now stays non-editable until the user taps it, so a programmatic focus cannot summon the keyboard; tapping or typing restores it immediately, and losing focus re-arms the block. The criterion is now the real causal chain: during a session switch the number of focus events landing on an editable composer is 0 (2 on the deployed build), typing still works after a tap, and the 14 UI criteria in `develop/ab-ui/` run against this package's **built artifact**.
