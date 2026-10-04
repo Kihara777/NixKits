@@ -266,7 +266,7 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 		["Simplified quoting a Traditional name", "把「這個」换成简体再发我"],
 	]) {
 		const injected = await step(text);
-		check(`language: ${label} passes untouched`, injected.source?.plugin === undefined);
+		check(`language: ${label} passes untouched`, injected.source?.kind === "user");
 	}
 	for (const [label, text] of [
 		["English", "please rewrite the readme"],
@@ -276,7 +276,7 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 		["Traditional Chinese", "請幫我修改這個檔案"],
 	]) {
 		const injected = await step(text);
-		check(`language: ${label} is flagged`, injected.source?.plugin === "news-language", injected.content?.[0]?.text?.slice(0, 40));
+		check(`language: ${label} is flagged`, injected.source?.kind === "plugin:news-language", injected.content?.[0]?.text?.slice(0, 40));
 	}
 
 	// Regression: a step also carries what the harness injects, and an English
@@ -289,7 +289,7 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 				id: "notice-1",
 				role: "user",
 				content: [{ type: "text", text: 'The approval policy changed from "never" to "ask" (changed by the user).' }],
-				source: { kind: "plugin", plugin: "user-approval" },
+				source: { kind: "user-approval", form: "notice" },
 			},
 			{
 				id: "catalog-1",
@@ -317,7 +317,7 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 				id: "notice-2",
 				role: "user",
 				content: [{ type: "text", text: 'The approval policy changed from "never" to "ask".' }],
-				source: { kind: "plugin", plugin: "user-approval" },
+				source: { kind: "user-approval", form: "notice" },
 			},
 		];
 		const decision = await listener({ agent: { id: "s" }, messages, turn: 1, step: 1 }, async () => ({ kind: "enter", messages }));
@@ -535,13 +535,13 @@ const settleRefresh = () => new Promise((resolve) => setTimeout(resolve, 50));
 		const injected = decision.messages.at(-1);
 		check(
 			"material: the reminder rides with the human's message",
-			injected?.source?.plugin === "news-material" && injected.content[0].text.includes("取材铁律") && injected.content[0].text.includes("web_search"),
+			injected?.source?.kind === "plugin:news-material" && injected.content[0].text.includes("取材铁律") && injected.content[0].text.includes("web_search"),
 		);
 		const again = await preStep({ agent: { id: "a9" }, turn: 1, step: 1, messages: decision.messages }, async () => ({ kind: "enter", messages: decision.messages }));
 		check("material: the reminder is not injected twice", again.messages.length === decision.messages.length);
 	}
 	{
-		const notice = { id: "n1", role: "user", content: [{ type: "text", text: "approval policy changed" }], source: { kind: "plugin", plugin: "user-approval" } };
+		const notice = { id: "n1", role: "user", content: [{ type: "text", text: "approval policy changed" }], source: { kind: "user-approval", form: "notice" } };
 		const decision = await preStep({ agent: { id: "a9" }, turn: 1, step: 1, messages: [notice] }, async () => ({ kind: "enter", messages: [notice] }));
 		check("material: a step without a human message gets no reminder", decision.messages.length === 1);
 	}

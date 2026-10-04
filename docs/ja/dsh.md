@@ -262,6 +262,45 @@ curl -sS -b cookies -H 'content-type: application/json' \
 - **persona**：新形式ファイルの「プリセットは `$DSH_HOME/.agent-presets/<id>/` ディレクトリに住む」という一句は 0.2.0 の正確な記述へ改めた——プリセットは profile `cordis.patch.yml` にある `@deepseek-ai/dsh-agent-preset` の条目であり、**発見を担うのはその一行である**；プリセットは依然として自分のファイルを `.agent-presets/<id>/` の下に置き、profile から相対経路で参照できる——本配備のいくつかのプリセットはまさにそうやってプラグインと技能を同梱している。これを書き換えれば**モデルへ送る提示詞**が変わる。挙動変更にあたるため、保守者が別途批准した。
 - **同梱技能**：二つのプリセットはかつて `cordis-plugin-development` と `editing-cordis-compositions` の複製を**同梱**していた。0.2.0 はこの二つ（加えて `agent-experience` / `cordis-composition-reference`）を `@deepseek-ai/dsh-agent-preset` とともに配布するが、こちらの二つは 0.1.x のディレクトリ式プリセットモデルに留まっていた——ゆえに同名が二つ並び、うち一つは廃止された書き方を教えていた（上流の新版は *"Nothing reads that directory any more"* と明言している）。現在、二つのプリセットの `skill-filesystem` 行は**上流のそれを直接マウント**する形に変わっており（内蔵 `cordis` プリセットと同一の式）、上流に無い `skills-nixos/`（NixOS 運用技能）だけを残している。`develop/check-preset-derivation.py` は「もはや複製を同梱しない」ことを断言として釘付けにした；同梱していた二つは今も stable チャネルがピン留めした rev から取用できる（0.1.x 互換）。
 
+### 会話フォーマット v4 のメッセージ来源准入（2026-10-03 事故）
+
+dsh 0.2.0 は**会話フォーマット v4** を持ち込んだ。これは**各メッセージの `source`** に一条の准入判据を課す：
+
+> 対象はオブジェクトであり、`kind` は非空、かつ**字面量 `"plugin"` に等しくない**こと。
+
+字面量 `"plugin"` と同级の `plugin: "<名>"` は **v3 時代**のプラグイン来源形状である（0.1.6 時代の
+内蔵プラグインがそう書いており、それを丸写しした第三者のプラグインも同様）。v4 では、
+**プリセットのプラグインがそのようなメッセージを一つでも会話へ書き込めば准入が拒否する**。
+症状は session 全体が「本機実行失敗」となり、エラーはただ一句：
+
+```text
+format v4 message requires a producer-owned source kind
+```
+
+2026-10-03 の実測：掌灯模式の `journal-catchup` は**新規 session の開始ごと**に注意書きを一件
+steer する。ゆえに 0.2.0-rc.2 上では新規 session が作成のたびに崩れ、session ファイルには
+メッセージが一件も残らなかった（header・三件のポリシーイベント・`session/end-seed` のみ）
+——保守者は会話を続けるためにシステムを巻き戻すしかなかった。同じ形状は本リポジトリの
+ニュース三要素プリセットの二つのプラグイン（`news-language.js` / `news-material.js`）にもあり、
+同期して直さなければ次の配備で同じように崩れる。
+
+| 帰属 | v3 形状（v4 が拒否） | v4 形状 |
+|---|---|---|
+| プラグイン来源 | `{ kind: "plugin", plugin: "<名>", form: "notice", … }` | `{ kind: "plugin:<名>", form: "notice", … }` |
+| 同名 producer | `{ kind: "plugin", plugin: "user-approval" }` | `{ kind: "user-approval", … }` |
+| 人 | `{ kind: "user" }` | 不変 |
+
+判据は `nix flake check` の `session-sources` 項として固定済み
+（`develop/check-session-sources.py`）：本リポジトリのプリセットプラグインに
+`kind: "plugin"` が現れれば失敗する。`plugin:` 接頭辞はここでの創作ではない——v4 の移行表が
+「同名でないプラグイン」に与える名前（`plugin:` + 完全なプラグイン名）であり、履歴の会話が
+移行後に取る形状と一致する。
+
+> **巻き戻しの代価**：v4 の会話は**旧版では読めない**（0.1.6 の JSONL 永続化は未知の format
+> version を読んだ時点で拒否する。降格読みはしない）。ゆえに「0.2.0 へ上げてから巻き戻す」と
+> それ以前の会話が一切開けなくなる——**昇格の前に**プラグインの来源形状を直すこと。
+> 巻き戻しを逃げ道と考えないこと。
+
 ## sudo デーモン
 
 dsh サンドボックス内では `sudo` の setuid が失われ、エージェントは昇格できない（例：`nixos-rebuild`）。`sudo.enable` は systemd の**ソケットアクティベーション型 root 実行器**（`nixkits-sudo@.service`、接続ごとに `nixkits-sudo-exec` を実行）を配備し、dsh サービスへ `NIXKITS_SUDO_SOCKET` を注入する。nixos-shell プラグインは初期化時にこのソケットを検出し、存在すれば `sudo` パラメータを有効化してリクエストをルーティングする：

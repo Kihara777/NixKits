@@ -264,6 +264,45 @@ That last row is **a real trap this landing fixed**: a preset's own plugin files
 - **persona**: the sentence in the new-format files — "presets live under the `$DSH_HOME/.agent-presets/<id>/` directory" — has been changed to the accurate 0.2.0 statement: a preset is one `@deepseek-ai/dsh-agent-preset` entry in the profile `cordis.patch.yml`, and **discovery goes through that row**; a preset can still put its own files under `.agent-presets/<id>/` and reference them from the profile by relative path, and several presets in this deployment carry their plugins and skills exactly that way. Rewriting it amounts to changing **the prompt sent to the model** — a behaviour change the maintainer has since approved separately.
 - **bundled skills**: the two presets used to **ship their own** copies of `cordis-plugin-development` and `editing-cordis-compositions`. 0.2.0 distributes those two (plus `agent-experience` / `cordis-composition-reference`) with `@deepseek-ai/dsh-agent-preset`, while our two copies were still stuck on the 0.1.x directory-based preset model — so there were two of each name, one of them teaching a deprecated approach (the new upstream version says outright *"Nothing reads that directory any more"*). The `skill-filesystem` row in both presets now **mounts upstream's copy directly** (the same expression as the built-in `cordis` preset), keeping only `skills-nixos/` (the NixOS operations skills), which upstream does not have. `develop/check-preset-derivation.py` pins "no bundled copies any more" as an assertion; the two copies that used to be bundled can still be taken from the rev the stable channel is pinned to (0.1.x compatibility).
 
+### Session-format v4 admission for message sources (the 2026-10-03 incident)
+
+dsh 0.2.0 introduces **session format v4**. It imposes one admission rule on **every message's `source`**:
+
+> it must be an object, its `kind` must be nonempty, and it must **not equal the literal `"plugin"`**.
+
+The literal `"plugin"` plus a sibling `plugin: "<name>"` is the **v3-era** plugin-source shape (the
+built-in plugins of the 0.1.6 era wrote it, and every third-party plugin that copied them did too).
+Under v4, **the moment a preset plugin writes such a message into a session the admission refuses
+it**, and the symptom is an entire session reporting "run failed" with a single line:
+
+```text
+format v4 message requires a producer-owned source kind
+```
+
+Measured on 2026-10-03: lampkeeper's `journal-catchup` steers one notice at **the start of every new
+session**, so on 0.2.0-rc.2 every new session crashed on creation and the session file kept not a
+single message (just the header, three policy events and `session/end-seed`) — the maintainer had to
+roll the system back to keep talking at all. The same shape sits in two plugins of this repo's
+news-three-elements preset (`news-language.js` / `news-material.js`); unfixed, the next deployment
+crashes the same way.
+
+| Owner | v3 shape (refused by v4) | v4 shape |
+|---|---|---|
+| plugin source | `{ kind: "plugin", plugin: "<name>", form: "notice", … }` | `{ kind: "plugin:<name>", form: "notice", … }` |
+| same-name producer | `{ kind: "plugin", plugin: "user-approval" }` | `{ kind: "user-approval", … }` |
+| human | `{ kind: "user" }` | unchanged |
+
+The rule is pinned as the `session-sources` item of `nix flake check`
+(`develop/check-session-sources.py`): a `kind: "plugin"` anywhere in this repo's preset plugins
+fails the check. The `plugin:` prefix is not invented here — it is the name the v4 migration table
+gives to a non-same-name plugin (`plugin:` plus the complete plugin name), matching the shape
+historical sessions take after migration.
+
+> **The price of a rollback**: v4 sessions **cannot be read by older versions** (0.1.6's JSONL
+> persistence refuses an unrecognized format version outright rather than degrading). So
+> "upgrade to 0.2.0, then roll back" leaves every earlier session unopenable — fix the plugin
+> source shapes *before* upgrading; do not treat a rollback as the escape hatch.
+
 ## Sudo daemon
 
 Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate (e.g. `nixos-rebuild`). `sudo.enable` deploys a systemd **socket-activated root executor** (`nixkits-sudo@.service`, running `nixkits-sudo-exec` once per connection) and injects `NIXKITS_SUDO_SOCKET` into the dsh service. The nixos-shell plugin probes that socket at apply time, advertises the `sudo` parameter when present, and routes requests through it:

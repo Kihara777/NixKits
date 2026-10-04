@@ -259,6 +259,42 @@ HEAD，只在「取用点」分叉——stable 通道的预设内容取自
 > `{ section }` 校验（未知键即报错）、以及本仓 `@kihara777/dsh-nixos-shell` 的三行都在比对范围内，
 > 均无变化。
 
+### 会话格式 v4 对消息来源的准入（2026-10-03 事故）
+
+dsh 0.2.0 引入**会话格式 v4**。它对**每条消息的 `source`** 有一条准入判据：
+
+> 必须是对象，`kind` 非空，且**不等于字面量 `"plugin"`**。
+
+字面量 `"plugin"` + 同级 `plugin: "<名字>"` 是 **v3 时代**的插件来源形状
+（0.1.6 时代的自带插件、以及一切照抄它们的第三方插件都这么写）。在 v4 里，
+**预设插件只要把一个这样的消息写进会话，准入就拒**，而症状是整个 session
+「本机运行失败」，错误只说一句：
+
+```text
+format v4 message requires a producer-owned source kind
+```
+
+2026-10-03 实测：掌灯模式的 `journal-catchup` 在**每个新会话开局**都会 steer 一条提醒，
+于是在 0.2.0-rc.2 上「每开一个新会话就崩一次」，会话文件里连一条消息都留不下
+（只有 header + 三条策略事件 + `session/end-seed`）——狐莉只能回滚系统才能继续对话。
+同形状还在本仓新闻三要素预设的两个插件里（`news-language.js` / `news-material.js`），
+若不同步修复，下一次部署会以同样方式崩。
+
+| 归属 | v3 形状（v4 拒绝） | v4 形状 |
+|---|---|---|
+| 插件来源 | `{ kind: "plugin", plugin: "<名>", form: "notice", … }` | `{ kind: "plugin:<名>", form: "notice", … }` |
+| 同名 producer | `{ kind: "plugin", plugin: "user-approval" }` | `{ kind: "user-approval", … }` |
+| 人 | `{ kind: "user" }` | 不变 |
+
+判据已固化为 `nix flake check` 的 `session-sources` 项
+（`develop/check-session-sources.py`）：本仓预设插件里出现 `kind: "plugin"` 即失败。
+`plugin:` 前缀不是自创——它是 v4 迁移表给「非同名插件」定的名字
+（`plugin:` + 完整插件名），与历史会话被迁移后的形状一致。
+
+> **回滚的代价**：v4 会话**旧版读不了**（0.1.6 的 JSONL 持久化在读到不认识的
+> format version 时直接拒绝，不是降级读取）。所以「升到 0.2.0 再回滚」会让此前
+> 的会话全部打不开——升级前先修好插件来源形状，别把回滚当退路。
+
 > ⚠️ **`promoteOnTimeout` 是本次升级里唯一会改变日常行为的新默认值**（决策：**不写进预设**，
 > 跟随上游）。它的效果是：前台 bash 调用命中超时后不再被杀掉，而是**提升为后台任务**继续跑，
 > 调用方拿到一个 job id；`job_output` / `job_list` / `job_kill` 因此成为超时后的收尾手段。

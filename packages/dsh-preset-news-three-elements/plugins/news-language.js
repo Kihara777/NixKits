@@ -179,7 +179,7 @@ function withNotice(agent, decision) {
 				id: `news-language-${agent.id}-${offender.id}`,
 				role: "user",
 				content: [{ type: "text", text: refusalNotice() }],
-				source: { kind: "plugin", plugin: name, form: "notice", summary: "语言审查：用户未使用简体中文，按拒绝服务流程回绝" },
+				source: { kind: `plugin:${name}`, form: "notice", summary: "语言审查：用户未使用简体中文，按拒绝服务流程回绝" },
 			},
 		],
 	};

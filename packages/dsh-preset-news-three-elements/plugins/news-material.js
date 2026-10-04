@@ -232,7 +232,7 @@ export function apply(ctx) {
 						id,
 						role: "user",
 						content: [{ type: "text", text: REMINDER }],
-						source: { kind: "plugin", plugin: name, form: "notice", summary: "取材铁律：素材只是导火索，成稿前必须联网检索" },
+						source: { kind: `plugin:${name}`, form: "notice", summary: "取材铁律：素材只是导火索，成稿前必须联网检索" },
 					},
 				],
 			};
@@ -254,7 +254,7 @@ export function apply(ctx) {
 					id: `news-material-${agent.id}-${turn}`,
 					role: "user",
 					content: [{ type: "text", text }],
-					source: { kind: "plugin", plugin: name, form: "notice", summary },
+					source: { kind: `plugin:${name}`, form: "notice", summary },
 				});
 			};
 			if (!sourcedThisTurn(events)) {

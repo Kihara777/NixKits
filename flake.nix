@@ -112,6 +112,17 @@
         touch $out
       '';
 
+      # 预设插件写进会话的消息来源不许用 v3 的旧形状（`kind: "plugin"`）：
+      # dsh 0.2.0 的 v4 准入只拒这一个字面量，症状是整个 session「本机运行失败」。
+      # 2026-10-03 实测：掌灯模式开局对账每开一个新会话就崩一次。
+      session-sources = pkgs.runCommand "check-session-sources" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-session-sources.py
+        touch $out
+      '';
+
       news-mode-tests = pkgs.runCommand "check-news-mode-tests" {
         nativeBuildInputs = [ pkgs.nodejs ];
       } ''

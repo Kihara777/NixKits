@@ -237,9 +237,9 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 > 报 `HTTP error 403: API rate limit exceeded`。`build-package.yml` 已含双 host，
 > 修改 workflow 时务必保持一致。
 
-### `nix flake check` 的 7 项自检
+### `nix flake check` 的 8 项自检
 
-仓库的**自检契约**——任一项失败即阻断提交。6 项由 `develop/check-*.py` 实现，
+仓库的**自检契约**——任一项失败即阻断提交。7 项由 `develop/check-*.py` 实现，
 `news-mode-tests` 为 node 脚本：
 
 | 检查 | 脚本 | 校验内容 |
@@ -251,6 +251,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 | `doc-versions` | `develop/check-doc-versions.py` | `docs/<lang>/<pkg>.md` 的版本行与包定义一致（含多通道表；例外在 `EXEMPT` 登记） |
 | `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名、**结构对等**（每条目的提交 SHA 集合四语须与 zh 一致——只看总量会漏掉「某条目在某译文里整张表都没了」，2026-10-03 实测漏过一次）、**摘要标记须是本语的**（zh/pcn `**摘要**`、en `**Summary**`、ja `**概要**`；2026-10-03 实测漏过 80 条 ja + 59 条 pcn 的未译副本） |
 | `news-mode-tests` | `packages/dsh-preset-news-three-elements/tests/mode.test.mjs` | 新闻三要素模式插件的**行为测试**（node，非 python） |
+| `session-sources` | `develop/check-session-sources.py` | 预设插件**写进会话**的消息来源不得用 v3 的旧形状 `kind: "plugin"`——dsh 0.2.0 的 v4 准入只拒这一个字面量，症状是整个 session「本机运行失败」（2026-10-03 实测：掌灯模式开局对账每开一个新会话崩一次，事故经过见 Kitsunome 的 `journal/2026-10-04.md`）。正确形状 `kind: "plugin:<插件名>"` |
 
 > 各脚本可**单独本地运行**（`python3 develop/check-doc-links.py`），便于快速定位而不必
 > 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——

@@ -261,6 +261,40 @@ curl -sS -b cookies -H 'content-type: application/json' \
 - **persona**：新格式 file 之「預設 `$DSH_HOME/.agent-presets/<id>/` 目録 住」一句 0.2.0 之 正確 記述 変更——預設 = profile `cordis.patch.yml` 内 `@deepseek-ai/dsh-agent-preset` 条目 一本、**発見 担 者 該 一行 也**；預設 依然 自前 file `.agent-presets/<id>/` 下 置、profile 従 相対経路 参照 可能——本配備 之 一部 預設 正 此 様 插件 與 技能 同梱。此 書換 場合 **model 送 prompt** 変——挙動変更 該当 故、維護者 別途 批准 済。
 - **同梱技能**：二預設 以前 `cordis-plugin-development` 與 `editing-cordis-compositions` 之 副本 **同梱**。0.2.0 此 二（加 `agent-experience` / `cordis-composition-reference`）`@deepseek-ai/dsh-agent-preset` 與 共 配布、但 此方 之 二 0.1.x 目録式 預設 模型 上 留——故 同名 二 並、内 一 **廃止 書方** 教（上流 之 新版 *"Nothing reads that directory any more"* 明言）。現在 二預設 之 `skill-filesystem` 行 **上流 其 直接 掛載** 形 変更（内蔵 `cordis` 預設 與 同一 式）、上流 無 `skills-nixos/`（NixOS 運用技能）唯 残。`develop/check-preset-derivation.py`「既 副本 同梱 不」 断言 化 釘付；同梱 之 二 今 也 stable 通道 釘付 rev 従 取用 可能（0.1.x 互換）。
 
+### 会話格式 v4 之 消息来源 准入（2026-10-03 事故）
+
+dsh 0.2.0 **会話格式 v4** 導入。此 **各消息 之 `source`** 一条 之 准入判据 課：
+
+> 対象 客体 在、`kind` 非空、且 **字面量 `"plugin"` 等 不**。
+
+字面量 `"plugin"` 與 同级 `plugin: "<名>"` **v3 時代** 之 插件来源形状 也（0.1.6 時代 之 内蔵插件
+如 書、其 丸写 之 第三者 插件 亦 同様）。v4 於、**預設 插件 斯 様 消息 一 会話 書込 瞬間 准入
+拒否**。症状 session 全体「本機実行失敗」、error 唯 一句：
+
+```text
+format v4 message requires a producer-owned source kind
+```
+
+2026-10-03 実測：掌灯模式 之 `journal-catchup` **新規 session 開始毎** 注意書 一件 steer。故
+0.2.0-rc.2 上 新規 session 作成毎 崩、session file 消息 一件 亦 残 不（header・三件 之 政策
+event・唯 `session/end-seed`）——維護者 会話 続 為 系統 巻戻 之外 無。同一形状 本 repo 之
+新聞三要素 預設 之 二 插件（`news-language.js` / `news-material.js`）亦 在、同期 修正 不 場合
+次回 配備 同様 崩。
+
+| 帰属 | v3 形状（v4 拒否） | v4 形状 |
+|---|---|---|
+| 插件来源 | `{ kind: "plugin", plugin: "<名>", form: "notice", … }` | `{ kind: "plugin:<名>", form: "notice", … }` |
+| 同名 producer | `{ kind: "plugin", plugin: "user-approval" }` | `{ kind: "user-approval", … }` |
+| 人 | `{ kind: "user" }` | 不変 |
+
+判据 `nix flake check` 之 `session-sources` 項 固定 済（`develop/check-session-sources.py`）：
+本 repo 預設 插件 `kind: "plugin"` 出現 場合 失敗。`plugin:` 接頭辞 此処 創作 非——v4 移行表
+於「同名 非 插件」与 名（`plugin:` + 完全 插件名）、履歴 会話 移行後 取 形状 與 一致。
+
+> **巻戻 代価**：v4 会話 **旧版 読 不**（0.1.6 JSONL 永続化 未知 format version 読 時点 拒否、
+> 降格読 不）。故「0.2.0 上 後 巻戻」以前 会話 一切 開 不——**昇格 前** 插件 来源形状 修正 事。
+> 巻戻 逃道 考 不 事。
+
 ## sudo 守護
 
 dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`）。`sudo.enable` systemd **套接字激活型 root 実行器**（`nixkits-sudo@.service`、接続毎 `nixkits-sudo-exec` 実行）配備、dsh service `NIXKITS_SUDO_SOCKET` 注入。nixos-shell 插件初期化時該套接字検出、存在時 `sudo` 參數有効化請求路由：
