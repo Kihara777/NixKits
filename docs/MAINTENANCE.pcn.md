@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T07:14:50+09:00
+
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `8dab668` → `f805f4e`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208) 見）。移動端「session 切替時 keyboard 不表示」此前**依然失效**：実際 `focusin` cancel 不可（插件 `preventDefault` 死 code）、軟 keyboard 於 `focus` 瞬間要求済、後 blur 補救而已。今入力欄 用户 tap 以前編集不可維持、程序性聚焦 keyboard 喚出不能；tap / 按鍵 即時復帰、焦点離脱 再武装。判据 真因果鏈 交換：session 切替中「編集可能入力欄 focus 落下」回数 0（部署版 2）、tap 後 通常入力可、`develop/ab-ui/` 14 条界面判据 本 package **build 産物** 対象 全通過。
+
+| 提交 | 説明 |
+|------|------|
+| `a4b6bb1` | fix(dsh-api-balance): re-pin to f805f4e — mobile keyboard guard rewritten around the real causal chain |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重釘） |
+| 　 | rev | `8dab668` → `f805f4e` |
+| 　 | src hash | `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` → `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` |
+
 ## 2026-10-04T09:23:29+09:00
 
 **摘要**：fix(dsh-preset-news-three-elements): 預設 插件 之 会話消息 来源 v4 形状 至 変更 —— dsh 0.2.0 之 会話格式 v4 字面量 `kind: "plugin"`（v3 時代 之 插件来源形状）唯 拒。本 repo 預設 插件 其 丸写、故 插件 消息 一件 書 毎 准入 拒否、症状 session 全体「本機実行失敗」、error 唯 `format v4 message requires a producer-owned source kind` 一句。2026-10-03 実測：掌灯模式（私有 repo）之 `journal-catchup` 新規 session 開始毎 注意書 一件 steer、故 0.2.0-rc.2 上 新規 session 作成毎 崩、session file 消息 一件 亦 残 不、維護者 会話 続 為 系統 巻戻 之外 無（v4 会話 旧版 読 不）。本 repo 三箇所 `{ kind: `plugin:${name}`, form: "notice", summary }` 至 変更（`news-language.js` ×1、`news-material.js` ×2）、test 断言 `source.plugin` 自 `source.kind` 至、`user-approval` 模 二 夹具 `{ kind: "user-approval", form: "notice" }` 至 変更；更 自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` 接続）追加、「本 repo 預設 插件 `kind: "plugin"` 出 不」固定（正逆 両方向 検証：旧形状 注入 → 行番号 付 捕捉）。四語 `docs/*/dsh.md`「会話格式 v4 之 消息来源 准入」節 追加。

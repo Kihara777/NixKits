@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T07:14:50+09:00
+
+**概要**：dsh-api-balance 薄ラッパー re-pin —— rev `8dab668` → `f805f4e`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208) にある）。モバイルの「セッション切替時にキーボードを出さない」が**依然として効いていなかった**：実際の `focusin` はキャンセル不可（プラグインの `preventDefault` は死んだコード）で、ソフトキーボードは `focus` の瞬間に要求されるため、後からの blur は事後処理にすぎない。入力欄はユーザーがタップするまで編集不可となり、プログラム的フォーカスではキーボードを呼び出せなくなった；タップ / キー入力で即座に復帰し、フォーカスが外れると再び武装する。判定は実際の因果チェーンに置き換えた：セッション切替中に「編集可能な入力欄に focus が落ちる」回数は 0（デプロイ版は 2）、タップ後も入力可能で、`develop/ab-ui/` の 14 項目の UI 判定は本パッケージの**ビルド成果物**を対象に実行した。
+
+| コミット | 説明 |
+|------|------|
+| `a4b6bb1` | fix(dsh-api-balance): re-pin to f805f4e — mobile keyboard guard rewritten around the real causal chain |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `8dab668` → `f805f4e` |
+| 　 | src hash | `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` → `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` |
+
 ## 2026-10-04T09:23:29+09:00
 
 **概要**：fix(dsh-preset-news-three-elements): プリセットプラグインの会話メッセージ来源を v4 形状へ —— dsh 0.2.0 の会話フォーマット v4 は字面量 `kind: "plugin"`（v3 時代のプラグイン来源形状）だけを拒む。本リポジトリのプリセットプラグインはそれを丸写ししていたため、プラグインがメッセージを一つ書くたびに准入で拒否され、症状は session 全体の「本機実行失敗」、エラーは `format v4 message requires a producer-owned source kind` の一句のみ。2026-10-03 の実測：掌灯模式（私有リポジトリ）の `journal-catchup` は新規 session の開始ごとに注意書きを一件 steer するため、0.2.0-rc.2 上では新規 session が作成のたびに崩れ、session ファイルにはメッセージが一件も残らず、保守者は会話を続けるためにシステムを巻き戻すしかなかった（v4 の会話は旧版では読めない）。本リポジトリの三箇所を `{ kind: `plugin:${name}`, form: "notice", summary }` へ変更（`news-language.js` ×1、`news-material.js` ×2）、テストの断言を `source.plugin` から `source.kind` へ、`user-approval` を模す二つの夹具を `{ kind: "user-approval", form: "notice" }` へ変更；さらに自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` に接続）を追加し「本リポジトリのプリセットプラグインに `kind: "plugin"` を出さない」ことを固定（正逆両方向で検証：旧形状を注入 → 行番号付きで捕捉）。四語の `docs/*/dsh.md` に「会話フォーマット v4 のメッセージ来源准入」の節を追加。

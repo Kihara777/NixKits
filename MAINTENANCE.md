@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-05T07:14:50+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `8dab668` → `f805f4e`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208)）。移动端「会话切换不弹键盘」此前**仍然失效**：真实 `focusin` 不可取消（插件那次 `preventDefault` 是死代码），而软键盘在 `focus` 那一刻就被请求，事后的 blur 只算补救。现改为让输入框在用户点按前保持不可编辑，程序性聚焦唤不出键盘；点按/按键即刻恢复，焦点离开重新武装。判据换成真因果链：切换会话期间「focus 落到可编辑输入框」的次数 0（部署版为 2），且点按后仍可输入；`develop/ab-ui/` 的 14 条界面判据以本包**构建产物**为被测对象全过。
+
+| 提交 | 说明 |
+|------|------|
+| `a4b6bb1` | fix(dsh-api-balance): re-pin 到 f805f4e —— 移动端键盘守护按真因果链重写 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | rev | `8dab668` → `f805f4e` |
+| 　 | src hash | `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` → `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` |
+
 ## 2026-10-04T09:23:29+09:00
 
 **摘要**：fix(dsh-preset-news-three-elements): 预设插件的会话消息来源改用 v4 形状 —— dsh 0.2.0 的会话格式 v4 只拒字面量 `kind: "plugin"`（v3 时代的插件来源形状），而本仓预设插件照抄了它，于是插件每写一条消息就被准入拒绝，症状是整个 session「本机运行失败」，错误只有一句 `format v4 message requires a producer-owned source kind`。2026-10-03 实测：掌灯模式（私有仓）的 `journal-catchup` 每个新会话开局都会 steer 一条提醒，在 0.2.0-rc.2 上「每开一个新会话崩一次」，会话文件里一条消息都没留下，维护者只能回滚系统才能继续对话（v4 会话旧版读不了）。本仓三处来源改为 `{ kind: `plugin:${name}`, form: "notice", summary }`（`news-language.js` ×1、`news-material.js` ×2），测试断言随之从 `source.plugin` 改为 `source.kind`，夹具里模拟 `user-approval` 的两处改用 `{ kind: "user-approval", form: "notice" }`；并新增自检 `session-sources`（`develop/check-session-sources.py`，挂进 `nix flake check`）钉住「预设插件里不许再出现 `kind: "plugin"`」，已做正反两向验证（注入旧形状 → 抓到并报行号）。四语 `docs/*/dsh.md` 增「会话格式 v4 对消息来源的准入」一节。

@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T07:14:50+09:00
+
+**Summary**: dsh-api-balance thin-wrapper re-pin — rev `8dab668` → `f805f4e` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208)). The mobile "no keyboard on session switch" guard **still failed**: a real `focusin` is not cancelable (the plugin's `preventDefault` was dead code), and the soft keyboard is requested the moment `focus` lands, so a blur afterwards only patches things up. The composer now stays non-editable until the user taps it, so a programmatic focus cannot summon the keyboard; tapping or typing restores it immediately, and losing focus re-arms the block. The criterion is now the real causal chain: during a session switch the number of focus events landing on an editable composer is 0 (2 on the deployed build), typing still works after a tap, and the 14 UI criteria in `develop/ab-ui/` run against this package's **built artifact**.
+
+| Commit | Description |
+|------|------|
+| `a4b6bb1` | fix(dsh-api-balance): re-pin to f805f4e — mobile keyboard guard rewritten around the real causal chain |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `8dab668` → `f805f4e` |
+| 　 | src hash | `sha256-yM+rQb/xIuTiN6QGpWr++jd2vDGHoN5K4gHnLmkGB4A=` → `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` |
+
 ## 2026-10-04T09:23:29+09:00
 
 **Summary**: fix(dsh-preset-news-three-elements): preset plugins' session message sources move to the v4 shape — dsh 0.2.0's session format v4 refuses the literal `kind: "plugin"` (the v3-era plugin-source shape), and this repo's preset plugins copied it, so every message a plugin wrote was refused at admission: the whole session reported "run failed" with the single line `format v4 message requires a producer-owned source kind`. Measured on 2026-10-03: lampkeeper's (private repo) `journal-catchup` steers one notice at the start of every new session, so on 0.2.0-rc.2 every new session crashed on creation and the session file kept not a single message — the maintainer could only roll the system back to keep talking (older versions cannot read v4 sessions). This repo's three sites now write `{ kind: `plugin:${name}`, form: "notice", summary }` (`news-language.js` ×1, `news-material.js` ×2); the test assertions moved from `source.plugin` to `source.kind`, the two fixtures simulating `user-approval` use `{ kind: "user-approval", form: "notice" }`; and a new self-check `session-sources` (`develop/check-session-sources.py`, wired into `nix flake check`) pins "no `kind: "plugin"` in this repo's preset plugins", verified in both directions (injecting the old shape → caught, with line numbers). All four `docs/*/dsh.md` gained a section on v4 message-source admission.
