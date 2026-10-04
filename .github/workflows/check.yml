@@ -33,4 +33,8 @@ jobs:
           echo "llama-cpp-ver = $tag（认证取回，作为本地输入覆盖）"
           echo "LLAMA_CPP_VER_OVERRIDE=--override-input llama-cpp-ver path:$json" >> "$GITHUB_ENV"
       - name: Check
-        run: nix flake check --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE
+        run: |
+          set -euo pipefail
+          # 同 build-package.yml：覆盖参数为空就**显式失败**，不静默退回未认证取回。
+          : "${LLAMA_CPP_VER_OVERRIDE:?认证取回步骤没有导出覆盖参数——拒绝退回未认证路径}"
+          nix flake check --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE

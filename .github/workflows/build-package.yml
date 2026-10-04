@@ -96,6 +96,9 @@ jobs:
         if: ${{ !inputs.riscv64-cross }}
         run: |
           set -euo pipefail
+          # 覆盖参数必须非空：空值会让 nix **静默**退回未认证取回（403 的来源）——
+          # 那是「看起来正常」的失败，所以这里显式要求它存在。
+          : "${LLAMA_CPP_VER_OVERRIDE:?认证取回步骤没有导出覆盖参数——拒绝退回未认证路径}"
           out="$(nix build --print-build-logs --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE --print-out-paths ".#${{ inputs.package }}")"
           echo "out=$out" >> "$GITHUB_OUTPUT"
           echo "产物：$out"
