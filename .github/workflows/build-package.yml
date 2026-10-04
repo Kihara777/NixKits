@@ -32,12 +32,48 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # main
         with:
           extra-conf: |
+            # `access-tokens` 覆盖的是 **`github:` 取源**（flake 输入 nixpkgs /
+            # flake-utils，以及 riscv64 交叉路径里的 `builtins.getFlake
+            # github:NixOS/nixpkgs`）——那些请求会带认证头。
+            # ⚠️ 它**不覆盖**浮动输入 `llama-cpp-ver`：那是普通 URL 输入
+            # （`https://api.github.com/.../releases/latest`），Nix 不会把
+            # access-tokens / netrc 附到这类 fetch 上（2026-10-05 实测，见下）。
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
 
       - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
         with:
           name: nixkits
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      # ── 浮动输入 `llama-cpp-ver`：改成**认证取回 + 本地覆盖** ─────────────────
+      # 它是普通 URL 输入（api.github.com/.../releases/latest），而 Nix 的
+      # `access-tokens` / `netrc-file` 都不会附加到这类 fetch 上——2026-10-05 实测：
+      # 给 api.github.com 配一个**假 token**，再取一个从未取过的 api.github.com URL；
+      # 若认证头真的送出去，GitHub 必然回 401 `Bad credentials`——实际 fetch 成功，
+      # 且未认证额度从 60 掉到 59。
+      # 于是每个 job 都打一次**未认证**请求，共享 runner IP 的 60 次/小时用尽即 403。
+      # 本仓已实测红过两次（`Build ruyi-beta (x86_64)` 2026-10-02、
+      # `Build kitsfmt (x86_64)` 2026-10-04），响应体都是
+      # "API rate limit exceeded for <ip>"。
+      #
+      # 处置：先由 `gh api`（认证，5000 次/小时）取回**同一份** JSON，再用
+      # `--override-input` 作为本地输入喂给 Nix。语义不变——版本仍来自上游最新
+      # release（overlay 只读 `json.tag_name`，见 overlays/llama-cpp-rocm.nix），
+      # 但不再依赖未认证额度。取回失败或缺 `tag_name` 时**显式失败**，不静默跳过。
+      - name: Resolve the floating llama-cpp-ver input (authenticated)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          json="$RUNNER_TEMP/llama-cpp-ver.json"
+          gh api repos/ggml-org/llama.cpp/releases/latest > "$json"
+          tag="$(jq -r '.tag_name // empty' "$json")"
+          if [ -z "$tag" ]; then
+            echo "::error::取回的 release JSON 里没有 tag_name——拒绝继续（不静默回落到旧版本）"
+            exit 1
+          fi
+          echo "llama-cpp-ver = $tag（认证取回，作为本地输入覆盖）"
+          echo "LLAMA_CPP_VER_OVERRIDE=--override-input llama-cpp-ver path:$json" >> "$GITHUB_ENV"
 
       # 包文件解析。riscv64 有时需要**另一个构建文件**（上游没有该架构的预编译时
       # 改为源码构建），这张表是唯一的出处——构建步骤与烟测步骤都读它的输出。
@@ -60,7 +96,7 @@ jobs:
         if: ${{ !inputs.riscv64-cross }}
         run: |
           set -euo pipefail
-          out="$(nix build --print-build-logs --no-write-lock-file --print-out-paths ".#${{ inputs.package }}")"
+          out="$(nix build --print-build-logs --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE --print-out-paths ".#${{ inputs.package }}")"
           echo "out=$out" >> "$GITHUB_OUTPUT"
           echo "产物：$out"
 

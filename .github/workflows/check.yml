@@ -10,12 +10,27 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # main
         with:
           extra-conf: |
-            # `api.github.com` 必须单独列出：Nix 的 access-tokens 按 host 精确
-            # 匹配，而浮动输入 `llama-cpp-ver` 的 URL 正是 api.github.com ——
-            # 只写 github.com 时该请求仍是**未认证**（60 次/小时），每次 push
-            # 触发 ~34 个 workflow 会立即耗尽额度并报 HTTP 403。
-            # （实测失败响应体："API rate limit exceeded for <ip>. (But here's
-            # the good news: Authenticated requests get a higher rate limit.)"）
+            # `access-tokens` 覆盖的是 **`github:` 取源**（flake 输入的 nixpkgs /
+            # flake-utils）——那些请求会带认证头。
+            # ⚠️ 它**不覆盖**浮动输入 `llama-cpp-ver`：那是普通 URL 输入，实测
+            # （2026-10-05）即便列了 api.github.com，该 fetch 仍是**未认证**的
+            # （判据与实测见 build-package.yml 里同名步骤的注释）。
+            # 所以下面的 `nix flake check` 也走「认证取回 + 覆盖」，不再依赖
+            # 未认证的 60 次/小时额度。
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Resolve the floating llama-cpp-ver input (authenticated)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          json="$RUNNER_TEMP/llama-cpp-ver.json"
+          gh api repos/ggml-org/llama.cpp/releases/latest > "$json"
+          tag="$(jq -r '.tag_name // empty' "$json")"
+          if [ -z "$tag" ]; then
+            echo "::error::取回的 release JSON 里没有 tag_name——拒绝继续（不静默回落到旧版本）"
+            exit 1
+          fi
+          echo "llama-cpp-ver = $tag（认证取回，作为本地输入覆盖）"
+          echo "LLAMA_CPP_VER_OVERRIDE=--override-input llama-cpp-ver path:$json" >> "$GITHUB_ENV"
       - name: Check
-        run: nix flake check --no-write-lock-file
+        run: nix flake check --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE
