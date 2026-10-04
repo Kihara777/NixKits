@@ -121,15 +121,28 @@ gh run list --limit 40 --json name,conclusion --jq '[.[]|.conclusion]|group_by(.
 | `build-<包>-<架构>.yml` | 每个包每架构一个，调用上面那个可复用 workflow |
 | `ci-summary.yml` | 渲染徽章（`gh-pages/ci-status.json`），push / 每小时 / 手动触发 |
 
-**一次 push 触发约 34 个 workflow**，每个都要解析 flake 输入——这是本仓 `403 限流`
-反复出现的直接原因：`llama-cpp-ver` 是浮动输入，每个 workflow 各打一次
-`api.github.com`，未认证额度（60 次/小时）一轮就耗尽。
+**一次 push 触发约 34 个 workflow**，每个都要解析 flake 输入。其中浮动输入
+`llama-cpp-ver`（普通 URL 输入，指向 `api.github.com/.../releases/latest`）**曾经**
+每个 workflow 各打一次**未认证**请求，共享 runner IP 的 60 次/小时额度用尽即 403。
+
+> **2026-10-05 更正（实测，不是推测）**：`access-tokens` **不覆盖这类 fetch**，
+> 所以「双 host」那条治不了它。判据：给 `api.github.com` 配一个**假 token**，
+> 再取一个从未取过的该 host URL——若认证头真的送出，GitHub 必然回 401
+> `Bad credentials`；实测 fetch **成功**、且未认证额度 −1。`netrc-file` 同法实测，
+> 同样不附加。（`access-tokens` 仍对 **`github:` 取源**有效——nixpkgs /
+> flake-utils / 交叉路径的 `builtins.getFlake github:…`——那部分保留。）
+>
+> **现行处置已在仓库里**（`build-package.yml` + `check.yml` 各一步）：
+> 先用 `gh api`（**认证**，5000 次/小时）取回同一份 JSON，再以
+> `--override-input llama-cpp-ver path:<json>` 作为本地输入喂给 Nix。
+> 语义不变——overlay 只读 `json.tag_name`；取不到或字段缺失即**显式失败**。
+> 看到 403 记录时先确认这两步还在（被删掉就会退回到未认证路径）。
 
 ### 本仓实测过的失败形态
 
 | 形态 | 实测记录 | 性质与处置 |
 |---|---|---|
-| `llama-cpp-ver` 403 限流 | 一轮 push 里 2 个 workflow 失败、其余 62 个通过；**重跑后 64/64 全绿** | **偶发**：`gh run rerun --failed`。根治靠 `access-tokens` **同时列** `github.com` 与 `api.github.com`（Nix 按 host 精确匹配，只写前者时那个请求仍未认证） |
+| `llama-cpp-ver` 403 限流 | 两次实测：`Build ruyi-beta (x86_64)` 2026-10-02（IP 68.220.61.199）、`Build kitsfmt (x86_64)` 2026-10-04（IP 64.236.142.132）；响应体均为 `API rate limit exceeded for <ip>`；**重跑即绿**（换 runner IP） | **偶发但成因结构性**：未认证请求 + 共享 IP 额度。**已根治**（认证取回 + 覆盖，见上）。仍见到时先按 `gh run rerun --failed` 处置，再查那两步是否还在 |
 | codewhale-riscv64 hash | 用 `nix-prefetch-url` 取 archive tarball 的 hash 充当 `fetchFromGitHub` 的 hash → **连续失败**（两者算法不同） | **真失败**：改用构建报错里的 `got:` 值 |
 | blender-mcp 取源 403 | `/archive/<rev>.tar.gz` 对全部 tag 403，`/api/v1/repos/.../archive/...` 200 | **真失败**：改 `fetchzip` 指向 API 端点 + `stripRoot = true` |
 | 「绿但全是缓存」 | 改完取源方式后，CI 仍可能通篇 `copying path … from cache` | **可疑**：必须**确认走了 fetch 阶段**，否则那次绿没有验证力 |

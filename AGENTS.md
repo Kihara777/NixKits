@@ -230,12 +230,25 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
 
-> **`check.yml` 的 `access-tokens` 必须同时列出 `github.com` 与 `api.github.com`**：
-> Nix 的 `access-tokens` **按 host 精确匹配**，而浮动输入 `llama-cpp-ver` 的 URL 是
-> `api.github.com`。只写 `github.com` 时该请求仍是**未认证**（60 次/小时，认证后
-> 5000），而每次 push 触发 ~34 个 workflow、每个都要解析它 → 一轮 push 即耗尽额度，
-> 报 `HTTP error 403: API rate limit exceeded`。`build-package.yml` 已含双 host，
-> 修改 workflow 时务必保持一致。
+> **浮动输入 `llama-cpp-ver` 在 CI 里走「认证取回 + 本地覆盖」**（2026-10-05 起）：
+> 它是**普通 URL 输入**（`api.github.com/.../releases/latest`），而 Nix **不会**把
+> `access-tokens` / `netrc-file` 附加到这类 fetch 上——实测判据：给该 host 配一个
+> **假 token** 再取一个从未取过的同 host URL，若认证头真的送出，GitHub 必然回 401
+> `Bad credentials`；实际 fetch 成功、未认证额度 −1。于是每个 job 各打一次未认证请求，
+> 共享 runner IP 的 60 次/小时用尽即 403（实测红过两次，响应体
+> `API rate limit exceeded for <ip>`：`Build ruyi-beta (x86_64)` 2026-10-02、
+> `Build kitsfmt (x86_64)` 2026-10-04）。
+>
+> 因此 `build-package.yml` 与 `check.yml` 各有一道步骤：先用 `gh api`（认证，
+> 5000 次/小时）取回**同一份** JSON，再以 `--override-input llama-cpp-ver path:<json>`
+> 喂给 Nix。语义不变（overlay 只读 `json.tag_name`，见 `overlays/llama-cpp-rocm.nix`），
+> 但不再依赖未认证额度；取不回或缺 `tag_name` 即**显式失败**。
+> **改 workflow 时不要删这两步**——删了就退回未认证路径，403 会随机回来。
+>
+> `access-tokens` 仍要**同时列出** `github.com` 与 `api.github.com`：它管的是
+> **`github:` 取源**（flake 输入的 nixpkgs / flake-utils，以及 riscv64 交叉路径里的
+> `builtins.getFlake github:NixOS/nixpkgs`），那些请求确实会带认证头。两个文件
+> 保持一致。
 
 ### `nix flake check` 的 8 项自检
 
