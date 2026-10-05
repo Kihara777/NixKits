@@ -63,6 +63,7 @@
     # - doc-versions：文档版本号与包定义一致（四语 + 通道表）
     # - doc-counts：文档里能从源机械读出的计数与源一致（词典条数、自检项数）
     # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
+    # - session-sources：预设插件写进会话的消息来源不得用 v3 旧形状（kind: "plugin"）
     # - news-mode-tests：新闻三要素模式插件的行为测试
     checks = {
       preset-derivation = pkgs.runCommand "check-preset-derivation" {
