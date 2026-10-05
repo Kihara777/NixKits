@@ -10,7 +10,7 @@
 |------|-------|
 | Type | Coding Agent Skill (language backend) |
 | Path | `skills/translate-pseudocn/` (`SKILL.md` + `dictionary.md`) |
-| Companion | `dictionary.md` -- the built-in katakana-to-kanji mapping dictionary (measured: **75** entries); consult it while translating and when self-checking for leftover kana |
+| Companion | `dictionary.md` -- the built-in katakana-to-kanji mapping dictionary (measured: **76** entries); consult it while translating and when self-checking for leftover kana |
 | Language code | pcn |
 | Called by | write-project-docs (auto-discovered) |
 
@@ -18,7 +18,7 @@
 
 - 偽中国語 (Pseudo-Chinese) translation — strips kana, adjusts word order (SOV→SVO)
 - Particle replacement, punctuation conversion
-- Built-in katakana-to-kanji dictionary (`dictionary.md`, **75** entries: everyday terms like software/hardware/version/upstream plus IT terminology)
+- Built-in katakana-to-kanji dictionary (`dictionary.md`, **76** entries: everyday terms like software/hardware/version/upstream plus IT terminology)
 - Code blocks, numbers, symbols preserved
 
 ## Usage

@@ -173,14 +173,6 @@
 | `21993c8` | fix(develop): maintenance-log 检查补「结构对等」判据 —— 原有的四条只看总量，漏掉过「某条目在某译文里整张表都没了」 |
 | `1c6e4be` | refactor(skills): 修正倍率判据 —— 全库均值混着 CJK 密度这个强混杂因子（实测 r=0.90） |
 
-## 2026-10-03T04:38:34+09:00
-
-**概要**：`write-maintenance-log` に**計測可能な長さ規範**を補い、自作四条の概要を 1674–3784 文字から 312–444 へ圧縮した：概要は「何が変わったか / なぜ / どう検証するか」だけに答え、目標 ≤ 400 文字；**訳文の倍率は同構造の実測値に揃える**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明らかに超えれば水増し）；「このエラーがなぜそうなるのか」を説明する段落はここに書かない。**検証**：`nix flake check` の四語自検は全緑；四条とも圧縮後の情報欠落はない。
-
-| コミット | 説明 |
-|------|------|
-| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
-
 ## 2026-10-03T04:27:03+09:00
 
 **概要**：`opencode-telegram` の riscv64 を**「摘出」から「ビルド」へ戻し**、「**成果物を本当に一度走らせる**」判定を加えた：二箇所の gyp 罠を修正（交叉コンパイラを指す `gcc` shim、`better-sqlite3` への明示的な `--force_build=1`）；`build-package.yml` に `smoke-test` を新設 —— ビルド後に `develop/qemu-smoke-tests/<包名>.sh` を走らせ（ローカルと CI で同一のもの）、スクリプトが無くても binfmt ハンドラが無くても失敗と判定する。**検証**：二度のプッシュはそれぞれ 33 本の workflow がすべて success。
@@ -1290,7 +1282,6 @@
 | godot-ai | 3.2.4 | 3.2.5 |
 | dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
 
-
 ## 2026-09-03T04:41:42+09:00
 
 **概要**：docs(dsh-api-balance): 上流 StatsLine 横スクロール最適化提案を記録 — DeepSeek Harness Discussion #5458（上流は現時点で外部 PR を受け付けないため、Discussion + 準備済みブランチの形で公開）；fork Kihara777/deepseek-harness の準備済みブランチ `draft/statline-overflow-scroll`；本リポジトリには公式 `dsh-plugin` エコシステムトピックも追記（四言語のドキュメントを同期）
@@ -1369,7 +1360,6 @@
 | dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
 | 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
-
 
 ## 2026-09-11T07:38:00+09:00
 
@@ -1795,7 +1785,7 @@
 
 ## 2026-09-11T12:54:29+09:00
 
-**概要**：fix(dsh/module): allowLanSettings の $host.state.getSnapshot() 補丁を撤去 — dsh ≥ 0.1.5 の $host クライアントサービスは state を公開せず、旧補丁は client-ui-settings apply 時に undefined.getSnapshot を参照し前端全体が白画面（Failed to load plugins）。モジュールは allowLanSettings=true の強制 override をやめ（上流行為へ復帰）、packages/dsh.nix の補丁は無条件 "host" に変更。検証: ホーム 200、llm/listProviders が DeepSeek 提供方を返す。
+**概要**：fix(dsh/module): allowLanSettings の $host.state.getSnapshot() パッチを撤去 — dsh ≥ 0.1.5 の $host クライアントサービスは state を公開せず、旧パッチは client-ui-settings apply 時に undefined.getSnapshot を参照し前端全体が白画面（Failed to load plugins）。モジュールは allowLanSettings=true の強制 override をやめ（上流行為へ復帰）、packages/dsh.nix のパッチは無条件 "host" に変更。検証: ホーム 200、llm/listProviders が DeepSeek 提供方を返す。
 
 | コミット | 説明 |
 |------|------|
@@ -2729,14 +2719,6 @@
 | `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
 | `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
 
-## 2026-07-04T07:33:07+09:00
-
-**概要**：docs(MAINTENANCE) — 全 6 MAINTENANCE ファイル（zh/en/ja/katalish/pcn）に言語切替を追加
-
-| コミット | 説明 |
-|------|------|
-| `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
-
 ## 2026-07-04T06:41:28+09:00
 
 **概要**：blender-mcp 1.0.0 — 新規 Blender MCP Server パッケージ（Python ビルド、22 MCP ツール、Blender add-on 付属）
@@ -2815,22 +2797,6 @@
 | 　 | codewhale tui hash (×3) | all updated |
 | 　 | mcp-searxng source hash | `...` → `...` |
 | 　 | mcp-searxng npmDepsHash | `...` → `...` |
-
-## 2026-06-26T08:00:00+09:00
-
-**概要**：docs(MAINTENANCE): pcn 欠落していた28件の履歴エントリを補完、zh基準全93エントリを網羅
-
-| コミット | 説明 |
-|------|------|
-| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
-
-## 2026-06-26T07:35:00+09:00
-
-**概要**：docs(MAINTENANCE): en/ja/katalish 欠落していた10件の履歴エントリを補完、3言語すべてzh基準（92/92）に一致；pcn 一部補完（66/92）
-
-| コミット | 説明 |
-|------|------|
-| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
 
 ## 2026-06-26T07:18:56+09:00
 
