@@ -17,7 +17,7 @@
 
 ## 2026-10-05T14:24:37+09:00
 
-**摘要**：dsh-api-balance 薄包装 re-pin —— rev `911df2e` → `95fec42`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) 見）。維護者 二度目 反饋：漸隠 下端 限定、**上端 依然 一刀切**、且 追従按鈕**下方** 切断内容 露出。今 上下両端 **scroll 連動** 漸隠 変更：`none/start/end/middle` 状態機械、最上部 上端 模糊不、最下部 下端 模糊不（三状態 逐一 確認）；卡片 上端 限定 漸隠（卡片全体 mask 追従按鈕 淡 成）、按鈕下方 同色 埋 塞。二罠 踏 修正：① 注入時 要素 束縛 不及（上流 style 先、component 後）、scroll capture + MutationObserver + 500ms polling 補強；② `elementFromPoint` 被覆 検証 誤（埋 `pointer-events:none`、hit test 映 不）。四語文档 同期。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `911df2e` → `95fec42`（変更 其 提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) 在；版本 `0.1.1` 之侭）。維護者 二度目 反饋 依 質問 dialog 漸隠 修正：下端 限定 自 **scroll 連動** 上下 漸隠 至（`none/start/end/middle` 状態機械、最上部 上端、最下部 下端 漸隠 不）；卡片 全体 非 上端 限定 漸隠（全体 mask 追従按鈕 淡 至）、按鈕下 切断内容 同色 埋 塞。判定：三状態 逐一 確認。
 
 | 提交 | 説明 |
 |------|------|
@@ -31,7 +31,7 @@
 
 ## 2026-10-05T13:58:51+09:00
 
-**摘要**：dsh-api-balance 薄包装 re-pin —— rev `1f0af6c` → `911df2e`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) 見）。維護者 截图 見後 指摘：疑問 window 下端「一刀切」——題干 限高 下端 與 追従按鈕上方 各 **漸隠 mask** 敷（題干 `mask-image`、按鈕上 `::before` 漸変帯）。漸変色 注入時 **卡片実際底色** 取得（light `rgb(255,255,255)` / dark `rgb(44,44,46)`；固定色 深色 露見）。定量判据：題干下端 30px 平均輝度 59.93 → 45.92（約 23% 暗）、漸隠帯 之上（60–90px）不変；双方向対照 部署版 這些 assertion 実測 FAIL。四語文档 同期。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `1f0af6c` → `911df2e`（変更 其 提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) 在；版本 `0.1.1` 之侭）。維護者 screenshot 指摘 依 質問 dialog 下端「一刀切」解消：高 制限 題干 下端 `mask-image` 漸隠、追従按鈕 上 `::before` 漸変帯 敷、漸変色 注入時 卡片 実際 底色 自 取得（明 `rgb(255,255,255)` / 暗 `rgb(44,44,46)`；固定色 暗 露見）。判定：題干 下端 30px 平均輝度 59.93 → 45.92（約 23% 暗）、漸隠帯 之上（60–90px）不変。
 
 | 提交 | 説明 |
 |------|------|
@@ -45,7 +45,7 @@
 
 ## 2026-10-05T13:23:30+09:00
 
-**摘要**：dsh-api-balance 薄包装 re-pin —— rev `f805f4e` → `1f0af6c`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 與 [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9) 見）。維護者反饋 二点 変更：① 底部統計条 横 scroll **停用** —— 官方 0.2.0 統計条 各指標 click 可能 pill 化（開即「session 統計」dialog：模型用時 / TTFT / TPS / token / cache hit）、行内 scroll 不要 且 pill gesture 競合；設定行 置灰 官方方案 明記、旧版 注入 style 清掃。② 疑問 window **依然 選択肢 遮蔽** —— 長題干 header 実測 948px 対 卡片可視域 398px、吸頂 不透明 header 遮蔽板 成；header 高 制限（≤40vh）自身 scroll 化 吸頂 廃止、実測 三選択肢 全部 視口内 復帰（664px 中 533–661px）。判据：本 package **build 産物** 対象 `develop/ab-ui` 14 項目（C2/C6「機構」→「結果」変更）、稼働樹 `develop/check-deployed-artifact.py` 三特徴串 照合。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `f805f4e` → `1f0af6c`（変更 其 提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 在；版本 `0.1.1` 之侭）。維護者 反饋 依 二点：① 下部 統計条 横 scroll **廃止**（公式 0.2.0 各指標 click 可能 pill 化、設定行 置灰）；② 質問 dialog header 高 制限（≤40vh）自身 scroll、追従 廃止——長 題干 選択肢 隠 為。判定：本 package **build 産物** 対象 `develop/ab-ui` 実行（C2/C6「結果」層 至 変更）、稼働樹 `develop/check-deployed-artifact.py` 三特徴串 照合。
 
 | 提交 | 説明 |
 |------|------|
@@ -59,7 +59,7 @@
 
 ## 2026-10-05T07:45:26+09:00
 
-**摘要**：CI 修正 —— 浮動入力 `llama-cpp-ver` 「認証付 取得 + 本地 上書」至 変更、`api.github.com` 之 403 制限 根治。該入力 **通常 URL 入力** 在、実測 依 無 Nix `access-tokens` / `netrc-file` 此類 fetch 至 **付与 不**（判据：該 host 至 **偽 token** 配、未取得 之 同 host URL 取得——認証 header 真 送出 場合 GitHub 必 401 `Bad credentials` 返。実測 fetch **成功**、未認証 枠 一 減）。故 各 job 未認証 request 一 回 打、runner IP 共有 之 60 回/時 枠 尽 時 403：実測 二 回 赤、応答体 共 `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。現在 先 `gh api`（認証、5000 回/時）同一 JSON 取得、`--override-input llama-cpp-ver path:<json>` 以 Nix 至 渡。意味 不変（overlay `json.tag_name` 唯 読）。取得 不能、`tag_name` 欠落 **明示的 失敗**、上書 parameter 空 場合 亦 明示的 失敗（未認証 経路 至 暗黙 退避 不）。`access-tokens` 残 —— 担当 `github:` 取源 也。AGENTS.md 與 `nixkits-check-updates` 技能 之「両 host 根治」旧結論 実測 合 訂正 済。
+**摘要**：CI 修正 —— 浮動入力 `llama-cpp-ver` 「認証付 取得 + 本地 上書」至 変更、`api.github.com` 之 403 制限 根治。該入力 **通常 URL 入力**、Nix `access-tokens` / `netrc-file` 此類 fetch 至 **付与 不**、故 各 job 之 未認証 request runner IP 共有 之 60 回/時 枠 尽（403）。現在 先 `gh api` 同一 JSON 取得、`--override-input llama-cpp-ver path:<json>` 以 Nix 至 渡：意味 不変（overlay `json.tag_name` 唯 読）、`tag_name` 欠落 **明示的 失敗**。`access-tokens` 残 —— 担当 `github:` 取源。
 
 | 提交 | 説明 |
 |------|------|
@@ -69,7 +69,7 @@
 
 ## 2026-10-05T07:14:50+09:00
 
-**摘要**：dsh-api-balance 薄包装 re-pin —— rev `8dab668` → `f805f4e`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208) 見）。移動端「session 切替時 keyboard 不表示」此前**依然失效**：実際 `focusin` cancel 不可（插件 `preventDefault` 死 code）、軟 keyboard 於 `focus` 瞬間要求済、後 blur 補救而已。今入力欄 用户 tap 以前編集不可維持、程序性聚焦 keyboard 喚出不能；tap / 按鍵 即時復帰、焦点離脱 再武装。判据 真因果鏈 交換：session 切替中「編集可能入力欄 focus 落下」回数 0（部署版 2）、tap 後 通常入力可、`develop/ab-ui/` 14 条界面判据 本 package **build 産物** 対象 全通過。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `8dab668` → `f805f4e`（変更 其 提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208) 在；版本 `0.1.1` 之侭）。mobile「session 切替時 keyboard 不表示」**依然 効 不**：実際 `focusin` cancel 不可（当時 `preventDefault` 死 code）、軟 keyboard `focus` 瞬間 要求。入力欄 使用者 tap 以前 編集不可、tap / 按鍵 即時復帰、焦点 離脱 再武装。判定：session 切替中 編集可能 入力欄 至 focus 落下 回数 0（deploy 版 2）、`develop/ab-ui/` 本 package **build 産物** 対象。
 
 | 提交 | 説明 |
 |------|------|
@@ -83,7 +83,7 @@
 
 ## 2026-10-04T09:23:29+09:00
 
-**摘要**：fix(dsh-preset-news-three-elements): 預設 插件 之 会話消息 来源 v4 形状 至 変更 —— dsh 0.2.0 之 会話格式 v4 字面量 `kind: "plugin"`（v3 時代 之 插件来源形状）唯 拒。本 repo 預設 插件 其 丸写、故 插件 消息 一件 書 毎 准入 拒否、症状 session 全体「本機実行失敗」、error 唯 `format v4 message requires a producer-owned source kind` 一句。2026-10-03 実測：掌灯模式（私有 repo）之 `journal-catchup` 新規 session 開始毎 注意書 一件 steer、故 0.2.0-rc.2 上 新規 session 作成毎 崩、session file 消息 一件 亦 残 不、維護者 会話 続 為 系統 巻戻 之外 無（v4 会話 旧版 読 不）。本 repo 三箇所 `{ kind: `plugin:${name}`, form: "notice", summary }` 至 変更（`news-language.js` ×1、`news-material.js` ×2）、test 断言 `source.plugin` 自 `source.kind` 至、`user-approval` 模 二 夹具 `{ kind: "user-approval", form: "notice" }` 至 変更；更 自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` 接続）追加、「本 repo 預設 插件 `kind: "plugin"` 出 不」固定（正逆 両方向 検証：旧形状 注入 → 行番号 付 捕捉）。四語 `docs/*/dsh.md`「会話格式 v4 之 消息来源 准入」節 追加。
+**摘要**：fix(dsh-preset-news-three-elements): 預設 插件 之 会話消息 来源 v4 形状 至 変更 —— dsh 0.2.0 之 会話格式 v4 字面量 `kind: "plugin"` 唯 拒、本 repo 預設 插件 其 丸写、故 消息 書 毎 准入 拒否、session 全体「本機実行失敗」至。三箇所 `{ kind: `plugin:${name}`, form: "notice", summary }` 至 変更（`news-language.js` ×1、`news-material.js` ×2）、test 断言 `source.plugin` 自 `source.kind` 至；更 自検 `session-sources`（`develop/check-session-sources.py`、`nix flake check` 接続）追加、「本 repo 預設 插件 `kind: "plugin"` 出 不」固定。
 
 | 提交 | 説明 |
 |------|------|
@@ -91,7 +91,7 @@
 
 ## 2026-10-03T09:49:14+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606) 見）。dsh 0.2.0 上 界面改善 逐項 確認 時、**静 失効** 二 件 発見：① 「下部 統計 条 横 scroll」 **dsh 0.1.5 以降 効 無** —— 上流 style module 自 `StatsLine.module.css` `StatsPills.module.css` 至 改名（実測：0.1.2 `StatsLine` 9 箇所、0.1.5 / 0.1.6 / 0.2.0 0 箇所）。插件 旧名 唯 見、style tag 見 無 侭 5 回 retry 後 自己 外、而 設定 其 行 On 表示 侭。現在 両名 試、諦 時 console 一度 警告 出。② 三 token 0.2.0 存在 無（実行時 実測 「未定義」）：`--dsw-alias-separator-primary`（18 箇所 境界線、**fallback 無** → `currentColor`＝文字色 退化）、`--dsw-alias-danger-primary` 與 `--dsw-alias-warning-primary`（hardcode 値 支、見 正）。現在 0.2.0 対応先 至 連鎖（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`）、末尾 元 hardcode 値 0.1.x 向 保存。**判定**（隔離実例 + 本地 stub model + Playwright、deploy 版 與 修正版 各 一度 実測）：統計条 「注入 tag 無、`overflow-x:visible`」 自 「tag 有、`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」 至；境界線 `rgb(97,102,107)` → `rgba(0,0,0,.1)`；peak ring `rgb(229,72,77)` → `rgb(236,19,19)`。同 確認 今 也 有効：質問 dialog 全頁 scroll、mobile keyboard 守護（A/B）、peak 赤 表示 與 aria 標識、ring 差替、panel 二 tab 與 設定 dialog 材質。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `700fbbc` → `8dab668`（版本 `0.1.1` 之侭）。dsh 0.2.0 上 界面改善 逐項 確認 時、**静 失効** 二 件 発見 修正：① 下部 統計条 横 scroll **dsh 0.1.5 以降 効 不** —— 上流 style module 自 `StatsLine.module.css` `StatsPills.module.css` 至 改名、插件 旧名 唯 見 侭 設定 其 行 On 表示 侭；② 三 token 0.2.0 存在 不、内 `--dsw-alias-separator-primary` 18 箇所 境界線 担 **fallback 無**；現在 0.2.0 対応先 至 連鎖。判定：隔離実例 + Playwright（deploy 版 二項目 共 失効）。
 
 | 提交 | 説明 |
 |------|------|
@@ -105,7 +105,7 @@
 
 ## 2026-10-03T06:45:00+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（版本 仍 `0.1.1`；子倉 維護日誌 無、変更 其 提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 與 [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc) 見）。本次 **実行時挙動 之 修正**、版本 発布 非。**何 修正 為**：① **回車交換 之 導入 部品 lifecycle 自 移出** —— dsh 0.2.0 composer chain slot（`conversation.composer`）化、質問 / 承認 / 子代理 **composer 全条 接管**。其 瞬間、環 部品 slot 與 共 卸载、交換器（Enter = 改行、Shift+Enter = 送信）也 同時 外、而 **画面 当時 完全 正常 見**。現在 `apply()` 内 導入、**編集可能** composer 之 的 作用（工作区 未選択 時、同一 `data-composer-input` 之 div 工作区 menu 之 keyboard trigger 也）。② **面板 / 弾窓 材質 0.2.0 原生 配方 依 書直** —— 0.2.0 `--dsw-specific-menu` 実色（0.1.x 之 `--dsw-alias-bg-layer-3`）自 **半透明** menu surface fill（明 `#f8f9fa94` / 暗 `#43454a73`）至 変更、原生 menu 層 必 `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）重 初 成立。插件 旧 配方 之 侭、結果 面板 **真 透明**、背後 会話 内容 透。主 面板 原生 `JObwrW_panel`（fill + blur 効果 + elevation + `border: 0`）踏襲、三 弾窓 原生 `VOzbGW_panel` 配方（不透明 `--dsw-alias-bg-layer-2` + elevation）至 —— **二 材質 混用 不可**。新 二 token fallback 付、0.1.x 透明 退行 無。**判定**（隔離実例 + 0.2.0-rc.2 + Playwright computed style 実測、明 / 暗 各）：面板 `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同 blur；設定 弾窓 `rgb(255,255,255)` / `rgb(44,44,46)`、本機 原生 設定 面板 與 一致；回車交換 新規 / 会話 / 触 模擬 三 状態 実 Enter `<br>` 追加（回帰 無）。
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `76ea584` → `700fbbc`（変更 其 提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 在；版本 `0.1.1` 之侭）。**実行時挙動 之 修正**：① 回車交換 導入 部品 lifecycle 自 移出 —— dsh 0.2.0 之 chain slot `conversation.composer` 接管 時 環 部品 slot 與 共 卸载、交換器 静 外 為、現在 `apply()` 内 導入；② 面板 / 弾窓 材質 0.2.0 原生 配方 依 書直 —— `--dsw-specific-menu` 半透明 化 `backdrop-filter` 重 要 有、旧 配方 面板 真 透明 為。判定：Playwright computed style 実測。
 
 | 提交 | 説明 |
 |------|------|
@@ -119,7 +119,7 @@
 
 ## 2026-10-03T06:15:29+09:00
 
-**摘要**：維護日誌 之 **未訳条目** 補完：ja **80** 条、pcn **59** 条 —— 其等 之 摘要 行 `**Summary**` 標記 + 英文 或 中文 之 旧稿、而 当時 之 五 条 検査 **全部 通過**（条目数 斉、時間戳 正、SHA 集合 正、仮名 検査 也 通過 —— 英文 仮名 無）。新 查明 一 点：摘要 **旧稿 時 内容 本身 亦 現 zh 源 與 不一致**、故 zh 源 按 **行 全体 置換**、唯 標籤 交換 非。検査器 第 6 条 「**摘要 標記 本語 之 者 須**」 追加、二 項 反証 各自 赤 転（ja `**Summary**` 用 → 赤；en `**概要**` 用 → 赤）。同一 穴 当日 三 回 踏 —— **判据 誤 時、数字 同様 自信 見**（CJK 占比 閾値 `codewhale 0.8.49` 此 類 ASCII 依 希釈；pcn 対 更 「漢字 多」 未訳 当成）。**検証**：`nix flake check` 全緑；四語 各 358 条、ja / pcn 均 0 条 残留。
+**摘要**：維護日誌 之 **未訳条目** 補完：ja **80** 条、pcn **59** 条 —— 其 概要行 `**Summary**` 標記 + 英語 或 中国語 之 旧稿、内容 自体 亦 現行 zh 源 與 食違、故 zh 源 通 **行 毎 置換**。検査器 第 6 条 「**概要 標記 該 言語 自身 之 者 須**」 補、ja 之 `**Summary**` 與 en 之 `**概要**` 各自 反証 以 赤 転。**検証**：`nix flake check` 全緑；四語 各 358 条、ja / pcn 共 残留 0 条。
 
 | 提交 | 説明 |
 |------|------|
@@ -128,7 +128,7 @@
 
 ## 2026-10-03T05:16:47+09:00
 
-**摘要**：維護日誌 之 **倍率 判据 第二 特徴 補**：反引号 占比。唯 見 CJK 密度 則 過大 評価 —— 実測 密度 0.646 之 一 条目、唯 依 密度 取 隊列（n=34） 平均 **2.37**、据此 判定 「短 偏」；反引号 占比 加 入 最近隣（n=15） 平均 **1.98**、交付 之 1.95 正 其 処 落。反引号 内容 逐字 照抄 者、占比 高 程 倍率 1 近 —— **此 機制 技能 内 本来 記載 有、但 判据 内 未 携、故 判据 自身 一度 自欺**。今 「同構造 + 同密度 隊列 比較」 改、順序 **先 同一 構造 内 比較、再 長短 論**。**検証**：`nix flake check` 四語 全緑。
+**摘要**：維護日誌 之 **倍率 判定 第二 特徴 補：反引号 占比** —— CJK 密度 限 則 過大 評価：密度 0.646 之 条目 密度 限 之 帯（n=34） 平均 **2.37** 以 「短」 判定、然 反引号 占比 加 最近隣（n=15） 平均 **1.98**、納品 之 1.95 其処 落。反引号 中身 逐字 写 故 占比 高 程 倍率 1 近；現在 「同構造 + 同密度 帯 比較」 改。**検証**：`nix flake check` 四語 全緑。
 
 | 提交 | 説明 |
 |------|------|
@@ -136,7 +136,7 @@
 
 ## 2026-10-03T05:13:21+09:00
 
-**摘要**：`blender-mcp` / `obs-bilibili-stream` 二 箇所 之 riscv64 排除、其 **理由 正確 改**：「依存 連鎖 交叉 編譯 欠陥」 非、而 **主 依存 nixpkgs 内 該 架構 宣言 無** 也。探針 実測 依、両者 皆 **評価 段階** 於 即 拒否 —— `blender 5.2.2` 之 `meta.platforms` 唯 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux` 三 種、`obs-studio 32.2.2` 同 唯 `x86_64-linux`/`i686-linux`/`aarch64-linux` 三 種、`Refusing to evaluate package …` 旨 報告 也。今 依存 名、上流 宣言 之 架構 一覧 與 拒否 原文 全部 明記、判据 `pkgs.<dep>.meta.platforms`（**編譯 錯誤 非**）。**検証**：`nix flake check` 四語 全緑。
+**摘要**：`blender-mcp` / `obs-bilibili-stream` 二 箇所 之 riscv64 除外、**理由 正**：「依存 連鎖 之 交叉 編譯 欠陥」 非、而 **主 依存 nixpkgs 側 以 該 構造 宣言 無**（`blender 5.2.2`、`obs-studio 32.2.2` 之 `meta.platforms` 何 也 riscv64 含 不、評価 段階 以 拒否）；判定 `pkgs.<dep>.meta.platforms` 而 **編譯 錯誤 非**。**検証**：`nix flake check` 四語 全緑。
 
 | 提交 | 説明 |
 |------|------|
@@ -144,7 +144,7 @@
 
 ## 2026-10-03T04:53:28+09:00
 
-**摘要**：`AGENTS.md` 之 部署 照合 判据 「文件 内容 見」 自 「単元 参照 見」 換。旧 文言 要求 再起 後 `cordis.patch.yml` 内 store 路徑 翻新 済 確認、而 実測 **dsh 0.2.0 起動 時 該 文件 重写**（preStart 17:33:10 1747 行 複製、dsh 17:33:11 1781 行 変更、其後 又 一 度 変）——落盤 者 dsh 自身 之 直列化 結果、内容 依 比較 **唯 偽陰性 得**、成功 一 回 之 部署 失敗 判定。新 判据：稼働 単元 pre-start 脚本 参照 之 store 路徑 與 現在 設定 生成 之 該 份 比較（二 条 命令 文書 書込）、本機 実測 一致 済。**検証**：`nix flake check` 全緑。
+**摘要**：`AGENTS.md` 之 配備 確認 判定 「書類 内容 見」 自 「**単元 参照 見**」 至 変更：dsh 0.2.0 起動 時 `cordis.patch.yml` 書換 故、書出 者 dsh 自身 之 直列化 結果、内容 以 比較 則 **偽陰性** 限 得、成功 之 配備 失敗 判定。新 判定、稼働 中 単元 pre-start 脚本 参照 之 store 路徑 與 現在 設定 生成 之 者 比較（二 指令 文書 記載）；本機 実測 一致。**検証**：`nix flake check` 全緑。
 
 | 提交 | 説明 |
 |------|------|
@@ -152,7 +152,7 @@
 
 ## 2026-10-03T04:43:18+09:00
 
-**摘要**：二 箇所 之 **我 自身 導入 失守** 修正、皆 「総量 緑、詳細 漏」 属。**① 検査 「表 全体 消失」 見 不能**：`check-maintenance-log.py` 従来 四 条 規則 全 総量 見（条目数、全局 SHA 重複 除去、行級 仮名）、故 我 新条目 三言語 組入 時 唯 標題 與 摘要 書、**提交 表 欠落**、脚本 依然 「354 entries … all passed」 出力。第 5 条 **構造 対等** 追加：各 条目 之 提交 SHA 集合、四語 zh 與 一致 須（zh 本来 表 無 之 歴史 5 条、訳文 亦 有 不 該）。**② 我 技能 記載 之 倍率 判据 自体 誤**：全倉 平均値（`en/zh` ≈ 1.84）以 訳文 冗長 否 判断、而 実測 CJK 密度 與 倍率 之 相関係数 **r = 0.90**——同密度 群 平均 2.29、被 「超過」 判定 之 該 条 実 群 平均 下 回；平均 従 実行 者、唯 **内容 削除** 誘発、防 欲 「水増」 與 同一 硬貨 之 表裏 也。同密度 群 内 比較 変更、或 「en 文字 ÷ zh 之 CJK 文字」 此 密度 無関係 量 用。**検証**：`nix flake check` 全緑；検査 之 三 項 反証（表 全体 削除 / SHA 一 桁 変更 / 条目 全体 削除）全部 赤 転。
+**摘要**：**我 自身 導入 失守** 二 箇所 修正。**① 検査 「表 全体 消失」 見 不能**：`check-maintenance-log.py` 従来 四 条 何 也 総数 限 見、標題 與 概要 限 書 **提交 表 落** 也 通過；第 5 条 **構造 対等** 補（各 条目 之 提交 SHA 集合 四語 zh 與 一致 須）。**② 技能 内 書 倍率 判定 自体 誤**：全倉 平均（`en/zh` ≈ 1.84） 以 訳文 冗長 判定、而 実測 CJK 密度 與 倍率 之 相関係数 **r = 0.90** —— 同密度 帯 平均 2.29、「超過」 判定 之 条目 実際 帯 下回；平均 従 則 **内容 削** 事 強 之外 無。同密度 帯 比較 改。**検証**：`nix flake check` 全緑；検査 之 三 反証（表 全体 削除 / SHA 一 桁 改変 / 条目 全体 削除）全部 赤 転。
 
 | 提交 | 説明 |
 |------|------|
@@ -161,7 +161,7 @@
 
 ## 2026-10-03T04:38:34+09:00
 
-**摘要**：`write-maintenance-log` 対 **可測 之 長度 規範** 追加、且 自作 四 条 条目 之 摘要 1674–3784 文字 自 312–444 至 圧縮 回。原因 摘要 完全 状態 記述 化 —— 機構 導出、錯誤 原文、CI 日誌 全部 含、而 詳細 本来 別 之家 有（commit message / 包定義 冒頭 / `AGENTS.md`）。規範 三 条：摘要 唯 「何 変更 / 何故 / 如何 検証」 答、目標 ≤ 400 文字；**訳文 倍率 全倉 実測 値 整合**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明確 超過 即 展開式 冗長 属）；**摘要 内 「何故 此 錯誤 発生」 説明 場合、該 一 段 此処 置 適切 非**。**検証**：`nix flake check` 四語 自検 全緑；四 条 圧縮 後 情報 欠落 無（詳細 皆 commit message 與 包定義 冒頭 自 参照 可能）。
+**摘要**：`write-maintenance-log` **可測 之 長度 規範** 補、自作 四 条 之 概要 1674–3784 文字 自 312–444 至 圧縮：概要 「何 変 / 何故 / 如何 検証」 限 答、目標 ≤ 400 文字；**訳文 之 倍率 同構造 之 実測値 整合**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明確 超過 則 水増）；「此 錯誤 何故 生」 説明 段落 此処 書 不。**検証**：`nix flake check` 之 四語 自検 全緑；四 条 共 圧縮 後 情報 欠落 無。
 
 | 提交 | 説明 |
 |------|------|
@@ -169,7 +169,7 @@
 
 ## 2026-10-03T04:27:03+09:00
 
-**摘要**：`opencode-telegram` 之 riscv64 **「摘除」 自 「構築」 改 回**、且 「**産物 真 実走 一 回**」 此 判据 追加。二 箇所 之 根因 同型 —— gyp **空串** 他 種別 扱：交叉 PATH 上 裸 `gcc` 無 ⇒ `"" >= 7` 例外 抛；`better-sqlite3` 之 `prebuild_exists` 同様 空串 化 ⇒ target `type: none` 至 退化、`make` 只 stamp 蓋。修法 各 交叉 編譯器 向 指 之 `gcc` shim 與 顕式 `--force_build=1`。`build-package.yml` `smoke-test` 新規 追加：構築 後 `develop/qemu-smoke-tests/<包名>.sh` 走（本地 與 CI 同一 份）、脚本 無 也 binfmt 処理器 無 也 共 失敗 判定。**検証**：二 回 push 各 33 個 workflow 全部 success。
+**摘要**：`opencode-telegram` 之 riscv64 **「摘除」 自 「構築」 至 戻**、且 「**産物 真 実走 一 回**」 判定 追加：二 箇所 之 gyp 罠 修正（交叉 編譯器 指 之 `gcc` shim、`better-sqlite3` 明示 `--force_build=1`）；`build-package.yml` `smoke-test` 新設 —— 構築 後 `develop/qemu-smoke-tests/<包名>.sh` 走（本地 與 CI 同一 者）、脚本 無 也 binfmt 処理器 無 也 失敗 判定。**検証**：二 回 push 各 33 個 workflow 全部 success。
 
 | 提交 | 説明 |
 |------|------|
@@ -184,7 +184,7 @@
 
 ## 2026-10-03T02:26:58+09:00
 
-**摘要**：`opencode-telegram` **riscv64 構築 摘除** —— 転緑 構築 修正 依 非、而 本来 使用 不可 能 之 平台 停止 構築 依。事実 二 件：該 job **一直 緩衝 依 仮緑**（日誌 内 一 行 構築 也 無、取得 者 前 一 版 0.25.3 之 産物）；真 構築 則 `better-sqlite3` 於 卡 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 又 `install` script 取消、読込器 二 路 全 空。産物 **構築 能、一 起動 即 抛**、故 `blender-mcp` / `obs-bilibili-stream` 之 同一 先例 按 摘除。**検証**：x86_64 / aarch64 影響 無。
+**摘要**：`opencode-telegram` **riscv64 構築 摘除** —— 転緑 構築 修正 依 非、而 本来 使用 不可 能 之 平台 停止 構築 依：該 job **一直 緩衝 依 仮緑**（日誌 内 一 行 構築 也 無、産物 前 版 0.25.3）；真 構築 則 `better-sqlite3` 於 卡 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 `install` 脚本 取消；産物 **構築 能、一 起動 即 抛**、故 `blender-mcp` / `obs-bilibili-stream` 之 同一 先例 按 摘除。**検証**：x86_64 / aarch64 影響 無。
 
 | 提交 | 説明 |
 |------|------|
@@ -196,7 +196,7 @@
 
 ## 2026-10-02T20:38:40+09:00
 
-**摘要**：**判据 盲点** 二 箇所 與 **同名 衝突** 一 箇所、何 也 注入 / 対照 実測 依 発見。**① `doc-links` 之 切替器 判据 盲点 補**：旧版 只 `lines[:8]` 内 切替器 行 発見 時 検証、「行 全体 削除」 與 「第 8 行 以降 落」 故 一直 静黙 通過 —— 四 份 `docs/*/ruyi.md` 従来 未 検証；現在 改：`docs/` 下 必須 切替器 帯、**全文** 内 探査。**② 預設 組合 記述 技能 副本 自帶 不再**：二 份 技能 上流 與 **同名 然 内容 分岐**、我 等 之 該 份 尚 0.1.x 之 目録式 模型 上 停、上流 該 份 掛 且 断言 釘。**③ persona 過期 説法 削除**（模型 送 進 之 提示詞 改寫 者 挙動 変更 属、維護者 単独 承認 依）。**検証**：`nix flake check` 全緑；預設 使捨 `0.2.0-rc.2` 実例 内 投入、**9 条 預設 `broken` 全 空**。
+**摘要**：二 箇所 之 **判定 盲点** 與 一 箇所 之 **同名 衝突**：`doc-links` 之 切替器 判定 `docs/` 配下 必須 且 **全文** 検索 至 変更（旧版 `lines[:8]` 限 見、「行 全体 削除」 與 「第 8 行 以降」 何 也 静黙 通過 —— 四 份 之 `docs/*/ruyi.md` 一 度 也 検証 無）；預設 組合 記述 技能 之 副本 自前 持 不 形 至（上流 與 **同名 且 内容 分岐**、上流 之 者 掛 断言 以 固定）；persona 之 陳腐化 記述 除去。**検証**：`nix flake check` 全緑；預設 使捨 `0.2.0-rc.2` 実例 至 投入、**9 条目** 之 **`broken`** 全 空。
 
 | 提交 | 説明 |
 |------|------|
@@ -205,7 +205,7 @@
 
 ## 2026-10-02T19:54:49+09:00
 
-**摘要**：dsh 両 通道 共 **0.2.0-rc.2** 至 跨（0.1.x → 0.2.x 世代断絶）、且 **Agent 預設 移行 之 落地** 完了。**① 通道 語義**：dist-tag 実測 `latest` = `next` = `0.2.0-rc.2`、`alpha` = `0.1.7-alpha.2` —— **`alpha` `latest` 比 低**、故 `dsh-alpha` `next` 追 改；両 通道 同一 tarball 指、hash 與 lock 共用。**② 預設 格式 断層**：0.1.x 之 目録式 通道 上流 整条 削除 被、HEAD 従此 新格式 限 維護；旧 格式 新規 追加 之 釘-rev 包 提供。**③ 模組 接線**：預設 `preset.patch.yml` 逐字 模組 生成 之 `cordis.patch.yml` 内 併 改；來源 `passthru.dshChannel` 按 二 択 一；旧 settings 鍵 現在 断言 以 遮断。**検証**：四語 自検 全緑；使捨 実例 実走 依 預設 與 技能 根 解析 確認。
+**摘要**：dsh **0.2.0-rc.2** —— 二 通道 共 世代 跨（0.1.x → 0.2.x）、且 **Agent 預設 移行 之 落地** 完了：実測 `alpha` `latest` 比 低（`latest` = `next` = `0.2.0-rc.2`）、故 `dsh-alpha` `next` 至 追随；両 通道 同一 tarball 指 且 hash 與 lock 共用。0.1.x 之 目録式 預設 上流 全体 削除、旧 格式 新設 之 rev 釘 包 提供。部品 `passthru.dshChannel` 以 二択、`preset.patch.yml` **逐字**、生成 之 `cordis.patch.yml` 至 差込 形 変更；旧 settings 鍵 断言 以 止。**検証**：四語 之 自検 全緑；使捨 実例 実走 預設 與 技能 根 之 解決 確認。
 
 | 提交 | 説明 |
 |------|------|
@@ -227,7 +227,7 @@
 
 ## 2026-10-02T18:02:46+09:00
 
-**摘要**：feat(dsh): preset 移行 準備 —— 0.2.0 新形式 `preset.patch.yml` 與 派生検査 適配（四言語）— **0.2.0 preset 機構 再構築**：preset 「`$DSH_HOME/.agent-presets/<id>/` 目录 + `agent.cordis.yml`」 非、**一本 loader patch 条目**（`- insert:` → `@deepseek-ai/dsh-agent-preset`、插件行 `config.plugins` 至）、落点 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`。**26 包 schema 插件単位 照合 結果、変化 6 箇所 全 新規 任意 field、既存設定 不正 化 者 一 也 無**；最 鋭 `dsh-tool-bash` / `dsh-tool-pwsh` 追加 `promoteOnTimeout`（既定 `true`）—— 前面 bash timeout 「殺」 自 「背景 job 昇格」 変、然 本 files 該 key 一 字 也 書 不。**旧 file 其侭 写 壊 三箇所**：① `baseUrl` 実測 `$DSH_HOME/profiles/<profile>/` 意味 化、旧 書方 **mount 成功 然 技能 静黙 消** —— 新 file 包根 解決 且 **存在 guard** 付；② metadata `config.name` / `description` 移、file 全体 byte 派生 不可 故 派生 `plugins:` 本文 載替；③ `config.order` 新 key。**実機検証**（使捨 0.2.0 実例）：組込 4 + `nixos` + `maintenance` + `lampkeeper` 7 条目、**全 `broken` 空**；反証 **実 file 複製 一行 限 変** 方式、四 複製 各 具体的 `broken` 報告。**本段階 実行時 変更 一切 落地 不**：module 未着手、dsh 版 未変更、`news-three-elements` 未変換、挙動 既定値 記録 限。**併 判明：`ocean-spiral` repo 也 播種 也 持 不** 故、0.2.0 来 則 roster 自 丸 消 —— 移行 先 「家」 必要。
+**摘要**：feat(dsh): 預設 移行 之 準備 —— 0.2.0 之 新形式 `preset.patch.yml` 與 派生 検査 之 適応（四言語）：預設 目録式 `agent.cordis.yml` 自 一本 之 loader patch 条目（`- insert:` → `@deepseek-ai/dsh-agent-preset`） 至 変更、落点 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`；26 包 之 schema 拡張 単位 照合、6 箇所 之 変化 全部 新規 之 任意 field；「其 侭 写 則 壊」 三 箇所 修正（`baseUrl` 当該 profile 目録 指 様 変更、metadata `config.name` / `description` 至、`config.order` 新 key）。**検証**：使捨 0.2.0 実例 之 7 条目 預設 以 `broken` 全 空；反証 一行 限 変 各自 具体 之 `broken` 報告。
 
 | 提交 | 説明 |
 |------|------|
@@ -235,7 +235,7 @@
 
 ## 2026-10-02T17:39:30+09:00
 
-**摘要**：feat(dsh): 宣言的設定面 補全 —— 構造化 option 7 → **13**、新規 6 型別 namespace（四言語）— 補 者 正 維護者 本機 使用 中 三：`permission`、`web-search-deepseek`、`agent-presets`（以前 無型 `cfg.settings.<ns>` 逃生口 限）、更 `subagent`、`shell`、`llm-deepseek`。**此 options 意義** 「誤記 / 範囲外 実行時 静黙 破棄」 **求值期 error** 化。**併 実測 依 既存判断 三箇所 修正**：① namespace 総数 **12 → 15**（旧 grep `installSection` 限 見、`settings.register` 経路 漏）；② 「`shell.cwd` 既定値 無 ⇒ 部分宣言 不可」**誤** —— schemastery 内 `.required()` 無 字段 本来 任意；③ module 冒頭 「typo 與 範囲外 何 也 静黙」**半分 限 正** —— 実測 object **開放**、typo 保持（真 field 既定値 食、完全 静黙）、然 型 誤 / 範囲外 **鳴**（該 namespace 登録 失敗、熱更新 `keeping last good` warn）。注釈 與 四言語文書 正確 記述 変更。**意図的 不実行**（理由 注釈 記載）：`llm-pi-ai`（`api` 列挙 pi-ai 版 依 移 開放集合、型付 腐）、`ui-onboarding`（純 client 状態）、`web-search-deepseek.apiKey`（`role("secret")` —— settings.yaml 記載 鍵 世界 読 可能 `/nix/store` 置 等）。**検証**：最小 NixOS 設定（13 段 全有効 + 逃生口 一箇所 上書）求值 通過；生成 `settings.yaml` 全 新設段 含、`builtins.fromJSON` 解析 可能、逃生口 構造化値 優先；負例（enum / 型 / 範囲 / 横断 field assertion）各 求值期 error；`nix flake check` 全緑、且 検査 対象 source snapshot 作業 tree 與 **byte 単位 一致** 確認（古 cache tree 非）。
+**摘要**：feat(dsh): 宣言的 設定面 之 補完 —— 構造化 option 7 → **13**、型別 namespace 6 新設（`permission`、`web-search-deepseek`、`agent-presets`、`subagent`、`shell`、`llm-deepseek`）——「誤記 與 範囲外 実行時 静黙 破棄」 至 **求値期 之 誤謬** 変更；併 既存 判断 三 箇所 修正（namespace 総数 **12 → 15**；「`shell.cwd` 既定値 無 ⇒ 部分宣言 不可」 誤；「typo 與 範囲外 何 也 静黙」 半分 限 正）。**検証**：最小 之 NixOS 設定（13 段 全部 有効 + 逃生口 以 1 箇所 上書） 求値 通過、生成 之 `settings.yaml` 全 新設段 含 且 `builtins.fromJSON` 以 解析 可能、負例 各自 求値期 誤謬；`nix flake check` 全緑。
 
 | 提交 | 説明 |
 |------|------|
@@ -243,7 +243,10 @@
 
 ## 2026-10-02T17:33:52+09:00
 
-**摘要**：godot-ai 4.1.0 → 4.2.3（構造的昇級）— fail-closed 実行時 pin 表 **9 項 自 14 項** 拡大：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `mcp-types` / `httpx2` / `httpcore2` / `sniffio` 新規追加。**`mcp-types` nixpkgs 内 存在 不**（2.x wire types 独立配布物 分割）故、上流 同一 repo `src/mcp-types/` 子 project 自 定義 新規追加。**今回 最 重要 発見 構造的欠陥**：二 overlay 以前 各自 `python312.override { packageOverrides = …; }` 記載、然 連鎖 `.extend` 下 **後者 前者 置換** —— fastmcp overlay Python 上書 全部 **静黙 破棄**（`fastmcp-slim` 実際 nixpkgs 旧版 侭）、**然 構築 成功 続**。過去 事故「片方 限 連鎖 古 依存 残」真 根因 此 在。nixpkgs 公式 重 合 可能 拡張点 `pythonPackagesExtensions`（順序 依存 不）変更。**検証 四**：構築 通過；**成果物 自身 実行** `godot-ai 4.2.3`（fail-closed 検証 起動 拒否 不）；成果物 自身 PYTHONPATH 以 `importlib.metadata` 照会 **14/14 正確 一致**；`nix flake check` 全緑（6 check 実際 構築）。`dontCheckRuntimeDeps` **削除**、構築期 hook 同 pin 表 一段 早 判定。**汎化**：汎用技能 「罠 8 · 連鎖 overlay 後 python 上書 前者 静黙 置換」追加。
+**摘要**：godot-ai 4.1.0 → 4.2.3 — fail-closed 之 pin 表 9 項 自 14 項 至（`mcp` 1.29.1 → 2.2.0、`fastmcp` 3.4.7 → 4.0.5、更 `mcp-types` 等 新規追加）
+- `mcp-types` nixpkgs 於 存在 不 故、上流 同一 倉庫 之 `src/mcp-types/` sub project 自 定義 取得
+- 二 overlay 之 `python312.override { packageOverrides = …; }` 連鎖 `.extend` 於 互 置換、上書 静 破棄 侭 構築 成功；現在 `pythonPackagesExtensions` 使用
+- 判定：構築 通過、`godot-ai --version` 実行 4.2.3、`importlib.metadata` 14/14、`nix flake check` 全緑
 
 | 提交 | 説明 |
 |------|------|
@@ -258,7 +261,7 @@
 
 ## 2026-10-02T17:09:33+09:00
 
-**摘要**：feat(skills): 更新確認 「push 後：CI 構築 検証」節 新設（四言語）— **独立 節 為 理由**：local 構築成功 CI 緑 意味 不 —— local Binary cache 命中 可能、且 現在 架構 限 覆。多架構 包 場合、他方 架構 検証 可能 者 **CI 限**。**判据 三 規律**：全 `status` `queued`/`in_progress` 離 迄 判定 不（未完 実行 集計 内「出現 不」、「失敗 無」 最 誤認 易）、`--commit` 依 絞（否則 前回 古 失敗 読）、失敗 必 **log 原文** 見。**先 分類 後 動**：rate 制限 與 揺 偶発、hash 不一致 與 lock 不自洽 真失敗、特定 架構 限 赤 判定保留、且 **「全緑 然 log `copying path … from cache` 尽」 可疑** —— CI 通 事 CI 構築 事 同 非。判据 log 内 実際 fetch / build 段 有無。**対話的選択肢**：失敗時 其場 問、**全** 失敗項 與 其 性質（偶発 / 真失敗 / 判定保留）一度 示、選択肢 再実行、修正 後 **commit 追加**（push 済 履歴 書換 不）、該 batch 巻戻 含、各形態 修復方案 併記。「修正 不 緑 迄 再実行」 明示的 禁 —— 判据 同一 失敗 **異 実行** 同 log 現 事。**適配層 本倉 形態 補**：`build-package.yml` 再利用可能 骨組、包×架構 毎 一 workflow、`ci-summary.yml` 徽章 描画。一度 push 約 34 workflow 起動 事 `llama-cpp-ver` 403 構造的原因。実測 四 失敗形態（403 偶発 / codewhale-riscv64 hash / blender-mcp 取源 403 / 緑 然 全 cache）與 各自 処置 技能 記録。
+**摘要**：feat(skills): 更新確認 「push 後：CI 構築 検証」節 新設（四言語）— local 構築成功 CI 緑 意味 不：local Binary cache 命中 得、且 現行 架構 限 覆；多架構 包 場合、他方 検証 可能 者 CI 限。判定 三：全 `status` `queued`/`in_progress` 離 迄 待、`--commit` 以 絞、失敗 必 log 原文 見。先 分類 後 動：rate 制限 與 揺 偶発、hash 不一致 與 lock 不自洽 真 失敗、単一 架構 赤 判定保留、且「全緑 然 log `copying path … from cache` 尽」可疑——CI 通 事 CI 構築 事 非。失敗時 全 失敗項 與 其 性質 一度 示、再実行・修正 後 commit 追加・該 batch 巻戻 選択肢 至、「修正 不 緑 迄 再実行」禁。適配層 本 倉庫 之 形態（`build-package.yml` 骨組、包×架構 毎 一 workflow、`ci-summary.yml` 徽章）與 実測 四 失敗形態 記録。
 
 | 提交 | 説明 |
 |------|------|
@@ -266,7 +269,9 @@
 
 ## 2026-10-02T17:03:13+09:00
 
-**摘要**：上流更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四言語文書同期）。**二項 暫緩**：`dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 全 hash 算出 且 構築 通過 雖、**preset mount 検証 未通過** —— 以 0.2.0-rc.2 構成 with-plugins 実例、本機 探針（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）内 `agentPresets/list` roster **此 二 preset 出現 不**（「送検 0 份」）。**対照実験** 同一 探針、同一 preset 現行 0.1.6-alpha.2 対 実行、二 何 也 ✓ 且 故意 壊 夹具 broken 判定 —— 故 判据 自身 識別力 有、問題 0.2.0 側 在。然 **未 区別**：preset 形式 非互換 或 探針 最小限 `DSH_HOME` 新版 不足 之 何 也。`godot-ai` 4.2.3 同 暫緩：fail-closed pin 表 9 項 自 14 項 拡張、`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（何 也 大版跨）、更 `httpx2` / `httpcore2` / `mcp-types` / `sniffio` 新規追加 —— 且 **`mcp-types` nixpkgs 内 存在 不**。構造的変更 故、新規 包定義 與 二 overlay 書直 必要。**併 静黙欠陥 一 修正**：`dsh` `postPatch` 元「`devDependencies` 自 文件末尾 迄 截断」削除、此 写法 devDependencies **最後** 頂層 field 場合 限 成立。0.2.0-rc.2 以降 `exports` 其 後 在 故、旧 侭 実行 則 `exports` 也 削除（`./profile-boot` 等 子 path 導出 失効、而 **構築 其侭 成功**）。按塊 匹配 且 末尾 comma 修復 awk 変更、二 実 tarball（0.1.5-rc.2「末尾」配置 與 0.2.0-rc.2「中間」配置）離線 検証 —— 何 也 JSON 解析 可能。**別途 確認**：`.github/workflows/` 固定 SHA action 三 何 也 上流 最新、且 `nix-installer-action` `# main` 注釈 照合 結果 **正確**（該 SHA main HEAD 且 v23 tag）。**第 0 步 実測**：着手前 遠端 照合 —— 未閉 issue 0、未閉 PR 0。
+**摘要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四言語 文書 同期
+- `dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 暫緩：hash 與 構築 通過、但 預設 mount 検証 通 不——`agentPresets/list` 之 roster 內 何 也 出現 不；対照実験 識別力 有 但、形式 之 非互換 與 探針 `DSH_HOME` 不足 未 区別 可能
+- fix(dsh): `postPatch` 「`devDependencies` 自 文件末尾 至 截断」自 按塊 照合 + 末尾 comma 修復 至 変更——0.2.0-rc.2 以降 `exports` 其 後 至 来 故、旧 写法 則 其 共 削除（導出 失効 然 構築 成功）；二 実 tarball 以 解析 可能 事 離線 検証
 
 | 提交 | 説明 |
 |------|------|
@@ -286,7 +291,7 @@
 
 ## 2026-10-02T16:26:56+09:00
 
-**摘要**：feat(skills): 更新確認 「第 0 步」 新設——着手前 遠端同期 且 未閉 issue / PR 確認（四言語）— **汎用技能** `nix-flake-update-check` 主 flow 第 0 步 自 開始（既存 第 1〜9 步 相互参照 崩 不 為 番号 0）：`git fetch` 作業 copy 整列 後、未閉 issue / PR 列挙、「空」 與「取得不能」 境界 引——`gh` **明示 error 終了（非零）**、実測 三形態：認証失効 / 倉庫名 誤 → `Could not resolve to a Repository`；**issue 機能 無効** 倉庫 → `repository has disabled issues`；真 無 → 終了 0 空 list。故 判据 二段階：先 倉庫 読 可能 証明、次 列表 見。**「空 list」「真 無」 意味 場合 命令 成功 時 限定**。**独立 工程 為 価値**：issue 「既知 故障」 集合、PR 「在途 作業」 集合、更 取得経路 自検 第 3 步 以前 引上。**commit 前 自検 九問 自 十問 至**（第 10 問 本 工程）、且 **出所 差異 正直 標記**——第 1〜9 問 実測 再実行 産物、第 10 問 維護者 要求 着手前 動作。**適配層 本倉 形態 補**：座標、`has_issues=true`、実測 現状（未閉 issue 0 / PR 0）、且 **四 実例**——PR #6 正 SHA 固定 action 変更、PR #7 正 更新確認 触 包 更新（CI 必 落 故 最終 close 手動更新 至）、PR #4 / #5 二 誤検出 `/tts` SSRF 実修正 導、issue #3 技能分割 契機。**併 二箇所 不正確 修正**：`traps.md` 「九問 何 也 此 対応 節 持」 記載、然 第 9 問（判据 識別力）対応 節 実際 存在 不（前回 拡張 時 漂移）；四言語 技能 文書 仍 「六問 自検」 與 「第 1〜9 步」 記載（二巡 遅）。**第 9 問 「如何 自証」 追加**：`nix flake check` `running 0 flake checks... all checks passed!` 出 場合 **cache 命中** 且 「検査 走」 非——`docs/pcn/` 片仮名 一 注入 則 `doc-links` 直 `kana on line 124` 失敗、此 依 閘門 現在 入力 実際 測 事 証明。**検証**：`nix flake check` 全通過（初回 pcn 平仮名 助詞 残留、倉庫 自身 検査 script 検出 後 修正）。
+**摘要**：feat(skills): 更新確認 「第 0 步」 新設——着手前 `git fetch` 以 遠端 整列、未閉 issue / PR 確認（四言語）— issue 「既知 之 故障」之 集合、PR 「在途 之 作業」之 集合、此 工程 取得 経路 之 自検 也 前倒。`gh` 明示的 非零 終了 故、「空 list」「真 無」意味 命令 成功 時 限。commit 前 自検 九問 自 十問 至 拡張、第 10 問 維護者 之 要求 依 着手前 動作 在 事 正直 標記（第 1〜9 問 実測 之 再実行 之 産物）。適配層 本 倉庫 之 座標、`has_issues=true`、0 未閉 issue / PR、四 実例（PR #6 SHA 固定 action、PR #7 本 倉庫 之 包 更新、PR #4 / #5 `/tts` 之 SSRF 修正 導、issue #3 技能分割 之 契機）補、二箇所 之 不正確 併 修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -294,7 +299,7 @@
 
 ## 2026-10-02T03:54:38+09:00
 
-**摘要**：fix(dsh): image modality 記述 訂正（四言語）— 前回 記録（`2ab7dda`）`modules/dsh.nix` option 説明 與 四言語 `dsh.md` 内、`deepseek-flash` 「**唯一** image modality 宣言 flash 項目」記、且 該断定 stable 與 alpha 両 channel 拡張。**store 内 二 構築済成果物**（`dsh-0.1.5-rc.2` 與 `dsh-0.1.6-alpha.1` 之 `dsh-llm-deepseek` → `DEFAULT_MODELS`）実査 結果、stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 目録 各 `inputModalities: ["text","image"]` 宣言 項目 **二** 持 —— `deepseek-flash` 與 `deepseek-v4-flash-vision-exp`、一条 収束 alpha `0.1.6-alpha.2` 限。断定 alpha.2 於 限 成立。**変更内容**：選択理由「三 目録 全部 収録、且 各目録 image modality 宣言 唯一 之 id」書換、目録表 内「内 image modality 宣言 者」列 追加 事実 直接照合 可能 化；併 低下時 警告「無言置換」自 **二経路** 訂正 —— 新規添付 画像 `session/prompt` 添付准入 於 **其場 拒否**、履歴 既存 画像 限 `projectImagesForTextModel` 依 **無言** 置換。既定値 自体（`deepseek-flash`）変更 無、依然 正 選択。
+**摘要**：fix(dsh): image modality 記述 訂正（四言語）— 前回 之 記録 `deepseek-flash` 「唯一 image modality 宣言 flash 項目」至 称、其 断定 両 channel 至 拡。store 内 二 構築済 成果物 実査 則、stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 各自 `inputModalities: ["text","image"]` 宣言 項目 二 持（`deepseek-flash`、`deepseek-v4-flash-vision-exp`）、一条 者 alpha `0.1.6-alpha.2` 限。変更内容：理由 「三 目録 全部 収録、何 也 image modality 宣言 唯一 之 id」至 改、目録表 該 列 追加；低下時 之 警告 二経路 至 訂正——新規 添付 画像 `session/prompt` 之 添付准入 於 `MODEL_DOES_NOT_SUPPORT_IMAGES` 至 拒否、履歴 之 画像 限 無言 置換。既定値 変更 不
 
 | 提交 | 説明 |
 |------|------|
@@ -302,7 +307,7 @@
 
 ## 2026-10-02T03:01:23+09:00
 
-**摘要**：fix(dsh): 既定模型 `deepseek-flash` 移行（四言語）— **上流 2026-09-10 既 V4 Flash 與 V4 Flash Vision Exp 廃止**：DeepSeek-V4.1-Flash 公開時 模型名 `deepseek-flash`（画像理解 含）與 `deepseek-v4-pro` 収束、旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行 Flash 料金 課金（上流[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 1）。dsh 内蔵目録（`dsh-llm-deepseek` 之 `DEFAULT_MODELS`）版 追随：stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 四条、alpha `0.1.6-alpha.2` 二条 収束 且 image modality `deepseek-flash` 統合。**問題**：本倉庫 `defaultModel.model` 既定値 `deepseek-v4-flash` alpha 目録 不存在、而 dsh 目録外 id **文本専用**模型 扱（`modelInfo` `inputModalities: ["text"]` fallback）為、送信前 `projectImagesForTextModel` 会話中 画像 **無言 文本記述 置換** —— 誤謬 不出、模型 画像 未見（実機 実測：選択器 自 id 消失、但 既定値 依然 其 指）。**変更内容**：既定値 `deepseek-flash`（両目録 存在、image modality 宣言 唯一 之 flash 項目）変更、option 説明 内「目録 版 追随」「目録外 id 等価 非」明記；四言語 `dsh.md` 例 id 同期、「模型目録 dsh 版 追随」節 與 無言 機能低下 之 警告 追加、FIM 節 上流 FIM API 合 `deepseek-flash` / `deepseek-v4-pro` 改。
+**摘要**：fix(dsh): 既定模型 `deepseek-flash` 至 移行（四言語）— 上流 2026-09-10 於 V4 Flash 與 V4 Flash Vision Exp 廃止、模型名 `deepseek-flash` 與 `deepseek-v4-pro` 至 収束。dsh 之 目録 版 至 追随：stable `0.1.5-rc.2` 與 alpha `0.1.6-alpha.1` 四条、alpha `0.1.6-alpha.2` 二条。旧 既定値 `deepseek-v4-flash` alpha 之 目録 於 存在 不、目録外 之 id 文本専用 模型 至 扱 故、画像 `projectImagesForTextModel` 依 無言 文本記述 至 置換——誤謬 不出、模型 也 画像 未見。変更内容：既定値 `deepseek-flash` 至 変更、option 説明 目録 版 至 追随 事 明記；四言語 `dsh.md` 例 id 同期、当該 節 與 降下 之 警告 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -310,7 +315,7 @@
 
 ## 2026-09-28T13:07:06+09:00
 
-**摘要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄 wrapper 座標同期（子 repo 維護記録 無、変更 同 repo commit [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177) 参照）。**修正内容**：音色 「**実際 話 変体**」 以 選 —— 旧実装 主言語 前方一致 以 最初 音色 取、然 `zh-HK`（広東語、Tracy/HiuGaai）與 `zh-CN`（普通話、Xiaoxiao）同 `zh` 主語言 属、故 音色一覧 広東語 先 来 系統 **必 普通話 text 広東語 読**。更 **text 與 界面 両方 正**、音 聞 限 気付 不能（本機実測：界面 中国語、放送 広東語）。修正：① 変体 分類 與 並替——普通話 要求 普通話 音色 之内 的 選（逆 亦 同、`yue`/`zh-yue` 認識）；② 発声 前 **音色一覧 準備 待**（初回 `getVoices()` 空 多、選 不能 時 lang engine 任 同 誤読）；③ `utter.lang` 選択 音色 合；④「音色」設定 追加（既定 自動、指名 指定 可能）與 実際 使用 音色 表示——「何 音色 選 為 可」 目 見 事実 化。**判定**：子 repo `test/voice-selection.test.mjs` 追加（25 assertion、**反証** 含——旧 algorithm 「広東語 先」 fixture 於 **確 広東語 選** 先 断言、其上 新 algorithm 不 選 断言）。更 本機 Edge 23 音色 対、同 抽出 code 実 browser 実行 実選択 確認。
+**摘要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄包装 之 座標同期（子 repo 維護記録 無、変更 同 repo 之 commit [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177) 参照）。音色 「**実際 話 変体**」 以 選 至 変更：旧実装 主言語 之 前方一致 以 最初 之 音色 取、広東語 `zh-HK` 與 普通話 `zh-CN` 同 `zh` 属、故 音色一覧 広東語 先 来 系統 必 普通話 text 広東語 以 読——然 文書 與 界面 亦 正、音 聞 限 気付 不能。現在 変体 毎 之 分類 與 並替、発声 前 音色一覧 待、`utter.lang` 與 選択 音色 一致、実際 使用 音色 示 「音色」設定 追加。判定：子 repo 之 `test/voice-selection.test.mjs`（25 assertion、反証 含）與 実 browser 実測。
 
 | 提交 | 説明 |
 |------|------|
@@ -323,7 +328,7 @@
 
 ## 2026-09-28T08:28:27+09:00
 
-**摘要**：refactor(skills): 本日 之 预设事故 二層 技能 泛化（`nixkits-check-updates` 第 10.3 步 之 帰属判据「別 nix flake repo 於 亦 成立 可」 以 振分）——**① 通用技能**（何 repo 亦 成立）：`nix-flake-update-check` 之「commit 前 自検」**八問 自 九問 増**、第 9 問「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加。前八問 與 質 異——問 者 「十分 調査 為 可」 非、**判定 自体 識別力 有 可** 也、決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、其 全緑 情報量 無。救済 判定 對 **既知 壊 夹具**（反証）添 事——壊 夹具 判別 可能 上 初 其 ✓ 意義 有。**② 適配層**（本 repo 特有）：`nixkits-check-updates` 之「dsh 内蔵插件一覧 同期」新節 追加——插件 改名/削除 文書 問題 而已 非、本 repo 二 preset **実際 壊**：組合行 **package 名** 以 内蔵插件 参照、dsh ≤ 0.1.6-alpha.1 解決不能 行 **黙 無視**（旧名 痕跡 残 不 長 潜伏 得）、≥ alpha.2 **硬失敗**（preset 全体 mount 不能、UI 上 「preset 消失」 如 見 而已）。同節 dsh 更新 前 走 二層 判定（安価 行解析 + 権威 実 mount。後者 上流 自身 之 `broken` field 読、「package 在、行 亦 解決 得、読込時 初 炸」 捉 得 唯一 者）與 seed-once 播種 之 帰結（package 内 源 與 既展開 複製 両方 直 必要）示。自検 番号 對 参照 三箇所 同期更新。
+**摘要**：refactor(skills): 本日 之 預設事故 「別 之 nix flake 倉庫 於 亦 成立 可」 判定 以 二層 技能 至 汎化 —— ① 汎用技能 `nix-flake-update-check` 之 commit 前 自検 八問 自 九問 至 増、「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加：決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、救済 **既知 壊 夹具** 反証 以 添 事。② 本 repo 適配層 `nixkits-check-updates` 新節：插件 改名/削除 文書 而已 之 問題 非、二 預設 **実際 壊**——組合行 package 名 以 内蔵插件 参照、dsh ≤ 0.1.6-alpha.1 解決不能 行 黙 無視、≥ alpha.2 硬失敗 預設 全体 mount 不能。同節 更新 前 之 二層 判定（offline 行解析 + 上流 `broken` field 読 権威 実 mount）與 seed-once 播種 之 帰結 示。自検 番号 至 参照 三箇所 亦 同期更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -331,7 +336,10 @@
 
 ## 2026-09-28T08:04:31+09:00
 
-**摘要**：fix(dsh-nixos-shell): preset 行 `workflow-ptc` 変更 —— dsh 0.1.6 内建插件 `dsh-workflow-worker-thread` 改名、然 本 repo 二 preset 之 組合行 與 其 中 技能文書 例 旧名 侭。dsh ≤ alpha.1 解決不能 插件行 **黙 無視**（preset 其侭 読込、問題 痕跡 皆無）、alpha.2 新規 插件 resolver 此 **硬失敗** 変更：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— Agent preset 全体 mount 不能、維護者 本機 四 preset 中 三 此 死、「preset 消失」 如 見。修正：`nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時改名（`config` 不変、維護模式 NixOS模式 之 完全派生 侭）。**判定 欠落**：既存 流 「package build 可能 否」 而已 見、而「組合行 解決 可能 否」**session 作成時** 初 露見——失敗点 検証点 自 一層 下 在。今回 以後 **build 成果物** 直接 mount 検証：臨時 dsh 起動（独立 `DSH_HOME`/端口）、`agentPresets/list` 呼 上流 自身 之 `broken` 健全性判定 読、更 **故意 壊 夹具** 混 反証 為、判定 真 識別力 有 確認（夹具 broken 判定、理由 偽 package 名 含 必要）。同 罠 `docs/*/dsh.md` 插件互換性 注記 記載（四語）。**併 本 repo `AGENTS.md` 之「本機展開」前提 修正**：本機 **GitHub 参照 而 非 `path:` 輸入**（原文 逆）、故「先 push、次 再鎖」之順 —— push 不 為 局所 commit 鎖 不能、`nixos apply` 成功 如 見 而 変更 運 不。再鎖 本 repo 浮動子輸入 再解析 事 亦 記録（実測：`--update-input nixkits` 一回 **llama-cpp 0.4.1 → 0.5.0** 巻 込）、一行 修正 為 再鎖 前 一考 要。
+**摘要**：fix(dsh-nixos-shell): 預設行 `workflow-ptc` 至 変更 —— dsh 0.1.6 内蔵插件 `dsh-workflow-worker-thread` 改名、旧名 ≤ alpha.1 黙 無視、alpha.2 以降 預設 全体 mount 不能。
+- `nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時 改名、`config` 逐字 不変
+- 検証 **build 産物** 実際 mount 方式 至：臨時 dsh `agentPresets/list` 呼 上流 `broken` 判定 読、更 故意 壊 夹具 反証 以 混
+- 同 罠 `docs/*/dsh.md` 記載（四語）、`AGENTS.md` 本機展開 前提 `path:` 輸入 非 GitHub 参照 至 修正（先 push 後 再鎖、再鎖 浮動子入力 亦 再解決）
 
 | 提交 | 説明 |
 |------|------|
@@ -341,7 +349,7 @@
 
 ## 2026-09-24T05:45:11+09:00
 
-**摘要**：① `fix(pcn)` 偽中国語 残留仮名 除去 —— 前回 二 提交 pcn 文書 内 4 箇所 仮名 残留、`nix flake check` 之 `check-maintenance-log` 與 `check-doc-links` 双方 失敗（即 **CI 以来 常 赤**）、逐箇所 偽中国語 改写 後 二 検査 `exit 0` 復帰。② `feat(dsh)` 6 箇 構造化 settings 選項 新設 且 namespace 表 修正：上流 dsh 0.1.6-alpha 合計 12 箇 settings namespace 登録、然 模組 従来 唯 `agent-default-model` 対 構造化 選項 提供、其 余 唯 **無型 脱出経路** `settings` 経由 以外 不可 —— 字段名、列挙、範囲 誤記 也 **評価期 錯誤 発生 不**、dsh 実行時 検証 失敗 後 該当段 破棄 且 **静黙 schema 既定値 復帰**、記録 内 何 也 残 不。現在 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 対 Nix 側 鏡像 補完（語義 既存 `defaultModel` 與 一致：既定 `enable = false` 非書込、明示 `settings.<同名 namespace>` 優先）；`shell` 者 `cwd` schema 内 **既定値 無**、一部 宣言 検証 risk 有 故 意図的 提供 不。同時 文書 中 `0.1.5-rc.2` 依拠 転記 namespace 表 修正 —— 逐項 実測 後 **5 行 事実 與 不 合**：`locale` 字段 `preference` 有、`language` 非；`ui-theme` 唯 `preference`/`fontSize`（`dark`/`light` `preference` 之 取値 有 且 字段 非）；`shell` 内 `dshHome` 存在 不、実際 実行器 六項 制限；`subagent-model-selection` 頂層 `enabled`/`allowedModels`（`provider`/`model` 配列要素 字段）；`agent-default-model` 唯 `provider`/`model` 必須。**検証**：6 検査 全 green、四言語 構造 対等（名前空間 表 19 行、構造化 選項 表 7 行、code fence 30 箇所、四言語 一致）、pcn 仮名 0 命中、且 **end-to-end 描画 検証** 実施（全 6 項 有効化 後 生成 `settings.yaml` 正 6 新段 含、`subagent-model-selection.enabled` 設計 通 自動 true 設定）
+**摘要**：① `fix(pcn)` 偽中国語 内 残留 仮名 4 箇所 除去、`check-maintenance-log` 與 `check-doc-links` `exit 0` 至 復帰。② `feat(dsh)` 構造化 settings 選項 6 件 追加（`agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation`）：従来 `agent-default-model` 唯 構造化 選項 有、残 無型 `settings` 経由 而已（誤 静 schema 既定値 至 戻）；`shell` `cwd` schema 既定値 無 故 意図的 提供 不。併 文書 中 之 `0.1.5-rc.2` 自 転記 namespace 表 5 行 訂正。判定：6 検査 全 緑、四言語 構造 対等、6 項 全部 有効化 生成 settings.yaml 6 新節 含。
 
 | 提交 | 説明 |
 |------|------|
@@ -350,7 +358,7 @@
 
 ## 2026-09-23T08:27:16+09:00
 
-**摘要**：refactor(preset): 維護模式 prompt 分割為「汎用方法 + 本倉適配層」—— `maintenance-skills` 従来 NixKits 工作流 **全體 硬编码 於 公開預設**、`skills/` 既存 分法（`nix-flake-update-check` 汎用 ← `nixkits-check-updates` 本倉適配）與 矛盾。現在 二 段：`maintenance-workflow`（序号 901、汎用——如何倉庫 皆 成立：論理類別 毎 分割 commit、push 後 記録、文書 與 code 同期、修正 技能 汎化、技能内容 単一來源）與 `maintenance-workflow-repo`（序号 902、本倉 約束：四言語 與 `docs/zh/` 基準、`write-maintenance-log` 準則、項目数 一致 之 検証可能 判据、技能 tree 単一來源）。判据 唯一「此規約、換倉庫 尚 成立 乎」。汎用層 本倉専名 一切 不出現（NixKits / 四言語 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`、逐詞 照合 済）。新 component 選項 `repoWorkflow: false` 唯 汎用層 残存 可。四言語 文書 同期
+**摘要**：refactor(preset): 維護模式 prompt 「汎用方法 + 本倉適配層」至 分割 —— `maintenance-skills` 従来 NixKits 工作流 全体 公開預設 内 直接記述、`skills/` 既存 之 分法（`nix-flake-update-check` 汎用 ← `nixkits-check-updates` 本倉適配）與 矛盾。現在 `maintenance-workflow`（序号 901、汎用：分割 commit、push 後 記録、文書 與 code 同期、修正 之 技能 至 汎化）與 `maintenance-workflow-repo`（序号 902、本倉 約束：四言語 與 `docs/zh/` 基準、`write-maintenance-log` 準則、項目数 一致 判定）。判定 「此 規約 他 倉庫 於 亦 成立 可」 唯一。汎用層 本倉 固有 之名 出現 不。新 選項 `repoWorkflow: false` 汎用層 唯 残 可能。四言語 文書 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -358,7 +366,7 @@
 
 ## 2026-09-22T16:23:33+09:00
 
-**摘要**：docs(skill): 「起動器設定 命令式改変 不可」事故 記録 於 `nixos-specialisation-tuning` —— 本件 **我 導入、実際 系統 起動不能 至** 障害。**要求**：上流 nixpkgs 將 Limine 既定項目「specialisation 存在即 第三番 選択」**硬编码**（`limine-install.py:533`）。故 選択面 存在 唯 即 既定 選択面 至。既定 復 為、`extraInstallCommands`（nixpkgs 保証 install script **後** 実行）以 `limine.conf` 之 `default_entry` 行 `sed` 改写。**失敗機構**：本 鉤子 実行 於 Limine **設定 哈希 固化 後** —— `limine-install.py:660` 於 `enrollConfig=true` 時 計算 `blake2b(config_file.strip())`、以 `limine enroll-config` 固化 於 EFI 二進。`limine.nix:471` 之 `${install} "$@"` 固化 完了、`:472` 之 `${extraInstallCommands}` 改写 設定。固化後 改写 → **哈希 不一致** → Secure Boot 下 起動器 拒 読 設定 → **系統 起動不能**。復旧 須 外部鏡像 手動 無効化 secure boot 與 `panicOnChecksumMismatch`。**一般化形式**：`extraInstallCommands` 如 此「install 後」鉤子 見 安全 最終修正点。然 install 内部 **既 検証、固化 完了** 有 得 —— 「鉤子 最後 実行」≠「鉤子 変更 全検証 通過」。**技能 二節 追加**：① `### 引导菜单与默认面` —— 一般規則（起動器設定 宣言式 必須、生成物 sed/cp 改写 不可）、事故 完全 記録 與 失敗機構、変更前 正 調査順序（読 install script 全 flow、洗出 「file 書込 → 検証/署名」 全 順序、確認 変更 固化前 落。無 安全 入口 場合 従 上流 論理、不 対抗）、避 不 得 固化後 変更 場合 須 以 **上流 與 byte 単位 同一** 算法 再固化、及 安全 switch 降級 規律（`enrollConfig`/`validateChecksums`/`panicOnChecksumMismatch`、何 一 也 nixpkgs 断言 "allows bypassing secure boot"）；② 面切替後 二 運行級 障害 —— `### 分面切换后的运行级收敛`（`switch-to-configuration` 不 変更 active target。判定 **不可 用** `is-active`。systemd target 加算的、`graphical` 要求 `multi-user`、故 常 真。用 `default.target` 之**解決値**。尚 `systemctl get-default` 返 `default.target` 自体、非 其 指 先）與 `### 用户级 systemd 实例跨面陈旧`（`user@<uid>.service` 跨 面 亦 不 再起動、unit link 失効。`daemon-reload`/`daemon-reexec` 何 一 也 無効、須 instance 全体 再起動。含 逆方向 清理 與 検証判定基準 —— **不可 視「合成器 存在」為「桌面 正常」**。黒画面 時 正 合成器 動作 中）。frontmatter `description` 與「适用场景」同期更新、技能 正 路由 起動 可能
+**摘要**：docs(skill): 「起動器設定 命令式改変 不可」事故 `nixos-specialisation-tuning` 至 記録 —— `extraInstallCommands` Limine 之 **哈希固化 後** 於 `limine.conf` 之 `default_entry` 改写、哈希 不一致 以 Secure Boot 下 **系統 起動不能** 至。技能 二節 追加：`### 引导菜单与默认面`（設定 宣言式 必須、変更前 install script 読 「file 書込 → 検証/署名」 之 順序 洗出、固化後 変更 上流 與 byte 単位 同一 之 算法 以 再固化 必須）與 面切替 之 二 運行級 障害（判定 `is-active` 非 `default.target` 之 解決値 用；`user@<uid>.service` 面 跨 全体 再起動 必要、「合成器 存在」 以 「桌面 正常」 視 不）。frontmatter `description` 與「适用场景」亦 同期更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -366,7 +374,7 @@
 
 ## 2026-09-22T09:37:07+09:00
 
-**摘要**：fix(ci): CI 徽章 `failing` 誤報 修正 —— 根因 `ci-summary` **競合（race）**。**現象**：README 徽章 繰返 `failing` 示 一方、**当時 全 build 実際 全 green**。09-18 〜 09-21 実測、徽章 `failing → passing` **1〜2 分間隔 対 反転**、規則性 自 実障害 非 判断 可。**根因**：`ci-summary.yml` push 起動 故、**同 push build 未完了 内** 走。其 query `status=completed` 使、**commit 限定 無** 故、一部 workflow 「最新 完了済 実行」依然 **前回 push 失敗実行**、`group_by(workflow_id)` 其 最新 選 → 失敗 判定。**具体例 特定**：`Build dsh-preset-news-three-elements (aarch64)` **run#157**（sha `a350616`）失敗 —— 原因 浮動入力 `llama-cpp-ver` **HTTP 403 rate limit** 偶発（AGENTS.md 既記載 同種）；其後 #158/#159 成功 但、`ci-summary` 丁度 其 隙間 起動 #157 読。**修正三点**：① query `head_sha=$GITHUB_SHA` 追加、**現在 commit** 実行 唯一 集計 —— 今回未完了 workflow 集計 **現 不**（通過 也 失敗 也 数 不）、完了時 起動 次回 `ci-summary` 補。故 古 失敗 現況 誤認 不。② `curl` `--fail` 追加 —— 従来 無 場合、403 制限 返 JSON error 本体 故 jq `workflow_runs` 取得 不能 → `FAILED` 空 → **静 `passing` 書込**、**誤報 赤 以上 危険 偽 緑**（赤 調査 促、緑 誰 也 気付 不）。③ request 失敗 時 **既存 徽章 保持 `exit 1`**、誤 color 書 不。**検証**：新 jq logic 現在 HEAD 対 実行 出力 空（=> passing）、**31 Build workflow 全 green** 事実 一致。先 手動起動 徽章 自己修復 確認、修正 push 後 当該 workflow 再度 success、徽章 `passing` 維持。**文書 與 汎化**：`AGENTS.md` CI 章 此 競合 罠 與 `--fail` 二点 追記（従来 「毎時更新」 唯一 記載、起動条件 與 risk 触 無）；適配層技能 「収尾時 徽章 惑 不」節 追加、**実行記録 基準** 明記、且 偶発失敗（制限、再実行 可）與 真 失敗（hash 不一致、build error）区別。**説明**：今回 「外部 自 変更」 実 何 `gh-pages` 上 `ci-summary` bot 書込 徽章状態 —— **main branch source 第三者 変更 無**、`git status` clean 且 `main` remote 一致
+**摘要**：fix(ci): `ci-summary` `head_sha` 以 絞込、README 徽章 之 `failing` 誤報 修正 —— 本 workflow push 起動 故 同一 push 之 構築 未完了時 走、query commit 限定 無 場合 前回 push 之 失敗実行 読（実例：`Build dsh-preset-news-three-elements (aarch64)` run#157）。他 二点：`curl` 於 `--fail` 追加、request 失敗時 既存徽章 保持 `exit 1` —— 従来 403 制限 返 JSON error 本体 以 `FAILED` 空 至、静 `passing` 書。判定：新 jq logic 現在 HEAD 対 実行 出力 空（=> passing）、31 之 Build workflow 全緑 一致。今回 外部 自 変更 `gh-pages` 上 之 徽章状態 唯一、main branch 之 source 第三者 変更 無。
 
 | 提交 | 説明 |
 |------|------|
@@ -374,7 +382,12 @@
 
 ## 2026-09-20T17:56:28+09:00
 
-**摘要**：refactor(skill): **汎用技能 8 件 全** 対 「倉庫／役割 特指」監査 後 一括汎化 —— 発端 本 round 先 `traps.md` Dependabot 特指 修正。**監査方法**：先 frontmatter 與 本文 自 各技能 **汎用** 又 **倉庫適配層** 判定（後者 NixKits 指名 **正**、修正対象外）。其上 各 file 三種 問題 精査：①或 倉庫 約定 普遍規則 扱 ②維護者 唯 語、貢献者、引継者 無視 ③技能間 hard 参照（別倉庫 即断）。**汎用技能 8 件**：`nix-flake-update-check` / `write-maintenance-log` / `write-project-docs` / `translate-pseudocn` / `nixos-modern-cli` / `nixos-specialisation-tuning` / `recover-nixos-config` / `news-three-elements`。**修正 要点**：**① `write-maintenance-log` 二箇所 「別倉庫 動作 不」**：入口 「本技能 AGENTS.md 規則 強制起動」 記載 —— 他倉庫 AGENTS.md 無、又 該当規則 無 場合 有、技能 **永久 発火 不**。条件式 変更（該当規則 無 場合 使用者 明示起動 旨 付記）。SUBTITLE mapping 表 `NixKits 软件更新维护日志。` 直書 —— 此 表 翻訳時 **逐字置換** 機械的文字列、其 侭 使用 **他 project 名 採用者 log 書込**。`<项目名>` placeholder 與 置換説明 変更。**② `write-project-docs` 自己矛盾**：templates.md 「root 中文 唯一 残」 記 且、同技能 反 pattern 表 「言語 list 直書」 **反 pattern** 明記 —— 「基準言語（倉庫 定。本技能 特定言語 仮定 不）」 変更。**③ 切替 validator 付随修正（実測 踏 罠）**：元 script `docs/zh|en|ja|pcn` 與 `/5` 件 直書。言語集合 動的発見 書換 際、**私自身 三 罠 踏、逐一 実測 修正** —— `^\[中文\]` BRE 内 **文字 class**（`grep -F` 必要）、言語名 anchor 無 **shell pipe 與 Markdown 表行** 命中（且 `grep -m1` 返 物 其 問題行、誤診 招）、**基準言語 切替器 内 plain text**（`[名]` 唯一 一致 基準言語 文書 欠落 誤報）。最終版 実倉庫 検証：**有効 文書 無輸出、link 故意 破 場合 正 `3/4` 報告**。三点 共 技能 罠 記載。**④ `translate-pseudocn` 文法的 壊 script 修正**：孤立 loop 本体、未定義 `$expected`、直書 「5 言語」 —— 誰 複製 也 実行不能。書直済。**⑤ 技能間 hard 参照**：汎用技能 自 `write-maintenance-log` 又 適配層 参照、単独 也 成立 表現 変更（使用者 片方 唯 導入 可能性 有）。**⑥ 其他**：工程数 記載 「第 1~10 步」 実際 9 步 不一致。子倉庫 例 自 `dsh-api-balance`/`MAINTENANCE.md` 特指 除去。`kits/` 汎用 placeholder 変更。実測数値 「来源倉庫 実測」 統一表記、読者 倉庫 混同 無。**保持**：`nixkits-check-updates` / `nixkits-skills` NixKits 特指 **変更 不**（適配層 特指 可）。本倉庫 **全 経手人** 結論 成立 点 補足。**監査結果 clean**：`nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config`、`news-three-elements`。**検証**：書直 二 検証 script **実際 実行 通過**（故意 壊 link 注入 逆検証 含）、`nix flake check` 全通過
+**摘要**：refactor(skill): 監査後、8 件 之 汎用技能 倉庫／役割特指 一括汎化。
+- `write-maintenance-log`：「AGENTS.md 依 強制起動」 条件式 変更；SUBTITLE 之 `NixKits 软件更新维护日志。` `<项目名>` placeholder 変更（逐字置換 故、其 侭 使用 他 project 名 書込）
+- `write-project-docs`：「root 中文 唯一」 反 pattern 表 之「言語 list 直書」 矛盾 故「基準言語 倉庫 定」 変更
+- 切替 validator 言語集合 之 動的発見 変更（`docs/zh|en|ja|pcn` 與 `/5` 直書）；`translate-pseudocn` 之 壊 script 書直
+- 技能間 hard 参照 単独 成立 表現 至；工程数 記載 実際 之 9 步 一致；子倉庫 例 與 `kits/` 自 特指 除去
+判定：書直 二 検証 script 実行 通過（故意 壊 link 注入 逆検証 含）、`nix flake check` 全通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -382,7 +395,7 @@
 
 ## 2026-09-20T17:41:07+09:00
 
-**摘要**：refactor(skill): 外部自働化 與 Actions 検査 之**適用対象** 汎化 —— 特定 倉庫、特定 役割 指 非。**問題**：従来 記述 「Dependabot 使 無」 **NixKits 固有 事実** 書、Actions 検査 動機 **単一 維護者 視点** 叙述 —— 但 技能 何 他者 渡 再利用可能 成果物、読者 **別 倉庫** 維護者、貢献者、又 貢献予定者 可能。此 書方 「自分 関係 無」 読。**修正：役割 與 判据 述、判据 読者 倉庫内 立場 依存 非**。**① `traps.md` 「何故 此 維護者 以外 全 経手人 該当」新設**：**SHA 固定 何 共通 選択、其 副作用（通知 届 無）採用 者 誰 也 継承** 点 明示。維護者／貢献者、貢献予定者／監査者、引継者 三役割 適用時期 列挙。判据 **「自力実装 可」 且 「誰 使用」 非** 明記 —— platform 既 有効化 場合 **交差確認**、無 場合 **唯一 経路**、何 也 実行 価値 有（命令 読取専用、数秒）。**② `traps.md` 「維護者 非 場合：action 昇格 也 PR 行」新設**：昇格 CI 挙動 変、review 対象 変更 有。無関係 発見 現在 PR 混 非 別 PR 可。加 「変更前 上流 tag 実在 確認」警告（release page title 自 SHA 推測 非）。**③ 第 2 步**：「Dependabot 使 無 場合」 誰 也 該当 説明 変更、**発見 ≠ 昇格義務** 強調。**④ `builders.md`**：小節 title 「倉庫 外部依存自働化 有効 場合（Dependabot 等）」 自 「PR 外部依存自働化 開 場合」 変更、本文 也 「NixKits 使 無、本節 参考」 自 **一般 場合** 変更。**⑤ 汎用技能 自 適配層 硬编码 path 参照 削除**（`../nixkits-check-updates/SKILL.md`）—— 汎用技能 特定 倉庫 技能集合 結合 非、「一部 倉庫 此 自働化 意図的 有効化 非」 記述。**⑥ 第 8 步**：特定 倉庫 記録技能 指名 非 「適配層 指定」 変更。第 5 步 例 「来源実例（或 実倉庫 自 取得）」 標記、汎用技能 内 「本倉庫」 曖昧 除去。**境界**：適配 `nixkits-check-updates` **本倉庫固有 事実 保持**（本来 特指 可、其 結合 **正**）。本倉庫 **全 経手人** 結論 成立 点 補足。**検証**：`nix flake check` 全通過
+**摘要**：refactor(skill): 外部自働化 與 Actions 検査 之**適用対象** 汎化 —— NixKits 又 単一 維護者 視点 指 非。技能 他者 渡 再利用可能 成果物 有、読者 別倉庫 之 貢献者 又 引継者 可能性 有、従来 之 書方 「自分 関係 無」 読。`traps.md` 二節 新設：SHA 固定 共通 之 選択 有、其 副作用（通知 届 無）採用者 継承；基準 **「自力実装 可」 且 「誰 使用」 非**（維護者／貢献者／監査者 適用時期 列挙）。加 非維護者 之 action 昇格 也 PR 行 旨。第 2 步 與 `builders.md` 一般 場合 記述、第 8 步 「適配層 指定」 変更、汎用技能 自 適配層 至 直書 path 参照 削除。判定：`nix flake check` 全通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -390,7 +403,11 @@
 
 ## 2026-09-20T17:28:32+09:00
 
-**摘要**：fix(skill): `nix-flake-update-check` 之三欠陥修正 —— 何 本日更新検査 実体験 自露呈、**三者共通 失敗形態 何「錯誤 出 非、唯 取落」**。**① 固定 SHA 之 Actions 検査 到達不能（最深刻）**：`traps.md` 既 完全手順（action 列挙 → tag 照会 → tag 指 commit 取得 → SHA 與 注釈 書戻）記載済 但、**`SKILL.md` 何 段階 自 参照 無** —— 第 2 步 唯 `flake.nix` 参照 包定義 走査、六問自检 也 該当項目 無、故 此 検査 一度 也 実行 無。**対応**：第 2 步 末尾 新設「軟件包 以外 也 必 検査 更新 有」節（発見 命令 與「**先 命令 実行 実際 輸出 見。「此 倉庫 無」 決 付 飛 非**」戒 含）、自检 **八問** 拡張（第 8 問 即 Actions）、`traps.md` 目次 **毎回** 明記。**② 版本発見 启发式 静 包 落**：第 2 步 `version\s*=` 以 版本 抽出、故 **parameter 化 主定義 `version ? "0.1.5-rc.2"`**（`packages/dsh.nix`） 一致 不 —— 此 包 検査範囲 自 消、且 「最新」 與 区別 不能。`version\s*[?=]` 変更、`?`＝主定義 既定値（stable 真版本）與 `=`＝channel 上書値 **両者 検査 要** 旨 表 補足。**③ 生 `curl` `api.github.com` 静 空 返**：第 3 步 例 匿名 `curl` 使用、60 回/時 额度 使切 後 **錯誤 出 非 空 返**、下流 `grep` 同様 沈黙 —— **全 包 「最新」 判定**、偽 「全部正常」 輸出。`gh api` 統一、`ERROR:` 分岐 明示 追加、自检 第 7 問 組込、「**空 結果 錯誤 扱**」規律 與 鏈路自检 命令 補足。**泛化 帰属**：①②③ 何 也 **倉庫非依存** 汎用欠陥、`nix-flake-update-check` 記載。`nixkits-check-updates` 適配層 本倉庫固有 内容 補足 —— Dependabot 使 無 故 **本技能 action 更新 唯一 経路**、`build-package.yml` 再利用可能 workflow（31 workflow 自 参照）、本機 `curl` 実測。**新流程 初回実行 実測結果**：本倉庫 三 action（`actions/checkout` v7.0.1、`DeterminateSystems/nix-installer-action` main、`cachix/cachix-action` v17）計 6 箇所 **逐一 SHA 照合 結果 全 最新** 確認 —— 修正 価値 「更新 発見」 非、**此 検査 今後 確定的 結論 出、静 飛 非** 点 有。**検証**：`nix flake check` 全通過（`preset-derivation` drift 検査 含）
+**摘要**：fix(skill): `nix-flake-update-check` 之 三 欠陥 修正、何 也 「錯誤 出 非、唯 取落」型。
+- 固定 SHA 之 Actions 検査 到達不能：`traps.md` 手順 有 且 `SKILL.md` 何 段階 自 参照 無；第 2 步 節 追加、検査項目 八問 拡張、目次 「毎回」 明記
+- 版本発見 `version\s*=` 故 parameter 化 `version ? "0.1.5-rc.2"`（`packages/dsh.nix`）一致 不、当該 包 検査範囲 自 消；`version\s*[?=]` 変更
+- 生 `curl` `api.github.com` 上限 使切 錯誤 出 非 空 返、下流 grep 同様 沈黙、全 包 「最新」 判定；`gh api` 統一 `ERROR:` 分岐 追加
+判定：`nix flake check` 全通過；新 flow 初回実行 本倉庫 之 3 action 計 6 箇所 逐一 SHA 照合、全 最新 確認。
 
 | 提交 | 説明 |
 |------|------|

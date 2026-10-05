@@ -17,7 +17,7 @@
 
 ## 2026-10-05T14:24:37+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `911df2e` → `95fec42`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816)）。维护者第二轮反馈：渐隐只在底部、**顶部仍是硬切**，且吸附按钮**下方**还露着一截被切断的内容。现改为**滚动感知**的上下渐隐：状态机 `none/start/end/middle`，滑到顶不在顶边发虚、滑到底不在底边发虚（实测三态逐一核对）；卡片只淡顶边（整块 mask 会把吸附按钮一起淡掉），按钮下方用同底色补片收口。踩到两个坑并修掉：① 只在注入那一刻绑定元素会扑空（上游样式先到、组件后到），改为 scroll 捕获 + MutationObserver + 500ms 轮询兜底；② 用 `elementFromPoint` 验「覆盖」是错的（补片 `pointer-events:none`，命中测试永远测不到）。四语文档同步。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `911df2e` → `95fec42`（变更见其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816)；版本仍 `0.1.1`）。按维护者第二轮反馈修疑问窗口渐隐：由「仅底部」改为**滚动感知**的上下渐隐（状态机 `none/start/end/middle`，滑到顶不在顶边发虚、滑到底不在底边发虚）；卡片只淡顶边而非整块（整块 mask 会把吸附按钮一起淡掉），按钮下方用同底色补片收口被切断的内容。判据：三态逐一核对。
 
 | 提交 | 说明 |
 |------|------|
@@ -31,7 +31,7 @@
 
 ## 2026-10-05T13:58:51+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `1f0af6c` → `911df2e`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0)）。维护者看截图后指出疑问窗口底部是「一刀切」：题干限高的下边界与被吸附按钮上方各加一道**渐隐遮罩**（题干用 `mask-image`，按钮上方用 `::before` 渐变带）。渐变色在注入时取**卡片实际底色**（浅 `rgb(255,255,255)` / 深 `rgb(44,44,46)`，写死会在深色下露馅）。量化判据：题干下边界 30px 平均亮度 59.93 → 45.92（约暗 23%），而渐隐区之上（60–90px）不变；双向对照下部署版这些断言实测 FAIL。四语文档同步。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `1f0af6c` → `911df2e`（变更见其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0)；版本仍 `0.1.1`）。按维护者截图反馈去掉疑问窗口底部的「一刀切」：题干限高的下边界加 `mask-image` 渐隐、被吸附按钮上方加 `::before` 渐变带，渐变色在注入时取卡片实际底色（浅 `rgb(255,255,255)` / 深 `rgb(44,44,46)`，写死会在深色下露馅）。判据：题干下边界 30px 平均亮度 59.93 → 45.92（约暗 23%），渐隐区之上（60–90px）不变。
 
 | 提交 | 说明 |
 |------|------|
@@ -45,7 +45,7 @@
 
 ## 2026-10-05T13:23:30+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `f805f4e` → `1f0af6c`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 与 [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9)）。按维护者反馈改两处：① 底部统计条横向滚动**停用** —— 官方 0.2.0 已把统计条上每个指标做成可点击的 pill（点开是「会话统计」对话框：模型用时 / TTFT / TPS / token / 缓存命中），行内滚动不再适用且与 pill 的手势相抢；设置里那行置灰并写明官方方案，旧版本注入的样式主动清理。② 疑问窗口**仍然遮挡选项** —— 长题干下 header 实测 948px 而卡片可见区仅 398px，吸顶的不透明 header 成了挡板；改为 header 限高（≤40vh）自滚、不吸顶，实测三个选项全部回到视口内（533–661px / 视口 664px）。判据：以本包**构建产物**为被测对象跑 `develop/ab-ui`（C2/C6 已从「机制」改成「结果」层），运行树核对用 `develop/check-deployed-artifact.py` 的三个特征串。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `f805f4e` → `1f0af6c`（变更见其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c)；版本仍 `0.1.1`）。维护者反馈两点：① 底部统计条横向滚动**停用**（官方 0.2.0 已把指标做成可点击 pill，设置行置灰）；② 疑问窗口 header 限高（≤40vh）自滚、不吸顶 —— 长题干下曾挡住选项。判据：以本包**构建产物**跑 `develop/ab-ui`（C2/C6 改判结果层），运行树用 `develop/check-deployed-artifact.py` 的三个特征串核对。
 
 | 提交 | 说明 |
 |------|------|
@@ -59,7 +59,7 @@
 
 ## 2026-10-05T07:45:26+09:00
 
-**摘要**：CI 修复 —— 浮动输入 `llama-cpp-ver` 改走「认证取回 + 本地覆盖」，根治 `api.github.com` 的 403 限流。该输入是**普通 URL 输入**，而实测表明 Nix **不会**把 `access-tokens`／`netrc-file` 附加到这类 fetch 上（判据：给该 host 配**假 token** 再取一个从未取过的同 host URL——若认证头真的送出，GitHub 必然回 401 `Bad credentials`；实测 fetch **成功**、未认证额度 −1）。于是每个 job 各打一次未认证请求，共享 runner IP 的 60 次/小时用尽即 403：实测红过两次，响应体均为 `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。现改为先用 `gh api`（认证，5000 次/小时）取回同一份 JSON，再以 `--override-input llama-cpp-ver path:<json>` 喂给 Nix：语义不变（overlay 只读 `json.tag_name`），取不回或缺 `tag_name` 即**显式失败**，覆盖参数为空同样显式失败（不静默退回未认证路径）。`access-tokens` 保留——它管的是 `github:` 取源；AGENTS.md 与 `nixkits-check-updates` 技能里「双 host 即根治」的旧结论已按实测更正。
+**摘要**：CI 修复 —— 浮动输入 `llama-cpp-ver` 改走「认证取回 + 本地覆盖」，根治 `api.github.com` 的 403 限流。该输入是**普通 URL 输入**，Nix **不会**把 `access-tokens`／`netrc-file` 附加到这类 fetch 上，各 job 的未认证请求用尽共享 runner IP 的 60 次/小时额度（403）。现先以 `gh api` 取回同一份 JSON，再经 `--override-input llama-cpp-ver path:<json>` 喂给 Nix：语义不变（overlay 只读 `json.tag_name`），缺 `tag_name` 即**显式失败**。`access-tokens` 保留——它管 `github:` 取源。
 
 | 提交 | 说明 |
 |------|------|
@@ -69,7 +69,7 @@
 
 ## 2026-10-05T07:14:50+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `8dab668` → `f805f4e`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208)）。移动端「会话切换不弹键盘」此前**仍然失效**：真实 `focusin` 不可取消（插件那次 `preventDefault` 是死代码），而软键盘在 `focus` 那一刻就被请求，事后的 blur 只算补救。现改为让输入框在用户点按前保持不可编辑，程序性聚焦唤不出键盘；点按/按键即刻恢复，焦点离开重新武装。判据换成真因果链：切换会话期间「focus 落到可编辑输入框」的次数 0（部署版为 2），且点按后仍可输入；`develop/ab-ui/` 的 14 条界面判据以本包**构建产物**为被测对象全过。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `8dab668` → `f805f4e`（变更见其提交 [`f805f4e`](https://github.com/Kihara777/dsh-api-balance/commit/f805f4e4445cd4db6a3ccd16e23cfd90fb092208)；版本仍 `0.1.1`）。移动端「会话切换不弹键盘」此前**仍然失效**：真实 `focusin` 不可取消（那次 `preventDefault` 是死代码），软键盘在 `focus` 那一刻就被请求。现让输入框在用户点按前保持不可编辑，点按/按键即刻恢复，焦点离开重新武装。判据：切换会话期间「focus 落到可编辑输入框」的次数 0（部署版 2）；`develop/ab-ui/` 以本包**构建产物**为被测对象。
 
 | 提交 | 说明 |
 |------|------|
@@ -83,7 +83,7 @@
 
 ## 2026-10-04T09:23:29+09:00
 
-**摘要**：fix(dsh-preset-news-three-elements): 预设插件的会话消息来源改用 v4 形状 —— dsh 0.2.0 的会话格式 v4 只拒字面量 `kind: "plugin"`（v3 时代的插件来源形状），而本仓预设插件照抄了它，于是插件每写一条消息就被准入拒绝，症状是整个 session「本机运行失败」，错误只有一句 `format v4 message requires a producer-owned source kind`。2026-10-03 实测：掌灯模式（私有仓）的 `journal-catchup` 每个新会话开局都会 steer 一条提醒，在 0.2.0-rc.2 上「每开一个新会话崩一次」，会话文件里一条消息都没留下，维护者只能回滚系统才能继续对话（v4 会话旧版读不了）。本仓三处来源改为 `{ kind: `plugin:${name}`, form: "notice", summary }`（`news-language.js` ×1、`news-material.js` ×2），测试断言随之从 `source.plugin` 改为 `source.kind`，夹具里模拟 `user-approval` 的两处改用 `{ kind: "user-approval", form: "notice" }`；并新增自检 `session-sources`（`develop/check-session-sources.py`，挂进 `nix flake check`）钉住「预设插件里不许再出现 `kind: "plugin"`」，已做正反两向验证（注入旧形状 → 抓到并报行号）。四语 `docs/*/dsh.md` 增「会话格式 v4 对消息来源的准入」一节。
+**摘要**：fix(dsh-preset-news-three-elements): 预设插件会话消息来源改用 v4 形状 —— dsh 0.2.0 会话格式 v4 只拒字面量 `kind: "plugin"`，本仓预设插件照抄了它，于是每条消息都被拒，session 报「本机运行失败」。三处改为 `{ kind: `plugin:${name}`, form: "notice", summary }`（`news-language.js` ×1、`news-material.js` ×2），断言由 `source.plugin` 改为 `source.kind`；新增自检 `session-sources`（`develop/check-session-sources.py`，挂进 `nix flake check`）钉住「预设插件里不得再出现 `kind: "plugin"`」。
 
 | 提交 | 说明 |
 |------|------|
@@ -91,7 +91,7 @@
 
 ## 2026-10-03T09:49:14+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`8dab668`](https://github.com/Kihara777/dsh-api-balance/commit/8dab6682f8173b7408ca61cc0cf1af8b3b1bc606)）。逐项复核 dsh 0.2.0 上的界面改进时查出两处**静默失效**：① 「底部统计条横向滚动」**自 dsh 0.1.5 起就没生效过** —— 上游把样式模块由 `StatsLine.module.css` 改名为 `StatsPills.module.css`（实测 0.1.2 有 StatsLine 9 处、0.1.5 / 0.1.6 / 0.2.0 均为 0），插件只认旧名 → 找不到样式标签 → 重试 5 次后自我移除，而设置里那行照样显示 On；现两个名字都试，并在放弃时于控制台出声一次。② 三个 token 在 0.2.0 已不存在（运行时逐个实测为「未定义」）：`--dsw-alias-separator-primary`（18 处边框、**无 fallback** → 退化为 `currentColor`＝文字色）、`--dsw-alias-danger-primary` 与 `--dsw-alias-warning-primary`（靠硬编码兜住，看着对）；现按 0.2.0 原生对应补链（`--dsw-alias-border-l2` / `--dsw-alias-state-error-primary` / `--dsw-alias-state-warn-primary`），末尾保留原硬编码给 0.1.x。**判据**（隔离实例 + 本地桩模型 + Playwright，部署版与修复版各测一遍）：统计条由「注入标签不存在、`overflow-x:visible`」变为「标签存在、`overflow-x:auto` / `overflow-y:hidden` / `scrollbar-width:none`」；边框 `rgb(97,102,107)` → `rgba(0,0,0,.1)`；峰环 `rgb(229,72,77)` → `rgb(236,19,19)`。同轮复核确认仍然生效：疑问窗口整页滚动、移动端键盘守护（A/B：启用臂多注册 4 个捕获监听且合成 `focusin` 被 `preventDefault`）、峰时红色标识与 aria 徽标、圆圈替换、面板两标签与设置弹窗材质。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `700fbbc` → `8dab668`（版本仍 `0.1.1`）。复核 dsh 0.2.0 界面改进时查出两处**静默失效**并修复：① 底部统计条横向滚动**自 dsh 0.1.5 起失效** —— 上游把样式模块 `StatsLine.module.css` 改名为 `StatsPills.module.css`，插件只认旧名而设置里仍显示 On；② 三个 token 在 0.2.0 已不存在，其中 `--dsw-alias-separator-primary` 管 18 处边框且**无 fallback**；现按 0.2.0 原生补链。判据：隔离实例 + Playwright 实测（部署版两项皆失效）。
 
 | 提交 | 说明 |
 |------|------|
@@ -105,7 +105,7 @@
 
 ## 2026-10-03T06:45:00+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 与 [`700fbbc`](https://github.com/Kihara777/dsh-api-balance/commit/700fbbc)）。本次是**运行行为修复**，不是版本发布。**修的是什么**：① **回车交换的安装移出组件生命周期** —— dsh 0.2.0 把 composer 改成链式槽位（`conversation.composer`），提问 / 审批 / 子代理会接管整条 composer，那一刻圆圈组件随槽位卸载，交换器（Enter = 换行、Shift+Enter = 发送）被一并摘掉，而**界面当时看着完全正常**；现改为在 `apply()` 中安装，且只作用于**可编辑**的 composer（未选工作区时，同一个 `data-composer-input` 的 div 是工作区菜单的键盘触发器）。② **面板/弹窗材质按 0.2.0 原生配方重写** —— 0.2.0 把 `--dsw-specific-menu` 从实色（0.1.x 的 `--dsw-alias-bg-layer-3`）换成**半透明** menu surface fill（浅 `#f8f9fa94` / 深 `#43454a73`），原生浮层一律再叠 `backdrop-filter: var(--dsw-menu-backdrop-filter)`（`blur(40px) saturate(150%)`）才成形；插件只沿用旧配方，于是面板**真的透明**、背后的会话内容直接透出。主面板照抄原生 `JObwrW_panel`（fill + 模糊 + elevation + `border: 0`），三个模态弹窗改用原生 `VOzbGW_panel` 配方（不透明 `--dsw-alias-bg-layer-2` + elevation）——**两种材质不可混用**；两个新 token 均带 fallback，0.1.x 上不会退化成透明。**判据**（隔离实例 + 0.2.0-rc.2 + Playwright 实测 computed style，浅/深各一遍）：面板 `rgba(248,249,250,.58)` + `blur(40px) saturate(1.5)` / `rgba(67,69,74,.45)` + 同模糊；设置弹窗 `rgb(255,255,255)` / `rgb(44,44,46)`，与本机原生设置面板实测一致；回车交换在草稿 / 会话 / 触摸模拟三态下真实 Enter 均插入 `<br>`（无回归）。
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `76ea584` → `700fbbc`（变更见其提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43)；版本仍 `0.1.1`）。**运行行为修复**：① 回车交换安装移出组件生命周期 —— 0.2.0 链式槽位 `conversation.composer` 被接管时环组件随槽位卸载、交换器被静默摘掉，现于 `apply()` 安装；② 面板 / 弹窗材质按 0.2.0 原生配方重写 —— `--dsw-specific-menu` 已半透明且须叠 `backdrop-filter`，旧配方下面板真的透明。判据：Playwright 实测 computed style。
 
 | 提交 | 说明 |
 |------|------|
@@ -119,7 +119,7 @@
 
 ## 2026-10-03T06:15:29+09:00
 
-**摘要**：补齐维护日志的**未译条目**：ja **80** 条、pcn **59** 条——它们的摘要行是 `**Summary**` 标记 + 英文或中文旧稿，而当时的五条检查**全部放行**（条目数齐、时间戳对、SHA 集合对、假名检查也过——英文没有假名）。新查明一点：摘要**是旧稿时内容本身也与现 zh 源不一致**，故按 zh 源**整行替换**，不是只换标签。检查器补第 6 条「**摘要标记须是本语的**」，两项反证各自翻红（ja 用 `**Summary**` → 红；en 用 `**概要**` → 红）。同一个坑当天踩了三次——**判据错的时候，数字看起来一样自信**（CJK 占比阈值被 `codewhale 0.8.49` 这类 ASCII 稀释；对 pcn 更把「汉字多」当成了未译）。**验证**：`nix flake check` 全绿；四语各 358 条，ja / pcn 均 0 条残留。
+**摘要**：补齐维护日志的**未译条目**：ja **80** 条、pcn **59** 条——其摘要行是 `**Summary**` 标记加英文或中文旧稿，内容本身也与现 zh 源不一致，故按 zh 源**整行替换**。检查器补第 6 条「**摘要标记须是本语的**」，ja 用 `**Summary**`、en 用 `**概要**` 各自作反证翻红。**验证**：`nix flake check` 全绿；四语各 358 条，ja / pcn 均 0 条残留。
 
 | 提交 | 说明 |
 |------|------|
@@ -128,7 +128,7 @@
 
 ## 2026-10-03T05:16:47+09:00
 
-**摘要**：给维护日志的**倍率判据补第二个特征**：反引号占比。只看 CJK 密度会高估——实测一条密度 0.646 的条目，只按密度取队列（n=34）均值 **2.37**，据此判它「偏短」；把反引号占比加进来做最近邻（n=15）均值是 **1.98**，交付的 1.95 正落在那里。反引号内容是逐字照抄的，占比越高倍率越贴近 1——**这条机制技能里本来就写着，但判据里没带它，于是判据自己骗了自己一次**。现改为「同结构 + 同密度队列比较」，顺序是**先在同一结构里比，再谈长短**。**验证**：`nix flake check` 四语全绿。
+**摘要**：维护日志的**倍率判据补第二个特征：反引号占比**——只看 CJK 密度会高估：密度 0.646 的条目按密度队列（n=34）均值 **2.37** 被判「偏短」，把反引号占比加进来做最近邻（n=15）后均值 **1.98**，交付的 1.95 正落在那里。反引号内容逐字照抄、占比越高倍率越贴近 1，故改为「同结构 + 同密度队列比较」。**验证**：`nix flake check` 四语全绿。
 
 | 提交 | 说明 |
 |------|------|
@@ -136,7 +136,7 @@
 
 ## 2026-10-03T05:13:21+09:00
 
-**摘要**：把 `blender-mcp` / `obs-bilibili-stream` 两处 riscv64 排除的**理由改准**：不是「依赖链交叉编译缺陷」，而是**主依赖在 nixpkgs 里就没声明该架构**。探针实测两者都在**求值阶段**即被拒——`blender 5.2.2` 的 `meta.platforms` 只有 `aarch64-darwin`/`aarch64-linux`/`x86_64-linux`，`obs-studio 32.2.2` 只有 `x86_64-linux`/`i686-linux`/`aarch64-linux`，报 `Refusing to evaluate package …`。现写明依赖名、上游声明的架构列表与拒绝原文，判据是 `pkgs.<dep>.meta.platforms`（**不是编译报错**）。**验证**：`nix flake check` 四语全绿。
+**摘要**：把 `blender-mcp` / `obs-bilibili-stream` 两处 riscv64 排除的**理由改准**：不是「依赖链交叉编译缺陷」，而是**主依赖在 nixpkgs 里没声明该架构**（`blender 5.2.2`、`obs-studio 32.2.2` 的 `meta.platforms` 都不含 riscv64，求值阶段即被拒），判据是 `pkgs.<dep>.meta.platforms` 而**不是编译报错**。**验证**：`nix flake check` 四语全绿。
 
 | 提交 | 说明 |
 |------|------|
@@ -144,7 +144,7 @@
 
 ## 2026-10-03T04:53:28+09:00
 
-**摘要**：把 `AGENTS.md` 的部署核对判据从「看文件内容」换成「看单元引用」。原句要求重启后核对 `cordis.patch.yml` 里的 store 路径已翻新，而实测 **dsh 0.2.0 启动时会重写该文件**（preStart 于 17:33:10 拷入 1747 行，dsh 在 17:33:11 改成 1781 行，此后又变过一次）——落盘的是 dsh 自己的序列化结果，照内容比对**只会得到假阴性**，把一次成功的部署判成失败。新判据：比对运行单元 pre-start 脚本引用的 store 路径与当前配置生成的那份（两条命令写进文档），已在本机实测一致。**验证**：`nix flake check` 全绿。
+**摘要**：把 `AGENTS.md` 的部署核对判据从「看文件内容」换成「**看单元引用**」：dsh 0.2.0 启动时会重写 `cordis.patch.yml`，落盘的是它自己的序列化结果，照内容比对只会得到**假阴性**、把成功的部署判成失败。新判据比对运行单元 pre-start 脚本引用的 store 路径与当前配置生成的那份（两条命令已写进文档），本机实测一致。**验证**：`nix flake check` 全绿。
 
 | 提交 | 说明 |
 |------|------|
@@ -152,7 +152,7 @@
 
 ## 2026-10-03T04:43:18+09:00
 
-**摘要**：修两处**我自己引入的失守**，都属「总量绿、细节漏」。**① 检查器看不见「整张表没了」**：`check-maintenance-log.py` 原先四条规则全看总量（条目数、全局 SHA 去重、行级假名），于是我把新条目拼进三语时只写了标题与摘要、**丢掉提交表**，脚本照样打印「354 entries … all passed」。补上第 5 条**结构对等**：每条目的提交 SHA 集合四语须与 zh 一致（zh 本就没有表的历史 5 条，译文也不该有）。**② 我写进技能的倍率判据本身是错的**：拿全库均值（`en/zh` ≈ 1.84）判译文是否啰嗦，而实测 CJK 密度与倍率的相关系数 **r = 0.90**——同密度队列均值 2.29，被判「超标」的那条其实低于队列；照均值执行只会逼出**删内容**，与想防的「加料」是同一枚硬币的两面。改为同密度队列比较，或用「en 字符 ÷ zh 的 CJK 字符」这个密度无关的量。**验证**：`nix flake check` 全绿；检查器的三项反证（删整表 / 改一位 SHA / 删整条）全部翻红。
+**摘要**：修两处**我自己引入的失守**。**① 检查器看不见「整张表没了」**：`check-maintenance-log.py` 原先四条规则全看总量，于是只写标题与摘要、**丢掉提交表**照样通过；补第 5 条**结构对等**（每条目的提交 SHA 集合四语须与 zh 一致）。**② 写进技能的倍率判据本身是错的**：拿全库均值（`en/zh` ≈ 1.84）判译文啰嗦，而实测 CJK 密度与倍率相关系数 **r = 0.90**，同密度队列均值 2.29、被判「超标」的那条其实低于队列——照均值执行只会逼出**删内容**；改为同密度队列比较。**验证**：`nix flake check` 全绿；检查器三项反证（删整表 / 改一位 SHA / 删整条）全部翻红。
 
 | 提交 | 说明 |
 |------|------|
@@ -161,7 +161,7 @@
 
 ## 2026-10-03T04:38:34+09:00
 
-**摘要**：给 `write-maintenance-log` 补上**可测的长度规范**，并把四条自撰条目的摘要从 1674–3784 字符压回 312–444。起因是摘要被写成了完整事态描述——机制推导、报错原文、CI 日志全在里面，而细节本就有别的家（commit message / 包定义头部 / `AGENTS.md`）。规范三条：摘要只答「变了什么 / 为什么 / 怎么验证」，目标 ≤ 400 字符；**译文倍率对齐全库实测值**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21，明显超出即属展开式加料）；**如果你在摘要里解释「这个报错为什么是这么来的」，那一段就不该在这里**。**验证**：`nix flake check` 四语自检全绿；四条压缩后信息无丢失（细节均可从 commit message 与包定义头部查到）。
+**摘要**：给 `write-maintenance-log` 补上**可测的长度规范**，并把四条自撰条目的摘要从 1674–3784 字符压回 312–444：摘要只答「变了什么 / 为什么 / 怎么验证」，目标 ≤ 400 字符；**译文倍率对齐同结构实测值**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21，明显超出即属加料）；在摘要里解释「报错为什么是这么来的」的段落不写在这里。**验证**：`nix flake check` 四语全绿；四条压缩后信息无丢失。
 
 | 提交 | 说明 |
 |------|------|
@@ -169,7 +169,7 @@
 
 ## 2026-10-03T04:27:03+09:00
 
-**摘要**：`opencode-telegram` 的 riscv64 **由「摘掉」改回「建」**，并加上「**产物真的跑一遍**」这条判据。两处根因同型——gyp 把**空串**当成了别的类型：交叉 PATH 上没有裸 `gcc` ⇒ `"" >= 7` 抛异常；`better-sqlite3` 的 `prebuild_exists` 同样成空串 ⇒ target 退化成 `type: none`、`make` 只盖 stamp。修法分别是指向交叉编译器的 `gcc` shim 与显式 `--force_build=1`。`build-package.yml` 新增 `smoke-test`：构建后跑 `develop/qemu-smoke-tests/<包名>.sh`（本地与 CI 同一份），缺脚本或缺 binfmt 处理器都判失败。**验证**：两次推送各 33 个 workflow 全部 success。
+**摘要**：`opencode-telegram` 的 riscv64 **由「摘掉」改回「建」**，并加上「**产物真的跑一遍**」这条判据：修好两处 gyp 陷阱（指向交叉编译器的 `gcc` shim、`better-sqlite3` 显式 `--force_build=1`）；`build-package.yml` 新增 `smoke-test`——构建后跑 `develop/qemu-smoke-tests/<包名>.sh`（本地与 CI 同一份），缺脚本或缺 binfmt 处理器都判失败。**验证**：两次推送各 33 个 workflow 全部 success。
 
 | 提交 | 说明 |
 |------|------|
@@ -184,7 +184,7 @@
 
 ## 2026-10-03T02:26:58+09:00
 
-**摘要**：`opencode-telegram` **摘掉 riscv64 构建**——转绿不是靠修好构建，而是停建一个本就不可能可用的平台。两件事实：那个 job **一直是靠缓存假绿**（日志里一行构建都没有，取的是上一版 0.25.3 的产物）；真构建则卡在 `better-sqlite3`——**直接依赖**且被**静态 import**，上游没有 riscv64 预编译、v13 起又取消 `install` 脚本，加载器两条路径全空。产物**能构建、一启动就抛**，故按 `blender-mcp` / `obs-bilibili-stream` 同一先例摘掉。**验证**：x86_64 / aarch64 不受影响。
+**摘要**：`opencode-telegram` **摘掉 riscv64 构建**——转绿不是靠修好构建，而是停建一个本就不可能可用的平台：那个 job **一直靠缓存假绿**（日志里没有构建，取的是上一版 0.25.3 的产物），真构建则卡在**直接依赖且被静态 import** 的 `better-sqlite3`（上游无 riscv64 预编译、v13 起取消 `install` 脚本），**产物能构建、一启动就抛**；按 `blender-mcp` / `obs-bilibili-stream` 同一先例摘掉。**验证**：x86_64 / aarch64 不受影响。
 
 | 提交 | 说明 |
 |------|------|
@@ -196,7 +196,7 @@
 
 ## 2026-10-02T20:38:40+09:00
 
-**摘要**：两处**判据盲区**与一处**同名冲突**，都靠注入/对照实测发现。**① `doc-links` 的切换器判据补盲区**：旧版只在 `lines[:8]` 里找到切换器行时才校验，「整行删掉」与「落在第 8 行之后」因此一直静默通过——四份 `docs/*/ruyi.md` 从来没被校验过；现改为 `docs/` 下必须带切换器且在**全文**里查找。**② 预设不再自带组合撰写技能副本**：两份技能与上游**同名而内容分叉**，我们那份还停在 0.1.x 的目录式模型，改为挂上游那份并用断言钉住。**③ persona 去过期说法**（改写送进模型的提示词属行为变更，由维护者单独批准）。**验证**：`nix flake check` 全绿；预设放进一次性 `0.2.0-rc.2` 实例，**9 条预设 `broken` 全空**。
+**摘要**：两处**判据盲区**与一处**同名冲突**：`doc-links` 的切换器判据改为 `docs/` 下必须存在且在**全文**里查找（旧版只看 `lines[:8]`，「整行删掉」与「落在第 8 行之后」一直静默通过——四份 `docs/*/ruyi.md` 从未被校验）；预设不再自带组合撰写技能副本（与上游**同名而内容分叉**，改为挂上游那份并用断言钉住）；persona 去掉已过期的说法。**验证**：`nix flake check` 全绿；预设放进一次性 `0.2.0-rc.2` 实例，**9 条预设 `broken` 全空**。
 
 | 提交 | 说明 |
 |------|------|
@@ -205,7 +205,7 @@
 
 ## 2026-10-02T19:54:49+09:00
 
-**摘要**：dsh 两个通道一起跨到 **0.2.0-rc.2**（0.1.x → 0.2.x 断代），并完成 **Agent 预设迁移的落地**。**① 通道语义**：实测 dist-tag 为 `latest` = `next` = `0.2.0-rc.2`、`alpha` = `0.1.7-alpha.2`——**`alpha` 比 `latest` 低**，故 `dsh-alpha` 改跟 `next`；两通道指向同一 tarball，hash 与 lock 共用。**② 预设格式断层**：0.1.x 的目录式通道被上游整条删除，HEAD 从此只维护新格式；旧格式由新增的钉-rev 包提供。**③ 模块接线**：预设改为把 `preset.patch.yml` 逐字并进模块生成的 `cordis.patch.yml`；来源按 `passthru.dshChannel` 二选一；旧 settings 键现在被断言拦下。**验证**：四语自检全绿；实跑一次性实例确认预设与技能根解析。
+**摘要**：dsh **0.2.0-rc.2** —— 两个通道一起跨代（0.1.x → 0.2.x 断代），并完成 **Agent 预设迁移的落地**：实测 `alpha` 比 `latest` 低（`latest` = `next` = `0.2.0-rc.2`），故 `dsh-alpha` 改跟 `next`，两通道同一 tarball、hash 与 lock 共用；0.1.x 的目录式预设被上游整条删除，旧格式由新增的钉-rev 包提供；模块按 `passthru.dshChannel` 二选一，把 `preset.patch.yml` 逐字并进生成的 `cordis.patch.yml`，旧 settings 键被断言拦下。**验证**：四语自检全绿；实跑一次性实例确认预设与技能根解析。
 
 | 提交 | 说明 |
 |------|------|
@@ -227,7 +227,7 @@
 
 ## 2026-10-02T18:02:46+09:00
 
-**摘要**：feat(dsh): 预设迁移准备 —— 0.2.0 新格式 `preset.patch.yml` + 派生检查适配（四语）— **0.2.0 重构了 preset 机制**：预设从「`$DSH_HOME/.agent-presets/<id>/` 目录 + `agent.cordis.yml`」变成**一条 loader patch 条目**（`- insert:` → `@deepseek-ai/dsh-agent-preset`，插件行搬进 `config.plugins`），落点是 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`。**逐插件核对 26 个包的 schema：6 处变化全部是新增可选字段，没有一处让现有配置变非法**；最要命的是 `dsh-tool-bash` / `dsh-tool-pwsh` 新增 `promoteOnTimeout`（默认 `true`）——前台 bash 超时从「被杀掉」变成「提升为后台任务」，而我们的文件一个字没写这个键。**三处「照抄会坏」**：① `baseUrl` 实测已变成 `$DSH_HOME/profiles/<profile>/`（不再是预设目录），旧写法会**挂载成功而技能静默消失**，新文件改为解析包根 + **存在性守卫**（指错即 broken）；② 元数据搬进 `config.name` / `description`，整文件字节派生在新格式下不可能，派生改落在 `plugins:` 正文；③ `config.order` 是新键。**实机验证**（0.2.0 一次性实例）：4 个内置 + `nixos` + `maintenance` + `lampkeeper` 共 7 条，**每一条 `broken` 均为空**；反证用**真文件复制后只改一行**（删必填项 / 换包名 / 换相对路径 / 换锚点），四条副本各报具体 broken。**本阶段不落地运行时**：模块侧一行未动、dsh 版本未动、`news-three-elements` 未转换、行为默认值只记录未钉。**另查明 `ocean-spiral` 无仓库也无播种**（其 `AGENTS.md` 自述部署副本即源本身），0.2.0 一到会从 roster 里整个消失——迁移它需先给它一个家。
+**摘要**：feat(dsh): 预设迁移准备 —— 0.2.0 新格式 `preset.patch.yml` + 派生检查适配（四语）：预设从目录式 `agent.cordis.yml` 变成一条 loader patch 条目（`- insert:` → `@deepseek-ai/dsh-agent-preset`），落点 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`；26 个包的 schema 逐插件核对，6 处变化全是新增可选字段；三处「照抄会坏」已改（`baseUrl` 改指该 profile 目录、元数据搬进 `config.name` / `description`、`config.order` 是新键）。**验证**：一次性 0.2.0 实例 7 条预设 `broken` 全空，反证只改一行即各报具体 `broken`。
 
 | 提交 | 说明 |
 |------|------|
@@ -235,7 +235,7 @@
 
 ## 2026-10-02T17:39:30+09:00
 
-**摘要**：feat(dsh): 声明式设置面补全 —— 结构化选项 7 → **13**，新增 6 个类型化 namespace（四语）— 补齐的正是维护者本机在用的三个：`permission`、`web-search-deepseek`、`agent-presets`（此前只能走无类型的 `cfg.settings.<ns>` 逃生舱），另加 `subagent`、`shell`、`llm-deepseek`。**这套选项的意义**是把「拼错或越界只在运行时被静默丢弃」变成**求值期报错**。**顺带用实测修正三处既有判断**：① namespace 总数 **12 → 15**（旧 grep 只看 `installSection`，漏了走 `settings.register` 的路径）；② 「`shell.cwd` 无默认值 ⇒ 不能部分声明」**是错的**——schemastery 里没写 `.required()` 的字段本就可选；③ 模块头部注释「typo 与越界都静默」**只对一半**——实测 object 是**开放**的，typo 被保留（真字段吃默认，完全静默），而类型错 / 越界**会响**（该 namespace 注册失败、热更新打 warn `keeping last good`）。注释与四语文档均已改为准确表述。**故意不做**（理由写入注释）：`llm-pi-ai`（`api` 枚举是随版本漂移的开放集合，类型化会腐化）、`ui-onboarding`（纯客户端状态）、`web-search-deepseek.apiKey`（`role("secret")`，写进 settings.yaml 等于落到世界可读的 `/nix/store`）。**验证**：最小 NixOS 配置（13 段全开 + 一处逃生舱覆盖）求值通过；生成的 `settings.yaml` 含全部新段、`builtins.fromJSON` 可解析、逃生舱优先于结构化值；负例（enum / 类型 / 范围 / 跨字段 assertion）各自在求值期报错；`nix flake check` 全绿，并核验被检查的 source 快照与工作区**逐字节一致**（不是缓存的旧树）。
+**摘要**：feat(dsh): 声明式设置面补全 —— 结构化选项 7 → **13**，新增 6 个类型化 namespace（`permission`、`web-search-deepseek`、`agent-presets`、`subagent`、`shell`、`llm-deepseek`），把「拼错或越界只在运行时被静默丢弃」变成**求值期报错**；顺带修正三处既有判断（namespace 总数 **12 → 15**、「`shell.cwd` 无默认值 ⇒ 不能部分声明」是错的、「typo 与越界都静默」只对一半）。**验证**：最小 NixOS 配置（13 段全开 + 一处逃生舱覆盖）求值通过，`settings.yaml` 含全部新段且可 `builtins.fromJSON` 解析，负例各自在求值期报错；`nix flake check` 全绿。
 
 | 提交 | 说明 |
 |------|------|
@@ -243,7 +243,10 @@
 
 ## 2026-10-02T17:33:52+09:00
 
-**摘要**：godot-ai 4.1.0 → 4.2.3（结构性升级）— fail-closed 运行时校验表从 **9 项扩到 14 项**：`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `mcp-types` / `httpx2` / `httpcore2` / `sniffio`；其中 **`mcp-types` 在 nixpkgs 里不存在**（2.x 把 wire types 拆成独立发行版），取上游同仓库 `src/mcp-types/` 子项目新增定义。**本次最重要的发现是一处结构性缺陷**：两个 overlay 原先各自用 `python312.override { packageOverrides = …; }`，而链式 `.extend` 下**后者替换前者**——fastmcp overlay 的全部 Python 覆盖被**静默丢弃**（`fastmcp-slim` 实际仍是 nixpkgs 旧版），**而构建照样成功**；历史事故「只链一处导致旧依赖」的真根因就在这里。已改用 nixpkgs 官方可叠加扩展点 `pythonPackagesExtensions`（与顺序无关）。**验证四条**：构建通过；**实跑 `godot-ai --version` → `godot-ai 4.2.3`**（fail-closed 校验未拒绝启动）；用产物自身的 PYTHONPATH 查 `importlib.metadata` **14/14 精确命中**；`nix flake check` 全绿（真实构建了 6 个 check）。另**移除 `dontCheckRuntimeDeps`**——让构建期 hook 也判一次，同一张 pin 表多一道更早的判据。**泛化**：新增「陷阱 8 · 链式 overlay 的后一个 python 覆盖会静默替换前一个」，写进通用技能。
+**摘要**：godot-ai 4.1.0 → 4.2.3 — fail-closed 校验表 9 → 14 项（`mcp` 1.29.1 → 2.2.0、`fastmcp` 3.4.7 → 4.0.5，新增 `mcp-types` 等）
+- `mcp-types` 不在 nixpkgs，取自上游同仓库 `src/mcp-types/` 子项目
+- 两 overlay 的 `python312.override { packageOverrides = …; }` 在链式 `.extend` 下互相替换、覆盖被静默丢弃而构建仍成功；改用 `pythonPackagesExtensions`
+- 判据：构建通过、实跑 `godot-ai --version` 得 4.2.3、`importlib.metadata` 14/14、`nix flake check` 全绿
 
 | 提交 | 说明 |
 |------|------|
@@ -258,7 +261,7 @@
 
 ## 2026-10-02T17:09:33+09:00
 
-**摘要**：feat(skills): 更新检查新增「推送后：验证 CI 构建」环节（四语）— **为什么值得独立一节**：本地构建成功 ≠ CI 会绿——本地可能命中二进制缓存，且只覆盖当前架构；多架构包的另一个架构，CI 是**唯一**的验证途径。**判据三条纪律**：等 `status` 全部离开 `queued`/`in_progress` 再判定（未完成的运行在统计里「不出现」，最易被误当成「没有失败」）、按 `--commit` 过滤（否则读到上一轮的旧失败）、失败必须看到**日志原文**。**失败先分类再动手**：限流 / 抖动属偶发，hash 不符与 lock 不自洽属真失败，只有某架构红属待判，而**「全绿但日志全是 `copying path … from cache`」属可疑**——CI 通过 ≠ 它构建过，判据是日志里有没有实际的 fetch / build 阶段。**交互式选项**：失败时当场提问，一次列出**所有**失败项及各自性质（偶发 / 真失败 / 待判），选项含重跑、修补后**追加**提交（不改写已推送历史）、回退该批，并附各形态的修复方案；明确禁止「用重跑到绿代替修复」——判据是同一失败在**不同运行**里以同样日志出现。**适配层补本仓形态**：`build-package.yml` 为可复用骨架，每包每架构一个 workflow，`ci-summary.yml` 渲染徽章；一次 push 触发约 34 个 workflow 正是 `llama-cpp-ver` 403 的结构成因；四条实测失败形态（403 偶发 / codewhale-riscv64 hash / blender-mcp 取源 403 / 绿但全是缓存）与各自处置一并记入技能。
+**摘要**：feat(skills): 更新检查新增「推送后：验证 CI 构建」一节（四语）— 本地构建成功不等于 CI 会绿：本地可能命中二进制缓存，且只覆盖当前架构，多架构包的另一架构只有 CI 能验。判据三条：等 `status` 全部离开 `queued`/`in_progress`、按 `--commit` 过滤、失败必看日志原文。失败先分类再动手：限流与抖动属偶发，hash 不符与 lock 不自洽属真失败，单架构红属待判，而「全绿但日志全是 `copying path … from cache`」属可疑——CI 通过不等于它构建过。失败时一次列出全部失败项与性质，选项含重跑、修补后追加提交、回退该批；禁止「用重跑到绿代替修复」。适配层记入本仓形态（`build-package.yml` 骨架、每包每架构一个 workflow、`ci-summary.yml` 徽章）与四种实测失败形态。
 
 | 提交 | 说明 |
 |------|------|
@@ -266,7 +269,9 @@
 
 ## 2026-10-02T17:03:13+09:00
 
-**摘要**：上游更新 —— codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2（四语文档同步）。**两项暂缓**：`dsh` 0.2.0-rc.2 与 `dsh-alpha` 0.1.7-alpha.2 虽已算出全部 hash 并构建通过，但**预设挂载验证未通过**——用本机探针（`/etc/nixos/tests/dsh-preset-mount-probe.sh`）对 0.2.0-rc.2 构造的 with-plugins 实例，`agentPresets/list` 的 roster 里**没有这两份预设**（「送检 0 份」）；**对照实验**用同一探针、同一份预设跑当前 0.1.6-alpha.2，两预设 ✓ 且故意坏掉的夹具被判 broken —— 故判据本身有区分度，问题出在 0.2.0 侧，但**尚不能区分**是预设格式不兼容还是探针的极简 `DSH_HOME` 在新版本下不再够用。`godot-ai` 4.2.3 同样暂缓：其 fail-closed pin 表从 9 项扩到 14 项，`mcp` 1.29.1 → **2.2.0**、`fastmcp` 3.4.7 → **4.0.5**（均跨大版本），新增 `httpx2` / `httpcore2` / `mcp-types` / `sniffio`，其中 **`mcp-types` 在 nixpkgs 里不存在**——属结构性改动，需新增包定义与重写两个 overlay。**顺带修一处静默缺陷**：`dsh` 的 `postPatch` 原先按「从 `devDependencies` 截断到文件末尾」删除，该写法只在 devDependencies 是**最后一个**顶层字段时成立；0.2.0-rc.2 起 `exports` 排在它之后，照旧执行会把 `exports` 一并删掉（`./profile-boot` 等子路径导出失效，而**构建照样成功**）。已改为按块匹配 + 尾逗号修复的 awk，并在两份真实 tarball（0.1.5-rc.2 的「末尾」布局与 0.2.0-rc.2 的「中间」布局）上离线验证 JSON 均可解析。**另查**：`.github/workflows/` 三个固定 SHA 的 action 均已是上游最新，且 `nix-installer-action` 的 `# main` 注释经核对**准确**（该 SHA 同时是 main 的 HEAD 与 v23 tag）。**第 0 步实测**：开工前核对远端，0 个未关闭 issue、0 个未关闭 PR。
+**摘要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四语文档同步
+- `dsh` 0.2.0-rc.2 与 `dsh-alpha` 0.1.7-alpha.2 暂缓：hash 与构建通过，但预设挂载验证未过——`agentPresets/list` 的 roster 里都不出现；对照实验有区分度，尚不能区分格式不兼容与探针 `DSH_HOME` 不足
+- fix(dsh): `postPatch` 由「从 `devDependencies` 截断到末尾」改为按块匹配 + 尾逗号修复——0.2.0-rc.2 起 `exports` 在后，旧写法会连带删掉（导出失效而构建仍成功）；两份真实 tarball 离线验证可解析
 
 | 提交 | 说明 |
 |------|------|
@@ -286,7 +291,7 @@
 
 ## 2026-10-02T16:26:56+09:00
 
-**摘要**：feat(skills): 更新检查新增「第 0 步」——开工前同步远端并核对活跃 issue / PR（四语）— **通用技能** `nix-flake-update-check` 的主流程改由第 0 步起头（编号取 0，以免打乱既有第 1~9 步的交叉引用）：`git fetch` 对齐本地后列出未关闭 issue / PR，并划清「空」与「取不到」的分野——`gh` 失败时**显式报错、非零退出**，实测三种形态：认证失效 / 仓库名写错 → `Could not resolve to a Repository`；仓库**未启用 issue 功能** → `repository has disabled issues`；确实没有 → 退出 0 且输出空列表。故判据是两步：先证仓库可读，再看列表；**「空列表」只在命令成功时才算「真的没有」**。**为何值得单独立一步**：issue 是「已知故障」的集合、PR 是「在途工作」的集合，且它把取数链路自检提早到第 3 步之前。**提交前自检由九问扩为十问**（第 10 问即此步），并**如实标注来源差异**——前九问是实测返工的产物，第 10 问来自维护者的前置要求，性质不同。**适配层补本仓形态**：仓库坐标、`has_issues=true`、实测现状（0 未关闭 issue / 0 未关闭 PR），以及**四条真实先例**——PR #6 改的正是固定 SHA 的 action、PR #7 升级的正是更新检查会碰的包（且注定过不了 CI，终以关闭改手动收场）、PR #4 / #5 两份误报促成了 `/tts` 的 SSRF 真实修复、issue #3 成为技能拆分的契机。**顺带修正两处失真**：`traps.md` 原称「九问中每一问都对应这里的一个章节」，实则第 9 问（判据区分度）无对应章节（上次扩充时漂移）；四语技能文档仍写着「六问自检」与「第 1~9 步」（落后两轮）。**第 9 问补上「怎么自证」**：`nix flake check` 输出 `running 0 flake checks... all checks passed!` 是**缓存命中**而非「跑过了」——实测往 `docs/pcn/` 注入一个片假名后，`doc-links` 立即以 `kana on line 124` 失败，这才证明闸门带着当前输入真的量过。**验证**：`nix flake check` 全通过（首轮 pcn 曾残留助词「が」，被仓库自己的检查脚本抓出后修正）。
+**摘要**：feat(skills): 更新检查新增「第 0 步」——开工前 `git fetch` 对齐远端并核对未关闭 issue / PR（四语）— issue 是「已知故障」的集合、PR 是「在途工作」的集合，该步同时把取数链路自检提前。`gh` 失败即显式非零退出，故「空列表」只在命令成功时才算「真的没有」。提交前自检由九问扩为十问，并如实标注第 10 问出自维护者的前置要求（前九问是实测返工的产物）。适配层补本仓坐标、`has_issues=true`、实测 0 未关闭 issue / PR 与四条真实先例（PR #6 改固定 SHA 的 action、PR #7 更新本仓包、PR #4 / #5 促成 `/tts` 的 SSRF 修复、issue #3 促成技能拆分）；顺带修正 `traps.md` 与四语技能文档的两处失真。
 
 | 提交 | 说明 |
 |------|------|
@@ -294,7 +299,7 @@
 
 ## 2026-10-02T03:54:38+09:00
 
-**摘要**：fix(dsh): 更正 image 模态断言（四语）— 上一条记录（`2ab7dda`）在 `modules/dsh.nix` 的选项描述与四语 `dsh.md` 里写了 `deepseek-flash` 是「**唯一**声明 image 模态的 flash 条目」，并把该断言横跨 stable 与 alpha 两个通道。**实查 store 内两份已构建产物**（`dsh-0.1.5-rc.2`、`dsh-0.1.6-alpha.1` 的 `dsh-llm-deepseek` → `DEFAULT_MODELS`）后确认：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 的目录里**各有两条**声明 `inputModalities: ["text","image"]` —— `deepseek-flash` 与 `deepseek-v4-flash-vision-exp`；收敛为一条的只有 alpha `0.1.6-alpha.2`。该断言仅在 alpha.2 上成立。**改动**：选择理由改写为「三个目录都收录、且都声明 image 模态的唯一 id」，目录表新增「其中声明 image 模态」一列使该事实可直接核对；同时把降级警告从「静默替换」修正为**双路径**——新贴的图在 `session/prompt` 附件准入处**当场报错**（`MODEL_DOES_NOT_SUPPORT_IMAGES`），只有历史里已有的图才由 `projectImagesForTextModel` **静默**替换。默认值本身（`deepseek-flash`）不变，仍是正确选择。
+**摘要**：fix(dsh): 更正 image 模态断言（四语）— 上条记录称 `deepseek-flash` 为「唯一声明 image 模态的 flash 条目」且横跨两通道。store 内两份已构建产物：stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` 各有两条声明 `inputModalities: ["text","image"]`（`deepseek-flash`、`deepseek-v4-flash-vision-exp`），仅 alpha `0.1.6-alpha.2` 为一条。改动：改为「三个目录都收录且都声明 image 模态的唯一 id」，目录表新增该列；降级警告修正为双路径——新贴的图在 `session/prompt` 准入报错 `MODEL_DOES_NOT_SUPPORT_IMAGES`，仅历史里的图静默替换。默认值不变
 
 | 提交 | 说明 |
 |------|------|
@@ -302,7 +307,7 @@
 
 ## 2026-10-02T03:01:23+09:00
 
-**摘要**：fix(dsh): 默认模型迁到 `deepseek-flash`（四语）— **上游早在 2026-09-10 就下线了 V4 Flash 与 V4 Flash Vision Exp**：发布 DeepSeek-V4.1-Flash 时模型名收敛为 `deepseek-flash`（原生多模态、带图像理解）与 `deepseek-v4-pro`，旧 id 为兼容仍可调用、但由 V4.1-Flash 承接并按 Flash 计费（上游[模型与价格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)脚注 1）。dsh 的内置目录（`dsh-llm-deepseek` 的 `DEFAULT_MODELS`）随版本走：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 是四条，alpha `0.1.6-alpha.2` 收敛为两条并把 image 模态并进 `deepseek-flash`。**问题**：本仓 `defaultModel.model` 的默认值 `deepseek-v4-flash` 在 alpha 通道上已不在目录中，而 dsh 对目录外的 id 按**纯文本**模型处理（`modelInfo` 回落 `inputModalities: ["text"]`），派发前经 `projectImagesForTextModel` 把会话里的图片**静默替换成文本占位符** —— 不报错，模型也没看到图（本机实测：选择器里该 id 消失、默认值却仍指向它）。**改动**：默认值改为 `deepseek-flash`（两个通道的目录都在、且唯一声明 image 模态的 flash 条目），选项描述写明目录随版本走与「目录外 id 不等价」；四语 `dsh.md` 同步示例 id、新增「模型目录随 dsh 版本走」小节与静默降级警告，FIM 一节的取值按上游 FIM API 改为 `deepseek-flash` / `deepseek-v4-pro`。
+**摘要**：fix(dsh): 默认模型迁到 `deepseek-flash`（四语）— 上游 2026-09-10 下线 V4 Flash 与 V4 Flash Vision Exp，模型名收敛为 `deepseek-flash` 与 `deepseek-v4-pro`。dsh 目录随版本走：stable `0.1.5-rc.2` 与 alpha `0.1.6-alpha.1` 四条、alpha `0.1.6-alpha.2` 两条。原默认值 `deepseek-v4-flash` 已不在 alpha 目录，目录外 id 按纯文本模型处理，图片被 `projectImagesForTextModel` 静默替换为文本占位符——不报错、模型看不到图。改动：默认值改 `deepseek-flash`、选项描述写明目录随版本走；四语 `dsh.md` 同步示例 id、新增该节与降级警告
 
 | 提交 | 说明 |
 |------|------|
@@ -310,7 +315,7 @@
 
 ## 2026-09-28T13:07:06+09:00
 
-**摘要**：dsh-api-balance 0.1.0 → 0.1.1 — 薄封装坐标同步（子仓无维护日志，变更见其提交 [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177)）。**修的是什么**：音色改为按「**话的变体**」选择 —— 旧实现只按主语言前缀取第一个音色，而 `zh-HK`（粤语，Tracy/HiuGaai）与 `zh-CN`（普通话，Xiaoxiao）同属 `zh` 主语言，音色表里粤语排在前的系统**必然把普通话文本念成粤语**；更麻烦的是**文本与界面全对**，不听声音发现不了（本机实测：界面中文、播报却是粤语）。修复：① 变体归类与排序，普通话请求只在普通话音色里选（粤语请求同理，`yue`/`zh-yue` 亦识别）；② 发声前**等音色表就绪**（首次 `getVoices()` 常为空，选不到就把 lang 交给引擎自选，同样念错话）；③ `utter.lang` 与所选音色对齐；④ 新增「音色」设置项（默认自动、可点名指定）并显示当前实际使用的音色——把「选了哪个音色」变成看得见的事实。**判据**：子仓新增 `test/voice-selection.test.mjs`（25 条断言，含**反证**——先用旧算法在「粤语在前」的构造表上断言它**确实选到粤语**，再断言新算法不选），另用真实浏览器（本机 Edge 的 23 个音色）跑同一份抽取代码验证实选结果。
+**摘要**：dsh-api-balance 0.1.0 → 0.1.1 —— 薄封装坐标同步（子仓无维护日志，变更见 [`76ea584`](https://github.com/Kihara777/dsh-api-balance/commit/76ea5847c3e3f8e639b01abbfd8901fa71d6c177)）。音色改为按「话的变体」选择：旧实现按主语言前缀取第一个音色，而粤语 `zh-HK` 与普通话 `zh-CN` 同属 `zh`，音色表里粤语在前的系统必然把普通话念成粤语——文本与界面全对，不听声音发现不了。现按变体归类排序、发声前等音色表就绪、`utter.lang` 与所选音色对齐，并新增「音色」设置项显示实际使用的音色。判据：子仓 `test/voice-selection.test.mjs`（25 条断言含反证）与真实浏览器实测。
 
 | 提交 | 说明 |
 |------|------|
@@ -323,7 +328,7 @@
 
 ## 2026-09-28T08:28:27+09:00
 
-**摘要**：refactor(skills): 把本日的预设事故泛化进两级技能（按 `nixkits-check-updates` 第 10.3 步的归属判据分层：「搬到另一个 nix flake 仓库还成立吗」）——**① 通用技能**（任何仓库都成立）：`nix-flake-update-check` 的「提交前自检」由**八问增至九问**，新增第 9 问「『验过了』验的是失败会发生的那一层吗？判据自己能失败吗？」。它与前八问性质不同：质问的不是「查得够不够」，而是**判据本身有没有区分度**——一个从不报警的判据无法区分「没问题」与「没量到」，其全绿不含信息量；救济办法是给判据配一份**已知坏掉的夹具**（反证），能把坏夹具判出来，它的 ✓ 才算数。**② 适配层**（本仓特有）：`nixkits-check-updates` 的「dsh 内置插件清单同步」下新增一节——插件改名/删除不只是文档问题，还会**真的坏掉**本仓两个预设：组合行按**包名**引用内置插件，而 dsh ≤ 0.1.6-alpha.1 对无法解析的行**静默忽略**（旧名可潜伏很久、不留痕迹），≥ alpha.2 改为**硬失败**（整份预设挂不起来，界面只表现为「预设消失了」）。该节同时给出升级前必跑的两层判据（廉价离线的行解析 + 权威的真挂载，后者读上游自己的 `broken` 字段，是唯一能抓住「包在、行也解析得了、加载时才炸」的判据）与 seed-once 播种的推论（包内源与已部署副本都要修）。三处对自检编号的引用同步更新。
+**摘要**：refactor(skills): 本日的预设事故按「换个 nix flake 仓库还成立吗」分入两级技能 —— ① 通用技能 `nix-flake-update-check` 的提交前自检由八问增至九问，新增「『验过了』验的是失败会发生的那一层吗？判据自己能失败吗？」：从不报警的判据区分不了「没问题」与「没量到」，救济是给判据配一份已知坏掉的夹具（反证）。② 本仓适配层 `nixkits-check-updates` 新增一节：插件改名/删除不只是文档问题，还会真的坏掉两个预设——组合行按包名引用内置插件，dsh ≤ 0.1.6-alpha.1 静默忽略解析不了的行，≥ alpha.2 硬失败致整份预设挂不起来；该节给出升级前必跑的两层判据（离线行解析 + 读上游 `broken` 字段的真挂载）与 seed-once 播种的推论。三处自检编号引用同步更新。
 
 | 提交 | 说明 |
 |------|------|
@@ -331,7 +336,10 @@
 
 ## 2026-09-28T08:04:31+09:00
 
-**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，而本仓两个预设的组合行与其中的技能文档示例仍写旧名。dsh ≤ alpha.1 对无法解析的插件行**静默忽略**（预设照常加载、问题不留痕迹），alpha.2 新增的插件解析器把它变成**硬失败**：`preset "lampkeeper" failed to mount: row "workflow-worker-thread" names a plugin that cannot be resolved` —— 整份 Agent 预设挂不起来，维护者本机四个预设里三个死于此，症状表现为「预设凭空消失」。修复：`nixos-mode` / `maintenance-mode` 的组合行与 `editing-cordis-compositions` 技能示例同步改名（`config` 逐字不变，维护模式仍为 NixOS模式的完整派生）。**判据缺口**：既有流程只验证「包能否构建」，而「组合行能否解析」要到**建会话**才暴露——失败点比验证点晚了一整层。本次改为对**构建产物**直接做挂载验证：起一次性 dsh（独立 `DSH_HOME`/端口）调 `agentPresets/list`，读上游自己的 `broken` 健康判定，并塞入一份**故意坏掉的夹具**做反证，确认判据确有区分度（夹具必须被判 broken 且理由含假包名）。同一陷阱写入 `docs/*/dsh.md` 插件兼容段（四语）。**另修正本仓 `AGENTS.md` 的「本机部署」前提**：本机是 **GitHub 引用而非 `path:` 输入**（原文写反了）——因此必须「先推送、再重锁」；本地提交不推送就锁不到，`nixos apply` 会看起来成功而没带上改动。同时记下重锁会重新解析本仓的浮动子输入（实测一次 `--update-input nixkits` 把 **llama-cpp 0.4.1 → 0.5.0** 一并拉了进来），修一行小事前先想清楚要不要连带升级 llama.cpp。
+**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，旧名在 ≤ alpha.1 静默忽略、alpha.2 起令整份预设挂不起来。
+- `nixos-mode` / `maintenance-mode` 组合行与 `editing-cordis-compositions` 技能示例同步改名，`config` 逐字不变
+- 验证改为对**构建产物**真挂载：一次性 dsh 调 `agentPresets/list` 读上游 `broken` 判定，并塞入故意坏掉的夹具做反证
+- 同陷阱写入 `docs/*/dsh.md`（四语）；修正 `AGENTS.md` 本机部署前提为 GitHub 引用而非 `path:`（须先推送再重锁，重锁连带重解析浮动子输入）
 
 | 提交 | 说明 |
 |------|------|
@@ -341,7 +349,7 @@
 
 ## 2026-09-24T05:45:11+09:00
 
-**摘要**：① `fix(pcn)` 剔除偽中国語残留假名——上两次提交在 pcn 文档留下 4 处假名，`nix flake check` 的 `check-maintenance-log` 与 `check-doc-links` 双双失败（即 **CI 自那时起一直是红的**），逐处改写为伪中国语后两检查恢复 exit 0。② `feat(dsh)` 新增 6 个结构化 settings 选项并修正 namespace 表：上游 dsh 0.1.6-alpha 共注册 12 个 settings namespace，而模块此前只为 `agent-default-model` 提供了结构化选项，其余只能走**无类型逃生舱** `settings`——字段名、枚举、范围写错都**不会在求值期报错**，dsh 运行时校验失败后丢弃该段并**静默回落 schema 默认值**，日志里什么都不留。现为 `agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation` 补齐 Nix 侧镜像（语义与既有 `defaultModel` 一致：默认 `enable = false` 不写入、显式 `settings.<同名 namespace>` 优先）；`shell` 因 `cwd` 在 schema 里**没有默认值**、部分声明有校验风险而刻意不提供。同时更正文档中按 `0.1.5-rc.2` 抄录的 namespace 表——逐项实测后 **5 行与事实不符**：`locale` 字段是 `preference` 而非 `language`；`ui-theme` 只有 `preference`/`fontSize`（`dark`/`light` 是 `preference` 的取值而非字段）；`shell` 不存在 `dshHome`，实际是执行器六项限制；`subagent-model-selection` 顶层是 `enabled`/`allowedModels`（`provider`/`model` 是数组元素字段）；`agent-default-model` 仅 `provider`/`model` 必填。**验证**：6 个检查全绿、四语结构对等（命名空间表 19 行、结构化选项表 7 行、代码围栏 30 处，四语一致）、pcn 假名 0 命中、并做**端到端渲染验证**（启用全部 6 项后生成的 settings.yaml 正确含 6 个新段，`subagent-model-selection.enabled` 按设计自动置 true）
+**摘要**：① `fix(pcn)` 剔除偽中国語残留假名 4 处，`check-maintenance-log` 与 `check-doc-links` 恢复 `exit 0`。② `feat(dsh)` 新增 6 个结构化 settings 选项（`agent-loop`、`subagent-model-selection`、`locale`、`ui-theme`、`ui-chat`、`ui-conversation`）：此前仅 `agent-default-model` 有结构化选项，其余只走无类型 `settings`（写错静默回落 schema 默认）；`shell` 因 `cwd` 无 schema 默认值而不提供。并改正文档里 `0.1.5-rc.2` 版 namespace 表 5 行错误。判据：6 项检查全绿、四语结构对等、全部启用后生成的 settings.yaml 含 6 新段。
 
 | 提交 | 说明 |
 |------|------|
@@ -350,7 +358,7 @@
 
 ## 2026-09-23T08:27:16+09:00
 
-**摘要**：refactor(preset): 维护模式提示词拆成「通用方法 + 本仓适配层」——`maintenance-skills` 此前把 NixKits 工作流**整块写死在公开预设里**，与 `skills/` 既有分法（`nix-flake-update-check` 通用 ← `nixkits-check-updates` 本仓适配）不一致。现拆为两段：`maintenance-workflow`（序号 901，通用——任何仓库都成立：按逻辑类别分批提交、推送后记录、文档与代码同步、修复泛化到技能、技能内容单一来源）与 `maintenance-workflow-repo`（序号 902，本仓约定：四语与 `docs/zh/` 基准、`write-maintenance-log` 为准绳、条目数一致的可核验判据、技能树单一来源）。判据只有一句「这条规矩换个仓库还成立吗」；通用层不出现任何本仓专名（NixKits / 四语 / `translate-*` / `MAINTENANCE.md` / `grep -c` / `docs/zh`，已逐词核对）。新增组件选项 `repoWorkflow: false` 可只留通用层。四语文档同步
+**摘要**：refactor(preset): 维护模式提示词拆成「通用方法 + 本仓适配层」—— `maintenance-skills` 此前把 NixKits 工作流写死在公开预设里，与 `skills/` 既有分法（`nix-flake-update-check` 通用 ← `nixkits-check-updates` 本仓适配）不一致。现拆为 `maintenance-workflow`（序号 901，通用：分批提交、推送后记录、文档与代码同步、修复泛化到技能）与 `maintenance-workflow-repo`（序号 902，本仓约定：四语与 `docs/zh/` 基准、`write-maintenance-log` 为准绳、条目数一致判据）。判据是「这条规矩换个仓库还成立吗」；通用层不含本仓专名。新增选项 `repoWorkflow: false` 可只留通用层；四语文档同步。
 
 | 提交 | 说明 |
 |------|------|
@@ -358,7 +366,7 @@
 
 ## 2026-09-22T16:23:33+09:00
 
-**摘要**：docs(skill): 把「引导器配置不可命令式改写」事故写入 `nixos-specialisation-tuning` —— 这是一次**由我引入、实际导致系统无法启动**的故障。**需求**：上游 nixpkgs 把 Limine 默认项**硬编码**为"有 specialisation 就选第 3 项"（`limine-install.py:533`），故只要存在可选面，默认就进可选面而非默认面；为改回默认面，用 `extraInstallCommands`（nixpkgs 保证它在 install 脚本**之后**执行）`sed` 改写 `limine.conf` 的 `default_entry`。**失败机制**：该钩子执行在 limine **完成哈希固化之后** —— `limine-install.py:660` 在 `enrollConfig=true` 时对配置算 `blake2b(config_file.strip())` 并 `limine enroll-config` 固化进 EFI 二进制，而 `limine.nix:471` 的 `${install} "$@"` 完成固化、`:472` 的 `${extraInstallCommands}` 才改写配置。改写发生在固化之后 → **哈希不匹配** → Secure Boot 下引导器拒绝加载配置 → **系统无法启动**，现场只能靠外部镜像手动关闭 secure boot 与 `panicOnChecksumMismatch` 才进入系统。**通用形态**：`extraInstallCommands` 这类"install 之后"的钩子看似是安全的最终修补点，但 install 内部可能**已完成校验/固化** —— "钩子在最后执行" ≠ "钩子的修改会被所有校验接受"。**技能新增两节**：① `### 引导菜单与默认面` —— 通用规则（引导器配置必须声明式、不得 sed/cp 改写生成物）、完整事故记录与失败机制、改动前的正确排查顺序（先读 install 脚本完整流程、标出所有「写文件 → 计算校验/签名」的先后、确认修改落在固化之前；无安全入口则顺从上游逻辑而非对抗）、若必须固化后修改则须用**与上游逐字节相同**的算法重新固化、以及安全开关（`enrollConfig`/`validateChecksums`/`panicOnChecksumMismatch`）的降级纪律（nixpkgs 对三者均有断言，标注 "allows bypassing secure boot"）；② 分面切换的两个运行级故障 —— `### 分面切换后的运行级收敛`（`switch-to-configuration` 不改 active target；判据**不能**用 `is-active`，因 systemd target 是叠加的、`graphical` 依赖 `multi-user` 故恒真，须用 `default.target` 的**解析值**；且 `systemctl get-default` 返回 `default.target` 本身而非其指向）与 `### 用户级 systemd 实例跨面陈旧`（`user@<uid>.service` 跨面不重启致单元链接失效，`daemon-reload`/`daemon-reexec` 均无效、须整个 restart；含反向清理与验证判据 —— **不得用"合成器存在"当"桌面正常"**，黑屏时合成器正是在跑的）。同步更新 frontmatter `description` 与「适用场景」，使技能能被正确路由触发
+**摘要**：docs(skill): 记「引导器配置不可命令式改写」事故于 `nixos-specialisation-tuning` —— `extraInstallCommands` 在 Limine **完成哈希固化之后**改写 `limine.conf` 的 `default_entry`，哈希不匹配致 Secure Boot 下**系统无法启动**。技能加两节：`### 引导菜单与默认面`（配置必须声明式，并给出「写文件 → 校验/签名」的排查顺序与固化后须与上游逐字节同算法重新固化的要求）与分面切换的两个运行级故障（判据不得用 `is-active` 而须用 `default.target` 的解析值；`user@<uid>.service` 跨面须整体 restart，不得以「合成器存在」当「桌面正常」）。并同步 frontmatter `description` 与「适用场景」。
 
 | 提交 | 说明 |
 |------|------|
@@ -366,7 +374,7 @@
 
 ## 2026-09-22T09:37:07+09:00
 
-**摘要**：fix(ci): 修正 CI 徽章误报 `failing` —— 根因是 `ci-summary` 的**竞态**。**现象**：README 徽章反复显示 `failing`，而**当时所有构建实际全绿**；实测 09-18 ~ 09-21 徽章在 `failing → passing` 之间**成对跳变（间隔 1~2 分钟）**，规律性明显，说明不是真实故障。**根因**：`ci-summary.yml` 由 push 触发，会在**同一轮 push 的构建尚未完成时**启动；其查询用 `status=completed` 且**不限定 commit**，于是某些 workflow 的"最新已完成运行"仍是**上一轮 push 的旧失败运行**，被 `group_by(workflow_id)` 取为最新 → 判定失败。**已定位到具体案例**：`Build dsh-preset-news-three-elements (aarch64)` **run#157**（sha `a350616`）失败——原因是 `llama-cpp-ver` 浮动输入的 **403 限流**偶发（与 AGENTS.md 已记载的同一类）；其 #158/#159 随后均成功，但 `ci-summary` 恰在空档触发，读到 #157。**修复三点**：① 查询加 `head_sha=$GITHUB_SHA`，只统计**当前 commit** 的运行——本轮未完成的 workflow 在统计中**不出现**（既不算通过也不算失败），由其完成后触发的下一次 `ci-summary` 补上，故不会再把旧失败当成现况；② `curl` 加 `--fail`——此前不带时，403 限流返回的 JSON 错误体让 jq 取不到 `workflow_runs` → `FAILED` 为空 → **静默写成 `passing`**，这是**比误报红更危险的假绿**（误报红会有人去查，假绿无人察觉）；③ 请求失败时**保留现有徽章并 `exit 1`**，不写入错误颜色。**验证**：新 jq 逻辑对当前 HEAD 实跑输出为空（=> passing），与 **31 个 Build workflow 全绿**的事实一致；先手动触发一次确认徽章自愈，修复推送后该 workflow 再次 success、徽章保持 `passing`。**文档与泛化**：`AGENTS.md` 的 CI 章节补该竞态陷阱与 `--fail` 两点（原文仅写"每小时刷新"，未提触发条件与风险）；适配层技能补「收尾时不要被徽章误导」一节，指明**以运行记录为准**，并区分偶发失败（限流，重跑即可）与真失败（hash 不符、构建错误）。**说明**：本次的"外部改动"实为 `gh-pages` 上由 `ci-summary` 机器人写入的徽章状态——**主分支源码未被他方改动**，`git status` 干净、`main` 与远端一致
+**摘要**：fix(ci): `ci-summary` 按 `head_sha` 过滤，修正 README 徽章误报 `failing` —— 该 workflow 由 push 触发，会在同一轮构建未完成时启动，查询不限定 commit 便取到上一轮 push 的旧失败运行（实例：`Build dsh-preset-news-three-elements (aarch64)` run#157）。另两点：`curl` 加 `--fail`；请求失败时保留现有徽章并 `exit 1` —— 此前 403 限流返回的 JSON 错误体让 `FAILED` 为空，静默写成 `passing`。判据：新 jq 逻辑对当前 HEAD 实跑输出为空（=> passing），与 31 个 Build workflow 全绿一致。本次外部改动仅为 `gh-pages` 上的徽章状态，主分支源码未被他方改动。
 
 | 提交 | 说明 |
 |------|------|
@@ -374,7 +382,12 @@
 
 ## 2026-09-20T17:56:28+09:00
 
-**摘要**：refactor(skill): 对**全部 8 个通用技能**做「仓库/角色特指」审计后的批量泛化 —— 起因是本轮先修了 `traps.md` 的 Dependabot 特指，遂系统排查同类问题。**审计方法**：先按 frontmatter 与正文判定每个技能是**通用**还是**仓库适配层**（后者特指 NixKits 是**正确的**，不在修复范围），再逐文件核查三类问题：①把某仓库的约定当作通用规则 ②只对维护者说话、忽略贡献者/接手者 ③跨技能硬引用（换个仓库即断）。**通用技能 8 个**：`nix-flake-update-check` / `write-maintenance-log` / `write-project-docs` / `translate-pseudocn` / `nixos-modern-cli` / `nixos-specialisation-tuning` / `recover-nixos-config` / `news-three-elements`。**修复要点**：**① `write-maintenance-log` 两处会导致"换个仓库就不工作"**：入口写着「本技能由 AGENTS.md 规则强制触发」——其他仓库可能没有 AGENTS.md 或没有该规则，技能**永远不触发**，已改为条件式（并说明无该规则时由用户显式触发）；SUBTITLE 映射表原为写死的 `NixKits 软件更新维护日志。`，而该表是翻译时**逐字替换**的机械字符串，照抄会把**别的项目名写进采用者的日志**，已改为 `<项目名>` 占位并加替换说明。**② `write-project-docs` 的自相矛盾**：templates.md 写「根目录仅保留中文」，而同一技能的反模式表里明列「硬编码语言列表」为**反模式**——已改为「基准语言（由仓库自定，本技能不假定具体语言）」。**③ 切换器验证脚本的连带修复（实测踩坑）**：原脚本写死 `docs/zh|en|ja|pcn` 与 `/5` 条目数，改写为动态发现语言集时**我自己连踩三个坑并逐一实测修正**——`^\[中文\]` 在 BRE 里是**字符类**（须 `grep -F`）、不锚定语言名会命中 **shell 管道与 Markdown 表格行**（且 `grep -m1` 取到的正是出错那一行，极易误判）、**基语言在切换器中是纯文本**（只匹配 `[名]` 会把基准语言文档误报为缺条目）。最终版经真实仓库验证：**有效文档零输出，注入断链后正确报 `3/4`**。这三条已写入技能作为易错点。**④ `translate-pseudocn` 修复一处语法残缺的脚本**：孤立的循环体 + 未定义 `$expected` + 写死「5 语言」，任何人复制都无法运行——已重写。**⑤ 跨技能硬引用**：通用技能对 `write-maintenance-log`、适配层的引用改为可独立成立的表述（用户可能只装了其中一个技能）。**⑥ 其余**：步数声明「第 1~10 步」与实际 9 步不符；子仓示例去掉 `dsh-api-balance`/`MAINTENANCE.md` 专指；`kits/` 改为通用占位；实测数字统一标注为「来源仓库实测」，避免与读者仓库混淆。**保留**：`nixkits-check-updates` / `nixkits-skills` 的 NixKits 特指**不动**（适配层本就该特指），仅补「该结论对本仓任何经手人成立」。**审计为干净**：`nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config`、`news-three-elements`。**验证**：改写后的两个验证脚本均**实际运行通过**（含故意注入断链的反向验证），`nix flake check` 全通过
+**摘要**：refactor(skill): 审计后泛化 8 个通用技能中的仓库与角色特指。
+- `write-maintenance-log`：入口「由 AGENTS.md 强制触发」改条件式；SUBTITLE 的 `NixKits 软件更新维护日志。` 改 `<项目名>` 占位（逐字替换，会写入他项目名）
+- `write-project-docs`：「仅保留中文」与反模式表「硬编码语言列表」矛盾，改「基准语言由仓库自定」
+- 切换器验证脚本改动态发现语言集（原写死 `docs/zh|en|ja|pcn` 与 `/5`）；`translate-pseudocn` 残缺脚本重写
+- 跨技能硬引用改为可独立成立；步数声明与实际的 9 步对齐；子仓示例与 `kits/` 去特指
+判据：两个验证脚本实跑通过（含注入断链反向验证），`nix flake check` 全通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -382,7 +395,7 @@
 
 ## 2026-09-20T17:41:07+09:00
 
-**摘要**：refactor(skill): 泛化外部自动化与 Actions 检查的**适用对象** —— 不再特指某个仓库、某个角色。**问题**：原表述把「不用 Dependabot」写成 NixKits 的**专属事实**，并以**单一维护者视角**叙述 Actions 检查的动因 —— 技能是发给他人的可复用产物，读者可能是**别的仓库**的维护者、贡献者或潜在贡献者，这种写法读起来像"与我无关"。**改法：按「角色」与「判据」陈述，判据不依赖读者在仓库中的身份**。**① `traps.md` 新增「为什么这适用于所有经手人，而不只是维护者」**：点明**固定 SHA 是共同选择，其副作用（收不到通知）由任何采纳该做法的人继承**；列维护者 / 贡献者·潜在贡献者 / 审计者·接手者三类角色的适用时机；并明确判据是**「能否自行实现」而非「谁在用」** —— 平台已启用则作为**交叉核对**，未启用则是**唯一途径**，两种情况都值得跑（命令只读，成本几秒）。**② `traps.md` 新增「若你不是维护者：升级 action 也应走 PR」**：升级改变 CI 行为、属需评审变更；无关的发现应另开 PR 而非混入当前 PR；并加「改前先确认上游 tag 真实存在」的告警（不要凭 release 页面标题推断 SHA）。**③ 第 2 步**把"如不用 Dependabot"改为对任何人的适用性说明，并强调**发现 ≠ 必须升级**。**④ `builders.md`** 小节标题由「若仓库启用了外部依赖自动化（如 Dependabot）」改为「若 PR 由外部依赖自动化开出」，正文由「NixKits 不用、本节仅供参考」改为**通用情形**。**⑤ 移除通用技能对适配层的硬编码路径引用**（`../nixkits-check-updates/SKILL.md`）—— 通用技能不应耦合某仓库的技能集，改述为"某些仓库刻意不启用此类自动化"。**⑥ 第 8 步**不再点名某仓库的记录技能，改为「由适配层指定」；第 5 步实例改标「来源实例（取自一个实际仓库）」，消除通用技能里"本仓库"的歧义。**边界**：适配层 `nixkits-check-updates` **保留**本仓事实（它本就该特指，属**正确的**仓库耦合），仅补充说明该结论对**本仓任何经手人**成立。**验证**：`nix flake check` 全通过
+**摘要**：refactor(skill): 泛化外部自动化与 Actions 检查的**适用对象**，不再特指 NixKits 与单一维护者视角 —— 技能是发给他人复用的产物，读者可能是别的仓库的贡献者或接手者，原写法读起来像「与我无关」。`traps.md` 新增两节：固定 SHA 的副作用（收不到通知）由任何采纳者继承，判据是**能否自行实现**而非谁在用（按维护者 / 贡献者 / 审计者三类角色列适用时机），以及非维护者升级 action 也应走 PR；第 2 步与 `builders.md` 改述为一般情形，第 8 步改为「由适配层指定」，并移除通用技能对适配层的硬编码路径引用。判据：`nix flake check` 全通过；适配层 `nixkits-check-updates` 的本仓事实保留。
 
 | 提交 | 说明 |
 |------|------|
@@ -390,7 +403,11 @@
 
 ## 2026-09-20T17:28:32+09:00
 
-**摘要**：fix(skill): 修复 `nix-flake-update-check` 的三处缺陷 —— 均由本日更新检查的实际经历暴露，且**三者共同的失败形态都是「不报错、只漏掉」**。**① 固定 SHA 的 Actions 检查无法到达（最严重）**：`traps.md` 早已写好完整流程（列 action → 查 tag → 取 tag 的 commit → 回写 SHA 与注释），但 `SKILL.md` **没有任何一步指向它** —— 第 2 步只扫 `flake.nix` 引用的包定义，六问自检也无对应条目，于是这类检查从未被执行。**已补**：第 2 步末尾新增「软件包之外还有一类必须检查的更新」小节（含发现命令与「**先跑命令看实际输出，不要凭"这仓库没有"跳过**」的告诫）、自检扩为**八问**（第 8 问即 Actions）、`traps.md` 目录标注「**每轮都要**」。**② 版本发现启发式静默漏包**：第 2 步用 `version\s*=` 提版本，**匹配不到参数化主定义的 `version ? "0.1.5-rc.2"`**（`packages/dsh.nix`）—— 该包因此从检查范围里消失，且与「已是最新」无法区分。已改为 `version\s*[?=]`，并补表格说明 `?`＝主定义默认值（stable 真版本）与 `=`＝通道覆盖值**二者都要查**。**③ 裸 `curl` 到 `api.github.com` 静默返回空**：第 3 步示例用匿名 `curl`，耗尽 60 次/小时额度后**不报错、返回空**，下游 `grep` 同样静默 —— **每个包都被判成"已是最新"**，整轮给出虚假的「全部正常」。已统一改 `gh api`、显式加 `ERROR:` 分支、纳入自检第 7 问，并补「**空结果必须当错误**」纪律与链路自检命令。**泛化归属**：①②③ 均为**仓库无关**的通用缺陷，写入 `nix-flake-update-check`；`nixkits-check-updates` 适配层补本仓特有内容 —— 不用 Dependabot 故**本技能是 action 更新的唯一途径**、`build-package.yml` 是可复用 workflow（被 31 个 workflow 引用）、以及本机 `curl` 实测。**首次执行新流程的实测结果**：本仓 3 个 action（`actions/checkout` v7.0.1、`DeterminateSystems/nix-installer-action` main、`cachix/cachix-action` v17）共 6 处引用，**逐个比对 SHA 后确认全部为最新** —— 修复的价值不在"发现了更新"，而在**该检查从此会产生确定的结论，而不是被静默跳过**。**验证**：`nix flake check` 全通过（含 `preset-derivation` 漂移检查）
+**摘要**：fix(skill): 修复 `nix-flake-update-check` 三处「不报错、只漏掉」缺陷。
+- 固定 SHA 的 Actions 检查不可达：`traps.md` 有流程而 `SKILL.md` 无步骤指向，补第 2 步小节、自检扩八问、目录标「每轮都要」
+- 版本发现用 `version\s*=` 漏掉参数化主定义的 `version ? "0.1.5-rc.2"`（`packages/dsh.nix`），该包从检查范围消失；改 `version\s*[?=]`
+- 裸 `curl` 查 `api.github.com` 额度耗尽后不报错返回空，下游同样静默、每包判「最新」；改 `gh api` 加 `ERROR:` 分支
+判据：`nix flake check` 全通过；新流程首跑实测 3 个 action 共 6 处引用逐一比对 SHA 均最新。
 
 | 提交 | 说明 |
 |------|------|
