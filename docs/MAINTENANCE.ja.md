@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T13:23:30+09:00
+
+**概要**：dsh-api-balance 薄ラッパー re-pin —— rev `f805f4e` → `1f0af6c`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) と [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9) にある）。メンテナのフィードバックによる二点：① 下部統計バーの横スクロールを**廃止** —— 公式 0.2.0 は各指標をクリックできるピルにし（開くと「セッション統計」ダイアログ：モデル所要時間 / TTFT / TPS / token / キャッシュヒット）、行内スクロールは不要になりピルのジェスチャと競合していた；設定行はグレーアウトして公式の方案を明記し、旧版が注入したスタイルは掃除する。② 質問ダイアログが**依然として選択肢を隠していた** —— 長いプロンプトでは header が実測 948px に対しカードの可視領域は 398px で、追従する不透明 header が遮蔽板になっていた；header を高さ制限（≤40vh）して自身でスクロールさせ追従をやめ、実測で三つの選択肢がすべて視口内に戻った（664px 中 533–661px）。判定：本パッケージの**ビルド成果物**を対象に `develop/ab-ui` の 14 項目（C2/C6 は「機構」から「結果」へ変更）、稼働ツリーは `develop/check-deployed-artifact.py` の三つの特徴文字列で照合。
+
+| コミット | 説明 |
+|------|------|
+| `1548c4c` | fix(dsh-api-balance): re-pin to 1f0af6c — stats bar retired, question prompt no longer hides the options |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `f805f4e` → `1f0af6c` |
+| 　 | src hash | `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` → `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` |
+
 ## 2026-10-05T07:45:26+09:00
 
 **概要**：CI 修正 —— 浮動入力 `llama-cpp-ver` を「認証付き取得 + ローカル上書き」に変更し、`api.github.com` の 403 制限を根治した。当該入力は**通常の URL 入力**であり、実測によれば Nix は `access-tokens` / `netrc-file` をこの種の fetch に**付与しない**（判据：当該 host に**偽トークン**を配し、未取得の同 host URL を取得する——認証ヘッダが本当に送出されるなら GitHub は必ず 401 `Bad credentials` を返す。実測では fetch は**成功**し、未認証枠が 1 減った）。ゆえに各 job が未認証リクエストを 1 回ずつ打ち、runner IP が共有する 60 回/時の枠が尽きると 403：実測で 2 回赤、応答体はいずれも `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。現在は先に `gh api`（認証、5000 回/時）で同一の JSON を取得し、`--override-input llama-cpp-ver path:<json>` で Nix に渡す：意味は不変（overlay は `json.tag_name` のみ読む）。取得不能・`tag_name` 欠落は**明示的に失敗**し、上書きパラメータが空の場合も明示的に失敗する（未認証経路への暗黙の退避をしない）。`access-tokens` は残す——担当は `github:` 取源である。AGENTS.md と `nixkits-check-updates` 技能の「両 host で根治」という旧結論は実測に合わせて訂正した。

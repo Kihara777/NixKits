@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T13:23:30+09:00
+
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `f805f4e` → `1f0af6c`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 與 [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9) 見）。維護者反饋 二点 変更：① 底部統計条 横 scroll **停用** —— 官方 0.2.0 統計条 各指標 click 可能 pill 化（開即「session 統計」dialog：模型用時 / TTFT / TPS / token / cache hit）、行内 scroll 不要 且 pill gesture 競合；設定行 置灰 官方方案 明記、旧版 注入 style 清掃。② 疑問 window **依然 選択肢 遮蔽** —— 長題干 header 実測 948px 対 卡片可視域 398px、吸頂 不透明 header 遮蔽板 成；header 高 制限（≤40vh）自身 scroll 化 吸頂 廃止、実測 三選択肢 全部 視口内 復帰（664px 中 533–661px）。判据：本 package **build 産物** 対象 `develop/ab-ui` 14 項目（C2/C6「機構」→「結果」変更）、稼働樹 `develop/check-deployed-artifact.py` 三特徴串 照合。
+
+| 提交 | 説明 |
+|------|------|
+| `1548c4c` | fix(dsh-api-balance): re-pin to 1f0af6c — stats bar retired, question prompt no longer hides the options |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重釘） |
+| 　 | rev | `f805f4e` → `1f0af6c` |
+| 　 | src hash | `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` → `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` |
+
 ## 2026-10-05T07:45:26+09:00
 
 **摘要**：CI 修正 —— 浮動入力 `llama-cpp-ver` 「認証付 取得 + 本地 上書」至 変更、`api.github.com` 之 403 制限 根治。該入力 **通常 URL 入力** 在、実測 依 無 Nix `access-tokens` / `netrc-file` 此類 fetch 至 **付与 不**（判据：該 host 至 **偽 token** 配、未取得 之 同 host URL 取得——認証 header 真 送出 場合 GitHub 必 401 `Bad credentials` 返。実測 fetch **成功**、未認証 枠 一 減）。故 各 job 未認証 request 一 回 打、runner IP 共有 之 60 回/時 枠 尽 時 403：実測 二 回 赤、応答体 共 `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。現在 先 `gh api`（認証、5000 回/時）同一 JSON 取得、`--override-input llama-cpp-ver path:<json>` 以 Nix 至 渡。意味 不変（overlay `json.tag_name` 唯 読）。取得 不能、`tag_name` 欠落 **明示的 失敗**、上書 parameter 空 場合 亦 明示的 失敗（未認証 経路 至 暗黙 退避 不）。`access-tokens` 残 —— 担当 `github:` 取源 也。AGENTS.md 與 `nixkits-check-updates` 技能 之「両 host 根治」旧結論 実測 合 訂正 済。

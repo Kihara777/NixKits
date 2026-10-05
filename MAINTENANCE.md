@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-05T13:23:30+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `f805f4e` → `1f0af6c`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 与 [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9)）。按维护者反馈改两处：① 底部统计条横向滚动**停用** —— 官方 0.2.0 已把统计条上每个指标做成可点击的 pill（点开是「会话统计」对话框：模型用时 / TTFT / TPS / token / 缓存命中），行内滚动不再适用且与 pill 的手势相抢；设置里那行置灰并写明官方方案，旧版本注入的样式主动清理。② 疑问窗口**仍然遮挡选项** —— 长题干下 header 实测 948px 而卡片可见区仅 398px，吸顶的不透明 header 成了挡板；改为 header 限高（≤40vh）自滚、不吸顶，实测三个选项全部回到视口内（533–661px / 视口 664px）。判据：以本包**构建产物**为被测对象跑 `develop/ab-ui`（C2/C6 已从「机制」改成「结果」层），运行树核对用 `develop/check-deployed-artifact.py` 的三个特征串。
+
+| 提交 | 说明 |
+|------|------|
+| `1548c4c` | fix(dsh-api-balance): re-pin 到 1f0af6c —— 统计条停用 + 疑问窗口题干不再遮挡选项 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | rev | `f805f4e` → `1f0af6c` |
+| 　 | src hash | `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` → `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` |
+
 ## 2026-10-05T07:45:26+09:00
 
 **摘要**：CI 修复 —— 浮动输入 `llama-cpp-ver` 改走「认证取回 + 本地覆盖」，根治 `api.github.com` 的 403 限流。该输入是**普通 URL 输入**，而实测表明 Nix **不会**把 `access-tokens`／`netrc-file` 附加到这类 fetch 上（判据：给该 host 配**假 token** 再取一个从未取过的同 host URL——若认证头真的送出，GitHub 必然回 401 `Bad credentials`；实测 fetch **成功**、未认证额度 −1）。于是每个 job 各打一次未认证请求，共享 runner IP 的 60 次/小时用尽即 403：实测红过两次，响应体均为 `API rate limit exceeded for <ip>`（`Build ruyi-beta (x86_64)` 2026-10-02 IP `68.220.61.199`、`Build kitsfmt (x86_64)` 2026-10-04 IP `64.236.142.132`）。现改为先用 `gh api`（认证，5000 次/小时）取回同一份 JSON，再以 `--override-input llama-cpp-ver path:<json>` 喂给 Nix：语义不变（overlay 只读 `json.tag_name`），取不回或缺 `tag_name` 即**显式失败**，覆盖参数为空同样显式失败（不静默退回未认证路径）。`access-tokens` 保留——它管的是 `github:` 取源；AGENTS.md 与 `nixkits-check-updates` 技能里「双 host 即根治」的旧结论已按实测更正。

@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T13:23:30+09:00
+
+**Summary**: dsh-api-balance thin-wrapper re-pin — rev `f805f4e` → `1f0af6c` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commits [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) and [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9)). Two changes from the maintainer's feedback: ① the bottom stats-bar horizontal scroll is **retired** — the official 0.2.0 UI already turns every metric into a clickable pill (opening the "session stats" dialog: model time / TTFT / TPS / tokens / cache hit), so in-place scrolling no longer applies and fights the pill's gestures; the settings row is greyed out with the official solution spelled out, and the style older versions injected is cleaned up. ② the question dialog **still hid the options** — with a long prompt the header measured 948px against a 398px visible card area, so the pinned opaque header acted as a shield; the header is now height-capped (≤40vh), scrolls itself and is no longer pinned, and all three options came back into the viewport (533–661px of 664px). Criteria: the 14 UI checks in `develop/ab-ui` (C2/C6 moved from "mechanism" to "outcome") run against this package's **built artifact**, and the running tree is checked by `develop/check-deployed-artifact.py` against all three markers.
+
+| Commit | Description |
+|------|------|
+| `1548c4c` | fix(dsh-api-balance): re-pin to 1f0af6c — stats bar retired, question prompt no longer hides the options |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `f805f4e` → `1f0af6c` |
+| 　 | src hash | `sha256-u1L1VHy86tOeB3iv3MhCdL0VAi8xpNUf2OJHAa/zndY=` → `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` |
+
 ## 2026-10-05T07:45:26+09:00
 
 **Summary**: CI fix — the floating input `llama-cpp-ver` now goes through "authenticated fetch + local override", curing the `api.github.com` 403 rate limiting. That input is a **plain URL input**, and measurement shows Nix does **not** attach `access-tokens` / `netrc-file` to such fetches (criterion: configure a **bogus token** for that host and fetch a never-before-fetched URL on it — if the auth header were actually sent, GitHub would necessarily answer 401 `Bad credentials`; measured: the fetch **succeeded** and the unauthenticated budget dropped by one). So every job made one unauthenticated request, and once the 60/hour budget shared by the runner IPs ran out, the result was 403: measured twice, both with the body `API rate limit exceeded for <ip>` (`Build ruyi-beta (x86_64)` 2026-10-02, IP `68.220.61.199`; `Build kitsfmt (x86_64)` 2026-10-04, IP `64.236.142.132`). Now `gh api` (authenticated, 5000/hour) fetches the same JSON first and Nix receives it via `--override-input llama-cpp-ver path:<json>`: the semantics are unchanged (the overlay only reads `json.tag_name`), an unreachable API or a missing `tag_name` **fails explicitly**, and an empty override parameter fails explicitly too (no silent fallback to the unauthenticated path). `access-tokens` stays — it covers `github:` fetches; the old "both hosts is the cure" claim in AGENTS.md and the `nixkits-check-updates` skill has been corrected to match the measurement.
