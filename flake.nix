@@ -61,6 +61,7 @@
     # - workflow-coverage：每个包都有构建 workflow（例外显式登记）
     # - doc-links：文档相对链接可达、语言切换器四语齐全
     # - doc-versions：文档版本号与包定义一致（四语 + 通道表）
+    # - doc-counts：文档里能从源机械读出的计数与源一致（词典条数、自检项数）
     # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
     # - news-mode-tests：新闻三要素模式插件的行为测试
     checks = {
@@ -101,6 +102,14 @@
       } ''
         cd ${self.outPath}
         python3 develop/check-doc-versions.py
+        touch $out
+      '';
+
+      doc-counts = pkgs.runCommand "check-doc-counts" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-doc-counts.py
         touch $out
       '';
 
