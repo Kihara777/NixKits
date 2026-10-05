@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-06T01:12:23+09:00
+
+**Summary**: chore(pkgs): godot-ai 4.2.3 → 4.3.0 — with the fail-closed runtime check
+
+- All 14 pinned dependencies keep their identity; only 6 raise versions, and both consumption paths resolve to identical sets
+- The runtime check really ran: the artifact's `--version` passes (upstream `main()` verifies dependencies first), 14/14 item by item; **counter-proof** — injecting a fake `fastmcp-9.9.9` makes the artifact refuse to start
+- anyio vs the new Python 3.12.15 is a pre-existing environment conflict (proven by an identical drvPath against HEAD); 12 cases are deselected by nodeid prefix, with the removal condition in the comment
+- starlette 1.7.0's new collection-time imports were supplied instead of disabling tests (1275 collected → 1269 passed)
+- Not verified: GUI features that need a live Godot editor instance
+
+| Commit | Description |
+|------|------|
+| `9b3260d` | chore(pkgs): godot-ai 4.2.3 → 4.3.0 (with the fail-closed runtime check) |
+
 ## 2026-10-06T00:48:30+09:00
 
 **Summary**: feat(check): self-check hardening — counter-example suite and repo-wide pcn glyph fix

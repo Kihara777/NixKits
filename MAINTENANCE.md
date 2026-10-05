@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-06T01:12:23+09:00
+
+**摘要**：chore(pkgs): godot-ai 4.2.3 → 4.3.0 —— 含 fail-closed 运行期校验
+
+- 依赖 pin 14 项集合不变、只有 6 项抬版本；两条消费路径链出的依赖完全相同
+- 运行期真验到了：产物 `--version` 通过（上游 `main()` 首句就是依赖校验），逐项 14/14；**反证**塞假 `fastmcp-9.9.9` → 产物拒绝启动
+- anyio 与新 Python 3.12.15 冲突属既有环境问题（drvPath 与 HEAD 相同为证），用 `--deselect` + nodeid 前缀摘掉 12 个用例，注释带撤销条件
+- starlette 1.7.0 新增的收集期依赖按报错补齐，**没有关测试**（1275 collected → 1269 passed）
+- 未验到：需要活 Godot 编辑器实例的 GUI 功能
+
+| 提交 | 说明 |
+|------|------|
+| `9b3260d` | chore(pkgs): godot-ai 4.2.3 → 4.3.0（含 fail-closed 运行期校验） |
+
 ## 2026-10-06T00:48:30+09:00
 
 **摘要**：feat(check): 自检体系加固 —— 反证用例库与 pcn 全库字形修正

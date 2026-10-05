@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-06T01:12:23+09:00
+
+**摘要**：chore(pkgs): godot-ai 4.2.3 → 4.3.0 —— fail-closed 実行時検証 付
+
+- 依存 pin 十四 項 集合 不変、上昇 六 項 限定；二 消費経路 解決 依存 完全 一致（以前 「一箇所 限定 変更」 分岐 経験 有）
+- 実行時検証 真 実行：成果物 `--version` 通過（上流 `main()` 最初 依存 検証）、逐項 十四/十四；**反証** 偽 `fastmcp-9.9.9` 注入 → 成果物 起動 拒否
+- anyio 與 新 Python 3.12.15 衝突 既存 環境問題（HEAD 與 drvPath 同一 為 証拠）；`--deselect` + nodeid 前綴 以 十二 件 限定 除外、撤去条件 注釈 記載
+- starlette 1.7.0 増加 収集期 import 補充、**試験 停止 不**（1275 collected → 1269 passed）
+- 未検証：生 Godot editor 必要 GUI 機能
+
+| 提交 | 説明 |
+|------|------|
+| `9b3260d` | chore(pkgs): godot-ai 4.2.3 → 4.3.0（fail-closed 実行時検証 付） |
+
 ## 2026-10-06T00:48:30+09:00
 
 **摘要**：feat(check): 自検 強化 —— 反証用例集 與 pcn 全倉 字形修正
