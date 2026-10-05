@@ -7,7 +7,7 @@
 
 python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
-  version = "4.2.3";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "hi-godot";
@@ -16,7 +16,7 @@ python312.pkgs.buildPythonApplication rec {
     # ⚠️ 改 version 必须连 hash 一起改，且**先把 hash 置成 lib.fakeHash 再构建**取真值：
     # 固定输出派生的输出路径由 hash 决定，留着旧 hash 改 version 会让 Nix 直接复用旧版本
     # 的源码树——构建在一份与 version 不符的代码上跑完，而且**不报任何错**。
-    hash = "sha256-8OQsZycLSWR+jQ48S7V9Ckl4zBOPC0HM130BPVtjwQU=";
+    hash = "sha256-GJvmt9TYLAVwIPFV21sC7LguZeIevnwxGhRBcAqwn4Q=";
   };
 
   pyproject = true;
@@ -29,7 +29,7 @@ python312.pkgs.buildPythonApplication rec {
   # 83.0.0，构建会中止于 "Unmet dependencies (checked against .../python3.12):
   # setuptools==84.0.0 wanted: ==84.0.0 found: 83.0.0"。该 pin 是可复现性守卫、
   # 不是功能需求——放宽到 nixpkgs 的版本，而不是再 vendor 一份 setuptools，
-  # 这样整个闭包都用同一套工具链构建。4.2.3 仍保留这个 pin，故 postPatch 继续有效。
+  # 这样整个闭包都用同一套工具链构建。4.3.0 仍保留这个 pin，故 postPatch 继续有效。
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires = ["setuptools==84.0.0"]' 'requires = ["setuptools"]'
@@ -44,9 +44,12 @@ python312.pkgs.buildPythonApplication rec {
   # `godot_ai.runtime_dependencies.verify_runtime_dependencies()` 在进程启动时
   # **复查全部十四个**，任一不符即抛错——拒绝启动，而不是警告。
   #
-  # 下面十四条与上游 pin 表**一一对应**。4.2.3 由 9 项增至 14 项：新增
+  # 下面十四条与上游 pin 表**一一对应**。条目数在 4.2.3 定型为 14（当时新增
   # fastmcp-slim / httpx2 / httpcore2 / mcp-types / sniffio，且 mcp 跨大版本
-  # （1.29.1 → 2.2.0，上游把 wire types 拆成独立发行版）、fastmcp 3.4.7 → 4.0.5。
+  # 1.29.1 → 2.2.0，上游把 wire types 拆成独立发行版）。
+  # 4.3.0 **不增删条目**，只抬其中六项：fastmcp / fastmcp-slim 4.0.5 → 4.0.10、
+  # httpx2 / httpcore2 2.13.0 → 2.13.1、uvicorn 0.53.0 → 0.54.0、
+  # starlette 1.6.0 → 1.7.0；其余八项与 4.2.3 相同。
   #
   # 版本来源分三处，缺一不可：
   #   - overlays/fastmcp.nix        → fastmcp、fastmcp-slim
@@ -99,8 +102,8 @@ python312.pkgs.buildPythonApplication rec {
   # `pydantic_core` / `platformdirs` 这类深层依赖同样必须在 PYTHONPATH 上。
   # 只展开一层是不够的（fastmcp → fastmcp-slim → platformdirs 有三层）。
   #
-  # ⚠️ 闭包必须覆盖 4.2.3 的**新**传递依赖（mcp-types、httpx2、httpcore2、
-  # sniffio……）。历史事故：只展开一层导致子进程 `No module named godot_ai`
+  # ⚠️ 闭包必须覆盖**完整**传递依赖（mcp-types、httpx2、httpcore2、sniffio……），
+  # 而不只是直接依赖。历史事故：只展开一层导致子进程 `No module named godot_ai`
   # 或运行期 pin 校验读不到包——构建期一切正常，实跑才炸。
   #
   # 注意不要用 `d.pythonPath`：那个属性来自 `python3.pkgs` 的**另一份**包

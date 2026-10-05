@@ -12,7 +12,7 @@ Production-grade MCP server and AI tools for the Godot engine — connects MCP c
 |------|-------|
 | Type | Python application (MCP server) |
 | Upstream | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| Version | `4.2.3` |
+| Version | `4.3.0` |
 | License | MIT |
 | Python | ≥ 3.11, < 3.15 |
 
@@ -27,23 +27,23 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## Dependencies
 
-**Fail-closed exact pins since v4**: at startup it verifies the **exact version** of the fourteen packages below and raises `RuntimeError` on any mismatch, refusing to start. 4.2.3 grew the list from nine to fourteen — adding `fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` — and moved `mcp` across a major version (1.29.1 → 2.2.0: upstream split the wire types into the standalone `mcp-types` distribution and switched its HTTP client to `httpx2`).
+**Fail-closed exact pins since v4**: at startup it verifies the **exact version** of the fourteen packages below and raises `RuntimeError` on any mismatch, refusing to start. The list settled at fourteen entries in 4.2.3 (which added `fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` and moved `mcp` across a major version, 1.29.1 → 2.2.0: upstream split the wire types into the standalone `mcp-types` distribution and switched its HTTP client to `httpx2`). 4.3.0 **adds and removes nothing** — it raises six of the entries: `fastmcp` / `fastmcp-slim` 4.0.5 → 4.0.10, `httpx2` / `httpcore2` 2.13.0 → 2.13.1, `uvicorn` 0.53.0 → 0.54.0, and `starlette` 1.6.0 → 1.7.0.
 
 | Dependency | Version | Source |
 |------------|---------|--------|
 | anyio | `4.15.1` | `overlays/godot-ai-v4-deps.nix` |
-| fastmcp | `4.0.5` | `overlays/fastmcp.nix` |
-| fastmcp-slim | `4.0.5` | `overlays/fastmcp.nix` |
+| fastmcp | `4.0.10` | `overlays/fastmcp.nix` |
+| fastmcp-slim | `4.0.10` | `overlays/fastmcp.nix` |
 | h11 | `0.16.0` | nixpkgs |
 | httpx | `0.28.1` | nixpkgs |
-| httpx2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
-| httpcore2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| httpx2 | `2.13.1` | `overlays/godot-ai-v4-deps.nix` |
+| httpcore2 | `2.13.1` | `overlays/godot-ai-v4-deps.nix` |
 | mcp | `2.2.0` | `overlays/godot-ai-v4-deps.nix` |
 | mcp-types | `2.2.0` | `overlays/godot-ai-v4-deps.nix` (absent from nixpkgs; definition built from upstream source) |
 | pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
 | sniffio | `1.3.1` | nixpkgs |
-| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
-| uvicorn | `0.53.0` | `overlays/godot-ai-v4-deps.nix` |
+| starlette | `1.7.0` | `overlays/godot-ai-v4-deps.nix` |
+| uvicorn | `0.54.0` | `overlays/godot-ai-v4-deps.nix` |
 | websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
 
 > The fourteen rows above map one-to-one onto `dependencies` in `packages/godot-ai.nix` (same count, same versions), and match the pin table in upstream's `runtime_dependencies.py`.

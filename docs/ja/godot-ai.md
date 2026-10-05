@@ -12,7 +12,7 @@ Godotエンジン向けの本格的なMCPサーバーおよびAIツール — MC
 |------|-----|
 | タイプ | Python アプリ（MCPサーバー）|
 | 上流 | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| バージョン | `4.2.3` |
+| バージョン | `4.3.0` |
 | ライセンス | MIT |
 | Python | ≥ 3.11, < 3.15 |
 
@@ -27,23 +27,23 @@ MCP Client  ⇐ MCP/stdio ⇒  godot-ai  ⇐ WebSocket ⇒  Godot Editor Plugin
 
 ## 依存関係
 
-**v4 以降は fail-closed な厳密固定**：起動時に以下の 14 パッケージの**正確な版**を照合し、一つでも異なれば `RuntimeError` を送出して起動を拒否します。4.2.3 で 9 項目から 14 項目に増え（`fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` を追加）、`mcp` はメジャーバージョンをまたぎました（1.29.1 → 2.2.0：上流が wire types を独立ディストリビューション `mcp-types` に分離し、HTTP クライアントを `httpx2` に変更）。
+**v4 以降は fail-closed な厳密固定**：起動時に以下の 14 パッケージの**正確な版**を照合し、一つでも異なれば `RuntimeError` を送出して起動を拒否します。項目数は 4.2.3 で 14 に確定しました（当時 `fastmcp-slim` / `httpx2` / `httpcore2` / `mcp-types` / `sniffio` を追加し、`mcp` はメジャーバージョンをまたぎました：1.29.1 → 2.2.0、上流が wire types を独立ディストリビューション `mcp-types` に分離し、HTTP クライアントを `httpx2` に変更）。4.3.0 は**項目の増減なし**で、うち六項目を引き上げます：`fastmcp` / `fastmcp-slim` 4.0.5 → 4.0.10、`httpx2` / `httpcore2` 2.13.0 → 2.13.1、`uvicorn` 0.53.0 → 0.54.0、`starlette` 1.6.0 → 1.7.0。
 
 | 依存 | バージョン | 提供元 |
 |------|-----------|--------|
 | anyio | `4.15.1` | `overlays/godot-ai-v4-deps.nix` |
-| fastmcp | `4.0.5` | `overlays/fastmcp.nix` |
-| fastmcp-slim | `4.0.5` | `overlays/fastmcp.nix` |
+| fastmcp | `4.0.10` | `overlays/fastmcp.nix` |
+| fastmcp-slim | `4.0.10` | `overlays/fastmcp.nix` |
 | h11 | `0.16.0` | nixpkgs |
 | httpx | `0.28.1` | nixpkgs |
-| httpx2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
-| httpcore2 | `2.13.0` | `overlays/godot-ai-v4-deps.nix` |
+| httpx2 | `2.13.1` | `overlays/godot-ai-v4-deps.nix` |
+| httpcore2 | `2.13.1` | `overlays/godot-ai-v4-deps.nix` |
 | mcp | `2.2.0` | `overlays/godot-ai-v4-deps.nix` |
 | mcp-types | `2.2.0` | `overlays/godot-ai-v4-deps.nix`（nixpkgs に存在せず、上流ソースから新規定義） |
 | pydantic | `2.13.5` | `overlays/godot-ai-v4-deps.nix` |
 | sniffio | `1.3.1` | nixpkgs |
-| starlette | `1.6.0` | `overlays/godot-ai-v4-deps.nix` |
-| uvicorn | `0.53.0` | `overlays/godot-ai-v4-deps.nix` |
+| starlette | `1.7.0` | `overlays/godot-ai-v4-deps.nix` |
+| uvicorn | `0.54.0` | `overlays/godot-ai-v4-deps.nix` |
 | websockets | `17.1` | `overlays/godot-ai-v4-deps.nix` |
 
 > 上表の 14 行は `packages/godot-ai.nix` の `dependencies` と**一対一に対応**し（数もバージョンも同一）、上流 `runtime_dependencies.py` の pin 表とも一致します。
