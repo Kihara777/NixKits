@@ -17,7 +17,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 
 ## 版通道
 
-NixKits 仿 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数 dsh 版同時提供：
+NixKits 倣 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数 dsh 版同時提供：
 
 | 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
@@ -62,7 +62,7 @@ dsh web   # 瀏覧器 UI 起動
 
 ## 服務設定
 
-常駐 web 服務実行 `nixkits.dsh` module 使用。dsh RCE 安全 loopback 唯（`127.0.0.1:8615`）監聽、lighttpd 反代对外端口 `8625` 公開（防火牆自動開放）：
+常駐 web 服務実行 `nixkits.dsh` module 使用。dsh RCE 安全 loopback 唯（`127.0.0.1:8615`）監聽、lighttpd 反代対外端口 `8625` 公開（防火牆自動開放）：
 
 ```nix
 {
@@ -72,7 +72,7 @@ dsh web   # 瀏覧器 UI 起動
     port = 8615;          # 内部 loopback 端口
     reverseProxy = {
       enable = true;
-      port = 8625;        # lighttpd 对外端口
+      port = 8625;        # lighttpd 対外端口
     };
     environment.DEEPSEEK_API_KEY = "sk-...";
   };
@@ -149,7 +149,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 ### 插件更新與零再起活性化
 
-插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体與插件樹）與 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、回滚自翻旧代路）。`dsh.service` 與 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
+插件包経**安定掛載点**読込：activation script 毎回 switch/boot `/run/dsh/current`（dsh 本体與插件樹）與 `/run/dsh/nixos-shell`（sudo 実行脚本）符号連結翻當前世代 store 路（GC 安全：目標常當前 toplevel 閉包内、復帰自翻旧代路）。`dsh.service` 與 `nixkits-sudo@.service` 単元定義僅参照該安定路、故**插件包更新不変単元内容**——switch-to-configuration 不再起 dsh、不 stop/start sudo socket、活性化零中断在途工具呼出。
 
 代価與配套：dsh 長駐進程、插件／預設包更新反映需明示再起——**先 `systemctl daemon-reload`、次 `systemctl restart dsh`**（`nixos_shell` 後者自動分離瞬時単元、呼出先於再起返）。restart 単独 時 前世代 pre-start 脚本 実行 有、其 工程 正 `cordis.patch.yml` `$DSH_HOME` 複製 段（預設根 該文件 記載）、症状「服務確 再起、預設 仍旧」。再起後 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` store 路 翻新 確認。sudo 実行器接続毎生成、新連接自動新脚本、無需再起。
 
@@ -160,7 +160,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
-| dsh-api-balance | webui 用量面板「用量 / 余额」切替：帳戶残高、日 / 月 / 30 日内消耗図表與音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
+| dsh-api-balance | webui 用量面板「用量 / 残高」切替：勘定残高、日 / 月 / 30 日内消耗図表與音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## 模式
 
@@ -196,7 +196,7 @@ dsh 0.2.0 Agent 預設 保持方式 再構築、**目録型預設経路 削除**
 
 | | 0.1.x（0.2.0 以降 使用 不） | 0.2.0（現在） |
 |---|---|---|
-| 預設形態 | `$DSH_HOME/.agent-presets/<id>/` 目録 | profile 用戶 patch 層（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）内 loader patch 一條 |
+| 預設形態 | `$DSH_HOME/.agent-presets/<id>/` 目録 | profile 利用者 patch 層（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`）内 loader patch 一條 |
 | 組合與 metadata | `agent.cordis.yml`（完全組合）+ `preset.yml`（`name` / `description`） | `@deepseek-ai/dsh-agent-preset` 行 `config.plugins`（插件行）+ `config.name` / `config.description` |
 | 検出方法 | `@deepseek-ai/dsh-agent-presets`（複数形）root 走査 | Loader 樹 自身；複数形包 0.2.0 既不存在 |
 | roster 並順 | 無 | `config.order`（内蔵 1–4 占有、預設間 一意必須） |
@@ -308,7 +308,7 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 }
 ```
 
-> **安全模型**：套接字書類 dsh service 用戶所有 `0600`（`SocketUser`/`SocketMode`）— 該用戶接続可、実質該用戶向免密 root 実行。用戶與代理挙動双方信頼可場合有効化。
+> **安全模型**：套接字書類 dsh service 利用者所有 `0600`（`SocketUser`/`SocketMode`）— 該利用者接続可、実質該利用者向免密 root 実行。利用者與代理挙動双方信頼可場合有効化。
 
 
 ## 插件清單
@@ -505,7 +505,7 @@ dsh 0.2.0-rc.2 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
 
 ## 設定宣言構成
 
-dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）格納。`nixkits.dsh.settings` 宣言構成（namespace → section）：
+dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類備份、hot reload）格納。`nixkits.dsh.settings` 宣言構成（namespace → section）：
 
 ```nix
 {
@@ -687,7 +687,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類备份、hot reload）�
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 | **両通道 `0.2.0-rc.2`（現在）** | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
-`deepseek-flash` 三 目録 **全部 存在**、且 **各目録 image modality 宣言** 唯一 之 id —— 此 模块 既定値 選択 理由。他 画像対応 id `deepseek-v4-flash-vision-exp` 古 二 目録 限 存在、上流 2026-09-10 廃止 為、既定値 使用 不可。
+`deepseek-flash` 三 目録 **全部 存在**、且 **各目録 image modality 宣言** 唯一 之 id —— 此 模塊 既定値 選択 理由。他 画像対応 id `deepseek-v4-flash-vision-exp` 古 二 目録 限 存在、上流 2026-09-10 廃止 為、既定値 使用 不可。
 
 上流 2026-09-10 DeepSeek-V4.1-Flash 公開時、V4 Flash 與 V4 Flash Vision Exp 廃止、模型名 `deepseek-flash`（画像理解 備）與 `deepseek-v4-pro` 収束。旧 id 互換 為 引続 呼出 可能、但 処理 V4.1-Flash 行、Flash 料金 課金（[模型 與 価格](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/) 脚注 参照）。
 

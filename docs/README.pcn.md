@@ -24,7 +24,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
 | dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.1.6-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
-| godot-ai | Godot 引擎 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
+| godot-ai | Godot 機関 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
@@ -34,12 +34,12 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## 插件
 
-DeepSeek Harness（DSH）组件與軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
+DeepSeek Harness（DSH）組件與軟体分開掲載（掛載方式 [docs/pcn/dsh.md](pcn/dsh.md)）：
 
 | 插件 | 説明 | 文書 |
 |------|------|------|
 | dsh-nixos-shell | NixOS 操作統合（shell 実行、工具引導、sudo 守護路由、NixOS 診断） | [docs/pcn/dsh-nixos-shell.md](pcn/dsh-nixos-shell.md) |
-| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 余额」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退）。**独立[repo](https://github.com/Kihara777/dsh-api-balance) 移転 済。本 repo 宣言的 install 用 薄 wrapper package 保持** | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
+| dsh-api-balance | API 用量残高——webui 用量圓環（送信按鈕左）添加「用量 / 残高」標籤切替、残高・当日 / 当月 / 30 日消耗與図表表示。platform token 預設本機瀏覽器登録状態自動掃描取得（手動連接回退）。**独立[repo](https://github.com/Kihara777/dsh-api-balance) 移転 済。本 repo 宣言的 install 用 薄 wrapper package 保持** | [docs/pcn/dsh-api-balance.md](pcn/dsh-api-balance.md) |
 
 ## 模式
 
@@ -76,11 +76,11 @@ nix registry add nixkits github:Kihara777/NixKits
 |------|------|------|
 | llama-cpp-rocm | 上流最新版追跡 ROCm 加速 | [docs/pcn/llama-cpp-rocm.md](pcn/llama-cpp-rocm.md) |
 | rcc-fix | asusctl 2-in-1 機器体験修正 | [docs/pcn/rcc-fix.md](pcn/rcc-fix.md) |
-| asusd-pd-profile | 供電種別 依 平台檔位選択（USB-C PD 與 原生 AC 区別） | [docs/pcn/asusd-pd-profile.md](pcn/asusd-pd-profile.md) |
-| asusd-thermal-guard | 溫度監視：過熱時 檔位降格、冷卻後 復帰 | [docs/pcn/asusd-thermal-guard.md](pcn/asusd-thermal-guard.md) |
+| asusd-pd-profile | 供電種別 依 平台段階選択（USB-C PD 與 原生 AC 区別） | [docs/pcn/asusd-pd-profile.md](pcn/asusd-pd-profile.md) |
+| asusd-thermal-guard | 温度監視：過熱時 段階降格、冷卻後 復帰 | [docs/pcn/asusd-thermal-guard.md](pcn/asusd-thermal-guard.md) |
 | comfyui | ComfyUI 之 ROCm 統合（GFX override / 機器権限 / 内核参數） | [docs/pcn/comfyui.md](pcn/comfyui.md) |
 | efl-cross-fix | efl 交叉编訳符号生成道具不足修正 | [docs/pcn/efl-cross-fix.md](pcn/efl-cross-fix.md) |
-| codewhale-sudo | overlay — codewhale v0.9.0 以降 阻止 sudo 机能 复元（ptrace 拦截器） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
+| codewhale-sudo | overlay — codewhale v0.9.0 以降 阻止 sudo 机能 復元（ptrace 傍受） | [docs/pcn/codewhale-sudo.md](pcn/codewhale-sudo.md) |
 | breeze-black | Plasma 6 高対比 Breeze Black 障碍支援主題 | [docs/pcn/breeze-black.md](pcn/breeze-black.md) |
 
 > ⚠️ 補丁全為 overlay、修改上流 nixpkgs 軟件包而非独立構建、不在二進制緩存中。動態追跡版本項目（如 llama-cpp-rocm）其 hash 随上流發布変化、無法緩存固定。
@@ -104,7 +104,7 @@ AI 符号化代理向：
 | 技能 | 説明 | 文書 |
 |------|------|------|
 > ⚠️ **Claude Code** nixkits-skills 導入対象削除。利用者資料基国籍推論実装、安全境界越。参照 [nixkits-skills 文書](pcn/skills/nixkits-skills.md)。
-| news-three-elements | 本物通信社報道形式 露風速報捏造——「報道三要素」必到三人主人公 巴兰尼科夫・尤丁采夫・布亚诺夫 指（遊技機構要素 + 素材優先拒否服務） | [docs/pcn/skills/news-three-elements.md](pcn/skills/news-three-elements.md) |
+| news-three-elements | 本物通信社報道形式 露風速報捏造——「報道三要素」必到三人主人公 巴蘭尼科夫・尤丁采夫・布亜諾夫 指（遊技機構要素 + 素材優先拒否服務） | [docs/pcn/skills/news-three-elements.md](pcn/skills/news-three-elements.md) |
 | nix-flake-update-check | **汎用**：任意 nix flake 倉庫 的 上流更新確認 自動更新（builder 別 hash flow / flake.lock / 修正内蔵版 / nixpkgs 漂移 罠） | [docs/pcn/skills/nix-flake-update-check.md](pcn/skills/nix-flake-update-check.md) |
 | nixkits-check-updates | NixKits 更新適配層：四言語文書、插件一覧、保守記録、過去 事故教訓（nix-flake-update-check 依存） | [docs/pcn/skills/nixkits-check-updates.md](pcn/skills/nixkits-check-updates.md) |
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |

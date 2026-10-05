@@ -2,7 +2,7 @@
 
 [中文](../zh/asusd-pd-profile.md) | [English](../en/asusd-pd-profile.md) | [日本語](../ja/asusd-pd-profile.md)  | 偽中国語
 
-按給電種別選択 ASUS 平台檔位 —— 区分 **USB-C PD** 與**原生/桶形 AC**、補足 `asusd` 自身設定不能表現之第三態。
+按給電種別選択 ASUS 平台段階 —— 区分 **USB-C PD** 與**原生/桶形 AC**、補足 `asusd` 自身設定不能表現之第三態。
 
 ## 基本情報
 
@@ -16,7 +16,7 @@
 
 ## 解決之問題
 
-`asusd` 之 `asusd.ron` **僅有二個檔位鍵**：
+`asusd` 之 `asusd.ron` **僅有二個段階鍵**：
 
 ```ron
 platform_profile_on_ac: Performance,
@@ -62,17 +62,17 @@ platform_profile_on_battery: Quiet,
 | 選項 | 種別 | 既定 | 説明 |
 |------|------|------|------|
 | `enable` | bool | `false` | 有効化本部品 |
-| `pdProfile` | enum | `"balanced"` | USB-C PD 給電時選用之檔位 |
-| `nativeAcProfile` | enum | `"performance"` | 原生/桶形 AC 給電時選用之檔位 |
+| `pdProfile` | enum | `"balanced"` | USB-C PD 給電時選用之段階 |
+| `nativeAcProfile` | enum | `"performance"` | 原生/桶形 AC 給電時選用之段階 |
 
-檔位可選 `quiet` / `balanced` / `performance`。
+段階可選 `quiet` / `balanced` / `performance`。
 
 ## 重要実装要点
 
 ### 1. 絶対不直接書 sysfs
 
 **不要**書 `/sys/firmware/acpi/platform_profile` —— asusd 於毎回 AC 事象時
-皆按自身 AC 檔位重設、会即時覆盖外部書込（日誌可見
+皆按自身 AC 段階重設、会即時覆盖外部書込（日誌可見
 `[DEBUG asusd::ctrl_platform] Setting Performance before EPP`）。
 
 本部品改為書 asusd **自身**之持久化設定（`PlatformProfileOnAc`）、
@@ -91,9 +91,9 @@ asusd 暴露 `xyz.ljones.Platform` 接続、其中 `PlatformProfileOnAc` 是可�
 - 不依存 CLI 之**人間可読出力格式**（上流改措辞即静黙失效）
 - 不依存 `asusctl` 二進在 `PATH` 中
 
-> ⚠️ **檔位列挙値**（実測 asusctl 6.4.0）：
+> ⚠️ **段階列挙値**（実測 asusctl 6.4.0）：
 >
-> | 値 | 檔位 |
+> | 値 | 段階 |
 > |----|------|
 > | `0` | balanced |
 > | `1` | performance |
@@ -119,7 +119,7 @@ ACTION=="add|change", SUBSYSTEM=="typec", KERNEL=="port[0-9]*", ...
 ## 検証
 
 ```bash
-# 當前檔位（D-Bus）
+# 當前段階（D-Bus）
 busctl get-property xyz.ljones.Asusd /xyz/ljones xyz.ljones.Platform \
   PlatformProfileOnAc
 
@@ -135,20 +135,20 @@ PlatformProfileOnAc already 0 (balanced), nothing to do
 on battery — asusd handles it (platform_profile_on_battery), no action
 ```
 
-> ⚠️ **窓期陷阱**：`power_operation_mode` 與 USB 供給元之 `online`
+> ⚠️ **窓期罠**：`power_operation_mode` 與 USB 供給元之 `online`
 > **僅在拔插瞬間**変化。若在未接続 PD 時読取、`power_operation_mode`
 > 恒為 `default` —— 據此会誤判「内核不能区分 PD 與桶形」。
 > 判断前必須先確認當時確実處於 PD 給電。
 
-## 功耗檔位実測
+## 功耗段階実測
 
 同一提示詞、同一会期、400 語彙 生成（Strix Halo / Radeon 8060S）：
 
-| 檔位 | 功耗 | sclk | 温度 | 生成速度 |
+| 段階 | 功耗 | sclk | 温度 | 生成速度 |
 |------|------|------|------|---------|
 | quiet | **38.6–43.9 W** | 2228–2464 MHz | **59–78 °C** | 12.12–12.35 t/s |
 | balanced | 55.1 W | 2586–2731 MHz | 87–93 °C | 12.84 t/s |
 | performance | 76.7 W | 2753–2859 MHz | 90–95 °C | 13.07 t/s |
 
 **quiet 相対 performance：功耗 −49%、温度 −17~36 °C、速度僅 −5~7%。**
-統一記憶域機器上、生成隘路是**依頼遅延**而非周波数、故降檔幾乎不損失吞吐。
+統一記憶域機器上、生成隘路是**依頼遅延**而非周波数、故降格幾乎不損失呑吐。

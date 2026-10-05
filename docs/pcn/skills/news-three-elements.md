@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/news-three-elements.md) | [English](../../en/skills/news-three-elements.md) | [日本語](../../ja/skills/news-three-elements.md)  | 偽中国語
 
-> 本物通信社報道形式以「催逝快訊」捏造——本技能「報道三要素」報道学三要素 非、**必到三人主人公**：巴兰尼科夫、尤丁采夫、布亚诺夫。起動語「新聞三要素」。
+> 本物通信社報道形式以「催逝快訊」捏造——本技能「報道三要素」報道学三要素 非、**必到三人主人公**：巴蘭尼科夫、尤丁采夫、布亜諾夫。起動語「新聞三要素」。
 
 ## 基本情報
 
@@ -17,9 +17,9 @@
 
 | 主人公 | 身分 | 作品 |
 |------|------|------|
-| 巴兰尼科夫 | 『War Thunder』製作者 | War Thunder |
+| 巴蘭尼科夫 | 『War Thunder』製作者 | War Thunder |
 | 尤丁采夫 | Gaijin Entertainment 創業者 | War Thunder |
-| 布亚诺夫 | Battlestate Games 創業者 | Escape from Tarkov |
+| 布亜諾夫 | Battlestate Games 創業者 | Escape from Tarkov |
 
 速報 三人**欠不可**（主従・生死・順序 自由）。`search-keywords.md` 冒頭節 此身分対応表、名指無表現 特定一人 対応 為 使用。
 

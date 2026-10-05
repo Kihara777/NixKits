@@ -2,7 +2,7 @@
 
 [中文](../zh/dsh-nixos-shell.md) | [English](../en/dsh-nixos-shell.md) | [日本語](../ja/dsh-nixos-shell.md)  | 偽中国語
 
-NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引導・sudo 守護路由・読取専用 NixOS 診断**単一插件統合**。機能要件 `nixos-modern-cli` 技能場景由来（宣言式不変 NixOS、極小 PATH、現代 CLI、系統維護、Nix store 路徑陷阱）。
+NixOS 場景能力 DeepSeek Harness（DSH）插件 — shell 実行・工具引導・sudo 守護路由・読取専用 NixOS 診断**単一插件統合**。機能要件 `nixos-modern-cli` 技能場景由来（宣言式不変 NixOS、極小 PATH、現代 CLI、系統維護、Nix store 路徑罠）。
 
 ## 基本情報
 
@@ -60,7 +60,7 @@ sudo 守護 = systemd 套接字活性化 root 実行器（`nixkits-sudo-exec.js`
 
 模組側「安定掛載点」（dsh.md 参照）配合：插件包更新不変 dsh/sudo 単元内容、普通 rebuild 不再起何物。插件更新明示 `systemctl restart dsh`（同自動分離）反映、sudo 実行器接続毎生成新連接自動新脚本。
 
-sudo 套接字**呼出時**検証非 apply 時：rebuild 活性化中 socket 暫時消失、該窓啟動 session 不永久失 `sudo` 參數——socket 復後即可用。
+sudo 套接字**呼出時**検証非 apply 時：rebuild 活性化中 socket 暫時消失、該窓起動 session 不永久失 `sudo` 參數——socket 復後即可用。
 
 ## 使用
 

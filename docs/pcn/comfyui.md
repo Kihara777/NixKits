@@ -36,7 +36,7 @@ ComfyUI 向 ROCm 機能補丁提供。
 | `comfyui-nix-stdenv-api` | 上流已自行移行至 `stdenv.hostPlatform.*`（旧写法 0 処） |
 | `comfyui-nix-nixpkgs-compat` | 以前判定「依然必要 有 可能」、**該判定 既 覆** —— 詳見下方警示 |
 
-> ⚠️ **`nixpkgs-compat` 之判定曾出錯、值得引以為戒。**
+> ⚠️ **`nixpkgs-compat` 之判定曾出錯、値得引以為戒。**
 > 初次評価之「完整構築検証」（717 個 derivation 全成功）中、`scipy` 実為
 > **緩衝命中、従未真実構築**；昇級後即因 `test_support_moments_sample`
 > 浮点断言失敗 —— 当時 誤認 正是該補丁欲跳過之測試。
@@ -60,7 +60,7 @@ ComfyUI 向 ROCm 機能補丁提供。
 >
 > ⚠️ 同時除去了一個給 `pkgs.comfyui` 打補丁之上乗。其作用已被上流
 > `disabledModules` + 自帯 package 取代；若保留、会因補丁書類不存在而
-> **於構築期失敗**（求值期不報錯、故不易察覚）。
+> **於構築期失敗**（求値期不報錯、故不易察覚）。
 
 ## 使用
 

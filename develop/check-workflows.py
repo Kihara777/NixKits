@@ -40,10 +40,12 @@ def main() -> None:
     for package in package_names():
         if package in EXEMPT:
             continue
-        expected = [name for name in workflows if name.startswith(f"build-{package}-")]
+        # 必须真的是一份 workflow：只判前缀会把 `build-x-….yml.disabled` 这类
+        # 「禁用了但文件还在」也算成覆盖（2026-10-05 写反证用例时实测到）。
+        expected = [name for name in workflows
+                    if name.startswith(f"build-{package}-") and name.endswith(".yml")]
         if not expected:
             missing.append(package)
-
     for package in missing:
         print(
             f"workflow-coverage: packages/{package}.nix has no build-{package}-*.yml workflow",

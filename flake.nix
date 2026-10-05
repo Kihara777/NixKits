@@ -64,6 +64,7 @@
     # - doc-counts：文档里能从源机械读出的计数与源一致（词典条数、自检项数）
     # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
     # - session-sources：预设插件写进会话的消息来源不得用 v3 旧形状（kind: "plugin"）
+    # - self-tests：每个自检都必须能被「已知的坏输入」撞响（对照 + 注入 + 断言红得对）
     # - news-mode-tests：新闻三要素模式插件的行为测试
     checks = {
       preset-derivation = pkgs.runCommand "check-preset-derivation" {
@@ -130,6 +131,16 @@
       } ''
         cd ${self.outPath}
         python3 develop/check-session-sources.py
+        touch $out
+      '';
+
+      # 每个自检都必须能被「已知的坏输入」撞响（对照 + 注入 + 断言红得对）：
+      # 判据静默失灵过一次就不会自己说话——2026-10-05 一天里出现过三次。
+      self-tests = pkgs.runCommand "check-self-tests" {
+        nativeBuildInputs = [ pkgs.python3 pkgs.nodejs ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-selftests.py
         touch $out
       '';
 

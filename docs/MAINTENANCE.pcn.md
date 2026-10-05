@@ -62,7 +62,7 @@
 
 - rev `911df2e` → `95fec42`（変更 其 提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) 在；版本 `0.1.1` 之侭）
 - 漸隠 下端 限定 自 **scroll 連動** 上下 漸隠 至（`none/start/end/middle` 状態機械、最上部 上端、最下部 下端 漸隠 不）
-- 卡片 全体 非 上端 限定 漸隠 —— 全体 mask 追従按鈕 淡 至
+- 札 全体 非 上端 限定 漸隠 —— 全体 mask 追従按鈕 淡 至
 - 按鈕下 切断内容 同色 埋 塞
 - 判定：三状態 逐一 確認
 | 提交 | 説明 |
@@ -81,7 +81,7 @@
 
 - rev `1f0af6c` → `911df2e`（変更 其 提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) 在；版本 `0.1.1` 之侭）
 - 高 制限 題干 下端 `mask-image` 漸隠、追従按鈕 上 `::before` 漸変帯 敷
-- 漸変色 注入時 卡片 実際 底色 自 取得（明 `rgb(255,255,255)` / 暗 `rgb(44,44,46)`；固定色 暗 露見）
+- 漸変色 注入時 札 実際 底色 自 取得（明 `rgb(255,255,255)` / 暗 `rgb(44,44,46)`；固定色 暗 露見）
 - 判定：題干 下端 30px 平均輝度 59.93 → 45.92（約 23% 暗）、漸隠帯 之上（60–90px）不変
 | 提交 | 説明 |
 |------|------|
@@ -180,7 +180,7 @@
 **摘要**：dsh-api-balance 薄包装 re-pin —— **実行時挙動 之 修正**
 
 - rev `76ea584` → `700fbbc`（変更 其 提交 [`cc89c43`](https://github.com/Kihara777/dsh-api-balance/commit/cc89c43) 在；版本 `0.1.1` 之侭）
-- ① 回車交換 導入 部品 lifecycle 自 移出 —— dsh 0.2.0 之 chain slot `conversation.composer` 接管 時 環 部品 slot 與 共 卸载、交換器 静 外 為、現在 `apply()` 内 導入
+- ① 回車交換 導入 部品 lifecycle 自 移出 —— dsh 0.2.0 之 chain slot `conversation.composer` 接管 時 環 部品 slot 與 共 卸載、交換器 静 外 為、現在 `apply()` 内 導入
 - ② 面板 / 弾窓 材質 0.2.0 原生 配方 依 書直 —— `--dsw-specific-menu` 半透明 化 `backdrop-filter` 重 要 有、旧 配方 面板 真 透明 為
 - 判定：Playwright computed style 実測
 | 提交 | 説明 |
@@ -275,7 +275,7 @@
 **摘要**：`opencode-telegram` **riscv64 構築 摘除** —— 転緑 構築 修正 依 非、而 本来 使用 不可能 之 平台 停止 構築 依
 
 - 該 job **一直 緩衝 依 仮緑**（日誌 内 構築 一 行 也 無、産物 前 版 0.25.3）
-- 真 構築 則 `better-sqlite3` 於 卡 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 `install` 脚本 取消；産物 **構築 能、一 起動 即 抛**
+- 真 構築 則 `better-sqlite3` 於 停滞 —— **直接 依存** 且 **静的 import** 被、上流 riscv64 預編譯 無、v13 起 `install` 脚本 取消；産物 **構築 能、一 起動 即 抛**
 - `blender-mcp` / `obs-bilibili-stream` 之 同一 先例 按 摘除
 - 判定：x86_64 / aarch64 影響 無
 | 提交 | 説明 |
@@ -384,7 +384,7 @@
 
 **摘要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四言語 文書 同期
 
-- `dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 暫緩：hash 與 構築 通過、但 預設 mount 検証 通 不——`agentPresets/list` 之 roster 內 何 也 出現 不；対照実験 識別力 有 但、形式 之 非互換 與 探針 `DSH_HOME` 不足 未 区別 可能
+- `dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 暫緩：hash 與 構築 通過、但 預設 mount 検証 通 不——`agentPresets/list` 之 roster 内 何 也 出現 不；対照実験 識別力 有 但、形式 之 非互換 與 探針 `DSH_HOME` 不足 未 区別 可能
 - fix(dsh): `postPatch` 「`devDependencies` 自 文件末尾 至 截断」自 按塊 照合 + 末尾 comma 修復 至 変更——0.2.0-rc.2 以降 `exports` 其 後 至 来 故、旧 写法 則 其 共 削除（導出 失効 然 構築 成功）；二 実 tarball 以 解析 可能 事 離線 検証
 
 | 提交 | 説明 |
@@ -462,7 +462,7 @@
 
 **摘要**：refactor(skills): 本日 之 預設事故 「別 之 nix flake 倉庫 於 亦 成立 可」 判定 以 二層 技能 至 汎化
 
-- `nix-flake-update-check` 之 commit 前 自検 八問 自 九問 至 増、「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加：決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、救済 **既知 壊 夹具** 反証 以 添 事
+- `nix-flake-update-check` 之 commit 前 自検 八問 自 九問 至 増、「『検証 済』 失敗 発生 層 於 検証 為 可？判定 自身 失敗 可能 可？」追加：決 鳴 不 判定 「問題 無」 與 「何 亦 測 不」 区別 不能、救済 **既知 壊 夾具** 反証 以 添 事
 - 本 倉庫 適配層 `nixkits-check-updates` 新節：插件 改名/削除 文書 而已 之 問題 非、二 預設 **実際 壊** —— 組合行 package 名 以 内蔵插件 参照 故、dsh ≤ 0.1.6-alpha.1 解決不能 行 黙 無視、≥ alpha.2 硬失敗 預設 全体 mount 不能
 - 同節 更新 前 之 二層 判定（offline 行解析 + 上流 `broken` field 読 権威 実 mount）與 seed-once 播種 之 帰結 示
 - 自検 番号 至 参照 三箇所 亦 同期更新
@@ -475,7 +475,7 @@
 **摘要**：fix(dsh-nixos-shell): 預設行 `workflow-ptc` 至 変更 —— dsh 0.1.6 内蔵插件 `dsh-workflow-worker-thread` 改名、旧名 ≤ alpha.1 黙 無視、alpha.2 以降 預設 全体 mount 不能。
 
 - `nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時 改名、`config` 逐字 不変
-- 検証 **build 産物** 実際 mount 方式 至：臨時 dsh `agentPresets/list` 呼 上流 `broken` 判定 読、更 故意 壊 夹具 反証 以 混
+- 検証 **build 産物** 実際 mount 方式 至：臨時 dsh `agentPresets/list` 呼 上流 `broken` 判定 読、更 故意 壊 夾具 反証 以 混
 - 同 罠 `docs/*/dsh.md` 記載（四語）、`AGENTS.md` 本機展開 前提 `path:` 輸入 非 GitHub 参照 至 修正（先 push 後 再鎖、再鎖 浮動子入力 亦 再解決）
 
 | 提交 | 説明 |
@@ -517,7 +517,7 @@
 
 - `extraInstallCommands` Limine 之 **哈希固化 後** 於 `limine.conf` 之 `default_entry` 改写、哈希 不一致 以 Secure Boot 下 **系統 起動不能** 至
 - 技能 一節 追加 `### 引导菜单与默认面`：設定 宣言式 必須、「file 書込 → 検証/署名」 之 順序 洗出、固化後 変更 上流 與 byte 単位 同一 之 算法 以 再固化 必須
-- 他 一節 面切替 之 二 運行級 障害：判定 `is-active` 非 `default.target` 之 解決値 用；`user@<uid>.service` 面 跨 全体 再起動 必要、「合成器 存在」 以 「桌面 正常」 視 不
+- 他 一節 面切替 之 二 運行級 障害：判定 `is-active` 非 `default.target` 之 解決値 用；`user@<uid>.service` 面 跨 全体 再起動 必要、「合成器 存在」 以 「机上 正常」 視 不
 - frontmatter `description` 與「适用场景」亦 同期更新
 | 提交 | 説明 |
 |------|------|
@@ -1278,7 +1278,7 @@
 
 **摘要**：feat(skill+preset): 「新聞三要素」三人主人公 指 変更、拒否服務「先 素材 見做」判定 改
 
-- 維護者 四修正 提出：本模式「新聞三要素」報道学三要素 非、**必到三人主人公**——巴兰尼科夫、尤丁采夫、布亚诺夫——；検索 補 可能 素材 一律拒否 禁止；共創原稿 三人必備；仮定疑問 與 名指無人物 先 三人中一 対応 可能 評価
+- 維護者 四修正 提出：本模式「新聞三要素」報道学三要素 非、**必到三人主人公**——巴蘭尼科夫、尤丁采夫、布亜諾夫——；検索 補 可能 素材 一律拒否 禁止；共創原稿 三人必備；仮定疑問 與 名指無人物 先 三人中一 対応 可能 評価
 - 技能側：`SKILL.md` 新義確定、「形式厳格制約」第 0 条（三人本文登場、一人欠 即 改稿）追加、取材 四類 拡張
 - 「拒否服務」厳格判定順序 書換——素材可能物 一律拒否禁止 / 仮定疑問「既発生事」書 / 名指無人物 先 対応 / 何 亦接続不能時 唯拒否
 - 預設側：persona「素材優先」節 與 共創三人揃 規則 追加、`readonly-gate` 儀式文 三人括注 追加
@@ -1451,7 +1451,7 @@
 - 取得失敗 即座断念 無：初回 即時、以後 0/30/120 秒再試、timer timer 服務 載 故 会期與共破棄
 - 長命会期 6 時間毎 倉庫再確認、実行中標識 周期任務 重複防止
 - 三回失敗時 局所副本 登録維持 且 log 残留
-- store 複製 読取専用、`presets.*` 選項「以後之用戶編集尊重」與矛盾（既存 `nixos` 種子 同様）
+- store 複製 読取専用、`presets.*` 選項「以後之利用者編集尊重」與矛盾（既存 `nixos` 種子 同様）
 - 三 seed 塊 `cp` 後 `chmod -R u+w`
 | 提交 | 説明 |
 |------|------|
@@ -1502,7 +1502,7 @@
 - 一括置換：`与`→`與` 計 132 箇所、`说明`→`説明` 計 120 箇所、他 `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`
 - 辞書映射：`文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；`端口` / `制御台` 日本語 対応字 有 故 保持 且 辞書 記録
 - commit 情報免除：「提交」列 commit 情報 verbatim 保持（不変外部参照、ja 版 同 中国語 保持）
-- 検証：残留仮名 零、提交列以外 簡体専用字 零、基线 与 文件毎行数 一致；技能 4 節追加（置換前分類、未命中時 調査 入典、commit 情報免除、基线取得）
+- 検証：残留仮名 零、提交列以外 簡体専用字 零、基線 与 文件毎行数 一致；技能 4 節追加（置換前分類、未命中時 調査 入典、commit 情報免除、基線取得）
 
 | 提交 | 説明 |
 |------|------|
@@ -1522,7 +1522,7 @@
 
 ## 2026-09-14T05:32:10+09:00
 
-**摘要**：feat(asusd-pd-profile): 供電種別 依 平台檔位選択 NixOS 部品 追加
+**摘要**：feat(asusd-pd-profile): 供電種別 依 平台段階選択 NixOS 部品 追加
 
 - `asusd.ron` 僅 `platform_profile_on_ac` / `platform_profile_on_battery` 二鍵、**USB-C PD 分岐不存在**、故「PD 時 Balanced、桶形 AC 時 Performance」設定表現不能
 - 本部品 udev 駆動 oneshot 服務 第三状態 補、判定 Type-C 端口 `power_operation_mode` 與 `type` 為 `USB` 在線供給元
@@ -1540,7 +1540,7 @@
 - DeepSeek 展開章 IQ1_S / IQ3_S 二量子化対照（1.5625 bpw / 3.4375 bpw）拡張
 - **量子化開銷 固定値 非**（IQ1_S 約 6.5 GiB、IQ3_S 約 13.3 GiB、量子化変更後 GPUActive 再実測 要）
 - **生成速度 依頼遅延 制約**（重値 1.56→3.44 bpw 生成不変 12.8→12.9 t/s）
-- **功耗檔位実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s 対 performance 76.7 W / 90–95 °C / 13.07 t/s）
+- **功耗段階実測**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s 対 performance 76.7 W / 90–95 °C / 13.07 t/s）
 - 顕存指標 `/proc/meminfo` 之 `GPUActive`、IQ3_S 余量 約 6 GiB
 | 提交 | 説明 |
 |------|------|
@@ -1567,7 +1567,7 @@
 - llama-cpp / dsh / dsh-api-balance / MAINTENANCE 之 `から`・`のみ`・`リング`・`キー`・`セッション`・`セクション`・`データ`・`合わせ` 修正
 - 新規用語 偽中国語化（prefill→前置充填、bottleneck→隘路、trade-off→相反関係、warmup→暖機、decode→復号 等）
 - `token` 既存慣用「語彙」統一
-- 辞書 16 項目追加、SKILL.md 陷阱表 空列生 片仮名 6 件 追加
+- 辞書 16 項目追加、SKILL.md 罠表 空列生 片仮名 6 件 追加
 - 外部引用原文（AGENTS.md 節題、git 提交情報）意図的 verbatim 維持
 | 提交 | 説明 |
 |------|------|
@@ -1763,7 +1763,7 @@
 
 - 根因：質問時 composer takeover 置換、`conversation.input.right` 環 component unmount/remount、component effect 内 注入 該 lifecycle 追随 消、style 頁面 到達 不可能
 - 修正：CSS 注入 `apply()` 内 `ctx.effect` 移動、插件読込時 一回 実行
-- 検証：実 helper 與 実 QuestionComposer CSS 抽出 Chromium 端到端 検証、注入成功、卡片全体 scroll、header 吸着 確認
+- 検証：実 helper 與 実 QuestionComposer CSS 抽出 Chromium 端到端 検証、注入成功、札全体 scroll、header 吸着 確認
 | 提交 | 説明 |
 |------|------|
 | `2c30611` | fix(dsh-api-balance): 疑問 window 注入插件読込時移動 |
@@ -1782,10 +1782,10 @@
 
 **摘要**：feat(dsh-api-balance): 疑問 window 頁面全体 scroll 最適化（長題干選択肢圧迫不）
 
-- CSS：卡片自身 scroll container 化、標題+詳細+選択肢一括 scroll；header 與 footer 按鈕領域 sticky 吸着；body 独立 scroll 停止
+- CSS：札自身 scroll container 化、標題+詳細+選択肢一括 scroll；header 與 footer 按鈕領域 sticky 吸着；body 独立 scroll 停止
 - 実装：class 名 ui-user-questions style 標籤自実行時抽出；標籤未準備時 1 秒間隔最大 5 回 retry
 - 設定：設定 → 界面「疑問 window 頁面全体 scroll」toggle 追加（既定有効、localStorage 永続化）
-- 検証：headless Chromium 実 markup 再現、修正後 卡片全体 scroll、header 吸着
+- 検証：headless Chromium 実 markup 再現、修正後 札全体 scroll、header 吸着
 
 | 提交 | 説明 |
 |------|------|
@@ -1840,9 +1840,9 @@
 **摘要**：fix(dsh-api-balance): 用量面板 頁面級 fixed portal 化（移動端 画面外 根治）
 
 - 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 與 座標空間 影響 受不
-- 位置 ring 锚点 視口座標 自 換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）
-- 二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方 可用空間（横屏 自動縮小 top bar 回避）——全 画面 size 画面外 出 不
-- 面板外 click 閉鎖 同 更新、z-index 900 充值/登録/設定 overlay 下
+- 位置 ring 錨点 視口座標 自 換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）
+- 二重 clamp：幅上限 = min(錨点空間, 視口 − 24px)、高度上限 = 錨点上方 可用空間（横屏 自動縮小 top bar 回避）——全 画面 size 画面外 出 不
+- 面板外 click 閉鎖 同 更新、z-index 900 充値/登録/設定 overlay 下
 | 提交 | 説明 |
 |------|------|
 | `4b2f19f` | fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） |
@@ -1851,7 +1851,7 @@
 
 **摘要**：fix(dsh-api-balance): 手機縦屏 窄幅 横 gesture 面板 scroll 返還
 
-- 根因：pager touch-action: pan-y 觸屏環境 瀏覽器級 横 gesture 禁止、面板 native 横 scroll 吞、内容 面板幅 超 時「出界且 横 scroll 不能」表現
+- 根因：pager touch-action: pan-y 觸屏環境 瀏覽器級 横 gesture 禁止、面板 native 横 scroll 呑、内容 面板幅 超 時「出界且 横 scroll 不能」表現
 - 修正：pager 内容幅 與 面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁 停止、頁面切替 上方 指示 dot 経由 維持
 - 収 時 pan-y + drag/swipe 翻頁 維持
 | 提交 | 説明 |
@@ -1872,7 +1872,7 @@
 **摘要**：feat(dsh-api-balance): 挨拶 手動更新時 限定 + pager 高度 當前頁 追従
 
 - 挨拶 時機 再構成：頁面 初期化（全頁 更新/読込） 挨拶 再生 不、自動放送 設定 従 使用量 警告 限 放送（load → announceHunger、音声通知 switch 與 30 分 rate 制限 制約）
-- 「余额」標籤 click 數據 読込済（初回 初期化 読込 以外） 場合 限 random 挨拶 音声 再生
+- 「残高」標籤 click 數據 読込済（初回 初期化 読込 以外） 場合 限 random 挨拶 音声 再生
 - pager 高度 自動 増減/回収：container 高度 = 當前頁 実測 高度（offsetHeight）、切頁 或 内容 変化 時 再測定——矮頁 切替 即 回収、高頁 切替 即 増加、非 active 頁 自然 高度 描画（視図外 移動、超過分 container clip）、区域 自身 scroll 不、全内容 面板 縦 scroll 依存
 | 提交 | 説明 |
 |------|------|
@@ -1882,7 +1882,7 @@
 
 **摘要**：fix(dsh-api-balance): 手機 横屏 top bar 遮蔽 + 窄幅 横 scroll 不具合
 
-- 横屏 修正：面板 最大高 「锚点 上方 可用 空間」 動態 clamp（環 自 祖先 chain 辿 最初 縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 锚点 上端 − clip 上端 − 12)、window size 変更時 再計算）、面板 自身 縦 scroll 全内容 表示
+- 横屏 修正：面板 最大高 「錨点 上方 可用 空間」 動態 clamp（環 自 祖先 chain 辿 最初 縦 clip container ≒ top bar 下端 hard 境界、maxHeight = min(460, 錨点 上端 − clip 上端 − 12)、window size 変更時 再計算）、面板 自身 縦 scroll 全内容 表示
 - 窄幅 修正：pager 頁幅 各頁 内容 実測幅（scrollWidth 最大、下限 220、px base 翻頁） 変更 固定 100% 廃止——利用可能 幅 不足 時 頁内容 自身 幅 維持、面板 overflow-x:auto 横 scroll 表示、pager overflow:hidden clip 回避
 | 提交 | 説明 |
 |------|------|
@@ -1893,7 +1893,7 @@
 **摘要**：feat(dsh-api-balance): 消耗明細 区域 水平 翻頁（indicator dot + swipe）
 
 - 当日/当月/30日 與 模型別 内訳/chart 同一 区域 二頁 水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）
-- 区域 上部 類 手機 主屏幕 頁面 指示 dot（tap 可、active dot 膠囊状 伸長）、横 drag/swipe 頁面 切替 対応（pointer capture 閾値 超過後 限定 有効化、頁内 按鈕 click 不奪；touch-action: pan-y 面板 縦 scroll 維持）
+- 区域 上部 類 手機 主屏幕 頁面 指示 dot（tap 可、active dot 膠嚢状 伸長）、横 drag/swipe 頁面 切替 対応（pointer capture 閾値 超過後 限定 有効化、頁内 按鈕 click 不奪；touch-action: pan-y 面板 縦 scroll 維持）
 - 区域 高度 内容 応 変化 自身 scroll 不、全内容 用量 面板 縦 scroll 依存
 | 提交 | 説明 |
 |------|------|
@@ -1901,11 +1901,11 @@
 | `8db2f12` | docs(dsh-api-balance): 消耗明細翻頁説明（四語） |
 ## 2026-09-02T04:40:47+09:00
 
-**摘要**：refactor(dsh-api-balance): 設定 按鈕 header 移動 + 余额 標籤 更新 継承 + token 取得元 帳戶情報 下 移動
+**摘要**：refactor(dsh-api-balance): 設定 按鈕 header 移動 + 残高 標籤 更新 継承 + token 取得元 勘定情報 下 移動
 
 - 面板 layout 再調整：「⚙ 設定」按鈕 面板 header 旧「數據更新」按鈕 位置 移動
-- 更新 按鈕 廃止、其 機能（host cache 迂回 強制 更新 + random 挨拶 音声）「余额」標籤 click 完全 継承（読込中 標籤内 spinner 表示）
-- token 取得元 区域（取得元 label / ✓ 登録済 / 切断） 面板下部 自 「帳戶情報」block 直下 至 移動、帳戶情報 與 連続 情報 section 構成
+- 更新 按鈕 廃止、其 機能（host cache 迂回 強制 更新 + random 挨拶 音声）「残高」標籤 click 完全 継承（読込中 標籤内 spinner 表示）
+- token 取得元 区域（取得元 label / ✓ 登録済 / 切断） 面板下部 自 「勘定情報」block 直下 至 移動、勘定情報 與 連続 情報 section 構成
 | 提交 | 説明 |
 |------|------|
 | `3ccc0d1` | refactor(dsh-api-balance): 設定按鈕 header + 余额標籤更新継承 + token 取得元帳戶情報下 |
@@ -1925,7 +1925,7 @@
 
 **摘要**：feat(dsh-api-balance): 面板 全幅 回帰 修正 + 峰谷 峰 標記 + 移動端 keyboard 抑制
 
-- 面板幅 内容 scrollWidth 一回 測定 具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋 解消、上限 min(锚点 右端 − sidebar, 640) 引締、超過時 面板内 横 scroll
+- 面板幅 内容 scrollWidth 一回 測定 具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋 解消、上限 min(錨点 右端 − sidebar, 640) 引締、超過時 面板内 横 scroll
 - DeepSeek 峰 時間帯（週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余 週末 終日 含 低谷） 用量 環 與 chart 紅色 表示 + 「峰時課金」badge（面板 header 與 chart 標題）、挨拶 音声 後 峰 提示 追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加
 - 移動端 sidebar session 切替 時 軟 keyboard 自動 表示 不（focusin capture 非 tap 入力欄 聚焦 遮断、預設 有効、設定 → 界面 無効化 可）
 | 提交 | 説明 |
@@ -1934,11 +1934,11 @@
 | `4ed2e7c` | docs(dsh-api-balance): 四語文書同期（峰標記 / 移動端 keyboard / peak segment） |
 ## 2026-09-01T12:18:16+09:00
 
-**摘要**：feat(presets): 預設 派生 漂移 檢查 flake check 導入
+**摘要**：feat(presets): 預設 派生 漂移 檢査 flake check 導入
 
 - develop/check-preset-derivation.py 新設、維護模式 NixOS模式 自 完全 派生 検証（組合 file = 固定行 block 追記、skills 目録 file 単位 一致）
 - flake.nix checks.preset-derivation 追加（CI 毎 push 実行）
-- AGENTS.md 「预设」節 新設 派生 規約 與 漂移 檢查 記録
+- AGENTS.md 「预设」節 新設 派生 規約 與 漂移 檢査 記録
 - Enter key 動作 項目 dsh-api-balance「設定 → 界面」switch 実装 至 修正
 | 提交 | 説明 |
 |------|------|
@@ -1967,10 +1967,10 @@
 | `9dc7a5d` | feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 |
 ## 2026-09-01T11:34:40+09:00
 
-**摘要**：feat(dsh-api-balance): 動的幅 + 帳戶情報 一行化 + 消耗 指標 子行
+**摘要**：feat(dsh-api-balance): 動的幅 + 勘定情報 一行化 + 消耗 指標 子行
 
 - 面板幅 max-content 動的適応 変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅 正文 折返 解消
-- API 鍵 / 帳戶 状態 / 幣別 残高 「帳戶情報」 一行 統合（· 区切）、充值 按鈕 標題 右側 移動
+- API 鍵 / 勘定 状態 / 幣別 残高 「勘定情報」 一行 統合（· 区切）、充値 按鈕 標題 右側 移動
 - 当日 / 当月 / 30 日 與 模型別 消耗 正文 指標 子行（金額 / 入 / cache命中 / 出） 分割、横向 幅 更 節約
 | 提交 | 説明 |
 |------|------|
@@ -2235,8 +2235,8 @@
 **摘要**：opencode-telegram 0.24.1 他三包 — 上流更新與文書同期
 
 - opencode-telegram 0.24.1：韓国語界面追加、`/opencode_stop` 応答中状態以即無応答本地 OpenCode 工程強制終了可能、音声文字起引用塊以表示、Telegram 一時錯誤安全再試行返信消失/重複防止、流送編集節流適応化
-- mcp-searxng 2.1.0：引擎明示選択時引擎毎 time-range 対応検証、非対応時実用錯誤以即時失敗
-- godot-ai 3.2.0：custom_tools 第三方 addon 工具登録、CLI 登録範囲選択化、DeepSeek Harness 客戶端対応追加
+- mcp-searxng 2.1.0：機関明示選択時機関毎 time-range 対応検証、非対応時実用錯誤以即時失敗
+- godot-ai 3.2.0：custom_tools 第三方 addon 工具登録、CLI 登録範囲選択化、DeepSeek Harness 依頼者対応追加
 - ruyi-beta 0.52.0-beta.20260824：beta 通道上流更新
 - 四言語文書同期、nix flake check 通過
 | 提交 | 説明 |
@@ -2262,9 +2262,9 @@
 
 ## 2026-08-27T07:28:58+09:00
 
-**摘要**：feat(dsh-api-balance): 面板刷新按鈕 — 余额與官方用量強制再取得
+**摘要**：feat(dsh-api-balance): 面板刷新按鈕 — 残高與官方用量強制再取得
 
-- 面板頭部標籤行右側刷新按鈕（↻）追加：點擊 queryBalance(true) 強制繞宿主側 30s TTL cache 重取余额 + 官方用量（按日/按月図表同步更新）
+- 面板頭部標籤行右側刷新按鈕（↻）追加：點撃 queryBalance(true) 強制繞宿主側 30s TTL cache 重取残高 + 官方用量（按日/按月図表同步更新）
 - 載入中按鈕禁用 + 旋轉動画（dshAbSpin 復用）
 - 中英双語文案（刷新資料 / Refresh data）
 - 検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映
@@ -2300,7 +2300,7 @@
 
 **摘要**：fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離（三類欠陥修正）
 
-- v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起、客户端消失則守護活性化中途殺 switch（部分活性化）
+- v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起、依頼者消失則守護活性化中途殺 switch（部分活性化）
 - v3 改明示帯内取消行、対向消失時子進程分離態完走
 - 取消/超時改進程組撃殺（spawn detached + kill(-pid)）——僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能
 - 超時上限 6h 放寛
@@ -2312,10 +2312,10 @@
 
 ## 2026-08-27T04:07:15+09:00
 
-**摘要**：feat(dsh-api-balance): 充值卡片弾窓代替 iframe + 残高不足語音提醒
+**摘要**：feat(dsh-api-balance): 充値札弾窓代替 iframe + 残高不足語音提醒
 
 - top_up 頁 WAF 遮断（"Max challenge attempts exceeded"）、iframe 弾窓不能工作
-- 改居中卡片弾窓（新窓按鈕 + 右上閉按鈕）、無頁面跳転
+- 改居中札弾窓（新窓按鈕 + 右上閉按鈕）、無頁面跳転
 - 追加残高不足語音提醒：残高低閾値（10 CNY/USD）時 Web Speech API 播報、15 分輪詢 + 30 分冷却
 - 面板内開關（balance.speechOn/Off）、中英双語文案
 - 検証：配備後特徴 grep（TopupModal/speechOn/announceHunger）確認生效
@@ -2325,12 +2325,12 @@
 
 ## 2026-08-26T11:44:45+09:00
 
-**摘要**：dsh-api-balance 0.1.0 — 新規包（用量 / 余额標籤切替）
+**摘要**：dsh-api-balance 0.1.0 — 新規包（用量 / 残高標籤切替）
 
-- webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加
+- webui 用量圓環（送信按鈕左 上下文使用量表示）弾出面板「用量 / 残高」標籤切替追加
 - 「用量」原上下文占有率與内訳維持
-- 「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付與残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL cache）表示
-- 宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化
+- 「残高」當前 API KEY 勘定情報（鍵末尾、残高可否、通貨別総残高 / 充値残高 / 付與残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL cache）表示
+- 宿主側 connection.rpc.intercept 包私有 endpoint 登録、依頼者側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化
 - 検証: RPC CNY 271.07 実残高返、client bundle 配信正常
 - 四語文書同期、nix flake check 通過
 | 提交 | 説明 |
@@ -2346,7 +2346,7 @@
 
 **摘要**：fix(dsh/module): allowLanSettings $host.state.getSnapshot() 補丁撤去
 
-- dsh ≥ 0.1.5 $host 客户端服务 state 非公開、旧補丁 client-ui-settings apply 時 undefined.getSnapshot 参照、前端全体白画面（Failed to load plugins）
+- dsh ≥ 0.1.5 $host 依頼者服務 state 非公開、旧補丁 client-ui-settings apply 時 undefined.getSnapshot 参照、前端全体白画面（Failed to load plugins）
 - 模組 allowLanSettings=true 強制 override 停止（上流行為復帰）
 - packages/dsh.nix 補丁無条件 "host" 変更
 - 検証: 首頁 200、llm/listProviders DeepSeek 提供方返
@@ -2468,7 +2468,7 @@
 **摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正
 
 - 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）
-- 交接卡與插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤、`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一
+- 交接札與插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤、`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一
 - 検証：`nix flake check` 通過、系統配備 `nixos apply` 変更実測成功
 | 提交 | 説明 |
 |------|------|
@@ -2639,8 +2639,8 @@
 
 **摘要**：fix(dsh): insert 塊縮進修正 — 毎包 1 insert 操作
 
-- 嵌套 '' 字符串按自身最小縮進剝離、插件条目第 0 列復帰、`- insert:` 兄弟補丁操作誤解析（dsh 報 patch: entry … not found + id is required for non-insert patches、8 行再度全部未掛載）
-- 毎包 1 insert 操作発行、条目对象與 `- insert:` 行同字符串（2/4 列縮進）修正、模組注釈該陷阱記録
+- 嵌套 '' 字符串按自身最小縮進剥離、插件条目第 0 列復帰、`- insert:` 兄弟補丁操作誤解析（dsh 報 patch: entry … not found + id is required for non-insert patches、8 行再度全部未掛載）
+- 毎包 1 insert 操作発行、条目対象與 `- insert:` 行同字符串（2/4 列縮進）修正、模組注釈該罠記録
 - 検証：dump-config stderr 零、8 行全部合成樹反映
 | 提交 | 説明 |
 |------|------|
@@ -2662,7 +2662,7 @@
 
 **摘要**：fix(dsh): 複数插件注入失敗 — GNU tar 目録模式復元書込不可
 
-- 展開後 GNU tar 復元帰檔内目録模式（store 樹 0555）、直前插件作成 scope 目録（@kihara777/）次插件書込不可、2 個目以降 Cannot mkdir: Permission denied 失敗
+- 展開後 GNU tar 復元帰段階内目録模式（store 樹 0555）、直前插件作成 scope 目録（@kihara777/）次插件書込不可、2 個目以降 Cannot mkdir: Permission denied 失敗
 - 単一插件不発生、初実系統構築顕在化
 - 各插件解包直後 chmod -R u+w 実行修正
 - 検証：系統 toplevel 完全構築成功、dsh-nix-shell 與 7 技能全部注入済
@@ -2803,7 +2803,7 @@
 
 **摘要**：feat(module): nixkits.dsh.settings — 宣言設定
 
-- dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件备份、hot reload、namespace 別 section）格納
+- dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件備份、hot reload、namespace 別 section）格納
 - settings 選項（attrsOf attrs、namespace → section）追加、JSON（合法 YAML）preStart 写入
 - 実測：web-search-deepseek.maxTokens 既定 4096 → 8192 宣言覆写
 - 4 言語文書 設定節追加
@@ -3081,7 +3081,7 @@
 
 ## 2026-08-09T22:43:43+09:00
 
-**摘要**：refactor(skill): 陷阱 第 4 条 追加
+**摘要**：refactor(skill): 罠 第 4 条 追加
 
 - 無引数 `nix flake lock` 全 floating input 更新（nixpkgs 漂移 再発、8/7 nixpkgs diffusers/httpx 失敗）
 - --update-input 或 rev 固定 使用
@@ -3268,7 +3268,7 @@
 
 ## 2026-07-23T12:08:13+09:00
 
-**摘要**：fix(codewhale-sudo): LD_PRELOAD shim → ptrace 系統呼出 拦截器 入替
+**摘要**：fix(codewhale-sudo): LD_PRELOAD shim → ptrace 系統呼出 傍受 入替
 
 - codewhale 静的連結 故 LD_PRELOAD `prctl(PR_SET_NO_NEW_PRIVS)` 捕捉 不能
 - `ptrace(2)` 採用 kernel 境界 捕捉、静的 與 動的 双方対応
@@ -4246,11 +4246,11 @@
 
 ## 2026-06-16T06:03:24+09:00
 
-**摘要**：mcp-searxng 文書 — CodeWhale MCP 設定指南、常見罠警告 與 故障排查章節
+**摘要**：mcp-searxng 文書 — CodeWhale MCP 設定指南、常見罠警告 與 故障排査章節
 
 - CodeWhale MCP 設定指南
 - 常見罠警告（env 既定 {}）
-- 故障排查章節
+- 故障排査章節
 | 提交 | 説明 |
 |------|------|
 | `d670e1e` | docs(mcp-searxng): add CodeWhale config, common pitfall, and troubleshooting |
@@ -4330,7 +4330,7 @@
 
 ## 2026-06-12T18:17:52+09:00
 
-**摘要**：llama-cpp-rocm 模块 — modelsPreset 支持 復旧 與 名前空間 移行
+**摘要**：llama-cpp-rocm 模塊 — modelsPreset 支持 復旧 與 名前空間 移行
 
 - modelsPreset 支持 復旧（nixpkgs 既削除）
 - 名前空間 nixkits 移行
@@ -4479,9 +4479,9 @@
 
 ## 2026-06-08T14:22:25+09:00
 
-**摘要**：rcc-fix — NixOS 模块（systemd 死鎖修正）
+**摘要**：rcc-fix — NixOS 模塊（systemd 死鎖修正）
 
-- NixOS 模块：systemd 死鎖修正
+- NixOS 模塊：systemd 死鎖修正
 | 提交 | 説明 |
 |------|------|
 | `141f4af` | feat(rcc-fix): add NixOS module for systemd deadlock fix |

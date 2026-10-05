@@ -8,7 +8,7 @@
 **旧位置**：`modules/comfyui-rocm.nix` + `patches/comfyui-nix-{strix-halo,nixpkgs-compat,stdenv-api}.patch`
 **現状**：模組 保留 且 `nixkits.comfyui` 改名、**三補丁 全部 削除**
 
-### 我们很荣幸地看到上游开发者积极维护着项目并更新 ROCm 支持组件到了能很好支持 StrixHalo 设备的版本，本补丁的历史使命已经完成。
+### 上流 開発者 計画 積極 保守 與 ROCm 支持 部品 更新、StrixHalo 機器 良好 支持 可能 版本 至 到達 —— 見 事 栄幸 至。本補丁 歴史 使命 完了 済。
 
 ## 曾 何 解決
 
@@ -33,14 +33,14 @@
   故 上流 flake/overlay 直接 評価 場合 非推奨警告 **依然 出**。修正 不要 真 理由
   **我々 上流 code 上書 不 化**：旧修正 overlay 経由 評価 fork 対 此 移行 適用、
   下流 build 汚 警告 消除。上流 直接 指 今、本 module 宣言 配線 限定 行。
-- **nixpkgs 互換**：上流 Python test 跳过 logic 大半 既 cover。
+- **nixpkgs 互換**：上流 Python test 省略 logic 大半 既 cover。
 
 ## ⚠️ 一度 誤判定（記録 値）
 
 `comfyui-nix-nixpkgs-compat` 之 廃止判定 **当初 誤**：
 
 1. 初回評価 時「完全構築検証」行：717 derivation 全部 成功、
-   `scipy` / `jupyter-server` / `jupyterlab` / `fastapi` 等「test 跳过 必要」
+   `scipy` / `jupyter-server` / `jupyterlab` / `fastapi` 等「test 省略 必要」
    包 失敗 無、依此 補丁 不要 判定。
 2. **但 其回 `scipy` 緩衝命中、一度 実際 未構築。** 検証 緩衝内 産物、
    非 現実 構築。

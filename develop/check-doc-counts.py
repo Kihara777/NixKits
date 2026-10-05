@@ -17,6 +17,8 @@
    == `skills/translate-pseudocn/dictionary.md` 的表数据行数。
 2. `AGENTS.md` 声明的自检项数（总数、其中 python 实现数）
    == `flake.nix` 的 `checks` 条目数、以及其中调用 `develop/check-*.py` 的数量。
+3. `flake.nix` 里那份清单注释（`# - <名字>：…`）与 `checks` 的键**一一对应**
+   （2026-10-05 实测：`session-sources` 加进来时漏了这处注释，而它没人看）。
 
 挂入 `nix flake check`（checks.doc-counts），CI 每次 push 执行。
 """
@@ -40,13 +42,14 @@ def dictionary_entry_count() -> int:
     return len(rows) - 1
 
 
-def flake_check_counts() -> tuple:
-    """`flake.nix` 的 checks 条目数、其中调用 `develop/check-*.py` 的数量。"""
+def flake_checks() -> tuple:
+    """`flake.nix` 的 checks 键集合、注释清单里列出的名字集合、python 实现数。"""
     text = read("flake.nix")
     segment = text[text.index("checks = {"):]
-    named = re.findall(r'(\w[\w-]*)\s*=\s*pkgs\.runCommand "check-', segment)
+    keys = set(re.findall(r'(\w[\w-]*)\s*=\s*pkgs\.runCommand "check-', segment))
+    comment = set(re.findall(r"(?m)^\s*# - ([\w-]+)：", text))
     python_scripts = set(re.findall(r"python3 (develop/check-\S+\.py)", segment))
-    return len(named), len(python_scripts)
+    return keys, comment, len(python_scripts)
 
 
 # 规则 1：文档里声明的词典条数（`**N** 条` / `**N** 項(目)` / `**N** entries`）
@@ -76,7 +79,8 @@ def main() -> None:
                 )
 
     # ── 规则 2 ───────────────────────────────────────────────
-    total, pythonic = flake_check_counts()
+    keys, comment, pythonic = flake_checks()
+    total = len(keys)
     agents = read("AGENTS.md")
     for pattern, actual, what in (
         (CHECK_TOTAL_CLAIM, total, "自检项总数"),
@@ -92,6 +96,15 @@ def main() -> None:
                     f"AGENTS.md: 声明的{what}是 {claim}，而 flake.nix 的 checks 实际为 {actual} "
                     f"（新增/删除一项检查时，AGENTS.md 的这张表要一起改）"
                 )
+
+    # ── 规则 3：flake.nix 的清单注释必须与 checks 实际一一对应 ─────────
+    # 2026-10-05 实测：`session-sources` 加入时漏了这处注释，而它一直没人看。
+    for name in sorted(keys - comment):
+        problems.append(
+            f"flake.nix: checks 里有 `{name}`，但上方的清单注释（`# - <名字>：…`）没有列它")
+    for name in sorted(comment - keys):
+        problems.append(
+            f"flake.nix: 清单注释列了 `{name}`，但 checks 里没有这一项")
 
     for problem in problems:
         print(f"doc-counts: {problem}", file=sys.stderr)
