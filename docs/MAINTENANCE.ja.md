@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T14:24:37+09:00
+
+**概要**：dsh-api-balance 薄ラッパー re-pin —— rev `911df2e` → `95fec42`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) にある）。メンテナの二度目のフィードバック：フェードは下端だけで、**上端は依然として一刀両断**、しかも追従ボタンの**下側**に切り取られた内容が覗いていた。上下両端の**スクロール連動**フェードに変更：`none/start/end/middle` の状態機械で、最上部では上端が、最下部では下端がぼけない（三状態を逐一確認）；カードは上端のみフェード（カード全体の mask は追従ボタンまで淡くしてしまう）、ボタン下側は同色の埋めで塞いだ。二つの罠を踏んで直した：① 注入時に要素を束縛しても間に合わない（上流のスタイルが先、コンポーネントが後）、scroll キャプチャ + MutationObserver + 500ms ポーリングで補強；② `elementFromPoint` で「被覆」を検証するのは誤り（埋めは `pointer-events:none` でヒットテストに映らない）。四語ドキュメント同期。
+
+| コミット | 説明 |
+|------|------|
+| `16f4fef` | fix(dsh-api-balance): re-pin to 95fec42 — scroll-aware fades in the question dialog |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `911df2e` → `95fec42` |
+| 　 | src hash | `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` → `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` |
+
 ## 2026-10-05T13:58:51+09:00
 
 **概要**：dsh-api-balance 薄ラッパー re-pin —— rev `1f0af6c` → `911df2e`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) にある）。スクリーンショットを見たメンテナから、質問ダイアログの下端が「一刀両断」だと指摘があった：高さ制限したプロンプトの下端と、追従ボタンの上側の両方に**フェードマスク**を敷いた（プロンプトは `mask-image`、ボタン上は `::before` のグラデーション帯）。グラデーション色は注入時に**カードの実際の背景色**から取得する（ライト `rgb(255,255,255)` / ダーク `rgb(44,44,46)`；固定色だとダークで露見する）。定量的な判定：プロンプト下端 30px の平均輝度が 59.93 → 45.92（約 23% 暗い）で、フェード帯より上（60–90px）は不変；双方向の対照でデプロイ版はこれらのアサーションが FAIL。四語ドキュメント同期。

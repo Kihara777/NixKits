@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-05T14:24:37+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— rev `911df2e` → `95fec42`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816)）。维护者第二轮反馈：渐隐只在底部、**顶部仍是硬切**，且吸附按钮**下方**还露着一截被切断的内容。现改为**滚动感知**的上下渐隐：状态机 `none/start/end/middle`，滑到顶不在顶边发虚、滑到底不在底边发虚（实测三态逐一核对）；卡片只淡顶边（整块 mask 会把吸附按钮一起淡掉），按钮下方用同底色补片收口。踩到两个坑并修掉：① 只在注入那一刻绑定元素会扑空（上游样式先到、组件后到），改为 scroll 捕获 + MutationObserver + 500ms 轮询兜底；② 用 `elementFromPoint` 验「覆盖」是错的（补片 `pointer-events:none`，命中测试永远测不到）。四语文档同步。
+
+| 提交 | 说明 |
+|------|------|
+| `16f4fef` | fix(dsh-api-balance): re-pin 到 95fec42 —— 疑问窗口渐隐改滚动感知 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | rev | `911df2e` → `95fec42` |
+| 　 | src hash | `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` → `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` |
+
 ## 2026-10-05T13:58:51+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— rev `1f0af6c` → `911df2e`（版本仍 `0.1.1`；子仓无维护日志，变更见其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0)）。维护者看截图后指出疑问窗口底部是「一刀切」：题干限高的下边界与被吸附按钮上方各加一道**渐隐遮罩**（题干用 `mask-image`，按钮上方用 `::before` 渐变带）。渐变色在注入时取**卡片实际底色**（浅 `rgb(255,255,255)` / 深 `rgb(44,44,46)`，写死会在深色下露馅）。量化判据：题干下边界 30px 平均亮度 59.93 → 45.92（约暗 23%），而渐隐区之上（60–90px）不变；双向对照下部署版这些断言实测 FAIL。四语文档同步。

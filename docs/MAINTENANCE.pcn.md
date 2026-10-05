@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T14:24:37+09:00
+
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `911df2e` → `95fec42`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) 見）。維護者 二度目 反饋：漸隠 下端 限定、**上端 依然 一刀切**、且 追従按鈕**下方** 切断内容 露出。今 上下両端 **scroll 連動** 漸隠 変更：`none/start/end/middle` 状態機械、最上部 上端 模糊不、最下部 下端 模糊不（三状態 逐一 確認）；卡片 上端 限定 漸隠（卡片全体 mask 追従按鈕 淡 成）、按鈕下方 同色 埋 塞。二罠 踏 修正：① 注入時 要素 束縛 不及（上流 style 先、component 後）、scroll capture + MutationObserver + 500ms polling 補強；② `elementFromPoint` 被覆 検証 誤（埋 `pointer-events:none`、hit test 映 不）。四語文档 同期。
+
+| 提交 | 説明 |
+|------|------|
+| `16f4fef` | fix(dsh-api-balance): re-pin to 95fec42 — scroll-aware fades in the question dialog |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重釘） |
+| 　 | rev | `911df2e` → `95fec42` |
+| 　 | src hash | `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` → `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` |
+
 ## 2026-10-05T13:58:51+09:00
 
 **摘要**：dsh-api-balance 薄包装 re-pin —— rev `1f0af6c` → `911df2e`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) 見）。維護者 截图 見後 指摘：疑問 window 下端「一刀切」——題干 限高 下端 與 追従按鈕上方 各 **漸隠 mask** 敷（題干 `mask-image`、按鈕上 `::before` 漸変帯）。漸変色 注入時 **卡片実際底色** 取得（light `rgb(255,255,255)` / dark `rgb(44,44,46)`；固定色 深色 露見）。定量判据：題干下端 30px 平均輝度 59.93 → 45.92（約 23% 暗）、漸隠帯 之上（60–90px）不変；双方向対照 部署版 這些 assertion 実測 FAIL。四語文档 同期。

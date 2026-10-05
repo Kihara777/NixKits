@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T14:24:37+09:00
+
+**Summary**: dsh-api-balance thin-wrapper re-pin — rev `911df2e` → `95fec42` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816)). Second round of maintainer feedback: the fade was bottom-only, the **top edge was still a hard cut**, and a sliced-off line still showed **below** the pinned buttons. The fades are now **scroll-aware** on both ends: a `none/start/end/middle` state machine means the top edge no longer goes soft when scrolled to the top nor the bottom edge at the bottom (all three states checked one by one); the card fades its top edge only (masking the whole card would fade the pinned buttons too), and the strip below the buttons is closed off with a same-colour filler. Two traps were hit and fixed: ① binding elements at injection time misses them (the upstream style tag arrives before the component), now covered by scroll capture + MutationObserver + a 500 ms poll; ② `elementFromPoint` cannot verify a *paint* cover (the filler is `pointer-events:none`, so the hit test never sees it). All four language docs updated.
+
+| Commit | Description |
+|------|------|
+| `16f4fef` | fix(dsh-api-balance): re-pin to 95fec42 — scroll-aware fades in the question dialog |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `911df2e` → `95fec42` |
+| 　 | src hash | `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` → `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` |
+
 ## 2026-10-05T13:58:51+09:00
 
 **Summary**: dsh-api-balance thin-wrapper re-pin — rev `1f0af6c` → `911df2e` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0)). After looking at a screenshot, the maintainer pointed out that the question dialog's bottom edge was a hard cut: both the height-capped prompt's lower edge and the strip above the pinned buttons now carry a **fade mask** (a `mask-image` on the prompt, a `::before` gradient band above the buttons). The gradient colour is sampled at injection time from the **card's actual background** (light `rgb(255,255,255)` / dark `rgb(44,44,46)`; a hardcoded colour would give itself away in dark mode). Quantitative criterion: the average luminance of the prompt's bottom 30px goes 59.93 → 45.92 (~23% darker) while the band above the fade (60–90px) is unchanged; in a two-way comparison those assertions measured FAIL on the deployed build. All four language docs updated.
