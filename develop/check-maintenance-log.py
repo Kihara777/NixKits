@@ -13,7 +13,9 @@
 6. **摘要标记须是本语的**：每种语言用自己那份标记（zh/pcn → `**摘要**`、en → `**Summary**`、
    ja → `**概要**`），冒号全/半角不论。
 7. **zh 摘要 ≤ 400 字符**（规范里那条字符预算）。
-8. **清单式摘要的条目数四语相等**（少一条是漏译，多一条是加料）。
+8. **摘要一律清单式**：每条摘要至少有 **1 个 `- ` 项**，且**项数四语相等**
+   （2026-10-05 起策略从「散文或清单都行」改为只此一种——扫读时要能一眼数清改了几件事，
+   散文段落没法数）。
 9. **说明块（`>` 行）只有一行，且标记是本语的**。
 
 第 5 条是补上的**盲区**：前四条都只看「总量」——条目数、全局 SHA 唯一性、行级假名——
@@ -224,7 +226,7 @@ def main() -> None:
                         f"(zh={len(shas)} {shas}, {lang}={len(other)} {other})"
                     )
 
-    # 规则 7/8/9：字符预算、清单条目数对等、说明块形态（2026-10-05 补）。
+    # 规则 7/8/9：字符预算、摘要一律清单式、说明块形态（2026-10-05 补）。
     zh_bodies = per_lang_bodies.get("zh", {})
     for heading, body in zh_bodies.items():
         summary = summary_body("zh", body)
@@ -234,6 +236,11 @@ def main() -> None:
                 f"> {ZH_SUMMARY_LIMIT}（删减顺序：过程与推导 → 收尾句 → 次要枚举 → 原因只留一句）"
             )
         zh_items = bullet_items(summary)
+        if summary is not None and zh_items == 0:
+            problems.append(
+                f"{os.path.relpath(FILES['zh'], ROOT)}: {heading} 摘要是散文——策略要求"
+                "「一句话概括 + 空行 + 至少 1 个 `- ` 项」，单件事的条目也要写成单行清单"
+            )
         for lang, mapping in per_lang_bodies.items():
             if lang == "zh" or heading not in mapping:
                 continue

@@ -19,9 +19,9 @@ Language extension skills are discovered via the `translate-*` naming convention
 
 - Writes software update records (summary + commit ID table + version table)
 - Writes bug fix records (summary + commit ID table)
-- **The summary accepts two layouts**: one sentence, or a **markdown list** (easier to scan when the change naturally splits into several items); both share the same length budget (≤ 400 characters in zh)
-  - With the list form, the **item count must match across languages** — one item short is a missed translation, one extra is padding
-- **The shape rules are pinned as CI assertions** (`develop/check-maintenance-log.py`, run by `nix flake check`): zh summary ≤ 400 characters, matching list-item counts across languages, and note blocks that are single-line with an in-language marker. **Translations have no length gate** — Chinese, English and Japanese differ in information density (measured literal ratios, median: en 1.87, ja 1.17, pcn 1.03), so they are judged by a density-matched ratio
+- **The summary has exactly one layout (mandatory since 2026-10-05)**: a one-sentence headline, a blank line, then one or more `- ` items; one thing per item (an item may enumerate with commas or contain a subordinate clause), and **even a single-thing entry becomes a one-item list**
+  - The **item count must match across languages** — one item short is a missed translation, one extra is padding
+- **The shape rules are pinned as CI assertions** (`develop/check-maintenance-log.py`, run by `nix flake check`): **at least one `- ` item per summary** (a prose summary fails), zh summary ≤ 400 characters in total, matching item counts across languages, and note blocks that are single-line with an in-language marker. **Translations have no length gate** — Chinese, English and Japanese differ in information density (measured literal ratios, median: en 1.87, ja 1.17, pcn 1.03), so they are judged by a density-matched ratio
 - **Writes cross-repository chained-update records**: the main repo's entry records only the thin-wrapper coordinate change (`rev` / hash) and **links to the corresponding entry section in the sub-repo**; the sub-repo's entry records its own full version change — the two differ and are not duplicates
   - Anchor derivation: ISO 8601 timestamp **lowercased → every character except `-` `_` replaced with `-`** (so `:` and `+` each become one `-`, existing `-` are kept)
 - Sync across all available languages (auto-discovered via translate-* skills)
