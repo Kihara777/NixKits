@@ -1374,7 +1374,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `9483c2c` | docs(dsh-api-balance): peak auto-trigger/clear and peakEnd segment (4 languages) |
 ## 2026-09-02T10:23:55+09:00
 
-**Summary**: feat(dsh-api-balance): unify peak-hour red across the usage page + keep chart models distinguishable — the peak-hour red now covers the usage page's context progress bar and detail color chips, the refresh/loading spinner (new dshAbSpinPeak red-ring class), and the reading text, matching the already-red usage ring/chart; the progress bar's segments take different red shades by index via peakShade so multiple segments stay distinguishable; the chart keeps PEAK_PALETTE at peak — a red family where each model keeps a distinct red shade (legend dots synced), red yet distinguishable rather than blindly replaced by one color
+**Summary**: feat(dsh-api-balance): peak-hour red unified across the usage page + chart model colors stay distinguishable — peak red now covers the page's context progress bar and detail chips, the refresh/loading animation (new dshAbSpinPeak red-ring class in dshAbSpin) and the reading text, matching the already-red usage ring/chart; progress-bar segments take different red shades by index via peakShade, so multiple segments stay distinguishable; the chart keeps PEAK_PALETTE at peak — a red family with a distinct shade per model (legend dots synced).
 
 | Commit | Description |
 |------|------|
@@ -1382,7 +1382,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `ea34699` | docs(dsh-api-balance): peak-red unified to progress bar/spinner/details (4 languages) |
 ## 2026-09-02T06:32:01+09:00
 
-**Summary**: refactor(dsh-api-balance): remove the phone-portrait overflow fixes and restore the lean implementation — remove the 「portrait-overflow sizing logic」(panel width returns to content scrollWidth measurement + cap, no longer switching to min(520px, 94vw) on overflow); remove the pager's fitWidth / overflowing / layoutW handling (page width returns to the fixed measured content width, touchAction back to pan-y, touch/drag paging works in every scenario); keep the page-level fixed portal (mobile-landscape top-bar avoidance and general overlay stability)
+**Summary**: refactor(dsh-api-balance): drop the phone-portrait overflow fixes and restore the lean implementation — the 「portrait-overflow settings-page sizing logic」 is removed (panel width back to measuring content scrollWidth with a cap, no longer switching to min(520px, 94vw) on overflow); the pager's fitWidth / overflowing / layoutW handling is removed (page width back to the measured content width, touchAction back to pan-y, touch/drag paging works in every scenario); the page-level fixed portal stays (mobile-landscape top-bar avoidance and general overlay stability).
 
 | Commit | Description |
 |------|------|
@@ -1390,7 +1390,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `e529d48` | docs(dsh-api-balance): narrow-screen behavior reverted to content-adaptive + panel scroll (4 languages) |
 ## 2026-09-02T05:56:57+09:00
 
-**Summary**: fix(dsh-api-balance): portrait overflow directly adopts the settings dialog's sizing logic — when the content width exceeds the available space (portrait overflow), the panel width switches directly to the settings dialog's page sizing logic (min(520px, 94vw)) and the content adapts to the panel width; only rare hard-overflow content falls back to the panel's horizontal scroll; the pager follows suit: on overflow the page width uses the panel's available width (content wraps to fit), gestures return to the panel's native scroll and paging goes through the indicator dots, and once the content fits, drag/swipe paging resumes automatically
+**Summary**: fix(dsh-api-balance): portrait overflow adopts the settings dialog's sizing — when the content is wider than the space available, the panel width switches to the settings dialog's page sizing (min(520px, 94vw)) and content adapts; only rare hard-overflow content falls back to horizontal scroll; the pager follows (page width = the panel's available width, content wraps, gestures return to native scroll, paging via the dots) and drag/swipe paging resumes once the content fits.
 
 | Commit | Description |
 |------|------|
@@ -1398,7 +1398,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `a8f8cda` | docs(dsh-api-balance): portrait-overflow sizing-logic notes (4 languages) |
 ## 2026-09-02T05:45:48+09:00
 
-**Summary**: fix(dsh-api-balance): usage panel becomes a page-level fixed portal (root fix for mobile off-screen) — the panel moves from absolute positioning inside the conversation tree to a document.body-level fixed portal (same architecture as the settings dialog), no longer clipped by the conversation area's overflow or bound to its coordinate space; the position is derived from the ring anchor's viewport rect (recomputed on resize/scroll, measured in useLayoutEffect to avoid flicker); double clamps: width cap = min(anchor space, viewport − 24px), height cap = the space above the anchor (auto-shrinks in landscape to avoid the top bar) — never off-screen at any size; the outside-click close is updated (the panel left the ring's ancestor chain), and z-index 900 sits below the top-up/login/settings overlays
+**Summary**: fix(dsh-api-balance): the usage panel becomes a page-level fixed portal (root fix for mobile off-screen) — it moves from absolute positioning inside the conversation tree to a document.body-level fixed portal (same architecture as the settings dialog), no longer clipped by the conversation area's overflow or bound to its coordinate space; position is derived from the ring anchor's viewport rect (recomputed on resize/scroll, measured in useLayoutEffect to avoid flicker); double clamps: width cap = min(anchor space, viewport − 24px), height cap = the space above the anchor (auto-shrinks in landscape to avoid the top bar) — never off-screen at any size; outside-click close is updated, z-index 900 below the top-up/login/settings overlays.
 
 | Commit | Description |
 |------|------|
@@ -1406,7 +1406,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `7145e5f` | docs(dsh-api-balance): page-level overlay architecture notes (4 languages) |
 ## 2026-09-02T05:29:47+09:00
 
-**Summary**: fix(dsh-api-balance): narrow phone-portrait horizontal gestures returned to panel scrolling — root cause: the pager's touch-action: pan-y forbids browser-level horizontal gestures on touch, so the panel's native horizontal scroll was swallowed by the whole pager — overflowing content appeared cut off with no horizontal scrolling; fix: the pager checks whether its content exceeds the panel's available width (fitWidth prop) and, when it does, switches touch-action to auto (handing horizontal gestures back to the panel's native scroll) and disables drag-flipping (gestures only scroll the panel), with page switching kept via the indicator dots; when it fits, pan-y + drag/swipe flipping stays
+**Summary**: fix(dsh-api-balance): narrow phone-portrait horizontal gestures return to panel scroll — root cause: the pager's touch-action: pan-y blocks browser-level horizontal gestures on touch, swallowing the panel's native horizontal scroll, so overflowing content looked cut off and unscrollable; fix: the pager compares content width against the panel's available width (fitWidth prop) and on overflow switches touch-action to auto (gestures to the panel's native scroll) and disables drag paging (page switching stays via the dots); when it fits, pan-y + drag/swipe paging remain.
 
 | Commit | Description |
 |------|------|
@@ -1414,14 +1414,14 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `189945c` | docs(dsh-api-balance): narrow-screen gesture-priority notes (4 languages) |
 ## 2026-09-02T05:23:13+09:00
 
-**Summary**: fix(dsh-api-balance): the first manual refresh plays the greeting too — every manual refresh via the 「Balance」 tab (including the first click) plays the random greeting; only the full-page-load initialization skips it (broadcasting just the usage warnings per the auto-broadcast setting)
+**Summary**: fix(dsh-api-balance): the first manual refresh plays the greeting too — every manual refresh of the 「Balance」 tab, first click included, plays a random greeting; only full-page-load initialization skips it (usage warnings only, per the auto-broadcast setting).
 
 | Commit | Description |
 |------|------|
 | `4836b4e` | fix(dsh-api-balance): the first manual refresh plays the greeting too |
 ## 2026-09-02T05:15:52+09:00
 
-**Summary**: feat(dsh-api-balance): greetings only on manual refresh + pager height follows the current page — greeting timing reworked: page initialization (full refresh/load) no longer plays a greeting and only broadcasts the usage warnings per the auto-broadcast setting (load → announceHunger, gated by the voice-alert switch and the 30-minute rate limit); the 「Balance」 tab click plays the random greeting only when data has already been loaded (i.e. not the initial load); pager height auto-grow/reclaim: the container height equals the current page's measured height (offsetHeight), re-measured on page switch or content change — switching to a shorter page reclaims height, a taller page grows it; non-active pages render at natural height (translated out of view, overflow clipped by the container), the area never scrolls itself, and full content relies on the panel's vertical scroll
+**Summary**: feat(dsh-api-balance): greetings only on manual refresh + pager height follows the current page — page initialization (full refresh/load) no longer plays a greeting and only broadcasts usage warnings per the auto-broadcast setting (load → announceHunger, gated by the voice-alert switch and the 30-minute rate limit); the 「Balance」 tab plays the greeting only when data was already loaded; the pager height equals the current page's measured height (offsetHeight), re-measured on page switch or content change — a shorter page reclaims height, a taller one grows it; non-active pages render at natural height and full content relies on the panel's vertical scroll.
 
 | Commit | Description |
 |------|------|
@@ -1429,7 +1429,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `610c402` | docs(dsh-api-balance): greeting timing + pager height reclaim notes (4 languages) |
 ## 2026-09-02T05:03:47+09:00
 
-**Summary**: fix(dsh-api-balance): phone-landscape top-bar occlusion + broken narrow-screen horizontal scroll — landscape fix: the panel max-height clamps dynamically to the space above the anchor (the first vertically-clipping ancestor of the ring ≈ the top bar's bottom edge is the hard boundary; maxHeight = min(460, anchor top − clipping top − 12), recomputed on resize), with the panel's own vertical scroll carrying the full content; narrow-screen fix: pager pages now use each page's measured content width (max scrollWidth, floor 220, px-based paging) instead of a fixed 100% — when the available width is too small, page content keeps its own width and the panel's overflow-x:auto scrolls horizontally instead of being clipped by the pager's overflow:hidden
+**Summary**: fix(dsh-api-balance): phone-landscape top-bar occlusion + broken narrow-screen horizontal scroll — landscape: the panel max-height clamps dynamically to the space above the anchor (the ring's first vertically-clipping ancestor ≈ the top bar's bottom edge is the hard boundary; maxHeight = min(460, anchor top − clipping top − 12), recomputed on resize), with the panel's own vertical scroll carrying the full content; narrow screen: pager pages use each page's measured content width (max scrollWidth, floor 220, px-based paging) instead of a fixed 100% — when the available width is too small, content keeps its own width and the panel's overflow-x:auto scrolls, no longer clipped by the pager's overflow:hidden.
 
 | Commit | Description |
 |------|------|
@@ -1437,7 +1437,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `2f37193` | docs(dsh-api-balance): mobile panel height/width adaptation notes (4 languages) |
 ## 2026-09-02T04:48:40+09:00
 
-**Summary**: feat(dsh-api-balance): horizontally paged consumption-detail area (dot indicator + swipe) — today/month/30-day and the per-model breakdown/chart merge into one two-page horizontal pager (page 1: window rows; page 2: per-model + daily/monthly chart); a phone-home-screen-style dot indicator sits above (tappable, the active dot stretches into a pill), with horizontal drag/swipe paging (pointer capture only engages past the threshold, so in-page button clicks are never swallowed; touch-action: pan-y keeps the panel's vertical scroll); the area height follows its content and never scrolls itself — full content relies on the usage panel's own vertical scrollbar
+**Summary**: feat(dsh-api-balance): horizontally paged consumption-detail area (dot indicator + swipe) — today/month/30-day and the per-model breakdown/chart merge into one two-page horizontal pager (page 1: window rows; page 2: per-model + daily/monthly chart); a home-screen-style dot indicator sits above (tappable, the active dot becomes a pill), with horizontal drag/swipe paging (pointer capture engages only past the threshold, so in-page button clicks aren't swallowed; touch-action: pan-y keeps the panel's vertical scroll); the area height follows its content and never scrolls itself — full content relies on the usage panel's vertical scrollbar.
 
 | Commit | Description |
 |------|------|
@@ -1445,7 +1445,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `8db2f12` | docs(dsh-api-balance): paged consumption-detail notes (4 languages) |
 ## 2026-09-02T04:40:47+09:00
 
-**Summary**: refactor(dsh-api-balance): settings button moves to the header + Balance tab takes over refresh + token source moves below account info — another panel layout pass: the 「⚙ Settings」 button moves into the panel header where the 「Refresh data」 button used to be; the refresh button is removed and its behavior (force-refresh bypassing the host cache + a random greeting) is fully inherited by clicking the 「Balance」 tab (a spinner shows inside the tab while loading); the token-source area (source label / ✓ Signed in / Disconnect) moves from the panel bottom to directly below the 「Account」 block, forming one continuous info section
+**Summary**: refactor(dsh-api-balance): settings button to the header, Balance tab carries refresh, token source below account info — the 「⚙ Settings」 button takes the panel header's old 「Refresh data」 slot; that button is dropped and its behavior (force-refresh bypassing the host cache + a random greeting) is inherited by clicking the 「Balance」 tab (spinner while loading); the token-source area (source label / ✓ Signed in / Disconnect) moves from the panel bottom to just below the 「Account」 block, forming one continuous info section.
 
 | Commit | Description |
 |------|------|
@@ -1453,7 +1453,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `3b1a7be` | docs(dsh-api-balance): greeting trigger reworded to the Balance tab (4 languages) |
 ## 2026-09-02T04:29:05+09:00
 
-**Summary**: fix(dsh-api-balance): interface optimizations on by default + hardened mobile keyboard guard — the stats-bar horizontal scroll and Enter/newline swap settings flip from default-off to default-on (unset localStorage counts as on; explicit user off still works); the stats-bar CSS injection now retries (up to 5 times, 1s apart) when the ui-chat style tag isn't ready yet, avoiding silent injection failures from mount timing; the mobile keyboard guard is hardened — touch detection broadens to coarse pointer OR maxTouchPoints > 0 (tablets/hybrids), plus a focus-capture fallback that blurs immediately to close the soft keyboard on engines that don't fire focusin
+**Summary**: fix(dsh-api-balance): all interface optimizations default on + hardened mobile keyboard guard — the stats-bar horizontal scroll and the Enter/newline swap flip from default-off to default-on (unset localStorage counts as on; an explicit user off still works); the stats-bar CSS injection retries (up to 5 times, 1s apart) when the ui-chat style tag isn't ready, avoiding silent failures from mount timing; the mobile keyboard guard widens touch detection to coarse pointer OR maxTouchPoints > 0 (tablets/hybrids), plus a focus-capture fallback that blurs immediately to close the soft keyboard on engines that don't fire focusin.
 
 | Commit | Description |
 |------|------|
@@ -1461,7 +1461,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | `b8cd0b7` | docs(dsh-api-balance): default-on interface settings notes (4 languages) + AGENTS Enter-key entry |
 ## 2026-09-02T02:49:52+09:00
 
-**Summary**: feat(dsh-api-balance): full-page panel width regression fix + peak-pricing marker + mobile keyboard guard — the panel width is now measured once from content scrollWidth and set as a concrete px (eliminating the 「chart px → panel max-content → observer → chart px」 feedback that pushed the panel to the cap and filled the whole page), with the cap tightened to min(anchor right edge − sidebar, 640) and in-panel horizontal scrolling beyond it; during DeepSeek peak hours (official current rule: Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time, everything else incl. weekends off-peak) the usage ring and chart turn red with a 「Peak pricing」 badge (panel header + chart title), and greetings are followed by a peak hint (pack `peak` segment / TTS fallback) with a new `peak` segment in the creator; on mobile, switching sessions via the sidebar no longer pops the soft keyboard (focusin capture blocks non-tap composer focus; on by default, Settings → Interface to disable)
+**Summary**: feat(dsh-api-balance): full-page panel width regression + peak-pricing marker + mobile keyboard guard — the panel width is measured once from content scrollWidth into a concrete px, removing the 「chart px → panel max-content → observer → chart px」 feedback, with the cap tightened to min(anchor right edge − sidebar, 640) and in-panel horizontal scrolling beyond; peak hours (Mon–Fri 09:00–12:00 & 14:00–18:00 Beijing time, off-peak otherwise) turn the usage ring and chart red with a 「Peak pricing」 badge (panel header + chart title), greetings gain a peak hint (voice pack peak segment / TTS fallback) and the creator a peak segment; on mobile, sidebar session switching no longer pops the soft keyboard (focusin capture blocks non-tap composer focus; on by default, Settings → Interface to disable).
 
 | Commit | Description |
 |------|------|
@@ -1532,7 +1532,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-01T10:20:14+09:00
 
-**Summary**: fix/feat(dsh-api-balance): split 「in」 from cache hits to match the official usage page + greeting list editor and TTS-aligned sample texts — investigated the inflated 200M 「today in」: the official API's token buckets include PROMPT_CACHE_HIT_TOKEN (228M today, the dominant share), which we previously folded into 「in」; now the panel matches the official itemization (in = uncached input only, cache hits listed separately) across the window rows, per-model rows, and the chart-toggle broadcast, with a new cacheHitLabel voice-pack segment. The creator gains a greeting list editor (add/remove slots, per-entry record/import/play/delete, packaged into manifest.greetings); segment keys are reworked to today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix with sample texts matching the default TTS fallbacks exactly; the chart-toggle broadcast now covers the full data set (in / cache hit / out / cost with currency).
+**Summary**: fix/feat(dsh-api-balance): split 「in」 from cache hits to match the official usage page + greeting list editor and TTS-aligned sample texts — the official API's token buckets include `PROMPT_CACHE_HIT_TOKEN` (228M that day), previously folded into 「in」 and inflating 「200M in today」; 「in」 now covers uncached input only, cache hits listed separately, across window rows, per-model rows and the chart-toggle broadcast; segment keys are reworked with a new `cacheHitLabel`, sample texts matching the TTS fallbacks exactly; the creator gains a greeting list editor (add/remove slots, per-entry record/import/play/delete, packaged into `manifest.greetings`).
 
 | Commit | Description |
 |------|------|
@@ -1564,7 +1564,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-01T09:10:18+09:00
 
-**Summary**: feat(dsh-api-balance): voice-pack library management + creator sub-menu + recording float window — the host now keeps a library (packs/<id>/ + state.json active record; new activate route for switching, DELETE ?ids= for multi-select removal with automatic fallback when the active pack is removed, audio served as /audio/<id>/<key>); the settings dialog keeps only an import control plus one 「Manage packs」 button, whose sub-menu has a packs view (scrollable list: click a row to switch, checkboxes for multi-select removal, entry to the creator) and a creator view (language picker zh-CN/en/ja — sample texts follow it, cross-language recording, manifest lang records the pack language; per-segment record/import/play/delete; compile-download / compile-apply); while recording, a visual float window appears in the corner (AudioContext+Analyser canvas level meter, elapsed time, sample text, stop-and-save/discard); the list shows pack name and language after import; the first-edit overwrite warning for imported packs is retained.
+**Summary**: feat(dsh-api-balance): voice-pack library + creator sub-menu + recording float window — the host is now a library (`packs/<id>/` multi-pack storage + `state.json` active record; activate switches packs, DELETE ?ids= removes several (auto-fallback), audio served at `/audio/<id>/<key>`); the settings page keeps import plus a 「Manage packs」 button whose sub-menu has a packs view (scrollable list: click to switch, checkboxes for batch removal, entry to the creator) and a creator view (language picker zh-CN/en/ja with matching sample texts and cross-language recording, manifest lang records the pack language; per-segment record / import / play / delete; compile-download / compile-apply); a float window appears while recording (level meter, elapsed time, sample text, save / discard); imported packs keep the first-edit overwrite warning.
 
 | Commit | Description |
 |------|------|
@@ -1572,7 +1572,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-01T08:41:48+09:00
 
-**Summary**: feat(dsh-api-balance): zip voice packs + record/import creator + edit protection — voice packs are now zip archives (manifest.json + audio/ files); the host parses zips in pure JS (STORE/DEFLATE via DecompressionStream inflate) into `$DSH_HOME/api-balance-voicepack/` and serves audio through a prefix route, shared by all devices. The settings dialog's creator supports per-segment browser recording (MediaRecorder) or importing local audio files; 「Package & download」 produces a shareable zip and 「Compile & apply」 installs it locally right away (overwriting the current pack). When a voice pack is imported, the first edit (record/import/delete/compile) shows an overwrite warning confirmed once per session. Broadcast segments now support both URL and inline data-URI carriers; four-language docs gain the voice-pack format guide (zip layout / manifest / segment table / recording & sharing flow).
+**Summary**: feat(dsh-api-balance): zip voice packs + record/import creator + edit protection — voice packs are now zip archives (`manifest.json` + `audio/` files); the host parses them in pure JS into `$DSH_HOME/api-balance-voicepack/`, serving audio through a prefix route shared by all devices; the settings dialog's creator supports per-segment browser recording (MediaRecorder) or importing local audio files, 「Package & download」 produces a shareable zip and 「Compile & apply」 installs it locally right away; imported packs warn on first edit, confirmed once per session; broadcast segments support both URL and inline carriers, and the four-language docs gain the voice-pack format guide (zip layout / manifest / segment table / recording & sharing flow).
 
 | Commit | Description |
 |------|------|
@@ -1597,7 +1597,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-01T01:25:25+09:00
 
-**Summary**: feat(dsh-api-balance): login prompt + exact LevelDB parsing + voice broadcast menu — when the browser scan finds nothing, a prompt pops up with 「Go to login」 (opens the login page in a new tab and picks up the token via quick-scan polling); manual entry is demoted to a secondary option inside the prompt. A greyed 「✓ Signed in」 button shows once connected, and every manual refresh auto-quick-scans for the login state. New pure-JS LevelDB table parser (footer → index → data blocks → snappy decompression → entry walk; fixes the extended-literal length as single byte + 1, not a varint) extracts userToken exactly — quick scan hits in 949ms (previously 5.3s full scan / quick scan failed). Voice broadcast gets its own row with a dropdown (current usage / balance / test warning audio); the menu is now a fixed-position portal to fix scroll clipping, with speech-engine warmup; token source is displayed in two lines.
+**Summary**: feat(dsh-api-balance): login prompt + exact LevelDB parsing + voice broadcast menu — when the browser scan finds nothing, a prompt pops up with 「Go to login」 (opens the login page in a new tab and picks up the token via quick-scan polling); manual entry is demoted to a secondary option in the prompt, and a greyed 「✓ Signed in」 shows once connected. A new pure-JS LevelDB table parser extracts userToken exactly — quick scan hits in 949ms; voice broadcast gets its own row with a dropdown (current usage / balance / test warning audio), the menu becomes a fixed-position portal to fix scroll clipping, with speech-engine warmup; token source now uses two lines. Verified: LevelDB parsing hit in practice and quick scan went from failing to a 949ms hit.
 
 | Commit | Description |
 |------|------|
@@ -1614,7 +1614,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-31T23:50:04+09:00
 
-**Summary**: feat(dsh-api-balance): auto-scan local browsers for the platform userToken — the host reads the Local Storage LevelDB of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) directly, extracts base64 candidates (55–85 chars) and validates each against GET /api/v0/users/get_user_summary, saving the first hit. Anyone who has signed in to the platform in a local browser gets the usage token with zero manual steps. 6-hour throttle + immediate rescan after token invalidation (40003/401) + a panel 「Rescan local browsers」 button (RPC args.rescanBrowsers), with a token-source badge (browser / manual) once connected. Verified: the real token was found automatically among 31 candidates in the local Edge leveldb, and a browser-triggered query re-acquired it after deployment; four-language docs synced.
+**Summary**: feat(dsh-api-balance): auto-scan local browsers for the platform userToken — the host reads the Local Storage LevelDB of local Chromium-family browsers (Edge / Chrome / Brave / Chromium / Vivaldi / Opera, every profile) directly, extracts base64 candidates (55–85 chars) and validates them against GET /api/v0/users/get_user_summary before saving, so anyone who has signed in locally gets the usage token with no manual pasting. 6-hour throttle + immediate rescan on token invalidation (40003/401) + a panel 「Rescan local browsers」 button (RPC args.rescanBrowsers), with a token-source badge (browser / manual) once connected. Verified: the real token was found among 31 candidates in the local Edge leveldb.
 
 | Commit | Description |
 |------|------|
@@ -1631,7 +1631,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-31T11:31:42+09:00
 
-**Summary**: dsh-alpha rollout disaster recovery — fixed the alpha reverse-proxy Host semantics (the web UI entry authenticates with a Host-authority session cookie; rewriting Host caused permanent 401s), the dsh-api-balance shared RPC interceptor conflict (`/api` is exclusively held by typert-gateway; switched to an exact fetch route implementing the RPC envelope), and dsh-nixos-shell's dsh-tools channel alignment; new module options launchUrlFile (LAN startup URL capture) and reverseProxy.autoAuth (mod_magnet passwordless token injection — explicitly disables entry auth, trusted LAN only); four-language docs gain the LAN access sections.
+**Summary**: dsh-alpha rollout disaster recovery — fixed the alpha reverse-proxy Host semantics (the web UI entry authenticates with a Host-authority session cookie; rewriting Host caused permanent 401s), the dsh-api-balance shared RPC interceptor conflict (`/api` is exclusively held by typert-gateway; switched to an exact fetch route implementing the RPC envelope), and dsh-nixos-shell's dsh-tools channel alignment; new module options launchUrlFile (LAN startup URL capture) and reverseProxy.autoAuth (mod_magnet passwordless token injection, trusted LAN only); four-language docs gain the LAN access sections. Verified: after the reverse-proxy and RPC fixes the web UI entry and plugin RPC work again.
 
 | Commit | Description |
 |------|------|
@@ -1647,7 +1647,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-31T07:23:07+09:00
 
-**Summary**: dsh-alpha 0.1.2-alpha.2 — new package, npm `alpha` dist-tag development channel; dsh refactored into a ruyi-style thin wrapper (version/hash/npmDepsHash/lockFile overridable), postPatch drops the tarball's devDependencies with plain sed (they reference unpublished monorepo-internal packages — registry 404), patch target files guarded by existence checks. Four-language docs gain a version-channels section. Follow-up fixes: vendored lock aligned with npmDepsHash (missing npm fixup platform entries caused an out-of-date error in the main build), and the README software table gains the dsh-alpha row in all four languages.
+**Summary**: dsh-alpha 0.1.2-alpha.2 — new package, npm `alpha` dist-tag development channel; dsh refactored into a ruyi-style thin wrapper (version/hash/npmDepsHash/lockFile overridable), postPatch drops the tarball's devDependencies with plain sed (they reference unpublished monorepo-internal packages — registry 404), patch target files guarded by existence checks; four-language docs gain a version-channels section and the README software table gains the dsh-alpha row. Follow-up fix: vendored lock aligned with npmDepsHash (missing npm fixup platform entries made the main build report out of date). Verified: the package builds, and after the lock alignment the main build no longer reports out of date.
 
 | Commit | Description |
 |------|------|
@@ -1679,7 +1679,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T09:19:59+09:00
 
-**Summary**: opencode-telegram 0.24.1 — Korean interface, `/opencode_stop` can kill a hung local OpenCode server even while busy, voice transcripts shown as quotes, safe retries on temporary Telegram errors prevent lost/duplicated replies, adaptive streaming throttle; mcp-searxng 2.1.0 — per-engine time-range capability validation when engines are explicitly selected, failing fast with an actionable error; godot-ai 3.2.0 — custom_tools third-party addon registry, selectable CLI registration scope, DeepSeek Harness client support; ruyi-beta 0.52.0-beta.20260824 — beta channel upstream update. Four-language docs synced; nix flake check passes.
+**Summary**: opencode-telegram 0.24.1 — Korean interface, `/opencode_stop` can kill a hung local OpenCode process even while busy, voice transcripts shown as quotes, safe retries on temporary Telegram errors prevent lost or duplicated replies, adaptive streaming throttle; mcp-searxng 2.1.0 — per-engine time-range capability validation when engines are explicitly selected, failing fast with an actionable error; godot-ai 3.2.0 — custom_tools third-party addon registry, selectable CLI registration scope, DeepSeek Harness client support; ruyi-beta 0.52.0-beta.20260824 — beta channel upstream update. Four-language docs synced; nix flake check passes.
 
 | Commit | Description |
 |------|------|
@@ -1704,7 +1704,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T07:28:58+09:00
 
-**Summary**: feat(dsh-api-balance): panel refresh button. A refresh button (↻) is added to the right of the panel header tab row: clicking it calls queryBalance(true), bypassing the host-side 30s TTL cache to re-fetch the balance + official usage (daily/monthly charts update together); the button is disabled with a spinner while loading (reuses dshAbSpin). Bilingual zh/en labels (刷新数据 / Refresh data). Verified: build passed, deployed zero-restart via the stable mount point (generation 424), then activated with a dsh restart.
+**Summary**: feat(dsh-api-balance): panel refresh button — a refresh button (↻) is added to the right of the panel header tab row: clicking it calls queryBalance(true), bypassing the host-side 30s TTL cache to re-fetch the balance + official usage (daily/monthly charts update together); the button is disabled with a spinner while loading (reuses dshAbSpin); bilingual zh/en labels (刷新数据 / Refresh data). Verified: build passed and it deployed zero-restart through the stable mount point (generation 424), taking effect after a dsh restart.
 
 | Commit | Description |
 |--------|-------------|
@@ -1712,7 +1712,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T07:28:49+09:00
 
-**Summary**: fix(dsh-nixos-shell): honest detached results + auto-detach for systemctl restart dsh. Previously a rebuild handed off through systemd-run returned the handoff's exit 0, so the tool result looked like a successful build while the real outcome was unknown; detached commands now return `detached: true` + `detachedUnit` + `note` with exitCode null — a successful handoff is not a successful build, and the real result must be verified via nixos_cli op=journal / op=generations (background jobs append the same verification guidance to their final output). The detach predicate now also covers `systemctl restart dsh`: after a plugin update deploys through the stable mount points, an explicit dsh restart activates it — that command is equally auto-detached, returning before the restart lands. Verified: detached dsh restart landed (RESTARTED_EXIT=0), plugin-change rebuilds (generations 424/425) restarted nothing and interrupted nothing, nix flake check passed. Four-language docs synced.
+**Summary**: fix(dsh-nixos-shell): honest detached results + auto-detach for systemctl restart dsh. Previously a rebuild handed off through systemd-run returned the handoff's exit 0, so the tool result looked like a successful build while the real outcome was unknown; detached commands now return `detached: true` + `detachedUnit` + `note` with exitCode null — a successful handoff is not a successful build, and the real result must be verified via nixos_cli op=journal / op=generations  The detach predicate now also covers `systemctl restart dsh` (a plugin update needs an explicit restart to take effect), equally auto-detached and returning before the restart lands. Verified: detached dsh restart landed (RESTARTED_EXIT=0), plugin-change rebuilds (generations 424/425) restarted nothing and interrupted nothing.
 
 | Commit | Description |
 |--------|-------------|
@@ -1720,7 +1720,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T07:28:39+09:00
 
-**Summary**: feat(module): dsh plugin stable mount points — zero-restart plugin activation. Plugin packages were previously baked directly into the dsh/sudo units (ExecStart/preStart/executor template), so any plugin update changed unit content: switch-to-configuration restarted dsh during activation (killing in-flight tool calls with the harness process) and stopped/started the sudo socket (killing a daemon-run rebuild together with its own switch, leaving the socket down). Now stable mount points: an activation script re-links `/run/dsh/current` (dsh with its plugin tree) and `/run/dsh/nixos-shell` (the sudo executor script) to the current generation's store paths on every switch/boot (GC-safe: targets sit in the current toplevel closure, rollback flips back); the dsh.service and nixkits-sudo@.service unit definitions reference only these stable paths — plugin package updates no longer change unit content, so activation restarts nothing and interrupts nothing. Companion semantics: dsh is a long-lived process, so plugin updates take effect via an explicit `systemctl restart dsh` (auto-detached); the sudo executor spawns per connection and new connections use the new script automatically. Verified: generation 423 deployed this change (one-time dsh restart); two consecutive plugin-change rebuilds (424/425) left both dsh's and the socket's ActiveEnterTimestamp unchanged, flipped /run/dsh/current correctly, and interrupted no tool call. Four-language docs synced.
+**Summary**: feat(module): dsh plugin stable mount points — zero-restart plugin activation. Plugin packages were previously baked into the dsh/sudo units, so any plugin update restarted dsh and the sudo socket during activation (in-flight tool calls and daemon-run rebuilds died; the socket could not recover). Now stable mount points: an activation script re-links `/run/dsh/current` (dsh including its plugin tree) and `/run/dsh/nixos-shell` to the current generation's store paths on every switch/boot (GC-safe), and the units reference only those stable paths — activation restarts nothing and interrupts no socket. Companion: plugin updates take effect via an explicit `systemctl restart dsh`. Verified: generation 423 deployed this; after plugin-change rebuilds on 424/425 both dsh's and the socket's ActiveEnterTimestamp were unchanged.
 
 | Commit | Description |
 |--------|-------------|
@@ -1728,7 +1728,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T04:07:27+09:00
 
-**Summary**: fix(dsh-nixos-shell): sudo protocol v3 + rebuild auto-detach. Three defects fixed: 1) the v2 protocol treated a disconnect as cancel — a rebuild's switch stage restarts dsh.service (plugin paths are baked into the service unit), so the client disappears and the daemon killed the switch mid-activation, leaving a partially activated system (observed 8/26 14:31: profile stuck at 415 while dsh had restarted and unit files were half-new); v3 uses an explicit in-band cancel line (job_kill writes it via socket.end) and on peer loss the child keeps running detached to completion. 2) Cancel/timeout now kill the whole process group (spawn detached + kill(-pid)) — killing only the shell wrapper leaves orphaned grandchildren holding the pipe write-ends and hangs the daemon; the daemon timeout cap is raised to 6h and rebuild commands use it automatically. 3) Rebuilds auto-detach into a systemd-run transient unit (own cgroup) — during activation, switch-to-configuration stops/starts nixkits-sudo.socket, and a rebuild running through the daemon is killed by its own socket stop, leaving the socket down (observed 8/26 17:25: socket dead and sessions booted in that window permanently lost the sudo parameter); detached execution returns the unit name immediately (detachedUnit) and the activation completes. Also: the socket is validated at call time, dsh-jobs cancellation maps to the valid `killed` enum, and the daemon response is flushed via the write callback before exit. Verified: background sudo returns a job id immediately, job_output delivers full output, job_kill kills the whole group with no orphans, a real rebuild deployed through a detached unit with the socket auto-recovering after activation, nix flake check passed. Four-language docs synced.
+**Summary**: fix(dsh-nixos-shell): sudo protocol v3 + rebuild auto-detach. Three defects fixed: 1) the v2 protocol treated a disconnect as cancel — a rebuild's switch stage restarts dsh.service, so the client disappears and the daemon killed the switch mid-activation (partial activation); v3 uses an explicit in-band cancel line, and on peer loss the child keeps running detached to completion. 2) Cancel/timeout now kill the whole process group (spawn detached + kill(-pid)) — killing only the shell wrapper leaves orphaned grandchildren holding the pipe write-ends and hangs the daemon; the timeout cap is raised to 6h. 3) Rebuilds auto-detach into a systemd-run transient unit (own cgroup), so a socket stop/start during activation cannot kill the switch itself. Verified: background sudo returns a job id immediately, job_kill kills the whole group with no orphans, and a real rebuild deployed through a detached unit with the socket auto-recovering.
 
 | Commit | Description |
 |--------|-------------|
@@ -1736,7 +1736,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T04:07:15+09:00
 
-**Summary**: feat(dsh-api-balance): top-up card modal replaces iframe + low-balance voice alert. platform.deepseek.com/top_up is blocked by a WAF ("Max challenge attempts exceeded"), so the iframe modal could not work — replaced with a centered card modal (new-window button + close button top-right), no page navigation. Added a low-balance voice alert: when the balance drops below the threshold (10 CNY/USD) it speaks a prompt via the Web Speech API, with 15-minute polling + 30-minute cooldown and a panel toggle (balance.speechOn/Off), bilingual zh/en copy. Verified: post-deploy feature grep (TopupModal/speechOn/announceHunger) confirms it is live.
+**Summary**: feat(dsh-api-balance): top-up card modal replaces iframe + low-balance voice alert. The top_up page is blocked by a WAF ("Max challenge attempts exceeded"), so the iframe modal could not work — replaced with a centered card modal (new-window button + close button top-right), no page navigation. Added a low-balance voice alert: when the balance drops below the threshold (10 CNY/USD) it speaks a prompt via the Web Speech API, with 15-minute polling + 30-minute cooldown and a panel toggle (balance.speechOn/Off), bilingual zh/en copy. Verified: post-deploy feature grep (TopupModal/speechOn/announceHunger) confirms it is live.
 
 | Commit | Description |
 |--------|-------------|
@@ -1757,7 +1757,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-11T12:54:29+09:00
 
-**Summary**: fix(dsh/module): drop the allowLanSettings $host.state.getSnapshot() patch — dsh ≥ 0.1.5's $host client service no longer exposes state (only isLoopback/home), so the old patch hit undefined.getSnapshot during client-ui-settings apply, throwing "Cannot read properties of undefined (reading 'getSnapshot')" and blanking the whole frontend (Failed to load plugins). Fix: the module no longer force-overrides allowLanSettings=true (restoring upstream behavior — non-loopback pages keep settings read-only/memory); packages/dsh.nix patch now writes unconditional "host" so an explicit future enable cannot crash. Verified: client.js has no state.getSnapshot, home page 200, llm/listProviders returns the DeepSeek provider.
+**Summary**: fix(dsh/module): drop the allowLanSettings $host.state.getSnapshot() patch — dsh ≥ 0.1.5's $host client service no longer exposes state, so the old patch hit undefined.getSnapshot during client-ui-settings apply and blanked the whole frontend (Failed to load plugins). The module no longer force-overrides allowLanSettings=true (restoring upstream behavior), and the packages/dsh.nix patch writes unconditional "host". Verified: home page 200, llm/listProviders returns the DeepSeek provider.
 
 | Commit | Description |
 |------|------|
@@ -1766,7 +1766,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-09-11T06:15:33+09:00
 
-**Summary**: fix(preset): dsh persona text → prefix (0.1.5-alpha.2 compat). dsh 0.1.5-alpha.2 changed dsh-persona's Config from text to prefix (required) + suffix (optional). The old agent presets (nixos-mode / maintenance-mode / local ocean-spiral) still wrote text, so the persona plugin failed to load ($.prefix missing required value) → session/create failed → settings, llm provider catalog, and session history all failed to load (frontend showed Failed to fetch plus an infinite commands/list retry missing agentId). Fix: both presets' persona config now uses prefix; the three local presets were patched too. Verified: session/create returns ok:true + sessionId, session/list returns sessions, llm/listProviders returns the DeepSeek provider.
+**Summary**: fix(preset): dsh persona text → prefix (0.1.5-alpha.2 compat). dsh-persona's Config changed text to prefix (required) + suffix (optional); the old agent presets (nixos-mode / maintenance-mode / local ocean-spiral) still wrote text, so persona failed to load ($.prefix missing required value) → session/create failed → settings, the llm provider catalog, and session history all failed to load. Fix: both presets' persona config uses prefix; the three local presets were patched too. Verified: session/create returns ok:true + sessionId.
 
 | Commit | Description |
 |------|------|
@@ -1774,7 +1774,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-27T01:30:33+09:00
 
-**Summary**: fix(module): dsh watchdog — auto-restart after switch-to-configuration failure. nixos-rebuild's switch-to-configuration can fail (exit 101) between stopping and starting dsh, leaving it inactive; a systemd-initiated stop does not trigger Restart=always, so the reverse proxy returned 503 for a long time (seen 8/26 22:10 and 23:53). Added a dsh-watchdog timer (15s) that runs systemctl start when dsh is inactive. Verified: recovers within 20s of a stop.
+**Summary**: fix(module): dsh watchdog — auto-restart after a switch-to-configuration failure. nixos-rebuild's switch-to-configuration can fail (exit 101) between stopping and starting dsh, leaving it inactive; a systemd-initiated stop does not trigger Restart=always, so the reverse proxy returned 503 for a long time. Added a dsh-watchdog timer (15s) that runs systemctl start when dsh is inactive. Verified: recovers within 20s of a stop.
 
 | Commit | Description |
 |------|------|
@@ -1782,7 +1782,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-24T15:44:06+09:00
 
-**Summary**: fix(overlay): llama-cpp-rocm v0.2.0 semantic version — llama.cpp upstream switched release tags from build numbers (b10549) to semantic versions (v0.2.0). The old overlay only stripped the b prefix, yielding v0.2.0, which nixpkgs then passed into LLAMA_BUILD_NUMBER, producing `int LLAMA_BUILD_NUMBER = v0.2.0;` and a C++ compile failure (too many decimal points) that blocked system rebuilds and the dsh upgrade. It now strips both v/b prefixes and appends -DLLAMA_BUILD_NUMBER=0. Verified: llama-cpp-0.2.0 builds and llama-cpp.service runs.
+**Summary**: fix(overlay): llama-cpp-rocm v0.2.0 semantic version — llama.cpp upstream switched release tags from build numbers (b10549) to semantic versions (v0.2.0). The old overlay stripped only the b prefix, so nixpkgs passed v0.2.0 into LLAMA_BUILD_NUMBER, producing `int LLAMA_BUILD_NUMBER = v0.2.0;` and a C++ compile failure (too many decimal points) that blocked system rebuilds and the dsh upgrade. It now strips both v/b prefixes and appends -DLLAMA_BUILD_NUMBER=0. Verified: llama-cpp-0.2.0 builds and llama-cpp.service runs.
 
 | Commit | Description |
 |------|------|
@@ -1790,7 +1790,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-24T15:20:16+09:00
 
-**Summary**: fix(pkgs): dsh crash fix — cordis-plugin-timer (latest upstream 1.1.3, unfixed) rejects a pending ctx.timeout() promise with "Context has been disposed" during Context dispose; when uncached it becomes an unhandled rejection that dsh-app-boot's installFailLoud turns into process.exit(1), causing sporadic runtime crashes (rc.6/rc.7/rc.8/0.1.1-rc.2 all affected; rc.8 hit it after only 38min on 8/22 00:05). installFailLoud is patched to ignore only this error; other fatal rejections still exit. Verified: patch lands in the 0.1.1-rc.2 output (dsh-app-boot/lib/index.js:1047).
+**Summary**: fix(pkgs): dsh crash fix — cordis-plugin-timer (unfixed upstream at 1.1.3) rejects a pending ctx.timeout() promise with "Context has been disposed" during Context dispose; when uncaught it becomes an unhandled rejection that dsh-app-boot's installFailLoud turns into process.exit(1) (rc.6/rc.7/rc.8/0.1.1-rc.2 all affected). installFailLoud is patched to ignore only this error; other fatal rejections still exit. Verified: patch lands in the 0.1.1-rc.2 output (dsh-app-boot/lib/index.js:1047).
 
 | Commit | Description |
 |------|------|
@@ -1798,7 +1798,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-24T14:27:47+09:00
 
-**Summary**: codewhale 0.9.11 — upstream renamed the TUI asset codewhale-tui → codew from v0.9.9; the package installs codew and keeps a compat alias; the riscv64 source build synced Cargo.lock (687→690 entries, rquickjs-sys 0.12.2 unchanged, bindings patch still valid); mcp-searxng 2.0.0 — major upgrade (requires Node.js ≥ 22, satisfied by the nixpkgs default, CLI entry unchanged); dsh 0.1.1-rc.2 — vendored lock regenerated (560 resolved entries), randomUUID fallback patch target paths unchanged, built-in plugin inventory identical to rc.8 (137 entries); dsh-nixos-shell dependency dsh-tools → 0.1.1-rc.2 to align with the new ecosystem. Four-language docs synced; nix flake check passes.
+**Summary**: codewhale 0.9.11 — upstream renamed the TUI asset codewhale-tui → codew from v0.9.9; the package installs codew and keeps a compat alias; the riscv64 source build synced Cargo.lock (687→690 entries); mcp-searxng 2.0.0 — major upgrade (requires Node.js ≥ 22, satisfied by the nixpkgs default, CLI entry unchanged); dsh 0.1.1-rc.2 — vendored lock regenerated (560 resolved entries), built-in plugin inventory identical to rc.8 (137 entries); dsh-nixos-shell's dsh-tools dependency aligned to 0.1.1-rc.2. Four-language docs synced; nix flake check passes.
 
 | Commit | Description |
 |------|------|
@@ -1816,7 +1816,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-22T00:03:28+09:00
 
-**Summary**: docs(dsh): 0.1.0-rc.8 documentation sync — the four-language dsh.md version rows (rc.6 → rc.8) and the "Plugin inventory" code blocks (137 entry-id mappings extracted from the rc.8 build) are synced; nix flake check passes. Also: the /etc/nixos local config now declares `settings.agent-default-model` (deepseek-v4-pro + reasoningEffort=max) as the new-session default — the authoritative DeepSeek API model list is only flash/pro/flash-vision-exp with no "pro-max" id, so Pro + Max reasoning is the top tier; both the nixos and maintenance presets mount-validate on rc.8.
+**Summary**: docs(dsh): 0.1.0-rc.8 documentation sync — the four-language dsh.md version rows (rc.6 → rc.8) and the "Plugin inventory" code blocks (137 entry-id mappings extracted from the rc.8 build) are synced; nix flake check passes. Also: the /etc/nixos local config adds `settings.agent-default-model` (deepseek-v4-pro + reasoningEffort=max) as the new-session default — the authoritative DeepSeek API model list is only flash/pro/flash-vision-exp with no "pro-max" id, so Pro + Max reasoning is the top tier; both the nixos and maintenance presets mount-validate on rc.8.
 
 | Commit | Description |
 |--------|-------------|
@@ -1824,7 +1824,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-21T21:51:26+09:00
 
-**Summary**: docs: README plugins-section expansion and DSH credits info — ① the "Plugins" section gains an "Agent presets" table (NixOS模式/维护模式, shipped with the plugin, seeded once via nixkits.dsh.presets), keeping DSH components separate from software; ② the credits "小爪" entry now carries DSH ecosystem info (the dsh-nixos-shell plugin and the two agent presets); ③ the AGENTS.md plugin-listing rule is widened to "dsh-* components (plugins and agent presets)". All four languages synced.
+**Summary**: docs: README plugins-section expansion and DSH credits info — ① the "Plugins" section gains an "Agent presets" table besides dsh-nixos-shell (NixOS模式/维护模式, shipped with the plugin, seeded once via nixkits.dsh.presets), keeping DSH components separate from software; ② the credits "小爪" entry gains DSH ecosystem info (the dsh-nixos-shell plugin and the two agent presets); ③ the AGENTS.md plugin-listing rule is widened to "dsh-* components (plugins and agent presets)". All four languages synced.
 
 | Commit | Description |
 |--------|-------------|
@@ -1832,7 +1832,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-21T00:01:46+09:00
 
-**Summary**: fix(dsh-nixos-shell): surface the tools whitelist in the tool description — the acceptance round's non-blocking finding: the fixed POSIX tool whitelist was not shown in the tool description. The whitelist is now generated dynamically from the TOOL_PACKAGES map (27 names, including the python alias) into the `tools` parameter description, the tool description points at it, and the four-language docs list the full whitelist. Verified: all 27 names present in the parameter description, tool description carries the pointer, syntax check and nix flake check pass.
+**Summary**: fix(dsh-nixos-shell): surface the tools whitelist in the tool description — the acceptance round's non-blocking finding: the fixed POSIX tool whitelist was not shown in the tool description. The whitelist is now generated dynamically from the TOOL_PACKAGES map (27 names, including the python alias) into the `tools` parameter description, the tool description points at it, and the four-language docs carry the full list. Verified: all 27 names in the parameter description, the pointer present, nix flake check passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1840,7 +1840,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T20:12:33+09:00
 
-**Summary**: fix(dsh-nixos-shell): correct the modern rebuild command to `nixos apply` — the installed nixos 0.16.1-dev has no `rebuild` subcommand (`nixos --help` lists activate/apply/generation etc.), so the handoff book and the plugin's recommendedRebuild/command map/gate guidance were wrong; unified to `nixos apply /etc/nixos` (or the traditional `sudo nixos-rebuild switch --flake /etc/nixos`). Verified: node syntax checks and nix flake check pass; system deployment switched to `nixos apply` and works.
+**Summary**: fix(dsh-nixos-shell): correct the modern rebuild command to `nixos apply` — the installed nixos 0.16.1-dev has no `rebuild` subcommand (`nixos --help` lists activate/apply/generation etc.), so the handoff book and the plugin's recommendedRebuild/command map/gate guidance were wrong; unified to `nixos apply /etc/nixos` (or the traditional `sudo nixos-rebuild switch --flake /etc/nixos`). Verified: nix flake check passes, and system deployment switched to `nixos apply` succeeds.
 
 | Commit | Description |
 |--------|-------------|
@@ -1848,7 +1848,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T20:10:08+09:00
 
-**Summary**: fix(dsh-nixos-shell): NixOS-mode acceptance fixes P1–P4 — P1 (high): the tools-bootstrap wrapper changed from `bash -lc` to `bash -c`; the login shell's /etc/profile chain reset PATH and discarded the nix shell injection, and the sudo path sharing the wrapper is fixed too (control experiment: `-c` yields Python 3.14.7, `-lc` yields command not found); the mapping also fixes grep→gnugrep and find→findutils (previously masked by login-PATH false positives). P2: generations gains `limit` (default 20, max 200, newest first) and returns the current generation plus the total. P3: journal unit accepts `*`/`%` globs and a trailing `@` auto-appends `*` (all template instances). P4: naming unified from nixos-cli to the nixos binary (nixos-cli project), across the tool description, the command map, and the gate guidance. Docs op tables synced in four languages. Verified: 5-case functional suite passes (including the real nix shell injection through the plugin echoing TOOLS_INJECTION_OK), node syntax checks, nix flake check passes.
+**Summary**: fix(dsh-nixos-shell): NixOS-mode acceptance fixes P1–P4 — P1 (high): the tools-bootstrap wrapper changed from `bash -lc` to `bash -c`; the login shell's /etc/profile chain reset PATH and discarded the nix shell injection, and the sudo path sharing the wrapper is fixed too (control: `-c` yields Python 3.14.7, `-lc` yields command not found); the mapping also fixes grep→gnugrep and find→findutils. P2: generations gains `limit` (default 20, max 200, newest first). P3: journal unit accepts `*`/`%` globs, a trailing `@` auto-appends `*`. P4: naming unified from nixos-cli to the nixos binary. Docs op tables synced in four languages; nix flake check passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1856,7 +1856,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T19:33:51+09:00
 
-**Summary**: fix(dsh-nixos-shell): use the PromptSection `text` field instead of `content` — the dsh-system-prompt interpolator reads `input.text`, so sections registered with `content` crashed a real NixOS-mode session ("Cannot read properties of undefined (reading 'indexOf')"), a real-session path defect that mount validation cannot cover. Fixed 3 sites: nixos-gate (guidance/gate sections) and maintenance-skills (workflow section). Root cause located by reading the dsh-system-prompt interpolate() source and the PromptSection type definition (text: string | provider); the ToolGuard shape was also confirmed from its type definition (`(execution) => string | undefined`, compatible with the current implementation). Verified: mock assertions on the text field and no dangling `{{`; real systemPrompt service registration + assemble (includes=true, no crash); system prebuild passes.
+**Summary**: fix(dsh-nixos-shell): use the PromptSection `text` field instead of `content` — the dsh-system-prompt interpolator reads `input.text`, so sections registered with `content` crashed a real NixOS-mode session ("Cannot read properties of undefined (reading 'indexOf')"), a real-session path defect that mount validation cannot cover. Fixed 3 sites: nixos-gate (guidance/gate sections) and maintenance-skills (workflow section). Verified: mock assertions on the text field and no dangling `{{`; real systemPrompt service assemble with no crash; system prebuild passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1864,7 +1864,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T19:05:44+09:00
 
-**Summary**: feat(dsh-nixos-shell): 维护模式 agent preset — new package entry maintenance-skills: at apply time it registers runtime skills write-project-docs, write-maintenance-log, and every translate-* language extension (auto-discovered) from the repo's skills/ tree embedded at build time (single source of truth, fresh sessions always get the latest content), plus the repository-maintenance workflow prompt section (commit batching, post-push maintenance log, doc sync, generalization); the package postPatch copies skills → skills-embedded. The preset presets/maintenance-mode (id `maintenance`, based on the NixOS-mode composition plus the maintenance-skills row) ships with the package; the module gains nixkits.dsh.presets.maintenanceMode (seed-once). Verified: mock registration of 3 skills + workflow section all pass, package contains the embedded tree and export, system prebuild passes; the nixos preset mount-validates (mounted ok), the maintenance preset needs a final check after restart due to the loader's in-process package.json cache.
+**Summary**: feat(dsh-nixos-shell): maintenance-mode agent preset — new package entry maintenance-skills: at apply time it registers runtime skills write-project-docs, write-maintenance-log, and every translate-* language extension (auto-discovered) from the repo's skills/ tree embedded at build time (single source of truth), plus the repository-maintenance workflow prompt section; the package postPatch copies skills → skills-embedded. The preset presets/maintenance-mode (id `maintenance`, based on the NixOS-mode composition plus the maintenance-skills row) ships with the package; the module gains nixkits.dsh.presets.maintenanceMode (seed-once). Verified: mock registration of 3 skills + workflow section all pass, system prebuild passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1872,7 +1872,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T18:30:46+09:00
 
-**Summary**: feat(dsh-nixos-shell): NixOS模式 agent preset — new package subpath entry nixos-gate: at session initialization it verifies the host is NixOS (/etc/NIXOS or os-release ID=nixos) — on non-NixOS it denies every tool execution via tools.guard and injects a refusal prompt section (clear reason + preset-switch advice), on NixOS it injects the development-guidance prompt section (derived from the nixos-modern-cli scenarios: declarative nature, tool bootstrap, modern commands, store-path pitfalls). The preset presets/nixos-mode (id `nixos`, based on the creation-mode cordis composition plus its skill directories, with nixos-gate/nixos-shell rows appended) ships with the package; the module gains nixkits.dsh.presets.nixosMode, seeding $DSH_HOME/.agent-presets/nixos once in preStart (later user edits respected). Verified: package build, gate syntax check, and system prebuild all pass.
+**Summary**: feat(dsh-nixos-shell): NixOS-mode agent preset — new subpath entry nixos-gate: at session initialization it verifies the host is NixOS (/etc/NIXOS or os-release ID=nixos) — on non-NixOS it denies every tool execution via tools.guard and injects a refusal prompt section, on NixOS it injects the development-guidance prompt section. The preset presets/nixos-mode (id `nixos`, based on the creation-mode cordis composition plus its skill directories, with nixos-gate/nixos-shell rows appended) ships with the package; the module gains nixkits.dsh.presets.nixosMode, seeding $DSH_HOME/.agent-presets/nixos once in preStart. Verified: package build, gate syntax check, and system prebuild pass.
 
 | Commit | Description |
 |--------|-------------|
@@ -1888,7 +1888,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T17:56:21+09:00
 
-**Summary**: refactor(dsh-nixos-shell): rename package nixos-shell → dsh-nixos-shell — the package name (pname/directory/flake output/overlay/CI workflows/docs) is now `dsh-nixos-shell` (pkgs.dsh-nixos-shell); the dsh-internal display name stays `nixos-shell` (composition-row entry id, plugin name, tool names nixos_shell/nixos_cli unchanged). Verified: package build passes; deployment-side references synced.
+**Summary**: refactor(dsh-nixos-shell): rename package nixos-shell → dsh-nixos-shell — the package name (pname/directory/flake output/overlay/CI workflow/docs) is unified as `dsh-nixos-shell` (pkgs.dsh-nixos-shell); the dsh-internal display name stays `nixos-shell` (composition-row entry id, plugin name, tool names nixos_shell/nixos_cli unchanged). Verified: package build passes; deployment-side references synced.
 
 | Commit | Description |
 |--------|-------------|
@@ -1896,7 +1896,11 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T17:46:44+09:00
 
-**Summary**: feat(nixos-shell): consolidate NixOS scenario capabilities into a single plugin; refactor: abandon the skills-as-plugins design — new package nixos-shell (@kihara777/dsh-nixos-shell 0.1.0) registers two tools: the nixos_shell executor (NixOS PATH injection + bash fallback + a `tools` parameter wrapping the command in `nix shell nixpkgs#… --command` to provide missing POSIX tools + sudo-daemon routing) and nixos_cli read-only diagnostics (capabilities / system-status / generations / journal / audit-store-paths), with functional requirements derived from the nixos-modern-cli skill scenarios. Also removed: dsh-nix-shell (function merged in) and dsh-skill-nixkits (the 7-skill-plugin design, including the module's skills option), with CI/docs swapped accordingly; the nixkits-skills installer no longer targets dsh (dsh capabilities come from nixos-shell; skills remain for other assistants). Fix: generations uses an in-process read-only listing (nix-env needs the profile lock file and fails unprivileged with Permission denied). Verified: 13-case functional suite passes (including real sudo root routing and nix shell tool bootstrap); system prebuild passes.
+**Summary**: feat(nixos-shell): NixOS scenario capabilities consolidated into one plugin; refactor: the skills-as-plugins design is abandoned
+- New package nixos-shell (@kihara777/dsh-nixos-shell 0.1.0) registers two tools: the nixos_shell executor (NixOS PATH injection + bash fallback + `tools` bootstrapping missing POSIX tools + sudo-daemon routing) and nixos_cli read-only diagnostics (capabilities and others), requirements from the nixos-modern-cli skill scenarios.
+- Removed dsh-nix-shell and dsh-skill-nixkits (the 7-skill-plugin design), CI/docs swapped.
+- Fix for generations: an in-process read-only listing (`nix-env` refused when unprivileged).
+Verified: 13-case functional suite passes; system prebuild passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1908,7 +1912,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T16:40:16+09:00
 
-**Summary**: fix(dsh): point the service HOME at the real user home — git's gh credential helper resolves credentials from `$HOME/.config/gh`, and the module previously set the service HOME to dshHome (/home/kix/.dsh), so sandbox git pushes found no credentials (could not read Username). Changed to `users.users.<user>.home` (falling back to dshHome), letting the agent inherit the user's own tooling context (git/gh credentials, ~/.gitconfig, npm/ssh configs); DSH_HOME remains dsh's state root and is unaffected. Verified: pushing the backlog with HOME=/home/kix succeeded; the system prebuild passes.
+**Summary**: fix(dsh): point the service HOME at the real user home — git's gh credential helper resolves credentials from `$HOME/.config/gh`, and the module had set the service HOME to dshHome (/home/kix/.dsh), so sandbox git pushes found no credentials. Changed to `users.users.<user>.home` (falling back to dshHome), letting the agent inherit the user's own tooling context (git/gh credentials, ~/.gitconfig, npm/ssh configs); DSH_HOME remains dsh's state root and is unaffected. Verified: pushing the backlog succeeded; the system prebuild passes.
 
 | Commit | Description |
 |--------|-------------|
@@ -1916,7 +1920,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T16:13:40+09:00
 
-**Summary**: fix(dsh-nix-shell): sudo executor PATH merge order — socket-activated template units inherit systemd's manager-default PATH (coreutils/findutils/grep/sed/systemd store paths only), and `...process.env` spread after the explicit NixOS PATH overrode it, leaving profile tools like ps and nixos-rebuild unresolvable inside the daemon (PS-MISSING/NIXOS-REBUILD-MISSING). Fixed by spreading the inherited env first and the explicit NixOS profile PATH second (request env still merges last). Verified: running the executor directly with a simulated systemd-default PATH yields a PATH headed by /run/current-system/sw/bin, with both ps and nixos-rebuild resolving.
+**Summary**: fix(dsh-nix-shell): sudo executor PATH merge order — socket-activated template units inherit systemd's manager-default PATH (coreutils/findutils/grep/sed/systemd store paths only), and `...process.env` spread after the explicit NixOS PATH overrode it, leaving profile tools like ps and nixos-rebuild unresolvable inside the daemon. Fixed by spreading the inherited env first and the explicit NixOS profile PATH second (request env still merges last). Verified: the PATH starts with /run/current-system/sw/bin, with both ps and nixos-rebuild resolving.
 
 | Commit | Description |
 |--------|-------------|
@@ -1932,7 +1936,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-21T23:02:33+09:00
 
-**Summary**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8. Completed the leftover rc.8 bump: filled real src hash and npmDepsHash (previously placeholders); regenerated package-lock.json (the old lock was missing 120 entries incl. dsh-invariants, causing ENOTCACHED during buildNpmPackage fetch). Verified: rc.8 builds, the randomUUID fallback patch applies, the with-plugins variant runs, and the service starts with no plugin load errors. Note: the local skills-as-plugins design was abandoned — skills now live inside dsh-nixos-shell (maintenance-skills), so with-plugins injects only dsh-nixos-shell.
+**Summary**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8. Completed the leftover rc.8 bump: real src hash and npmDepsHash filled in; package-lock.json regenerated (the old lock was missing 120 entries, incl. dsh-invariants). Verified: rc.8 builds, the randomUUID fallback patch applies, the with-plugins variant runs, and the service starts with no plugin load errors; with-plugins injects only dsh-nixos-shell.
 
 | Commit | Description |
 |------|------|
@@ -1948,7 +1952,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T11:08:08+09:00
 
-**Summary**: fix(module): dsh plugin ESM resolution — dsh's cordis-plugin-loader resolves from the profile directory ($DSH_HOME/profiles/web) as its base (the parentURL of Node 24's internal cascaded loader), searching node_modules upward from there. Plugins were injected into dsh's store tree, but the store is not on the profile's node_modules path, so import hit ERR_MODULE_NOT_FOUND and dsh crashed at startup (restart loop up to 108). preStart now symlinks the injected @kihara777 scope into $DSH_HOME/node_modules so Node can resolve it; after realpath back into the store tree, the @deepseek-ai/* peer deps the plugins import remain resolvable in the same tree. Verified: skills + nix-shell plugins load.
+**Summary**: fix(module): dsh plugin ESM resolution — dsh's cordis-plugin-loader resolves from the profile directory ($DSH_HOME/profiles/web) as its base, searching node_modules upward from there. Plugins were injected into dsh's store tree, but the store is not on the profile's node_modules path, so import hit ERR_MODULE_NOT_FOUND and dsh crashed at startup. preStart now symlinks the injected @kihara777 scope into $DSH_HOME/node_modules so Node can resolve it; after realpath back into the store tree, the @deepseek-ai/* peer deps the plugins import remain resolvable in the same tree. Verified: skills + nix-shell plugins load.
 
 | Commit | Description |
 |------|------|
@@ -1964,7 +1968,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T10:21:46+09:00
 
-**Summary**: fix(dsh): wrap generated rows in the insert op — a bare `- id:` row in cordis.patch.yml only patches an existing entry, so dsh dropped every new plugin entry (stderr: patch: entry "nixkits-nix-shell" not found) and none of the 8 plugin rows mounted (verified via dump-config). The package injection succeeded, but with no entries in the composed tree the nix_shell tool and the 7 skill plugins never registered. Fixed by wrapping the generated plugins.packages rows in an `- insert:` op (same shape as the MCP rows in extraPatch). Verified: dump-config runs with zero stderr and all 8 rows in the composed tree.
+**Summary**: fix(dsh): wrap generated rows in the insert op — a bare `- id:` row in cordis.patch.yml only patches an existing entry, so dsh dropped every new plugin entry and none of the 8 plugin rows mounted (verified via dump-config). The package injection succeeded, but with no entries in the composed tree the nix_shell tool and the 7 skill plugins never registered. Fixed by wrapping the generated plugins.packages rows in an `- insert:` op (same shape as the MCP rows in extraPatch). Verified: dump-config runs with zero stderr and all 8 rows in the composed tree.
 
 | Commit | Description |
 |--------|-------------|
@@ -1972,7 +1976,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T09:45:59+09:00
 
-**Summary**: fix(dsh): fix multi-plugin injection failure — after unpacking, GNU tar restores the archived directory modes (0555 for store trees), so the scope directory (@kihara777/) created by the previous plugin is unwritable for the next one, and the second and later plugins fail with "Cannot mkdir: Permission denied"; a single-plugin setup never triggers it, and the first real system build exposed it. Fixed by chmod -R u+w immediately after each plugin extraction. Verified: full system toplevel build succeeds; dsh-nix-shell and all 7 skills injected.
+**Summary**: fix(dsh): multi-plugin injection failure — after unpacking, GNU tar restores the archived directory modes (0555 for store trees), so the scope directory (@kihara777/) created by the previous plugin is unwritable for the next one, and the second and later plugins fail with "Cannot mkdir: Permission denied"; a single-plugin setup never triggers it, and the first real system build exposed it. Fixed by chmod -R u+w immediately after each plugin extraction. Verified: full system toplevel build succeeds; dsh-nix-shell and all 7 skills injected.
 
 | Commit | Description |
 |--------|-------------|
@@ -1988,7 +1992,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T07:41:45+09:00
 
-**Summary**: fix(rcc-fix): patch rebased for asusctl 6.4.0 — after nixpkgs advanced, asusctl moved 6.3.7 → 6.4.0 and hunk 4 of rcc-fix.patch failed (system build broke). Upstream restructured the region: `if dev.is_old_laptop() { pow3r.retain(...) }` replaced the old push block, and the PowerZones::None filter in the else branch was absorbed upstream; the patch now keeps only the bounds-check replacement (`names[(*z) as usize]` → filter_map with bounds check + warn). The other hunks needed no change. Verified: git apply --check passes all hunks against the 6.4.0 source; asusctl builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).
+**Summary**: fix(rcc-fix): patch rebased for asusctl 6.4.0 — after nixpkgs advanced, asusctl moved 6.3.7 → 6.4.0 and hunk 4 of rcc-fix.patch failed (system build broke). Upstream restructured that region (`is_old_laptop`/`retain` replacing the old push block; the else-branch filter was absorbed upstream), so the patch now keeps only the bounds-check replacement (`names[(*z) as usize]` → filter_map with bounds check + warn); the other hunks needed no change. Verified: git apply --check passes all hunks against the 6.4.0 source; asusctl builds successfully (EXIT=0) against the machine's pinned nixpkgs rev (0ae2bc1).
 
 | Commit | Description |
 |------|------|
@@ -1996,7 +2000,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T06:27:40+09:00
 
-**Summary**: feat(dsh-nix-shell): external sudo daemon integration (0.2.0) — the dsh sandbox strips sudo's setuid, so the agent cannot elevate. The plugin now probes the daemon socket at apply time (config `sudoSocketPath` / env `NIXKITS_SUDO_SOCKET`), advertises `sudo`/`justification` when present, and routes `sudo: true` requests whole (command/cwd/env/timeout) over a Unix socket to the daemon; `justification` is mandatory and echoed with the result. The daemon is a systemd socket-activated root executor (nixkits-sudo@.service + nixkits-sudo-exec.js, one-request-per-connection JSON protocol, shipped with the plugin package); the access-control boundary is the socket file owned by the dsh service user with mode 0600 (SocketUser/SocketMode). The module gains nixkits.dsh.sudo (enable/socketPath/package) creating the units and injecting the env var. Verified: gating (params hidden without socket, exposed with), routing round-trip, justification enforcement, direct executor protocol, and module unit evaluation.
+**Summary**: feat(dsh-nix-shell): external sudo daemon integration (0.2.0) — the plugin probes the daemon socket at init (config `sudoSocketPath` / env `NIXKITS_SUDO_SOCKET`) and advertises `sudo`/`justification` when it exists; `sudo: true` requests are routed whole (command/cwd/env/timeout) over the Unix socket to the daemon, with `justification` mandatory and echoed alongside the result. The daemon is a systemd socket-activated root executor (nixkits-sudo@.service + nixkits-sudo-exec.js, one-request-per-connection JSON protocol, shipped with the plugin package); the access-control boundary is the socket file, owned by the dsh service user with mode `0600` (SocketUser/SocketMode). The module adds nixkits.dsh.sudo (enable/socketPath/package), generating the socket and service and injecting the env var. Verified: gating, routing round-trip, justification enforcement, direct executor protocol and module evaluation all pass.
 
 | Commit | Description |
 |------|------|
@@ -2004,7 +2008,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T06:02:50+09:00
 
-**Summary**: refactor(skills): NixKits skills rewritten as native DSH skill plugins — new package dsh-skill-nixkits (@kihara777/dsh-skill-nixkits, zero runtime dependencies) with one subpath plugin entry per skill; each plugin registers its own content via ctx.skills.register (runtime provider, rank 250, outranking filesystem sources) and returns the registration disposer from apply(). The SKILL.md files remain the single source of truth in skills/, embedded at build time, with frontmatter stripped into content and preserved as metadata (the docs-pipeline auto-discovery contract is unchanged). The module's skills.enable now auto-generates the 7 composition rows (skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>), replacing the previously misimplemented directory injection (nixkits-skills package + bundledSkillDir). Verified: all 7 plugins register via a mock ctx, bare-subpath import + registration tested live (SUBPATH-OK/REGISTERED). CI builds added for x86_64/aarch64.
+**Summary**: refactor(skills): NixKits skills rewritten as native DSH skill plugins — new package dsh-skill-nixkits (@kihara777/dsh-skill-nixkits, zero runtime dependencies), one subpath plugin entry per skill; each registers its own content at runtime via ctx.skills.register (runtime provider, rank 250, outranking filesystem sources) and returns the registration disposer from apply(), so it is dropped with the composition. SKILL.md files stay the single source of truth in skills/ and are embedded at build time, with the frontmatter stripped into content and kept as metadata (the docs-pipeline auto-discovery contract is unchanged). The module's skills.enable now auto-generates the 7 composition rows (skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>), replacing the previously misimplemented directory injection (nixkits-skills package and bundledSkillDir). Verified: all 7 plugins register via a mock ctx, and bare-subpath import plus registration were tested live. CI builds added for x86_64/aarch64.
 
 | Commit | Description |
 |------|------|
@@ -2012,7 +2016,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-20T05:27:48+09:00
 
-**Summary**: feat(dsh): built-in bash tool NixOS fix + third-party plugin packages + deployment-bundled skills — ① the module injects a complete NixOS PATH into the dsh service (systemd's default PATH lacks bash; the stock bash tool failed with spawn bash ENOENT); ② new dsh-nix-shell package (@kihara777/dsh-nix-shell, a NixOS-aware shell tool plugin: Nix store bash fallback when PATH resolution fails, injected NixOS PATH, timeout and spill output) and nixkits-skills package (skill directory bundle); ③ new module options plugins.packages (tar-extracted into node_modules — a symlink is realpathed back into the plugin's store path, breaking peer resolution — with auto-generated composition rows) and skills.enable (skill-filesystem bundledSkillDir, rank 600); ④ CI builds for dsh-nix-shell on x86_64/aarch64. Verified end-to-end: IMPORT-OK inside the injected tree (plugin exports and dependency chain resolve).
+**Summary**: feat(dsh): built-in bash tool NixOS fix + third-party plugin packages + deployment-bundled skills — ① the module injects a complete NixOS PATH into the dsh service (systemd's default PATH lacks bash; the built-in bash tool failed with spawn bash ENOENT); ② new dsh-nix-shell package (@kihara777/dsh-nix-shell, a NixOS-aware shell tool plugin: Nix store bash fallback when PATH resolution fails, injected NixOS PATH, timeout and spill output) and nixkits-skills package (skill directory bundle); ③ new module options plugins.packages (tar-extracted into node_modules — a symlink is realpathed back into the plugin's store path, breaking peer resolution, so it must be extracted physically — with auto-generated composition rows) and skills.enable (skill-filesystem bundledSkillDir, rank 600); ④ CI builds for dsh-nix-shell on x86_64/aarch64. Verified end-to-end: IMPORT-OK inside the injected tree.
 
 | Commit | Description |
 |------|------|
@@ -2029,7 +2033,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-19T19:57:03+09:00
 
-**Summary**: fix(codewhale-src): riscv64 cross build — four-part fix chain: ① rquickjs-sys 0.12.2 (newest on crates.io) ships no riscv64gc bindings (the build.rs non-bindgen path includes the target file); upstream's LP64 little-endian bindings are byte-identical, so postPatch drops an x86_64 copy into the materialized vendor dir; ② the host-side (x86_64 build-dependency) ring build let cc-rs fall back from the host triple to the derivation CC (the cross compiler) and add -m64 — now points at the buildPackages toolchain explicitly; ③ the bare postInstall cargo build lost --target and linked with the host toolchain — now mirrors cargoBuildHook's target triple; ④ binaries link -lgcc_s dynamically and autoPatchelfHook only scans hostPlatform deps — the cross gcc libgcc output is now an explicit input. Verified locally with the exact CI command (pkgsCross.riscv64.callPackage); clears the 6-run red Build codewhale (riscv64).
+**Summary**: fix(codewhale-src): riscv64 cross build — four-part fix chain: ① rquickjs-sys 0.12.2 ships no riscv64gc bindings (the build.rs non-bindgen path includes the target file); upstream's 64-bit little-endian bindings are byte-identical, so postPatch drops an x86_64 copy into the materialized vendor dir; ② the host-side ring build let cc-rs fall back from the host triple to the cross compiler and add -m64 — now points at the buildPackages toolchain explicitly; ③ the bare postInstall cargo build lost --target and linked with the host toolchain — now mirrors cargoBuildHook's target triple; ④ binaries link -lgcc_s dynamically and autoPatchelfHook only scans hostPlatform deps — the cross gcc libgcc output is now an explicit input. Verified locally with the exact CI command (pkgsCross.riscv64.callPackage); clears the 6-run red Build codewhale (riscv64).
 
 | Commit | Description |
 |------|------|
@@ -2045,7 +2049,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-19T16:52:54+09:00
 
-**Summary**: fix(module): dsh WebSocket reverse proxy via mod_proxy upgrade — NixOS's lighttpd module generates server.modules in a fixed allKnownModules order, so mod_wstunnel always loads after mod_proxy. Because proxy.server matches every path, mod_proxy intercepts the WebSocket upgrade on /api/events.* and returns 426 Upgrade Required, while mod_wstunnel never runs (r->handler_module already set). Switched to lighttpd 1.4.56+ mod_proxy native WebSocket tunneling (proxy.header = "upgrade" => "enable"), dropping mod_wstunnel. Verified: 8625 / returns 200, /api/events.host|mux handshake 101 (local + LAN).
+**Summary**: fix(module): dsh WebSocket reverse proxy via mod_proxy upgrade — NixOS's lighttpd module generates server.modules in a fixed allKnownModules order, so mod_wstunnel loads after mod_proxy; since proxy.server matches every path, mod_proxy intercepts the upgrade on /api/events.* and returns 426, while mod_wstunnel never runs (r->handler_module already set). Switched to lighttpd 1.4.56+ mod_proxy native WebSocket tunneling (proxy.header = "upgrade" => "enable"), dropping mod_wstunnel. Verified: 8625 / returns 200, /api/events.host|mux handshake 101 (local + LAN).
 
 | Commit | Description |
 |------|------|
@@ -2113,7 +2117,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-18T17:30:00+09:00
 
-**Summary**: fix(module): dsh trustedHosts option — all /api calls returned 403 behind the proxy. dsh validates the Host header on /api requests (isTrustedApiRequest: Host must be loopback or trusted, and the browser Origin must match). Via lighttpd the Host arrives as the LAN hostname/IP, so everything was 403 forbidden. Add nixkits.dsh.trustedHosts (mapped to repeatable --trusted-host); system config sets harukax.lan + 192.168.31.241 and the API recovered.
+**Summary**: fix(module): dsh trustedHosts option — all /api calls 403 behind the proxy. dsh validates the Host header on /api requests, and via lighttpd the Host arrives as the LAN hostname/IP, so requests were rejected. Added nixkits.dsh.trustedHosts (mapped to repeatable --trusted-host); the system config trusts harukax.lan + 192.168.31.241 and the API recovered.
 
 | Commit | Description |
 |------|------|
@@ -2121,7 +2125,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-18T16:20:05+09:00
 
-**Summary**: fix(dsh): patch browser client bundles — crypto.randomUUID fallback. crypto.randomUUID() is unavailable in non-secure contexts (HTTP on LAN IP, i.e. via the lighttpd reverse proxy), breaking the webui with "crypto.randomUUID is not a function". postInstall replaces it in dsh-client-connection + dsh-client-ui-conversation with a __dshUuid helper falling back to crypto.getRandomValues (available everywhere). Server-side index.js uses Node crypto, untouched.
+**Summary**: fix(dsh): patch browser client bundles — crypto.randomUUID fallback. crypto.randomUUID() is unavailable in non-secure contexts (HTTP on a LAN IP, i.e. via the lighttpd reverse proxy), so the webui errored. postInstall replaces it in dsh-client-connection + dsh-client-ui-conversation with a __dshUuid helper that falls back to crypto.getRandomValues (available in every context).
 
 | Commit | Description |
 |------|------|
@@ -2138,7 +2142,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-18T14:38:26+09:00
 
-**Summary**: feat(module): dsh reverseProxy via lighttpd — dsh rejects non-loopback hosts (RCE safety); a lighttpd `$SERVER["socket"]` block on 0.0.0.0:8626 proxies to dsh loopback 8625 (reusing the SearXNG lighttpd instance; extraConfig is types.lines, merges cleanly). Firewall opens 8626.
+**Summary**: feat(module): add nixkits.dsh.reverseProxy (lighttpd) — dsh rejects non-loopback hosts (RCE safety), so a lighttpd `$SERVER["socket"]` block proxies 0.0.0.0:8626 to dsh loopback 8625 (reusing the SearXNG lighttpd instance; extraConfig is types.lines and merges cleanly), with 8626 opened in the firewall.
 
 | Commit | Description |
 |------|------|
@@ -2146,7 +2150,12 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-18T10:29:46+09:00
 
-**Summary**: feat/fix(dsh): deploy dsh service + configure MCP/skills — ① module fix: dsh system user HOME=/var/empty (read-only) caused EPERM, use writable /var/lib/dsh home + StateDirectory; ② HMR service needs --expose-internals (forbidden by NODE_OPTIONS, unknown to CLI), launch bin.js via node --expose-internals; ③ MCP services configured via cordis.patch.yml `insert:` syntax (not id-targeted override) for SearXNG + Godot; ④ skills copied to /var/lib/dsh/skills/ (not .agent-presets subdir); ⑤ nixkits-skills directory corrected to ~/.dsh/skills.
+**Summary**: feat/fix(dsh): deploy the dsh service and configure MCP + skills.
+- module fix: the dsh system user's HOME=/var/empty (read-only) caused EPERM; switched to a writable /var/lib/dsh + StateDirectory
+- the HMR service needs --expose-internals; launch bin.js via node --expose-internals
+- MCP services (SearXNG + Godot) are configured with cordis.patch.yml `insert:` syntax, not id-targeted overrides
+- skills copied to /var/lib/dsh/skills/, not an .agent-presets subdirectory
+- nixkits-skills directory corrected to ~/.dsh/skills
 
 | Commit | Description |
 |------|------|
@@ -2165,7 +2174,12 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-18T07:19:30+09:00
 
-**Summary**: audit fixes — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 bumps; ② comfyui-rocm module restored services.comfyui assertion + clarified nixpkgs-compat patch target; ③ overlay codewhale arch-based source-build fallback (riscv64); ④ doc version/link/description sync; ⑤ write-maintenance-log skill header + drop katalish column.
+**Summary**: audit fixes — version bumps plus module/overlay/doc/skill corrections.
+- codewhale 0.9.8, mcp-searxng 1.15.0, opencode-telegram 0.24.0, obs-bilibili-stream 2.1.3 bumped
+- comfyui-rocm module restored the services.comfyui assertion and clarified the nixpkgs-compat patch target
+- overlay codewhale falls back to a source build per architecture (riscv64)
+- doc versions, the ruyi link and the codewhale-sudo description synced
+- write-maintenance-log skill gained a table header and dropped the katalish column
 
 | Commit | Description |
 |------|------|
@@ -2196,7 +2210,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-08-15T08:31:32+09:00
 
-**Summary**: feat(dsh): new deepseek-harness 0.1.0-rc.6 package + 4-language docs. DSH (DeepSeek Harness) — Everything is a Plugin. Prebuilt npm package (@deepseek-ai/dsh, bin dsh → lib/bin.js); vendored package-lock.json (npm tarballs ship none), dontNpmBuild to skip build. godot-ai and dsh listed in README (4 languages).
+**Summary**: deepseek-harness 0.1.0-rc.6 — new package (@deepseek-ai/dsh, bin dsh → lib/bin.js). Prebuilt npm package with a vendored package-lock.json (npm tarballs ship none) and dontNpmBuild to skip the build; 4-language docs added and godot-ai/dsh listed in the README.
 
 | Commit | Description |
 |------|------|
@@ -2391,7 +2405,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-31T04:07:23+09:00
 
-**Summary**：fix(ci): fixed ci-summary.yml syntax errors (broken YAML, hardcoded token), switched to push/schedule triggers with GITHUB_TOKEN. README badge now uses shields.io endpoint reflecting actual Build workflow status instead of bare flake evaluation.
+**Summary**: fix(ci): fixed ci-summary.yml syntax errors (broken YAML, hardcoded token), switched to push/schedule triggers with GITHUB_TOKEN. README badge now uses shields.io endpoint reflecting actual Build workflow status instead of bare flake evaluation.
 
 | Commit | Description |
 |------|------|
@@ -2399,7 +2413,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-31T03:34:15+09:00
 
-**Summary**：fix(ci): injected GITHUB_TOKEN as Nix access-token — the llama-cpp-ver input requires GitHub API calls; unauthenticated requests are limited to 60/hr, causing frequent HTTP 403 errors under parallel CI jobs. Now uses `${{ secrets.GITHUB_TOKEN }}` for authentication.
+**Summary**: fix(ci): injected GITHUB_TOKEN as Nix access-token — the llama-cpp-ver input requires GitHub API calls; unauthenticated requests are limited to 60/hr, causing frequent HTTP 403 errors under parallel CI jobs. Now uses `${{ secrets.GITHUB_TOKEN }}` for authentication.
 
 | Commit | Description |
 |------|------|
@@ -2407,7 +2421,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-31T03:00:12+09:00
 
-**Summary**：fix(codewhale-src): fixed riscv64 cross-compile — the `ring` crate's `cc` build inherited `-m64` from the generic CFLAGS, causing riscv64-gcc errors. Clear both generic CFLAGS/CXXFLAGS in addition to per-target variables.
+**Summary**: fix(codewhale-src): fixed riscv64 cross-compile — the `ring` crate's `cc` build inherited `-m64` from the generic CFLAGS, causing riscv64-gcc errors. Clear both generic CFLAGS/CXXFLAGS in addition to per-target variables.
 
 | Commit | Description |
 |------|------|
@@ -2415,7 +2429,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-30T17:56:11+09:00
 
-**Summary**：codewhale 0.9.1 — upstream bug fixes; mcp-searxng 1.12.1 — upstream feature update; opencode-telegram 0.22.5 — upstream maintenance
+**Summary**: codewhale 0.9.1 — upstream bug fixes; mcp-searxng 1.12.1 — upstream feature update; opencode-telegram 0.22.5 — upstream maintenance
 
 | Commit | Description |
 |------|------|
@@ -2432,7 +2446,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-23T12:56:53+09:00
 
-**Summary**：fix(codewhale-sudo): fixed ptrace wrapper — removed child tracing (avoid SIGTRAP killing codewhale sub-shells), added PTRACE_EVENT_EXEC handling. Synced 4-language docs (LD_PRELOAD → ptrace description).
+**Summary**: fix(codewhale-sudo): fixed ptrace wrapper — removed child tracing (avoid SIGTRAP killing codewhale sub-shells), added PTRACE_EVENT_EXEC handling. Synced 4-language docs (LD_PRELOAD → ptrace description).
 
 | Commit | Description |
 |------|------|
@@ -2441,7 +2455,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-23T12:08:13+09:00
 
-**Summary**：fix(codewhale-sudo): replaced LD_PRELOAD shim with ptrace syscall interceptor — Codewhale is statically linked so LD_PRELOAD could not intercept prctl(PR_SET_NO_NEW_PRIVS); now uses ptrace(2) at the kernel boundary, compatible with both static and dynamic binaries.
+**Summary**: fix(codewhale-sudo): replaced LD_PRELOAD shim with ptrace syscall interceptor — Codewhale is statically linked so LD_PRELOAD could not intercept prctl(PR_SET_NO_NEW_PRIVS); now uses ptrace(2) at the kernel boundary, compatible with both static and dynamic binaries.
 
 | Commit | Description |
 |------|------|
@@ -2449,7 +2463,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-23T11:24:15+09:00
 
-**Summary**：fix(overlays): breeze-black — replaced the defunct fetchpatch URL (injx.sbs domain permanently unavailable) with a pure local colors file installation. KDE Plasma auto-discovers color schemes from share/color-schemes/.
+**Summary**: fix(overlays): breeze-black — replaced the defunct fetchpatch URL (injx.sbs domain permanently unavailable) with a pure local colors file installation. KDE Plasma auto-discovers color schemes from share/color-schemes/.
 
 | Commit | Description |
 |------|------|
@@ -2465,7 +2479,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 
 ## 2026-07-22T09:00:00+09:00
 
-**Summary**：feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
+**Summary**: feat(overlays) — new breeze-black overlay, providing high-contrast Breeze Black accessibility theme for Plasma 6 (global look-and-feel + GTK + color scheme). Includes 4-language docs.
 
 | Commit | Description |
 |------|------|

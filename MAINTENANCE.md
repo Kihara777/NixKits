@@ -1375,7 +1375,7 @@
 | `9483c2c` | docs(dsh-api-balance): 高峰自动触发/解除与 peakEnd 片段（四语） |
 ## 2026-09-02T10:23:55+09:00
 
-**摘要**：feat(dsh-api-balance): 峰时红色统一到用量页全元素 + 图表模型色保持可分 — 峰时变红扩展：用量页上下文进度条与明细色块、刷新/加载动画（dshAbSpin 新增 dshAbSpinPeak 红环类）、读取文本统一转为红色系，与已变红的用量圈/图表一致；进度条峰时各段经 peakShade 按索引取不同红档色调，多条段仍可分；图表峰时沿用 PEAK_PALETTE——红系但各模型用不同红档（图例圆点同步），红且可分而非盲目替换同一色
+**摘要**：feat(dsh-api-balance): 峰时红色统一到用量页全元素 + 图表模型色保持可分 — 峰时变红扩展：用量页上下文进度条与明细色块、刷新/加载动画（dshAbSpin 新增 dshAbSpinPeak 红环类）、读取文本统一转为红色系，与已变红的用量圈/图表一致；进度条峰时各段经 peakShade 按索引取不同红档色调，多条段仍可分；图表峰时沿用 PEAK_PALETTE——红系但各模型用不同红档（图例圆点同步）
 
 | 提交 | 说明 |
 |------|------|
@@ -1399,7 +1399,7 @@
 | `a8f8cda` | docs(dsh-api-balance): 竖屏越界设置页尺寸逻辑说明（四语） |
 ## 2026-09-02T05:45:48+09:00
 
-**摘要**：fix(dsh-api-balance): 用量面板改为页面级 fixed portal（根治移动端出界） — 面板从「会话树内 absolute 定位」改为 document.body 级 fixed portal（与设置弹窗同架构），不再受会话区 overflow 裁剪与坐标空间影响；位置由圆圈锚点的视口坐标换算（resize/scroll 重算，useLayoutEffect 测量避免闪烁）；双保险钳制：宽度上限 = min(锚点空间, 视口 − 24px)、高度上限 = 锚点上方可用空间（横屏自动收缩避开顶栏），任何屏幕尺寸不越界；面板外点击关闭同步更新（面板已移出圆圈祖先链），z-index 900 低于充值/登录/设置弹层
+**摘要**：fix(dsh-api-balance): 用量面板改为页面级 fixed portal（根治移动端出界） — 面板从「会话树内 absolute 定位」改为 document.body 级 fixed portal（与设置弹窗同架构），不再受会话区 overflow 裁剪与坐标空间影响；位置由圆圈锚点的视口坐标换算（resize/scroll 重算，useLayoutEffect 测量避免闪烁）；双保险钳制：宽度上限 = min(锚点空间, 视口 − 24px)、高度上限 = 锚点上方可用空间（横屏自动收缩避开顶栏），任何屏幕尺寸不越界；面板外点击关闭同步更新，z-index 900 低于充值/登录/设置弹层
 
 | 提交 | 说明 |
 |------|------|
@@ -1462,7 +1462,7 @@
 | `b8cd0b7` | docs(dsh-api-balance): 界面设置默认开启说明（四语）+ AGENTS 回车行为条目 |
 ## 2026-09-02T02:49:52+09:00
 
-**摘要**：feat(dsh-api-balance): 修复面板铺满整页 + 峰谷高峰标记 + 移动端不弹键盘 — 面板宽度回归修复：由内容 scrollWidth 一次性测量落成具体 px，消除「图表 px → 面板 max-content → 观察器 → 图表 px」正反馈（此前面板被顶到上限铺满整页），上限收紧为 min(锚点右缘 − 工具栏, 640)，内容更宽时面板内横向滚动；峰谷计费高峰时段（官方现行规则：周一至周五北京时间 09:00–12:00、14:00–18:00，其余含周末全天低谷）用量圈与图表红色显示 + 「峰时计费」标记（面板头部与图表标题），问候音效后追加高峰提示（语音包 peak 片段 / TTS 兜底），制作器新增 peak 片段与示例文本；移动端侧栏切换会话不再自动弹出软键盘（focusin 捕获拦截非用户点按的输入框聚焦，默认开、设置 → 界面可关）
+**摘要**：feat(dsh-api-balance): 修复面板铺满整页 + 峰谷高峰标记 + 移动端不弹键盘 — 面板宽度由内容 scrollWidth 一次性测量落成具体 px，消除「图表 px → 面板 max-content → 观察器 → 图表 px」正反馈，上限收紧为 min(锚点右缘 − 工具栏, 640)，内容更宽时面板内横向滚动；峰谷计费高峰时段（周一至周五北京时间 09:00–12:00、14:00–18:00，其余低谷）用量圈与图表红色显示 + 「峰时计费」标记（面板头部与图表标题），问候音效后追加高峰提示（语音包 peak 片段 / TTS 兜底），制作器新增 peak 片段；移动端侧栏切换会话不再自动弹出软键盘（focusin 捕获拦截非用户点按的输入框聚焦，默认开、设置 → 界面可关）
 
 | 提交 | 说明 |
 |------|------|
@@ -1533,7 +1533,7 @@
 
 ## 2026-09-01T10:20:14+09:00
 
-**摘要**：fix/feat(dsh-api-balance): 「入」与「缓存命中」拆分对齐官方口径 + 问候语列表编辑与示例文本对齐 TTS — 排查「当日入 200M」虚高：官方 API 的 token 桶含 PROMPT_CACHE_HIT_TOKEN（当日 228M 占绝对多数），此前把缓存命中折进「入」导致膨胀；现与官方用量页分项口径一致（入 = 仅缓存未命中输入、缓存命中单列），窗口行 / 分模型行 / 图表切换播报同步拆分并新增 cacheHitLabel 语音包片段；制作器新增问候语列表编辑（添加 / 移除槽位、逐条录制 / 导入 / 试听 / 删除，打包编入 manifest.greetings）；片段键重构为 today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix，示例文本与默认 TTS 兜底文案一字不差；图表切换播报补全三组数据（入 / 缓存命中 / 出 / 金额币种）
+**摘要**：fix/feat(dsh-api-balance): 「入」与「缓存命中」拆分对齐官方用量页口径 + 问候语列表编辑与示例文本对齐 TTS — 官方 API 的 token 桶含 `PROMPT_CACHE_HIT_TOKEN`（当日 228M），此前折进「入」致「当日入 200M」虚高；现入 = 仅缓存未命中输入、缓存命中单列，窗口行 / 分模型行 / 图表切换播报同步拆分；片段键重构并新增 `cacheHitLabel`，示例文本与默认 TTS 兜底文案一字不差；制作器新增问候语列表编辑（槽位增删、逐条录制 / 导入 / 试听 / 删除，编入 `manifest.greetings`）。
 
 | 提交 | 说明 |
 |------|------|
@@ -1565,7 +1565,7 @@
 
 ## 2026-09-01T09:10:18+09:00
 
-**摘要**：feat(dsh-api-balance): 语音包库管理 + 制作器次级菜单 + 录音可视化浮窗 — host 语音包库化（packs/<id>/ 多包存储 + state.json 激活记录；新增 activate 切换路由、DELETE ?ids= 多选移除（激活包被移除自动切换剩余）、音频按 /audio/<id>/<key> 服务）；设置页仅保留「导入 + 一个语音包管理按钮」，次级菜单含 packs 视图（可滚动列表：点击行切换激活、勾选多选移除、入口进制作器）与 creator 视图（语言选择 zh-CN/en/ja——示例文本随之变化、可跨语言录制，清单 lang 记录包语言；逐段录音/导入文件/试听/删除；编译下载/编译应用）；录音时右下角弹出可视化浮窗（AudioContext+Analyser 画布电平表、计时、示例文本、停止并保存/放弃）；导入后列表显示包名与语言；编辑已导入包仍保留首次覆盖提示。
+**摘要**：feat(dsh-api-balance): 语音包库管理 + 制作器次级菜单 + 录音可视化浮窗 — host 语音包库化（`packs/<id>/` 多包存储 + `state.json` 激活记录；activate 切换路由、DELETE ?ids= 多选移除（激活包被移除自动切换剩余）、音频按 `/audio/<id>/<key>` 服务）；设置页仅保留「导入 + 一个语音包管理按钮」，次级菜单含 packs 视图（列表：点击切换激活、勾选多选移除、入口进制作器）与 creator 视图（语言选择 zh-CN/en/ja、示例文本随语言变化、可跨语言录制，清单 lang 记录包语言；逐段录音 / 导入 / 试听 / 删除；编译下载 / 编译应用）；录音时右下角弹出可视化浮窗（电平表、计时、示例文本、保存 / 放弃）；编辑已导入包仍保留首次覆盖提示。
 
 | 提交 | 说明 |
 |------|------|
@@ -1573,7 +1573,7 @@
 
 ## 2026-09-01T08:41:48+09:00
 
-**摘要**：feat(dsh-api-balance): 语音包 zip 化 + 录音/导入制作器 + 编辑保护 — 语音包改为 zip 压缩包（manifest.json + audio/ 音频文件），host 纯 JS zip 解析（STORE/DEFLATE，DecompressionStream inflate）落盘 `$DSH_HOME/api-balance-voicepack/` 目录，音频经 prefix 路由按 URL 服务全设备共享；设置弹窗内制作器支持逐段浏览器录音（MediaRecorder）或导入本地音频文件，「打包下载」生成可分享 zip、「编译并应用」立即覆盖应用到本机；已导入语音包时首次编辑（录制/导入/删除/编译）弹出覆盖提示，会话内确认一次；播报引擎片段支持 URL/内嵌双载体，四语文档补语音包格式指南（zip 结构 / manifest / 片段表 / 录音与分享流程）。
+**摘要**：feat(dsh-api-balance): 语音包 zip 化 + 录音/导入制作器 + 编辑保护 — 语音包改为 zip 压缩包（`manifest.json` + `audio/` 音频文件），host 纯 JS 解析 zip 后落盘 `$DSH_HOME/api-balance-voicepack/`，音频经 prefix 路由服务、全设备共享；设置弹窗内制作器支持逐段浏览器录音（MediaRecorder）或导入本地音频文件，「打包下载」生成可分享 zip、「编译并应用」立即覆盖应用到本机；已导入语音包时首次编辑弹出覆盖提示，会话内确认一次；播报片段支持 URL / 内嵌双载体，四语文档补语音包格式指南（zip 结构 / manifest / 片段表 / 录音与分享流程）。
 
 | 提交 | 说明 |
 |------|------|
@@ -1598,7 +1598,7 @@
 
 ## 2026-09-01T01:25:25+09:00
 
-**摘要**：feat(dsh-api-balance): 未登录弹窗 + LevelDB 精确解析 + 语音播报下拉 — 浏览器扫描未命中时自动弹窗「前往登录」（新标签页登录 + 轮询快扫自动拾取），手动输入降为弹窗内二级备选；已连接显示灰显「✓ 已登录」，手动刷新时自动快扫检查登录态；新增纯 JS LevelDB 表解析（footer → index → 数据块 → snappy 解压 → 条目遍历，修正扩展字面量长度 = 单字节+1 而非 varint）精确提取 userToken，快扫 949ms 命中（此前全扫 5.3s / 快扫失败）；语音播报独立一行 + 下拉菜单（当前用量 / 余额 / 测试警告音频），菜单改 portal 固定定位修复滚动裁剪并预热语音引擎；令牌来源改两行显示。
+**摘要**：feat(dsh-api-balance): 未登录弹窗 + LevelDB 精确解析 + 语音播报下拉 — 浏览器扫描未命中时自动弹窗「前往登录」（新标签页登录 + 轮询快扫自动拾取），手动输入降为弹窗内二级备选；已连接显示灰显「✓ 已登录」。新增纯 JS LevelDB 表解析精确提取 userToken，快扫 949ms 命中；语音播报独立一行 + 下拉菜单，菜单改 portal 固定定位修复滚动裁剪并预热语音引擎；令牌来源改两行显示。验证：LevelDB 解析实测命中，快扫由失败转为 949ms 命中。
 
 | 提交 | 说明 |
 |------|------|
@@ -1615,7 +1615,7 @@
 
 ## 2026-08-31T23:50:04+09:00
 
-**摘要**：feat(dsh-api-balance): 本机浏览器自动扫描获取平台 userToken — host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 Local Storage LevelDB，提取 base64 候选（55–85 字符）并经 GET /api/v0/users/get_user_summary 校验后落盘，用户在本机浏览器登录过平台即可无感获取用量令牌，无需控制台手动粘贴；6 小时节流 + 令牌失效（40003/401）立即重扫 + 面板「重新扫描本机浏览器」按钮（RPC args.rescanBrowsers），连接后显示令牌来源徽章（browser / manual）。实测：本机 Edge leveldb 31 个候选中自动命中真实令牌，部署后浏览器触发查询即自动重取令牌，四语文档同步。
+**摘要**：feat(dsh-api-balance): 本机浏览器自动扫描获取平台 userToken — host 直接读取本机 Chromium 系浏览器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera，各 Profile）的 Local Storage LevelDB，提取 base64 候选（55–85 字符）并经 GET /api/v0/users/get_user_summary 校验后落盘，用户在本机浏览器登录过平台即可无感获取用量令牌，无需控制台手动粘贴；6 小时节流 + 令牌失效（40003/401）立即重扫 + 面板「重新扫描本机浏览器」按钮（RPC args.rescanBrowsers），连接后显示令牌来源徽章（browser / manual）。验证：本机 Edge leveldb 31 个候选自动命中真实令牌。
 
 | 提交 | 说明 |
 |------|------|
@@ -1632,7 +1632,7 @@
 
 ## 2026-08-31T11:31:42+09:00
 
-**摘要**：dsh-alpha 上线灾难恢复 — 修复 alpha 反代 Host 语义（web UI 入口按 Host authority 的 session cookie 认证，重写 Host 致永远 401）、dsh-api-balance 的 shared RPC interceptor 冲突（/api 已被 typert-gateway 独占，改用精确 fetch route 自实现 RPC envelope）、dsh-nixos-shell 的 dsh-tools 通道对齐；新增 launchUrlFile（局域网启动 URL 捕获）与 reverseProxy.autoAuth（mod_magnet 免认证注入，显式禁用入口认证仅限可信局域网）模块选项；四语文档补全局域网访问章节。
+**摘要**：dsh-alpha 上线灾难恢复 — 修复 alpha 反代 Host 语义（web UI 入口按 Host authority 的 session cookie 认证，重写 Host 致永远 401）、dsh-api-balance 的 shared RPC interceptor 冲突（/api 已被 typert-gateway 独占，改用精确 fetch route 自实现 RPC envelope）、dsh-nixos-shell 的 dsh-tools 通道对齐；新增 launchUrlFile（局域网启动 URL 捕获）与 reverseProxy.autoAuth（mod_magnet 免认证注入，仅限可信局域网）模块选项；四语文档补全局域网访问章节。验证：反代与 RPC 冲击修复后 web UI 入口与插件 RPC 恢复可用。
 
 | 提交 | 说明 |
 |------|------|
@@ -1648,7 +1648,7 @@
 
 ## 2026-08-31T07:23:07+09:00
 
-**摘要**：dsh-alpha 0.1.2-alpha.2 — 新包，npm `alpha` dist-tag 开发通道；dsh 重构为 ruyi 式薄包装（version/hash/npmDepsHash/lockFile 可覆盖），postPatch 纯 sed 删除 tarball 的 devDependencies（引用未发布的 monorepo 内部包，registry 404），补丁目标文件加存在性守卫。四语文档新增版本通道章节。后续修复 vendored lock 与 npmDepsHash 对齐（npm fixup 平台条目缺失导致主构建报 out of date），README 软件表四语补齐 dsh-alpha 行。
+**摘要**：dsh-alpha 0.1.2-alpha.2 — 新包，npm `alpha` dist-tag 开发通道；dsh 重构为 ruyi 式薄包装（version/hash/npmDepsHash/lockFile 可覆盖），postPatch 纯 sed 删除 tarball 的 devDependencies（引用未发布的 monorepo 内部包，registry 404），补丁目标文件加存在性守卫；四语文档新增版本通道章节，README 软件表四语补齐 dsh-alpha 行。后续修复 vendored lock 与 npmDepsHash 对齐（npm fixup 平台条目缺失致主构建报 out of date）。验证：包构建通过，lock 对齐后主构建不再报 out of date。
 
 | 提交 | 说明 |
 |------|------|
@@ -1680,7 +1680,7 @@
 
 ## 2026-08-27T09:19:59+09:00
 
-**摘要**：opencode-telegram 0.24.1 — 新增韩语界面、`/opencode_stop` 忙时可终止卡死的本地 OpenCode 进程、语音转写以引用块显示、Telegram 临时错误安全重试防回复丢失/重复、流式编辑节流自适应；mcp-searxng 2.1.0 — 显式选择引擎时逐引擎校验 time-range 能力、不支持时快速失败并给出可操作错误；godot-ai 3.2.0 — custom_tools 第三方 addon 工具注册、CLI 注册范围可选、新增 DeepSeek Harness 客户端支持；ruyi-beta 0.52.0-beta.20260824 — beta 通道上游更新。四语文档同步，nix flake check 通过。
+**摘要**：opencode-telegram 0.24.1 — 新增韩语界面、`/opencode_stop` 忙时可终止卡死的本地 OpenCode 进程、语音转写以引用块显示、Telegram 临时错误安全重试防回复丢失或重复、流式编辑节流自适应；mcp-searxng 2.1.0 — 显式选择引擎时逐引擎校验 time-range 能力、不支持时快速失败并给出可操作错误；godot-ai 3.2.0 — custom_tools 第三方 addon 工具注册、CLI 注册范围可选、新增 DeepSeek Harness 客户端支持；ruyi-beta 0.52.0-beta.20260824 — beta 通道上游更新。四语文档同步，nix flake check 通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1705,7 +1705,7 @@
 
 ## 2026-08-27T07:28:58+09:00
 
-**摘要**：feat(dsh-api-balance): 面板刷新按钮。面板头部标签行右侧新增刷新按钮（↻）：点击经 queryBalance(true) 强制绕过 host 端 30s TTL 缓存重新拉取余额 + 官方用量（按日/按月图表同步更新）；加载中按钮禁用并显示旋转动画（复用 dshAbSpin）。中英双语文案（刷新数据 / Refresh data）。验证：构建通过、经稳定挂载点零重启部署（424 代）后 dsh 重启生效。
+**摘要**：feat(dsh-api-balance): 面板刷新按钮 — 面板头部标签行右侧新增刷新按钮（↻）：点击经 queryBalance(true) 强制绕过 host 端 30s TTL 缓存重新拉取余额 + 官方用量（按日/按月图表同步更新）；加载中按钮禁用并显示旋转动画（复用 dshAbSpin）；中英双语文案（刷新数据 / Refresh data）。验证：构建通过、经稳定挂载点零重启部署（424 代）后 dsh 重启生效。
 
 | 提交 | 说明 |
 |------|------|
@@ -1713,7 +1713,7 @@
 
 ## 2026-08-27T07:28:49+09:00
 
-**摘要**：fix(dsh-nixos-shell): 分离结果诚实语义 + systemctl restart dsh 自动分离。此前 rebuild 经 systemd-run 交接后直接透传其 exit 0，工具结果看起来「构建成功」而真实结果未知；现在分离命令返回 `detached: true` + `detachedUnit` + `note`、exitCode 为 null——交接成功 ≠ 构建成功，真实结果一律经 nixos_cli op=journal / op=generations 验证（后台任务最终输出同样追加验证指引）。分离谓词扩展至 `systemctl restart dsh`：插件更新经稳定挂载点部署后需显式重启 dsh 生效，该命令同样自动分离、调用先于重启返回。验证：分离式 dsh 重启落地（RESTARTED_EXIT=0）、插件变更 rebuild（424/425 代）零重启零中断、nix flake check 通过。四语文档同步。
+**摘要**：fix(dsh-nixos-shell): 分离结果诚实语义 + systemctl restart dsh 自动分离。此前 rebuild 经 systemd-run 交接后透传其 exit 0，工具结果看似「构建成功」而真实结果未知；现分离命令返回 `detached: true` + `detachedUnit` + `note`、exitCode 为 null——交接成功 ≠ 构建成功，真实结果须经 nixos_cli op=journal / op=generations 验证。分离谓词扩展至 `systemctl restart dsh`（插件更新需显式重启生效），同样自动分离、先于重启返回。验证：分离式 dsh 重启落地（RESTARTED_EXIT=0）、插件变更 rebuild（424/425 代）零重启零中断。
 
 | 提交 | 说明 |
 |------|------|
@@ -1721,7 +1721,7 @@
 
 ## 2026-08-27T07:28:39+09:00
 
-**摘要**：feat(module): dsh 插件稳定挂载点 — 插件更新零重启激活。插件包此前直接烧进 dsh/sudo 的 unit（ExecStart/preStart/守护模板），任何插件更新都会改变 unit 内容：switch-to-configuration 在激活阶段重启 dsh（在途工具调用随 harness 进程消失）、stop/start sudo socket（连同经守护执行的 rebuild 自身一起杀掉，socket 无法自动恢复）。改为稳定挂载点：activation script 在每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell`（sudo 守护脚本）符号链接翻到当前代 store 路径（GC 安全：目标处于当前 toplevel 闭包，回滚自动翻回旧代）；dsh.service 与 nixkits-sudo@.service 的单元定义只引用这些稳定路径——插件包更新不再改变 unit 内容，激活阶段零重启、零 socket 中断。配套语义：dsh 是长驻进程，插件更新后需显式 `systemctl restart dsh` 生效（自动分离）；sudo 守护按连接生成，新连接自动使用新脚本。验证：423 代部署本改动（一次性 dsh 重启）；424/425 代连续两次插件包变更 rebuild——dsh 与 socket 的 ActiveEnterTimestamp 均未变化、/run/dsh/current 正常翻链、全程无工具调用被中断。四语文档同步。
+**摘要**：feat(module): dsh 插件稳定挂载点 — 插件更新零重启激活。此前插件包烧进 dsh/sudo 的 unit，插件更新即在激活阶段重启 dsh 与 sudo socket（在途工具调用、经守护执行的 rebuild 被杀，socket 不能自复）。改为稳定挂载点：activation script 每次 switch/boot 把 `/run/dsh/current`（dsh 含插件树）与 `/run/dsh/nixos-shell` 翻到当前代 store 路径（GC 安全），unit 只引用稳定路径，激活零重启零 socket 中断。配套：插件更新后需显式 `systemctl restart dsh` 生效。验证：423 代部署；424/425 代插件包变更 rebuild 后 dsh 与 socket 的 ActiveEnterTimestamp 未变。
 
 | 提交 | 说明 |
 |------|------|
@@ -1729,7 +1729,7 @@
 
 ## 2026-08-27T04:07:27+09:00
 
-**摘要**：fix(dsh-nixos-shell): sudo 协议 v3 + rebuild 自动分离。修复三类缺陷：1) v2 协议把连接断开当取消——rebuild 的 switch 阶段重启 dsh.service（插件路径烧进 service unit）导致客户端消失，守护在激活中途杀死 switch、留下部分激活状态（8/26 14:31 实测：profile 停在 415 而 dsh 已重启、单元文件半新半旧）；v3 改为显式带内取消行（job_kill 经 socket.end 写入），对端消失时子进程分离继续运行到完成。2) 取消/超时改为进程组击杀（spawn detached + kill(-pid)），只杀 shell 包装进程会留下继承管道写端的孤儿孙进程并卡死守护；守护超时上限放宽至 6h、rebuild 自动使用。3) rebuild 自动分离到 systemd-run 瞬态单元（独立 cgroup）——激活阶段 switch-to-configuration 会 stop/start nixkits-sudo.socket，rebuild 经守护执行时 socket 停止会连同 switch 自身一起杀掉、socket 无法自动恢复（8/26 17:25 实测 socket 死掉且该窗口期启动的会话永久丢失 sudo 参数）；分离后调用立即返回单元名（detachedUnit）、激活完整跑完。另：socket 改为调用时校验、dsh-jobs 取消映射合法枚举 killed、守护响应经 write 回调刷出后退出。验证：后台 sudo 即时返回 job id、job_output 完整输出、job_kill 整组击杀无孤儿、真实 rebuild 经分离单元部署成功且 socket 激活后自动恢复、nix flake check 通过。四语文档同步。
+**摘要**：fix(dsh-nixos-shell): sudo 协议 v3 + rebuild 自动分离。修复三类缺陷：1) v2 协议把连接断开当取消——rebuild 的 switch 阶段重启 dsh.service 致客户端消失，守护中途杀死 switch（部分激活）；v3 改为显式带内取消行，对端消失时子进程分离续跑至完成。2) 取消/超时改为进程组击杀（spawn detached + kill(-pid)），只杀 shell 包装会留下孤儿孙进程卡死守护；超时上限放宽至 6h。3) rebuild 自动分离到 systemd-run 瞬态单元（独立 cgroup），避免 socket stop/start 连带杀掉 switch。验证：后台 sudo 即返 job id、job_kill 整组击杀无孤儿、真实 rebuild 经分离单元部署成功且 socket 自动恢复。
 
 | 提交 | 说明 |
 |------|------|
@@ -1737,7 +1737,7 @@
 
 ## 2026-08-27T04:07:15+09:00
 
-**摘要**：feat(dsh-api-balance): 充值卡片弹窗替代 iframe + 余额不足语音提醒。platform.deepseek.com/top_up 被 WAF 拦截（"Max challenge attempts exceeded"），iframe 弹窗无法工作——改为居中卡片弹窗（新窗口按钮 + 右上角关闭按钮），不跳转页面。新增余额不足语音提醒：余额低于阈值（10 CNY/USD）时经 Web Speech API 播报提示，15 分钟轮询 + 30 分钟冷却，面板内开关（balance.speechOn/Off），中英双语文案。验证：部署后特征 grep（TopupModal/speechOn/announceHunger）确认生效。
+**摘要**：feat(dsh-api-balance): 充值卡片弹窗替代 iframe + 余额不足语音提醒。top_up 页面被 WAF 拦截（"Max challenge attempts exceeded"），iframe 弹窗无法工作——改为居中卡片弹窗（新窗口按钮 + 右上角关闭按钮），不跳转页面。新增余额不足语音提醒：余额低于阈值（10 CNY/USD）时经 Web Speech API 播报提示，15 分钟轮询 + 30 分钟冷却，面板内开关（balance.speechOn/Off），中英双语文案。验证：部署后特征 grep（TopupModal/speechOn/announceHunger）确认生效。
 
 | 提交 | 说明 |
 |------|------|
@@ -1758,7 +1758,7 @@
 
 ## 2026-09-11T12:54:29+09:00
 
-**摘要**：fix(dsh/module): 移除 allowLanSettings 的 $host.state.getSnapshot() 补丁 — dsh ≥ 0.1.5 的 $host 客户端服务不暴露 state（仅 isLoopback/home），旧补丁在 client-ui-settings apply 时访问 undefined.getSnapshot，抛 "Cannot read properties of undefined (reading 'getSnapshot')"，整个前端白屏（Failed to load plugins）。修复：模块不再强制 override allowLanSettings=true（恢复上游行为，非 loopback 页面 settings 保持 memory 只读）；packages/dsh.nix 的补丁改为无条件 "host"（若将来显式启用也不会崩）。验证：client.js 无 state.getSnapshot，首页 200，llm/listProviders 返回 DeepSeek 提供方。
+**摘要**：fix(dsh/module): 移除 allowLanSettings 的 $host.state.getSnapshot() 补丁 — dsh ≥ 0.1.5 的 $host 客户端服务不暴露 state，旧补丁在 client-ui-settings apply 时访问 undefined.getSnapshot 致整个前端白屏（Failed to load plugins）。模块不再强制 override allowLanSettings=true（恢复上游行为），packages/dsh.nix 的补丁改为无条件 "host"。验证：首页 200，llm/listProviders 返回 DeepSeek 提供方。
 
 | 提交 | 说明 |
 |------|------|
@@ -1767,7 +1767,7 @@
 
 ## 2026-09-11T06:15:33+09:00
 
-**摘要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 兼容）。dsh 0.1.5-alpha.2 的 dsh-persona 插件 Config 由 text 改为 prefix（必填）+ suffix（可选）。旧 agent preset（nixos-mode / maintenance-mode / 本机 ocean-spiral）仍写 text，导致 persona 插件加载失败（$.prefix missing required value）→ session/create 失败 → settings / llm 提供方目录 / session 历史全部无法加载（前端表现为 Failed to fetch + 无限重试 commands/list 缺 agentId）。修复：两预设的 persona config 改为 prefix，本机三个 preset 同步修改。验证：session/create 返回 ok:true + sessionId，session/list 返回会话列表，llm/listProviders 返回 DeepSeek 提供方。
+**摘要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 兼容）。dsh-persona 插件 Config 的 text 改为 prefix（必填）+ suffix（可选），旧 agent preset（nixos-mode / maintenance-mode / 本机 ocean-spiral）仍写 text，persona 加载失败（$.prefix missing required value）→ session/create 失败 → settings / llm 提供方目录 / session 历史全部无法加载。修复：两预设 persona config 改为 prefix，本机三个 preset 同步。验证：session/create 返回 ok:true + sessionId。
 
 | 提交 | 说明 |
 |------|------|
@@ -1775,7 +1775,7 @@
 
 ## 2026-08-27T01:30:33+09:00
 
-**摘要**：fix(module): dsh watchdog — switch-to-configuration 失败后的自动拉起。nixos-rebuild 的 switch-to-configuration 在「stop dsh → start dsh」之间偶发失败（exit 101）会把 dsh 留在 inactive；systemd 主动 stop 不触发 Restart=always，反代因此长期 503（实测 8/26 22:10、23:53 两次）。新增 dsh-watchdog timer（15s 间隔）检测 inactive 时自动 systemctl start。实测 stop 后 20 秒内自动恢复。
+**摘要**：fix(module): dsh watchdog — switch-to-configuration 失败后的自动拉起。nixos-rebuild 的 switch-to-configuration 在「stop dsh → start dsh」之间偶发失败（exit 101）会把 dsh 留在 inactive；systemd 主动 stop 不触发 Restart=always，反代因此长期 503。新增 dsh-watchdog timer（15s）检测 inactive 时自动 systemctl start。实测 stop 后 20 秒内自动恢复。
 
 | 提交 | 说明 |
 |------|------|
@@ -1783,7 +1783,7 @@
 
 ## 2026-08-24T15:44:06+09:00
 
-**摘要**：fix(overlay): llama-cpp-rocm v0.2.0 语义化版本 — llama.cpp 上游 release tag 从 build number（b10549）切换为语义化版本（v0.2.0），旧 overlay 只剥离 b 前缀得到 v0.2.0，nixpkgs 又把它传入 LLAMA_BUILD_NUMBER，生成 `int LLAMA_BUILD_NUMBER = v0.2.0;` 导致 C++ 编译失败（too many decimal points），阻塞系统 rebuild 与 dsh 升级。现在同时剥离 v/b 前缀并追加 -DLLAMA_BUILD_NUMBER=0 覆盖。验证：llama-cpp-0.2.0 构建成功、llama-cpp.service 正常运行。
+**摘要**：fix(overlay): llama-cpp-rocm v0.2.0 语义化版本 — llama.cpp 上游 release tag 从 build number（b10549）切换为语义化版本（v0.2.0）。旧 overlay 只剥离 b 前缀，nixpkgs 把 v0.2.0 传入 LLAMA_BUILD_NUMBER，生成 `int LLAMA_BUILD_NUMBER = v0.2.0;` 致 C++ 编译失败（too many decimal points），阻塞系统 rebuild 与 dsh 升级。改为同时剥离 v/b 前缀并追加 -DLLAMA_BUILD_NUMBER=0。验证：llama-cpp-0.2.0 构建成功且 llama-cpp.service 正常运行。
 
 | 提交 | 说明 |
 |------|------|
@@ -1791,7 +1791,7 @@
 
 ## 2026-08-24T15:20:16+09:00
 
-**摘要**：fix(pkgs): dsh 崩溃修复 — cordis-plugin-timer（上游最新 1.1.3 未修）在 Context dispose 时对 pending 的 ctx.timeout() promise reject "Context has been disposed"，未 catch 时成为 unhandled rejection，被 dsh-app-boot 的 installFailLoud 捕获后 process.exit(1)，表现为运行中偶发崩溃（rc.6/rc.7/rc.8/0.1.1-rc.2 均受影响，8/22 00:05 rc.8 实测 38 分钟即触发）。patch installFailLoud 仅忽略该特定错误，其余 fatal rejection 仍照常退出。验证：patch 落入 0.1.1-rc.2 产物（dsh-app-boot/lib/index.js:1047），服务升级后正常。
+**摘要**：fix(pkgs): dsh 崩溃修复 — cordis-plugin-timer（上游 1.1.3 未修）在 Context dispose 时对 pending 的 ctx.timeout() promise reject "Context has been disposed"，未 catch 成为 unhandled rejection，被 dsh-app-boot 的 installFailLoud 捕获后 process.exit(1)（rc.6/rc.7/rc.8/0.1.1-rc.2 均受影响）。patch installFailLoud 仅忽略该特定错误，其余 fatal rejection 仍照常退出。验证：patch 落入 0.1.1-rc.2 产物（dsh-app-boot/lib/index.js:1047）。
 
 | 提交 | 说明 |
 |------|------|
@@ -1799,7 +1799,7 @@
 
 ## 2026-08-24T14:27:47+09:00
 
-**摘要**：codewhale 0.9.11 — 上游 v0.9.9 起 TUI 资产更名 codewhale-tui → codew，包内安装 codew 并保留兼容别名，riscv64 源码构建同步 Cargo.lock（687→690 条目，rquickjs-sys 0.12.2 不变、bindings 补丁继续有效）；mcp-searxng 2.0.0 — 大版本升级（要求 Node.js ≥ 22，nixpkgs 默认满足，CLI 入口不变）；dsh 0.1.1-rc.2 — vendored lock 重新生成（560 个 resolved 条目），randomUUID 回退补丁目标路径不变，内置插件清单与 rc.8 完全一致（137 条）；dsh-nixos-shell 依赖 dsh-tools → 0.1.1-rc.2 对齐新生态。四语文档同步，nix flake check 通过。
+**摘要**：codewhale 0.9.11 — 上游 v0.9.9 起 TUI 资产更名 codewhale-tui → codew，包内安装 codew 并保留兼容别名，riscv64 源码构建同步 Cargo.lock（687→690 条目）；mcp-searxng 2.0.0 — 大版本升级（要求 Node.js ≥ 22，nixpkgs 默认满足，CLI 入口不变）；dsh 0.1.1-rc.2 — vendored lock 重新生成（560 个 resolved 条目），内置插件清单与 rc.8 完全一致（137 条）；dsh-nixos-shell 依赖 dsh-tools 对齐 0.1.1-rc.2。四语文档同步，nix flake check 通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1817,7 +1817,7 @@
 
 ## 2026-08-22T00:03:28+09:00
 
-**摘要**：docs(dsh): 0.1.0-rc.8 文档同步 — 四语 dsh.md 的版本行（rc.6 → rc.8）与「插件清单」代码块（137 条 entry id 映射，从 rc.8 构建产物提取）同步完成；nix flake check 通过。另：/etc/nixos 本地配置新增 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）声明化新会话默认——DeepSeek API 权威模型列表仅 flash/pro/flash-vision-exp，无 "pro-max" id，Pro+Max 思考即当前最高档；rc.8 上 nixos/maintenance 两预设挂载校验通过。
+**摘要**：docs(dsh): 0.1.0-rc.8 文档同步 — 四语 dsh.md 的版本行（rc.6 → rc.8）与「插件清单」代码块（137 条 entry id 映射，自 rc.8 构建产物提取）同步完成；nix flake check 通过。另：/etc/nixos 本地配置新增 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）作新会话默认；DeepSeek API 权威模型列表仅 flash/pro/flash-vision-exp，无 "pro-max" id，Pro+Max 思考即当前最高档；rc.8 上 nixos/maintenance 两预设挂载校验通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1833,7 +1833,7 @@
 
 ## 2026-08-21T00:01:46+09:00
 
-**摘要**：fix(dsh-nixos-shell): 工具描述明示 tools 白名单 — 验收非阻塞发现：固定 POSIX 工具白名单未在工具描述中明示。改为白名单从 TOOL_PACKAGES 映射动态生成（27 个名字，含 python 别名），写入 `tools` 参数描述，工具描述指向参数；四语文档同步完整列表。验证：27 项全在参数描述中、工具描述含指向、语法检查与 nix flake check 通过。
+**摘要**：fix(dsh-nixos-shell): 工具描述明示 tools 白名单 — 验收非阻塞发现：固定 POSIX 工具白名单未在工具描述中明示。改为白名单从 TOOL_PACKAGES 映射动态生成（27 个名字，含 python 别名），写入 `tools` 参数描述，工具描述指向参数；四语文档同步完整列表。验证：27 项全在参数描述中、工具描述含指向、nix flake check 通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1841,7 +1841,7 @@
 
 ## 2026-08-20T20:12:33+09:00
 
-**摘要**：fix(dsh-nixos-shell): 现代 rebuild 命令更正为 `nixos apply` — 实测 nixos 0.16.1-dev 无 `rebuild` 子命令（`nixos --help` 列出 activate/apply/generation 等），交接卡与插件 recommendedRebuild/命令对照表/门控提示词中的 `nixos rebuild switch` 表述错误；统一更正为 `nixos apply /etc/nixos`（或传统 `sudo nixos-rebuild switch --flake /etc/nixos`）。验证：node 语法检查、nix flake check 通过；系统部署改用 `nixos apply` 实测成功。
+**摘要**：fix(dsh-nixos-shell): 现代 rebuild 命令更正为 `nixos apply` — 实测 nixos 0.16.1-dev 无 `rebuild` 子命令（`nixos --help` 列出 activate/apply/generation 等），交接卡与插件 recommendedRebuild/命令对照表/门控提示词中的 `nixos rebuild switch` 表述错误；统一更正为 `nixos apply /etc/nixos`（或传统 `sudo nixos-rebuild switch --flake /etc/nixos`）。验证：nix flake check 通过，系统部署改用 `nixos apply` 实测成功。
 
 | 提交 | 说明 |
 |------|------|
@@ -1849,7 +1849,7 @@
 
 ## 2026-08-20T20:10:08+09:00
 
-**摘要**：fix(dsh-nixos-shell): NixOS模式验收 P1–P4 修复 — P1（高）tools 引导包装由 `bash -lc` 改为 `bash -c`：登录壳的 /etc/profile 链重置 PATH、丢弃 nix shell 注入，sudo 路径共用同一 wrapper 一并修复（对照实验：`-c` 得 Python 3.14.7、`-lc` 得 command not found）；同步修正映射 grep→gnugrep、find→findutils（此前被登录 PATH 假阳性掩盖）。P2 generations 新增 `limit`（默认 20、上限 200、新→旧），返回当前代与总数。P3 journal 的 unit 允许 `*`/`%` 通配，尾随 `@` 自动补 `*`（模板单元全实例）。P4 命名统一：nixos-cli → nixos 命令（nixos-cli 项目），覆盖工具描述、命令对照表与门控提示词。文档四语同步 op 表。验证：5 项功能套件全过（含经插件执行的真实 nix shell 注入回显 TOOLS_INJECTION_OK）、node 语法检查、nix flake check 通过。
+**摘要**：fix(dsh-nixos-shell): NixOS模式验收 P1–P4 修复 — P1（高）tools 引导包装由 `bash -lc` 改为 `bash -c`：登录壳的 /etc/profile 链重置 PATH、丢弃 nix shell 注入，sudo 路径共用同一 wrapper 一并修复（对照：`-c` 得 Python 3.14.7、`-lc` 得 command not found）；同步修正映射 grep→gnugrep、find→findutils。P2 generations 新增 `limit`（默认 20、上限 200、新→旧）。P3 journal 的 unit 允许 `*`/`%` 通配，尾随 `@` 自动补 `*`。P4 命名统一 nixos-cli → nixos 命令。四语文档 op 表同步；nix flake check 通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1857,7 +1857,7 @@
 
 ## 2026-08-20T19:33:51+09:00
 
-**摘要**：fix(dsh-nixos-shell): 提示节字段改用 text — dsh-system-prompt 的插值器读取 `input.text`，此前以 `content` 注册的节导致真实 NixOS模式会话崩溃（Cannot read properties of undefined (reading 'indexOf')，mount 校验无法覆盖的真实会话路径缺陷）。修复 nixos-gate（guidance/gate 两节）与 maintenance-skills（workflow 节）共 3 处 `content` → `text`。根因定位：反查 dsh-system-prompt 包 interpolate() 源码 + PromptSection 类型定义（text: string | provider）；ToolGuard 形态亦经类型定义确认为 `(execution) => string | undefined`（现有实现兼容）。验证：mock 断言 text 字段 + 无未闭合 `{{`；真实 systemPrompt 服务注册并 assemble（includes=true，无崩溃）；系统预构建通过。
+**摘要**：fix(dsh-nixos-shell): 提示节字段改用 text — dsh-system-prompt 的插值器读取 `input.text`，此前以 `content` 注册的节导致真实 NixOS模式会话崩溃（Cannot read properties of undefined (reading 'indexOf')，mount 校验覆盖不到的真实会话路径缺陷）。修复 nixos-gate（guidance/gate 两节）与 maintenance-skills（workflow 节）共 3 处 `content` → `text`。验证：mock 断言 text 字段 + 无未闭合 `{{`；真实 systemPrompt 服务 assemble 无崩溃；系统预构建通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1865,7 +1865,7 @@
 
 ## 2026-08-20T19:05:44+09:00
 
-**摘要**：feat(dsh-nixos-shell): 维护模式 agent 预设 — 新包内入口 maintenance-skills：apply 时从构建期嵌入的仓库 skills/ 树（内容单一来源，全新会话即最新）注册运行时技能 write-project-docs、write-maintenance-log 与全部 translate-* 语言扩展（自动发现），并注入仓库维护工作流提示词（分批提交、推送后维护日志、文档同步、泛化）；包内 postPatch cp -r skills → skills-embedded。预设 presets/maintenance-mode（id `maintenance`，基于 NixOS模式组合 + maintenance-skills 行）随包分发；模块新增 nixkits.dsh.presets.maintenanceMode seed-once。验证：mock 注册 3 技能 + 工作流提示节全过、包含嵌入树与导出、系统预构建通过；nixos 预设挂载校验通过（mounted ok），maintenance 预设因加载器进程内 package.json 缓存需重启后终验。
+**摘要**：feat(dsh-nixos-shell): 维护模式 agent 预设 — 新包内入口 maintenance-skills：apply 时从构建期嵌入的仓库 skills/ 树注册运行时技能 write-project-docs、write-maintenance-log 与全部 translate-* 语言扩展（自动发现），并注入仓库维护工作流提示词；包内 postPatch cp -r skills → skills-embedded。预设 presets/maintenance-mode（id `maintenance`，基于 NixOS模式组合 + maintenance-skills 行）随包分发；模块新增 nixkits.dsh.presets.maintenanceMode。验证：mock 注册 3 技能 + 工作流提示节全过，系统预构建通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1873,7 +1873,7 @@
 
 ## 2026-08-20T18:30:46+09:00
 
-**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 预设 — 新包内子路径入口 nixos-gate：会话初始化时校验宿主为 NixOS（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS 时经 tools.guard 拒绝一切工具执行并注入拒绝提示词（明确理由 + 建议切换预设），NixOS 时注入开发指南提示词（源自 nixos-modern-cli 场景：声明式本质、tools 引导、现代命令、store 路径陷阱）。预设 presets/nixos-mode（id `nixos`，基于创造模式 cordis 组合 + 其技能目录 + 追加 nixos-gate/nixos-shell 两行）随包分发；模块新增 nixkits.dsh.presets.nixosMode，preStart seed-once 写入 $DSH_HOME/.agent-presets/nixos（尊重用户后续编辑）。验证：包构建通过、门控语法检查通过、系统预构建通过。
+**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 预设 — 新子路径入口 nixos-gate：会话初始化时校验宿主为 NixOS（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS 时经 tools.guard 拒绝一切工具执行并注入拒绝提示词，NixOS 时注入开发指南提示词。预设 presets/nixos-mode（id `nixos`，基于创造模式 cordis 组合 + 其技能目录 + 追加 nixos-gate/nixos-shell 两行）随包分发；模块新增 nixkits.dsh.presets.nixosMode，preStart seed-once 写入 $DSH_HOME/.agent-presets/nixos。验证：包构建、门控语法检查、系统预构建通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1897,7 +1897,11 @@
 
 ## 2026-08-20T17:46:44+09:00
 
-**摘要**：feat(nixos-shell): NixOS 场景能力整合为单一插件；refactor: 废弃技能插件化设计 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）注册两个工具：nixos_shell 执行器（NixOS PATH 注入 + bash 回退 + `tools` 参数经 `nix shell nixpkgs#… --command` 引导缺失 POSIX 工具 + sudo 守护路由）与 nixos_cli 只读诊断（capabilities / system-status / generations / journal / audit-store-paths），功能需求源自 nixos-modern-cli 技能场景。同步移除：dsh-nix-shell（功能并入）与 dsh-skill-nixkits（7 技能插件设计废弃，含模块 skills 选项）、CI/文档随之更替；nixkits-skills 安装器移除 dsh 安装目标（dsh 能力由 nixos-shell 提供，技能保留供其他助手安装）。修复点：generations 用进程内只读列出（nix-env 需锁文件权限，非 root 报 Permission denied）。验证：13 项功能套件全过（含真实 sudo root 路由与 nix shell 工具引导）；系统预构建通过。
+**摘要**：feat(nixos-shell): NixOS 场景能力整合为单一插件；refactor: 废弃技能插件化设计
+- 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）注册 2 个工具：nixos_shell 执行器（NixOS PATH 注入 + bash 回退 + `tools` 引导缺失 POSIX 工具 + sudo 守护路由）与 nixos_cli 只读诊断（capabilities 等），需求源自 nixos-modern-cli 技能场景。
+- 移除 dsh-nix-shell 与 dsh-skill-nixkits（7 技能插件设计废弃），CI/文档更替。
+- 修复 generations：进程内只读列出（`nix-env` 非 root 被拒）。
+验证：13 项功能套件全过；系统预构建通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1909,7 +1913,7 @@
 
 ## 2026-08-20T16:40:16+09:00
 
-**摘要**：fix(dsh): 服务 HOME 指向真实用户家目录 — git 的 gh credential helper 按 `$HOME/.config/gh` 解析凭据，模块此前将服务 HOME 设为 dshHome（/home/kix/.dsh），沙箱内 git push 找不到凭据（could not read Username）。改为 `users.users.<user>.home`（缺省回退 dshHome），代理继承用户自身的工具上下文（git/gh 凭据、~/.gitconfig、npm/ssh 配置）；DSH_HOME 仍为 dsh 状态根不受影响。验证：HOME=/home/kix 推送积压提交全部成功；系统预构建通过。
+**摘要**：fix(dsh): 服务 HOME 指向真实用户家目录 — git 的 gh credential helper 按 `$HOME/.config/gh` 解析凭据，模块此前将服务 HOME 设为 dshHome（/home/kix/.dsh），沙箱内 git push 找不到凭据。改为 `users.users.<user>.home`（缺省回退 dshHome），代理继承用户自身的工具上下文（git/gh 凭据、~/.gitconfig、npm/ssh 配置）；DSH_HOME 仍为 dsh 状态根不受影响。验证：推送积压提交全部成功；系统预构建通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -1917,7 +1921,7 @@
 
 ## 2026-08-20T16:13:40+09:00
 
-**摘要**：fix(dsh-nix-shell): sudo 执行器 PATH 合并顺序 — 套接字激活的模板单元继承 systemd 管理器默认 PATH（仅 coreutils/findutils/grep/sed/systemd 的 store 路径），`...process.env` 在显式 NixOS PATH 之后展开将其覆盖，导致守护进程内 ps、nixos-rebuild 等 profile 工具全部不可解析（PS-MISSING/NIXOS-REBUILD-MISSING）。改为继承 env 在前、显式 NixOS profile PATH 在后（请求 env 仍最后合并）。验证：模拟 systemd 默认 PATH 直跑执行器，PATH 以 /run/current-system/sw/bin 开头、ps 与 nixos-rebuild 均解析成功。
+**摘要**：fix(dsh-nix-shell): sudo 执行器 PATH 合并顺序 — 套接字激活的模板单元继承 systemd 管理器默认 PATH（coreutils/findutils/grep/sed/systemd 的 store 路径），`...process.env` 在显式 NixOS PATH 之后展开将其覆盖，守护进程内 ps、nixos-rebuild 等 profile 工具全部不可解析。改为继承 env 在前、显式 NixOS profile PATH 在后（请求 env 仍最后合并）。验证：PATH 以 /run/current-system/sw/bin 开头，ps 与 nixos-rebuild 均解析成功。
 
 | 提交 | 说明 |
 |------|------|
@@ -1933,7 +1937,7 @@
 
 ## 2026-08-21T23:02:33+09:00
 
-**摘要**：chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。完成遗留的 rc.8 升级：src hash 与 npmDepsHash 从占位符填入真实值；package-lock.json 重新生成（旧 lock 缺失 120 个 entries 含 dsh-invariants，导致 buildNpmPackage fetch 阶段 ENOTCACHED）。验证：rc.8 构建成功、randomUUID 回退 patch 生效、with-plugins 变体正常、服务启动无插件加载错误。注意：本机 skills-as-plugins 设计已废弃，skills 已整合进 dsh-nixos-shell（maintenance-skills），with-plugins 仅注入 dsh-nixos-shell。
+**摘要**：chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。完成遗留的 rc.8 升级：src hash 与 npmDepsHash 填入真实值；package-lock.json 重新生成（旧 lock 缺失 120 个 entries，含 dsh-invariants）。验证：rc.8 构建成功、randomUUID 回退 patch 生效、with-plugins 变体正常、服务启动无插件加载错误；with-plugins 仅注入 dsh-nixos-shell。
 
 | 提交 | 说明 |
 |------|------|
@@ -1941,7 +1945,7 @@
 
 ## 2026-08-21T22:11:28+09:00
 
-**摘要**：fix(module): dsh 崩溃韧性 — Restart=always + RestartSec 5s。dsh 上游有已知崩溃 bug（cordis-plugin-timer 的 Context disposed，rc.6 实测运行约 13 小时触发），rc.7/rc.8 的 cordis-plugin-timer 依赖版本不变（^1.1.3），bug 仍存。崩溃时 lighttpd 反代随即返回 503 直到 systemd 拉起。改为 Restart=always（on-failure 不覆盖 exit 0 退出路径）+ 重启间隔 5s，把中断窗口压到最小。
+**摘要**：fix(module): dsh 崩溃韧性 — Restart=always + RestartSec 5s。dsh 上游有已知崩溃 bug（cordis-plugin-timer 的 Context disposed，rc.6 实测约 13 小时触发），rc.7/rc.8 的 cordis-plugin-timer 依赖版本不变（^1.1.3），bug 仍存。崩溃时 lighttpd 反代随即返回 503 直到 systemd 拉起。改为 Restart=always（on-failure 不覆盖 exit 0 退出路径）+ 重启间隔 5s，把中断窗口压到最小。
 
 | 提交 | 说明 |
 |------|------|
@@ -1949,7 +1953,7 @@
 
 ## 2026-08-20T11:08:08+09:00
 
-**摘要**：fix(module): dsh 插件 ESM 解析 — dsh 的 cordis-plugin-loader 以 profile 目录（$DSH_HOME/profiles/web）为解析基准（Node 24 内部 cascaded loader 的 parentURL），从那里向上查找 node_modules。插件虽已注入 dsh 的 store 树，但 store 不在 profile 的 node_modules 链上，import 直接 ERR_MODULE_NOT_FOUND，启动即崩溃（restart 循环到 108）。preStart 把注入后的 @kihara777 scope 符号链接到 $DSH_HOME/node_modules 让 Node 可解析；realpath 回 store 树后，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。实测 skills + nix-shell 插件加载成功。
+**摘要**：fix(module): dsh 插件 ESM 解析 — dsh 的 cordis-plugin-loader 以 profile 目录（$DSH_HOME/profiles/web）为解析基准，从那里向上查找 node_modules。插件虽已注入 dsh 的 store 树，但 store 不在 profile 的 node_modules 链上，import 直接 ERR_MODULE_NOT_FOUND，启动即崩溃。preStart 把注入后的 @kihara777 scope 符号链接到 $DSH_HOME/node_modules 让 Node 可解析；realpath 回 store 树后，插件引用的 @deepseek-ai/* peer deps 仍在同树内可解析。实测 skills + nix-shell 插件加载成功。
 
 | 提交 | 说明 |
 |------|------|
@@ -1965,7 +1969,7 @@
 
 ## 2026-08-20T10:21:46+09:00
 
-**摘要**：fix(dsh): 生成行改用 insert 动词 — cordis.patch.yml 中裸 `- id:` 行只补丁已有条目，新增插件条目被 dsh 丢弃（stderr: patch: entry "nixkits-nix-shell" not found），8 个插件行全部未挂载（dump-config 验证）。插件包注入虽成功，但组合树中没有条目 → 工具 nix_shell 与 7 技能插件均未注册。修复：模块生成的 plugins.packages 行包裹在 `- insert:` 操作下（与 extraPatch 的 MCP 行同构）。验证：dump-config 零 stderr、8 行全部进入组合树。
+**摘要**：fix(dsh): 生成行改用 insert 动词 — cordis.patch.yml 中裸 `- id:` 行只补丁已有条目，新增插件条目被 dsh 丢弃，8 个插件行全部未挂载（dump-config 验证）。插件包注入虽成功，但组合树中没有条目 → 工具 nix_shell 与 7 技能插件均未注册。修复：模块生成的 plugins.packages 行包裹在 `- insert:` 操作下（与 extraPatch 的 MCP 行同构）。验证：dump-config 零 stderr、8 行全部进入组合树。
 
 | 提交 | 说明 |
 |------|------|
@@ -1973,7 +1977,7 @@
 
 ## 2026-08-20T09:45:59+09:00
 
-**摘要**：fix(dsh): 修复多插件注入失败 — GNU tar 解包结束后恢复归档中的目录模式（store 树为 0555），前一个插件创建的 scope 目录（@kihara777/）对下一个插件不可写，第二个插件起报 Cannot mkdir: Permission denied；单插件场景不触发，首次真实系统构建暴露。改为每次插件解包后立即 chmod -R u+w。验证：系统 toplevel 完整构建成功，dsh-nix-shell 与 7 技能全部注入。
+**摘要**：fix(dsh): 多插件注入失败 — GNU tar 解包结束后恢复归档中的目录模式（store 树为 0555），前一个插件创建的 scope 目录（@kihara777/）对下一个插件不可写，第二个插件起报 Cannot mkdir: Permission denied；单插件场景不触发，首次真实系统构建暴露。改为每次插件解包后立即 chmod -R u+w。验证：系统 toplevel 完整构建成功，dsh-nix-shell 与 7 技能全部注入。
 
 | 提交 | 说明 |
 |------|------|
@@ -1989,7 +1993,7 @@
 
 ## 2026-08-20T07:41:45+09:00
 
-**摘要**：fix(rcc-fix): 补丁重基适配 asusctl 6.4.0 — nixpkgs 前进后 asusctl 6.3.7 → 6.4.0，rcc-fix.patch 第 4 hunk 失效（系统构建失败）。上游重构了该区域：`if dev.is_old_laptop() { pow3r.retain(...) }` 替代原 push 块，else 分支的 PowerZones::None 过滤已吸收上游；补丁仅保留越界防护替换（`names[(*z) as usize]` → filter_map 边界检查 + warn）。其余 hunk 无需变更。验证：git apply --check 对 6.4.0 源码全 hunk 通过；以本机系统 nixpkgs 修订（0ae2bc1）构建 asusctl 成功（EXIT=0）。
+**摘要**：fix(rcc-fix): 补丁重基适配 asusctl 6.4.0 — nixpkgs 前进后 asusctl 6.3.7 → 6.4.0，rcc-fix.patch 第 4 hunk 失效（系统构建失败）。上游重构了该区域（`is_old_laptop`/`retain` 替代原 push 块，else 分支过滤已被上游吸收），补丁仅保留越界防护替换（`names[(*z) as usize]` → filter_map 边界检查 + warn）；其余 hunk 无需变更。验证：git apply --check 对 6.4.0 源码全 hunk 通过；以本机 nixpkgs 修订（0ae2bc1）构建 asusctl 成功（EXIT=0）。
 
 | 提交 | 说明 |
 |------|------|
@@ -1997,7 +2001,7 @@
 
 ## 2026-08-20T06:27:40+09:00
 
-**摘要**：feat(dsh-nix-shell): 外部 sudo 守护集成（0.2.0）— dsh 沙箱剥离 sudo setuid，代理无法提权。插件新增：初始化时探测守护套接字（config sudoSocketPath / 环境变量 NIXKITS_SUDO_SOCKET），存在即启用 sudo/justification 参数；sudo 请求整单（command/cwd/env/timeout）经 Unix 套接字路由至守护执行，justification 必填随结果回显。守护 = systemd 套接字激活的 root 执行器（nixkits-sudo@.service + nixkits-sudo-exec.js，单请求单连接 JSON 协议，随插件包发布）；访问控制边界 = 套接字文件归 dsh 服务用户所有且 0600（SocketUser/SocketMode）。模块新增 nixkits.dsh.sudo（enable/socketPath/package）自动生成 socket+service 并注入环境变量。验证：门控（无套接字不暴露参数/有套接字暴露）、路由往返、justification 校验、执行器直连协议全部通过；模块求值单元正确。
+**摘要**：feat(dsh-nix-shell): 外部 sudo 守护集成（0.2.0）— 插件探测守护套接字（config `sudoSocketPath` / 环境变量 `NIXKITS_SUDO_SOCKET`），存在即启用 `sudo`/`justification` 参数；`sudo: true` 请求整单经 Unix 套接字路由至守护执行，`justification` 必填回显。守护 = systemd 套接字激活的 root 执行器（nixkits-sudo@.service + nixkits-sudo-exec.js，单请求 JSON 协议）；访问控制边界 = 套接字文件 `0600`。模块新增 nixkits.dsh.sudo（enable/socketPath/package）生成 socket+service 并注入环境变量。验证：门控、路由往返通过。
 
 | 提交 | 说明 |
 |------|------|
@@ -2005,7 +2009,7 @@
 
 ## 2026-08-20T06:02:50+09:00
 
-**摘要**：refactor(skills): NixKits 技能重写为原生 DSH 技能插件 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits，零运行时依赖），7 个技能各为包内一个子路径插件条目，运行时经 ctx.skills.register 注册自身内容（runtime provider，rank 250，优先于文件系统来源），apply() 返回注册 disposer 随组合撤销；SKILL.md 保留在 skills/ 为内容单一来源、构建期嵌入，frontmatter 剥离并保留进 metadata（文档流水线自动发现契约不变）。模块 skills.enable 改为自动生成 7 条组合行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>），移除此前误实施的目录注入机制（nixkits-skills 包与 bundledSkillDir）。验证：7 插件 mock 注册全通过、子路径裸导入解析 + 注册实测通过（SUBPATH-OK/REGISTERED）。CI 新增 x86_64/aarch64 构建。
+**摘要**：refactor(skills): NixKits 技能重写为原生 DSH 技能插件 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits，零运行时依赖），7 个技能各为包内一个子路径插件条目，运行时经 ctx.skills.register 注册内容（runtime provider，rank 250）。SKILL.md 保留在 skills/ 为单一来源（文档流水线自动发现契约不变）。模块 skills.enable 自动生成 7 条组合行（skill-nixkits-<id> → dsh-skill-nixkits/<id>），取代原目录注入（nixkits-skills 包与 bundledSkillDir）。验证：7 插件 mock 注册、子路径导入均通过。CI 新增 x86_64/aarch64 构建。
 
 | 提交 | 说明 |
 |------|------|
@@ -2013,7 +2017,7 @@
 
 ## 2026-08-20T05:27:48+09:00
 
-**摘要**：feat(dsh): 内置 bash 工具 NixOS 修复 + 第三方插件包 + 部署级技能 — ① 模块为 dsh 服务注入完整 NixOS PATH（systemd 默认 PATH 无 bash，内置 bash 工具报 spawn bash ENOENT）；② 新增 dsh-nix-shell 包（@kihara777/dsh-nix-shell，NixOS 感知 shell 工具插件：PATH 解析失败回退 Nix store bash、注入 NixOS PATH、超时与落盘输出）与 nixkits-skills 包（技能目录 bundle）；③ 模块新增 plugins.packages（tar 解包注入 node_modules——symlink 被 Node realpath 回插件 store 路径导致 peer 解析断裂，故须实体解包——并自动生成组合行）与 skills.enable（skill-filesystem bundledSkillDir rank 600）；④ CI 新增 dsh-nix-shell x86_64/aarch64 构建。端到端验证：注入树内 IMPORT-OK（插件导出与依赖链解析正常）。
+**摘要**：feat(dsh): 内置 bash 工具 NixOS 修复 + 第三方插件包 + 部署级技能 — ① 模块为 dsh 服务注入完整 PATH（systemd 默认 PATH 无 bash，内置 bash 工具报 spawn bash ENOENT）；② 新增 dsh-nix-shell 包（@kihara777/dsh-nix-shell，NixOS 感知 shell 工具插件）与 nixkits-skills 包（技能目录 bundle）；③ 模块新增 plugins.packages（tar 解包注入 node_modules，并自动生成组合行）与 skills.enable（skill-filesystem bundledSkillDir rank 600）；④ CI 新增 dsh-nix-shell x86_64/aarch64 构建。端到端验证：注入树内 IMPORT-OK。
 
 | 提交 | 说明 |
 |------|------|
@@ -2030,7 +2034,7 @@
 
 ## 2026-08-19T19:57:03+09:00
 
-**摘要**：fix(codewhale-src): riscv64 交叉构建修复 — 四重问题链：① rquickjs-sys 0.12.2（crates.io 最新版）不提供 riscv64gc bindings（build.rs 非 bindgen 路径 include 目标文件），上游各 64 位小端平台 bindings 字节级一致，postPatch 将 x86_64 副本落入物化后的 vendor 目录；② ring 宿主侧（x86_64 build 依赖）构建时 cc-rs 从宿主 triple 回退到派生级 CC（交叉编译器）并追加 -m64，显式指向 buildPackages 工具链；③ postInstall 裸 cargo build 丢失 --target 而误用宿主工具链链接，镜像 cargoBuildHook 的目标三元组；④ 二进制以 -lgcc_s 动态链接，autoPatchelfHook 仅扫描 hostPlatform 依赖，显式加入交叉 gcc 的 libgcc 输出。本地以 CI 相同命令（pkgsCross.riscv64.callPackage）验证通过，Build codewhale (riscv64) 连续 6 次失败恢复。
+**摘要**：fix(codewhale-src): riscv64 交叉构建修复 — 四重问题链：① rquickjs-sys 0.12.2 不提供 riscv64gc bindings，postPatch 将 x86_64 bindings 落入 vendor 目录；② ring 宿主侧构建时 cc-rs 从宿主 triple 回退到交叉编译器并加 -m64，显式指向 buildPackages 工具链；③ postInstall 裸 cargo build 丢失 --target 而误用宿主工具链链接 — 改为与 cargoBuildHook 相同；④ 二进制以 -lgcc_s 动态链接，autoPatchelfHook 只扫 hostPlatform 依赖，显式加入交叉 gcc 的 libgcc。解 Build codewhale (riscv64) 连续 6 次失败。
 
 | 提交 | 说明 |
 |------|------|
@@ -2046,7 +2050,7 @@
 
 ## 2026-08-19T16:52:54+09:00
 
-**摘要**：fix(module): dsh WebSocket 反代改用 mod_proxy upgrade — NixOS lighttpd 模块按 allKnownModules 固定顺序生成 server.modules，mod_wstunnel 永远排在 mod_proxy 之后；proxy.server 匹配所有路径，mod_proxy 先接管 /api/events.* 的 WebSocket 升级请求返回 426 Upgrade Required，mod_wstunnel 因 r->handler_module 非空而跳过、从不生效。改用 lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"），移除 mod_wstunnel 配置。实测 8625 首页 200、/api/events.host|mux 握手 101（本地+局域网）。
+**摘要**：fix(module): dsh WebSocket 反代改用 mod_proxy upgrade — NixOS lighttpd 模块按 allKnownModules 固定顺序生成 server.modules，mod_wstunnel 排在 mod_proxy 之后，而 proxy.server 匹配所有路径：mod_proxy 先接管 /api/events.* 的升级请求返回 426，mod_wstunnel 因 r->handler_module 非空从不生效。改用 lighttpd 1.4.56+ mod_proxy 原生隧道（proxy.header = "upgrade" => "enable"），移除 mod_wstunnel 配置。实测 8625 首页 200、/api/events.host|mux 握手 101（本地+局域网）。
 
 | 提交 | 说明 |
 |------|------|
@@ -2114,7 +2118,7 @@
 
 ## 2026-08-18T17:30:00+09:00
 
-**摘要**：fix(module): dsh trustedHosts 选项 — 反代后 API 全 403。dsh 对 /api 请求校验 Host header（isTrustedApiRequest：Host 必须 loopback 或在信任列表，且浏览器 Origin 需同源）。经 lighttpd 反代后 Host 变为局域网域名/IP，所有 /api 调用返回 403 forbidden。新增 nixkits.dsh.trustedHosts（映射为 repeatable --trusted-host），系统配置 harukax.lan + 192.168.31.241 后 API 恢复。
+**摘要**：fix(module): dsh trustedHosts 选项 — 反代后 /api 全 403。dsh 校验 /api 请求的 Host header，lighttpd 反代使 Host 变为局域网域名/IP 而被拒。新增 nixkits.dsh.trustedHosts（映射为 repeatable --trusted-host），系统配置 harukax.lan + 192.168.31.241 后 API 恢复。
 
 | 提交 | 说明 |
 |------|------|
@@ -2122,7 +2126,7 @@
 
 ## 2026-08-18T16:20:05+09:00
 
-**摘要**：fix(dsh): patch 浏览器端 client bundle — crypto.randomUUID fallback。crypto.randomUUID() 在非安全上下文（HTTP 局域网 IP，即 lighttpd 反代）不可用，导致 webui 报 "crypto.randomUUID is not a function"。postInstall 替换 dsh-client-connection + dsh-client-ui-conversation 的 crypto.randomUUID 为 __dshUuid helper（fallback 到 crypto.getRandomValues，全上下文可用）。服务端 index.js 用 Node crypto，无需处理。
+**摘要**：fix(dsh): patch 浏览器端 client bundle — crypto.randomUUID fallback。crypto.randomUUID() 在非安全上下文（HTTP 局域网 IP，即 lighttpd 反代）不可用，webui 因此报错。postInstall 把 dsh-client-connection + dsh-client-ui-conversation 的 crypto.randomUUID 换成 __dshUuid helper（fallback 到 crypto.getRandomValues，全上下文可用）。
 
 | 提交 | 说明 |
 |------|------|
@@ -2139,7 +2143,7 @@
 
 ## 2026-08-18T14:38:26+09:00
 
-**摘要**：feat(module): dsh reverseProxy via lighttpd — dsh 拒绝非 loopback host（RCE 安全），通过 lighttpd `$SERVER["socket"]` 条件块在 0.0.0.0:8626 反代到 dsh loopback 8625（复用 SearXNG 的 lighttpd 实例，extraConfig 是 types.lines 可合并）。对外 8626 开放防火墙。
+**摘要**：feat(module): 新增 nixkits.dsh.reverseProxy（lighttpd）— dsh 拒绝非 loopback host（RCE 安全），故以 lighttpd `$SERVER["socket"]` 条件块把 0.0.0.0:8626 反代到 dsh loopback 8625（复用 SearXNG 的 lighttpd 实例，extraConfig 为 types.lines 可合并），并开放 8626 防火墙。
 
 | 提交 | 说明 |
 |------|------|
@@ -2147,7 +2151,12 @@
 
 ## 2026-08-18T10:29:46+09:00
 
-**摘要**：feat/fix(dsh): 部署 dsh 服务并配置 MCP + skills — ① 模块修复：dsh 系统用户 HOME=/var/empty（只读）导致 EPERM，改 /var/lib/dsh 可写 home + StateDirectory；② HMR 服务需 --expose-internals（NODE_OPTIONS 禁止、CLI 不识别），改 node --expose-internals 直接启动 bin.js；③ MCP 服务用 cordis.patch.yml 的 `insert:` 语法（非 id-targeted override）配置 SearXNG + Godot；④ skills 复制到 /var/lib/dsh/skills/（非 .agent-presets 子目录）；⑤ nixkits-skills 目录修正为 ~/.dsh/skills。
+**摘要**：feat/fix(dsh): 部署 dsh 服务并配置 MCP + skills。
+- 模块修复：dsh 系统用户 HOME=/var/empty 只读致 EPERM，改用可写 /var/lib/dsh + StateDirectory
+- HMR 服务需 --expose-internals，改以 node --expose-internals 直接启动 bin.js
+- MCP 服务（SearXNG + Godot）以 cordis.patch.yml 的 `insert:` 语法配置，非 id-targeted override
+- skills 复制到 /var/lib/dsh/skills/，非 .agent-presets 子目录
+- nixkits-skills 目录修正为 ~/.dsh/skills
 
 | 提交 | 说明 |
 |------|------|
@@ -2166,7 +2175,12 @@
 
 ## 2026-08-18T07:19:30+09:00
 
-**摘要**：审计修复 — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 版本更新；② comfyui-rocm 模块补回 services.comfyui assertion 并澄清 nixpkgs-compat 补丁目标；③ overlay codewhale 按架构回退源码构建（riscv64）；④ 文档版本号 + ruyi 链接 + codewhale-sudo 描述同步；⑤ write-maintenance-log 技能补表头 + 删 katalish 列。
+**摘要**：审计修复 —— 版本更新与模块/overlay/文档/技能修正。
+- codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 版本更新
+- comfyui-rocm 模块补回 services.comfyui assertion，并澄清 nixpkgs-compat 补丁目标
+- overlay codewhale 按架构回退源码构建（riscv64）
+- 文档版本号、ruyi 链接、codewhale-sudo 描述同步
+- write-maintenance-log 技能补表头、删 katalish 列
 
 | 提交 | 说明 |
 |------|------|
@@ -2197,7 +2211,7 @@
 
 ## 2026-08-15T08:31:32+09:00
 
-**摘要**：feat(dsh): 新增 deepseek-harness 0.1.0-rc.6 包 + 4 语言文档。DSH（DeepSeek Harness）— 万物皆插件。预构建 npm 包（@deepseek-ai/dsh，bin dsh → lib/bin.js），vendor package-lock.json（npm tarball 不含 lock），dontNpmBuild 跳过 build。同时 godot-ai 与 dsh 列入 README（4 语言）。
+**摘要**：deepseek-harness 0.1.0-rc.6 — 新包（@deepseek-ai/dsh，bin dsh → lib/bin.js）。预构建 npm 包，vendor package-lock.json（npm tarball 不含 lock），dontNpmBuild 跳过 build；4 语言文档 + README 列入 godot-ai 与 dsh。
 
 | 提交 | 说明 |
 |------|------|
@@ -2369,7 +2383,7 @@
 
 ## 2026-08-04T02:15:00+09:00
 
-**摘要**: fix(ruyi): 容忍 ruff lint 失败 — 第二条 ruff check（不带 --fix）在 nixpkgs ruff 更新后因 139 条上游违规阻塞构建。
+**摘要**：fix(ruyi): 容忍 ruff lint 失败 — 第二条 ruff check（不带 --fix）在 nixpkgs ruff 更新后因 139 条上游违规阻塞构建。
 
 | 提交 | 说明 |
 |------|------|

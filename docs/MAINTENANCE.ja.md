@@ -1374,7 +1374,7 @@
 | `9483c2c` | docs(dsh-api-balance): ピーク自動起動/解除と peakEnd セグメント（4 言語） |
 ## 2026-09-02T10:23:55+09:00
 
-**概要**：feat(dsh-api-balance): ピーク時の赤を用量ページ全体へ統一 + チャートのモデル色を区分可能に — ピーク時の赤表示を拡張：用量ページのコンテキスト進捗バーと明細カラーチップ、更新/ロードアニメーション（dshAbSpin に赤リングの dshAbSpinPeak クラス新設）、読み取りテキストを一括で赤色系へ統一し、既に赤い用量リング/チャートと一致；進捗バーの各セグメントは peakShade でインデックスごとに異なる赤トーンを取り、複数セグメントが区別可能；チャートはピーク時も PEAK_PALETTE を維持——赤系だが各モデルは異なる赤トーン（凡例ドットも同期）で、同一色への盲目的置換ではなく赤かつ区分可能
+**概要**：feat(dsh-api-balance): ピーク時の赤を用量ページ全体へ統一 + チャートのモデル色は区分可能 — ピーク時の赤は用量ページのコンテキスト進捗バーと明細チップ、更新/ロードアニメーション（dshAbSpin に赤リングの dshAbSpinPeak クラス新設）、読み取りテキストへ拡大し、既に赤い用量リング/チャートと一致；進捗バーの各セグメントは peakShade でインデックスごとに異なる赤トーンを取り区分可能；チャートはピーク時も PEAK_PALETTE を維持——赤系で各モデルは異なる赤トーン（凡例ドット同期）
 
 | コミット | 説明 |
 |------|------|
@@ -1390,7 +1390,7 @@
 | `e529d48` | docs(dsh-api-balance): 狭幅動作を内容適応+パネルスクロールへ回帰（4 言語） |
 ## 2026-09-02T05:56:57+09:00
 
-**概要**：fix(dsh-api-balance): 縦画面オーバーフロー時に設定ダイアログのページサイズロジックを直接採用 — 内容幅が利用可能スペースを超えた（縦画面オーバーフロー）場合、パネル幅を設定ダイアログと同じページサイズロジック（min(520px, 94vw)）へ直接切替し、コンテンツはパネル幅に適応；ごく稀なハードオーバーフロー内容のみパネルの横スクロールにフォールバック；ページャーも同期——オーバーフロー時はページ幅をパネル利用可能幅に変更（コンテンツは折返し適応）、ジェスチャーはパネルのネイティブスクロールへ返還しページングはインジケータードット経由、内容が収まればドラッグ/スワイプページングが自動復帰
+**概要**：fix(dsh-api-balance): 縦画面オーバーフロー時は設定ダイアログのページサイズロジックを採用 — 内容幅が利用可能スペースを超えた場合、パネル幅を設定ダイアログと同じページサイズ（min(520px, 94vw)）へ切替え内容が適応；稀なハードオーバーフロー内容のみパネルの横スクロールにフォールバック；ページャーも同期——ページ幅をパネル利用可能幅に変更（内容は折返し）、ジェスチャーはパネルのネイティブスクロールへ返還、ページングはインジケータードット経由、収まればドラッグ/スワイプが自動復帰
 
 | コミット | 説明 |
 |------|------|
@@ -1398,7 +1398,7 @@
 | `a8f8cda` | docs(dsh-api-balance): 縦画面オーバーフローのサイズロジック説明（4 言語） |
 ## 2026-09-02T05:45:48+09:00
 
-**概要**：fix(dsh-api-balance): 用量パネルをページレベルの fixed portal 化（モバイル画面外の根治） — パネルを「会話ツリー内の absolute 配置」から document.body レベルの fixed portal（設定ダイアログと同一アーキテクチャ）へ変更し、会話領域の overflow クリップや座標空間の影響を受けなくした；位置はリングアンカーのビューポート座標から換算（resize/scroll で再計算、useLayoutEffect 測定でちらつき回避）；二重クランプ：幅上限 = min(アンカー空間, ビューポート − 24px)、高さ上限 = アンカー上方の利用可能スペース（横画面では自動縮小しトップバーを回避）——あらゆる画面サイズで画面外に出ない；パネル外クリックの閉鎖も更新（パネルがリングの祖先チェーンから離脱）、z-index 900 はチャージ/ログイン/設定オーバーレイより下
+**概要**：fix(dsh-api-balance): 用量パネルをページレベルの fixed portal 化（モバイル画面外の根治） — パネルを「会話ツリー内の absolute 配置」から document.body レベルの fixed portal（設定ダイアログと同一アーキテクチャ）へ変更し、会話領域の overflow クリップや座標空間の影響を受けなくした；位置はリングアンカーのビューポート座標から換算（resize/scroll で再計算、useLayoutEffect 測定でちらつき回避）；二重クランプ：幅上限 = min(アンカー空間, ビューポート − 24px)、高さ上限 = アンカー上方の利用可能スペース（横画面では自動縮小しトップバーを回避）——あらゆる画面サイズで画面外に出ない；パネル外クリックの閉鎖も更新、z-index 900 はチャージ/ログイン/設定オーバーレイより下
 
 | コミット | 説明 |
 |------|------|
@@ -1406,7 +1406,7 @@
 | `7145e5f` | docs(dsh-api-balance): ページレベルオーバーレイアーキテクチャ説明（4 言語） |
 ## 2026-09-02T05:29:47+09:00
 
-**概要**：fix(dsh-api-balance): スマホ縦画面の狭幅で横ジェスチャーをパネルスクロールへ返還 — 根本原因：ページャーの touch-action: pan-y がタッチ環境でブラウザレベルの横ジェスチャーを禁止し、パネルのネイティブ横スクロールがページャー全体に飲み込まれ——内容がパネル幅を超えると「はみ出して横スクロール不能」に見えていた；修正：ページャーが内容幅とパネル利用可能幅（fitWidth prop）を比較し、超過時は touch-action を auto に切替（横ジェスチャーをパネルのネイティブスクロールへ返還）してドラッグページングを停止（ジェスチャーはパネルスクロールのみ）、ページ切替は上部インジケータードット経由で維持；収まる場合は pan-y + ドラッグ/スワイプページングを維持
+**概要**：fix(dsh-api-balance): スマホ縦画面の狭幅で横ジェスチャーをパネルスクロールへ返還 — 根本原因：ページャーの touch-action: pan-y がタッチ環境でブラウザレベルの横ジェスチャーを禁止し、パネルのネイティブ横スクロールが飲み込まれ、内容がパネル幅を超えると「はみ出して横スクロール不能」に見えていた；修正：ページャーが内容幅とパネル利用可能幅（fitWidth prop）を比較し、超過時は touch-action を auto に切替（横ジェスチャーをパネルのネイティブスクロールへ返還）してドラッグページングを停止、ページ切替は上部インジケータードット経由で維持；収まる場合は pan-y + ドラッグ/スワイプページングを維持
 
 | コミット | 説明 |
 |------|------|
@@ -1437,7 +1437,7 @@
 | `2f37193` | docs(dsh-api-balance): モバイルのパネル高/幅適応説明（4 言語） |
 ## 2026-09-02T04:48:40+09:00
 
-**概要**：feat(dsh-api-balance): 消費明細エリアの水平ページめくり（インジケータードット + スワイプ） — 当日/当月/30 日間とモデル別内訳/チャートを同一エリアの 2 ページ水平ページャーへ統合（1 ページ目：消費ウィンドウ行、2 ページ目：モデル別 + 日別/月別チャート）；エリア上部にスマホホーム画面風のページインジケータードット（タップ可、アクティブドットはカプセル状に伸長）、横ドラッグ/スワイプでのページ切替に対応（ポインターキャプチャは閾値超過後にのみ有効化し、ページ内ボタンのクリックを奪わない；touch-action: pan-y でパネルの縦スクロールを維持）；エリアの高さは内容に応じて動的に調整され自身ではスクロールせず、全内容は用量パネル自身の縦スクロールバーに依存
+**概要**：feat(dsh-api-balance): 消費明細エリアの水平ページめくり（インジケータードット + スワイプ） — 当日/当月/30 日間とモデル別内訳/チャートを同一エリアの 2 ページ水平ページャーへ統合（1 ページ目：消費ウィンドウ行、2 ページ目：モデル別 + 日別/月別チャート）；エリア上部にスマホホーム画面風のインジケータードット（タップ可、アクティブはカプセル状に伸長）、横ドラッグ/スワイプのページ切替に対応（ポインターキャプチャは閾値超過後のみ有効化しページ内ボタンのクリックを奪わない；touch-action: pan-y でパネルの縦スクロールを維持）；エリアの高さは内容に応じて変化し自身ではスクロールせず、全内容は用量パネルの縦スクロールに依存
 
 | コミット | 説明 |
 |------|------|
@@ -1461,7 +1461,7 @@
 | `b8cd0b7` | docs(dsh-api-balance): 界面設定既定有効の説明（4 言語）+ AGENTS Enter キー項目 |
 ## 2026-09-02T02:49:52+09:00
 
-**概要**：feat(dsh-api-balance): パネル全幅回帰修正 + ピーク課金マーカー + モバイルキーボード抑制 — パネル幅をコンテンツ scrollWidth の一度きり測定で具体 px 化し、「チャート px → パネル max-content → オブザーバー → チャート px」の正フィードバック（パネルが上限まで広がり全幅化）を解消、上限は min(アンカー右端 − サイドバー, 640) に引締め、超過時はパネル内横スクロール；DeepSeek ピーク時間帯（現行公式規則：月〜金 北京時間 09:00–12:00・14:00–18:00、それ以外は週末終日を含めオフピーク）は用量リングとチャートを赤色表示 + 「ピーク課金」バッジ（パネルヘッダーとチャートタイトル）、挨拶音声後にピーク提示を追加（パック `peak` セグメント / TTS フォールバック）、作成器に `peak` セグメントを追加；モバイルではサイドバーのセッション切替でソフトキーボードが自動表示されない（focusin キャプチャで非タップの入力欄フォーカスを遮断、既定有効、設定 → 界面で無効化可）
+**概要**：feat(dsh-api-balance): パネル全幅回帰修正 + ピーク課金マーカー + モバイルキーボード抑制 — パネル幅をコンテンツ scrollWidth の一度きり測定で具体 px 化し、「チャート px → パネル max-content → オブザーバー → チャート px」の正フィードバックを解消、上限は min(アンカー右端 − サイドバー, 640) に引締め、超過時はパネル内横スクロール；DeepSeek ピーク時間帯（月〜金 北京時間 09:00–12:00・14:00–18:00、それ以外は週末終日を含めオフピーク）は用量リングとチャートを赤色表示 + 「ピーク課金」バッジ（パネルヘッダーとチャートタイトル）、挨拶音声後にピーク提示を追加（パック `peak` セグメント / TTS フォールバック）、作成器に `peak` セグメントを追加；モバイルではサイドバーのセッション切替でソフトキーボードが自動表示されない（focusin キャプチャで非タップの入力欄フォーカスを遮断、既定有効、設定 → 界面で無効化可）
 
 | コミット | 説明 |
 |------|------|
@@ -1492,7 +1492,7 @@
 | `9dc7a5d` | feat(dsh-api-balance): 設定ダイアログ（界面/音声）+ 統計バー横スクロール + Enter キー交換 |
 ## 2026-09-01T11:34:40+09:00
 
-**概要**: feat(dsh-api-balance): 動的幅 + アカウント情報の一行化 + 消費指標サブロー — パネル幅を max-content の動的適応に変更（最小 264px、上限 = アンカー右端 − サイドバー）し、固定幅による本文の折返しを解消。API キー / アカウント状態 / 通貨別残高を「アカウント情報」の 1 行に統合（· 区切り）、チャージボタンはタイトル右側へ移動。当日 / 当月 / 30 日とモデル別の消費本文を指標サブロー（金額 / 入力 / キャッシュヒット / 出力）に分割し、横方向の幅をさらに節約。
+**概要**：feat(dsh-api-balance): 動的幅 + アカウント情報の一行化 + 消費指標サブロー — パネル幅を max-content の動的適応に変更（最小 264px、上限 = アンカー右端 − サイドバー）し、固定幅による本文の折返しを解消。API キー / アカウント状態 / 通貨別残高を「アカウント情報」の 1 行に統合（· 区切り）、チャージボタンはタイトル右側へ移動。当日 / 当月 / 30 日とモデル別の消費本文を指標サブロー（金額 / 入力 / キャッシュヒット / 出力）に分割し、横方向の幅をさらに節約。
 
 | コミット | 説明 |
 |------|------|
@@ -1500,7 +1500,7 @@
 
 ## 2026-09-01T11:20:09+09:00
 
-**概要**: feat(dsh-api-balance): パネル幅の縮小 + タイトル/本文の二行レイアウト — パネル幅を 264px に統一（元の使用量リングと一致）、狭幅画面でコンテンツが溢れる場合のみ横スクロールを表示。各行を「タイトル（10px 三次色）/ 本文（12px 折返し可）」の二行レイアウトに変更（トークン取得元の階層を再利用、縦方向の余白が豊富なためより美観）。チャート幅の下限を 220 に下げパネルに追従。
+**概要**：feat(dsh-api-balance): パネル幅の縮小 + タイトル/本文の二行レイアウト — パネル幅を 264px に統一（元の使用量リングと一致）、狭幅画面でコンテンツが溢れる場合のみ横スクロールを表示。各行を「タイトル（10px 三次色）/ 本文（12px 折返し可）」の二行レイアウトに変更（トークン取得元の階層を再利用、縦方向の余白が豊富なためより美観）。チャート幅の下限を 220 に下げパネルに追従。
 
 | コミット | 説明 |
 |------|------|
@@ -1508,7 +1508,7 @@
 
 ## 2026-09-01T10:45:06+09:00
 
-**概要**: feat(dsh-api-balance): パネル幅のコンテンツベース化 + 左サイドバー回避 — 残高ビューの幅を max-content に変更（上部テキストを 1 行に維持）；画面内上限を「アンカー右端 − 左サイドバー幅 − マージン」に変更（サイドバー幅は幾何学的ヒットテストで測定し、ビルドのハッシュクラス名を回避。ウィンドウリサイズ時に再計算）し、左ツールバーに覆われないようにする。はみ出したコンテンツは引き続き横スクロール可能。
+**概要**：feat(dsh-api-balance): パネル幅のコンテンツベース化 + 左サイドバー回避 — 残高ビューの幅を max-content に変更（上部テキストを 1 行に維持）；画面内上限を「アンカー右端 − 左サイドバー幅 − マージン」に変更（サイドバー幅は幾何学的ヒットテストで測定し、ビルドのハッシュクラス名を回避。ウィンドウリサイズ時に再計算）し、左ツールバーに覆われないようにする。はみ出したコンテンツは引き続き横スクロール可能。
 
 | コミット | 説明 |
 |------|------|
@@ -1516,7 +1516,7 @@
 
 ## 2026-09-01T10:33:16+09:00
 
-**概要**: feat(dsh-api-balance): パネル幅のレスポンシブ化 — 画面を出ずに自動拡張、狭幅では横スクロール — 残高ビューの幅を固定 340px から min(560px, calc(100vw - 24px)) に変更：デスクトップでは 560px まで自動拡張、狭幅画面ではビューポート内に収縮。コンテンツが画面を超える場合（縦持ちスマートフォンなど）はパネルを横スクロール可能に（overflow-x + overscroll-behavior-x 収束）。チャート幅は ResizeObserver でパネル幅に追従。
+**概要**：feat(dsh-api-balance): パネル幅のレスポンシブ化 — 画面を出ずに自動拡張、狭幅では横スクロール — 残高ビューの幅を固定 340px から min(560px, calc(100vw - 24px)) に変更：デスクトップでは 560px まで自動拡張、狭幅画面ではビューポート内に収縮。コンテンツが画面を超える場合（縦持ちスマートフォンなど）はパネルを横スクロール可能に（overflow-x + overscroll-behavior-x 収束）。チャート幅は ResizeObserver でパネル幅に追従。
 
 | コミット | 説明 |
 |------|------|
@@ -1524,7 +1524,7 @@
 
 ## 2026-09-01T10:27:06+09:00
 
-**概要**: feat(dsh-api-balance): 音声試聴 — ライブラリのリストでパックを展開し、対応する全音声を 1 つずつ試聴 — packs ビュー下部の独立テスト音声ボタンを削除；各行に展開トグル（▸/▾）を追加し、展開すると全対応音声（セグメント + 挨拶）を一覧して ▶ ワンクリックで試聴できる。アクティブなパックに限らず任意のインポート済みパックを試聴可能。
+**概要**：feat(dsh-api-balance): 音声試聴 — ライブラリのリストでパックを展開し、対応する全音声を 1 つずつ試聴 — packs ビュー下部の独立テスト音声ボタンを削除；各行に展開トグル（▸/▾）を追加し、展開すると全対応音声（セグメント + 挨拶）を一覧して ▶ ワンクリックで試聴できる。アクティブなパックに限らず任意のインポート済みパックを試聴可能。
 
 | コミット | 説明 |
 |------|------|
@@ -1532,7 +1532,7 @@
 
 ## 2026-09-01T10:20:14+09:00
 
-**概要**: fix/feat(dsh-api-balance): 「入力」とキャッシュヒットを分離して公式基準に一致 + 挨拶リスト編集と TTS に揃えたサンプルテキスト — 「当日入力 200M」の水増しを調査：公式 API のトークンバケットには PROMPT_CACHE_HIT_TOKEN（当日 228M と大半を占める）が含まれ、従来はキャッシュヒットを「入力」に合算していた。公式使用量ページの分項基準に一致させ（入力 = キャッシュ未ヒットのみ、キャッシュヒットは別掲）、ウィンドウ行 / モデル別行 / チャート切替放送を分離し cacheHitLabel セグメントを追加。作成器に挨拶リスト編集（スロット追加 / 削除、1 件ずつ録音 / インポート / 試聴 / 削除、manifest.greetings にパッケージ）を追加。セグメントキーを today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix に再構成し、サンプルテキストはデフォルト TTS のフォールバック文案と一字一句一致。チャート切替放送は全データ（入力 / キャッシュヒット / 出力 / 金額通貨）を網羅。
+**概要**：fix/feat(dsh-api-balance): 「入力」とキャッシュヒットを分離し公式使用量ページの基準に一致 + 挨拶リスト編集と TTS に揃えたサンプルテキスト — 公式 API のトークン区分は `PROMPT_CACHE_HIT_TOKEN`（当日 228M）を含み、従来これを「入力」に合算していたため「当日入力 200M」が水増しされていた。入力をキャッシュ未ヒット分のみ、キャッシュヒットは別掲とし、ウィンドウ行 / モデル別行 / チャート切替放送も同様に分離。セグメントキーを再構成し `cacheHitLabel` を追加、サンプルテキストは既定 TTS のフォールバック文案と一字一句一致。作成器に挨拶リスト編集（スロットの追加 / 削除、1 件ずつの録音 / インポート / 試聴 / 削除、`manifest.greetings` へ梱包）を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -1540,7 +1540,7 @@
 
 ## 2026-09-01T09:35:56+09:00
 
-**概要**: refactor(dsh-api-balance): 放送ボタンを削除し、チャート切替ボタンで対応ビューを読み上げ — 「🔊 使用量を読み上げ」ボタンとドロップダウンメニュー（メニュー位置・方向フォールバック機構を含む）を削除；使用量チャートの「日別 / 月別」切替ボタンのクリック時に対応ビューの音声使用量を放送（パックプレフィックス + TTS 数字）；テスト音声（低使用量 / 残高不足）を「パック管理」ビューへ移動；音声設定ボタンは独立行として維持。
+**概要**：refactor(dsh-api-balance): 放送ボタンを削除し、チャート切替ボタンで対応ビューを読み上げ — 「🔊 使用量を読み上げ」ボタンとドロップダウンメニュー（メニュー位置・方向フォールバック機構を含む）を削除；使用量チャートの「日別 / 月別」切替ボタンのクリック時に対応ビューの音声使用量を放送（パックプレフィックス + TTS 数字）；テスト音声（低使用量 / 残高不足）を「パック管理」ビューへ移動；音声設定ボタンは独立行として維持。
 
 | コミット | 説明 |
 |------|------|
@@ -1548,7 +1548,7 @@
 
 ## 2026-09-01T09:28:55+09:00
 
-**概要**: fix(dsh-api-balance): 手動の「データ更新」ボタンでもランダム挨拶音声を再生 — 挨拶再生を playRandomGreeting に抽出して共用：ページ更新（ページごとに 1 回）と手動更新ボタンのクリック（毎回）の両方でトリガーし、音声放送スイッチで一律にゲート。設定ダイアログの説明文も更新。
+**概要**：fix(dsh-api-balance): 手動の「データ更新」ボタンでもランダム挨拶音声を再生 — 挨拶再生を playRandomGreeting に抽出して共用：ページ更新（ページごとに 1 回）と手動更新ボタンのクリック（毎回）の両方でトリガーし、音声放送スイッチで一律にゲート。設定ダイアログの説明文も更新。
 
 | コミット | 説明 |
 |------|------|
@@ -1556,7 +1556,7 @@
 
 ## 2026-09-01T09:24:11+09:00
 
-**概要**: feat(dsh-api-balance): ページ更新時のランダム挨拶音声 — 音声放送が有効な場合、ページ更新のたびにランダムな挨拶/着地音を再生（ページごとに 1 回）：音声パックのマニフェストに任意の `greetings` 配列（0–16 個の音声ファイル；ホストが検証・保存し `/audio/<id>/greetN` で配信、GET リストは挨拶 URL を返す）を追加。挨拶音声がない場合は TTS 挨拶プール（zh 5 件 / en 5 件）からランダムに再生。設定ダイアログの自動放送スイッチ下に説明文を追加。
+**概要**：feat(dsh-api-balance): ページ更新時のランダム挨拶音声 — 音声放送が有効な場合、ページ更新のたびにランダムな挨拶/着地音を再生（ページごとに 1 回）：音声パックのマニフェストに任意の `greetings` 配列（0–16 個の音声ファイル；ホストが検証・保存し `/audio/<id>/greetN` で配信、GET リストは挨拶 URL を返す）を追加。挨拶音声がない場合は TTS 挨拶プール（zh 5 件 / en 5 件）からランダムに再生。設定ダイアログの自動放送スイッチ下に説明文を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -1564,7 +1564,7 @@
 
 ## 2026-09-01T09:10:18+09:00
 
-**概要**: feat(dsh-api-balance): 音声パックライブラリ管理 + 作成器サブメニュー + 録音可視化フローティングウィンドウ — ホストをライブラリ化（packs/<id>/ 複数保存 + state.json のアクティブ記録；activate 切替ルート、DELETE ?ids= 複数選択削除（アクティブ削除時は残りへ自動切替）、音声は /audio/<id>/<key> で配信）；設定ダイアログはインポート + 「パック管理」ボタン 1 つのみとし、サブメニューに packs ビュー（スクロール可能なリスト：行クリックで切替、チェックボックスで複数選択削除、作成器への入口）と creator ビュー（言語選択 zh-CN/en/ja——サンプルテキストが追従し言語をまたいだ録音が可能、マニフェスト lang にパック言語を記録；セグメントごとの録音/インポート/試聴/削除；コンパイルダウンロード/コンパイル適用）を搭載；録音中は右下に可視化フローティングウィンドウ（AudioContext+Analyser のキャンバスレベルメーター、経過時間、サンプルテキスト、停止保存/破棄）を表示；インポート後のリストにはパック名と言語を表示；インポート済みパックの初回編集上書き警告は維持。
+**概要**：feat(dsh-api-balance): 音声パックライブラリ管理 + 作成器サブメニュー + 録音可視化フローティングウィンドウ — ホストをライブラリ化（`packs/<id>/` の複数保存 + `state.json` のアクティブ記録；activate 切替ルート、DELETE ?ids= の複数選択削除（アクティブ削除時は残りへ自動切替）、音声は `/audio/<id>/<key>` で配信）；設定ページはインポート + 「パック管理」ボタン 1 つのみとし、サブメニューに packs ビュー（スクロール可能なリスト：行クリックで切替、チェックボックスで複数選択削除、作成器への入口）と creator ビュー（言語選択 zh-CN/en/ja でサンプルテキストが追従し言語をまたいだ録音が可能、マニフェスト lang にパック言語を記録；セグメントごとの録音 / インポート / 試聴 / 削除；コンパイルダウンロード / コンパイル適用）を搭載；録音中は右下に可視化フローティングウィンドウ（レベルメーター、経過時間、サンプルテキスト、保存 / 破棄）を表示；インポート済みパックの初回編集上書き警告は維持。
 
 | コミット | 説明 |
 |------|------|
@@ -1572,7 +1572,7 @@
 
 ## 2026-09-01T08:41:48+09:00
 
-**概要**: feat(dsh-api-balance): 音声パック zip 化 + 録音/インポート作成器 + 編集保護 — 音声パックを zip アーカイブ（manifest.json + audio/ ファイル）に変更。ホストは純 JS で zip を解析（STORE/DEFLATE、DecompressionStream inflate）し `$DSH_HOME/api-balance-voicepack/` へ展開、prefix ルートで音声を URL 配信し全デバイス共有。設定ダイアログの作成器はセグメントごとのブラウザ録音（MediaRecorder）またはローカル音声ファイルのインポートに対応し、「パッケージ & ダウンロード」で共有可能な zip を生成、「コンパイル & 適用」でそのまま本機へ適用（現在のパックを上書き）。パックインポート済みの場合、初回編集（録音/インポート/削除/コンパイル）で上書き警告を表示しセッション内 1 回確認。放送セグメントは URL / インライン両キャリア対応、四言語文書に音声パック形式ガイド（zip 構造 / manifest / セグメント表 / 録音と共有フロー）を追加。
+**概要**：feat(dsh-api-balance): 音声パック zip 化 + 録音/インポート作成器 + 編集保護 — 音声パックを zip アーカイブ（`manifest.json` + `audio/` ファイル）に変更。ホストは純 JS で zip を解析し `$DSH_HOME/api-balance-voicepack/` へ展開、prefix ルートで音声を配信し全デバイスで共有。設定ダイアログの作成器はセグメントごとのブラウザ録音（MediaRecorder）またはローカル音声ファイルのインポートに対応し、「パッケージ & ダウンロード」で共有可能な zip を生成、「コンパイル & 適用」でそのまま本機へ適用。パックインポート済みの初回編集では上書き警告を表示しセッション内 1 回確認。放送セグメントは URL / インライン両キャリア対応、四言語文書に音声パック形式ガイド（zip 構造 / manifest / セグメント表 / 録音と共有フロー）を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -1580,7 +1580,7 @@
 
 ## 2026-09-01T02:36:15+09:00
 
-**概要**: feat(dsh-api-balance): 音声放送の言語と音色が DSH 界面言語に追従 — 放送テキストは従来 t() で界面言語に追従していたが、発声の lang と音色は zh-CN 固定だった。LocaleFace スナップショット（useSyncExternalStore で locale サービスの subscribe/getSnapshot を購読）から現在の言語コードを取得（zh → zh-CN、他はそのまま透過）、音色は言語プレフィックスで一致させ、組み立て放送テキストの区切り文字も言語に応じて切替（中文は全角、他は半角）。locale サービス不在時は zh にフォールバック。
+**概要**：feat(dsh-api-balance): 音声放送の言語と音色が DSH 界面言語に追従 — 放送テキストは従来 t() で界面言語に追従していたが、発声の lang と音色は zh-CN 固定だった。LocaleFace スナップショット（useSyncExternalStore で locale サービスの subscribe/getSnapshot を購読）から現在の言語コードを取得（zh → zh-CN、他はそのまま透過）、音色は言語プレフィックスで一致させ、組み立て放送テキストの区切り文字も言語に応じて切替（中文は全角、他は半角）。locale サービス不在時は zh にフォールバック。
 
 | コミット | 説明 |
 |------|------|
@@ -1588,7 +1588,7 @@
 
 ## 2026-09-01T01:51:10+09:00
 
-**概要**: fix(dsh-api-balance): 音声放送メニューを下から上への展開に変更 — メニューはデフォルトでボタン上辺に接して上向きに展開し（translateY(-100%)）、上方の余白不足時（ビューポート上端から 8px 未満）は自動的に下向き展開へフォールバックする
+**概要**：fix(dsh-api-balance): 音声放送メニューを下から上への展開に変更 — メニューはデフォルトでボタン上辺に接して上向きに展開し（translateY(-100%)）、上方の余白不足時（ビューポート上端から 8px 未満）は自動的に下向き展開へフォールバックする
 
 | コミット | 説明 |
 |------|------|
@@ -1597,7 +1597,7 @@
 
 ## 2026-09-01T01:25:25+09:00
 
-**概要**: feat(dsh-api-balance): 未ログインプロンプト + LevelDB 精確解析 + 音声放送メニュー — ブラウザスキャンがヒットしない場合に「ログインへ」プロンプトを自動表示（新タブでログインページを開き、ポーリングのクイックスキャンでトークンを自動取得）、手動入力はプロンプト内の二級オプションに降格。接続後はグレー表示の「✓ ログイン済み」ボタンを表示し、手動更新のたびにログイン状態を自動クイックスキャン。純 JS の LevelDB テーブルパーサーを新設（footer → index → データブロック → snappy 解凍 → エントリ走査；拡張リテラル長を varint ではなく単バイト+1 と修正）で userToken を精確抽出——クイックスキャン 949ms でヒット（従来はフルスキャン 5.3s / クイックスキャン失敗）。音声放送は独立行 + ドロップダウン（現在の使用量 / 残高 / テスト警告音声）、メニューを portal 固定位置へ変更してスクロール切抜きを修正し音声エンジンを予熱。トークン取得元は二行表示に変更。
+**概要**：feat(dsh-api-balance): 未ログインプロンプト + LevelDB 精確解析 + 音声放送メニュー — ブラウザスキャン未命中時は「ログインへ」プロンプトを自動表示（新タブでログインしポーリングのクイックスキャンで自動取得）、手動入力はプロンプト内の二級オプションに降格；接続後はグレー表示の「✓ ログイン済み」を表示。純 JS の LevelDB テーブルパーサーを新設し userToken を精確抽出——クイックスキャン 949ms で命中。音声放送は独立行 + ドロップダウン（現在の使用量 / 残高 / テスト警告音声）、メニューを portal 固定位置へ変更してスクロール切抜きを修正し音声エンジンを予熱；トークン取得元は二行表示に変更。検証：LevelDB 解析は実測で命中、クイックスキャンは失敗から 949ms 命中へ。
 
 | コミット | 説明 |
 |------|------|
@@ -1606,7 +1606,7 @@
 
 ## 2026-08-31T23:55:52+09:00
 
-**概要**: docs(dsh): api-balance プラグイン節の四言語補完 — pcn 版 dsh.md にプラグイン節を追加（本機ブラウザ自動スキャン / 使用量チャート / config オプション）、四言語 README のプラグイン表の説明を「ブラウザログイン状態からの自動スキャン取得」の意味に同期
+**概要**：docs(dsh): api-balance プラグイン節の四言語補完 — pcn 版 dsh.md にプラグイン節を追加（本機ブラウザ自動スキャン / 使用量チャート / config オプション）、四言語 README のプラグイン表の説明を「ブラウザログイン状態からの自動スキャン取得」の意味に同期
 
 | コミット | 説明 |
 |------|------|
@@ -1614,7 +1614,7 @@
 
 ## 2026-08-31T23:50:04+09:00
 
-**概要**: feat(dsh-api-balance): ローカルブラウザ自動スキャンで platform userToken を取得 — ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の Local Storage LevelDB を直接読み、base64 候補（55–85 文字）を抽出して GET /api/v0/users/get_user_summary で逐一検証し最初の一致を保存。ローカルブラウザで一度プラットフォームにログインしていれば手動操作なしで使用量トークンを取得できる。6 時間節流 + トークン失効（40003/401）時の即時再スキャン + パネルの「本機ブラウザを再スキャン」ボタン（RPC args.rescanBrowsers）、接続後はトークン取得元バッジ（browser / manual）を表示。実測：ローカル Edge leveldb の 31 候補から実トークンを自動命中し、デプロイ後にブラウザ起因のクエリで自動再取得。四言語文書同期。
+**概要**：feat(dsh-api-balance): ローカルブラウザ自動スキャンで platform userToken を取得 — ホストがローカルの Chromium 系ブラウザ（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全プロファイル）の Local Storage LevelDB を直接読み、base64 候補（55–85 文字）を抽出して GET /api/v0/users/get_user_summary で検証後に保存。ローカルブラウザで一度ログインしていれば手動貼付なしで使用量トークンを取得できる。6 時間節流 + トークン失効（40003/401）時の即時再スキャン + パネルの「本機ブラウザを再スキャン」ボタン（RPC args.rescanBrowsers）、接続後はトークン取得元バッジ（browser / manual）を表示。検証：ローカル Edge leveldb の 31 候補から実トークンを自動命中。
 
 | コミット | 説明 |
 |------|------|
@@ -1622,7 +1622,7 @@
 
 ## 2026-08-31T11:50:02+09:00
 
-**概要**: docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 三則（vendored lock と npmDepsHash の一致 / 未公開 devDependencies を postPatch の純 sed で削除し lock も同源生成 / ruyi 式多チャネル薄ラッパー）、初回起動監査前の git fetch、本機デプロイ節新設（path-input 再ロック、nixos apply コマンド、--no-link 成果物回収）
+**概要**：docs(AGENTS): dsh-alpha セッション経験の汎化 — buildNpmPackage 三則（vendored lock と npmDepsHash の一致 / 未公開 devDependencies を postPatch の純 sed で削除し lock も同源生成 / ruyi 式多チャネル薄ラッパー）、初回起動監査前の git fetch、本機デプロイ節新設（path-input 再ロック、nixos apply コマンド、--no-link 成果物回収）
 
 | コミット | 説明 |
 |------|------|
@@ -1631,7 +1631,7 @@
 
 ## 2026-08-31T11:31:42+09:00
 
-**概要**: dsh-alpha 導入の障害復旧 — alpha のリバースプロキシ Host セマンティクス修正（web UI 入口は Host authority の session cookie で認証、Host 書き換えが恒久 401 を引き起こしていた）、dsh-api-balance の shared RPC interceptor 衝突修正（`/api` は typert-gateway が独占、正確な fetch route に切替えて RPC envelope を自前実装）、dsh-nixos-shell の dsh-tools チャネル整合；新規モジュールオプション launchUrlFile（局域网起動 URL 捕捉）と reverseProxy.autoAuth（mod_magnet 免認証トークン注入 — 入口認証を明示的に無効化、信頼できる局域网のみ）；四言語文書に局域网アクセス節を追加。
+**概要**：dsh-alpha 導入の障害復旧 — alpha のリバースプロキシ Host セマンティクス修正（web UI 入口は Host authority の session cookie で認証、Host 書き換えが恒久 401 を引き起こしていた）、dsh-api-balance の shared RPC interceptor 衝突修正（`/api` は typert-gateway が独占、正確な fetch route に切替えて RPC envelope を自前実装）、dsh-nixos-shell の dsh-tools チャネル整合；新規モジュールオプション launchUrlFile（LAN 起動 URL 捕捉）と reverseProxy.autoAuth（mod_magnet 免認証トークン注入、信頼できる LAN のみ）；四言語文書に LAN アクセス節を追加。検証：リバースプロキシと RPC の修正後、web UI 入口とプラグイン RPC が再び利用可能。
 
 | コミット | 説明 |
 |------|------|
@@ -1647,7 +1647,7 @@
 
 ## 2026-08-31T07:23:07+09:00
 
-**概要**: dsh-alpha 0.1.2-alpha.2 — 新規パッケージ、npm `alpha` dist-tag 開発チャネル；dsh を ruyi 式薄ラッパーに再構成（version/hash/npmDepsHash/lockFile 上書き可能）、postPatch は純 sed で tarball の devDependencies を削除（未公開の monorepo 内部パッケージ参照、registry 404）、パッチ対象ファイルに存在ガード追加。四言語文書にバージョンチャネル節を追加。後続修正：vendored lock を npmDepsHash に一致させ（npm fixup のプラットフォーム項目欠落が主ビルドの out of date を引き起こしていた）、README ソフトウェア表に dsh-alpha 行を四言語で追補。
+**概要**：dsh-alpha 0.1.2-alpha.2 — 新規パッケージ、npm `alpha` dist-tag 開発チャネル；dsh を ruyi 式薄ラッパーに再構成（version/hash/npmDepsHash/lockFile 上書き可能）、postPatch は純 sed で tarball の devDependencies を削除（未公開の monorepo 内部パッケージ参照、registry 404）、パッチ対象ファイルに存在ガード追加；四言語文書にバージョンチャネル節を追加し、README ソフトウェア表に dsh-alpha 行を四言語で追補。後続修正：vendored lock を npmDepsHash に一致（npm fixup のプラットフォーム項目欠落が主ビルドの out of date を引き起こしていた）。検証：パッケージはビルド通過、lock 一致後は主ビルドが out of date を出さない。
 
 | コミット | 説明 |
 |------|------|
@@ -1665,7 +1665,7 @@
 
 ## 2026-08-31T07:05:44+09:00
 
-**概要**: godot-ai 3.2.4 — 自己更新復旧の直列化、設定書き込みの堅牢化、パス検証とコールドスタートの修正（v3.2.1〜v3.2.4 はいずれもバグ修正）；四言語文書のバージョン番号同期。
+**概要**：godot-ai 3.2.4 — 自己更新復旧の直列化、設定書き込みの堅牢化、パス検証とコールドスタートの修正（v3.2.1〜v3.2.4 はいずれもバグ修正）；四言語文書のバージョン番号同期。
 
 | コミット | 説明 |
 |------|------|
@@ -1679,7 +1679,7 @@
 
 ## 2026-08-27T09:19:59+09:00
 
-**概要**: opencode-telegram 0.24.1 — 韓国語インターフェース追加、`/opencode_stop` が応答中でもハングしたローカル OpenCode プロセスを強制終了可能、音声文字起こしを引用ブロックで表示、Telegram の一時エラーを安全に再試行して返信の消失/重複を防止、ストリーミング編集スロットルを適応化；mcp-searxng 2.1.0 — エンジン明示選択時にエンジンごとの time-range 対応を検証し、非対応時は実用的なエラーで即時失敗；godot-ai 3.2.0 — custom_tools によるサードパーティ addon ツール登録、CLI 登録スコープの選択化、DeepSeek Harness クライアント対応追加；ruyi-beta 0.52.0-beta.20260824 — beta チャネルの上流更新。四言語文書同期、nix flake check 通過。
+**概要**：opencode-telegram 0.24.1 — 韓国語インターフェース追加、`/opencode_stop` が応答中でもハングしたローカル OpenCode プロセスを強制終了可能、音声文字起こしを引用ブロックで表示、Telegram の一時エラーを安全に再試行して返信の消失/重複を防止、ストリーミング編集スロットルを適応化；mcp-searxng 2.1.0 — エンジン明示選択時にエンジンごとの time-range 対応を検証し、非対応時は実用的なエラーで即時失敗；godot-ai 3.2.0 — custom_tools によるサードパーティ addon ツール登録、CLI 登録スコープの選択化、DeepSeek Harness クライアント対応追加；ruyi-beta 0.52.0-beta.20260824 — beta チャネルの上流更新。四言語文書同期、nix flake check 通過。
 
 | コミット | 説明 |
 |------|------|
@@ -1704,7 +1704,7 @@
 
 ## 2026-08-27T07:28:58+09:00
 
-**概要**: feat(dsh-api-balance): パネル刷新ボタン。パネルヘッダーのタブ行右側に刷新ボタン（↻）を追加：クリックで queryBalance(true) を呼び、ホスト側 30 秒 TTL キャッシュを迂回して残高 + 公式使用量を再取得（日別/月別チャートも同時更新）。読み込み中はボタン無効化 + スピナー（dshAbSpin 再利用）。中英二言語文案（刷新数据 / Refresh data）。検証：ビルド通過、安定マウントポイント経由でゼロ再起動配備（424 世代）後に dsh 再起動で反映。
+**概要**：feat(dsh-api-balance): パネル刷新ボタン — パネルヘッダーのタブ行右側に刷新ボタン（↻）を追加：クリックで queryBalance(true) を呼び、ホスト側 30 秒 TTL キャッシュを迂回して残高 + 公式使用量を再取得（日別/月別チャートも同時更新）；読み込み中はボタン無効化 + スピナー（dshAbSpin 再利用）；中英二言語文案（刷新数据 / Refresh data）。検証：ビルド通過、安定マウントポイント経由でゼロ再起動配備（424 世代）後に dsh 再起動で反映。
 
 | コミット | 説明 |
 |----------|------|
@@ -1712,7 +1712,7 @@
 
 ## 2026-08-27T07:28:49+09:00
 
-**概要**: fix(dsh-nixos-shell): 分離結果の誠実な意味論 + systemctl restart dsh の自動分離。従来は systemd-run 経由の引き継ぎが返す exit 0 をそのまま透かしていたため、ツール結果が「ビルド成功」に見えながら実際の結果は不明だった。分離コマンドは今後 `detached: true` + `detachedUnit` + `note` を返し exitCode は null——引き継ぎ成功はビルド成功ではなく、実際の結果は必ず nixos_cli op=journal / op=generations で検証する（バックグラウンドジョブも最終出力に同じ検証ガイドを追記）。分離述語は `systemctl restart dsh` にも拡大：安定マウントポイント経由で配備したプラグイン更新は明示的な dsh 再起動で反映され、このコマンドも自動分離されて再起動前に呼び出しが返る。検証：分離式 dsh 再起動が着地（RESTARTED_EXIT=0）、プラグイン変更 rebuild（424/425 世代）は何も再起動せず何も中断せず、nix flake check 通過。四言語ドキュメント同期。
+**概要**：fix(dsh-nixos-shell): 分離結果の誠実な意味論 + systemctl restart dsh の自動分離。従来は systemd-run 経由の引き継ぎが返す exit 0 をそのまま透かしていたため、ツール結果が「ビルド成功」に見えながら実際の結果は不明だった。分離コマンドは今後 `detached: true` + `detachedUnit` + `note` を返し exitCode は null——引き継ぎ成功はビルド成功ではなく、実際の結果は必ず nixos_cli op=journal / op=generations で検証する。分離述語は `systemctl restart dsh` にも拡大（プラグイン更新は明示的な再起動で反映される）、同様に自動分離されて再起動前に呼び出しが返る。検証：分離式 dsh 再起動が着地（RESTARTED_EXIT=0）、プラグイン変更 rebuild（424/425 世代）は何も再起動せず何も中断しなかった。
 
 | コミット | 説明 |
 |----------|------|
@@ -1720,7 +1720,7 @@
 
 ## 2026-08-27T07:28:39+09:00
 
-**概要**: feat(module): dsh プラグイン安定マウントポイント — ゼロ再起動活性化。プラグインパッケージは従来 dsh/sudo のユニット（ExecStart/preStart/実行器テンプレート）に直接焼き込まれていたため、プラグイン更新のたびにユニット内容が変化：switch-to-configuration が活性化段階で dsh を再起動し（実行中のツール呼び出しは harness プロセスごと消滅）、sudo socket を stop/start した（デーモン経由の rebuild は自身の switch ごと殺され socket は復旧不能）。安定マウントポイントへ変更：activation script が毎回の switch/boot で `/run/dsh/current`（dsh とプラグイン木）と `/run/dsh/nixos-shell`（sudo 実行スクリプト）のシンボリックリンクを現在世代の store パスへ張り替え（GC 安全：リンク先は現在の toplevel 閉包内、ロールバック時は旧世代へ自動復帰）。dsh.service と nixkits-sudo@.service のユニット定義はこれら安定パスのみを参照——プラグインパッケージの更新はユニット内容を変えず、活性化は何も再起動せず何も中断しない。付随意味論：dsh は長寿命プロセスのため、プラグイン更新は明示的な `systemctl restart dsh`（自動分離）で反映。sudo 実行器は接続ごとに生成され、新規接続は自動的に新スクリプトを使用。検証：423 世代で本変更を配備（一度だけの dsh 再起動）。424/425 世代の連続 2 回のプラグイン変更 rebuild では dsh と socket の ActiveEnterTimestamp がともに不変、/run/dsh/current は正常に張り替えられ、中断されたツール呼び出しはゼロ。四言語ドキュメント同期。
+**概要**：feat(module): dsh プラグイン安定マウントポイント — ゼロ再起動活性化。プラグインパッケージは従来 dsh/sudo のユニットに焼き込まれていたため、プラグイン更新のたびに活性化段階で dsh と sudo socket が再起動した（実行中のツール呼び出しとデーモン経由の rebuild が消滅、socket は復旧不能）。安定マウントポイントへ変更：activation script が毎回の switch/boot で `/run/dsh/current`（dsh とプラグイン木）と `/run/dsh/nixos-shell` を現在世代の store パスへ張り替え（GC 安全）、ユニットはこの安定パスのみを参照——活性化は何も再起動せず socket も中断しない。付属：プラグイン更新は明示的な `systemctl restart dsh` で反映。検証：423 世代で配備；424/425 世代のプラグイン変更 rebuild 後も dsh と socket の ActiveEnterTimestamp は不変。
 
 | コミット | 説明 |
 |----------|------|
@@ -1728,7 +1728,7 @@
 
 ## 2026-08-27T04:07:27+09:00
 
-**概要**: fix(dsh-nixos-shell): sudo プロトコル v3 + rebuild 自動分離。三種類の欠陥を修正：1) v2 プロトコルは断絶を取消とみなした——rebuild の switch 段階で dsh.service が再起動し（插件パスは service ユニットに焼き込み）、クライアントが消えるとデーモンが活性化の途中で switch を殺し、部分活性化状態が残った（8/26 14:31 実測：profile は 415 のまま dsh は再起動済み、ユニットファイルは半新半旧）；v3 は明示的帯内取消行（job_kill が socket.end で書込）に変更し、対向消失時は子プロセスが分離状態で完了まで走り続ける。2) 取消/タイムアウトはプロセスグループ全体を殺す方式に変更（spawn detached + kill(-pid)）——シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になる；デーモンのタイムアウト上限は 6 時間に緩和し rebuild コマンドが自動使用。3) rebuild は systemd-run 一時ユニット（独立 cgroup）へ自動分離——活性化段階で switch-to-configuration が nixkits-sudo.socket を stop/start するため、rebuild をデーモン経由で実行すると socket 停止が switch 自身もろとも殺し、socket が自動復旧できなかった（8/26 17:25 実測：socket 死滅し、その窓で起動したセッションは sudo パラメータを恒久的に喪失）；分離後は呼び出しが即座にユニット名（detachedUnit）を返し、活性化は完走する。その他：socket は呼び出し時検証へ変更、dsh-jobs の取消を合法 enum `killed` へマッピング、デーモン応答は write コールバックでフラッシュ後に終了。検証：バックグラウンド sudo が job id を即時返却、job_output が全出力を配信、job_kill がグループ全体を孤児なしで殺害、実 rebuild が分離ユニット経由で配備成功し socket が活性化後に自動復旧、nix flake check 通過。四言語ドキュメント同期。
+**概要**：fix(dsh-nixos-shell): sudo プロトコル v3 + rebuild 自動分離。三種類の欠陥を修正：1) v2 プロトコルは断絶を取消とみなした——rebuild の switch 段階で dsh.service が再起動しクライアントが消えると、デーモンが活性化の途中で switch を殺した（部分活性化）；v3 は明示的帯内取消行に変更し、対向消失時は子プロセスが分離状態で完了まで走り続ける。2) 取消/タイムアウトはプロセスグループ全体を殺す方式に変更（spawn detached + kill(-pid)）——シェル包装のみ殺すとパイプ書き込み端を継承した孤児孫プロセスが残りデーモンが応答不能になる；タイムアウト上限は 6 時間に緩和。3) rebuild は systemd-run 一時ユニット（独立 cgroup）へ自動分離——活性化段階の socket stop/start が switch 自身を殺すことがない。検証：バックグラウンド sudo が job id を即時返却、job_kill がグループ全体を孤児なしで殺害、実 rebuild が分離ユニット経由で配備成功し socket が自動復旧。
 
 | コミット | 説明 |
 |----------|------|
@@ -1736,7 +1736,7 @@
 
 ## 2026-08-27T04:07:15+09:00
 
-**概要**: feat(dsh-api-balance): チャージカードモーダルが iframe を代替 + 残高不足音声アラート。platform.deepseek.com/top_up は WAF に遮断され（"Max challenge attempts exceeded"）、iframe モーダルは機能しなかった——中央カードモーダル（新規ウィンドウボタン + 右上閉じるボタン）に置き換え、ページ遷移なし。残高不足音声アラートを追加：残高が閾値（10 CNY/USD）を下回ると Web Speech API で読み上げ、15 分間隔ポーリング + 30 分クールダウン、パネル内トグル（balance.speechOn/Off）、中英二言語文案。検証：配備後の特徴 grep（TopupModal/speechOn/announceHunger）で稼働確認。
+**概要**：feat(dsh-api-balance): チャージカードモーダルが iframe を代替 + 残高不足音声アラート。top_up ページは WAF に遮断され（"Max challenge attempts exceeded"）、iframe モーダルは機能しなかった——中央カードモーダル（新規ウィンドウボタン + 右上閉じるボタン）に置き換え、ページ遷移なし。残高不足音声アラートを追加：残高が閾値（10 CNY/USD）を下回ると Web Speech API で読み上げ、15 分間隔ポーリング + 30 分クールダウン、パネル内トグル（balance.speechOn/Off）、中英二言語文案。検証：配備後の特徴 grep（TopupModal/speechOn/announceHunger）で稼働確認。
 
 | コミット | 説明 |
 |----------|------|
@@ -1744,7 +1744,7 @@
 
 ## 2026-08-26T11:44:45+09:00
 
-**概要**: dsh-api-balance 0.1.0 — 新規パッケージ。webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加：「用量」は元のコンテキスト占有率と内訳を維持、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高、DeepSeek 公式 GET /user/balance から取得しホスト側 30 秒 TTL キャッシュ）を表示する。ホスト側は connection.rpc.intercept でパッケージプライベート endpoint を登録、クライアント側は conversation.input.right に視覚互換の代替リングを登録し元のボタンを非表示化。検証: RPC が CNY 271.07 の実残高を返し、client bundle の配信も正常。四言語ドキュメント同期、nix flake check 通過。
+**概要**：dsh-api-balance 0.1.0 — 新規パッケージ。webui の使用量リング（送信ボタン左のコンテキスト使用量表示）のポップオーバーパネルに「用量 / 残高」タブ切替を追加：「用量」は元のコンテキスト占有率と内訳を維持、「残高」は現在の API キーのアカウント情報（キー末尾、残高可否、通貨別の総残高 / チャージ残高 / 付与残高、DeepSeek 公式 GET /user/balance から取得しホスト側 30 秒 TTL キャッシュ）を表示する。ホスト側は connection.rpc.intercept でパッケージプライベート endpoint を登録、クライアント側は conversation.input.right に視覚互換の代替リングを登録し元のボタンを非表示化。検証: RPC が CNY 271.07 の実残高を返し、client bundle の配信も正常。四言語文書同期、nix flake check 通過。
 
 | コミット | 説明 |
 |------|------|
@@ -1757,7 +1757,7 @@
 
 ## 2026-09-11T12:54:29+09:00
 
-**概要**: fix(dsh/module): allowLanSettings の $host.state.getSnapshot() 補丁を撤去 — dsh ≥ 0.1.5 の $host クライアントサービスは state を公開しない（isLoopback/home のみ）。旧補丁は client-ui-settings apply 時に undefined.getSnapshot を参照し、"Cannot read properties of undefined (reading 'getSnapshot')" を投げて前端全体が白画面（Failed to load plugins）。修正: モジュールは allowLanSettings=true の強制 override をやめ（上流行為へ復帰、非 loopback ページの settings は memory 読取専用のまま）、packages/dsh.nix の補丁は無条件 "host" に変更（将来明示的に有効化してもクラッシュしない）。検証: client.js に state.getSnapshot なし、ホーム 200、llm/listProviders が DeepSeek 提供方を返す。
+**概要**：fix(dsh/module): allowLanSettings の $host.state.getSnapshot() 補丁を撤去 — dsh ≥ 0.1.5 の $host クライアントサービスは state を公開せず、旧補丁は client-ui-settings apply 時に undefined.getSnapshot を参照し前端全体が白画面（Failed to load plugins）。モジュールは allowLanSettings=true の強制 override をやめ（上流行為へ復帰）、packages/dsh.nix の補丁は無条件 "host" に変更。検証: ホーム 200、llm/listProviders が DeepSeek 提供方を返す。
 
 | コミット | 説明 |
 |------|------|
@@ -1766,7 +1766,7 @@
 
 ## 2026-09-11T06:15:33+09:00
 
-**概要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 は dsh-persona の Config を text から prefix（必須）+ suffix（任意）に変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）は text のままで、persona プラグインの読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴すべて読込不可（前端は Failed to fetch と agentId 欠如による commands/list 無限リトライを呈す）。修正: 両 preset の persona config を prefix に変更、本機の 3 preset も同期修正。検証: session/create が ok:true + sessionId を返し、session/list がセッション一覧を返し、llm/listProviders が DeepSeek 提供方を返す。
+**概要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh-persona の Config は text から prefix（必須）+ suffix（任意）に変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）は text のままで persona 読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴すべて読込不可。修正: 両 preset の persona config を prefix に変更、本機 3 preset も同期。検証: session/create が ok:true + sessionId を返す。
 
 | コミット | 説明 |
 |------|------|
@@ -1774,7 +1774,7 @@
 
 ## 2026-08-27T01:30:33+09:00
 
-**概要**: fix(module): dsh watchdog — switch-to-configuration 失敗後の自動起動。nixos-rebuild の switch-to-configuration は「stop dsh → start dsh」の間で偶発失敗（exit 101）し、dsh を inactive に残す。systemd の能動的な stop は Restart=always をトリガーしないため、反代が長期間 503（8/26 22:10、23:53 の 2 回観測）。dsh-watchdog timer（15s 間隔）を追加し、inactive 検知時に systemctl start。検証: stop 後 20 秒以内に自動復帰。
+**概要**：fix(module): dsh watchdog — switch-to-configuration 失敗後の自動起動。nixos-rebuild の switch-to-configuration は「stop dsh → start dsh」の間で偶発失敗（exit 101）し dsh を inactive に残す。systemd の能動 stop は Restart=always をトリガーしないため反代が長期間 503。dsh-watchdog timer（15s）を追加し、inactive 検知時に systemctl start。検証: stop 後 20 秒以内に自動復帰。
 
 | コミット | 説明 |
 |------|------|
@@ -1782,7 +1782,7 @@
 
 ## 2026-08-24T15:44:06+09:00
 
-**概要**: fix(overlay): llama-cpp-rocm v0.2.0 セマンティック版 — llama.cpp 上流が release tag を build number（b10549）からセマンティック版（v0.2.0）に切替。旧 overlay は b 前置詞のみ除去して v0.2.0 を得たが、nixpkgs がそれを LLAMA_BUILD_NUMBER に渡し、`int LLAMA_BUILD_NUMBER = v0.2.0;` を生成して C++ コンパイル失敗（too many decimal points）になり、システム rebuild と dsh 更新を阻塞。現在は v/b 前置詞を両方除去し、-DLLAMA_BUILD_NUMBER=0 を追記。検証: llama-cpp-0.2.0 ビルド成功、llama-cpp.service 稼働。
+**概要**：fix(overlay): llama-cpp-rocm v0.2.0 セマンティック版 — llama.cpp 上流が release tag を build number（b10549）からセマンティック版（v0.2.0）に切替。旧 overlay は b 前置詞のみ除去したため nixpkgs が v0.2.0 を LLAMA_BUILD_NUMBER に渡し、`int LLAMA_BUILD_NUMBER = v0.2.0;` を生成して C++ コンパイル失敗（too many decimal points）、システム rebuild と dsh 更新を阻塞。現在は v/b 前置詞を両方除去し -DLLAMA_BUILD_NUMBER=0 を追記。検証: llama-cpp-0.2.0 ビルド成功、llama-cpp.service 稼働。
 
 | コミット | 説明 |
 |------|------|
@@ -1790,7 +1790,7 @@
 
 ## 2026-08-24T15:20:16+09:00
 
-**概要**: fix(pkgs): dsh クラッシュ修正 — cordis-plugin-timer（上流最新 1.1.3 未修正）が Context dispose 時に pending の ctx.timeout() promise を "Context has been disposed" で reject し、未 catch なら unhandled rejection 化。dsh-app-boot の installFailLoud が process.exit(1) に変え、実行中の偶発クラッシュ（rc.6/rc.7/rc.8/0.1.1-rc.2 全影響、8/22 00:05 に rc.8 が 38 分で発生）。installFailLoud はこのエラーのみ無視、他 fatal rejection は従来通り終了。検証: patch が 0.1.1-rc.2 出力に適用（dsh-app-boot/lib/index.js:1047）。
+**概要**：fix(pkgs): dsh クラッシュ修正 — cordis-plugin-timer（上流 1.1.3 未修正）が Context dispose 時に pending の ctx.timeout() promise を "Context has been disposed" で reject し、未 catch なら unhandled rejection 化。dsh-app-boot の installFailLoud が process.exit(1) に変える（rc.6/rc.7/rc.8/0.1.1-rc.2 全影響）。installFailLoud はこのエラーのみ無視、他 fatal rejection は従来通り終了。検証: patch が 0.1.1-rc.2 出力に適用（dsh-app-boot/lib/index.js:1047）。
 
 | コミット | 説明 |
 |------|------|
@@ -1798,7 +1798,7 @@
 
 ## 2026-08-24T14:27:47+09:00
 
-**概要**：codewhale 0.9.11 — 上流が v0.9.9 から TUI アセット名を codewhale-tui → codew に改名、パッケージは codew を導入し互換エイリアスを維持、riscv64 ソースビルドは Cargo.lock を同期（687→690 エントリ、rquickjs-sys 0.12.2 不変、bindings パッチ有効継続）；mcp-searxng 2.0.0 — メジャーアップグレード（Node.js ≥ 22 要求、nixpkgs 既定で充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved エントリ）、randomUUID フォールバックパッチ対象パス不変、内蔵プラグイン一覧は rc.8 と完全一致（137 件）；dsh-nixos-shell 依存 dsh-tools → 0.1.1-rc.2 で新エコシステムに整合。四言語文書同期、nix flake check 通過。
+**概要**：codewhale 0.9.11 — 上流が v0.9.9 から TUI アセット名を codewhale-tui → codew に改名、パッケージは codew を導入し互換エイリアスを維持、riscv64 ソースビルドは Cargo.lock を同期（687→690 エントリ）；mcp-searxng 2.0.0 — メジャーアップグレード（Node.js ≥ 22 要求、nixpkgs 既定で充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved エントリ）、内蔵プラグイン一覧は rc.8 と完全一致（137 件）；dsh-nixos-shell の dsh-tools 依存を 0.1.1-rc.2 に整合。四言語文書同期、nix flake check 通過。
 
 | コミット | 説明 |
 |------|------|
@@ -1816,7 +1816,7 @@
 
 ## 2026-08-22T00:03:28+09:00
 
-**概要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語の dsh.md のバージョン行（rc.6 → rc.8）と「プラグイン一覧」コードブロック（rc.8 ビルドから抽出した 137 エントリの id マップ）を同期。nix flake check 通過。併せて /etc/nixos ローカル設定に `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）を宣言し新規セッションの既定に——DeepSeek API の正規モデル一覧は flash/pro/flash-vision-exp のみで "pro-max" id は存在せず、Pro+Max 推論が現状最高位。rc.8 上で nixos/maintenance 両プリセットのマウント検証通過。
+**概要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語の dsh.md のバージョン行（rc.6 → rc.8）と「プラグイン一覧」コードブロック（rc.8 ビルドから抽出した 137 エントリの id マップ）を同期。nix flake check 通過。併せて /etc/nixos ローカル設定に `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）を新規セッションの既定として追加——DeepSeek API の正規モデル一覧は flash/pro/flash-vision-exp のみで "pro-max" id は存在せず、Pro+Max 推論が現状最高位。rc.8 上で nixos/maintenance 両プリセットのマウント検証通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1824,7 +1824,7 @@
 
 ## 2026-08-21T21:51:26+09:00
 
-**概要**：docs: README「プラグイン」章の拡充とクレジットの DSH 情報 — ①「プラグイン」章に「Agent プリセット」表（NixOS模式/維護模式、プラグイン同梱、nixkits.dsh.presets で一度だけシード）を追加し、DSH コンポーネントをソフトウェアと分離掲載；② クレジットの「小爪」エントリに DSH エコシステム情報（dsh-nixos-shell プラグインと 2 つの Agent プリセット）を追記；③ AGENTS.md のプラグイン独立掲載規則を「dsh-* コンポーネント（プラグインと Agent プリセット）」に拡大。4 言語同期。
+**概要**：docs: README「プラグイン」章の拡充とクレジットの DSH 情報 — ①「プラグイン」章に dsh-nixos-shell 以外の「Agent プリセット」表（NixOS模式/維護模式、プラグイン同梱、nixkits.dsh.presets で一度だけシード）を追加し、DSH コンポーネントをソフトウェアと分離掲載；② クレジットの「小爪」エントリに DSH エコシステム情報（dsh-nixos-shell プラグインと 2 つの Agent プリセット）を追記；③ AGENTS.md のプラグイン独立掲載規則を「dsh-* コンポーネント（プラグインと Agent プリセット）」に拡大。4 言語同期。
 
 | コミット | 説明 |
 |----------|------|
@@ -1832,7 +1832,7 @@
 
 ## 2026-08-21T00:01:46+09:00
 
-**概要**：fix(dsh-nixos-shell): ツール説明に tools ホワイトリストを明示 — 受入の非ブロッキング指摘：固定 POSIX ツールのホワイトリストがツール説明に記載されていなかった。ホワイトリストを TOOL_PACKAGES マップから動的生成（27 名、python エイリアス含む）して `tools` パラメータ説明に記載し、ツール説明からパラメータを参照。4 言語ドキュメントに完全なリストを同期。検証：27 名すべてがパラメータ説明に存在、ツール説明に参照あり、構文検査と nix flake check 通過。
+**概要**：fix(dsh-nixos-shell): ツール説明に tools ホワイトリストを明示 — 受入の非ブロッキング指摘：固定 POSIX ツールのホワイトリストがツール説明に記載されていなかった。ホワイトリストを TOOL_PACKAGES マップから動的生成（27 名、python エイリアス含む）して `tools` パラメータ説明に記載し、ツール説明から参照。4 言語ドキュメントに完全なリストを同期。検証：27 名すべてがパラメータ説明に存在、参照あり、nix flake check 通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1840,7 +1840,7 @@
 
 ## 2026-08-20T20:12:33+09:00
 
-**概要**：fix(dsh-nixos-shell): 現代 rebuild コマンドを `nixos apply` に訂正 — 実測の nixos 0.16.1-dev に `rebuild` サブコマンドは存在せず（`nixos --help` は activate/apply/generation 等を列挙）、引き継ぎカードとプラグインの recommendedRebuild/コマンド対照表/ゲートガイダンスの `nixos rebuild switch` は誤りだった。`nixos apply /etc/nixos`（または従来の `sudo nixos-rebuild switch --flake /etc/nixos`）に統一。検証：node 構文検査、nix flake check 通過。システム配備は `nixos apply` に変更し実測成功。
+**概要**：fix(dsh-nixos-shell): 現代 rebuild コマンドを `nixos apply` に訂正 — 実測の nixos 0.16.1-dev に `rebuild` サブコマンドはなく（`nixos --help` は activate/apply/generation 等を列挙）、引き継ぎカードとプラグインの recommendedRebuild/コマンド対照表/ゲートガイダンスの `nixos rebuild switch` は誤り。`nixos apply /etc/nixos`（または従来の `sudo nixos-rebuild switch --flake /etc/nixos`）に統一。検証：nix flake check 通過、システム配備を `nixos apply` に変更し実測成功。
 
 | コミット | 説明 |
 |----------|------|
@@ -1848,7 +1848,7 @@
 
 ## 2026-08-20T20:10:08+09:00
 
-**概要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）ツールブートストラップのラッパーを `bash -lc` から `bash -c` に変更：ログインシェルの /etc/profile チェーンが PATH をリセットして nix shell の注入を破棄しており、sudo 経路が同じラッパーを共有するため同時修正（対照実験：`-c` は Python 3.14.7、`-lc` は command not found）。マッピングも grep→gnugrep、find→findutils に修正（従来はログイン PATH の偽陽性で覆われていた）。P2 generations に `limit` を追加（既定 20・上限 200・新→旧）、現在世代と総数を返す。P3 journal の unit は `*`/`%` ワイルドカードを許可し、末尾 `@` は自動で `*` を補う（テンプレート全インスタンス）。P4 命名統一：nixos-cli → nixos コマンド（nixos-cli プロジェクト）、ツール説明・コマンド対照表・ゲートガイダンスを更新。ドキュメント op 表を 4 言語同期。検証：5 ケースの機能スイート全通過（プラグイン経由の実 nix shell 注入で TOOLS_INJECTION_OK 回顕を含む）、node 構文検査、nix flake check 通過。
+**概要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）ツールブートストラップのラッパーを `bash -lc` から `bash -c` に変更：ログインシェルの /etc/profile チェーンが PATH をリセットして nix shell の注入を破棄、sudo 経路も同じラッパーを共有するため同時修正（対照：`-c` は Python 3.14.7、`-lc` は command not found）。マッピングも grep→gnugrep、find→findutils に修正。P2 generations に `limit` を追加（既定 20・上限 200・新→旧）。P3 journal の unit は `*`/`%` ワイルドカードを許可し末尾 `@` は自動で `*` を補う。P4 命名統一：nixos-cli → nixos コマンド。文書 op 表を 4 言語同期；nix flake check 通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1856,7 +1856,7 @@
 
 ## 2026-08-20T19:33:51+09:00
 
-**概要**：fix(dsh-nixos-shell): プロンプト節のフィールドを text に変更 — dsh-system-prompt の補間器は `input.text` を読むため、`content` で登録した節が実セッションの NixOS模式をクラッシュさせた（Cannot read properties of undefined (reading 'indexOf')。マウント検証では捉えられない実セッション経路の欠陥）。nixos-gate（guidance/gate の 2 節）と maintenance-skills（workflow 節）の計 3 箇所を `content` → `text` に修正。原因は dsh-system-prompt の interpolate() ソースと PromptSection 型定義（text: string | provider）の読み取りで特定。ToolGuard の形も型定義から確認（`(execution) => string | undefined`、現行実装と互換）。検証：mock で text フィールドと未閉じ `{{` なしを確認；実 systemPrompt サービスで登録 + assemble（includes=true、クラッシュなし）；システム事前ビルド通過。
+**概要**：fix(dsh-nixos-shell): プロンプト節のフィールドを text に変更 — dsh-system-prompt の補間器は `input.text` を読むため、`content` で登録した節が実セッションの NixOS模式をクラッシュさせた（Cannot read properties of undefined (reading 'indexOf')。マウント検証では捉えられない実セッション経路の欠陥）。nixos-gate（guidance/gate の 2 節）と maintenance-skills（workflow 節）の計 3 箇所を `content` → `text` に修正。検証：mock で text フィールドと未閉じ `{{` なしを確認、実 systemPrompt サービスで assemble がクラッシュなし、システム事前ビルド通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1864,7 +1864,7 @@
 
 ## 2026-08-20T19:05:44+09:00
 
-**概要**：feat(dsh-nixos-shell): 維護模式 agent プリセット — 新パッケージ内エントリ maintenance-skills：apply 時にビルド時に埋め込まれたリポジトリの skills/ ツリー（単一ソース、新規セッションで常に最新）からランタイムスキル write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節（分割コミット、push 後の保守ログ、ドキュメント同期、汎化）を注入。パッケージの postPatch が skills → skills-embedded をコピー。プリセット presets/maintenance-mode（id `maintenance`、NixOS模式コンポジション + maintenance-skills 行基盤）はパッケージに同梱。モジュールに nixkits.dsh.presets.maintenanceMode（seed-once）を追加。検証：mock で 3 スキル登録 + ワークフロー節すべて通過、パッケージに埋め込みツリーとエクスポートあり、システム事前ビルド通過。nixos プリセットはマウント検証通過（mounted ok）、maintenance プリセットはローダーのプロセス内 package.json キャッシュのため再起動後の最終確認を要す。
+**概要**：feat(dsh-nixos-shell): 維護模式 agent プリセット — 新パッケージ内エントリ maintenance-skills：apply 時にビルド時に埋め込まれたリポジトリの skills/ ツリー（単一ソース）からランタイムスキル write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）を登録し、リポジトリ保守ワークフローのプロンプト節を注入。パッケージの postPatch が skills → skills-embedded をコピー。プリセット presets/maintenance-mode（id `maintenance`、NixOS模式コンポジション + maintenance-skills 行基盤）はパッケージに同梱。モジュールに nixkits.dsh.presets.maintenanceMode（seed-once）を追加。検証：mock で 3 スキル登録 + ワークフロー節すべて通過、システム事前ビルド通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1872,7 +1872,7 @@
 
 ## 2026-08-20T18:30:46+09:00
 
-**概要**：feat(dsh-nixos-shell): NixOS模式 agent プリセット — 新パッケージ内サブパス nixos-gate：セッション初期化時にホストが NixOS であることを検証（/etc/NIXOS または os-release の ID=nixos）——非 NixOS では tools.guard で全ツール実行を拒否し拒否プロンプト節を注入（明確な理由 + プリセット切替の助言）、NixOS では開発ガイドのプロンプト節を注入（nixos-modern-cli シナリオ由来：宣言的本質、ツールブートストラップ、モダンコマンド、store パスの落とし穴）。プリセット presets/nixos-mode（id `nixos`、創造モード cordis コンポジション + スキルディレクトリ基盤、nixos-gate/nixos-shell 行を追加）はパッケージに同梱。モジュールに nixkits.dsh.presets.nixosMode を追加し、preStart で $DSH_HOME/.agent-presets/nixos へ一度だけシード（ユーザーの後続編集は尊重）。検証：パッケージビルド、ゲート構文チェック、システム事前ビルドすべて通過。
+**概要**：feat(dsh-nixos-shell): NixOS模式 agent プリセット — 新サブパス nixos-gate：セッション初期化時にホストが NixOS であることを検証（/etc/NIXOS または os-release の ID=nixos）——非 NixOS では tools.guard で全ツール実行を拒否し拒否プロンプト節を注入、NixOS では開発ガイドのプロンプト節を注入。プリセット presets/nixos-mode（id `nixos`、創造モード cordis コンポジション + スキルディレクトリ基盤、nixos-gate/nixos-shell 行を追加）はパッケージに同梱。モジュールに nixkits.dsh.presets.nixosMode を追加し、preStart で $DSH_HOME/.agent-presets/nixos へ一度だけシード。検証：パッケージビルド、ゲート構文チェック、システム事前ビルド通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1896,7 +1896,11 @@
 
 ## 2026-08-20T17:46:44+09:00
 
-**概要**：feat(nixos-shell): NixOS シナリオ能力を単一プラグインへ統合；refactor: スキルプラグイン化設計の廃止 — 新パッケージ nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）は 2 つのツールを登録する：nixos_shell 実行器（NixOS PATH 注入 + bash フォールバック + `tools` パラメータによる `nix shell nixpkgs#… --command` の不足 POSIX ツール提供 + sudo デーモンルーティング）と nixos_cli 読み取り専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件は nixos-modern-cli スキルのシナリオに由来。併せて削除：dsh-nix-shell（機能統合）と dsh-skill-nixkits（7 スキルプラグイン設計、モジュールの skills オプション含む）、CI/ドキュメントも差し替え。nixkits-skills インストーラから dsh 対象を削除（dsh 能力は nixos-shell が提供、スキルは他アシスタント向けに残置）。修正：generations はプロセス内の読み取り専用リストに変更（nix-env はロックファイル権限が必要で、非 root は Permission denied）。検証：13 ケースの機能スイート全通過（実 sudo root ルーティングと nix shell ツールブートストラップ含む）；システム事前ビルド通過。
+**概要**：feat(nixos-shell): NixOS シナリオ能力を単一プラグインへ統合；refactor: スキルプラグイン化設計の廃止
+- 新パッケージ nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）は 2 つのツールを登録：nixos_shell 実行器（NixOS PATH 注入 + bash フォールバック + `tools` による不足 POSIX ツール提供 + sudo デーモンルーティング）と nixos_cli 読み取り専用診断（capabilities ほか 4 項目）。要件は nixos-modern-cli スキルのシナリオに由来。
+- dsh-nix-shell と dsh-skill-nixkits（7 スキルプラグイン設計）を削除、CI/ドキュメント差し替え。
+- generations の修正：プロセス内の読み取り専用リストへ変更（`nix-env` は非 root で拒否）。
+検証：13 ケースの機能スイート全通過；システム事前ビルド通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1908,7 +1912,7 @@
 
 ## 2026-08-20T16:40:16+09:00
 
-**概要**：fix(dsh): サービス HOME を実ユーザーホームへ — git の gh credential helper は `$HOME/.config/gh` から認証情報を解決するが、モジュールはサービス HOME を dshHome（/home/kix/.dsh）に設定していたため、サンドボックス内の git push が認証情報を見つけられなかった（could not read Username）。`users.users.<user>.home`（無ければ dshHome にフォールバック）に変更し、エージェントがユーザー自身のツール環境（git/gh 認証情報、~/.gitconfig、npm/ssh 設定）を継承するようにした。DSH_HOME は dsh の状態ルートのままで影響なし。検証：HOME=/home/kix で滞留コミットの push がすべて成功；システムの事前ビルドも通過。
+**概要**：fix(dsh): サービス HOME を実ユーザーホームへ — git の gh credential helper は `$HOME/.config/gh` から認証情報を解決するが、モジュールはサービス HOME を dshHome（/home/kix/.dsh）に設定していたため、サンドボックス内の git push が認証情報を見つけられなかった。`users.users.<user>.home`（無ければ dshHome にフォールバック）に変更し、エージェントがユーザー自身のツール環境（git/gh 認証情報、~/.gitconfig、npm/ssh 設定）を継承するようにした。DSH_HOME は dsh の状態ルートのままで影響なし。検証：滞留コミットの push がすべて成功；システムの事前ビルドも通過。
 
 | コミット | 説明 |
 |----------|------|
@@ -1916,7 +1920,7 @@
 
 ## 2026-08-20T16:13:40+09:00
 
-**概要**：fix(dsh-nix-shell): sudo エグゼキュータの PATH マージ順修正 — ソケット活性化のテンプレートユニットは systemd マネージャ既定 PATH（coreutils/findutils/grep/sed/systemd の store パスのみ）を継承し、明示的な NixOS PATH の後で展開される `...process.env` がそれを上書きして、デーモン内で ps や nixos-rebuild など profile ツールが解決不能になっていた（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env を先に、明示的 NixOS profile PATH を後に展開するよう修正（リクエスト env は最後にマージのまま）。検証：systemd 既定 PATH を模擬してエグゼキュータを直接実行、PATH は /run/current-system/sw/bin 先頭、ps と nixos-rebuild の両方が解決成功。
+**概要**：fix(dsh-nix-shell): sudo エグゼキュータの PATH マージ順修正 — ソケット活性化のテンプレートユニットは systemd マネージャ既定 PATH（coreutils/findutils/grep/sed/systemd の store パスのみ）を継承し、明示的な NixOS PATH の後で展開される `...process.env` がそれを上書きして、デーモン内で ps や nixos-rebuild など profile ツールが解決不能になっていた。継承 env を先に、明示的 NixOS profile PATH を後に展開するよう修正（リクエスト env は最後にマージのまま）。検証：PATH は /run/current-system/sw/bin 先頭、ps と nixos-rebuild の両方が解決成功。
 
 | コミット | 説明 |
 |----------|------|
@@ -1932,7 +1936,7 @@
 
 ## 2026-08-21T23:02:33+09:00
 
-**概要**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。遗留していた rc.8 升级を完了：src hash と npmDepsHash をプレースホルダーから実値へ、package-lock.json を再生成（旧 lock は dsh-invariants 含む 120 エントリ欠落で buildNpmPackage の fetch が ENOTCACHED）。検証: rc.8 ビルド成功、randomUUID フォールバック patch 適用、with-plugins 変体正常、起動時プラグイン読込エラーなし。注: 本機の skills-as-plugins 設計は廃止済み、skills は dsh-nixos-shell（maintenance-skills）へ統合、with-plugins は dsh-nixos-shell のみ注入。
+**概要**：chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。遺留していた rc.8 升級を完了：src hash と npmDepsHash を実値へ、package-lock.json を再生成（旧 lock は dsh-invariants 含む 120 エントリ欠落）。検証：rc.8 ビルド成功、randomUUID フォールバック patch 適用、with-plugins 変体正常、起動時プラグイン読込エラーなし；with-plugins は dsh-nixos-shell のみ注入。
 
 | コミット | 説明 |
 |------|------|
@@ -1940,7 +1944,7 @@
 
 ## 2026-08-21T22:11:28+09:00
 
-**概要**: fix(module): dsh クラッシュ耐性 — Restart=always + RestartSec 5s。dsh 上流に既知のクラッシュバグ（cordis-plugin-timer の Context disposed、rc.6 で約 13 時間稼働後に発生）があり、rc.7/rc.8 も cordis-plugin-timer 依存は不変（^1.1.3）のためバグは残存。クラッシュ時は lighttpd 反代が systemd の再起動まで 503 を返す。Restart=always（on-failure は exit 0 終了をカバーしない）+ 再起動間隔 5s に変更し、中断時間を最小化。
+**概要**：fix(module): dsh クラッシュ耐性 — Restart=always + RestartSec 5s。dsh 上流に既知のクラッシュバグ（cordis-plugin-timer の Context disposed、rc.6 で約 13 時間稼働後に発生）があり、rc.7/rc.8 も cordis-plugin-timer 依存は不変（^1.1.3）のためバグは残存。クラッシュ時は lighttpd 反代が systemd の再起動まで 503 を返す。Restart=always（on-failure は exit 0 終了をカバーしない）+ 再起動間隔 5s に変更し、中断時間を最小化。
 
 | コミット | 説明 |
 |------|------|
@@ -1948,7 +1952,7 @@
 
 ## 2026-08-20T11:08:08+09:00
 
-**概要**: fix(module): dsh プラグイン ESM 解決 — dsh の cordis-plugin-loader は profile ディレクトリ（$DSH_HOME/profiles/web）を解決基準（Node 24 内部 cascaded loader の parentURL）とし、そこから上へ node_modules を検索する。プラグインは dsh の store ツリーに注入済みだが、store は profile の node_modules パス上にないため import が ERR_MODULE_NOT_FOUND となり起動直後にクラッシュ（restart ループ 108 回まで）。preStart で注入済み @kihara777 scope を $DSH_HOME/node_modules へシンボリックリンクし Node から解決可能に。realpath で store ツリーに戻るため、プラグインが参照する @deepseek-ai/* peer deps も同一ツリー内で解決できる。検証: skills + nix-shell プラグイン読込成功。
+**概要**：fix(module): dsh プラグイン ESM 解決 — dsh の cordis-plugin-loader は profile ディレクトリ（$DSH_HOME/profiles/web）を解決基準とし、そこから上へ node_modules を検索する。プラグインは dsh の store ツリーに注入済みだが、store は profile の node_modules パス上にないため import が ERR_MODULE_NOT_FOUND となり起動直後にクラッシュ。preStart で注入済み @kihara777 scope を $DSH_HOME/node_modules へシンボリックリンクし Node から解決可能に。realpath で store ツリーに戻るため、プラグインが参照する @deepseek-ai/* peer deps も同一ツリー内で解決できる。検証：skills + nix-shell プラグイン読込成功。
 
 | コミット | 説明 |
 |------|------|
@@ -1964,7 +1968,7 @@
 
 ## 2026-08-20T10:21:46+09:00
 
-**概要**：fix(dsh): 生成行を insert 動詞でラップ — cordis.patch.yml の裸の `- id:` 行は既存エントリのパッチに過ぎず、新規プラグインエントリは dsh に破棄され（stderr: patch: entry "nixkits-nix-shell" not found）、8 つのプラグイン行すべてが未マウントだった（dump-config で検証）。パッケージ注入自体は成功していたが、合成ツリーにエントリが無いため nix_shell ツールと 7 スキルプラグインが未登録だった。生成される plugins.packages 行を `- insert:` 操作でラップして修正（extraPatch の MCP 行と同じ形）。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。
+**概要**：fix(dsh): 生成行を insert 動詞でラップ — cordis.patch.yml の裸の `- id:` 行は既存エントリのパッチに過ぎず、新規プラグインエントリは dsh に破棄され、8 つのプラグイン行すべてが未マウントだった（dump-config で検証）。パッケージ注入自体は成功していたが、合成ツリーにエントリが無いため nix_shell ツールと 7 スキルプラグインが未登録だった。生成される plugins.packages 行を `- insert:` 操作でラップして修正（extraPatch の MCP 行と同じ形）。検証：dump-config が stderr ゼロ、8 行すべて合成ツリーに反映。
 
 | コミット | 説明 |
 |----------|------|
@@ -1988,7 +1992,7 @@
 
 ## 2026-08-20T07:41:45+09:00
 
-**概要**：fix(rcc-fix): asusctl 6.4.0 向けパッチ再ベース — nixpkgs 前進で asusctl が 6.3.7 → 6.4.0 となり、rcc-fix.patch の 4 番目の hunk が失敗（システムビルド失敗）。上流が該当領域を再構築（`if dev.is_old_laptop() { pow3r.retain(...) }` が旧 push ブロックを置換、else 分岐の PowerZones::None フィルタは上流に吸収）。パッチは境界チェック置換（`names[(*z) as usize]` → filter_map による境界チェック + warn）のみを保持。他 hunk は変更不要。検証：6.4.0 ソースへの git apply --check が全 hunk 通過、本機ピン留め nixpkgs rev（0ae2bc1）で asusctl ビルド成功（EXIT=0）。
+**概要**：fix(rcc-fix): asusctl 6.4.0 向けパッチ再ベース — nixpkgs 前進で asusctl が 6.3.7 → 6.4.0 となり、rcc-fix.patch の 4 番目の hunk が失敗（システムビルド失敗）。上流が該当領域を再構築（`is_old_laptop`/`retain` が旧 push ブロックを置換、else 分岐のフィルタは上流に吸収）。パッチは境界チェック置換（`names[(*z) as usize]` → filter_map による境界チェック + warn）のみを保持。他 hunk は変更不要。検証：6.4.0 ソースへの git apply --check が全 hunk 通過、本機ピン留め nixpkgs rev（0ae2bc1）で asusctl ビルド成功（EXIT=0）。
 
 | コミット | 説明 |
 |------|------|
@@ -1996,7 +2000,7 @@
 
 ## 2026-08-20T06:27:40+09:00
 
-**概要**：feat(dsh-nix-shell): 外部 sudo デーモン統合（0.2.0）— dsh サンドボックスは sudo の setuid を剥奪し、エージェントは昇格できない。プラグインは初期化時にデーモンソケット（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）を検出し、存在すれば `sudo`/`justification` パラメータを有効化。`sudo: true` のリクエストは全体（command/cwd/env/timeout）を Unix ソケット経由でデーモンへルーティングし、`justification` は必須で結果と共に返却。デーモンは systemd ソケットアクティベーション型の root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続ごとに 1 リクエストの JSON プロトコル、プラグインパッケージに同梱）。アクセス制御境界は dsh サービスユーザー所有・`0600` のソケットファイル（SocketUser/SocketMode）。モジュールに nixkits.dsh.sudo（enable/socketPath/package）を追加し、ユニット生成と環境変数注入を行う。検証：ゲーティング（ソケットなしでパラメータ非公開／ありで公開）、ルーティング往復、justification 強制、実行器直結プロトコル、モジュールユニット評価がすべて通過。
+**概要**：feat(dsh-nix-shell): 外部 sudo デーモン統合（0.2.0）— プラグインは初期化時にデーモンソケット（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）を検出し、存在すれば `sudo`/`justification` パラメータを有効化。`sudo: true` のリクエストは全体（command/cwd/env/timeout）を Unix ソケット経由でデーモンへルーティングし、`justification` は必須で結果と共に返却。デーモンは systemd ソケットアクティベーション型の root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続ごとに 1 リクエストの JSON プロトコル、プラグインパッケージに同梱）。アクセス制御境界は dsh サービスユーザー所有・`0600` のソケットファイル（SocketUser/SocketMode）。モジュールに nixkits.dsh.sudo（enable/socketPath/package）を追加し、ユニット生成と環境変数注入を行う。検証：ゲーティング、ルーティング往復、justification 強制、実行器直結プロトコル、モジュール評価がすべて通過。
 
 | コミット | 説明 |
 |------|------|
@@ -2004,7 +2008,7 @@
 
 ## 2026-08-20T06:02:50+09:00
 
-**概要**：refactor(skills): NixKits スキルをネイティブ DSH スキルプラグインへ書き直し — 新パッケージ dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、ランタイム依存ゼロ）、7 スキル各々がパッケージ内のサブパスプラグインエントリ。各プラグインはランタイムに ctx.skills.register で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、apply() が登録 disposer を返してコンポジション解除と共に破棄。SKILL.md は skills/ に単一ソースとして残りビルド時に埋め込み、frontmatter は剥離して content とし metadata に保持（ドキュメントパイプラインの自動発見契約は不変）。モジュールの skills.enable は 7 行のコンポジション行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）を自動生成し、以前の誤実装だったディレクトリ注入（nixkits-skills パッケージ + bundledSkillDir）を置き換え。検証：7 プラグインの mock 登録全通過、ベアサブパスインポート + 登録を実測（SUBPATH-OK/REGISTERED）。CI に x86_64/aarch64 ビルドを追加。
+**概要**：refactor(skills): NixKits スキルをネイティブ DSH スキルプラグインへ書き直し — 新パッケージ dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、ランタイム依存ゼロ）、7 スキル各々がパッケージ内のサブパスプラグインエントリ。各プラグインはランタイムに ctx.skills.register で自身の内容を登録（runtime provider、rank 250、ファイルシステム由来より優先）し、apply() が登録 disposer を返してコンポジション解除と共に破棄。SKILL.md は skills/ に単一ソースとして残りビルド時に埋め込み、frontmatter は剥離して content とし metadata に保持（ドキュメントパイプラインの自動発見契約は不変）。モジュールの skills.enable は 7 行のコンポジション行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）を自動生成し、以前の誤実装だったディレクトリ注入（nixkits-skills パッケージ + bundledSkillDir）を置き換え。検証：7 プラグインの mock 登録、ベアサブパスインポート + 登録の実測がすべて通過。CI に x86_64/aarch64 ビルドを追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2012,7 +2016,7 @@
 
 ## 2026-08-20T05:27:48+09:00
 
-**概要**：feat(dsh): 内蔵 bash ツールの NixOS 修正 + サードパーティプラグインパッケージ + デプロイメント同梱スキル — ① モジュールが dsh サービスへ完全な NixOS PATH を注入（systemd 既定 PATH に bash が無く、標準 bash ツールが spawn bash ENOENT で失敗）；② dsh-nix-shell パッケージ新規（@kihara777/dsh-nix-shell、NixOS 対応シェルツールプラグイン：PATH 解決失敗時に Nix store の bash へフォールバック、NixOS PATH 注入、タイムアウトとスピル出力）と nixkits-skills パッケージ（スキルディレクトリバンドル）新規；③ モジュールに plugins.packages（node_modules へ tar 展開注入 — シンボリックリンクは Node の realpath でプラグイン自身の store パスへ戻り peer 解決が壊れるため実展開 — とコンポジション行の自動生成）と skills.enable（skill-filesystem bundledSkillDir、rank 600）を追加；④ CI に dsh-nix-shell の x86_64/aarch64 ビルドを追加。注入ツリー内で IMPORT-OK をエンドツーエンド検証（プラグインのエクスポートと依存連鎖が解決）。
+**概要**：feat(dsh): 内蔵 bash ツールの NixOS 修正 + サードパーティプラグインパッケージ + デプロイメント同梱スキル — ① モジュールが dsh サービスへ完全な NixOS PATH を注入（systemd 既定 PATH に bash が無く、内蔵 bash ツールが spawn bash ENOENT で失敗）；② dsh-nix-shell パッケージ新規（@kihara777/dsh-nix-shell、NixOS 対応シェルツールプラグイン：PATH 解決失敗時に Nix store の bash へフォールバック、NixOS PATH 注入、タイムアウトとスピル出力）と nixkits-skills パッケージ（スキルディレクトリバンドル）新規；③ モジュールに plugins.packages（node_modules へ tar 展開注入 — シンボリックリンクは Node の realpath でプラグイン自身の store パスへ戻り peer 解決が壊れるため実展開 — とコンポジション行の自動生成）と skills.enable（skill-filesystem bundledSkillDir、rank 600）を追加；④ CI に dsh-nix-shell の x86_64/aarch64 ビルドを追加。エンドツーエンド検証：注入ツリー内で IMPORT-OK。
 
 | コミット | 説明 |
 |------|------|
@@ -2029,7 +2033,7 @@
 
 ## 2026-08-19T19:57:03+09:00
 
-**概要**：fix(codewhale-src): riscv64 クロスビルド修正 — 4 段階の問題連鎖を解消：① rquickjs-sys 0.12.2（crates.io 最新版）に riscv64gc bindings が無く（build.rs 非 bindgen パスが対象ファイルを include）、上流の各 64bit リトルエンディアン向け bindings はバイト単位で同一のため postPatch で x86_64 版を物化済み vendor ディレクトリへ配置；② ホスト側（x86_64 build 依存）の ring ビルドで cc-rs がホスト triple から派生レベルの CC（クロスコンパイラ）へフォールバックし -m64 を付与 — buildPackages ツールチェーンを明示；③ postInstall の裸 cargo build が --target を失いホストツールチェーンでリンク — cargoBuildHook と同様にターゲット triple を明示；④ バイナリが -lgcc_s を動的リンクし autoPatchelfHook は hostPlatform 依存のみ走査 — クロス gcc の libgcc 出力を明示的に追加。CI と同一コマンド（pkgsCross.riscv64.callPackage）でローカル検証済み。Build codewhale (riscv64) の 6 連続失敗を解消。
+**概要**：fix(codewhale-src): riscv64 クロスビルド修正 — 4 段階の問題連鎖を解消：① rquickjs-sys 0.12.2 に riscv64gc bindings が無く（build.rs 非 bindgen パスが対象ファイルを include）、上流の各 64bit リトルエンディアン向け bindings はバイト単位で同一のため postPatch で x86_64 版を物化済み vendor ディレクトリへ配置；② ホスト側の ring ビルドで cc-rs がホスト triple からクロスコンパイラへフォールバックし -m64 を付与 — buildPackages ツールチェーンを明示；③ postInstall の裸 cargo build が --target を失いホストツールチェーンでリンク — cargoBuildHook と同様にターゲット triple を明示；④ バイナリが -lgcc_s を動的リンクし autoPatchelfHook は hostPlatform 依存のみ走査 — クロス gcc の libgcc 出力を明示的に追加。CI と同一コマンド（pkgsCross.riscv64.callPackage）でローカル検証済み。Build codewhale (riscv64) の 6 連続失敗を解消。
 
 | コミット | 説明 |
 |------|------|
@@ -2045,7 +2049,7 @@
 
 ## 2026-08-19T16:52:54+09:00
 
-**概要**: fix(module): dsh WebSocket 反代を mod_proxy upgrade に変更 — NixOS の lighttpd モジュールは allKnownModules 固定順で server.modules を生成し、mod_wstunnel は常に mod_proxy の後にロードされる。proxy.server が全パスにマッチするため mod_proxy が /api/events.* の WebSocket アップグレードを先に処理して 426 Upgrade Required を返し、mod_wstunnel は r->handler_module 非 NULL でスキップされ実行されない。lighttpd 1.4.56+ の mod_proxy ネイティブ WebSocket トンネル（proxy.header = "upgrade" => "enable"）に変更し、mod_wstunnel を削除。検証: 8625 / は 200、/api/events.host|mux ハンドシェイク 101（ローカル+LAN）。
+**概要**：fix(module): dsh WebSocket 反代を mod_proxy upgrade に変更 — NixOS の lighttpd モジュールは allKnownModules 固定順で server.modules を生成し、mod_wstunnel は mod_proxy の後にロードされる。proxy.server が全パスにマッチするため mod_proxy が /api/events.* のアップグレードを先に処理して 426 を返し、mod_wstunnel は r->handler_module 非 NULL で実行されない。lighttpd 1.4.56+ の mod_proxy ネイティブ WebSocket トンネル（proxy.header = "upgrade" => "enable"）に変更し、mod_wstunnel を削除。検証: 8625 / は 200、/api/events.host|mux ハンドシェイク 101（ローカル+LAN）。
 
 | コミット | 説明 |
 |------|------|
@@ -2055,7 +2059,7 @@
 
 ## 2026-08-19T13:10:00+09:00
 
-**概要**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 は約 13 時間でクラッシュ（fatal load failure: Context has been disposed）— cordis-plugin-timer の ctx.timeout() が Context の静的な dispose 時に reject し unhandled rejection 化。rc.7（8/17）が最新、cordis/timer バージョンは不変（バグ残存の可能性）だが上流修正を含む。プラグイン一覧不変（131）。
+**概要**：fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 は約 13 時間でクラッシュ（fatal load failure: Context has been disposed）— cordis-plugin-timer の ctx.timeout() が Context の静的な dispose 時に reject し unhandled rejection 化。rc.7（8/17）が最新、cordis/timer バージョンは不変（バグ残存の可能性）だが上流修正を含む。プラグイン一覧不変（131）。
 
 | コミット | 説明 |
 |------|------|
@@ -2063,7 +2067,7 @@
 
 ## 2026-08-18T20:00:00+09:00
 
-**概要**: fix(module): dsh 通常ユーザー実行対応 — 隔離システムユーザー（home /var/lib/dsh）では /home/<user>（700 権限）にアクセスできず、agent が作業ディレクトリを操作できなかった。dshHome オプションを追加し、HOME/DSH_HOME/WorkingDirectory/preStart を統一ルート化、StateDirectory を preStart mkdir + chown に置換。ローカル設定は user="kix" + dshHome="/home/kix/.dsh" で、dsh が kix として実行され /home/kix に到達。
+**概要**：fix(module): dsh 通常ユーザー実行対応 — 隔離システムユーザー（home /var/lib/dsh）では /home/<user>（700 権限）にアクセスできず、agent が作業ディレクトリを操作できなかった。dshHome オプションを追加し、HOME/DSH_HOME/WorkingDirectory/preStart を統一ルート化、StateDirectory を preStart mkdir + chown に置換。ローカル設定は user="kix" + dshHome="/home/kix/.dsh" で、dsh が kix として実行され /home/kix に到達。
 
 | コミット | 説明 |
 |------|------|
@@ -2071,7 +2075,7 @@
 
 ## 2026-08-18T19:30:00+09:00
 
-**概要**: feat(module): nixkits.dsh.settings — 宣言的設定。dsh 設定メニュー項目は $DSH_HOME/settings.yaml（ファイルバックアップ、ホットリロード、namespace 別セクション）に格納。settings オプション（attrsOf attrs、namespace → section）を追加し JSON（合法 YAML）として preStart で書き込み。実測：web-search-deepseek.maxTokens を既定 4096 → 8192 に宣言的オーバーライド。4言語ドキュメントに設定節を追加。
+**概要**：feat(module): nixkits.dsh.settings — 宣言的設定。dsh 設定メニュー項目は $DSH_HOME/settings.yaml（ファイルバックアップ、ホットリロード、namespace 別セクション）に格納。settings オプション（attrsOf attrs、namespace → section）を追加し JSON（合法 YAML）として preStart で書き込み。実測：web-search-deepseek.maxTokens を既定 4096 → 8192 に宣言的オーバーライド。4言語ドキュメントに設定節を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2080,7 +2084,7 @@
 
 ## 2026-08-18T18:45:00+09:00
 
-**概要**: docs(dsh) + refactor(skill): プラグイン一覧同期 — docs/dsh.md 4言語に「プラグイン一覧」節（131 内蔵 entry id、id -> パッケージ）を追加、nixkits.dsh.plugins.disabled の参照に。check-updates スキル第5ステップに dsh 特有説明を追加：更新時に新パッケージの dsh-*/cordis.patch.yml から一覧を抽出して docs に同期。
+**概要**：docs(dsh) + refactor(skill): プラグイン一覧同期 — docs/dsh.md 4言語に「プラグイン一覧」節（131 内蔵 entry id、id -> パッケージ）を追加、nixkits.dsh.plugins.disabled の参照に。check-updates スキル第5ステップに dsh 特有説明を追加：更新時に新パッケージの dsh-*/cordis.patch.yml から一覧を抽出して docs に同期。
 
 | コミット | 説明 |
 |------|------|
@@ -2096,7 +2100,7 @@
 
 ## 2026-08-18T18:20:00+09:00
 
-**概要**: feat(module): nixkits.dsh.plugins — 宣言的プラグインオン/オフと設定。dsh プラグインは cordis.patch.yml でランタイムホットリロード、モジュールに plugins.disabled（entry id）、plugins.settings（config 上書き）、plugins.extraPatch（MCP などの生フラグメント）を追加。システム設定は MCP を extraPatch に移行、API key を kix.credentials に宣言化、session-telemetry-otel + session-stats を無効化例として設定。実測：cordis.patch.yml 正しく生成、absent-id 警告なし。
+**概要**：feat(module): nixkits.dsh.plugins — 宣言的プラグインオン/オフと設定。dsh プラグインは cordis.patch.yml でランタイムホットリロード、モジュールに plugins.disabled（entry id）、plugins.settings（config 上書き）、plugins.extraPatch（MCP などの生フラグメント）を追加。システム設定は MCP を extraPatch に移行、API key を kix.credentials に宣言化、session-telemetry-otel + session-stats を無効化例として設定。実測：cordis.patch.yml 正しく生成、absent-id 警告なし。
 
 | コミット | 説明 |
 |------|------|
@@ -2105,7 +2109,7 @@
 
 ## 2026-08-18T17:55:00+09:00
 
-**概要**: fix(module): lighttpd が Host/Origin を loopback に書き換え — trustedHosts 方式を置換。dsh の isTrustedApiRequest が loopback を見て通過、per-deployment trustedHosts 不要、かつ LAN ホスト名/IP をバックエンドに漏洩しない。Origin は Host と同時に書き換え必須（同一生成元チェック失敗を避けるため）。実測：trustedHosts 削除後も反代 API（harukax.lan / 192.168.31.241）が ok:true。
+**概要**：fix(module): lighttpd が Host/Origin を loopback に書き換え — trustedHosts 方式を置換。dsh の isTrustedApiRequest が loopback を見て通過、per-deployment trustedHosts 不要、かつ LAN ホスト名/IP をバックエンドに漏洩しない。Origin は Host と同時に書き換え必須（同一生成元チェック失敗を避けるため）。実測：trustedHosts 削除後も反代 API（harukax.lan / 192.168.31.241）が ok:true。
 
 | コミット | 説明 |
 |------|------|
@@ -2113,7 +2117,7 @@
 
 ## 2026-08-18T17:30:00+09:00
 
-**概要**: fix(module): dsh trustedHosts オプション — リバースプロキシ経由で全 /api が 403。dsh は /api リクエストの Host header を検証（isTrustedApiRequest：Host は loopback か信頼リスト必須、ブラウザ Origin も同一生成元）。lighttpd 経由で Host が LAN ホスト名/IP になり全 403 forbidden。nixkits.dsh.trustedHosts を追加（repeatable --trusted-host にマップ）、システム設定で harukax.lan + 192.168.31.241 を信頼し API 復旧。
+**概要**：fix(module): dsh trustedHosts オプション — リバースプロキシ経由で /api が全 403。dsh は /api リクエストの Host header を検証するため、lighttpd 経由では Host が LAN ホスト名/IP となり拒否された。nixkits.dsh.trustedHosts を追加（repeatable --trusted-host にマップ）、システム設定で harukax.lan + 192.168.31.241 を信頼して API 復旧。
 
 | コミット | 説明 |
 |------|------|
@@ -2121,7 +2125,7 @@
 
 ## 2026-08-18T16:20:05+09:00
 
-**概要**: fix(dsh): ブラウザ側 client bundle パッチ — crypto.randomUUID fallback。crypto.randomUUID() は非セキュアコンテキスト（LAN IP への HTTP、つまり lighttpd リバースプロキシ経由）で使用不可となり、webui が "crypto.randomUUID is not a function" で失敗。postInstall で dsh-client-connection + dsh-client-ui-conversation の crypto.randomUUID を __dshUuid ヘルパー（crypto.getRandomValues にフォールバック、全コンテキストで利用可）に置換。サーバー側 index.js は Node の crypto を使用、変更不要。
+**概要**：fix(dsh): ブラウザ側 client bundle パッチ — crypto.randomUUID fallback。crypto.randomUUID() は非セキュアコンテキスト（LAN IP への HTTP、lighttpd リバースプロキシ経由）で使用不可のため webui がエラー。postInstall で dsh-client-connection + dsh-client-ui-conversation の crypto.randomUUID を __dshUuid ヘルパー（crypto.getRandomValues にフォールバック、全コンテキストで利用可）に置換。
 
 | コミット | 説明 |
 |------|------|
@@ -2129,7 +2133,7 @@
 
 ## 2026-08-18T15:29:14+09:00
 
-**概要**: fix/docs(dsh): lighttpd リバースプロキシ定稿 — dsh 内部 loopback ポート 8615（SearXNG 42701 に合わせる）、lighttpd 对外ポート 8625（4270 に合わせる）、ファイアウォールは lighttpd 对外ポートを開放（dsh 内部ポートでなく）。4 言語ドキュメント同期。
+**概要**：fix/docs(dsh): lighttpd リバースプロキシ定稿 — dsh 内部 loopback ポート 8615（SearXNG 42701 に合わせる）、lighttpd 対外ポート 8625（4270 に合わせる）、ファイアウォールは lighttpd 対外ポートを開放（dsh 内部ポートでなく）。4 言語文書同期。
 
 | コミット | 説明 |
 |------|------|
@@ -2138,7 +2142,7 @@
 
 ## 2026-08-18T14:38:26+09:00
 
-**概要**: feat(module): dsh reverseProxy via lighttpd — dsh が非 loopback host を拒否するため（RCE 安全）、lighttpd の `$SERVER["socket"]` ブロックで 0.0.0.0:8626 を dsh loopback 8625 にリバースプロキシ（SearXNG の lighttpd インスタンスを再利用、extraConfig は types.lines でクリーンにマージ）。対外 8626 をファイアウォール開放。
+**概要**：feat(module): nixkits.dsh.reverseProxy（lighttpd）新規 — dsh は非 loopback host を拒否するため（RCE 安全）、lighttpd の `$SERVER["socket"]` ブロックで 0.0.0.0:8626 を dsh loopback 8625 にリバースプロキシ（SearXNG の lighttpd 実例を再利用、extraConfig は types.lines でマージ可）、ファイアウォールで 8626 を開放。
 
 | コミット | 説明 |
 |------|------|
@@ -2146,7 +2150,12 @@
 
 ## 2026-08-18T10:29:46+09:00
 
-**概要**: feat/fix(dsh): dsh サービス配備 + MCP/skills 設定 — ① モジュール修正：dsh システムユーザー HOME=/var/empty（読取専用）で EPERM、書込可能な /var/lib/dsh home + StateDirectory に変更；② HMR サービスが --expose-internals を要求（NODE_OPTIONS 禁止・CLI 非認識）、node --expose-internals で bin.js を直接起動；③ MCP サービスを cordis.patch.yml の `insert:` 構文（id-targeted override でなく）で SearXNG + Godot 設定；④ skills を /var/lib/dsh/skills/（.agent-presets サブディレクトリでなく）に複製；⑤ nixkits-skills のディレクトリを ~/.dsh/skills に修正。
+**概要**：feat/fix(dsh): dsh サービスを配備し MCP + skills を設定。
+- モジュール修正：dsh システムユーザーの HOME=/var/empty（読取専用）が EPERM を招くため、書込可能な /var/lib/dsh + StateDirectory に変更
+- HMR サービスは --expose-internals を要するため、node --expose-internals で bin.js を直接起動
+- MCP サービス（SearXNG + Godot）は cordis.patch.yml の `insert:` 構文で設定（id-targeted override ではない）
+- skills は /var/lib/dsh/skills/ へ複製（.agent-presets サブディレクトリではない）
+- nixkits-skills のディレクトリを ~/.dsh/skills に修正
 
 | コミット | 説明 |
 |------|------|
@@ -2157,7 +2166,7 @@
 
 ## 2026-08-18T08:42:40+09:00
 
-**概要**: docs: ruyi チャンネル版数を同期（stable 0.50.0 → 0.51.0、beta/alpha 日付）し、en/ja/pcn README の ruyi 説明列を補完（空 `<br><br>` → RuyiSDK 説明 + 3 チャンネル版数、zh と一致）。
+**概要**：docs: ruyi チャンネル版数を同期（stable 0.50.0 → 0.51.0、beta/alpha 日付）し、en/ja/pcn README の ruyi 説明列を補完（空 `<br><br>` → RuyiSDK 説明 + 3 チャンネル版数、zh と一致）。
 
 | コミット | 説明 |
 |------|------|
@@ -2165,7 +2174,12 @@
 
 ## 2026-08-18T07:19:30+09:00
 
-**概要**: 監査修正 — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 更新；② comfyui-rocm モジュールに services.comfyui assertion 復元 + nixpkgs-compat パッチ対象を明確化；③ overlay codewhale アーキテクチャ別ソースビルドフォールバック（riscv64）；④ ドキュメント版数/リンク/説明同期；⑤ write-maintenance-log スキル表ヘッダ + katalish 列削除。
+**概要**：監査修正 —— 版数更新とモジュール/overlay/文書/スキル修正。
+- codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 更新
+- comfyui-rocm モジュールに services.comfyui assertion を復元し、nixpkgs-compat パッチ対象を明確化
+- overlay codewhale はアーキテクチャ別にソースビルドへフォールバック（riscv64）
+- 文書の版数、ruyi リンク、codewhale-sudo 説明を同期
+- write-maintenance-log スキルに表ヘッダを追加し katalish 列を削除
 
 | コミット | 説明 |
 |------|------|
@@ -2180,7 +2194,7 @@
 
 ## 2026-08-15T10:04:37+09:00
 
-**概要**: refactor: comfyui-rocm-patch + comfyui-strix-halo を単一 comfyui-rocm に統合 — 2モジュールが ComfyUI ROCm サポートの異なる部分（パッチ層 vs Strix Halo ハードウェア最適化）を処理していたのを、nixkits.comfyui-rocm（enable オプション）に統合し、パッチマウント、GFX オーバーライド、xformers バイパス、C ツールチェーン、Strix Halo 設定（ROCm ランタイム/DeviceAllow/kernelParams）を網羅。ドキュメントと README 同期。
+**概要**：refactor: comfyui-rocm-patch + comfyui-strix-halo を単一 comfyui-rocm に統合 — 2モジュールが ComfyUI ROCm サポートの異なる部分（パッチ層 vs Strix Halo ハードウェア最適化）を処理していたのを、nixkits.comfyui-rocm（enable オプション）に統合し、パッチマウント、GFX オーバーライド、xformers バイパス、C ツールチェーン、Strix Halo 設定（ROCm ランタイム/DeviceAllow/kernelParams）を網羅。文書と README 同期。
 
 | コミット | 説明 |
 |------|------|
@@ -2188,7 +2202,7 @@
 
 ## 2026-08-15T09:23:15+09:00
 
-**概要**: refactor: パッチファイル rog-control-center-fix.patch → rcc-fix.patch に改名し、rcc-fix 統一命名の仕上げ。overlays/rcc-fix.nix と 4言語 rcc-fix.md の参照を更新。
+**概要**：refactor: パッチファイル rog-control-center-fix.patch → rcc-fix.patch に改名し、rcc-fix 統一命名の仕上げ。overlays/rcc-fix.nix と 4言語 rcc-fix.md の参照を更新。
 
 | コミット | 説明 |
 |------|------|
@@ -2196,7 +2210,7 @@
 
 ## 2026-08-15T08:31:32+09:00
 
-**概要**: feat(dsh): deepseek-harness 0.1.0-rc.6 パッケージ新規追加 + 4言語ドキュメント。DSH（DeepSeek Harness）— すべてがプラグイン。プリビルト npm パッケージ（@deepseek-ai/dsh、bin dsh → lib/bin.js）、package-lock.json を同梱（npm tarball に lock なし）、dontNpmBuild で build スキップ。godot-ai と dsh を README に掲載（4言語）。
+**概要**：deepseek-harness 0.1.0-rc.6 — 新規パッケージ（@deepseek-ai/dsh、bin dsh → lib/bin.js）。プリビルト npm パッケージで package-lock.json を同梱（npm tarball に lock なし）、dontNpmBuild で build をスキップ。4 言語文書を追加し godot-ai と dsh を README に掲載。
 
 | コミット | 説明 |
 |------|------|
@@ -2204,7 +2218,7 @@
 
 ## 2026-08-15T08:07:33+09:00
 
-**概要**: refactor: rog-control-center-fix を rcc-fix に統合 — 両者は同一の ROG Control Center 修正プロジェクト（overlay asusctl パッチ + module systemd デッドロック修正）。単一の rcc-fix に統一：overlays/rog-control-center-fix.nix → rcc-fix.nix、modules/rog-control-center-fix.nix → rcc-fix.nix、オプション nixkits.rog-control-center-fix → nixkits.rcc-fix、独立ドキュメント削除（rcc-fix.md に統合）。
+**概要**：refactor: rog-control-center-fix を rcc-fix に統合 — 両者は同一の ROG Control Center 修正プロジェクト（overlay asusctl パッチ + module systemd デッドロック修正）。単一の rcc-fix に統一：overlays/rog-control-center-fix.nix → rcc-fix.nix、modules/rog-control-center-fix.nix → rcc-fix.nix、オプション nixkits.rog-control-center-fix → nixkits.rcc-fix、独立文書は削除（rcc-fix.md に統合）。
 
 | コミット | 説明 |
 |------|------|
@@ -2212,7 +2226,7 @@
 
 ## 2026-08-13T01:20:29+09:00
 
-**概要**: fix(default-overlay): godot-ai を fastmcp overlay 適用で構築 — default overlay の final.callPackage が fastmcp を nixpkgs 3.3.1（循環 import バグ）に解決。 (prev.extend (import ./fastmcp.nix)) で依存を 3.4.7 に解決。
+**概要**：fix(default-overlay): godot-ai を fastmcp overlay 適用で構築 — default overlay の final.callPackage が fastmcp を nixpkgs 3.3.1（循環 import バグ）に解決。 (prev.extend (import ./fastmcp.nix)) で依存を 3.4.7 に解決。
 
 | コミット | 説明 |
 |------|------|
@@ -2220,7 +2234,7 @@
 
 ## 2026-08-12T10:05:00+09:00
 
-**概要**: fix(default-overlay): godot-ai パス修正 — default overlay の callPackage は `../packages/`（overlay がサブディレクトリのため）であり、`./packages/` では存在しない `overlays/packages/` に解決された。
+**概要**：fix(default-overlay): godot-ai パス修正 — default overlay の callPackage は `../packages/`（overlay がサブディレクトリのため）であり、`./packages/` では存在しない `overlays/packages/` に解決された。
 
 | コミット | 説明 |
 |------|------|
@@ -2228,7 +2242,7 @@
 
 ## 2026-08-12T10:00:00+09:00
 
-**概要**: fix(default-overlay): godot-ai を登録 — flake packages には存在するが デフォルト overlay から漏れており、下流（/etc/nixos）から pkgs.godot-ai として見えなかった。
+**概要**：fix(default-overlay): godot-ai を登録 — flake packages には存在するが デフォルト overlay から漏れており、下流（/etc/nixos）から pkgs.godot-ai として見えなかった。
 
 | コミット | 説明 |
 |------|------|
@@ -2236,7 +2250,7 @@
 
 ## 2026-08-12T09:18:26+09:00
 
-**概要**: docs(godot-ai): 4言語ドキュメント新規追加（72行）— アーキテクチャ図、依存表（fastmcp 3.4 含む）、システムインストール + MCP 設定 + 前提条件ガイド。
+**概要**：docs(godot-ai): 4言語文書新規追加（72行）— アーキテクチャ図、依存表（fastmcp 3.4 含む）、システムインストール + MCP 設定 + 前提条件ガイド。
 
 | コミット | 説明 |
 |------|------|
@@ -2244,7 +2258,7 @@
 
 ## 2026-08-12T07:07:27+09:00
 
-**概要**: feat(godot-ai): godot-ai 3.1.5 パッケージ新規追加 + fastmcp 3.4.7 overlay。godot-ai は MCP クライアントを実行中 Godot エディタに接続する本格 MCP server。fastmcp 3.3.1→3.4.7（godot-ai が >=3.4.0 を要求、3.3.x に循環 import バグ）、fastmcp-slim + py-key-value-aio 0.4.5 も連動アップグレード。devshell godot-mcp→godot-ai。
+**概要**：feat(godot-ai): godot-ai 3.1.5 パッケージ新規追加 + fastmcp 3.4.7 overlay。godot-ai は MCP クライアントを実行中 Godot エディタに接続する本格 MCP server。fastmcp 3.3.1→3.4.7（godot-ai が >=3.4.0 を要求、3.3.x に循環 import バグ）、fastmcp-slim + py-key-value-aio 0.4.5 も連動アップグレード。devshell godot-mcp→godot-ai。
 
 | コミット | 説明 |
 |------|------|
@@ -2252,7 +2266,7 @@
 
 ## 2026-08-11T18:49:54+09:00
 
-**概要**: fix(breeze-black): Edge/Chromium 用 純黒背景 + 純白前景 — sed 再マップ拡張：背景 #292c30 → #000000（ボタン/ツールバー/無効化）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、灰色残りゼロ。
+**概要**：fix(breeze-black): Edge/Chromium 用 純黒背景 + 純白前景 — sed 再マップ拡張：背景 #292c30 → #000000（ボタン/ツールバー/無効化）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、灰色残りゼロ。
 
 | コミット | 説明 |
 |------|------|
@@ -2260,7 +2274,7 @@
 
 ## 2026-08-11T18:41:14+09:00
 
-**概要**: fix(breeze-black): 背景変数を真っ黒 #000000 にマップ — Breeze-Dark の基本色は #202326（濃灰、純黒でない）。CSS コピー後、主背景/base を #000000 に再マップ（ボタンは #292c30 を維持し区別を確保）、gtk-dark.css は自己完結化（gtk.css のコピー）し灰色 import を廃止。
+**概要**：fix(breeze-black): 背景変数を真っ黒 #000000 にマップ — Breeze-Dark の基本色は #202326（濃灰、純黒でない）。CSS コピー後、主背景/base を #000000 に再マップ（ボタンは #292c30 を維持し区別を確保）、gtk-dark.css は自己完結化（gtk.css のコピー）し灰色 import を廃止。
 
 | コミット | 説明 |
 |------|------|
@@ -2268,7 +2282,7 @@
 
 ## 2026-08-11T16:19:49+09:00
 
-**概要**: fix(breeze-black): gtk.css 本体を Breeze-Dark のダーク配色で上書き — Chromium 系（Edge/Chrome）は prefer-dark を無視して gtk.css を直接読み込む；BreezeBlack（ライト Breeze からの改名）にライト変数（#eff0f1）が残り Edge がグレー表示。gtk-{3,4}.0 の gtk.css(+.map) をダーク（#202326）に上書き。
+**概要**：fix(breeze-black): gtk.css 本体を Breeze-Dark のダーク配色で上書き — Chromium 系（Edge/Chrome）は prefer-dark を無視して gtk.css を直接読み込む；BreezeBlack（ライト Breeze からの改名）にライト変数（#eff0f1）が残り Edge がグレー表示。gtk-{3,4}.0 の gtk.css(+.map) をダーク（#202326）に上書き。
 
 | コミット | 説明 |
 |------|------|
@@ -2276,7 +2290,7 @@
 
 ## 2026-08-11T16:02:39+09:00
 
-**概要**: fix(breeze-black): Breeze-Dark を保持 — BreezeBlack の gtk-dark.css が `@import ../../Breeze-Dark/...` で本物のダーク配色（#202326）を取得。preFixup での削除で import が切れ GTK がライトにフォールバック（「黒くない」症状）。
+**概要**：fix(breeze-black): Breeze-Dark を保持 — BreezeBlack の gtk-dark.css が `@import ../../Breeze-Dark/...` で本物のダーク配色（#202326）を取得。preFixup での削除で import が切れ GTK がライトにフォールバック（「黒くない」症状）。
 
 | コミット | 説明 |
 |------|------|
@@ -2284,7 +2298,7 @@
 
 ## 2026-08-09T22:43:43+09:00
 
-**概要**: refactor(skill): トラップ4追加 — 無引数 `nix flake lock` は全フローティング input を更新（nixpkgs ドリフト再発、8/7 nixpkgs で diffusers/httpx 失敗）。--update-input または nixpkgs rev 固定を使用。
+**概要**：refactor(skill): トラップ4追加 — 無引数 `nix flake lock` は全フローティング input を更新（nixpkgs ドリフト再発、8/7 nixpkgs で diffusers/httpx 失敗）。--update-input または nixpkgs rev 固定を使用。
 
 | コミット | 説明 |
 |------|------|
@@ -2292,7 +2306,7 @@
 
 ## 2026-08-09T19:40:21+09:00
 
-**概要**: feat(patches): ローカル comfyui-nix ビルド修正をパッチファイルとして正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook、nixpkgs ≥ 8/5）；② flaky スイート doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib ランタイム依存スキップ。モジュールコメント + 4 言語ドキュメント更新。
+**概要**：feat(patches): ローカル comfyui-nix ビルド修正をパッチファイルとして正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook、nixpkgs ≥ 8/5）；② flaky スイート doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib ランタイム依存スキップ。モジュールコメント + 4 言語文書更新。
 
 | コミット | 説明 |
 |------|------|
@@ -2301,7 +2315,7 @@
 
 ## 2026-08-09T19:05:53+09:00
 
-**概要**: refactor(skill): nixkits-check-updates に nixpkgs ドリフト故障診断セクション追加 — ① 旧 flake.lock 復元時は flake.nix の follows を要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest パッケージは doInstallCheck=false（pytestCheckHook は installCheckPhase で実行）；③ pythonRuntimeDepsCheckHook（nixpkgs ≥ 8/5）が wheel 構築を破壊、dontCheckRuntimeDeps=true で修復。
+**概要**：refactor(skill): nixkits-check-updates に nixpkgs ドリフト故障診断セクション追加 — ① 旧 flake.lock 復元時は flake.nix の follows を要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest パッケージは doInstallCheck=false（pytestCheckHook は installCheckPhase で実行）；③ pythonRuntimeDepsCheckHook（nixpkgs ≥ 8/5）が wheel 構築を破壊、dontCheckRuntimeDeps=true で修復。
 
 | コミット | 説明 |
 |------|------|
@@ -2309,7 +2323,7 @@
 
 ## 2026-08-09T04:21:09+09:00
 
-**概要**: fix(module): llama-cpp — ① services.llama-cpp.extraFlags は非推奨のため settings で --sleep-idle-seconds を渡すよう変更；② freeform settings は分離定義不可のため lib.mkMerge で models-preset と sleep-idle-seconds を統合。
+**概要**：fix(module): llama-cpp — ① services.llama-cpp.extraFlags は非推奨のため settings で --sleep-idle-seconds を渡すよう変更；② freeform settings は分離定義不可のため lib.mkMerge で models-preset と sleep-idle-seconds を統合。
 
 | コミット | 説明 |
 |------|------|
@@ -2318,7 +2332,7 @@
 
 ## 2026-08-08T23:07:40+09:00
 
-**概要**: fix(breeze-black): look-and-feel グローバルテーマ復元と GTK リネーム修正 — 7/23 外部パッチ除去後の2つのリグレッション：① org.kde.breezeblack.desktop 欠落で BreezeBlack が設定のテーマ選択から消えたため、look-and-feel をローカル内蔵で復元；② preFixup の Breeze* グロブが Breeze と Breeze-Dark 両方に一致し GTK テーマがネスト化、Breeze のみリネームに修正。
+**概要**：fix(breeze-black): look-and-feel グローバルテーマ復元と GTK リネーム修正 — 7/23 外部パッチ除去後の2つのリグレッション：① org.kde.breezeblack.desktop 欠落で BreezeBlack が設定のテーマ選択から消えたため、look-and-feel をローカル内蔵で復元；② preFixup の Breeze* グロブが Breeze と Breeze-Dark 両方に一致し GTK テーマがネスト化、Breeze のみリネームに修正。
 
 | コミット | 説明 |
 |------|------|
@@ -2326,7 +2340,7 @@
 
 ## 2026-08-08T22:50:33+09:00
 
-**概要**: fix(codewhale-src): 0.9.4 に同期し source hash を修正 — 従来の nix-prefetch-url archive tarball hash が fetchFromGitHub（git プロトコル）と不一致で riscv64 CI が連続失敗。fetchFromGitHub ビルドで正しい hash を取得、Cargo.lock 同期、技能の誤った助言も修正。
+**概要**：fix(codewhale-src): 0.9.4 に同期し source hash を修正 — 従来の nix-prefetch-url archive tarball hash が fetchFromGitHub（git プロトコル）と不一致で riscv64 CI が連続失敗。fetchFromGitHub ビルドで正しい hash を取得、Cargo.lock 同期、技能の誤った助言も修正。
 
 | コミット | 説明 |
 |------|------|
@@ -2335,7 +2349,7 @@
 
 ## 2026-08-08T22:20:21+09:00
 
-**概要**: codewhale 0.9.4 — 上流バグ修正；mcp-searxng 1.14.1 — 上流メンテナンス；opencode-telegram 0.23.1 — 上流機能更新
+**概要**：codewhale 0.9.4 — 上流バグ修正；mcp-searxng 1.14.1 — 上流メンテナンス；opencode-telegram 0.23.1 — 上流機能更新
 
 | コミット | 説明 |
 |------|------|
@@ -2352,7 +2366,7 @@
 
 ## 2026-08-05T07:24:56+09:00
 
-**概要**: chore(pkgs) — codewhale-src を 0.9.3 に同期（riscv64 ソースビルドがプレビルト版より 3 バージョン遅れていた）。version・fetchFromGitHub hash・Cargo.lock（711 → 763 エントリ）を同期。
+**概要**：chore(pkgs) — codewhale-src を 0.9.3 に同期（riscv64 ソースビルドがプレビルト版より 3 バージョン遅れていた）。version・fetchFromGitHub hash・Cargo.lock（711 → 763 エントリ）を同期。
 
 | コミット | 説明 |
 |------|------|
@@ -2360,7 +2374,7 @@
 
 ## 2026-08-05T01:30:00+09:00
 
-**概要**: refactor(skill) — nixkits-check-updates に Rust パッケージ（buildRustPackage）更新フローを追加。codewhale-src の Cargo.lock 同期経験を汎化（version + source hash + Cargo.lock の三点同期、上流 lock 取得とエントリ数検証、クロスコンパイルタイムアウト時のフォールバック）。
+**概要**：refactor(skill) — nixkits-check-updates に Rust パッケージ（buildRustPackage）更新フローを追加。codewhale-src の Cargo.lock 同期経験を汎化（version + source hash + Cargo.lock の三点同期、上流 lock 取得とエントリ数検証、クロスコンパイルタイムアウト時のフォールバック）。
 
 | コミット | 説明 |
 |------|------|
@@ -2368,7 +2382,7 @@
 
 ## 2026-08-04T02:15:00+09:00
 
-**概要**: fix(ruyi): checkPhase の ruff lint 失敗を許容 — 2番目の ruff check（--fix無し）が nixpkgs ruff 更新後の139件の上流違反でビルドをブロックしていた。
+**概要**：fix(ruyi): checkPhase の ruff lint 失敗を許容 — 2番目の ruff check（--fix無し）が nixpkgs ruff 更新後の139件の上流違反でビルドをブロックしていた。
 
 | コミット | 説明 |
 |------|------|
@@ -2376,7 +2390,7 @@
 
 ## 2026-08-04T01:15:52+09:00
 
-**概要**: codewhale 0.9.3 — 上流バグ修正；mcp-searxng 1.14.0 — 上流機能更新
+**概要**：codewhale 0.9.3 — 上流バグ修正；mcp-searxng 1.14.0 — 上流機能更新
 
 | コミット | 説明 |
 |------|------|

@@ -1374,7 +1374,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `9483c2c` | docs(dsh-api-balance): 峰自動起動/解除與 peakEnd segment（四語） |
 ## 2026-09-02T10:23:55+09:00
 
-**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能維持 — 峰時赤表示拡張：用量頁 context 進捗 bar 與明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 一括紅色系統一、既赤用量環/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得、複数 segment 区別可能；chart 峰時同 PEAK_PALETTE 維持——赤系但各 model 異赤 tone（図例 dot 同同期）、同一色盲目的置換非、赤且区分可能
+**摘要**：feat(dsh-api-balance): 峰時赤用量頁全体統一 + chart model 色区分可能 — 峰時赤用量頁 context 進捗 bar 與明細色塊、更新/load 動画（dshAbSpin 赤 ring dshAbSpinPeak class 新設）、読取 text 拡大、既赤用量環/chart 一致；進捗 bar 各 segment peakShade index 毎異赤 tone 取得区分可能；chart 峰時 PEAK_PALETTE 維持——赤系各 model 異赤 tone（図例 dot 同期）
 
 | 提交 | 説明 |
 |------|------|
@@ -1390,7 +1390,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `e529d48` | docs(dsh-api-balance): 窄幅動作内容適応+面板 scroll 回帰（四語） |
 ## 2026-09-02T05:56:57+09:00
 
-**摘要**：fix(dsh-api-balance): 縦屏越界時設定 dialog 頁面 size 邏輯直接採用 — 内容幅利用可能空間超（縦屏越界）場合、面板幅設定 dialog 同頁面 size 邏輯（min(520px, 94vw)）直接切替、内容面板幅適応；僅極罕 hard 超幅内容面板横 scroll 兜底；pager 同同期——越界時頁幅面板利用可能幅変更（内容折返適応）、gesture 面板 native scroll 返還、頁面切替指示 dot 経由、内容収時 drag/swipe 頁面切替自動復帰
+**摘要**：fix(dsh-api-balance): 縦屏越界時設定 dialog 頁面 size 邏輯採用 — 内容幅利用可能空間超場合、面板幅設定 dialog 同頁面 size（min(520px, 94vw)）切替内容適応；稀 hard 超幅内容限定面板横 scroll 兜底；pager 同同期——頁幅面板利用可能幅変更（内容折返）、gesture 面板 native scroll 返還、頁面切替指示 dot 経由、収時 drag/swipe 頁面切替自動復帰
 
 | 提交 | 説明 |
 |------|------|
@@ -1398,7 +1398,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `a8f8cda` | docs(dsh-api-balance): 縦屏越界 size 邏輯説明（四語） |
 ## 2026-09-02T05:45:48+09:00
 
-**摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 與座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新（面板 ring 祖先 chain 離脱）、z-index 900 充值/登録/設定 overlay 下
+**摘要**：fix(dsh-api-balance): 用量面板頁面級 fixed portal 化（移動端画面外根治） — 面板「会話 tree 内 absolute 配置」→ document.body 級 fixed portal（設定 dialog 同 architecture）変更、会話区域 overflow clip 與座標空間影響受不；位置 ring 锚点視口座標自換算（resize/scroll 再計算、useLayoutEffect 測定 flash 回避）；二重 clamp：幅上限 = min(锚点空間, 視口 − 24px)、高度上限 = 锚点上方可用空間（横屏自動縮小 top bar 回避）——全画面 size 画面外出不；面板外 click 閉鎖同更新、z-index 900 充值/登録/設定 overlay 下
 
 | 提交 | 説明 |
 |------|------|
@@ -1406,7 +1406,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `7145e5f` | docs(dsh-api-balance): 頁面級 overlay architecture 説明（四語） |
 ## 2026-09-02T05:29:47+09:00
 
-**摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll pager 全体吞——内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅與面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止（gesture 面板 scroll 限定）、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持
+**摘要**：fix(dsh-api-balance): 手機縦屏窄幅横 gesture 面板 scroll 返還 — 根因：pager touch-action: pan-y 觸屏環境瀏覽器級横 gesture 禁止、面板 native 横 scroll 吞、内容面板幅超時「出界且横 scroll 不能」表現；修正：pager 内容幅與面板利用可能幅（fitWidth prop）比較、超過時 touch-action auto 切替（横 gesture 面板 native scroll 返還）drag 翻頁停止、頁面切替上方指示 dot 経由維持；収時 pan-y + drag/swipe 翻頁維持
 
 | 提交 | 説明 |
 |------|------|
@@ -1437,7 +1437,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `2f37193` | docs(dsh-api-balance): 移動端面板高/幅適応説明（四語） |
 ## 2026-09-02T04:48:40+09:00
 
-**摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 與 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 胶囊状伸長）、横 drag/swipe 翻頁対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応動態調整自身不 scroll、全内容用量面板自身縦 scrollbar 依存
+**摘要**：feat(dsh-api-balance): 消耗明細区域水平翻頁（indicator dot + swipe） — 当日/当月/30日 與 模型別内訳/chart 同一区域二頁水平 pager 統合（1 頁目：消耗 window 行、2 頁目：模型別 + 日別/月別 chart）；区域上部類手機主屏幕頁面指示 dot（tap 可、active dot 膠囊状伸長）、横 drag/swipe 頁面切替対応（pointer capture 閾値超過後限定有効化、頁内按鈕 click 不奪；touch-action: pan-y 面板縦 scroll 維持）；区域高度内容応変化自身 scroll 不、全内容用量面板縦 scroll 依存
 
 | 提交 | 説明 |
 |------|------|
@@ -1453,7 +1453,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `3b1a7be` | docs(dsh-api-balance): 挨拶 trigger 余额標籤改訂（四語） |
 ## 2026-09-02T04:29:05+09:00
 
-**摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 與 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、用戶明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加
+**摘要**：fix(dsh-api-balance): 界面最適化全預設有効化 + 移動端 keyboard 抑制強化 — 底部統計条横 scroll 與 Enter/改行交換二設定預設 off → 預設 on 変更（localStorage 未設定 = on 扱、使用者明示 off 仍有效）；統計条 CSS 注入 ui-chat style 標籤未準備時 retry（1 秒間隔最大 5 回）追加、mount 時機静失敗回避；移動端 keyboard 抑制強化——觸屏判定 coarse pointer 或 maxTouchPoints > 0（平板/混合 device 対応）拡大、focusin 不発火 engine 向 focus capture 即 blur 軟 keyboard 閉 fallback 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -1461,7 +1461,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `b8cd0b7` | docs(dsh-api-balance): 界面設定預設有効説明（四語）+ AGENTS Enter key 項目 |
 ## 2026-09-02T02:49:52+09:00
 
-**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋（面板上限拡大全幅化）解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（現行公式規則：週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余週末終日含低谷）用量環與 chart 紅色表示 + 「峰時課金」badge（面板 header 與 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
+**摘要**：feat(dsh-api-balance): 面板全幅回帰修正 + 峰谷峰標記 + 移動端 keyboard 抑制 — 面板幅内容 scrollWidth 一回測定具体 px 化、「chart px → 面板 max-content → observer → chart px」正反饋解消、上限 min(锚点右端 − sidebar, 640) 引締、超過時面板内横 scroll；DeepSeek 峰時間帯（週一〜週五 北京時間 09:00–12:00、14:00–18:00、其余週末終日含低谷）用量環與 chart 紅色表示 + 「峰時課金」badge（面板 header 與 chart 標題）、挨拶音声後峰提示追加（pack `peak` segment / TTS 回退）、作成器 `peak` segment 追加；移動端 sidebar session 切替時軟 keyboard 自動表示不（focusin capture 非 tap 入力欄聚焦遮断、預設有効、設定 → 界面無効化可）
 
 | 提交 | 説明 |
 |------|------|
@@ -1492,7 +1492,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `9dc7a5d` | feat(dsh-api-balance): 設定 dialog（界面/音声）+ 統計条横 scroll + Enter key 交換 |
 ## 2026-09-01T11:34:40+09:00
 
-**摘要**: feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API 鍵 / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日與模型別消耗正文指標子行（金額 / 入 / 缓存命中 / 出）分割、横向幅更節約。
+**摘要**：feat(dsh-api-balance): 動的幅 + 帳戶情報一行化 + 消耗指標子行 — 面板幅 max-content 動的適応変更（min 264px、上限 = anchor 右端 − sidebar）、固定幅正文折返解消。API 鍵 / 帳戶状態 / 幣別残高「帳戶情報」一行統合（· 区切）、充值按鈕標題右側移動。当日 / 当月 / 30 日與模型別消耗正文指標子行（金額 / 入 / cache命中 / 出）分割、横向幅更節約。
 
 | 提交 | 説明 |
 |------|------|
@@ -1500,7 +1500,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T11:20:09+09:00
 
-**摘要**: feat(dsh-api-balance): 面板幅縮小 + 標題/正文二行 layout — 面板幅 264px 統一（元使用量 ring 一致）、狭幅溢出時限定横 scroll 表示。各行「標題（10px 三次色）/ 正文（12px 折返可）」二行 layout 変更（token 取得元階層再利用、縦方向余白豊富故美観向上）。chart 幅下限 220 降下面板追従。
+**摘要**：feat(dsh-api-balance): 面板幅縮小 + 標題/正文二行 layout — 面板幅 264px 統一（元使用量 ring 一致）、狭幅溢出時限定横 scroll 表示。各行「標題（10px 三次色）/ 正文（12px 折返可）」二行 layout 変更（token 取得元階層再利用、縦方向余白豊富故美観向上）。chart 幅下限 220 降下面板追従。
 
 | 提交 | 説明 |
 |------|------|
@@ -1508,7 +1508,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T10:45:06+09:00
 
-**摘要**: feat(dsh-api-balance): 面板幅 content base 化 + 左 sidebar 回避 — 残高視図幅 max-content 変更（上方文字一行維持）；不出屏上限「anchor 右端 − 左 sidebar 幅 − margin」変更（sidebar 幅幾何 hit-test 測定、build hash class 名回避、window resize 時再計算）、左 toolbar 覆被防。超出 content 横 scroll 継続。
+**摘要**：feat(dsh-api-balance): 面板幅 content base 化 + 左 sidebar 回避 — 残高視図幅 max-content 変更（上方文字一行維持）；不出屏上限「anchor 右端 − 左 sidebar 幅 − margin」変更（sidebar 幅幾何 hit-test 測定、build hash class 名回避、window resize 時再計算）、左 toolbar 覆被防。超出 content 横 scroll 継続。
 
 | 提交 | 説明 |
 |------|------|
@@ -1516,7 +1516,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T10:33:16+09:00
 
-**摘要**: feat(dsh-api-balance): 面板幅 responsive — 不出屏自動拡張、狭幅横 scroll — 残高視図幅固定 340px → min(560px, calc(100vw - 24px)) 変更：desktop 560px 自動拡張、狭幅 viewport 内収縮。内容畫面超時（縦持手機等）面板横 scroll 可（overflow-x + overscroll-behavior-x 収束）。chart 幅 ResizeObserver 面板幅追従。
+**摘要**：feat(dsh-api-balance): 面板幅 responsive — 不出屏自動拡張、狭幅横 scroll — 残高視図幅固定 340px → min(560px, calc(100vw - 24px)) 変更：desktop 560px 自動拡張、狭幅 viewport 内収縮。内容畫面超時（縦持手機等）面板横 scroll 可（overflow-x + overscroll-behavior-x 収束）。chart 幅 ResizeObserver 面板幅追従。
 
 | 提交 | 説明 |
 |------|------|
@@ -1524,7 +1524,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T10:27:06+09:00
 
-**摘要**: feat(dsh-api-balance): 音声試聴 — library list pack 展開対応全音声一条毎試聴 — packs 視図下部独立 test 音声按鈕削除；各行展開 toggle（▸/▾）追加、展開時全対応音声（segment + 挨拶）一覧 ▶ one click 試聴可。active pack 限定非、任意 import 済 pack 試聴可能。
+**摘要**：feat(dsh-api-balance): 音声試聴 — library list pack 展開対応全音声一条毎試聴 — packs 視図下部独立 test 音声按鈕削除；各行展開 toggle（▸/▾）追加、展開時全対応音声（segment + 挨拶）一覧 ▶ one click 試聴可。active pack 限定非、任意 import 済 pack 試聴可能。
 
 | 提交 | 説明 |
 |------|------|
@@ -1532,7 +1532,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T10:20:14+09:00
 
-**摘要**: fix/feat(dsh-api-balance): 「入」與缓存命中分離官方基準一致 + 挨拶 list 編集與 TTS 揃 sample text — 「当日入 200M」水増調査：官方 API token bucket PROMPT_CACHE_HIT_TOKEN（当日 228M 大半占）含、従前缓存命中「入」合算。官方使用量頁分項基準一致（入 = 未命中輸入限定、缓存命中別掲）、window 行 / 模型別行 / chart 切替放送分離 cacheHitLabel segment 追加。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、manifest.greetings 打包）追加。segment key today / month / inLabel / outLabel / cacheHitLabel / costLabel / tokenUnit / suffix 再構成、sample text 預設 TTS 兜底文案一字一句一致。chart 切替放送全數據（入 / 缓存命中 / 出 / 金額幣種）網羅。
+**摘要**：fix/feat(dsh-api-balance): 「入」與 cache 命中分離公式使用量頁基準一致 + 挨拶 list 編集與 TTS 揃 sample text — 公式 API token 区分 `PROMPT_CACHE_HIT_TOKEN`（当日 228M）含、従前「入」合算故「当日入 200M」水増。入 = cache 未命中輸入限定、cache 命中別掲、window 行 / 模型別行 / chart 切替放送同様分離。segment key 再構成 `cacheHitLabel` 追加、sample text 既定 TTS 回退文案一字一句一致。作成器挨拶 list 編集（slot 追加 / 削除、一条毎録音 / import / 試聴 / 削除、`manifest.greetings` 梱包）追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -1540,7 +1540,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T09:35:56+09:00
 
-**摘要**: refactor(dsh-api-balance): 放送按鈕削除、chart 切替按鈕対応視図読上 — 「🔊 使用量読上」按鈕與 drop-down menu（menu 位置、方向回退機構含）削除；使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack prefix + TTS 數字）；test 音声（低使用量 / 残高不足）「pack 管理」視図移動；音声設定按鈕独立行維持。
+**摘要**：refactor(dsh-api-balance): 放送按鈕削除、chart 切替按鈕対応視図読上 — 「🔊 使用量読上」按鈕與 drop-down menu（menu 位置、方向回退機構含）削除；使用量 chart「日別 / 月別」切替按鈕 click 時対応視図音声使用量放送（pack prefix + TTS 數字）；test 音声（低使用量 / 残高不足）「pack 管理」視図移動；音声設定按鈕独立行維持。
 
 | 提交 | 説明 |
 |------|------|
@@ -1548,7 +1548,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T09:28:55+09:00
 
-**摘要**: fix(dsh-api-balance): 手動「數據更新」按鈕亦 random 挨拶音声再生 — 挨拶再生 playRandomGreeting 抽出共用：頁面更新（頁毎一回）與手動更新按鈕 click（毎回）両方 trigger、音声放送 switch 一律 gate。設定 dialog 説明文更新。
+**摘要**：fix(dsh-api-balance): 手動「數據更新」按鈕亦 random 挨拶音声再生 — 挨拶再生 playRandomGreeting 抽出共用：頁面更新（頁毎一回）與手動更新按鈕 click（毎回）両方 trigger、音声放送 switch 一律 gate。設定 dialog 説明文更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -1556,7 +1556,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T09:24:11+09:00
 
-**摘要**: feat(dsh-api-balance): 頁面更新時 random 挨拶音声 — 音声放送有効時、頁面更新毎 random 挨拶/着地音再生（頁毎一回）：音声 pack manifest 任意 `greetings` 配列（0–16 個音声 file；host 検証保存 `/audio/<id>/greetN` 配信、GET list 挨拶 URL 返）追加。挨拶音声無時 TTS 挨拶 pool（zh 5 件 / en 5 件）random 再生。設定 dialog 自動放送 switch 下説明文追加。
+**摘要**：feat(dsh-api-balance): 頁面更新時 random 挨拶音声 — 音声放送有効時、頁面更新毎 random 挨拶/着地音再生（頁毎一回）：音声 pack manifest 任意 `greetings` 配列（0–16 個音声 file；host 検証保存 `/audio/<id>/greetN` 配信、GET list 挨拶 URL 返）追加。挨拶音声無時 TTS 挨拶 pool（zh 5 件 / en 5 件）random 再生。設定 dialog 自動放送 switch 下説明文追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -1564,7 +1564,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T09:10:18+09:00
 
-**摘要**: feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（packs/<id>/ 複数保存 + state.json active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 /audio/<id>/<key> 配信）；設定 dialog import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）與 creator 視図（語言選択 zh-CN/en/ja——sample text 追従言語跨録音可能、manifest lang pack 語言記録；segment 毎録音/import/試聴/削除；compile download/compile 適用）搭載；録音中右下可視化浮窗（AudioContext+Analyser canvas level meter、経過時間、sample text、停止保存/破棄）表示；import 後 list pack 名與語言表示；import 済 pack 初回編集上書警告維持。
+**摘要**：feat(dsh-api-balance): 音声 pack library 管理 + 作成器次級 menu + 録音可視化浮窗 — host library 化（`packs/<id>/` 複数保存 + `state.json` active 記録；activate 切替 route、DELETE ?ids= 複数選択削除（active 削除時残自動切替）、音声 `/audio/<id>/<key>` 配信）；設定頁 import + 「pack 管理」按鈕一個限定、次級 menu packs 視図（scroll 可能 list：行 click 切替、checkbox 複数選択削除、作成器入口）與 creator 視図（語言選択 zh-CN/en/ja sample text 追従、語言跨録音可能、manifest lang pack 語言記録；segment 毎録音 / import / 試聴 / 削除；compile download / compile 適用）搭載；録音中右下可視化浮窗（level meter、経過時間、sample text、保存 / 破棄）表示；import 済 pack 初回編集上書警告維持。
 
 | 提交 | 説明 |
 |------|------|
@@ -1572,7 +1572,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T08:41:48+09:00
 
-**摘要**: feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 — 音声 pack zip archive（manifest.json + audio/ file）変更。host 純 JS zip 解析（STORE/DEFLATE、DecompressionStream inflate）`$DSH_HOME/api-balance-voicepack/` 展開、prefix route 音声 URL 配信全 device 共有。設定 dialog 作成器 segment 毎瀏覽器録音（MediaRecorder）或 local 音声 file import 対応、「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用（當前 pack 上書）。pack import 済時初回編集（録音/import/削除/compile）上書警告表示 session 内一回確認。放送 segment URL / inline 両 carrier 対応、四語言文書音声 pack 形式指南（zip 構造 / manifest / segment 表 / 録音與共有 flow）追加。
+**摘要**：feat(dsh-api-balance): 音声 pack zip 化 + 録音/import 作成器 + 編集保護 — 音声 pack zip archive（`manifest.json` + `audio/` file）変更。host 純 JS zip 解析 `$DSH_HOME/api-balance-voicepack/` 展開、prefix route 音声配信全 device 共有。設定 dialog 作成器 segment 毎瀏覽器録音（MediaRecorder）或 local 音声 file import 対応、「打包 download」共有 zip 生成、「compile & 適用」其儘本機適用。pack import 済初回編集上書警告表示 session 内一回確認。放送 segment URL / inline 両 carrier 対応、四語言文書音声 pack 形式指南（zip 構造 / manifest / segment 表 / 録音與共有 flow）追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -1580,7 +1580,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T02:36:15+09:00
 
-**摘要**: feat(dsh-api-balance): 音声放送語言與音色 DSH 界面語言追従 — 放送 text 従前 t() 界面語言追従済、発声 lang 與音色 zh-CN 固定。LocaleFace snapshot（useSyncExternalStore locale service subscribe/getSnapshot 購読）當前語言碼取得（zh → zh-CN、他其儘透過）、音色語言 prefix 一致、組合放送 text 区切文字語言応切替（中文全角 / 他半角）。locale service 不在時 zh 回退。
+**摘要**：feat(dsh-api-balance): 音声放送語言與音色 DSH 界面語言追従 — 放送 text 従前 t() 界面語言追従済、発声 lang 與音色 zh-CN 固定。LocaleFace snapshot（useSyncExternalStore locale service subscribe/getSnapshot 購読）當前語言碼取得（zh → zh-CN、他其儘透過）、音色語言 prefix 一致、組合放送 text 区切文字語言応切替（中文全角 / 他半角）。locale service 不在時 zh 回退。
 
 | 提交 | 説明 |
 |------|------|
@@ -1588,7 +1588,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T01:51:10+09:00
 
-**摘要**: fix(dsh-api-balance): 音声放送 menu 下→上展開変更 — menu 預設按鈕上辺接上向展開（translateY(-100%)）、上方余白不足時（viewport 上端 8px 未満）自動下向展開回退
+**摘要**：fix(dsh-api-balance): 音声放送 menu 下→上展開変更 — menu 預設按鈕上辺接上向展開（translateY(-100%)）、上方余白不足時（viewport 上端 8px 未満）自動下向展開回退
 
 | 提交 | 説明 |
 |------|------|
@@ -1597,7 +1597,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-01T01:25:25+09:00
 
-**摘要**: feat(dsh-api-balance): 未登録 prompt + LevelDB 精確解析 + 音声放送 drop-down — 瀏覽器 scan 不命中時「前往登録」prompt 自動表示（新標籤開登録頁、polling 快掃自動取得）、手動輸入 prompt 内二級 option 降格。接続後灰顯「✓ 登録済」按鈕表示、手動更新毎登録状態自動快掃。純 JS LevelDB 表 parser 新設（footer → index → 數據 block → snappy 解凍 → entry 走査、拡張 literal 長 varint 非単 byte+1 修正）userToken 精確抽出——快掃 949ms 命中（従前全掃 5.3s / 快掃失敗）。音声放送独立行 + drop-down（當前使用量 / 残高 / test 警告音声）、menu portal 固定位置変更 scroll 切抜修正 + 音声 engine 予熱。token 取得元二行表示変更。
+**摘要**：feat(dsh-api-balance): 未登録 prompt + LevelDB 精確解析 + 音声放送 menu — 瀏覽器 scan 不命中時「前往登録」prompt 自動表示（新標籤登録 + polling 快掃自動取得）、手動輸入 prompt 内二級 option 降格；接続後灰顯「✓ 登録済」表示。純 JS LevelDB 表 parser 新設 userToken 精確抽出——快掃 949ms 命中。音声放送独立行 + drop-down（當前使用量 / 残高 / test 警告音声）、menu portal 固定位置変更 scroll 切抜修正 + 音声 engine 予熱；token 取得元二行表示変更。検証：LevelDB 解析実測命中、快掃失敗自 949ms 命中至。
 
 | 提交 | 説明 |
 |------|------|
@@ -1606,7 +1606,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T23:55:52+09:00
 
-**摘要**: docs(dsh): api-balance 插件節四語補完 — pcn 版 dsh.md 插件節追加（本機瀏覽器自動掃描 / 用量図表 / config 選項）、四語 README 插件表説明「瀏覽器登録状態自動掃描取得」語義同期
+**摘要**：docs(dsh): api-balance 插件節四語補完 — pcn 版 dsh.md 插件節追加（本機瀏覽器自動掃描 / 用量図表 / config 選項）、四語 README 插件表説明「瀏覽器登録状態自動掃描取得」語義同期
 
 | 提交 | 説明 |
 |------|------|
@@ -1614,7 +1614,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T23:50:04+09:00
 
-**摘要**: feat(dsh-api-balance): 本機瀏覽器自動掃描 platform userToken 取得 — host 本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）Local Storage LevelDB 直接読取、base64 候補（55–85 字）抽出 GET /api/v0/users/get_user_summary 逐次検証最初一致保存。本機瀏覽器一度 platform 登録済使用者手動操作無使用量 token 取得可能。6 時間節流 + token 失効（40003/401）即時再掃描 + 面板「本機瀏覽器再掃描」按鈕（RPC args.rescanBrowsers）、接続後 token 取得元徽章（browser / manual）表示。実測：本機 Edge leveldb 31 候補中実 token 自動命中、部署後瀏覽器起因 query 自動再取得。四言語文書同期。
+**摘要**：feat(dsh-api-balance): 本機瀏覽器自動掃描 platform userToken 取得 — host 本機 Chromium 系瀏覽器（Edge / Chrome / Brave / Chromium / Vivaldi / Opera、全 Profile）Local Storage LevelDB 直接読取、base64 候補（55–85 字）抽出 GET /api/v0/users/get_user_summary 検証後保存。本機瀏覽器一度登録済使用者手動貼付無使用量 token 取得可能。6 時間節流 + token 失効（40003/401）即時再掃描 + 面板「本機瀏覽器再掃描」按鈕（RPC args.rescanBrowsers）、接続後 token 取得元徽章（browser / manual）表示。検証：本機 Edge leveldb 31 候補自実 token 自動命中。
 
 | 提交 | 説明 |
 |------|------|
@@ -1622,7 +1622,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T11:50:02+09:00
 
-**摘要**: docs(AGENTS): dsh-alpha 会話経験泛化 — buildNpmPackage 三則（vendored lock 與 npmDepsHash 一致 / 未公開 devDependencies postPatch 純 sed 削除且 lock 同源生成 / ruyi 式多通道薄包装）、初回起動監査前 git fetch、本機部署節新設（path-input 再鎖、nixos apply 命令、--no-link 産物回収）
+**摘要**：docs(AGENTS): dsh-alpha 会話経験汎化 — buildNpmPackage 三則（vendored lock 與 npmDepsHash 一致 / 未公開 devDependencies postPatch 純 sed 削除且 lock 同源生成 / ruyi 式多通道薄包装）、初回起動監査前 git fetch、本機部署節新設（path-input 再鎖、nixos apply 命令、--no-link 産物回収）
 
 | 提交 | 説明 |
 |------|------|
@@ -1631,7 +1631,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T11:31:42+09:00
 
-**摘要**: dsh-alpha 導入災害復旧 — alpha 反代 Host 語義修正（web UI 入口 Host authority session cookie 認証、Host 書換恒久 401 引發）、dsh-api-balance shared RPC interceptor 衝突修正（`/api` typert-gateway 独占、精確 fetch route 切替 RPC envelope 自前実装）、dsh-nixos-shell dsh-tools 通道整合；新規部品選項 launchUrlFile（局域网起動 URL 捕捉）與 reverseProxy.autoAuth（mod_magnet 免認証注入 — 入口認証明示無効化、可信局域网限定）；四言語文書局域网訪問節追加。
+**摘要**：dsh-alpha 導入災害復旧 — alpha 反代 Host 語義修正（web UI 入口 Host authority session cookie 認証、Host 書換恒久 401 引發）、dsh-api-balance shared RPC interceptor 衝突修正（`/api` typert-gateway 独占、精確 fetch route 切替 RPC envelope 自前実装）、dsh-nixos-shell dsh-tools 通道整合；新規部品選項 launchUrlFile（LAN 起動 URL 捕捉）與 reverseProxy.autoAuth（mod_magnet 免認証注入、可信 LAN 限定）；四言語文書 LAN 訪問節追加。検証：反代與 RPC 修正後 web UI 入口與插件 RPC 再可用。
 
 | 提交 | 説明 |
 |------|------|
@@ -1647,7 +1647,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T07:23:07+09:00
 
-**摘要**: dsh-alpha 0.1.2-alpha.2 — 新規包、npm `alpha` dist-tag 開発通道；dsh ruyi 式薄包装再構成（version/hash/npmDepsHash/lockFile 上書可能）、postPatch 純 sed tarball devDependencies 削除（未公開 monorepo 内部包参照、registry 404）、修正対象書類存在警備追加。四言語文書版本通道節追加。後続修正：vendored lock 與 npmDepsHash 一致修正（npm fixup 平台項目欠落主建構 out of date 引發）、README 軟件表 dsh-alpha 行四語追補。
+**摘要**：dsh-alpha 0.1.2-alpha.2 — 新規包、npm `alpha` dist-tag 開発通道；dsh ruyi 式薄包装再構成（version/hash/npmDepsHash/lockFile 上書可能）、postPatch 純 sed tarball devDependencies 削除（未公開 monorepo 内部包参照、registry 404）、修正対象書類存在警備追加；四言語文書版本通道節追加、README 軟件表 dsh-alpha 行四語追補。後続修正：vendored lock 與 npmDepsHash 一致（npm fixup 平台項目欠落主建構 out of date 引發）。検証：包建構通過、lock 一致後主建構 out of date 不出。
 
 | 提交 | 説明 |
 |------|------|
@@ -1665,7 +1665,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-31T07:05:44+09:00
 
-**摘要**: godot-ai 3.2.4 — 自己更新復旧直列化、設定書込堅牢化、経路検証與冷起動修正（v3.2.1〜v3.2.4 皆不具合修正）；四言語文書版番号同期。
+**摘要**：godot-ai 3.2.4 — 自己更新復旧直列化、設定書込堅牢化、経路検証與冷起動修正（v3.2.1〜v3.2.4 皆不具合修正）；四言語文書版番号同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -1679,7 +1679,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T09:19:59+09:00
 
-**摘要**: opencode-telegram 0.24.1 — 韓国語界面追加、`/opencode_stop` 応答中状態以即無応答本地 OpenCode 工程強制終了可能、音声文字起引用塊以表示、Telegram 一時錯誤安全再試行返信消失/重複防止、流送編集節流適応化；mcp-searxng 2.1.0 — 引擎明示選択時引擎毎 time-range 対応検証、非対応時実用錯誤以即時失敗；godot-ai 3.2.0 — custom_tools 第三方 addon 工具登録、CLI 登録範囲選択化、DeepSeek Harness 客戶端対応追加；ruyi-beta 0.52.0-beta.20260824 — beta 通道上流更新。四言語文書同期、nix flake check 通過。
+**摘要**：opencode-telegram 0.24.1 — 韓国語界面追加、`/opencode_stop` 応答中状態以即無応答本地 OpenCode 工程強制終了可能、音声文字起引用塊以表示、Telegram 一時錯誤安全再試行返信消失/重複防止、流送編集節流適応化；mcp-searxng 2.1.0 — 引擎明示選択時引擎毎 time-range 対応検証、非対応時実用錯誤以即時失敗；godot-ai 3.2.0 — custom_tools 第三方 addon 工具登録、CLI 登録範囲選択化、DeepSeek Harness 客戶端対応追加；ruyi-beta 0.52.0-beta.20260824 — beta 通道上流更新。四言語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1704,7 +1704,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T07:28:58+09:00
 
-**摘要**: feat(dsh-api-balance): 面板刷新按鈕。面板頭部標籤行右側追加刷新按鈕（↻）：點擊 queryBalance(true) 強制繞宿主側 30s TTL 緩存重取余额 + 官方用量（按日/按月圖表同步更新）；載入中按鈕禁用 + 旋轉動畫（dshAbSpin 復用）。中英双語文案（刷新資料 / Refresh data）。検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映。
+**摘要**：feat(dsh-api-balance): 面板刷新按鈕 — 面板頭部標籤行右側刷新按鈕（↻）追加：點擊 queryBalance(true) 強制繞宿主側 30s TTL cache 重取余额 + 官方用量（按日/按月図表同步更新）；載入中按鈕禁用 + 旋轉動画（dshAbSpin 復用）；中英双語文案（刷新資料 / Refresh data）。検証：構築通過、経安定掛載点零再起配備（424 代）後 dsh 再起反映。
 
 | 提交 | 説明 |
 |------|------|
@@ -1712,7 +1712,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T07:28:49+09:00
 
-**摘要**: fix(dsh-nixos-shell): 分離結果誠実語義 + systemctl restart dsh 自動分離。従前 rebuild 経 systemd-run 交接後直接透伝其 exit 0、工具結果看似「構築成功」而実結果未知；現分離命令返 `detached: true` + `detachedUnit` + `note`、exitCode 為 null——交接成功非構築成功、実結果一律 nixos_cli op=journal / op=generations 検証（後台任務最終輸出同追記検証指引）。分離謂詞拡至 `systemctl restart dsh`：插件更新経安定掛載点配備後需明示 dsh 再起反映、該命令同自動分離、呼出先於再起返。検証：分離式 dsh 再起着地（RESTARTED_EXIT=0）、插件変更 rebuild（424/425 代）零再起零中断、nix flake check 通過。四語文書同期。
+**摘要**：fix(dsh-nixos-shell): 分離結果誠実語義 + systemctl restart dsh 自動分離。従前 rebuild 経 systemd-run 交接後直接透伝其 exit 0、工具結果看似「構築成功」而実結果未知；現分離命令返 `detached: true` + `detachedUnit` + `note`、exitCode 為 null——交接成功非構築成功、実結果一律 nixos_cli op=journal / op=generations 検証。分離謂詞拡至 `systemctl restart dsh`（插件更新需明示再起反映）、同自動分離、呼出先於再起返。検証：分離式 dsh 再起着地（RESTARTED_EXIT=0）、插件変更 rebuild（424/425 代）零再起零中断。
 
 | 提交 | 説明 |
 |------|------|
@@ -1720,7 +1720,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T07:28:39+09:00
 
-**摘要**: feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化。插件包従前直接焼込 dsh/sudo 単元（ExecStart/preStart/守護模版）、插件更新即変単元内容：switch-to-configuration 活性化段再起 dsh（在途工具呼出随 harness 進程消滅）、stop/start sudo socket（連同経守護実行 rebuild 自身殺、socket 不能自復）。改安定掛載点：activation script 毎回 switch/boot `/run/dsh/current`（dsh 含插件樹）與 `/run/dsh/nixos-shell`（sudo 守護脚本）符号連結翻當前代 store 路（GC 安全：目標處當前 toplevel 閉包、回滚自翻旧代）；dsh.service 與 nixkits-sudo@.service 単元定義僅参照該安定路——插件包更新不変単元内容、活性化零再起零 socket 中断。配套語義：dsh 長駐進程、插件更新需明示 `systemctl restart dsh` 反映（自動分離）；sudo 守護接続毎生成、新連接自動新脚本。検証：423 代配備本改動（一次性 dsh 再起）；424/425 代連続両回插件変更 rebuild——dsh 與 socket ActiveEnterTimestamp 均不変、/run/dsh/current 正常翻鏈、全程無工具呼出被中断。四語文書同期。
+**摘要**：feat(module): dsh 插件安定掛載点 — 插件更新零再起活性化。插件包従前焼込 dsh/sudo 単元、插件更新毎活性化段 dsh 與 sudo socket 再起（実行中工具呼出與守護経由 rebuild 消滅、socket 復旧不能）。改安定掛載点：activation script 毎回 switch/boot `/run/dsh/current`（dsh 與插件樹）與 `/run/dsh/nixos-shell` 當前代 store 路張替（GC 安全）、単元僅参照該安定路——活性化何也不再起 socket 也不中断。付属：插件更新明示 `systemctl restart dsh` 反映。検証：423 代配備；424/425 代插件変更 rebuild 後 dsh 與 socket ActiveEnterTimestamp 不変。
 
 | 提交 | 説明 |
 |------|------|
@@ -1728,7 +1728,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T04:07:27+09:00
 
-**摘要**: fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離。三類欠陥修正：1) v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起（插件路徑焼込 service 単元）、客户端消失則守護活性化中途殺 switch、部分活性化状態殘留（8/26 14:31 実測：profile 停 415 而 dsh 已再起、単元文件半新半旧）；v3 改明示帯内取消行（job_kill 経 socket.end 写入）、対向消失時子進程分離態継続完走。2) 取消/超時改進程組撃殺（spawn detached + kill(-pid)）——僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能；守護超時上限 6h 放寛、rebuild 自動用。3) rebuild 自動分離 systemd-run 瞬時単元（独立 cgroup）——活性化段 switch-to-configuration stop/start nixkits-sudo.socket、rebuild 経守護実行則 socket 停止連同 switch 自身殺、socket 不能自復（8/26 17:25 実測：socket 死滅、該窓起動 session 永久失 sudo 參數）；分離後呼出即返単元名（detachedUnit）、活性化完走。其他：socket 改呼出時検証、dsh-jobs 取消映射合法 enum `killed`、守護応答 write 回調刷出後退出。検証：後台 sudo 即返 job id、job_output 全輸出配信、job_kill 整組無孤児撃殺、実 rebuild 分離単元配備成功且 socket 活性化後自復、nix flake check 通過。四語文書同期。
+**摘要**：fix(dsh-nixos-shell): sudo 協議 v3 + rebuild 自動分離。三類欠陥修正：1) v2 協議断絶視為取消——rebuild switch 段 dsh.service 再起、客户端消失則守護活性化中途殺 switch（部分活性化）；v3 改明示帯内取消行、対向消失時子進程分離態完走。2) 取消/超時改進程組撃殺（spawn detached + kill(-pid)）——僅殺 shell 包装則管道写端継承孤児孫進程殘留守護応答不能；超時上限 6h 放寛。3) rebuild 自動分離 systemd-run 瞬時単元（独立 cgroup）——活性化段 socket stop/start 不致殺 switch 自身。検証：後台 sudo 即返 job id、job_kill 整組無孤児撃殺、実 rebuild 分離単元配備成功且 socket 自動復旧。
 
 | 提交 | 説明 |
 |------|------|
@@ -1736,7 +1736,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T04:07:15+09:00
 
-**摘要**: feat(dsh-api-balance): 充值卡片弾窓代替 iframe + 残高不足語音提醒。platform.deepseek.com/top_up WAF 遮断（"Max challenge attempts exceeded"）、iframe 弾窓不能工作——改居中卡片弾窓（新窓按鈕 + 右上閉按鈕）、無頁面跳転。追加残高不足語音提醒：残高低閾値（10 CNY/USD）時 Web Speech API 播報、15 分輪詢 + 30 分冷却、面板内開關（balance.speechOn/Off）、中英双語文案。検証：配備後特徴 grep（TopupModal/speechOn/announceHunger）確認生效。
+**摘要**：feat(dsh-api-balance): 充值卡片弾窓代替 iframe + 残高不足語音提醒。top_up 頁 WAF 遮断（"Max challenge attempts exceeded"）、iframe 弾窓不能工作——改居中卡片弾窓（新窓按鈕 + 右上閉按鈕）、無頁面跳転。追加残高不足語音提醒：残高低閾値（10 CNY/USD）時 Web Speech API 播報、15 分輪詢 + 30 分冷却、面板内開關（balance.speechOn/Off）、中英双語文案。検証：配備後特徴 grep（TopupModal/speechOn/announceHunger）確認生效。
 
 | 提交 | 説明 |
 |------|------|
@@ -1744,7 +1744,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-26T11:44:45+09:00
 
-**摘要**: dsh-api-balance 0.1.0 — 新包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率與内訳維持、「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付與残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL 緩存）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
+**摘要**：dsh-api-balance 0.1.0 — 新規包。webui 用量圓環（送信按鈕左 上下文使用量表示）弹出面板「用量 / 余额」標籤切替追加：「用量」原上下文占有率與内訳維持、「余额」當前 API KEY 帳戶情報（鍵末尾、残高可否、通貨別総残高 / 充值残高 / 付與残高、DeepSeek 公式 GET /user/balance 取得 宿主側 30 秒 TTL cache）表示。宿主側 connection.rpc.intercept 包私有 endpoint 登録、客户端側 conversation.input.right 視覚互換代替圓環登録 原按鈕非表示化。検証: RPC CNY 271.07 実残高返、client bundle 配信正常。四語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1757,7 +1757,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-11T12:54:29+09:00
 
-**摘要**: fix(dsh/module): allowLanSettings $host.state.getSnapshot() 補丁撤去 — dsh ≥ 0.1.5 $host 客户端服务 state 非公開（isLoopback/home 只）。旧補丁 client-ui-settings apply 時 undefined.getSnapshot 参照、"Cannot read properties of undefined (reading 'getSnapshot')" 投、前端全体白画面（Failed to load plugins）。修正: 模組 allowLanSettings=true 強制 override 停止（上流行為復帰、非 loopback 页面 settings memory 読取専用維持）、packages/dsh.nix 補丁無条件 "host" 変更（将来明示有効化亦不崩）。検証: client.js state.getSnapshot 無、首頁 200、llm/listProviders DeepSeek 提供方返。
+**摘要**：fix(dsh/module): allowLanSettings $host.state.getSnapshot() 補丁撤去 — dsh ≥ 0.1.5 $host 客户端服务 state 非公開、旧補丁 client-ui-settings apply 時 undefined.getSnapshot 参照、前端全体白画面（Failed to load plugins）。模組 allowLanSettings=true 強制 override 停止（上流行為復帰）、packages/dsh.nix 補丁無条件 "host" 変更。検証: 首頁 200、llm/listProviders DeepSeek 提供方返。
 
 | 提交 | 説明 |
 |------|------|
@@ -1766,7 +1766,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-09-11T06:15:33+09:00
 
-**摘要**: fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh 0.1.5-alpha.2 dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 插件読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可（前端 Failed to fetch + agentId 欠如 commands/list 無限再試）。修正: 両 preset persona config prefix 変更、本機 3 preset 同期修正。検証: session/create ok:true + sessionId、session/list 会期一覧、llm/listProviders DeepSeek 提供方返。
+**摘要**：fix(preset): dsh persona text → prefix（0.1.5-alpha.2 互換）。dsh-persona Config text → prefix（必須）+ suffix（任意）変更。旧 agent preset（nixos-mode / maintenance-mode / 本機 ocean-spiral）text 残、persona 読込失敗（$.prefix missing required value）→ session/create 失敗 → settings / llm 提供方一覧 / session 履歴読込不可。修正: 両 preset persona config prefix 変更、本機 3 preset 同期。検証: session/create ok:true + sessionId 返。
 
 | 提交 | 説明 |
 |------|------|
@@ -1774,7 +1774,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-27T01:30:33+09:00
 
-**摘要**: fix(module): dsh watchdog — switch-to-configuration 失敗後自動起動。nixos-rebuild switch-to-configuration「stop dsh → start dsh」間偶発失敗（exit 101）dsh inactive 残。systemd 能動 stop Restart=always 非発、反代長期 503（8/26 22:10、23:53 二回観測）。dsh-watchdog timer（15s 間隔）追加、inactive 検知時 systemctl start。検証: stop 後 20 秒以内自動復帰。
+**摘要**：fix(module): dsh watchdog — switch-to-configuration 失敗後自動起動。nixos-rebuild switch-to-configuration「stop dsh → start dsh」間偶発失敗（exit 101）dsh inactive 残。systemd 能動 stop Restart=always 非発、反代長期 503。dsh-watchdog timer（15s）追加、inactive 検知時 systemctl start。検証: stop 後 20 秒以内自動復帰。
 
 | 提交 | 説明 |
 |------|------|
@@ -1782,7 +1782,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-24T15:44:06+09:00
 
-**摘要**: fix(overlay): llama-cpp-rocm v0.2.0 語義版 — llama.cpp 上流 release tag build number（b10549）→ 語義版（v0.2.0）切替。旧 overlay b 前置詞只除去 v0.2.0 得、nixpkgs 它 LLAMA_BUILD_NUMBER 渡、`int LLAMA_BUILD_NUMBER = v0.2.0;` 生成 C++ 編譯失敗（too many decimal points）、系統 rebuild dsh 更新阻塞。現在 v/b 前置詞両方除去、-DLLAMA_BUILD_NUMBER=0 追記。検証: llama-cpp-0.2.0 構築成功、llama-cpp.service 稼働。
+**摘要**：fix(overlay): llama-cpp-rocm v0.2.0 語義版 — llama.cpp 上流 release tag build number（b10549）→ 語義版（v0.2.0）切替。旧 overlay b 前置詞只除去故 nixpkgs v0.2.0 LLAMA_BUILD_NUMBER 渡、`int LLAMA_BUILD_NUMBER = v0.2.0;` 生成 C++ 編譯失敗（too many decimal points）、系統 rebuild dsh 更新阻塞。現在 v/b 前置詞両方除去、-DLLAMA_BUILD_NUMBER=0 追記。検証: llama-cpp-0.2.0 構築成功、llama-cpp.service 稼働。
 
 | 提交 | 説明 |
 |------|------|
@@ -1790,7 +1790,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-24T15:20:16+09:00
 
-**摘要**: fix(pkgs): dsh 崩壊修正 — cordis-plugin-timer（上流最新 1.1.3 未修）Context dispose 時 pending ctx.timeout() promise "Context has been disposed" reject、未 catch unhandled rejection 化。dsh-app-boot installFailLoud process.exit(1) 変、実行中偶発崩壊（rc.6/rc.7/rc.8/0.1.1-rc.2 全影響、8/22 00:05 rc.8 38 分発生）。installFailLoud 此 error 只無視、他 fatal rejection 従来終了。検証: patch 0.1.1-rc.2 出力適用（dsh-app-boot/lib/index.js:1047）。
+**摘要**：fix(pkgs): dsh 崩壊修正 — cordis-plugin-timer（上流 1.1.3 未修正）Context dispose 時 pending ctx.timeout() promise "Context has been disposed" reject、未 catch unhandled rejection 化。dsh-app-boot installFailLoud process.exit(1) 変（rc.6/rc.7/rc.8/0.1.1-rc.2 全影響）。installFailLoud 此 error 只無視、他 fatal rejection 従来終了。検証: patch 0.1.1-rc.2 出力適用（dsh-app-boot/lib/index.js:1047）。
 
 | 提交 | 説明 |
 |------|------|
@@ -1798,7 +1798,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-24T14:27:47+09:00
 
-**摘要**：codewhale 0.9.11 — 上流 v0.9.9 起 TUI 資産名 codewhale-tui → codew 改名、包内 codew 導入互換別名維持、riscv64 源構築 Cargo.lock 同期（687→690 条目、rquickjs-sys 0.12.2 不変、bindings 補丁有効継続）；mcp-searxng 2.0.0 — 大版本升級（Node.js ≥ 22 要求、nixpkgs 既定充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved 条目）、randomUUID 回退補丁対象路経不変、内建插件清單 rc.8 完全一致（137 件）；dsh-nixos-shell 依存 dsh-tools → 0.1.1-rc.2 新生態整合。四言語文書同期、nix flake check 通過。
+**摘要**：codewhale 0.9.11 — 上流 v0.9.9 起 TUI 資産名 codewhale-tui → codew 改名、包内 codew 導入互換別名維持、riscv64 源構築 Cargo.lock 同期（687→690 条目）；mcp-searxng 2.0.0 — 大版本升級（Node.js ≥ 22 要求、nixpkgs 既定充足、CLI 入口不変）；dsh 0.1.1-rc.2 — vendored lock 再生成（560 resolved 条目）、内建插件清單 rc.8 完全一致（137 件）；dsh-nixos-shell dsh-tools 依存 0.1.1-rc.2 整合。四言語文書同期、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1816,7 +1816,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-22T00:03:28+09:00
 
-**摘要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語 dsh.md 版本行（rc.6 → rc.8）與「插件清單」代碼塊（rc.8 構築抽出自 137 entry id 映射）同期。nix flake check 通過。併 /etc/nixos 本地設定 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）宣言新規 session 既定——DeepSeek API 正規模型一覧僅 flash/pro/flash-vision-exp、"pro-max" id 無、Pro+Max 推論現状最高位。rc.8 上 nixos/maintenance 両預設掛載検証通過。
+**摘要**：docs(dsh): 0.1.0-rc.8 文書同期 — 4 言語 dsh.md 版本行（rc.6 → rc.8）與「插件清單」代碼塊（rc.8 構築抽出自 137 entry id 映射）同期。nix flake check 通過。併 /etc/nixos 本地設定 `settings.agent-default-model`（deepseek-v4-pro + reasoningEffort=max）新規 session 既定追加——DeepSeek API 正規模型一覧僅 flash/pro/flash-vision-exp、"pro-max" id 無、Pro+Max 推論現状最高位。rc.8 上 nixos/maintenance 両預設掛載検証通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1824,7 +1824,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-21T21:51:26+09:00
 
-**摘要**：docs: README「插件」章拡充與作者 DSH 情報 — ①「插件」章「Agent 預設」表（NixOS模式/維護模式、插件同梱、nixkits.dsh.presets 一度限 seed）追加、DSH 组件與軟体分離掲載；② 作者「小爪」条目 DSH 生態情報（dsh-nixos-shell 插件與 2 Agent 預設）追記；③ AGENTS.md 插件独立掲載規則「dsh-* 组件（插件與 Agent 預設）」拡大。4 言語同期。
+**摘要**：docs: README「插件」章拡充與作者 DSH 情報 — ①「插件」章 dsh-nixos-shell 之外「Agent 預設」表（NixOS模式/維護模式、插件同梱、nixkits.dsh.presets 一度限 seed）追加、DSH 组件與軟体分離掲載；② 作者「小爪」条目 DSH 生態情報（dsh-nixos-shell 插件與 2 Agent 預設）追記；③ AGENTS.md 插件独立掲載規則「dsh-* 组件（插件與 Agent 預設）」拡大。4 言語同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -1832,7 +1832,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-21T00:01:46+09:00
 
-**摘要**：fix(dsh-nixos-shell): 工具説明明示 tools 白名單 — 受入非阻塞指摘：固定 POSIX 工具白名單工具説明未記載。白名單 TOOL_PACKAGES 映射自動生成（27 名、python 別名含）`tools` 參數説明記載、工具説明自參數参照。4 言語文書完全列表同期。検証：27 名全參數説明存在、工具説明参照有、構文検査與 nix flake check 通過。
+**摘要**：fix(dsh-nixos-shell): 工具説明明示 tools 白名單 — 受入非阻塞指摘：固定 POSIX 工具白名單工具説明未記載。白名單 TOOL_PACKAGES 映射自動生成（27 名、python 別名含）、`tools` 參數説明記載、工具説明參照。4 言語文書完全列表同期。検証：27 名全參數説明存在、參照有、nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1840,7 +1840,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T20:12:33+09:00
 
-**摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正 — 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）、交接卡與插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤。`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一。検証：node 構文検査、nix flake check 通過。系統配備 `nixos apply` 変更実測成功。
+**摘要**：fix(dsh-nixos-shell): 現代 rebuild 命令 `nixos apply` 訂正 — 実測 nixos 0.16.1-dev 無 `rebuild` 子命令（`nixos --help` activate/apply/generation 等列挙）、交接卡與插件 recommendedRebuild/命令対照表/門控指南 `nixos rebuild switch` 誤。`nixos apply /etc/nixos`（或従来 `sudo nixos-rebuild switch --flake /etc/nixos`）統一。検証：nix flake check 通過、系統配備 `nixos apply` 変更実測成功。
 
 | 提交 | 説明 |
 |------|------|
@@ -1848,7 +1848,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T20:10:08+09:00
 
-**摘要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）工具引導包装 `bash -lc` 自 `bash -c` 変更：登録壳 /etc/profile 鏈 PATH 重置 nix shell 注入破棄、sudo 路徑同 wrapper 共用同時修正（対照実験：`-c` 得 Python 3.14.7、`-lc` 得 command not found）。映射亦 grep→gnugrep、find→findutils 修正（従来登録 PATH 偽陽性覆蓋）。P2 generations `limit` 追加（既定 20、上限 200、新→旧）、現在世代與総数返。P3 journal unit `*`/`%` 通配許可、末尾 `@` 自動 `*` 補（模版全實例）。P4 命名統一：nixos-cli → nixos 命令（nixos-cli 項目）、工具説明、命令対照表、門控指南更新。文書 op 表 4 言語同期。検証：5 案例機能套件全過（插件経由実 nix shell 注入 TOOLS_INJECTION_OK 回顕含）、node 構文検査、nix flake check 通過。
+**摘要**：fix(dsh-nixos-shell): NixOS模式 受入 P1–P4 修正 — P1（高）工具引導包装 `bash -lc` 自 `bash -c` 変更：登録壳 /etc/profile 鏈 PATH 重置 nix shell 注入破棄、sudo 路徑同 wrapper 共用同時修正（対照：`-c` 得 Python 3.14.7、`-lc` 得 command not found）。映射亦 grep→gnugrep、find→findutils 修正。P2 generations `limit` 追加（既定 20、上限 200、新→旧）。P3 journal unit `*`/`%` 通配許可、末尾 `@` 自動 `*` 補。P4 命名統一：nixos-cli → nixos 命令。文書 op 表 4 言語同期；nix flake check 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1856,7 +1856,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T19:33:51+09:00
 
-**摘要**：fix(dsh-nixos-shell): 提示節字段 text 変更 — dsh-system-prompt 補間器 `input.text` 読取、`content` 登録節実 session NixOS模式崩壊（Cannot read properties of undefined (reading 'indexOf')、mount 検証捕捉不能実 session 路徑欠陥）。nixos-gate（guidance/gate 2 節）與 maintenance-skills（workflow 節）計 3 箇所 `content` → `text` 修正。原因 dsh-system-prompt interpolate() 源碼與 PromptSection 型定義（text: string | provider）読取特定。ToolGuard 形型定義確認（`(execution) => string | undefined`、現行実装互換）。検証：mock text 字段與未閉 `{{` 無確認；実 systemPrompt service 登録 + assemble（includes=true、崩壊無）；系統預構築通過。
+**摘要**：fix(dsh-nixos-shell): 提示節字段 text 変更 — dsh-system-prompt 補間器 `input.text` 読取、`content` 登録節実 session NixOS模式崩壊（Cannot read properties of undefined (reading 'indexOf')、mount 検証捕捉不能実 session 路徑欠陥）。nixos-gate（guidance/gate 2 節）與 maintenance-skills（workflow 節）計 3 箇所 `content` → `text` 修正。検証：mock text 字段與未閉 `{{` 無確認、実 systemPrompt service assemble 崩壊無、系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1864,7 +1864,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T19:05:44+09:00
 
-**摘要**：feat(dsh-nixos-shell): 維護模式 agent 預設 — 新包内入口 maintenance-skills：apply 時構築期嵌入倉庫 skills/ 樹（単一來源、新規 session 常最新）自 runtime 技能 write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）登録、倉庫維護工作流提示詞節（分割提交、push 後維護日誌、文書同期、汎化）注入。包 postPatch skills → skills-embedded 複製。預設 presets/maintenance-mode（id `maintenance`、NixOS模式組合 + maintenance-skills 行基盤）包同梱。模組 nixkits.dsh.presets.maintenanceMode（seed-once）追加。検証：mock 3 技能登録 + 工作流節全過、包嵌入樹與導出有、系統預構築通過。nixos 預設掛載検証通過（mounted ok）、maintenance 預設 loader 進程内 package.json 緩存故再起動後最終確認要。
+**摘要**：feat(dsh-nixos-shell): 維護模式 agent 預設 — 新包内入口 maintenance-skills：apply 時構築期嵌入倉庫 skills/ 樹（単一來源）自 runtime 技能 write-project-docs、write-maintenance-log、全 translate-* 言語拡張（自動発見）登録、倉庫維護工作流提示詞節注入。包 postPatch skills → skills-embedded 複製。預設 presets/maintenance-mode（id `maintenance`、NixOS模式組合 + maintenance-skills 行基盤）包同梱。模組 nixkits.dsh.presets.maintenanceMode（seed-once）追加。検証：mock 3 技能登録 + 工作流節全過、系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1872,7 +1872,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T18:30:46+09:00
 
-**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新包内子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否與拒否提示詞節注入（明確理由 + 預設切替助言）、NixOS 開発指南提示詞節注入（nixos-modern-cli 場景由来：宣言式本質、工具引導、現代命令、store 路徑陷阱）。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos（用户後続編輯尊重）。検証：包構築、門控構文検査、系統預構築全通過。
+**摘要**：feat(dsh-nixos-shell): NixOS模式 agent 預設 — 新子路 nixos-gate：session 初期化時宿主 NixOS 検証（/etc/NIXOS 或 os-release ID=nixos）——非 NixOS tools.guard 全工具実行拒否與拒否提示詞節注入、NixOS 開発指南提示詞節注入。預設 presets/nixos-mode（id `nixos`、創造模式 cordis 組合 + 技能目録基盤、nixos-gate/nixos-shell 行追加）包同梱。模組 nixkits.dsh.presets.nixosMode 追加、preStart 一度限 seed $DSH_HOME/.agent-presets/nixos。検証：包構築、門控構文検査、系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1896,7 +1896,11 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T17:46:44+09:00
 
-**摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止 — 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 參數 `nix shell nixpkgs#… --command` 不足 POSIX 工具提供 + sudo 守護路由）與 nixos_cli 読取専用診断（capabilities / system-status / generations / journal / audit-store-paths）。機能要件 nixos-modern-cli 技能場景由来。併削除：dsh-nix-shell（機能統合）與 dsh-skill-nixkits（7 技能插件設計、模組 skills 選項含）、CI/文書差替。nixkits-skills 安裝器 dsh 対象削除（dsh 能力 nixos-shell 提供、技能他助手向残置）。修正：generations 進程内読取専用列表変更（nix-env 鎖文件権限必要、非 root Permission denied）。検証：13 案例機能套件全過（実 sudo root 路由與 nix shell 工具引導含）；系統預構築通過。
+**摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止
+- 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 不足 POSIX 工具提供 + sudo 守護路由）與 nixos_cli 読取専用診断（capabilities 他 4 項目）。要件 nixos-modern-cli 技能場景由来。
+- dsh-nix-shell 與 dsh-skill-nixkits（7 技能插件設計）削除、CI/文書差替。
+- generations 修正：進程内読取専用列表変更（`nix-env` 非 root 拒否）。
+検証：13 案例機能套件全過；系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1908,7 +1912,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T16:40:16+09:00
 
-**摘要**：fix(dsh): service HOME 実用户家指向 — git gh credential helper `$HOME/.config/gh` 憑証解決、模組此前 service HOME dshHome（/home/kix/.dsh）設定、沙箱内 git push 憑証発見不能（could not read Username）。`users.users.<user>.home`（無場合 dshHome 回退）変更、代理用户自身工具環境（git/gh 憑証、~/.gitconfig、npm/ssh 設定）継承。DSH_HOME dsh 状態根不変無影響。検証：HOME=/home/kix 滞留提交 push 全成功；系統預構築通過。
+**摘要**：fix(dsh): service HOME 実使用者家指向 — git gh credential helper `$HOME/.config/gh` 憑証解決、模組此前 service HOME dshHome（/home/kix/.dsh）設定、沙箱内 git push 憑証発見不能。`users.users.<user>.home`（無場合 dshHome 回退）変更、代理使用者自身工具環境（git/gh 憑証、~/.gitconfig、npm/ssh 設定）継承。DSH_HOME dsh 状態根不変無影響。検証：滞留提交 push 全成功；系統預構築通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -1916,7 +1920,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T16:13:40+09:00
 
-**摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 與 nixos-rebuild 等 profile 工具解決不能（PS-MISSING/NIXOS-REBUILD-MISSING）。継承 env 先、明示 NixOS profile PATH 後展開修正（請求 env 最後合併不変）。検証：systemd 既定 PATH 模擬実行器直接実行、PATH /run/current-system/sw/bin 先頭、ps 與 nixos-rebuild 両方解決成功。
+**摘要**：fix(dsh-nix-shell): sudo 実行器 PATH 合併順修正 — 套接字活性化模版単元 systemd 管理器既定 PATH（coreutils/findutils/grep/sed/systemd store 路徑僅）継承、明示 NixOS PATH 後展開 `...process.env` 覆蓋、守護内 ps 與 nixos-rebuild 等 profile 工具解決不能。継承 env 先、明示 NixOS profile PATH 後展開変更以修正（請求 env 最後合併不変）。検証：PATH /run/current-system/sw/bin 先頭、ps 與 nixos-rebuild 両方解決成功。
 
 | 提交 | 説明 |
 |------|------|
@@ -1924,7 +1928,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T16:01:28+09:00
 
-**摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹與警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）與 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）與二進緩存説明追加。4 言語同期。
+**摘要**：docs(dsh): 使用例実模組動作同期 — 手動組合行例 `- insert:` 包裹與警告追加（裸 `- id:` 行僅補丁既有条目）；技能插件文書全 7 entry id（`skill-nixkits-<id>` 接頭辞欠落）與 disabled 例 id 修正；dsh 文書安裝節模組式変更（旧 `nixkits.extraPackages` 既不存在）與二進 cache 説明追加。4 言語同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -1932,7 +1936,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-21T23:02:33+09:00
 
-**摘要**: chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。遺留 rc.8 升級完了：src hash npmDepsHash 占位符実値、package-lock.json 再生成（旧 lock dsh-invariants 含 120 条目欠落、buildNpmPackage fetch ENOTCACHED）。検証: rc.8 構築成功、randomUUID fallback patch 適用、with-plugins 変体正常、起動插件読込 error 無。注: 本機 skills-as-plugins 設計廃止、skills dsh-nixos-shell（maintenance-skills）統合、with-plugins dsh-nixos-shell 只注入。
+**摘要**：chore(pkgs): dsh 0.1.0-rc.7 → 0.1.0-rc.8。遺留 rc.8 升級完了：src hash npmDepsHash 実値、package-lock.json 再生成（旧 lock dsh-invariants 含 120 条目欠落）。検証：rc.8 構築成功、randomUUID fallback patch 適用、with-plugins 変体正常、起動插件読込 error 無；with-plugins dsh-nixos-shell 只注入。
 
 | 提交 | 説明 |
 |------|------|
@@ -1940,7 +1944,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-21T22:11:28+09:00
 
-**摘要**: fix(module): dsh 崩壊耐性 — Restart=always + RestartSec 5s。dsh 上流既知崩壊 bug（cordis-plugin-timer Context disposed、rc.6 約 13 時間稼働後発生）、rc.7/rc.8 cordis-plugin-timer 依存不変（^1.1.3）bug 残存。崩壊時 lighttpd 反代 systemd 再起動迄 503 返。Restart=always（on-failure exit 0 終了未覆）+ 再起動間隔 5s 変更、中断時間最小化。
+**摘要**：fix(module): dsh 崩壊耐性 — Restart=always + RestartSec 5s。dsh 上流既知崩壊 bug（cordis-plugin-timer Context disposed、rc.6 約 13 時間稼働後発生）、rc.7/rc.8 cordis-plugin-timer 依存不変（^1.1.3）bug 残存。崩壊時 lighttpd 反代 systemd 再起動迄 503 返。Restart=always（on-failure exit 0 終了未覆）+ 再起動間隔 5s 変更、中断時間最小化。
 
 | 提交 | 説明 |
 |------|------|
@@ -1948,7 +1952,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T11:08:08+09:00
 
-**摘要**: fix(module): dsh 插件 ESM 解決 — dsh cordis-plugin-loader profile 目録（$DSH_HOME/profiles/web）解決基準（Node 24 内部 cascaded loader parentURL）、上方向 node_modules 検索。插件 dsh store 樹注入済、store profile node_modules 路徑上不在、import ERR_MODULE_NOT_FOUND 起動直後崩壊（restart 循環 108 回）。preStart 注入済 @kihara777 scope $DSH_HOME/node_modules 符号連結、Node 解決可。realpath store 樹復帰、插件参照 @deepseek-ai/* peer deps 同一樹内解決可。検証: skills + nix-shell 插件読込成功。
+**摘要**：fix(module): dsh 插件 ESM 解決 — dsh cordis-plugin-loader profile 目録（$DSH_HOME/profiles/web）解決基準、上方向 node_modules 検索。插件 dsh store 樹注入済、store profile node_modules 路徑上不在、import ERR_MODULE_NOT_FOUND 起動直後崩壊。preStart 注入済 @kihara777 scope $DSH_HOME/node_modules 符号連結、Node 解決可。realpath store 樹復帰、插件参照 @deepseek-ai/* peer deps 同一樹内解決可。検証：skills + nix-shell 插件読込成功。
 
 | 提交 | 説明 |
 |------|------|
@@ -1964,7 +1968,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T10:21:46+09:00
 
-**摘要**：fix(dsh): 生成行 insert 動詞包裹 — cordis.patch.yml 裸 `- id:` 行僅補丁既有条目、新規插件条目 dsh 破棄（stderr: patch: entry "nixkits-nix-shell" not found）、8 插件行全部未掛載（dump-config 検証）。包注入成功処、合成樹無条目故 nix_shell 工具與 7 技能插件未登録。生成 plugins.packages 行 `- insert:` 操作包裹修正（extraPatch MCP 行同形）。検証：dump-config stderr 零、8 行全部合成樹反映。
+**摘要**：fix(dsh): 生成行 insert 動詞包裹 — cordis.patch.yml 裸 `- id:` 行僅補丁既有条目、新規插件条目 dsh 破棄、8 插件行全部未掛載（dump-config 検証）。包注入成功処、合成樹無条目故 nix_shell 工具與 7 技能插件未登録。生成 plugins.packages 行 `- insert:` 操作包裹修正（extraPatch MCP 行同形）。検証：dump-config stderr 零、8 行全部合成樹反映。
 
 | 提交 | 説明 |
 |------|------|
@@ -1988,7 +1992,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T07:41:45+09:00
 
-**摘要**：fix(rcc-fix): asusctl 6.4.0 向補丁再基 — nixpkgs 前進 asusctl 6.3.7 → 6.4.0、rcc-fix.patch 第 4 hunk 失敗（系統構築失敗）。上流該領域再構築（`if dev.is_old_laptop() { pow3r.retain(...) }` 旧 push 塊置換、else 分岐 PowerZones::None 過濾上流吸収）。補丁境界検査置換（`names[(*z) as usize]` → filter_map 境界検査 + warn）保持。他 hunk 変更不要。検証：6.4.0 源 git apply --check 全 hunk 通過、本機釘 nixpkgs rev（0ae2bc1）asusctl 構築成功（EXIT=0）。
+**摘要**：fix(rcc-fix): asusctl 6.4.0 向補丁再基 — nixpkgs 前進 asusctl 6.3.7 → 6.4.0、rcc-fix.patch 第 4 hunk 失敗（系統構築失敗）。上流該領域再構築（`is_old_laptop`/`retain` 旧 push 塊置換、else 分岐 過濾上流吸収）。補丁境界検査置換（`names[(*z) as usize]` → filter_map 境界検査 + warn）保持。他 hunk 変更不要。検証：6.4.0 源 git apply --check 全 hunk 通過、本機釘 nixpkgs rev（0ae2bc1）asusctl 構築成功（EXIT=0）。
 
 | 提交 | 説明 |
 |------|------|
@@ -1996,7 +2000,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T06:27:40+09:00
 
-**摘要**：feat(dsh-nix-shell): 外部 sudo 守護統合（0.2.0）— dsh 沙箱 sudo setuid 剥奪、代理昇格不能。插件初期化時守護套接字（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）検出、存在時 `sudo`/`justification` 參數有効化。`sudo: true` 請求全体（command/cwd/env/timeout）Unix 套接字経由守護路由、`justification` 必須結果随返。守護 = systemd 套接字激活型 root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続毎 1 請求 JSON 協議、插件包同梱）。接続制御境界 = dsh service 用戶所有 `0600` 套接字文件（SocketUser/SocketMode）。部品 nixkits.dsh.sudo（enable/socketPath/package）追加、単元生成與環境変数注入。検証：門控（套接字無參數非公開／有公開）、路由往復、justification 強制、実行器直結協議、部品単元評価全通過。
+**摘要**：feat(dsh-nix-shell): 外部 sudo 守護統合（0.2.0）— 插件初期化時守護套接字（config `sudoSocketPath` / 環境変数 `NIXKITS_SUDO_SOCKET`）検出、存在時 `sudo`/`justification` 參數有効化。`sudo: true` 請求全体（command/cwd/env/timeout）Unix 套接字経由守護執行路由、`justification` 必須結果随返。守護 = systemd 套接字激活型 root 実行器（nixkits-sudo@.service + nixkits-sudo-exec.js、接続毎 1 請求 JSON 協議、插件包同梱）。接続制御境界 = dsh 服務使用者所有 `0600` 套接字文件（SocketUser/SocketMode）。部品 nixkits.dsh.sudo（enable/socketPath/package）追加、単元生成與環境変数注入。検証：門控、路由往復、justification 強制、実行器直結協議、部品評価全通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -2004,7 +2008,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T06:02:50+09:00
 
-**摘要**：refactor(skills): NixKits 技能原生 DSH 技能插件書換 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、runtime 依存零）、7 技能各包内子路插件条目。各插件 runtime ctx.skills.register 自身内容登録（runtime provider、rank 250、文件系統由來優先）、apply() 登録 disposer 返組合解除随破棄。SKILL.md skills/ 単一來源殘置構築期嵌入、frontmatter 剥離 content 化 metadata 保持（文書管自動発見契約不変）。部品 skills.enable 7 組合行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）自動生成、旧誤実装目録注入（nixkits-skills 包 + bundledSkillDir）置換。検証：7 插件 mock 登録全通過、裸子路 import + 登録実測（SUBPATH-OK/REGISTERED）。CI x86_64/aarch64 構築追加。
+**摘要**：refactor(skills): NixKits 技能原生 DSH 技能插件書換 — 新包 dsh-skill-nixkits（@kihara777/dsh-skill-nixkits、runtime 依存零）、7 技能各包内子路插件条目。各插件 runtime ctx.skills.register 自身内容登録（runtime provider、rank 250、文件系統由來優先）、apply() 登録 disposer 返組合解除随破棄。SKILL.md skills/ 単一來源殘置構築期嵌入、frontmatter 剥離 content 化 metadata 保持（文書管自動発見契約不変）。部品 skills.enable 7 組合行（skill-nixkits-<id> → @kihara777/dsh-skill-nixkits/<id>）自動生成、旧誤実装目録注入（nixkits-skills 包與 bundledSkillDir）置換。検証：7 插件 mock 登録、裸子路 import 與登録実測全通過。CI x86_64/aarch64 構築追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -2012,7 +2016,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-20T05:27:48+09:00
 
-**摘要**：feat(dsh): 内建 bash 工具 NixOS 修正 + 第三者插件包 + 配備同梱技能 — ① 部品 dsh service 完全 NixOS PATH 注入（systemd 既定 PATH bash 無、標準 bash 工具 spawn bash ENOENT 失敗）；② dsh-nix-shell 包新規（@kihara777/dsh-nix-shell、NixOS 対応 shell 工具插件：PATH 解失敗時 Nix store bash 回退、NixOS PATH 注入、超時與落盤輸出）與 nixkits-skills 包（技能目録 bundle）新規；③ 部品 plugins.packages（node_modules tar 展開注入 — 符号連結 Node realpath 插件自身 store 路戻 peer 解決壊故実展開 — 與組合行自動生成）與 skills.enable（skill-filesystem bundledSkillDir、rank 600）追加；④ CI dsh-nix-shell x86_64/aarch64 構築追加。注入樹内 IMPORT-OK 端到端検証（插件輸出與依存連鎖解決正常）。
+**摘要**：feat(dsh): 内建 bash 工具 NixOS 修正 + 第三者插件包 + 配備級技能 — ① 部品 dsh 服務完全 NixOS PATH 注入（systemd 既定 PATH bash 無、内建 bash 工具 spawn bash ENOENT 失敗）；② dsh-nix-shell 包新規（@kihara777/dsh-nix-shell、NixOS 対応 shell 工具插件：PATH 解失敗時 Nix store bash 回退、NixOS PATH 注入、超時與落盤輸出）與 nixkits-skills 包（技能目録 bundle）新規；③ 部品 plugins.packages（node_modules tar 展開注入 — 符号連結 Node realpath 插件自身 store 路戻 peer 解決壊故実展開 — 與組合行自動生成）與 skills.enable（skill-filesystem bundledSkillDir、rank 600）追加；④ CI dsh-nix-shell x86_64/aarch64 構築追加。端到端検証：注入樹内 IMPORT-OK。
 
 | 提交 | 説明 |
 |------|------|
@@ -2045,7 +2049,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-19T16:52:54+09:00
 
-**摘要**: fix(module): dsh WebSocket 反代 mod_proxy upgrade 変更 — NixOS lighttpd 模組 allKnownModules 固定順 server.modules 生成、mod_wstunnel 常 mod_proxy 後負載。proxy.server 全路徑匹配、mod_proxy /api/events.* WebSocket 升級請求先処理 426 Upgrade Required 返、mod_wstunnel r->handler_module 非 NULL skip 不実行。lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"）変更、mod_wstunnel 削除。検証: 8625 / 200、/api/events.host|mux 握手 101（本地+LAN）。
+**摘要**：fix(module): dsh WebSocket 反代 mod_proxy upgrade 変更 — NixOS lighttpd 模組 allKnownModules 固定順 server.modules 生成、mod_wstunnel mod_proxy 後負載。proxy.server 全路徑匹配故 mod_proxy /api/events.* 升級請求先処理 426 返、mod_wstunnel r->handler_module 非 NULL 不実行。lighttpd 1.4.56+ mod_proxy 原生 WebSocket 隧道（proxy.header = "upgrade" => "enable"）変更、mod_wstunnel 削除。検証: 8625 / 200、/api/events.host|mux 握手 101（本地+LAN）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2055,7 +2059,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-19T13:10:00+09:00
 
-**摘要**: fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 約 13 時間後崩壊（fatal load failure: Context has been disposed）— cordis-plugin-timer ctx.timeout() Context 静態 dispose 時 reject unhandled rejection 化。rc.7（8/17）最新、cordis/timer 版不変（bug 残存可）上流修正含。插件清單不変（131）。
+**摘要**：fix(pkgs): dsh 0.1.0-rc.6 → 0.1.0-rc.7。rc.6 約 13 時間後崩壊（fatal load failure: Context has been disposed）— cordis-plugin-timer ctx.timeout() Context 静態 dispose 時 reject unhandled rejection 化。rc.7（8/17）最新、cordis/timer 版不変（bug 残存可）上流修正含。插件清單不変（131）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2063,7 +2067,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T20:00:00+09:00
 
-**摘要**: fix(module): dsh 通常用户実行対応 — 隔離 system user（home /var/lib/dsh）無法 /home/<user>（700）訪問、agent 作業目録操作不能。dshHome 選項追加、HOME/DSH_HOME/WorkingDirectory/preStart 統一、StateDirectory preStart mkdir + chown 置換。本機 user="kix" + dshHome="/home/kix/.dsh"、dsh kix 身份実行 /home/kix 到達。
+**摘要**：fix(module): dsh 通常使用者実行対応 — 隔離 system user（home /var/lib/dsh）無法 /home/<user>（700）訪問、agent 作業目録操作不能。dshHome 選項追加、HOME/DSH_HOME/WorkingDirectory/preStart 統一、StateDirectory preStart mkdir + chown 置換。本機 user="kix" + dshHome="/home/kix/.dsh"、dsh kix 身份実行 /home/kix 到達。
 
 | 提交 | 説明 |
 |------|------|
@@ -2071,7 +2075,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T19:30:00+09:00
 
-**摘要**: feat(module): nixkits.dsh.settings — 宣言設定。dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件备份、hot reload、namespace 別 section）格納。settings 選項（attrsOf attrs、namespace → section）追加 JSON（合法 YAML）preStart 写入。実測：web-search-deepseek.maxTokens 既定 4096 → 8192 宣言覆写。4言語文書設定節追加。
+**摘要**：feat(module): nixkits.dsh.settings — 宣言設定。dsh 設定菜單項目 $DSH_HOME/settings.yaml（文件备份、hot reload、namespace 別 section）格納。settings 選項（attrsOf attrs、namespace → section）追加 JSON（合法 YAML）preStart 写入。実測：web-search-deepseek.maxTokens 既定 4096 → 8192 宣言覆写。4言語文書設定節追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -2080,7 +2084,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T18:45:00+09:00
 
-**摘要**: docs(dsh) + refactor(skill): 插件清單同期 — docs/dsh.md 4言語「插件清單」節（131 内建 entry id、id -> 包名）追加、nixkits.dsh.plugins.disabled 参照。check-updates 技能第5步 dsh 特説明追加：更新時新包 dsh-*/cordis.patch.yml 清單抽出 docs 同期。
+**摘要**：docs(dsh) + refactor(skill): 插件清單同期 — docs/dsh.md 4言語「插件清單」節（131 内建 entry id、id -> 包名）追加、nixkits.dsh.plugins.disabled 参照。check-updates 技能第5步 dsh 特説明追加：更新時新包 dsh-*/cordis.patch.yml 清單抽出 docs 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -2088,7 +2092,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T18:39:34+09:00
 
-**摘要**：fix(module): dsh preStart rm before cp — preStart 生成文件権限 444（読取専用）、服務用戶 cp 上書不能。先 rm 後 cp 修正。
+**摘要**：fix(module): dsh preStart rm before cp — preStart 生成文件権限 444（読取専用）、服務使用者 cp 上書不能。先 rm 後 cp 修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -2096,7 +2100,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T18:20:00+09:00
 
-**摘要**: feat(module): nixkits.dsh.plugins — 宣言插件 on/off 與設定。dsh 插件 cordis.patch.yml runtime hot reload、module plugins.disabled（entry id）、plugins.settings（config 覆写）、plugins.extraPatch（MCP 等生片段）追加。系統設定 MCP extraPatch 移行、API key kix.credentials 宣言化、session-telemetry-otel + session-stats 無効化例。実測：cordis.patch.yml 正生成、absent-id 警告無。
+**摘要**：feat(module): nixkits.dsh.plugins — 宣言插件 on/off 與設定。dsh 插件 cordis.patch.yml runtime hot reload、部品 plugins.disabled（entry id）、plugins.settings（config 覆写）、plugins.extraPatch（MCP 等生片段）追加。系統設定 MCP extraPatch 移行、API key kix.credentials 宣言化、session-telemetry-otel + session-stats 無効化例。実測：cordis.patch.yml 正生成、absent-id 警告無。
 
 | 提交 | 説明 |
 |------|------|
@@ -2105,7 +2109,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T17:55:00+09:00
 
-**摘要**: fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 與 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。
+**摘要**：fix(module): lighttpd 反代 Host/Origin loopback 改写 — trustedHosts 方式取代。dsh isTrustedApiRequest loopback 通過、per-deployment trustedHosts 不要、LAN 域名/IP 不外泄。Origin 與 Host 同時改写必須（同一生成元 check 失敗避）。実測：trustedHosts 削除後反代 API（harukax.lan / 192.168.31.241）ok:true。
 
 | 提交 | 説明 |
 |------|------|
@@ -2113,7 +2117,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T17:30:00+09:00
 
-**摘要**: fix(module): dsh trustedHosts 選項 — 反代後全 /api 403。dsh /api 要求 Host header 検証（isTrustedApiRequest：Host loopback 或信頼必須、Origin 同一生成元）。lighttpd 経由 Host LAN 域名/IP 化、全 403 forbidden。nixkits.dsh.trustedHosts 追加（repeatable --trusted-host 映射）、系統設定 harukax.lan + 192.168.31.241 信頼後 API 復旧。
+**摘要**：fix(module): dsh trustedHosts 選項 — 反代経由 /api 全 403。dsh /api 要求 Host header 検証故、lighttpd 経由 Host LAN 域名/IP 化 拒否。nixkits.dsh.trustedHosts 追加（repeatable --trusted-host 映射）、系統設定 harukax.lan + 192.168.31.241 信頼 API 復旧。
 
 | 提交 | 説明 |
 |------|------|
@@ -2121,7 +2125,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T16:20:05+09:00
 
-**摘要**: fix(dsh): 瀏覧器 client bundle patch — crypto.randomUUID fallback。crypto.randomUUID() 非安全上下文（HTTP LAN IP、lighttpd 反代）不可用、webui "crypto.randomUUID is not a function" 失敗。postInstall dsh-client-connection + dsh-client-ui-conversation 置換 __dshUuid helper（crypto.getRandomValues fallback、全上下文可）。server index.js Node crypto 使用、変更不要。
+**摘要**：fix(dsh): 瀏覧器側 client bundle patch — crypto.randomUUID fallback。crypto.randomUUID() 非安全上下文（LAN IP HTTP、lighttpd 反代経由）使用不可故 webui 錯誤。postInstall dsh-client-connection + dsh-client-ui-conversation crypto.randomUUID __dshUuid helper（crypto.getRandomValues fallback、全上下文利用可）置換。
 
 | 提交 | 説明 |
 |------|------|
@@ -2129,7 +2133,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T15:29:14+09:00
 
-**摘要**: fix/docs(dsh): lighttpd 反代定稿 — dsh 内部 loopback 端口 8615（SearXNG 42701 对齐）、lighttpd 对外端口 8625（4270 对齐）、防火牆開放 lighttpd 对外端口（非 dsh 内部）。4 語言文書同期。
+**摘要**：fix/docs(dsh): lighttpd 反代定稿 — dsh 内部 loopback 端口 8615（SearXNG 42701 合）、lighttpd 対外端口 8625（4270 合）、防火牆 lighttpd 対外端口 開放（dsh 内部端口 非）。4 語言文書同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -2138,7 +2142,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T14:38:26+09:00
 
-**摘要**: feat(module): dsh reverseProxy via lighttpd — dsh 拒否 non loopback（RCE 安全）、lighttpd `$SERVER["socket"]` block 0.0.0.0:8626 dsh loopback 8625 反代（SearXNG lighttpd 実例再利用、extraConfig types.lines 合併）。对外 8626 firewall 開放。
+**摘要**：feat(module): nixkits.dsh.reverseProxy（lighttpd）新規 — dsh 非 loopback host 拒否故（RCE 安全）、lighttpd `$SERVER["socket"]` block 0.0.0.0:8626 dsh loopback 8625 反代（SearXNG lighttpd 実例 再利用、extraConfig types.lines 合併可）、防火牆 8626 開放。
 
 | 提交 | 説明 |
 |------|------|
@@ -2146,7 +2150,12 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T10:29:46+09:00
 
-**摘要**: feat/fix(dsh): dsh 服務配備 + MCP/skills 設定 — ① module 修正：dsh system user HOME=/var/empty（読取専用）EPERM、書込可 /var/lib/dsh home + StateDirectory 変更；② HMR 需 --expose-internals（NODE_OPTIONS 禁止、CLI 非認識）、node --expose-internals bin.js 直起動；③ MCP cordis.patch.yml `insert:` 構文（id-targeted override 非）SearXNG + Godot 設定；④ skills /var/lib/dsh/skills/（.agent-presets 子目録非）複製；⑤ nixkits-skills 目録 ~/.dsh/skills 修正。
+**摘要**：feat/fix(dsh): dsh 服務 配備 且 MCP + skills 設定。
+- 部品修正：dsh system 使用者 HOME=/var/empty（読取専用）EPERM 招故、書込可能 /var/lib/dsh + StateDirectory 変更
+- HMR 服務 --expose-internals 要故、node --expose-internals bin.js 直接起動
+- MCP 服務（SearXNG + Godot）cordis.patch.yml `insert:` 構文 設定（id-targeted override 非）
+- skills /var/lib/dsh/skills/ 複製（.agent-presets 子目録 非）
+- nixkits-skills 目録 ~/.dsh/skills 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -2157,7 +2166,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T08:42:40+09:00
 
-**摘要**: docs: ruyi 通道版本同期（stable 0.50.0 → 0.51.0、beta/alpha 日期）+ en/ja/pcn README ruyi 説明列補完（空 `<br><br>` → RuyiSDK 説明 + 3 通道版本、zh 一致）。
+**摘要**：docs: ruyi 通道版本同期（stable 0.50.0 → 0.51.0、beta/alpha 日期）+ en/ja/pcn README ruyi 説明列補完（空 `<br><br>` → RuyiSDK 説明 + 3 通道版本、zh 一致）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2165,7 +2174,12 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-18T07:19:30+09:00
 
-**摘要**: 監査修正 — ① codewhale 0.9.8 / mcp-searxng 1.15.0 / opencode-telegram 0.24.0 / obs-bilibili-stream 2.1.3 更新；② comfyui-rocm module services.comfyui assertion 復元 + nixpkgs-compat patch 目標明確化；③ overlay codewhale arch 別 source build fallback（riscv64）；④ 文書版数/連結/説明同期；⑤ write-maintenance-log 技能表頭 + katalish 列削除。
+**摘要**：監査修正 —— 版数更新 與 部品/overlay/文書/技能 修正。
+- codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 更新
+- comfyui-rocm 部品 services.comfyui assertion 復元、nixpkgs-compat patch 対象 明確化
+- overlay codewhale 構造別 source 構築 回退（riscv64）
+- 文書 版数、ruyi 連結、codewhale-sudo 説明 同期
+- write-maintenance-log 技能 表頭 追加、katalish 列 削除
 
 | 提交 | 説明 |
 |------|------|
@@ -2180,7 +2194,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-15T10:04:37+09:00
 
-**摘要**: refactor: comfyui-rocm-patch + comfyui-strix-halo 単一 comfyui-rocm 統合 — 2 module 異部分処理（patch 層 vs Strix Halo 硬件最適化）、nixkits.comfyui-rocm（enable 選項）統合、patch mount/GFX 覆写/xformers 迂回/C 工具鏈/Strix Halo 設定（ROCm runtime/DeviceAllow/kernelParams）網羅。文書與 README 同期。
+**摘要**：refactor: comfyui-rocm-patch + comfyui-strix-halo 単一 comfyui-rocm 統合 — 2 module 異部分処理（patch 層 vs Strix Halo 硬件最適化）、nixkits.comfyui-rocm（enable 選項）統合、patch mount/GFX 覆写/xformers 迂回/C 工具鏈/Strix Halo 設定（ROCm runtime/DeviceAllow/kernelParams）網羅。文書與 README 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -2188,7 +2202,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-15T09:23:15+09:00
 
-**摘要**: refactor: 補丁 rog-control-center-fix.patch → rcc-fix.patch 改名、rcc-fix 統一名称收尾。overlays/rcc-fix.nix 與 4言語 rcc-fix.md 参照更新。
+**摘要**：refactor: 補丁 rog-control-center-fix.patch → rcc-fix.patch 改名、rcc-fix 統一名称收尾。overlays/rcc-fix.nix 與 4言語 rcc-fix.md 参照更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -2196,7 +2210,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-15T08:31:32+09:00
 
-**摘要**: feat(dsh): deepseek-harness 0.1.0-rc.6 新包 + 4言語文書。DSH（DeepSeek Harness）— 万物皆插件。預構築 npm 包（@deepseek-ai/dsh、bin dsh → lib/bin.js）、package-lock.json 同梱（npm tarball 無 lock）、dontNpmBuild build 跳過。godot-ai 與 dsh README 掲載（4言語）。
+**摘要**：deepseek-harness 0.1.0-rc.6 — 新規包（@deepseek-ai/dsh、bin dsh → lib/bin.js）。預構築 npm 包 package-lock.json 同梱（npm tarball lock 無）、dontNpmBuild build 跳過。4 言語文書 追加 且 godot-ai 與 dsh README 掲載。
 
 | 提交 | 説明 |
 |------|------|
@@ -2204,7 +2218,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-15T08:07:33+09:00
 
-**摘要**: refactor: rog-control-center-fix rcc-fix 統合 — 両者同一 ROG Control Center 修正（overlay asusctl patch + module systemd 死鎖修正）。単一 rcc-fix 統一：overlays/rog-control-center-fix.nix → rcc-fix.nix、modules/rog-control-center-fix.nix → rcc-fix.nix、選項 nixkits.rog-control-center-fix → nixkits.rcc-fix、独立文書削除（rcc-fix.md 統合）。
+**摘要**：refactor: rog-control-center-fix rcc-fix 統合 — 両者同一 ROG Control Center 修正（overlay asusctl patch + module systemd 死鎖修正）。単一 rcc-fix 統一：overlays/rog-control-center-fix.nix → rcc-fix.nix、modules/rog-control-center-fix.nix → rcc-fix.nix、選項 nixkits.rog-control-center-fix → nixkits.rcc-fix、独立文書削除（rcc-fix.md 統合）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2212,7 +2226,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-13T01:20:29+09:00
 
-**摘要**: fix(default-overlay): godot-ai fastmcp overlay 適用構築 — default overlay final.callPackage fastmcp nixpkgs 3.3.1（循環 import bug）解決。 (prev.extend (import ./fastmcp.nix)) 依存 3.4.7 解決。
+**摘要**：fix(default-overlay): godot-ai fastmcp overlay 適用構築 — default overlay final.callPackage fastmcp nixpkgs 3.3.1（循環 import bug）解決。 (prev.extend (import ./fastmcp.nix)) 依存 3.4.7 解決。
 
 | 提交 | 説明 |
 |------|------|
@@ -2220,7 +2234,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-12T10:05:00+09:00
 
-**摘要**: fix(default-overlay): godot-ai 路経修正 — default overlay callPackage `../packages/` 要（overlay 子目録）、`./packages/` 誤無存 `overlays/packages/` 解決。
+**摘要**：fix(default-overlay): godot-ai 路経修正 — default overlay callPackage `../packages/` 要（overlay 子目録）、`./packages/` 誤無存 `overlays/packages/` 解決。
 
 | 提交 | 説明 |
 |------|------|
@@ -2228,7 +2242,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-12T10:00:00+09:00
 
-**摘要**: fix(default-overlay): godot-ai 登録 — flake packages 存在 default overlay 遺漏、下流 pkgs.godot-ai 不可視。
+**摘要**：fix(default-overlay): godot-ai 登録 — flake packages 存在 default overlay 遺漏、下流 pkgs.godot-ai 不可視。
 
 | 提交 | 説明 |
 |------|------|
@@ -2236,7 +2250,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-12T09:18:26+09:00
 
-**摘要**: docs(godot-ai): 4言語文書新規追加（72行）— 架構図、依存表（fastmcp 3.4 含）、系統導入 + MCP 設定 + 前提條件指南。
+**摘要**：docs(godot-ai): 4言語文書新規追加（72行）— 架構図、依存表（fastmcp 3.4 含）、系統導入 + MCP 設定 + 前提條件指南。
 
 | 提交 | 説明 |
 |------|------|
@@ -2244,7 +2258,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-12T07:07:27+09:00
 
-**摘要**: feat(godot-ai): godot-ai 3.1.5 新包 + fastmcp 3.4.7 overlay。godot-ai MCP client Godot editor 接続本格 MCP server。fastmcp 3.3.1→3.4.7（必要 >=3.4.0、3.3.x 循環 import bug）、fastmcp-slim + py-key-value-aio 0.4.5 連動。devshell godot-mcp→godot-ai。
+**摘要**：feat(godot-ai): godot-ai 3.1.5 新包 + fastmcp 3.4.7 overlay。godot-ai MCP client Godot editor 接続本格 MCP server。fastmcp 3.3.1→3.4.7（必要 >=3.4.0、3.3.x 循環 import bug）、fastmcp-slim + py-key-value-aio 0.4.5 連動。devshell godot-mcp→godot-ai。
 
 | 提交 | 説明 |
 |------|------|
@@ -2252,7 +2266,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-11T18:49:54+09:00
 
-**摘要**: fix(breeze-black): Edge/Chromium 純黒背景 + 純白前景 — sed 再映射拡張：背景 #292c30 → #000000（按鈕/工具欄/禁用）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、零灰残留。
+**摘要**：fix(breeze-black): Edge/Chromium 純黒背景 + 純白前景 — sed 再映射拡張：背景 #292c30 → #000000（按鈕/工具欄/禁用）、前景 #fcfcfc/#a1a9b1 → #ffffff。gtk-3.0/4.0 検証：15× #000000、14× #ffffff、零灰残留。
 
 | 提交 | 説明 |
 |------|------|
@@ -2260,7 +2274,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-11T18:41:14+09:00
 
-**摘要**: fix(breeze-black): 背景変数 純黒 #000000 映射 — Breeze-Dark 基本色 #202326（濃灰非純黒）。CSS 複製後 主背景/base #000000 再映射（按鈕 #292c30 維持區別）、gtk-dark.css 自己完結（gtk.css 複製）灰色 import 廢止。
+**摘要**：fix(breeze-black): 背景変数 純黒 #000000 映射 — Breeze-Dark 基本色 #202326（濃灰非純黒）。CSS 複製後 主背景/base #000000 再映射（按鈕 #292c30 維持區別）、gtk-dark.css 自己完結（gtk.css 複製）灰色 import 廢止。
 
 | 提交 | 説明 |
 |------|------|
@@ -2268,7 +2282,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-11T16:19:49+09:00
 
-**摘要**: fix(breeze-black): gtk.css 本体 Breeze-Dark dark 覆写 — Chromium 系（Edge/Chrome）prefer-dark 無視、gtk.css 直読；BreezeBlack（light Breeze 改名）light 変数（#eff0f1）残留、Edge 灰色。gtk-{3,4}.0 gtk.css(+.map) dark（#202326）覆写。
+**摘要**：fix(breeze-black): gtk.css 本体 Breeze-Dark dark 覆写 — Chromium 系（Edge/Chrome）prefer-dark 無視、gtk.css 直読；BreezeBlack（light Breeze 改名）light 変数（#eff0f1）残留、Edge 灰色。gtk-{3,4}.0 gtk.css(+.map) dark（#202326）覆写。
 
 | 提交 | 説明 |
 |------|------|
@@ -2276,7 +2290,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-11T16:02:39+09:00
 
-**摘要**: fix(breeze-black): Breeze-Dark 保持 — BreezeBlack gtk-dark.css `@import ../../Breeze-Dark/...` 真 dark 配色（#202326）取得、preFixup 削除致 import 断、GTK 浅色退避（「不够黑」症状）。
+**摘要**：fix(breeze-black): Breeze-Dark 保持 — BreezeBlack gtk-dark.css `@import ../../Breeze-Dark/...` 真 dark 配色（#202326）取得、preFixup 削除致 import 断、GTK 浅色退避（「黒不足」症状）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2284,7 +2298,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-09T22:43:43+09:00
 
-**摘要**: refactor(skill): 陷阱第4条追加 — 無引数 `nix flake lock` 全 floating input 更新（nixpkgs 漂移再発、8/7 diffusers/httpx 失敗）。--update-input 或 rev 固定使用。
+**摘要**：refactor(skill): 陷阱第4条追加 — 無引数 `nix flake lock` 全 floating input 更新（nixpkgs 漂移再発、8/7 diffusers/httpx 失敗）。--update-input 或 rev 固定使用。
 
 | 提交 | 説明 |
 |------|------|
@@ -2292,7 +2306,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-09T19:40:21+09:00
 
-**摘要**: feat(patches): 本地 comfyui-nix build 修正 patch 正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook ≥ 8/5）；② flaky 套件 doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib runtime 依頼 skip。module 注釈 + 4 言語文書更新。
+**摘要**：feat(patches): 本地 comfyui-nix build 修正 patch 正式化 — ① mkWheel dontCheckRuntimeDeps（pythonRuntimeDepsCheckHook ≥ 8/5）；② flaky 套件 doInstallCheck=false（jupyter-server/scipy/fastapi/einops/mss/inline-snapshot）；③ torch/facexlib runtime 依存 skip。module 注釈 + 4 言語文書更新。
 
 | 提交 | 説明 |
 |------|------|
@@ -2301,7 +2315,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-09T19:05:53+09:00
 
-**摘要**: refactor(skill): nixkits-check-updates nixpkgs 漂移診断節追加 — ① 旧 flake.lock 復元 follows 要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest 包 doInstallCheck=false 使用；③ pythonRuntimeDepsCheckHook（≥ 8/5）wheel 構築破壊、dontCheckRuntimeDeps=true 修復。
+**摘要**：refactor(skill): nixkits-check-updates nixpkgs 漂移診断節追加 — ① 旧 flake.lock 復元 follows 要確認（喪失 → glibc 2.40 → GLIBC_ABI_GNU2_TLS）；② pytest 包 doInstallCheck=false 使用；③ pythonRuntimeDepsCheckHook（≥ 8/5）wheel 構築破壊、dontCheckRuntimeDeps=true 修復。
 
 | 提交 | 説明 |
 |------|------|
@@ -2309,7 +2323,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-09T04:21:09+09:00
 
-**摘要**: fix(module): llama-cpp — ① services.llama-cpp.extraFlags 非推奨、settings 採用；② freeform settings 分離定義不可、lib.mkMerge 統合。
+**摘要**：fix(module): llama-cpp — ① services.llama-cpp.extraFlags 非推奨、settings 採用；② freeform settings 分離定義不可、lib.mkMerge 統合。
 
 | 提交 | 説明 |
 |------|------|
@@ -2318,7 +2332,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-08T23:07:40+09:00
 
-**摘要**: fix(breeze-black): look-and-feel 全局主題復元 + GTK 改名修正 — 7/23 外部補丁除去後 2 種後退：① org.kde.breezeblack.desktop 欠落 BreezeBlack 設定主題選択消失、local 内蔵復元；② preFixup Breeze* 同時匹配 Breeze/Breeze-Dark GTK 主題嵌套、Breeze 単独改名修正。
+**摘要**：fix(breeze-black): look-and-feel 全局主題復元 + GTK 改名修正 — 7/23 外部補丁除去後 2 種後退：① org.kde.breezeblack.desktop 欠落 BreezeBlack 設定主題選択消失、local 内蔵復元；② preFixup Breeze* 同時匹配 Breeze/Breeze-Dark GTK 主題嵌套、Breeze 単独改名修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -2326,7 +2340,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-08T22:50:33+09:00
 
-**摘要**: fix(codewhale-src): 0.9.4 同期 source hash 修正 — nix-prefetch-url archive tarball hash fetchFromGitHub（git 方式）不一致、riscv64 CI 連続失敗。fetchFromGitHub build 正 hash 取得、Cargo.lock 同期、技能誤助言修正。
+**摘要**：fix(codewhale-src): 0.9.4 同期 source hash 修正 — nix-prefetch-url archive tarball hash fetchFromGitHub（git 方式）不一致、riscv64 CI 連続失敗。fetchFromGitHub build 正 hash 取得、Cargo.lock 同期、技能誤助言修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -2335,7 +2349,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-08T22:20:21+09:00
 
-**摘要**: codewhale 0.9.4 — 上流修正；mcp-searxng 1.14.1 — 上流保守；opencode-telegram 0.23.1 — 上流機能追加
+**摘要**：codewhale 0.9.4 — 上流修正；mcp-searxng 1.14.1 — 上流保守；opencode-telegram 0.23.1 — 上流機能追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2352,7 +2366,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-05T07:24:56+09:00
 
-**摘要**: chore(pkgs) — codewhale-src 0.9.3 同期（riscv64 源码 build 預編譯 3 版遅）。version、fetchFromGitHub hash、Cargo.lock（711 → 763 項目）同期。
+**摘要**：chore(pkgs) — codewhale-src 0.9.3 同期（riscv64 source build 預編譯 3 版遅）。version、fetchFromGitHub hash、Cargo.lock（711 → 763 項目）同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -2360,7 +2374,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-05T01:30:00+09:00
 
-**摘要**: refactor(skill) — nixkits-check-updates Rust 包（buildRustPackage）更新流程追加。codewhale-src Cargo.lock 同期経験汎化（version + source hash + Cargo.lock 三所同期、上流 lock 取得 項目数検証、交叉編譯 timeout 迂回）。
+**摘要**：refactor(skill) — nixkits-check-updates Rust 包（buildRustPackage）更新流程追加。codewhale-src Cargo.lock 同期経験汎化（version + source hash + Cargo.lock 三点同期、上流 lock 取得 項目数検証、交叉編譯 timeout 迂回）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2368,7 +2382,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-08-04T02:15:00+09:00
 
-**摘要**: fix(ruyi): ruff lint 失敗許容 — 第2 ruff check（--fix無）nixpkgs ruff 更新後 139件 上流違反 build 遮断。
+**摘要**：fix(ruyi): ruff lint 失敗許容 — 第2 ruff check（--fix無）nixpkgs ruff 更新後 139件 上流違反 build 遮断。
 
 | 提交 | 説明 |
 |------|------|
@@ -2391,7 +2405,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-31T04:07:23+09:00
 
-**摘要**：fix(ci): ci-summary.yml 構文修正（YAML 混在、固定 token）、push/schedule + GITHUB_TOKEN 移行。README badge shields.io endpoint 全 Build 実状態反映変更。
+**摘要**：fix(ci): ci-summary.yml 構文修正（YAML 破損、固定 token）、push/schedule 起動 + GITHUB_TOKEN 切替。README badge、check.yml（flake 評価 限定）自 shields.io endpoint（全 Build workflow 実状態反映）変更。
 
 | 提交 | 説明 |
 |------|------|
@@ -2432,7 +2446,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-23T12:56:53+09:00
 
-**摘要**：fix(codewhale-sudo): ptrace wrapper 修正 — 子追跡削除（sub-shell SIGTRAP kill 防止）、PTRACE_EVENT_EXEC 追加。4 言語文書同期更新。
+**摘要**：fix(codewhale-sudo): ptrace wrapper 修正 — 子追跡削除（sub-shell SIGTRAP kill 防止）、PTRACE_EVENT_EXEC 追加。4 言語文書同期更新（LD_PRELOAD → ptrace 記述）。
 
 | 提交 | 説明 |
 |------|------|
@@ -2441,7 +2455,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-23T12:08:13+09:00
 
-**摘要**：fix(codewhale-sudo): LD_PRELOAD shim → ptrace 入替 — codewhale 静的連結故 LD_PRELOAD 不可、ptrace(2) 採用。kernel 境界捕捉、静的双方可。
+**摘要**：fix(codewhale-sudo): LD_PRELOAD shim → ptrace 入替 — codewhale 静的連結故 LD_PRELOAD 以 prctl(PR_SET_NO_NEW_PRIVS) 捕捉 無効、ptrace(2) 採用。kernel 境界捕捉、静的 與 動的 双方対応。
 
 | 提交 | 説明 |
 |------|------|
