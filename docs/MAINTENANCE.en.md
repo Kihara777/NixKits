@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T23:43:17+09:00
+
+**Summary**: fix(skill): summaries are now always list-form — spec, assertion and full retrofit
+
+- The layout goes from "prose or list" to **list only**: a one-sentence headline, a blank line, then at least one `- ` item; even a single-thing entry becomes a one-item list
+- 336 prose summaries retrofitted across all four languages (item counts equal per entry; 1–8 items, mean 3.2)
+- Assertion: `develop/check-maintenance-log.py` now fails a summary with **no `- ` item**; the skill, `AGENTS.md` and the four-language doc pages updated
+- Evidence: the checker passes for 366 entries × 4 languages; a token-loss audit against the pre-retrofit HEAD found **0** entries losing tokens; `nix flake check` passes all 9 checks
+
+| Commit | Description |
+|------|------|
+| `78e1e7c` | docs(MAINTENANCE): retrofit 336 prose summaries to headline + list (four languages) |
+| `6463640` | feat(skill): summaries are always list-form (spec + assertion + doc pages) |
+
 ## 2026-10-05T23:15:53+09:00
 
 **Summary**: feat(check): new `doc-counts` check — counts that can be derived mechanically from a source must match it (`nix flake check` 8 → 9 checks)
