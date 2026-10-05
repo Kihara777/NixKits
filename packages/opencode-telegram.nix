@@ -50,16 +50,16 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "opencode-telegram";
-  version = "0.26.2";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "grinev";
     repo = "opencode-telegram-bot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8MjkxXKKvAfqmC67o2M7vhx7QPIkhOmraxJ6XJ3LiU=";
+    hash = "sha256-kgD1TXOqDPalocW7HNiZz31bbUMiyJ6xu0cPYBVzjhs=";
   };
 
-  npmDepsHash = "sha256-5IW3Zk1nRjUZHetvqKvJTlOlm8DzexkgNrkzCVRz0AQ=";
+  npmDepsHash = "sha256-1PeS2g4rU/E2+ITWYO3troB1v3FlnHFWrIWlZWImjHg=";
   npmBuildScript = "build";
   npmInstallFlags = [ "--ignore-scripts" ];
 

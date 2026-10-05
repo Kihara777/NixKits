@@ -1,8 +1,8 @@
 # opencode-telegram
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-x86_64.yml?branch=main&label=x86_64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.26.2)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-x86_64.yml?branch=main&label=x86_64%20v0.26.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-aarch64.yml?branch=main&label=aarch64%20v0.26.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![riscv64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-opencode-telegram-riscv64.yml?branch=main&label=riscv64%20v0.26.3)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/opencode-telegram.md) | [English](../en/opencode-telegram.md) | [日本語](../ja/opencode-telegram.md)  | 偽中国語
 
@@ -12,7 +12,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 版 | 0.26.2 |
+| 版 | 0.26.3 |
 | 上流 | [grinev/opencode-telegram-bot](https://github.com/grinev/opencode-telegram-bot) |
 | 平台 | x86_64、aarch64、**riscv64**（上流 riscv64 向 予備 無 故、二 原生 module 構築時 実編譯。CI 以 qemu-user + binfmt 産物 実際 走 煙測試——`develop/qemu-smoke-tests/opencode-telegram.sh`） |
 
