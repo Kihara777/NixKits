@@ -173,14 +173,6 @@
 | `21993c8` | fix(develop): maintenance-log 检查补「结构对等」判据 —— 原有的四条只看总量，漏掉过「某条目在某译文里整张表都没了」 |
 | `1c6e4be` | refactor(skills): 修正倍率判据 —— 全库均值混着 CJK 密度这个强混杂因子（实测 r=0.90） |
 
-## 2026-10-03T04:38:34+09:00
-
-**摘要**：`write-maintenance-log` **可測 之 長度 規範** 補、自作 四 条 之 概要 1674–3784 文字 自 312–444 至 圧縮：概要 「何 変 / 何故 / 如何 検証」 限 答、目標 ≤ 400 文字；**訳文 之 倍率 同構造 之 実測値 整合**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21、明確 超過 則 水増）；「此 錯誤 何故 生」 説明 段落 此処 書 不。**検証**：`nix flake check` 之 四語 自検 全緑；四 条 共 圧縮 後 情報 欠落 無。
-
-| 提交 | 説明 |
-|------|------|
-| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
-
 ## 2026-10-03T04:27:03+09:00
 
 **摘要**：`opencode-telegram` 之 riscv64 **「摘除」 自 「構築」 至 戻**、且 「**産物 真 実走 一 回**」 判定 追加：二 箇所 之 gyp 罠 修正（交叉 編譯器 指 之 `gcc` shim、`better-sqlite3` 明示 `--force_build=1`）；`build-package.yml` `smoke-test` 新設 —— 構築 後 `develop/qemu-smoke-tests/<包名>.sh` 走（本地 與 CI 同一 者）、脚本 無 也 binfmt 処理器 無 也 失敗 判定。**検証**：二 回 push 各 33 個 workflow 全部 success。
@@ -1290,7 +1282,6 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | godot-ai | 3.2.4 | 3.2.5 |
 | dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
 
-
 ## 2026-09-03T04:41:42+09:00
 
 **摘要**：docs(dsh-api-balance): 上流 StatsLine 横 scroll 最適化提案記録 — DeepSeek Harness Discussion #5458（上流現時外部 PR 不承、故 Discussion + 準備済 branch 形公開）；fork Kihara777/deepseek-harness 準備済 branch `draft/statline-overflow-scroll`；本 repo 公式 `dsh-plugin` 生態 topic 追記（四言語 文書同期）
@@ -1369,7 +1360,6 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
 | 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
-
 
 ## 2026-09-11T07:38:00+09:00
 
@@ -2727,14 +2717,6 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
 | `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
 
-## 2026-07-04T07:33:07+09:00
-
-**摘要**：docs(MAINTENANCE) — 全 6 MAINTENANCE 書類（zh/en/ja/katalish/pcn）言語切替追加
-
-| 提交 | 説明 |
-|------|------|
-| `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
-
 ## 2026-07-04T06:41:28+09:00
 
 **摘要**：blender-mcp 1.0.0 — 新規 Blender MCP 伺服器包（Python 構築、22 MCP 道具、Blender 拡張含）
@@ -2813,22 +2795,6 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 | 　 | codewhale tui hash (×3) | all updated |
 | 　 | mcp-searxng source hash | `...` → `...` |
 | 　 | mcp-searxng npmDepsHash | `...` → `...` |
-
-## 2026-06-26T08:00:00+09:00
-
-**摘要**：docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅
-
-| 提交 | 説明 |
-|------|------|
-| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
-
-## 2026-06-26T07:35:00+09:00
-
-**摘要**：docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）
-
-| 提交 | 説明 |
-|------|------|
-| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
 
 ## 2026-06-26T07:18:56+09:00
 

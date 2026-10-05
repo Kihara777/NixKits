@@ -173,14 +173,6 @@
 | `21993c8` | fix(develop): maintenance-log 检查补「结构对等」判据 —— 原有的四条只看总量，漏掉过「某条目在某译文里整张表都没了」 |
 | `1c6e4be` | refactor(skills): 修正倍率判据 —— 全库均值混着 CJK 密度这个强混杂因子（实测 r=0.90） |
 
-## 2026-10-03T04:38:34+09:00
-
-**摘要**：给 `write-maintenance-log` 补上**可测的长度规范**，并把四条自撰条目的摘要从 1674–3784 字符压回 312–444：摘要只答「变了什么 / 为什么 / 怎么验证」，目标 ≤ 400 字符；**译文倍率对齐同结构实测值**（`en/zh` ≈ 1.84、`ja/zh` ≈ 1.21，明显超出即属加料）；在摘要里解释「报错为什么是这么来的」的段落不写在这里。**验证**：`nix flake check` 四语全绿；四条压缩后信息无丢失。
-
-| 提交 | 说明 |
-|------|------|
-| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
-
 ## 2026-10-03T04:27:03+09:00
 
 **摘要**：`opencode-telegram` 的 riscv64 **由「摘掉」改回「建」**，并加上「**产物真的跑一遍**」这条判据：修好两处 gyp 陷阱（指向交叉编译器的 `gcc` shim、`better-sqlite3` 显式 `--force_build=1`）；`build-package.yml` 新增 `smoke-test`——构建后跑 `develop/qemu-smoke-tests/<包名>.sh`（本地与 CI 同一份），缺脚本或缺 binfmt 处理器都判失败。**验证**：两次推送各 33 个 workflow 全部 success。
@@ -1370,7 +1362,6 @@
 | dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
 | 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
-
 
 ## 2026-09-11T07:38:00+09:00
 
@@ -2732,14 +2723,6 @@
 | `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
 | `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
 
-## 2026-07-04T07:33:07+09:00
-
-**摘要**：docs(MAINTENANCE) — 为全部 6 个 MAINTENANCE 文件（zh/en/ja/katalish/pcn）添加语言切换器
-
-| 提交 | 说明 |
-|------|------|
-| `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
-
 ## 2026-07-04T06:41:28+09:00
 
 **摘要**：blender-mcp 1.0.0 — 新增 Blender MCP Server 包（Python 构建，22 个 MCP 工具，含 Blender add-on 配套文件）
@@ -2818,22 +2801,6 @@
 | 　 | codewhale tui hash (×3) | 全部更新 |
 | 　 | mcp-searxng source hash | `sha256-6N1YF...` → `sha256-xyNjB...` |
 | 　 | mcp-searxng npmDepsHash | `sha256-ZKhLP...` → `sha256-dVFX5...` |
-
-## 2026-06-26T08:00:00+09:00
-
-**摘要**：docs(MAINTENANCE): pcn 补全 28 条历史缺失维护日志条目，覆盖 zh 基准全部 93 条
-
-| 提交 | 说明 |
-|------|------|
-| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
-
-## 2026-06-26T07:35:00+09:00
-
-**摘要**：docs(MAINTENANCE): en/ja/katalish 补全 10 条历史缺失维护日志条目，三语言全部对齐 zh 基准（92/92）；pcn 部分补全（66/92）
-
-| 提交 | 说明 |
-|------|------|
-| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
 
 ## 2026-06-26T07:18:56+09:00
 

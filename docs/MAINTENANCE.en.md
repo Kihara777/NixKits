@@ -173,14 +173,6 @@
 | `21993c8` | fix(develop): maintenance-log 检查补「结构对等」判据 —— 原有的四条只看总量，漏掉过「某条目在某译文里整张表都没了」 |
 | `1c6e4be` | refactor(skills): 修正倍率判据 —— 全库均值混着 CJK 密度这个强混杂因子（实测 r=0.90） |
 
-## 2026-10-03T04:38:34+09:00
-
-**Summary**: `write-maintenance-log` gains a **measurable length spec**, and four self-written summaries go from 1674–3784 characters back to 312–444: a summary answers only “what changed / why / how verified”, ≤ 400 characters; **translation ratios match same-structure measurements** (`en/zh` ≈ 1.84, `ja/zh` ≈ 1.21 — clearly over means padding); explaining “why this error arises” does not belong here. **Verification**: `nix flake check` green in all four languages; the four compressed lose no information.
-
-| Commit | Description |
-|------|------|
-| `7d3fae0` | docs(MAINTENANCE): 摘要回归摘要 —— 压缩四条自撰条目（1674–3784 → 312–444 字符）并钉住长度与倍率规范 |
-
 ## 2026-10-03T04:27:03+09:00
 
 **Summary**: `opencode-telegram`'s riscv64 **goes from “dropped” back to “built”**, plus the criterion “**the artefact really runs once**”: two gyp traps fixed (a `gcc` shim pointing at the cross compiler, and an explicit `--force_build=1` for `better-sqlite3`); `build-package.yml` gains `smoke-test` — after the build it runs `develop/qemu-smoke-tests/<包名>.sh` (the same file locally and in CI), and a missing script or binfmt handler is a failure. **Verification**: two pushes, 33 workflows each, all success.
@@ -1290,7 +1282,6 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | godot-ai | 3.2.4 | 3.2.5 |
 | dsh-alpha | 0.1.2-alpha.3 | 0.1.2-alpha.5 |
 
-
 ## 2026-09-03T04:41:42+09:00
 
 **Summary**: docs(dsh-api-balance): record the upstream StatsLine horizontal-scroll proposal — DeepSeek Harness Discussion #5458 (upstream does not yet accept external PRs, so it lands as a discussion plus a ready branch); ready branch `draft/statline-overflow-scroll` on fork Kihara777/deepseek-harness; this repo also adds the official `dsh-plugin` ecosystem topic (four-language docs synced)
@@ -1369,7 +1360,6 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 | dsh-alpha | 0.1.2-alpha.2 | 0.1.2-alpha.3 |
 | 　 | hash | `sha256-W/BiompJCFP/uSlP48n7IEfwKb41RWEt6kVxioGSCkc=` → `sha256-MwlKS+Jx+edLMvs4NHJanw1T7SXxNBdQb/7htXANr8c=` |
 | 　 | npmDepsHash | `sha256-bJMeVSSEZngCysPvuS2w+3j+fzntcObddsi4y5fLlO0=` → `sha256-mmatKs0jykfMcaIf0SVNLyIZ+Z7ipjGjjp2IaZo9FoE=` |
-
 
 ## 2026-09-11T07:38:00+09:00
 
@@ -2730,14 +2720,6 @@ Verified: 13-case functional suite passes; system prebuild passes.
 | `7d87ff2` | fix(ci): avoid bash ${} nesting issue — use simple vars, default-first pattern |
 | `63c7d9f` | fix(ci): remove blender-mcp from riscv64-cross (mcp→sse-starlette dep fails on riscv64) |
 
-## 2026-07-04T07:33:07+09:00
-
-**Summary**: docs(MAINTENANCE) — add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn)
-
-| Commit | Description |
-|------|------|
-| `9feb2fd` | docs(MAINTENANCE): add language switcher to all 6 MAINTENANCE files (zh/en/ja/katalish/pcn) |
-
 ## 2026-07-04T06:41:28+09:00
 
 **Summary**: blender-mcp 1.0.0 — new Blender MCP Server package (Python build, 22 MCP tools, includes Blender add-on)
@@ -2816,22 +2798,6 @@ Verified: 13-case functional suite passes; system prebuild passes.
 | 　 | codewhale tui hash (×3) | all updated |
 | 　 | mcp-searxng source hash | `...` → `...` |
 | 　 | mcp-searxng npmDepsHash | `...` → `...` |
-
-## 2026-06-26T08:00:00+09:00
-
-**Summary**: docs(MAINTENANCE): backfill 28 missing historical entries to pcn, full zh baseline (93 entries) now covered
-
-| Commit | Description |
-|------|------|
-| `01f662b` | docs(MAINTENANCE): backfill 28 missing historical entries to pcn (93/93 zh baseline covered) |
-
-## 2026-06-26T07:35:00+09:00
-
-**Summary**: docs(MAINTENANCE): backfill 10 missing historical entries to en/ja/katalish, all three now aligned with zh baseline (92/92); pcn partially backfilled (66/92)
-
-| Commit | Description |
-|------|------|
-| `1921a36` | docs(MAINTENANCE): backfill 10 missing entries to en/ja/katalish (+ partial pcn) |
 
 ## 2026-06-26T07:18:56+09:00
 
