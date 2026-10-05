@@ -244,6 +244,7 @@
 ## 2026-10-02T17:33:52+09:00
 
 **概要**：godot-ai 4.1.0 → 4.2.3 — fail-closed な pin 表が 9 項から 14 項へ（`mcp` 1.29.1 → 2.2.0、`fastmcp` 3.4.7 → 4.0.5、さらに `mcp-types` などを新規追加）
+
 - `mcp-types` は nixpkgs に存在しないため、上流同一リポジトリの `src/mcp-types/` サブプロジェクトから定義を取得
 - 二つの overlay の `python312.override { packageOverrides = …; }` は連鎖した `.extend` で互いを置換し、上書きは静かに捨てられたままビルドは成功していた；現在は `pythonPackagesExtensions` を使用
 - 判定：ビルド通過、`godot-ai --version` の実行が 4.2.3、`importlib.metadata` は 14/14、`nix flake check` 全緑
@@ -270,6 +271,7 @@
 ## 2026-10-02T17:03:13+09:00
 
 **概要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四言語ドキュメント同期
+
 - `dsh` 0.2.0-rc.2 と `dsh-alpha` 0.1.7-alpha.2 は保留：hash もビルドも通過したが、プリセットのマウント検証が通らない——`agentPresets/list` の roster にどちらも現れない；対照実験は識別力を持つが、形式の非互換と探針の `DSH_HOME` 不足はまだ区別できない
 - fix(dsh): `postPatch` を「`devDependencies` からファイル末尾まで截断」からブロック単位の照合 + 末尾カンマ修復へ変更——0.2.0-rc.2 以降は `exports` がその後に来るため、旧来の書き方ではそれも削除される（導出が失効するのにビルドは成功する）；二つの実 tarball で解析可能なことをオフライン検証
 
@@ -337,6 +339,7 @@
 ## 2026-09-28T08:04:31+09:00
 
 **概要**：fix(dsh-nixos-shell): プリセット行を `workflow-ptc` に変更 —— dsh 0.1.6 で内蔵プラグイン `dsh-workflow-worker-thread` が改名され、旧名は ≤ alpha.1 では黙って無視され、alpha.2 以降はプリセット全体がマウントできなくなる。
+
 - `nixos-mode` / `maintenance-mode` の組合せ行と `editing-cordis-compositions` 技能の例を同時に改名、`config` は逐字不変
 - 検証は**ビルド成果物**を実際にマウントする方式へ：使い捨て dsh が `agentPresets/list` を呼び上流の `broken` 判定を読む、さらに故意に壊したフィクスチャを反証として混ぜる
 - 同じ罠を `docs/*/dsh.md` に記載（四語）、`AGENTS.md` の本機展開の前提を `path:` 入力ではなく GitHub 参照へ修正（先に push してから再ロック、再ロックは浮動子入力も再解決する）
@@ -383,6 +386,7 @@
 ## 2026-09-20T17:56:28+09:00
 
 **概要**：refactor(skill): 監査後、8 つの汎用スキルにおけるリポジトリ／役割特指を一括汎化。
+
 - `write-maintenance-log`：「AGENTS.md により強制起動」を条件式に変更；SUBTITLE の `NixKits 软件更新维护日志。` を `<项目名>` プレースホルダに（逐字置換のため、そのまま使うと他プロジェクト名が書き込まれる）
 - `write-project-docs`：「ルートには中文のみ」が反パターン表の「言語リストの直書き」と矛盾していたため「基準言語はリポジトリが定める」に変更
 - 切り替えバリデータを言語集合の動的発見に変更（`docs/zh|en|ja|pcn` と `/5` を直書きしていた）；`translate-pseudocn` の壊れたスクリプトを書き直し
@@ -404,6 +408,7 @@
 ## 2026-09-20T17:28:32+09:00
 
 **概要**：fix(skill): `nix-flake-update-check` の三つの欠陥を修正、いずれも「エラーを出さず、ただ取りこぼす」型。
+
 - 固定 SHA の Actions 検査が到達不能：`traps.md` に手順があるのに `SKILL.md` のどのステップからも参照されていなかった；第 2 步に節を追加、チェック項目を八問に拡張、目次に「毎回」と明記
 - バージョン発見が `version\s*=` のためパラメータ化された `version ? "0.1.5-rc.2"`（`packages/dsh.nix`）に一致せず、当該パッケージは検査範囲から消えていた；`version\s*[?=]` に変更
 - 生の `curl` で `api.github.com` は上限を使い切るとエラーを出さず空を返し、下流の grep も同様に沈黙、全パッケージが「最新」と判定されていた；`gh api` に統一し `ERROR:` 分岐を追加
@@ -443,6 +448,7 @@
 ## 2026-09-19T14:05:38+09:00
 
 **概要**：fix(ci): `check.yml` の `access-tokens` に `api.github.com` が欠けていた。あわせて子リポジトリ `dsh-api-balance` に四言語 `SECURITY.md` を追加。
+
 - CI：浮動入力 `llama-cpp-ver` はこれまで未認証で取得されていた（60 回/時の上限を push ごとの ~34 workflow が使い切る）。両 host を記載後は 33 workflow すべて success、403 はゼロ。入力は浮動のままで `flake.lock` には書かれない
 - 子リポジトリのセキュリティポリシー：スキャナの PR #4 / #5 の「レート制限の欠如」「リクエストボディのサイズ上限の欠如」はともに誤検知と判定、コードは変更しない
 - 主リポジトリの四言語 `SECURITY.md` の「同サブプロジェクトは未だポリシーを整備していない」を「整備済み」に訂正し、子リポジトリ文書へリンク
@@ -458,6 +464,7 @@
 ## 2026-09-19T07:51:05+09:00
 
 **概要**：スキル文書 4 篇（`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`）を確認、3 件修正（四言語）。
+
 - `nix-flake-update-check`：文書は主フローを 1〜10 ステップとしていたが、`SKILL.md` は実際にはステップ 9 まで。ステップ 10（締め）は適応層 `nixkits-check-updates` が定義
 - `write-project-docs`：付属ファイル `templates.md`（209 行）が `SKILL.md` で宣言されていなかった —— 付属表とディレクトリ形式のパスを補完
 - `translate-pseudocn`：辞書の項目数 13 を実測 75 に訂正し、`dictionary.md` の付属行を追加
@@ -474,6 +481,7 @@
 ## 2026-09-19T07:43:15+09:00
 
 **概要**：fix(comfyui): 「上流は stdenv API を移行済み」という誤った判定を訂正。
+
 - 元の判定は「上流は hostPlatform へ移行済み」でしたが、実測で反証：`stdenv.is<Platform>` は **0.34.0 と 0.30.2 に各 38 箇所**、`hostPlatform.is*` は両版 7 箇所のみ——一度も移行されていません
 - 本当の理由：**上流コードを上書きしなくなったこと**です（旧パッチは移行を overlay 経由で評価される fork に適用していました）
 - `modules/comfyui.nix` のコメントと、四言語 `deprecated/comfyui-rocm.md` の「なぜ廃止できるか」の節を同時に訂正
@@ -488,6 +496,7 @@
 ## 2026-09-19T07:38:04+09:00
 
 **概要**：fix(docs): パッチ文書群が完了 —— 最後の 3 文書を確認し 4 件修正（いずれも四言語）。
+
 - asusd-thermal-guard：文書が状態を `/run` に置くと誤記。モジュールは `StateDirectory`（`/var/lib/private/asusd-thermal-guard`）を使い、コメントは `RuntimeDirectory` の使用を警告（systemd が丸ごと削除するため、冷却カウントが毎回ゼロに戻る）
 - comfyui：バッジが存在しない CI ジョブを名指し（`check.yml` には単一の `check` ジョブのみ）。如実な CI バッジに変更
 - comfyui：キャッシュ節に overlay の記述が残存（モジュールには `pkgs.comfyui` の参照もなく、宣言的な設定のみ）
@@ -504,6 +513,7 @@
 ## 2026-09-18T11:04:38+09:00
 
 **概要**：外部カタログへの掲載が完了 —— awesome-ai-plugins の 2 つの PR がともにマージされ、NixKits と dsh-api-balance が正式に同カタログへ入りました。
+
 - スキャン評価 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、措辞のみ変更し情報は削除せず
 - PR #321：`dsh-api-balance` を DeepSeek Harness Plugins に追加、**2026-09-16 にマージ**
 - PR #323：NixKits を Development & Workflow に追加、レビュー是正とスキャン再実行の後、私たちが自らクローズ
@@ -519,6 +529,7 @@
 ## 2026-09-18T14:35:36+09:00
 
 **概要**：fix(docs): パッチ 5 文書の検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）—— 3 件修正。
+
 - `rcc-fix` が存在しない option 名前空間を使用：例は `services.asusctl`（`power-profile`/`cpu-power-control` を含む）ですが、正しくは `services.asusd` で、プロファイルと CPU 電力上限は `profileConfig` 経由（四言語）
 - `breeze-black`：「インストール」節のプレースホルダパス `(import ./overlay.nix)` を `inputs.nixkits.overlays.<name>` へ（zh のみ）
 - `codewhale-sudo`：基本情報表の重複行を削除（zh のみ）
@@ -534,6 +545,7 @@
 ## 2026-09-18T14:26:43+09:00
 
 **概要**：fix(devshell): 開発 2 篇の検証 —— 引数の誤り 1 件を修正し、ソースの不具合 1 件を発見。
+
 - `ruyi venv` / `ruyi extract` の引数誤り：前者は `ruyi venv -t <toolchain> <profile> <dest>` の形が必要で `profile` はローカル索引に存在する必要があり、後者の位置引数はファイルパスではなくパッケージ `ruyi extract <pkg>`（四言語）
 - searxng limiter 設定が一度も読まれていなかった：`develop/opencode.nix` は `settings.yml` の `server.limiterSettings` ブロックに記述。独立した `limiter.toml`（`[botdetection] trusted_proxies`）へ移し、修正後は `missing config file` 警告が消え、リバースプロキシも HTTP 200 を返す
 その他の主張は実測で通過。
@@ -547,6 +559,7 @@
 ## 2026-09-18T13:51:14+09:00
 
 **概要**：fix(docs): プラグイン 2 文書とモード 3 文書の検証 —— プラグインは全項目一致で変更不要、モードは 1 件修正。
+
 - `dsh-nixos-shell` と `dsh-api-balance`：npm 名とバージョン、`nixos_shell` の 27 項目のツール白リスト、`nixos_cli` の 5 つの op と数値上限、sudo プロトコル v3（`MAX_TIMEOUT_MS = 21600000`）、`skills-embedded/` スナップショット、`dsh-api-balance` の rev `c47f857` と 4 つの config 項目まで全項目一致
 - NixOS モードの「コンポジション」行が persona 行に `complete: true` を設定したと誤記。実際は `prefix` のみで、四言語で訂正
 その他のモードの主張は通過（`nixos-gate` の読み取り、NixOS モードのスキル 5 つ、メンテナンスモードの派生関係、ニュース三要素モードの各項目）。
@@ -560,6 +573,7 @@
 ## 2026-09-18T13:43:54+09:00
 
 **概要**：fix(docs): ruyi 文書 2 件修正（ほか 1 件はついでの表現修正）。
+
 - テスト件数が beta チャネルのみの値だったため、チャネル別に列挙：`ruyi` ユニット 368 / 統合 58、`ruyi-beta` 462 / 70、`ruyi-alpha` 346 / 57。あわせて `checkPhase` の ruff / mypy は `|| true` で、実際にビルドを左右するのは pytest と注記
 - zh のインストール節は散文の一行が Nix コードフェンス内に入り、ブロックが途切れていた（en/ja/pcn には無し）
 - （ついで）`pyelftools` は本パッケージが共有ベースで無条件に追加（バージョン条件なし）で、「0.53.0 以降で新規」ではない
@@ -583,6 +597,7 @@
 ## 2026-09-18T13:40:20+09:00
 
 **概要**：fix(docs): kitsfmt と mcp-searxng に各 2 件の不正確な記述。
+
 - `kitsfmt`：「コメント保持」の記述が広すぎる —— 0.5.0 の実測ではノード直前の先行コメントだけがソート時に追随し、最後以外の属性の同行末尾は次の属性の上へ移動、最後の属性の同行末尾とファイル先頭・末尾は破棄。漏れていた `KITSFMT_STDIN=1` も補完
 - `mcp-searxng`：「すぐ使える設定」に廃止済みの `real_ip.x_for = 1` が含まれていた（上流 `limiter.toml` に `real_ip` セクションは既に無い）。四言語から削除
 - `mcp-searxng`：「`SEARXNG_URL` が無いとサイレント失敗」は実測と不一致 —— サーバーは正常に起動し `tools/list` も返る。`tools/call` のみ毎回 `isError: true` を返し、テキストと stderr に明示
@@ -597,6 +612,7 @@
 ## 2026-09-18T13:32:32+09:00
 
 **概要**：fix(docs): dsh と godot-ai の文書検証 —— 3 件修正、加えて実際の機能不具合 1 件を発見。
+
 - `dsh`：「宣言的に設定可能な host ネームスペース」表が 6 件のみで 0.1.2-alpha と記載。該当節が扱う `0.1.5-rc.2` は `installSection` 経由で 12 件を登録するため、`agent-default-model` ほか 5 件が欠けていた
 - `godot-ai` コマンドは起動直後に失敗：attach ブリッジが `sys.executable -m godot_ai` でバックエンドを再 spawn するが、Nix 下では素の CPython で、`site.addsitedir()` が注入する依存は子プロセスに継承されない。makeWrapper で PYTHONPATH を前置し、実測で動作
 - `godot-ai` 文書の残り 2 件：ツール数 43 → 46、WebSocket ポート 9876 → 9500
@@ -611,6 +627,7 @@
 ## 2026-09-18T13:23:25+09:00
 
 **概要**：fix(docs): 26 項目の主張 + 子文書を検証、失実記述を 7 件修正
+
 - 主文書 2 件：`inputs.nixkits.url = "~/NixKits"` は使用不可——`git+file:///path/to/NixKits` に変更。「全パッケージが既定で `lib.platforms.linux` に従う」は失実、実際は `lib.platforms.all`
 - blender-mcp 3 件：実サーバの登録は 26 ツール（文書は 22 と称す）。アドオンの導入先は `extensions/user/`（Blender Extension で 4.x では読み込めない）。更新手順は `chmod`→`rm -rf`→`cp`→`chmod`（従来は無言で失敗）
 - codewhale 2 件：`--sandbox <tier>` は存在せず、実は `--sandbox-mode`。以前修正済みの引数名が再導入されたもので、四言語は統一
@@ -669,6 +686,7 @@
 ## 2026-09-17T18:15:40+09:00
 
 **概要**：汎用スキルを「主フロー + 二つの付属参考」へ再構成し、ブランチ分離で滞留していた Gitea の教訓を回収 — 評価に基づく改善：
+
 - 実測ブランチで書かれた 70 行の「自ホスト forge（Gitea）のソース取得」節を main へ回収（当該ブランチはマージしない取り決め）：自ホストのインスタンスは全 tag で 403 を返す可能性
 - 適応層に、テストブランチで生まれた汎用の教訓はその場で手作業により main へ書くことを要求する小節を追加
 - スキルを 918 行の単一ファイルから主フロー `SKILL.md`（462 行）+ `builders.md`（254 行：ビルダー別の hash フロー）+ `traps.md`（271 行：ドリフトの罠など）へ分割し、第 7 步「コミット前の六つの自問」を新設
@@ -830,6 +848,7 @@
 ## 2026-09-17T01:34:13+09:00
 
 **概要**：docs(security): `SECURITY.md` に「評価済みの外部報告」節を追加し、`docs/SECURITY.{en,ja,pcn}.md` で四言語ローカライズに組入 — 精査のうえクローズした 4 件を公開。
+
 - PR #4（`/token`・`/voicepack`・`/tts` のレート制限欠如）と PR #5（`/query` のリクエストボディ上限欠如）はいずれも誤検出：説明と diff が不一致で、`readJsonBody` の 64 KiB 上限は既に存在する。
 - issue #1/#2（`secrets: inherit` が最小権限に違反）も誤検出：リポジトリ全体で secret は 2 つのみ、明示的な受け渡しと `inherit` は等価。
 - これらが導いた 2 件の実際の堅牢化：`/tts` エンドポイントの SSRF と 31 のビルド workflow の最小権限補完。
@@ -842,6 +861,7 @@
 ## 2026-09-17T01:23:46+09:00
 
 **概要**：chore(security): `SECURITY.md` と Dependabot を追加、Actions を SHA に固定 — 発端は awesome-ai-plugins のメンテナ（@kantorcodes）による PR #323 への是正要求：スキャンは 71/100 で 80 の閾値を下回った。
+
 - スコアカード：critical も high もゼロで、減点はすべてエンジニアリング衛生（Actions 未固定、Dependabot 欠如）。
 - `SECURITY.md`（サポートバージョン、非公開の脆弱性報告チャネル、対応期限）と `.github/dependabot.yml` を追加。
 - 6 箇所のサードパーティ action 参照を浮動参照からコミット SHA へ固定。`DeterminateSystems/nix-installer-action@main` は浮動ブランチだった。
@@ -862,6 +882,7 @@
 ## 2026-09-16T14:54:53+09:00
 
 **概要**：refactor(dsh-api-balance)!: 独立リポジトリへ移転し、本リポジトリは薄いラッパーへ — 初の分割。
+
 - 監査の判定：唯一のプラットフォーム非依存プロジェクト、NixKits とのコードレベル結合ゼロ、npm パッケージングの必要あり。
 - 新リポジトリ `Kihara777/dsh-api-balance`：ソース、四言語ドキュメント、npm 公開 CI。`dsh plugin add` が 1 行で導入でき、web profile が `exit=0` で起動することを実測。
 - 本リポジトリ側：`packages/dsh-api-balance/` を削除、`.nix` は `fetchFromGitHub` の薄いラッパーへ（`npmDepsHash` は不変）；ドキュメントは短ページへ圧縮、README に移転を明記；CI workflow は Cachix 命中のため保持。
@@ -1134,6 +1155,7 @@
 ## 2026-09-14T06:18:42+09:00
 
 **概要**：docs(pcn): 簡体字をリポジトリ全体から除去 — 偽中国語は仮名を剥離した日本語であり、本文中の簡体字は決して正当化されない
+
 - 一括置換：`与`→`與` 計 132 箇所、`说明`→`説明` 計 120 箇所、他に `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`
 - 辞書マッピング：`文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；`端口` / `制御台` は日本語に対応字があるため保持し辞書に記録
 - コミット情報は免除：「コミット」列の commit 情報は verbatim 保持（不変の外部参照、ja 版も中国語のまま）
@@ -1345,6 +1367,7 @@
 ## 2026-09-11T07:27:00+09:00
 
 **概要**：fix(dsh-api-balance): 質問ダイアログのページ全体スクロールが実測で効かなかった — MutationObserver 監視へ変更
+
 - 現象と根本原因：質問 UI のスタイルタグは別プラグインバンドルが注入するため本プラグインの初期化より遅れることがあり、従来の 5×1s の有界リトライ窓を逃すと静かに注入されなかった
 - 修正：`document.head` を MutationObserver で監視（タグ出現と同時にクラス名を抽出して注入）+ 2 秒のフォールバックポーリング、注入成功後は自動切断
 - 検証：headless Chromium で実マークアップを再現し CSS 方式自体は正しいと確認；スモークテストに「タグが遅れて到着しても注入される」ケースを追加
@@ -1355,6 +1378,7 @@
 ## 2026-09-11T07:15:47+09:00
 
 **概要**：feat(dsh-api-balance): 質問ダイアログのページ全体スクロール最適化（長いプロンプトがオプションを圧迫しない）
+
 - CSS：カード自身をスクロールコンテナにし、タイトル+詳細+オプションを一緒にスクロール；header とフッターのボタン領域は sticky で吸着；body は独立スクロールを停止
 - 実装：クラス名は ui-user-questions のスタイルタグから実行時に抽出；タグ未準備時は 1 秒間隔で最大 5 回リトライ
 - 設定：設定 → 界面に「質問ダイアログのページ全体スクロール」トグルを追加（既定で有効、localStorage 永続化）
@@ -1897,6 +1921,7 @@
 ## 2026-08-20T17:46:44+09:00
 
 **概要**：feat(nixos-shell): NixOS シナリオ能力を単一プラグインへ統合；refactor: スキルプラグイン化設計の廃止
+
 - 新パッケージ nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）は 2 つのツールを登録：nixos_shell 実行器（NixOS PATH 注入 + bash フォールバック + `tools` による不足 POSIX ツール提供 + sudo デーモンルーティング）と nixos_cli 読み取り専用診断（capabilities ほか 4 項目）。要件は nixos-modern-cli スキルのシナリオに由来。
 - dsh-nix-shell と dsh-skill-nixkits（7 スキルプラグイン設計）を削除、CI/ドキュメント差し替え。
 - generations の修正：プロセス内の読み取り専用リストへ変更（`nix-env` は非 root で拒否）。
@@ -2151,6 +2176,7 @@
 ## 2026-08-18T10:29:46+09:00
 
 **概要**：feat/fix(dsh): dsh サービスを配備し MCP + skills を設定。
+
 - モジュール修正：dsh システムユーザーの HOME=/var/empty（読取専用）が EPERM を招くため、書込可能な /var/lib/dsh + StateDirectory に変更
 - HMR サービスは --expose-internals を要するため、node --expose-internals で bin.js を直接起動
 - MCP サービス（SearXNG + Godot）は cordis.patch.yml の `insert:` 構文で設定（id-targeted override ではない）
@@ -2175,6 +2201,7 @@
 ## 2026-08-18T07:19:30+09:00
 
 **概要**：監査修正 —— 版数更新とモジュール/overlay/文書/スキル修正。
+
 - codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 更新
 - comfyui-rocm モジュールに services.comfyui assertion を復元し、nixpkgs-compat パッチ対象を明確化
 - overlay codewhale はアーキテクチャ別にソースビルドへフォールバック（riscv64）

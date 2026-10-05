@@ -77,10 +77,21 @@ NOTE_LINE = re.compile(r"^>\s*\*\*([^*]+)\*\*\s*[:：]\s*(.*)$")
 
 
 def summary_body(lang: str, body: str):
-    """该条目在该语言下的摘要正文（去掉标记；到首个空行为止）。"""
+    """该条目在该语言下的摘要正文（去掉标记）。
+
+    摘要＝标记行，**外加紧随其后的清单块**（规范示例是「标记行 / 空行 / 清单」；
+    2026-10-05 的重写里也出现过不留空行的紧排，两种都合规）。清单必须算进摘要——
+    否则它会掉出字符预算与「清单条目数四语相等」两条判据之外，而那正是它们要防的东西。
+    """
     match = re.search(
         r"(?m)^\*\*%s\*\*[:：](.*?)(?=\n\n|\Z)" % SUMMARY_MARKER[lang], body, re.S)
-    return match.group(1).strip() if match else None
+    if match is None:
+        return None
+    text = match.group(1)
+    following = re.match(r"\n\n((?:- .*\n?)+)", body[match.end():])
+    if following:
+        text = text + "\n\n" + following.group(1).rstrip("\n")
+    return text.strip()
 
 
 def bullet_items(summary) -> int:

@@ -244,6 +244,7 @@
 ## 2026-10-02T17:33:52+09:00
 
 **摘要**：godot-ai 4.1.0 → 4.2.3 — fail-closed 校验表 9 → 14 项（`mcp` 1.29.1 → 2.2.0、`fastmcp` 3.4.7 → 4.0.5，新增 `mcp-types` 等）
+
 - `mcp-types` 不在 nixpkgs，取自上游同仓库 `src/mcp-types/` 子项目
 - 两 overlay 的 `python312.override { packageOverrides = …; }` 在链式 `.extend` 下互相替换、覆盖被静默丢弃而构建仍成功；改用 `pythonPackagesExtensions`
 - 判据：构建通过、实跑 `godot-ai --version` 得 4.2.3、`importlib.metadata` 14/14、`nix flake check` 全绿
@@ -270,6 +271,7 @@
 ## 2026-10-02T17:03:13+09:00
 
 **摘要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四语文档同步
+
 - `dsh` 0.2.0-rc.2 与 `dsh-alpha` 0.1.7-alpha.2 暂缓：hash 与构建通过，但预设挂载验证未过——`agentPresets/list` 的 roster 里都不出现；对照实验有区分度，尚不能区分格式不兼容与探针 `DSH_HOME` 不足
 - fix(dsh): `postPatch` 由「从 `devDependencies` 截断到末尾」改为按块匹配 + 尾逗号修复——0.2.0-rc.2 起 `exports` 在后，旧写法会连带删掉（导出失效而构建仍成功）；两份真实 tarball 离线验证可解析
 
@@ -336,9 +338,10 @@
 
 ## 2026-09-28T08:04:31+09:00
 
-**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，旧名在 ≤ alpha.1 静默忽略、alpha.2 起令整份预设挂不起来。
+**摘要**：fix(dsh-nixos-shell): 预设行改用 `workflow-ptc` —— 内置插件 `dsh-workflow-worker-thread` 在 dsh 0.1.6 已改名，旧名 ≤ alpha.1 静默忽略，alpha.2 起整份预设挂不起来。
+
 - `nixos-mode` / `maintenance-mode` 组合行与 `editing-cordis-compositions` 技能示例同步改名，`config` 逐字不变
-- 验证改为对**构建产物**真挂载：一次性 dsh 调 `agentPresets/list` 读上游 `broken` 判定，并塞入故意坏掉的夹具做反证
+- 验证改为对**构建产物**真挂载：一次性 dsh 调 `agentPresets/list` 读 `broken` 判定，并塞坏夹具做反证
 - 同陷阱写入 `docs/*/dsh.md`（四语）；修正 `AGENTS.md` 本机部署前提为 GitHub 引用而非 `path:`（须先推送再重锁，重锁连带重解析浮动子输入）
 
 | 提交 | 说明 |
@@ -383,6 +386,7 @@
 ## 2026-09-20T17:56:28+09:00
 
 **摘要**：refactor(skill): 审计后泛化 8 个通用技能中的仓库与角色特指。
+
 - `write-maintenance-log`：入口「由 AGENTS.md 强制触发」改条件式；SUBTITLE 的 `NixKits 软件更新维护日志。` 改 `<项目名>` 占位（逐字替换，会写入他项目名）
 - `write-project-docs`：「仅保留中文」与反模式表「硬编码语言列表」矛盾，改「基准语言由仓库自定」
 - 切换器验证脚本改动态发现语言集（原写死 `docs/zh|en|ja|pcn` 与 `/5`）；`translate-pseudocn` 残缺脚本重写
@@ -404,6 +408,7 @@
 ## 2026-09-20T17:28:32+09:00
 
 **摘要**：fix(skill): 修复 `nix-flake-update-check` 三处「不报错、只漏掉」缺陷。
+
 - 固定 SHA 的 Actions 检查不可达：`traps.md` 有流程而 `SKILL.md` 无步骤指向，补第 2 步小节、自检扩八问、目录标「每轮都要」
 - 版本发现用 `version\s*=` 漏掉参数化主定义的 `version ? "0.1.5-rc.2"`（`packages/dsh.nix`），该包从检查范围消失；改 `version\s*[?=]`
 - 裸 `curl` 查 `api.github.com` 额度耗尽后不报错返回空，下游同样静默、每包判「最新」；改 `gh api` 加 `ERROR:` 分支
@@ -443,6 +448,7 @@
 ## 2026-09-19T14:05:38+09:00
 
 **摘要**：fix(ci): `check.yml` 的 `access-tokens` 漏了 `api.github.com`；同时为子仓 `dsh-api-balance` 补四语 `SECURITY.md`。
+
 - CI：浮动输入 `llama-cpp-ver` 此前一直未认证（60 次/小时额度被每轮 push 的 ~34 个 workflow 耗尽），补上双 host 后 33 个 workflow 全 success、零 403；输入仍浮动、未写入 `flake.lock`
 - 子仓安全政策：复核扫描器 PR #4 / #5 的「缺少速率限制」「缺少请求体体积上限」两项主张，均判误报、不改代码
 - 主仓四语 `SECURITY.md` 的「该子项目尚未自建安全政策」随之更正为已自建，并链接子仓文档
@@ -458,6 +464,7 @@
 ## 2026-09-19T07:51:05+09:00
 
 **摘要**：技能文档核对 4 篇（`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`），修 3 处（四语）
+
 - `nix-flake-update-check`：文档称主流程 1–10 步，`SKILL.md` 实止第 9 步，第 10 步（收尾）归适配层 `nixkits-check-updates`
 - `write-project-docs`：配套文件 `templates.md`（209 行）未被 `SKILL.md` 声明 —— 补配套表与目录式路径
 - `translate-pseudocn`：词典条目数 13 更正为实测 75，补 `dictionary.md` 配套行
@@ -474,6 +481,7 @@
 ## 2026-09-19T07:43:15+09:00
 
 **摘要**：fix(comfyui): 更正「上游已迁移 stdenv API」的错误判定。
+
 - 原判定称「上游已迁移 hostPlatform」，实测否证：`stdenv.is<Platform>` **0.34.0 与 0.30.2 各 38 处**，`hostPlatform.is*` 两版 7 处 —— 从未迁移
 - 真实理由：**不再覆盖上游代码**（旧补丁把迁移施加在被 overlay 求值的 fork 上）
 - 同步更正 `modules/comfyui.nix` 注释与四语 `deprecated/comfyui-rocm.md`「何故可废弃」段
@@ -488,6 +496,7 @@
 ## 2026-09-19T07:38:04+09:00
 
 **摘要**：fix(docs): 补丁类文档收官 —— 后三篇核对完毕，修 4 处（均四语）。
+
 - asusd-thermal-guard：文档误称状态在 `/run`；模块用 `StateDirectory`（`/var/lib/private/asusd-thermal-guard`），注释警告不可用 `RuntimeDirectory`（systemd 会整个删除它，冷却计数每轮归零）
 - comfyui：徽章伪称不存在的 CI job（`check.yml` 只有单个 `check` job），改为如实的 CI 徽章
 - comfyui：缓存段残留 overlay 声明（模块已无 `pkgs.comfyui` 引用，只做声明式配置）
@@ -504,6 +513,7 @@
 ## 2026-09-18T11:04:38+09:00
 
 **摘要**：外部收录完成 —— awesome-ai-plugins 的两个 PR 均已合并，NixKits 与 dsh-api-balance 正式进入该目录。
+
 - 扫描评分 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**，只改措辞、不删信息
 - PR #321：`dsh-api-balance` 加入 DeepSeek Harness Plugins，**2026-09-16 合并**
 - PR #323：NixKits 加入 Development & Workflow，按评审整改并重跑扫描后由我们主动关闭
@@ -519,6 +529,7 @@
 ## 2026-09-18T14:35:36+09:00
 
 **摘要**：fix(docs): 补丁类前 5 篇文档验证（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）—— 修 3 处。
+
 - `rcc-fix` 用了不存在的 option 命名空间：示例写 `services.asusctl`（含 `power-profile`/`cpu-power-control`），实际应为 `services.asusd`，档位与 CPU 功率上限经 `profileConfig`（四语）
 - `breeze-black`「安装」段的占位路径 `(import ./overlay.nix)` 改为 `inputs.nixkits.overlays.<name>`（仅 zh）
 - `codewhale-sudo` 基本信息表重复行已删（仅 zh）
@@ -534,6 +545,7 @@
 ## 2026-09-18T14:26:43+09:00
 
 **摘要**：fix(devshell): 开发类 2 篇验证 —— 修 1 处参数错误 + 1 处源码缺陷。
+
 - `ruyi venv` / `ruyi extract` 参数写错：前者需 `ruyi venv -t <toolchain> <profile> <dest>` 且 `profile` 须在本地索引；后者位置参数是包名 `ruyi extract <pkg>` 而非文件路径（四语）
 - searxng limiter 配置从未被读取：`develop/opencode.nix` 写在 `settings.yml` 的 `server.limiterSettings` 块内，已改为独立 `limiter.toml`（`[botdetection] trusted_proxies`），修复后 `missing config file` 警告归零、反代 HTTP 200
 其余断言实测通过。
@@ -547,6 +559,7 @@
 ## 2026-09-18T13:51:14+09:00
 
 **摘要**：fix(docs): 插件类 2 篇与模式类 3 篇文档验证 —— 插件全项相符、无需改动，模式修 1 处。
+
 - `dsh-nixos-shell` 与 `dsh-api-balance`：npm 名与版本、`nixos_shell` 的 27 项工具白名单、`nixos_cli` 五个 op 与数值上限、sudo 协议 v3（`MAX_TIMEOUT_MS = 21600000`）、`skills-embedded/` 快照、`dsh-api-balance` 的 rev `c47f857` 与 4 个 config 项逐项相符
 - NixOS模式「组合」行误称 persona 行设了 `complete: true`，实际只设 `prefix`，已四语改正
 其余模式断言通过（`nixos-gate` 读取、NixOS模式技能 5 个、维护模式派生关系、新闻三要素模式各项）。
@@ -560,6 +573,7 @@
 ## 2026-09-18T13:43:54+09:00
 
 **摘要**：fix(docs): ruyi 文档 2 处修正（另 1 处顺带表述修正）。
+
 - 测试数此前只写 beta 通道的值，改为按通道分列：`ruyi` 单元 368 / 集成 58、`ruyi-beta` 462 / 70、`ruyi-alpha` 346 / 57；并注明 `checkPhase` 中 ruff / mypy 为 `|| true`，真正把关的是 pytest
 - zh 安装段把一行散文提示写进了 Nix 代码围栏，致代码块被截断（en/ja/pcn 无此问题）
 - （顺带）`pyelftools` 由本包在共享 base 中无条件加入（无版本条件），并非「≥ 0.53.0 新增」
@@ -583,6 +597,7 @@
 ## 2026-09-18T13:40:20+09:00
 
 **摘要**：fix(docs): kitsfmt 与 mcp-searxng 各 2 处失实修正。
+
 - `kitsfmt`：「注释保持」表述过宽 —— 0.5.0 实测只有节点上方的先行注释跟随排序；非末条属性的同行尾注移位到下一属性上方，末条同行尾注与文件头、文件尾均丢弃；另补漏掉的 `KITSFMT_STDIN=1`
 - `mcp-searxng`：「开箱即用」示例含已废弃的 `real_ip.x_for = 1`（上游 `limiter.toml` 已无 `real_ip` 段），四语移除
 - `mcp-searxng`：「缺少 `SEARXNG_URL` 时静默失败」与实测不符 —— 服务器正常启动、`tools/list` 正常返回，仅每次 `tools/call` 返回 `isError: true` 并在文本与 stderr 明确报错
@@ -597,6 +612,7 @@
 ## 2026-09-18T13:32:32+09:00
 
 **摘要**：fix(docs): dsh 与 godot-ai 文档验证 —— 修 3 处，另发现 1 处真实功能缺陷。
+
 - `dsh`「可声明式配置的宿主 namespace」表只列 6 个、标注 0.1.2-alpha；该节讨论的 `0.1.5-rc.2` 实为 12 个（`installSection`），缺 `agent-default-model` 等 6 个
 - `godot-ai` 命令启动即失败：attach 桥以 `sys.executable -m godot_ai` 再 spawn 后端，Nix 下它是裸 CPython，`site.addsitedir()` 的依赖不被子进程继承；已用 makeWrapper 前置 PYTHONPATH，实测可用
 - `godot-ai` 文档另 2 处：工具数 43 → 46、WebSocket 端口 9876 → 9500
@@ -611,6 +627,7 @@
 ## 2026-09-18T13:23:25+09:00
 
 **摘要**：fix(docs): 26 条断言 + 子文档验证，共修 7 处失实描述
+
 - 主文档 2 处：`inputs.nixkits.url = "~/NixKits"` 不可用 → `git+file:///path/to/NixKits`；「所有包默认跟随 `lib.platforms.linux`」失实，实为 `lib.platforms.all`
 - blender-mcp 3 处：实际注册 26 个工具（文档称 22）；add-on 路径改为 `extensions/user/`（Blender Extension，4.x 加载不了）；升级流程 `chmod`→`rm -rf`→`cp`→`chmod`（原流程静默失败）
 - codewhale 2 处：`--sandbox <tier>` 不存在，实为 `--sandbox-mode`；此前修好的参数名被重新写错，四语统一
@@ -668,6 +685,7 @@
 ## 2026-09-17T18:15:40+09:00
 
 **摘要**：通用技能重构为「主流程 + 两份配套参考」，并补回因分支隔离滞留的 Gitea 教训 — 评估驱动的整改：
+
 - 已在 main 上补回实测分支写出的 70 行「自托管 forge（Gitea）取源」章节（该分支永不合并）：自托管实例可能对所有 tag 返回 403
 - 适配层新增要求：测试分支上的通用教训当场手工写入 main
 - 技能由 918 行单文件拆为主流程 `SKILL.md`（462 行）+ `builders.md`（254 行：按 builder 的 hash 流程）+ `traps.md`（271 行：漂移陷阱等），新增第 7 步「提交前六问自检」
@@ -832,6 +850,7 @@
 ## 2026-09-17T01:34:13+09:00
 
 **摘要**：docs(security): `SECURITY.md` 新增「已评估的外部报告」节，含 `docs/SECURITY.{en,ja,pcn}.md` — 公开 4 条已复核关闭的报告。
+
 - PR #4（`/token`、`/voicepack`、`/tts` 缺限流）与 PR #5（`/query` 缺请求体上限）均属误报：描述与 diff 不符、`readJsonBody` 已有 64 KiB 上限。
 - issue #1/#2（`secrets: inherit` 违反最小权限）亦属误报：全仓仅 2 个 secret，显式传递与 `inherit` 等价。
 - 报告促成两次真实加固：`/tts` 端点 SSRF、31 个构建 workflow 最小权限补全。
@@ -844,6 +863,7 @@
 ## 2026-09-17T01:23:46+09:00
 
 **摘要**：chore(security): 补 `SECURITY.md`、Dependabot，Actions 固定到 SHA — 起因 awesome-ai-plugins 维护者（@kantorcodes）PR #323 整改要求：扫描 71/100，低于 80 阈值。
+
 - 评分表：零 critical 零 high，扣分全在工程卫生（Actions 未固定 SHA、缺 Dependabot）。
 - 新增 `SECURITY.md`（支持版本、报告渠道、响应时限）与 `.github/dependabot.yml`。
 - 6 处第三方 action 由浮动引用固定到 SHA，含浮动分支的 `DeterminateSystems/nix-installer-action@main`。
@@ -864,6 +884,7 @@
 ## 2026-09-16T14:54:53+09:00
 
 **摘要**：refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改薄封装 — 首次组件拆分。
+
 - 审计判据：唯一平台无关项目、与 NixKits 零代码耦合、有 npm 打包需求。
 - 新仓库 `Kihara777/dsh-api-balance`：源码、四语文档、npm 发布 CI；已实测 `dsh plugin add` 一行装成，web profile `exit=0`。
 - 本仓侧：删除 `packages/dsh-api-balance/`，`.nix` 改为 `fetchFromGitHub` 薄封装（`npmDepsHash` 未变）；文档压为短页、README 标注迁出；CI workflow 保留以继续命中 Cachix 缓存。
@@ -1136,6 +1157,7 @@
 ## 2026-09-14T06:18:42+09:00
 
 **摘要**：docs(pcn): 全仓清除简体中文字 — 伪中国语是剥离假名的日文，简体字在其正文中一律非法
+
 - 批量替换：`与`→`與` 132 处、`说明`→`説明` 120 处，另修 `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`
 - 词典映射：`文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；`端口` / `制御台` 日语有对应字，保留并计入词典
 - 提交信息豁免：「提交」列 commit 信息保持 verbatim（不可变外部引用，ja 版同样保留中文）
@@ -1346,6 +1368,7 @@
 ## 2026-09-11T07:27:00+09:00
 
 **摘要**：fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望
+
 - 现象与根因：疑问 UI 样式标签由独立插件包注入，可能晚于本插件初始化，原 5×1s 有界重试窗口错过即静默不注入
 - 修复：MutationObserver 守望 `document.head`（标签一出现即提取类名注入）+ 2s 兜底轮询，注入成功后断开
 - 验证：headless Chromium 复刻真实标记确认 CSS 方案本身正确；冒烟测试补「标签晚到仍能注入」用例
@@ -1356,6 +1379,7 @@
 ## 2026-09-11T07:15:47+09:00
 
 **摘要**：feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项）
+
 - CSS：卡片自身改为滚动容器，标题+详情+选项一起滚动；header 与底部按钮区 sticky 吸附；body 取消独立滚动
 - 实现：类名运行时从 ui-user-questions 样式标签提取；标签未就绪时 1s 重试至多 5 次
 - 设置：设置 → 界面新增「疑问窗口整页滚动」开关（默认开启，localStorage 持久化）
@@ -1898,6 +1922,7 @@
 ## 2026-08-20T17:46:44+09:00
 
 **摘要**：feat(nixos-shell): NixOS 场景能力整合为单一插件；refactor: 废弃技能插件化设计
+
 - 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）注册 2 个工具：nixos_shell 执行器（NixOS PATH 注入 + bash 回退 + `tools` 引导缺失 POSIX 工具 + sudo 守护路由）与 nixos_cli 只读诊断（capabilities 等），需求源自 nixos-modern-cli 技能场景。
 - 移除 dsh-nix-shell 与 dsh-skill-nixkits（7 技能插件设计废弃），CI/文档更替。
 - 修复 generations：进程内只读列出（`nix-env` 非 root 被拒）。
@@ -2152,6 +2177,7 @@
 ## 2026-08-18T10:29:46+09:00
 
 **摘要**：feat/fix(dsh): 部署 dsh 服务并配置 MCP + skills。
+
 - 模块修复：dsh 系统用户 HOME=/var/empty 只读致 EPERM，改用可写 /var/lib/dsh + StateDirectory
 - HMR 服务需 --expose-internals，改以 node --expose-internals 直接启动 bin.js
 - MCP 服务（SearXNG + Godot）以 cordis.patch.yml 的 `insert:` 语法配置，非 id-targeted override
@@ -2176,6 +2202,7 @@
 ## 2026-08-18T07:19:30+09:00
 
 **摘要**：审计修复 —— 版本更新与模块/overlay/文档/技能修正。
+
 - codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 版本更新
 - comfyui-rocm 模块补回 services.comfyui assertion，并澄清 nixpkgs-compat 补丁目标
 - overlay codewhale 按架构回退源码构建（riscv64）

@@ -244,6 +244,7 @@
 ## 2026-10-02T17:33:52+09:00
 
 **Summary**: godot-ai 4.1.0 → 4.2.3 — the fail-closed pin table grows from 9 entries to 14 (`mcp` 1.29.1 → 2.2.0, `fastmcp` 3.4.7 → 4.0.5, plus new `mcp-types` and others)
+
 - `mcp-types` is not in nixpkgs, so a definition was taken from the `src/mcp-types/` subproject of the same upstream repo
 - both overlays' `python312.override { packageOverrides = …; }` replace each other under chained `.extend`, silently dropping the overrides while the build still succeeded; both now use `pythonPackagesExtensions`
 - criterion: the build passes, running `godot-ai --version` prints 4.2.3, `importlib.metadata` hits 14/14, `nix flake check` is fully green
@@ -270,6 +271,7 @@
 ## 2026-10-02T17:03:13+09:00
 
 **Summary**: codewhale 0.9.13 → 0.10.0; ruyi 0.52.0 → 0.53.0; mcp-searxng 2.3.0 → 2.5.0; opencode-telegram 0.25.3 → 0.26.2 — four-language doc sync
+
 - `dsh` 0.2.0-rc.2 and `dsh-alpha` 0.1.7-alpha.2 are on hold: every hash and the build pass, but the preset mount verification does not — none appear in the `agentPresets/list` roster; a control run discriminates, yet an incompatible format cannot yet be told apart from the probe's `DSH_HOME` being insufficient
 - fix(dsh): `postPatch` moves from "cut from `devDependencies` to end of file" to block matching plus trailing-comma repair — from 0.2.0-rc.2 on `exports` follows, so the old form would delete that too (exports lost while the build still succeeds); two real tarballs verified offline as parseable
 
@@ -337,6 +339,7 @@
 ## 2026-09-28T08:04:31+09:00
 
 **Summary**: fix(dsh-nixos-shell): preset rows switched to `workflow-ptc` — dsh 0.1.6 renamed the built-in `dsh-workflow-worker-thread`; the old name is silently ignored up to alpha.1 and from alpha.2 on makes the whole preset fail to mount.
+
 - The `nixos-mode` / `maintenance-mode` composition rows and the `editing-cordis-compositions` skill example were renamed together, with `config` unchanged
 - Verification now mounts the **build output** for real: a throwaway dsh calls `agentPresets/list` to read upstream's `broken` verdict, plus a deliberately broken fixture as counter-evidence
 - The same trap was written into `docs/*/dsh.md` (four languages), and `AGENTS.md`'s local-deployment premise was corrected from a `path:` input to a GitHub reference (push before re-locking; re-locking also re-resolves the floating sub-inputs)
@@ -383,6 +386,7 @@
 ## 2026-09-20T17:56:28+09:00
 
 **Summary**: refactor(skill): batch generalization of repo/role specifics across the 8 generic skills.
+
 - `write-maintenance-log`: "force-triggered by AGENTS.md" is now conditional; the SUBTITLE `NixKits 软件更新维护日志。` became a `<项目名>` placeholder (verbatim; copying it writes another project's name)
 - `write-project-docs`: "keeps only Chinese" contradicted the "hardcoded language list" anti-pattern; now "the base language is chosen by the repository"
 - The switcher verification script now discovers languages dynamically (it hardcoded `docs/zh|en|ja|pcn` and `/5`); the broken `translate-pseudocn` script was rewritten
@@ -404,6 +408,7 @@ Evidence: both rewritten verification scripts were run and pass (including a rev
 ## 2026-09-20T17:28:32+09:00
 
 **Summary**: fix(skill): three defects in `nix-flake-update-check`, all of the "no error, just a silent omission" kind.
+
 - The pinned-SHA Actions check was unreachable: `traps.md` had the flow but no step in `SKILL.md` pointed to it; step 2 gained a section, the self-check grew to eight questions, and the table of contents marks it "every round"
 - Version discovery used `version\s*=`, which misses the parameterized `version ? "0.1.5-rc.2"` in `packages/dsh.nix`, so that package vanished from the check scope; now `version\s*[?=]`
 - A bare `curl` to `api.github.com` returns empty without error once the quota is exhausted, and the downstream grep is equally silent, so every package was judged "up to date"; now unified on `gh api` with an `ERROR:` branch
@@ -443,6 +448,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-19T14:05:38+09:00
 
 **Summary**: fix(ci): `check.yml` was missing `api.github.com` in `access-tokens`; the sub-repo `dsh-api-balance` also gained a four-language `SECURITY.md`.
+
 - CI: the floating `llama-cpp-ver` input had been fetching unauthenticated (the 60/hour quota exhausted by ~34 workflows per push); with both hosts set, 33 workflows all pass with zero 403s, and the input stays floating — never written to `flake.lock`
 - Sub-repo security policy: the scanner's PR #4 / #5 claims — 'missing rate limiting' and 'missing request-body size cap' — are both assessed as false positives; no code change
 - The main repo's four-language `SECURITY.md` line saying the subproject 'has not yet' established a policy is corrected to 'now has one', linking the sub-repo document
@@ -458,6 +464,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-19T07:51:05+09:00
 
 **Summary**: Skill-doc review of 4 docs (`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`), 3 corrections (four languages).
+
 - `nix-flake-update-check`: the docs claimed steps 1-10; `SKILL.md` actually ends at step 9, with step 10 (closing) defined by the adapter `nixkits-check-updates`
 - `write-project-docs`: the companion `templates.md` (209 lines) was undeclared in `SKILL.md` — added the companion table and the directory-form path
 - `translate-pseudocn`: the dictionary count 13 corrected to the measured 75, plus a `dictionary.md` companion row
@@ -474,6 +481,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-19T07:43:15+09:00
 
 **Summary**: fix(comfyui): corrected the wrong "upstream has migrated the stdenv API" assessment.
+
 - The original claim was "upstream has migrated to hostPlatform"; measurement falsifies it: `stdenv.is<Platform>` appears **38 times each in 0.34.0 and 0.30.2**, while `hostPlatform.is*` appears 7 times in both -- never migrated
 - The real reason: **we no longer override upstream code** (the old patch applied the migration to a fork evaluated under an overlay)
 - Corrected in both the `modules/comfyui.nix` comment and the "why it can be retired" section of the four-language `deprecated/comfyui-rocm.md`
@@ -488,6 +496,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-19T07:38:04+09:00
 
 **Summary**: fix(docs): the patch document set is complete -- the last three are checked with 4 corrections (all four languages).
+
 - asusd-thermal-guard: the docs wrongly said state lives in `/run`; the module uses `StateDirectory` (`/var/lib/private/asusd-thermal-guard`) and its comments warn against `RuntimeDirectory` (systemd deletes it entirely, so the cooldown counter zeroes every round)
 - comfyui: the badge named a CI job that does not exist (`check.yml` has only a single `check` job); replaced with an honest CI badge
 - comfyui: the cache section still claimed an overlay declaration (the module has no `pkgs.comfyui` reference and does declarative configuration only)
@@ -504,6 +513,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-18T11:04:38+09:00
 
 **Summary**: External listing complete -- both awesome-ai-plugins PRs are merged, and NixKits and dsh-api-balance are now officially in that catalog.
+
 - Scanner score **88 -> 94/100 (A - Excellent)**, Security **13/16 -> 16/16**, by rewording only, deleting no information
 - PR #321: adds `dsh-api-balance` to DeepSeek Harness Plugins, **merged 2026-09-16**
 - PR #323: adds NixKits to Development & Workflow, closed by us after the review remediation and a rerun of the scan
@@ -519,6 +529,7 @@ Evidence: `nix flake check` fully passes; on the new flow's first run, this repo
 ## 2026-09-18T14:35:36+09:00
 
 **Summary**: fix(docs): the first five patch documents verified (breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile) -- three corrections.
+
 - `rcc-fix` used a non-existent option namespace: the example reads `services.asusctl` (with `power-profile`/`cpu-power-control`), where it should be `services.asusd`, whose profiles and CPU power limits go through `profileConfig` (four languages)
 - `breeze-black`: the placeholder path `(import ./overlay.nix)` in the "install" section is now `inputs.nixkits.overlays.<name>` (zh only)
 - `codewhale-sudo`: a duplicated row in the basic-information table was removed (zh only)
@@ -534,6 +545,7 @@ Every other assertion was checked item by item and passed.
 ## 2026-09-18T14:26:43+09:00
 
 **Summary**: fix(devshell): both development documents verified -- one parameter error fixed, plus one source defect found.
+
 - `ruyi venv` / `ruyi extract` documented with wrong parameters: the former needs `ruyi venv -t <toolchain> <profile> <dest>` with `profile` already in the local index, and the latter's positional is a package, `ruyi extract <pkg>`, not a file path (four languages)
 - the searxng limiter configuration was never read: `develop/opencode.nix` put it in a `server.limiterSettings` block inside `settings.yml`; it now lives in a separate `limiter.toml` (`[botdetection] trusted_proxies`), and after the fix the `missing config file` warning is gone with the reverse proxy answering HTTP 200
 Every other assertion was measured and passed.
@@ -547,6 +559,7 @@ Every other assertion was measured and passed.
 ## 2026-09-18T13:51:14+09:00
 
 **Summary**: fix(docs): both plugin documents and all three mode documents verified -- the plugins matched every item, the modes needed one correction.
+
 - `dsh-nixos-shell` and `dsh-api-balance`: npm name and version, the 27-entry `nixos_shell` tool whitelist, `nixos_cli`'s five ops and ceilings, sudo protocol v3 (`MAX_TIMEOUT_MS = 21600000`), the `skills-embedded/` snapshots, plus `dsh-api-balance`'s rev `c47f857` and its 4 config options all matched item by item
 - the NixOS mode "Composition" line wrongly said the persona row sets `complete: true`; it sets only `prefix`, corrected in four languages
 The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, the maintenance mode derivation, and the news-three-elements items).
@@ -560,6 +573,7 @@ The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, t
 ## 2026-09-18T13:43:54+09:00
 
 **Summary**: fix(docs): two corrections in the ruyi documents (plus one incidental wording fix).
+
 - test counts had been given for the beta channel only; they are now split per channel: `ruyi` 368 unit / 58 integration, `ruyi-beta` 462 / 70, `ruyi-alpha` 346 / 57 -- with the note that ruff / mypy are `|| true` in `checkPhase` and pytest is what actually gates the build
 - the zh install section had a prose line inside its Nix code fence, truncating the block (en/ja/pcn were unaffected)
 - (incidental) `pyelftools` is added unconditionally by this package in the shared base (no version condition), not "new in >= 0.53.0"
@@ -583,6 +597,7 @@ The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, t
 ## 2026-09-18T13:40:20+09:00
 
 **Summary**: fix(docs): two inaccuracies each in kitsfmt and mcp-searxng.
+
 - `kitsfmt`: the "comment preservation" claim was too broad -- in 0.5.0 only leading comments above a node travel with it during sorting; a trailing comment on a non-last attribute moves above the next attribute, while the last attribute's and the file header/footer are dropped; `KITSFMT_STDIN=1` was also added
 - `mcp-searxng`: the "works out of the box" example carried the obsolete `real_ip.x_for = 1` (upstream `limiter.toml` no longer has a `real_ip` section); removed in all four languages
 - `mcp-searxng`: "fails silently without `SEARXNG_URL`" does not match measurement: the server starts and `tools/list` returns; only `tools/call` returns `isError: true` with an explicit message in the text and on stderr
@@ -597,6 +612,7 @@ The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, t
 ## 2026-09-18T13:32:32+09:00
 
 **Summary**: fix(docs): the dsh and godot-ai documents verified -- three corrections, plus one real functional defect found.
+
 - `dsh`: the "declaratively configurable host namespaces" table listed only 6 and was labelled 0.1.2-alpha; the `0.1.5-rc.2` the section discusses registers 12 through `installSection`, so `agent-default-model` and 5 others were missing
 - the `godot-ai` command fails immediately on startup: the attach bridge re-spawns a backend via `sys.executable -m godot_ai`, and under Nix that is bare CPython, so the dependencies injected by `site.addsitedir()` are not inherited by the child; PYTHONPATH is now prepended with makeWrapper and it works when measured
 - two more fixes in the godot-ai docs: tool count 43 -> 46 and WebSocket port 9876 -> 9500
@@ -611,6 +627,7 @@ The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, t
 ## 2026-09-18T13:23:25+09:00
 
 **Summary**: fix(docs): 26 assertions plus subdocuments verified; 7 inaccurate descriptions fixed
+
 - Main document, 2 items: `inputs.nixkits.url = "~/NixKits"` does not work — use `git+file:///path/to/NixKits`; the claim that all packages follow `lib.platforms.linux` is false, they are actually `lib.platforms.all`
 - blender-mcp, 3 items: the server registers 26 tools (the docs claimed 22); the add-on path is `extensions/user/` (a Blender Extension, unloadable on 4.x); the upgrade flow is `chmod` -> `rm -rf` -> `cp` -> `chmod` (the old one failed silently)
 - codewhale, 2 items: `--sandbox <tier>` does not exist, the flag is `--sandbox-mode`; a name already fixed once was reintroduced by mistake, and the four languages now agree
@@ -669,6 +686,7 @@ The other mode assertions passed (`nixos-gate` reads, the 5 NixOS mode skills, t
 ## 2026-09-17T18:15:40+09:00
 
 **Summary**: Restructured the generic skill into "main flow + two companion references" and recovered the Gitea lesson stranded by branch isolation — a remediation driven by evaluation:
+
 - Recovered onto main the 70-line "self-hosted forge (Gitea) source fetching" section written on the field-test branch (never merged): a self-hosted instance may return 403 for every tag
 - The adapter layer now requires that generic lessons from a test branch be written into main by hand on the spot
 - The skill went from 918 lines in one file to `SKILL.md` (462 lines) plus `builders.md` (254 lines: per-builder hash flows) and `traps.md` (271 lines: drift traps and more), with step 7, the "six questions before committing" self-check, added
@@ -830,6 +848,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-17T01:34:13+09:00
 
 **Summary**: docs(security): `SECURITY.md` gained an "already-evaluated external reports" section and joined the four-language localisation via `docs/SECURITY.{en,ja,pcn}.md` — publishing the 4 reviewed-and-closed reports.
+
 - PR #4 (rate limiting missing on `/token`, `/voicepack`, `/tts`) and PR #5 (no request-body cap on `/query`) are both false positives: the description did not match the diff, and `readJsonBody`'s 64 KiB cap already exists.
 - issue #1/#2 (`secrets: inherit` violating least privilege) are false positives too: with only 2 secrets in the repo, explicit passing is equivalent to `inherit`.
 - These reports prompted two genuine hardenings: the `/tts` endpoint SSRF and the least-privilege completion of 31 build workflows.
@@ -842,6 +861,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-17T01:23:46+09:00
 
 **Summary**: chore(security): added `SECURITY.md` and Dependabot, and pinned Actions to SHAs — prompted by the awesome-ai-plugins maintainer's (@kantorcodes) remediation request on PR #323: the scan scored 71/100, below the 80 threshold.
+
 - Scorecard: zero critical, zero high, with every deduction in engineering hygiene (Actions not pinned, no Dependabot).
 - Added `SECURITY.md` (supported versions, a private vulnerability-reporting channel, response timeframes) and `.github/dependabot.yml`.
 - 6 third-party action references pinned from floating refs to commit SHAs, including `DeterminateSystems/nix-installer-action@main`, which was a floating branch.
@@ -862,6 +882,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-16T14:54:53+09:00
 
 **Summary**: refactor(dsh-api-balance)!: moved out to its own repository, with this repo reduced to a thin wrapper — the first component split here.
+
 - Audit criteria: the only platform-agnostic project, zero code-level coupling to NixKits, and an existing npm packaging need.
 - New repository `Kihara777/dsh-api-balance`: source, four-language docs and npm publish CI; verified that `dsh plugin add` installs it in one line and the web profile boots with `exit=0`.
 - This repo's side: `packages/dsh-api-balance/` deleted; the `.nix` becomes a `fetchFromGitHub` thin wrapper (`npmDepsHash` unchanged); docs condensed to short pages; README notes the move; CI workflows kept so the Cachix cache still hits.
@@ -1134,6 +1155,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-14T06:18:42+09:00
 
 **Summary**: docs(pcn): purged simplified-Chinese characters repo-wide — pseudocn is kana-stripped Japanese, so simplified characters are never legal in its body text
+
 - Mass replacement: `与`→`與` 132 times and `说明`→`説明` 120 times, plus `档`→`檔`, `径`→`経`, `译`→`訳`, `实例`→`実例`
 - Dictionary mappings: `文件`→`書類`, `版本`→`版`, `用户`→`利用者`, `支持`→`対応`; `端口` / `制御台` have Japanese counterparts, so they are kept and recorded in the dictionary
 - Commit subjects are exempt: the commit column keeps them verbatim (immutable external references; the ja log does too)
@@ -1345,6 +1367,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-11T07:27:00+09:00
 
 **Summary**: fix(dsh-api-balance): question-dialog whole-page scroll had no effect in testing — switched to a MutationObserver watch
+
 - Symptom and root cause: the question UI's style tag comes from a separate plugin bundle that can load after this plugin initializes, so the previous bounded 5×1s retry window missed it and injection silently skipped
 - Fix: watch `document.head` with a MutationObserver (extracting and injecting the class name as soon as the tag appears) plus a 2s fallback poll, disconnecting once injection succeeds
 - Verification: a faithful markup replica in headless Chromium confirms the CSS approach itself is correct; the smoke suite gains a "late-arriving tag still injects" case
@@ -1355,6 +1378,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-09-11T07:15:47+09:00
 
 **Summary**: feat(dsh-api-balance): question dialog whole-page scroll (long prompts no longer squeeze the options)
+
 - CSS: the card itself becomes the scroll container, so title + detail + options scroll together; the header and footer button areas stick; the body stops scrolling to avoid double scrollbars
 - Implementation: class names are extracted at runtime from the ui-user-questions style tag; up to 5 retries at 1s while the tag isn't ready
 - Settings: Settings → Interface gains a "Question dialog: whole-page scroll" toggle (on by default, localStorage-persisted)
@@ -1897,6 +1921,7 @@ The link-audit method went into the generic skill: a `curl` 404 must be confirme
 ## 2026-08-20T17:46:44+09:00
 
 **Summary**: feat(nixos-shell): NixOS scenario capabilities consolidated into one plugin; refactor: the skills-as-plugins design is abandoned
+
 - New package nixos-shell (@kihara777/dsh-nixos-shell 0.1.0) registers two tools: the nixos_shell executor (NixOS PATH injection + bash fallback + `tools` bootstrapping missing POSIX tools + sudo-daemon routing) and nixos_cli read-only diagnostics (capabilities and others), requirements from the nixos-modern-cli skill scenarios.
 - Removed dsh-nix-shell and dsh-skill-nixkits (the 7-skill-plugin design), CI/docs swapped.
 - Fix for generations: an in-process read-only listing (`nix-env` refused when unprivileged).
@@ -2151,6 +2176,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 ## 2026-08-18T10:29:46+09:00
 
 **Summary**: feat/fix(dsh): deploy the dsh service and configure MCP + skills.
+
 - module fix: the dsh system user's HOME=/var/empty (read-only) caused EPERM; switched to a writable /var/lib/dsh + StateDirectory
 - the HMR service needs --expose-internals; launch bin.js via node --expose-internals
 - MCP services (SearXNG + Godot) are configured with cordis.patch.yml `insert:` syntax, not id-targeted overrides
@@ -2175,6 +2201,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 ## 2026-08-18T07:19:30+09:00
 
 **Summary**: audit fixes — version bumps plus module/overlay/doc/skill corrections.
+
 - codewhale 0.9.8, mcp-searxng 1.15.0, opencode-telegram 0.24.0, obs-bilibili-stream 2.1.3 bumped
 - comfyui-rocm module restored the services.comfyui assertion and clarified the nixpkgs-compat patch target
 - overlay codewhale falls back to a source build per architecture (riscv64)

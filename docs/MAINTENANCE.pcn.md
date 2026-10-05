@@ -244,6 +244,7 @@
 ## 2026-10-02T17:33:52+09:00
 
 **摘要**：godot-ai 4.1.0 → 4.2.3 — fail-closed 之 pin 表 9 項 自 14 項 至（`mcp` 1.29.1 → 2.2.0、`fastmcp` 3.4.7 → 4.0.5、更 `mcp-types` 等 新規追加）
+
 - `mcp-types` nixpkgs 於 存在 不 故、上流 同一 倉庫 之 `src/mcp-types/` sub project 自 定義 取得
 - 二 overlay 之 `python312.override { packageOverrides = …; }` 連鎖 `.extend` 於 互 置換、上書 静 破棄 侭 構築 成功；現在 `pythonPackagesExtensions` 使用
 - 判定：構築 通過、`godot-ai --version` 実行 4.2.3、`importlib.metadata` 14/14、`nix flake check` 全緑
@@ -270,6 +271,7 @@
 ## 2026-10-02T17:03:13+09:00
 
 **摘要**：codewhale 0.9.13 → 0.10.0；ruyi 0.52.0 → 0.53.0；mcp-searxng 2.3.0 → 2.5.0；opencode-telegram 0.25.3 → 0.26.2 — 四言語 文書 同期
+
 - `dsh` 0.2.0-rc.2 與 `dsh-alpha` 0.1.7-alpha.2 暫緩：hash 與 構築 通過、但 預設 mount 検証 通 不——`agentPresets/list` 之 roster 內 何 也 出現 不；対照実験 識別力 有 但、形式 之 非互換 與 探針 `DSH_HOME` 不足 未 区別 可能
 - fix(dsh): `postPatch` 「`devDependencies` 自 文件末尾 至 截断」自 按塊 照合 + 末尾 comma 修復 至 変更——0.2.0-rc.2 以降 `exports` 其 後 至 来 故、旧 写法 則 其 共 削除（導出 失効 然 構築 成功）；二 実 tarball 以 解析 可能 事 離線 検証
 
@@ -337,6 +339,7 @@
 ## 2026-09-28T08:04:31+09:00
 
 **摘要**：fix(dsh-nixos-shell): 預設行 `workflow-ptc` 至 変更 —— dsh 0.1.6 内蔵插件 `dsh-workflow-worker-thread` 改名、旧名 ≤ alpha.1 黙 無視、alpha.2 以降 預設 全体 mount 不能。
+
 - `nixos-mode` / `maintenance-mode` 組合行 與 `editing-cordis-compositions` 技能 例 同時 改名、`config` 逐字 不変
 - 検証 **build 産物** 実際 mount 方式 至：臨時 dsh `agentPresets/list` 呼 上流 `broken` 判定 読、更 故意 壊 夹具 反証 以 混
 - 同 罠 `docs/*/dsh.md` 記載（四語）、`AGENTS.md` 本機展開 前提 `path:` 輸入 非 GitHub 参照 至 修正（先 push 後 再鎖、再鎖 浮動子入力 亦 再解決）
@@ -383,6 +386,7 @@
 ## 2026-09-20T17:56:28+09:00
 
 **摘要**：refactor(skill): 監査後、8 件 之 汎用技能 倉庫／役割特指 一括汎化。
+
 - `write-maintenance-log`：「AGENTS.md 依 強制起動」 条件式 変更；SUBTITLE 之 `NixKits 软件更新维护日志。` `<项目名>` placeholder 変更（逐字置換 故、其 侭 使用 他 project 名 書込）
 - `write-project-docs`：「root 中文 唯一」 反 pattern 表 之「言語 list 直書」 矛盾 故「基準言語 倉庫 定」 変更
 - 切替 validator 言語集合 之 動的発見 変更（`docs/zh|en|ja|pcn` 與 `/5` 直書）；`translate-pseudocn` 之 壊 script 書直
@@ -404,6 +408,7 @@
 ## 2026-09-20T17:28:32+09:00
 
 **摘要**：fix(skill): `nix-flake-update-check` 之 三 欠陥 修正、何 也 「錯誤 出 非、唯 取落」型。
+
 - 固定 SHA 之 Actions 検査 到達不能：`traps.md` 手順 有 且 `SKILL.md` 何 段階 自 参照 無；第 2 步 節 追加、検査項目 八問 拡張、目次 「毎回」 明記
 - 版本発見 `version\s*=` 故 parameter 化 `version ? "0.1.5-rc.2"`（`packages/dsh.nix`）一致 不、当該 包 検査範囲 自 消；`version\s*[?=]` 変更
 - 生 `curl` `api.github.com` 上限 使切 錯誤 出 非 空 返、下流 grep 同様 沈黙、全 包 「最新」 判定；`gh api` 統一 `ERROR:` 分岐 追加
@@ -443,6 +448,7 @@
 ## 2026-09-19T14:05:38+09:00
 
 **摘要**：fix(ci): `check.yml` 之 `access-tokens` `api.github.com` 欠。同時 子 repo `dsh-api-balance` 四言語 `SECURITY.md` 追加。
+
 - CI：浮動入力 `llama-cpp-ver` 従来 未認証 取得（六十 回/時 之 上限 push 毎 ~三十四 workflow 使切）。両 host 記載 後 三十三 workflow 全部 success、403 零。入力 浮動 侭 `flake.lock` 書 不
 - 子 repo 安全政策：scanner 之 PR #4 / #5「rate limit 欠如」「request body size 上限 欠如」共 誤検知 判定、code 変更 不
 - 主 repo 四言語 `SECURITY.md` 之「同 子工程 未 政策 整備」記述 「整備済」 至 訂正、子 repo 文書 至 link
@@ -458,6 +464,7 @@
 ## 2026-09-19T07:51:05+09:00
 
 **摘要**：技能文書 四 篇（`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`）確認、三 件 修正（四言語）。
+
 - `nix-flake-update-check`：文書 主 flow 1〜10 step 記載、但 `SKILL.md` 実際 step 9 至。step 10（締）適配層 `nixkits-check-updates` 定義
 - `write-project-docs`：付属 file `templates.md`（209 行）`SKILL.md` 宣言 無 —— 付属表 與 目録形式 path 補完
 - `translate-pseudocn`：辞書 項目数 13 実測 75 訂正、`dictionary.md` 付属行 追加
@@ -474,6 +481,7 @@
 ## 2026-09-19T07:43:15+09:00
 
 **摘要**：fix(comfyui): 「上流 stdenv API 移行済」 誤 判定 訂正。
+
 - 元 判定「上流 hostPlatform 移行済」、実測 反証：`stdenv.is<Platform>` **0.34.0 與 0.30.2 各 三十八 処**、`hostPlatform.is*` 両版 七 処 限定——一度 也 移行 不
 - 真 理由：**上流 code 上書 不 化**（旧 patch 移行 overlay 経由 評価 fork 適用）
 - `modules/comfyui.nix` 注釈 與 四言語 `deprecated/comfyui-rocm.md`「何故 廃止 可」節 同時 訂正
@@ -488,6 +496,7 @@
 ## 2026-09-19T07:38:04+09:00
 
 **摘要**：fix(docs): 修正文書群 完了 —— 最後 三 文書 確認 四 件 修正（何 四言語）。
+
 - asusd-thermal-guard：文書 状態 `/run` 記載 誤。module `StateDirectory`（`/var/lib/private/asusd-thermal-guard`）使用、注釈 `RuntimeDirectory` 使用 警告（systemd 丸 削除、故 冷却計数 毎回 零 戻）
 - comfyui：徽章 存在 不 CI job 名指（`check.yml` 単一 `check` job 限定）。如実 CI 徽章 変更
 - comfyui：cache 節 overlay 記述 残存（module `pkgs.comfyui` 参照 無、宣言 設定 限定）
@@ -504,6 +513,7 @@
 ## 2026-09-18T11:04:38+09:00
 
 **摘要**：外部 目録 掲載 完了 —— awesome-ai-plugins 二 PR 共 合并、NixKits 與 dsh-api-balance 正式 同 目録 進入。
+
 - scan 評価 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、措辞 限定 変更 情報 削除 不
 - PR #321：`dsh-api-balance` DeepSeek Harness Plugins 追加、**2026-09-16 合并**
 - PR #323：NixKits Development & Workflow 追加、審査 是正 與 scan 再実行 後 我々 自 閉
@@ -519,6 +529,7 @@
 ## 2026-09-18T14:35:36+09:00
 
 **摘要**：fix(docs): 修正類 前 五 文書 検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）—— 三 件 修正。
+
 - `rcc-fix` 存在 不 option 名前空間 使用：例 `services.asusctl`（`power-profile`/`cpu-power-control` 含）記載、正 `services.asusd`、段階 與 CPU 電力上限 `profileConfig` 経由（四言語）
 - `breeze-black`：「導入」節 placeholder path `(import ./overlay.nix)` 為 `inputs.nixkits.overlays.<name>` 変更（zh 限定）
 - `codewhale-sudo`：基本情報表 重複行 削除（zh 限定）
@@ -534,6 +545,7 @@
 ## 2026-09-18T14:26:43+09:00
 
 **摘要**：fix(devshell): 開発 二 篇 検証 —— 引数 誤 一 件 修正、且 source 欠陥 一 件 発見。
+
 - `ruyi venv` / `ruyi extract` 引数 誤：前者 `ruyi venv -t <toolchain> <profile> <dest>` 之形 必要、且 `profile` 本地索引 存在 必要；後者 位置引数 包名 `ruyi extract <pkg>` 非 file path（四言語）
 - searxng limiter 設定 一度 也 読 不：`develop/opencode.nix` `settings.yml` `server.limiterSettings` block 内 記載、独立 `limiter.toml`（`[botdetection] trusted_proxies`）移、修正後 `missing config file` 警告 消、reverse proxy 亦 HTTP 200 返
 其他 主張 実測 通過。
@@ -547,6 +559,7 @@
 ## 2026-09-18T13:51:14+09:00
 
 **摘要**：fix(docs): plugin 二 文書 與 mode 三 文書 検証 —— plugin 全項目 一致 変更 不要、mode 一 件 修正。
+
 - `dsh-nixos-shell` 與 `dsh-api-balance`：npm 名 與 version、`nixos_shell` 二十七 項目 道具白名単、`nixos_cli` 五 op 與 数値上限、sudo protocol v3（`MAX_TIMEOUT_MS = 21600000`）、`skills-embedded/` snapshot、`dsh-api-balance` rev `c47f857` 與 四 config 項目 全項目 一致
 - NixOS mode「組合」行 persona 行 `complete: true` 設定 誤記。実際 `prefix` 限定、四言語 訂正
 其他 mode 主張 通過（`nixos-gate` 読取、NixOS mode 技能 五、maintenance mode 派生関係、news 三要素 mode 各項目）。
@@ -560,6 +573,7 @@
 ## 2026-09-18T13:43:54+09:00
 
 **摘要**：fix(docs): ruyi 文書 二 件 修正（他 一 件 順便 表現 修正）。
+
 - 試験件数 beta channel 限定 値 為、channel 別 列挙 改：`ruyi` 単体 368 / 統合 58、`ruyi-beta` 462 / 70、`ruyi-alpha` 346 / 57。併 `checkPhase` ruff / mypy `|| true`、実際 build 左右 物 pytest 注記
 - zh 導入節 散文 一行 Nix code fence 内 入、block 途切（en/ja/pcn 無）
 - （順便）`pyelftools` 本 package 共有 base 無条件 追加（version 条件 無）、「0.53.0 以降 新規」非
@@ -583,6 +597,7 @@
 ## 2026-09-18T13:40:20+09:00
 
 **摘要**：fix(docs): kitsfmt 與 mcp-searxng 各 二 件 不正確 記述。
+
 - `kitsfmt`：「注釈保持」記述 過広 —— 0.5.0 実測 節点 直前 先行注釈 限定 整序時 追随、最後 以外 属性 同行末尾 次 属性 上 移動、最後 属性 同行末尾 與 書類 先頭、末尾 破棄。漏 `KITSFMT_STDIN=1` 補完
 - `mcp-searxng`：「即用設定」廃止済 `real_ip.x_for = 1` 含（上流 `limiter.toml` `real_ip` 節 既 無）。四言語 削除
 - `mcp-searxng`：「`SEARXNG_URL` 無 場合 黙 失敗」実測 不一致 —— 伺服器 正常 起動 且 `tools/list` 返。`tools/call` 限定 毎回 `isError: true` 返、文本 與 stderr 明示
@@ -597,6 +612,7 @@
 ## 2026-09-18T13:32:32+09:00
 
 **摘要**：fix(docs): dsh 與 godot-ai 文書 検証 —— 三 件 修正、加 実際 機能 欠陥 一 件 発見。
+
 - `dsh`：「宣言的 設定可能 host namespace」表 六 件 限定 且 0.1.2-alpha 記載。該当節 扱 `0.1.5-rc.2` `installSection` 経由 十二 件 登録 故、`agent-default-model` 他 五 件 欠
 - `godot-ai` 命令 起動 直後 失敗：attach 橋 `sys.executable -m godot_ai` 以 backend 再 spawn、但 Nix 下 裸 CPython、`site.addsitedir()` 注入 依存 子工程 継承 不。makeWrapper 以 PYTHONPATH 前置、実測 動作
 - `godot-ai` 文書 残 二 件：道具数 43 → 46、WebSocket port 9876 → 9500
@@ -611,6 +627,7 @@
 ## 2026-09-18T13:23:25+09:00
 
 **摘要**：fix(docs): 26 項目 主張 + 子文書 検証、失実記述 7 件 修正
+
 - 主文書 2 件：`inputs.nixkits.url = "~/NixKits"` 使用不可——`git+file:///path/to/NixKits` 変更。「全包 既定 `lib.platforms.linux` 従」失実、実際 `lib.platforms.all`
 - blender-mcp 3 件：実 server 登録 26 道具（文書 22 称）。拡張 導入先 `extensions/user/`（Blender Extension、4.x 読込 不可）。更新手順 `chmod`→`rm -rf`→`cp`→`chmod`（従来 無言 失敗）
 - codewhale 2 件：`--sandbox <tier>` 存在 不、実 `--sandbox-mode`。以前 修正済 引数名 再導入 者、四言語 統一
@@ -669,6 +686,7 @@
 ## 2026-09-17T18:15:40+09:00
 
 **摘要**：汎用技能「主 flow + 二 付属参考」再構成、且 branch 分離 滞留 Gitea 教訓 回収 — 評価 基 改善：
+
 - 実測 branch 記載 70 行「自 host forge（Gitea）source 取得」節 main 回収（当該 branch merge 不 取決）：自 host instance 全 tag 403 返 可能性
 - 適配層 追加：test branch 生 汎用 教訓 其場 手作業 main 書 要求
 - 技能 918 行 単一 file 自 主 flow `SKILL.md`（462 行）+ `builders.md`（254 行：builder 別 hash flow）+ `traps.md`（271 行：漂移 罠 等）分割、第 7 步「commit 前 六 自問」新設
@@ -830,6 +848,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-17T01:34:13+09:00
 
 **摘要**：docs(security): `SECURITY.md` 「評価済 外部報告」節 追加、`docs/SECURITY.{en,ja,pcn}.md` 以 四言語 local 化 組入 — 精査 上 close 済 4 件 公開。
+
 - PR #4（`/token`・`/voicepack`・`/tts` rate 制限 欠如）與 PR #5（`/query` request body 上限 欠如）何 也 誤検出：説明 與 diff 不一致、`readJsonBody` 64 KiB 上限 既 存在。
 - issue #1/#2（`secrets: inherit` 最小権限 違反）也 誤検出：倉庫 全体 於 secret 2 件 限定、明示 受渡 與 `inherit` 等価。
 - 此等 導 2 件 実際 堅牢化：`/tts` endpoint SSRF 與 31 build workflow 最小権限 補完。
@@ -842,6 +861,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-17T01:23:46+09:00
 
 **摘要**：chore(security): `SECURITY.md` 與 Dependabot 追加、Actions SHA 固定 — 発端 awesome-ai-plugins 維護者（@kantorcodes）PR #323 是正要求：scan 71/100、80 閾値 下回。
+
 - scorecard：critical 也 high 也 零、減点 全部 engineering 衛生（Actions 未固定、Dependabot 欠如）。
 - `SECURITY.md`（支援 版本、非公開 脆弱性 報告 channel、対応期限）與 `.github/dependabot.yml` 追加。
 - 6 箇所 第三者 action 参照 浮動参照 自 commit SHA 固定。`DeterminateSystems/nix-installer-action@main` 浮動 branch 参照。
@@ -862,6 +882,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-16T14:54:53+09:00
 
 **摘要**：refactor(dsh-api-balance)!: 独立 倉庫 移転、本 倉庫 薄 wrapper 化 — 初 分割。
+
 - 監査 判定：唯一 platform 非依存 project、NixKits 與 code level 結合 零、npm packaging 必要 有。
 - 新 倉庫 `Kihara777/dsh-api-balance`：source、四言語 文書、npm 公開 CI。`dsh plugin add` 一 行 導入 可能、web profile `exit=0` 起動 実測。
 - 本 倉庫 側：`packages/dsh-api-balance/` 削除、`.nix` `fetchFromGitHub` 薄 wrapper 化（`npmDepsHash` 不変）；文書 短 page 圧縮、README 移転 明記；CI workflow Cachix 命中 為 保持。
@@ -1134,6 +1155,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-14T06:18:42+09:00
 
 **摘要**：docs(pcn): 全倉簡体中文字 清除 — 偽中国語 仮名剥離日文、故 本文中簡体字 一律非法
+
 - 一括置換：`与`→`與` 計 132 箇所、`说明`→`説明` 計 120 箇所、他 `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`
 - 辞書映射：`文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；`端口` / `制御台` 日本語 対応字 有 故 保持 且 辞書 記録
 - commit 情報免除：「提交」列 commit 情報 verbatim 保持（不変外部参照、ja 版 同 中国語 保持）
@@ -1345,6 +1367,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-11T07:27:00+09:00
 
 **摘要**：fix(dsh-api-balance): 疑問 window 頁面全体 scroll 実測無効 — MutationObserver 守望変更
+
 - 現象與根因：疑問 UI style 標籤別 plugin bundle 注入、本 plugin 初期化遅可能、旧 5×1s 有界 retry 窓逸失時静黙注入不
 - 修正：`document.head` MutationObserver 守望（標籤出現即 class 名抽出入）+ 2 秒 fallback polling、注入成功後自動切断
 - 検証：headless Chromium 実 markup 再現、CSS 方式自身正確確認；smoke test「標籤遅到仍注入」case 追加
@@ -1355,6 +1378,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-09-11T07:15:47+09:00
 
 **摘要**：feat(dsh-api-balance): 疑問 window 頁面全体 scroll 最適化（長題干選択肢圧迫不）
+
 - CSS：卡片自身 scroll container 化、標題+詳細+選択肢一括 scroll；header 與 footer 按鈕領域 sticky 吸着；body 独立 scroll 停止
 - 実装：class 名 ui-user-questions style 標籤自実行時抽出；標籤未準備時 1 秒間隔最大 5 回 retry
 - 設定：設定 → 界面「疑問 window 頁面全体 scroll」toggle 追加（既定有効、localStorage 永続化）
@@ -1897,6 +1921,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-08-20T17:46:44+09:00
 
 **摘要**：feat(nixos-shell): NixOS 場景能力単一插件統合；refactor: 技能插件化設計廃止
+
 - 新包 nixos-shell（@kihara777/dsh-nixos-shell 0.1.0）2 工具登録：nixos_shell 実行器（NixOS PATH 注入 + bash 回退 + `tools` 不足 POSIX 工具提供 + sudo 守護路由）與 nixos_cli 読取専用診断（capabilities 他 4 項目）。要件 nixos-modern-cli 技能場景由来。
 - dsh-nix-shell 與 dsh-skill-nixkits（7 技能插件設計）削除、CI/文書差替。
 - generations 修正：進程内読取専用列表変更（`nix-env` 非 root 拒否）。
@@ -2151,6 +2176,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-08-18T10:29:46+09:00
 
 **摘要**：feat/fix(dsh): dsh 服務 配備 且 MCP + skills 設定。
+
 - 部品修正：dsh system 使用者 HOME=/var/empty（読取専用）EPERM 招故、書込可能 /var/lib/dsh + StateDirectory 変更
 - HMR 服務 --expose-internals 要故、node --expose-internals bin.js 直接起動
 - MCP 服務（SearXNG + Godot）cordis.patch.yml `insert:` 構文 設定（id-targeted override 非）
@@ -2175,6 +2201,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 ## 2026-08-18T07:19:30+09:00
 
 **摘要**：監査修正 —— 版数更新 與 部品/overlay/文書/技能 修正。
+
 - codewhale 0.9.8、mcp-searxng 1.15.0、opencode-telegram 0.24.0、obs-bilibili-stream 2.1.3 更新
 - comfyui-rocm 部品 services.comfyui assertion 復元、nixpkgs-compat patch 対象 明確化
 - overlay codewhale 構造別 source 構築 回退（riscv64）
