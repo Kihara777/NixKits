@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T23:15:53+09:00
+
+**摘要**：feat(check): `doc-counts` 新設 —— 源 自 機械的 読出 可能 計数 源 與 一致 必須（`nix flake check` 8 → 9 項）
+
+- 発端：同日 二度 「文書 失真 侭 誰 也 見 不」——辞書 mapping 一 補 後、四言語頁 「**75** 条」 失効；検査 一 追加 後、`AGENTS.md` 「8 項 自検」 失効
+- 二 規則：辞書条数 == `dictionary.md` 之 資料行数；自検項数 == `flake.nix` 之 `checks` 条目数（python 実装分 含）
+- 反証：一時 copy 二 箇所 違反 注入、各自 「申告 X ≠ 実際 Y」 報 exit 1；現行 全緑
+- script 規則表 構成（規則追加＝一行）；`AGENTS.md` 自検表 與 `flake.nix` comment 同期
+
+| 提交 | 説明 |
+|------|------|
+| `c1e53bf` | feat(check): `doc-counts` 新設 —— 源 自 機械的 読出 可能 計数 源 與 一致 必須 |
+
 ## 2026-10-05T22:20:17+09:00
 
 **摘要**：feat(check): 維護記録 形態 要件 判定 固定 —— zh 概要 ≤ 400 文字、清単項目数 四言語 一致、説明 block 一行 且 本語 標記

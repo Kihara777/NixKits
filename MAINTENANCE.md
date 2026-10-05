@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-05T23:15:53+09:00
+
+**摘要**：feat(check): 新增 `doc-counts` —— 文档里能从源机械读出的计数必须与源一致（`nix flake check` 8 → 9 项）
+
+- 起因：同一天两次「文档已失真而无人看得见」——补一条词典映射后四语页的「**75** 条」过期；加一项检查后 `AGENTS.md` 的「8 项自检」过期
+- 两条规则：词典条数 == `dictionary.md` 数据行数；自检项数 == `flake.nix` 的 `checks` 条目数（含 python 实现数）
+- 反证：临时副本注入两处违规，各自报「声明 X ≠ 实际 Y」并 exit 1；现库全绿
+- 脚本按规则表组织（加规则＝加一条）；`AGENTS.md` 自检表与 `flake.nix` 注释同步
+
+| 提交 | 说明 |
+|------|------|
+| `c1e53bf` | feat(check): 新增 doc-counts —— 文档里能从源机械读出的计数必须与源一致 |
+
 ## 2026-10-05T22:20:17+09:00
 
 **摘要**：feat(check): 维护日志的形态要求钉成断言 —— zh 摘要 ≤ 400 字符、清单条目数四语相等、说明块单行且标记为本语

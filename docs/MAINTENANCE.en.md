@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T23:15:53+09:00
+
+**Summary**: feat(check): new `doc-counts` check — counts that can be derived mechanically from a source must match it (`nix flake check` 8 → 9 checks)
+
+- Cause: two cases in one day where a document went stale unnoticed — the four-language page's "**75** entries" after a dictionary mapping was added, and `AGENTS.md`'s "8 self-checks" after a check was added
+- Two rules: dictionary entry count == rows in `dictionary.md`; self-check count == `checks` entries in `flake.nix` (including the python-implemented subset)
+- Negative test: two injected violations in a temp copy each reported "stated X ≠ actual Y" and exited 1; the current repo is green
+- The script is a rule table (a new rule is one entry); `AGENTS.md`'s table and `flake.nix`'s comment list updated
+
+| Commit | Description |
+|------|------|
+| `c1e53bf` | feat(check): new doc-counts check — mechanically derivable doc counts must match their source |
+
 ## 2026-10-05T22:20:17+09:00
 
 **Summary**: feat(check): the maintenance log's shape rules are now assertions — zh summary ≤ 400 characters, matching list-item counts across languages, single-line note blocks with in-language markers
