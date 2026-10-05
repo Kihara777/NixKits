@@ -4,7 +4,7 @@
 
 [中文](../zh/godot-ai.md) | [English](../en/godot-ai.md) | [日本語](../ja/godot-ai.md)  | 偽中国語
 
-Godot 引擎 高品質 MCP server 與 AI 工具 — MCP client **実行中 Godot editor** 接続、AI 助手 場景構築・節點脚本編集・信号配線・UI材料動画設定可能。46 MCP 工具 / 120+ 操作。
+Godot 機関 高品質 MCP server 與 AI 工具 — MCP client **実行中 Godot editor** 接続、AI 助手 場景構築・節點脚本編集・信号配線・UI材料動画設定可能。46 MCP 工具 / 120+ 操作。
 
 ## 基本情報
 
