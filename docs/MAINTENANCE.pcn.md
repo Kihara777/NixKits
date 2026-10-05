@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T14:54:21+09:00
+
+**摘要**：feat(skill): `write-maintenance-log` 概要 **markdown 清単** 排版 許可
+
+- 「概要 概要 成」節 二種 排版 提示、**長 予算 同一**（合計 ≤ 400 文字）明記——清単 「多 書行」許可 非。各行 依然 「何 変更」 限定 回答
+- 清単 送信表 **代替 非**：commit id 依然 `| 提交 | 説明 |` 限 出現
+- 多言語同期：清単形式 **逐条翻訳、項目数 一致必須**（一項目 不足 翻訳漏、一項目 過剰 水増）
+- 4c 検証節 実行可能 判定 追加（各言語 `grep -c '^- '` 相等）、当時 実際 踏 教訓 記載：**判定 緩 書過 不**
+
+| 提交 | 説明 |
+|------|------|
+| `e2cb5ab` | feat(skill): 維護記録 概要 markdown 清単 許可；四語 document page 同期 |
+
 ## 2026-10-05T14:24:37+09:00
 
 **摘要**：dsh-api-balance 薄包装 re-pin —— rev `911df2e` → `95fec42`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816) 見）。維護者 二度目 反饋：漸隠 下端 限定、**上端 依然 一刀切**、且 追従按鈕**下方** 切断内容 露出。今 上下両端 **scroll 連動** 漸隠 変更：`none/start/end/middle` 状態機械、最上部 上端 模糊不、最下部 下端 模糊不（三状態 逐一 確認）；卡片 上端 限定 漸隠（卡片全体 mask 追従按鈕 淡 成）、按鈕下方 同色 埋 塞。二罠 踏 修正：① 注入時 要素 束縛 不及（上流 style 先、component 後）、scroll capture + MutationObserver + 500ms polling 補強；② `elementFromPoint` 被覆 検証 誤（埋 `pointer-events:none`、hit test 映 不）。四語文档 同期。

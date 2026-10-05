@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T14:54:21+09:00
+
+**Summary**: feat(skill): `write-maintenance-log` now allows a **markdown list** for the summary
+
+- The "the summary is a summary" section documents both layouts and states they share the **same length budget** (≤ 400 characters in total) — a list is not a licence to write more lines; each line still answers only "what changed"
+- A list does **not** replace the commit table: commit ids still appear only under `| Commit | Description |`
+- Multi-language sync: a list summary is translated **item by item, with matching item counts** (one short is a missed translation, one extra is padding)
+- The 4c verification section gains a runnable criterion (equal `grep -c '^- '` across languages) plus the lesson actually hit that day: **do not write a criterion too loosely**
+
+| Commit | Description |
+|------|------|
+| `e2cb5ab` | feat(skill): markdown lists allowed in maintenance-log summaries; four-language doc pages synced |
+
 ## 2026-10-05T14:24:37+09:00
 
 **Summary**: dsh-api-balance thin-wrapper re-pin — rev `911df2e` → `95fec42` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`f39c816`](https://github.com/Kihara777/dsh-api-balance/commit/f39c816)). Second round of maintainer feedback: the fade was bottom-only, the **top edge was still a hard cut**, and a sliced-off line still showed **below** the pinned buttons. The fades are now **scroll-aware** on both ends: a `none/start/end/middle` state machine means the top edge no longer goes soft when scrolled to the top nor the bottom edge at the bottom (all three states checked one by one); the card fades its top edge only (masking the whole card would fade the pinned buttons too), and the strip below the buttons is closed off with a same-colour filler. Two traps were hit and fixed: ① binding elements at injection time misses them (the upstream style tag arrives before the component), now covered by scroll capture + MutationObserver + a 500 ms poll; ② `elementFromPoint` cannot verify a *paint* cover (the filler is `pointer-events:none`, so the hit test never sees it). All four language docs updated.
