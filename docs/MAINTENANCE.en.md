@@ -2671,7 +2671,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-07-07T12:01:12+09:00
 
-**Summary**: fix(docs) — katalish/pcn localization fixes: broken lang switchers in katalish/ruyi.md and pcn/ruyi.md (missing links, duplicate lang names), pcn/ruyi.md full rewrite from raw Japanese to pseudocn.
+**Summary**: fix(docs): katalish/pcn localization — repaired the language switchers in katalish/ruyi.md and pcn/ruyi.md (missing links, duplicate language names); pcn/ruyi.md fully rewritten from Japanese into pseudocn.
 
 | Commit | Description |
 |------|------|
@@ -2680,7 +2680,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-07-05T04:41:23+09:00
 
-**Summary**: fix(ci) — blender-mcp riscv64-cross saga (4 commits): initial failure from `callPackage` auto-resolving incompatible `blender`, followed by Nix/Bash escaping issues, and finally removed blender-mcp from riscv64-cross due to upstream nixpkgs `sse-starlette` cross-compilation defect. x86_64 / aarch64 unaffected.
+**Summary**: fix(ci): blender-mcp removed from riscv64-cross — the upstream nixpkgs `sse-starlette` cross-compilation defect breaks the build (`blender` is unsupported on riscv64 too); x86_64 / aarch64 unaffected.
 
 | Commit | Description |
 |------|------|
@@ -2948,7 +2948,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-24T02:30:21+09:00
 
-**Summary**: CI — add riscv64 cross-compilation pipeline, full 3-arch CI coverage (x86_64 / aarch64 / riscv64); per-package riscv64 badges
+**Summary**: CI — add riscv64 cross-compilation pipeline, full 3-arch CI coverage (x86_64 / aarch64 / riscv64); per-package riscv64 badges.
 
 | Commit | Description |
 |------|------|
@@ -2959,7 +2959,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-23T05:20:00+09:00
 
-**Summary**: translate-pseudocn — expand dictionary based on web research (7→46 entries), convert to SVO word order, regenerate all pcn docs
+**Summary**: translate-pseudocn — expand the dictionary based on web research (7→46 entries), convert to SVO word order, regenerate all pcn docs.
 
 | Commit | Description |
 |------|------|
@@ -2968,7 +2968,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-23T04:19:16+09:00
 
-**Summary**: translate-pseudocn skill refactor — redefine pseudo-Chinese as "visual result of Japanese after stripping kana", no longer convert to Chinese; preserve original Japanese kanji (not simplified), retain SOV word order, reduce dictionary from 40→7 entries (katakana→Japanese kanji only); regenerate all 22 pcn docs
+**Summary**: translate-pseudocn skill refactor — pseudo-Chinese is redefined as "the visual result of Japanese after stripping kana", no longer converted into Chinese; original Japanese kanji are kept as-is (not simplified), SOV word order is retained, and the dictionary is reduced from 40→7 entries (katakana→Japanese kanji only); all 22 pcn docs regenerated.
 
 | Commit | Description |
 |------|------|
@@ -2976,7 +2976,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-23T04:04:32+09:00
 
-**Summary**：AGENTS.md — 去硬编码、移除冗余审计备忘、缓存章节重写为代理操作指南、移除用户侧描述、语言体系改为自动发现
+**Summary**: AGENTS.md — remove hardcoded counts, drop the redundant audit memo, rewrite the cache section as an agent-facing how-to, remove the user-facing subsection; switch the language set to auto-discovery.
 
 | Commit | Description |
 |------|------|
@@ -2986,7 +2986,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T23:49:00+09:00
 
-**Summary**：mcp-searxng 1.7.2 — 上游修复
+**Summary**: mcp-searxng 1.7.2 — upstream fixes.
 
 | Commit | Description |
 |------|------|
@@ -3000,7 +3000,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T23:22:00+09:00
 
-**Summary**：AGENTS.md — 新增初次启动审计规则、访问控制移至顶部
+**Summary**: AGENTS.md — add the new-session audit rule; move access control to the top.
 
 | Commit | Description |
 |------|------|
@@ -3009,7 +3009,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T07:20:50+09:00
 
-**Summary**：docs — README 重复行修复，write-project-docs 反模式补充
+**Summary**: docs — fix a duplicated line in the README; add an anti-pattern to write-project-docs.
 
 | Commit | Description |
 |------|------|
@@ -3018,7 +3018,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T06:41:50+09:00
 
-**Summary**：AGENTS.md — 新增访问控制、语言要求、提交规范、维护记录检查、文档同步、泛化、多架构缓存规则
+**Summary**: AGENTS.md — add rules for access control, language requirements, commit discipline, maintenance-log checks, doc sync, generalization, and the multi-arch cache.
 
 | Commit | Description |
 |------|------|
@@ -3026,7 +3026,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T06:21:11+09:00
 
-**Summary**：docs — 每包文档添加双架构 CI 徽章，技能模板同步
+**Summary**: docs — add dual-arch CI badges to every package doc; sync the skill templates.
 
 | Commit | Description |
 |------|------|
@@ -3037,7 +3037,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T06:05:49+09:00
 
-**Summary**：CI — 添加 ARM runner 多架构构建，修复 flake.lock 并发竞争（--no-write-lock-file）
+**Summary**: CI — add ARM runners for multi-arch builds; fix the flake.lock concurrency race (--no-write-lock-file).
 
 | Commit | Description |
 |------|------|
@@ -3048,7 +3048,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:48:23+09:00
 
-**Summary**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 变化）；ruyi — overlay postPatch 回移（补丁文件依赖）
+**Summary**: mcp-searxng — update source hash + npmDepsHash (GitHub archive changed); ruyi — restore the overlay postPatch (patch file dependency).
 
 | Commit | Description |
 |------|------|
@@ -3057,7 +3057,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:39:33+09:00
 
-**Summary**：docs — 添加缓存排除警告（overlay 与模块+补丁条目），README 缓存说明压缩，flake.nix 添加 nixConfig 自动声明
+**Summary**: docs — add cache-exclusion warnings (overlay and module+patch entries), compress the README cache notes, add the nixConfig auto-declaration to flake.nix.
 
 | Commit | Description |
 |------|------|
@@ -3066,7 +3066,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:27:50+09:00
 
-**Summary**：docs — 全部 30 篇包文档添加 `## 缓存` 节，CI badge 布局改进，技能同步
+**Summary**: docs — add a `## Cache` section to all 30 package docs; improve the CI badge layout; sync the skills.
 
 | Commit | Description |
 |------|------|
@@ -3075,7 +3075,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:45+09:00
 
-**Summary**：CI/CD — 添加 GitHub Actions 构建矩阵（Cachix 推送）、二进制缓存、AGENTS.md
+**Summary**: CI/CD — add the GitHub Actions build matrix (Cachix push), the binary cache, and AGENTS.md.
 
 | Commit | Description |
 |------|------|
@@ -3083,7 +3083,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:40+09:00
 
-**Summary**：skills — translate-katalish / translate-pseudocn / write-project-docs 拆分词典与模板，SKILL.md 压缩至 60-80 行
+**Summary**: skills — translate-katalish / translate-pseudocn / write-project-docs: dictionaries and templates split into separate files, SKILL.md compressed to 60-80 lines
 
 | Commit | Description |
 |------|------|
@@ -3091,7 +3091,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:36+09:00
 
-**Summary**：docs — MAINTENANCE 时间戳精确化（29 节）、30 重复节删除（SHA 去重）、nix-kits→nixkits 全量替换（183 处）、模块文档同步
+**Summary**: docs — MAINTENANCE timestamps made precise (29 sections), 30 duplicate sections deleted (SHA dedup), nix-kits→nixkits replaced everywhere (183 places), module docs synced
 
 | Commit | Description |
 |------|------|
@@ -3099,7 +3099,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:31+09:00
 
-**Summary**：patches — ruyi-nixos-compat.patch 基于干净克隆重建（1223→426 行），清除 flake.lock 自引用 artifact
+**Summary**: patches — ruyi-nixos-compat.patch rebuilt from a clean clone (1223→426 lines), removing the self-referencing flake.lock artifact
 
 | Commit | Description |
 |------|------|
@@ -3107,7 +3107,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:26+09:00
 
-**Summary**：overlays — patches 列表 lib.unique 去重，ruyi-nixos-compat 精简，llama-cpp-rocm 添加 curried 形式注释
+**Summary**: overlays — patches list deduplicated with lib.unique, ruyi-nixos-compat simplified, a curried-form comment added to llama-cpp-rocm
 
 | Commit | Description |
 |------|------|
@@ -3115,7 +3115,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:22+09:00
 
-**Summary**：modules — 4 模块添加 enable 选项，comfyui-strix-halo 添加 assertions，命名空间统一至 nixkits.*（含向后兼容），llama-cpp-rocm hfCacheDir 动态推导
+**Summary**: modules — enable options added to 4 modules, assertions added to comfyui-strix-halo, namespace unified on nixkits.* (backward compatible), llama-cpp-rocm hfCacheDir derived dynamically
 
 | Commit | Description |
 |------|------|
@@ -3123,7 +3123,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:16+09:00
 
-**Summary**：codewhale 0.8.63 — 多架构预编译二进制（x86_64 / aarch64 / riscv64）；ruyi — overlay postPatch 合并入包；meta 字段补全
+**Summary**: codewhale 0.8.63 — prebuilt binaries for multiple architectures (x86_64 / aarch64 / riscv64); ruyi — overlay postPatch merged into the package; meta fields completed
 
 | Commit | Description |
 |------|------|
@@ -3131,7 +3131,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-22T05:13:11+09:00
 
-**Summary**：flake — 移除 mihomo-alpha 幽灵输入与 overlay（文件从未存在）
+**Summary**: flake — removed the mihomo-alpha ghost input and overlay (the file never existed)
 
 | Commit | Description |
 |------|------|
@@ -3139,7 +3139,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-21T04:32:31+09:00
 
-**Summary**：语言切换器标签规则泛化 — display_name 语义修正为语言自称、添加语言名称不本地化规则至 write-project-docs / translate-katalish / translate-pseudocn 三技能；修正 zh/katalish/pcn 全部文档切换器中残留的本地化名称
+**Summary**: Language-switcher label rule generalized — display_name redefined as the language's own name, a rule against localizing language names added to write-project-docs / translate-katalish / translate-pseudocn; leftover localized names fixed in every zh/katalish/pcn doc switcher
 
 | Commit | Description |
 |------|------|
@@ -3150,7 +3150,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-21T00:07:44+09:00
 
-**Summary**：codewhale 0.8.62 — 上游修复；mcp-searxng 1.7.1 — 上游修复
+**Summary**: codewhale 0.8.62 — upstream fixes; mcp-searxng 1.7.1 — upstream fixes
 
 | Commit | Description |
 |------|------|
@@ -3164,7 +3164,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-20T18:36:33+09:00
 
-**Summary**：技能系统重构 — translate-katakana→translate-katalish 重命名，新增 translate-pseudocn（偽中国語），write-project-docs 与 write-maintenance-log 语言扩展自动发现，文档代码五语映射表
+**Summary**: Skill system reworked — translate-katakana renamed to translate-katalish, translate-pseudocn (偽中国語) added, automatic language-extension discovery in write-project-docs and write-maintenance-log, docs-as-code five-language mapping table
 
 | Commit | Description |
 |------|------|
@@ -3180,7 +3180,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-18T09:52:34+09:00
 
-**Summary**：codewhale 0.8.61 — 上游修复；mcp-searxng 1.6.0 — 上游修复
+**Summary**: codewhale 0.8.61 — upstream fixes; mcp-searxng 1.6.0 — upstream fixes
 
 | Commit | Description |
 |------|------|
@@ -3198,7 +3198,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-18T09:03:48+09:00
 
-**Summary**：ruyi — NixOS 兼容性补丁（`patches/ruyi-nixos-compat.patch`），透明处理预编译 RISC-V 工具链的动态链接器路径、GCC 子进程 ELF interpreter 修复和 console_scripts argv0 问题
+**Summary**: ruyi — NixOS compatibility patch (`patches/ruyi-nixos-compat.patch`) that transparently handles the prebuilt RISC-V toolchain's dynamic-linker path, the GCC subprocess ELF interpreter fix, and the console_scripts argv0 problem
 
 | Commit | Description |
 |------|------|
@@ -3206,7 +3206,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T10:59:35+09:00
 
-**Summary**：ruyi — NixOS 模块（`services.ruyi`），声明式生成 `/etc/xdg/ruyi/config.toml` 与环境变量
+**Summary**: ruyi — NixOS module (`services.ruyi`) that declaratively generates `/etc/xdg/ruyi/config.toml` and environment variables
 
 | Commit | Description |
 |------|------|
@@ -3217,7 +3217,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T10:03:05+09:00
 
-**Summary**：ruyi — 新增 devShell 支持，`nix develop github:Kihara777/NixKits#ruyi` 即可进入环境
+**Summary**: ruyi — devShell support added: `nix develop github:Kihara777/NixKits#ruyi` enters the environment
 
 | Commit | Description |
 |------|------|
@@ -3225,7 +3225,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T09:48:33+09:00
 
-**Summary**：ruyi 0.51.0-alpha.20260616 — RuyiSDK 包管理器，新包（Python / Poetry 构建，ruff + mypy + 320 单元测试 + 52 集成测试全部通过）
+**Summary**: ruyi 0.51.0-alpha.20260616 — RuyiSDK package manager, new package (built with Python / Poetry; ruff + mypy + 320 unit tests + 52 integration tests all pass)
 
 | Commit | Description |
 |------|------|
@@ -3237,7 +3237,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T07:37:39+09:00
 
-**Summary**：write-maintenance-log 技能 — 从 nixkits-check-updates 剥离为独立技能，双入口设计（记入维护记录 + 更新维护记录）；flake.lock 同步 .gitignore 前置检测与三路分支逻辑
+**Summary**: write-maintenance-log skill — split out of nixkits-check-updates into a standalone skill with a dual entry point (record into and update the maintenance log); flake.lock sync gains a .gitignore pre-check and three-branch logic
 
 | Commit | Description |
 |------|------|
@@ -3256,7 +3256,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T06:48:47+09:00
 
-**Summary**：fix(mcp-searxng): 修复入口文件错误 — dist/index.js → dist/cli.js，MCP 服务器可正常启动
+**Summary**: fix(mcp-searxng): fix wrong entry file — dist/index.js → dist/cli.js, so the MCP server starts normally
 
 | Commit | Description |
 |------|------|
@@ -3264,7 +3264,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-17T06:46:13+09:00
 
-**Summary**：llama-cpp-rocm — 尝试用 builtins.fetchurl 替代 flake input 动态获取版本（已撤销，方案不可用）
+**Summary**: llama-cpp-rocm — attempted to replace the flake input with builtins.fetchurl for dynamic version lookup (reverted, the approach is unusable)
 
 | Commit | Description |
 |------|------|
@@ -3273,7 +3273,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-16T06:03:24+09:00
 
-**Summary**：mcp-searxng 文档 — CodeWhale MCP 配置指南、常见陷阱警告（env 默认为 {}）、故障排查章节
+**Summary**: mcp-searxng docs — CodeWhale MCP configuration guide, common pitfall warning (env defaults to {}), troubleshooting section
 
 | Commit | Description |
 |------|------|
@@ -3281,7 +3281,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-16T05:20:34+09:00
 
-**Summary**：nixos-modern-cli 技能 — Nix Store 路径陷阱章节（gh auth setup-git 硬编码路径失效的诊断与通用修复模式）
+**Summary**: nixos-modern-cli skill — Nix Store path trap section (diagnosis and general fix pattern for the hardcoded path of gh auth setup-git going stale)
 
 | Commit | Description |
 |------|------|
@@ -3289,7 +3289,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-16T04:56:06+09:00
 
-**Summary**：opencode-telegram 0.21.2 — 上游修复及依赖更新
+**Summary**: opencode-telegram 0.21.2 — upstream fixes and dependency updates
 
 | Commit | Description |
 |------|------|
@@ -3304,7 +3304,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-15T17:32:16+09:00
 
-**Summary**：codewhale 0.8.60 — 上游修复
+**Summary**: codewhale 0.8.60 — upstream fixes
 
 | Commit | Description |
 |------|------|
@@ -3319,7 +3319,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-14T08:11:16+09:00
 
-**Summary**：comfyui-strix-halo 文档 — 在线集成模式说明与文件结构图
+**Summary**: comfyui-strix-halo docs — online integration mode description and file structure diagram
 
 | Commit | Description |
 |------|------|
@@ -3327,7 +3327,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-14T07:56:11+09:00
 
-**Summary**：codewhale 0.8.59 — 修复若干 TUI 渲染问题；mcp-searxng 1.4.0 — 新增 HTTP 传输模式
+**Summary**: codewhale 0.8.59 — fixes several TUI rendering issues; mcp-searxng 1.4.0 — adds HTTP transport mode
 
 | Commit | Description |
 |------|------|
@@ -3346,7 +3346,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-12T18:17:52+09:00
 
-**Summary**：llama-cpp-rocm 模块 — 恢复 modelsPreset 支持（nixpkgs 已移除）、命名空间迁移至 nixkits、三语迁移指南
+**Summary**: llama-cpp-rocm module — restores modelsPreset support (removed from nixpkgs), migrates the namespace to nixkits, trilingual migration guide
 
 | Commit | Description |
 |------|------|
@@ -3355,11 +3355,11 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-12T17:29:59+09:00
 
-**Summary**：feat(llama-cpp-rocm): 恢复 modelsPreset 支持（nixpkgs 已移除），命名空间迁移至 nixkits
+**Summary**: feat(llama-cpp-rocm): restore modelsPreset support (removed in nixpkgs), migrate the namespace to nixkits
 
 ## 2026-06-12T10:51:31+09:00
 
-**Summary**：codewhale 0.8.58 — 上游修复；mcp-searxng 1.3.4 — 上游修复
+**Summary**: codewhale 0.8.58 — upstream fixes; mcp-searxng 1.3.4 — upstream fixes
 
 | Commit | Description |
 |------|------|
@@ -3378,7 +3378,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-11T05:28:59+09:00
 
-**Summary**：技能文档 — 维护日志格式规则系列（自动发现泛化、描述性标题、精确 git commit 时间戳、禁止 T00:00:00 占位符）
+**Summary**: skill docs — a series of maintenance-log format rules (auto-discovery generalization, descriptive titles, exact git commit timestamps, no T00:00:00 placeholder)
 
 | Commit | Description |
 |------|------|
@@ -3389,7 +3389,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-11T05:13:39+09:00
 
-**Summary**：other — 2 项更新
+**Summary**: other — 2 updates
 
 | Commit | Description |
 |------|------|
@@ -3398,7 +3398,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-11T04:52:16+09:00
 
-**Summary**：codewhale 0.8.57 — TUI 新增；mcp-searxng 1.3.2 — 上游修复
+**Summary**: codewhale 0.8.57 — TUI added; mcp-searxng 1.3.2 — upstream fix
 
 | Commit | Description |
 |------|------|
@@ -3416,7 +3416,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-10T04:31:20+09:00
 
-**Summary**：opencode-telegram — KillMode 改为 process、添加 TimeoutStopSec 防止关机挂起
+**Summary**: opencode-telegram — KillMode changed to process, TimeoutStopSec added to prevent shutdown hang
 
 | Commit | Description |
 |------|------|
@@ -3425,7 +3425,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-10T02:28:10+09:00
 
-**Summary**：codewhale 0.8.55 — 上游修复；mcp-searxng 1.3.1 — 上游修复
+**Summary**: codewhale 0.8.55 — upstream fix; mcp-searxng 1.3.1 — upstream fix
 
 | Commit | Description |
 |------|------|
@@ -3440,7 +3440,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-08T15:12:39+09:00
 
-**Summary**：文档重构 — 本地化文件移入 docs/ 目录；MAINTENANCE.md 首次添加合列规则、纯表格格式、回填完整提交历史
+**Summary**: Docs restructure — localized files moved into docs/; MAINTENANCE.md gains merged-column rule, table-only format and full backfilled commit history
 
 | Commit | Description |
 |------|------|
@@ -3455,7 +3455,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-08T14:25:02+09:00
 
-**Summary**：mcp-searxng 1.2.1 — 上游修复
+**Summary**: mcp-searxng 1.2.1 — upstream fix
 
 | Commit | Description |
 |------|------|
@@ -3474,7 +3474,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-08T14:22:25+09:00
 
-**Summary**：rcc-fix — NixOS 模块（systemd 死锁修复）
+**Summary**: rcc-fix — NixOS module (systemd deadlock fix)
 
 | Commit | Description |
 |------|------|
@@ -3482,7 +3482,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-06T15:17:11+09:00
 
-**Summary**：技能文档 — 源变更后文档同步规范；comfyui-strix-halo C 工具链说明；hash 计算注意事项泛化；基本情報规则多语言统一
+**Summary**: Skill docs — doc-sync rule after source changes; comfyui-strix-halo C toolchain note; generalized hash-computation gotchas; 基本情報 rule unified across languages
 
 | Commit | Description |
 |------|------|
@@ -3499,7 +3499,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-06T13:58:47+09:00
 
-**Summary**：codewhale 0.8.53 — 上游修复；mcp-searxng 1.1.0 — 上游修复；opencode-telegram 0.21.1 — 上游修复
+**Summary**: codewhale 0.8.53 — upstream fix; mcp-searxng 1.1.0 — upstream fix; opencode-telegram 0.21.1 — upstream fix
 
 | Commit | Description |
 |------|------|
@@ -3519,7 +3519,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-06T12:51:46+09:00
 
-**Summary**：comfyui-strix-halo 补丁 — ROCm 7.2 wheels 内嵌支持
+**Summary**: comfyui-strix-halo patch — ROCm 7.2 wheels embedded support
 
 | Commit | Description |
 |------|------|
@@ -3535,7 +3535,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-04T13:07:30+09:00
 
-**Summary**：技能系统 — SKILL.md 全面中文化；三语对称性检查规则
+**Summary**: Skill system — SKILL.md fully localized to Chinese; trilingual symmetry check rule
 
 | Commit | Description |
 |------|------|
@@ -3544,7 +3544,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-02T10:15:53+09:00
 
-**Summary**：other — 7 项更新
+**Summary**: other — 7 updates
 
 | Commit | Description |
 |------|------|
@@ -3558,7 +3558,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-02T08:49:47+09:00
 
-**Summary**：opencode-telegram — 8 项更新
+**Summary**: opencode-telegram — 8 updates
 
 | Commit | Description |
 |------|------|
@@ -3573,7 +3573,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-02T05:57:11+09:00
 
-**Summary**：codewhale 0.8.49 — 上游修复；mcp-searxng 1.0.4 — 上游修复；obs-bilibili-stream 2.1.0 — 上游修复；opencode-telegram 0.21.0 — 上游修复
+**Summary**: codewhale 0.8.49 — upstream fix; mcp-searxng 1.0.4 — upstream fix; obs-bilibili-stream 2.1.0 — upstream fix; opencode-telegram 0.21.0 — upstream fix
 
 | Package | Old | New |
 |--------|--------|--------|
@@ -3591,7 +3591,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-06-02T03:42:25+09:00
 
-**Summary**：nixos-modern-cli 技能 — POSIX 工具指南与 nix 二进制路径提示
+**Summary**: nixos-modern-cli skill — POSIX tool guide and nix binary path hint
 
 | Commit | Description |
 |------|------|
@@ -3599,7 +3599,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-31T03:42:18+09:00
 
-**Summary**：write-project-docs — 新技能（按 NixKits 风格为任意项目编写多语言文档系统）
+**Summary**: write-project-docs — new skill (multi-language documentation system for any project, NixKits style)
 
 | Commit | Description |
 |------|------|
@@ -3607,7 +3607,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-30T03:42:14+09:00
 
-**Summary**：codewhale — stdenv 拼写修复；llama-cpp-rocm 文档修正（移除内联链接、使用 system.nix 完整预设）；opencode-telegram 首次设置流程
+**Summary**: codewhale — stdenv typo fix; llama-cpp-rocm doc fixes (remove inline links, use the complete preset from system.nix); opencode-telegram first-time setup flow
 
 | Commit | Description |
 |------|------|
@@ -3619,7 +3619,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-30T03:19:48+09:00
 
-**Summary**：other — 2 项更新
+**Summary**: other — 2 updates
 
 | Commit | Description |
 |------|------|
@@ -3628,7 +3628,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-29T15:25:12+09:00
 
-**Summary**：kitsfmt — 多项修复（vendor 目录恢复、幂等性、原地安全性、with→builtins.attrValues 转换、--stdin 标志）；rcc-fix — 重写为 D-Bus 热插拔检测；build — .vscode gitignore 范围修正
+**Summary**: kitsfmt — multiple fixes (restore vendor dir, idempotency, in-place safety, with→builtins.attrValues conversion, --stdin flag); rcc-fix — rewrite as D-Bus hot-plug detection; build — .vscode gitignore scope fix
 
 | Commit | Description |
 |------|------|
@@ -3644,7 +3644,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-29T13:16:30+09:00
 
-**Summary**：docs: fix codewhale type description (pre-built, not source-built)
+**Summary**: docs: fix codewhale type description (pre-built, not source-built)
 
 | Commit | Description |
 |------|------|
@@ -3652,7 +3652,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-29T10:18:46+09:00
 
-**Summary**：codewhale v0.8.47 — 新包
+**Summary**: codewhale v0.8.47 — new package
 
 | Commit | Description |
 |------|------|
@@ -3665,7 +3665,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-29T06:28:50+09:00
 
-**Summary**：fix(kitsfmt): 修复 inherit 逗号、缩进字符串损坏、lambda 空格等多个格式化问题；修复幂等性
+**Summary**: fix(kitsfmt): fix inherit comma, indented string corruption, lambda spacing and other formatting bugs; fix idempotency
 
 | Commit | Description |
 |------|------|
@@ -3676,11 +3676,11 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-29T05:57:55+09:00
 
-**Summary**：fix(build): 修复 .vscode gitignore 范围过宽导致 vendored crate 文件被排除
+**Summary**: fix(build): fix overly broad .vscode gitignore scope that excluded vendored crate files
 
 ## 2026-05-28T08:29:27+09:00
 
-**Summary**：llama-cpp-rocm — NixOS 模块（systemd 沙箱覆盖）；opencode-telegram — NixOS 模块（声明式配置、自动安装）；rcc-fix — visible 属性修复；技能文档 — 动态发现措辞
+**Summary**: llama-cpp-rocm — NixOS module (systemd sandbox overrides); opencode-telegram — NixOS module (declarative config, auto install); rcc-fix — visible property fix; skill docs — dynamic discovery wording
 
 | Commit | Description |
 |------|------|
@@ -3694,7 +3694,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-27T06:08:13+09:00
 
-**Summary**：技能系统 — nixkits-check-updates、nixkits-skills、nixos-modern-cli 三大技能同步上线；llama-cpp-rocm 动态追踪说明
+**Summary**: Skill system — nixkits-check-updates, nixkits-skills and nixos-modern-cli all added together; llama-cpp-rocm dynamic tracking note
 
 | Commit | Description |
 |------|------|
@@ -3705,7 +3705,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-26T05:30:58+09:00
 
-**Summary**：文档 — README 节名重命名（快速开始→添加、包→软件、License→许可）
+**Summary**: docs — rename README sections (快速开始→添加, 包→软件, License→许可)
 
 | Commit | Description |
 |------|------|
@@ -3713,7 +3713,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-24T03:01:02+09:00
 
-**Summary**：mcp-searxng 文档 — SearXNG + lighttpd 反向代理完整 NixOS 配置
+**Summary**: mcp-searxng docs — complete NixOS config for SearXNG + lighttpd reverse proxy
 
 | Commit | Description |
 |------|------|
@@ -3721,7 +3721,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-22T06:45:11+09:00
 
-**Summary**：llama-cpp-rocm — 移除 llama-cpp-ver flake 输入，使用 nixpkgs 默认版本
+**Summary**: llama-cpp-rocm — drop llama-cpp-ver flake input, use nixpkgs default version
 
 | Commit | Description |
 |------|------|
@@ -3729,7 +3729,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-21T16:35:02+09:00
 
-**Summary**：mcp-searxng v1.0.3 — 新包；opencode-telegram v0.20.5 — 新包
+**Summary**: mcp-searxng v1.0.3 — new package; opencode-telegram v0.20.5 — new package
 
 | Package | Old | New |
 |--------|--------|--------|
@@ -3738,7 +3738,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-16T19:07:54+09:00
 
-**Summary**：kitsfmt — 修复 match_ast! 宏语法错误、简化 comments_before 函数、修正 src 路径
+**Summary**: kitsfmt — fixed the `match_ast!` macro syntax error, simplified the `comments_before` function, corrected the src path
 
 | Commit | Description |
 |------|------|
@@ -3748,7 +3748,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-15T16:59:28+09:00
 
-**Summary**：kitsfmt — 基于 rnix AST 重写格式化引擎 v0.3.0；生成 Cargo.lock
+**Summary**: kitsfmt — formatting engine rewritten on the rnix AST as v0.3.0; Cargo.lock generated
 
 | Commit | Description |
 |------|------|
@@ -3758,7 +3758,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-14T17:10:06+09:00
 
-**Summary**：llama-cpp-rocm — 新包（动态追踪上游最新 Release）
+**Summary**: llama-cpp-rocm — new package (dynamically tracks the upstream latest Release)
 
 | Commit | Description |
 |------|------|
@@ -3770,7 +3770,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-14T07:38:08+09:00
 
-**Summary**：kitsfmt — 新包（自建 Nix 格式化器）；obs-bilibili-stream v1.0.0 — 新包
+**Summary**: kitsfmt — new package (in-house Nix formatter); obs-bilibili-stream v1.0.0 — new package
 
 | Commit | Description |
 |------|------|
@@ -3783,7 +3783,7 @@ Verified: 13-case functional suite passes; system prebuild passes.
 
 ## 2026-05-01T01:08:15+09:00
 
-**Summary**：rcc-fix — 新包（asusctl 补丁）
+**Summary**: rcc-fix — new package (asusctl patch)
 
 | Commit | Description |
 |------|------|

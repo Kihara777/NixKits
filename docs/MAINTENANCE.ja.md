@@ -2550,7 +2550,7 @@
 
 ## 2026-07-16T06:08:43+09:00
 
-**概要**: fix(ci) — ci-summary workflow が `gh run list` をワークフロー毎に呼び出し HTTP 403 rate limit で失敗していた問題を修正。2 回の一括 `gh api` 呼出に変更し並行制御を追加。
+**概要**：fix(ci) — ci-summary workflow が `gh run list` をワークフロー毎に呼び出し HTTP 403 rate limit で失敗していた問題を修正。2 回の一括 `gh api` 呼出に変更し並行制御を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2558,7 +2558,7 @@
 
 ## 2026-07-16T05:57:35+09:00
 
-**概要**: revert(skill) — katalish（半角カタカナ機械翻訳）の全コンテンツを削除：19 文書、スキル（SKILL.md + 102 項目辞書）、全言語切替リンク。翻訳の不安定さ（英文残留や文書構造破壊）により本番環境不適と判断。
+**概要**：revert(skill) — katalish（半角カタカナ機械翻訳）の全コンテンツを削除：19 文書、スキル（SKILL.md + 102 項目辞書）、全言語切替リンク。翻訳の不安定さ（英文残留や文書構造破壊）により本番環境不適と判断。
 
 | コミット | 説明 |
 |------|------|
@@ -2566,7 +2566,7 @@
 
 ## 2026-07-16T04:54:55+09:00
 
-**概要**: docs(nixkits-skills) —「既知の削除」を「リスク警告」に改名、5 言語スキル文書同期。
+**概要**：docs(nixkits-skills) —「既知の削除」を「リスク警告」に改名、5 言語スキル文書同期。
 
 | コミット | 説明 |
 |------|------|
@@ -2574,7 +2574,7 @@
 
 ## 2026-07-16T04:46:54+09:00
 
-**概要**: skill(nixkits-skills) — Claude Code インストール対象を削除（ユーザーデータに基づく国籍推論がセキュリティ境界を越える）、Codex サポートを追加。SKILL.md に「リスク警告」節と原文声明を追加。
+**概要**：skill(nixkits-skills) — Claude Code インストール対象を削除（ユーザーデータに基づく国籍推論がセキュリティ境界を越える）、Codex サポートを追加。SKILL.md に「リスク警告」節と原文声明を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2583,7 +2583,7 @@
 
 ## 2026-07-16T04:35:20+09:00
 
-**概要**: skill(write-maintenance-log) — タイムスタンプ規則強化：`git log` によるコミット時刻の強制取得、`T00:00:00` プレースホルダ禁止、生成後検証ステップ追加。MAINTENANCE プレースホルダタイムスタンプ修正（`968df0e`）から汎化。
+**概要**：skill(write-maintenance-log) — タイムスタンプ規則強化：`git log` によるコミット時刻の強制取得、`T00:00:00` プレースホルダ禁止、生成後検証ステップ追加。MAINTENANCE プレースホルダタイムスタンプ修正（`968df0e`）から汎化。
 
 | コミット | 説明 |
 |------|------|
@@ -2592,7 +2592,7 @@
 
 ## 2026-07-16T04:30:55+09:00
 
-**概要**: feat(ci) — CI サマリーエンドポイントバッジを追加。メイン README CI バッジを shields.io endpoint 経由で `gh-pages/ci-status.json` を読み取る方式に変更、失敗時に失敗パッケージ名を表示。
+**概要**：feat(ci) — CI サマリーエンドポイントバッジを追加。メイン README CI バッジを shields.io endpoint 経由で `gh-pages/ci-status.json` を読み取る方式に変更、失敗時に失敗パッケージ名を表示。
 
 | コミット | 説明 |
 |------|------|
@@ -2601,7 +2601,7 @@
 
 ## 2026-07-16T04:09:46+09:00
 
-**概要**: refactor(ci) — CI を単一 check.yml から 25 の独立 workflow ファイルに分割（パッケージ×アーキテクチャ毎）、バッジの相互影響を完全に解消。再利用可能な `build-package.yml` を追加。
+**概要**：refactor(ci) — CI を単一 check.yml から 25 の独立 workflow ファイルに分割（パッケージ×アーキテクチャ毎）、バッジの相互影響を完全に解消。再利用可能な `build-package.yml` を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2611,7 +2611,7 @@
 
 ## 2026-07-16T04:00:46+09:00
 
-**概要**: fix(codewhale) — ソースビルド riscv64 クロスコンパイル修正：ring crate の `-m64` エラーが cc crate の host CFLAGS 継承に起因、per-target CFLAGS をクリアして修正。
+**概要**：fix(codewhale) — ソースビルド riscv64 クロスコンパイル修正：ring crate の `-m64` エラーが cc crate の host CFLAGS 継承に起因、per-target CFLAGS をクリアして修正。
 
 | コミット | 説明 |
 |------|------|
@@ -2620,7 +2620,7 @@
 
 ## 2026-07-16T01:18:16+09:00
 
-**概要**: codewhale 0.8.67 — デュアルパスビルド（プリビルド x86_64/aarch64 + ソースビルド riscv64）。上流が v0.8.67 から riscv64 バイナリを削除したため、riscv64 は rustPlatform.buildRustPackage で Cargo.lock からビルド。
+**概要**：codewhale 0.8.67 — デュアルパスビルド（プリビルド x86_64/aarch64 + ソースビルド riscv64）。上流が v0.8.67 から riscv64 バイナリを削除したため、riscv64 は rustPlatform.buildRustPackage で Cargo.lock からビルド。
 
 | コミット | 説明 |
 |------|------|
@@ -2632,7 +2632,7 @@
 
 ## 2026-07-15T08:32:13+09:00
 
-**概要**: mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — アップストリーム更新（codewhale スキップ：v0.8.67 依然 riscv64 バイナリなし）
+**概要**：mcp-searxng 1.11.1 + opencode-telegram 0.22.2 + obs-bilibili-stream 2.1.2 — アップストリーム更新（codewhale スキップ：v0.8.67 依然 riscv64 バイナリなし）
 
 | コミット | 説明 |
 |------|------|
@@ -2647,7 +2647,7 @@
 
 ## 2026-07-09T01:22:00+09:00
 
-**概要**: revert(ci) — `ci/` ディレクトリを削除、`llama-cpp-ver` input を上流 API（`ggml-org/llama.cpp` releases/latest）に復元。overlay に `tryEval` + `prev.llama-cpp.version` フォールバックが既に存在し、ローカルキャッシュ不要。
+**概要**：revert(ci) — `ci/` ディレクトリを削除、`llama-cpp-ver` input を上流 API（`ggml-org/llama.cpp` releases/latest）に復元。overlay に `tryEval` + `prev.llama-cpp.version` フォールバックが既に存在し、ローカルキャッシュ不要。
 
 | コミット | 説明 |
 |------|------|
@@ -2655,7 +2655,7 @@
 
 ## 2026-07-09T01:14:34+09:00
 
-**概要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — アップストリーム更新（codewhale スキップ：v0.8.67 に riscv64 バイナリなし）
+**概要**：obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — アップストリーム更新（codewhale スキップ：v0.8.67 に riscv64 バイナリなし）
 
 | コミット | 説明 |
 |------|------|
@@ -2670,7 +2670,7 @@
 
 ## 2026-07-07T12:01:12+09:00
 
-**概要**: fix(docs) — katalish/pcn ローカライズ修正：katalish/ruyi.md と pcn/ruyi.md の言語切替破損（リンク欠落や重複言語名）を修正、pcn/ruyi.md を日本語から偽中国語に全文書換。
+**概要**：fix(docs): katalish/pcn ローカライズ修正 — katalish/ruyi.md と pcn/ruyi.md の言語切替を修正（リンク欠落・言語名重複）、pcn/ruyi.md は日本語から偽中国語へ全文書換。
 
 | コミット | 説明 |
 |------|------|
@@ -2679,7 +2679,7 @@
 
 ## 2026-07-05T04:41:23+09:00
 
-**概要**: fix(ci) — blender-mcp riscv64-cross 修正経緯（4 コミット）。`callPackage` が非互換 `blender` を自動解決したことによる初回失敗、Nix/Bash エスケープ問題、最終的に上流 nixpkgs の `sse-starlette` クロスコンパイル欠陥により blender-mcp を riscv64-cross から除外。x86_64 / aarch64 は影響なし。
+**概要**：fix(ci): blender-mcp を riscv64-cross から除外 — 上流 nixpkgs の `sse-starlette` クロスコンパイル欠陥によりビルド失敗（`blender` も riscv64 非対応）；x86_64 / aarch64 は影響なし。
 
 | コミット | 説明 |
 |------|------|
@@ -2690,7 +2690,7 @@
 
 ## 2026-07-04T07:33:07+09:00
 
-**概要**: docs(MAINTENANCE) — 全 6 MAINTENANCE ファイル（zh/en/ja/katalish/pcn）に言語切替を追加
+**概要**：docs(MAINTENANCE) — 全 6 MAINTENANCE ファイル（zh/en/ja/katalish/pcn）に言語切替を追加
 
 | コミット | 説明 |
 |------|------|
@@ -2698,7 +2698,7 @@
 
 ## 2026-07-04T06:41:28+09:00
 
-**概要**: blender-mcp 1.0.0 — 新規 Blender MCP Server パッケージ（Python ビルド、22 MCP ツール、Blender add-on 付属）
+**概要**：blender-mcp 1.0.0 — 新規 Blender MCP Server パッケージ（Python ビルド、22 MCP ツール、Blender add-on 付属）
 
 | コミット | 説明 |
 |------|------|
@@ -2711,7 +2711,7 @@
 
 ## 2026-07-02T04:00:00+09:00
 
-**概要**: codewhale 0.8.66 — アップストリーム更新（TUIレイアウト修正、承認ラベル改善、パフォーマンス修正）
+**概要**：codewhale 0.8.66 — アップストリーム更新（TUIレイアウト修正、承認ラベル改善、パフォーマンス修正）
 
 | コミット | 説明 |
 |------|------|
@@ -2726,7 +2726,7 @@
 
 ## 2026-06-28T06:30:00+09:00
 
-**概要**: opencode-telegram 0.22.0 — アップストリーム更新（3モードTTS + thinking表示 + コンパクト出力 + /settingsコマンド + セッション起動修正）
+**概要**：opencode-telegram 0.22.0 — アップストリーム更新（3モードTTS + thinking表示 + コンパクト出力 + /settingsコマンド + セッション起動修正）
 
 | コミット | 説明 |
 |------|------|
@@ -2741,7 +2741,7 @@
 
 ## 2026-06-26T13:00:00+09:00
 
-**概要**: CI — llama-cpp-ver をローカルファイル（ci/llama-cpp-ver.json）に変更、全CIジョブからGitHub API呼出を排除しrate limitによる全ビルド失敗を恒久修正；docs — riscv64バッジをパッケージ別に精密化（codewhale/kitsfmt/mcp-searxng/opencode-telegram）
+**概要**：CI — llama-cpp-ver をローカルファイル（ci/llama-cpp-ver.json）に変更、全CIジョブからGitHub API呼出を排除しrate limitによる全ビルド失敗を恒久修正；docs — riscv64バッジをパッケージ別に精密化（codewhale/kitsfmt/mcp-searxng/opencode-telegram）
 
 | コミット | 説明 |
 |------|------|
@@ -2750,7 +2750,7 @@
 
 ## 2026-06-26T12:30:00+09:00
 
-**概要**: feat(opencode-telegram): サービスPATHにシステムパッケージを注入するextraPackagesオプションとhome-managerパスを注入するextraBinPathsオプションを追加、opencodeがサービスPATHで見つからない問題を修正；5言語ドキュメント更新
+**概要**：feat(opencode-telegram): サービスPATHにシステムパッケージを注入するextraPackagesオプションとhome-managerパスを注入するextraBinPathsオプションを追加、opencodeがサービスPATHで見つからない問題を修正；5言語ドキュメント更新
 
 | コミット | 説明 |
 |------|------|
@@ -2759,7 +2759,7 @@
 
 ## 2026-06-26T10:55:41+09:00
 
-**概要**: codewhale 0.8.65 — アップストリーム更新（cliバイナリ名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — アップストリーム更新（マルチインスタンスフェイルオーバー/並列ファンアウト、能力発見集約、safesearch修正）
+**概要**：codewhale 0.8.65 — アップストリーム更新（cliバイナリ名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — アップストリーム更新（マルチインスタンスフェイルオーバー/並列ファンアウト、能力発見集約、safesearch修正）
 
 | コミット | 説明 |
 |------|------|
@@ -2777,7 +2777,7 @@
 
 ## 2026-06-26T08:00:00+09:00
 
-**概要**: docs(MAINTENANCE): pcn 欠落していた28件の履歴エントリを補完、zh基準全93エントリを網羅
+**概要**：docs(MAINTENANCE): pcn 欠落していた28件の履歴エントリを補完、zh基準全93エントリを網羅
 
 | コミット | 説明 |
 |------|------|
@@ -2785,7 +2785,7 @@
 
 ## 2026-06-26T07:35:00+09:00
 
-**概要**: docs(MAINTENANCE): en/ja/katalish 欠落していた10件の履歴エントリを補完、3言語すべてzh基準（92/92）に一致；pcn 一部補完（66/92）
+**概要**：docs(MAINTENANCE): en/ja/katalish 欠落していた10件の履歴エントリを補完、3言語すべてzh基準（92/92）に一致；pcn 一部補完（66/92）
 
 | コミット | 説明 |
 |------|------|
@@ -2793,7 +2793,7 @@
 
 ## 2026-06-26T07:18:56+09:00
 
-**概要**: fix(skill): write-maintenance-log 第4ステップ「多言語同期」を5行のスタブから実行可能なフローに書き直し（4a 言語発見 → 4b 言語別翻訳書込 → 4c エントリ数一致検証）；AGENTS.md 第4ステップに検証チェックを強化
+**概要**：fix(skill): write-maintenance-log 第4ステップ「多言語同期」を5行のスタブから実行可能なフローに書き直し（4a 言語発見 → 4b 言語別翻訳書込 → 4c エントリ数一致検証）；AGENTS.md 第4ステップに検証チェックを強化
 
 | コミット | 説明 |
 |------|------|
@@ -2801,7 +2801,7 @@
 
 ## 2026-06-26T06:19:21+09:00
 
-**概要**: 監査修正 — 空の scripts/ ディレクトリと .gitignore の死んだルール（translate_pcn.py）を削除；AGENTS.md の SKILL.md 行数制約をハードリミットから定性的ガイダンスに緩和
+**概要**：監査修正 — 空の scripts/ ディレクトリと .gitignore の死んだルール（translate_pcn.py）を削除；AGENTS.md の SKILL.md 行数制約をハードリミットから定性的ガイダンスに緩和
 
 | コミット | 説明 |
 |------|------|
@@ -2810,7 +2810,7 @@
 
 ## 2026-06-25T11:02:38+09:00
 
-**概要**: ruyi — クロスコンパイル修正（postPatch に python.pythonOnBuildForHost 使用）；CI — ruyi* を riscv64-cross に復帰；docs — riscv64 バッジの正確な job filter を復元
+**概要**：ruyi — クロスコンパイル修正（postPatch に python.pythonOnBuildForHost 使用）；CI — ruyi* を riscv64-cross に復帰；docs — riscv64 バッジの正確な job filter を復元
 
 | コミット | 説明 |
 |------|------|
@@ -2820,7 +2820,7 @@
 
 ## 2026-06-25T10:12:02+09:00
 
-**概要**: CI — riscv64-cross から ruyi* を恒久的に除去（Python postPatch のクロスコンパイル不可）；docs — riscv64 バッジを * マーク付きフォールバックに戻し + 注記
+**概要**：CI — riscv64-cross から ruyi* を恒久的に除去（Python postPatch のクロスコンパイル不可）；docs — riscv64 バッジを * マーク付きフォールバックに戻し + 注記
 
 | コミット | 説明 |
 |------|------|
@@ -2829,7 +2829,7 @@
 
 ## 2026-06-25T10:04:30+09:00
 
-**概要**: CI — access-tokens の上書きによる GitHub API レート制限超過を修正（1行に統合）；riscv64-cross の並列上限を 4 に設定
+**概要**：CI — access-tokens の上書きによる GitHub API レート制限超過を修正（1行に統合）；riscv64-cross の並列上限を 4 に設定
 
 | コミット | 説明 |
 |------|------|
@@ -2837,7 +2837,7 @@
 
 ## 2026-06-25T09:44:44+09:00
 
-**概要**: CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha を復帰（パスマッピング）；docs — バッジラベル簡略化 + riscv64 job 精密フィルター
+**概要**：CI — riscv64-cross に ruyi/ruyi-beta/ruyi-alpha を復帰（パスマッピング）；docs — バッジラベル簡略化 + riscv64 job 精密フィルター
 
 | コミット | 説明 |
 |------|------|
@@ -2846,7 +2846,7 @@
 
 ## 2026-06-25T09:29:43+09:00
 
-**概要**: CI — build / riscv64-cross をパッケージ単位の matrix に分割、独立バッジ対応；docs — ruyi バッジを 9 枚（3バージョン×3アーキテクチャ）に拡張
+**概要**：CI — build / riscv64-cross をパッケージ単位の matrix に分割、独立バッジ対応；docs — ruyi バッジを 9 枚（3バージョン×3アーキテクチャ）に拡張
 
 | コミット | 説明 |
 |------|------|
@@ -2855,7 +2855,7 @@
 
 ## 2026-06-25T09:24:43+09:00
 
-**概要**: CI — build job に ruyi-beta / ruyi-alpha のビルドステップを追加；docs — ruyi 基本情報テーブルのチャンネル行に beta/alpha バージョン番号を追加
+**概要**：CI — build job に ruyi-beta / ruyi-alpha のビルドステップを追加；docs — ruyi 基本情報テーブルのチャンネル行に beta/alpha バージョン番号を追加
 
 | コミット | 説明 |
 |------|------|
@@ -2864,7 +2864,7 @@
 
 ## 2026-06-25T09:09:26+09:00
 
-**概要**: CI — ruyi を riscv64-cross から除外；overlays — default overlay に ruyi-beta/ruyi-alpha を追加＋nixConfig を flake トップレベルに移行；docs — README テーブルに ruyi 3チャンネルバージョンを表示
+**概要**：CI — ruyi を riscv64-cross から除外；overlays — default overlay に ruyi-beta/ruyi-alpha を追加＋nixConfig を flake トップレベルに移行；docs — README テーブルに ruyi 3チャンネルバージョンを表示
 
 | コミット | 説明 |
 |------|------|
@@ -2874,7 +2874,7 @@
 
 ## 2026-06-25T05:35:00+09:00
 
-**概要**: docs — 全5言語のREADMEにruyi-beta / ruyi-alpha devShellエントリを追加
+**概要**：docs — 全5言語のREADMEにruyi-beta / ruyi-alpha devShellエントリを追加
 
 | コミット | 説明 |
 |------|------|
@@ -2882,7 +2882,7 @@
 
 ## 2026-06-25T05:28:12+09:00
 
-**概要**: ruyi — パッケージディレクトリ構造を再編（packages/ruyi/）、beta/alphaをthin wrapperに；devShellsを追加
+**概要**：ruyi — パッケージディレクトリ構造を再編（packages/ruyi/）、beta/alphaをthin wrapperに；devShellsを追加
 
 | コミット | 説明 |
 |------|------|
@@ -2891,7 +2891,7 @@
 
 ## 2026-06-25T05:13:34+09:00
 
-**概要**: ruyi — バージョンチャンネルを独立パッケージ化（ruyi / ruyi-beta / ruyi-alpha）、独立overlayを削除
+**概要**：ruyi — バージョンチャンネルを独立パッケージ化（ruyi / ruyi-beta / ruyi-alpha）、独立overlayを削除
 
 | コミット | 説明 |
 |------|------|
@@ -2899,7 +2899,7 @@
 
 ## 2026-06-25T04:58:36+09:00
 
-**概要**: ruyi — 3チャンネルバージョン体系（stable/beta/alpha）、ベースパッケージを0.50.0安定版に切替、beta/alphaはoverlayで上書き
+**概要**：ruyi — 3チャンネルバージョン体系（stable/beta/alpha）、ベースパッケージを0.50.0安定版に切替、beta/alphaはoverlayで上書き
 
 | コミット | 説明 |
 |------|------|
@@ -2913,7 +2913,7 @@
 
 ## 2026-06-24T03:19:30+09:00
 
-**概要**: workflow — メンテナンスログ更新ルールを必須化（AGENTS.md + write-maintenance-logスキル）
+**概要**：workflow — メンテナンスログ更新ルールを必須化（AGENTS.md + write-maintenance-logスキル）
 
 | コミット | 説明 |
 |------|------|
@@ -2921,7 +2921,7 @@
 
 ## 2026-06-24T03:15:37+09:00
 
-**概要**: docs — 古い手動riscv64ビルド手順を削除、CIが3アーキテクチャをカバー済み
+**概要**：docs — 古い手動riscv64ビルド手順を削除、CIが3アーキテクチャをカバー済み
 
 | コミット | 説明 |
 |------|------|
@@ -2929,7 +2929,7 @@
 
 ## 2026-06-24T03:06:20+09:00
 
-**概要**: codewhale 0.8.64 — アップストリーム更新
+**概要**：codewhale 0.8.64 — アップストリーム更新
 
 | コミット | 説明 |
 |------|------|
@@ -2947,7 +2947,7 @@
 
 ## 2026-06-24T02:30:21+09:00
 
-**概要**: CI — riscv64クロスコンパイルパイプライン追加、3アーキテクチャCI全量カバー（x86_64 / aarch64 / riscv64）；パッケージ毎にriscv64バッジ追加
+**概要**：CI — riscv64クロスコンパイルパイプライン追加、3アーキテクチャCI全量カバー（x86_64 / aarch64 / riscv64）；パッケージ毎にriscv64バッジ追加。
 
 | コミット | 説明 |
 |------|------|
@@ -2958,7 +2958,7 @@
 
 ## 2026-06-23T05:20:00+09:00
 
-**概要**: translate-pseudocn — Webリサーチに基づき辞書を拡充（7→46エントリ）、SVO語順に変更、全pcnドキュメントを再生成
+**概要**：translate-pseudocn — Webリサーチに基づき辞書を拡充（7→46エントリ）、SVO語順に変更、全pcnドキュメントを再生成。
 
 | コミット | 説明 |
 |------|------|
@@ -2967,7 +2967,7 @@
 
 ## 2026-06-23T04:19:16+09:00
 
-**概要**: translate-pseudocnスキル再構築 — 疑似中国語を「日本語から仮名を剥がした視覚結果」と再定義、中国語への変換を廃止。日本語漢字をそのまま保持（簡体字化しない）、SOV語順を維持、辞書を40→7エントリに縮小（カタカナ→日本語漢字のみ）。全22件のpcnドキュメントを再生成
+**概要**：translate-pseudocnスキル再構築 — 疑似中国語を「日本語から仮名を剥がした視覚結果」と再定義、中国語への変換を廃止。日本語漢字をそのまま保持（簡体字化しない）、SOV語順を維持、辞書を40→7エントリに縮小（カタカナ→日本語漢字のみ）。全22件のpcnドキュメントを再生成。
 
 | コミット | 説明 |
 |------|------|
@@ -2975,7 +2975,7 @@
 
 ## 2026-06-23T04:04:32+09:00
 
-**概要**：AGENTS.md — ハードコードの除去、冗長な監査メモの削除、キャッシュ節をエージェント操作ガイドへ書き直し、ユーザー側の記述を削除、言語体系を自動検出へ変更
+**概要**：AGENTS.md — ハードコードの除去、冗長な監査メモの削除、キャッシュ節をエージェント操作ガイドへ書き直し、ユーザー側の記述を削除、言語体系を自動検出へ変更。
 
 | コミット | 説明 |
 |------|------|
@@ -2985,7 +2985,7 @@
 
 ## 2026-06-22T23:49:00+09:00
 
-**概要**：mcp-searxng 1.7.2 — 上流の修正
+**概要**：mcp-searxng 1.7.2 — 上流の修正。
 
 | コミット | 説明 |
 |------|------|
@@ -2998,7 +2998,7 @@
 
 ## 2026-06-22T23:22:00+09:00
 
-**概要**：AGENTS.md — 初回起動監査規則を新規追加、アクセス制御を冒頭へ移動
+**概要**：AGENTS.md — 初回起動監査規則を新規追加、アクセス制御を冒頭へ移動。
 
 | コミット | 説明 |
 |------|------|
@@ -3007,7 +3007,7 @@
 
 ## 2026-06-22T07:20:50+09:00
 
-**概要**：docs — README の重複行を修正、write-project-docs にアンチパターンを追加
+**概要**：docs — README の重複行を修正、write-project-docs にアンチパターンを追加。
 
 | コミット | 説明 |
 |------|------|
@@ -3016,7 +3016,7 @@
 
 ## 2026-06-22T06:41:50+09:00
 
-**概要**：AGENTS.md — アクセス制御、言語要件、コミット規範、メンテナンス記録の確認、文書同期、汎化、多アーキテクチャキャッシュ規則を新設
+**概要**：AGENTS.md — アクセス制御、言語要件、コミット規範、メンテナンス記録の確認、文書同期、汎化、多アーキテクチャキャッシュの各規則を新設。
 
 | コミット | 説明 |
 |------|------|
@@ -3024,7 +3024,7 @@
 
 ## 2026-06-22T06:21:11+09:00
 
-**概要**：docs — パッケージごとの文書に双アーキテクチャの CI バッジを追加、スキルテンプレートを同期
+**概要**：docs — パッケージごとの文書に双アーキテクチャの CI バッジを追加、スキルテンプレートを同期。
 
 | コミット | 説明 |
 |------|------|
@@ -3035,7 +3035,7 @@
 
 ## 2026-06-22T06:05:49+09:00
 
-**概要**：CI — ARM runner の多アーキテクチャビルドを追加、flake.lock の並行競合を修正（--no-write-lock-file）
+**概要**：CI — ARM runner の多アーキテクチャビルドを追加、flake.lock の並行競合を修正（--no-write-lock-file）。
 
 | コミット | 説明 |
 |------|------|
@@ -3046,7 +3046,7 @@
 
 ## 2026-06-22T05:48:23+09:00
 
-**概要**：mcp-searxng — source hash + npmDepsHash を更新（GitHub archive の変化）；ruyi — overlay postPatch を元に戻し（パッチファイル依存）
+**概要**：mcp-searxng — source hash + npmDepsHash を更新（GitHub archive の変化）；ruyi — overlay postPatch を元に戻し（パッチファイル依存）。
 
 | コミット | 説明 |
 |------|------|
@@ -3055,7 +3055,7 @@
 
 ## 2026-06-22T05:39:33+09:00
 
-**概要**：docs — キャッシュ除外の警告を追加（overlay とモジュール+パッチの条目）、README のキャッシュ説明を圧縮、flake.nix に nixConfig の自動宣言を追加
+**概要**：docs — キャッシュ除外の警告を追加（overlay とモジュール+パッチの項目）、README のキャッシュ説明を圧縮、flake.nix に nixConfig の自動宣言を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -3064,7 +3064,7 @@
 
 ## 2026-06-22T05:27:50+09:00
 
-**概要**：docs — 全 30 篇のパッケージ文書に `## 缓存` 節を追加、CI バッジのレイアウトを改善、スキルを同期
+**概要**：docs — 全 30 篇のパッケージ文書に `## 缓存` 節を追加、CI バッジのレイアウトを改善、スキルを同期。
 
 | コミット | 説明 |
 |------|------|
@@ -3073,7 +3073,7 @@
 
 ## 2026-06-22T05:13:45+09:00
 
-**概要**：CI/CD — GitHub Actions のビルドマトリクス（Cachix への push）、バイナリキャッシュ、AGENTS.md を追加
+**概要**：CI/CD — GitHub Actions のビルドマトリクス（Cachix への push）、バイナリキャッシュ、AGENTS.md を追加。
 
 | コミット | 説明 |
 |------|------|
@@ -3233,7 +3233,7 @@
 
 ## 2026-06-17T07:37:39+09:00
 
-**概要**：write-maintenance-log スキル — nixkits-check-updates から独立スキルとして切り出し、二重エントリポイント設計（修正を記録 + 更新维护记录）；flake.lock 同期の .gitignore 事前チェックと三路分岐ロジック
+**概要**：write-maintenance-log スキル — nixkits-check-updates から独立スキルとして切り出し、二重エントリポイント設計（維護記録を記入 + 維護記録を更新）；flake.lock 同期の .gitignore 事前チェックと三路分岐ロジック
 
 | コミット | 説明 |
 |------|------|
@@ -3252,7 +3252,7 @@
 
 ## 2026-06-17T06:48:47+09:00
 
-**概要**：fix(mcp-searxng): 入口ファイルの誤りを修正 — dist/index.js → dist/cli.js、MCP サーバが正常に起動可能に
+**概要**：fix(mcp-searxng): エントリーファイルの誤りを修正 — dist/index.js → dist/cli.js、MCP サーバが正常に起動可能に
 
 | コミット | 説明 |
 |------|------|
@@ -3269,7 +3269,7 @@
 
 ## 2026-06-16T06:03:24+09:00
 
-**概要**：mcp-searxng ドキュメント — CodeWhale の MCP 設定ガイド、よくある落とし穴の警告（env の既定は {}）、トラブルシューティングの節
+**概要**：mcp-searxng 文書 — CodeWhale の MCP 設定ガイド、よくある落とし穴の警告（env の既定は {}）、トラブルシューティングの節
 
 | コミット | 説明 |
 |------|------|
@@ -3593,7 +3593,7 @@
 
 ## 2026-05-30T03:42:14+09:00
 
-**概要**：codewhale — stdenv のスペルミス修正；llama-cpp-rocm のドキュメント修正（インラインリンクを削除し、system.nix の完全なプリセットを使用）；opencode-telegram の初回セットアップ手順
+**概要**：codewhale — stdenv のスペルミス修正；llama-cpp-rocm の文書修正（インラインリンクを削除し、system.nix の完全なプリセットを使用）；opencode-telegram の初回セットアップ手順
 
 | コミット | 説明 |
 |------|------|
@@ -3665,7 +3665,7 @@
 
 ## 2026-05-28T08:29:27+09:00
 
-**概要**：llama-cpp-rocm — NixOS モジュール（systemd サンドボックスの上書き）；opencode-telegram — NixOS モジュール（宣言的設定、自動インストール）；rcc-fix — visible プロパティの修正；スキルドキュメント — 動的発見の文言
+**概要**：llama-cpp-rocm — NixOS モジュール（systemd サンドボックスの上書き）；opencode-telegram — NixOS モジュール（宣言的設定、自動インストール）；rcc-fix — visible プロパティの修正；スキル文書 — 動的発見の文言
 
 | コミット | 説明 |
 |------|------|
@@ -3690,7 +3690,7 @@
 
 ## 2026-05-26T05:30:58+09:00
 
-**概要**：ドキュメント — README の節名を改名（快速开始→添加、包→软件、License→许可）
+**概要**：文書 — README の節名を改名（快速开始→添加、包→软件、License→许可）
 
 | コミット | 説明 |
 |------|------|
@@ -3698,7 +3698,7 @@
 
 ## 2026-05-24T03:01:02+09:00
 
-**概要**：mcp-searxng のドキュメント — SearXNG + lighttpd リバースプロキシの完全な NixOS 設定
+**概要**：mcp-searxng の文書 — SearXNG + lighttpd リバースプロキシの完全な NixOS 設定
 
 | コミット | 説明 |
 |------|------|

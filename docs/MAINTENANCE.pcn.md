@@ -2550,7 +2550,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T06:08:43+09:00
 
-**摘要**: fix(ci) — ci-summary workflow `gh run list` 逐 workflow API 呼出 HTTP 403 rate limit 修正。2 回一括 `gh api` 呼出並列制御変更。
+**摘要**：fix(ci) — ci-summary workflow `gh run list` 逐 workflow API 呼出 HTTP 403 rate limit 修正。2 回一括 `gh api` 呼出並列制御変更。
 
 | 提交 | 説明 |
 |------|------|
@@ -2558,7 +2558,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T05:57:35+09:00
 
-**摘要**: revert(skill) — katalish（半角片仮名機械翻訳）全内容削除：19 文書、技能（SKILL.md + 102 条辞書）、全言語切替連結。翻訳不安定（英文残留又文書構造破壊）生産環境不適。
+**摘要**：revert(skill) — katalish（半角片仮名機械翻訳）全内容削除：19 文書、技能（SKILL.md + 102 条辞書）、全言語切替連結。翻訳不安定（英文残留或文書構造破壊）生産環境不適。
 
 | 提交 | 説明 |
 |------|------|
@@ -2574,7 +2574,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T04:46:54+09:00
 
-**摘要**: skill(nixkits-skills) — Claude Code 導入対象削除（利用者資料基国籍推論安全境界越）、Codex 支援追加。SKILL.md「危険警告」節追記、原文声明含。
+**摘要**：skill(nixkits-skills) — Claude Code 導入対象削除（利用者資料基国籍推論安全境界越）、Codex 支援追加。SKILL.md「危険警告」節追記、原文声明含。
 
 | 提交 | 説明 |
 |------|------|
@@ -2592,7 +2592,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T04:30:55+09:00
 
-**摘要**: feat(ci) — CI 集計端点徽章追加。主文書 CI 徽章 shields.io endpoint 経由 `gh-pages/ci-status.json` 読取、失敗時失敗包名表示。
+**摘要**：feat(ci) — CI 集計端点徽章追加。主文書 CI 徽章 shields.io endpoint 経由 `gh-pages/ci-status.json` 読取、失敗時失敗包名表示。
 
 | 提交 | 説明 |
 |------|------|
@@ -2601,7 +2601,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T04:09:46+09:00
 
-**摘要**: refactor(ci) — CI 単一 check.yml 25 独立 workflow 書類分割（包×構造毎）、徽章相互影響完全解消。再利用可能 `build-package.yml` 追加。
+**摘要**：refactor(ci) — CI 単一 check.yml 25 独立 workflow 書類分割（包×構造毎）、徽章相互影響完全解消。再利用可能 `build-package.yml` 追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -2611,7 +2611,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-16T04:00:46+09:00
 
-**摘要**: fix(codewhale) — 源構築 riscv64 交叉編集修正：ring crate `-m64` 誤 cc crate 継承 host CFLAGS 起因、per-target CFLAGS 清空修正。
+**摘要**：fix(codewhale) — 源構築 riscv64 交叉編集修正：ring crate `-m64` 誤 cc crate 継承 host CFLAGS 起因、per-target CFLAGS 清空修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -2645,7 +2645,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-09T01:22:00+09:00
 
-**摘要**: revert(ci) — `ci/` 削除、`llama-cpp-ver` input 上流 API 復元。上乗既 `tryEval` + fallback 備、局所緩衝不要。
+**摘要**：revert(ci) — `ci/` 削除、`llama-cpp-ver` input 上流 API 復元。上乗既 `tryEval` + fallback 備、局所緩衝不要。
 
 | 提交 | 説明 |
 |------|------|
@@ -2653,7 +2653,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-09T01:14:34+09:00
 
-**摘要**: obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上流更新（codewhale 跳過：v0.8.67 riscv64 二進欠落）
+**摘要**：obs-bilibili-stream 2.1.1 + mcp-searxng 1.11.0 + opencode-telegram 0.22.1 — 上流更新（codewhale 跳過：v0.8.67 riscv64 二進欠落）
 
 | 提交 | 説明 |
 |------|------|
@@ -2668,7 +2668,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-07T12:01:12+09:00
 
-**摘要**: fix(docs) — katalish/pcn 現地化修正：katalish/ruyi.md pcn/ruyi.md 言語切替破損（連結欠落又重複言語名）修正、pcn/ruyi.md 全文日本語偽中国語書換。
+**摘要**：fix(docs): katalish/pcn 現地化修正 — katalish/ruyi.md 與 pcn/ruyi.md 言語切替修正（連結欠落・言語名重複）、pcn/ruyi.md 日本語自偽中国語全文書換。
 
 | 提交 | 説明 |
 |------|------|
@@ -2677,7 +2677,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-05T04:41:23+09:00
 
-**摘要**: fix(ci) — blender-mcp riscv64-cross 修正経緯（4 回）。初 `callPackage` 自動解決非互換 `blender` 失敗、Nix/Bash 逸脱問題、最終上流 nixpkgs `sse-starlette` 交叉編集欠陥故 blender-mcp 除外。x86_64 / aarch64 無影響。
+**摘要**：fix(ci): blender-mcp riscv64-cross 自除外 — 上流 nixpkgs `sse-starlette` 交叉編集欠陥故 構築失敗（`blender` riscv64 非対応）；x86_64 / aarch64 影響無。
 
 | 提交 | 説明 |
 |------|------|
@@ -2688,7 +2688,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-04T07:33:07+09:00
 
-**摘要**: docs(MAINTENANCE) — 全 6 MAINTENANCE 書類（zh/en/ja/katalish/pcn）言語切替追加
+**摘要**：docs(MAINTENANCE) — 全 6 MAINTENANCE 書類（zh/en/ja/katalish/pcn）言語切替追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2696,7 +2696,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-04T06:41:28+09:00
 
-**摘要**: blender-mcp 1.0.0 — 新規 Blender MCP 伺服器包（Python 構築、22 MCP 道具、Blender 拡張含）
+**摘要**：blender-mcp 1.0.0 — 新規 Blender MCP 伺服器包（Python 構築、22 MCP 道具、Blender 拡張含）
 
 | 提交 | 説明 |
 |------|------|
@@ -2709,7 +2709,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-07-02T04:00:00+09:00
 
-**摘要**: codewhale 0.8.66 — 上流更新
+**摘要**：codewhale 0.8.66 — 上流更新（TUI配置修正、承認標籤改善、性能修正）
 
 | 提交 | 説明 |
 |------|------|
@@ -2724,7 +2724,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-28T06:30:00+09:00
 
-**摘要**: opencode-telegram 0.22.0 — 上流更新（三模式TTS + thinking表示 + 緊湊出力 + /settings命令 + session起動修正）
+**摘要**：opencode-telegram 0.22.0 — 上流更新（三模式TTS + thinking表示 + 緊湊出力 + /settings命令 + session起動修正）
 
 | 提交 | 説明 |
 |------|------|
@@ -2739,7 +2739,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T13:00:00+09:00
 
-**摘要**: CI — llama-cpp-ver 本地文件切替（ci/llama-cpp-ver.json）、全CI作業GitHub API呼出排除rate limit全局構築失敗恒久修正；docs — riscv64徽章包装別精密化
+**摘要**：CI — llama-cpp-ver 本地文件切替（ci/llama-cpp-ver.json）、全CI作業 GitHub API 呼出排除 rate limit 故 全構築失敗 恒久修正；docs — riscv64 徽章 包別 精密化（codewhale/kitsfmt/mcp-searxng/opencode-telegram）
 
 | 提交 | 説明 |
 |------|------|
@@ -2748,7 +2748,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T12:30:00+09:00
 
-**摘要**: feat(opencode-telegram): 服務PATH系包装注入extraPackages選択肢home-manager路注入extraBinPaths選択肢追加、opencode不在服務PATH問題修正；5言語文書更新
+**摘要**：feat(opencode-telegram): 服務PATH系包装注入extraPackages選択肢home-manager路注入extraBinPaths選択肢追加、opencode不在服務PATH問題修正；5言語文書更新
 
 | 提交 | 説明 |
 |------|------|
@@ -2757,7 +2757,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T10:55:41+09:00
 
-**摘要**: codewhale 0.8.65 — 上流更新（cli二進名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — 上流更新（多実例故障転送/並列扇出、能力発見集約、safesearch修正）
+**摘要**：codewhale 0.8.65 — 上流更新（cli二進名変更：codewhale-cli-linux → codewhale-linux）；mcp-searxng 1.8.0 — 上流更新（多実例故障転送/並列扇出、能力発見集約、safesearch修正）
 
 | 提交 | 説明 |
 |------|------|
@@ -2775,7 +2775,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T08:00:00+09:00
 
-**摘要**: docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅
+**摘要**：docs(MAINTENANCE): pcn 欠落28件履歴項目補完、zh基準全93項目網羅
 
 | 提交 | 説明 |
 |------|------|
@@ -2783,7 +2783,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T07:35:00+09:00
 
-**摘要**: docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）
+**摘要**：docs(MAINTENANCE): en/ja/katalish 欠落10件履歴項目補完、3言語全zh基準（92/92）一致；pcn 一部補完（66/92）
 
 | 提交 | 説明 |
 |------|------|
@@ -2791,7 +2791,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T07:18:56+09:00
 
-**摘要**: fix(skill): write-maintenance-log 第4段階「多言語同期」雛形実行可能流書直（4a 言語発見 → 4b 言語別翻訳書込 → 4c 項目数一致検証）；AGENTS.md 第4段階検証確認強化
+**摘要**：fix(skill): write-maintenance-log 第4段階「多言語同期」雛形実行可能流書直（4a 言語発見 → 4b 言語別翻訳書込 → 4c 項目数一致検証）；AGENTS.md 第4段階検証確認強化
 
 | 提交 | 説明 |
 |------|------|
@@ -2799,7 +2799,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-26T06:19:21+09:00
 
-**摘要**: 監査修正 — 空 scripts/ 目録削除 .gitignore 死規則（translate_pcn.py）削除；AGENTS.md SKILL.md 行数制約硬性数値定性案内緩和
+**摘要**：監査修正 — 空 scripts/ 目録削除 .gitignore 死規則（translate_pcn.py）削除；AGENTS.md SKILL.md 行数制約硬性数値定性案内緩和
 
 | 提交 | 説明 |
 |------|------|
@@ -2835,7 +2835,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T09:44:44+09:00
 
-**摘要**: CI — riscv64-cross ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
+**摘要**：CI — riscv64-cross ruyi/ruyi-beta/ruyi-alpha 復帰（路映射）；docs — 徽章標籤簡略化 + riscv64 job 精密過濾
 
 | 提交 | 説明 |
 |------|------|
@@ -2844,7 +2844,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T09:29:43+09:00
 
-**摘要**: CI — build / riscv64-cross 包別 matrix 分割、独立徽章対応；docs — ruyi 徽章 9 枚（3版本×3架構）拡張
+**摘要**：CI — build / riscv64-cross 包別 matrix 分割、独立徽章対応；docs — ruyi 徽章 9 枚（3版本×3架構）拡張
 
 | 提交 | 説明 |
 |------|------|
@@ -2853,7 +2853,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T09:24:43+09:00
 
-**摘要**: CI — build job ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行 beta/alpha 版本番号追加
+**摘要**：CI — build job ruyi-beta / ruyi-alpha 構築段階追加；docs — ruyi 基本情報表格通道行 beta/alpha 版本番号追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2862,7 +2862,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T09:09:26+09:00
 
-**摘要**: CI — ruyi riscv64-cross 除外；overlays — default overlay ruyi-beta/ruyi-alpha 追加＋nixConfig flake 最上位層移行；docs — README 表 ruyi 3路版本表示
+**摘要**：CI — ruyi riscv64-cross 除外；overlays — default overlay ruyi-beta/ruyi-alpha 追加＋nixConfig flake 最上位層移行；docs — README 表 ruyi 3路版本表示
 
 | 提交 | 説明 |
 |------|------|
@@ -2872,7 +2872,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T05:35:00+09:00
 
-**摘要**: docs — 全5言語README ruyi-beta / ruyi-alpha devShell 項目追加
+**摘要**：docs — 全5言語README ruyi-beta / ruyi-alpha devShell 項目追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2880,7 +2880,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T05:28:12+09:00
 
-**摘要**: ruyi — 包装目録構造再編（packages/ruyi/）、beta/alpha thin wrapper化；devShells 追加
+**摘要**：ruyi — 包装目録構造再編（packages/ruyi/）、beta/alpha thin wrapper化；devShells 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -2889,7 +2889,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T05:13:34+09:00
 
-**摘要**: ruyi — 版通道独立包装化（ruyi / ruyi-beta / ruyi-alpha）、独立overlay削除
+**摘要**：ruyi — 版通道独立包装化（ruyi / ruyi-beta / ruyi-alpha）、独立overlay削除
 
 | 提交 | 説明 |
 |------|------|
@@ -2897,7 +2897,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-25T04:58:36+09:00
 
-**摘要**: ruyi — 3通道版体系（stable/beta/alpha）、基本包装0.50.0安定版切替、beta/alpha overlay上書
+**摘要**：ruyi — 3通道版体系（stable/beta/alpha）、基本包装0.50.0安定版切替、beta/alpha overlay上書
 
 | 提交 | 説明 |
 |------|------|
@@ -2911,7 +2911,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-24T03:19:30+09:00
 
-**摘要**: workflow — 維護記録更新規則必須化（AGENTS.md + write-maintenance-log 技能）
+**摘要**：workflow — 維護記録更新規則必須化（AGENTS.md + write-maintenance-log 技能）
 
 | 提交 | 説明 |
 |------|------|
@@ -2919,7 +2919,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-24T03:15:37+09:00
 
-**摘要**: docs — 古手動riscv64構築手順削除、CI 3架構網羅済
+**摘要**：docs — 古手動riscv64構築手順削除、CI 3架構網羅済
 
 | 提交 | 説明 |
 |------|------|
@@ -2927,7 +2927,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-24T03:06:20+09:00
 
-**摘要**: codewhale 0.8.64 — 上流更新
+**摘要**：codewhale 0.8.64 — 上流更新
 
 | 提交 | 説明 |
 |------|------|
@@ -2945,7 +2945,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-24T02:30:21+09:00
 
-**摘要**: CI — riscv64交叉編訳管追加、3架構CI全量網羅（x86_64 / aarch64 / riscv64）；包装毎riscv64徽章追加
+**摘要**：CI — riscv64交叉編訳管追加、3架構CI全量網羅（x86_64 / aarch64 / riscv64）；包装毎riscv64徽章追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -2956,7 +2956,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-23T05:20:00+09:00
 
-**摘要**: translate-pseudocn — Web調査基辞書拡充（7→46項目）、SVO語順変更、全pcn文書再生成
+**摘要**：translate-pseudocn — Web調査基辞書拡充（7→46項目）、SVO語順変更、全pcn文書再生成。
 
 | 提交 | 説明 |
 |------|------|
@@ -2965,7 +2965,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-23T04:19:16+09:00
 
-**摘要**: translate-pseudocn技能再構築 — 疑似中国語「日本語仮名剥視覚結果」再定義、中国語変換廃止。日本語漢字保持（簡体字化）、SOV語順維持、辞書40→7項目縮小（片仮名→日本語漢字）。全22件pcn文書再生成
+**摘要**：translate-pseudocn技能再構築 — 疑似中国語「日本語仮名剥離後之視覚結果」再定義、中国語変換廃止。日本語漢字其儘保持（簡体字化無）、SOV語順維持、辞書40→7項目縮小（片仮名→日本語漢字）。全22件pcn文書再生成。
 
 | 提交 | 説明 |
 |------|------|
@@ -2973,7 +2973,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-23T04:04:32+09:00
 
-**摘要**：AGENTS.md — 去 硬符号 化、冗長 監査 備忘 削除、緩衝 章 改 代理 操作 手引、利用者 側 記述 削除、言語体系 改 自動発見
+**摘要**：AGENTS.md — 硬符号化 除去、冗長 監査 備忘 削除、cache 章 代理 操作手引 改、利用者 側 記述 削除、言語体系 自動発見 改。
 
 | 提交 | 説明 |
 |------|------|
@@ -2983,7 +2983,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T23:49:00+09:00
 
-**摘要**：mcp-searxng 1.7.2 — 上流 修復
+**摘要**：mcp-searxng 1.7.2 — 上流 修正。
 
 | 提交 | 説明 |
 |------|------|
@@ -2996,7 +2996,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T23:22:00+09:00
 
-**摘要**：AGENTS.md — 新規 初回 起動 監査 規則、接続制御 移動 頂部
+**摘要**：AGENTS.md — 新規 初回 起動 監査 規則、接続制御 移動 頂部。
 
 | 提交 | 説明 |
 |------|------|
@@ -3005,7 +3005,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T07:20:50+09:00
 
-**摘要**：docs — README 重複 行 修復、write-project-docs 反模式 補充
+**摘要**：docs — README 重複 行 修正、write-project-docs 反模式 補充。
 
 | 提交 | 説明 |
 |------|------|
@@ -3014,7 +3014,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T06:41:50+09:00
 
-**摘要**：AGENTS.md — 新規 接続制御、言語 要求、送信 規範、保守記録 確認、文書同期、汎化、多架構 緩衝 規則
+**摘要**：AGENTS.md — 新規 接続制御、言語 要求、送信 規範、保守記録 確認、文書同期、汎化、多架構 cache 規則。
 
 | 提交 | 説明 |
 |------|------|
@@ -3022,7 +3022,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T06:21:11+09:00
 
-**摘要**：docs — 毎包 文書 追加 双架構 CI 徽章、技能 雛形 同期
+**摘要**：docs — 毎包 文書 双架構 CI 徽章 追加、技能 雛形 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -3033,7 +3033,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T06:05:49+09:00
 
-**摘要**：CI — ARM runner 多架構 構築 追加、flake.lock 並行競合 修正（--no-write-lock-file）
+**摘要**：CI — ARM runner 多架構 構築 追加、flake.lock 並行競合 修正（--no-write-lock-file）。
 
 | 提交 | 説明 |
 |------|------|
@@ -3044,7 +3044,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T05:48:23+09:00
 
-**摘要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 復帰（patch file 依存）
+**摘要**：mcp-searxng — source hash + npmDepsHash 更新（GitHub archive 変化）；ruyi — overlay postPatch 復帰（patch file 依存）。
 
 | 提交 | 説明 |
 |------|------|
@@ -3053,7 +3053,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T05:39:33+09:00
 
-**摘要**：docs — 緩衝 除外 警告 追加（overlay 與 模組 + patch 条目）、README 緩衝 説明 圧縮、flake.nix nixConfig 自動 宣言 追加
+**摘要**：docs — cache 除外 警告 追加（overlay 與 模組 + patch 項目）、README cache 説明 圧縮、flake.nix nixConfig 自動 宣言 追加。
 
 | 提交 | 説明 |
 |------|------|
@@ -3062,7 +3062,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T05:27:50+09:00
 
-**摘要**：docs — 全 30 篇 包 文書 `## 缓存` 節 追加、CI 徽章 配置 改善、技能 同期
+**摘要**：docs — 全 30 篇 包 文書 `## 缓存` 節 追加、CI 徽章 配置 改善、技能 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -3071,7 +3071,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-22T05:13:45+09:00
 
-**摘要**：CI/CD — GitHub Actions 構築 行列（Cachix push）追加、二進緩衝、AGENTS.md
+**摘要**：CI/CD — GitHub Actions 構築 行列（Cachix push）追加、二進 cache、AGENTS.md。
 
 | 提交 | 説明 |
 |------|------|
@@ -3250,7 +3250,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-17T06:48:47+09:00
 
-**摘要**：fix(mcp-searxng): 入口 書類 之 錯誤 修正 — dist/index.js → dist/cli.js、MCP 伺服器 正常 起動 可能
+**摘要**：fix(mcp-searxng): 入口 書類 之 錯誤 修正 — dist/index.js → dist/cli.js、MCP server 正常 起動 可能
 
 | 提交 | 説明 |
 |------|------|
@@ -3258,7 +3258,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-17T06:46:13+09:00
 
-**摘要**: llama-cpp-rocm — builtins.fetchurl 代替 flake input 動的版取得試行（既撤回、方案不可用）
+**摘要**：llama-cpp-rocm — builtins.fetchurl 代替 flake input 動的版取得試行（既撤回、方案不可用）
 
 | 提交 | 説明 |
 |------|------|
@@ -3267,7 +3267,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-16T06:03:24+09:00
 
-**摘要**: mcp-searxng 文書 — CodeWhale MCP 構成指南、常見罠警告（env 既定{}）、故障排查章節
+**摘要**：mcp-searxng 文書 — CodeWhale MCP 設定指南、常見罠警告（env 既定 {}）、故障排查章節
 
 | 提交 | 説明 |
 |------|------|
@@ -3275,7 +3275,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-16T05:20:34+09:00
 
-**摘要**: nixos-modern-cli 技能 — Nix Store 路罠章節（gh auth setup-git 硬碼路失效診断汎用修正pattern）
+**摘要**：nixos-modern-cli 技能 — Nix Store 路径 罠 章節（gh auth setup-git 硬碼 路径 失效 診断 與 汎用 修正 pattern）
 
 | 提交 | 説明 |
 |------|------|
@@ -3283,7 +3283,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-16T04:56:06+09:00
 
-**摘要**: opencode-telegram 0.21.2 — 上流修正及依存更新
+**摘要**：opencode-telegram 0.21.2 — 上流修正及依存更新
 
 | 提交 | 説明 |
 |------|------|
@@ -3298,7 +3298,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-15T17:32:16+09:00
 
-**摘要**: codewhale 0.8.60 — 上流修正
+**摘要**：codewhale 0.8.60 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3313,7 +3313,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-14T08:11:16+09:00
 
-**摘要**: comfyui-strix-halo 文書 — 線上統合 mode 説明 文件構造図
+**摘要**：comfyui-strix-halo 文書 — 線上統合 mode 説明 與 書類 構造図
 
 | 提交 | 説明 |
 |------|------|
@@ -3321,7 +3321,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-14T07:56:11+09:00
 
-**摘要**: codewhale 0.8.59 — 若干 TUI 描画問題修正；mcp-searxng 1.4.0 — HTTP 伝送 mode 新規
+**摘要**：codewhale 0.8.59 — 若干 TUI 描画問題修正；mcp-searxng 1.4.0 — HTTP 転送 mode 新規
 
 | 提交 | 説明 |
 |------|------|
@@ -3340,7 +3340,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-12T18:17:52+09:00
 
-**摘要**: llama-cpp-rocm 模块 — modelsPreset 支持復旧（nixpkgs 既削除）、名前空間 nixkits 移行、三言語移行指南
+**摘要**：llama-cpp-rocm 模块 — modelsPreset 支持復旧（nixpkgs 既削除）、名前空間 nixkits 移行、三言語移行指南
 
 | 提交 | 説明 |
 |------|------|
@@ -3353,7 +3353,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-12T10:51:31+09:00
 
-**摘要**: codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
+**摘要**：codewhale 0.8.58 — 上流修正；mcp-searxng 1.3.4 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3372,7 +3372,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-11T05:28:59+09:00
 
-**摘要**: 技能文書 — 維護記録格式規則系列（自動発見汎化、記述的標題、正確git commit時間印、禁止T00:00:00占位符）
+**摘要**：技能文書 — 維護記録 格式 規則 系列（自動発見 汎化、記述的 標題、正確 git commit 時間印、禁止 `T00:00:00` 占位符）
 
 | 提交 | 説明 |
 |------|------|
@@ -3383,7 +3383,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-11T05:13:39+09:00
 
-**摘要**: other — 2件更新
+**摘要**：other — 2件更新
 
 | 提交 | 説明 |
 |------|------|
@@ -3392,7 +3392,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-11T04:52:16+09:00
 
-**摘要**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流 修正
+**摘要**：codewhale 0.8.57 — TUI 新規追加；mcp-searxng 1.3.2 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3409,7 +3409,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-10T04:31:20+09:00
 
-**摘要**: opencode-telegram — KillMode process変更、TimeoutStopSec 追加防止 shutdown 掛起
+**摘要**：opencode-telegram — KillMode process変更、TimeoutStopSec 追加 防止 shutdown 掛起
 
 | 提交 | 説明 |
 |------|------|
@@ -3418,7 +3418,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-10T02:28:10+09:00
 
-**摘要**：codewhale 0.8.55 — 上流 修正；mcp-searxng 1.3.1 — 上流 修正
+**摘要**：codewhale 0.8.55 — 上流修正；mcp-searxng 1.3.1 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3432,7 +3432,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-08T15:12:39+09:00
 
-**摘要**: 文書再構 — 地域化文件 docs/ 目録移入；MAINTENANCE.md 初回合列規則追加、純表格形式、完全提交歴史逆填
+**摘要**：文書再構 — 地域化文件 docs/ 目録移入；MAINTENANCE.md 初回合列規則追加、純表格形式、完全提交歴史逆填
 
 | 提交 | 説明 |
 |------|------|
@@ -3447,7 +3447,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-08T14:25:02+09:00
 
-**摘要**：mcp-searxng 1.2.1 — 上流 修正
+**摘要**：mcp-searxng 1.2.1 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3465,7 +3465,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-08T14:22:25+09:00
 
-**摘要**: rcc-fix — NixOS 模块（systemd 死鎖修正）
+**摘要**：rcc-fix — NixOS 模块（systemd 死鎖修正）
 
 | 提交 | 説明 |
 |------|------|
@@ -3473,7 +3473,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-06T15:17:11+09:00
 
-**摘要**: 技能文書 — 源変更後文書同期規範；comfyui-strix-halo C 道具鎖説明；hash 計算注意事項汎化；基本情報規則多言語統一
+**摘要**：技能文書 — 源変更後文書同期規範；comfyui-strix-halo C 道具鎖説明；hash 計算注意事項汎化；基本情報規則多言語統一
 
 | 提交 | 説明 |
 |------|------|
@@ -3490,7 +3490,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-06T13:58:47+09:00
 
-**摘要**：codewhale 0.8.53 — 上流 修正；mcp-searxng 1.1.0 — 上流 修正；opencode-telegram 0.21.1 — 上流 修正
+**摘要**：codewhale 0.8.53 — 上流修正；mcp-searxng 1.1.0 — 上流修正；opencode-telegram 0.21.1 — 上流修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3524,7 +3524,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-04T13:07:30+09:00
 
-**摘要**: 技能体系 — SKILL.md 全面中国語化；三言語対称性確認規則
+**摘要**：技能体系 — SKILL.md 全面中国語化；三言語対称性確認規則
 
 | 提交 | 説明 |
 |------|------|
@@ -3533,7 +3533,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-02T10:15:53+09:00
 
-**摘要**: other — 7件更新
+**摘要**：other — 7件更新
 
 | 提交 | 説明 |
 |------|------|
@@ -3547,7 +3547,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-02T08:49:47+09:00
 
-**摘要**: opencode-telegram — 8件更新
+**摘要**：opencode-telegram — 8件更新
 
 | 提交 | 説明 |
 |------|------|
@@ -3562,7 +3562,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-02T05:57:11+09:00
 
-**摘要**：codewhale 0.8.49 — 上流 修正；mcp-searxng 1.0.4 — 上流 修正；obs-bilibili-stream 2.1.0 — 上流 修正；opencode-telegram 0.21.0 — 上流 修正
+**摘要**：codewhale 0.8.49 — 上流修正；mcp-searxng 1.0.4 — 上流修正；obs-bilibili-stream 2.1.0 — 上流修正；opencode-telegram 0.21.0 — 上流修正
 
 |--------|--------|--------|
 | codewhale | 0.8.47 | 0.8.49 |
@@ -3579,7 +3579,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-06-02T03:42:25+09:00
 
-**摘要**: nixos-modern-cli 技能 — POSIX 道具指南 nix 二進路提示
+**摘要**：nixos-modern-cli 技能 — POSIX 道具指南 nix 二進路提示
 
 | 提交 | 説明 |
 |------|------|
@@ -3587,7 +3587,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-31T03:42:18+09:00
 
-**摘要**: write-project-docs — 新技能（NixKits 風任意 project 多語言文書体系作成）
+**摘要**：write-project-docs — 新技能（NixKits 風任意 project 多語言文書体系作成）
 
 | 提交 | 説明 |
 |------|------|
@@ -3595,7 +3595,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-30T03:42:14+09:00
 
-**摘要**: codewhale — stdenv 綴修正；llama-cpp-rocm 文書修正（内line連結削除、system.nix 完全 preset 使用）；opencode-telegram 初回設定流
+**摘要**：codewhale — stdenv 綴修正；llama-cpp-rocm 文書修正（内line連結削除、system.nix 完全 preset 使用）；opencode-telegram 初回設定流
 
 | 提交 | 説明 |
 |------|------|
@@ -3607,7 +3607,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-30T03:19:48+09:00
 
-**摘要**: other — 2件更新
+**摘要**：other — 2件更新
 
 | 提交 | 説明 |
 |------|------|
@@ -3632,7 +3632,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-29T13:16:30+09:00
 
-**摘要**: docs: codewhale 種別説明修正（事前構築済、非原始碼構築）
+**摘要**：docs: codewhale 種別説明修正（事前構築済、非原始碼構築）
 
 | 提交 | 説明 |
 |------|------|
@@ -3692,7 +3692,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-26T05:30:58+09:00
 
-**摘要**: 文書 — README 節名改名（快速開始→追加、包→軟件、License→許可）
+**摘要**：文書 — README 節名改名（快速開始→追加、包→軟件、License→許可）
 
 | 提交 | 説明 |
 |------|------|
@@ -3700,7 +3700,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-24T03:01:02+09:00
 
-**摘要**: mcp-searxng 文書 — SearXNG + lighttpd 逆代理完全 NixOS 構成
+**摘要**：mcp-searxng 文書 — SearXNG + lighttpd 逆代理完全 NixOS 構成
 
 | 提交 | 説明 |
 |------|------|
@@ -3708,7 +3708,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-22T06:45:11+09:00
 
-**摘要**: llama-cpp-rocm — llama-cpp-ver flake 入力削除、nixpkgs 既定版使用
+**摘要**：llama-cpp-rocm — llama-cpp-ver flake 入力削除、nixpkgs 既定版使用
 
 | 提交 | 説明 |
 |------|------|
@@ -3724,7 +3724,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-16T19:07:54+09:00
 
-**摘要**: kitsfmt — match_ast! 宏構文誤修正、comments_before 関数簡略化、src 路修正
+**摘要**：kitsfmt — `match_ast!` 宏構文誤 修正、`comments_before` 関数 簡素化、src 路 修正
 
 | 提交 | 説明 |
 |------|------|
@@ -3734,7 +3734,7 @@ link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 
 
 ## 2026-05-15T16:59:28+09:00
 
-**摘要**: kitsfmt — rnix AST 基盤格式化 engine v0.3.0 書換；Cargo.lock 生成
+**摘要**：kitsfmt — rnix AST 基盤 格式化 engine v0.3.0 書換；Cargo.lock 生成
 
 | 提交 | 説明 |
 |------|------|
