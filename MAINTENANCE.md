@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-06T00:48:30+09:00
+
+**摘要**：feat(check): 自检体系加固 —— 反证用例库与 pcn 全库字形修正
+
+- 反证用例库（第 10 项 `self-tests`）：每个检查「对照通过 → 注入已知坏输入 → 必须失败且红得对」，现 11 正例 + 2 负例全过
+- 它当场抓出真洞：`workflow-coverage` 只判文件名前缀，`build-x-….yml.disabled` 也算覆盖
+- 新增判据：`flake.nix` 注释清单须与 `checks` 一一对应；pcn 禁非日文字形；en 摘要禁中文原稿（阈值实测标定）
+- pcn 全库修正 45 种字形 / 187 处 / 39 份文档 + 9 条词典映射（新判据报出的既有缺陷）
+- opencode-telegram → 0.26.3（纯 bugfix，hash 取自 `got:`，两架构烟测通过）；三个固定 SHA 的 action 均已最新
+
+| 提交 | 说明 |
+|------|------|
+| `192ec4a` | feat(check): 自检体系加固 —— 反证用例库 + 四条新断言 + 全库语料修正 |
+| `f8e6fc7` | chore(pkgs): opencode-telegram 0.26.2 → 0.26.3 |
+
 ## 2026-10-05T23:43:17+09:00
 
 **摘要**：fix(skill): 摘要一律清单式 —— 规范、断言与全库回溯

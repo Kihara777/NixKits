@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-06T00:48:30+09:00
+
+**摘要**：feat(check): 自検 強化 —— 反証用例集 與 pcn 全倉 字形修正
+
+- 反証用例集（第 十 項 `self-tests`）：各検査 「対照 通過 → 既知 悪入力 注入 → 期待文言 失敗必須」 検証。十一 正例 + 二 負例 全通過
+- 是 即座 本物 穴 発見：`workflow-coverage` 唯 前綴 判定、`build-x-….yml.disabled` 也 被覆 算
+- 新判定：`flake.nix` 一覧注釈 `checks` 與 一対一 一致；pcn 非日文字形 禁；en 概要 中文原稿 禁（閾値 367 条 標定）
+- pcn 全倉 修正 45 種 字形 / 187 箇所 / 39 文書 + 辞書 九 条（判定 有効化 途端 出 既存 欠陥）
+- opencode-telegram → 0.26.3（純 bugfix、hash `got:` 取得、二 架構 煙試験 通過）；固定 SHA action 三 個 全 最新
+
+| 提交 | 説明 |
+|------|------|
+| `192ec4a` | feat(check): 自検 強化 —— 反証用例集 + 四 新判定 + 全倉 語料修正 |
+| `f8e6fc7` | chore(pkgs): opencode-telegram 0.26.2 → 0.26.3 |
+
 ## 2026-10-05T23:43:17+09:00
 
 **摘要**：fix(skill): 概要 常 清単形式 —— 規約、判定 與 全倉 回溯

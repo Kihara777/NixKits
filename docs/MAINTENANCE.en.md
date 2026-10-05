@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-06T00:48:30+09:00
+
+**Summary**: feat(check): self-check hardening — counter-example suite and repo-wide pcn glyph fix
+
+- Counter-example suite (10th check `self-tests`): each check must pass its control, then fail with the expected message after a known-bad input is injected; 11 positive + 2 negative cases pass
+- It found a real hole at once: `workflow-coverage` matched only the filename prefix, so `build-x-….yml.disabled` still counted as coverage
+- New assertions: the `flake.nix` comment list must match `checks` one-for-one; pcn must not contain non-Japanese glyphs; en summaries must not be Chinese drafts (threshold calibrated on 367 entries)
+- Repo-wide pcn fix: 45 glyphs / 187 occurrences / 39 docs + 9 dictionary mappings (pre-existing defects the new assertion exposed)
+- opencode-telegram → 0.26.3 (pure bugfix; hashes from `got:`; smoke tests pass on two architectures); all three pinned-SHA actions already current
+
+| Commit | Description |
+|------|------|
+| `192ec4a` | feat(check): self-check hardening — counter-example suite + four new assertions + repo-wide corpus fix |
+| `f8e6fc7` | chore(pkgs): opencode-telegram 0.26.2 → 0.26.3 |
+
 ## 2026-10-05T23:43:17+09:00
 
 **Summary**: fix(skill): summaries are now always list-form — spec, assertion and full retrofit
