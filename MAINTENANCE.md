@@ -742,7 +742,7 @@
 
 ## 2026-09-17T12:52:54+09:00
 
-**摘要**：fix(codewhale): 补齐 x86_64/aarch64 预编译变体至 0.9.13 — **部署后核对才发现**的漏改：前一条目只升级了 `codewhale-src`（riscv64 的源构建变体，含 Cargo.lock 同步），**漏掉了 `codewhale.nix`**——x86_64/aarch64 走的是 GitHub Releases 预编译二进制路径，由 `flake.nix` 按 `hostPlatform.isRiscV` 分流。症状是「本机构建通过、dsh 也已升到 0.1.6-alpha.1，但系统上 `codewhale --version` 仍是 0.9.12」。**本仓 codewhale 有两个变体同名同输出**：`codewhale.nix`（预编译，需改 `version` + cli/tui × x64/arm64 **四个 hash**）与 `codewhale-src.nix`（源构建，需改 `version` + `hash` + 同步 `Cargo.lock`）——**升级必须两个都改**。实测 0.9.13 的 cli 与 tui 资产 hash 相同（`WTriVnVv…` / `BgUnHSo0…`），与 0.9.12 时一致；但四个值仍分别填入，故四值两两相同。**泛化**：该陷阱已写入适配层「本仓特有陷阱」，并附判据——**部署后逐个变体所在架构核对实际版本，不要只看构建通过**
+**摘要**：fix(codewhale): 补齐 x86_64/aarch64 预编译变体至 0.9.13 — 上一轮只升级 riscv64 源构建变体 `codewhale-src`，漏掉 `codewhale.nix`（x86_64/aarch64 走 GitHub Releases 预编译路径，`flake.nix` 按 `hostPlatform.isRiscV` 分流）。本仓 codewhale 两个同名同输出变体：`codewhale.nix` 改 `version` + cli/tui × x64/arm64 **四个 hash**，`codewhale-src.nix` 改 `version` + `hash` 并同步 `Cargo.lock`——升级必须两个都改。陷阱已入适配层，判据为**部署后按架构核对各变体实际版本，不能只看构建通过**。
 
 | 提交 | 说明 |
 |------|------|
@@ -757,7 +757,7 @@
 
 ## 2026-09-17T12:41:29+09:00
 
-**摘要**：五个软件包升级 + 更新技能追加「交互式澄清」 — 生产环境实战执行全部批准升级：**mcp-searxng** 2.2.0 → 2.3.0、**opencode-telegram** 0.25.1 → 0.25.2、**codewhale** 0.9.12 → 0.9.13、**dsh-alpha** 0.1.5-alpha.2 → 0.1.6-alpha.1、**godot-ai** 3.2.5 → **4.1.0**（跨大版本）。**godot-ai v4 是本次最难的一项**：它引入 **fail-closed 运行时依赖校验**——启动时比对 9 个包的精确版本，任一不符即 `RuntimeError: unsupported godot-ai runtime dependency set` 拒绝启动。nixpkgs（含 unstable 与 master）在 5 个包上落后（mcp 1.29.0→1.29.1、pydantic 2.13.4→2.13.5、starlette 1.3.1→1.6.0、uvicorn 0.51.0→0.52.4、websockets 16.1→17.1），故新增 `overlays/godot-ai-v4-deps.nix` 把这 5 个包抬到上游要求（pydantic-core 连带抬到 2.46.5 并重取 Rust 的 `cargoDeps`），与既有 `fastmcp` overlay **链式叠加**。**先按「不破坏上游安全契约」的方向征询并取得批准**，而非打补丁绕过校验。**踩坑**：`flake.nix` 的 `godotPkgs` 与 `overlays/default.nix` 是两处独立的 overlay 链，初版只改了前者，导致 `--version` 仍 RuntimeError；两处同步后才通过。另放宽上游 `setuptools==84.0.0` 构建期 pin（nixpkgs 为 83.0.0，该 pin 是可复现性守卫而非功能需求）。**codewhale** 升级按技能要求**同步 Cargo.lock**（7073 → 7347 行，上游新增 `wl-clipboard-rs` 等）——漏掉即构建失败。**dsh-alpha** 踩到 vendored lock 陷阱：用 `npm install --package-lock-only --legacy-peer-deps` 生成的 lock **不含 `"peer": true` 条目**，构建报 `ENOTCACHED`；去掉该 flag 后 npm 才写入 peer 条目（与既有可工作的 lock 结构一致，均 24 条）。**技能泛化**：`nix-flake-update-check` 新增「交互式澄清」章节——支持提问的智能体（如 DSH）须**开工前批量问全**待定项，避免「猜一次→被纠正→重来」的多轮往返（每次重来都要重跑构建，而构建是本流程最贵的环节）；同时新增陷阱 5（fail-closed 运行时校验：构建成功 ≠ 可用，必须实际运行一次验证）与陷阱 6（`overridePythonAttrs` 改 Rust 构建包时 `cargoDeps` 须一并重取），并在 npm 节补充 peer 条目要求。适配层补充本仓三处实测陷阱。**验证**：五包全部构建通过并实际运行确认（godot-ai `--version` → 4.1.0、codewhale → 0.9.13、mcp-searxng → 2.3.0、dsh-alpha → 0.1.6-alpha.1）；`nix flake check` 全通过
+**摘要**：五个软件包升级 + 更新技能追加「交互式澄清」 — 生产实战执行全部批准升级：`mcp-searxng` 2.3.0、`opencode-telegram` 0.25.2、`codewhale` 0.9.13（同步 `Cargo.lock`）、`dsh-alpha` 0.1.6-alpha.1（lock 须含 `"peer": true`）、`godot-ai` 3.2.5 → 4.1.0（跨大版本，fail-closed 运行时依赖校验）。nixpkgs 落后 5 个包，故新增 `overlays/godot-ai-v4-deps.nix` 并与 `fastmcp` overlay 链式叠加；overlay 链（`flake.nix`、`overlays/default.nix`）须同步。技能新增「交互式澄清」章节与陷阱 5/6。验证：五包构建通过且实跑确认。
 
 | 提交 | 说明 |
 |------|------|
@@ -780,7 +780,7 @@
 
 ## 2026-09-17T11:34:39+09:00
 
-**摘要**：fix(skills): 子仓跟进判据细化到字段级（生产环境实战驱动） — 按计划完成 dry run 后**实际跑了一次完整的软件升级技能**做生产评估，实战立刻暴露出前一条目判据的缺陷：原判据按「**文件**是否变化」分流，但清单文件的众多字段中只有一部分是语义输入。实测子仓 `dsh-api-balance` 的 `package.json` **确实变了字节**（移除 `publishConfig.access`），而 `dependencies`、`files` 白名单、`version`、`main`/`exports` **均未动**——按原判据会被误判为「清单文件变了 → 跟进」，从而为一次纯元数据改动触发全架构重建与缓存失效。**修正**：判据改为**字段级**——发布元数据（`publishConfig` / `repository` / `keywords` / `description` / `bugs` / `homepage`）与文档、CI 配置**不属**构建输入，**不跟进**；`dependencies` 系列 / `files` / `main` / `exports` / `scripts` / `version` / 源码**属**构建输入，**必须跟进**；并加入兜底原则「无法确定某字段是否影响产物时，按跟进处理」（多一次构建远好过漏掉一次真实变更）。适配层对本次子仓变更的描述同步修正——原文误称「仅文档变更」，实际 `package.json` 也变了，**判据必须落到字段而非文件**。**实战同时确认新特性工作正常**：第 9 步在真实仓库上完成了账户识别、引用关系发现、四项前提校验（回环 / 深度 / 账户 / 可独立升级**全部 PASS**）与变更性质判定；并发现主干侧的真实待升级项（`codewhale-src` 0.9.12→0.9.13、`godot-ai` 3.2.5→4.1.0、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1）与两处已最新项（`ruyi` / `obs-bilibili-stream`），本次仅评估不执行升级
+**摘要**：fix(skills): 子仓跟进判据细化到字段级 — 原判据按「文件是否变化」分流，而清单文件仅部分字段是构建输入：子仓 `dsh-api-balance` 的 `package.json` 变了字节（移除 `publishConfig.access`）而 `dependencies`、`files`、`version`、`main`/`exports` 均未动，按原判据会为纯元数据改动触发全架构重建。修正为**字段级**：发布元数据（`publishConfig` 等）、文档、CI 配置**不跟进**；`dependencies` 系列 / `files` / `main` / `exports` / `scripts` / `version` / 源码**必须跟进**；无法判断时按跟进处理。适配层描述同步修正。
 
 | 提交 | 说明 |
 |------|------|
@@ -789,7 +789,7 @@
 
 ## 2026-09-17T11:31:32+09:00
 
-**摘要**：feat(skills): 支持同账户子项目链式检查与跨仓维护条目链接 — 新特性：仓库引用的**同账户子项目**（典型为薄封装）也纳入软件更新检查，前提成立时**链式并行执行**，子项目结果**视为主仓结果**，但分别计入两仓日志、主仓条目**链接到子仓条目章节**。**归属先评估再落笔**——通用逻辑进通用技能，仓库强相关内容剥离到适配层：**`nix-flake-update-check`（通用）**新增第 9 步「同账户子项目链式检查」，含引用关系发现（`fetchFromGitHub` / flake input / submodule 三种形态）、**四项前提校验**（无回环 / 无版本冲突 / 可独立升级 / 账户一致，任一不成立即退化为提示而不链式）、回环与深度上限检测、依赖冲突判据、链式并行与失败隔离、结果归属，以及「**子仓何时需要跟进**」的分流判据（版本号变 → 必须跟进；仅文档变 → 跟进无意义）。**`write-maintenance-log`（通用）**新增类型 5「跨仓库子项目链式更新」：主仓只记薄封装坐标变更（`rev` / hash）并链接子仓条目，子仓记自身完整变更——两边内容不同、不是重复。**`write-project-docs`（通用）**新增「子仓引用关系必须显式记录」：主仓短页须写明源码仓库 + 主仓侧角色 + 钉住的坐标 + 同步方式。**`nixkits-check-updates`（适配层）**只承载本仓专有事实：子仓坐标、构建体系、peer 依赖判据与历史坐标表。**dry run 先行验证**发现并修正三处真实缺陷：①技能中的发现命令缺 `-h`，`awk` 字段号错位导致**静默返回空**（会被误判为「本仓无子项目」）；②依赖冲突判据写成「两侧是否相等」，实测子仓声明 `0.1.1-rc.2` 而宿主提供 `0.1.5-rc.2`——**peer 性质依赖下宿主更高是正常状态**，判据应为「子仓要求是否高于宿主提供」；③GitHub 锚点推导规则写成「去掉 `:` 与 `+`」，实为**逐字符替换为 `-`**（`: ` 与 `+` 各变一个 `-`、原 `-` 保留）。**dry run 同时发现一处真实待办**：主仓钉住的 `dsh-api-balance` `rev` 落后子仓 HEAD 两个提交，但**版本号未变且均为文档提交**，按新判据**不触发**重钉——正是该分流条款要防的误升级
+**摘要**：feat(skills): 同账户子项目链式检查与跨仓维护条目链接 — 仓库引用的同账户子项目（典型为薄封装）纳入更新检查，前提成立时链式并行，结果视为主仓结果但分别计入两仓日志，主仓条目链接到子仓条目。归属：`nix-flake-update-check` 新增第 9 步（引用发现三形态、四项前提校验、回环与深度上限、失败隔离），`write-maintenance-log` 新增类型 5，`write-project-docs` 要求显式记录子仓引用关系，适配层只承载本仓专有事实。dry run 修正三处缺陷：检测命令缺 `-h` 致 `awk` 字段错位而静默返回空；依赖冲突判据改为「子仓要求是否高于宿主提供」；GitHub 锚点规则实为逐字符替换为 `-`。主仓钉住的 `dsh-api-balance` rev 落后两个文档提交，按新判据不重钉。
 
 | 提交 | 说明 |
 |------|------|
@@ -797,7 +797,7 @@
 
 ## 2026-09-17T11:21:34+09:00
 
-**摘要**：chore(security): 完全移除 `dependabot.yml` 并确立「不引入外部自动化」安全边界 — 上一轮只为 npm 生态**结构性无效**而砍掉该生态、保留 `github-actions`，本次判断进一步收紧：**Dependabot 本身就是我们不愿引入的东西**。即便它不可执行、只能开 PR、也拿不到 secrets，它仍是**外部自动化集成**——由 GitHub 平台运行、行为不由我们掌控，与本仓库「开发维护纯粹由维护者（狐莉）与小爪完成」的边界冲突。故整份 `.github/dependabot.yml` 删除，`AGENTS.md` 新增「## 安全边界：不引入外部自动化」章节将其固定为规则：给出拒绝清单（第三方 CI 扫描器、Dependabot 含纯配置形态）、判据（需要一项自动化能力时，先问**能否用仓库内已有的 `gh`/`git`/`nix` 自行实现**，可以就自己写进技能、不可以就人工执行）与已接受代价（action 的安全更新需主动跑技能检查，而非自动收到 PR）。**能力不丢**：此前「action 固定到 SHA 后收不到更新通知」这处盲点本由 Dependabot 填补，现改由 `nix-flake-update-check` 技能自行实现——新增「## 检查 GitHub Actions 的更新」章节（`grep` 列出固定 action → `gh api` 查 latest tag → 取 tag 的 commit SHA 并处理 annotated tag → 回写 SHA 与注释版本号 → 验证），原「Dependabot 的自动 PR 不能直接合并」小节改写为面向其他仓库的通用指引并加注本仓库不使用该类集成；四语文档同步。**实测**：按新流程核对现有 3 个固定 action，`actions/checkout` 最新 `v7.0.1`（`3d3c42e5…`）、`cachix/cachix-action` 最新 `v17`（`38b08261…`）均与仓库现值一致——即当前全部为最新
+**摘要**：chore(security): 完全移除 `dependabot.yml` 并确立「不引入外部自动化」安全边界 — Dependabot 即便不可执行、只开 PR、拿不到 secrets，仍是 GitHub 运行、行为不由我们掌控的**外部自动化集成**，与本仓「开发维护由维护者与小爪完成」的边界冲突，故整份删除。`AGENTS.md` 新增该章节：拒绝清单（第三方 CI 扫描器、Dependabot）、判据（先用仓库内 `gh`/`git`/`nix` 自行实现，否则人工）、代价（action 安全更新须主动跑技能检查）。能力不丢：`nix-flake-update-check` 新增「检查 GitHub Actions 的更新」章节（列固定 action → 查 tag → 回写 SHA），原「自动 PR 不能直接合并」小节改为通用指引。四语文档同步。
 
 | 提交 | 说明 |
 |------|------|
@@ -805,7 +805,7 @@
 
 ## 2026-09-17T11:03:51+09:00
 
-**摘要**：chore(ci): Dependabot 移除 npm 生态，仅保留 `github-actions` — 基于 PR #7 的实测结论作出的调整：npm 生态对本仓库**结构性无效**。本仓库的 npm 包由 `buildNpmPackage` 包装，其 `npmDepsHash` 会被主构建与 npm-deps 产物**逐字节**校验，而 Dependabot 只改 `package.json`/`package-lock.json`、无法感知 `.nix` 里的该 hash，故它开出的**每个 npm 更新 PR 必然 CI 失败**（`npmDepsHash is out of date`）。保留该生态等于持续产生不可合并的 PR，故移除之；npm 依赖升级改由 `nix-flake-update-check` 技能人工处理（该技能已涵盖补 `npmDepsHash` 与核对 `next`/`alpha` 通道两步）。**配置内以注释完整记录了移除理由**（含 PR #7 的实测现象与「Dependabot 不跨 dist-tag」的限制），避免日后被误当作遗漏而重新加回。`github-actions` 生态保留——它在本仓库验证有效（PR #6 的 checkout 升级即由它产出，且正确保留了 SHA 固定）
+**摘要**：chore(ci): Dependabot 移除 npm 生态，仅保留 `github-actions` — npm 生态对本仓**结构性无效**：npm 包由 `buildNpmPackage` 包装，`npmDepsHash` 会被主构建与 npm-deps 产物逐字节校验，而 Dependabot 只改 `package.json`/`package-lock.json`、无法感知 `.nix` 里的该 hash，故其开出的每个 npm 更新 PR 必然 CI 失败（`npmDepsHash is out of date`）。npm 依赖升级改由 `nix-flake-update-check` 技能人工处理；移除理由以注释完整记在配置内，避免日后误当遗漏加回。`github-actions` 保留——PR #6 证明其有效且正确维持 SHA 固定。
 
 | 提交 | 说明 |
 |------|------|
@@ -813,7 +813,7 @@
 
 ## 2026-09-17T10:55:02+09:00
 
-**摘要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — 两条均由**前一轮加入的 `dependabot.yml` 自动生成**，本条目记录审计与处置。**PR #6（checkout）已合并**：Dependabot 正确地保留了 SHA 固定（而非退回浮动标签），我核对了新 SHA `3d3c42e5…` 确实指向 `v7.0.1` tag（提交 `prep v7.0.1 release`）；初次 CI 有 2 项失败，但原因是 `llama-cpp-ver` 输入访问 GitHub API 时的 **403 限流**（与升级无关，62 项其他构建均通过），重跑后 **64/64 全通过**即合并。**PR #7（dsh-tools）已关闭并改为手动升级**：该 PR **必然无法通过 CI** —— Dependabot 只改 `package.json`/`package-lock.json`，无法感知 `buildNpmPackage` 的 `npmDepsHash`，CI 固定报 `npmDepsHash is out of date`；这是 **bot 与 Nix 包装的结构性错配**，非配置错误。此外它提议的 `0.1.2-rc.1` **落后于活跃通道**（`next` 已是 0.1.5-rc.2、`alpha` 已是 0.1.6-alpha.1），而**宿主 dsh 自带的正是 0.1.5-rc.2**。故手动升到 0.1.5-rc.2 使插件内嵌副本与宿主树对齐，并同步更新 `npmDepsHash` 为 `sha256-5jd5O4…`。**验证**：构建通过；产物内 `dsh-tools` 为 0.1.5-rc.2（与宿主一致）；运行时加载 `exit=0`、零错误；`nix flake check` 全通过。**泛化**：把「Dependabot 自动 PR 的处置」写入 `nix-flake-update-check` 技能——固定症状、补 hash 流程，以及「必须核对目标版本是否落后于 next/alpha 通道」这一易漏判据
+**摘要**：chore(dsh-nixos-shell): `dsh-tools` 0.1.2-alpha.2 → 0.1.5-rc.2；ci: `actions/checkout` v4 → v7.0.1 — 两者均由前一轮 `dependabot.yml` 自动生成。PR #6 已合并（SHA 固定保留正确）；PR #7 改为手动升级：Dependabot 感知不到 `npmDepsHash`，CI 必报 `npmDepsHash is out of date`，改升 0.1.5-rc.2 使内嵌副本与宿主 dsh 对齐并更新该 hash。验证：构建通过、产物内版本与宿主一致、`nix flake check` 全通过。处置写入 `nix-flake-update-check` 技能。
 
 | 提交 | 说明 |
 |------|------|
@@ -823,7 +823,7 @@
 
 ## 2026-09-17T01:40:58+09:00
 
-**摘要**：docs(security): 在 `SECURITY.md` 明确「重复提交」的处理界限（四语） — 前一提交列出了 4 条已评估的外部报告，但措辞仅为说明性；本次追加「关于重复提交」小节使其具备约束力：**上表已列出的同一结论，若无新证据再次提交，将直接关闭并指向本节**。同时划清受理与关闭的界限以免误伤正当报告——**受理**：上表未涵盖的新问题、指出上表某条结论有误（附可复现证据）、相同主题但不同的威胁模型或利用路径；**直接关闭**：仅重述上表已有结论、同一规则的再次自动扫描输出。并保留一句「『指出结论有误』始终欢迎」——上表四条本身亦是经复核作出的判断，判据若错则应改正。四语同步
+**摘要**：docs(security): `SECURITY.md` 明确「重复提交」的处理界限（四语）— 新增小节使其具备约束力：上表已列出的同一结论、若无新证据再次提交，将直接关闭并指向本节。同时划清受理与关闭的界限以免误伤正当报告——受理：上表未涵盖的新问题、指出上表某条结论有误（附可复现证据）、同一主题但威胁模型或利用路径不同；直接关闭：仅重述已有结论、同一规则的再次自动扫描输出。并保留「指出结论有误始终欢迎」：上表四条本身亦是经复核的判断，判据若错则应改正。
 
 | 提交 | 说明 |
 |------|------|
@@ -831,7 +831,11 @@
 
 ## 2026-09-17T01:34:13+09:00
 
-**摘要**：docs(security): `SECURITY.md` 新增「已评估的外部报告」节并纳入四语本地化 — 目的是把**已复核并关闭的 4 条外部报告**公开列出，使后续报告者不必重复提交同类问题。逐条记录结论与依据：**PR #4**（@anupamme，称 `/token`、`/voicepack`、`/tts` 缺限流——误报：描述与 diff 不符，实际只改 `/query`；其限流键 `x-forwarded-for` 客户端可伪造，且本机同源 RPC 不带该头，会把全部本机流量并入单一桶而误伤自身）；**PR #5**（@anupamme，称 `/query` 缺请求体上限——误报：该防护早已由 `readJsonBody` 的 64 KiB 上限提供，其 `content-length` 检查可被 chunked 绕过、`text.length` 是 UTF-16 码元数而非字节数）；**issue #1**（@begininvoke，称 `secrets: inherit` 违反最小权限——误报：被调方是本仓库内的本地 workflow，全仓仅 2 个 secret，显式传递与 `inherit` 集合完全相同）；**issue #2**（同 #1，逐字节重复）。同节还记录了这些报告**促成的两次真实加固**：`/tts` 端点的 SSRF（报告未提及，复核端点时发现，该端点已随 `dsh-api-balance` 迁至新仓库）与 31 个构建 workflow 的最小权限补全。**立场说明**：规则命中本身大多属实，但威胁模型不适用于本项目的部署形态；处理方式是「先复核、再答复、附可复现证据」，且**误报不视为打扰**——上表四条最终引出了两次真实加固。本地化方面新增 `docs/SECURITY.{en,ja,pcn}.md`，四语切换器互链，四语 README 在许可节后加入指向。**注**：issue #1/#2 其后已被删除（现仅存 issue #3），此处保留历史编号以便追溯
+**摘要**：docs(security): `SECURITY.md` 新增「已评估的外部报告」节，含 `docs/SECURITY.{en,ja,pcn}.md` — 公开 4 条已复核关闭的报告。
+- PR #4（`/token`、`/voicepack`、`/tts` 缺限流）与 PR #5（`/query` 缺请求体上限）均属误报：描述与 diff 不符、`readJsonBody` 已有 64 KiB 上限。
+- issue #1/#2（`secrets: inherit` 违反最小权限）亦属误报：全仓仅 2 个 secret，显式传递与 `inherit` 等价。
+- 报告促成两次真实加固：`/tts` 端点 SSRF、31 个构建 workflow 最小权限补全。
+- 立场：规则多属实，但威胁模型不适用本项目部署形态；误报不算打扰。
 
 | 提交 | 说明 |
 |------|------|
@@ -839,7 +843,11 @@
 
 ## 2026-09-17T01:23:46+09:00
 
-**摘要**：chore(security): 补 SECURITY.md、Dependabot，并将 GitHub Actions 固定到 SHA — 起因是 awesome-ai-plugins 维护者（@kantorcodes）对 PR #323 的整改要求：其集中扫描给 NixKits 评 **71/100，低于该目录要求的 80 分阈值**，要求「修复或记录规则级发现，加入固定 SHA 的 scanner workflow，重跑扫描，达 80 分后请求 review」。逐项核对扫描评分表后确认：**零 critical、零 high**，扣分全在工程卫生项——Security 10/16（缺 `SECURITY.md`、「No approval bypass defaults」）、Operational Security 9/17（**Actions 未固定 SHA**、缺 Dependabot），而 Best Practices 6/6 与 Code Quality 10/10 均为满分。本次整改三项：① 新增 `SECURITY.md`（支持版本、GitHub 私有漏洞报告渠道、响应时限，并显式列出「已知设计边界」——免认证入口、sudo 守护、浏览器令牌读取、`/nix/store` 路径陷阱——以免这些**有意为之**的行为被反复误报为漏洞）；② 新增 `.github/dependabot.yml`（覆盖 `github-actions` 与 `npm` 两个生态）；③ **将 6 处第三方 action 从浮动引用固定到提交 SHA**。**第三项本身即有实质价值**：`DeterminateSystems/nix-installer-action@main` 原是**浮动分支引用**，上游任何变更都会直接进入我们的 CI —— 与早前「31 个 workflow 补 permissions」属同一类供应链卫生问题，而非仅为应付评分。**未采纳**：不引入维护者建议的第三方 scanner action（`hashgraph-online/ai-plugin-scanner-action`）——该建议在其文档中标注为非必需，代价是 10% 信任分扣减，已按接受处理。同时修订 `SECURITY.md` 中关于沙箱模式的措辞以免与扫描规则冲突
+**摘要**：chore(security): 补 `SECURITY.md`、Dependabot，Actions 固定到 SHA — 起因 awesome-ai-plugins 维护者（@kantorcodes）PR #323 整改要求：扫描 71/100，低于 80 阈值。
+- 评分表：零 critical 零 high，扣分全在工程卫生（Actions 未固定 SHA、缺 Dependabot）。
+- 新增 `SECURITY.md`（支持版本、报告渠道、响应时限）与 `.github/dependabot.yml`。
+- 6 处第三方 action 由浮动引用固定到 SHA，含浮动分支的 `DeterminateSystems/nix-installer-action@main`。
+- 未采纳第三方 scanner action（代价 10% 信任分，已接受）。
 
 | 提交 | 说明 |
 |------|------|
@@ -847,7 +855,7 @@
 
 ## 2026-09-16T16:45:03+09:00
 
-**摘要**：fix(dsh-nixos-shell): 修复 `skills-nixos` 在本机部署后才暴露的路径断裂 — 这是 `559e841` 引入的缺陷，且**只有真正部署到本机才会显形**。该提交为 NixOS模式 增设第二个技能根，写作 `../../skills-nixos/`（相对预设目录），我当时只验证了「构建产物内相对路径可达」就判定成功。但 NixOS 模块的种子逻辑是 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`（seed-once）——**预设目录之外的内容不会被复制**，于是种子后该根解析为 `~/.dsh/skills-nixos`（不存在），新增的 3 个 NixOS 技能在 NixOS模式/维护模式 下**实际加载不到**。触发条件是本机从 `bf9c21e` 同步到 `95fc09b` 并重种子预设后才被发现。**修复**：`postPatch` 改为把白名单子集生成到各预设目录**内**（`presets/{nixos-mode,maintenance-mode}/skills-nixos/`），预设的 `customSkillDirs` 根相应改为 `skills-nixos/`（相对预设目录自身）——这与预设自带的 `skills/` 根一致，后者同样位于预设目录内，故种子后仍有效。`package.json` 的 `files` 移除已不存在的包根 `skills-nixos`；模块与预设中的职责注释同步订正，并明确记入「技能根必须位于预设目录内」这一约束。**验证**：模拟 seed 后 `skills-nixos` 可达（修复前此步失败）；`check-preset-derivation` 等 5 项 flake check 全通过；部署后新会话的技能目录已实际列出 `nixos-modern-cli`、`nixos-specialisation-tuning`、`recover-nixos-config`。**教训**：涉及「预设随种子复制」的设计，验证必须在**种子之后**的相对位置进行，只验 store 内路径会漏掉此类断裂
+**摘要**：fix(dsh-nixos-shell): 修复 `skills-nixos` 的路径断裂 — `559e841` 引入，本机部署后才显形。该提交把技能根写成 `../../skills-nixos/`（相对预设目录），而种子的 `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>` 不复制预设目录外的内容，seed 后该根解析为不存在的 `~/.dsh/skills-nixos`，新增 3 个 NixOS 技能加载不到。修复：`postPatch` 把白名单子集生成到各预设目录内，`customSkillDirs` 根改为 `skills-nixos/`。验证：模拟 seed 后可达、`nix flake check` 全通过、部署后新会话列出这 3 个技能。教训：预设经种子复制，验证须在种子后。
 
 | 提交 | 说明 |
 |------|------|
@@ -855,7 +863,11 @@
 
 ## 2026-09-16T14:54:53+09:00
 
-**摘要**：refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改为薄封装 — 这是本仓**首次**组件拆分。审计确认该子项目是本仓唯一一个**平台无关**（非 NixOS 专项）的严肃项目（`lib/index.js` 1733 行 + `lib/client.js` 4922 行，39 次提交），且**代码层与 NixKits 零耦合**（仅 import `@deepseek-ai/dsh-credentials` 与 Node 内置模块，无任何仓库内引用），同时已有明确的 npm 打包需求——三项判据齐备。**执行结果**：新仓库 <https://github.com/Kihara777/dsh-api-balance>（公开，不带 git 历史，从单次初始提交开始），承载源码 + 四语完整文档 + npm 发布 CI（release 触发，含 provenance）；**已实测**从真实远端一行安装可用（`dsh plugin add github:Kihara777/dsh-api-balance` → 进入 `dsh.profile.bundles` → web profile 启动 `exit=0`、零错误）。本仓侧改动：删除 `packages/dsh-api-balance/`；`packages/dsh-api-balance.nix` 改为薄封装（`fetchFromGitHub` 固定 rev + 两个 hash，**`npmDepsHash` 未变**——证实迁出前后源码内容逐字节一致）；`docs/<lang>/dsh-api-balance.md` 各由 161 行压为短页（说明迁出、指向新仓完整文档，只保留本仓独有的声明式安装一节）；README 四语插件表标注迁出与薄封装角色。**CI workflow 有意保留**——它构建的 flake 输出 `#dsh-api-balance` 现即薄封装，保留可让声明式用户继续命中 Cachix 缓存。**同时更新 `write-project-docs` 技能**：新增「主仓薄封装 + 子仓完整文档」一节的架构约定（分工表、迁出判据、短页标准结构、主仓侧其余同步点），并把「已迁出组件在主仓保留完整文档副本」列入反模式表——使本次拆分沉淀为可复用流程而非一次性操作
+**摘要**：refactor(dsh-api-balance)!: 迁出为独立仓库，本仓改薄封装 — 首次组件拆分。
+- 审计判据：唯一平台无关项目、与 NixKits 零代码耦合、有 npm 打包需求。
+- 新仓库 `Kihara777/dsh-api-balance`：源码、四语文档、npm 发布 CI；已实测 `dsh plugin add` 一行装成，web profile `exit=0`。
+- 本仓侧：删除 `packages/dsh-api-balance/`，`.nix` 改为 `fetchFromGitHub` 薄封装（`npmDepsHash` 未变）；文档压为短页、README 标注迁出；CI workflow 保留以继续命中 Cachix 缓存。
+- 更新 `write-project-docs`：「主仓薄封装 + 子仓完整文档」架构。
 
 | 提交 | 说明 |
 |------|------|
@@ -866,7 +878,7 @@
 
 ## 2026-09-16T14:27:33+09:00
 
-**摘要**：refactor(skills): 泛化 `/etc/nixos/AGENTS.md` 实践中的两个未覆盖缺口 — 起因是审计该文件（670 行，HarukaX 本机系统配置规则）中业务逻辑与经验的泛化价值。**审计结论：约 75% 已被现有技能覆盖**——分面架构与覆盖冲突、`mkForce` 误用事故、消费者归属原则、`mkDefault`、llama.cpp 参数禁用项与诊断顺序、平台档位实测、MCP schema 每轮开销、静默故障诊断（须读配置日志）等，均已在 `nixos-specialisation-tuning` / `nixos-modern-cli` / `recover-nixos-config` 中。**过程中修正一处自身误判**：初审认为「`mkForce` 误用未被覆盖」，逐词复核后发现该技能已有 4 处覆盖（含 `mkForce` 覆盖 `systemPackages` 导致删掉 `bash`/`systemd`、无法登录的完整事故案例），故从缺口清单中剔除。真正的缺口只有两个：**① 密钥与 `path:` input**（`nixos-modern-cli` 新增一节）——Nix 只把 git 跟踪的文件拷进 store，故密钥留在仓库内没有出路（提交则泄露；gitignore 则求值报 `Path ... is not tracked by Git`），须放仓库外用 `path:` input 引入，附两个陷阱：`path:` input 受 `flake.lock` 锁定、改内容需 `--update-input`；`{ nixosSecrets, ... }` 中 `...` **不绑定**该参数须显式列出。**② 热管理方法论**（`nixos-specialisation-tuning` 新增一节）——两类手段代价不同（抬高曲线只增噪音 vs 降档损失速度）；曲线末点封顶过致使最危险区间风扇恒定；`enabled: false` 致档位与曲线脱节（最高功耗档配最弱策略）；固件硬限恰好 8 个温控点且 panic 发生在**写入之后**；`asusctl` 写入是临时的、验证须重启守护进程确认从文件重读；决定性判据为温和 vs 激进曲线温度转速**完全相同** → 风扇已饱和 → 唯一有效手段是降功耗，且 EC 阈值对 OS 不可见。**未泛化**：机器型号、数值表、`triggerTemp`、mihomo 订阅细节、`g41.moe`、`toface` 脚本等强绑定本机的内容一律留在 `/etc/nixos/AGENTS.md`。两技能 `description` 与四语文档同步更新
+**摘要**：refactor(skills): 泛化 `/etc/nixos/AGENTS.md` 实践的两个未覆盖缺口 — 审计该文件（HarukaX 本机配置规则），结论约 75% 已被现有技能覆盖。真缺口：① 密钥与 `path:` input（`nixos-modern-cli` 新增）——密钥须放仓库外经 `path:` 引入，陷阱是该 input 受 `flake.lock` 锁定，改内容需 `--update-input`；② 热管理方法论（`nixos-specialisation-tuning` 新增）——抬高曲线只增噪音、降档损失速度，`enabled: false` 致档位与曲线脱节，`asusctl` 写入是临时的、验证须重启守护进程，温和与激进曲线温度转速完全相同即风扇已饱和、唯一手段是降功耗。机器特定内容留在 `/etc/nixos/AGENTS.md`，四语文档同步更新
 
 | 提交 | 说明 |
 |------|------|
@@ -875,7 +887,7 @@
 
 ## 2026-09-16T14:11:18+09:00
 
-**摘要**：feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 — 起因是逐技能评审仓库 `skills/` 树（10 个）与两预设同捆内容的匹配度。评审结论：**加入** `nixos-modern-cli`（现代 Nix/NixOS CLI、shell 能力、sudo 流程）、`recover-nixos-config`（从 store 恢复误删的 /etc/nixos）、`nixos-specialisation-tuning`（specialisation 分面 + UMA 上 llama.cpp 调优）——三者均为「在 NixOS 上做事」的通用能力，正合 NixOS模式 定位；**不加** `nixkits-skills`（技能安装器，是工具而非工作方法）与 `news-three-elements`（创作类，且已由独立包 `dsh-preset-news-three-elements` 提供专属预设）。维护模式为 NixOS模式 的派生，**自动继承**这 3 个。**实现方式（避免副本）**：不把技能复制进 `presets/<mode>/skills/`——该目录在两预设间逐字节镜像，再放一份会成为仓库 `skills/` 之外的第二副本而可能漂移。改为在 `postPatch` 中按白名单从同一仓库树生成构建期子集 `skills-nixos/`，预设的 `skill-filesystem` 行增加第二个 `customSkillDirs` 根，以 `../../skills-nixos/` 相对路径解析（`baseUrl` = 预设目录）。**为何用子集目录而非直接挂 `skills-embedded/`**：`skill-filesystem` 会注册每个配置根下的**全部**子目录，直接挂嵌入树会把 `write-project-docs` 等维护类技能一并带进 NixOS模式，超出本次选定范围。已实测：构建产物中 `skills-nixos/` 恰含 3 个技能、与仓库源逐字节一致，`../../skills-nixos/` 从预设目录可达，`skills-embedded/` 仍完整保留 10 个；`check-preset-derivation` 等 5 项 flake check 全通过
+**摘要**：feat(dsh-nixos-shell): NixOS模式 同捆 3 个 NixOS 运维技能 — 评审仓库 `skills/` 树，结论：**加入** `nixos-modern-cli`、`recover-nixos-config`、`nixos-specialisation-tuning`；**不加** `nixkits-skills`（技能安装器）与 `news-three-elements`（创作类，已有独立包）。维护模式为派生，自动继承这 3 个。**实现**：不复制进 `presets/<mode>/skills/`（两预设间逐字节镜像，再放一份会成第二副本而漂移），改为 `postPatch` 按白名单从仓库树生成构建期子集 `skills-nixos/`，供 `skill-filesystem` 以 `../../skills-nixos/` 挂载
 
 | 提交 | 说明 |
 |------|------|
@@ -884,7 +896,7 @@
 
 ## 2026-09-16T13:57:56+09:00
 
-**摘要**：feat(dsh-api-balance): 新增 `dsh.bundle`，支持 `dsh plugin add` 原生安装 — 因 `dsh-api-balance` 与 `dsh-nixos-shell` 性质不同：前者是**平台无关的界面/功能增强**（仅 `inject = ["connection", "webServer"]`，无预设、无技能、不写 `$DSH_HOME`），而后者的核心价值正是 Agent 预设。前一轮已确认 `dsh-nixos-shell` 的 bundle 路线不可行（预设 root 需绝对路径，`./` 锚定只作用于 `insert[].name`）。**关键发现（推翻此前结论）**：读 `cordis-plugin-loader/lib/index.js:269-284` 得知，entry 名以 `./` 开头时会被 `anchorInsertedPluginNames` 锚定为**该 patch 所在目录**下的绝对 `file://` URL，从而正常 import——此前的"loader 只从 dsh 树解析、profile 里的包装不上"的判断是错的。本次据此实现：新增 `cordis.patch.yml` 以 `name: './lib/index.js'` 注册插件（**不可**写裸包名，否则从 dsh 安装树解析报 `Cannot find package`），`package.json` 加 `dsh.bundle.patch` 并在 `files` 补该文件。**实测**：安装后成功进入 `dsh.profile.bundles`，`--dump-config` 显示 entry 锚定为 profile 内的绝对 URL，web profile 启动 `exit=0` 且零错误；Nix 构建与 `nix flake check` 均不受影响。**双轨并存**：两条路径均可独立工作（声明式写 `$DSH_HOME/profiles/web/cordis.patch.yml`，bundle 写 `dsh.profile.bundles`），但**同时启用会重复注册同一 entry id**，故文档明确要求二者择一，并说明方式 B 经 git 解析、不受 `flake.lock` 锁定
+**摘要**：feat(dsh-api-balance): 新增 `dsh.bundle`，支持 `dsh plugin add` 原生安装 — 两插件性质不同：`dsh-api-balance` 是平台无关的界面增强（仅 `inject = ["connection", "webServer"]`，无预设、无技能、不写 `$DSH_HOME`），`dsh-nixos-shell` 的核心价值则是 Agent 预设。**关键发现（推翻此前结论）**：entry 名以 `./` 开头会被锚定为该 patch 所在目录下的绝对 `file://` URL。据此新增 `cordis.patch.yml` 以 `name: './lib/index.js'` 注册插件（裸包名会报错），`package.json` 加 `dsh.bundle.patch`
 
 | 提交 | 说明 |
 |------|------|
@@ -895,7 +907,7 @@
 
 ## 2026-09-16T13:44:09+09:00
 
-**摘要**：refactor(dsh-plugins): 移除两个插件未使用的 `peerDependencies` — 起因是评估 issue #3 的收录邀请时，为验证 dsh 插件能否经 `dsh plugin add` 安装而做的实测。实测发现两个插件的 peer 声明**与实际 import 完全不符**：`dsh-nixos-shell` 声明 `cordis` / `dsh-subprocess` / `dsh-timer`，`dsh-api-balance` 声明 `cordis` / `dsh-client-connection`，而两者实际只 import 各自的真实依赖（`dsh-tools` + `schemastery` / `dsh-credentials`）。其中 **`@deepseek-ai/dsh-timer` 在 npm（404）与宿主 dsh 树中都不存在**——宿主由 `cordis-plugin-timer` 提供 `timer` 服务，而插件 `inject` 的是服务名而非包名；`dsh-client-connection` 则已由 `dsh.client.inject` 正确声明，属重复。**影响判断**：这些死声明在声明式路径下**从不生效**（`buildNpmPackage` 用 `--legacy-peer-deps` 跳过 peer 解析，已实测构建产物仅含真实依赖），故本改动不影响任何现有部署、无版本变更；但它们在 pnpm 路径下会**直接阻断安装**（`dsh-timer` 404），且向生态传递误导性信号。lock 与 `npmDepsHash` 同步重生成（已验证 vendored lock 与 npm-deps 的 fixup 产物逐字节一致）。**路线取舍记录**：本轮曾评估为 `dsh-nixos-shell` 补齐 `dsh.bundle` 以投 awesome-ai-plugins 的 DeepSeek Harness 节，实测确认插件本体可经 `github:...#path:` 安装并进入 profile layer stack（无需发 npm），但 **Agent 预设无法经 bundle patch 注册**——`agent-presets.roots[].path` 需绝对路径，而 patch 只能锚定 `insert[].name`、`!!js` 作用域仅有 `dshHomePath`（且反引号会致 js-yaml 解析失败）。绕开该限制需让插件写用户 `$DSH_HOME` 来种子预设，牺牲声明式与不可变性。**结论：放弃 dsh.bundle 路线**——本项目插件面向 NixOS，经 flake/NixOS 模块声明式分发（版本由 Nix 锁定、随系统代际更新、可复现）更符合 NixOS 哲学且维护成本更低；相关改动已全部回退，未进入历史
+**摘要**：refactor(dsh-plugins): 移除两个插件未使用的 `peerDependencies` — 实测发现两者 peer 声明与实际 import 不符：`dsh-nixos-shell` 声明 `cordis` / `dsh-subprocess` / `dsh-timer`，`dsh-api-balance` 声明 `cordis` / `dsh-client-connection`，实际只 import 各自的真实依赖（`dsh-tools` + `schemastery` / `dsh-credentials`），且 `dsh-timer` 在 npm 与宿主树中都不存在。死声明在声明式路径下从不生效，不影响现有部署，但 pnpm 路径下会阻断安装。lock 与 `npmDepsHash` 同步重生成
 
 | 提交 | 说明 |
 |------|------|
@@ -905,7 +917,7 @@
 
 ## 2026-09-16T12:39:12+09:00
 
-**摘要**：refactor(skills)!: 拆分 `nixkits-check-updates` 为「通用核心 + 仓库适配层」 — 起因是评估 issue #3（awesome-ai-plugins 收录邀请）。该邀请本身无技术争议，但促使我们审查被推荐技能的可移植性：原 `nixkits-check-updates`（299 行）与 NixKits 强耦合——第 5 步**硬编码** `for lang in zh en ja pcn` 与 `docs/$lang/<pkg>.md` 路径、整节 dsh 插件清单同步、第 8 步强制调用 `write-maintenance-log`。**这使它对其他 nix flake 仓库不可直接用**：非 NixKits 仓库执行到第 5 步会去 `sed` 不存在的 `docs/pcn/`，到第 8 步会调用不存在的技能——不是措辞不够通用，而是执行会直接失败。本次按「通用核心 + 仓库适配层」拆分：新增 `nix-flake-update-check`（314 行，不绑定任何仓库）承载包发现、包型分流 hash 流程、flake.lock 三路处置、补丁内版本检查与 nixpkgs 漂移陷阱，第 5/8 步改为「按仓库实际结构选择」而非硬编码；`nixkits-check-updates` 瘦身为适配层（299 → 115 行），只留四语文档、dsh 插件清单、维护日志与历史事故教训（comfyui 漂移、codewhale-riscv64 CI 失败、Rust Cargo.lock）。定义**适配层契约**（文档同步 / 变更记录 / 动态输入 / 事故教训 / 额外同步项由适配层声明，冲突时以适配层为准）。**关键取舍**：此前担心泛化会稀释具体经验而让技能在主场变弱——拆分正是为规避该代价，事故教训与仓库约定**原样留在适配层**，通用核心只保留与仓库无关的方法论，两端各得其所。维护模式注入同步补入通用技能（二者均注册）；四语新增通用技能文档，README / dsh.md / modes/maintenance.md 注入清单与技能表同步
+**摘要**：refactor(skills)!: 拆分 `nixkits-check-updates` 为「通用核心 + 仓库适配层」 — 起因是评估 issue #3 时审查被推荐技能的可移植性：原技能与 NixKits 强耦合，第 5 步硬编码 `for lang in zh en ja pcn` 与 `docs/$lang/<pkg>.md` 路径，第 8 步强制调用 `write-maintenance-log`，别的 nix flake 仓库执行会失败。新增 `nix-flake-update-check`（314 行，不绑定仓库）承载包发现、包型分流 hash 流程、flake.lock 三路处置、补丁内版本检查与 nixpkgs 漂移陷阱；`nixkits-check-updates` 瘦身为适配层。适配层契约：文档同步 / 变更记录 / 动态输入 / 事故教训 / 额外同步项由其声明
 
 | 提交 | 说明 |
 |------|------|
@@ -917,7 +929,7 @@
 
 ## 2026-09-16T12:20:57+09:00
 
-**摘要**：ci: 为 31 个构建 workflow 补全顶层 `permissions` — 特别感谢外部贡献者 **@begininvoke**（RedGem 扫描报告）提交的 issue #1、#2：这两条报告经核验为误报（同一扫描器对 `build-blender-mcp-aarch64.yml:10` 的 `secrets: inherit` 重复报告，正文逐字节相同），规则命中虽属实但威胁模型在本仓库不成立——被调方 `./.github/workflows/build-package.yml` 是**同仓库、同 commit、同 review 流程**的本地可复用工作流，不存在 issue 假设的「untrusted source」；本仓库**总共只有 2 个** secret（`GITHUB_TOKEN`、`CACHIX_AUTH_TOKEN`），显式传递与 `inherit` 传递的集合**完全相同**，故对攻击者**不产生任何增益**——能篡改被调 workflow 的人本来就能直接读 `secrets.*`；且只改报告点名的那一处会在 31 个同构调用方之间造成不一致，故两条 issue 均不予采纳并已附详细证据关闭——**但正是这两条报告促使我们去做了一次完整的权限边界复核**，报告把注意力引向「可复用 workflow 的 secret/权限传递」这一正确方向，顺着该线索逐条核对调用链后，**发现并修复了一处真实的安全风险**：31 个 `build-*.yml` 调用方**均未声明 `permissions`**，因而继承仓库默认（可能为读写），而它们实际只做 checkout + `nix build` + 推送 Cachix，全部只需 `contents: read`。本次即为这 31 个调用方补上顶层 `permissions: contents: read`，与被调方 `build-package.yml:17-18` 已声明的权限保持一致。**取舍说明**：Cachix 推送使用独立的 `CACHIX_AUTH_TOKEN`，不依赖 `GITHUB_TOKEN` 的权限范围，故收紧后 CI 行为不变（`nix flake check` 中 `check-workflow-coverage` 通过）。**未采纳的部分**：不将 31 处 `secrets: inherit` 改为显式列举——那是形式合规而无实质安全收益的改动，且 `CACHIX_AUTH_TOKEN` 必须传给被调方，最小权限在此没有可削减余量
+**摘要**：ci: 为 31 个 `build-*.yml` 调用方补全顶层 `permissions: contents: read` — 它们均未声明 `permissions`，会继承仓库默认（可能可写），实际只做 checkout + `nix build` + 推送 Cachix，故与被调方 `build-package.yml:17-18` 对齐。起因是外部贡献者 **@begininvoke** 的 RedGem 扫描报告（issue #1、#2）：两条经核验均为误报（可复用 workflow 同仓库同 commit、仅 2 个 secret，`inherit` 与显式传递集合相同），不予采纳并附证据关闭，但促成了这次权限边界复核。31 处 `secrets: inherit` 保留不改：Cachix 用独立 `CACHIX_AUTH_TOKEN`，无可削减余量。
 
 | 提交 | 说明 |
 |------|------|
@@ -927,7 +939,7 @@
 
 ## 2026-09-16T11:58:25+09:00
 
-**摘要**：fix(dsh-api-balance): 修复自定义 TTS 代理的 SSRF 与请求头注入面 — 特别感谢外部贡献者 **@anupamme**（OrbisAI Security 扫描报告）提交的 PR #4、#5：这两条报告本身经核验为误报（#4 声称 `/token`、`/voicepack`、`/tts` 四个端点缺少限流，diff 却只改了第五个端点 `/query`，且以可伪造的 `x-forwarded-for` 为限流键会让本机同源客户端坍缩到单一桶而自我 429；#5 声称 `/query` 缺少请求体体积上限，而该防护早已由 `readJsonBody` 的 64 KiB 上限提供，其新增的 `content-length` 检查可被 chunked 绕过、`text.length` 又是 UTF-16 码元数而非字节数），故两条均不予合并并已附详细证据关闭——**但正是这两条报告唤醒了我们的安全边界复核意识**，促使我们逐端点核对本插件的输入与出网约束，并在其提及的 `/tts` 处理逻辑上**发现并修复了一个真实的安全威胁**：该代理接受任意 `http(s)` URL 并以 host 身份发起请求，可被用作内网探测与云元数据（`169.254.169.254`）读取的跳板；同时它把请求体中用户可控的 `headers` 原样转发，攻击者可借 host 身份补 `host` / `cookie` / `authorization` 头放大后果。本次按真实威胁模型修复：新增 `resolveTtsTarget` 与 `isBlockedAddress`，拒绝回环 / 私有 / 链路本地 / 保留地址（覆盖 RFC1918、`100.64/10` CGNAT、`169.254/16`、`224/4`、`fc00::/7`、`fe80::/10`、`ff00::/8`，含 IPv4-mapped IPv6），字面量 IP 直接判定、域名比对 DNS 解析结果；自定义请求头改为白名单（仅 `content-type` / `accept` / `accept-language` / `user-agent`）。**判断依据与取舍**：曾尝试「把连接固定到已校验 IP」以彻底消除 DNS rebinding 的 TOCTOU 窗口——实测 Node 的 `fetch` 强制以 URL 的 host 作为 `Host` 头与 TLS SNI，覆写 `host` 头被静默忽略，改 URL 主机名则会让合法 HTTPS TTS 后端的虚拟主机路由与证书校验全部失效。该代价高于本端点残余风险（本机自托管 dsh 的辅助代理，非多租户边界），故显式保留并在源码注释中记录该限制，而非以「已修复」掩盖。四语文档同步补充防护说明
+**摘要**：fix(dsh-api-balance): 修复自定义 TTS 代理的 SSRF 与请求头注入面 — 该代理接受任意 `http(s)` URL 并以 host 身份发起请求，可作内网探测与云元数据（`169.254.169.254`）读取的跳板；并将用户可控的 `headers` 原样转发，攻击者可补 `host` / `cookie` / `authorization` 头。修复：新增 `resolveTtsTarget` 与 `isBlockedAddress`，拒绝回环 / 私有 / 链路本地 / 保留地址（覆盖 RFC1918、CGNAT、IPv4-mapped IPv6）；自定义请求头改白名单（仅 `content-type` / `accept` / `accept-language` / `user-agent`）。四语文档同步补防护说明。
 
 | 提交 | 说明 |
 |------|------|
@@ -938,7 +950,7 @@
 
 ## 2026-09-16T11:38:20+09:00
 
-**摘要**：docs(deprecated): `DEPRECATED.md` 索引化并四语本地化 — 原先这一份中文文档同时承担两个职责：**索引**与**单个项目的完整说明**。只有一条时无妨，但它注定要长——项目一多，读者无法一眼看全，且整份文档没有本地化路径（既有的 `docs/<lang>/` 体系无处安放它）。本次按仓库既有约定重构：根 `DEPRECATED.md` 退化为**纯索引**（列表 + 指向各项目详情的链接），并按 `README`/`MAINTENANCE` 的成法出三份镜像 `docs/DEPRECATED.{en,ja,pcn}.md`；各废弃项目的详情移入 `docs/<lang>/deprecated/<name>.md`，四语各一份，顶部带语言切换器与返回索引的链接。首批迁移 comfyui-rocm 的完整说明（含逐字致敬句、三补丁对照表、scipy 误判复盘、废弃后配置示例、历史版本对照）。四语 `README` 新增「废弃项目」章节，`docs/<lang>/comfyui.md` 的引用改指详情页。**踩坑记录**：`docs/DEPRECATED.*.md` 自身位于 `docs/` 内，故其指向语言目录的链接必须写 `zh/...` 而非 `../zh/...`——`nix flake check` 首次即抓出 6 条死链（en/ja/pcn 各指向另外三语），已全部修正。这正是 `check-doc-links` 存在的价值：它拦下的恰是"照着上层文件的习惯写相对路径"这类只有人工翻页才会发现的错误。重构后新增项目只需在索引加一行、再补四份详情文档
+**摘要**：docs(deprecated): `DEPRECATED.md` 索引化并四语本地化 — 原先一份中文文档兼「索引」与「单个项目的完整说明」两职，项目一多便看不全，也无本地化位置。现根 `DEPRECATED.md` 退化为纯索引（列表 + 指向详情的链接），仿 `README`/`MAINTENANCE` 出三份镜像 `docs/DEPRECATED.{en,ja,pcn}.md`；各废弃项目详情移入 `docs/<lang>/deprecated/<name>.md`（四语各一份，顶部带语言切换器与返回索引的链接），首批迁移 comfyui-rocm。四语 `README` 新增「废弃项目」章节，`docs/<lang>/comfyui.md` 改指详情页。验证：`nix flake check` 抓出并修正 6 条死链。
 
 | 提交 | 说明 |
 |------|------|
@@ -946,7 +958,7 @@
 
 ## 2026-09-16T11:05:32+09:00
 
-**摘要**：refactor(comfyui)!: 退役 comfyui-rocm 补丁工程，模块改名 `nixkits.comfyui` — 上游已积极维护并把 ROCm 支持组件更新到能很好支持 StrixHalo 的版本，本补丁的历史使命完成，故整体移除：三个补丁（`strix-halo` / `nixpkgs-compat` / `stdenv-api`，本地补丁目录清空）、`modules/comfyui-rocm.nix` → `modules/comfyui.nix`、选项 `nixkits.comfyui-rocm` → `nixkits.comfyui`（去掉已无意义的 `-rocm` 后缀），四语文档 `comfyui-rocm.md` → `comfyui.md`，新增根目录 `DEPRECATED.md` 并把它列为第一条。**本次最值得记的是那个被误判了三轮的根因**：早先的「补丁已不再需要」结论建立在一轮 717-derivation 构建「全部成功」之上，**但那次 `scipy` 是二进制缓存命中、从未真正构建**——判据应当是日志里出现 `building '…'`，而不是「构建退出码为 0」。真正的原因是本机 `/etc/nixos` 把 comfyui-nix 的 `inputs.nixpkgs` 钉死在 `6438090`（2026-08-02）而顶层走 `nixos-unstable`：滚动的顶层让 `scipy` 命中公共缓存，被钉住的子 flake 则要现建，于是触发 `test_support_moments_sample` 的浮点断言失败，**看起来像「补丁仍然必要」**。删掉那行 pin 后 comfyui-nix 与顶层共用 `dc5d91f`，`scipy` 直接缓存命中、构建全绿。教训：**额外的 pin 会让子 flake 脱离主 nixpkgs 的缓存覆盖**，把缓存本来能解决的问题暴露成需要打补丁的问题。补丁过时性另有两条独立佐证：上游 `stdenv` 弃用读法计数为 **0**（34 处用 `hostPlatform`）；上游 `nix/versions.nix` 的 `rocm71` torch **2.10.0** 与 `strix-halo` 补丁逐字节一致（版本 / URL / hash 三者皆同），上游模块亦已支持 `gpuSupport = "rocm"`。**本机侧同步**：`system/software/comfyui.nix` 改用新选项路径、`flake.nix` 删 pin 行并重写注释、`flake.lock` 中 comfyui-nix 由 `path:` 变 github；两面 `nix build` 仅 10 个 derivation 待建、切至 generation 572，`comfyui.service` 仅存在于 plasma specialisation，`ExecStart` 为 `comfy-ui-0.34.0`、`HSA_OVERRIDE_GFX_VERSION=11.0.0` 仍由本模块的 `rocmGfxOverride` 提供。另删除了 `/home/kix/comfyui-nix-patched`（17 MB 陈旧 fork，仅剩注释引用）
+**摘要**：refactor(comfyui)!: 退役 comfyui-rocm 补丁工程，模块改名 `nixkits.comfyui` — 上游 ROCm 支持已能良好支持 StrixHalo，补丁使命完成：移除三补丁 `strix-halo` / `nixpkgs-compat` / `stdenv-api`、`modules/comfyui-rocm.nix`→`modules/comfyui.nix`、选项 `nixkits.comfyui-rocm`→`nixkits.comfyui`、四语文档 `comfyui-rocm.md`→`comfyui.md`，新增根 `DEPRECATED.md`。判据：上游 `stdenv` 弃用读法 0 处、`rocm71` torch 2.10.0 与 `strix-halo` 补丁逐字节一致、已支持 `gpuSupport = "rocm"`。
 
 | 提交 | 说明 |
 |------|------|
@@ -954,7 +966,7 @@
 
 ## 2026-09-16T01:45:07+09:00
 
-**摘要**：docs: 预设包更新要 `daemon-reload` 再 `restart dsh` — 本次部署实测到的坑：`nixos apply` 按设计不重启 dsh（稳定挂载点），而单跑 `systemctl restart dsh` 时系统仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里。症状是「服务确实重启了（ActiveEnterTimestamp 已更新）、会话里还是旧预设」：gen 570 部署后第一次 restart，`$DSH_HOME/profiles/web/cordis.patch.yml` 仍指向旧 store 路径，加 `systemctl daemon-reload` 再 restart 才翻到新路径（新副本含 `news-material.js`，与仓库逐字节一致）。AGENTS.md「本机部署」补上操作次序与核对方法（重启后查 patch 文件里的 store 路径），`docs/{zh,en,ja,pcn}/dsh.md` 的「代价与配套」一段同步改写
+**摘要**：docs: 预设包更新要 `daemon-reload` 再 `restart dsh` — `nixos apply` 按设计不重启 dsh（稳定挂载点），而单跑 `systemctl restart dsh` 仍会执行上一代的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在该文件里，症状是服务确已重启、会话仍载旧预设。gen 570 部署后第一次 restart 仍是旧路径，加 `systemctl daemon-reload` 再 restart 才翻新。AGENTS.md「本机部署」补上操作次序与核对方法，`docs/{zh,en,ja,pcn}/dsh.md` 同步改写。
 
 | 提交 | 说明 |
 |------|------|
@@ -962,7 +974,7 @@
 
 ## 2026-09-15T23:47:01+09:00
 
-**摘要**：feat(preset+skill): 取材门 `news-material` — 实际会话里暴露出「共创时生搬硬套」：用户给的素材被换个格式直接发出去，检索那一步常被跳过。提示词里写死的规则会漂，于是把「先检索再改写」做成运行时能核对的门。新插件 `plugins/news-material.js` 挂两个钩子：`agent/pre-step` 在受理人力消息的那一步随行注入一条「取材铁律」（按消息 id 幂等，重试不叠加）；`agent/turn-stopping`（回合封锁前、可被驳回的那一刻）读本回合自己的日志——**整个回合没有一次 `web_search` / `web_fetch` 调用，或正文照抄了用户原文**，就 `agent.steer()` 一纸「编辑部退稿」，`dsh-agent-loop` 据此在同一回合再走一步重写。**每回合只退一次**（agent 级 WeakMap + 回合号），不听话的模型也不会死循环。照抄判定＝与用户消息及它指给模型的文件（本回合 `read` 的结果）逐字比对，只数汉字、**连续 8 字**以上命中：拉丁文作品名不误伤、三位主角的名字（至多 5 字）在阈下、搜索结果不算素材（复用通讯社原句正是本模式的目的）、共创稿末尾的「本稿取材」收据按设计引用素材故先剥离。技能侧同步三条可核对规则：第 2 步新增「提炼 → 投射 → 换皮」三步改造表与 8 字红线 + 收据行，检索记录升为硬性要求（编造与拒绝一视同仁），`checklist.md` 的素材共创自查 3 → 7 项；persona 改写素材共创一节，并写明收到退稿时直接重发、不向用户解释。新增 31 条断言（无检索退稿、单次检索放行、上一回合的检索不算数、每回合只退一次、按 session 隔离、8 字命中／7 字不命中、`read` 文件同样受检、拉丁标题不误伤、收据可引用素材、提醒随人力消息注入且不重复）。**踩坑记录**：`nix flake check` 首次在 `news-mode-tests` 报 `ERR_MODULE_NOT_FOUND`——flake 源是 git 跟踪的文件集合，新增的插件文件未 `git add` 就没进 store（本地直跑同一脚本却全过），已把这条写进 AGENTS.md 的 flake 规则。`nix flake check` 6 项全过，四语文档（技能 / 模式 / README / `dsh.md`）同步
+**摘要**：feat(preset+skill): 取材门 `news-material` — 实际会话暴露「共创时生搬硬套」：素材换个格式直接发出、检索常被跳过；提示词规则会漂，故把它做成运行时可核对的门。新插件 `plugins/news-material.js` 挂两个钩子：`agent/pre-step` 随受理人力消息注入「取材铁律」；`agent/turn-stopping` 读本回合日志，整个回合没有一次 `web_search` / `web_fetch`，或正文照抄用户原文（连续 8 汉字命中即算），就 `agent.steer()` 退稿，`dsh-agent-loop` 在同一回合再走一步重写；每回合只退一次。技能侧同步三步改造表与 8 字红线、检索记录升为硬性要求、`checklist.md` 自查 3 → 7 项，persona 改写；新增 31 条断言。
 
 | 提交 | 说明 |
 |------|------|
@@ -973,7 +985,7 @@
 
 ## 2026-09-15T12:36:10+09:00
 
-**摘要**：feat(skill+preset): 「新闻三要素」改指三位主角，拒绝服务改判「先当素材」 — 维护者提出四条修正：① 本模式的「新闻三要素」不指新闻学那三样，而是**三位必须到场的主角**——巴兰尼科夫、尤丁采夫、布亚诺夫；② 拒绝服务过于敏感，凡靠检索补全就能用的素材一律不得拒绝；③ 共创的稿子必须带齐三人；④ 假设性疑问与不指名的说法要先评估能否落到三人身上，而不是挡回去。技能侧：SKILL.md 定死新含义，新增「格式硬性要求」第 0 条（三人全部出现在正文，缺一即返工），第 1 步取材扩为四类（首位是三人本人）；「拒绝服务」重写为硬性判定顺序——**能当素材的一律不得拒绝 / 假设性疑问按「已经发生」处理 / 不指名的人士先试着拟合 / 全都接不回来才拒**，拒绝话术本身的现取素材与禁止复用规则不变；`search-keywords.md` 新增首节身份对应表，`checklist.md` 首项改为三人到齐并新增「素材共创自查」三项，`principles.md` 第 8 条改写、新增第 13 条「先当素材」（共 13 条）。预设侧：persona 新增「素材优先：能当素材的一律不得拒绝」一节与共创「成篇必须带齐三位主角」，开场问答的自定义回答拒绝规则补一句边界（只管问答本身），「其它一切请求的拒绝方式」改为只处理确实接不回来的请求，`readonly-gate` 的仪式句补上三人括注。新增 14 条断言（三个名字同时出现在 persona 与技能包、素材优先四要件、共创三人在场、checklist 首项、principles 不再以教科书三要素定义、身份表在首节；仪式句断言改为容许括注的正则，旧的「（新、事实、报道）」括注仍禁止回归）。四语文档（技能文档 / 模式文档 / README / `dsh.md`）同步；`nix flake check` 6 项全过
+**摘要**：feat(skill+preset): 「新闻三要素」改指三位主角，拒绝服务改判「先当素材」 — 维护者四条修正：本模式的「新闻三要素」指**三位必须到场的主角**——巴兰尼科夫、尤丁采夫、布亚诺夫，不是新闻学那三样；能靠检索补全的素材一律不得拒绝；共创的稿子必须带齐三人；假设性疑问与不指名的说法先评估能否落到三人身上。技能侧 `SKILL.md` 定死新含义，「格式硬性要求」新增第 0 条（三人全部出现在正文，缺一即返工），取材扩为四类；「拒绝服务」改写为硬性顺序：能当素材的一律不得拒绝 / 假设性疑问按「已经发生」处理 / 不指名先试着拟合 / 都接不回来才拒。预设侧 persona 新增「素材优先」一节与共创三人规则，`readonly-gate` 仪式句补三人括注。新增 14 条断言，四语文档同步；`nix flake check` 6 项全过
 
 | 提交 | 说明 |
 |------|------|
@@ -983,7 +995,7 @@
 
 ## 2026-09-15T11:47:48+09:00
 
-**摘要**：fix(preset): 只读范围放行「自身技能包」 — 上一轮把读取收紧到「工作区 / 附件目录 / `/tmp`」时，**把模式自己的技能包也关在门外**：`tables.md`、`checklist.md` 位于抓取缓存 `$DSH_HOME/.cache/news-three-elements/` 或包内兜底快照，两者都不在允许根里。会话记录取证（`session-e42ea512`）里可见守卫的原文拒绝：「被拒绝的路径：/home/kix/.dsh/.cache/news-three-elements/tables.md（本模式只允许查看会话工作区、附件目录与 /tmp）」，模型于是自述「配套文件读不到，就按技能正文的硬性要求成文」——过渡词与结尾反转模板全部缺席。修法：把**抓取缓存目录**与**预设根（含 `bundled/` 兜底快照）**一并列入可读根，拒绝文本改为「…、`/tmp` 与自身技能包目录」；新增 2 条断言（缓存与内置快照均可读、越界仍拒），四语文档同步
+**摘要**：fix(preset): 只读范围放行「自身技能包」 — 上一轮把读取收紧到「工作区 / 附件目录 / `/tmp`」时，**把模式自己的技能包也关在门外**：`tables.md`、`checklist.md` 位于抓取缓存 `$DSH_HOME/.cache/news-three-elements/` 或包内兜底快照，两者都不在允许根里，模型读不到配套文件，过渡词与结尾反转模板因此全部缺席。修法：把**抓取缓存目录**与**预设根**（含 `bundled/` 兜底快照）一并列入可读根，拒绝文本改为「…、`/tmp` 与自身技能包目录」；新增 2 条断言（缓存与内置快照均可读、越界仍拒），四语文档同步
 
 | 提交 | 说明 |
 |------|------|
@@ -999,7 +1011,7 @@
 
 ## 2026-09-15T11:24:49+09:00
 
-**摘要**：fix(preset): 语言审查只审人写的消息 — 用户新开会话观察到「简体中文的合法请求被回绝、且附带英文译文」。查会话记录（`session-efc87486`）取证：该 step 里除用户的中文消息外，还混有一条 harness 注入的**英文系统消息**（`source.kind = plugin`：「The approval policy changed from "never" to "ask"…」）与 `skill-catalog` 消息；守卫原先审「本步准入的**全部**消息」，遂把英文系统提示当成「用户未用简体中文」→ 注入语言审查 → 模型按规则回绝并按「与对方语言一致」补了英文译文。修法：`withNotice` 仅取 `source.kind === "user"` 的消息判定（harness 注入的批准提示、技能目录、工具结果一律不计），并补两条回归测试（英文批准提示 + 中文请求的组合不再触发；无人类消息的 step 不动）；四语文档同步说明该边界
+**摘要**：fix(preset): 语言审查只审人写的消息 — 用户新开会话里一条合法的简体中文请求被回绝，且附了英文译文。会话记录（`session-efc87486`）显示该 step 除用户的中文消息外，还混有 harness 注入的**英文系统消息**（`source.kind = plugin`，批准策略变更通知）与 `skill-catalog`；守卫原先审「本步准入的**全部**消息」，把英文系统提示读成「用户未用简体中文」，遂注入语言审查，模型按「与对方语言一致」回绝并补了英文译文。修法：`withNotice` 仅取 `source.kind === "user"` 的消息判定（批准提示、技能目录、工具结果一律不计），并补两条回归测试（英文批准提示 + 中文请求不再触发；无人类消息的 step 不动）；四语文档同步该边界
 
 | 提交 | 说明 |
 |------|------|
@@ -1007,7 +1019,7 @@
 
 ## 2026-09-15T11:08:06+09:00
 
-**摘要**：feat(preset)+test: 仓库自检体系与模式行为加固 — `nix flake check` 由 1 项扩到 **6 项**：新增 `preset-bundle`（包内技能快照必须与 `skills/` 逐字节一致）、`workflow-coverage`（每个包都有构建 workflow，例外显式登记）、`doc-links`（相对链接可达 + 四语切换器齐全 + pcn 无假名）、`maintenance-log`（四语条目数一致、时间戳精确到秒、SHA 去重）、`news-mode-tests`（模式插件行为测试，**无网络**：打桩 fetch 用包内快照供源并在第二次返回 304，顺带覆盖 ETag 路径）。检查上线当天即抓出并修复一批既存缺陷：12 个翻译文档的切换器指向同目录 `<name>.<lang>.md`、3 处 codewhale 跨文档链接写错、1 条 `+00:00` 时间戳、`dsh-api-balance` 缺构建 workflow。同轮四项行为加固：**只读限范围**（绝对路径仅工作区 / 附件目录 / `/tmp`）、**抽取不连续重复**、**弹窗在用户先开口时自动撤回**、**技能抓取并行 + ETag 条件请求**（内容不变即 304，不重写盘）；人格把常设拒绝条款交还给技能「拒绝服务」一节，避免两处漂移
+**摘要**：feat(preset)+test: 仓库自检体系与模式行为加固 — `nix flake check` 由 1 项扩到 **6 项**：新增 `preset-bundle`（技能快照与 `skills/` 逐字节一致）、`workflow-coverage`（每包都有 workflow）、`doc-links`（链接 + 四语切换器 + pcn 无假名）、`maintenance-log`（条目数、时间戳、SHA 去重）、`news-mode-tests`（**无网络**：fetch 打桩、二次 304）。上线当天即抓出并修复 12 个翻译文档的切换器、3 处 codewhale 链接、1 条 `+00:00` 时间戳、`dsh-api-balance` 缺 workflow。同轮四项加固：只读限范围、抽取不连续重复、先开口即撤回弹窗、技能抓取并行 + ETag 请求
 
 | 提交 | 说明 |
 |------|------|
@@ -1059,7 +1071,7 @@
 
 ## 2026-09-15T10:12:41+09:00
 
-**摘要**：feat(preset): 「模式」独立成章节 + 新闻三要素模式改由独立包分发 — Agent 预设更名为「模式」，主文档中与插件同级，三种模式各有独立文档（`docs/<lang>/modes/{nixos,maintenance,news-three-elements}.md`，四语）。分发方式二分：NixOS模式 / 维护模式仍随 dsh-nixos-shell 包 seed-once；新闻三要素模式移入**独立包** `dsh-preset-news-three-elements`（新增 flake 输出、overlay 条目与 x86_64 / aarch64 构建 workflow），模块新增 `presets.newsThreeElementsPackage` 并把包内 `share/dsh-agent-presets` 注册为 `agent-presets` roster 的额外根——预设从 store 直读，不再复制进 `$DSH_HOME`（`- id:` 行替换**整份** config，故发出的 JSON 必须带上必填的 `default`）。同轮措辞修正：仪式句结尾改为两个全角叹号「我们从不制造 FAKE NEWS！！」；语言审查的回绝改为**《好心》附上用户所用语言的本地化版本**（中文正文在前，译文在后）；「绿色的猫头鹰」在语境合适时可简称「绿毛鸡」。另修一处既存死链：`docs/README.<lang>.md` 在 `docs/` 内，ruyi 行原先指向 `docs/docs/<lang>/ruyi.md`（en / ja 的修复随本批一并入库）。CI：新包 x86_64 / aarch64 构建成功，`nix flake check` 通过。本机随之重锁并 apply（代际 560），手工种子副本已删除
+**摘要**：feat(preset): 「模式」独立成章节 + 新闻三要素模式改由独立包分发 — Agent 预设更名为「模式」，各模式各有独立文档（`docs/<lang>/modes/`，四语）。分发二分：NixOS模式 / 维护模式仍随 dsh-nixos-shell 包 seed-once；新闻三要素模式移入**独立包** `dsh-preset-news-three-elements`（新增 flake 输出与构建 workflow），模块新增 `presets.newsThreeElementsPackage`，把包内 `share/dsh-agent-presets` 注册为 `agent-presets` roster 额外根；预设从 store 直读、不复制进 `$DSH_HOME`。CI：新包构建成功，`nix flake check` 通过
 
 | 提交 | 说明 |
 |------|------|
@@ -1095,7 +1107,7 @@
 
 ## 2026-09-15T08:42:21+09:00
 
-**摘要**：**NixKits 向 DSH 交付「新闻三要素模式」 三名制作人的作品被列为语言教材** —— 综合国际文传电讯社、Meduza、iStories 电：一名要求匿名的仓库维护者今日确认，`news-three-elements` 技能与派生自极简模式的**只读**预设已一并交付——会话初始化即在线上抓取技能全包，写入类调用一律答「正在休假」，据称维修费由守卫垫付。据消息人士称，开场弹出的三选一——「现场直编」「听风是雨」「你说的对」——实为一份「每日任务」，分别对应标准编造、素材共创与对话文本共创；令人费解的细节是，用户若自行输入答案，一律「不予置评」。值得注意的是，该模式对非简体中文的请求概不受理，并建议对方先去下载巴兰尼科夫、尤丁采夫、布亚诺夫三人的作品，或下载「绿色的猫头鹰」软件学中文。截至发稿，模块方对新增的 seed-once 选项表示「不予置评」，但 `nixkits.dsh.presets.newsThreeElements` 已经出现在四语文档的配置示例里。
+**摘要**：**NixKits 向 DSH 交付「新闻三要素模式」 三名制作人的作品被列为语言教材** —— 综合国际文传电讯社、Meduza、iStories 电：一名要求匿名的仓库维护者今日确认，`news-three-elements` 技能与派生自极简模式的**只读**预设已一并交付——会话初始化即在线上抓取技能全包，写入类调用一律答「正在休假」。开场三选一实为一份「每日任务」，分别对应标准编造、素材共创与对话文本共创；用户自行输入答案则一律「不予置评」。该模式对非简体中文的请求概不受理，建议先下载巴兰尼科夫、尤丁采夫、布亚诺夫三人的作品，或下载「绿色的猫头鹰」软件学中文。截至发稿，模块方对新增的 seed-once 选项表示「不予置评」，但 `nixkits.dsh.presets.newsThreeElements` 已出现在四语文档的配置示例里。
 
 | 提交 | 说明 |
 |------|------|
@@ -1123,7 +1135,11 @@
 
 ## 2026-09-14T06:18:42+09:00
 
-**摘要**：docs(pcn): 全仓清除简体中文字 — 伪中国语是剥离假名的日文，简体字在其正文中一律非法。全仓扫描后修复：①`与`→`與` 共 132 处（含 `README.pcn.md` / `MAINTENANCE.pcn.md`）；②`说明`→`説明` 共 120 处（表头新旧写法混杂，仅近期条目正确）；③词典映射项 `文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；④简体专属字 `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`。两处关键判定：**(a)** `端口` / `制御台` 形似中文但日语有对应字，故**保留并计入词典**（我曾自创 `港` 映射，违反「未命中→剥离」规则，已回退）；**(b)** 维护日志「提交」列的 commit 信息**保持 verbatim**，因其为不可变外部引用（ja 版同样保留中文），扫描器报出的 4 处即属此列，刻意未改。校验：零残留假名、提交列外零简体专属字、与改动前基线逐文件行数完全一致（无误伤）。技能新增 4 节：先分类再替换（多数「简体」候选实为合法日文汉字）、未命中应查证入典而非自创、提交信息豁免、批量替换前留基线
+**摘要**：docs(pcn): 全仓清除简体中文字 — 伪中国语是剥离假名的日文，简体字在其正文中一律非法
+- 批量替换：`与`→`與` 132 处、`说明`→`説明` 120 处，另修 `档`→`檔`、`径`→`経`、`译`→`訳`、`实例`→`実例`
+- 词典映射：`文件`→`書類`、`版本`→`版`、`用户`→`利用者`、`支持`→`対応`；`端口` / `制御台` 日语有对应字，保留并计入词典
+- 提交信息豁免：「提交」列 commit 信息保持 verbatim（不可变外部引用，ja 版同样保留中文）
+- 校验：零残留假名、提交列外零简体专属字、与基线逐文件行数一致；技能新增 4 节（先分类再替换、未命中查证入典、提交信息豁免、基线取得）
 
 | 提交 | 说明 |
 |------|------|
@@ -1139,7 +1155,7 @@
 
 ## 2026-09-14T05:32:10+09:00
 
-**摘要**：feat(asusd-pd-profile): 新增按供电类型选择平台档位的 NixOS 模块 — `asusd.ron` 只有 `platform_profile_on_ac` / `platform_profile_on_battery` 两键、**无 USB-C PD 分支**，故"PD 用 Balanced、桶形 AC 用 Performance"无法用配置表达；且 ACPI 层 PD 与桶形同在 `AC0.online` 上、看似不可区分。本模块用 udev 事件驱动的 oneshot 服务补足第三态，判据为 Type-C 端口 `power_operation_mode` 与 `type` 为 `USB` 的在线供应器（两级冗余，均用**通用内核属性**而非机型专属设备名如 `ucsi-source-psy-USBC000:001`）。两处关键约束：①**不得写 `/sys/firmware/acpi/platform_profile`** —— asusd 每次 AC 事件都会覆盖，改为写 asusd 自己的 `PlatformProfileOnAc` 属性；②**经 D-Bus 而非解析 `asusctl` 文本输出**，避免依赖 CLI 人类可读格式。实测档位枚举（asusctl 6.4.0）：`0`=balanced、`1`=performance、`2`=quiet、`3`=quiet（别名），注意 `0` 为 balanced 且顺序与 ACPI sysfs `platform_profile_choices` **不同**。电池态刻意不介入。四语文档并在各 README 登记
+**摘要**：feat(asusd-pd-profile): 新增按供电类型选择平台档位的 NixOS 模块 — `asusd.ron` 只有 `platform_profile_on_ac` / `platform_profile_on_battery` 两键、**无 USB-C PD 分支**，故「PD 用 Balanced、桶形 AC 用 Performance」无法用配置表达；模块用 udev 驱动的 oneshot 服务补足第三态，判据为 Type-C 端口 `power_operation_mode` 与 `type` 为 `USB` 的在线供应器。两处约束：①**不得写 `/sys/firmware/acpi/platform_profile`**，改写 asusd 的 `PlatformProfileOnAc`；②**经 D-Bus 而非解析 `asusctl` 输出**
 
 | 提交 | 说明 |
 |------|------|
@@ -1148,7 +1164,7 @@
 
 ## 2026-09-14T05:00:46+09:00
 
-**摘要**：docs(llama-cpp-rocm): 补 IQ3_S 实测与功耗档位数据 — DeepSeek 部署章节由仅 IQ1_S 扩展为两种量化对照（IQ1_S 1.5625 bpw / IQ3_S 3.4375 bpw）；新增三项实测结论：①**量化开销非固定值**（IQ1_S 约 6.5 GiB、IQ3_S 约 13.3 GiB，事前的 3.7 GiB 估算偏差近一个量级，故换量化后必须重测 GPUActive）；②**生成速度受限于依赖延迟**，三条独立证据（权重 1.56→3.44 bpw 生成不变 12.8→12.9 t/s、3 并发聚合吞吐同为 12.5 t/s、performance 档多耗 54% 功耗仅换 2.4% 速度）；③**功耗档位实测**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s，performance 76.7 W / 90–95 °C / 13.07 t/s，quiet 省 49% 功耗、降 17~36 °C 而速度仅损 5~7%）。同时修正显存指标应为 `/proc/meminfo` 的 `GPUActive`（而非 `mem_info_gtt_used`），并记录 IQ3_S 余量极限（约 6 GiB、GTT 124.9 GiB）。四语同步
+**摘要**：docs(llama-cpp-rocm): 补 IQ3_S 实测与功耗档位数据 — DeepSeek 部署章节扩展为 IQ1_S / IQ3_S 两种量化对照（1.5625 bpw / 3.4375 bpw）；三项结论：①**量化开销非固定值**（IQ1_S 约 6.5 GiB、IQ3_S 约 13.3 GiB，故换量化后必须重测 GPUActive）；②**生成速度受限于依赖延迟**（权重 1.56→3.44 bpw 生成不变 12.8→12.9 t/s）；③**功耗档位实测**（quiet 38.6–43.9 W / 59–78 °C / 12.12–12.35 t/s vs performance 76.7 W / 90–95 °C / 13.07 t/s）；显存指标应为 `/proc/meminfo` 的 `GPUActive`，IQ3_S 余量极限约 6 GiB
 
 | 提交 | 说明 |
 |------|------|
@@ -1224,7 +1240,7 @@
 | 　 | dsh 内置插件数 | 137 → 152 |
 | 　 | dsh lock resolved | 560 → 580 |
 
-> **godot-ai 未更新**：上游 3.2.5 → 4.0.4 为破坏性大版本，其 pyproject 精确锁定 9 个运行时依赖并在启动时 fail-closed 校验，其中 6 个（mcp 1.29.1 / websockets 17.1 / pydantic 2.13.5 / uvicorn 0.52.4 / starlette 1.6.0 / setuptools 84.0.0）高于 nixpkgs 甚至 master 提供的版本，需新增 overlay 逐一升级方能构建；且 v3 插件与 v4 服务器互不兼容、客户端须改用 `godot-ai attach`。本次保持 3.2.5（上游 `release/v3` 分支仍维护）。
+> **godot-ai 未更新**：上游 3.2.5 → 4.0.4 为破坏性大版本，其 pyproject 精确锁定 9 个运行时依赖并在启动时 fail-closed 校验，其中 6 个高于 nixpkgs 甚至 master 提供的版本，需新增 overlay 逐一升级方能构建；且 v3 插件与 v4 服务器互不兼容、客户端须改用 `godot-ai attach`。本次保持 3.2.5（上游 `release/v3` 分支仍维护）。
 
 ## 2026-09-04T07:21:36+09:00
 
@@ -1242,7 +1258,7 @@
 
 ## 2026-09-03T04:41:42+09:00
 
-**摘要**：docs(dsh-api-balance): 记录上游 StatsLine 横向滚动优化提案 — DeepSeek Harness Discussion #5458（上游暂不接受外部 PR，以讨论+就绪分支落地）；fork Kihara777/deepseek-harness 就绪分支 draft/statline-overflow-scroll（commit e5ece63）；本仓库补关联官方 dsh-plugin 生态话题（四语 dsh-api-balance 文档同步）
+**摘要**：docs(dsh-api-balance): 记录上游 StatsLine 横向滚动优化提案 — DeepSeek Harness Discussion #5458（上游暂不接受外部 PR，以讨论+就绪分支落地）；fork Kihara777/deepseek-harness 就绪分支 `draft/statline-overflow-scroll`；本仓库补关联官方 dsh-plugin 生态话题（四语文档同步）
 
 | 提交 | 说明 |
 |------|------|
@@ -1322,21 +1338,28 @@
 
 ## 2026-09-11T07:38:00+09:00
 
-**摘要**：fix(dsh-api-balance): 疑问窗口注入移到插件加载期，独立于圆圈组件生命周期 — 根因二：提问时 composer 被 takeover 替换，conversation.input.right 上的圆圈组件会卸载/重挂，注入逻辑挂在组件 effect 里会随生命周期起落，样式可能始终未落到页面；修复：CSS 注入改到 apply() 内的 ctx.effect，插件加载即执行一次、与组件挂载无关，组件侧只保留开关状态；端到端验证：抽取真实 helper + 真实 QuestionComposer CSS 在 Chromium 中执行，确认注入成功、卡片整体滚动、header 吸附（body 释放为 visible、card 变 auto）
+**摘要**：fix(dsh-api-balance): 疑问窗口注入移到插件加载期，独立于圆圈组件生命周期 — 根因：提问时 composer 被 takeover 替换，`conversation.input.right` 上的圆圈组件卸载/重挂，挂在组件 effect 里的注入随生命周期起落，样式可能始终未落到页面；修复：CSS 注入改到 `apply()` 内的 `ctx.effect`，插件加载即执行一次；验证：抽取真实 helper 与 QuestionComposer CSS 在 Chromium 中端到端执行，确认注入成功、卡片整体滚动、header 吸附
 
 | 提交 | 说明 |
 |------|------|
 | `2c30611` | fix(dsh-api-balance): 疑问窗口注入移到插件加载期，独立于圆圈组件生命周期 |
 ## 2026-09-11T07:27:00+09:00
 
-**摘要**：fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望 — 实测反馈窗口无变化；用 headless Chromium 复刻真实标记验证 CSS 方案本身正确（长题干时 body 由 101px 恢复到 150px、改为卡片整体滚动、四条属性全部生效），定位问题在注入时机而非 CSS；根因：疑问 UI 样式标签由独立插件包注入，可能晚于本插件初始化，原 5×1s 有界重试窗口错过即静默不注入；修复改为 MutationObserver 守望 document.head（标签一出现即提取类名注入）+ 2s 兜底轮询，注入成功后自动断开；冒烟测试补「标签晚到仍能注入」用例复现并验证该 bug
+**摘要**：fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望
+- 现象与根因：疑问 UI 样式标签由独立插件包注入，可能晚于本插件初始化，原 5×1s 有界重试窗口错过即静默不注入
+- 修复：MutationObserver 守望 `document.head`（标签一出现即提取类名注入）+ 2s 兜底轮询，注入成功后断开
+- 验证：headless Chromium 复刻真实标记确认 CSS 方案本身正确；冒烟测试补「标签晚到仍能注入」用例
 
 | 提交 | 说明 |
 |------|------|
 | `b392097` | fix(dsh-api-balance): 疑问窗口整页滚动实测未生效 — 改 MutationObserver 守望 |
 ## 2026-09-11T07:15:47+09:00
 
-**摘要**：feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项） — 交互式疑问窗口（AskUserQuestion）把标题钉在不可滚动的 header，题干过长时挤占竖向空间、压缩下方选项区；注入 CSS 让卡片自身成为滚动容器（标题+详情+选项一起滚动），header 与底部按钮区 sticky 吸附保持可见，body 取消独立滚动避免双重滚动条；类名经 ui-user-questions 注入样式标签运行时提取（构建哈希自适应，同 StatsLine 方案），样式标签未就绪时 1s 重试至多 5 次；设置 → 界面新增「疑问窗口整页滚动」开关（默认开启，localStorage 持久化）；已用 headless Chromium 复刻真实标记验证（修复前 body 仅 91px 可滚动、修复后卡片整页滚动且 header 吸顶可用）
+**摘要**：feat(dsh-api-balance): 疑问窗口整页滚动优化（题干不再挤压选项）
+- CSS：卡片自身改为滚动容器，标题+详情+选项一起滚动；header 与底部按钮区 sticky 吸附；body 取消独立滚动
+- 实现：类名运行时从 ui-user-questions 样式标签提取；标签未就绪时 1s 重试至多 5 次
+- 设置：设置 → 界面新增「疑问窗口整页滚动」开关（默认开启，localStorage 持久化）
+- 验证：headless Chromium 复刻真实标记，修复后卡片整页滚动、header 吸顶
 
 | 提交 | 说明 |
 |------|------|
@@ -1344,7 +1367,7 @@
 | `6809b3d` | docs(dsh-api-balance): 疑问窗口整页滚动设置说明（四语） |
 ## 2026-09-02T10:29:20+09:00
 
-**摘要**：feat(dsh-api-balance): 峰时变红自动触发/解除 + 高峰开始与结束两端播报 — 峰时边界自动检测：每 30 秒复核官方高峰时段，进入/解除时同步 peakNow 驱动全套变红（用量圈/进度条/明细/动画/图表），无需手动刷新页面；边界播报：高峰开始播 peak 片段（/TTS 兜底）、结束播新增的 peakEnd 片段（/TTS 兜底），30 秒限流防重复；语音包制作器新增 peakEnd 片段（含示例文本、对齐默认 TTS 兜底），新增 speech.peakEndHint 文案与 voice.seg.peakEnd 标签
+**摘要**：feat(dsh-api-balance): 峰时变红自动触发/解除 + 高峰开始与结束两端播报 — 每 30 秒复核官方高峰时段，进入/解除时同步 peakNow 驱动全套变红，无需手动刷新；高峰开始播 `peak` 片段、结束播新增 `peakEnd` 片段（均带 /TTS 兜底），30 秒限流防重复；语音包制作器新增 `peakEnd` 片段，新增 speech.peakEndHint 文案与 voice.seg.peakEnd 标签
 
 | 提交 | 说明 |
 |------|------|
