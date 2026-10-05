@@ -17,6 +17,7 @@
 | [检查补丁内版本](#检查补丁内版本) | 包依赖 `.patch` 文件时 |
 | [审计文档中的外部链接](#审计文档中的外部链接) | 收尾审计时 |
 | [检查 GitHub Actions 的更新](#检查-github-actions-的更新) | **每轮都要**（见 SKILL.md 第 2 步末尾） |
+| [抬依赖版本时的判据](#抬依赖版本时的判据2026-10-05-godot-ai-423--430-实测) | 抬某个依赖的版本时（四类判据：旧 workaround、新 test-only 依赖、摘用例、归因） |
 
 ---
 
@@ -412,3 +413,67 @@ in { single = a.python312.pkgs.<被抬的包>.version;
 > 而不是报错。判据要落在**最终产物**上，不能落在「两份配置都写了」。
 
 
+
+---
+
+## 抬依赖版本时的判据（2026-10-05 godot-ai 4.2.3 → 4.3.0 实测）
+
+抬一个 Python 依赖的版本，带出来的是**四类**要逐项判的东西，不是「改个 version + src」。
+下面每一条都是那一轮真实撞到的，附判据。
+
+### 1. 旧 workaround 的前提要重估：「还能打上」不是「还必要」
+
+上游自己修掉问题后，为它写的 `postPatch` 会变成**空转**——它照样命中、构建照样成功，
+只是注释开始说谎。实测：starlette 1.7.0 自己修掉了 1.6.0 时代那条 `anyio.abc.BlockingPortal`
+引用，而 `--replace-fail '"error",'` 在 1.7.0 里依然命中。
+
+> 判据：抬版本时把每个 local patch / 覆盖段**对着新源码**读一遍，问「这条还在修什么？」
+> 答不上来就删。**过期 workaround 是负债**，不是保险。
+
+### 2. 新版会带来新的 test-only 依赖 → 补 check inputs，别关测试
+
+上游测试集新增 import，而 nixpkgs 的 `nativeCheckInputs` 是按**旧版本**写的：
+缺任一个就 `error during collection`，**一个用例都不跑**（看起来像「测试挂了」，
+其实是没开始跑）。实测：starlette 1.7.0 需要 `blockbuster`、`opentelemetry-api`、
+再补 `opentelemetry-sdk`（补了 api 之后下一层才暴露）。
+
+> 判据：读报错原文逐个补；**不要用 `doCheck = false` 收场**——那等于删掉整层判据。
+
+### 3. 摘测试用例：`-k` 是**子串**匹配，会跨模块误伤；用 `--deselect` + nodeid 前缀
+
+`disabledTests` 走 pytest 的 `-k`，匹配的是**名字子串**。同名用例散在多个模块时，
+按名字禁会连**不相关模块里仍在通过**的用例一起摘掉。实测：`test_receive_invalid_max_bytes`
+在 anyio 里被五个模块共用，裸名字一写下去多摘了 **24** 个用例。
+
+改用 `pytestFlags = [ "--deselect" "tests/streams/test_tls.py::TestTLSStream::test_..." ]`
+（pytest 源码即 `nodeid.startswith(...)`），只命中目标类里的那些。
+
+> **发现它的不是构建——当时构建是绿的。是对数字**：
+> `2911 items` 与实际 `passed 2760` 对不上「总数 − 该摘的个数」。
+> **摘掉判据是不会报警的**：构建成功、测试通过、什么都不响。
+> 所以每摘一个用例，都要算出**预期剩下的数**并核对。
+
+### 4. 归因判据：怀疑失败与自己的改动无关时，比 `drvPath`
+
+不要靠推理（「应该不是我的问题」）。取**已提交版**的覆盖文件，让 Nix 求值出衍生物的
+drvPath，与失败的那个比：
+
+```bash
+git show HEAD:overlays/<file>.nix > /tmp/head-overlay.nix
+# 用两份 overlay 各求值一次，打印目标包的 drvPath
+nix eval --raw --impure --expr '... .drvPath'
+```
+
+`drvPath` 是**内容寻址**的：输入完全相同 ⇒ 路径逐字节相同 ⇒ 该失败与你的改动**无关**。
+实测据此把一个「anyio 4.15.1 在新 Python 3.12.15 下 TLS 用例必失败」判为既有环境问题
+（Python 收紧了 `ssl.wrap_bio()`，anyio 仍按旧签名调用），并在注释里写明撤销条件。
+**这比任何解释都硬**，也省得为了让它变绿去动不该动的东西。
+
+### 5. 哈希：`nix store prefetch-file --unpack` 与 `fetchFromGitHub` 同值，但**别手抄**
+
+两条独立路径（`prefetch-file --unpack <tarball>` 与 `fetchFromGitHub` 取同一 tag）
+实测得到同一个哈希——可以互相校验。但**人抄哈希必错**：那一轮把 `…UOKsT0…` 抄成
+`…UOKcT0…`，靠 Nix 的 `hash mismatch` 才发现。
+
+> 正确形状：**脚本从构建报错的 `got:` 直接写入文件，再回读校验**（实测 5 个哈希逐个过这道校验）。
+> 手抄一次就是一次运气。
