@@ -73,6 +73,17 @@ NixKits 特有环节。
    都只能靠主动跑这一条命令。
 2. **改之前先看引用分布**：`build-package.yml` 是**可复用 workflow**，被 31 个
    `build-*.yml` 引用。若某 action 只在它里面出现，**只需改那一处**。
+3. **推 workflow 改动要用仓库所有者账号**（2026-10-05 实测）：本机 `gh` 里有两个账号，
+   默认那个（`GrG41`）的 OAuth 令牌**没有 `workflow` 权限**，改 `.github/workflows/`
+   下任何文件都会被拒：
+
+   ```
+   ! [remote rejected] main -> main (refusing to allow an OAuth App to create or
+     update workflow `.github/workflows/build-package.yml` without `workflow` scope)
+   ```
+
+   处置：`gh auth switch --user Kihara777` → 推 → `gh auth switch --user GrG41` 还原。
+   只改**非 workflow 文件**时默认账号够用，不必切换。
 
 ```bash
 # 本仓当前固定的 action 及其引用处（改前先看这个）
