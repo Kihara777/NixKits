@@ -183,7 +183,17 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
    > ② 推之前对着**该提交的树**验一遍：
    > `git worktree add /tmp/wt HEAD && (cd /tmp/wt && python3 develop/check-maintenance-log.py); git worktree remove /tmp/wt`
 3. **推送**：每批提交后立即 `git push`
-4. **`nix flake check`**：代码修改后必须先通过验证再提交
+4. **判据上线时，射程内的文件必须同批修正**：新增一条自检规则（或扩大某条规则的扫描范围）时，它要求改的所有文件必须进**同一个提交**。若其中某个文件正被另一个任务改写，**不要把它排除在外「等对方一起交」**——那会让判据先上线、修正悬空，而**谁的提交都没带上它**：2026-10-05 实测，规则「pcn 不得出现非日文字形」的射程覆盖 `docs/pcn/**`，而 `docs/pcn/godot-ai.md` 挂在在途任务手里，CI 判的是旧内容（`line 7 非日文字形 '擎'`）。两条选择：**同批提交**，或者**先别让那条规则上线**。
+   > 要修的文件正被别人改着、又不能覆盖对方的在途工作时，可以**只提交内容、不碰工作树**：
+   > ```bash
+   > git show HEAD:<path> | <改法> > /tmp/fixed
+   > blob=$(git hash-object -w /tmp/fixed)
+   > git update-index --cacheinfo 100644,"$blob",<path>   # 工作树原样留着
+   > git commit
+   > ```
+   > 推之前再用 `bash develop/precheck.sh [commit]` 对着**那棵树**验一遍（见上一条）。
+5. **`nix flake check`**：代码修改后必须先通过验证再提交
+6. **推 workflow 改动要用仓库所有者账号**：本机默认账号的 OAuth 令牌没有 `workflow` 权限，改 `.github/workflows/` 下任何文件会被 remote 拒（`refusing to allow an OAuth App to create or update workflow … without 'workflow' scope`）。处置：`gh auth switch --user Kihara777` → 推 → 切回（详见 `nixkits-check-updates` 技能）。
 
 ### 维护记录
 
