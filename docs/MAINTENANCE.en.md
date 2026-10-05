@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T22:20:17+09:00
+
+**Summary**: feat(check): the maintenance log's shape rules are now assertions — zh summary ≤ 400 characters, matching list-item counts across languages, single-line note blocks with in-language markers
+
+- Cause: the spec said "target ≤ 400"; a round driven by that target produced 21 summaries of 420–721 characters with **not a single violation**
+- Translations get no length gate — Chinese, English and Japanese differ in density (measured literal ratios, median: en 1.87, ja 1.17, pcn 1.03); one number for all three only forces facts out
+- Negative test: four injected violations in a temp copy (over-length summary / one list item removed from en / two-line note block in pcn / marker changed to `**注**`) each failed with exit 1; the current log is green
+- `AGENTS.md` check table, `skills/write-maintenance-log/SKILL.md` and the four-language doc pages updated; the 27 list summaries now match the spec's example layout (blank line between title and list, and the checker accepts both)
+
+| Commit | Description |
+|------|------|
+| `8d58fb3` | feat(check): the maintenance log's shape rules are now assertions (zh length / list items / note blocks) |
+| `9165a8e` | fix(check): summary parsing accepts both list layouts; 27 list summaries aligned to the spec example |
+
 ## 2026-10-05T14:54:21+09:00
 
 **Summary**: feat(skill): `write-maintenance-log` now allows a **markdown list** for the summary
