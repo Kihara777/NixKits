@@ -415,7 +415,7 @@
 
 ## 2026-09-20T17:05:51+09:00
 
-**概要**：定例の更新チェック —— opencode-telegram 0.25.3、ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm パッケージ。スキルの手順どおり `nix build` を二回実行し、それぞれ source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）と npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`）を取得、ビルド通過。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄いラッパーは version と hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`）のみ変更、三チャネル共有の base は未変更。**③ 実測値の更新**：alpha チャネルの pytest 件数が 346 ユニット / 57 統合から **462 ユニット（xfailed 1 件を含む）/ 70 統合**へ増加（`nix log` でビルドログを読んで実測）。beta チャネルと同程度になり、四言語の文書を同期更新しました。**④ 全数調査の結論**：stable チャネルの被検査 12 パッケージのうち、上流に遅れているのは上記 2 件のみ。`dsh`（0.1.5-rc.2、npm の `latest` と一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917）はいずれも上流と一致。**ツール上の観察**：GitHub API への匿名リクエスト（`curl` で `api.github.com` に直接アクセス）は本機で空の応答を返し、認証済みの `gh api` は正常（额度 5000/時）——検査スクリプトは生の `curl` ではなく `gh api` に統一すべきです。四言語同期、`check-doc-versions` / `check-doc-links` / `check-maintenance-log` の三項目の自检通過
+**概要**：定例の更新チェック —— `opencode-telegram` 0.25.3（npm パッケージ、source hash と npmDepsHash を更新、ビルド通過）；`ruyi-alpha` 0.54.0-alpha.20260918（薄いラッパー、version と hash のみ変更で三チャネル共有の base は未変更）。同じ実行で stable チャネルの被検査 12 パッケージを確認し、上流に遅れるのはこの 2 件のみ。alpha チャネルの文書の pytest 件数を 346 ユニット / 57 統合から 462 ユニット（xfailed 1 件を含む）/ 70 統合へ更新し、四言語の文書を同期。
 
 | コミット | 説明 |
 |------|------|
@@ -432,17 +432,20 @@
 
 ## 2026-09-19T14:13:43+09:00
 
-**概要**：ドキュメント検証の締めくくり——「文書に載っていない内容」の確認で構造的な欠落を 1 件発見し、**ドキュメント検証タスク全体が完了**しました。**方法**：git 追跡下の全ファイルをカテゴリ別に棚卸しし（トップレベル項目 / `modules/` 9 / `overlays/` 8 / `patches/` 2 / `packages/` 13 パッケージと変種 / `develop/` 10 / `skills/` 10 / `.github/` workflows）、README・`AGENTS.md`・`docs/zh/` の参照と突き合わせました。**結果**：ほとんどは既に文書化済みで、**構造的な欠落は 1 件**のみ——本リポジトリには**自検契約として 7 件の `nix flake check`** があり（いずれか失敗すればコミットが阻断されます）が、**それを一箇所にまとめた説明がありません**でした。情報は `flake.nix` のコメントに散在するのみで、`AGENTS.md` はそのうち 2 件（`check-preset-derivation.py`、`check-doc-versions.py`）に触れるだけであり、残る 4 スクリプト（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）と 7 件目の `news-mode-tests`（**node スクリプトで python ではない**）は**まったく言及されていません**でした。**追加**：`AGENTS.md` の `## CI` 節に ① **7 件の自検一覧表**（検査名 / スクリプトパス / 検証内容）を追加し、「各スクリプトは単独でローカル実行でき、素早い切り分けに使える」および「**文書に数量をハードコードしない**——`check-doc-versions` はバージョン番号のみを検証し、この種の計数は検証しない」という 2 点を注記（後者は本セッションで繰り返し確認済み：辞書の項目数やテスト数といった計数は非常に古くなりやすい）；② **`access-tokens` の host 照合の落とし穴**（今回の CI 大量失敗の根本原因——`check.yml` が `api.github.com` を欠き、浮動入力 `llama-cpp-ver` が未認証のまま、60 回/時の上限を push ごとの ~34 workflow が使い切っていた）を記録し、今後の workflow 編集で再発しないようにしました。**確認**：表の 7 パスはすべて実在し、「単独実行可能」は実測で確認、`nix flake check` は全通過。**配置の根拠**：これらは**内部のエンジニアリング契約**（貢献者とエージェントが「どの変更がどの検査を発火させるか」を知る必要がある）であり、ユーザー向け内容ではないため、README のユーザー節ではなく `AGENTS.md` に置くのが適切です。
+**概要**：「文書に載っていない内容」の確認で構造的な欠落を 1 件補完：`nix flake check` の 7 件の自検（自検契約、いずれか失敗でコミットを阻止）は、これまで一箇所にまとまった説明がなく、`flake.nix` のコメントに散在し `AGENTS.md` は 2 件に触れるのみだった。`AGENTS.md` の `## CI` 節に ① 7 件の自検一覧表（検査名 / スクリプトパス / 検証内容）、② CI の `access-tokens` host 照合の落とし穴（`check.yml` が `api.github.com` を欠き、浮動入力 `llama-cpp-ver` が未認証となり上限を使い切る）を追加。検証：7 パスはすべて実在し `nix flake check` は全通過。
 
 | コミット | 説明 |
 |------|------|
 | `7766b88` | docs(agents): nix flake check の 7 件の自検一覧と CI の access-tokens の落とし穴を補完 |
 
-> **説明**：`AGENTS.md`（それ自体が代理エージェント向けの取り決めファイルで、ユーザー文書ではありません）を変更します。これで**本セッションのドキュメント検証タスクはすべて完了**しました：主文書 + ソフトウェア 9 + プラグイン 2 + モード 3 + 開発 2 + パッチ 8 + 廃止 1 + スキル 10 + 文書に載っていない内容の確認——累計 36 のファイル群、20 件の修正（うちソースの不具合 2 件と、本セッションで以前に入れた退行 3 件を含む）。
+> **説明**：`AGENTS.md`（それ自体が代理エージェント向けの取り決めファイルで、ユーザー文書ではありません）を変更。
 
 ## 2026-09-19T14:05:38+09:00
 
-**概要**：CI の大量失敗の根本原因を特定・修正し、子リポジトリにセキュリティポリシーを追加しました。**① CI の 403 レート制限（`d224b18`）**：維護者に CI 失敗メールが大量に届いたため調査したところ、**根本原因は浮動入力 `llama-cpp-ver` の要求がずっと未認証だったこと**でした。この入力は `https://api.github.com/...` を指しますが、Nix の `access-tokens` は **host を完全一致で照合**します——`build-package.yml` は既に `github.com=… api.github.com=…` の 2 host 形式でしたが、**`check.yml` には `github.com` しか書かれていませんでした**。そのため要求は未認証で送られ（上限 **60 回/時**、認証時は **5000**）、**push ごとに ~34 の workflow** がこの入力を解決するため、**1 回の push で上限を使い切る**状態でした。失敗レスポンスが答えを明示しています：`API rate limit exceeded for 52.165.58.41. (But here's the good news: Authenticated requests get a higher rate limit.)`。**修正**：`check.yml` に `api.github.com=${{ secrets.GITHUB_TOKEN }}` を追加し、この見落としやすい host 照合の規則をコメントで明記。31 個の `build-*.yml` はすべて `build-package.yml`（既に正しい）経由であることを確認したため、check.yml が唯一の欠落でした。**検証**：コミット `d224b18` は **33 workflow すべて success**、403 はゼロ。**AGENTS.md に違反しません**：制約は `llama-cpp-ver` を**固定してはならない**（上流の最新リリースを動的に追跡する必要がある）ことで、本変更はその要求の**認証方法**にのみ影響し、入力は浮動のまま `flake.lock` にも書かれません。**失敗統計**（直近 100 run の分類）：403 が **24 回**、**未マージの Dependabot ブランチ** `86843b4` による hash mismatch が 4 回（AGENTS.md の「Dependabot は `npmDepsHash` を知らないため必ず失敗する」の実証。当該ブランチは main 上になく PR #7 はクローズ済み）、Cachix の後処理段階が 1 回（ビルド自体は成功済み）。日付では 09-15/16 がピーク（28 + 49）で、メールの量と一致します。**② 子リポジトリのセキュリティポリシー（子リポジトリ `2cce37b`、主リポジトリ `39c9f10` で同期）**：子リポジトリ `dsh-api-balance` には以前 **`SECURITY.md` がありませんでした**——まさに本リポジトリのスキルの「外部リンク監査」が記録していた死リンクです。四言語の `SECURITY.md` を追加し、スキャナが自動生成した PR #4 / #5 の主張の評価を記載しました：**「レート制限の欠如」と「リクエストボディのサイズ上限の欠如」はいずれも誤検知**です。判断根拠はすべて記録しています：報告の記述と diff が一致しない（4 エンドポイントを挙げながら、diff は `/query` のみ変更）、その `x-forwarded-for` 制限キーはクライアントが偽装でき、**同一オリジンのローカル RPC は当該ヘッダを伴わない**ため全ローカル要求が同一の `"unknown"` バケットに入り **正常なユーザーが先に制限される**、`/token` には既に **6 時間**のサーバー側スロットル、音声アナウンスには **30 分**の制限がある、そして**本プラグインに高頻度ポーリングはない**（唯一の 30 秒 `setInterval` が実行する `isPeakPricing()` は純粋にローカルな時刻判定で**ネットワーク要求を発行しない**）ため、人間の操作速度では最も活発でも **毎分 5〜10 回**程度であり、スキャナ推奨の毎分 30 回は既にその 3〜6 倍です。本当の境界は **DSH ホストの認証と Host authority** にあります。**結論：コードは変更しません**——将来必要になれば、**IP ではなく認証主体ごと**に（IP は偽装可能）、閾値は人間の操作よりはるかに高く（例：毎分 60〜120 回）設定し、「暴走スクリプト対策」として位置づけるべきです。主リポジトリの四言語 `SECURITY.md` にあった「同サブプロジェクトは**未だ**ポリシーを整備していない」という行が結果的に古くなったため、「整備済み」に訂正し、子リポジトリ文書への直リンクを添えました。
+**概要**：fix(ci): `check.yml` の `access-tokens` に `api.github.com` が欠けていた。あわせて子リポジトリ `dsh-api-balance` に四言語 `SECURITY.md` を追加。
+- CI：浮動入力 `llama-cpp-ver` はこれまで未認証で取得されていた（60 回/時の上限を push ごとの ~34 workflow が使い切る）。両 host を記載後は 33 workflow すべて success、403 はゼロ。入力は浮動のままで `flake.lock` には書かれない
+- 子リポジトリのセキュリティポリシー：スキャナの PR #4 / #5 の「レート制限の欠如」「リクエストボディのサイズ上限の欠如」はともに誤検知と判定、コードは変更しない
+- 主リポジトリの四言語 `SECURITY.md` の「同サブプロジェクトは未だポリシーを整備していない」を「整備済み」に訂正し、子リポジトリ文書へリンク
 
 | コミット | 説明 |
 |------|------|
@@ -450,11 +453,15 @@
 | `2cce37b` | （子リポジトリ dsh-api-balance）docs(security): 四言語 SECURITY.md を追加 |
 | `39c9f10` | docs(security): 子リポジトリがポリシーを整備済みに——古い「未整備」記述を訂正（四言語） |
 
-> **説明**：`d224b18` は `.github/workflows/check.yml` を変更、`39c9f10` は四言語ドキュメント、子リポジトリのコミットはそのリポジトリに記録されています。修正後 CI はすべて green です。
+> **説明**：`d224b18` は `.github/workflows/check.yml` を変更、`39c9f10` は四言語ドキュメント、子リポジトリのコミットはそのリポジトリに記録。
 
 ## 2026-09-19T07:51:05+09:00
 
-**概要**：スキル文書の確認（4 篇完了：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn）で 3 件修正。**① nix-flake-update-check：ステップ数の誤り（四言語）**。文書は「第 1〜**10** 步の主フロー」としていましたが、汎用スキルの `SKILL.md` は実測で**第 1〜9 步のみ**です。「プロセスの振り返りと規範の検証」および「テストブランチの教訓を main へ戻す」は、実際には**適応層スキル** `nixkits-check-updates`（その「第 10 步（締め）」、258 行目以降）で定義されています。元の記述は 2 つのスキルのステップを混同しており、読者は汎用スキルで第 10 步を見つけられません。「本スキルは第 9 步まで。締めの第 10 步は適応層が補う」に改めました。**② write-project-docs：配套ファイル `templates.md` がスキル自身から宣言されていない（四言語 + SKILL.md）**。`templates.md`（209 行の完全なテンプレート集）は実在し、`AGENTS.md` の 88 行目も参照していますが、`SKILL.md` には**ファイル名が一切現れず**、「配套ファイル」節もありません（対照的に `nix-flake-update-check/SKILL.md` には明確な配套ファイル表があります）。四言語の文書はさらに進んで、スキルを単一ファイルと同一視していました。結果として、実行時にテンプレート集の存在を知る手段がなく——それは「ある種の文書を初めて作る」際に最も先に読むべきものです。`SKILL.md` の冒頭に配套ファイル表（既存スキルと同じ形式）を追加し、四言語の文書には「パス＝ディレクトリ形式」と「配套ファイル」の行を補いました。**③ translate-pseudocn：辞書の項目数と配套ファイル（四言語）**。文書は「内蔵 ~**13** 項目のマッピング辞書」としていましたが、`dictionary.md` は実測 **75** 項目です。履歴を見ると辞書は複数回拡張されており（`4fbf387`「expand dictionary 7→46 entries」）、13 はより早い版で止まっています。また `SKILL.md` は `dictionary.md` を 3 箇所で参照していますが（表引き翻訳、カタカナ対応、残存仮名の書き戻し）、四言語の文書は `SKILL.md` 単一パスしか書かず、本文でも同ファイルに触れていません。配套行を追加し、項目数を実測の 75 に改めました。**照合**：同梱の `news-three-elements` 文書は 4 つの配套ファイル（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）を**既に正しく**宣言し、SKILL.md にも対応する参照があるため、本欠陥は普遍的なものではありません。また `nixkits-check-updates` 文書は全項目一致でした（子倉座標——`fetchFromGitHub` 固定 rev / flake input ではない / npm 未公開——はいずれも事実で、3 つの固有の落とし穴——godot-ai は overlay を**2 箇所とも**連結する必要、codewhale の 2 変種、dsh-alpha の vendored lock における `--legacy-peer-deps` 禁止——もソースと一致し、第 10 步の 6 サブステップもスキル本文と一致）。
+**概要**：スキル文書 4 篇（`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`）を確認、3 件修正（四言語）。
+- `nix-flake-update-check`：文書は主フローを 1〜10 ステップとしていたが、`SKILL.md` は実際にはステップ 9 まで。ステップ 10（締め）は適応層 `nixkits-check-updates` が定義
+- `write-project-docs`：付属ファイル `templates.md`（209 行）が `SKILL.md` で宣言されていなかった —— 付属表とディレクトリ形式のパスを補完
+- `translate-pseudocn`：辞書の項目数 13 を実測 75 に訂正し、`dictionary.md` の付属行を追加
+- 照合：`news-three-elements` の付属宣言はもともと正確
 
 | コミット | 説明 |
 |------|------|
@@ -462,21 +469,29 @@
 | `7f7363f` | fix(docs): write-project-docs が配套ファイル templates.md を宣言していない（四言語 + SKILL.md） |
 | `cef09fe` | fix(docs): translate-pseudocn の辞書項目数と配套ファイルが不正確（四言語） |
 
-> **説明**：`7f7363f` は `skills/write-project-docs/SKILL.md` の変更を含みます（スキルスナップショットは `check-preset-bundle` により `skills/` ツリーとバイト単位で一致することを確認済み）。残りは四言語のドキュメントです。スキル文書は残り 6 篇（news-three-elements / nixkits-skills / nixos-modern-cli / nixos-specialisation-tuning / recover-nixos-config / write-maintenance-log）、その後は文書に載っていない内容の確認です。
+> **説明**：`7f7363f` は `skills/write-project-docs/SKILL.md` の変更を含む（技能スナップショットは `check-preset-bundle` により `skills/` ツリーとバイト単位で一致することを確認済み）。残りは四言語の文書。
 
 ## 2026-09-19T07:43:15+09:00
 
-**概要**：廃止文書の確認 — **ファイルをまたぐ事実誤り**（モジュールのコメントと四言語の廃止文書の双方に存在）を発見し、訂正しました。**元の判定**：「上流は hostPlatform へ移行済み（旧記法 **0 箇所**、新記法 34 箇所）で、非推奨警告は出ない」。**実測による反証**（上流 tarball を取得しファイル単位で計数）：非推奨の `stdenv.is<Platform>` 短記法は **0.34.0 で 38 箇所**、**0.30.2（パッチ時代の基版）でも 38 箇所**、一方 `hostPlatform.is*` は両版とも 7 箇所のみ——両版は完全に同一で、上流は**一度も**この API を移行していません。nixpkgs を実測してこの記法が実際に非推奨であることも確認済み（`evaluation warning: stdenv.isLinux is deprecated, use stdenv.hostPlatform.isLinux instead`）で、「非推奨警告は出ない」は成立しません。**原因の推測**：元の判定は、**私たち自身のパッチ**が行ったことを上流が行ったこととして記録してしまった可能性が高いです——旧 `comfyui-nix-stdenv-api.patch` のサブジェクトはまさに「migrate stdenv.is<Platform> to stdenv.hostPlatform.is<Platform>」（36/44 箇所を移行）で、誤った結論の数字とよく一致します。**訂正後の正確な記述**：パッチが不要になったのは事実ですが、本当の理由は**私たちが上流コードを上書きしなくなったこと**です——旧パッチは、overlay 経由で評価される fork にこの移行を適用し、下流ビルドを汚す警告を消していました。上流を直接指すようになった今、本モジュールは宣言的な配線のみを行います。**2 箇所を同時に訂正**：`modules/comfyui.nix` の「パッチ削除の判定根拠」コメント（警告マーカーと実測値を含む）と、四言語 `deprecated/comfyui-rocm.md` の「なぜ廃止できるか」の節。訂正にこだわったのは、本リポジトリの「判定根拠を後から辿れるように記録する」という既定の取り決めに従ったためです——誤った結論を残せば、将来の確認者がそれを前提に推論を続けてしまいます。**その他の廃止項目の主張は通過**：モジュールは実際に `nixkits.comfyui` へ改名済み（ソースコメントと文書が一致）。`modules/comfyui-rocm.nix` と 3 つのパッチファイルは削除済み。`DEPRECATED.md` / `docs/DEPRECATED.{en,ja,pcn}.md` の索引はいずれも本文書を正しく指しています。履歴対照表の上流バージョンは実測で **v0.34.0** と記載どおり、ROCm wheels は上流同梱、入力元は `github:utensils/comfyui-nix` に変更済み、パッチ数は 3 → 0。
+**概要**：fix(comfyui): 「上流は stdenv API を移行済み」という誤った判定を訂正。
+- 元の判定は「上流は hostPlatform へ移行済み」でしたが、実測で反証：`stdenv.is<Platform>` は **0.34.0 と 0.30.2 に各 38 箇所**、`hostPlatform.is*` は両版 7 箇所のみ——一度も移行されていません
+- 本当の理由：**上流コードを上書きしなくなったこと**です（旧パッチは移行を overlay 経由で評価される fork に適用していました）
+- `modules/comfyui.nix` のコメントと、四言語 `deprecated/comfyui-rocm.md` の「なぜ廃止できるか」の節を同時に訂正
+- その他の廃止項目の主張は通過：`nixkits.comfyui` へ改名済み、`modules/comfyui-rocm.nix` と 3 つのパッチは削除済み、四言語 `DEPRECATED.md` の索引は正しく、上流バージョンは **v0.34.0**
 
 | コミット | 説明 |
 |------|------|
 | `4054c32` | fix(comfyui): 「上流が stdenv API を移行済み」という誤った判定を訂正（モジュールコメント＋廃止文書四言語） |
 
-> **説明**：`4054c32` は **`modules/comfyui.nix` を変更**します（コメントのみで評価に影響せず、`nix flake check` は全通過）。残りは四言語のドキュメントです。廃止文書はこれで完了。残りは**スキル 10 文書**と、最後に文書に載っていない内容の確認です。
+> **説明**：`4054c32` は **`modules/comfyui.nix` を変更**します（コメントのみで評価に影響せず、`nix flake check` は全通過）。残りは四言語のドキュメントです。
 
 ## 2026-09-19T07:38:04+09:00
 
-**概要**：パッチ群が完了 — 最後の 3 文書（asusd-thermal-guard / comfyui / llama-cpp-rocm）を検証し 4 件修正、これで**パッチ 8 文書すべて**が完了しました。**① asusd-thermal-guard が状態を `/run` に置くと誤記（四言語）**。「検証」節のコメントは「root が必要：**状態は /run に書き込まれ**」としていましたが、モジュールは **`StateDirectory`（`/var/lib/private/asusd-thermal-guard`）** を明示的に使い、ソースコメントで **`RuntimeDirectory`（＝ /run）を使ってはならない**と**わざわざ警告**しています——systemd はそのディレクトリを使う最後のユニットが停止すると丸ごと削除するため、冷却カウントが毎回ゼロに戻り、復帰ロジックが機能しなくなります（コメントには実測症状 `streak 1/6 → 2/6 → 1/6 → 2/6` が延々と往復し 6 に達しない、と記録されています）。したがって文書の `/run` は誤りであるうえ、モジュールが意図的に避けている落とし穴をちょうど指していました。**② comfyui のバッジが存在しない CI ジョブを名指し（四言語）**。バッジは `check.yml?job=build (ubuntu-latest, comfyui)` でしたが、`check.yml` には**単一の `check` ジョブしかありません**（ファイル内に `matrix|comfyui` は 0 件）。comfyui は本リポジトリでは**純粋なモジュール**（`nixosModules.comfyui`、パッケージ出力なし）であり、`build-comfyui-*.yml` も存在しません（blender-mcp/kitsfmt/ruyi のバッジは実在する `build-<pkg>-<arch>.yml` を指しています）。**この誤りは自力で露見しません**：shields.io に**故意に存在しないジョブ名**を渡しても `passing` が返ります——一致しない `job=` は黙って無視され、ワークフロー全体の状態にフォールバックするため、あのバッジはずっと CI 全体の状態を表示していました。**③ comfyui のキャッシュ節に overlay の記述が残存（四言語）**。同じページの「種別」は既に「純粋な NixOS モジュール（パッチなし）」としているのに、キャッシュ節は「本エントリは overlay…バイナリキャッシュに含まれない」のままでした——overlay だった頃の古い文言です。モジュールには **`pkgs.comfyui` の参照も `overrideAttrs` もなく**、宣言的な設定（`boot.kernelParams`、`hardware.graphics.extraPackages`、systemd の堅牢化）のみを行い、comfyui の overlay ファイルも既に存在しません。**④ llama-cpp-rocm の移行例が展開されない `~` を使用（四言語）**。例は `hfCacheDir = "~/.cache/huggingface/hub"` でしたが、モジュールはこの値を **systemd `Environment = [ "LLAMA_CACHE=${cfg.hfCacheDir}" ]`** 経由で注入し、systemd の `Environment=` は **`~` を展開しません**——例をそのまま使うとリテラルなパスになり、llama.cpp は相対パスとして扱います。モジュール自身の既定値は**絶対パス**（`${users.users.<user>.home}/.cache/huggingface/hub`）であり、誤っていたのは例の側です。**その他の主張はすべて通過**：asusd-thermal-guard の 6 オプションと既定値、`triggerTemp > resumeTemp` の assertion、`name` による hwmon 解決、CPU/GPU の大きい方の採用、sysfs ではなく `asusctl profile set` の使用、ヒステリシスと冷却カウント、ラダーと「profileCeiling を超えて昇格しない」、両ユニット名と文書の journalctl コマンドの一致。comfyui の `nixkits.comfyui.enable` / `services.comfyui.rocmGfxOverride`（「gpuSupport=rocm のときのみ有効」の限定込み）、機能 6 項目、ROCm 7.1 による gfx1151 のネイティブ認識、3 パッチ削除の理由と 2 つの教訓。llama-cpp-rocm の純 overlay 形態と curried 形式、`llama-cpp-ver` の動的追跡（上流は実測 `v0.4.1` でセマンティックバージョンへの切替を確認）、接頭辞の除去と **`LLAMA_BUILD_NUMBER=0` の上書き**（しないと `int LLAMA_BUILD_NUMBER = v0.2.0;` が生成され C++ のコンパイルが失敗）、全モジュールオプションと `services.llama-cpp.port`。
+**概要**：fix(docs): パッチ文書群が完了 —— 最後の 3 文書を確認し 4 件修正（いずれも四言語）。
+- asusd-thermal-guard：文書が状態を `/run` に置くと誤記。モジュールは `StateDirectory`（`/var/lib/private/asusd-thermal-guard`）を使い、コメントは `RuntimeDirectory` の使用を警告（systemd が丸ごと削除するため、冷却カウントが毎回ゼロに戻る）
+- comfyui：バッジが存在しない CI ジョブを名指し（`check.yml` には単一の `check` ジョブのみ）。如実な CI バッジに変更
+- comfyui：キャッシュ節に overlay の記述が残存（モジュールには `pkgs.comfyui` の参照もなく、宣言的な設定のみ）
+- llama-cpp-rocm：移行例の `hfCacheDir` が展開されない `~` を使用。モジュールの既定値は絶対パス
 
 | コミット | 説明 |
 |------|------|
@@ -484,94 +499,121 @@
 | `01679e8` | fix(docs): comfyui のバッジが存在しないジョブを名指し＋overlay 記述の残存（四言語） |
 | `35aaf05` | fix(docs): llama-cpp-rocm の移行例が展開されない ~ を hfCacheDir に使用（四言語） |
 
-> **説明**：いずれもドキュメントのみの修正で、`packages/`・`overlays/`・`modules/` は未変更。パッチ 8 文書はこれで完了。残りは**廃止 1 文書**（comfyui-rocm）、**スキル 10 文書**、および最後に文書に載っていない内容の確認です。
+> **説明**：いずれもドキュメントのみの修正で、`packages/`・`overlays/`・`modules/` は未変更。
 
 ## 2026-09-18T11:04:38+09:00
 
-**概要**：外部カタログへの掲載が完了 — awesome-ai-plugins の 2 つの PR がともにマージされ、NixKits と dsh-api-balance が正式に同カタログへ入りました。**背景**：本リポジトリは以前に掲載招待の issue #3（@zerocodefast）を受け取りました。以前のログは「open のまま PR 未提出」と記録していましたが、その後実際に提出して掲載が受理されていました——**本項目は提出とマージの事実を追記するもの**です。**結果**：① [PR #321](https://github.com/hashgraph-online/awesome-ai-plugins/pull/321) — `dsh-api-balance` を DeepSeek Harness Plugins に追加、**2026-09-16 にマージ**（APPROVED、@kantorcodes による）。② [PR #323](https://github.com/hashgraph-online/awesome-ai-plugins/pull/323) — NixKits を Development & Workflow に追加、レビュー指摘に沿った是正とスキャン再実行のため**私たちが自らクローズ**。③ [PR #335](https://github.com/hashgraph-online/awesome-ai-plugins/pull/335) — 再提出版、**2026-09-18 にマージ**（APPROVED、@kantorcodes による）。両エントリは現在上流 README に反映されています（`NixKits` は Development & Workflow 節の NeatContext と Oh My Design の間、`dsh-api-balance` は DeepSeek Harness Plugins 節）。**是正の振り返り**：スキャン評価は **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、medium はゼロに。根本原因は `RISKY_APPROVAL_DEFAULT` が**設定ではなくドキュメント**に一致していたこと（制御実験で特定：空のリポジトリでは 0 件、`danger-full-access` の一語を注入するだけで出現）。修正は**情報を一切削らず措辞のみを変更**するもので、これが本リポジトリの既存の「点数のために境界を破らない」姿勢の根拠となっています。**意図的に行わなかった 3 点**：scanner workflow を導入しない（独立に監査できない第三者コードを本リポジトリの CI に入れず、10% の信頼スコア減点を受け入れる）、Dependabot を残さない、したがって満点ではなく 94 点で止める——理由と代償は `AGENTS.md` の「安全境界：外部自動化を導入しない」に記載。**ローカルの対応**：issue #3 の返信を更新し、3 つの PR の最終状態と掲載されたエントリの位置を明記（元の返信は「2 つの PR を提出」と述べ、クローズ済みの #323 を指しており古くなっていました）。**併せて確認**：#323/#335 で報告した上流 `scripts/check-alphabetical.py` の pinned 判定の不具合（47 行目が「マーカーがエントリの 2 行上」でのみ有効と判定するが、README ではマーカーがエントリの直上にある）はスクリプトに依然残っていますが、現在の `main` ではチェックが通っています（README 側で回避したと推測）。issue の返信でこれを指摘し、pinned エントリを新規追加すると再び誤検知する可能性があること、どちらの側でも 1 行の修正で独立 PR を出せることを伝えました。
+**概要**：外部カタログへの掲載が完了 —— awesome-ai-plugins の 2 つの PR がともにマージされ、NixKits と dsh-api-balance が正式に同カタログへ入りました。
+- スキャン評価 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、措辞のみ変更し情報は削除せず
+- PR #321：`dsh-api-balance` を DeepSeek Harness Plugins に追加、**2026-09-16 にマージ**
+- PR #323：NixKits を Development & Workflow に追加、レビュー是正とスキャン再実行の後、私たちが自らクローズ
+- PR #335：再提出版、**2026-09-18 にマージ**。両エントリは現在上流 README に反映済み
+- scanner workflow と Dependabot は導入せず、10% の信頼スコア減点を受け入れ
 
 | コミット | 説明 |
 |------|------|
 | `--` | 外部リポジトリでの作業（awesome-ai-plugins PR #321 / #335 のマージ）と issue #3 返信の更新。本リポジトリに対応するコミットはなし |
 
-> **説明**：本項目は本リポジトリ外で起きた成果の追記です——掲載は外部カタログ側がマージしたもので、本リポジトリの `packages/`・`overlays/`・ドキュメントはいずれも未変更です。追記した理由は、以前のログが「#323 の是正要請」までしか記録しておらず、**提出と最終的なマージという 2 つの事実が記録されていなかった**ため、タイムラインに断絶があったからです。
+> **説明**：掲載は外部カタログ側がマージしたもので、本リポジトリの `packages/`・`overlays/`・ドキュメントはいずれも未変更。
 
 ## 2026-09-18T14:35:36+09:00
 
-**概要**：パッチ 5 文書の検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）— 3 件修正。**① rcc-fix が存在しない option 名前空間を使用（四言語）**：例は `services.asusctl = { enable = true; power-profile = true; cpu-power-control = true; }` ですが、nixpkgs に **`services.asusctl` は存在しません**（リポジトリ全体の `grep -r 'services\.asusctl'` がゼロ件）。asusctl のデーモンオプションは `services.asusd`（`nixos/modules/services/hardware/asusd.nix`）にあり、`enable`/`package`/`animeConfig`/`asusdConfig`/`auraConfigs`/`profileConfig`/`fanCurvesConfig`/`userLedModesConfig` で、**`power-profile` や `cpu-power-control` はありません**（プロファイルと CPU 電力上限は `profileConfig` 経由で `/etc/asusd/profile.ron` に書かれます）。傍証：本リポジトリの `modules/rcc-fix.nix` は `config.services.asusd.enable` を使っており、同梱の asusd-pd-profile 文書も `services.asusd` を正しく使用しています——誤っていたのは rcc-fix のみで、四言語すべて同様でした。**② breeze-black の「インストール」節がプレースホルダパスを使用（zh のみ）**：`nixpkgs.overlays = [ (import ./overlay.nix) ];` とありますが、これは flake パスでも本リポジトリのファイルでもありません。他のパッチ文書（efl-cross-fix / rcc-fix / codewhale-sudo）と en/ja/pcn は既に `inputs.nixkits.overlays.<name>` で統一されており、zh のみ未修正でした。**③ codewhale-sudo の基本情報表に重複行（zh のみ）**：「类型 | overlay（覆盖 codewhale 包）」が 2 回あり、他の三言語は各 1 行です。**その他の主張はすべて通過**：efl-cross-fix は実際に `pkgsCross.{riscv64,riscv64-musl,aarch64}` のみを `overrideScope` でカバーし、仕組みはホストでビルドした `efl-native/bin/.` をビルドディレクトリへコピーして `export PATH="$PWD:$PATH"` するもの（meson の `find_program(..., native: true)` が eolian_gen / eet を見つけられる）で、ホストの efl は影響を受けません。breeze-black は実際に `kdePackages.breeze`/`breeze-gtk` のみを上書きし独立パッケージ出力はなく、look-and-feel id は `metadata.json` で `org.kde.breezeblack.desktop` と確認、GTK テーマ名は `BreezeBlack`（light の "Breeze" からのリネーム）、`BreezeBlack.colors` も存在。codewhale-sudo の仕組みは実際に ptrace でカーネル境界において `prctl(PR_SET_NO_NEW_PRIVS)`/`PR_SET_SECCOMP` を無害な `PR_GET_NO_NEW_PRIVS` へ書き換えるもので、「静的リンクにより `LD_PRELOAD` が無効」という理由と整合し、overlay 名 `codewhale-sudo-fix` は flake 登録と一致。rcc-fix のモジュールは実際に `partOf = lib.mkForce [ ]` で `asus-shutdown.service` の PartOf を外してデッドロックを解消し（加えて `SendSIGKILL=yes`/`TimeoutStopSec=30s` を強制）、`programs.rog-control-center.{enable,autoStart}` も実在します。asusd-pd-profile の `pdProfile` 既定 `balanced`・`nativeAcProfile` 既定 `performance` は文書と一致し、サービスは実際に `Type=oneshot` の udev 起動（常駐なし・ポーリングなし）、文書記載の二段階の PD 判定（`/sys/class/typec/port*/power_operation_mode` が `usb_power_delivery`、`/sys/class/power_supply/*` で `type=USB` のものが `online=1`）はいずれもスクリプトに実装され、「バッテリ時は即終了」にも対応する分岐とメッセージがあります。
+**概要**：fix(docs): パッチ 5 文書の検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）—— 3 件修正。
+- `rcc-fix` が存在しない option 名前空間を使用：例は `services.asusctl`（`power-profile`/`cpu-power-control` を含む）ですが、正しくは `services.asusd` で、プロファイルと CPU 電力上限は `profileConfig` 経由（四言語）
+- `breeze-black`：「インストール」節のプレースホルダパス `(import ./overlay.nix)` を `inputs.nixkits.overlays.<name>` へ（zh のみ）
+- `codewhale-sudo`：基本情報表の重複行を削除（zh のみ）
+その他の主張は全項目照合済みで通過。
 
 | コミット | 説明 |
 |------|------|
 | `a262e3c` | fix(docs): breeze-black のインストールパスと codewhale-sudo の重複行（zh） |
 | `ea03584` | fix(docs): rcc-fix が存在しない services.asusctl オプションを使用（四言語） |
 
-> **説明**：いずれもドキュメントのみの修正で、`packages/`・`overlays/`・`modules/` は未変更。パッチ文書は残り 3 篇（asusd-thermal-guard / comfyui / llama-cpp-rocm）、その後は廃止 1 篇、スキル 10 篇、および文書に載っていない内容です。
+> **説明**：いずれもドキュメントのみの修正で、`packages/`・`overlays/`・`modules/` は未変更。
 
 ## 2026-09-18T14:26:43+09:00
 
-**概要**：開発 2 文書の検証が完了 — ドキュメントのパラメータ誤り 1 件を修正し、さらに**ソースの不具合 1 件**を発見（devShell の設定が一切効いていなかった。ドキュメントの問題ではない）。**① `ruyi venv` / `ruyi extract` の引数誤り（四言語）**：文書は `ruyi venv <name>` と `ruyi venv --toolchain <t>` を示していますが、実測ではどちらも不完全です——位置引数を 1 つだけ渡すと usage を表示して終了し、`-t` なしで `profile dest` を渡すと `fatal error: You have to specify at least one toolchain atom for now, e.g. \`-t gnu-plct\`` となります。正しい形式は三つとも必須で `ruyi venv -t <toolchain> <profile> <dest>`、さらに `profile` はローカル索引に存在する必要があります（初回は `ruyi update`）。また `ruyi extract <file>`（「RISC-V AppImage を展開」）も誤りで、このコマンドの位置引数は**ファイルパスではなくパッケージ atom** です。ファイルパスを渡すと `fatal error: atom /tmp/dummy.AppImage matches no package in the repository` となるため、`ruyi extract <pkg>` に改め、引数の意味を明記しました。**② ソースの不具合：opencode devShell の searxng limiter 設定が一度も読まれていなかった**。`develop/opencode.nix` は limiter 設定を `settings.yml` の `server.limiterSettings` ブロックに書いていましたが、searxng は limiter 設定を **`<user_cfg_folder>/limiter.toml` からのみ**読み込みます（`searx/limiter.py` の `get_cfg()`）。devShell に入ると searxng が直ちに `missing config file: /tmp/searxng-*/limiter.toml` を警告し、このブロックが**黙って無視されていた**こと、すなわち `trusted_proxies`（本機の lighttpd リバースプロキシが渡す X-Forwarded-For/X-Real-IP を信頼する設定）が**一度も効いていなかった**ことが判明しました。しかもそのブロックには上流で廃止済みの `real_ip.x_for` も含まれていました（本セッションで mcp-searxng 文書から削除したのと同じ廃止キー）。修正は limiter 設定を `settings.yml` と**同じディレクトリの独立した `limiter.toml`** へ移し（`SEARXNG_SETTINGS_PATH` がファイルを指す場合、そのディレクトリが user_cfg_folder）、現在のスキーマである `[botdetection] trusted_proxies`（`127.0.0.0/8`、`::1`）を使い `real_ip` を削除しました。修正後は `missing config file` 警告が**消え**、searxng(42701) と lighttpd(4270) がいずれも HTTP 200 を返します。**その他の主張は実測通過**：3 つの devShell が存在し `nix develop .#ruyi` が動作（解決されるのはパッチ済み ruyi）、ruyi の 6 サブコマンドが揃い、opencode devShell の 12 packages、3 つの MCP サーバ（SearXNG/Blender/Godot とそのコマンド）、3 つの環境変数、`~/.config/opencode/mcp.json` の初回生成、`~/NixKits/skills/`（GitHub フォールバック）から `~/.opencode/skills/` へのスキル導入がいずれも文書と一致。
+**概要**：fix(devshell): 開発 2 篇の検証 —— 引数の誤り 1 件を修正し、ソースの不具合 1 件を発見。
+- `ruyi venv` / `ruyi extract` の引数誤り：前者は `ruyi venv -t <toolchain> <profile> <dest>` の形が必要で `profile` はローカル索引に存在する必要があり、後者の位置引数はファイルパスではなくパッケージ `ruyi extract <pkg>`（四言語）
+- searxng limiter 設定が一度も読まれていなかった：`develop/opencode.nix` は `settings.yml` の `server.limiterSettings` ブロックに記述。独立した `limiter.toml`（`[botdetection] trusted_proxies`）へ移し、修正後は `missing config file` 警告が消え、リバースプロキシも HTTP 200 を返す
+その他の主張は実測で通過。
 
 | コミット | 説明 |
 |------|------|
 | `26e7a76` | fix(devshell): ruyi venv/extract の引数誤り + opencode searxng limiter 設定が一度も効いていなかった（四言語） |
 
-> **説明**：`26e7a76` は **`develop/opencode.nix` を変更**（limiter 設定を独立した `limiter.toml` へ移動）。devShell の挙動が変化しています。残りはドキュメントのみの修正です。テスト中に生成された `dump.rdb`（redis の産物）と残留バックグラウンドプロセスはすべて掃除しました。残りはパッチ 8 文書、廃止 1 文書、スキル 10 文書、および文書に載っていない内容です。
+> **説明**：`26e7a76` は **`develop/opencode.nix` を変更**（limiter 設定を独立した `limiter.toml` へ移動）し、devShell の挙動が変化。残りはドキュメントのみの修正で、試験中の `dump.rdb` と残留バックグラウンドプロセスは掃除済み。
 
 ## 2026-09-18T13:51:14+09:00
 
-**概要**：プラグイン 2 文書とモード 3 文書の検証が完了 — プラグインは完全一致（変更ゼロ）、モードは 1 件修正。**① プラグイン（変更ゼロ）**：`dsh-nixos-shell` は全項目一致——npm 名とバージョン、`nixos_shell` の 27 項目のツール白リストが文書と**一字一句一致**（python3/python/grep/ls/cat/head/tail/wc/tr/sort/mkdir/rm/cp/mv/find/env/sed/bash/awk/git/curl/jq/ripgrep/rsync/htop/tree/unzip）、`nixos_cli` の 5 つの op と数値上限（generations 既定 20 / 上限 200、journal 既定 50 / 上限 500）が `--help` の記述と一字一句一致、sudo プロトコルは実際に **v3**（`bin/nixkits-sudo-exec.js` の「Protocol (v3, one request per connection)」）で `MAX_TIMEOUT_MS = 21600000`（6 時間）、実測ソケット `/run/nixkits-sudo.sock` は `srw-------` で `kix:users` 所有、分離実行のロジックは実際に rebuild 系コマンドを認識して `systemd-run --collect` で一時ユニットを起動し `detached: true` + `detachedUnit` と「受け渡し ≠ 成功」の note を返し、`presets/` の 2 プリセットと `package.json` の `exports["./nixos-gate"]` / `["./maintenance-skills"]` サブパスが存在、`skills-embedded/` に 10 のスキルスナップショット。`dsh-api-balance` も全項目一致——薄いラッパー（`src` が本リポジトリではなく GitHub を指し、「ソースを保持しない」と整合）、固定 rev `c47f857` が上流に存在（HTTP 200）、npm 名と `package.json` のバージョンが 0.1.0 で一致、文書記載の 4 つの config 項目（`apiKeyEnv`/`baseURL`/`browserScan`/`browserScanIntervalMs`）がすべて存在し、既定値の実測は `6 * 60 * 60 * 1000`（文書の 21600000、6 時間）。**② モード（1 件）**：NixOS モード文書の「コンポジション」行が persona 行に `complete: true` を設定したと述べていましたが、`presets/nixos-mode/agent.cordis.yml` の persona 行は**`prefix` のみを設定**（独立した `complete:` フィールドはどこにもない）で、ランタイムコンテキストは依然として付加されます。`@deepseek-ai/dsh-persona` のスキーマには `complete`（既定 false）が実在するため、これは文書が述べる設定ではなく当該プリセットの選択です——プロンプト本文に「decision-complete」等の語があるため誤読しやすいものでした。四言語で訂正。**照合済みで正しい**：**ニュース三要素モードの persona 行は実際に `complete: true` と `includeRuntimeContext: false` を設定**しており、その文書は正確なので変更していません。その他のモードの主張はすべて通過：`nixos-gate` は実際に `/etc/NIXOS` と `/etc/os-release` を読み（非 NixOS ではツールガードを登録し拒否プロンプトを注入）、NixOS モードのスキルは実際に 5 つ（プリセット同梱 2 + ビルド時サブセット 3）、メンテナンスモードの派生関係は `diff` の実測で**末尾に固定ブロックがちょうど 1 つ追加**され、両プリセットの `skills/` ディレクトリは `diff -r` でファイル単位に一致、`check-preset-derivation.py` は `MAINTENANCE_DELTA` を含み flake check に組み込み済み（実走で確認）、ニュース三要素モードの 5 プラグインの相対名マウント、5 つのスキルファイルがリポジトリのソースと一対一対応、リトライ `[0, 30_000, 120_000]`、6 時間ごとの再確認、ETag/304、キャッシュディレクトリ `$DSH_HOME/.cache/<SKILL_ID>`、readonly 白リスト 8 項目がいずれも実測と一致。
+**概要**：fix(docs): プラグイン 2 文書とモード 3 文書の検証 —— プラグインは全項目一致で変更不要、モードは 1 件修正。
+- `dsh-nixos-shell` と `dsh-api-balance`：npm 名とバージョン、`nixos_shell` の 27 項目のツール白リスト、`nixos_cli` の 5 つの op と数値上限、sudo プロトコル v3（`MAX_TIMEOUT_MS = 21600000`）、`skills-embedded/` スナップショット、`dsh-api-balance` の rev `c47f857` と 4 つの config 項目まで全項目一致
+- NixOS モードの「コンポジション」行が persona 行に `complete: true` を設定したと誤記。実際は `prefix` のみで、四言語で訂正
+その他のモードの主張は通過（`nixos-gate` の読み取り、NixOS モードのスキル 5 つ、メンテナンスモードの派生関係、ニュース三要素モードの各項目）。
 
 | コミット | 説明 |
 |------|------|
 | `3d6340f` | fix(docs): NixOS モードのコンポジション記述が persona の complete: true を誤って主張（四言語） |
 
-> **説明**：ドキュメントのみの修正。プラグイン 2 文書はいずれも変更不要（今後の退行比較のため記録）。残りは開発・パッチ・廃止・スキルの各文書と、文書に載っていない内容です。
+> **説明**：ドキュメントのみの修正。プラグイン 2 文書はいずれも変更不要（今後の退行比較のため記録）。
 
 ## 2026-09-18T13:43:54+09:00
 
-**概要**：ソフトウェア 9 文書の検証が完了 — ruyi は 2 件修正（うち 1 件は**前ラウンドで私が入れた退行**）。これで主文書とソフトウェア系の全子文書を確認し終えました。**① テスト件数がチャネル別でない（退行）**：前ラウンドで「320 ユニット + 52 統合」を一律「462 ユニット + 70 統合」に書き換えましたが、その二つの数値は** beta のみ**でした。実測では三チャネルがそれぞれ異なります——`ruyi`（0.52.0）ユニット **368** / 統合 **58**、`ruyi-beta` **462** / **70**、`ruyi-alpha` **346** / **57**。チャネル別に列挙し直し、「`checkPhase` の ruff / mypy は `|| true`（非ブロッキング）で、**実際にビルドを左右するのは pytest**」と注記して「すべて通過」が三項目すべてとは誤読されないようにしました。**② zh のインストール節のコードブロック破損**：```nix フェンスの中に散文の一行（`> 需要 beta 或 alpha 版本？…`）が混入し、Nix コードとして描画されてブロックが途切れていました。en/ja/pcn にはなく zh のみの問題です。**③ pyelftools の記述も併せて修正**：「ruyi ≥ 0.53.0 で追加」としていましたが、本パッケージは**共有ベースで無条件に**この依存を追加しており（バージョン条件なし）、0.52.x チャネルも持ちます（実測で三チャネルすべてに存在、上流 0.52.0 の pyproject には 0 回）。「上流は 0.53.0 以降必要、本パッケージは無条件に追加、冗長だが無害」と明記しました。**その他の主張は実測通過**：`ruyi --help` に list/install/venv/device、`device provision`・`venv --toolchain`・`list --all` が存在。モジュールオプション `settings.packages.prereleases`/`repo.remote`/`telemetry.mode`/`telemetryOptout`/`venvs.{profile,toolchain,dest}` がすべて存在し、`/etc/xdg/ruyi/config.toml` を生成、アクティベーション時に `ruyi update` を自動実行。NixOS 互換の三機能を成果物内で個別に確認（`wrap_exec_for_nixos`/`_maybe_fix_toolchain_sub_binaries`/`patchelf`/`RUYI_ARGV0`）、文書の検証コマンドは実際にファイルを見つけられます。ライセンス Apache-2.0、上流は ISCAS が保守。**CI について**：今回の最終 push 後 `Build dsh-api-balance (aarch64)` が一度失敗しましたが、調査の結果 `api.github.com/.../llama.cpp/releases/latest` が **HTTP 403**（GitHub API のレート制限、浮動入力 `llama-cpp-ver` に命中）を返したためで、コードではなく一時的なインフラ障害でした。`gh run rerun --failed` で即成功し、リポジトリは 30/30 で green です。
+**概要**：fix(docs): ruyi 文書 2 件修正（ほか 1 件はついでの表現修正）。
+- テスト件数が beta チャネルのみの値だったため、チャネル別に列挙：`ruyi` ユニット 368 / 統合 58、`ruyi-beta` 462 / 70、`ruyi-alpha` 346 / 57。あわせて `checkPhase` の ruff / mypy は `|| true` で、実際にビルドを左右するのは pytest と注記
+- zh のインストール節は散文の一行が Nix コードフェンス内に入り、ブロックが途切れていた（en/ja/pcn には無し）
+- （ついで）`pyelftools` は本パッケージが共有ベースで無条件に追加（バージョン条件なし）で、「0.53.0 以降で新規」ではない
 
 | コミット | 説明 |
 |------|------|
 | `c30f2b6` | fix(docs): ruyi のテスト件数がチャネル別でない + zh インストール節のコードブロック破損（四言語） |
 
-> **説明**：ドキュメントのみの修正。これで**主文書 + ソフトウェア 9 文書**（blender-mcp / codewhale / dsh / godot-ai / kitsfmt / mcp-searxng / obs-bilibili-stream / opencode-telegram / ruyi）の検証が完了し、累計 15 件の修正（実際の機能不具合 1 件と、本セッションで以前に入れた退行 2 件を含む）。残りはプラグイン・モード・開発・パッチ・廃止・スキルの各文書と、文書に載っていない内容です。
+> **説明**：ドキュメントのみの修正で、`packages/`・`overlays/`・`modules/` は未変更。
 
 ## 2026-09-18T13:41:45+09:00
 
-**概要**：ドキュメント検証の続き — obs-bilibili-stream で 1 件修正、opencode-telegram は完全一致（変更ゼロ）。**① obs-bilibili-stream**：「Home Manager」節の `home.packages = [ ...obs-bilibili-stream ];` は**インストールされるが OBS はプラグインを読み込みません**——OBS は `OBS_PLUGINS_PATH` でプラグインを探し、この変数は **nixpkgs の `wrapOBS` だけが注入**します（`pkgs/applications/video/obs-studio/wrapper.nix`: `wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`）。つまり `programs.obs-studio.plugins` 経由のみです。`home.packages` は `.so` をプロファイルに置くだけで、OBS はそのパスを走査せず、「入っているのにプラグイン一覧に出ない」となります。四言語に警告と二つの正しい方法を追記しました（NixOS ではモジュールか `programs.obs-studio.plugins`、非 NixOS／Home Manager のみならプラグイン探索パスに `.../lib/obs-plugins` を含めるよう自力で確保）。その他の主張は実測通過：バージョン 2.1.5、`meta.platforms` は純 Linux（darwin なし、「Linux only」と一致）、`default` overlay が当該パッケージを実際にエクスポート、`nixosModules.obs-bilibili-stream` が登録済み、モジュールのオプション名が文書と一致し**モジュール enable 時の代入が文書の「手動」記載とバイト単位で同一**、成果物構造が正しい（`lib/obs-plugins/bilibili-stream-for-obs.so` と対応する `share/obs/obs-plugins/`）、バッジに対応する x86_64/aarch64 の workflow が存在。**② opencode-telegram（今回唯一の変更ゼロ文書）**：全項目が一致——文書記載の 4 サブコマンド `start`/`status`/`stop`/`config` が `--help` 出力と一致、モジュールオプション `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（ほか `environment`/`package`）がすべて実在し意味も一致、「start が opencode を自動起動」は事実——パッケージ内 `dist/opencode/process.js` の `startLocalOpencodeServer` が実際に `spawn("opencode", ["serve", "--port", port])` を呼び、これが文書でサービス PATH を強調する理由でもある、方案 A の `pkgs.opencode` は nixpkgs に実在（1.18.30）、バッジの三プラットフォーム workflow も存在。
+**概要**：fix(docs): obs-bilibili-stream の Home Manager 用法は導入されるが効かない —— `home.packages` は `.so` をプロファイルに置くだけで、OBS は `OBS_PLUGINS_PATH` でプラグインを探し、この変数を注入するのは nixpkgs の `wrapOBS` のみ、つまり `programs.obs-studio.plugins` だけが有効な経路。四言語に警告と二つの正しい方法を追記。opencode-telegram は全項目一致で変更ゼロ。
 
 | コミット | 説明 |
 |------|------|
 | `4bea784` | fix(docs): obs-bilibili-stream の Home Manager 用法は入るが効かない（四言語） |
 
-> **説明**：ドキュメントのみの修正で、`packages/` と `overlays/` は未変更。opencode-telegram は変更不要と確認（今後の退行比較のため記録）。ソフトウェア群は ruyi のみ。
+> **説明**：ドキュメントのみの修正で、`packages/` と `overlays/` は未変更。opencode-telegram は変更不要と確認（今後の退行比較のため記録）。
 
 ## 2026-09-18T13:40:20+09:00
 
-**概要**：ドキュメント検証の続き — kitsfmt と mcp-searxng で各 2 件修正。**① kitsfmt**：「コメント保持」の記述が広すぎた——0.5.0 の実測では**ノード直前の先行コメント**だけがソート時に追随し、他に 4 種類の位置が失われるか移動する：最後以外の属性の同行末尾コメントは**次の属性の上へ移動**、**最後**の属性の同行末尾は**破棄**、**ファイル先頭**（トップレベル式の前）と**ファイル末尾**（その後）も破棄。ソースが裏付ける：コメントは `comments_before(<entry>)` 経由でのみ収集されるため、先頭・末尾には収集点がない。四言語に「コメント保持の制限」節を追加し、各行を実測で確認した。また漏れていた `KITSFMT_STDIN=1` を補完（`--help` は env を 4 つ表示するが、文書は 3 つだけだった）。その他の主張はすべて実測通過：3 つのベストプラクティス変換は**文書の例とバイト単位で同一の出力**（裸 URL 引用符化 / rec → let-in / with → builtins.attrValues）、`--check` の終了コード意味論（未整形 1、整形済 0）、`-i`/`-B`/複数ファイル（`---` 区切り付き）、冪等性、APC `a.b.c` 折りたたみ、そして別 flake からの `nix fmt` が端から端まで動作。**② mcp-searxng**：第一に「すぐ使える設定」に**廃止済み**の `real_ip.x_for = 1` が含まれていた——上流 searxng の `limiter.toml` にはもはや `real_ip` セクションがなく（`[botdetection]` 下は ipv4_prefix/ipv6_prefix/trusted_proxies のみ）、上流 master と nixpkgs がそのオプションに同梱する example の二箇所で独立に裏付けられ、コミュニティ記録も「replace real_ip by IPv4/v6 network」で置き換えられたことを示す。四言語から削除した。第二に「`SEARXNG_URL` がないと**サイレントに**失敗する」は実測と一致しない——サーバーは**正常に起動し `tools/list` もツールを返す**が、`tools/call` は毎回 `isError: true` を返し、テキストで `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., ...)` と明示し、同時に stderr へ `SEARXNG_URL not set` を出す。つまりエラーは**明示的で対処可能**である（本当に残すべき落とし穴は `mcp add` が `env` を埋めないこと）。その他の主張は通過：バージョン 2.3.0、wrapper が nodejs を注入、本機の `~/.deepseek/mcp.json` の `servers.SearXNG` 構造が文書の例と**フィールド単位で一致**、nixpkgs の searx モジュールが `redisCreateLocally`/`settings`/`limiterSettings` の 3 オプションを実際に持つこと。
+**概要**：fix(docs): kitsfmt と mcp-searxng に各 2 件の不正確な記述。
+- `kitsfmt`：「コメント保持」の記述が広すぎる —— 0.5.0 の実測ではノード直前の先行コメントだけがソート時に追随し、最後以外の属性の同行末尾は次の属性の上へ移動、最後の属性の同行末尾とファイル先頭・末尾は破棄。漏れていた `KITSFMT_STDIN=1` も補完
+- `mcp-searxng`：「すぐ使える設定」に廃止済みの `real_ip.x_for = 1` が含まれていた（上流 `limiter.toml` に `real_ip` セクションは既に無い）。四言語から削除
+- `mcp-searxng`：「`SEARXNG_URL` が無いとサイレント失敗」は実測と不一致 —— サーバーは正常に起動し `tools/list` も返る。`tools/call` のみ毎回 `isError: true` を返し、テキストと stderr に明示
 
 | コミット | 説明 |
 |------|------|
 | `0cb9f4f` | fix(docs): kitsfmt のコメント保持の記述が広すぎ + KITSFMT_STDIN 追加（四言語） |
 | `9f3c829` | fix(docs): mcp-searxng の不正確な記述 2 件（real_ip は廃止、失敗はサイレントではない）（四言語） |
 
-> **説明**：いずれもドキュメントのみの修正で、`packages/` と `overlays/` は未変更。検証は継続中（ソフトウェア群は残り obs-bilibili-stream / opencode-telegram / ruyi、その後プラグイン・モード・開発・パッチ・廃止・スキルの各文書、最後に文書に載っていない内容の確認）。
+> **説明**：いずれもドキュメントのみの修正で、`packages/` と `overlays/` は未変更。
 
 ## 2026-09-18T13:32:32+09:00
 
-**概要**：ドキュメント検証の続き — dsh と godot-ai の双方で問題を発見、うち godot-ai は**実際の機能不具合**（ドキュメントの問題ではない）。**① dsh（ドキュメント 1 件）**：「宣言的に設定可能な host ネームスペース」の表が 6 件のみで、しかも「DSH 0.1.2-alpha」と記載されていたが、その節が扱っているのは `0.1.5-rc.2` である——実測するとこのバージョンが `installSection` で登録する名前空間は **12 件**で、`agent-default-model`（provider/model/reasoningEffort）、`agent-loop`（maxParallelToolCalls）、`permission`（presets）、`shell`（dshHome）、`subagent-model-selection`、`web-search-deepseek` が欠けていた。三重の裏付け：`*_SETTINGS_NAMESPACE` 定数の全抽出で 12 件、各 `z.object({...})` スキーマの抽出でフィールド、実機の `settings.yaml` で `permission` の存在を確認。dsh のその他の主張はすべて通過（live サービス 8615/8625、reverseProxy の三オプションとその安全警告、`launchUrlFile` が実際に `/run/dsh/launch-urls` を生成、sudo ガードのソケットが `srw-------` で kix:users 所有かつ `NIXKITS_SUDO_SOCKET` 注入済み、プラグイン一覧 152 件が live dump と一行ずつ一致、reasoningEffort 四段階と `high` のフォールバック既定）。**② godot-ai（機能不具合 1 件 + ドキュメント 2 件）**：ドキュメント記載の `godot-ai` コマンドが**起動直後に失敗**する（`BACKEND_START_FAILED`、バックエンドログは `No module named godot_ai`）。根本原因を層ごとに特定：このコマンドは既定で attach ブリッジ経由で**バックエンドをもう一つ spawn** する（`sys.executable -m godot_ai`）。しかし Nix 包装下の `sys.executable` は**素の CPython** であり、依存は包装スクリプトが実行時に `site.addsitedir()` で注入するのみで、**spawn された子プロセスには継承されない**。上流は `uvx`／実 venv で導入するためこの落差は存在しない。修正は makeWrapper で PYTHONPATH を前置するもので、検証中に三つの必須ポイントを実測で踏んだ：`python312.sitePackages` は**相対**パスなので `${placeholder "out"}/` と結合する必要がある、深い伝播依存（pydantic_core/platformdirs）は `propagatedBuildInputs` を fixpoint 展開する必要がある、`d.pythonPath` は使えない（nixpkgs 側の別の pydantic 2.13.4 を指し、本リポジトリの overlay が引き上げた 2.13.5 を迂回して fail-closed 検証に失敗する）。実測 A/B：修正前 ❌ / 修正後 ✅（バックエンドは 127.0.0.1:8000 を待ち受け、MCP `tools/list` は 46 ツールを返す）。ドキュメントはさらに 2 件修正：ツール数 43 → **46**（上流 v4.1.0 の README も 46 と記載）、既定 WebSocket ポート 9876 → **9500**（`--help`、`__init__.py` の argparse、`asgi.py` の三箇所で独立に裏付け。9876 はパッケージ内に一切出現しない）。
+**概要**：fix(docs): dsh と godot-ai の文書検証 —— 3 件修正、加えて実際の機能不具合 1 件を発見。
+- `dsh`：「宣言的に設定可能な host ネームスペース」表が 6 件のみで 0.1.2-alpha と記載。該当節が扱う `0.1.5-rc.2` は `installSection` 経由で 12 件を登録するため、`agent-default-model` ほか 5 件が欠けていた
+- `godot-ai` コマンドは起動直後に失敗：attach ブリッジが `sys.executable -m godot_ai` でバックエンドを再 spawn するが、Nix 下では素の CPython で、`site.addsitedir()` が注入する依存は子プロセスに継承されない。makeWrapper で PYTHONPATH を前置し、実測で動作
+- `godot-ai` 文書の残り 2 件：ツール数 43 → 46、WebSocket ポート 9876 → 9500
 
 | コミット | 説明 |
 |------|------|
 | `6b47f55` | fix(docs): dsh の設定ネームスペース表が不完全かつバージョン表記が古い（四言語） |
 | `a54bd9d` | fix(godot-ai): attach バックエンドが起動しない不具合の修正と不正確な記述 2 件（四言語） |
 
-> **説明**：`a54bd9d` は **`packages/godot-ai.nix` を変更**する（makeWrapper と postFixup を追加）。godot-ai のビルド成果物が変化している。残りはドキュメントのみの修正。
+> **説明**：`a54bd9d` は **`packages/godot-ai.nix` を変更**（makeWrapper と postFixup を追加）し、godot-ai のビルド成果物が変化。残りはドキュメントのみの修正。
 
 ## 2026-09-18T13:23:25+09:00
 
-**概要**：ドキュメント検証を開始 — 主文書の 26 項目の主張を再確認し、子文書を一篇ずつ検証、不正確な記述を 7 件修正。**手法**：ソースから推測するのではなく**実際に配備して計測**する——実プロセスを起動して権威あるデータを取得し（例：blender-mcp の MCP stdio に `tools/list` を送信）、統制された比較実験を行う。各ラウンドで証拠を残した後にクリーンアップし（一時ディレクトリ、registry 項目、テスト用 HOME）、実設定が一切変更されていないことを確認する。**① 主文書（README × 四言語）2 件**：`inputs.nixkits.url = "~/NixKits"` は**使用不可**（Nix は flake input URL の `~` を展開しない。実測エラー `path '.../source/~/NixKits/flake.nix' does not exist`。`path:$HOME/...` も同様に失敗。`git+file:///path/to/NixKits` に変更し、五通りの書き方の統制比較結果を添付）；「全パッケージが既定で `lib.platforms.linux` に従う」は**事実に反する**——12 パッケージの `meta.platforms` を実測すると 9 件が `lib.platforms.all`（darwin を含む）を宣言し、Linux 限定は codewhale / obs-bilibili-stream / godot-ai のみ。**② blender-mcp 3 件**：ツール数は 22 と称しながら 17 件しか列挙されておらず、**実サーバの登録は 26 件**（5 つの要約ツールの `_for_cli` 変種、2 つの jump ツール、`search_api_docs` / `search_manual_docs` が欠落）；アドオンのインストールパスは `blender/4.4/scripts/addons/` とあるが、このアドオンは **Blender Extension**（manifest `blender_version_min = "5.1.0"`、ゆえに **4.x では読み込めない**）で、新しい Blender のディレクトリは `extensions/user/`；さらに**更新が無言で失敗する**——store 内ディレクトリは読み取り専用（`dr-xr-xr-x`）で `cp -r` は権限ごと複製するため、2 回目のインストールは大量の `Permission denied` を出し、新旧が混在した半端な状態を残す（保守者の環境が 1.0.0 のままなのは正にこの症状）。正しい更新手順を追加（`chmod` → `rm -rf` → `cp` → `chmod`、1.0.0 → 1.0.3 を実測しパッケージ内とバイト単位で一致）。**③ codewhale 2 件（うち 1 件は退行）**：`codewhale --sandbox <tier>` という引数は**存在しない**（実測 `unexpected argument`）。実際は `--sandbox-mode`。**これは退行である**——`e386dfc` が既にこの引数名を修正していたが、同一コミットがスキャナの `RISKY_APPROVAL_DEFAULT` を消すために文言を書き換えた際、**誤った引数名を再導入した**。当時は「文言がスキャナに引っかかるか」だけを確認し、「書き換えた引数がまだ使えるか」を確認していなかったことを示す。また zh のみがこの行を持ち、en/ja/pcn は正当な `--yolo` を記載していたため四言語が不一致であった。現在は四言語すべてが `--sandbox-mode <tier>` の例・有効値・「`--sandbox` ではない」という注意を含む。**その他の主張は確認済み**：パッケージ / overlay / モジュール / devShell / スキルディレクトリ（`skills/` と**一件ずつ照合**し完全一致）、四言語の章構成とバージョン番号の一致、キャッシュの到達性、モード配布の seed-once と「コピーせず登録」の意味論、Claude Code 削除の理由が参照先文書に実在すること。
+**概要**：fix(docs): 26 項目の主張 + 子文書を検証、失実記述を 7 件修正
+- 主文書 2 件：`inputs.nixkits.url = "~/NixKits"` は使用不可——`git+file:///path/to/NixKits` に変更。「全パッケージが既定で `lib.platforms.linux` に従う」は失実、実際は `lib.platforms.all`
+- blender-mcp 3 件：実サーバの登録は 26 ツール（文書は 22 と称す）。アドオンの導入先は `extensions/user/`（Blender Extension で 4.x では読み込めない）。更新手順は `chmod`→`rm -rf`→`cp`→`chmod`（従来は無言で失敗）
+- codewhale 2 件：`--sandbox <tier>` は存在せず、実は `--sandbox-mode`。以前修正済みの引数名が再導入されたもので、四言語は統一
 
 | コミット | 説明 |
 |------|------|
@@ -579,11 +621,11 @@
 | `ead55d1` | fix(docs): blender-mcp の不正確な記述 3 件（四言語） |
 | `6f40487` | fix(docs): codewhale のサンドボックス引数名の退行と四言語の不一致（四言語） |
 
-> **説明**：ドキュメントのみの修正で、`packages/` と `overlays/` は未変更。ドキュメント検証は継続中（子文書を主文書の順に一篇ずつ再確認）。以降の発見は別途記録する。
+> **説明**：ドキュメントのみの修正で、`packages/` と `overlays/` は未変更。
 
 ## 2026-09-18T13:09:18+09:00
 
-**概要**：refactor(ruyi)! — `ruyi-nixos-compat` パッチをパッケージ定義に統合し、無効となった overlay を削除。**① 発見した不一致**：この overlay は `prev.ruyi.overrideAttrs` であり、**nixpkgs の `ruyi`** を修正するものでした。しかし nixpkgs は既に当該パッケージを提供しておらず（`builtins.attrNames pkgs` で `ruyi` は NOT-FOUND）、overlay は**宿主を失っていました**——`nixkits.ruyi` モジュールの `lib.mkPackageOption pkgs "ruyi"` は何も解決できず、`packages/ruyi/*.nix` はこのパッチを参照しておらず（自前の `postPatch` で `nixos_compat.py` に追記するだけなのに、コメントには「file is created by the overlay patch」と書かれていました）、**実際に効いていたのは overlay を自前で被せていた `develop/ruyi.nix` のみ**でした。結果として、四言語のドキュメントは「パッケージ版が当該 overlay を含む」と述べているのに、flake パッケージの利用者は**NixOS 互換処理を実際には得られていません**でした。しかもこの種の不一致は**ビルド成功では露見しません**——成果物を項目ごとに確認して初めて判明します。**② 修正**：overlay が行っていた三つのことをすべて `packages/ruyi/ruyi.nix` に移しました——`patches = [ …/ruyi-nixos-compat.patch ]`（三チャネル共有）、`substituteInPlace --replace-fail` による `@nixLdSo@`/`@nixGlibcLib@` の埋め込み、そしてパッチが必要とする `ensure_toolchain_nixos_compat` の明示的な import です。**`--replace-fail` は意図的**：上流の改名でプレースホルダが消えた場合、**ビルドが即座に失敗**し、「パッチはあるが互換性はない」パッケージを黙って生み出すことはありません。あわせて overlay ファイルと flake の登録を削除し、`develop/ruyi.nix` も被せをやめました——devShell・flake パッケージ・NixOS モジュールが**同一の**ビルドを得ます。**③ 検証（ビルド通過だけでなく、成果物内で項目ごとに確認）**：三チャネル（ruyi / ruyi-beta / ruyi-alpha）すべてビルド成功。`nixos_compat.py` が存在し `@nixLdSo@` の**残存は 0 回**、実際の store パス（`glibc-2.42-84/ld-linux-x86-64.so.2`、存在を実測）に置換済み。`runtime.py` に `wrap_exec_for_nixos` と注入 import、`maker.py` に `expose_build_tools_in_venv` 呼び出し、`nuitka.py` に `RUYI_ARGV0` 分岐を確認。ランタイムのスモークテスト `ruyi --version`/`--help` は正常。beta(0.53.0) の pytest は依然 **462 passed + 70 passed**。四言語ドキュメントを「パッチ内蔵・overlay 設定不要」に書き換え、経緯も保持。
+**概要**：refactor(ruyi)! — `ruyi-nixos-compat` パッチを `packages/ruyi/ruyi.nix` に統合し、無効となった overlay を削除。overlay は **nixpkgs の** `ruyi` を修正するものだったが、そのパッケージは既に存在せず、実際に効いていたのは自前で被せていた `develop/ruyi.nix` のみ——flake パッケージの利用者は NixOS 互換処理を得られていなかった。パッチは三チャネル内蔵となり（`--replace-fail` で `@nixLdSo@`/`@nixGlibcLib@` を埋め込み、`ensure_toolchain_nixos_compat` を注入）、devShell・flake パッケージ・NixOS モジュールが同一のビルドを得る。検証：三チャネルはビルド成功、成果物内の `@nixLdSo@` 残存 0 回、`ruyi --version`/`--help` 正常、beta の pytest は 462 + 70 passed。
 
 | コミット | 説明 |
 |------|------|
@@ -593,7 +635,7 @@
 
 ## 2026-09-18T12:41:08+09:00
 
-**概要**：定例の更新チェック — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` ランタイム依存を追加）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2。**① ruyi の依存追加（唯一の実質的欠陥）**：上流は 0.53.0 から `pyelftools` を `pyproject.toml` の**ランタイム**依存に記載し（0.52.x 以前にはありませんでした）、さらに**収集時**に `import elftools` する `tests/ruyipkg/abi/test_elfbuilder.py` を追加しました——依存が欠けると pytest は `Interrupted: 1 error during collection` を出し、一件をスキップするのではなく**スイート全体を中断**します。`propagatedBuildInputs` に追加した結果、`ruyi`/`ruyi-beta`/`ruyi-alpha` の三チャネルすべてが通過し、beta のテスト数は 320 ユニット + 52 統合から **462 ユニット + 70 統合**へ増加しました。四言語の ruyi ドキュメントにその数と依存の説明を反映しています。**② dsh-alpha の vendored lock が古い**：alpha.2 では上流が 4 つのプラグインパッケージ（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`）を追加した一方、`dsh-package-lock-alpha.json` は alpha.1 のままでした——**version だけを変えると `npmDepsHash is out of date` になります**。AGENTS.md の取り決めに従い、**派生の `postPatch` 処理後**の `package.json`（`devDependencies` を削除）に対して `npm install --package-lock-only` で lock を再生成し、ハッシュを書き戻しました。**③ 内蔵プラグイン一覧の照合**：`dsh --profile web --dump-default-config` で stable rc.2 の **152 件の `id -> name`** を再抽出し、一行ずつ比較した結果、rc.1 と**完全に一致**しました（rc.1→rc.2 で npm 依存集合も変わらないため、既存の `npmDepsHash` がそのまま使えます）——よってドキュメントのプラグイン表に変更は不要でした。**④ セルフホスト forge からの取得（教訓の再現）**：`projects.blender.org` の Web パス `/archive/<rev>.tar.gz` は非ブラウザの user agent に **403** を返し（API パス `/api/v1/repos/.../archive/` は正常）、`fetchFromGitea` のハッシュ換算も**すでに記録済みの教訓**であったため、今回は遠回りしませんでした：ハッシュは**展開後の NAR**（`stripRoot`）の sha256 であり、1.0.0 の宣言値に対して換算方法を**逆向きに検証**したうえで `nix build` が一発で成功しています。四言語同期、`nix flake check` 全通過
+**概要**：定例の更新チェック — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` ランタイム依存を追加：上流は 0.53.0 からランタイム依存に記載、欠けると pytest が収集期に中断）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2（上流がプラグイン 4 件を追加、`dsh-package-lock-alpha.json` を再生成——version だけの変更では `npmDepsHash is out of date` になる）。四言語のドキュメントを同期、`nix flake check` 通過。
 
 | コミット | 説明 |
 |------|------|
@@ -616,36 +658,45 @@
 
 ## 2026-09-18T00:38:59+09:00
 
-**概要**：サンドボックス段階の記述を書き換え、外部スキャナの `RISKY_APPROVAL_DEFAULT` を解消（88 → 94） — 外部カタログ `awesome-ai-plugins` のスキャナが本リポジトリに対し `RISKY_APPROVAL_DEFAULT`（medium）を 5 件報告しました。**制御実験**によりトリガー語が `danger-full-access` であると特定：空のリポジトリでは 0 件、当該語を一行注入するだけで finding が出現します。**これは実際のリスクではありません**——本リポジトリは利用者が任意に選べる挙動を「既知の設計境界」の表と CLI の使用例で**記述**しているのであり、既定値を**設定**しているのではありません。ただしスキャナはパターン照合であり、「文書の記述」と「設定による有効化」を区別できません。**修正は情報を一切削らず措辞のみを変更**し、結果として読者にとってより正確になりました（「既定では緩めない」と明示）：四言語の `SECURITY.md` は「サンドボックス権限の段階は利用者が明示的に選択し、**既定では一切緩めません**」となり、`docs/zh/codewhale.md` の CLI 例は `--sandbox <tier>` になりました。**既存の記述誤りも同時に修正**：例では `--sandbox` としていましたが、このパッケージの実際の引数は `--sandbox-mode` です（`codewhale --help` の実行で確認）。正しい形式に改めました。**実測による検証**（公式スキャナ、CI と同一）：修正前 **88/100**（Security 13/16、medium 5 件）、修正後 **94/100（A - Excellent）**、Security **16/16**、medium 0 件。**意図的に行わなかった最適化**：残る 6 点は `Dependabot configured for automation surfaces` に由来します。本リポジトリは Dependabot を**意図的に削除**しており（AGENTS.md「安全境界：外部自動化を導入しない」参照）、**点数を上げるためにその境界を破ることはしません**。四言語同期、`nix flake check` 全通過
+**概要**：四言語の `SECURITY.md` のサンドボックス段階の記述を書き換え、外部スキャナの `RISKY_APPROVAL_DEFAULT` を解消（88 → 94）——トリガー語は `danger-full-access` で、本リポジトリは利用者が任意に選べる挙動を記述しているのであって既定値を設定しているのではなく、パターン照合のスキャナには区別できない。改後の記述は「既定では緩めない」を明示する。あわせて `docs/zh/codewhale.md` の CLI 例を `--sandbox-mode` に修正。検証：公式スキャナで 94/100（A - Excellent）、Security 16/16、medium 0 件。残る 6 点は `Dependabot configured for automation surfaces` 由来で、本リポジトリは「外部自動化を導入しない」境界を点数のために破らない。
 
 | コミット | 説明 |
 |------|------|
 | `e386dfc` | docs(security): 改写沙箱档位表述，消除扫描器 RISKY_APPROVAL_DEFAULT（88 → 94） |
 
-> **注**：文言のみの文書修正であり、`packages/` と `overlays/` は未変更。
+> **説明**：文言のみの文書修正であり、`packages/` と `overlays/` は未変更。
 
 ## 2026-09-17T18:15:40+09:00
 
-**概要**：汎用スキルを「主フロー + 二つの配套参考」へ再構成し、ブランチ分離で滞留していた Gitea の教訓を回収 — 本セッションにおける更新スキルの**性能評価に基づく改善**です。**① 既知の知識損失の回収**：監査により、blender-mcp の実測ブランチで書かれた 70 行の「自ホスト forge（Gitea）のソース取得」節と 21 行の適応層記録が**永続的に滞留する寸前**であったことが判明しました。テストブランチは取り決めによりマージされませんが、その知識（`fetchFromGitea` は `fetchFromGitHub` に委譲し `/archive/` 経路を生成する、自ホストのインスタンスは**全 tag で 403** を返しうる、対策は API エンドポイント + `stripRoot = true`、そして「旧版がまだビルドできる」のは単なるキャッシュ命中かもしれない）は**再現可能・追跡可能で、あらゆる自ホスト forge リポジトリに当てはまります**。持ち込む前に **main 上で証拠を逐一再現**（403 対 200 の実測、nixpkgs の fetcher ソースで確認）しており、機械的な cherry-pick ではありません。**② 回収の慣例を強化**：適応層の第 10 步に、**テストブランチで生まれた汎用の教訓はその場で手作業により main へ書く**ことを要求する小節を追加——「ブランチはマージされない」は「教訓が重要でない」理由にはなりません——今回の実際の損失を根拠として記録しました。**③ スキルの再構成**：単一ファイル 918 行では実行中に目的の箇所を探しにくいため、AGENTS.md の「独立したデータは配套ファイルへ分割」に従い、主フロー `SKILL.md`（462 行）+ `builders.md`（254 行：ビルダー別 hash フローと `flake.lock` の処理）+ `traps.md`（271 行：ドリフトの罠、fail-closed、外部リンク失効監査、Actions、パッチ内バージョン）としました。**完全性を四通りに照合**（`##` 節、`###`/`####` 子節、行単位の比較、行数）。そのうち**三つの節を実際に取りこぼしました**（「パッチ内バージョンの確認」「外部リンクの監査」「GitHub Actions の更新確認」——`sed` の境界が適応層の節の手前になり、この三節はそのさらに前に位置していた）。見出しレベルの照合で発見し復元しました。最終的な行単位比較で差分は 4 行のみで、いずれも意図的な書き換えと確認済みです。**④ 「コミット前の六つの自問」を新設**（第 7 步）：変体は複数か？依存表は一致か？ソース取得は有効か？実際に実行したか？文書の記述は成立するか？`flake.lock` はコミットすべきか？——**六つはいずれも同日に実測した事故から抽出**したもので、各問が一回のやり直しか欠陥に対応します。該当したら `traps.md` へ進めばよく、全文を読む必要はありません。**評価の根拠**：本セッションの実測 3 回、6 パッケージの更新、初回成功率 4/6、そして 3 回のやり直しは**いずれもスキルが記録済み、あるいは記録すべきだった罠が原因**でした——ゆえに改善の方向は「教訓が正しい場所で見つかるようにする」ことであり、さらなる積み増しではありません。四言語の文書を同期
+**概要**：汎用スキルを「主フロー + 二つの付属参考」へ再構成し、ブランチ分離で滞留していた Gitea の教訓を回収 — 評価に基づく改善：
+- 実測ブランチで書かれた 70 行の「自ホスト forge（Gitea）のソース取得」節を main へ回収（当該ブランチはマージしない取り決め）：自ホストのインスタンスは全 tag で 403 を返す可能性
+- 適応層に、テストブランチで生まれた汎用の教訓はその場で手作業により main へ書くことを要求する小節を追加
+- スキルを 918 行の単一ファイルから主フロー `SKILL.md`（462 行）+ `builders.md`（254 行：ビルダー別の hash フロー）+ `traps.md`（271 行：ドリフトの罠など）へ分割し、第 7 步「コミット前の六つの自問」を新設
+- 根拠：本セッションの 6 パッケージ更新の初回成功率は 4/6 で、3 回のやり直しはいずれもこの種の罠が原因
+検証：分割は `##` 節・子節・行単位の比較・行数の四通りで照合し、漏れていた 3 節を復元。四言語を同期
 
 | コミット | 説明 |
 |------|------|
 | `e0b1a64` | refactor(skills)!: 通用技能拆分为主流程 + 两份配套参考，并补回丢失的 Gitea 教训 |
 
-> **注**：スキル構造の変更（配套ファイル `builders.md` と `traps.md` を新設）。`packages/` は未変更。
+> **説明**：スキル構造の変更（付属ファイル `builders.md` と `traps.md` を新設）。`packages/` は未変更。
 ## 2026-09-17T17:22:50+09:00
 
-**概要**：`check-doc-versions` 検査を新設し「文書の版 = パッケージ定義の版」を断言化 — 今回連続して発見した 5 件の文書の版の不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）に対する**構造的な防御**です。この種の不一致は**どのビルドも失敗させない**ため人手で文書を読まなければ見つかりません。そこで `nix flake check` の 6 番目の検査（従来 5 件）として固定しました。**検査内容**：①`docs/<lang>/<pkg>.md` の「バージョン」行（四言語）がパッケージ定義の宣言値と一致すること；②多チャネルパッケージ（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）の**チャネル表**の版も四言語で検査；③版を他所から読む場合も追跡（`kitsfmt` は `Cargo.toml`）；④例外はスクリプトの `EXEMPT` に明示登録（`dsh-api-balance` は薄いラッパーとして意図的に版を記載せず、`codewhale-src` は独立パッケージではなく、`dsh`/`dsh-alpha` はチャネル表に記載）。**定義から機械的に読み出せる部分（版番号）のみを検査**します。依存表・プラットフォーム対応・インストール手順は自動比較できず、明示的に範囲外です——判定に人の判断を要する検査を書かないためです。**回帰テスト（要点）**：今回**実際に遭遇した** 5 種類の欠陥を一つずつ注入し、すべて検出されました。メッセージは「どのファイルが何と書き、どの定義が何を宣言しているか」を明示します——codewhale 0.9.12（zh）、godot-ai 3.2.5（zh）、mcp-searxng 2.2.0（en）、opencode-telegram 0.25.1（ja）は版行の検査で、dsh-alpha のチャネル行 0.1.5-alpha.2（四言語）はチャネル検査で捕捉。**エンドツーエンド検証**：欠陥を注入後、`nix flake check` の**実際の経路**で失敗することを確認（`failed to build attribute 'checks.x86_64-linux.doc-versions'`）——スクリプトを直接実行したときだけ失敗するのではないこと。**CI 確認**：push 後 `CI` workflow が成功（run `35199359526`）、ログに `evaluating 'checks.x86_64-linux.doc-versions'` が出ており、検査がスキップされず実際に実行されたことを示します。`AGENTS.md` に規約・例外登録方法・適用範囲を記録
+**概要**：`check-doc-versions` 検査を新設し「文書の版 = パッケージ定義の版」を断言化 — 今回連続して発見した 5 件の文書の版の不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）に対する構造的な防御：この種の不一致はどのビルドも失敗させないため、`nix flake check` の 6 番目の検査とした。
+検査内容：`docs/<lang>/<pkg>.md` の「バージョン」行（四言語）と多チャネルパッケージ（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）のチャネル表がパッケージ定義と一致すること；版を他所から読む場合も追跡（`kitsfmt` は `Cargo.toml`）；例外は `EXEMPT` に登録し、機械的に読み出せる部分のみを検査。
+検証：今回実際に遭遇した 5 種類の欠陥を注入しすべて検出；`nix flake check` の実際の経路で失敗することを確認；`AGENTS.md` に記録
 
 | コミット | 説明 |
 |------|------|
 | `072ab87` | feat(ci): 新增 check-doc-versions，把「文档版本 = 包定义版本」固化为断言 |
 
-> **注**：検査スクリプト `develop/check-doc-versions.py` を追加し `flake.nix` の `checks` に接続（検査数 5 → 6）。`packages/` と文書内容は未変更。
+> **説明**：検査スクリプト `develop/check-doc-versions.py` を追加し `flake.nix` の `checks` に接続（検査数 5 → 6）。`packages/` と文書内容は未変更。
 
 ## 2026-09-17T16:12:06+09:00
 
-**概要**：5 パッケージの文書の版番号を修正（内容品質の修正） — **全サービスパッケージ**を対象に「文書の版 vs パッケージ定義の版」を体系的に照合し、5 件の不一致を発見。いずれも更新済みなのに文書が追随していない事例：**codewhale** 0.9.12 → **0.9.13**（プリビルド変体とソース変体の双方が 0.9.13）、**mcp-searxng** 2.2.0 → **2.3.0**、**opencode-telegram** 0.25.1 → **0.25.2**、**dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1**（文書と README の 2 箇所）、**codewhale-sudo** v0.9.12 → **v0.9.0 以降**。**最後の一件は機械的置換ではなく判断を要した**：当該 overlay は実際には**版に依存せず**（`codewhale.override { allowSudo = true; }`）、v0.9.0 で導入された `prctl(PR_SET_NO_NEW_PRIVS)` を傍受するものです。README の「v0.9.12」は古いだけでなく文書本文（v0.9.0 と記載）と**自己矛盾**していたため、たまたま存在した版を固定するのではなく機能の由来を記述する形に改めました——そして**当該 overlay が 0.9.13 でも正常に動作することを実測**しました（codewhale 0.9.13 と codew/codewhale-tui の 3 バイナリを生成）。**意図的に残した歴史的参照**：`docs/*/modes/nixos.md` の「`prefix` は dsh 0.1.5-alpha.2 以降必須」は**出来事の記述**（フィールドがいつ変わったかの記録）であり現在の版の標識ではないため、変更すればかえって記録が歪みます。**照合方法**：パッケージごとに定義の版を `grep` し四言語と比較、修正後に全体を再照合（10/10 一致。残る 3 件の「不一致」は精査の結果すべて grep の誤検出——`dsh`/`ruyi` は `version ?` 形式、`dsh-api-balance` は薄いラッパーとして意図的に版を記載しない）。**併せて実施した整合性検査**：文書が参照する 9 個のファイルパスはすべて実在、`nixkits.*` のモジュールオプションはすべて有効（疑わしい 3 件は精査の結果モジュールオプションではなく flake 出力）、文書中のパッケージ名はすべて実際の flake 出力。`nix flake check` 全通過、四言語同期
+**概要**：5 パッケージの文書の版番号を修正（内容品質の修正）— 全サービスパッケージを照合し、更新済みなのに文書が追随していない 5 件を発見：`codewhale` 0.9.12→0.9.13、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1（文書 + README）、`codewhale-sudo` v0.9.12→**v0.9.0 以降**。
+最後の一件は置換ではなく判断：当該 overlay は版に依存せず、v0.9.0 で導入された `prctl(PR_SET_NO_NEW_PRIVS)` を傍受するものです。README の値は古いだけでなく文書本文と自己矛盾していたため、機能の由来を記述する形に改めました。
+検証：全体を再照合し 10/10 一致；`nix flake check` 通過、四言語を同期
 
 | コミット | 説明 |
 |------|------|
@@ -659,11 +710,13 @@
 | dsh-alpha（文書 + README） | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
 | codewhale-sudo（README の表現） | 「v0.9.12 の sudo 機能」 | 「v0.9.0 以降で阻まれた sudo 機能」 |
 
-> **注**：今回は**文書のみの修正**であり、`packages/` と `overlays/` は未変更。
+> **説明**：今回は文書のみの修正であり、`packages/` と `overlays/` は未変更。
 
 ## 2026-09-17T15:56:56+09:00
 
-**概要**：godot-ai の四言語文書の版番号と依存表を修正；汎用スキルの第 5 步に「機械的置換ではなく書き直す」判据を新設 — **内容品質の修正が主**：main 上の godot-ai の**コード**は `2a06bbf` で既に 4.1.0 に到達し機能も完全（実測 `godot-ai --version` → 4.1.0、exit 0）だが、**文書が同期されておらず**、二つの事実誤りが残っていた：①版番号が依然 `3.2.5`；②依存表が **6** 項で全て「≥ 範囲」だが、実際は **9** 項の fail-closed 厳密固定。**②の方が有害**——v4 は起動時にこれら 9 パッケージの**正確な版**を検証し、不一致なら起動を拒否する。文書に「≥」と書けば読者は版が自由に浮動できると誤解し、その通りにすれば `RuntimeError` に直撃する。修正では依存表を「版 + 提供元」の二列にして 9 項を逐一列挙し、pydantic-core の連動要求（`==2.46.5`）、ビルド時 `setuptools==84.0.0` pin の緩和説明、「なぜ検証を打ち消すパッチを書かないか」の理由を補足した。**照合**：文書中の 9 個の版番号は `nix eval` で**overlay を含む実際の閉包**から測ったもので**推測ではない**。文書値と逐一比較し **9/9 完全一致**；四言語同期、`nix flake check` 全通過。**スキル改善**：汎用スキルの第 5 步に「**文書を機械的置換ではなく書き直すべき時**」の触发判据を新設（依存が範囲から厳密固定へ / 起動時・ビルド時の硬い検証の追加 / 依存の増減 / ビルド方式の変更 / 対応プラットフォームの狭まり）。**手作業で main に書き込み**（cherry-pick ではない）。書き込み前に各主張を検証し証拠の参照先を書き換えて main 上で自包含かつ再現可能にした：初稿の「当該表はその後書き直された」という記述も削除——照合の結果 main では当時まだ書き直されておらず、残せば証拠の虚偽申告になるため
+**概要**：godot-ai の四言語文書の版番号と依存表を修正；汎用スキルの第 5 步に「機械的置換ではなく書き直す」判定を新設 — 内容品質の修正が主：main 上の godot-ai のコードは `2a06bbf` で既に 4.1.0 に到達し機能も完全（実測 `godot-ai --version` → 4.1.0）だが、文書が同期されておらず、版番号は依然 `3.2.5`、依存表は 6 項で全て「≥ 範囲」だが実際は 9 項の fail-closed 厳密固定でした。
+②の方が有害：v4 は起動時にこれら 9 パッケージの正確な版を検証し、不一致なら起動を拒否します。修正では依存表を「版 + 提供元」の二列にして 9 項を逐一列挙し、pydantic-core の連動要求（`==2.46.5`）を補足しました。
+検証：9 個の版番号は `nix eval` で overlay を含む閉包から測り、逐一比較して 9/9 一致；スキルの触发判定は依存の厳密固定化や起動時の硬い検証の追加
 
 | コミット | 説明 |
 |------|------|
@@ -674,11 +727,14 @@
 |--------|--------|--------|
 | godot-ai（文書） | 文書は 3.2.5 / 依存表 6 項「≥ 範囲」 | 4.1.0 / 依存表 9 項の厳密固定 |
 
-> **注**：今回は**文書の修正**であり、`packages/godot-ai.nix` は未変更（そのコードは `2a06bbf` で既に正しい）。
+> **説明**：今回は文書の修正であり、`packages/godot-ai.nix` は未変更（そのコードは `2a06bbf` で既に正しい）。
 
 ## 2026-09-17T13:00:09+09:00
 
-**概要**：feat(skills): 適応層に第 10 步「プロセスの振り返りと規範の検証」を新設 — 更新フローが**完全に終了した後**に実行し、監査するのは**ソフトウェアではなく、ソフトウェアがどう更新されるかを決める規範そのもの**（スキル / `AGENTS.md` / `SECURITY.md` / develop スクリプト）——すなわち更新プロセス自身への更新チェックである。六つのサブステップ：**10.1 振り返り**（初回で失敗した箇所 / ユーザーに問う必要があった箇所 / やり直した箇所を根本原因まで辿る）、**10.2 検証**（`AGENTS.md` / `SECURITY.md` の記述が今も成立するか。外部リンクの到達性を含む）、**10.3 帰属**（可搬性で汎用スキル / 適応層 / `AGENTS.md` / `SECURITY.md` に振り分ける。判据は「別の nix flake リポジトリへ移しても成立するか」）、**10.4 体験**（ユーザーを何往復待たせたかを振り返り、自行検証できる事項を潰す）、**10.5 証拠規律**、**10.6 成果**。**10.5 は硬性の制約**：規範の変更は**再現可能・追跡可能・異議申立て可能**でなければならない——印象による規範変更、一度の偶発を法則と見なすこと、既に正しく書かれた内容への「さらなる最適化」、役に立たないように見えるが拘束力の残る条目を削除することは、前提が消えたことを証明できない限り禁止する。**初回実行で二つの実欠陥を発見**（いずれも**ビルドエラーを生まず**、能動的な監査だけが炙り出せる）：①`SECURITY.md` がサブリポジトリの `SECURITY.md` を指す**デッドリンク**——当該ファイルは未作成（`gh api` と `curl` の双方で 404 を確証）。四言語を「同サブプロジェクトは独自のセキュリティポリシーを未整備。脆弱性は本リポジトリへ」に変更；②**12 箇所**の `Asus-linux/asusctl` 失効リンク（3 文書 × 4 言語）——プロジェクトは `OpenGamingCollective/asusctl` へ移転（`gh api` で 602 stars、HTTP 200 を確証）。「URL を直すときは表示テキストも直す」の要求に従いリンク文言も更新。**汎化**：リンク監査の手法を汎用スキル「文書内の外部リンクの監査」へ。三つの判据を含む——`curl` の 404 は `gh api` で再確認して初めて確定する（権限や制限の可能性がある）、`403` は多くの場合スクレイピング対策でありデッドリンクではない、**vendored な第三者コンテンツは書き換えない**（`packages/kitsfmt-src/vendor/` 内の上流 CHANGELOG など）。四言語の文書を同期
+**概要**：feat(skills): 適応層に第 10 步「プロセスの振り返りと規範の検証」を新設 — 更新フローが終了した後に実行し、監査するのはソフトウェアではなく、ソフトウェアがどう更新されるかを決める規範そのもの（スキル / `AGENTS.md` / `SECURITY.md` / develop スクリプト）です。六つのステップ：振り返り、検証、帰属、体験、証拠規律、成果。
+証拠規律は硬性の制約：規範の変更は再現可能・追跡可能・異議申立て可能でなければならず、印象による規範変更、一度の偶発を法則と見なすこと、既に正しい内容への更なる最適化、拘束力の残る条目を役に立たないように見えるからと削除することは禁止です。
+初回実行で二つの実欠陥を発見（いずれもビルドエラーを生じません）：`SECURITY.md` が未作成のサブリポジトリ `SECURITY.md` を指すデッドリンクで、四言語を「同サブプロジェクトは独自のセキュリティポリシーを未整備」に変更；12 箇所の `asusctl` リンクはプロジェクトの `OpenGamingCollective/asusctl` への移転に合わせて変更。
+リンク監査の手法は汎用スキルへ：`curl` の 404 は `gh api` で再確認し、`403` は多くの場合スクレイピング対策です。
 
 | コミット | 説明 |
 |------|------|

@@ -415,7 +415,7 @@
 
 ## 2026-09-20T17:05:51+09:00
 
-**摘要**：定例更新検査 —— opencode-telegram 0.25.3、ruyi-alpha 0.54.0-alpha.20260918。**① opencode-telegram 0.25.2 → 0.25.3**：npm 包、技能手順通 `nix build` 二回実行、各 source hash（`sha256-XVIsT9mQuagF3DDLwlXomihfpBJLZ6OfJHzBGLM9lXM=`）與 npmDepsHash（`sha256-lLl6AobcB/Zi9aw463iv1MMAPah+RV/GtrF0nK6X1Q0=`）取得、構築通過。**② ruyi-alpha 0.52.0-alpha.20260714 → 0.54.0-alpha.20260918**：薄包装 version 與 hash（`sha256-6XSVQuU+szU8CnijgAwQa1XmoHgpk/vHW6tmWP5dkpQ=`）唯変更、三 channel 共有 base 未動。**③ 実測値刷新**：alpha channel pytest 件数 346 単体 / 57 統合 自 **462 単体（xfailed 1 件含）/ 70 統合** 至増加（`nix log` 構築記録読取 実測）、beta channel 與同程度、四言語文書 同期更新。**④ 全数調査結論**：stable channel 被検査 12 包 中、上流 遅延 上記 2 件 唯一。`dsh`（0.1.5-rc.2、npm `latest` 一致）、`dsh-alpha`（0.1.6-alpha.2）、`mcp-searxng`（2.3.0）、`blender-mcp`（1.0.3）、`codewhale`（0.9.13）、`godot-ai`（4.1.0）、`obs-bilibili-stream`（2.1.5）、`ruyi`（0.52.0）、`ruyi-beta`（0.53.0-beta.20260917） 何 上流 一致。**道具観察**：GitHub API 匿名請求（`curl` 直接 `api.github.com` 接続）本機 空応答 返、認証済 `gh api` 正常（额度 5000/時）——検査 script 生 `curl` 非 用、`gh api` 統一 使用 可。四言語同期、`check-doc-versions` / `check-doc-links` / `check-maintenance-log` 三項目 自检通過
+**摘要**：定例更新検査 —— `opencode-telegram` 0.25.3（npm 包、source hash 與 npmDepsHash 更新、構築通過）；`ruyi-alpha` 0.54.0-alpha.20260918（薄包装、version 與 hash 唯変更、三 channel 共有 之 base 未変更）。同 実行 以 stable channel 之 被検査 12 包 確認、上流 遅延 上記 二 件 唯一。alpha channel 之 文書 之 pytest 件数 346 単体 / 57 統合 自 462 単体（xfailed 1 件 含）/ 70 統合 至 更新、四言語 之 文書 同期。
 
 | 提交 | 説明 |
 |------|------|
@@ -432,17 +432,20 @@
 
 ## 2026-09-19T14:13:43+09:00
 
-**摘要**：文書検証 締 —— 「文書 載 不 内容」確認 構造的 欠落 一 件 発見、**文档検証 task 全体 完了**。**方法**：git 追跡 全 file 分類別 棚卸（top level 項目 / `modules/` 九 / `overlays/` 八 / `patches/` 二 / `packages/` 十三 package 與 変種 / `develop/` 十 / `skills/` 十 / `.github/` workflows）、README、`AGENTS.md`、`docs/zh/` 参照 與 突合。**結果**：大半 既 文書化済、**構造的 欠落 一 件** 限定——本 repo **自検契約 七 件 `nix flake check`** 有（何 失敗 場合 commit 阻断）、但 **一 箇所 集 説明 無**。情報 `flake.nix` comment 散在 限定、`AGENTS.md` 其 内 二 件（`check-preset-derivation.py`、`check-doc-versions.py`）触 限定、残 四 script（`check-preset-bundle.py` / `check-workflows.py` / `check-doc-links.py` / `check-maintenance-log.py`）與 七 件目 `news-mode-tests`（**node script、python 非**）**一切 言及 無**。**追加**：`AGENTS.md` `## CI` 節 ① **七 件 自検一覧表**（検査名 / script path / 検証内容）追加、「各 script 単独 local 実行 可、迅速 切分 使」及「**文書 数量 hardcode 不**——`check-doc-versions` version 番号 限定 検証、此種 計数 検証 不」二 点 注記（後者 本 session 繰返 確認済：辞書 項目数 與 test 数 一類 計数 非常 古 化 易）；② **`access-tokens` host 照合 落穴**（今回 CI 大量失敗 根本原因——`check.yml` `api.github.com` 欠、浮動入力 `llama-cpp-ver` 未認証 侭、六十 回/時 上限 push 毎 ~三十四 workflow 使切）記録、今後 workflow 編集 再発 防。**確認**：表 七 path 全部 実在、「単独実行 可」実測 確認、`nix flake check` 全通過。**配置 根拠**：此等 **内部 engineering 契約**（貢献者 與 agent「何 変更 何 検査 発火」知 必要）有、user 向 内容 非 故、README user 節 非 `AGENTS.md` 置 適切。
+**摘要**：「文書 載 不 内容」之 確認 以 構造的 欠落 一 件 補完：`nix flake check` 之 七 件 之 自検（自検契約、何 失敗 以 commit 阻止）従来 一 箇所 集 説明 無、`flake.nix` 之 comment 散在、`AGENTS.md` 二 件 触 限定。`AGENTS.md` 之 `## CI` 節 ① 七 件 自検一覧表（検査名 / script path / 検証内容）、② CI 之 `access-tokens` host 照合 落穴（`check.yml` `api.github.com` 欠、浮動入力 `llama-cpp-ver` 未認証 化 上限 使切）追加。検証：七 path 全部 実在、`nix flake check` 全通過。
 
 | 提交 | 説明 |
 |------|------|
 | `7766b88` | docs(agents): nix flake check 七 件 自検一覧 與 CI `access-tokens` 落穴 補完 |
 
-> **説明**：`AGENTS.md`（本身 代理 agent 向 取決 file、user 文書 非）変更。此 **本 session 文档検証 task 全部 完了**：主文書 + 軟件 九 + plugin 二 + mode 三 + 開発 二 + 修正 八 + 廃止 一 + 技能 十 + 文書 載 不 内容 確認——累計 三十六 file 群、二十 件 修正（内 source 欠陥 二 件 與 本 session 以前 導入 退行 三 件 含）。
+> **説明**：`AGENTS.md`（本身 代理 agent 向 取決 file、user 文書 非）変更。
 
 ## 2026-09-19T14:05:38+09:00
 
-**摘要**：CI 大量失敗 根本原因 特定、修正、且 子 repo 安全政策 追加。**① CI 403 rate limit（`d224b18`）**：維護者 CI 失敗 mail 大量 受 為 調査、**根本原因 浮動入力 `llama-cpp-ver` 要求 常 未認証**。此 入力 `https://api.github.com/...` 指、但 Nix `access-tokens` **host 完全一致 照合**——`build-package.yml` 既 `github.com=… api.github.com=…` 二 host 形式、但 **`check.yml` `github.com` 限定 記載**。故 要求 未認証 送（上限 **六十 回/時**、認証時 **五千**）、**push 毎 ~三十四 workflow** 此 入力 解決 為、**一 回 push 上限 使切** 状態。失敗 response 答案 明示：`API rate limit exceeded for 52.165.58.41. (But here's the good news: Authenticated requests get a higher rate limit.)`。**修正**：`check.yml` `api.github.com=${{ secrets.GITHUB_TOKEN }}` 追加、此 見落 易 host 照合 規則 comment 明記。三十一 `build-*.yml` 全部 `build-package.yml`（既 正）経由 確認 為、check.yml 唯一 欠落。**検証**：commit `d224b18` **三十三 workflow 全部 success**、403 零。**AGENTS.md 違反 不**：制約 `llama-cpp-ver` **固定 不可**（上流 最新 release 動的 追跡 必要）、本変更 其 要求 **認証方法** 限定 影響、入力 浮動 侭 `flake.lock` 書 不。**失敗統計**（直近 百 run 分類）：403 **二十四 回**、**未 merge Dependabot branch** `86843b4` 依 hash mismatch 四 回（AGENTS.md「Dependabot `npmDepsHash` 知 不 為 必 失敗」実証。当該 branch main 上 無、PR #7 close 済）、Cachix 後処理段階 一 回（build 自体 成功済）。日付 09-15/16 峰（二十八 + 四十九）、mail 量 與 一致。**② 子 repo 安全政策（子 repo `2cce37b`、主 repo `39c9f10` 同期）**：子 repo `dsh-api-balance` 以前 **`SECURITY.md` 無**——正 本 repo 技能「外部 link 監査」記録済 死 link。四言語 `SECURITY.md` 追加、scanner 自動生成 PR #4 / #5 主張 評価 記載：**「rate limit 欠如」與「request body size 上限 欠如」何 誤検知**。判断根拠 全部 記録：報告 記述 diff 一致 不（四 endpoint 挙、diff `/query` 限定 変更）、其 `x-forwarded-for` 制限 key client 偽装 可、**同一 origin local RPC 当該 header 伴 不** 為 全 local 要求 同一 `"unknown"` bucket 入 **正常 user 先 制限**、`/token` 既 **六 時間** server 側 throttle、音声 announcement **三十 分** 限制 有、且 **本 plugin 高頻度 polling 無**（唯一 三十 秒 `setInterval` 実行 `isPeakPricing()` 純粋 local 時刻 判定、**network 要求 発行 不**）為、人間 操作 速度 最 活発 也 **毎分 五〜十 回** 程度、scanner 推奨 毎分 三十 回 既 其 三〜六 倍。真 境界 **DSH 宿主 認証 與 Host authority** 有。**結論：code 変更 不**——将来 必要 場合、**IP 非 認証主体 毎**（IP 偽装 可）、閾値 人間 操作 與 比較 十分 高（例：毎分 六十〜百二十 回）設定、「暴走 script 対策」位置 付 可。主 repo 四言語 `SECURITY.md`「同 子工程 **未** 政策 整備」行 結果的 古 化 為、「整備済」訂正、子 repo 文書 直 link 添。
+**摘要**：fix(ci): `check.yml` 之 `access-tokens` `api.github.com` 欠。同時 子 repo `dsh-api-balance` 四言語 `SECURITY.md` 追加。
+- CI：浮動入力 `llama-cpp-ver` 従来 未認証 取得（六十 回/時 之 上限 push 毎 ~三十四 workflow 使切）。両 host 記載 後 三十三 workflow 全部 success、403 零。入力 浮動 侭 `flake.lock` 書 不
+- 子 repo 安全政策：scanner 之 PR #4 / #5「rate limit 欠如」「request body size 上限 欠如」共 誤検知 判定、code 変更 不
+- 主 repo 四言語 `SECURITY.md` 之「同 子工程 未 政策 整備」記述 「整備済」 至 訂正、子 repo 文書 至 link
 
 | 提交 | 説明 |
 |------|------|
@@ -450,11 +453,15 @@
 | `2cce37b` | （子 repo dsh-api-balance）docs(security): 四言語 SECURITY.md 追加 |
 | `39c9f10` | docs(security): 子 repo 政策 整備済 化——古「未整備」記述 訂正（四言語） |
 
-> **説明**：`d224b18` `.github/workflows/check.yml` 変更、`39c9f10` 四言語 文書、子 repo commit 其 repo 記録。修正後 CI 全部 green。
+> **説明**：`d224b18` `.github/workflows/check.yml` 変更、`39c9f10` 四言語 文書、子 repo commit 其 repo 記録。
 
 ## 2026-09-19T07:51:05+09:00
 
-**摘要**：技能文書 確認（四 篇 完了：nix-flake-update-check / nixkits-check-updates / write-project-docs / translate-pseudocn）三 件 修正。**① nix-flake-update-check：步骤数 誤（四言語）**。文書「第 1〜**10** 步 主 flow」記載、但 汎用技能 `SKILL.md` 実測 **第 1〜9 步 限定**。「process 振返 與 規範 検証」及「test branch 教訓 main 戻」実際 **適配層技能** `nixkits-check-updates`（其「第 10 步（締）」258 行以降）定義。原文 二 技能 步骤 混同、読者 汎用技能 第 10 步 発見 不能。已「本技能 第 9 步 止。締 第 10 步 適配層 補」改。**② write-project-docs：配套書類 `templates.md` 技能自身 宣言 不（四言語 + SKILL.md）**。`templates.md`（209 行 完全 模板集）実在、`AGENTS.md` 八十八 行 参照、但 `SKILL.md` **file 名 一切 出現 不**、「配套書類」節 也 無（対照 `nix-flake-update-check/SKILL.md` 明確 配套表 有）。四言語 文書 更 技能 単一 file 同一視。結果 実行時 模板集 存在 知 手段 無——其 各種類 文書 初回 作成 際 最 先 読 可 物。`SKILL.md` 冒頭 配套表（既存技能 同 形式）追加、四言語 文書「路＝目録形式」與「配套書類」行 補。**③ translate-pseudocn：辞書 項目数 與 配套書類（四言語）**。文書「内蔵 ~**13** 項 対応辞書」記載、但 `dictionary.md` 実測 **75** 項。履歴 辞書 複数回 拡張（`4fbf387`「expand dictionary 7→46 entries」）、13 早 版 止。又 `SKILL.md` `dictionary.md` 三 箇所 参照（表引翻訳、片仮名対応、残存仮名 書戻）、四言語 文書 `SKILL.md` 単一 path 限定 記載、本文 亦 同 file 触 不。配套行 追加、項目数 実測 75 改。**照合**：同梱 `news-three-elements` 文書 四 配套書類（`search-keywords.md`/`tables.md`/`checklist.md`/`principles.md`）**既 正 宣言**、SKILL.md 対応参照 有、故 本欠陥 普遍的 非。`nixkits-check-updates` 文書 全項目 一致（子倉座標——`fetchFromGitHub` 固定 rev / flake input 非 / npm 未公開——何 事実、三 固有 落穴——godot-ai overlay **二 箇所 共** 連結 必要、codewhale 二 変種、dsh-alpha vendored lock `--legacy-peer-deps` 禁止——source 與 一致、第 10 步 六 sub-step 技能本文 與 一致）。
+**摘要**：技能文書 四 篇（`nix-flake-update-check` / `nixkits-check-updates` / `write-project-docs` / `translate-pseudocn`）確認、三 件 修正（四言語）。
+- `nix-flake-update-check`：文書 主 flow 1〜10 step 記載、但 `SKILL.md` 実際 step 9 至。step 10（締）適配層 `nixkits-check-updates` 定義
+- `write-project-docs`：付属 file `templates.md`（209 行）`SKILL.md` 宣言 無 —— 付属表 與 目録形式 path 補完
+- `translate-pseudocn`：辞書 項目数 13 実測 75 訂正、`dictionary.md` 付属行 追加
+- 照合：`news-three-elements` 付属宣言 元 正確
 
 | 提交 | 説明 |
 |------|------|
@@ -462,21 +469,29 @@
 | `7f7363f` | fix(docs): write-project-docs 配套書類 templates.md 宣言 不（四言語 + SKILL.md） |
 | `cef09fe` | fix(docs): translate-pseudocn 辞書 項目数 與 配套書類 不正確（四言語） |
 
-> **説明**：`7f7363f` `skills/write-project-docs/SKILL.md` 変更 含（技能 snapshot `check-preset-bundle` 依 `skills/` tree 與 byte 単位 一致 確認済）。残 四言語 文書。技能文書 残 六 篇（news-three-elements / nixkits-skills / nixos-modern-cli / nixos-specialisation-tuning / recover-nixos-config / write-maintenance-log）、其後 文書 載 不 内容 確認。
+> **説明**：`7f7363f` `skills/write-project-docs/SKILL.md` 変更 含（技能 snapshot `check-preset-bundle` 依 `skills/` tree 與 byte 単位 一致 確認済）、残 四言語 文書。
 
 ## 2026-09-19T07:43:15+09:00
 
-**摘要**：廃止文書 確認 — **file 跨 事実 誤**（module 注釈 與 四言語 廃止文書 双方 存在）発見、訂正。**元 判定**：「上流 hostPlatform 移行 済（旧記法 **0 処**、新記法 34 処）、非推奨警告 無」。**実測 反証**（上流 tarball 取得 file 単位 計数）：非推奨 `stdenv.is<Platform>` 短記法 **0.34.0 三十八 処**、**0.30.2（patch 時代 基版）亦 三十八 処**、一方 `hostPlatform.is*` 両版 七 処 限定——両版 完全 同一、上流 **一度 也** 此 API 移行 不。nixpkgs 実測 此記法 実際 非推奨 確認（`evaluation warning: stdenv.isLinux is deprecated, use stdenv.hostPlatform.isLinux instead`）、故「非推奨警告 無」不成立。**原因 推測**：元判定 **我々 自身 patch** 行 事 上流 行 事 記録 可能性 高——旧 `comfyui-nix-stdenv-api.patch` subject 正「migrate stdenv.is<Platform> to stdenv.hostPlatform.is<Platform>」（三十六/四十四 処 移行）、誤 結論 数字 與 良 一致。**訂正後 正確 記述**：patch 不要 化 事実、但 真 理由 **我々 上流 code 上書 不 化**——旧 patch overlay 経由 評価 fork 対 此移行 適用、下流 build 汚 警告 消除。上流 直接 指 今、本 module 宣言 配線 限定 行。**二 箇所 同時 訂正**：`modules/comfyui.nix`「patch 削除 判定根拠」注釈（警告 marker 與 実測値 含）、四言語 `deprecated/comfyui-rocm.md`「何故 廃止 可」節。訂正 拘 理由 本 repo「判定根拠 後 辿 可 様 記録」既定 取決 従 為——誤 結論 残 場合、将来 確認者 其 前提 推論 続。**其他 廃止項目 主張 通過**：module 実際 `nixkits.comfyui` 改名済（source 注釈 與 文書 一致）。`modules/comfyui-rocm.nix` 與 三 patch file 削除済。`DEPRECATED.md` / `docs/DEPRECATED.{en,ja,pcn}.md` 索引 何 本文書 正 指。履歴対照表 上流 version 実測 **v0.34.0** 記載 通、ROCm wheels 上流 同梱、入力元 `github:utensils/comfyui-nix` 変更済、patch 数 三 → 零。
+**摘要**：fix(comfyui): 「上流 stdenv API 移行済」 誤 判定 訂正。
+- 元 判定「上流 hostPlatform 移行済」、実測 反証：`stdenv.is<Platform>` **0.34.0 與 0.30.2 各 三十八 処**、`hostPlatform.is*` 両版 七 処 限定——一度 也 移行 不
+- 真 理由：**上流 code 上書 不 化**（旧 patch 移行 overlay 経由 評価 fork 適用）
+- `modules/comfyui.nix` 注釈 與 四言語 `deprecated/comfyui-rocm.md`「何故 廃止 可」節 同時 訂正
+- 其他 廃止項目 主張 通過：`nixkits.comfyui` 改名済、`modules/comfyui-rocm.nix` 與 三 patch 削除済、四言語 `DEPRECATED.md` 索引 正、上流 version **v0.34.0**
 
 | 提交 | 説明 |
 |------|------|
 | `4054c32` | fix(comfyui): 「上流 stdenv API 移行 済」誤 判定 訂正（module 注釈 + 廃止文書 四言語） |
 
-> **説明**：`4054c32` **`modules/comfyui.nix` 変更**（注釈 限定、評価 影響 無、`nix flake check` 全通過）。残 四言語 文書。廃止文書 此 完了。残 **技能 十 文書** 與 最後 文書 載 不 内容 確認。
+> **説明**：`4054c32` **`modules/comfyui.nix` 変更**（注釈 限定、評価 影響 無、`nix flake check` 全通過）。残 四言語 文書。
 
 ## 2026-09-19T07:38:04+09:00
 
-**摘要**：修正群 完了 — 最後 三 文書（asusd-thermal-guard / comfyui / llama-cpp-rocm）検証 四 件 修正、此 **修正 八 文書 全部** 完了。**① asusd-thermal-guard 状態 /run 記載 誤（四言語）**。「検証」節 注釈「root 必要：**狀態書於 /run**」記載、但 module **`StateDirectory`（`/var/lib/private/asusd-thermal-guard`）** 明示 使用、且 source 注釈 **`RuntimeDirectory`（即 /run）使用 不可** 特別 警告——systemd 該目録 使用 最終 unit 停止 時 丸 削除、故 冷却計数 毎回 零 戻、復帰 logic 機能 不（注釈 実測症状 `streak 1/6 → 2/6 → 1/6 → 2/6` 往復 永遠 六 到達 不 記録）。故 文書 `/run` 誤 且、module 意図的 回避 落穴 丁度 指。**② comfyui 徽章 存在 不 CI job 名指（四言語）**。徽章 `check.yml?job=build (ubuntu-latest, comfyui)` 記載、但 `check.yml` **単一 `check` job 限定**（file 内 `matrix|comfyui` 零 件）。comfyui 本 repo **純 module**（`nixosModules.comfyui`、package 出力 無）、故 `build-comfyui-*.yml` 存在 不（blender-mcp/kitsfmt/ruyi 徽章 実在 `build-<pkg>-<arch>.yml` 指）。**此 誤 自力 露見 不**：shields.io 故意 存在 不 job 名 渡 場合 也 `passing` 返——不一致 `job=` 黙 無視、workflow 全体 状態 代替 使用、故 該徽章 常 CI 全体 状態 表示。**③ comfyui cache 節 overlay 記述 残存（四言語）**。同 page「種別」既「純 NixOS module（patch 無）」記載、cache 節 仍「本 entry overlay…binary cache 含 不」——overlay 当時 古 文言。module **`pkgs.comfyui` 参照 也 `overrideAttrs` 也 無**、宣言設定（`boot.kernelParams`、`hardware.graphics.extraPackages`、systemd 加固）限定 行、comfyui overlay file 既 存在 不。**④ llama-cpp-rocm 移行例 展開 不 `~` 使用（四言語）**。例 `hfCacheDir = "~/.cache/huggingface/hub"` 記載、但 module 此値 **systemd `Environment = [ "LLAMA_CACHE=${cfg.hfCacheDir}" ]`** 経由 注入、systemd `Environment=` **`~` 展開 不**——例 其侭 使用 場合 literal path 化、llama.cpp 相対 path 扱。module 自身 既定値 **絶対 path**（`${users.users.<user>.home}/.cache/huggingface/hub`）、誤 例 側。**其他 主張 全部 通過**：asusd-thermal-guard 六 option 與 既定値、`triggerTemp > resumeTemp` assertion、`name` 依 hwmon 解決、CPU/GPU 大 方 採用、sysfs 非 `asusctl profile set` 使用、hysteresis 與 冷却計数、ladder 與「profileCeiling 超 昇格 不」、両 unit 名 與 文書 journalctl command 一致。comfyui `nixkits.comfyui.enable` / `services.comfyui.rocmGfxOverride`（「gpuSupport=rocm 時 限定」含）、機能 六 項目、ROCm 7.1 gfx1151 native 認識、三 patch 削除 理由 與 二 教訓。llama-cpp-rocm 純 overlay 形態 與 curried 形式、`llama-cpp-ver` 動的追跡（上流 実測 `v0.4.1`、semantic version 切替 確認）、接頭辞 除去 與 **`LLAMA_BUILD_NUMBER=0` 上書**（無 場合 `int LLAMA_BUILD_NUMBER = v0.2.0;` 生成 C++ 編譯 失敗）、全 module option 與 `services.llama-cpp.port`。
+**摘要**：fix(docs): 修正文書群 完了 —— 最後 三 文書 確認 四 件 修正（何 四言語）。
+- asusd-thermal-guard：文書 状態 `/run` 記載 誤。module `StateDirectory`（`/var/lib/private/asusd-thermal-guard`）使用、注釈 `RuntimeDirectory` 使用 警告（systemd 丸 削除、故 冷却計数 毎回 零 戻）
+- comfyui：徽章 存在 不 CI job 名指（`check.yml` 単一 `check` job 限定）。如実 CI 徽章 変更
+- comfyui：cache 節 overlay 記述 残存（module `pkgs.comfyui` 参照 無、宣言 設定 限定）
+- llama-cpp-rocm：移行例 `hfCacheDir` 展開 不 `~` 使用。module 既定値 絶対 path
 
 | 提交 | 説明 |
 |------|------|
@@ -484,94 +499,121 @@
 | `01679e8` | fix(docs): comfyui 徽章 存在 不 job 名指 + overlay 記述 残存（四言語） |
 | `35aaf05` | fix(docs): llama-cpp-rocm 移行例 展開 不 ~ hfCacheDir 使用（四言語） |
 
-> **説明**：何 文書 限定 修正、`packages/`、`overlays/`、`modules/` 未変更。修正 八 文書 此 完了。残 **廃止 一 文書**（comfyui-rocm）、**技能 十 文書**、及 最後 文書 載 不 内容 確認。
+> **説明**：何 文書 限定 修正、`packages/`、`overlays/`、`modules/` 未変更。
 
 ## 2026-09-18T11:04:38+09:00
 
-**摘要**：外部 収録 完了 — awesome-ai-plugins 二 PR 共 合并、NixKits 與 dsh-api-balance 正式 同 目録 進入。**背景**：本 repo 以前 issue #3（@zerocodefast） 収録 招待 受。以前 log「open 侭 PR 未提出」記録、但 其後 実際 提出 収録 受理——**本項 提出 與 合并 事実 追記**。**結果**：① [PR #321](https://github.com/hashgraph-online/awesome-ai-plugins/pull/321) — `dsh-api-balance` DeepSeek Harness Plugins 追加、**2026-09-16 合并**（APPROVED、@kantorcodes 依）。② [PR #323](https://github.com/hashgraph-online/awesome-ai-plugins/pull/323) — NixKits Development & Workflow 追加、審査 指摘 沿 是正 與 scan 再実行 為 **我々 自 閉**。③ [PR #335](https://github.com/hashgraph-online/awesome-ai-plugins/pull/335) — 再提出版、**2026-09-18 合并**（APPROVED、@kantorcodes 依）。両 entry 現在 上流 README 反映（`NixKits` Development & Workflow 節 NeatContext 與 Oh My Design 間、`dsh-api-balance` DeepSeek Harness Plugins 節）。**是正 回顧**：scan 評価 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、medium 零。根本原因 `RISKY_APPROVAL_DEFAULT` **設定 非 文書** 一致（制御実験 特定：空 repo 零 件、`danger-full-access` 一語 注入 限定 出現）。修正 **情報 一切 削 不 措辞 限定 変更**、此 本 repo 既存「点数 為 境界 破 不」姿勢 根拠。**意図的 行 不 三 点**：scanner workflow 導入 不（独立 監査 不能 第三者 code 本 repo CI 入 不、10% 信頼 score 減点 受入）、Dependabot 残 不、故 満点 非 94 点 止。理由 與 代償 `AGENTS.md`「安全境界：外部自働化 導入 不」記載。**本機 対応**：issue #3 返信 更新、三 PR 最終状態 與 収録 entry 位置 明記（元返信「2 PR 提出」述 閉済 #323 指 古）。**併 確認**：#323/#335 報告 上流 `scripts/check-alphabetical.py` pinned 判定 欠陥（47 行目「marker entry 二 行上」限定 有効 判定、但 README marker entry 直上）script 依然 残、但 現在 `main` check 通過（README 側 回避 推測）。issue 返信 指摘、pinned entry 新規 追加 場合 再 誤検知 可能性 有、何 側 也 一行 修正 独立 PR 出 可 伝。
+**摘要**：外部 目録 掲載 完了 —— awesome-ai-plugins 二 PR 共 合并、NixKits 與 dsh-api-balance 正式 同 目録 進入。
+- scan 評価 **88 → 94/100（A – Excellent）**、Security **13/16 → 16/16**、措辞 限定 変更 情報 削除 不
+- PR #321：`dsh-api-balance` DeepSeek Harness Plugins 追加、**2026-09-16 合并**
+- PR #323：NixKits Development & Workflow 追加、審査 是正 與 scan 再実行 後 我々 自 閉
+- PR #335：再提出版、**2026-09-18 合并**。両 entry 現在 上流 README 反映済
+- scanner workflow 與 Dependabot 導入 不、10% 信頼 score 減点 受入
 
 | 提交 | 説明 |
 |------|------|
 | `--` | 外部 repo 作業（awesome-ai-plugins PR #321 / #335 合并）與 issue #3 返信 更新。本 repo 対応 commit 無 |
 
-> **説明**：本項 本 repo 外 成果 追記——収録 外部 目録 側 合并、本 repo `packages/`、`overlays/`、文書 何 未変更。追記 理由：以前 log「#323 是正要請」限定 記録、**提出 與 最終 合并 二 事実 記録 無**、timeline 断絶 有。
+> **説明**：掲載 外部 目録 側 合并、本 repo `packages/`、`overlays/`、文書 何 未変更。
 
 ## 2026-09-18T14:35:36+09:00
 
-**摘要**：修正類 前 五 文書 検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）— 三 件 修正。**① rcc-fix 存在 不 option 名前空間 使用（四言語）**：例 `services.asusctl = { enable = true; power-profile = true; cpu-power-control = true; }` 記載、但 nixpkgs **`services.asusctl` 存在 不**（repo 全体 `grep -r 'services\.asusctl'` 零 件）。asusctl 守護 process option `services.asusd`（`nixos/modules/services/hardware/asusd.nix`）在、`enable`/`package`/`animeConfig`/`asusdConfig`/`auraConfigs`/`profileConfig`/`fanCurvesConfig`/`userLedModesConfig`、**`power-profile` 與 `cpu-power-control` 無**（段階 與 CPU 電力上限 `profileConfig` 経由 `/etc/asusd/profile.ron` 書込）。傍証：本 repo `modules/rcc-fix.nix` `config.services.asusd.enable` 使用、同梱 asusd-pd-profile 文書 亦 `services.asusd` 正 使用——誤 rcc-fix 限定、且 四言語 同。**② breeze-black「導入」節 placeholder path 使用（zh 限定）**：`nixpkgs.overlays = [ (import ./overlay.nix) ];` 記載、但 flake path 非 本 repo file 非。他 修正文書（efl-cross-fix / rcc-fix / codewhale-sudo）與 en/ja/pcn 既 `inputs.nixkits.overlays.<name>` 統一、zh 限定 未修正。**③ codewhale-sudo 基本情報表 重複行（zh 限定）**：「类型 | overlay（覆盖 codewhale 包）」 二 回、他 三言語 各 一行。**其他 主張 全部 通過**：efl-cross-fix 実際 `pkgsCross.{riscv64,riscv64-musl,aarch64}` 限定 `overrideScope` 覆盖、仕組 宿主 build `efl-native/bin/.` build 目録 複製 `export PATH="$PWD:$PATH"`（meson `find_program(..., native: true)` eolian_gen / eet 発見 可）、宿主 efl 影響 不。breeze-black 実際 `kdePackages.breeze`/`breeze-gtk` 限定 上書 独立 package 出力 無、look-and-feel id `metadata.json` 依 `org.kde.breezeblack.desktop` 確認、GTK theme 名 `BreezeBlack`（light "Breeze" 改名）、`BreezeBlack.colors` 存在。codewhale-sudo 仕組 実際 ptrace 内核境界 `prctl(PR_SET_NO_NEW_PRIVS)`/`PR_SET_SECCOMP` 無害 `PR_GET_NO_NEW_PRIVS` 書換、「静的 link `LD_PRELOAD` 無効」理由 與 整合、overlay 名 `codewhale-sudo-fix` flake 登録 與 一致。rcc-fix module 実際 `partOf = lib.mkForce [ ]` `asus-shutdown.service` PartOf 除去 死鎖 解消（加 `SendSIGKILL=yes`/`TimeoutStopSec=30s` 強制）、`programs.rog-control-center.{enable,autoStart}` 実在。asusd-pd-profile `pdProfile` 既定 `balanced`、`nativeAcProfile` 既定 `performance` 文書 與 一致、服務 実際 `Type=oneshot` udev 起動（常駐 無、polling 無）、文書 記載 二 段階 PD 判定（`/sys/class/typec/port*/power_operation_mode` `usb_power_delivery`、`/sys/class/power_supply/*` `type=USB` 者 `online=1`）何 script 実装、「battery 時 即 終了」対応 分岐 與 message 有。
+**摘要**：fix(docs): 修正類 前 五 文書 検証（breeze-black / efl-cross-fix / codewhale-sudo / rcc-fix / asusd-pd-profile）—— 三 件 修正。
+- `rcc-fix` 存在 不 option 名前空間 使用：例 `services.asusctl`（`power-profile`/`cpu-power-control` 含）記載、正 `services.asusd`、段階 與 CPU 電力上限 `profileConfig` 経由（四言語）
+- `breeze-black`：「導入」節 placeholder path `(import ./overlay.nix)` 為 `inputs.nixkits.overlays.<name>` 変更（zh 限定）
+- `codewhale-sudo`：基本情報表 重複行 削除（zh 限定）
+其他 主張 全項目 照合済 通過。
 
 | 提交 | 説明 |
 |------|------|
 | `a262e3c` | fix(docs): breeze-black 導入 path 與 codewhale-sudo 重複行（zh） |
 | `ea03584` | fix(docs): rcc-fix 存在 不 services.asusctl option 使用（四言語） |
 
-> **説明**：何 文書 限定 修正、`packages/`、`overlays/`、`modules/` 未変更。修正類 残 三 篇（asusd-thermal-guard / comfyui / llama-cpp-rocm）、其後 廃止 一 篇、技能 十 篇、與 文書 載 不 内容。
+> **説明**：何 文書 限定 修正、`packages/`、`overlays/`、`modules/` 未変更。
 
 ## 2026-09-18T14:26:43+09:00
 
-**摘要**：開発 二 文書 検証 完了 — 文書 引数 誤 一 件 修正、且 **source 欠陥 一 件** 発見（devShell 設定 一切 効 不。文書 問題 非）。**① `ruyi venv` / `ruyi extract` 引数 誤（四言語）**：文書 `ruyi venv <name>` 與 `ruyi venv --toolchain <t>` 示、但 実測 何 不完全——位置引数 一 限定 渡 場合 usage 表示 終了、`-t` 無 `profile dest` 渡 場合 `fatal error: You have to specify at least one toolchain atom for now, e.g. \`-t gnu-plct\``。正 形式 三 全部 必須 `ruyi venv -t <toolchain> <profile> <dest>`、且 `profile` 本地索引 存在 必要（初回 `ruyi update`）。又 `ruyi extract <file>`（「RISC-V AppImage 解凍」）亦 誤、此 command 位置引数 **file path 非 package atom**。file path 渡 場合 `fatal error: atom /tmp/dummy.AppImage matches no package in the repository`、故 `ruyi extract <pkg>` 改 引数 意味 明記。**② source 欠陥：opencode devShell searxng limiter 設定 一度 也 読 不**。`develop/opencode.nix` limiter 設定 `settings.yml` `server.limiterSettings` block 記載、但 searxng limiter 設定 **`<user_cfg_folder>/limiter.toml` 限定** 読込（`searx/limiter.py` `get_cfg()`）。devShell 入 時 searxng 直  `missing config file: /tmp/searxng-*/limiter.toml` 警告、此 block **黙 無視** 証明、即 `trusted_proxies`（本機 lighttpd reverse proxy X-Forwarded-For/X-Real-IP 信頼 設定）**一度 也 効 不**。且 此 block 上流 廃止済 `real_ip.x_for` 含（本 session mcp-searxng 文書 削除 同 廃止 key）。修正 limiter 設定 `settings.yml` 與 **同 目録 独立 `limiter.toml`** 移（`SEARXNG_SETTINGS_PATH` file 指 場合 其 目録 user_cfg_folder）、現在 schema `[botdetection] trusted_proxies`（`127.0.0.0/8`、`::1`）使用 `real_ip` 削除。修正後 `missing config file` 警告 **消**、searxng(42701) 與 lighttpd(4270) 何 HTTP 200 返。**其他 主張 実測 通過**：三 devShell 存在 `nix develop .#ruyi` 動作（解決 物 patch 済 ruyi）、ruyi 六 subcommand 揃、opencode devShell 十二 packages、三 MCP server（SearXNG/Blender/Godot 與 其 command）、三 環境変数、`~/.config/opencode/mcp.json` 初回 生成、`~/NixKits/skills/`（GitHub fallback） 從 `~/.opencode/skills/` 技能 導入 何 文書 一致。
+**摘要**：fix(devshell): 開発 二 篇 検証 —— 引数 誤 一 件 修正、且 source 欠陥 一 件 発見。
+- `ruyi venv` / `ruyi extract` 引数 誤：前者 `ruyi venv -t <toolchain> <profile> <dest>` 之形 必要、且 `profile` 本地索引 存在 必要；後者 位置引数 包名 `ruyi extract <pkg>` 非 file path（四言語）
+- searxng limiter 設定 一度 也 読 不：`develop/opencode.nix` `settings.yml` `server.limiterSettings` block 内 記載、独立 `limiter.toml`（`[botdetection] trusted_proxies`）移、修正後 `missing config file` 警告 消、reverse proxy 亦 HTTP 200 返
+其他 主張 実測 通過。
 
 | 提交 | 説明 |
 |------|------|
 | `26e7a76` | fix(devshell): ruyi venv/extract 引数 誤 + opencode searxng limiter 設定 一度 也 効 不（四言語） |
 
-> **説明**：`26e7a76` **`develop/opencode.nix` 変更**（limiter 設定 独立 `limiter.toml` 移）。devShell 挙動 変化。残 文書 限定 修正。試験中 生成 `dump.rdb`（redis 産物）與 残留 background process 全部 掃除。残 patch 八 文書、廃止 一 文書、技能 十 文書、與 文書 載 不 内容。
+> **説明**：`26e7a76` **`develop/opencode.nix` 変更**（limiter 設定 独立 `limiter.toml` 移）、devShell 挙動 変化。残 文書 限定 修正、試験中 `dump.rdb` 與 残留 background process 掃除済。
 
 ## 2026-09-18T13:51:14+09:00
 
-**摘要**：plugin 二 文書 與 mode 三 文書 検証 完了 — plugin 完全一致（変更 零）、mode 一 件 修正。**① plugin（変更 零）**：`dsh-nixos-shell` 全項目 一致——npm 名 與 version、`nixos_shell` 二十七 項目 道具白名単 文書 與 **一字一句 一致**（python3/python/grep/ls/cat/head/tail/wc/tr/sort/mkdir/rm/cp/mv/find/env/sed/bash/awk/git/curl/jq/ripgrep/rsync/htop/tree/unzip）、`nixos_cli` 五 op 與 数値上限（generations 既定 二十 / 上限 二百、journal 既定 五十 / 上限 五百）`--help` 記述 與 一字一句 一致、sudo protocol 実際 **v3**（`bin/nixkits-sudo-exec.js` 「Protocol (v3, one request per connection)」）`MAX_TIMEOUT_MS = 21600000`（六 時間）、実測 socket `/run/nixkits-sudo.sock` `srw-------` `kix:users` 所有、分離実行 logic 実際 rebuild 系 command 認識 `systemd-run --collect` 一時 unit 起動 `detached: true` + `detachedUnit` 與「交接 ≠ 成功」note 返、`presets/` 二 預設 與 `package.json` `exports["./nixos-gate"]` / `["./maintenance-skills"]` subpath 存在、`skills-embedded/` 十 技能 snapshot。`dsh-api-balance` 亦 全項目 一致——薄 wrapper（`src` 本 repo 非 GitHub 指、「source 保持 不」一致）、固定 rev `c47f857` 上流 存在（HTTP 200）、npm 名 與 `package.json` version 0.1.0 一致、文書 記載 四 config 項目（`apiKeyEnv`/`baseURL`/`browserScan`/`browserScanIntervalMs`）全部 存在、既定値 実測 `6 * 60 * 60 * 1000`（文書 21600000、六 時間）。**② mode（一 件）**：NixOS mode 文書「組合」行 persona 行 `complete: true` 設定 述、但 `presets/nixos-mode/agent.cordis.yml` persona 行 **`prefix` 限定 設定**（独立 `complete:` 字段 何処 無）、実行時 context 依然 拼接。`@deepseek-ai/dsh-persona` schema `complete`（既定 false）実在、故 此 文書 述 設定 非 当該 preset 選択——prompt 本文 「decision-complete」等 語 為 誤読 易。四言語 訂正。**照合済 正**：**news 三要素 mode persona 行 実際 `complete: true` 與 `includeRuntimeContext: false` 設定**、其 文書 正確 故 変更 不。其他 mode 主張 全部 通過：`nixos-gate` 実際 `/etc/NIXOS` 與 `/etc/os-release` 読（非 NixOS 時 道具 guard 登録 拒否 prompt 注入）、NixOS mode 技能 実際 五（預設 同梱 二 + build 時 subset 三）、maintenance mode 派生関係 `diff` 実測 **末尾 固定 block 丁度 一 追加**、両預設 `skills/` 目録 `diff -r` 文件単位 一致、`check-preset-derivation.py` `MAINTENANCE_DELTA` 含 flake check 組込済（実走 確認）、news 三要素 mode 五 plugin 相対名 掛載、五 技能文件 repo source 與 一対一 対応、retry `[0, 30_000, 120_000]`、六 時間 毎 再確認、ETag/304、cache 目録 `$DSH_HOME/.cache/<SKILL_ID>`、readonly 白名単 八 項目 何 実測 一致。
+**摘要**：fix(docs): plugin 二 文書 與 mode 三 文書 検証 —— plugin 全項目 一致 変更 不要、mode 一 件 修正。
+- `dsh-nixos-shell` 與 `dsh-api-balance`：npm 名 與 version、`nixos_shell` 二十七 項目 道具白名単、`nixos_cli` 五 op 與 数値上限、sudo protocol v3（`MAX_TIMEOUT_MS = 21600000`）、`skills-embedded/` snapshot、`dsh-api-balance` rev `c47f857` 與 四 config 項目 全項目 一致
+- NixOS mode「組合」行 persona 行 `complete: true` 設定 誤記。実際 `prefix` 限定、四言語 訂正
+其他 mode 主張 通過（`nixos-gate` 読取、NixOS mode 技能 五、maintenance mode 派生関係、news 三要素 mode 各項目）。
 
 | 提交 | 説明 |
 |------|------|
 | `3d6340f` | fix(docs): NixOS mode 組合 記述 persona complete: true 誤主張（四言語） |
 
-> **説明**：文書 限定 修正。plugin 二 文書 何 変更 不要（今後 退行 比較 為 記録）。残 開発、修正、廃止、技能 各文書 與 文書 載 不 内容。
+> **説明**：文書 限定 修正。plugin 二 文書 何 変更 不要（今後 退行 比較 為 記録）。
 
 ## 2026-09-18T13:43:54+09:00
 
-**摘要**：軟件 九 文書 検証 完了 — ruyi 二 件 修正（内 一 件 **前 round 我 導入 退行**）。此 主文書 與 軟件系 全子文書 確認 終。**① 試験件数 channel 別 非（退行）**：前 round 「320 単体 + 52 統合」一律「462 単体 + 70 統合」書換、但 其 二 数値 **beta 限定**。実測 三 channel 各異——`ruyi`（0.52.0）単体 **368** / 統合 **58**、`ruyi-beta` **462** / **70**、`ruyi-alpha` **346** / **57**。channel 別 列挙 改、且 「`checkPhase` ruff / mypy `|| true`（非阻断）、**実際 build 左右 物 pytest**」注記、「全部通過」三 項目 全部 誤読 防。**② zh 導入節 code block 破損**：```nix fence 内 散文 一行（`> 需要 beta 或 alpha 版本？…`）混入、Nix code 当 描画 且 block 途切。en/ja/pcn 無、zh 限定 問題。**③ pyelftools 記述 併 修正**：「ruyi ≥ 0.53.0 追加」記載、但 本 package **共有 base 無条件** 此 依存 追加（version 条件 無）、0.52.x channel 也 持（実測 三 channel 全部 存在、上流 0.52.0 pyproject 零 回）。「上流 0.53.0 以降 必要、本 package 無条件 追加、冗長 但 無害」明記。**其他 主張 実測 通過**：`ruyi --help` list/install/venv/device 含、`device provision`、`venv --toolchain`、`list --all` 存在。module option `settings.packages.prereleases`/`repo.remote`/`telemetry.mode`/`telemetryOptout`/`venvs.{profile,toolchain,dest}` 全部 存在、`/etc/xdg/ruyi/config.toml` 生成、activation 時 `ruyi update` 自動実行。NixOS 互換 三 機能 成果物内 個別 確認（`wrap_exec_for_nixos`/`_maybe_fix_toolchain_sub_binaries`/`patchelf`/`RUYI_ARGV0`）、文書 検証 command 実際 文件 発見 可。許可 Apache-2.0、上流 ISCAS 保守。**CI 説明**：今回 最終 push 後 `Build dsh-api-balance (aarch64)` 一度 失敗、調査 結果 `api.github.com/.../llama.cpp/releases/latest` **HTTP 403**（GitHub API rate limit、浮動入力 `llama-cpp-ver` 命中）返却 為、code 非 一時 基盤 障害。`gh run rerun --failed` 即 成功、repo 30/30 green。
+**摘要**：fix(docs): ruyi 文書 二 件 修正（他 一 件 順便 表現 修正）。
+- 試験件数 beta channel 限定 値 為、channel 別 列挙 改：`ruyi` 単体 368 / 統合 58、`ruyi-beta` 462 / 70、`ruyi-alpha` 346 / 57。併 `checkPhase` ruff / mypy `|| true`、実際 build 左右 物 pytest 注記
+- zh 導入節 散文 一行 Nix code fence 内 入、block 途切（en/ja/pcn 無）
+- （順便）`pyelftools` 本 package 共有 base 無条件 追加（version 条件 無）、「0.53.0 以降 新規」非
 
 | 提交 | 説明 |
 |------|------|
 | `c30f2b6` | fix(docs): ruyi 試験件数 channel 別 非 + zh 導入節 code block 破損（四言語） |
 
-> **説明**：文書 限定 修正。此 **主文書 + 軟件 九 文書**（blender-mcp / codewhale / dsh / godot-ai / kitsfmt / mcp-searxng / obs-bilibili-stream / opencode-telegram / ruyi）検証 完了、累計 十五 件 修正（実際 機能 欠陥 一 件 與 本 session 以前 導入 退行 二 件 含）。残 plugin、mode、開発、修正、廃止、技能 各文書 與 文書 載 不 内容。
+> **説明**：文書 限定 修正、`packages/`、`overlays/`、`modules/` 未変更。
 
 ## 2026-09-18T13:41:45+09:00
 
-**摘要**：文書検証 継続 — obs-bilibili-stream 一 件 修正、opencode-telegram 完全一致（変更 零）。**① obs-bilibili-stream**：「Home Manager」節 `home.packages = [ ...obs-bilibili-stream ];` **導入 及 但 OBS plugin 読込 不**——OBS `OBS_PLUGINS_PATH` 依 plugin 探索、此 変数 **nixpkgs `wrapOBS` 限定 注入**（`pkgs/applications/video/obs-studio/wrapper.nix`: `wrapProgram --set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"`）、即 `programs.obs-studio.plugins` 経由 限定。`home.packages` `.so` profile 置 限定、OBS 該 path 走査 不、「導入済 但 plugin 一覧 無」結果。四言語 警告 與 二 正 方法 追記（NixOS module 或 `programs.obs-studio.plugins`、非 NixOS／Home Manager 限定 場合 plugin 探索 path `.../lib/obs-plugins` 包含 様 自力 確保）。其他 主張 実測 通過：version 2.1.5、`meta.platforms` 純 Linux（darwin 無、「Linux only」一致）、`default` overlay 当該 package 実際 export、`nixosModules.obs-bilibili-stream` 登録済、module option 名 文書 一致 **且 module enable 時 代入 文書「手動」記載 與 byte 単位 同一**、成果物 構造 正（`lib/obs-plugins/bilibili-stream-for-obs.so` 與 対応 `share/obs/obs-plugins/`）、徽章 対応 x86_64/aarch64 workflow 存在。**② opencode-telegram（今回 唯一 変更 零 文書）**：全項目 一致——文書 記載 四 subcommand `start`/`status`/`stop`/`config` `--help` 出力 與 一致、module option `enable`/`user`/`group`/`afterServices`/`extraPackages`/`extraBinPaths`（他 `environment`/`package`）全部 実在 意味 一致、「start opencode 自動起動」事実——包内 `dist/opencode/process.js` `startLocalOpencodeServer` 実際 `spawn("opencode", ["serve", "--port", port])` 呼出、此 文書 服務 PATH 強調 理由、方案 A `pkgs.opencode` nixpkgs 実在（1.18.30）、徽章 三 platform workflow 存在。
+**摘要**：fix(docs): obs-bilibili-stream 之 Home Manager 用法 導入 及 効 不 —— `home.packages` `.so` profile 置 限定、OBS `OBS_PLUGINS_PATH` 以 plugin 探索、此 変数 nixpkgs `wrapOBS` 限定 注入、即 `programs.obs-studio.plugins` 限定 有効 経路。四言語 警告 與 二 正 方法 追記。opencode-telegram 全項目 一致 変更 零。
 
 | 提交 | 説明 |
 |------|------|
 | `4bea784` | fix(docs): obs-bilibili-stream Home Manager 用法 導入 及 効 不（四言語） |
 
-> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。opencode-telegram 変更 不要 確認（今後 退行 比較 為 記録）。軟件群 ruyi 限定。
+> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。opencode-telegram 変更 不要 確認（今後 退行 比較 為 記録）。
 
 ## 2026-09-18T13:40:20+09:00
 
-**摘要**：文書検証 継続 — kitsfmt 與 mcp-searxng 各 二 件 修正。**① kitsfmt**：「注釈保持」記述 過広——0.5.0 実測 **節点 直前 先行注釈** 限定 整序時 追随、他 四 種 位置 消失 或 移動：最後 以外 属性 同行末尾 注釈 **次 属性 上 移動**、**最後** 属性 同行末尾 **破棄**、**書類 先頭**（上位 式 前）與 **書類 末尾**（其 後）破棄。source 裏付：注釈 `comments_before(<entry>)` 経由 限定 収集、故 先頭、末尾 収集点 無。四言語 「注釈保持 制限」節 追加、各行 実測 確認。又 漏  `KITSFMT_STDIN=1` 補完（`--help` env 四 表示、文書 三 限定）。其他 主張 全部 実測 通過：三 best-practice 変換 **文書 例 與 byte 単位 同一 出力**（裸 URL 引用符化 / rec → let-in / with → builtins.attrValues）、`--check` 終了 code 意味論（未整形 一、整形済 零）、`-i`/`-B`/複数書類（`---` 区切付）、冪等性、APC `a.b.c` 折畳、別 flake 依 `nix fmt` 端 端 動作。**② mcp-searxng**：第一 「即用設定」**廃止済** `real_ip.x_for = 1` 含——上流 searxng `limiter.toml` 既 `real_ip` 段 無（`[botdetection]` 下 ipv4_prefix/ipv6_prefix/trusted_proxies 限定）、上流 master 與 nixpkgs 該 option 同梱 example 二箇所 独立 裏付、community 記録 亦「replace real_ip by IPv4/v6 network」置換 示。四言語 削除。第二 「`SEARXNG_URL` 無 場合 **黙**失敗」実測 一致 不——server **正常 起動 且 `tools/list` 道具 返**、但 `tools/call` 毎回 `isError: true` 返、文本 `⚠️ Configuration Issues: SEARXNG_URL not set. Set SEARXNG_URL (e.g., ...)` 明示、同時 stderr `SEARXNG_URL not set` 出。即 錯誤 **明示 対処可能**（真 残 可 落穴 `mcp add` `env` 埋 不）。其他 主張 通過：version 2.3.0、wrapper nodejs 注入、本機 `~/.deepseek/mcp.json` `servers.SearXNG` 構造 文書 例 與 **字段 単位 一致**、nixpkgs searx 模組 `redisCreateLocally`/`settings`/`limiterSettings` 三 option 実際 持。
+**摘要**：fix(docs): kitsfmt 與 mcp-searxng 各 二 件 不正確 記述。
+- `kitsfmt`：「注釈保持」記述 過広 —— 0.5.0 実測 節点 直前 先行注釈 限定 整序時 追随、最後 以外 属性 同行末尾 次 属性 上 移動、最後 属性 同行末尾 與 書類 先頭、末尾 破棄。漏 `KITSFMT_STDIN=1` 補完
+- `mcp-searxng`：「即用設定」廃止済 `real_ip.x_for = 1` 含（上流 `limiter.toml` `real_ip` 節 既 無）。四言語 削除
+- `mcp-searxng`：「`SEARXNG_URL` 無 場合 黙 失敗」実測 不一致 —— 伺服器 正常 起動 且 `tools/list` 返。`tools/call` 限定 毎回 `isError: true` 返、文本 與 stderr 明示
 
 | 提交 | 説明 |
 |------|------|
 | `0cb9f4f` | fix(docs): kitsfmt 注釈保持 記述 過広 + KITSFMT_STDIN 追加（四言語） |
 | `9f3c829` | fix(docs): mcp-searxng 不正確 記述 二 件（real_ip 廃止、失敗 黙 非）（四言語） |
 
-> **説明**：何 文書 限定 修正、`packages/` 與 `overlays/` 未変更。検証 継続中（軟件群 残 obs-bilibili-stream / opencode-telegram / ruyi、其後 plugin、mode、開発、修正、廃止、技能 各文書、最後 文書 載 不 内容 確認）。
+> **説明**：何 文書 限定 修正、`packages/` 與 `overlays/` 未変更。
 
 ## 2026-09-18T13:32:32+09:00
 
-**摘要**：文書検証 継続 — dsh 與 godot-ai 双方 問題 発見、内 godot-ai **実際 機能 欠陥**（文書 問題 非）。**① dsh（文書 一 件）**：「宣言設定可能 host namespace」表 六 件 限定、且「DSH 0.1.2-alpha」記載、但 該節 扱 物 `0.1.5-rc.2` —— 実測 此版 `installSection` 登録 namespace **十二 件**、`agent-default-model`（provider/model/reasoningEffort）、`agent-loop`（maxParallelToolCalls）、`permission`（presets）、`shell`（dshHome）、`subagent-model-selection`、`web-search-deepseek` 欠落。三重 裏付：`*_SETTINGS_NAMESPACE` 定数 全抽出 十二 件、各 `z.object({...})` schema 抽出 字段、実機 `settings.yaml` `permission` 存在 確認。dsh 其他 主張 全部 通過（live 服務 8615/8625、reverseProxy 三 選択肢 與 安全警告、`launchUrlFile` 実際 `/run/dsh/launch-urls` 生成、sudo 守護 socket `srw-------` kix:users 所有 且 `NIXKITS_SUDO_SOCKET` 注入済、拡張一覧 152 件 live dump 與 一行 毎 一致、reasoningEffort 四 段階 與 `high` 兜底既定）。**② godot-ai（機能 欠陥 一 件 + 文書 二 件）**：文書 記載 `godot-ai` 命令 **起動 直後 失敗**（`BACKEND_START_FAILED`、backend log `No module named godot_ai`）。根本原因 層 毎 特定：此 命令 既定 attach 橋 経由 **backend 更 一 spawn**（`sys.executable -m godot_ai`）。但 Nix 包装下 `sys.executable` **裸 CPython**、依存 包装 script 実行時 `site.addsitedir()` 注入 限定、**spawn 子工程 継承 不**。上流 `uvx`／実 venv 導入 故 此 落差 存在 不。修正 makeWrapper 依 PYTHONPATH 前置、検証中 三 必須点 実測 踏：`python312.sitePackages` **相対** path 故 `${placeholder "out"}/` 結合 必要、深 伝播依存（pydantic_core/platformdirs）`propagatedBuildInputs` fixpoint 展開 必要、`d.pythonPath` 使用 不可（nixpkgs 側 別 pydantic 2.13.4 指、本 repo overlay 引上 2.13.5 迂回 令 fail-closed 検証 失敗）。実測 A/B：修正前 ❌ / 修正後 ✅（backend 127.0.0.1:8000 待受、MCP `tools/list` 四十六 道具 返）。文書 更 二 件 修正：道具数 43 → **46**（上流 v4.1.0 README 亦 46 記載）、既定 WebSocket port 9876 → **9500**（`--help`、`__init__.py` argparse、`asgi.py` 三箇所 独立 裏付。9876 包内 一切 出現 不）。
+**摘要**：fix(docs): dsh 與 godot-ai 文書 検証 —— 三 件 修正、加 実際 機能 欠陥 一 件 発見。
+- `dsh`：「宣言的 設定可能 host namespace」表 六 件 限定 且 0.1.2-alpha 記載。該当節 扱 `0.1.5-rc.2` `installSection` 経由 十二 件 登録 故、`agent-default-model` 他 五 件 欠
+- `godot-ai` 命令 起動 直後 失敗：attach 橋 `sys.executable -m godot_ai` 以 backend 再 spawn、但 Nix 下 裸 CPython、`site.addsitedir()` 注入 依存 子工程 継承 不。makeWrapper 以 PYTHONPATH 前置、実測 動作
+- `godot-ai` 文書 残 二 件：道具数 43 → 46、WebSocket port 9876 → 9500
 
 | 提交 | 説明 |
 |------|------|
 | `6b47f55` | fix(docs): dsh 設定 namespace 表 不完全 且 version 表記 古（四言語） |
 | `a54bd9d` | fix(godot-ai): attach backend 起動 不 欠陥 修正 與 不正確 記述 二 件（四言語） |
 
-> **説明**：`a54bd9d` **`packages/godot-ai.nix` 変更**（makeWrapper 與 postFixup 追加）。godot-ai build 成果物 変化。残 文書 限定 修正。
+> **説明**：`a54bd9d` **`packages/godot-ai.nix` 変更**（makeWrapper 與 postFixup 追加）、godot-ai 構築成果物 変化。残 文書 限定 修正。
 
 ## 2026-09-18T13:23:25+09:00
 
-**摘要**：文書検証 開始 — 主文書 26 項目 主張 再確認、子文書 一篇 毎 検証、不正確 記述 七 件 修正。**手法**：source 依 推測 非、**実際 配備 計測**——実工程 起動 権威 data 取得（例：blender-mcp MCP stdio 対 `tools/list` 送信）、統制 比較実験 実施。各 round 証拠 残 後 cleanup（一時目録、registry 項目、試験用 HOME）、実設定 一切 変更 無 確認。**① 主文書（README × 四言語）二 件**：`inputs.nixkits.url = "~/NixKits"` **使用 不可**（Nix flake input URL `~` 展開 不。実測 error `path '.../source/~/NixKits/flake.nix' does not exist`。`path:$HOME/...` 同様 失敗。`git+file:///path/to/NixKits` 変更、五 通 書方 統制比較結果 添付）；「全包 既定 `lib.platforms.linux` 従」**事実 反**——十二 包 `meta.platforms` 実測、九 件 `lib.platforms.all`（darwin 含）宣言、Linux 限定 codewhale / obs-bilibili-stream / godot-ai 限定。**② blender-mcp 三 件**：道具数 22 称 但 十七 件 列挙 限定、**実 server 登録 二十六 件**（五 要約道具 `_for_cli` 変種、二 jump 道具、`search_api_docs` / `search_manual_docs` 欠落）；拡張 導入路 `blender/4.4/scripts/addons/` 記載、但 此拡張 **Blender Extension**（manifest `blender_version_min = "5.1.0"`、故 **4.x 読込 不能**）、新 Blender 目録 `extensions/user/`；更 **更新 無言 失敗**——store 内目録 読取専用（`dr-xr-xr-x`）、`cp -r` 権限 共 複製、故 第二回 導入 大量 `Permission denied` 出、新旧 混在 半端 状態 残留（保守者 環境 1.0.0 停留 正 此症状）。正 更新手順 追加（`chmod` → `rm -rf` → `cp` → `chmod`、1.0.0 → 1.0.3 実測、包内 與 byte 単位 一致）。**③ codewhale 二 件（内 一 件 退行）**：`codewhale --sandbox <tier>` 引数 **存在 不**（実測 `unexpected argument`）。実際 `--sandbox-mode`。**此 退行**——`e386dfc` 既 此引数名 修正、但 同一 commit scanner `RISKY_APPROVAL_DEFAULT` 消 為 文言 書換 際、**誤 引数名 再導入**。当時「文言 scanner 引 掛 否」限定 確認、「書換 引数 仍 使用 可 否」確認 不 示。又 zh 限定 此 行 持、en/ja/pcn 正当 `--yolo` 記載、故 四言語 不一致。現在 四言語 全部 `--sandbox-mode <tier>` 例、有効値、「`--sandbox` 非」注意 含。**其他 主張 確認済**：包 / overlay / 模組 / devShell / 技能目録（`skills/` 與 **一件 毎 照合**、完全一致）、四言語 章構成 與 version 番号 一致、cache 到達性、mode 配布 seed-once 與「複製 不 登録」意味論、Claude Code 削除 理由 参照先文書 実在。
+**摘要**：fix(docs): 26 項目 主張 + 子文書 検証、失実記述 7 件 修正
+- 主文書 2 件：`inputs.nixkits.url = "~/NixKits"` 使用不可——`git+file:///path/to/NixKits` 変更。「全包 既定 `lib.platforms.linux` 従」失実、実際 `lib.platforms.all`
+- blender-mcp 3 件：実 server 登録 26 道具（文書 22 称）。拡張 導入先 `extensions/user/`（Blender Extension、4.x 読込 不可）。更新手順 `chmod`→`rm -rf`→`cp`→`chmod`（従来 無言 失敗）
+- codewhale 2 件：`--sandbox <tier>` 存在 不、実 `--sandbox-mode`。以前 修正済 引数名 再導入 者、四言語 統一
 
 | 提交 | 説明 |
 |------|------|
@@ -579,11 +621,11 @@
 | `ead55d1` | fix(docs): blender-mcp 不正確 記述 三 件（四言語） |
 | `6f40487` | fix(docs): codewhale sandbox 引数名 退行 與 四言語 不一致（四言語） |
 
-> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。文書検証 継続中（子文書 主文書 順 一篇 毎 再確認）。以降 発見 別途 記録。
+> **説明**：文書 限定 修正、`packages/` 與 `overlays/` 未変更。
 
 ## 2026-09-18T13:09:18+09:00
 
-**摘要**：refactor(ruyi)! — `ruyi-nixos-compat` 修正 包定義 統合、無効 化 overlay 削除。**① 発見 不一致**：此 overlay `prev.ruyi.overrideAttrs`、**nixpkgs `ruyi`** 修正 物。但 nixpkgs 既 当該 package 提供 無（`builtins.attrNames pkgs` 依 `ruyi` NOT-FOUND）、overlay **宿主 失**——`nixkits.ruyi` 模組 `lib.mkPackageOption pkgs "ruyi"` 何 解決 不能、`packages/ruyi/*.nix` 此修正 参照 無（自前 `postPatch`  `nixos_compat.py` 追記 限定、却 注釈「file is created by the overlay patch」記載）、**実際 有効 自前 被 `develop/ruyi.nix` 限定**。結果、四言語 文書「包版 当該 overlay 含」述、flake 包 利用者 **NixOS 互換処理 実際 得 不能**。且 此種 不一致 **build 成功 露見 不能**——成果物 項目 毎 確認 初 判明。**② 修正**：overlay 行 三 事 全部 `packages/ruyi/ruyi.nix` 移——`patches = [ …/ruyi-nixos-compat.patch ]`（三 channel 共有）、`substituteInPlace --replace-fail` 依 `@nixLdSo@`/`@nixGlibcLib@` 埋込、並 修正 必要 `ensure_toolchain_nixos_compat` 明示 import。**`--replace-fail` 意図的**：上流 改名  placeholder 消 場合、**build 即座 失敗**、「修正 有 但 互換性 無」package 黙 産出 無。併 overlay file 與 flake 登録 削除、`develop/ruyi.nix` 被 中止——devShell、flake 包、NixOS 模組 **同一** build 得。**③ 検証（build 通過 限定 非、成果物内 項目 毎 確認）**：三 channel（ruyi / ruyi-beta / ruyi-alpha）全部 build 成功。`nixos_compat.py` 存在 且 `@nixLdSo@` **残存 零 回**、実際 store path（`glibc-2.42-84/ld-linux-x86-64.so.2`、存在 実測）置換済。`runtime.py` `wrap_exec_for_nixos` 與 注入 import、`maker.py` `expose_build_tools_in_venv` 呼出、`nuitka.py` `RUYI_ARGV0` 分岐 確認。実行時 smoke test `ruyi --version`/`--help` 正常。beta(0.53.0) pytest 依然 **462 passed + 70 passed**。四言語 文書「修正 内蔵、overlay 設定 不要」書換、経緯 保持。
+**摘要**：refactor(ruyi)! — `ruyi-nixos-compat` 修正 `packages/ruyi/ruyi.nix` 統合、無効 化 overlay 削除。overlay **nixpkgs 之** `ruyi` 修正 者 但、当該 包 既 存在 無、実際 有効 自前 被 `develop/ruyi.nix` 限定——flake 包 利用者 NixOS 互換処理 得 不。修正 三 channel 内蔵 化（`--replace-fail` 以 `@nixLdSo@`/`@nixGlibcLib@` 埋込、`ensure_toolchain_nixos_compat` 注入）、devShell・flake 包・NixOS 模組 同一 構築 得。検証：三 channel 構築 成功、成果物内 `@nixLdSo@` 残存 零 回、`ruyi --version`/`--help` 正常、beta pytest 462 + 70 passed。
 
 | 提交 | 説明 |
 |------|------|
@@ -593,7 +635,7 @@
 
 ## 2026-09-18T12:41:08+09:00
 
-**摘要**：定例 更新 検査 — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` 実行時依存 追加）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2。**① ruyi 依存 追加（唯一 実質的 欠陥）**：上流 0.53.0 以降 `pyelftools` `pyproject.toml` **実行時**依存 記載（0.52.x 以前 無）、更 収集時 `import elftools` 為 `tests/ruyipkg/abi/test_elfbuilder.py` 追加——依存 欠 場合 pytest `Interrupted: 1 error during collection` 出、一件 skip 非、**套件全体 中断**。`propagatedBuildInputs` 追加 結果、`ruyi`/`ruyi-beta`/`ruyi-alpha` 三 channel 全部 通過、beta 試験数 320 unit + 52 統合 **462 unit + 70 統合** 増加。四言語 ruyi 文書 其 数 與 依存 説明 反映。**② dsh-alpha vendored lock 陳旧**：alpha.2 上流 四 拡張 package（`dsh-atomic-write`/`dsh-experimental-agent-team-web-profile`/`dsh-hmr`/`dsh-plugin-manager`）追加、一方 `dsh-package-lock-alpha.json` alpha.1 停 在——**version 限定 変更 場合 `npmDepsHash is out of date` 発生**。AGENTS.md 取決 従、**派生 `postPatch` 処理後** `package.json`（`devDependencies` 削除）対 `npm install --package-lock-only` lock 再生成、hash 書戻。**③ 内蔵拡張一覧 照合**：`dsh --profile web --dump-default-config` 依 stable rc.2 **152 件 `id -> name`** 再抽出、一行 逐 比較 結果 rc.1 與**完全 一致**（rc.1→rc.2 npm 依存集合 不変 故、既存 `npmDepsHash` 其 侭 使用 可）——故 文書 拡張表 変更 不要。**④ self-host forge 取得（教訓 再現）**：`projects.blender.org` Web path `/archive/<rev>.tar.gz` 非 browser user agent 対 **403** 返（API path `/api/v1/repos/.../archive/` 正常）、`fetchFromGitea` hash 換算 亦**既記録済 教訓**、今回 遠回 不：hash **展開後 NAR**（`stripRoot`）sha256、1.0.0 宣言値 対 換算方法**逆向 検証** 上 `nix build` 一発 成功。四言語 同期、`nix flake check` 全通過
+**摘要**：定例 更新 検査 — blender-mcp 1.0.3、ruyi-beta 0.53.0-beta.20260917（`pyelftools` 実行時依存 追加：上流 0.53.0 自 実行時依存 記載、欠 場合 pytest 収集期 中断）、dsh 0.1.5-rc.2、dsh-alpha 0.1.6-alpha.2（上流 拡張 4 件 追加、`dsh-package-lock-alpha.json` 再生成——version 限定 変更 以 `npmDepsHash is out of date` 発生）。四言語 文書 同期、`nix flake check` 通過。
 
 | 提交 | 説明 |
 |------|------|
@@ -612,40 +654,49 @@
 | 　 | dsh source hash | `sha256-Gnlxnxx2…` → `sha256-9MVIOdae…` |
 | 　 | dsh-alpha npmDepsHash | `sha256-qAlIccAJ…` → `sha256-p4uALt5v…` |
 
-> **説明**：共有 base `ruyi.nix`  `pyelftools` 一行 追加（三 channel 共用）。`dsh-package-lock-alpha.json` alpha.2 依存集合 再生成。残 package 上流 照合済 既 最新 故 変更 無。
+> **説明**：共有 base `ruyi.nix` `pyelftools` 一行 追加（三 channel 共用）。`dsh-package-lock-alpha.json` alpha.2 依存集合 再生成。残 package 上流 照合済 既 最新 故 変更 無。
 
 ## 2026-09-18T00:38:59+09:00
 
-**摘要**：sandbox 段階 記述 書換、外部 scanner `RISKY_APPROVAL_DEFAULT` 解消（88 → 94） — 外部 catalog `awesome-ai-plugins` scanner 本 repo 対 `RISKY_APPROVAL_DEFAULT`（medium）五 件 報告。**制御実験** 依 trigger 語 `danger-full-access` 特定：空 repo 零 件、当該語 一行 注入 限定 finding 出現。**此 実際 risk 非**——本 repo 利用者 任意 選択 可能 挙動 「既知 設計境界」表 與 CLI 使用例 記述、既定値 設定 非。但 scanner pattern 照合 故、「文書 記述」與「設定 有効化」区別 不能。**修正 情報 一切 削 不 措辞 限定 変更**、結果 読者 対 更 正確 化（「既定 緩 不」明示）：四言語 `SECURITY.md`「sandbox 権限段階 利用者 明示的 選択、**既定 一切 緩 不**」化、`docs/zh/codewhale.md` CLI 例 `--sandbox <tier>` 化。**既存 記述誤 同時 修正**：例 `--sandbox` 記載、但 此 package 実際 引数 `--sandbox-mode`（`codewhale --help` 実行 確認）。正 形式 改。**実測 検証**（公式 scanner、CI 同一）：修正前 **88/100**（Security 13/16、medium 五）、修正後 **94/100（A - Excellent）**、Security **16/16**、medium 零。**意図的 行 不 最適化**：残 六 点 `Dependabot configured for automation surfaces` 由来。本 repo Dependabot **意図的 削除**（AGENTS.md「安全境界：外部自働化 導入 不」参照）、**点数 上 為 其 境界 破 不**。四言語 同期、`nix flake check` 全通過
+**摘要**：四言語 `SECURITY.md` sandbox 段階 記述 書換、外部 scanner `RISKY_APPROVAL_DEFAULT` 解消（88 → 94）——trigger 語 `danger-full-access`、本 repo 利用者 任意 選択 可能 挙動 記述 者 非 既定値 設定、pattern 照合 scanner 区別 不能。改後 記述「既定 緩 不」明示。併 `docs/zh/codewhale.md` CLI 例 `--sandbox-mode` 修正。検証：公式 scanner 94/100（A - Excellent）、Security 16/16、medium 零 件。残 6 点 `Dependabot configured for automation surfaces` 由来、本 repo「外部自働化 導入 不」境界 点数 為 破 不。
 
 | 提交 | 説明 |
 |------|------|
 | `e386dfc` | docs(security): 改写沙箱档位表述，消除扫描器 RISKY_APPROVAL_DEFAULT（88 → 94） |
 
-> **注**：文言 限定 文書修正、`packages/` 與 `overlays/` 未変更。
+> **説明**：文言 限定 文書修正、`packages/` 與 `overlays/` 未変更。
 
 ## 2026-09-17T18:15:40+09:00
 
-**摘要**：汎用技能「主 flow + 二 配套参考」再構成、且 branch 分離 滞留 Gitea 教訓 回収 — 本 session 更新技能 **性能評価 基 改善**。**① 既知 知識損失 回収**：監査 依、blender-mcp 実測 branch 記載 70 行「自 host forge（Gitea）source 取得」節 與 21 行 適配層記録 **永続 滞留 寸前** 判明。test branch 取決 依 merge 不、但 其 知識（`fetchFromGitea` `fetchFromGitHub` 委譲 `/archive/` 経路 生成、自 host instance **全 tag 403** 返 可能、対策 API endpoint + `stripRoot = true`、且「旧版 仍 build 可能」単  cache 命中 可能）**再現可能、追跡可能 且 全 自 host forge 倉庫 該当**。持込 前 **main 上 証拠 逐一 再現**（403 対 200 実測、nixpkgs fetcher source 確認）機械的 cherry-pick 非。**② 回収 慣例 強化**：適配層 第 10 步 **test branch 生 汎用 教訓 其場 手作業 main 書** 要求 小節 追加——「branch merge 不」  「教訓 重要 非」理由 成 不——今回 実際 損失 根拠 記録。**③ 技能 再構成**：単一 file 918 行 実行中 目的 箇所 探 難、AGENTS.md「独立 data 配套 file 分割」従 主 flow `SKILL.md`（462 行）+ `builders.md`（254 行：builder 別 hash flow 與 `flake.lock` 処理）+ `traps.md`（271 行：漂移 罠、fail-closed、外部 link 失効監査、Actions、修正内蔵版）化。**完全性 四通 照合**（`##` 節、`###`/`####` 子節、行単位 比較、行数）。其中 **三 節 実際 取 落**（「修正内蔵版 確認」「外部 link 監査」「GitHub Actions 更新確認」——`sed` 境界 適配層 節 手前 化、此 三節 其 更 前 位置）見出  level 照合 発見 復元。最終 行単位 比較 差分 四 行 限定、何 及 意図的 書換 確認済。**④「commit 前 六 自問」新設**（第 7 步）：変体 複数 可否？依存表 一致 可否？source 取得 有効 可否？実際 実行 可否？文書 記述 成立 可否？`flake.lock` commit 可否？——**六 何 及 同日 実測 事故 抽出**、各問 一回 再実行 又 欠陥 対応。該当 則 `traps.md` 進 可、全文 読 不要。**評価 根拠**：本 session 実測 三 回、六 package 更新、初回成功率 4/6、且 三 回 再実行 **何 及 技能 記録済 又 記録 要 罠 原因**——故 改善 方向「教訓 正 場所 発見 可能 化」且 更 積増 非。四言語 文書 同期
+**摘要**：汎用技能「主 flow + 二 付属参考」再構成、且 branch 分離 滞留 Gitea 教訓 回収 — 評価 基 改善：
+- 実測 branch 記載 70 行「自 host forge（Gitea）source 取得」節 main 回収（当該 branch merge 不 取決）：自 host instance 全 tag 403 返 可能性
+- 適配層 追加：test branch 生 汎用 教訓 其場 手作業 main 書 要求
+- 技能 918 行 単一 file 自 主 flow `SKILL.md`（462 行）+ `builders.md`（254 行：builder 別 hash flow）+ `traps.md`（271 行：漂移 罠 等）分割、第 7 步「commit 前 六 自問」新設
+- 根拠：本 session 六 package 更新 初回成功率 4/6、三 回 再実行 何 及 此 種 罠 原因
+検証：分割 `##` 節、子節、行単位 比較、行数 四通 照合、漏 三 節 復元。四言語 同期
 
 | 提交 | 説明 |
 |------|------|
 | `e0b1a64` | refactor(skills)!: 通用技能拆分为主流程 + 两份配套参考，并补回丢失的 Gitea 教训 |
 
-> **注**：技能構造 変更（配套 file `builders.md` 與 `traps.md` 新設）。`packages/` 未変更。
+> **説明**：技能構造 変更（付属 file `builders.md` 與 `traps.md` 新設）。`packages/` 未変更。
 ## 2026-09-17T17:22:50+09:00
 
-**摘要**：`check-doc-versions` 検査 新設、「文書 版 = 包定義 版」断言化 — 今回 連続 発見 五 文書 版 不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）対 **構造的 防御**。此 種 不一致 **何 及 build 失敗 不** 故 人手 文書 読 非 則 発見 不能。故 `nix flake check` 第六 検査（従来 五）固定。**検査内容**：①`docs/<lang>/<pkg>.md`「版」行（四言語）包定義 宣言値 一致 必要；②多 channel 包（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）**channel 表** 版 也 四言語 検査；③版 他所 読 場合 也 追跡（`kitsfmt` `Cargo.toml` 読）；④例外 script `EXEMPT` 明示登録（`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不、`codewhale-src` 独立包 非、`dsh`/`dsh-alpha` channel 表 記載）。**定義 自 機械的 読出 可能 部分（版番号）限定 検査**。依存表、platform 対応、install 手順 自動比較 不能 故、明示的 範囲外——判定 人 判断 要 検査 書 不 為。**回帰 test（要点）**：今回 **実際 遭遇** 五 種類 欠陥 一 一 注入、全部 検出。message「何 file 何 記載、何 定義 何 宣言」明示——codewhale 0.9.12（zh）、godot-ai 3.2.5（zh）、mcp-searxng 2.2.0（en）、opencode-telegram 0.25.1（ja）版行 検査 捕捉、dsh-alpha channel 行 0.1.5-alpha.2（四言語）channel 検査 捕捉。**end-to-end 検証**：欠陥 注入 後 `nix flake check` **実際 経路** 失敗 確認（`failed to build attribute 'checks.x86_64-linux.doc-versions'`）——script 直接 実行 時 限定 失敗 非。**CI 確認**：push 後 `CI` workflow 成功（run `35199359526`）、log `evaluating 'checks.x86_64-linux.doc-versions'` 出現、検査 skip 非 実際 実行 示。`AGENTS.md` 規約、例外登録方法、適用範囲 記録
+**摘要**：`check-doc-versions` 検査 新設、「文書 版 = 包定義 版」断言化 — 今回 連続 発見 五 文書 版 不一致（godot-ai、codewhale、mcp-searxng、opencode-telegram、dsh-alpha）対 構造的 防御：此 種 不一致 何 及 build 失敗 不 故、`nix flake check` 第六 検査 化。
+検査内容：`docs/<lang>/<pkg>.md`「版」行（四言語）與 多 channel 包（`dsh-alpha` / `ruyi-beta` / `ruyi-alpha`）channel 表 包定義 一致 必要；版 他所 読 場合 也 追跡（`kitsfmt` `Cargo.toml` 読）；例外 `EXEMPT` 登録、機械的 読出 可能 部分 限定 検査。
+検証：今回 実際 遭遇 五 種類 欠陥 注入 全部 検出；`nix flake check` 実際 経路 失敗 確認；`AGENTS.md` 記録
 
 | 提交 | 説明 |
 |------|------|
 | `072ab87` | feat(ci): 新增 check-doc-versions，把「文档版本 = 包定义版本」固化为断言 |
 
-> **注**：検査 script `develop/check-doc-versions.py` 追加 且 `flake.nix` `checks` 接続（検査数 五 → 六）。`packages/` 與 文書内容 未変更。
+> **説明**：検査 script `develop/check-doc-versions.py` 追加 且 `flake.nix` `checks` 接続（検査数 五 → 六）。`packages/` 與 文書内容 未変更。
 
 ## 2026-09-17T16:12:06+09:00
 
-**摘要**：五 包 文書 版番号 修正（内容品質 修正） — **全 服務型包** 対象「文書 版 vs 包定義 版」体系的 照合、五 不一致 発見。何 及 既更新 但 文書 追随 未 事例：**codewhale** 0.9.12 → **0.9.13**（預編訳変体 與 source 変体 双方 0.9.13）、**mcp-searxng** 2.2.0 → **2.3.0**、**opencode-telegram** 0.25.1 → **0.25.2**、**dsh-alpha** 0.1.5-alpha.2 → **0.1.6-alpha.1**（文書 與 README 二 箇所）、**codewhale-sudo** v0.9.12 → **v0.9.0 以降**。**最後 一件 機械的置換 非 判断 要**：当該 overlay 実際 **版 依存 不**（`codewhale.override { allowSudo = true; }`）、v0.9.0 導入 `prctl(PR_SET_NO_NEW_PRIVS)` 傍受 物。README「v0.9.12」古 限定 非 文書 本文（v0.9.0 記載）與 **自己矛盾** 故、偶 存在 版 固定 非 機能 由来 記述 形 改——且 **当該 overlay 0.9.13 也 正常 動作 実測**（codewhale 0.9.13 與 codew/codewhale-tui 三 binary 生成）。**意図的 残 歴史的参照**：`docs/*/modes/nixos.md`「`prefix` dsh 0.1.5-alpha.2 以降 必須」**出来事 記述**（field 何時 変化 記録）且 現在 版 標識 非 故、変更 則 反 記録 歪。**照合方法**：包 毎 定義 版 `grep` 四言語 比較、修正後 全体 再照合（10/10 一致。残 三「不一致」精査 結果 何 及 grep 誤検出——`dsh`/`ruyi` `version ?` 形式、`dsh-api-balance` 薄 wrapper 故 意図的 版 記載 不）。**併 実施 整合性検査**：文書 参照 九 file path 全部 実在、`nixkits.*` module option 全部 有効（疑 三 精査 結果 module option 非 flake 輸出）、文書中 包名 全部 実際 flake 輸出。`nix flake check` 全通過、四言語 同期
+**摘要**：五 包 文書 版番号 修正（内容品質 修正）— 全 服務型包 照合、既更新 但 文書 追随 未 五 件 発見：`codewhale` 0.9.12→0.9.13、`mcp-searxng` 2.2.0→2.3.0、`opencode-telegram` 0.25.1→0.25.2、`dsh-alpha` 0.1.5-alpha.2→0.1.6-alpha.1（文書 + README）、`codewhale-sudo` v0.9.12→**v0.9.0 以降**。
+最後 一件 置換 非 判断：当該 overlay 版 依存 不、v0.9.0 導入 `prctl(PR_SET_NO_NEW_PRIVS)` 傍受 物。README 値 古 限定 非 文書 本文 與 自己矛盾 故、機能 由来 記述 形 改。
+検証：全体 再照合 10/10 一致；`nix flake check` 通過、四言語 同期
 
 | 提交 | 説明 |
 |------|------|
@@ -659,11 +710,13 @@
 | dsh-alpha（文書 + README） | 0.1.5-alpha.2 | 0.1.6-alpha.1 |
 | codewhale-sudo（README 表現） | 「v0.9.12 sudo 機能」 | 「v0.9.0 以降 阻止 sudo 機能」 |
 
-> **注**：今回 **文書 限定 修正**、`packages/` 與 `overlays/` 未変更。
+> **説明**：今回 文書 限定 修正、`packages/` 與 `overlays/` 未変更。
 
 ## 2026-09-17T15:56:56+09:00
 
-**摘要**：godot-ai 四言語文書 版番号 與 依存表 修正；汎用技能 第 5 步「機械的置換 非 書直」判据 新設 — **内容品質 修正 主**：main godot-ai **code** `2a06bbf` 既 4.1.0 到達 且 機能 完全（実測 `godot-ai --version` → 4.1.0、exit 0）、但 **文書 同期 未**、二 事実誤 残：①版番号 依然 `3.2.5`；②依存表 **六** 項 且 全「≥ 範囲」、実際 **九** 項 fail-closed 厳密固定。**② 方 有害**——v4 起動時 此 九 包 **正確 版** 検証、不一致 則 起動 拒否。文書「≥」記載 則 読者 版 自由 浮動 可能 誤解、其 通 行 則 `RuntimeError` 直撃。修正 依存表「版 + 提供元」二列 化 九 項 逐一 列挙、且 pydantic-core 連動 要求（`==2.46.5`）、build 時 `setuptools==84.0.0` pin 緩和 説明、「何故 検証 打消 修正 書 不」理由 補足。**照合**：文書 中 九 版番号 `nix eval` 以 **overlay 含 実際 閉包** 自 測定、**推測 非**。文書値 與 逐一 比較 **九/九 完全一致**；四言語 同期、`nix flake check` 全通過。**技能改善**：汎用技能 第 5 步「**文書 機械的置換 非 書直 時**」触发判据 新設（依存 範囲 厳密固定 化 / 起動時、build 時 硬 検証 追加 / 依存 増減 / build 方式 変更 / 対応 platform 狭）。**手作業 main 書込**（cherry-pick 非）。書込 前 各主張 検証 且 証拠 参照先 書換 main 上 自包含 且 再現可能 化：初稿「当該表 其後 書直 済」記述 也 削除——照合 結果 main 当時 尚未 書直、残 則 証拠 虚偽申告 成 故
+**摘要**：godot-ai 四言語文書 版番号 與 依存表 修正；汎用技能 第 5 步「機械的置換 非 書直」判定 新設 — 内容品質 修正 主：main godot-ai code `2a06bbf` 既 4.1.0 到達 且 機能 完全（実測 `godot-ai --version` → 4.1.0）、但 文書 同期 未、版番号 依然 `3.2.5`、依存表 六 項 且 全「≥ 範囲」、実際 九 項 fail-closed 厳密固定。
+② 方 有害：v4 起動時 此 九 包 正確 版 検証、不一致 則 起動 拒否。修正 依存表「版 + 提供元」二列 化 九 項 逐一 列挙、且 pydantic-core 連動 要求（`==2.46.5`）補足。
+検証：九 版番号 `nix eval` overlay 含 閉包 自 測定、逐一 比較 九/九 一致；技能 触发判定 依存 厳密固定 化 又 起動時 硬 検証 追加
 
 | 提交 | 説明 |
 |------|------|
@@ -674,11 +727,14 @@
 |--------|--------|--------|
 | godot-ai（文書） | 文書 3.2.5 / 依存表 六 項「≥ 範囲」 | 4.1.0 / 依存表 九 項 厳密固定 |
 
-> **注**：今回 **文書 修正**、`packages/godot-ai.nix` 未変更（其 code `2a06bbf` 既 正確）。
+> **説明**：今回 文書 修正、`packages/godot-ai.nix` 未変更（其 code `2a06bbf` 既 正確）。
 
 ## 2026-09-17T13:00:09+09:00
 
-**摘要**：feat(skills): 適配層 第 10 步「process 振返 與 規範 検証」新設 — 更新 flow **完全 終了 後** 実行、監査 対象 **軟件 非、軟件 如何 更新 決定 規範 自体**（技能 / `AGENTS.md` / `SECURITY.md` / develop script）——即 更新 process 自身 対 更新確認。六 子步：**10.1 振返**（初回 失敗 箇所 / 利用者 問 必要 有 箇所 / 再実行 箇所 根本原因 迄 辿）、**10.2 検証**（`AGENTS.md` / `SECURITY.md` 記述 今 成立 可否。外部 link 到達性 含）、**10.3 帰属**（可搬性 依 汎用技能 / 適配層 / `AGENTS.md` / `SECURITY.md` 振分。判据「別 nix flake 倉庫 移 也 成立 可否」）、**10.4 体験**（利用者 何往復 待 為 振返、自行検証 可能 事項 潰）、**10.5 証拠規律**、**10.6 成果**。**10.5 硬性 制約**：規範 変更 **再現可能、追跡可能、異議申立 可能** 必要——印象 依 規範 変更、一度 偶発 法則 視、既 正 書 内容 対「更 最適化」、役 立 無 見 但 拘束力 残 条目 削除、前提 消 証明 不能 限 禁止。**初回 実行 二 実欠陥 発見**（何 及 **build error 生 不**、能動的 監査 限定 炙出 可能）：①`SECURITY.md` 子倉 `SECURITY.md` 指 **dead link**——当該 file 未作成（`gh api` 與 `curl` 双方 404 確証）。四言語「同 sub project 独自 安全政策 未整備。脆弱性 本 repo 報告 願」変更；②**十二 箇所** `Asus-linux/asusctl` 失効 link（三 文書 × 四 言語）——project `OpenGamingCollective/asusctl` 移転（`gh api` 602 stars、HTTP 200 確証）。「URL 修正 時 表示 text 也 修正」要求 従 連結 文言 也 更新。**汎化**：link 監査 手法 汎用技能「文書 外部 link 監査」入。三 判据 含——`curl` 404 `gh api` 再確認 後 初 確定（権限 又 制限 可能 性 有）、`403` 多 場合 scraping 対策 且 dead link 非、**vendored 第三者 content 書換 不**（`packages/kitsfmt-src/vendor/` 内 上流 CHANGELOG 等）。四言語 文書 同期
+**摘要**：feat(skills): 適配層 第 10 步「process 振返 與 規範 検証」新設 — 更新 flow 終了 後 実行、監査 対象 軟件 非、軟件 如何 更新 決定 規範 自体（技能 / `AGENTS.md` / `SECURITY.md` / develop script）。六 步：振返、検証、帰属、体験、証拠規律、成果。
+証拠規律 硬性 制約：規範 変更 再現可能、追跡可能、異議申立 可能 必要、印象 依 規範 変更、一度 偶発 法則 視、既 正 内容 対 更 最適化、拘束力 残 条目 役 立 無 見 故 削除 禁止。
+初回 実行 二 実欠陥 発見（何 及 build error 生 不）：`SECURITY.md` 未作成 子倉 `SECURITY.md` 指 dead link、四言語「同 sub project 独自 安全政策 未整備」変更；十二 箇所 `asusctl` link project `OpenGamingCollective/asusctl` 移転 合 変更。
+link 監査 手法 汎用技能 入：`curl` 404 `gh api` 再確認、`403` 多 場合 scraping 対策。
 
 | 提交 | 説明 |
 |------|------|
