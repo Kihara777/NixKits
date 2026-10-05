@@ -176,8 +176,14 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 ### 提交与推送
 
 1. **分批提交**：修改内容核验无误后，按逻辑类别分批 `git commit`
-2. **推送**：每批提交后立即 `git push`
-3. **`nix flake check`**：代码修改后必须先通过验证再提交
+2. **跨语言文件整组提交**：`MAINTENANCE.md` 与 `docs/MAINTENANCE.*.md`（同理，各语言的同一份文档页）属**同一个**逻辑类别——把它们拆进不同的提交，会让那个中间提交自己不一致：只带上 ja 时 CI 报
+   `entry counts differ across languages: en=369, ja=365, pcn=369, zh=369`（2026-10-05 实测：`db06ab9` 把 ja 的日志文件连同词典改动一起提交，而其余三语还是旧条目数）。
+   > ⚠️ **对着工作树跑检查抓不到它**——工作树是一致的，不一致的是「被提交的那一部分」。
+   > 两条可行做法：① 这批改动涉及哪几份语言文件，就**一次性 `git add` 全部**，不要按文件分批；
+   > ② 推之前对着**该提交的树**验一遍：
+   > `git worktree add /tmp/wt HEAD && (cd /tmp/wt && python3 develop/check-maintenance-log.py); git worktree remove /tmp/wt`
+3. **推送**：每批提交后立即 `git push`
+4. **`nix flake check`**：代码修改后必须先通过验证再提交
 
 ### 维护记录
 
