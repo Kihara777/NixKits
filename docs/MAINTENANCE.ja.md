@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T13:58:51+09:00
+
+**概要**：dsh-api-balance 薄ラッパー re-pin —— rev `1f0af6c` → `911df2e`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) にある）。スクリーンショットを見たメンテナから、質問ダイアログの下端が「一刀両断」だと指摘があった：高さ制限したプロンプトの下端と、追従ボタンの上側の両方に**フェードマスク**を敷いた（プロンプトは `mask-image`、ボタン上は `::before` のグラデーション帯）。グラデーション色は注入時に**カードの実際の背景色**から取得する（ライト `rgb(255,255,255)` / ダーク `rgb(44,44,46)`；固定色だとダークで露見する）。定量的な判定：プロンプト下端 30px の平均輝度が 59.93 → 45.92（約 23% 暗い）で、フェード帯より上（60–90px）は不変；双方向の対照でデプロイ版はこれらのアサーションが FAIL。四語ドキュメント同期。
+
+| コミット | 説明 |
+|------|------|
+| `e755381` | fix(dsh-api-balance): re-pin to 911df2e — fade mask at the question dialog's bottom |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `1f0af6c` → `911df2e` |
+| 　 | src hash | `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` → `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` |
+
 ## 2026-10-05T13:23:30+09:00
 
 **概要**：dsh-api-balance 薄ラッパー re-pin —— rev `f805f4e` → `1f0af6c`（バージョンは `0.1.1` のまま；子リポジトリにメンテナンスログは無く、変更はそのコミット [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) と [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9) にある）。メンテナのフィードバックによる二点：① 下部統計バーの横スクロールを**廃止** —— 公式 0.2.0 は各指標をクリックできるピルにし（開くと「セッション統計」ダイアログ：モデル所要時間 / TTFT / TPS / token / キャッシュヒット）、行内スクロールは不要になりピルのジェスチャと競合していた；設定行はグレーアウトして公式の方案を明記し、旧版が注入したスタイルは掃除する。② 質問ダイアログが**依然として選択肢を隠していた** —— 長いプロンプトでは header が実測 948px に対しカードの可視領域は 398px で、追従する不透明 header が遮蔽板になっていた；header を高さ制限（≤40vh）して自身でスクロールさせ追従をやめ、実測で三つの選択肢がすべて視口内に戻った（664px 中 533–661px）。判定：本パッケージの**ビルド成果物**を対象に `develop/ab-ui` の 14 項目（C2/C6 は「機構」から「結果」へ変更）、稼働ツリーは `develop/check-deployed-artifact.py` の三つの特徴文字列で照合。

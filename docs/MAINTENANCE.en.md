@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-05T13:58:51+09:00
+
+**Summary**: dsh-api-balance thin-wrapper re-pin — rev `1f0af6c` → `911df2e` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commit [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0)). After looking at a screenshot, the maintainer pointed out that the question dialog's bottom edge was a hard cut: both the height-capped prompt's lower edge and the strip above the pinned buttons now carry a **fade mask** (a `mask-image` on the prompt, a `::before` gradient band above the buttons). The gradient colour is sampled at injection time from the **card's actual background** (light `rgb(255,255,255)` / dark `rgb(44,44,46)`; a hardcoded colour would give itself away in dark mode). Quantitative criterion: the average luminance of the prompt's bottom 30px goes 59.93 → 45.92 (~23% darker) while the band above the fade (60–90px) is unchanged; in a two-way comparison those assertions measured FAIL on the deployed build. All four language docs updated.
+
+| Commit | Description |
+|------|------|
+| `e755381` | fix(dsh-api-balance): re-pin to 911df2e — fade mask at the question dialog's bottom |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `1f0af6c` → `911df2e` |
+| 　 | src hash | `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` → `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` |
+
 ## 2026-10-05T13:23:30+09:00
 
 **Summary**: dsh-api-balance thin-wrapper re-pin — rev `f805f4e` → `1f0af6c` (the version stays `0.1.1`; the sub-repo keeps no maintenance log, so the change lives in its commits [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) and [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9)). Two changes from the maintainer's feedback: ① the bottom stats-bar horizontal scroll is **retired** — the official 0.2.0 UI already turns every metric into a clickable pill (opening the "session stats" dialog: model time / TTFT / TPS / tokens / cache hit), so in-place scrolling no longer applies and fights the pill's gestures; the settings row is greyed out with the official solution spelled out, and the style older versions injected is cleaned up. ② the question dialog **still hid the options** — with a long prompt the header measured 948px against a 398px visible card area, so the pinned opaque header acted as a shield; the header is now height-capped (≤40vh), scrolls itself and is no longer pinned, and all three options came back into the viewport (533–661px of 664px). Criteria: the 14 UI checks in `develop/ab-ui` (C2/C6 moved from "mechanism" to "outcome") run against this package's **built artifact**, and the running tree is checked by `develop/check-deployed-artifact.py` against all three markers.

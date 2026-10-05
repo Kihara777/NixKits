@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-05T13:58:51+09:00
+
+**摘要**：dsh-api-balance 薄包装 re-pin —— rev `1f0af6c` → `911df2e`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`4cf04a0`](https://github.com/Kihara777/dsh-api-balance/commit/4cf04a0) 見）。維護者 截图 見後 指摘：疑問 window 下端「一刀切」——題干 限高 下端 與 追従按鈕上方 各 **漸隠 mask** 敷（題干 `mask-image`、按鈕上 `::before` 漸変帯）。漸変色 注入時 **卡片実際底色** 取得（light `rgb(255,255,255)` / dark `rgb(44,44,46)`；固定色 深色 露見）。定量判据：題干下端 30px 平均輝度 59.93 → 45.92（約 23% 暗）、漸隠帯 之上（60–90px）不変；双方向対照 部署版 這些 assertion 実測 FAIL。四語文档 同期。
+
+| 提交 | 説明 |
+|------|------|
+| `e755381` | fix(dsh-api-balance): re-pin to 911df2e — fade mask at the question dialog's bottom |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重釘） |
+| 　 | rev | `1f0af6c` → `911df2e` |
+| 　 | src hash | `sha256-f3dg9oSbtKeYO6KzJZdpxz86gDUAI6vbRy8R3SSwroU=` → `sha256-oc+TPbtuwItV43kskjpz18Ys2cTtCgceXAGrh0Q0D2c=` |
+
 ## 2026-10-05T13:23:30+09:00
 
 **摘要**：dsh-api-balance 薄包装 re-pin —— rev `f805f4e` → `1f0af6c`（版本仍 `0.1.1`；子倉維護記録無、変更其提交 [`e6d638c`](https://github.com/Kihara777/dsh-api-balance/commit/e6d638c) 與 [`1f0af6c`](https://github.com/Kihara777/dsh-api-balance/commit/1f0af6cd26e46822ab8ebee839ba1792c62459f9) 見）。維護者反饋 二点 変更：① 底部統計条 横 scroll **停用** —— 官方 0.2.0 統計条 各指標 click 可能 pill 化（開即「session 統計」dialog：模型用時 / TTFT / TPS / token / cache hit）、行内 scroll 不要 且 pill gesture 競合；設定行 置灰 官方方案 明記、旧版 注入 style 清掃。② 疑問 window **依然 選択肢 遮蔽** —— 長題干 header 実測 948px 対 卡片可視域 398px、吸頂 不透明 header 遮蔽板 成；header 高 制限（≤40vh）自身 scroll 化 吸頂 廃止、実測 三選択肢 全部 視口内 復帰（664px 中 533–661px）。判据：本 package **build 産物** 対象 `develop/ab-ui` 14 項目（C2/C6「機構」→「結果」変更）、稼働樹 `develop/check-deployed-artifact.py` 三特徴串 照合。
