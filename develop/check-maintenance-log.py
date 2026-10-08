@@ -60,6 +60,15 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 可选：对其他按同一规范写维护日志的仓库也适用（例如薄封装子仓）。
+# 用法：python3 develop/check-maintenance-log.py --root /path/to/repo
+# 一份脚本两仓通用——**判据不复制**，复制出来的第二份必然与第一份分叉。
+if "--root" in sys.argv:
+    _i = sys.argv.index("--root")
+    if _i + 1 >= len(sys.argv):
+        print("check-maintenance-log: --root 后面要跟一个仓库路径", file=sys.stderr)
+        sys.exit(2)
+    ROOT = os.path.abspath(sys.argv[_i + 1])
 FILES = {
     "zh": os.path.join(ROOT, "MAINTENANCE.md"),
     "en": os.path.join(ROOT, "docs", "MAINTENANCE.en.md"),
