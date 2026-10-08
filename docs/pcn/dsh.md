@@ -316,6 +316,8 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 dsh 0.2.0-rc.2 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
 
 > **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版輸出為准。本表対応 web profile 之 base + web-app patch 集。
+>
+> ⚠️ **alpha 通道（`0.2.1-alpha.1`）比 本表 多 二 行**：`schedule -> @deepseek-ai/dsh-schedule` 與 `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`（2026-10-08、同一 命令 対 alpha 成果物 実行 実測、183 → 185）。**此 二 行 不 可 写 入 stable 配備**——stable `0.2.0-rc.2` 無 此 二 行、而 dsh ≥ 0.1.6-alpha.2 対 解決不能 之 plugin 行 視為 **硬失敗**（全 預設 不能 掛載、見 上文 改名 注意）。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools

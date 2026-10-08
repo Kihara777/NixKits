@@ -322,6 +322,8 @@ dsh サンドボックス内では `sudo` の setuid が失われ、エージェ
 dsh 0.2.0-rc.2 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled` の有効値、`id -> パッケージ`）：
 
 > **一覧の生成方法**：`dsh --profile web --dump-default-config`（読み取り専用）の出力がそのまま `id -> name` 形式。dsh を更新したら再実行し、導入版の出力を正とする。本一覧は web プロファイルの base + web-app パッチセットに対応する。
+>
+> ⚠️ **alpha チャネル（`0.2.1-alpha.1`）は本一覧より二行多い**：`schedule -> @deepseek-ai/dsh-schedule` と `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`（2026-10-08、同じコマンドを alpha 成果物に対して実行して実測、183 → 185）。**この二行を stable の配備に写さないこと**——stable の `0.2.0-rc.2` には存在せず、dsh ≥ 0.1.6-alpha.2 は解決できないプラグイン行を**ハード失敗**として扱う（プリセット全体がマウントできない。上文の改名の注意を参照）。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools

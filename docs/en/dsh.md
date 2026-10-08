@@ -324,6 +324,8 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 Built-in plugin entry ids for dsh 0.2.0-rc.2 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
+>
+> ⚠️ **The alpha channel (`0.2.1-alpha.1`) has two more rows than this list**: `schedule -> @deepseek-ai/dsh-schedule` and `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule` (measured 2026-10-08 on the alpha artifact with the same command; 183 → 185). **Do not copy them into a stable deployment** — stable `0.2.0-rc.2` does not have them, and dsh ≥ 0.1.6-alpha.2 treats an unresolvable plugin row as a **hard failure** (the whole preset fails to mount; see the rename note above).
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools

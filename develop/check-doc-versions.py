@@ -91,6 +91,62 @@ def channel_version_in_row(row: str, package: str):
 
 LANGUAGES = ("zh", "en", "ja", "pcn")
 
+# ── README 的软件表里也写版本，而此前**没有任何检查看得见它** ──────────────────
+# 后果实测（2026-10-08 清点）：`dsh-alpha（0.1.6-alpha.2）` 落后**两代**（0.2.0-rc.2 那次
+# 升级就漏了）、zh README 的 `ruyi stable 0.52.0` 落后**一代**。两者都是「自述变成二手
+# 信息」，而它们各自还都写在四语里。
+#
+# 判据：README 表行里出现的**版本声明**必须仍是该包当前声明的版本之一——
+#   · `<通道> <版本>`（`stable` / `beta` / `alpha` 后跟版本号）；
+#   · 圆括号里的版本（`…（0.2.1-alpha.1）`），即那行的「当前版本」标注。
+# 允许集合按**包名族**取：`ruyi` 行可以写 `ruyi-beta` / `ruyi-alpha` 的版本，
+# `dsh` 行可以写 `dsh-alpha` 的。行首包名不是包文件（如 `codewhale-sudo`，它不是独立包）
+# 就整行跳过——那条路上写着的是**历史**版本（`v0.9.0 起被阻止的 sudo` 之类），不是现值声明。
+# 行首包名后允许跟别的东西（如 `ruyi<br>ruyi-beta<br>ruyi-alpha`）——第一版正则要求包名
+# 后紧跟 `|`，于是那三行**整行被跳过**，而它们里面同样写着过期的 `0.52.0`
+# （2026-10-08 自查发现：判据的射程不能窄于它要管的声明）。
+README_ROW = re.compile(r"^\|\s*([A-Za-z0-9][\w.-]*)[^|]*\|(.*?)\|\s*$", re.MULTILINE)
+README_CHANNEL_CLAIM = re.compile(r"(?:stable|beta|alpha)\s+`?v?(\d[\w.+-]*)")
+README_PAREN_CLAIM = re.compile(r"[（(]\s*v?(\d[\w.+-]*)\s*[）)]")
+
+
+def readme_files() -> list:
+    """各语言 README 的路径（zh 在仓库根，其余在 `docs/`）。"""
+    files = [os.path.join(ROOT, "README.md")]
+    for language in LANGUAGES:
+        if language == "zh":
+            continue
+        path = os.path.join(DOCS, f"README.{language}.md")
+        if os.path.exists(path):
+            files.append(path)
+    return files
+
+
+def readme_version_problems(versions: dict) -> list:
+    problems = []
+    for path in readme_files():
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
+        for row in README_ROW.finditer(text):
+            package, body = row.group(1), row.group(2)
+            # 包名族：自己 + 同前缀的通道包装（`ruyi` → 也认 `ruyi-beta`/`ruyi-alpha`）。
+            allowed = {
+                version
+                for name, (version, _) in versions.items()
+                if name == package or name.startswith(f"{package}-")
+            }
+            if not allowed:
+                continue
+            claims = README_CHANNEL_CLAIM.findall(body) + README_PAREN_CLAIM.findall(body)
+            for claim in claims:
+                if claim not in allowed:
+                    problems.append(
+                        f"doc-versions: {os.path.relpath(path, ROOT)} 的 `{package}` 行写着"
+                        f" `{claim}`，但该包当前声明的版本是 "
+                        f"{', '.join(sorted(allowed))}"
+                    )
+    return problems
+
 
 def package_versions() -> dict:
     """包名 → 从定义中读出的版本（读不出的不进结果）。"""
@@ -203,6 +259,8 @@ def main() -> None:
                     f"doc-versions: {rel} channel row for {package} says {found}, "
                     f"but {source} declares {declared}"
                 )
+
+    problems.extend(readme_version_problems(versions))
 
     for problem in problems:
         print(problem, file=sys.stderr)

@@ -380,6 +380,8 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
 
 > **清单生成方法**：`dsh --profile web --dump-default-config`（只读）输出即 `id -> name` 格式；升级 dsh 后用它重新生成本表，以所装版本的输出为准。本表对应 web profile 的 base + web-app 补丁集。
+>
+> ⚠️ **alpha 通道（`0.2.1-alpha.1`）比本表多两条**：`schedule -> @deepseek-ai/dsh-schedule` 与 `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`（2026-10-08 用同一条命令在 alpha 产物上实测，183 → 185 条）。**别把这两行抄进 stable 部署**——stable 的 `0.2.0-rc.2` 里没有它们，而 dsh ≥ 0.1.6-alpha.2 对解析不了的插件行是**硬失败**（整份预设挂不起来，见上文那条「插件改名会硬失败」）。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
