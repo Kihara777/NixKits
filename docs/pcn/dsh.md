@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版 | `0.2.0-rc.2` |
-| 開発通道 | `dsh-alpha 0.2.0-rc.2`（npm `next` dist-tag） |
+| 開発通道 | `dsh-alpha 0.2.1-alpha.1`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,16 +22,16 @@ NixKits 倣 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数
 | 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag、既定。**預設内容** 指定 rev 凍結 |
-| `pkgs.dsh-alpha` | alpha | `0.2.0-rc.2` | npm **`next`** dist-tag、0.2.x 線 最新 prerelease 追跡。**預設内容** repo HEAD 追随 |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.1` | npm **`alpha`** dist-tag、0.2.x 線 最新 prerelease 追跡。**預設内容** repo HEAD 追随 |
 
 ```nix
 # 本機 最新 prerelease 使用
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **`dsh-alpha` 為何 `alpha` 非 `next` 追随**（2026-10-02 変更）。npm 三 dist-tag 現在値 `latest` = `next` = `0.2.0-rc.2`、一方 `alpha` = **`0.1.7-alpha.2`** —— `alpha` 古 0.1.x 線所属、**stable 未満**。追随継続 = 開発通道 既遅線 固定 同等（本 repo 更新前 正 此：stable 0.1.5-rc.2 指定、alpha 0.1.6-alpha.2 指定、両通道 共 0.1.x → 0.2.x 線 跨 必要）。`next` 追随 意味「0.2.x 線 最新 prerelease」：今日 stable 與同一 0.2.0-rc.2、将来 `npm publish --tag next` 0.2.1-alpha.x 出 時 判定基準 書換 不要 自然追随。
+> **`dsh-alpha` 為何 `alpha` 追随**（2026-10-08 復帰）。npm 三 dist-tag 現在値 `alpha` = **`0.2.1-alpha.1`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` 逆 `next` **追越**。2026-10-02 `next` 切替 理由「`alpha` = `0.1.7-alpha.2` 古 0.1.x 線所属、stable 未満」、**該前提 反転済**。`next` 追随継続 = 開発通道 `alpha` 未満 版 固定 同等。判定基準「何 tag 名 一層 prerelease 似」非、**何 tag 0.2.x 線 於 一層新版 指**：再確認毎 dist-tags 読直 両版 対照、`alpha` 先導 無 時 復帰 可。
 >
-> 両通道 今日 **唯一 挙動差 dsh 版 非、預設内容**：stable 預設 `packages/dsh-nixos-shell-stable.nix` 指定 commit 凍結、alpha repo HEAD 追随（下文「模式」参照）。
+> 両通道 **挙動差 二点**：① dsh 版（alpha 新、故 hash / `npmDepsHash` / vendored lock **各独立**——版異 間 stable lock 共用 不可）；② **預設内容**：stable 預設 `packages/dsh-nixos-shell-stable.nix` 指定 commit 凍結、alpha repo HEAD 追随（下文「模式」参照）。
 >
 > ⚠️ **0.2.0 預設格式 断層**、0.1.x 互換 無：目録型預設経路（`$DSH_HOME/.agent-presets/<id>/` + `agent.cordis.yml`）上流 削除済。更新前 下文「模式」與「dsh 0.2.0 於 預設格式之変化」両節 読 事。内蔵插件一覧 版 共 動、先 [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) 確認。
 
@@ -685,7 +685,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類備份、hot reload）�
 |--------|-------------|--------------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **両通道 `0.2.0-rc.2`（現在）** | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **両通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.1`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` 三 目録 **全部 存在**、且 **各目録 image modality 宣言** 唯一 之 id —— 此 模塊 既定値 選択 理由。他 画像対応 id `deepseek-v4-flash-vision-exp` 古 二 目録 限 存在、上流 2026-09-10 廃止 為、既定値 使用 不可。
 

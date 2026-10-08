@@ -7,14 +7,17 @@
   python3,
   # version/hash/lock overridden for other channels (e.g. dsh-alpha)
   #
-  # ── 通道语义（2026-10-02 迁移到 0.2.0）────────────────────────────────────
+  # ── 通道语义（2026-10-02 迁移到 0.2.0；2026-10-08 复核通道）──────────────
   # 本包 = stable 通道，跟 npm `latest`。
   #
-  # ⚠️ npm 的 dist-tag 在这里**不按字面排序**：`alpha` = 0.1.7-alpha.2（0.1.x
-  # 线的尾巴），而 `latest` = `next` = 0.2.0-rc.2 —— 即 **alpha 比 stable 低**。
-  # 所以「alpha 通道跟 `alpha` tag」这条老语义已经失效：`dsh-alpha` 改跟 `next`
-  # （语义是 0.2.x 线的最新预发布，见 dsh-alpha.nix 的注释）。两个通道因此都跨了
-  # 0.1.x → 0.2.x 这条线。
+  # ⚠️ npm 的 dist-tag 不按字面排序，而且**关系会反转**：
+  #   · 2026-10-02 复核：`alpha` = 0.1.7-alpha.2（0.1.x 线的尾巴）< `latest` =
+  #     `next` = 0.2.0-rc.2 —— 当时 alpha 比 stable **低**，`dsh-alpha` 遂改跟
+  #     `next`。
+  #   · 2026-10-08 复核：`alpha` = **0.2.1-alpha.1** > `next` = `latest` =
+  #     0.2.0-rc.2 —— alpha 已领跑，`dsh-alpha` 改回跟 `alpha`。
+  # 结论：**跟哪个 tag 不能一次定死**，每次复核都要重读 dist-tags。当前取值与
+  # 判据写在 dsh-alpha.nix 的注释里（本包 = stable，始终跟 `latest`）。
   #
   # 0.2.0 同时是一次**预设格式断层**：0.1.x 的 Agent 预设是
   # `$DSH_HOME/.agent-presets/<id>/` 目录（0.2.0 起该通道被删除），0.2.0 改成

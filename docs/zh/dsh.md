@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版本 | `0.2.0-rc.2` |
-| 开发通道 | `dsh-alpha 0.2.0-rc.2`（npm `next` dist-tag） |
+| 开发通道 | `dsh-alpha 0.2.1-alpha.1`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,22 +22,24 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 | 包 | 通道 | 版本 | 说明 |
 |----|------|------|------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag，默认；**预设内容**冻结在钉住的 rev |
-| `pkgs.dsh-alpha` | alpha | `0.2.0-rc.2` | npm **`next`** dist-tag，跟踪 0.2.x 线的最新预发布；**预设内容**跟仓库 HEAD |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.1` | npm **`alpha`** dist-tag，跟踪 0.2.x 线的最新预发布；**预设内容**跟仓库 HEAD |
 
 ```nix
 # 本机改用最新预发布版本
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **`dsh-alpha` 为什么跟 `next` 而不跟 `alpha`**（2026-10-02 改）。npm 上三个 dist-tag 的当前值是
-> `latest` = `next` = `0.2.0-rc.2`，而 `alpha` = **`0.1.7-alpha.2`**——`alpha` 挂在 0.1.x 旧线上，
-> 比 stable **低**。继续跟 `alpha` 等于把开发通道钉在一条已经落后的线上（本仓升级前正是如此：
-> stable 钉 0.1.5-rc.2、alpha 钉 0.1.6-alpha.2，两个通道都得跨 0.1.x → 0.2.x 这条线）。
-> 改跟 `next` 的语义是「0.2.x 线的最新预发布」：今天与 stable 同为 0.2.0-rc.2；将来
-> `npm publish --tag next` 出 0.2.1-alpha.x 时自然跟上，不必再改判据。
+> **`dsh-alpha` 为什么跟 `alpha`**（2026-10-08 改回）。npm 上三个 dist-tag 的当前值是
+> `alpha` = **`0.2.1-alpha.1`**，而 `latest` = `next` = `0.2.0-rc.2`——`alpha` 反过来
+> **领跑** `next`。2026-10-02 曾改跟 `next`，理由是当时 `alpha` = `0.1.7-alpha.2` 挂在
+> 0.1.x 旧线上、比 stable **低**；**该前提已经反转**，继续跟 `next` 反而把开发通道钉在
+> 比 `alpha` 旧的版本上。判据不是「哪个 tag 名字更像预发布」，而是**哪个 tag 指到的版本
+> 在 0.2.x 线上更新**：复核时重取一次 dist-tags 比较版本序即可；`alpha` 不再领先时再改回去。
 >
-> 两个通道今天的**唯一行为差异不在 dsh 版本上，而在预设内容**：stable 的预设冻结在
-> `packages/dsh-nixos-shell-stable.nix` 钉住的 commit，alpha 的预设跟仓库 HEAD（见下文「模式」）。
+> 两个通道的**行为差异有两处**：① dsh 版本（alpha 更新，故 hash / `npmDepsHash` /
+> vendored lock **各自独立**——版本不同时不能共用 stable 的 lock）；② **预设内容**：
+> stable 的预设冻结在 `packages/dsh-nixos-shell-stable.nix` 钉住的 commit，alpha 的预设跟
+> 仓库 HEAD（见下文「模式」）。
 >
 > ⚠️ **0.2.0 是一次预设格式断层**，与 0.1.x 不兼容：0.1.x 的目录式预设通道
 > （`$DSH_HOME/.agent-presets/<id>/` + `agent.cordis.yml`）已被上游删除。升级前请先读下文
@@ -749,7 +751,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 |----------|----------|--------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **两个通道 `0.2.0-rc.2`（当前）** | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **两个通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.1`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` 是三个目录**都存在**、且在其中**都声明 image 模态**的唯一 id —— 这也是模块默认值选它的理由。另一个能看图的 `deepseek-v4-flash-vision-exp` 只存在于两个较旧目录，且上游已于 2026-09-10 下线，不能作为默认值。
 

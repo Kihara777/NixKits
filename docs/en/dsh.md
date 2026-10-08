@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | Version | `0.2.0-rc.2` |
-| Development channel | `dsh-alpha 0.2.0-rc.2` (npm `next` dist-tag) |
+| Development channel | `dsh-alpha 0.2.1-alpha.1` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -22,16 +22,16 @@ NixKits provides several dsh versions through the same thin-wrapper pattern as r
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
-| `pkgs.dsh-alpha` | alpha | `0.2.0-rc.2` | npm **`next`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.1` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
 
 ```nix
 # run the newest prerelease on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **Why `dsh-alpha` follows `next` and not `alpha`** (changed 2026-10-02). Today the npm dist-tags read `latest` = `next` = `0.2.0-rc.2` while `alpha` = **`0.1.7-alpha.2`** — `alpha` sits on the older 0.1.x line and is **lower** than stable. Following it would pin the development channel to a line that has already fallen behind (which is what this repository did before the upgrade: stable pinned 0.1.5-rc.2, alpha pinned 0.1.6-alpha.2 — both channels had to cross the 0.1.x → 0.2.x line). Following `next` means "the newest prerelease on the 0.2.x line": today it is the same 0.2.0-rc.2 as stable, and when `npm publish --tag next` ships a 0.2.1-alpha.x it follows automatically without touching the criterion again.
+> **Why `dsh-alpha` follows `alpha`** (switched back 2026-10-08). The npm dist-tags currently read `alpha` = **`0.2.1-alpha.1`** while `latest` = `next` = `0.2.0-rc.2` — `alpha` now **leads** `next` instead of trailing it. The 2026-10-02 switch to `next` rested on `alpha` = `0.1.7-alpha.2` sitting on the older 0.1.x line and being **lower** than stable; **that premise has reversed**, and following `next` now pins the development channel to a version older than `alpha`. The criterion is not "which tag name sounds more like a prerelease" but **which tag points at the newer version on the 0.2.x line**: re-read the dist-tags and compare the two versions when re-checking, and switch back once `alpha` stops leading.
 >
-> The two channels' **only behavioural difference today is not the dsh version but the preset content**: stable's presets are frozen at the commit pinned in `packages/dsh-nixos-shell-stable.nix`, alpha's follow repository HEAD (see "Modes" below).
+> The two channels now **differ in two ways**: ① the dsh version (alpha is newer, so hash / `npmDepsHash` / vendored lock are **independent** — they must not share stable's lock while the versions differ); ② **preset content**: stable's presets are frozen at the commit pinned in `packages/dsh-nixos-shell-stable.nix`, alpha's follow repository HEAD (see "Modes" below).
 >
 > ⚠️ **0.2.0 is a preset-format break** and is incompatible with 0.1.x: the directory-based preset channel (`$DSH_HOME/.agent-presets/<id>/` + `agent.cordis.yml`) was removed upstream. Read the "Modes" and "Preset format changes in dsh 0.2.0" sections below before upgrading. The built-in plugin inventory moves with the version; check the [changelog](https://github.com/deepseek-ai/deepseek-harness/releases) first.
 
@@ -681,7 +681,7 @@ The `deepseek-official` route's model catalogue is **built into** the adapter (`
 |-------------|-------------------|---------------------------------|
 | stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` | `deepseek-flash`, `deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
-| **both channels `0.2.0-rc.2` (current)** | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
+| **both channels** (stable `0.2.0-rc.2`, alpha `0.2.1-alpha.1`) | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` is the only id **present in all three** catalogues **and declaring the image modality in each** — which is why the module default picks it. The other image-capable id, `deepseek-v4-flash-vision-exp`, exists only in the two older catalogues and upstream retired it on 2026-09-10, so it cannot serve as a default.
 
