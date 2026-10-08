@@ -2,6 +2,25 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-08T16:53:41+09:00
+
+**摘要**：dsh-api-balance re-pin —— rev `95fec42` → `43f4d18`（子倉 変更 其[維護記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900) 見：keyboard guard 硬阻止方式 変更）
+
+- 薄包装 座標 限定 記録：rev 與 src hash；子倉 自身 完全 変更 記録、重複 不
+- 子倉 判据：新「同一 frame 競合」反例（応用 `contenteditable` 書戻 + 即 `focus()`）、全量 15/15
+- 併：`check-maintenance-log.py` `--root <repo>` 対応——子倉 記録 同一 判据 核（script 複製 不）
+
+| 提交 | 説明 |
+|------|------|
+| `62fc667` | fix(dsh-api-balance): re-pin 到 43f4d18 —— keyboard guard 「既定 編集不可 + 程序性 focus 飲込」方式 |
+| `420b303` | chore: 記録検証器 --root 対応 + re-pin |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重釘） |
+| 　 | rev | `95fec42` → `43f4d18` |
+| 　 | src hash | `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` → `sha256-jNbfG09da6RYiSRfCm0P5pxBIo9LG38bpSAdVZaxyXc=` |
+
 ## 2026-10-06T01:12:23+09:00
 
 **摘要**：chore(pkgs): godot-ai 4.2.3 → 4.3.0 —— fail-closed 実行時検証 付

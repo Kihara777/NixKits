@@ -2,6 +2,25 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-08T16:53:41+09:00
+
+**概要**：dsh-api-balance re-pin —— rev `95fec42` → `43f4d18`（子リポジトリの変更は[メンテナンスログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900)に：キーボードガードを硬い阻止方式へ）
+
+- 薄いラッパーは座標のみ記録：rev と src hash；子リポジトリが自身の完全な変更を記録し、重複しない
+- 子リポジトリの判定：新しい「同一フレーム競合」反例（アプリが `contenteditable` を書き戻して即 `focus()`）、全体 15/15
+- 併せて：`check-maintenance-log.py` が `--root <repo>` に対応——子リポジトリのログも同じ判定で核（スクリプトを複製しない）
+
+| コミット | 説明 |
+|------|------|
+| `62fc667` | fix(dsh-api-balance): re-pin を 43f4d18 へ —— キーボードガードを「既定で編集不可 + プログラム的 focus を飲み込む」方式に |
+| `420b303` | chore: ログ検証器に --root + re-pin |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | rev | `95fec42` → `43f4d18` |
+| 　 | src hash | `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` → `sha256-jNbfG09da6RYiSRfCm0P5pxBIo9LG38bpSAdVZaxyXc=` |
+
 ## 2026-10-06T01:12:23+09:00
 
 **概要**：chore(pkgs): godot-ai 4.2.3 → 4.3.0 —— fail-closed な実行時検証つき

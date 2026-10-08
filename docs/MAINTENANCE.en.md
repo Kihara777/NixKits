@@ -2,6 +2,25 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-08T16:53:41+09:00
+
+**Summary**: dsh-api-balance re-pin — rev `95fec42` → `43f4d18` (the sub-repo change lives in its [maintenance log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900): the keyboard guard now blocks hard)
+
+- The thin wrapper records coordinates only: rev and src hash; the sub-repo records its own full change, no duplication
+- Sub-repo criteria: a new "same-frame race" counterexample (the app writes `contenteditable` back and calls `focus()` immediately), full suite 15/15
+- Also: `check-maintenance-log.py` now takes `--root <repo>`, so the sub-repo's log is checked by the same script (rather than a copy)
+
+| Commit | Description |
+|------|------|
+| `62fc667` | fix(dsh-api-balance): re-pin to 43f4d18 — keyboard guard rewritten as non-editable by default + programmatic focus swallowed |
+| `420b303` | chore: log checker gains --root + re-pin |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | rev | `95fec42` → `43f4d18` |
+| 　 | src hash | `sha256-bRZWVKmv4nHow0TWMdMww/cFnP9A6vJ08sQCloaRpEE=` → `sha256-jNbfG09da6RYiSRfCm0P5pxBIo9LG38bpSAdVZaxyXc=` |
+
 ## 2026-10-06T01:12:23+09:00
 
 **Summary**: chore(pkgs): godot-ai 4.2.3 → 4.3.0 — with the fail-closed runtime check
