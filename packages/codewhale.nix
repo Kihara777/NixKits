@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.10.0";
+  version = "0.10.1";
 
   # Prebuilt binaries from GitHub Releases — x86_64 and aarch64 only.
   # riscv64 is built from source (see codewhale-src.nix).
@@ -19,23 +19,23 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   cliHashes = {
-    x64     = "sha256-xEPCwyx0PdgP9WOXsee7/lWxymMG/1UGW5d7xlXVDtE=";
-    arm64   = "sha256-8+LYIlfKwz7wM/AzqWOMsAGJozNN61j7/3uJrtIYJzo=";
+    x64     = "sha256-7S2Ds4U96APuOfV0x0XR4cn2+L+Z7TrsODVCXgwmmTs=";
+    arm64   = "sha256-7+cCpQg/54p+CWdrEp3tuk9ZWhK0yCTH8aeU2pym1to=";
   };
 
   tuiHashes = {
-    x64     = "sha256-xEPCwyx0PdgP9WOXsee7/lWxymMG/1UGW5d7xlXVDtE=";
-    arm64   = "sha256-8+LYIlfKwz7wM/AzqWOMsAGJozNN61j7/3uJrtIYJzo=";
+    x64     = "sha256-7S2Ds4U96APuOfV0x0XR4cn2+L+Z7TrsODVCXgwmmTs=";
+    arm64   = "sha256-7+cCpQg/54p+CWdrEp3tuk9ZWhK0yCTH8aeU2pym1to=";
   };
 
   codewhale-cli = fetchurl {
-    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codewhale-linux-${archSuffix}";
+    url = "https://github.com/codewhale-hq/Codewhale/releases/download/v${version}/codewhale-linux-${archSuffix}";
     hash = cliHashes.${archSuffix};
   };
   # The TUI binary was renamed `codewhale-tui` → `codew` upstream in v0.9.9
   # (release asset `codew-linux-*`; same compiled runtime as the main CLI).
   codewhale-tui = fetchurl {
-    url = "https://github.com/Hmbown/CodeWhale/releases/download/v${version}/codew-linux-${archSuffix}";
+    url = "https://github.com/codewhale-hq/Codewhale/releases/download/v${version}/codew-linux-${archSuffix}";
     hash = tuiHashes.${archSuffix};
   };
 
@@ -105,8 +105,8 @@ WRAPEOF
 
   meta = {
     description = "Terminal coding agent for DeepSeek V4";
-    homepage = "https://github.com/Hmbown/CodeWhale";
-    changelog = "https://github.com/Hmbown/CodeWhale/releases/tag/v${version}";
+    homepage = "https://github.com/codewhale-hq/Codewhale";
+    changelog = "https://github.com/codewhale-hq/Codewhale/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "codewhale";
     platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ];

@@ -10,7 +10,7 @@ codewhale v0.9.0 は `prctl(PR_SET_NO_NEW_PRIVS)` をデフォルトで有効化
 |------|-----|
 | パッチ | `overlays/codewhale-sudo-fix.nix` |
 | 種類 | overlay（codewhale パッケージを上書き） |
-| 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| 上流 | [codewhale-hq/Codewhale](https://github.com/codewhale-hq/Codewhale) |
 
 ## インストール
 

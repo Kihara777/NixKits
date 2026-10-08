@@ -350,7 +350,7 @@ gh api repos/Kihara777/NixKits --jq .full_name || echo "取数链路异常 —�
 `wl-clipboard-rs` / `jobserver` 等依赖。**从上游 tag 直接取 lock 覆盖**即可：
 
 ```bash
-gh api "repos/Hmbown/CodeWhale/contents/Cargo.lock?ref=v<version>" \
+gh api "repos/codewhale-hq/Codewhale/contents/Cargo.lock?ref=v<version>" \
   --jq '.content' | base64 -d > packages/codewhale-src-Cargo.lock
 ```
 

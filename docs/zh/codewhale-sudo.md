@@ -9,7 +9,7 @@ codewhale v0.9.0 默认启用 `prctl(PR_SET_NO_NEW_PRIVS)` 深度防御，阻止
 | 项目 | 值 |
 |------|-----|
 | 类型 | overlay（覆盖 codewhale 包） |
-| 上游 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| 上游 | [codewhale-hq/Codewhale](https://github.com/codewhale-hq/Codewhale) |
 
 ## 安装
 

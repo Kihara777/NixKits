@@ -10,7 +10,7 @@ codewhale v0.9.0 enables `prctl(PR_SET_NO_NEW_PRIVS)` defense-in-depth by defaul
 |------|-------|
 | Patch | `overlays/codewhale-sudo-fix.nix` |
 | Type | overlay (overrides codewhale package) |
-| Upstream | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| Upstream | [codewhale-hq/Codewhale](https://github.com/codewhale-hq/Codewhale) |
 
 ## Install
 

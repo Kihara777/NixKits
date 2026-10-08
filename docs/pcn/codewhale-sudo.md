@@ -10,7 +10,7 @@ codewhale v0.9.0 既定 `prctl(PR_SET_NO_NEW_PRIVS)` 防禦縦深有効、`sudo`
 |------|-----|
 | 補丁 | `overlays/codewhale-sudo-fix.nix` |
 | 種別 | overlay（codewhale 包上書） |
-| 上流 | [Hmbown/CodeWhale](https://github.com/Hmbown/CodeWhale) |
+| 上流 | [codewhale-hq/Codewhale](https://github.com/codewhale-hq/Codewhale) |
 
 ## 導入
 

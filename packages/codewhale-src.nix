@@ -12,21 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
-    owner = "Hmbown";
-    repo = "CodeWhale";
+    owner = "codewhale-hq";
+    repo = "Codewhale";
     rev = "v${version}";
     # fetchFromGitHub 的哈希按 fetchzip 语义（解包后的树），无法离线预算：
-    # 取自 CI 的 hash mismatch 报告，并用 `nix store prefetch-file --unpack`
-    # 在本机复算，两者一致（sha256-ajv9FejiJ5Z6De+4RhTtjNLdfKzOaXBQ8xBxkWqg+1M=）。
+    # 取自本机构建报错的 `got:`，并用 `nix store prefetch-file --unpack`
+    # 独立复算，两者一致（sha256-/aTVxY+l3S30wm31BlWExbkIZx8s2R2lqCsQJVZa7TE=）。
     #
     # ⚠️ 改 version 时**必须先清空 hash**（置 `lib.fakeHash`）再构建。hash 与
     # version 不同步时不会报错：固定输出派生（fixed-output derivation）的路径
     # 由 hash 决定，旧 hash 对应的 store 路径若仍在，Nix 直接复用**旧版本的
     # 源码树**，构建在一份与 version 不符的代码上跑完，全程无提示。
-    hash = "sha256-SsN/p+8RjMSo58IeDub3u+iDdgXq4UxKDNIR5s28VSo=";
+    hash = "sha256-/aTVxY+l3S30wm31BlWExbkIZx8s2R2lqCsQJVZa7TE=";
   };
 
   # Cargo.lock is in workspace root
@@ -34,18 +34,11 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./codewhale-src-Cargo.lock;
   };
 
-  # rquickjs-sys 0.12.2 (newest release) does not ship riscv64gc bindings:
-  # its build.rs non-bindgen path does include!("bindings/<TARGET>.rs"), so the
-  # riscv64 cross build fails with "couldn't read .../bindings/
-  # riscv64gc-unknown-linux-gnu.rs". Upstream ships byte-identical bindings for
-  # every LP64 little-endian target (x86_64 == aarch64 == loongarch64 ==
-  # powerpc64), so a copy is valid for riscv64gc. Drop it into the vendored
-  # crate directory that cargoSetupPostUnpackHook materialized (and made
-  # writable) in the build tree; $cargoDepsCopy points at it.
-  postPatch = ''
-    cp ${./codewhale-rquickjs-riscv64.rs} \
-      "$cargoDepsCopy/rquickjs-sys-0.12.2/src/bindings/riscv64gc-unknown-linux-gnu.rs"
-  '';
+  # rquickjs-sys gained riscv64gc bindings in 0.14.0 (0.10.1's lock), so the
+  # former postPatch that materialized a copy of the x86_64 bindings — needed
+  # while the lock pinned 0.12.2, which shipped none — is gone. Verified:
+  # 0.14.0's src/bindings/{riscv64gc,x86_64}-unknown-linux-gnu.rs are
+  # byte-identical, and the crate now ships the riscv64gc file itself.
 
   nativeBuildInputs = [
     pkg-config
@@ -94,24 +87,26 @@ rustPlatform.buildRustPackage rec {
   # Skip tests during build (they require network access)
   doCheck = false;
 
-  # Build both CLI and TUI binaries
+  # v0.10.1 collapsed the two executables into one: `crates/tui` is now a
+  # library (`autobins = false`, no `[[bin]]` target) that `crates/cli` links
+  # against, and the allocator features say the allocators "belong exclusively
+  # to the canonical codewhale-cli executable". So `cargoInstallHook` already
+  # produced the whole runtime as a single `codewhale` binary — there is no
+  # second `codewhale-tui` target left to build (0.10.0 still had one, which is
+  # why this hook previously compiled it separately).
+  #
+  # The prebuilt releases ship the same bytes under both `codewhale` and
+  # `codew`; upstream tells Cargo users to add a `codew` symlink, so mirror
+  # that shape here, plus the pre-0.9.9 `codewhale-tui` alias for scripts.
   postInstall = ''
-    # Build TUI binary as well (not part of default-members).
-    # cargoBuildHook always passes --target; mirror it here, otherwise the
-    # bare cargo build falls back to the default target and cross builds link
-    # with the wrong toolchain.
-    cargo build --release --target ${stdenv.hostPlatform.rust.rustcTarget} -p codewhale-tui
-    install -Dm755 target/${stdenv.hostPlatform.rust.rustcTarget}/release/codewhale-tui -t $out/bin
-    # Upstream renamed the TUI command `codewhale-tui` → `codew` in v0.9.9;
-    # install under the new name and keep a backward-compat alias.
-    mv $out/bin/codewhale-tui $out/bin/codew
+    ln -s codewhale $out/bin/codew
     ln -s codew $out/bin/codewhale-tui
   '';
 
   meta = {
     description = "Terminal coding agent for DeepSeek V4";
-    homepage = "https://github.com/Hmbown/CodeWhale";
-    changelog = "https://github.com/Hmbown/CodeWhale/releases/tag/v${version}";
+    homepage = "https://github.com/codewhale-hq/Codewhale";
+    changelog = "https://github.com/codewhale-hq/Codewhale/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "codewhale";
     platforms = lib.platforms.linux;
