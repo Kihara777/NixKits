@@ -2,6 +2,37 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-08T23:25:20+09:00
+
+**摘要**：chore(dsh): alpha 通道改跟 `alpha`、stable pin 前移，README 自述补判据
+
+- `dsh-alpha` 0.2.0-rc.2 → **0.2.1-alpha.1**：当初「alpha 挂在 0.1.x 旧线上」的前提**反了**；hash 取自 `got:`，vendored lock 与产物逐字节相同
+- stable 的 `pinnedRev` `0175f85` → `1e85409`：代价是旧格式不再随包发布，0.1.x 用户按旧 rev 自取（仍取得到）
+- README 的版本自述烂了**四处**（`dsh-alpha` 落后两代、`ruyi stable` 落后一代，各四语）——新增判据钉住它们，反证已验
+- `docs/*/dsh.md` 插件清单加限定：alpha 比 stable 多两条，抄进 stable 会踩硬失败
+
+| 提交 | 说明 |
+|------|------|
+| `b17bd73` | chore: stable 通道 pinnedRev 前移（`0175f85` → `1e85409`） |
+| `bf0b9ac` | chore(dsh-alpha): 通道语义改回 npm `alpha` |
+| `52fcdbc` | fix(docs): README 版本自述修正 + 给它补判据 |
+
+## 2026-10-08T23:03:29+09:00
+
+**摘要**：chore(pkgs): mcp-searxng 2.5.1 与 codewhale 0.10.1 —— 结构性变更处置与 CI 烟测补缺
+
+- mcp-searxng：纯依赖/安全补丁，机械替换足够；产物实跑握手报 2.5.1
+- codewhale 0.10.1 **把两个可执行文件合成一个**——hash 类判据看不见这类结构变更，是**构建**喊的；已按上游说明改 postInstall
+- 随之一并处置：上游改名 `codewhale-hq/Codewhale`、删掉已成空转的 rquickjs riscv64 workaround、两处既有文档错误
+- **新增烟测并给三架构开 `smoke-test`**：此前 riscv64 产物在 CI 上从没被运行过；四条判据含反证，已实跑通过
+- 其余上游与三个固定 SHA 的 action 全部已最新
+
+| 提交 | 说明 |
+|------|------|
+| `1645aba` | chore(pkgs): mcp-searxng 2.5.0 → 2.5.1 |
+| `bbe7e7a` | ci(codewhale): 三个架构开启 smoke-test |
+| `19cc335` | chore(pkgs): codewhale 0.10.0 → 0.10.1（含上游改名与 riscv64 结构性变更的处置） |
+
 ## 2026-10-08T16:53:41+09:00
 
 **摘要**：dsh-api-balance re-pin —— rev `95fec42` → `43f4d18`（子仓变更见其维护日志 [键盘守护改硬拦法](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900)）

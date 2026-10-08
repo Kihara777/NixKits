@@ -2,6 +2,37 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-08T23:25:20+09:00
+
+**摘要**：chore(dsh): alpha 通道 `alpha` 追従、stable pin 前進、README 版自述 判定 追加
+
+- `dsh-alpha` 0.2.0-rc.2 → **0.2.1-alpha.1**：当初 前提「`alpha` 0.1.x 旧線 上、stable 以下」**反転済**；hash `got:` 取得、vendored lock 構築物 與 逐 byte 同一
+- stable `pinnedRev` `0175f85` → `1e85409`：代価 旧形式 同梱 不 発生；0.1.x 使用者 旧 rev 自行 取得（今 也 取得可能）
+- README 版自述 **四箇所** 腐敗（`dsh-alpha` 二世代、`ruyi stable` 一世代 遅、何 也 四言語）——新判定 固定、反証 検証済
+- `docs/*/dsh.md` plugin 清單 限定 追加：alpha stable 対 二 行 多。stable 転記 時 硬失敗
+
+| 提交 | 説明 |
+|------|------|
+| `b17bd73` | chore: stable 通道 pinnedRev 前進（`0175f85` → `1e85409`） |
+| `bf0b9ac` | chore(dsh-alpha): 通道 npm `alpha` 回帰 |
+| `52fcdbc` | fix(docs): README 版自述 修正、判定 追加 |
+
+## 2026-10-08T23:03:29+09:00
+
+**摘要**：chore(pkgs): mcp-searxng 2.5.1 與 codewhale 0.10.1 —— 構造変更 処置 與 CI 煙試験 穴埋
+
+- mcp-searxng：純 依存/security patch、機械的置換 足；成果物 握手 実際 2.5.1 答
+- codewhale 0.10.1 **二 実行 file 一 統合**——hash 系 判定 此 種 構造変更 不可視；**構築** 叫。postInstall 上流 説明 通 改写
+- 併 処置：上流 改名 `codewhale-hq/Codewhale`、空転 rquickjs riscv64 workaround 削除、既存 文書 誤 二箇所
+- **煙試験 新設、三 架構 `smoke-test` 有効化**：riscv64 成果物 CI 一度 也 実行 無；四 判定（反証 含）CI 実走
+- 他 上流 與 三 固定 SHA action 全 最新
+
+| 提交 | 説明 |
+|------|------|
+| `1645aba` | chore(pkgs): mcp-searxng 2.5.0 → 2.5.1 |
+| `bbe7e7a` | ci(codewhale): 三 架構 smoke-test 有効化 |
+| `19cc335` | chore(pkgs): codewhale 0.10.0 → 0.10.1（上流改名 與 riscv64 構造変更） |
+
 ## 2026-10-08T16:53:41+09:00
 
 **摘要**：dsh-api-balance re-pin —— rev `95fec42` → `43f4d18`（子倉 変更 其[維護記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900) 見：keyboard guard 硬阻止方式 変更）

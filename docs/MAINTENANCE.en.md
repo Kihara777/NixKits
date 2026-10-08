@@ -2,6 +2,37 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-08T23:25:20+09:00
+
+**Summary**: chore(dsh): the alpha channel follows `alpha`, the stable pin moves forward, README version claims get an assertion
+
+- `dsh-alpha` 0.2.0-rc.2 → **0.2.1-alpha.1**: the original premise ("`alpha` sits on the old 0.1.x line") had **reversed**; hashes from `got:`, and the vendored lock is byte-identical to the build's
+- The stable `pinnedRev` `0175f85` → `1e85409`: the cost is that the old preset format no longer ships, so 0.1.x users fetch that rev themselves (still fetchable)
+- README version claims had rotted in **four places** (`dsh-alpha` two generations behind, `ruyi stable` one, each across four languages) — a new assertion pins them, counter-proof verified
+- The `docs/*/dsh.md` plugin list now says: alpha has two rows more than stable, and copying them into stable hits a hard failure
+
+| Commit | Description |
+|------|------|
+| `b17bd73` | chore: the stable channel's pinnedRev moves forward (`0175f85` → `1e85409`) |
+| `bf0b9ac` | chore(dsh-alpha): the channel follows npm `alpha` again |
+| `52fcdbc` | fix(docs): README version claims corrected, plus an assertion for them |
+
+## 2026-10-08T23:03:29+09:00
+
+**Summary**: chore(pkgs): mcp-searxng 2.5.1 and codewhale 0.10.1 — structural change handling and a CI smoke-test gap closed
+
+- mcp-searxng: a pure dependency/security patch, mechanical replacement suffices; the artifact really answers the handshake with 2.5.1
+- codewhale 0.10.1 **collapsed two executables into one** — hash-style assertions cannot see this kind of structural change; the **build** was what shouted; postInstall rewritten per upstream
+- Handled along with it: upstream renamed to `codewhale-hq/Codewhale`, the now-dead rquickjs riscv64 workaround removed, and two pre-existing doc errors corrected
+- **A new smoke test, enabled on all three architectures**: the riscv64 artifact had never been run in CI; four assertions including a counter-proof, and CI has really run it
+- Every other upstream and all three pinned-SHA actions are current
+
+| Commit | Description |
+|------|------|
+| `1645aba` | chore(pkgs): mcp-searxng 2.5.0 → 2.5.1 |
+| `bbe7e7a` | ci(codewhale): smoke-test enabled on all three architectures |
+| `19cc335` | chore(pkgs): codewhale 0.10.0 → 0.10.1 (upstream rename and the riscv64 structural change) |
+
 ## 2026-10-08T16:53:41+09:00
 
 **Summary**: dsh-api-balance re-pin — rev `95fec42` → `43f4d18` (the sub-repo change lives in its [maintenance log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-08t1638010900): the keyboard guard now blocks hard)
