@@ -12,5 +12,9 @@ jobs:
     with:
       package: "codewhale"
       runs-on: "ubuntu-latest"
+      # 构建后**真的跑一遍产物**（develop/qemu-smoke-tests/codewhale.sh，本地与 CI 同一份）。
+      # 2026-10-08 补：此前 riscv64 的产物在 CI 上从没被运行过，而本包恰恰出过
+      # 「上游把两个可执行文件合成一个」这类**只有构建或运行才会发现**的结构性变更。
+      smoke-test: true
       riscv64-cross: false
     secrets: inherit
