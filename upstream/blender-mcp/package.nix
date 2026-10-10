@@ -6,13 +6,27 @@
 #
 # 它留在仓库里而不是 /tmp，是为了让 dry-run 的产物可复核、可被自检盯住。
 # 运行方式见同目录的 `build.sh`；提交计划见 `pr-body.md`。
+#
+# ── 一个曾经写错、后被实测推翻的地方（2026-10-10）───────────────────────
+# 这里本来有一个 `blender ? null` 参数与配套的 postFixup，想「让插件找到 Blender」。
+# 意图是：默认 null ⇒ 不拉 Blender 进闭包，想要的人自己 `.override { blender = …; }`。
+#
+# **实测推翻了那个意图。** 用 `callPackage { }`（不带任何参数）调用时：
+#   · `blender` **仍然被自动绑定**（它存在于 nixpkgs，callPackage 就填），
+#     于是 postFixup 真的执行、**整个 Blender 闭包进了每个消费者的路径**；
+#   · 只有显式传 `blender = null` 才不绑（两种调用的 drvPath 不同，实测确认）。
+# 也就是说 `? null` 这个默认**挡不住自动绑定**，它只掩盖了发生的事情。
+#
+# 所以现在把那个参数与 postFixup **整个删掉**：
+# 上游本来是按 PATH 找 `blender` 的，不需要我们绑定；
+# 需要固定路径的人设环境变量 `BLENDER_PATH` 即可。
+# 这样这个包零 Blender 依赖——判据：drv 的引用里不再有 blender。
 
 {
   lib,
   python3Packages,
   fetchFromGitea,
   makeWrapper,
-  blender ? null,
   nix-update-script,
 }:
 
@@ -95,12 +109,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     addonDir="$out/share/blender/scripts/addons/blender_mcp_addon"
     mkdir -p "$(dirname "$addonDir")"
     cp -r ../addon/blender_mcp_addon "$addonDir"
-  '';
-
-  # 可选：让插件知道 Blender 在哪（上游默认按 PATH 找）。
-  postFixup = lib.optionalString (blender != null) ''
-    wrapProgram "$out/bin/blender-mcp" \
-      --set-default BLENDER_PATH "${blender}/bin/blender"
   '';
 
   pythonImportsCheck = [ "blmcp" ];

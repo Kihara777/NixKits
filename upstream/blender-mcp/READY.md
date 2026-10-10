@@ -32,14 +32,44 @@ _最后核验：2026-10-10_
 
 ### 关于参数与死代码（2026-10-10 补）
 
-`package.nix` 的六个参数（`lib`、`python3Packages`、`fetchFromGitea`、`makeWrapper`、
-`blender`、`nix-update-script`）**全部在正文里被用到**，没有声明未用的死参数。
+`package.nix` 的五个参数（`lib`、`python3Packages`、`fetchFromGitea`、`makeWrapper`、
+`nix-update-script`）**全部在正文里被用到**，没有声明未用的死参数。
 Nix 对死参数不报警，所以这一条只能自己查。
+
+（原先还有第六个参数 `blender ? null` 与配套 `postFixup`，已整个删除——
+理由见下一条。）
 
 **查的时候注意量具本身**：我用文本正则连撞两次假警报——
 一次把参数表切错位置（于是「五个参数全死」），
 一次让 `\bblender\b` 命中 **`blender-mcp`** 里的 `blender`（于是「引用 12 次」）。
 可靠的做法是**从求值结果读参数名**（`builtins.functionArgs`），而不是读源码文本。
+
+
+### 一个被实测推翻的设计：「`? null` 能挡住自动绑定」（2026-10-10）
+
+草稿里本来有一个 `blender ? null` 参数与 postFixup，想「让插件找到 Blender」，
+**意图是默认 null ⇒ 不把 Blender 拉进闭包**。
+
+**实测推翻了它。** `callPackage { }`（不带任何参数）调用时：
+
+| 调用方式 | `blender` 是否被绑 | postFixup 里有 wrapProgram | drv 里有 blender |
+|---|---|---|---|
+| `callPackage { }` | **是**（自动绑定） | 有 | **1** |
+| `callPackage { blender = null; }` | 否 | 无 | 0 |
+
+也就是说：**参数签名里的默认值挡不住 `callPackage` 的自动绑定**——
+`blender` 存在于 nixpkgs，`callPackage` 就填它，`functionArgs` 也照样把它列成可绑定参数。
+那个 `? null` 只是**掩盖**了实际发生的事。
+
+处置：把参数与 postFixup **整个删掉**。上游本来按 PATH 找 `blender`，
+需要固定路径的人设环境变量 `BLENDER_PATH` 即可。
+
+**判据（前后可对照）**：
+
+```
+旧 drv 2hglksab… : drv 引用里 blender-5 = 1，产物 wrapper 有 BLENDER_PATH
+新 drv 93mpjjfr… : drv 引用里 blender-5 = 0，产物 wrapper 无 BLENDER_PATH
+```
 
 ---
 

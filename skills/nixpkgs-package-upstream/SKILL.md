@@ -409,6 +409,34 @@ nix-instantiate --eval --json --strict --expr '
 > 这属于「仪器类的错」：我要判的是包，结果两次都在判我自己的正则。
 > **判据的灵敏度要拿对照臂试**——比如故意把参数名换成它自己加个后缀，看它会不会漏。
 
+**⑪ 参数签名里的默认值挡不住 `callPackage` 的自动绑定——想「可选」就得删掉参数。**
+
+先例：为了让包里某个可执行文件能找到可选的上游程序，写了
+
+```nix
+{ blender ? null, ... }:
+...
+postFixup = lib.optionalString (blender != null) ''
+  wrapProgram "$out/bin/x" --set-default X_PATH "${blender}/bin/x"
+'';
+```
+
+**意图**是「默认 null ⇒ 不把那个程序拉进闭包」。**实测推翻**：
+
+| 调用方式 | 参数是否被绑 | 闭包里有它 |
+|---|---|---|
+| `callPackage { }` | **是** | **有** |
+| `callPackage { blender = null; }` | 否 | 无 |
+
+**`callPackage` 只看「这个名字在它自己的作用域里存不存在」**——
+存在就填，参数签名里写没写默认值它不管（`builtins.functionArgs` 也照样把它列成可绑定）。
+
+所以「可选依赖」在 nixpkgs 里的正确形态是**根本不要那个参数**：
+不写它，需要的人自己设环境变量（或自己 `.override` 一份）。
+写一个 `? null` 只会**掩盖**实际发生的事，还会让审阅者以为它真是可选的。
+
+**判据**：`nix-store -q --references <drv> | grep -c <那个程序>`，删前删后各跑一次。
+
 ---
 
 ## 仓库适配层
