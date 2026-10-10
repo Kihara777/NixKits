@@ -93,8 +93,8 @@ GPL-3.0-or-later`, and the add-on's `blender_manifest.toml` declares
 https://projects.blender.org/lab/blender_mcp/issues/59 and added a LICENSE
 file to `main` in commit `dbbf836ad` (2026-09-29, after the v1.0.3 tag).
 
-This supersedes #572360, which I opened from the wrong account. The review of
-that PR raised three issues, all addressed here:
+This supersedes #572360, which was submitted from the wrong account. The review
+of that PR raised three issues, all addressed here:
 
 - the preparation notes referring to another repository, and to files that are
   not part of this PR, have been removed;
