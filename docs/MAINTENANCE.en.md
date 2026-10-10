@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T12:59:05+09:00
+**Summary**: nixpkgs upstream contribution — feasibility assessment, two skills, and a blender-mcp dry run
+
+- All 13 packages checked: only `mcp-searxng` is already in nixpkgs; `dsh` is called `deepseek-harness` there and already has three in-flight PRs
+- Entry requirements audited: by-name, `nixpkgs-vet`'s 12 checks + 3 ratchets, and the `Assisted-by:` format the AI policy requires
+- Added the general skill `nixpkgs-package-upstream` and the adapter `nixkits-package-upstream` (four-language doc pages and index in sync)
+- Dry run: all four criteria for blender-mcp pass (including a **real handshake**), and the counterexamples fire
+- Corrected a stale note about ruyi: that overlay never had a host, and nixpkgs **never** shipped ruyi
+
+| Commit | Description |
+|------|------|
+| `d7ec6ff` | docs(upstream): 可行性评估与入场要求审计 |
+| `27be3f3` | feat(skills): 新增两个上游贡献技能 |
+| `4a2db07` | feat(upstream): blender-mcp dry-run 产物与判据自证 |
+| `c6476c2` | fix(docs): 更正 ruyi 的过期自述 |
+
 ## 2026-10-08T23:25:20+09:00
 
 **Summary**: chore(dsh): the alpha channel follows `alpha`, the stable pin moves forward, README version claims get an assertion

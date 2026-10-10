@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T12:59:05+09:00
+
+**摘要**：nixpkgs 上游贡献 — 可行性评估、两个技能与 blender-mcp 的 dry-run
+
+- 13 包取证：仅 `mcp-searxng` 已在 nixpkgs 里；`dsh` 在那边叫 `deepseek-harness`，已有三个在途 PR
+- 审计入场要求：by-name、`nixpkgs-vet` 的 12 检查 + 3 棘轮、AI 政策的 `Assisted-by:` 格式
+- 新增通用技能 `nixpkgs-package-upstream` 与适配层 `nixkits-package-upstream`（四语文档页与索引同步）
+- dry-run：blender-mcp 的四层判据全过（含**握手实跑**），反证已撞响
+- 更正 ruyi 的过期自述：该 overlay 本就无宿主，nixpkgs **从未**有过 ruyi
+
+| 提交 | 说明 |
+|------|------|
+| `d7ec6ff` | docs(upstream): 可行性评估与入场要求审计 |
+| `27be3f3` | feat(skills): 新增两个上游贡献技能 |
+| `4a2db07` | feat(upstream): blender-mcp dry-run 产物与判据自证 |
+| `c6476c2` | fix(docs): 更正 ruyi 的过期自述 |
+
 ## 2026-10-08T23:25:20+09:00
 
 **摘要**：chore(dsh): alpha 通道改跟 `alpha`、stable pin 前移，README 自述补判据

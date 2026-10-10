@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T12:59:05+09:00
+**摘要**：nixpkgs 上流貢献 — 実現可能性評価、二技能、blender-mcp dry-run
+
+- 13 包 各一件 確認：既 nixpkgs 内在 唯 `mcp-searxng`。`dsh` 先方 `deepseek-harness` 称呼、在途 PR 既三本
+- 参加要件監査：by-name、`nixpkgs-vet` 12 検査 + 3 棘輪、AI 政策 要求 `Assisted-by:` 格式
+- 汎用技能 `nixpkgs-package-upstream` 適配層 `nixkits-package-upstream` 追加（四言語文書頁 索引 同期）
+- dry-run：blender-mcp 四層判据 全通過（**握手実走** 含）、反例 撞響済
+- ruyi 陳腐化自述 更正：彼 overlay 元来 宿主 無、nixpkgs ruyi **一度** 提供 無
+
+| 提交 | 説明 |
+|------|------|
+| `d7ec6ff` | docs(upstream): 可行性评估与入场要求审计 |
+| `27be3f3` | feat(skills): 新增两个上游贡献技能 |
+| `4a2db07` | feat(upstream): blender-mcp dry-run 产物与判据自证 |
+| `c6476c2` | fix(docs): 更正 ruyi 的过期自述 |
+
 ## 2026-10-08T23:25:20+09:00
 
 **摘要**：chore(dsh): alpha 通道 `alpha` 追従、stable pin 前進、README 版自述 判定 追加
