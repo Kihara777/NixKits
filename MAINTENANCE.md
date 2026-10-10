@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:34:07+09:00
+
+**摘要**：上游贡献首次落地 — blender-mcp 提交 nixpkgs（PR #572360）
+
+- 两个 commit（`maintainers: add kihara777` → `blender-mcp: init at 1.0.3`），+151 −0 / 2 文件
+- 上游 CI **17 pass / 0 失败**，含 `Lint / nixpkgs-vet` 与 `Lint / treefmt`——此前只推理过的棘轮与格式，现由上游实测确认
+- author/committer 改用 GitHub noreply：首次建的 commit 带了账号真实邮箱，与「维护者条目不写邮箱」相冲，已删分支重做
+- 披露的模型名改为 `deepseek-flash`，与 commit trailer、PR 正文三处一致
+
+| 提交 | 说明 |
+|------|------|
+| `9b3fc25` | docs(upstream): 记录 PR #572360 开出与两处提交时的更正 |
+
 ## 2026-10-10T14:21:32+09:00
 
 **摘要**：blender-mcp 删掉 `blender` 可选参数 — 实测发现它挡不住 `callPackage` 的自动绑定

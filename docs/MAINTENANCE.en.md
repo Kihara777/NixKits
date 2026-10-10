@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:34:07+09:00
+
+**Summary**: first upstream contribution lands — blender-mcp submitted to nixpkgs (PR #572360)
+
+- PR [#572360](https://github.com/NixOS/nixpkgs/pull/572360): two commits, `maintainers: add kihara777` and `blender-mcp: init at 1.0.3`, +151 −0 across 2 files
+- Upstream CI is **17 pass / 0 fail**, including `Lint / nixpkgs-vet` and `Lint / treefmt` — the ratchet and the formatting that were previously only reasoned about are now measured upstream
+- The author/committer was switched to GitHub's noreply address: the first attempt carried the account's real email, which would have contradicted the decision to omit an email from the maintainer entry, so the branch was deleted and rebuilt
+- The disclosed model name became `deepseek-flash` (what the runtime actually reports), consistent across the commit trailers and the PR body
+
+| Commit | Description |
+|------|------|
+| `9b3fc25` | docs(upstream): record PR #572360 and the two corrections made at submission |
+
 ## 2026-10-10T14:21:32+09:00
 
 **Summary**: blender-mcp — the optional `blender` argument removed, after measuring that it does not block `callPackage` auto-binding

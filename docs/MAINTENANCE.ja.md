@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:34:07+09:00
+
+**概要**：上流貢献の初回着地 — blender-mcp を nixpkgs へ提出（PR #572360）
+
+- PR [#572360](https://github.com/NixOS/nixpkgs/pull/572360)：`maintainers: add kihara777` と `blender-mcp: init at 1.0.3` の二コミット、+151 −0 / 二ファイル
+- 上流 CI は **17 pass / 0 fail**、`Lint / nixpkgs-vet` と `Lint / treefmt` を含む——これまで推理のみだった棘輪と格式が、今は上流の実測で確認された
+- 提出時に author/committer を GitHub の noreply アドレスへ変更：最初のコミットはアカウントの実メールを持ち、「維護者条目にメールを書かない」決定と衝突するため、分岐を削除して作り直した
+- 披露の模型名は `deepseek-flash`（実行時の実際の報告）とし、commit trailer と PR 正文の三箇所で一致させた
+
+| コミット | 説明 |
+|------|------|
+| `9b3fc25` | docs(upstream): PR #572360 の着地と提出時の二点の更正を記録 |
+
 ## 2026-10-10T14:21:32+09:00
 
 **概要**：blender-mcp — 任意引数 `blender` を削除。`callPackage` の自動束縛を止められないと実測
