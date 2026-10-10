@@ -40,6 +40,7 @@ Assisted-by: DeepSeek Harness (deepseek-flash)
 
 ```nix
   grg41 = {
+    email = "gr@g41.moe";
     github = "GrG41";
     githubId = 152935465;
     name = "Kitsunome";
@@ -60,11 +61,17 @@ Assisted-by: DeepSeek Harness (deepseek-flash)
 |---|---|
 | 提交账号 | `GrG41` |
 | author / committer | `Kitsunome <152935465+GrG41@users.noreply.github.com>` |
-| 维护者条目 | `grg41` / `githubId 152935465` |
+| 维护者条目 | `grg41` / `githubId 152935465` / `email gr@g41.moe` |
 | 包内引用 | `maintainers = [ lib.maintainers.grg41 ];` |
 
 **noreply 地址的依据是 `DEC-011` 原文**（不是我拼的）：
 「提交身份 `Kitsunome <152935465+GrG41@users.noreply.github.com>`」。
+
+> **`email` 与 commit 身份刻意分开**：commit 的 author/committer 用 `DEC-011` 记的
+> **noreply** 形式（身份决议的原文，也让 commit 不带真实地址）；
+> `gr@g41.moe` 按狐莉 2026-10-10 的指定，只写进 **nixpkgs 维护者条目**——
+> 那是用来联系维护者的字段。
+> **若你要 commit 也用 `gr@g41.moe`，说一声我改。**
 
 ---
 
@@ -175,7 +182,7 @@ gh api user --jq .login          # 期望 GrG41
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `grg41` 条目可读 | ✅ `{ github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
+| `grg41` 条目可读 | ✅ `{ email = "gr@g41.moe"; github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
 | **包真的能引用到它** | ✅ 反证：`before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt（两份） | ✅ 均通过 |

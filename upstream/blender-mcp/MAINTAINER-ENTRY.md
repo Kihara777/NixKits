@@ -7,6 +7,7 @@
 
 ```nix
   grg41 = {
+    email = "gr@g41.moe";
     github = "GrG41";
     githubId = 152935465;
     name = "Kitsunome";
@@ -29,23 +30,21 @@
 | `github` | `GrG41` | `gh api users/GrG41` → `login=GrG41 id=152935465 created=2023-12-05` |
 | `githubId` | `152935465` | 同上；审阅者会核 `api.github.com/user/152935465` 的 `login` 是否吻合 |
 | `name` | `Kitsunome` | **`DEC-011` 原文的提交身份**：`Kitsunome <152935465+GrG41@users.noreply.github.com>` |
+| `email` | `gr@g41.moe` | 狐莉 2026-10-10 指定：可写入维护者信息 |
 
 **`name` 这一格请狐莉过目**：GitHub 显示名是「戦術人形Ｇ４１」，
 而 `DEC-011` 记的提交身份名是 `Kitsunome`。我取了后者（因为它是身份决议的原文），
 但这是公开字符串，你说了算。
 
-## 为什么没有 `email`
+## 关于 `email`
 
-`maintainer-list.nix` 的必填项是 `name` / `github` / `githubId` 三项，`email` 可选。
-实测：**488 条**既有条目没有 `email` 而字段完整，例如
+`maintainer-list.nix` 的必填项是 `name` / `github` / `githubId` 三项，`email` 可选
+（实测 **488 条**既有条目没有它而字段完整）。此处按狐莉 2026-10-10 的指定填入
+`gr@g41.moe`。
 
-```nix
-  _0x2B = {
-    name = "0x2B";
-    github = "0x2B-bin";
-    githubId = 49249957;
-  };
-```
+> **注意 `email` 与 commit 身份是两回事**：commit 的 author/committer 用
+> `DEC-011` 记的 `Kitsunome <152935465+GrG41@users.noreply.github.com>`（noreply），
+> 而这里的 `email` 是 nixpkgs 用来联系维护者的地址。
 
 ## 字段顺序
 
@@ -80,7 +79,7 @@
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `grg41` 条目可读 | ✅ `{ github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
+| `grg41` 条目可读 | ✅ `{ email = "gr@g41.moe"; github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
 | **包能引用到它**（带反证） | ✅ `before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt 两份 | ✅ |
