@@ -107,7 +107,9 @@ AI コーディングアシスタント向け：
 | news-three-elements | 本物の通信社報道形式でロシア風速報を捏造——「報道三要素」とは必ず揃う三人の主人公、バランニコフ・ユディンツェフ・ブヤノフを指す（遊技機構ネタ + 素材優先の拒否サービス） | [docs/ja/skills/news-three-elements.md](ja/skills/news-three-elements.md) |
 | nix-flake-update-check | **汎用**：任意の nix flake リポジトリの上流更新をチェックして自動更新（ビルダー別 hash フロー / flake.lock / パッチ内蔵版 / nixpkgs ドリフトの罠） | [docs/ja/skills/nix-flake-update-check.md](ja/skills/nix-flake-update-check.md) |
 | nixkits-check-updates | NixKits 更新アダプタ層：四言語ドキュメント、プラグイン一覧、メンテナンスログ、過去の事故教訓（nix-flake-update-check に依存） | [docs/ja/skills/nixkits-check-updates.md](ja/skills/nixkits-check-updates.md) |
+| nixkits-package-upstream | NixKits 上流貢献アダプタ層：13 包の実現可能性台帳、許諾缺口の処置、四言語同期（nixpkgs-package-upstream に依存） | [docs/ja/skills/nixkits-package-upstream.md](ja/skills/nixkits-package-upstream.md) |
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
+| nixpkgs-package-upstream | **汎用**：自前で梱包したソフトウェアを上流 nixpkgs へ提出（評価 → 監査 → dry-run → 実施。AI 貢献政策と by-name 要求を含む） | [docs/ja/skills/nixpkgs-package-upstream.md](ja/skills/nixpkgs-package-upstream.md) |
 | nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/ja/skills/recover-nixos-config.md](ja/skills/recover-nixos-config.md) |
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/ja/skills/translate-pseudocn.md](ja/skills/translate-pseudocn.md) |

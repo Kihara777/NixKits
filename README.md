@@ -109,7 +109,9 @@ nix registry add nixkits github:Kihara777/NixKits
 | news-three-elements | 以真实通讯社格式编造俄式快讯——「新闻三要素」指巴兰尼科夫、尤丁采夫、布亚诺夫三位必须到齐的主角（游戏机制梗 + 素材优先的拒绝服务话术） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
 | nix-flake-update-check | **通用**：检查任意 nix flake 仓库的上游软件更新并升级（包型分流 hash 流程 / flake.lock / 补丁内版本 / nixpkgs 漂移陷阱） | [docs/zh/skills/nix-flake-update-check.md](docs/zh/skills/nix-flake-update-check.md) |
 | nixkits-check-updates | NixKits 更新适配层：四语文档、插件清单、维护日志、历史事故教训（依赖 nix-flake-update-check） | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |
+| nixkits-package-upstream | NixKits 上游贡献适配层：13 包的可行性台账、许可缺口处置、四语同步（依赖 nixpkgs-package-upstream） | [docs/zh/skills/nixkits-package-upstream.md](docs/zh/skills/nixkits-package-upstream.md) |
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
+| nixpkgs-package-upstream | **通用**：把自建软件包提交到上游 nixpkgs（评估 → 审计 → dry-run → 实操；含 AI 贡献政策与 by-name 要求） | [docs/zh/skills/nixpkgs-package-upstream.md](docs/zh/skills/nixpkgs-package-upstream.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |
 | translate-pseudocn | 偽中国語翻译（日语假名剥离 + 语序转换） | [docs/zh/skills/translate-pseudocn.md](docs/zh/skills/translate-pseudocn.md) |
