@@ -97,7 +97,7 @@ nixkits.ruyi.venvs.riscv = {
 
 NixKits 包版 `patches/ruyi-nixos-compat.patch` **内蔵**、NixOS 上実行時非互換性透過処理。修正 `packages/ruyi/ruyi.nix` 組込、stable / beta / alpha 三 channel 共用——**overlay 設定 不要**、導入 即 有効。
 
-> 経緯：此修正 以前 overlay `ruyi-nixos-compat` 依 **nixpkgs `ruyi`** 適用。後 nixpkgs `ruyi` 包 削除、overlay 宿主 失、flake 包 與 NixOS 模組 読 不能（自前 被 devShell 限定 有効）。包内 `patches = [...]` 宣言 依、「文書 含 述、実際 有効 非」不一致 解消。
+> 経緯：此修正 以前 overlay `ruyi-nixos-compat` 依 適用。**此処 以前「nixpkgs `ruyi` 適用、後 nixpkgs 此包 削除」記載——2026-10-10 取证 之 覆**：nixpkgs ruyi **一度 提供 無**（by-name `ru/` 分片 無、commit 検索 零条、issue/PR 検索 零条、Discourse 検索 零条）。実際 状況 此 overlay 元来 宿主 無、自前 被 devShell 限定 有効。包内 `patches = [...]` 宣言 依、「文書 含 述、実際 有効 非」不一致 解消。
 
 **機能**
 - **動的連結器転送**：予構築 RISC-V 工具鎖二進 `/lib64/ld-linux-x86-64.so.2` 期待、NixOS 当経路不存在。修正 NixOS `ld.so` 介実行自動転送。

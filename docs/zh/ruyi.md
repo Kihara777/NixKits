@@ -96,7 +96,7 @@ nixkits.ruyi.venvs.riscv = {
 
 NixKits 打包版本**内置**补丁 `patches/ruyi-nixos-compat.patch`，在 NixOS 下透明处理运行时不兼容。补丁已并入 `packages/ruyi/ruyi.nix`，由 stable / beta / alpha 三通道共用 —— **无需任何 overlay 配置**，装上即生效。
 
-> 历史沿革：该补丁原先经 overlay `ruyi-nixos-compat` 挂载到 **nixpkgs 的 `ruyi`** 上。nixpkgs 后续移除了 `ruyi` 包，overlay 因而失去宿主 —— flake 包与 NixOS 模块都读不到它（只有 devShell 自己套壳才生效）。现改为包内直接 `patches = [...]`，消除了「文档声称包含、实际未生效」的失配。
+> 历史沿革：该补丁原先经 overlay `ruyi-nixos-compat` 挂载。**这里曾写着「挂载到 nixpkgs 的 `ruyi` 上、后来 nixpkgs 移除了该包」——2026-10-10 的取证推翻了它**：nixpkgs **从未提供过** ruyi（by-name 的 `ru/` 分片里没有、commit 搜索 0 条、issue/PR 搜索 0 条、Discourse 搜索 0 条）。真实的状况是那条 overlay 本来就没有宿主，只有 devShell 自套壳才生效。现改为包内直接 `patches = [...]`，消除了「文档声称包含、实际未生效」的失配。
 
 **功能**
 - **动态链接器重定向**：预编译 RISC-V 工具链二进制期望 `/lib64/ld-linux-x86-64.so.2`，NixOS 不存在该路径。补丁自动以 NixOS `ld.so` 重定向执行。

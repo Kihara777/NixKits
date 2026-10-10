@@ -97,7 +97,7 @@ nixkits.ruyi.venvs.riscv = {
 
 NixKitsのパッケージバージョンは`patches/ruyi-nixos-compat.patch`を**内蔵**しており、NixOS上でのランタイム非互換性を透過的に処理する。パッチは`packages/ruyi/ruyi.nix`に組み込まれ、stable / beta / alphaの三チャネルで共有される——**overlayの設定は不要**で、インストールすればそのまま有効になる。
 
-> 経緯：このパッチは以前、overlay`ruyi-nixos-compat`によって**nixpkgsの`ruyi`**に適用されていた。その後nixpkgsが`ruyi`パッケージを削除したため、overlayは宿主を失い、flakeパッケージもNixOSモジュールもこれを読めなくなった（自前で被せていたdevShellのみが有効）。パッケージ内で`patches = [...]`を宣言することで、「ドキュメントは含むと述べているが実際には効いていない」という不一致を解消した。
+> 経緯：このパッチは以前、overlay`ruyi-nixos-compat`によって適用されていた。**ここには以前「nixpkgsの`ruyi`に適用され、その後nixpkgsが`ruyi`パッケージを削除した」と書かれていた——2026-10-10の証拠収集がこれを覆した**：nixpkgsはruyiを**一度も提供していない**（`pkgs/by-name`の`ru/`分片に無し、commit検索0件、issue/PR検索0件、Discourse検索0件）。実際にはそのoverlayはそもそも宿主を持たず、自前で被せていたdevShellのみが有効だった。パッケージ内で`patches = [...]`を宣言することで、「ドキュメントは含むと述べているが実際には効いていない」という不一致を解消した。
 
 **機能**
 - **動的リンカーリダイレクト**：プリビルドのRISC-Vツールチェーンバイナリは`/lib64/ld-linux-x86-64.so.2`を期待するが、NixOSにはこのパスが存在しない。パッチはNixOSの`ld.so`を介して実行を自動的にリダイレクトする。

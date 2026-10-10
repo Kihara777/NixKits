@@ -39,10 +39,14 @@ python.pkgs.buildPythonApplication {
   # GCC 子进程（cc1/as/collect2）的 ELF interpreter，以及 console_scripts
   # 包装下 argv0 丢失的问题。
   #
-  # 历史上该补丁经 overlay `ruyi-nixos-compat` 挂到 **nixpkgs 的 ruyi** 上；
-  # 但 nixpkgs 已不再提供 ruyi 包，overlay 因此失去宿主（flake 包与模块都
-  # 读不到它）。现在直接并入包定义，成为三通道（stable/beta/alpha）共用的
-  # 唯一来源，不再依赖外部 overlay。
+  # 历史上该补丁经 overlay `ruyi-nixos-compat` 挂载。
+  #
+  # ⚠️ 这里曾写着「挂到 **nixpkgs 的 ruyi** 上，而 nixpkgs 已不再提供该包」——
+  # 2026-10-10 的取证推翻了它：**nixpkgs 从未提供过 ruyi**
+  # （`pkgs/by-name` 的 `ru/` 分片里没有、commit 搜索 0 条、issue/PR 搜索 0 条、
+  # Discourse 搜索 0 条）。那条 overlay 本来就没有宿主。
+  # 现在直接并入包定义，成为三通道（stable/beta/alpha）共用的唯一来源，
+  # 不再依赖外部 overlay。
   patches = [
     ../../patches/ruyi-nixos-compat.patch
   ];
