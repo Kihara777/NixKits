@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:48:29+09:00
+
+**Summary**: the draft aligned with the existing OBS plugins in nixpkgs, and a real defect found
+
+- Pulled **all 54** OBS plugin definitions from current master and measured the conventions rather than generalising from one or two samples
+- **Real defect**: upstream's `CMakePresets.json` turns on `ENABLE_FRONTEND_API` while `CMakeLists.txt` defaults it to OFF, and we only passed `ENABLE_QT`; without it `NEEDED` lacks `libobs-frontend-api.so.30` and the `.so` is a different file; **our own package had the same defect and is fixed too**, leaving the two `.so` files byte-identical
+- Aligned with the statistics: `platforms` now uses `inherit (obs-studio.meta) platforms` (30/54) and `maintainers` uses `with lib.maintainers; [ … ]` (50/54)
+- Confirmed `dontWrapQtApps` (17/54, exactly the Qt users) and "rm obs-plugins only" (17/54) already matched
+
+| Commit | Description |
+|------|------|
+| `450ff40` | fix(upstream): aligned with existing OBS plugin conventions, added the missing ENABLE_FRONTEND_API |
+
 ## 2026-10-10T15:38:10+09:00
 
 **Summary**: the obs draft aligned with current master; the disclosure model name corrected

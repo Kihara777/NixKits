@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:48:29+09:00
+
+**概要**：nixpkgs 既存の OBS プラグイン規約に草稿を整合、実欠陥を一件発見
+
+- 現行 master の OBS プラグイン**全 54 件**を取得して統計を取った（一、二件の見本から一般化しない）
+- **実欠陥**：上流 `CMakePresets.json` の template preset は `ENABLE_FRONTEND_API` を有効にするが `CMakeLists.txt` の既定は OFF で、当方は `ENABLE_QT` のみ渡していた；無効時は `NEEDED` に `libobs-frontend-api.so.30` が無く `.so` も別物；**自倉のパッケージにも同じ欠陥があり併せて修正**、修正後は両者の `.so` がバイト同一
+- 統計に合わせて：`platforms` は `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` は `with lib.maintainers; [ … ]`（50/54）
+- `dontWrapQtApps`（17/54 = Qt 使用の 17 件）と「rm obs-plugins のみ」（17/54）は元から規約どおりと確認
+
+| コミット | 説明 |
+|------|------|
+| `450ff40` | fix(upstream): 既存 OBS プラグイン規約に整合、欠落していた ENABLE_FRONTEND_API を追加 |
+
 ## 2026-10-10T15:38:10+09:00
 
 **概要**：obs 草稿を現行 master に整合；披露の模型名を更正

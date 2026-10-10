@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T15:48:29+09:00
+
+**摘要**：nixpkgs 既存 OBS 插件 規約 草稿 整合、実欠陥 一件 発見
+
+- 現行 master OBS 插件 **全 54 件** 取得 統計 実施（一二件 見本 一般化 不）
+- **実欠陥**：上流 `CMakePresets.json` template preset `ENABLE_FRONTEND_API` 有効化、`CMakeLists.txt` 既定 OFF、当方 `ENABLE_QT` 限 渡。無効時 `NEEDED` `libobs-frontend-api.so.30` 無、`.so` 別物。**自倉 包 同一欠陥 併 修正**、修正後 両者 `.so` 字節同一
+- 統計 合：`platforms` `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` `with lib.maintainers; [ … ]`（50/54）
+- `dontWrapQtApps`（17/54 = Qt 使用 17 件）「rm obs-plugins 限」（17/54）元 規約通 確認
+
+| 提交 | 説明 |
+|------|------|
+| `450ff40` | fix(upstream): 既存 OBS 插件 規約 整合、欠落 ENABLE_FRONTEND_API 追加 |
+
 ## 2026-10-10T15:38:10+09:00
 
 **摘要**：obs 草稿 現行 master 整合；披露 模型名 更正

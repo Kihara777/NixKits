@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:48:29+09:00
+
+**摘要**：按 nixpkgs 现有 OBS 插件规范对齐草稿，查出一处真缺陷
+
+- 把当前 master 上**全部 54 个** OBS 插件拉下来做统计，不靠一两个样本推断
+- **真缺陷**：上游 `CMakePresets.json` 开了 `ENABLE_FRONTEND_API`，而 `CMakeLists.txt` 默认 OFF，我们只开了 `ENABLE_QT`；不开时 `NEEDED` 里没有 `libobs-frontend-api.so.30`；**我们仓里的包有同一缺陷，一并修了**
+- 按统计对齐：`platforms` 改用 `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` 改用 `with lib.maintainers; [ … ]`（50/54）
+
+| 提交 | 说明 |
+|------|------|
+| `450ff40` | fix(upstream): 按现有 OBS 插件规范对齐，并修掉缺失的 `ENABLE_FRONTEND_API` |
+
 ## 2026-10-10T15:38:10+09:00
 
 **摘要**：obs 草稿对齐当前 master；披露模型名更正
