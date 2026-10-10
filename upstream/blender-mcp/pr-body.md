@@ -158,10 +158,15 @@ gh api user --jq .login          # 期望 GrG41
 |---|---|---|---|
 | 1 | `maintainers = [ ]` 空着 | `pkgs/README.md:516`「must be set for new packages」 | `maintainers = [ lib.maintainers.grg41 ];` |
 | 2 | 账户用错 | `DEC-011` | GrG41，提交身份按 DEC-011 原文 |
+| 3 | **包定义里混着我们自己的内部注释** | 审阅者会看到 `packages/blender-mcp.nix`、`build.sh`、`pr-body.md` 这些**在 nixpkgs 里不存在**的路径，外加一段我们内部的 `blender ? null` 决策史 | 已重写为面向审阅者的注释（142 → 111 行） |
 
-**顺带修掉的第三处**：`commit-message.txt` 里的反证数字写成「71 errors」（真值 15 failed + 117 McpError）
+**顺带修掉的第四处**：`commit-message.txt` 里的反证数字写成「71 errors」（真值 15 failed + 117 McpError）
 与旧模型名 `DeepSeek V4 Flash`——**这两处在已发布的 #572360 里也是错的**，
 因为我把更正的副本留在了 `/tmp`、没写回源文件。
+
+**第 3 处是被狐莉「给我看完整内容」这句话撞出来的。** 我此前每一轮都只核
+「能不能构建、测试过不过、判据翻不翻脸」——**从没通读一遍那份要发出去的文件本身**。
+构建不关心注释，`nixpkgs-vet` 也不关心，所以没有任何判据会响。
 
 ---
 

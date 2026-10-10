@@ -1,27 +1,3 @@
-# blender-mcp —— 待提交到上游 nixpkgs 的草稿
-#
-# 这份文件**不是**本仓的包定义。本仓生效的是 `packages/blender-mcp.nix`；
-# 这份是按 nixpkgs 规范重写的、准备提交到
-# `pkgs/by-name/bl/blender-mcp/package.nix` 的版本。
-#
-# 它留在仓库里而不是 /tmp，是为了让 dry-run 的产物可复核、可被自检盯住。
-# 运行方式见同目录的 `build.sh`；提交计划见 `pr-body.md`。
-#
-# ── 一个曾经写错、后被实测推翻的地方（2026-10-10）───────────────────────
-# 这里本来有一个 `blender ? null` 参数与配套的 postFixup，想「让插件找到 Blender」。
-# 意图是：默认 null ⇒ 不拉 Blender 进闭包，想要的人自己 `.override { blender = …; }`。
-#
-# **实测推翻了那个意图。** 用 `callPackage { }`（不带任何参数）调用时：
-#   · `blender` **仍然被自动绑定**（它存在于 nixpkgs，callPackage 就填），
-#     于是 postFixup 真的执行、**整个 Blender 闭包进了每个消费者的路径**；
-#   · 只有显式传 `blender = null` 才不绑（两种调用的 drvPath 不同，实测确认）。
-# 也就是说 `? null` 这个默认**挡不住自动绑定**，它只掩盖了发生的事情。
-#
-# 所以现在把那个参数与 postFixup **整个删掉**：
-# 上游本来是按 PATH 找 `blender` 的，不需要我们绑定；
-# 需要固定路径的人设环境变量 `BLENDER_PATH` 即可。
-# 这样这个包零 Blender 依赖——判据：drv 的引用里不再有 blender。
-
 {
   lib,
   python3Packages,
@@ -35,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.0.3";
   pyproject = true;
 
-  # nixpkgs-vet 的两条棘轮：新顶层包必须为 true，且不得回退。
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -47,31 +22,33 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-pYeByO4Oi5eyynsJhGVd1vBWXHvhGn+Y5LGit6Kazlw=";
   };
 
-  # 上游把 Python 发行版放在仓库的 `mcp/` 子目录里。
+  # The Python distribution lives in the repository's mcp/ subdirectory; the
+  # Blender add-on sits next to it in addon/ and is installed in postInstall.
   sourceRoot = "${finalAttrs.src.name}/mcp";
 
   build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # Upstream declares mcp[cli]; python-dotenv and typer come from that extra.
   dependencies = with python3Packages; [
     docutils
     mcp
     pyyaml
-    # 上游声明的是 `mcp[cli]`，这两个是该 extra 带来的。
     python-dotenv
     typer
   ];
 
-  # 测试在源树的 `tests/` 里（不在 `mcp/`），而 postPatch 跑在 sourceRoot=mcp 里，
-  # 所以路径要退一级。
+  # The test helpers build a subprocess environment by assigning PYTHONPATH
+  # rather than appending to it. Inside a virtualenv that is harmless, since
+  # the dependencies are in the interpreter's own site-packages, but outside
+  # one it discards every dependency and the server subprocess fails to start
+  # with a wall of McpError('Connection closed') and
+  # ModuleNotFoundError: No module named 'yaml'. Appending instead makes the
+  # suite pass without changing what it exercises.
   #
-  # 这里修的是上游测试自己的一个 bug：它构造子进程环境时**覆盖**了 PYTHONPATH
-  # 而不是追加（`tests/test_mcp_server.py` 与 `tests/test_tool_listing.py` 各一处）。
-  # 在 venv 里这没关系——依赖在解释器自己的 site-packages 里；
-  # 在没有 venv 的构建环境里，这一行等于把依赖整个丢掉，子进程起不来，
-  # 表现为一片 `McpError('Connection closed')` 与 `ModuleNotFoundError: No module named 'yaml'`。
-  # 用 `--replace-fail`：上游若改了这两个文件，构建当场失败而不是静默少跑测试。
+  # --replace-fail is deliberate: if upstream rewrites these lines the build
+  # fails loudly rather than silently running fewer tests.
   postPatch = ''
     substituteInPlace ../tests/test_mcp_server.py \
       --replace-fail \
@@ -88,23 +65,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-asyncio
   ];
 
-  # 上游的测试会真的把服务端当子进程起起来并查询它，所以这些测试**必须**跑：
-  # 它们验的正是这个包的核心（MCP 协议面）。关掉等于把最有价值的一层判据扔掉。
   doCheck = true;
 
-  # 测试读的是源树里的 `tests/`，而 sourceRoot 指向 `mcp/`。
+  # The tests read from the source tree's tests/, while sourceRoot points at mcp/.
   preCheck = ''
     cd ..
     export HOME="$TMPDIR"
   '';
 
-  # 这一个文件要**真实运行的 Blender 编辑器实例**（`FileNotFoundError: 'blender'`），
-  # 在构建沙箱里永远跑不了，不是修的问题。其余三个文件全跑：
-  # 实测 102 passed / 9 skipped / 0 failed。
+  # This file drives a real Blender editor instance and cannot run in a build
+  # sandbox. The remaining files do run: 102 passed, 9 skipped.
   disabledTestPaths = [ "tests/test_blender_mcp_with_blender.py" ];
 
-  # 把 Blender 插件一并装上，用户可以直接从包里取用。
-  # 它是服务端那条 TCP 连接的另一半，缺了它整个包没有意义。
+  # The add-on is the other half of the TCP connection the server opens, so
+  # ship it alongside the server.
   postInstall = ''
     addonDir="$out/share/blender/scripts/addons/blender_mcp_addon"
     mkdir -p "$(dirname "$addonDir")"
@@ -113,12 +87,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "blmcp" ];
 
-  # 自动更新：`nix-update` 支持自托管 Gitea，但它是**探测式**判断的——
-  # `is_gitea_host` 先查已知 host 列表，不在列表里的就请求
-  # `https://<host>/api/v1/settings/api`，返回 200 才算。
-  # 实测（2026-10-10）：`projects.blender.org` 该端点返回 **200**，
-  # 且 `/api/v1/repos/lab/blender_mcp/tags` 返回 `v1.0.3` 等 tag，
-  # 与 `version_prefix` 从 `tag = "v${version}"` 推出的 `v` 一致。
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -131,9 +99,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://www.blender.org/lab/mcp-server/";
     changelog = "https://projects.blender.org/lab/blender_mcp/releases/tag/v${finalAttrs.version}";
-    # 依据：add-on 的 blender_manifest.toml 声明 `SPDX:GPL-3.0-or-later`，
-    # 且 main 分支上有 GPL-3.0 的 LICENSE。注意 v1.0.3 那个 tag 里
-    # **没有** LICENSE 文件——见 pr-body.md 的「许可依据」一节。
+    # The v1.0.3 tag carries no LICENSE file, but the licence is not ambiguous:
+    # every source file has an "SPDX-License-Identifier: GPL-3.0-or-later"
+    # header, and the add-on's blender_manifest.toml declares the same. Upstream
+    # confirmed this in issue #59 and added a LICENSE file to main afterwards.
     license = lib.licenses.gpl3Plus;
     mainProgram = "blender-mcp";
     platforms = lib.platforms.all;
