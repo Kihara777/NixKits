@@ -10,7 +10,7 @@
     email = "gr@g41.moe";
     github = "GrG41";
     githubId = 152935465;
-    name = "Kitsunome";
+    name = "戦術人形Ｇ４１";
   };
 ```
 
@@ -29,12 +29,15 @@
 |---|---|---|
 | `github` | `GrG41` | `gh api users/GrG41` → `login=GrG41 id=152935465 created=2023-12-05` |
 | `githubId` | `152935465` | 同上；审阅者会核 `api.github.com/user/152935465` 的 `login` 是否吻合 |
-| `name` | `Kitsunome` | **`DEC-011` 原文的提交身份**：`Kitsunome <152935465+GrG41@users.noreply.github.com>` |
+| `name` | `戦術人形Ｇ４１` | GitHub 显示名；狐莉 2026-10-10 指定 |
 | `email` | `gr@g41.moe` | 狐莉 2026-10-10 指定：可写入维护者信息 |
 
-**`name` 这一格请狐莉过目**：GitHub 显示名是「戦術人形Ｇ４１」，
-而 `DEC-011` 记的提交身份名是 `Kitsunome`。我取了后者（因为它是身份决议的原文），
-但这是公开字符串，你说了算。
+**`name` 由狐莉 2026-10-10 定为 GitHub 显示名「戦術人形Ｇ４１」**
+（我先前提议过 `DEC-011` 的提交身份名 `Kitsunome`，她选了显示名）。
+
+**非 ASCII 名字在这个文件里有先例**：实测 **360 条**含非 ASCII，
+其中 5 条是 CJK——`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`、`AsPulse / あすぱる`。
+`nixfmt` 与 `nix-instantiate --parse` 都通过。
 
 ## 关于 `email`
 

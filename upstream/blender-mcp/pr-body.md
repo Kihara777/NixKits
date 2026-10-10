@@ -43,7 +43,7 @@ Assisted-by: DeepSeek Harness (deepseek-flash)
     email = "gr@g41.moe";
     github = "GrG41";
     githubId = 152935465;
-    name = "Kitsunome";
+    name = "戦術人形Ｇ４１";
   };
 ```
 
@@ -60,18 +60,15 @@ Assisted-by: DeepSeek Harness (deepseek-flash)
 | 项 | 值 |
 |---|---|
 | 提交账号 | `GrG41` |
-| author / committer | `Kitsunome <152935465+GrG41@users.noreply.github.com>` |
+| author / committer | `Kitsunome <gr@g41.moe>` |
 | 维护者条目 | `grg41` / `githubId 152935465` / `email gr@g41.moe` |
 | 包内引用 | `maintainers = [ lib.maintainers.grg41 ];` |
 
-**noreply 地址的依据是 `DEC-011` 原文**（不是我拼的）：
-「提交身份 `Kitsunome <152935465+GrG41@users.noreply.github.com>`」。
+**`DEC-011` 记的提交身份名是 `Kitsunome`**，邮箱部分原为 noreply；
+狐莉 2026-10-10 指定改用 `gr@g41.moe`——**commit 与维护者条目现在用同一个地址**。
 
-> **`email` 与 commit 身份刻意分开**：commit 的 author/committer 用 `DEC-011` 记的
-> **noreply** 形式（身份决议的原文，也让 commit 不带真实地址）；
-> `gr@g41.moe` 按狐莉 2026-10-10 的指定，只写进 **nixpkgs 维护者条目**——
-> 那是用来联系维护者的字段。
-> **若你要 commit 也用 `gr@g41.moe`，说一声我改。**
+> 名字部分仍是 `Kitsunome`（`DEC-011` 原文），维护者条目的 `name` 是显示名
+> 「戦術人形Ｇ４１」；两者的差别是**身份名的两种用途**，不是不一致。
 
 ---
 

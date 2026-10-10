@@ -24,14 +24,16 @@ let
     email = "gr@g41.moe";
     github = "GrG41";
     githubId = 152935465;
-    name = "Kitsunome";
+    name = "戦術人形Ｇ４１";
   };
 
   pkgs = pkgs0.extend (
     final: prev: {
       lib = prev.lib.extend (
         libFinal: libPrev: {
-          maintainers = libPrev.maintainers // { inherit grg41; };
+          maintainers = libPrev.maintainers // {
+            inherit grg41;
+          };
         }
       );
     }
