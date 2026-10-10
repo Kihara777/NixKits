@@ -6,26 +6,32 @@
 
 ---
 
-## 提交前必须先解决的两件事
+## 提交前必须处理的两件事
 
-### ① 向上游补许可依据（**先做这个**）
+### ① 许可依据：**已经查到硬证据了**（不需要另行开 issue）
 
 `v1.0.3` 这个 tag 里**没有 LICENSE 文件**（`contents/LICENSE?ref=v1.0.3` 返回 404），
 根 `readme.md` 与 `mcp/README.md` 也都不提许可。
 GPL-3.0 的 LICENSE 是 **2026-09-29** 才加进 `main` 的（提交 `dbbf836ad`），
-比 v1.0.3 晚 18 天。
+比 v1.0.3 晚十八天。
 
-我们能拿到的依据只有两处，**都不在那个 tag 里**：
+**但许可本身在 v1.0.3 里是可核验的**，两处：
 
-- add-on 的 `blender_manifest.toml`：`license = ["SPDX:GPL-3.0-or-later"]`
-- `main` 上的 LICENSE（35147 字节）
+- **源文件头**：我们构建出来的 v1.0.3 产物里，`blmcp/__init__.py` 等文件带
+  `# SPDX-License-Identifier: GPL-3.0-or-later`；add-on 的
+  `blender_mcp_addon/__init__.py` 里也有。
+- **add-on 清单**：`blender_manifest.toml` 的 `license = ["SPDX:GPL-3.0-or-later"]`。
 
-**做法**：在 `projects.blender.org/lab/blender_mcp` 开一条 issue，
-请上游给已发布的 tag 补许可文件、或告知下一个 tag 的时间。
-这比直接提 PR 更有价值——它同时也在帮上游。
+**上游自己确认过这件事**：issue
+[`#59`](https://projects.blender.org/lab/blender_mcp/issues/59)
+「Add a license file for blender_mcp」（2026-09-28 提出，09-29 关闭）里，
+维护者 `dfelinto` 的原话是：
 
-**这不是可选项。** nixpkgs 要求 `meta.license` 与上游一致，
-审阅者看到被取的 tag 里没有许可文件就会问。
+> The license is in the individual files: `# SPDX-License-Identifier: GPL-3.0-or-later`
+> But we will add a license file to the repository.
+
+所以 **`meta.license = lib.licenses.gpl3Plus` 的依据是足的**——PR 里要引 #59，
+并说明那个 tag 尚未带上 LICENSE 文件。**不需要再开一条 issue**：那条已经有人提过、也已经被处理了。
 
 ### ② 在 `maintainer-list.nix` 里加自己（独立 commit，排在包之前）
 
@@ -66,11 +72,16 @@ local TCP socket.
 
 Built from the upstream source at projects.blender.org; the Blender add-on
 is installed alongside the server under share/blender/scripts/addons/.
-Upstream pytest suite is not enabled yet in this commit.
 
-Licence: the v1.0.3 tag itself carries no LICENSE file; GPL-3.0-or-later is
-declared by the add-on's blender_manifest.toml and by the LICENSE added to
-main in dbbf836ad.
+The upstream test suite runs (102 passed, 9 skipped). One file is excluded
+because it requires a real Blender editor instance. It also carries a small
+patch: the test helpers assign PYTHONPATH instead of appending to it, which
+discards the dependencies outside a virtualenv.
+
+Licence: the v1.0.3 tag itself carries no LICENSE file, but GPL-3.0-or-later
+is declared by an SPDX header in every source file and by the add-on's
+blender_manifest.toml; upstream confirmed this in issue #59 and added a
+LICENSE file to main in dbbf836ad.
 
 Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
 ```
@@ -90,10 +101,12 @@ TCP socket so an LLM can inspect and drive a running Blender instance. The
 add-on is installed by this package under `share/blender/scripts/addons/`, so
 both halves come from one install.
 
-At v1.0.3 the repository carries no LICENSE file; GPL-3.0-or-later is declared
-by the add-on's `blender_manifest.toml` and by the LICENSE file that was added
-to `main` in commit `dbbf836ad` (2026-09-29, i.e. after the v1.0.3 tag). I have
-asked upstream to attach a licence file to the released tags.
+At v1.0.3 the repository carries no LICENSE file. The licence is nevertheless
+unambiguous: every source file carries `# SPDX-License-Identifier:
+GPL-3.0-or-later`, and the add-on's `blender_manifest.toml` declares
+`SPDX:GPL-3.0-or-later`. Upstream confirmed this in
+https://projects.blender.org/lab/blender_mcp/issues/59 and added a LICENSE
+file to `main` in commit `dbbf836ad` (2026-09-29, after the v1.0.3 tag).
 
 ### Things done
 
@@ -105,6 +118,18 @@ asked upstream to attach a licence file to the released tags.
   - `blender-mcp` was started and answered a JSON-RPC `initialize` request over
     stdio, reporting `serverInfo.name = "blender-mcp"` and offering prompts,
     resources and tools capabilities.
+- [x] Runs the upstream test suite: 102 passed, 9 skipped.
+  - `tests/test_blender_mcp_with_blender.py` is disabled: it needs a real
+    Blender editor instance (`FileNotFoundError: 'blender'`), which a build
+    sandbox cannot provide. The remaining tests do run, and they spawn the
+    server as a subprocess and query it over MCP, so they cover this package's
+    actual protocol surface.
+  - The package patches two test helpers that assign `PYTHONPATH` rather than
+    appending to it. Inside a virtualenv that is harmless, but outside one it
+    discards every dependency, which makes the server subprocess fail to start.
+    Reverting the patch brings back 15 failures and 71 errors, so it is load-
+    bearing rather than cosmetic. I am happy to send it upstream instead if you
+    prefer, so this package can drop the patch.
 - [x] Fits CONTRIBUTING.md, pkgs/README.md, maintainers/README.md and other READMEs.
 - [x] Follows the automation/AI policy.
 

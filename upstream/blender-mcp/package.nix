@@ -49,6 +49,46 @@ python3Packages.buildPythonApplication (finalAttrs: {
     typer
   ];
 
+  # 测试在源树的 `tests/` 里（不在 `mcp/`），而 postPatch 跑在 sourceRoot=mcp 里，
+  # 所以路径要退一级。
+  #
+  # 这里修的是上游测试自己的一个 bug：它构造子进程环境时**覆盖**了 PYTHONPATH
+  # 而不是追加（`tests/test_mcp_server.py` 与 `tests/test_tool_listing.py` 各一处）。
+  # 在 venv 里这没关系——依赖在解释器自己的 site-packages 里；
+  # 在没有 venv 的构建环境里，这一行等于把依赖整个丢掉，子进程起不来，
+  # 表现为一片 `McpError('Connection closed')` 与 `ModuleNotFoundError: No module named 'yaml'`。
+  # 用 `--replace-fail`：上游若改了这两个文件，构建当场失败而不是静默少跑测试。
+  postPatch = ''
+    substituteInPlace ../tests/test_mcp_server.py \
+      --replace-fail \
+      'env["PYTHONPATH"] = os.path.join(_REPO_DIR, "mcp")' \
+      'env["PYTHONPATH"] = os.pathsep.join([_MCP_DIR, env.get("PYTHONPATH", "")])'
+    substituteInPlace ../tests/test_tool_listing.py \
+      --replace-fail \
+      'env["PYTHONPATH"] = os.path.join(_REPO_DIR, "mcp")' \
+      'env["PYTHONPATH"] = os.pathsep.join([os.path.join(_REPO_DIR, "mcp"), env.get("PYTHONPATH", "")])'
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  # 上游的测试会真的把服务端当子进程起起来并查询它，所以这些测试**必须**跑：
+  # 它们验的正是这个包的核心（MCP 协议面）。关掉等于把最有价值的一层判据扔掉。
+  doCheck = true;
+
+  # 测试读的是源树里的 `tests/`，而 sourceRoot 指向 `mcp/`。
+  preCheck = ''
+    cd ..
+    export HOME="$TMPDIR"
+  '';
+
+  # 这一个文件要**真实运行的 Blender 编辑器实例**（`FileNotFoundError: 'blender'`），
+  # 在构建沙箱里永远跑不了，不是修的问题。其余三个文件全跑：
+  # 实测 102 passed / 9 skipped / 0 failed。
+  disabledTestPaths = [ "tests/test_blender_mcp_with_blender.py" ];
+
   # 把 Blender 插件一并装上，用户可以直接从包里取用。
   # 它是服务端那条 TCP 连接的另一半，缺了它整个包没有意义。
   postInstall = ''
