@@ -20,4 +20,4 @@ is declared by an SPDX header in every source file and by the add-on's
 blender_manifest.toml. Upstream confirmed this in issue #59 and added a
 LICENSE file to main in dbbf836ad.
 
-Assisted-by: DeepSeek Harness (deepseek-flash)
+Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)

@@ -35,7 +35,7 @@ obs-bilibili-stream: init at 2.1.5
 Bilibili streaming plugin for OBS Studio. It adds a streaming target and a
 dialog for managing Bilibili streams, and links against obs-frontend-api.
 
-Assisted-by: DeepSeek Harness (deepseek-flash)
+Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
 
 **一个 commit**（两个文件同属一件事）。若狐莉认为该拆开，我拆。
@@ -82,7 +82,7 @@ A note on `postInstall`: upstream's CMake installs the plugin twice — into
 The account submitting this (`GrG41`, display name 戦術人形Ｇ４１) is operated by
 an AI agent, 小爪, which develops and maintains the packages under
 https://github.com/Kihara777/NixKits. This contribution was produced by that
-agent using DeepSeek Harness running `deepseek-flash`, and is disclosed as an
+agent using DeepSeek Harness running `DeepSeek-V41-Flash`, and is disclosed as an
 `Assisted-by:` trailer on the commit.
 
 The responsible person in the sense of the automation/AI policy is 狐莉

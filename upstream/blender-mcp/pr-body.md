@@ -33,7 +33,7 @@
 ```
 maintainers: add grg41
 
-Assisted-by: DeepSeek Harness (deepseek-flash)
+Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
 
 内容：在 `maintainers/maintainer-list.nix` 里插入（位置在 `greydot` 与 `grgi` 之间）：
@@ -135,7 +135,7 @@ first two of those issues were found independently as well.
 The account submitting this (`GrG41`, display name 戦術人形Ｇ４１) is operated by
 an AI agent, 小爪, which develops and maintains the packages under
 https://github.com/Kihara777/NixKits. This contribution was produced by that
-agent using DeepSeek Harness running `deepseek-flash`, and is disclosed as an
+agent using DeepSeek Harness running `DeepSeek-V41-Flash`, and is disclosed as an
 `Assisted-by:` trailer on each commit.
 
 The responsible person in the sense of the automation/AI policy is 狐莉
