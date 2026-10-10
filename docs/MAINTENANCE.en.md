@@ -8,8 +8,7 @@
 
 - Pulled **all 54** OBS plugin definitions from current master and measured the conventions rather than generalising from one or two samples
 - **Real defect**: upstream's `CMakePresets.json` turns on `ENABLE_FRONTEND_API` while `CMakeLists.txt` defaults it to OFF, and we only passed `ENABLE_QT`; without it `NEEDED` lacks `libobs-frontend-api.so.30` and the `.so` is a different file; **our own package had the same defect and is fixed too**, leaving the two `.so` files byte-identical
-- Aligned with the statistics: `platforms` now uses `inherit (obs-studio.meta) platforms` (30/54) and `maintainers` uses `with lib.maintainers; [ … ]` (50/54)
-- Confirmed `dontWrapQtApps` (17/54, exactly the Qt users) and "rm obs-plugins only" (17/54) already matched
+- Aligned with the statistics: `platforms` now uses `inherit (obs-studio.meta) platforms` (30/54), `maintainers` uses `with lib.maintainers; [ … ]` (50/54), and `dontWrapQtApps` (17/54) already matched
 
 | Commit | Description |
 |------|------|

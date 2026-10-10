@@ -8,8 +8,7 @@
 
 - 現行 master の OBS プラグイン**全 54 件**を取得して統計を取った（一、二件の見本から一般化しない）
 - **実欠陥**：上流 `CMakePresets.json` の template preset は `ENABLE_FRONTEND_API` を有効にするが `CMakeLists.txt` の既定は OFF で、当方は `ENABLE_QT` のみ渡していた；無効時は `NEEDED` に `libobs-frontend-api.so.30` が無く `.so` も別物；**自倉のパッケージにも同じ欠陥があり併せて修正**、修正後は両者の `.so` がバイト同一
-- 統計に合わせて：`platforms` は `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` は `with lib.maintainers; [ … ]`（50/54）
-- `dontWrapQtApps`（17/54 = Qt 使用の 17 件）と「rm obs-plugins のみ」（17/54）は元から規約どおりと確認
+- 統計に合わせて：`platforms` は `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` は `with lib.maintainers; [ … ]`（50/54）；`dontWrapQtApps` 17/54 は元から規約どおりと確認
 
 | コミット | 説明 |
 |------|------|

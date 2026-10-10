@@ -8,8 +8,7 @@
 
 - 現行 master OBS 插件 **全 54 件** 取得 統計 実施（一二件 見本 一般化 不）
 - **実欠陥**：上流 `CMakePresets.json` template preset `ENABLE_FRONTEND_API` 有効化、`CMakeLists.txt` 既定 OFF、当方 `ENABLE_QT` 限 渡。無効時 `NEEDED` `libobs-frontend-api.so.30` 無、`.so` 別物。**自倉 包 同一欠陥 併 修正**、修正後 両者 `.so` 字節同一
-- 統計 合：`platforms` `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` `with lib.maintainers; [ … ]`（50/54）
-- `dontWrapQtApps`（17/54 = Qt 使用 17 件）「rm obs-plugins 限」（17/54）元 規約通 確認
+- 統計 合：`platforms` `inherit (obs-studio.meta) platforms`（30/54）、`maintainers` `with lib.maintainers; [ … ]`（50/54）；`dontWrapQtApps` 17/54 元 規約通 確認
 
 | 提交 | 説明 |
 |------|------|
