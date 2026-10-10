@@ -12,12 +12,12 @@ The upstream test suite runs (102 passed, 9 skipped). One file is excluded
 because it requires a real Blender editor instance. The package also carries
 a small patch: the test helpers assign PYTHONPATH instead of appending to
 it, which discards the dependencies outside a virtualenv. Reverting that
-patch brings back 15 failures and 71 errors, so it is load-bearing rather
-than cosmetic; it is offered to upstream.
+patch brings back 15 test failures plus 117 McpError lines in the log, so it
+is load-bearing rather than cosmetic; it is offered to upstream.
 
 Licence: the v1.0.3 tag itself carries no LICENSE file, but GPL-3.0-or-later
 is declared by an SPDX header in every source file and by the add-on's
 blender_manifest.toml. Upstream confirmed this in issue #59 and added a
 LICENSE file to main in dbbf836ad.
 
-Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
+Assisted-by: DeepSeek Harness (deepseek-flash)

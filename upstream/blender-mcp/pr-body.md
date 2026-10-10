@@ -1,105 +1,78 @@
-# 提交计划：blender-mcp → nixpkgs
+# 提交计划：blender-mcp → nixpkgs（GrG41 名下）
 
-这份目录是 **dry-run 的产物**，不是已经提交的东西。
-真要提交时按下面的计划走；每一步的判据在
-[`skills/nixpkgs-package-upstream/SKILL.md`](../../skills/nixpkgs-package-upstream/SKILL.md)。
+**状态：内容已备好，等狐莉验证后发布。**
+
+> 这一版是**为 GrG41 账户重做的**。前一条 PR（#572360）以 Kihara777 账户开出，
+> 有两处必须修正的地方：
+> ① 账户用错了——`DEC-011` 明确 `GrG41` 是我的账户、提交身份是
+> `Kitsunome <152935465+GrG41@users.noreply.github.com>`；
+> ② 包里的 `maintainers = [ ]` **是空的**，而 `pkgs/README.md:516` 写着
+> 「`meta.maintainers` **must be set** for new packages」——
+> 我加了维护者条目却没让包引用它（见文末「这次修掉的两处」）。
 
 ---
 
-## 提交前必须处理的两件事
+## 一、单一来源（不要在别处复制这些内容）
 
-### ① 许可依据：**已经查到硬证据了**（不需要另行开 issue）
+| 内容 | 单一来源 |
+|---|---|
+| commit 2 的正文 | [`commit-message.txt`](commit-message.txt) —— 用 `git commit -F` 直接喂，**不要手抄** |
+| 维护者条目的落点与依据 | [`MAINTAINER-ENTRY.md`](MAINTAINER-ENTRY.md) |
+| 待提交的包定义 | [`package.nix`](package.nix) —— 与将推送到 fork 的那份逐字节相同 |
 
-`v1.0.3` 这个 tag 里**没有 LICENSE 文件**（`contents/LICENSE?ref=v1.0.3` 返回 404），
-根 `readme.md` 与 `mcp/README.md` 也都不提许可。
-GPL-3.0 的 LICENSE 是 **2026-09-29** 才加进 `main` 的（提交 `dbbf836ad`），
-比 v1.0.3 晚十八天。
+> ⚠️ **今天在这上面摔过**：我发布 #572360 时在 `/tmp` 里用 `sed` 改了模型名，
+> 却没写回源文件，于是**仓库里那份与已发布的那份不一致**。
+> 现在这条规矩是硬的：**更正一律改源文件，禁止在做发布时临时改副本。**
 
-**但许可本身在 v1.0.3 里是可核验的**，两处：
+---
 
-- **源文件头**：我们构建出来的 v1.0.3 产物里，`blmcp/__init__.py` 等文件带
-  `# SPDX-License-Identifier: GPL-3.0-or-later`；add-on 的
-  `blender_mcp_addon/__init__.py` 里也有。
-- **add-on 清单**：`blender_manifest.toml` 的 `license = ["SPDX:GPL-3.0-or-later"]`。
+## 二、两个 commit（顺序不能反）
 
-**上游自己确认过这件事**：issue
-[`#59`](https://projects.blender.org/lab/blender_mcp/issues/59)
-「Add a license file for blender_mcp」（2026-09-28 提出，09-29 关闭）里，
-维护者 `dfelinto` 的原话是：
+### commit 1
 
-> The license is in the individual files: `# SPDX-License-Identifier: GPL-3.0-or-later`
-> But we will add a license file to the repository.
+```
+maintainers: add grg41
 
-所以 **`meta.license = lib.licenses.gpl3Plus` 的依据是足的**——PR 里要引 #59，
-并说明那个 tag 尚未带上 LICENSE 文件。**不需要再开一条 issue**：那条已经有人提过、也已经被处理了。
+Assisted-by: DeepSeek Harness (deepseek-flash)
+```
 
-### ② 在 `maintainer-list.nix` 里加自己（独立 commit，排在包之前）
+内容：在 `maintainers/maintainer-list.nix` 里插入（位置在 `greydot` 与 `grgi` 之间）：
 
 ```nix
-kihara777 = {
-  name = "Kitsunori";
-  github = "Kihara777";
-  githubId = 24633616;
-};
+  grg41 = {
+    github = "GrG41";
+    githubId = 152935465;
+    name = "Kitsunome";
+  };
 ```
 
-`githubId` 必须是 **24633616**（`https://api.github.com/user/24633616` 的 `login`
-应当等于 `Kihara777`——审阅者会这样核，**已核过，对得上**）。
+### commit 2
 
-按决定**不写 `email`** —— 它是可选字段，既有条目里有 488 条同样不写。
-插入位置、字段来源与旁证见同目录的 [`MAINTAINER-ENTRY.md`](MAINTAINER-ENTRY.md)。
+**正文 = [`commit-message.txt`](commit-message.txt) 逐字。** 标题：`blender-mcp: init at 1.0.3`
+
+内容：新建 `pkgs/by-name/bl/blender-mcp/package.nix`。
 
 ---
 
-## 两个 commit
+## 三、账户与身份
 
-顺序**不能反**。
+| 项 | 值 |
+|---|---|
+| 提交账号 | `GrG41` |
+| author / committer | `Kitsunome <152935465+GrG41@users.noreply.github.com>` |
+| 维护者条目 | `grg41` / `githubId 152935465` |
+| 包内引用 | `maintainers = [ lib.maintainers.grg41 ];` |
 
-**commit 1**（标题固定形式）
-
-```
-maintainers: add kihara777
-
-Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
-```
-
-**commit 2**
-
-> 正文与 [`commit-message.txt`](commit-message.txt) **逐字相同**（用 `git commit -F` 直接喂它）。
-> 两处必须一起改——它们分家过一次，是我自己核出来的。
-
-```
-blender-mcp: init at 1.0.3
-
-MCP server for Blender, developed by Blender Lab. It runs as a separate
-process launched by the MCP client and talks to a Blender add-on over a
-local TCP socket, so an LLM can inspect and drive a running Blender
-instance. The add-on is installed by this package under
-share/blender/scripts/addons/, so both halves come from one install.
-
-Built from the upstream source at projects.blender.org.
-
-The upstream test suite runs (102 passed, 9 skipped). One file is excluded
-because it requires a real Blender editor instance. The package also carries
-a small patch: the test helpers assign PYTHONPATH instead of appending to
-it, which discards the dependencies outside a virtualenv. Reverting that
-patch brings back 15 failures and 71 errors, so it is load-bearing rather
-than cosmetic; it is offered to upstream.
-
-Licence: the v1.0.3 tag itself carries no LICENSE file, but GPL-3.0-or-later
-is declared by an SPDX header in every source file and by the add-on's
-blender_manifest.toml. Upstream confirmed this in issue #59 and added a
-LICENSE file to main in dbbf836ad.
-
-Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
-```
-
-> **`Assisted-by:` 是强制披露格式**，`Co-authored-by:` **不算**。
-> 这是 nixpkgs 的 AI 政策明文要求的，见 `CONTRIBUTING.md#automationai-policy`。
+**noreply 地址的依据是 `DEC-011` 原文**（不是我拼的）：
+「提交身份 `Kitsunome <152935465+GrG41@users.noreply.github.com>`」。
 
 ---
 
-## PR 摘要草案
+## 四、PR 标题与正文
+
+**标题**：`blender-mcp: init at 1.0.3`
+
+**正文**：
 
 ```markdown
 Adds blender-mcp, the Model Context Protocol server for Blender developed by
@@ -115,6 +88,8 @@ GPL-3.0-or-later`, and the add-on's `blender_manifest.toml` declares
 `SPDX:GPL-3.0-or-later`. Upstream confirmed this in
 https://projects.blender.org/lab/blender_mcp/issues/59 and added a LICENSE
 file to `main` in commit `dbbf836ad` (2026-09-29, after the v1.0.3 tag).
+
+(This supersedes #572360, which I opened from the wrong account.)
 
 ### Things done
 
@@ -135,30 +110,72 @@ file to `main` in commit `dbbf836ad` (2026-09-29, after the v1.0.3 tag).
   - The package patches two test helpers that assign `PYTHONPATH` rather than
     appending to it. Inside a virtualenv that is harmless, but outside one it
     discards every dependency, which makes the server subprocess fail to start.
-    Reverting the patch brings back 15 failures and 71 errors, so it is load-
-    bearing rather than cosmetic. I am happy to send it upstream instead if you
-    prefer, so this package can drop the patch.
+    Reverting the patch brings back 15 test failures plus 117 `McpError` lines
+    in the log, so it is load-bearing rather than cosmetic. I am happy to send
+    it upstream instead if you prefer, so this package can drop the patch.
 - [x] Fits CONTRIBUTING.md, pkgs/README.md, maintainers/README.md and other READMEs.
 - [x] Follows the automation/AI policy.
 
 ### AI disclosure
 
-This PR was prepared with the assistance of an LLM-based tool. The tool is
-DeepSeek Harness running DeepSeek V4 Flash; the same disclosure is recorded as
-an `Assisted-by:` trailer on each commit. Every part of this contribution —
-the package expression, the build and the runtime check described above — was
-reviewed and verified by me before submission, and I am the person responsible
-for it in the sense of the automation/AI policy.
-```
+The account submitting this (`GrG41`, display name 戦術人形Ｇ４１) is operated by
+an AI agent, 小爪, which develops and maintains the packages under
+https://github.com/Kihara777/NixKits. This contribution was produced by that
+agent using DeepSeek Harness running `deepseek-flash`, and is disclosed as an
+`Assisted-by:` trailer on each commit.
 
-> 披露段要**独立写在这里**，不能只靠 commit trailer——
-> 政策要求「PR 摘要与评审评论各自单独披露」。
+The responsible person in the sense of the automation/AI policy is 狐莉
+(Kitsunori, https://github.com/Kihara777), who reviewed this contribution and
+authorised its submission. Every claim above was checked by running it rather
+than by inspection: the build, the `initialize` handshake and the upstream
+test-suite results are all reproducible from the package definition in this PR.
+```
 
 ---
 
-## 提交后
+## 五、发布步骤
 
-- PR 模板的 `nixpkgs-review` 那一项：本机跑一次再勾。
-- 等待时间：原文说「数天到数周乃至数月无反馈完全正常」。
-  **至少一周**无活动再去 Discourse 的 review-requests 帖或 Matrix 频道。
-- **评审来了由狐莉答复**（AI 政策要求贡献者自己能答问，不能把意见转发给工具）。
+```bash
+# 1. 身份
+gh auth switch --user GrG41
+gh api user --jq .login          # 期望 GrG41
+
+# 2. fork（已建）+ 分支
+#    fork: GrG41/nixpkgs（已同步到 master 38fb26e7）
+# 3. 两个 commit 通过 Git Data API 建（不整树克隆）
+# 4. 建分支 refs/heads/init-blender-mcp
+# 5. 关掉旧的 #572360（附说明）
+# 6. 开新 PR
+```
+
+**关掉 #572360 时要在评论里说明原因**，不要让一条被关的 PR 无解释地挂着。
+
+---
+
+## 六、这次修掉的两处（相对 #572360）
+
+| # | 问题 | 证据 | 现在 |
+|---|---|---|---|
+| 1 | `maintainers = [ ]` 空着 | `pkgs/README.md:516`「must be set for new packages」 | `maintainers = [ lib.maintainers.grg41 ];` |
+| 2 | 账户用错 | `DEC-011` | GrG41，提交身份按 DEC-011 原文 |
+
+**顺带修掉的第三处**：`commit-message.txt` 里的反证数字写成「71 errors」（真值 15 failed + 117 McpError）
+与旧模型名 `DeepSeek V4 Flash`——**这两处在已发布的 #572360 里也是错的**，
+因为我把更正的副本留在了 `/tmp`、没写回源文件。
+
+---
+
+## 七、判据（发布前已跑过）
+
+| 判据 | 结果 |
+|---|---|
+| `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
+| `grg41` 条目可读 | ✅ `{ github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
+| **包真的能引用到它** | ✅ 反证：`before=false`（未加表时不存在）→ `after=true` |
+| `package.nix` 能解析 | ✅ |
+| nixfmt（两份） | ✅ 均通过 |
+| 四层判据（求值/构建/产物/运行） | ✅ 见 [`READY.md`](READY.md) |
+
+**仍未实测**（不许当成验过）：完整 `nix-update`、实际 `nixpkgs-vet`、
+aarch64 构建、`r-ryantm` 行为。其中 `nixpkgs-vet` 与 `treefmt` 在 #572360 上
+已由上游 CI 跑过一次并通过。

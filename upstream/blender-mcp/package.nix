@@ -137,10 +137,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "blender-mcp";
     platforms = lib.platforms.all;
-    # ⚠️ 提交时这里要填 `kihara777`，但**必须先**在
-    # `maintainers/maintainer-list.nix` 里加上同名条目（那是一个独立 commit，
-    # 标题 `maintainers: add kihara777`，排在包那个 commit 之前）。
-    # 现在留空：条目还不存在，写上会让求值直接失败。
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.grg41 ];
   };
 })

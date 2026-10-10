@@ -1,37 +1,38 @@
 # `maintainer-list.nix` 的落点（已取证）
 
-提交时这段要**单独一个 commit**，标题固定 `maintainers: add kihara777`，
+提交时这段要**单独一个 commit**，标题固定 `maintainers: add grg41`，
 并且**排在包那个 commit 之前**。
 
 ## 要插入的内容
 
 ```nix
-  kihara777 = {
-    name = "Kitsunori";
-    github = "Kihara777";
-    githubId = 24633616;
+  grg41 = {
+    github = "GrG41";
+    githubId = 152935465;
+    name = "Kitsunome";
   };
 ```
 
 ## 插在哪个位置
 
-`maintainers/maintainer-list.nix` 按 handle 字母序排。实测（本地那份 nixpkgs 树）：
+`maintainers/maintainer-list.nix` 按 handle 字母序排。实测（GrG41 fork 的 master，
+与上游 master `38fb26e7` 一致；文件 33070 行 / 5283 个条目，整体有序）：
 
-- 上一项：`kiyotoko`（第 15215 行）
-- 下一项：`kjeremy`（第 15221 行）
+- 上一项：`greydot`
+- 下一项：`grgi`（`grg4` < `grgi`，因为 `4` < `i`）
+- 插入点行号：10886（`  grgi = {` 之前）
 
-`kihara777` 落在两者之间（`kih` < `kiy`，且 `kiy` < `kj`）。
-
-## 三个字段的来源（都不是猜的）
+## 三个字段的来源
 
 | 字段 | 值 | 依据 |
 |---|---|---|
-| `name` | `Kitsunori` | 本机 git 身份与 NixKits 作者署名 |
-| `github` | `Kihara777` | NixKits 的 owner（`origin` 指向 `Kihara777/NixKits`） |
-| `githubId` | `24633616` | `gh api user/24633616` → `login=Kihara777 id=24633616 created=2016-12-18` |
+| `github` | `GrG41` | `gh api users/GrG41` → `login=GrG41 id=152935465 created=2023-12-05` |
+| `githubId` | `152935465` | 同上；审阅者会核 `api.github.com/user/152935465` 的 `login` 是否吻合 |
+| `name` | `Kitsunome` | **`DEC-011` 原文的提交身份**：`Kitsunome <152935465+GrG41@users.noreply.github.com>` |
 
-审阅者会访问 `https://api.github.com/user/24633616` 核 `login` 是否等于 `github`——
-**已核过，对得上**，而且账号 2016 年创建，不是新号。
+**`name` 这一格请狐莉过目**：GitHub 显示名是「戦術人形Ｇ４１」，
+而 `DEC-011` 记的提交身份名是 `Kitsunome`。我取了后者（因为它是身份决议的原文），
+但这是公开字符串，你说了算。
 
 ## 为什么没有 `email`
 
@@ -46,32 +47,48 @@
   };
 ```
 
-（注意那条里 `handle ≠ github`——所以 handle 与 GitHub 名字不同是允许的。）
+## 字段顺序
 
-## 几个顺手核过、可以放心的点
+这个文件里字段**按字段名字母序**（`email`, `github`, `githubId`, `name`），
+无邮箱时就是 `github` / `githubId` / `name` 三条——与上面的 `kidsan` 形态一致：
 
-- **handle 没被占用**：`grep -i 'kihara\|kitsunori'` 在 `maintainer-list.nix` 里
-  只有 `kitsunoff` 这样的近似项，`kihara*` 与 `kitsunori` 都没有。
-- **大小写不是硬规定**：5228 个条目里有 **386** 个 handle 含大写字母。
-  我们仍写全小写的 `kihara777`，与多数条目一致。
-- **`githubId` 的值**已用 `gh api user/24633616` 双向核过（见上表）。
+```nix
+  kidsan = {
+    github = "Kidsan";
+    githubId = 8798449;
+    name = "kidsan";
+  };
+```
+
+## 包这一侧必须引用它
+
+```nix
+    maintainers = [ lib.maintainers.grg41 ];
+```
+
+**`pkgs/README.md:516`**：「`meta.maintainers` **must be set** for new packages.」
+
+> ⚠️ **这一格我曾经漏掉**：#572360 里 `maintainers = [ ]` 是空的。
+> 我把条目加进了 `maintainer-list.nix`，却没让包引用它。
+> 上游 CI 不会因此变红（没有针对空 maintainers 的检查），
+> 所以它只会等审稿人指出来。
+> **当时的检查表写的是「维护者条目可写 ✅」——我验的是「条目写得进去」，
+> 没验「包引用了它」。**
+
+## 判据（发布前已跑）
+
+| 判据 | 结果 |
+|---|---|
+| `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
+| `grg41` 条目可读 | ✅ `{ github = "GrG41"; githubId = 152935465; name = "Kitsunome"; }` |
+| **包能引用到它**（带反证） | ✅ `before=false`（未加表时不存在）→ `after=true` |
+| `package.nix` 能解析 | ✅ |
+| nixfmt 两份 | ✅ |
 
 ## 关于棘轮检查 `strictDeps` / `__structuredAttrs`
 
 `nixpkgs-vet` 有两条棘轮：新顶层包必须求值出 `strictDeps = true` 与
-`__structuredAttrs = true`，且不得回退。
+`__structuredAttrs = true`，且不得回退。我们的草稿显式写了这两项。
 
-**我们的草稿显式写了这两项。这一点是安全的，但请注意这是推理而非实测**：
-
-1. base 是 nixpkgs master，那里**根本没有 `blender-mcp`**——
-   所以「从 true 回退到 false」在定义上不可能发生；
-2. python 的 `pkgs/development/interpreters/python/setup-hook.nix` 已经默认给出
-   `strictDeps = true` 与 `__structuredAttrs = true`，
-   我们显式写 `true` 是**同值**，不是回退。
-
-旁证：by-name 里 1596 个用 `buildPythonApplication` 的包中只有 **152** 个显式写了
-`__structuredAttrs`，其余也都被合并了。
-
-**我没有实际跑过 `nixpkgs-vet`** —— 它需要两个 git 检出（`ci/nixpkgs-vet.nix` 用
-`gitTracked` 取文件集），为验这一条不值得搭那套。如果 PR 被 vet 拦下，
-第一件事是把 `nixpkgs-vet` 拉下来对着 fork 跑一次，而不是猜。
+**现在这不是推理了**：#572360 上 `Lint / nixpkgs-vet` 与 `Lint / treefmt`
+都由上游 CI 跑过并 **pass**。
