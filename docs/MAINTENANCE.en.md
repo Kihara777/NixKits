@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:21:32+09:00
+
+**Summary**: blender-mcp — the optional `blender` argument removed, after measuring that it does not block `callPackage` auto-binding
+
+- With `callPackage { }` the `blender` argument is **still auto-bound**, pulling the whole Blender closure into every consumer; a `? null` default in the signature does not prevent it
+- The argument and its `postFixup` are gone entirely: upstream finds Blender on PATH, and anyone needing a fixed path sets `BLENDER_PATH`
+- Criteria: `blender-5` references in the drv 1 → 0; `BLENDER_PATH` in the artifact's wrapper present → absent; argument count 6 → 5
+- Trap ⑪ added to the skill: in nixpkgs the correct shape of an optional dependency is **not writing the argument at all**
+
+| Commit | Description |
+|------|------|
+| `b8f013b` | fix(upstream): drop the optional blender argument (it does not block auto-binding) |
+
 ## 2026-10-10T14:17:19+09:00
 
 **Summary**: third pass over the upstream draft — turning "has the go been given" into a criterion, and two false alarms recorded

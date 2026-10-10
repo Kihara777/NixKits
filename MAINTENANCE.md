@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:21:32+09:00
+
+**摘要**：blender-mcp 删掉 `blender` 可选参数 — 实测发现它挡不住 `callPackage` 的自动绑定
+
+- `callPackage { }` 时 `blender` **仍被自动绑定**，整个 Blender 闭包进了每个消费者；参数签名里的 `? null` 挡不住
+- 整个删掉参数与 `postFixup`：上游本来按 PATH 找，需要的人设 `BLENDER_PATH`
+- 判据：drv 里 `blender-5` 引用 1 → 0；产物 wrapper 的 `BLENDER_PATH` 有 → 无；参数表 6 → 5
+- 技能补陷阱 ⑪：nixpkgs 里「可选依赖」的正确形态是**不写那个参数**
+
+| 提交 | 说明 |
+|------|------|
+| `b8f013b` | fix(upstream): 删掉 blender 可选参数（挡不住自动绑定） |
+
 ## 2026-10-10T14:17:19+09:00
 
 **摘要**：上游草稿的第三轮 — 把「go 给了没」变成判据，并记下两次假警报

@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:21:32+09:00
+
+**概要**：blender-mcp — 任意引数 `blender` を削除。`callPackage` の自動束縛を止められないと実測
+
+- `callPackage { }` では `blender` が**依然として自動束縛**され、Blender 閉包全体が全利用者に入る。引数署名の `? null` では防げない
+- 引数と `postFixup` を丸ごと削除：上流は PATH から探すため、固定したい人は `BLENDER_PATH` を設定する
+- 判据：drv 内の `blender-5` 参照 1 → 0、産物 wrapper の `BLENDER_PATH` 有 → 無、引数 6 → 5
+- 技能に罠 ⑪ 追加：nixpkgs における「任意依存」の正しい形は**その引数を書かないこと**
+
+| コミット | 説明 |
+|------|------|
+| `b8f013b` | fix(upstream): 任意引数 blender を削除（自動束縛を止められない） |
+
 ## 2026-10-10T14:17:19+09:00
 
 **概要**：上流草稿の三巡目 — 「go が出たか」を判据にし、二度の誤警報を記録

@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T14:21:32+09:00
+
+**摘要**：blender-mcp 任意引数 `blender` 削除 — `callPackage` 自動束縛 阻止不能 実測
+
+- `callPackage { }` 時 `blender` **依然 自動束縛**、Blender 閉包 全部 全利用者 入。引数署名 `? null` 阻止 不能
+- 引数 `postFixup` 全部 削除：上流 PATH 探、固定 要 者 `BLENDER_PATH` 設定
+- 判据：drv 内 `blender-5` 参照 1 → 0、産物 wrapper `BLENDER_PATH` 有 → 無、引数 6 → 5
+- 技能 罠 ⑪ 追加：nixpkgs 「任意依存」正形 **該引数 書 無**
+
+| 提交 | 説明 |
+|------|------|
+| `b8f013b` | fix(upstream): 任意引数 blender 削除（自動束縛 阻止不能） |
+
 ## 2026-10-10T14:17:19+09:00
 
 **摘要**：上流草稿 三巡目 — 「go 有無」判据化、二度 誤警報 記録
