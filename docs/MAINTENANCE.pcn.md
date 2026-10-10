@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T14:09:55+09:00
+
+**摘要**：blender-mcp 提出前 二点 取证 — 自前 Gitea 自動更新 有効 可否、置換 錨 代償
+
+- `nix-update` host **探査式** 判定：既知一覧 外 host `/api/v1/settings/api` 200 返 必要、`projects.blender.org` 実測 200
+- 取得 tag `v1.0.3` 形式、`tag = "v${version}"` 由来 `version_prefix` 一致
+- `--replace-fail` 錨 消失 構築 失敗（意図的）：赤 良、試験 半分 走 悪
+- 境界 記録：探査・tag 取得・接頭辞推論 只 確認、実 nixpkgs 検出 完全 `nix-update` **未実施**
+
+| 提交 | 説明 |
+|------|------|
+| `40a9a8a` | docs(upstream): 自動更新 置換錨 証拠記録 |
+
 ## 2026-10-10T14:00:48+09:00
 
 **摘要**：blender-mcp 上流草稿 doCheck 打通 — 上流試験 真 bug 修正

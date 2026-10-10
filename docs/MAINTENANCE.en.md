@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:09:55+09:00
+
+**Summary**: two pre-submission facts checked for blender-mcp — does auto-update work for a self-hosted Gitea, and what a replaced anchor costs
+
+- `nix-update` probes rather than assumes: a host outside its known list must return 200 from `/api/v1/settings/api`, and `projects.blender.org` does
+- The tags come back as `v1.0.3`, matching the `version_prefix` derived from `tag = "v${version}"`
+- A missing `--replace-fail` anchor fails the build (deliberate): better red than quietly running half the tests
+- The boundary is recorded: only the probe, the tag fetch and the prefix inference were checked; a full `nix-update` run inside a real nixpkgs checkout was **not**
+
+| Commit | Description |
+|------|------|
+| `40a9a8a` | docs(upstream): evidence for auto-update and the replacement anchor |
+
 ## 2026-10-10T14:00:48+09:00
 
 **Summary**: blender-mcp upstream draft — doCheck working, and a real upstream test bug fixed

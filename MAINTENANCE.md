@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:09:55+09:00
+
+**摘要**：blender-mcp 提交前的两点取证 — 自动更新对自托管 Gitea 有无效、替换锚点的代价
+
+- `nix-update` 是**探测式**判断 host：不在已知列表的要 `/api/v1/settings/api` 返 200；实测 `projects.blender.org` 返 200
+- 取回的 tag 为 `v1.0.3` 形式，与从 `tag = "v${version}"` 推出的 `version_prefix` 一致
+- `--replace-fail` 的锚点消失即构建失败（有意）：宁可红，也不要测试少跑一半没人知道
+- 边界已记：只验了探测 + 取 tag + 前缀推断，**没有**在真 nixpkgs 检出里跑完整 `nix-update`
+
+| 提交 | 说明 |
+|------|------|
+| `40a9a8a` | docs(upstream): 自动更新与替换锚点的取证记录 |
+
 ## 2026-10-10T14:00:48+09:00
 
 **摘要**：blender-mcp 上游草稿的 doCheck 打通 — 并修掉上游测试里一个真 bug

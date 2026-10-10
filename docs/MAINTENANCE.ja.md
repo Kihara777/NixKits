@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:09:55+09:00
+
+**概要**：blender-mcp 提出前の二点の証拠 — 自前 Gitea で自動更新が効くか、置換アンカーの代償
+
+- `nix-update` は host を**探査式**に判定：既知一覧に無い host は `/api/v1/settings/api` が 200 を返す必要があり、`projects.blender.org` は実際に 200
+- 取得した tag は `v1.0.3` 形式で、`tag = "v${version}"` から導かれる `version_prefix` と一致
+- `--replace-fail` のアンカーが消えれば構築は失敗（意図的）：赤の方が、試験が半分しか走らないより良い
+- 境界を記録：探査・tag 取得・接頭辞推論のみ確認。実 nixpkgs 検出での完全な `nix-update` は**未実施**
+
+| コミット | 説明 |
+|------|------|
+| `40a9a8a` | docs(upstream): 自動更新と置換アンカーの証拠記録 |
+
 ## 2026-10-10T14:00:48+09:00
 
 **概要**：blender-mcp 上流草稿の doCheck を打通 — 上流テストの真の bug も修正
