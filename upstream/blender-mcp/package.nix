@@ -105,6 +105,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "blmcp" ];
 
+  # 自动更新：`nix-update` 支持自托管 Gitea，但它是**探测式**判断的——
+  # `is_gitea_host` 先查已知 host 列表，不在列表里的就请求
+  # `https://<host>/api/v1/settings/api`，返回 200 才算。
+  # 实测（2026-10-10）：`projects.blender.org` 该端点返回 **200**，
+  # 且 `/api/v1/repos/lab/blender_mcp/tags` 返回 `v1.0.3` 等 tag，
+  # 与 `version_prefix` 从 `tag = "v${version}"` 推出的 `v` 一致。
   passthru.updateScript = nix-update-script { };
 
   meta = {
