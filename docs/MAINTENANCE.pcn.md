@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T15:38:10+09:00
+
+**摘要**：obs 草稿 現行 master 整合；披露 模型名 更正
+
+- master 実査 結果 構造 二箇所 変化：接線 `plugins.nix` **自動発見** 化（行追加 不要）、`callPackage` 通常 復帰（Qt `qt6.qtbase` 記載）—— 本 PR 二文件変更 一文件追加 化；変更後 成果物 path 同一
+- 披露 模型名 `DeepSeek-V41-Flash` 化。変更 自己披露 限、dsh API 模型 id 日志履歴 **不触**
+- `upstream/MAINTAINER-ENTRY.md` 共用位置 移動（blender-mcp 配下 廃止）
+- 技能 罠 ⑬ 追加：手元 nixpkgs 構築 使用可、**上流構造判断 使用不可**
+
+| 提交 | 説明 |
+|------|------|
+| `a2ec88c` | fix(upstream): 披露 模型名 DeepSeek-V41-Flash 化 |
+| `ea113b9` | fix(upstream): obs 草稿 現行 master 形態 化 |
+
 ## 2026-10-10T15:31:21+09:00
 
 **摘要**：査読者 基準 実行可能 検査器 化、obs-bilibili-stream 草稿 作成

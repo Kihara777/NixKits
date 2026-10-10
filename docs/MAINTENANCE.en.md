@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:38:10+09:00
+
+**Summary**: the obs draft aligned with current master; the disclosure model name corrected
+
+- Checking master revealed two structural changes: wiring is now auto-discovery through `plugins.nix` (no line to add) and the `callPackage` is the plain one again (so Qt must be written `qt6.qtbase`) — this PR went from touching two files to **adding one file**; the output path is unchanged
+- The disclosure now names `DeepSeek-V41-Flash`; only the self-disclosure changed, leaving DSH's API model ids and the log history untouched
+- `upstream/MAINTAINER-ENTRY.md` moved to a shared location rather than living under blender-mcp
+- New skill trap ⑬: a local nixpkgs can build, but it cannot tell you upstream's structure
+
+| Commit | Description |
+|------|------|
+| `a2ec88c` | fix(upstream): disclosure model name set to DeepSeek-V41-Flash |
+| `ea113b9` | fix(upstream): obs draft aligned with the current master layout |
+
 ## 2026-10-10T15:31:21+09:00
 
 **Summary**: the reviewer's standards turned into a runnable checker, plus an obs-bilibili-stream draft

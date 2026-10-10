@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:38:10+09:00
+
+**摘要**：obs 草稿对齐当前 master；披露模型名更正
+
+- 取当前 master 核实发现两处结构变化：接线改为 `plugins.nix` 的**自动发现**（不用加行）、`callPackage` 换回普通的（Qt 要写 `qt6.qtbase`）—— 这个 PR 从改两个文件变成**只加一个文件**；改后产物路径完全相同
+- 披露里的模型名改为 `DeepSeek-V41-Flash`；只改自我披露，**不动** dsh 的 API 模型 id 与日志历史
+- `upstream/MAINTAINER-ENTRY.md` 移到共用位置（不再挂在 blender-mcp 下）
+- 技能加陷阱 ⑬：本地 nixpkgs 能用来构建，**不能用来判断上游结构**
+
+| 提交 | 说明 |
+|------|------|
+| `a2ec88c` | fix(upstream): 披露里的模型名改为 DeepSeek-V41-Flash |
+| `ea113b9` | fix(upstream): obs 草稿改为当前 master 的形态 |
+
 ## 2026-10-10T15:31:21+09:00
 
 **摘要**：把评审者的标准做成可跑的检查器，并给 obs-bilibili-stream 建草稿
