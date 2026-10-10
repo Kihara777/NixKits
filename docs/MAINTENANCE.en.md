@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:31:21+09:00
+
+**Summary**: the reviewer's standards turned into a runnable checker, plus an obs-bilibili-stream draft
+
+- `upstream/check-draft.sh`: every class of problem the reviewer raised becomes a mechanical criterion, with exit codes 0/1/2 kept apart (**unverified is not passed**)
+- Writing it produced two **false alarms**: calling `python3` where it is not on PATH reported "could not run" as "failed"; treating `mainProgram` as unconditionally required flagged a plugin that correctly omits it
+- The obs draft: it belongs in the `plugins/` directory plus one wiring line in `default.nix` (not by-name); `-DENABLE_QT=ON` is load-bearing while `-DOBS_SOURCE` is not (removing it leaves a byte-identical `.so`)
+- Licence corrected to `gpl2Only` (upstream's `metainfo.xml` declares `GPL-2.0-only`); our own package had said `gpl2Plus`
+
+| Commit | Description |
+|------|------|
+| `cc30658` | feat(upstream): obs-bilibili-stream draft and review-standard checker |
+
 ## 2026-10-10T14:34:07+09:00
 
 **Summary**: first upstream contribution lands — blender-mcp submitted to nixpkgs (PR #572360)

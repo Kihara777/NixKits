@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:31:21+09:00
+
+**摘要**：把评审者的标准做成可跑的检查器，并给 obs-bilibili-stream 建草稿
+
+- `upstream/check-draft.sh`：评审者提过的每一类问题变成机械判据，退出码 0/1/2 分离（**没能验到 ≠ 通过**）
+- 写它就撞了两次**假警报**：用不在 PATH 上的 `python3` 把「跑不起来」报成「失败」；把 `mainProgram` 当无条件必填而插件不该设它
+- obs 草稿：落点是 `plugins/` 目录 + 在 `default.nix` 接线（不是 by-name）；`-DENABLE_QT=ON` 承重、`-DOBS_SOURCE` 多余（去掉 `.so` 逐字节相同）
+- 许可更正为 `gpl2Only`（上游 `metainfo.xml` 写着 `GPL-2.0-only`）；我们自己的包写错了 `gpl2Plus`
+
+| 提交 | 说明 |
+|------|------|
+| `cc30658` | feat(upstream): obs-bilibili-stream 草稿 + 评审标准检查器 |
+
 ## 2026-10-10T14:34:07+09:00
 
 **摘要**：上游贡献首次落地 — blender-mcp 提交 nixpkgs（PR #572360）

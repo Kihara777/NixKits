@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:31:21+09:00
+
+**概要**：査読者の基準を実行可能なチェッカーにし、obs-bilibili-stream の草稿を作成
+
+- `upstream/check-draft.sh`：査読者が挙げた問題群を機械的判据に。終了コード 0/1/2 を分離（**検証できず ≠ 合格**）
+- 作成中に**誤警報**を二度：PATH に無い `python3` で「実行不能」を「失敗」と報告；`mainProgram` を無条件必須としてプラグインを誤検出
+- obs 草稿：落点は `plugins/` と `default.nix` への一行（by-name ではない）。`-DENABLE_QT=ON` は必須、`-DOBS_SOURCE` は不要（外しても `.so` がバイト同一）
+- 許諾を `gpl2Only` に更正（上流 `metainfo.xml` が `GPL-2.0-only` と宣言）；自倉のパッケージは `gpl2Plus` と誤記していた
+
+| コミット | 説明 |
+|------|------|
+| `cc30658` | feat(upstream): obs-bilibili-stream 草稿と査読基準チェッカー |
+
 ## 2026-10-10T14:34:07+09:00
 
 **概要**：上流貢献の初回着地 — blender-mcp を nixpkgs へ提出（PR #572360）
