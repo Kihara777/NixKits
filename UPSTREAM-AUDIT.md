@@ -15,7 +15,7 @@ _评估日期：2026-10-10 · 评估对象：NixKits 的 13 个包 · 结论分�
 
 技术上最干净、该第一个上的是 `blender-mcp`：
 已对着真实的 nixpkgs 树**完整构建成功并跑通 MCP 握手**（见第四节）。
-但它有一个**必须先解决的许可缺口**（见第二节），我把它列为第一件事。
+它的许可能指认到被取的那份源码里（见第二节），因此可以直接提。
 
 **不要碰的四个**：`mcp-searxng`（**已经在 nixpkgs 里**）、
 `dsh`（已有 3 个在途 PR，且我们用的是 npm 制品）、
@@ -27,7 +27,7 @@ _评估日期：2026-10-10 · 评估对象：NixKits 的 13 个包 · 结论分�
 
 | 包 | 在 nixpkgs 里 | 结论 |
 |---|---|---|
-| blender-mcp | 没有 | **推荐**，先修许可缺口 |
+| blender-mcp | 没有 | **推荐**，许可已查实、测试已打通 |
 | obs-bilibili-stream | 没有 | 可做 |
 | opencode-telegram | 没有 | 可做，但要先重做 riscv64 部分 |
 | ruyi | 没有 | 需评估，补丁要先修 |
@@ -37,25 +37,30 @@ _评估日期：2026-10-10 · 评估对象：NixKits 的 13 个包 · 结论分�
 | dsh | 没有 | **停止**（已有 3 个在途 PR） |
 | mcp-searxng | **已在** | 不提交新包 |
 
-### blender-mcp —— 推荐，但先修许可
+### blender-mcp —— 推荐（许可已查实，可以直接提）
 
 上游是 Blender 官方的 `lab/blender_mcp`，v1.0.3 发布于 2026-09-11。
 它需要的三个 Python 依赖 —— `mcp`、`docutils`、`pyyaml` —— nixpkgs 里全都有，
 所以**第一个 PR 不需要连带任何依赖包**。
 
-⚠️ **许可缺口（实测）**：`v1.0.3` 这个 tag 里**没有 LICENSE 文件**
-（`contents/LICENSE?ref=v1.0.3` → 404），根 `readme.md` 与 `mcp/README.md` 也都不提许可。
-GPL-3.0 的 LICENSE 是**后来**才加进 `main` 的（提交 `dbbf836ad`，2026-09-29，
-"Include GPL3+ license"）——**晚于 v1.0.3 十八天**。
+**许可（已查实，不再是缺口）**：`v1.0.3` 这个 tag 里**没有 LICENSE 文件**
+（`contents/LICENSE?ref=v1.0.3` → 404），GPL-3.0 的 LICENSE 是后来才加进 `main` 的
+（提交 `dbbf836ad`，2026-09-29，晚十八天）。
 
-也就是说：我们能拿到的许可依据只有两处，都不在那个 tag 里——
-add-on 的 `blender_manifest.toml` 写着 `SPDX:GPL-3.0-or-later`，
-以及 `main` 上那份 35147 字节的 LICENSE。
+但**许可本身在被取的那份源码里是可核验的**，两处：
 
-nixpkgs 要求 `meta.license` **与上游一致**，审阅者看到 tag 里没有许可文件会问。
-三条路：等下一个 tag（会带上 LICENSE）、**先向上游开 issue 要求给 v1.0.3 补许可文件**、
-或者就用 v1.0.3 + 在 `package.nix` 注释里写清算依据。我倾向第二条——
-它比提交一个包更能说明我们真的在帮上游。
+- 构建产物里的源文件带 `# SPDX-License-Identifier: GPL-3.0-or-later`；
+- add-on 的 `blender_manifest.toml` 写着 `SPDX:GPL-3.0-or-later`。
+
+而且上游 issue [`#59`](https://projects.blender.org/lab/blender_mcp/issues/59)
+就是问这件事的（2026-09-28 提出，09-29 关闭），维护者 `dfelinto` 回的原话是
+「licence is in the individual files」并随后补了 LICENSE。
+
+**结论：不需要另外开 issue 去要许可**——那条路径既不需要、也会重复别人做过的事。
+PR 里引 #59 即可。
+
+**顺带**：这个包的 `doCheck` 也打通了（102 passed / 9 skipped / 0 failed），
+过程中修掉上游测试里一个真 bug —— 见第四节。
 
 ### obs-bilibili-stream —— 可做
 
@@ -237,11 +242,41 @@ nixpkgs 的 `CONTRIBUTING.md` 里有一节 `Automation/AI policy`
    `$out/share/blender/scripts/addons/blender_mcp_addon/`。
 5. **真的跑了它**：喂一条 JSON-RPC `initialize`，拿回完整应答——
    `serverInfo.name = "blender-mcp"`，并列出 prompts / resources / tools 三组能力。
+6. **上游测试跑起来了**：`doCheck = true`，实测 **102 passed / 9 skipped / 0 failed**。
 
 第 5 步是关键：**构建成功不等于能跑**，而它跑了。
 
-还没做的：把上游 `tests/` 接进 `doCheck`；
-许可缺口（第二节）；维护者条目（`githubId` = 24633616）。
+### 第 6 步花了什么代价：上游测试里有一个真 bug
+
+第一次开 `doCheck` 是 **139 errors + 16 failed**。根因不是打包：
+
+```python
+# tests/test_mcp_server.py:108（test_tool_listing.py 里还有一处）
+env = os.environ.copy()
+env["PYTHONPATH"] = os.path.join(_REPO_DIR, "mcp")   # 覆盖，不是追加
+```
+
+**在 venv 里无害**（依赖在解释器自己的 site-packages 里），
+**在没有 venv 的构建环境里等于把依赖整个丢掉**，服务端子进程起不来——
+症状是一片 `McpError('Connection closed')` 与 `No module named 'yaml'`。
+
+修法：`substituteInPlace … --replace-fail` 改成追加。
+`tests/test_blender_mcp_with_blender.py` 只能排除——它要**真实运行的 Blender 实例**
+（`FileNotFoundError: 'blender'`）。
+
+**反证**：把修复摘掉，当场 `15 failed / 71 passed / 117` 个 `McpError`。它是承重的。
+
+### 许可：不需要再开 issue
+
+v1.0.3 的 **tag 里没有 LICENSE 文件**，但许可本身可核验：
+构建产物里的源文件带 `# SPDX-License-Identifier: GPL-3.0-or-later`，
+add-on 清单里也写着。而且上游 issue
+[`#59`](https://projects.blender.org/lab/blender_mcp/issues/59) 就是问这件事的——
+维护者 `dfelinto` 回「licence is in the individual files」，两天后补了 LICENSE 文件。
+
+**所以「先向上游要许可」这条路径既不需要、也重复了。**
+
+还没做的：维护者条目（`githubId` = 24633616）与实际的 fork/PR。
 
 ---
 

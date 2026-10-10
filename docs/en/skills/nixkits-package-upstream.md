@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-package-upstream.md) | English | [日本語](../../ja/skills/nixkits-package-upstream.md)  | [偽中国語](../../pcn/skills/nixkits-package-upstream.md)
 
-> The NixKits adaptation layer for upstreaming to nixpkgs: the feasibility ledger for 13 packages, handling licence gaps, four-language synchronisation, and registering self-checks.
+> The NixKits adaptation layer for upstreaming to nixpkgs: the feasibility ledger for 13 packages, establishing a licence basis, four-language synchronisation, and registering self-checks.
 
 ## Basic information
 
@@ -19,8 +19,7 @@
   `deepseek-harness` there and already has 3 in-flight PRs, and `kitsfmt`'s upstream repository 404s
 - **Correcting a stale self-description**: this repository once wrote that "nixpkgs no longer
   provides the ruyi package", when in fact it never did
-- **Licence gaps**: the licence evidence must live **inside the tag we actually fetch**;
-  something added to main later does not count
+- **Licence basis**: look first for SPDX headers in the sources and licence fields in manifest files **inside the artefact we fetch**; "there is no LICENSE file" does not mean "there is no licence"
 - **Dry-run location**: `upstream/<package>/`, not `/tmp`
 - **Registering and synchronising**: the four-language README index, the four-language skill
   documentation pages (including the language switcher), the maintenance log, and the self-check count

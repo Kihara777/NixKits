@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-package-upstream.md) | [English](../../en/skills/nixkits-package-upstream.md) | [日本語](../../ja/skills/nixkits-package-upstream.md)  | 偽中国語
 
-> NixKits nixpkgs 上流貢献 適配層：13 包 実現可能性台帳、許諾缺口処置、四言語同期、自検登録。
+> NixKits nixpkgs 上流貢献 適配層：13 包 実現可能性台帳、許諾根拠確定、四言語同期、自検登録。
 
 ## 基本情報
 
@@ -18,7 +18,7 @@
 - **最踏易三点**：`mcp-searxng` 既 nixpkgs 内在、`dsh` nixpkgs 内 `deepseek-harness` 称呼
   在途 PR 既三本、`kitsfmt` 上流倉庫 404
 - **陳腐化自述更正**：本倉「nixpkgs ruyi 包 既提供無」記載、実際 一度 無
-- **許諾缺口**：許諾根拠 **実際取得 tag 内部** 必然。後 main 追加物 根拠不成立
+- **許諾根拠**：**実際取得産物 内部** 源文件 SPDX 頭 清単許諾欄 先 探索。「LICENSE 文件 無」 者 「許諾 無」 意味 非
 - **dry-run 落点**：`upstream/<包名>/`、`/tmp` 非
 - **登録同期**：四言語 README 索引、四言語技能文書頁（言語切替器含）、維護日誌、自検項数
 

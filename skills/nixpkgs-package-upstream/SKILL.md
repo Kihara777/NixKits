@@ -78,13 +78,25 @@ gh api -X GET search/issues -f q="repo:NixOS/nixpkgs is:pr ${name}" --jq '.total
 
 这是最容易被跳过、也最容易被审阅者当场卡住的一条。
 
-**要检查的是「我们实际取源的那个 tag/rev」里有没有许可文件，不是仓库的 main 分支。**
+**要检查的是「我们实际取源的那个 tag/rev」里有没有许可，不是仓库的 main 分支。**
 
 > 走过的坑：某个包的 `main` 上有 LICENSE（最近才加的），
 > 而我们取源的 tag 比那次提交早十八天——**tag 里没有许可文件**。
-> 唯一的依据是 add-on 清单里的一行 SPDX 和 main 上那份文件。
-> 这类缺口要么先向上游要（给旧 tag 补许可文件 / 等新 tag），要么在 `package.nix`
-> 里把依据写清楚。**装没看见是最坏的选项。**
+
+**但「没有 LICENSE 文件」不等于「没有许可」。** 先找这三处，再决定要不要向上游要：
+
+1. **源文件头**：`# SPDX-License-Identifier: <SPDX 表达式>`。
+   直接在**构建出来的产物**里 grep（`grep -rl SPDX-License-Identifier $out`），
+   比读仓库可靠——它证明的是我们真正取到的那份源码。
+2. **清单文件**：Python 的 `pyproject.toml`、Blender 插件的 `blender_manifest.toml`、
+   Node 的 `package.json` 等，常带 `license` / SPDX 字段。
+3. **上游 issue 里有没有人问过**：搜 `license`，看维护者怎么答的。
+   先例：某包有人提过「仓库没有许可文件」，维护者回
+   「licence is in the individual files」并随后补了 LICENSE——**那条 issue 就是最有力的依据**，
+   引它比引 main 上那份后加的文件强得多，而且**说明不需要再开一条**（有人做过的事不要重复做）。
+
+**顺序是**：先查这三处 → 证据足就照提并在 PR 里写清依据 → 不足才向上游要。
+**装没看见是最坏的选项。**
 
 顺带核许可类型：nixpkgs 的 `lib.licenses` 只收自由许可；
 `unfree` 进不了 channel，`unfreeRedistributable` 可再分发但不能改二进制。
@@ -317,7 +329,9 @@ dry-run 的 `package.nix`、PR 摘要草案、披露文本要**进版本库**，
 真要复制，先确认树里没有外指链接。
 
 **② 许可要看「我们取源的那个 tag」，不是仓库的 main。**
-main 上新加的 LICENSE 可能比 tag 晚。**证据必须在被取的那份源码里。**
+main 上新加的 LICENSE 可能比 tag 晚。**但先找源文件头的 SPDX、清单文件的 license 字段、
+以及上游 issue 里有没有人问过**——见第 1 步第 ④ 问。
+**证据必须在被取的那份源码里**，而「没有 LICENSE 文件」不等于「没有许可」。
 
 **③ 仓库里关于 nixpkgs 的自述会过期。**
 「nixpkgs 已经不再提供 X」「上游删掉了 Y」这类句子，**先取证再采信**。
@@ -342,6 +356,32 @@ nixpkgs 的立场是「Source-available software should be built from source whe
 
 **⑧ 「依赖钉死精确版本」的包不要往 nixpkgs 提。**
 nixpkgs 里所有包共用一份语言包集，抬一个版本会牵动全仓。
+
+**⑨ 打开 `doCheck` 前先想清楚「测试在什么环境里跑过」——上游只在 venv 里试过。**
+
+先例：某包的测试把服务端起成子进程，构造子进程环境时写了
+
+```python
+env = os.environ.copy()
+env["PYTHONPATH"] = some_dir        # 覆盖
+```
+
+**在 venv 里这无害**（依赖在解释器自己的 site-packages 里），
+**在没有 venv 的构建环境里等于把依赖整个丢掉**——症状是一片
+`McpError('Connection closed')` 加 `ModuleNotFoundError`，
+看起来像打包坏了，其实是上游测试对环境的假设。
+
+处置：用 `substituteInPlace … --replace-fail` 把覆盖改成追加
+（`os.pathsep.join([原值, env.get("PYTHONPATH", "")])`）。
+用 `--replace-fail` 而不是静默 patch：上游改了那一行，构建立即失败，
+不会变成「测试少跑了一半还没人知道」。
+
+**并且给它撞一次反证**：把 patch 摘掉，测试必须当场翻脸。
+说不清「摘掉会坏成什么样」的 patch，不该留在包里。
+
+**永远跑不了的测试要显式排除，并在 PR 里说明范围**：
+需要真实 GUI 程序、真实设备、网络的测试在构建沙箱里跑不了，
+用 `disabledTestPaths` / `disabledTests` 点名，别用 `doCheck = false` 把整层判据扔掉。
 
 ---
 

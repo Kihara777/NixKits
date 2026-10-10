@@ -30,7 +30,7 @@ description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 nixp
 
 | 包 | 在 nixpkgs 里 | 结论 |
 |---|---|---|
-| blender-mcp | 没有 | **推荐**，先修许可缺口 |
+| blender-mcp | 没有 | **推荐**，许可已查实、测试已打通 |
 | obs-bilibili-stream | 没有 | 可做，先改用 nixpkgs 的 OBS 插件构建助手 |
 | opencode-telegram | 没有 | 可做，先摘掉 riscv64 那段 |
 | ruyi | 没有 | 需评估，426 行补丁要先静态化 |
@@ -69,15 +69,27 @@ commit 搜索 0、issue/PR 搜索 0、Discourse 搜索 0）。
 **规矩**：任何「上游已经……」「nixpkgs 已不再……」的句子，引用前先取证。
 发现是错的就**当次改掉并单独提交**，不要留着让下一个人再错一次。
 
-### 2.2 许可缺口：要看「我们取源的那个 tag」
+### 2.2 许可依据：先找源文件与清单，再考虑向上游要
 
 `blender-mcp` 取的是 `v1.0.3`，而那个 tag 里**没有 LICENSE 文件**；
 GPL-3.0 的 LICENSE 是十八天后才加进 `main` 的。
-唯一的许可依据是 add-on 的 `blender_manifest.toml` 里一行 `SPDX:GPL-3.0-or-later`。
 
-处置顺序：**先向上游要**（在 `projects.blender.org/lab/blender_mcp` 开 issue，
-要求给已发布的 tag 补许可文件，或等下一个 tag）→ 再提交。
-在 `package.nix` 里用注释把依据写清楚，别装看不见。
+**但许可并不缺** —— 它写在**每个源文件里**：
+我们构建出来的产物带 `# SPDX-License-Identifier: GPL-3.0-or-later`，
+add-on 的 `blender_manifest.toml` 也声明了。
+而且上游 issue
+[`#59`](https://projects.blender.org/lab/blender_mcp/issues/59)
+就是问这件事的，维护者的答复原话是「licence is in the individual files」。
+
+**处置顺序（这次学到的）**：
+
+1. 在**被取的产物**里找证据（`grep -rl SPDX-License-Identifier $out`）——
+   产物比仓库可靠，它证明的是我们真正取到的那份源码；
+2. 查上游有没有人问过许可（搜 issue），有就把那条引上——**最有力的依据**；
+3. 前两步都空，才向**上游**要（补许可文件 / 等下一个 tag）。
+
+**「没有 LICENSE 文件」不等于「没有许可」**；也**别重复别人做过的事**——
+先搜索，再开 issue。
 
 ### 2.3 dry-run 落在仓库里
 

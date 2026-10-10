@@ -2,7 +2,7 @@
 
 [中文](../../zh/skills/nixkits-package-upstream.md) | [English](../../en/skills/nixkits-package-upstream.md) | 日本語 | [偽中国語](../../pcn/skills/nixkits-package-upstream.md)
 
-> NixKits の nixpkgs 上流貢献 適配層：13 包の実現可能性台帳、許諾缺口の処置、四言語同期、自検の登録。
+> NixKits の nixpkgs 上流貢献 適配層：13 包の実現可能性台帳、許諾の根拠の確定、四言語同期、自検の登録。
 
 ## 基本情報
 
@@ -18,8 +18,7 @@
 - **最も踏み易い三点**：`mcp-searxng` は既に nixpkgs に在る、`dsh` は nixpkgs では
   `deepseek-harness` と呼ばれ在途 PR が既に 3 本、`kitsfmt` の上流倉庫は 404
 - **陳腐化した自述の更正**：本倉は「nixpkgs は ruyi 包を既に提供しない」と書いたが、実際は一度も無い
-- **許諾の缺口**：許諾の根拠は**実際に取得する tag の中**に無ければならない。後から main に
-  足された物は根拠にならない
+- **許諾の根拠**：**実際に取得する産物の中**で、源ファイルの SPDX 頭と清単の許諾欄を先に探す。「LICENSE ファイルが無い」は「許諾が無い」を意味しない
 - **dry-run の落点**：`upstream/<包名>/`、`/tmp` ではない
 - **登録と同期**：四言語 README 索引、四言語の技能文書頁（言語切替器を含む）、維護日誌、自検の項数
 
