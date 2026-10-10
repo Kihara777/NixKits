@@ -5,7 +5,7 @@
   cmake,
   obs-studio,
   curl,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     obs-studio
     curl
-    qtbase
+    qt6.qtbase
   ];
 
   # The plugin ships a Qt dialog and links against obs-frontend-api, but OBS

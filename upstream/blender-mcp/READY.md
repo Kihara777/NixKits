@@ -51,7 +51,7 @@ _最后核验：2026-10-10_
 | 6 | 格式符合 nixpkgs 强制要求 | ✅ | `nixfmt --check` 退出码 0 |
 | 7 | 许可依据可指认 | ✅ | 产物里源文件带 SPDX；上游 issue #59 维护者确认 |
 | 8 | 自动更新可用 | ✅ | `is_gitea_host` 探针 200 + tag 格式对得上（`VERIFICATION.md`） |
-| 9 | 维护者条目可写 | ✅ | `MAINTAINER-ENTRY.md`（位置、`githubId` 已双核、488 条无邮箱先例） |
+| 9 | 维护者条目可写 | ✅ | `../MAINTAINER-ENTRY.md`（位置、`githubId` 已双核、488 条无邮箱先例） |
 | 10 | PR 摘要与 AI 披露已拟 | ✅ | `pr-body.md`（含独立披露段） |
 | 11 | 本仓自检绿 | ✅ | `nix flake check` 全绿（含真实构建） |
 
@@ -59,7 +59,7 @@ _最后核验：2026-10-10_
 
 - 在真 nixpkgs 检出里跑**完整的** `nix-update`（需要整树副本，刻意没复制）。
 - 实际跑 `nixpkgs-vet`（需要两个 git 检出）。棘轮那一条是**推理**，
-  理由写在 `MAINTAINER-ENTRY.md` 末尾。
+  理由写在 `../MAINTAINER-ENTRY.md` 末尾。
 - `aarch64-linux` 上的构建（本地只有 x86_64）。
 - `r-ryantm` 到底会不会开 PR——它的运行环境与本地不同。
 
@@ -154,7 +154,7 @@ git switch --create init-blender-mcp upstream/master
 
 **commit 1 —— 维护者条目**
 
-把 `MAINTAINER-ENTRY.md` 里那段插到 `maintainers/maintainer-list.nix`
+把 `../MAINTAINER-ENTRY.md` 里那段插到 `maintainers/maintainer-list.nix`
 的 `kiyotoko` 与 `kjeremy` 之间，然后：
 
 ```bash
@@ -202,7 +202,7 @@ gh pr create --repo NixOS/nixpkgs --base master --title "blender-mcp: init at 1.
 
 | 症状 | 第一件事 |
 |---|---|
-| `nixpkgs-vet` 报 `strictDeps`/`__structuredAttrs` | 把 vet 拉下来对着 fork 真跑一次，别猜（`MAINTAINER-ENTRY.md` 末尾有推理，但那是推理） |
+| `nixpkgs-vet` 报 `strictDeps`/`__structuredAttrs` | 把 vet 拉下来对着 fork 真跑一次，别猜（`../MAINTAINER-ENTRY.md` 末尾有推理，但那是推理） |
 | 审阅者问许可 | 引 issue #59 与 `SPDX-License-Identifier` 在源文件里的事实 |
 | 审阅者问那个 `--replace-fail` 补丁 | 引 `VERIFICATION.md` 第二节；并说明**可以把它提给上游** |
 | 审阅者问为什么排除 Blender 那个测试文件 | 它要真实运行的 Blender 编辑器实例，沙箱里没有；其余三个文件 102 项全跑 |
@@ -219,6 +219,6 @@ gh pr create --repo NixOS/nixpkgs --base master --title "blender-mcp: init at 1.
 | `build.sh` | 四层判据（求值 / 构建 / 产物 / 运行）+ nixfmt 检查 |
 | `tests/criterion-self-test.sh` | 反证：每条判据都要能被已知坏输入撞响 |
 | `pr-body.md` | 提交计划、两个 commit 的正文、PR 摘要、AI 披露段 |
-| `MAINTAINER-ENTRY.md` | 维护者条目的确切内容与插入位置 |
+| `../MAINTAINER-ENTRY.md` | 维护者条目的确切内容与插入位置 |
 | `VERIFICATION.md` | 两个「提交后会被问到」的点的取证：自动更新、替换锚点 |
 | `READY.md` | 本文（提交就绪检查表与执行顺序） |

@@ -535,6 +535,36 @@ postFixup = lib.optionalString (blender != null) ''
   和**拿真样本试**（看它误不误报）；
 - 报告里分开写「检查器说不行」与「我看了，确实不行」——**前者不是结论**。
 
+**⑬ 本地那棵 nixpkgs 能用来「构建」，不能用来「判断上游长什么样」。**
+
+nixpkgs 的结构一直在动，而本地树通常是某个时点的快照。**凡属于结构的问题，
+必须现取 master 核实。** 属于结构的是：
+
+- 这个包该放哪个目录（`pkgs/by-name/…`？类别目录？还是某个 scope 下的文件？）
+- 要不要另改一个「接线文件」把包登记进去
+- 用哪个 `callPackage`（`pkgs.callPackage` / `qt6Packages.callPackage` / …）
+  —— **它决定参数名怎么写**（`qtbase` 还是 `qt6.qtbase`）
+- 有没有自动发现机制
+
+先例：按本地九月快照，我断定 OBS 插件要在 `plugins/default.nix` 里手工加一行、
+Qt 写 `qtbase`。取当前 master 一看，两处都变了 ——
+接线改成了 `lib.packagesFromDirectoryRecursive` 的**自动发现**（不用加行），
+`callPackage` 也换回普通的 `pkgs.callPackage`（于是要写 `qt6.qtbase`）。
+**差一点带着过时的接线方式去提交。**
+
+做法：
+
+```bash
+# 结构问题一律现取
+gh api "repos/NixOS/nixpkgs/contents/<路径>?ref=master" -H 'Accept: application/vnd.github.raw'
+gh api 'repos/NixOS/nixpkgs/contents/<目录>?ref=master' --jq '.[].name'   # 看目录现状
+```
+
+判据：**引用的每一个上游文件路径，都要有一次带 `ref=master` 的取回记录**；
+只凭本地 `ls` 得出的结论，写下来时要标「基于快照，未核 master」。
+
+---
+
 ---
 
 ## 仓库适配层

@@ -17,7 +17,7 @@
 | 内容 | 单一来源 |
 |---|---|
 | commit 2 的正文 | [`commit-message.txt`](commit-message.txt) —— 用 `git commit -F` 直接喂，**不要手抄** |
-| 维护者条目的落点与依据 | [`MAINTAINER-ENTRY.md`](MAINTAINER-ENTRY.md) |
+| 维护者条目的落点与依据 | [`MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
 | 待提交的包定义 | [`package.nix`](package.nix) —— 与将推送到 fork 的那份逐字节相同 |
 
 > ⚠️ **今天在这上面摔过**：我发布 #572360 时在 `/tmp` 里用 `sed` 改了模型名，

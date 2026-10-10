@@ -1,0 +1,18 @@
+obs-bilibili-stream: init at 2.1.5
+
+Bilibili streaming plugin for OBS Studio. It adds Bilibili as a streaming
+target and a dialog for managing streams, and links against obs-frontend-api.
+
+The package defines -DENABLE_QT=ON because the build cannot find the Qt headers
+the dialog uses without it.
+
+Upstream's CMake installs the plugin twice: into lib/obs-plugins/, which is the
+path the OBS wrapper reads via OBS_PLUGINS_PATH, and into obs-plugins/64bit/,
+OBS's own default prefix. The second copy is unused here and is removed.
+
+Licence: the project's appstream metadata declares GPL-2.0-only. The LICENSE
+file is the stock GPLv2 text and src/plugin-support.{h,c.in} are the unmodified
+OBS plugin template with its placeholders unfilled, so the "or any later
+version" wording there is boilerplate rather than the author's grant.
+
+Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)

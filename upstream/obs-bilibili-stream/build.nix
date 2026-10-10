@@ -24,6 +24,8 @@ let
     }
   );
 in
-# OBS 插件用 Qt 时，nixpkgs 的惯例是走 qt6Packages.callPackage（见 plugins/default.nix），
-# 由它注入 qtbase 等 Qt 包。所以这里也走那条路，与将来的落点一致。
-pkgs.qt6Packages.callPackage ./package.nix { }
+# OBS 插件现在由 lib.packagesFromDirectoryRecursive 自动发现（见
+# pkgs/applications/video/obs-studio/plugins.nix），用的是**普通的 pkgs.callPackage**。
+# 所以 Qt 依赖要在包定义里写成 `qt6.qtbase`，而不是靠 qt6Packages 注入。
+# 与当前 master 上 obs-color-monitor.nix 的写法一致。
+pkgs.callPackage ./package.nix { }

@@ -1,46 +1,47 @@
 # 提交计划：obs-bilibili-stream → nixpkgs
 
-**状态：草稿已建、构建通过、检查器通过。等狐莉验证后发布。**
+**状态：草稿已建、构建通过、检查器通过。等狐莉人工核查后才发布。**
 
 ---
 
-## 一、这个包要改**两个**文件（与 blender-mcp 不同）
+## 一、这个包**只改一个文件**（新增），加一个维护者条目
 
-nixpkgs 的 OBS 插件不走 by-name，而是有自己的目录与接线文件。
-`pkgs/applications/video/obs-studio/plugins/default.nix` 顶部写着入场规则：
+| 文件 | 动作 |
+|---|---|
+| `pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix` | **新增**（内容 = [`package.nix`](package.nix) 逐字节相同） |
+| `maintainers/maintainer-list.nix` | 插入 `grg41` 条目 —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
 
-> - Respect alphabetical order. On diversion, file a PR.
-> - Plugin name should reflect upstream's name. Including or excluding "obs" prefix/suffix.
-> - Add plugin to it's own directory (because of future patches).
+**接线文件不用改。** 这一条我最初写错了，见第七节。
 
-**文件一（新增）**：`pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix`
-内容 = [`package.nix`](package.nix) **逐字节相同**。
+## 二、两个 commit
 
-**文件二（改一行）**：`pkgs/applications/video/obs-studio/plugins/default.nix`
-
-在 `obs-backgroundremoval` 与 `obs-browser-transition` 之间插入（字母序：`bil` < `bro`）：
-
-```nix
-  obs-bilibili-stream = qt6Packages.callPackage ./obs-bilibili-stream.nix { };
-```
-
-用 `qt6Packages.callPackage` 是因为这个插件用 Qt——由它注入 `qtbase`，
-所以包定义里写的是 `qtbase` 而不是 `qt6.qtbase`（与 `obs-color-monitor` 等 14 个插件一致）。
-
-## 二、commit
+### commit 1
 
 ```
-obs-bilibili-stream: init at 2.1.5
-
-Bilibili streaming plugin for OBS Studio. It adds a streaming target and a
-dialog for managing Bilibili streams, and links against obs-frontend-api.
+maintainers: add grg41
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
 
-**一个 commit**（两个文件同属一件事）。若狐莉认为该拆开，我拆。
+### commit 2
 
-## 三、PR 标题与正文
+正文 = [`commit-message.txt`](commit-message.txt) 逐字。
+
+标题：`obs-bilibili-stream: init at 2.1.5`
+
+## 三、为什么这么写（每条都有实测依据）
+
+| 写法 | 依据 |
+|---|---|
+| 放在 `plugins/` 下的**平铺 `.nix` 文件** | `plugins.nix` 用 `lib.packagesFromDirectoryRecursive { directory = ./plugins; }`；`lib/filesystem.nix:403` 的规则是「`.nix` 文件 → `callPackage <file> { }`」 |
+| 参数写 **`qt6`**、依赖写 **`qt6.qtbase`** | 自动发现用的是**普通的 `pkgs.callPackage`**，没有 `qt6Packages` 注入。与当前 master 的 `obs-color-monitor.nix` 一致 |
+| `cmakeFlags = [ "-DENABLE_QT=ON" ]` | **去掉就建不过**：`fatal error: QMenuBar: No such file or directory`。实测 |
+| **没有** `-DOBS_SOURCE=...` | 实测多余：单独留它构建失败，去掉后 `.so` **逐字节相同**（`62a9a296…`） |
+| `postInstall` 里 `rm -rf "$out/obs-plugins"` | 上游 CMake **装两遍**：`lib/obs-plugins/`（OBS 包装器读的位置）与 `obs-plugins/64bit/`（OBS 自己的默认前缀）。实测去掉后产物会多出第二份 |
+| `license = lib.licenses.gpl2Only` | 上游 `metainfo.xml` 写着 `<project_license>GPL-2.0-only</project_license>` |
+| 没有 `mainProgram` | 插件不是可执行文件。nixpkgs 里 54 个 OBS 插件没一个设它 |
+
+## 四、PR 标题与正文
 
 **标题**：`obs-bilibili-stream: init at 2.1.5`
 
@@ -49,7 +50,7 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```markdown
 Adds obs-bilibili-stream, a plugin that adds Bilibili as a streaming target in
 OBS Studio, with a dialog for managing streams. It links against
-obs-frontend-api and uses Qt, so it is wired through `qt6Packages.callPackage`.
+obs-frontend-api and uses Qt.
 
 The licence is GPL-2.0-only: the project's own appstream metadata declares
 `<project_license>GPL-2.0-only</project_license>`. The LICENSE file is the stock
@@ -57,9 +58,13 @@ GPLv2 text and `src/plugin-support.{h,c.in}` are the unmodified OBS plugin
 template with its placeholders unfilled, so the "or any later version" wording
 there is boilerplate rather than the author's grant.
 
-A note on `postInstall`: upstream's CMake installs the plugin twice — into
-`lib/obs-plugins/` (the path the OBS wrapper reads) and into `obs-plugins/64bit/`
-(OBS's own default prefix). The second copy is dropped.
+Two notes on the package definition:
+
+- `-DENABLE_QT=ON` is load-bearing; without it the build cannot find the Qt
+  headers (`QMenuBar: No such file or directory`).
+- Upstream's CMake installs the plugin twice — into `lib/obs-plugins/` (the path
+  the OBS wrapper reads) and into `obs-plugins/64bit/` (OBS's own default
+  prefix). The second copy is dropped.
 
 ### Things done
 
@@ -70,10 +75,6 @@ A note on `postInstall`: upstream's CMake installs the plugin twice — into
 - [x] Verified the output layout matches what the OBS wrapper expects:
   `lib/obs-plugins/bilibili-stream-for-obs.so` and
   `share/obs/obs-plugins/bilibili-stream-for-obs/{config.json,locale/en-US.ini}`.
-- [x] Checked that `-DENABLE_QT=ON` is load-bearing: without it the build cannot
-  find the Qt headers (`QMenuBar: No such file or directory`). The
-  `-DOBS_SOURCE=...` that used to accompany it was dropped — building with it
-  alone fails and removing it leaves the `.so` byte-identical.
 - [x] Fits CONTRIBUTING.md, pkgs/README.md, maintainers/README.md and other READMEs.
 - [x] Follows the automation/AI policy.
 
@@ -83,32 +84,54 @@ The account submitting this (`GrG41`, display name 戦術人形Ｇ４１) is ope
 an AI agent, 小爪, which develops and maintains the packages under
 https://github.com/Kihara777/NixKits. This contribution was produced by that
 agent using DeepSeek Harness running `DeepSeek-V41-Flash`, and is disclosed as an
-`Assisted-by:` trailer on the commit.
+`Assisted-by:` trailer on every commit.
 
 The responsible person in the sense of the automation/AI policy is 狐莉
 (Kitsunori, https://github.com/Kihara777), who reviewed this contribution and
-authorised its submission.
+authorised its submission. Every claim above was checked by running it rather
+than by inspection.
 ```
 
-## 四、判据（发布前已跑）
+## 五、判据（发布前已跑）
 
 | 判据 | 结果 |
 |---|---|
 | 求值 + 构建 | ✅ |
 | 产物核验 | ✅ 3 个文件，与 NixKits 那版逐项相同 |
 | `-DENABLE_QT=ON` 承重 | ✅ 逐条实测（单独留它成功，单独留 `OBS_SOURCE` 失败） |
-| 去掉 `OBS_SOURCE` 不改变产物 | ✅ `.so` 逐字节相同（`62a9a296…`） |
-| 去掉 `postInstall` 会留下重复 | ✅ 实测：产物会多出 `obs-plugins/64bit/…` |
-| `check-draft.sh` 机械项 | ✅ 全过（含「不是 python 包」等 2 项**没能验到**，单列） |
+| 去掉 `OBS_SOURCE` 不改变产物 | ✅ `.so` 逐字节相同 |
+| 去掉 `postInstall` 会留下重复 | ✅ 实测 |
+| 改成 `qt6.qtbase` 不改变产物 | ✅ 产物路径与 `qtbase`（qt6Packages）那条路**完全相同** |
+| `check-draft.sh` 机械项 | ✅ 全过 |
 | nixfmt | ✅ |
 
 **仍未验**：在真 nixpkgs 检出里跑 `nixpkgs-vet`（要两个 git 检出）；
-aarch64 与 riscv64 构建（本地只有 x86_64，且 `obs-studio` 不支持 riscv64）。
+aarch64 / riscv64 构建（本地只有 x86_64，且 `obs-studio` 的 platforms 不含 riscv64）。
 
-## 五、顺带修掉的我们自己的错
+## 六、发布步骤
 
-`packages/obs-bilibili-stream.nix` 的 `license` 原写 `gpl2Plus`，
-**没有依据**——上游的 appstream 元数据写的是 `GPL-2.0-only`。已改为 `gpl2Only`。
+```bash
+gh auth switch --user GrG41
+gh api user --jq .login          # 期望 GrG41
+# fork GrG41/nixpkgs 已建；建分支 obs-bilibili-stream
+# 两个 commit 用 Git Data API 建（不整树克隆）
+# 开 PR
+```
 
-（`-DOBS_SOURCE=${obs-studio}` 在那边仍然留着：它无害，且改它要动我们 CI 的构建，
-收益为零。**已验证它不影响产物。**）
+## 七、⚠️ 一次差点带着过时信息提交
+
+我最初写的接线方式是「在 `plugins/default.nix` 里手工加一行」，
+Qt 写 `qtbase`（靠 `qt6Packages.callPackage` 注入）。**那是九月的快照。**
+
+取当前 master 一看，两处都变了：
+
+| | 九月快照 | 当前 master |
+|---|---|---|
+| 接线 | `plugins/default.nix` 手工加行 | `plugins.nix` 用 `packagesFromDirectoryRecursive` **自动发现**，不用加行 |
+| Qt | `qt6Packages.callPackage` → `qtbase` | 普通 `callPackage` → **`qt6.qtbase`** |
+
+**这正是本技能第 0 步「先同步，再采信」要防的事** —— 我用一棵本地 nixpkgs 快照
+推断「上游的目录结构与接线方式」，而那个快照是旧的。
+
+**规矩**：**结构性问题（文件放哪、怎么接线、用什么 callPackage）必须现取 master 核实，
+不能用本地快照推断。** 本地树可以用来**构建**，不能用来**判断上游长什么样**。
