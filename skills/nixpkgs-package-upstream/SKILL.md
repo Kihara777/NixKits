@@ -215,7 +215,13 @@ by-name 的两条限制：只收 `pkgs.callPackage` 风格的包（**排除** `p
 - 例外：AI 用在**被打包的上游软件本身**不在范围内；
   用在研究、测试、调试、私有审阅也范围外（有实质技术影响时仍要负责）。
 
-**执行是人工的，CI 里没有 AI trailer 校验**——没有机器看着这条，所以它靠我们守。
+**执行方式要分两层说，别合成一句「没人看」**：
+
+- **不强制**：`ci/github-script/lint-commits.ts` 不校验 AI trailer，缺了不会让构建变红；
+- **但会被认出来**：`ci/github-script/bot.ts` 里 `const assistedByPattern = /Assisted-by: (?!nix-init)/i`
+  命中即打 **`llm-assisted`** 标签（实测：本仓第一个 PR 就是这样被标上的）。
+
+**不阻断 ≠ 无人看见。** 写下「没有机器看着这条政策」是错的——机器在看，只是不拦。
 提议时就把合规形态做出来：commit trailer 写全，PR 摘要里独立写一段披露。
 
 ---
