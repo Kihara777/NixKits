@@ -2,7 +2,7 @@
 
 这份目录是 **dry-run 的产物**，不是已经提交的东西。
 真要提交时按下面的计划走；每一步的判据在
-[`skills/nixpkgs-package-upstream/SKILL.md`](../skills/nixpkgs-package-upstream/SKILL.md)。
+[`skills/nixpkgs-package-upstream/SKILL.md`](../../skills/nixpkgs-package-upstream/SKILL.md)。
 
 ---
 
