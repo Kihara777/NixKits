@@ -1,8 +1,41 @@
 # 提交就绪检查表（blender-mcp → nixpkgs）
 
-**状态：全部前置已就绪；只等狐莉一句「go」，然后按下面执行。**
+**状态：已提交 —— <https://github.com/NixOS/nixpkgs/pull/572360>（2026-10-10 开出）**
 
 _最后核验：2026-10-10_
+
+---
+
+## 零、已发生的事（提交后补记）
+
+| 项 | 值 |
+|---|---|
+| PR | [#572360](https://github.com/NixOS/nixpkgs/pull/572360)，`blender-mcp: init at 1.0.3` |
+| fork | `Kihara777/nixpkgs`，分支 `init-blender-mcp` |
+| 提交 | `6bfdbbf` `maintainers: add kihara777` → `dc19bf2` `blender-mcp: init at 1.0.3` |
+| 改动 | **+151 −0，恰好 2 个文件**（`maintainer-list.nix` +5、`package.nix` +146） |
+| CI | 17 pass / 2 skipping / 1 pending / **0 失败**，`mergeable=MERGEABLE` |
+
+**两条此前只推理过、没有实测的，现在是上游 CI 替我验的**：
+
+- `Lint / nixpkgs-vet` → **pass**（棘轮 `strictDeps` / `__structuredAttrs` 那一条）
+- `Lint / treefmt` → **pass**（nixfmt 格式）
+
+### 提交时改了两处（不是照草案原样发的）
+
+1. **`author`/`committer` 用 GitHub 的 noreply 地址**，不是账号里的真实邮箱。
+   第一次建的 commit 带了真实邮箱，我删掉分支重做了——
+   狐莉刚决定维护者条目不写邮箱，提交里公开同一个邮箱等于绕过那个决定。
+   noreply 形式（`24633616+Kihara777@users.noreply.github.com`）**保留不可变 GitHub ID**，
+   责任归属不变，nixpkgs 也明确接受。
+2. **披露里的模型名**改成 `deepseek-flash`（我运行时的实际报告）。
+   草案里写的「DeepSeek V4 Flash」是从本仓作者行抄的、**不是我核过的**。
+   现在 commit trailer 与 PR 正文三处一致。
+
+### 接下来归狐莉
+
+**评审答复归她**——AI 政策要求贡献者自己能答问，不能把意见转发给工具再转回去。
+被拦下时的排查表见第三节。
 
 ---
 

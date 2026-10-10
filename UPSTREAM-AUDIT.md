@@ -276,7 +276,12 @@ add-on 清单里也写着。而且上游 issue
 
 **所以「先向上游要许可」这条路径既不需要、也重复了。**
 
-还没做的：维护者条目（`githubId` = 24633616）与实际的 fork/PR。
+**已提交**：PR [#572360](https://github.com/NixOS/nixpkgs/pull/572360)
+（`blender-mcp: init at 1.0.3`，+151 −0，2 个文件）。
+维护者条目 `kihara777` 与包各一个 commit，`maintainers` 在前。
+上游 CI：17 pass / 0 失败，含 `Lint / nixpkgs-vet` 与 `Lint / treefmt`。
+
+**提交 ≠ 被接受**——它现在等维护者评审，那部分归狐莉。
 
 ---
 
