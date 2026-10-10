@@ -20,12 +20,7 @@ let
   # （PR 一旦落地，nixpkgs 的表里就有它了）。
   #
   # 三个字段与 `MAINTAINER-ENTRY.md` 里要插进 maintainer-list.nix 的**逐字相同**。
-  grg41 = {
-    email = "gr@g41.moe";
-    github = "GrG41";
-    githubId = 152935465;
-    name = "戦術人形Ｇ４１";
-  };
+  grg41 = import ../maintainer-entry.nix;
 
   pkgs = pkgs0.extend (
     final: prev: {

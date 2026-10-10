@@ -9,12 +9,7 @@ let
 
   # 包定义引用 `lib.maintainers.grg41`，本地那棵 nixpkgs 里没有这个条目
   # ——它由同 PR 的第一个 commit 加进去。这里注入以模拟**合并之后**的状态。
-  grg41 = {
-    email = "gr@g41.moe";
-    github = "GrG41";
-    githubId = 152935465;
-    name = "戦術人形Ｇ４１";
-  };
+  grg41 = import ../maintainer-entry.nix;
 
   pkgs = pkgs0.extend (
     final: prev: {
