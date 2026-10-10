@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T14:00:48+09:00
+
+**摘要**：blender-mcp 上流草稿 doCheck 打通 — 上流試験 真 bug 修正
+
+- 当初 139 errors + 16 failed。原因 上流試験 helper PYTHONPATH **上書**、依存 全部 消失
+- 修正 `--replace-fail` 使用：上流 此二箇所 変更 場合、構築 即失敗、黙 試験減少 無
+- `tests/test_blender_mcp_with_blender.py` 除外：実物 Blender 実例 必要、沙箱 走 不能
+- 実測 102 passed / 9 skipped / 0 failed。反例：修正 除去 15 failed + `McpError` 117 件
+- 許諾根拠 確認：v1.0.3 源文件 SPDX 頭 有、上流 issue #59 確認済、別途 issue 不要
+
+| 提交 | 説明 |
+|------|------|
+| `2824c74` | feat(upstream): doCheck 打通（102 passed）上流試験 bug 記録 |
+
+
 ## 2026-10-10T12:59:05+09:00
 **摘要**：nixpkgs 上流貢献 — 実現可能性評価、二技能、blender-mcp dry-run
 

@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:00:48+09:00
+
+**摘要**：blender-mcp 上游草稿的 doCheck 打通 — 并修掉上游测试里一个真 bug
+
+- 原状 139 errors + 16 failed；根因是上游测试 helper **覆盖** PYTHONPATH 而非追加，丢掉全部依赖
+- 修法用 `--replace-fail`：上游若改动这两处，构建立即失败而不是静默少跑测试
+- `tests/test_blender_mcp_with_blender.py` 排除：要真实 Blender 实例，沙箱里跑不了
+- 实测 102 passed / 9 skipped / 0 failed；反证：摘掉修复即 15 failed + 117 个 `McpError`
+- 许可依据查实：v1.0.3 源文件带 SPDX 头，上游 issue #59 已确认，无需另开 issue
+
+| 提交 | 说明 |
+|------|------|
+| `2824c74` | feat(upstream): doCheck 修好（102 passed）并记录上游测试 bug |
+
+
 ## 2026-10-10T12:59:05+09:00
 
 **摘要**：nixpkgs 上游贡献 — 可行性评估、两个技能与 blender-mcp 的 dry-run

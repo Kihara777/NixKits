@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:00:48+09:00
+
+**Summary**: blender-mcp upstream draft — doCheck working, and a real upstream test bug fixed
+
+- Originally 139 errors + 16 failed; the cause is the upstream test helper **overwriting** PYTHONPATH instead of appending, discarding every dependency
+- The patch uses `--replace-fail`: if upstream changes those two lines the build fails loudly instead of silently running fewer tests
+- `tests/test_blender_mcp_with_blender.py` is excluded: it needs a real Blender instance, which the sandbox cannot provide
+- Measured 102 passed / 9 skipped / 0 failed; counterexample: removing the fix gives 15 failed + 117 `McpError`s
+- Licence basis verified: v1.0.3 sources carry SPDX headers, confirmed upstream in issue #59, so no separate issue is needed
+
+| Commit | Description |
+|------|------|
+| `2824c74` | feat(upstream): doCheck working (102 passed) and upstream test bug recorded |
+
+
 ## 2026-10-10T12:59:05+09:00
 **Summary**: nixpkgs upstream contribution — feasibility assessment, two skills, and a blender-mcp dry run
 
