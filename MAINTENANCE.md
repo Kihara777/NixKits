@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:55:41+09:00
+
+**摘要**：终检 —— 补三件此前没验过的判据，清掉 README 的过期内容
+
+- **自动发现**：把草稿放进与 `plugins/` 同构的目录，用真的 `packagesFromDirectoryRecursive` 验「会被认成什么名字」；含反证臂（改名则属性名跟着变）。写它时它抓到我两个 bug
+- **单一来源**：维护者条目从 4 份副本收成 `upstream/maintainer-entry.nix`，文档那份由 `check-consistency.sh` 盯着
+- **src hash 独立复算**：收成 `upstream/verify-src.sh`；obs 走「真的重下一遍」，blender-mcp 因 403 走构造证明
+- 清掉 `READY.md` 的 12 处过期内容，重写为「排查表 + 清单」——它与 `pr-body.md` 并行描述同一件事，一定会漂
+
+| 提交 | 说明 |
+|------|------|
+| `f9dbb33` | verify: 终检 —— 自动发现、单一来源、独立复算 src，清掉 README 过期内容 |
+
 ## 2026-10-10T15:48:29+09:00
 
 **摘要**：按 nixpkgs 现有 OBS 插件规范对齐草稿，查出一处真缺陷

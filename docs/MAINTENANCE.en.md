@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T15:55:41+09:00
+
+**Summary**: final verification — three criteria that had not been checked, plus stale README content removed
+
+- **Auto-discovery**: the draft is placed in a directory shaped like `plugins/` and discovered through the real `packagesFromDirectoryRecursive`, testing what name it gets; includes a counterexample arm (renaming the file changes the attribute name). Writing it exposed two of my own bugs
+- **Single source**: the maintainer entry went from four copies to `upstream/maintainer-entry.nix`, with the documentation copy watched by `check-consistency.sh` (verified that it fails when it should)
+- **Independent src hash recomputation** collected into `upstream/verify-src.sh`; obs actually re-downloads, while blender-mcp uses the construction proof because upstream returns 403
+- Removed 12 stale spots in `READY.md` (old handle, old insertion point, old identity, old model name) and rewrote it as a triage table plus file inventory — it described the same submission as `pr-body.md`, and two descriptions of one thing always drift
+
+| Commit | Description |
+|------|------|
+| `f9dbb33` | verify: auto-discovery, single source, independent src recomputation, stale README removed |
+
 ## 2026-10-10T15:48:29+09:00
 
 **Summary**: the draft aligned with the existing OBS plugins in nixpkgs, and a real defect found

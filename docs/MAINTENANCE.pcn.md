@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T15:55:41+09:00
+
+**摘要**：最終検証 —— 未検証 三件 追加、README 陳腐化 除去
+
+- **自動発見**：草稿 `plugins/` 同型 目録 配置、実際 `packagesFromDirectoryRecursive` 「何 名前 認識」検証；反例腕 付（改名 属性名 変）。作成中 自身 bug 二件 検出
+- **単一来源**：維護者条目 四 複製 `upstream/maintainer-entry.nix` 集約、文書側 `check-consistency.sh` 監視（鳴 確認済）
+- **src hash 独立再計算** `upstream/verify-src.sh` 集約；obs 実際 再取得、blender-mcp 上流 403 構成証明
+- `READY.md` 陳腐化 12 箇所（旧 handle 旧挿入点 旧身分 旧模型名）除去、「調査表 + 一覧」書直。`pr-body.md` 同対象 並行記述、必 漂流
+
+| 提交 | 説明 |
+|------|------|
+| `f9dbb33` | verify: 自動発見 単一来源 独立再計算、README 陳腐化 除去 |
+
 ## 2026-10-10T15:48:29+09:00
 
 **摘要**：nixpkgs 既存 OBS 插件 規約 草稿 整合、実欠陥 一件 発見
