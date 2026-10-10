@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitea,
-  makeWrapper,
   nix-update-script,
 }:
 
@@ -27,8 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/mcp";
 
   build-system = [ python3Packages.setuptools ];
-
-  nativeBuildInputs = [ makeWrapper ];
 
   # Upstream declares mcp[cli]; python-dotenv and typer come from that extra.
   dependencies = with python3Packages; [
@@ -60,12 +57,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       'env["PYTHONPATH"] = os.pathsep.join([os.path.join(_REPO_DIR, "mcp"), env.get("PYTHONPATH", "")])'
   '';
 
+  # buildPythonApplication runs these in the install-check phase, which is the
+  # only check phase a Python package has.
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-asyncio
   ];
-
-  doCheck = true;
 
   # The tests read from the source tree's tests/, while sourceRoot points at mcp/.
   preCheck = ''
