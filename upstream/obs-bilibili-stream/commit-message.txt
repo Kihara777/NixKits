@@ -3,8 +3,11 @@ obs-bilibili-stream: init at 2.1.5
 Bilibili streaming plugin for OBS Studio. It adds Bilibili as a streaming
 target and a dialog for managing streams, and links against obs-frontend-api.
 
-The package defines -DENABLE_QT=ON because the build cannot find the Qt headers
-the dialog uses without it.
+Both build options are passed explicitly because they default to OFF in
+upstream's CMakeLists.txt while upstream's own CMakePresets.json turns them on:
+-DENABLE_QT=ON finds the Qt headers the dialog uses (without it the build fails
+with "QMenuBar: No such file or directory"), and -DENABLE_FRONTEND_API=ON links
+libobs-frontend-api, which the plugin uses to register its menu entry.
 
 Upstream's CMake installs the plugin twice: into lib/obs-plugins/, which is the
 path the OBS wrapper reads via OBS_PLUGINS_PATH, and into obs-plugins/64bit/,

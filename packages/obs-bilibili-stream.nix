@@ -34,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DOBS_SOURCE=${obs-studio}"
     "-DENABLE_QT=ON"
+    # 2026-10-10 补：**此前漏了这一个**，而它是上游 CMakePresets.json 的
+    # "template" preset 里就开着的（ENABLE_FRONTEND_API: true）。
+    # 上游 CMakeLists.txt 里它默认 OFF，OFF 时**不链接** libobs-frontend-api——
+    # 而这个插件正是用它注册菜单项的。
+    # 实测差异：不开时 NEEDED 里没有 libobs-frontend-api.so.30，且 .so 与开着的
+    # **不是同一个文件**。MODULE 库靠宿主解析符号，可能碰巧能跑——但那不是上游的意图。
+    "-DENABLE_FRONTEND_API=ON"
   ];
 
   postInstall = ''

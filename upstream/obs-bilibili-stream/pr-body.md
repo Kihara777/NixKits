@@ -31,15 +31,22 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 
 ## 三、为什么这么写（每条都有实测依据）
 
+**先把当前 master 上 54 个 OBS 插件全拉下来做了统计**，不靠一两个样本推断。
+下表每一行的「依据」都是实测或统计得来的。
+
 | 写法 | 依据 |
 |---|---|
-| 放在 `plugins/` 下的**平铺 `.nix` 文件** | `plugins.nix` 用 `lib.packagesFromDirectoryRecursive { directory = ./plugins; }`；`lib/filesystem.nix:403` 的规则是「`.nix` 文件 → `callPackage <file> { }`」 |
-| 参数写 **`qt6`**、依赖写 **`qt6.qtbase`** | 自动发现用的是**普通的 `pkgs.callPackage`**，没有 `qt6Packages` 注入。与当前 master 的 `obs-color-monitor.nix` 一致 |
-| `cmakeFlags = [ "-DENABLE_QT=ON" ]` | **去掉就建不过**：`fatal error: QMenuBar: No such file or directory`。实测 |
-| **没有** `-DOBS_SOURCE=...` | 实测多余：单独留它构建失败，去掉后 `.so` **逐字节相同**（`62a9a296…`） |
-| `postInstall` 里 `rm -rf "$out/obs-plugins"` | 上游 CMake **装两遍**：`lib/obs-plugins/`（OBS 包装器读的位置）与 `obs-plugins/64bit/`（OBS 自己的默认前缀）。实测去掉后产物会多出第二份 |
+| 放在 `plugins/` 下的**平铺 `.nix` 文件** | `plugins.nix` 用 `lib.packagesFromDirectoryRecursive { directory = ./plugins; }`；`lib/filesystem.nix:403` 的规则是「`.nix` 文件 → `callPackage <file> { }`」。**不用改接线文件** |
+| 参数写 **`qt6`**、依赖写 **`qt6.qtbase`** | 自动发现用的是**普通的 `pkgs.callPackage`**，没有 `qt6Packages` 注入。统计：**17/54** 用 Qt 的插件全部写 `qt6.qtbase`（0 个写裸 `qtbase`） |
+| `-DENABLE_QT=ON` | **去掉就建不过**：`fatal error: QMenuBar: No such file or directory`。实测 |
+| `-DENABLE_FRONTEND_API=ON` | 上游 `CMakePresets.json` 的 `template` preset 里就是 `true`，而 `CMakeLists.txt` 里默认 `OFF`。**这一条此前漏了** —— 不开时 `NEEDED` 里没有 `libobs-frontend-api.so.30`，且 `.so` 与开着的**不是同一个文件**（实测） |
+| **没有** `-DOBS_SOURCE=...` | 实测多余：单独留它构建失败，去掉后 `.so` **逐字节相同** |
+| `postInstall` 里 `rm -rf "$out/obs-plugins"` | 上游 CMake **装两遍**：`lib/obs-plugins/`（OBS 包装器读的位置）与 `obs-plugins/64bit/`（OBS 自己的默认前缀）。实测去掉后产物会多出第二份。统计：17/54 与这里一样「只 rm」 |
+| `dontWrapQtApps = true` | 统计：17/54 —— **恰好等于用 Qt 的那 17 个** |
+| `inherit (obs-studio.meta) platforms` | 统计：**30/54**（`lib.platforms.linux` 是 20/54）。而且更准确：`obs-studio` 的 platforms 只含 x86_64 / i686 / aarch64-linux，**不含 riscv64**，继承它就不会虚报 |
+| `maintainers = with lib.maintainers; [ … ]` | 统计：**50/54** 用这个写法 |
 | `license = lib.licenses.gpl2Only` | 上游 `metainfo.xml` 写着 `<project_license>GPL-2.0-only</project_license>` |
-| 没有 `mainProgram` | 插件不是可执行文件。nixpkgs 里 54 个 OBS 插件没一个设它 |
+| **没有** `mainProgram` | 插件不是可执行文件。统计：54 个里只有 1 个设了它 |
 
 ## 四、PR 标题与正文
 
@@ -97,6 +104,8 @@ than by inspection.
 | 判据 | 结果 |
 |---|---|
 | 求值 + 构建 | ✅ |
+| `-DENABLE_FRONTEND_API=ON` 的效果 | ✅ 加上后 `NEEDED` 含 `libobs-frontend-api.so.30`；`.so` 与不加时**不同**（`62a9a296…` → `ee630bd8…`） |
+| 我们仓里的包与这份草稿一致 | ✅ 修好后 `.so` **逐字节相同**（`ee630bd8…`） |
 | 产物核验 | ✅ 3 个文件，与 NixKits 那版逐项相同 |
 | `-DENABLE_QT=ON` 承重 | ✅ 逐条实测（单独留它成功，单独留 `OBS_SOURCE` 失败） |
 | 去掉 `OBS_SOURCE` 不改变产物 | ✅ `.so` 逐字节相同 |
