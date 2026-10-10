@@ -30,9 +30,38 @@ _最后核验：2026-10-10_
 - `aarch64-linux` 上的构建（本地只有 x86_64）。
 - `r-ryantm` 到底会不会开 PR——它的运行环境与本地不同。
 
+### 关于参数与死代码（2026-10-10 补）
+
+`package.nix` 的六个参数（`lib`、`python3Packages`、`fetchFromGitea`、`makeWrapper`、
+`blender`、`nix-update-script`）**全部在正文里被用到**，没有声明未用的死参数。
+Nix 对死参数不报警，所以这一条只能自己查。
+
+**查的时候注意量具本身**：我用文本正则连撞两次假警报——
+一次把参数表切错位置（于是「五个参数全死」），
+一次让 `\bblender\b` 命中 **`blender-mcp`** 里的 `blender`（于是「引用 12 次」）。
+可靠的做法是**从求值结果读参数名**（`builtins.functionArgs`），而不是读源码文本。
+
 ---
 
 ## 二、执行顺序（狐莉说 go 之后）
+
+### 第 0 步：先确认「go」到底给了没有（判据，不靠感觉）
+
+**不要靠记忆或叙述判断许可。** 用这三条探测，任一为真就说明已经动过手了：
+
+```bash
+# ① fork 存在吗（对已知存在的仓库会返回 200，所以这个方法本身是有效的）
+gh api repos/Kihara777/nixpkgs --jq .name          # 404 = 还没 fork
+
+# ② 分支存在吗
+gh api repos/Kihara777/nixpkgs/branches --jq '.[].name'
+
+# ③ PR 存在吗
+gh pr list --repo NixOS/nixpkgs --author Kihara777 --state all --json number,title
+```
+
+**2026-10-10 实测：三条全为空**（无 fork、无分支、无 PR）——也就是尚未动手。
+写在这里是为了让**下一个会话**能自己判断，而不是照着上一轮的叙述以为已经做过。
 
 ### 第 1 步：授权与身份
 
