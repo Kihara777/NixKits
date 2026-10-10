@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:14:19+09:00
+
+**Summary**: blender-mcp ready to submit — the maintainer entry located, and a self-caught divergence
+
+- `MAINTAINER-ENTRY.md`: the handle is free, the entry belongs between `kiyotoko` and `kjeremy`, the `githubId` was verified both ways, and 488 existing entries likewise omit `email`
+- `READY.md`: all 11 preconditions tied to an artifact, unchecked items listed separately, the execution order, and a triage table
+- The ratchet line (`strictDeps`/`__structuredAttrs`) is marked as **reasoning** in the document, not dressed up as measurement
+- Caught by self-review: commit 2's body was stored in two places and had already **diverged**; synced to `commit-message.txt` and annotated
+
+| Commit | Description |
+|------|------|
+| `ae69543` | feat(upstream): maintainer entry location and submission readiness checklist |
+
 ## 2026-10-10T14:09:55+09:00
 
 **Summary**: two pre-submission facts checked for blender-mcp — does auto-update work for a self-hosted Gitea, and what a replaced anchor costs

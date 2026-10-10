@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:14:19+09:00
+
+**摘要**：blender-mcp 提交就绪 — 维护者条目落点已取证，并自查抓出一处分叉
+
+- `MAINTAINER-ENTRY.md`：handle 未占用、插在 `kiyotoko`/`kjeremy` 之间、`githubId` 双向核过、488 条先例同样不写 `email`
+- `READY.md`：11 条前置逐条挂产物、未验项单列、执行顺序与被拦下的排查表
+- 棘轮（`strictDeps`/`__structuredAttrs`）一条在文档里标成**推理**，不冒充实测
+- 自查抓到：commit 2 的正文在两处各存一份且**已漂**；已按 `commit-message.txt` 同步并标注
+
+| 提交 | 说明 |
+|------|------|
+| `ae69543` | feat(upstream): 维护者条目落点与提交就绪检查表 |
+
 ## 2026-10-10T14:09:55+09:00
 
 **摘要**：blender-mcp 提交前的两点取证 — 自动更新对自托管 Gitea 有无效、替换锚点的代价

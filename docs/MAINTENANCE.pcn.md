@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-10T14:14:19+09:00
+
+**摘要**：blender-mcp 提出準備完了 — 維護者条目 落点 証拠付、自己点検 一分岐 発見
+
+- `MAINTAINER-ENTRY.md`：handle 未使用、`kiyotoko`/`kjeremy` 間 挿入、`githubId` 双方向 確認済、既存 488 条 `email` 無
+- `READY.md`：11 前提 各産物 結合、未検証項 別掲、実行順序 遮断時 切分表
+- 棘輪（`strictDeps`/`__structuredAttrs`）項 文書内 **推理** 明記、実測 装 無
+- 自己点検 発見：commit 2 本文 二箇所 存在 **既 分岐**；`commit-message.txt` 同期 注記
+
+| 提交 | 説明 |
+|------|------|
+| `ae69543` | feat(upstream): 維護者条目 落点 提出準備表 |
+
 ## 2026-10-10T14:09:55+09:00
 
 **摘要**：blender-mcp 提出前 二点 取证 — 自前 Gitea 自動更新 有効 可否、置換 錨 代償

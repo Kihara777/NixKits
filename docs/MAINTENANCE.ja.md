@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:14:19+09:00
+
+**概要**：blender-mcp 提出準備完了 — 維護者条目の落点を証拠付け、自己点検で一つの分岐を発見
+
+- `MAINTAINER-ENTRY.md`：handle は未使用、`kiyotoko`/`kjeremy` の間に挿入、`githubId` は双方向で確認済、既存 488 条も `email` を書かない
+- `READY.md`：11 の前提を各産物に結び付け、未検証項は別掲、実行順序と遮断時の切り分け表
+- 棘輪（`strictDeps`/`__structuredAttrs`）の項は文書内で**推理**と明記、実測の装いはしない
+- 自己点検で発見：commit 2 の本文が二箇所にあり**既に分岐**；`commit-message.txt` に同期し注記
+
+| コミット | 説明 |
+|------|------|
+| `ae69543` | feat(upstream): 維護者条目の落点と提出準備チェックリスト |
+
 ## 2026-10-10T14:09:55+09:00
 
 **概要**：blender-mcp 提出前の二点の証拠 — 自前 Gitea で自動更新が効くか、置換アンカーの代償
