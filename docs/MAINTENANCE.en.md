@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-10T14:17:19+09:00
+
+**Summary**: third pass over the upstream draft — turning "has the go been given" into a criterion, and two false alarms recorded
+
+- `READY.md` step 0: three probes (fork / branch / PR), all empty in practice, with the method validated against a repository known to exist
+- All six parameters are used: names are read from `builtins.functionArgs` evaluation, not from source text
+- Two **false alarms** while checking for dead parameters: a mis-sliced parameter list, and a regex word boundary matching inside `blender-mcp`
+- Trap ⑩ added to the skill: test a criterion's sensitivity with a control arm
+
+| Commit | Description |
+|------|------|
+| `111b3de` | docs(upstream): the criterion for "go", and two false alarms in the dead-parameter check |
+
 ## 2026-10-10T14:14:19+09:00
 
 **Summary**: blender-mcp ready to submit — the maintainer entry located, and a self-caught divergence
