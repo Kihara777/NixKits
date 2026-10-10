@@ -1,0 +1,23 @@
+blender-mcp: init at 1.0.3
+
+MCP server for Blender, developed by Blender Lab. It runs as a separate
+process launched by the MCP client and talks to a Blender add-on over a
+local TCP socket, so an LLM can inspect and drive a running Blender
+instance. The add-on is installed by this package under
+share/blender/scripts/addons/, so both halves come from one install.
+
+Built from the upstream source at projects.blender.org.
+
+The upstream test suite runs (102 passed, 9 skipped). One file is excluded
+because it requires a real Blender editor instance. The package also carries
+a small patch: the test helpers assign PYTHONPATH instead of appending to
+it, which discards the dependencies outside a virtualenv. Reverting that
+patch brings back 15 failures and 71 errors, so it is load-bearing rather
+than cosmetic; it is offered to upstream.
+
+Licence: the v1.0.3 tag itself carries no LICENSE file, but GPL-3.0-or-later
+is declared by an SPDX header in every source file and by the add-on's
+blender_manifest.toml. Upstream confirmed this in issue #59 and added a
+LICENSE file to main in dbbf836ad.
+
+Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)

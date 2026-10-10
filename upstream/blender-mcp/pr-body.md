@@ -38,14 +38,16 @@ GPL-3.0 的 LICENSE 是 **2026-09-29** 才加进 `main` 的（提交 `dbbf836ad`
 ```nix
 kihara777 = {
   name = "Kitsunori";
-  email = "<你希望公开的邮箱>";
   github = "Kihara777";
   githubId = 24633616;
 };
 ```
 
 `githubId` 必须是 **24633616**（`https://api.github.com/user/24633616` 的 `login`
-应当等于 `Kihara777`——审阅者会这样核）。
+应当等于 `Kihara777`——审阅者会这样核，**已核过，对得上**）。
+
+按决定**不写 `email`** —— 它是可选字段，既有条目里有 488 条同样不写。
+插入位置、字段来源与旁证见同目录的 [`MAINTAINER-ENTRY.md`](MAINTAINER-ENTRY.md)。
 
 ---
 
@@ -63,24 +65,30 @@ Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
 
 **commit 2**
 
+> 正文与 [`commit-message.txt`](commit-message.txt) **逐字相同**（用 `git commit -F` 直接喂它）。
+> 两处必须一起改——它们分家过一次，是我自己核出来的。
+
 ```
 blender-mcp: init at 1.0.3
 
 MCP server for Blender, developed by Blender Lab. It runs as a separate
 process launched by the MCP client and talks to a Blender add-on over a
-local TCP socket.
+local TCP socket, so an LLM can inspect and drive a running Blender
+instance. The add-on is installed by this package under
+share/blender/scripts/addons/, so both halves come from one install.
 
-Built from the upstream source at projects.blender.org; the Blender add-on
-is installed alongside the server under share/blender/scripts/addons/.
+Built from the upstream source at projects.blender.org.
 
 The upstream test suite runs (102 passed, 9 skipped). One file is excluded
-because it requires a real Blender editor instance. It also carries a small
-patch: the test helpers assign PYTHONPATH instead of appending to it, which
-discards the dependencies outside a virtualenv.
+because it requires a real Blender editor instance. The package also carries
+a small patch: the test helpers assign PYTHONPATH instead of appending to
+it, which discards the dependencies outside a virtualenv. Reverting that
+patch brings back 15 failures and 71 errors, so it is load-bearing rather
+than cosmetic; it is offered to upstream.
 
 Licence: the v1.0.3 tag itself carries no LICENSE file, but GPL-3.0-or-later
 is declared by an SPDX header in every source file and by the add-on's
-blender_manifest.toml; upstream confirmed this in issue #59 and added a
+blender_manifest.toml. Upstream confirmed this in issue #59 and added a
 LICENSE file to main in dbbf836ad.
 
 Assisted-by: DeepSeek Harness (DeepSeek V4 Flash)
