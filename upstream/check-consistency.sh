@@ -80,7 +80,7 @@ n=$(grep -rc "$MODEL" blender-mcp/commit-message.txt obs-bilibili-stream/commit-
 echo "=== 各草稿的 src hash：独立复算 ==="
 # 脚本收成一个（upstream/verify-src.sh），不再每个包一份副本。
 # 退出码 0=一致（含构造证明）1=不一致 2=没能验到。**2 不等于通过。**
-for pkg in blender-mcp obs-bilibili-stream opencode-telegram; do
+for pkg in blender-mcp obs-bilibili-stream opencode-telegram codewhale; do
   printf '  %-22s ' "$pkg"
   out=$(NIXPKGS_PATH="${NIXPKGS_PATH:-}" bash ./verify-src.sh "$pkg" 2>&1); rc=$?
   case $rc in
