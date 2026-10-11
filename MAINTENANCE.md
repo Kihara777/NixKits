@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-12T04:10:26+09:00
+
+**摘要**：第三个上游草稿 opencode-telegram（运行层判据 + 同强度反证臂）
+
+- 入场：nixpkgs 无、无在途 PR；上游 1245 stars / MIT / 活跃；宿主 `opencode` 已在 nixpkgs
+- 最简形态：`buildNpmPackage` + 8 行 meta，一个文件；riscv64 那套机器整个去掉（理由：`better-sqlite3@13` 的 prebuilds 恰好 8 平台，无 riscv64/i686）
+- 运行层：包装器能起、原生模块开库建表写入读回 `{"x":42}`、反证臂（删掉 linux-x64 预编译的派生必须失败）
+- 两个教训：反证臂最初只写 `require()` 而它是懒的（必须与正臂同强度）；`cp -r` 出来的 store 副本只读，`rm` 全失败——改用 `overrideAttrs`
+
+| 提交 | 说明 |
+|------|------|
+| `ee47ac2` | feat(upstream): opencode-telegram 的 nixpkgs 草稿 |
+
 ## 2026-10-12T03:33:52+09:00
 
 **摘要**：obs-bilibili-stream 已提交上游（PR #572912）

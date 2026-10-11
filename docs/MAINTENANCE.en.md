@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T04:10:26+09:00
+
+**Summary**: a third upstream draft, opencode-telegram, with a runtime criterion and an equally strong counterexample
+
+- Entry check: absent from nixpkgs, no competing PR; upstream has 1245 stars, MIT licence and is active; the host program `opencode` is already in nixpkgs
+- Minimal form: `buildNpmPackage` plus eight lines of meta in one file; the riscv64 machinery is dropped entirely because `better-sqlite3@13` ships prebuilds for exactly eight platforms and none of them is riscv64 or i686
+- Runtime: the wrapper starts, the native module opens a database, creates a table, writes and reads back `{"x":42}`, and a counterexample build with the linux-x64 prebuild removed must fail
+- Two lessons: the counterexample first used only `require()`, which is lazy, so it must match the positive arm's strength; and a `cp -r` copy of a store path is read-only, so `rm` silently failed and `overrideAttrs` is the right tool
+
+| Commit | Description |
+|------|------|
+| `ee47ac2` | feat(upstream): nixpkgs draft for opencode-telegram |
+
 ## 2026-10-12T03:33:52+09:00
 
 **Summary**: obs-bilibili-stream submitted upstream (PR #572912)

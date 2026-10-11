@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-12T04:10:26+09:00
+
+**摘要**：三番目 上流草稿 opencode-telegram（実行層判据 同強度反例腕）
+
+- 入場確認：nixpkgs 無、競合 PR 無；上流 1245 stars / MIT / 活発；宿主 `opencode` 既 nixpkgs 在
+- 最小形態：`buildNpmPackage` 8 行 meta、一文件；riscv64 機構 全除去（`better-sqlite3@13` prebuilds 8 平台 限、riscv64 i686 無）
+- 実行層：包装器 起動、原生 module 開庫 建表 書込 読回 `{"x":42}`、linux-x64 prebuild 削 派生 必 失敗
+- 二 教訓：反例腕 当初 `require()` 限、遅延 故 正腕 同強度 要；`cp -r` store 複製 読取専用 `rm` 全失敗、`overrideAttrs` 正解
+
+| 提交 | 説明 |
+|------|------|
+| `ee47ac2` | feat(upstream): opencode-telegram nixpkgs 草稿 |
+
 ## 2026-10-12T03:33:52+09:00
 
 **摘要**：obs-bilibili-stream 上流 提出（PR #572912）

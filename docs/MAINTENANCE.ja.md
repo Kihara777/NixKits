@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T04:10:26+09:00
+
+**概要**：三つ目の上流草稿 opencode-telegram（実行層の判据と同強度の反例腕）
+
+- 入場確認：nixpkgs に無し、競合 PR 無し；上流は 1245 stars / MIT / 活発；宿主 `opencode` は既に nixpkgs に在る
+- 最小形態：`buildNpmPackage` と 8 行の meta、一ファイル；riscv64 の機構は全て除去（`better-sqlite3@13` の prebuilds は 8 平台のみで riscv64 と i686 が無い）
+- 実行層：包装器が起動し、原生 module が開庫・建表・書込・読回 `{"x":42}`、linux-x64 の prebuild を削った派生は必ず失敗
+- 二つの教訓：反例腕が当初 `require()` のみで、それは遅延なので正腕と同強度にすべき；`cp -r` した store の複製は読取専用で `rm` が全て失敗し、`overrideAttrs` が正解
+
+| コミット | 説明 |
+|------|------|
+| `ee47ac2` | feat(upstream): opencode-telegram の nixpkgs 草稿 |
+
 ## 2026-10-12T03:33:52+09:00
 
 **概要**：obs-bilibili-stream を上流へ提出（PR #572912）
