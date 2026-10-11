@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T03:33:52+09:00
+
+**概要**：obs-bilibili-stream を上流へ提出（PR #572912）
+
+- 基準を `2edbf2c` から `4c28db8` へ再同期（`maintainer-list.nix` が再び変化）、分岐は移動ではなく再構築
+- 出発前確認：新 master で `maintainer-list.nix` と `plugins.nix` は不変、パッチは適用可能、競合 PR なし
+- 本文は **`pr-body.md` から抽出**（打ち直さない）、実行層の証拠とその反例腕を含む
+- 作者 `GrG41`、コミッタ `Kitsunome <gr@g41.moe>`、両コミットに `Assisted-by`
+- **上流 CI：22 件通過・0 件失敗**（`Lint / nixpkgs-vet` と `Lint / treefmt` を含む）
+
+| コミット | 説明 |
+|------|------|
+| `cad72dc` | obs: 4c28db8 で再構築、PR 本文に実行層の証拠を追加 |
+
 ## 2026-10-11T12:13:52+09:00
 
 **概要**：obs の注釈を整理し、実行層の判据を追加

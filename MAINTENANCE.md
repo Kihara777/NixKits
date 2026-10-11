@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-12T03:33:52+09:00
+
+**摘要**：obs-bilibili-stream 已提交上游（PR #572912）
+
+- 基准从 `2edbf2c` 再同步到 `4c28db8`（`maintainer-list.nix` 又变了），分支重建而非挪动
+- 起飞前确认：`maintainer-list.nix` 与 `plugins.nix` 在新 master 上未变，补丁落得下；无竞争 PR
+- 正文**从 `pr-body.md` 提取**（不重打），含运行层证据与它的对照臂
+- 作者 `GrG41`，`Kitsunome <gr@g41.moe>`，两个 commit 均带 `Assisted-by`
+- **上游 CI：22 项通过、0 失败**，含 `Lint / nixpkgs-vet` 与 `Lint / treefmt`
+
+| 提交 | 说明 |
+|------|------|
+| `cad72dc` | obs: 同步到 4c28db8 重建分支；PR 文案补上运行层证据 |
+
 ## 2026-10-11T12:13:52+09:00
 
 **摘要**：obs 注释优化 + 补上运行层判据

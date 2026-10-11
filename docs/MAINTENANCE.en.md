@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T03:33:52+09:00
+
+**Summary**: obs-bilibili-stream submitted upstream (PR #572912)
+
+- The base was re-synced from `2edbf2c` to `4c28db8` (`maintainer-list.nix` moved again), so the branch was rebuilt rather than moved
+- Pre-flight confirmed `maintainer-list.nix` and `plugins.nix` are unchanged on the new master, so the patch applies, and that no competing PR exists
+- The body was **extracted from `pr-body.md`** rather than retyped, and carries the runtime evidence together with its counterexample arm
+- Author `GrG41`, committer `Kitsunome <gr@g41.moe>`, both commits carrying `Assisted-by`
+- **Upstream CI: 22 pass, 0 fail**, including `Lint / nixpkgs-vet` and `Lint / treefmt`
+
+| Commit | Description |
+|------|------|
+| `cad72dc` | obs: rebuilt on 4c28db8 and PR body given the runtime evidence |
+
 ## 2026-10-11T12:13:52+09:00
 
 **Summary**: obs comments tightened and a runtime-layer criterion added
