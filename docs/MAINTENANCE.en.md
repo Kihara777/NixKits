@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-11T12:13:52+09:00
+
+**Summary**: obs comments tightened and a runtime-layer criterion added
+
+- Three comment changes: tightened `cmakeFlags`, dropped the statistics sentence from `platforms`, kept the non-obvious `license` reasoning; the output path is unchanged
+- New `tests/runtime.sh`: goes through `wrapOBS`, runs a real OBS under Xvfb with software GL, and reads the log OBS writes itself
+- **Includes a counterexample arm**: without the plugin, neither `[obs-bilibili-stream] 插件加载成功` nor `bilibili-stream-for-obs.so` appears
+- Two measured findings: OBS loads modules only *after* video initialisation (so software GL is required), and the script re-enters itself through `nix shell` when a tool is missing
+
+| Commit | Description |
+|------|------|
+| `3c250ed` | obs: comments tightened and a runtime-layer criterion with a counterexample arm |
+
 ## 2026-10-10T15:55:41+09:00
 
 **Summary**: final verification — three criteria that had not been checked, plus stale README content removed

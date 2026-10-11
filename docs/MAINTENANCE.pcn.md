@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-11T12:13:52+09:00
+
+**摘要**：obs 注釈 整理、実行層 判据 追加
+
+- 注釈 三箇所 整理：`cmakeFlags` 簡潔化、`platforms` 統計文 削除、`license` 非自明 判断 保持。成果物 path 不変
+- `tests/runtime.sh` 新設：`wrapOBS` 経由、Xvfb + 軟件 GL 上 実 OBS 插件 読、OBS 自身 書 log 読
+- **反例腕 付**：插件 載 場合 `[obs-bilibili-stream] 插件加载成功` `bilibili-stream-for-obs.so` 出 確認
+- 実測 二件：OBS 映像初期化 **後** module 読（故 軟件 GL 必須）；道具 無 時 `nix shell` 自身 再入
+
+| 提交 | 説明 |
+|------|------|
+| `3c250ed` | obs: 注釈整理 実行層判据（実 OBS 読込 + 反例腕） |
+
 ## 2026-10-10T15:55:41+09:00
 
 **摘要**：最終検証 —— 未検証 三件 追加、README 陳腐化 除去

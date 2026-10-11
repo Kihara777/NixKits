@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-11T12:13:52+09:00
+
+**摘要**：obs 注释优化 + 补上运行层判据
+
+- 注释三处优化：收紧 `cmakeFlags`、删掉 `platforms` 的统计句、保留 `license` 的非显然判定；产物路径未变
+- 新增 `tests/runtime.sh`：走 `wrapOBS` 那条路，在 Xvfb + 软件 GL 下让真 OBS 加载插件，读它自己写的日志
+- **带对照臂**：不挂插件再跑一次，确认 `[obs-bilibili-stream] 插件加载成功` 与 `bilibili-stream-for-obs.so` 都不出现
+- 两个实测发现：OBS 在视频初始化**之后**才加载模块（故软件 GL 必须）；脚本缺工具时用 `nix shell` 重入自己
+
+| 提交 | 说明 |
+|------|------|
+| `3c250ed` | obs: 注释优化 + 运行层判据（真 OBS 加载 + 对照臂） |
+
 ## 2026-10-10T15:55:41+09:00
 
 **摘要**：终检 —— 补三件此前没验过的判据，清掉 README 的过期内容
