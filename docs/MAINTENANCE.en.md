@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T05:13:05+09:00
+
+**Summary**: a fourth upstream draft, codewhale, a Rust package with 41078 stars
+
+- Entry: absent from nixpkgs with no competing PR; upstream is MIT, active and keeps `Cargo.lock` at the root
+- Form: `rustPlatform.buildRustPackage` in one file, with the riscv64 cross machinery removed
+- The 218-line ptrace interceptor is **not** included because it only compiles with `allowSudo = true`, which the nixpkgs form can never set; the PR body says so
+- Four runtime criteria plus a counterexample, and both vet ratchets evaluating to true
+- **Instrument lesson**: an unexpanded glob made me count "0 packages set `__structuredAttrs`" when the real number is 2192
+
+| Commit | Description |
+|------|------|
+| `913a79f` | feat(upstream): nixpkgs draft for codewhale |
+
 ## 2026-10-12T04:10:26+09:00
 
 **Summary**: a third upstream draft, opencode-telegram, with a runtime criterion and an equally strong counterexample

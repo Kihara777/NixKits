@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T05:13:05+09:00
+
+**概要**：四つ目の上流草稿 codewhale（Rust、41078 stars）
+
+- 入場：nixpkgs に無し、競合 PR 無し；上流は MIT・活発・`Cargo.lock` が根に在る
+- 形態：`rustPlatform.buildRustPackage`、一ファイル；riscv64 の交叉機構を除去
+- 218 行の ptrace 攔截器は**含めない**（`allowSudo=true` の時のみ編譯され、nixpkgs 形態では必ず false）。PR 本文で明記する
+- 実行層四段 + 反例腕；二つの棘輪が true と求値
+- **計器の教訓**：glob が展開されず「0 個の包が `__structuredAttrs` を設定」と誤集計、実際は 2192
+
+| コミット | 説明 |
+|------|------|
+| `913a79f` | feat(upstream): codewhale の nixpkgs 草稿 |
+
 ## 2026-10-12T04:10:26+09:00
 
 **概要**：三つ目の上流草稿 opencode-telegram（実行層の判据と同強度の反例腕）

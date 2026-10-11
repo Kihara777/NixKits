@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-12T05:13:05+09:00
+
+**摘要**：第四个上游草稿 codewhale（Rust，41078 stars）
+
+- 入场：nixpkgs 无、无在途 PR；上游 MIT、活跃、`Cargo.lock` 在根
+- 形态：`rustPlatform.buildRustPackage`，一个文件；去掉 riscv64 交叉机器
+- **未包含那个 218 行 ptrace 拦截器**（只在 `allowSudo=true` 时编译，nixpkgs 形态必然 false），但要在 PR 正文里说清
+- 运行层四段 + 反证臂；两个棘轮求值出 true
+- **量具教训**：glob 没展开导致我数出「0 个包设 `__structuredAttrs`」，真实是 2192 个
+
+| 提交 | 说明 |
+|------|------|
+| `913a79f` | feat(upstream): codewhale 的 nixpkgs 草稿 |
+
 ## 2026-10-12T04:10:26+09:00
 
 **摘要**：第三个上游草稿 opencode-telegram（运行层判据 + 同强度反证臂）
