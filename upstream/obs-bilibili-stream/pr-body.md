@@ -56,8 +56,8 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 
 ```markdown
 Adds obs-bilibili-stream, a plugin that adds Bilibili as a streaming target in
-OBS Studio, with a dialog for managing streams. It links against
-obs-frontend-api and uses Qt.
+OBS Studio, with a dialog for managing streams. It uses Qt and registers its
+menu entry through obs-frontend-api.
 
 The licence is GPL-2.0-only: the project's own appstream metadata declares
 `<project_license>GPL-2.0-only</project_license>`. The LICENSE file is the stock
@@ -67,8 +67,11 @@ there is boilerplate rather than the author's grant.
 
 Two notes on the package definition:
 
-- `-DENABLE_QT=ON` is load-bearing; without it the build cannot find the Qt
-  headers (`QMenuBar: No such file or directory`).
+- `ENABLE_QT` and `ENABLE_FRONTEND_API` both default to OFF in upstream's
+  CMakeLists.txt, while upstream's own CMakePresets.json turns them on, so both
+  are passed here. Without `ENABLE_QT` the build cannot find the Qt headers
+  (`QMenuBar: No such file or directory`); without `ENABLE_FRONTEND_API`
+  libobs-frontend-api is missing from NEEDED.
 - Upstream's CMake installs the plugin twice — into `lib/obs-plugins/` (the path
   the OBS wrapper reads) and into `obs-plugins/64bit/` (OBS's own default
   prefix). The second copy is dropped.
@@ -79,9 +82,20 @@ Two notes on the package definition:
   - [x] x86_64-linux
   - [ ] aarch64-linux
   - [ ] aarch64-darwin
-- [x] Verified the output layout matches what the OBS wrapper expects:
-  `lib/obs-plugins/bilibili-stream-for-obs.so` and
+- [x] Verified the output layout is what the OBS wrapper expects:
+  `lib/obs-plugins/bilibili-stream-for-obs.so` plus
   `share/obs/obs-plugins/bilibili-stream-for-obs/{config.json,locale/en-US.ini}`.
+- [x] Loaded it in a real OBS Studio 32.2.2, wrapped through `wrapOBS` the way the
+  NixOS module does. OBS lists it under `Loaded Modules` and the plugin's own
+  `obs_module_load` returns success:
+
+  ```
+  [obs-bilibili-stream] 插件版本: 2.1.5, commit: unknown
+  [obs-bilibili-stream] 插件加载成功
+  ```
+
+  (repeated with `plugins = [ ]`: neither line appears.)
+
 - [x] Fits CONTRIBUTING.md, pkgs/README.md, maintainers/README.md and other READMEs.
 - [x] Follows the automation/AI policy.
 
@@ -98,12 +112,15 @@ The responsible person in the sense of the automation/AI policy is 狐莉
 authorised its submission. Every claim above was checked by running it rather
 than by inspection.
 ```
-
 ## 五、判据（发布前已跑）
 
 | 判据 | 结果 |
 |---|---|
 | 求值 + 构建 | ✅ |
+| **真 OBS 加载（运行层）** | ✅ `wrapOBS` 包出的 OBS 32.2.2 在日志里列出它，且插件自己打印「插件加载成功」；见 `tests/runtime.sh` |
+| **运行层的对照臂** | ✅ `plugins = [ ]` 时那两行**都不出现** |
+| 导出 OBS 入口点 | ✅ `nm -D` 有 `obs_module_load`，另有 `unload` / `ver` / `set_pointer` 等 |
+| 自动发现 | ✅ `packagesFromDirectoryRecursive` 把它认成 `obs-bilibili-stream`；改名反证臂通过 |
 | `-DENABLE_FRONTEND_API=ON` 的效果 | ✅ 加上后 `NEEDED` 含 `libobs-frontend-api.so.30`；`.so` 与不加时**不同**（`62a9a296…` → `ee630bd8…`） |
 | 我们仓里的包与这份草稿一致 | ✅ 修好后 `.so` **逐字节相同**（`ee630bd8…`） |
 | 产物核验 | ✅ 3 个文件，与 NixKits 那版逐项相同 |
@@ -111,7 +128,8 @@ than by inspection.
 | 去掉 `OBS_SOURCE` 不改变产物 | ✅ `.so` 逐字节相同 |
 | 去掉 `postInstall` 会留下重复 | ✅ 实测 |
 | 改成 `qt6.qtbase` 不改变产物 | ✅ 产物路径与 `qtbase`（qt6Packages）那条路**完全相同** |
-| `check-draft.sh` 机械项 | ✅ 全过 |
+| `check-draft.sh` 机械项 | ✅ 15 项 0 失败 |
+| 跨文件一致性 | ✅ 条目与文档逐字相同、披露三处同值、src hash 独立复算 |
 | nixfmt | ✅ |
 
 **仍未验**：在真 nixpkgs 检出里跑 `nixpkgs-vet`（要两个 git 检出）；
