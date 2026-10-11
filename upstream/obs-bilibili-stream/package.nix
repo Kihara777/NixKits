@@ -29,14 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  # Upstream turns both of these on in CMakePresets.json's "template" preset;
-  # they default to OFF in CMakeLists.txt, so they have to be passed here.
+  # Upstream enables both of these in its CMakePresets.json while CMakeLists.txt
+  # defaults them to OFF:
   #
-  # -DENABLE_QT=ON finds the Qt headers the dialog uses. Without it the build
-  # fails with "QMenuBar: No such file or directory".
-  # -DENABLE_FRONTEND_API=ON links libobs-frontend-api, which the plugin uses to
-  # register its menu entry. Without it that library is absent from NEEDED and
-  # only the host's symbol resolution makes the plugin loadable at all.
+  # - ENABLE_QT finds the Qt headers the dialog needs; without it the build fails
+  #   with "QMenuBar: No such file or directory".
+  # - ENABLE_FRONTEND_API links libobs-frontend-api, which the plugin uses to
+  #   register its menu entry; without it that library is missing from NEEDED.
   cmakeFlags = [
     "-DENABLE_FRONTEND_API=ON"
     "-DENABLE_QT=ON"
@@ -63,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     # unmodified OBS plugin template (placeholders still unfilled), so the "or any later
     # version" wording there is boilerplate rather than the author's grant.
     license = lib.licenses.gpl2Only;
-    # A plugin cannot be built where its host cannot, and obs-studio does not
-    # build on every Linux platform (no riscv64). Inheriting is the majority
-    # form in this directory.
+    # A plugin cannot be built where its host cannot: obs-studio has no riscv64.
     inherit (obs-studio.meta) platforms;
     maintainers = with lib.maintainers; [ grg41 ];
   };
