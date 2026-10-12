@@ -42,12 +42,12 @@ NOISE
 cat > "$PROBE" <<PROBE
 let
   pkgs0 = import (builtins.getFlake "path:$NIXPKGS_PATH") { system = "x86_64-linux"; };
-  # 包定义引用 lib.maintainers.grg41，而一棵纯 nixpkgs 里没有这个条目
+  # 包定义引用 lib.maintainers.kihara777，而一棵纯 nixpkgs 里没有这个条目
   # ——它由本 PR 的**第一个 commit** 加进 maintainer-list.nix。
   # 这里注进去以模拟**合并之后**的状态；三个字段与那个 commit 逐字相同。
-  grg41 = import $HERE/../../maintainer-entry.nix;
+  kihara777 = import $HERE/../../maintainer-entry.nix;
   pkgs = pkgs0.extend (final: prev: {
-    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit grg41; }; });
+    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kihara777; }; });
   });
   discovered = pkgs.lib.packagesFromDirectoryRecursive {
     inherit (pkgs) callPackage;
@@ -69,9 +69,9 @@ PROBE
 cat > "$PROBE_NAMES" <<NAMES
 let
   pkgs0 = import (builtins.getFlake "path:$NIXPKGS_PATH") { system = "x86_64-linux"; };
-  grg41 = import $HERE/../../maintainer-entry.nix;
+  kihara777 = import $HERE/../../maintainer-entry.nix;
   pkgs = pkgs0.extend (final: prev: {
-    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit grg41; }; });
+    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kihara777; }; });
   });
 in
 builtins.attrNames (pkgs.lib.packagesFromDirectoryRecursive {
@@ -105,7 +105,7 @@ chk("version", d["version"], "2.1.5")
 chk("platforms（继承 obs-studio，不含 riscv64）", d["platforms"],
     ["x86_64-linux", "i686-linux", "aarch64-linux"])
 chk("platforms 里没有 riscv64-linux", "riscv64-linux" in d["platforms"], False)
-chk("maintainers", d["maintainers"], ["GrG41"])
+chk("maintainers", d["maintainers"], ["Kihara777"])
 chk("license", d["license"], "GPL-2.0-only")
 
 print("\n=== 反证臂：名字必须来自**文件名**，不是别的 ===")

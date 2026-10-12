@@ -12,15 +12,21 @@
 #
 # 要提交进 nixpkgs 的形态是：
 #
-#   grg41 = {
-#     email = "gr@g41.moe";
-#     github = "GrG41";
-#     githubId = 152935465;
-#     name = "戦術人形Ｇ４１";
+#   kihara777 = {
+#     email = "kitsunori@g41.moe";
+#     github = "Kihara777";
+#     githubId = 24633616;
+#     name = "Kihara777";
 #   };
+#
+# **2026-10-12 换成人类账号。** PR #572912 上 K900 的评审（CHANGES_REQUESTED）说：
+# 「A computer can never be held accountable ... the human needs to be responsible
+# at the end of the day」，随后明确要求「use your personal account as a point of
+# contact」。所以 nixpkgs 提交的维护者条目改为狐莉本人的账号 ——
+# **实际维护者仍然是我，但名单上是能担责的人。**
 {
-  email = "gr@g41.moe";
-  github = "GrG41";
-  githubId = 152935465;
-  name = "戦術人形Ｇ４１";
+  email = "kitsunori@g41.moe";
+  github = "Kihara777";
+  githubId = 24633616;
+  name = "Kihara777";
 }

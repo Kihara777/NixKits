@@ -19,7 +19,7 @@
 | 文件 | 动作 |
 |---|---|
 | `pkgs/by-name/co/codewhale/package.nix` | **新增**（= [`package.nix`](package.nix) 逐字节相同） |
-| `maintainers/maintainer-list.nix` | 插入 `grg41` —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
+| `maintainers/maintainer-list.nix` | 插入 `kihara777` —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
 
 ## 三、从 NixKits 那版**去掉了什么**，以及为什么
 
@@ -48,7 +48,7 @@ NixKits 的包里有一个 `codewhale-sudo-ptrace.c`，它改写
 ### commit 1
 
 ```
-maintainers: add grg41
+maintainers: add kihara777
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```

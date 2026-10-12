@@ -9,7 +9,7 @@
 | 文件 | 动作 |
 |---|---|
 | `pkgs/by-name/op/opencode-telegram/package.nix` | **新增**（内容 = [`package.nix`](package.nix) 逐字节相同） |
-| `maintainers/maintainer-list.nix` | 插入 `grg41` 条目 —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
+| `maintainers/maintainer-list.nix` | 插入 `kihara777` 条目 —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
 
 ## 二、入场评估（每条都有出处）
 
@@ -40,7 +40,7 @@ NixKits 的包里有约 60 行 riscv64 交叉构建机器（gcc shim、`--force_
 ### commit 1
 
 ```
-maintainers: add grg41
+maintainers: add kihara777
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```

@@ -32,7 +32,7 @@ d = {}
 # 早先只收带引号的，于是 KeyError: 'githubId'，整段判据没跑就崩了。
 for k, q, b in re.findall(r'^\s*(\w+) = (?:"([^"]*)"|([A-Za-z0-9_.]+));', src, re.M):
     d[k] = q if q else b
-want = f'''  grg41 = {{
+want = f'''  kihara777 = {{
     email = "{d['email']}";
     github = "{d['github']}";
     githubId = {d['githubId']};
@@ -55,7 +55,7 @@ rc=$?; [ $rc -ne 0 ] && fail=1
 
 echo "=== 代码侧不应再有内联的维护者条目 ==="
 # 排掉本脚本自己：它的 grep **模式**里就含那个字符串（第一次跑就是这么自我命中的）。
-hits=$(grep -rn 'githubId = 152935465' --include='*.nix' --include='*.sh' . \
+hits=$(grep -rn 'githubId = 24633616' --include='*.nix' --include='*.sh' . \
        | grep -v '^./maintainer-entry.nix' | grep -v '^./check-consistency.sh' || true)
 if [ -z "$hits" ]; then ok "只有 maintainer-entry.nix 里有它"
 else bad "还有地方内联着它："; echo "$hits" | sed 's/^/      /'; fi

@@ -12,7 +12,7 @@ let
     system = "x86_64-linux";
   };
 
-  # 包定义引用 `lib.maintainers.grg41`，而本地那棵 nixpkgs 里没有这个条目
+  # 包定义引用 `lib.maintainers.kihara777`，而本地那棵 nixpkgs 里没有这个条目
   # ——它由本 PR 的**第一个 commit** 加进去。
   #
   # 所以这里把该条目注进去，模拟**合并之后**的状态：
@@ -20,14 +20,14 @@ let
   # （PR 一旦落地，nixpkgs 的表里就有它了）。
   #
   # 三个字段与 `MAINTAINER-ENTRY.md` 里要插进 maintainer-list.nix 的**逐字相同**。
-  grg41 = import ../maintainer-entry.nix;
+  kihara777 = import ../maintainer-entry.nix;
 
   pkgs = pkgs0.extend (
     final: prev: {
       lib = prev.lib.extend (
         libFinal: libPrev: {
           maintainers = libPrev.maintainers // {
-            inherit grg41;
+            inherit kihara777;
           };
         }
       );
