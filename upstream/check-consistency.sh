@@ -53,6 +53,34 @@ else:
 PY
 rc=$?; [ $rc -ne 0 ] && fail=1
 
+echo "=== 每个草稿引用的维护者，必须是 SSOT 里那个名字 ==="
+# 来历（2026-10-12）：我把 maintainer-list 的条目从 grg41 换成 kitsunori，
+# **却没改包定义里的引用** —— 包指着 `lib.maintainers.grg41`，而那个变量在新名单
+# 里根本不存在。上游 CI 当场红：`error: undefined variable 'grg41'`。
+#
+# 我们的本地构建**结构上看不到这个错**：build.nix 会把 SSOT 的条目注入
+# lib.maintainers，于是无论包写的是哪个名字，总能解析到。
+# **判据只能在「包里的引用」与「SSOT 的键名」之间直接比。**
+ssot_attr=$(grep -oP '^\s+\K[A-Za-z0-9_]+(?= = \{)' MAINTAINER-ENTRY.md | head -1)
+if [ -z "$ssot_attr" ]; then
+  bad "从 MAINTAINER-ENTRY.md 取不到属性名"
+else
+  ok "SSOT 的属性名：$ssot_attr"
+  for pkg in */package.nix; do
+    [ -f "$pkg" ] || continue
+    # 两种写法都要认（实测四份草稿里两种都有）：
+    #   maintainers = with lib.maintainers; [ X ];
+    #   maintainers = [ lib.maintainers.X ];
+    ref=$(grep -oP 'maintainers = with lib\.maintainers; \[ \K[^ ]+' "$pkg" | head -1)
+    [ -n "$ref" ] || ref=$(grep -oP 'maintainers = \[ lib\.maintainers\.\K[A-Za-z0-9_]+' "$pkg" | head -1)
+    if [ "$ref" = "$ssot_attr" ]; then
+      ok "$(dirname "$pkg") 引用 $ref —— 与 SSOT 一致"
+    else
+      bad "$(dirname "$pkg") 引用 '$ref'，而 SSOT 是 '$ssot_attr' —— **上游求值会报 undefined variable**"
+    fi
+  done
+fi
+
 echo "=== 代码侧不应再有内联的维护者条目 ==="
 # 排掉本脚本自己：它的 grep **模式**里就含那个字符串（第一次跑就是这么自我命中的）。
 hits=$(grep -rn 'githubId = 24633616' --include='*.nix' --include='*.sh' . \
