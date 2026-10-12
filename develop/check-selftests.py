@@ -96,6 +96,21 @@ def inj_doc_versions(root):
          "| 版本 | 9.9.9")
 
 
+def inj_skill_registry(root):
+    """把某个技能的运行时注册注释掉 —— 模拟「技能躺在 skills/ 里但没接线」。
+
+    这正是 2026-10-12 那个真实事故的形状：两个 package-upstream 技能从
+    10-10 起就在 skills/ 里、四语文档页与 README 行都齐，但维护技能的
+    registerSkill 清单里没有它们，于是任何 session 都加载不到。
+
+    挑 nixkits-package-upstream 是因为它只会被这一条判据覆盖（.nix 列表项那
+    条路碰不到它），所以注入一定能被抓住。
+    """
+    edit(root, "packages/dsh-nixos-shell/lib/maintenance-skills.js",
+         r'^\s*registerSkill\("nixkits-package-upstream"\);',
+         '// selftest: 撤掉这一行')
+
+
 def inj_doc_counts(root):
     """把词典条数声明改成与 dictionary.md 不符的值。
 
@@ -218,6 +233,8 @@ CASES = [
      inj_preset_bundle, "preset-bundle:", ()),
     ("workflow-coverage", ["python3", "develop/check-workflows.py"],
      inj_workflow_coverage, "workflow-coverage:", ()),
+    ("skill-registry", ["python3", "develop/check-skill-registry.py"],
+     inj_skill_registry, "没有任何注入器认领它", ()),
     ("doc-links", ["python3", "develop/check-doc-links.py"],
      inj_doc_links, "doc-links:", ()),
     ("doc-versions", ["python3", "develop/check-doc-versions.py"],

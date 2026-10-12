@@ -60,6 +60,7 @@
     # - preset-bundle：包内技能快照必须与 skills/ 树逐字节一致
     # - workflow-coverage：每个包都有构建 workflow（例外显式登记）
     # - doc-links：文档相对链接可达、语言切换器四语齐全
+    # - skill-registry：skills/ 下每个技能都必须被某个注入器认领
     # - doc-versions：文档版本号与包定义一致（四语 + 通道表）
     # - doc-counts：文档里能从源机械读出的计数与源一致（词典条数、自检项数）
     # - maintenance-log：四语条目数一致、时间戳精确、SHA 去重、pcn 无假名
@@ -104,6 +105,17 @@
       } ''
         cd ${self.outPath}
         python3 develop/check-doc-versions.py
+        touch $out
+      '';
+
+      # skills/ 下每个技能必须有归属（被某个注入器登记、translate-* 自动发现、
+      # 或写进检查器的 NOT_INJECTED 并说明理由）。补这条是因为 2026-10-12 发现
+      # 两个 package-upstream 技能在 skills/ 里躺了两天而从没被注册过。
+      skill-registry = pkgs.runCommand "check-skill-registry" {
+        nativeBuildInputs = [ pkgs.python3 ];
+      } ''
+        cd ${self.outPath}
+        python3 develop/check-skill-registry.py
         touch $out
       '';
 

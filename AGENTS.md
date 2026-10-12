@@ -266,9 +266,9 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 > `builtins.getFlake github:NixOS/nixpkgs`），那些请求确实会带认证头。两个文件
 > 保持一致。
 
-### `nix flake check` 的 10 项自检
+### `nix flake check` 的 11 项自检
 
-仓库的**自检契约**——任一项失败即阻断提交。9 项由 `develop/check-*.py` 实现，
+仓库的**自检契约**——任一项失败即阻断提交。10 项由 `develop/check-*.py` 实现，
 `news-mode-tests` 为 node 脚本：
 
 | 检查 | 脚本 | 校验内容 |
@@ -282,6 +282,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 | `maintenance-log` | `develop/check-maintenance-log.py` | 四语条目数一致、时间戳精确到秒、commit SHA 去重、pcn 无假名、**结构对等**（每条目的提交 SHA 集合四语须与 zh 一致——只看总量会漏掉「某条目在某译文里整张表都没了」，2026-10-03 实测漏过一次）、**摘要标记须是本语的**（zh/pcn `**摘要**`、en `**Summary**`、ja `**概要**`；2026-10-03 实测漏过 80 条 ja + 59 条 pcn 的未译副本）、**zh 摘要 ≤ 400 字符**（2026-10-05 全量重写后钉住：规范里写成「目标」时，实测一轮就有 21 条交上来 420–721 字符而**没有一条算违规**；译文刻意不设长度门槛，按密度匹配倍率判）、**摘要一律清单式**（每条摘要至少 1 个 `- ` 项——2026-10-05 起从「散文或清单都行」改为只此一种：散文段落没法一眼数清改了几件事，单件事的条目也写成单行清单）、**项数四语相等**（少一项是漏译、多一项是加料）、**说明块只有一行且标记为本语**（历史上出现过 `**注**` 与 `**Note**`）、**pcn 正文不得出现非日文字形**（判据是 `shift_jis` 编码探针即 JIS X 0208；2026-10-05 实测现库有 28 种 / 73 处，如 `值`/`戶`/`额`/`锚`——「pcn 是日文剥离假名」这条定义此前只能靠人眼看）、**en 摘要不得是中文原稿**（未译副本：反引号外汉字数 ≥ 20 且占非空白字符 > 30%；阈值按 367 条实测标定，现库 0 误报，抓得住 67% 的整段副本） |
 | `news-mode-tests` | `packages/dsh-preset-news-three-elements/tests/mode.test.mjs` | 新闻三要素模式插件的**行为测试**（node，非 python） |
 | `session-sources` | `develop/check-session-sources.py` | 预设插件**写进会话**的消息来源不得用 v3 的旧形状 `kind: "plugin"`——dsh 0.2.0 的 v4 准入只拒这一个字面量，症状是整个 session「本机运行失败」（2026-10-03 实测：掌灯模式开局对账每开一个新会话崩一次，事故经过见 Kitsunome 的 `journal/2026-10-04.md`）。正确形状 `kind: "plugin:<插件名>"` |
+| `skill-registry` | `develop/check-skill-registry.py` | `skills/` 下每个技能**必须有归属**：被某个注入器登记（JS 的 `registerSkill` / `.nix` 的列表项）、命中 `translate-*` 自动发现、或写进脚本的 `NOT_INJECTED` **并写明理由**。来历：2026-10-12 发现两个 `*-package-upstream` 技能在 `skills/` 里躺了两天、四语文档页与 README 行都齐，**却从没被注册过**——任何 session 都加载不到 |
 | `self-tests` | `develop/check-selftests.py` | **每个自检都必须能被「已知的坏输入」撞响**：把仓库拷进临时树 → 先跑一遍（对照，必须通过）→ 注入一处已知坏输入 → 再跑（必须失败且输出含预期片段）。来历是 2026-10-05 一天里出现三次「判据静默失灵而仍报绿」（验收脚本的正则让 en/ja 永远匹配不到；「目标 ≤ 400」不是判据；解析在空行处截断让清单掉出预算）——**判据还在跑、还在打印通过，但已经不管那件事了**。写这套用例时它立刻抓出一个真洞（见上表 `workflow-coverage`） |
 
 > 各脚本可**单独本地运行**（`python3 develop/check-doc-links.py`），便于快速定位而不必

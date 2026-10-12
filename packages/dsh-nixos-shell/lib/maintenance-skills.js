@@ -87,6 +87,15 @@ export function apply(ctx) {
   // layer; both are registered so a maintenance session can load either.
   registerSkill("nix-flake-update-check");
   registerSkill("nixkits-check-updates");
+  // Upstream contribution follows the same split: a repo-agnostic skill for
+  // getting a package into nixpkgs, plus the NixKits-specific adapter layer.
+  //
+  // ⚠️ 2026-10-12: both skills had existed under skills/ since 10-10 with their
+  // four-language doc pages and README rows — but were never registered here, so
+  // no session could ever load them. These two lines are the wiring. Nothing
+  // checked that skills/ and this list agree; see develop/check-skill-registry.py.
+  registerSkill("nixpkgs-package-upstream");
+  registerSkill("nixkits-package-upstream");
 
   // Language-extension skills, auto-discovered (translate-*).
   let entries = [];
