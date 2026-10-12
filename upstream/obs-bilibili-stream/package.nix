@@ -64,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     # A plugin cannot be built where its host cannot: obs-studio has no riscv64.
     inherit (obs-studio.meta) platforms;
-    maintainers = with lib.maintainers; [ kihara777 ];
+    maintainers = with lib.maintainers; [ kitsunori ];
   };
 })

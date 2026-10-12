@@ -35,6 +35,6 @@ buildNpmPackage (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ kihara777 ];
+    maintainers = with lib.maintainers; [ kitsunori ];
   };
 })

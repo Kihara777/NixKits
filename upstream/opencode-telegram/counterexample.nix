@@ -6,12 +6,12 @@ let
   pkgs0 = import (builtins.getFlake "path:${builtins.getEnv "NIXPKGS_PATH"}") {
     system = "x86_64-linux";
   };
-  kihara777 = import ../maintainer-entry.nix;
+  kitsunori = import ../maintainer-entry.nix;
   pkgs = pkgs0.extend (
     final: prev: {
       lib = prev.lib.extend (
         libFinal: libPrev: {
-          maintainers = libPrev.maintainers // { inherit kihara777; };
+          maintainers = libPrev.maintainers // { inherit kitsunori; };
         }
       );
     }

@@ -12,7 +12,7 @@
 #
 # 要提交进 nixpkgs 的形态是：
 #
-#   kihara777 = {
+#   kitsunori = {
 #     email = "kitsunori@g41.moe";
 #     github = "Kihara777";
 #     githubId = 24633616;

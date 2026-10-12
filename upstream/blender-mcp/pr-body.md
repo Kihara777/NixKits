@@ -31,7 +31,7 @@
 ### commit 1
 
 ```
-maintainers: add kihara777
+maintainers: add kitsunori
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
@@ -39,7 +39,7 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 内容：在 `maintainers/maintainer-list.nix` 里插入（位置在 `greydot` 与 `grgi` 之间）：
 
 ```nix
-  kihara777 = {
+  kitsunori = {
     email = "kitsunori@g41.moe";
     github = "Kihara777";
     githubId = 24633616;
@@ -61,8 +61,8 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 |---|---|
 | 提交账号 | `GrG41` |
 | author / committer | `Kitsunome <gr@g41.moe>` |
-| 维护者条目 | `kihara777` / `githubId 24633616` / `email kitsunori@g41.moe` |
-| 包内引用 | `maintainers = [ lib.maintainers.kihara777 ];` |
+| 维护者条目 | `kitsunori` / `githubId 24633616` / `email kitsunori@g41.moe` |
+| 包内引用 | `maintainers = [ lib.maintainers.kitsunori ];` |
 
 **`DEC-011` 记的提交身份名是 `Kitsunome`**，邮箱部分原为 noreply；
 狐莉 2026-10-10 指定改用 `gr@g41.moe`——**commit 与维护者条目现在用同一个地址**。
@@ -98,7 +98,7 @@ of that PR raised three issues, all addressed here:
 
 - the preparation notes referring to another repository, and to files that are
   not part of this PR, have been removed;
-- `meta.maintainers` now refers to the `kihara777` entry added in the preceding
+- `meta.maintainers` now refers to the `kitsunori` entry added in the preceding
   commit, instead of being left empty;
 - all code comments are in English.
 
@@ -170,7 +170,7 @@ gh api user --jq .login          # 期望 GrG41
 
 | # | 问题 | 证据 | 现在 |
 |---|---|---|---|
-| 1 | `maintainers = [ ]` 空着 | `pkgs/README.md:516`「must be set for new packages」 | `maintainers = [ lib.maintainers.kihara777 ];` |
+| 1 | `maintainers = [ ]` 空着 | `pkgs/README.md:516`「must be set for new packages」 | `maintainers = [ lib.maintainers.kitsunori ];` |
 | 2 | 账户用错 | `DEC-011` | GrG41，提交身份按 DEC-011 原文 |
 | 3 | **包定义里混着我们自己的内部注释** | 审阅者会看到 `packages/blender-mcp.nix`、`build.sh`、`pr-body.md` 这些**在 nixpkgs 里不存在**的路径，外加一段我们内部的 `blender ? null` 决策史 | 已重写为面向审阅者的注释（142 → 111 行） |
 
@@ -193,7 +193,7 @@ gh api user --jq .login          # 期望 GrG41
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `kihara777` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
+| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
 | **包真的能引用到它** | ✅ 反证：`before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt（两份） | ✅ 均通过 |

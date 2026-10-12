@@ -18,7 +18,7 @@
 | 4 | `nixfmt` 通过 | `build.sh` 的第一步 |
 | 5 | 注释**全英文** | 非 ASCII 字符数 = 0（评审第 ③ 条） |
 | 6 | 不引用本 PR 之外的路径 | 无 `NixKits` / `build.sh` / `pr-body.md` 等字样（评审第 ① 条） |
-| 7 | `maintainers` **非空且能解析** | 求值出 `kihara777`（评审第 ② 条） |
+| 7 | `maintainers` **非空且能解析** | 求值出 `kitsunori`（评审第 ② 条） |
 | 8 | 许可有依据 | `SPDX-License-Identifier` 在源文件里 + 上游 issue #59 |
 | 9 | 机械项一遍过 | `bash ../check-draft.sh blender-mcp/package.nix` |
 | 10 | 披露三处同值 | 两个 commit trailer + PR 正文，均为 `DeepSeek-V41-Flash` |
@@ -57,7 +57,7 @@
 | [`package.nix`](package.nix) | **待提交的包定义** —— 与将放到 `pkgs/by-name/bl/blender-mcp/package.nix` 的那份逐字节相同 |
 | [`commit-message.txt`](commit-message.txt) | commit 2 的正文（**单一来源**，用 `git commit -F` 直接喂） |
 | [`pr-body.md`](pr-body.md) | 提交计划、两个 commit 的正文、PR 标题与正文 |
-| [`build.nix`](build.nix) | 求值入口：`builtins.getFlake "path:<nixpkgs>"` 读一棵真树，并注入 `kihara777` 以模拟合并后的状态 |
+| [`build.nix`](build.nix) | 求值入口：`builtins.getFlake "path:<nixpkgs>"` 读一棵真树，并注入 `kitsunori` 以模拟合并后的状态 |
 | [`build.sh`](build.sh) | 四层判据（求值 / 构建 / 产物 / 运行）+ nixfmt |
 | [`tests/criterion-self-test.sh`](tests/criterion-self-test.sh) | 反证：每条判据都要能被已知坏输入撞响 |
 | [`VERIFICATION.md`](VERIFICATION.md) | 两个「提交后会被问到」的点的取证：自动更新、替换锚点 |

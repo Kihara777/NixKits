@@ -32,7 +32,7 @@ d = {}
 # 早先只收带引号的，于是 KeyError: 'githubId'，整段判据没跑就崩了。
 for k, q, b in re.findall(r'^\s*(\w+) = (?:"([^"]*)"|([A-Za-z0-9_.]+));', src, re.M):
     d[k] = q if q else b
-want = f'''  kihara777 = {{
+want = f'''  kitsunori = {{
     email = "{d['email']}";
     github = "{d['github']}";
     githubId = {d['githubId']};

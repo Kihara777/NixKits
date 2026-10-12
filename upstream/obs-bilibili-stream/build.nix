@@ -7,14 +7,14 @@ let
     system = "x86_64-linux";
   };
 
-  # 包定义引用 `lib.maintainers.kihara777`，本地那棵 nixpkgs 里没有这个条目
+  # 包定义引用 `lib.maintainers.kitsunori`，本地那棵 nixpkgs 里没有这个条目
   # ——它由同 PR 的第一个 commit 加进去。这里注入以模拟**合并之后**的状态。
-  kihara777 = import ../maintainer-entry.nix;
+  kitsunori = import ../maintainer-entry.nix;
 
   pkgs = pkgs0.extend (
     final: prev: {
       lib = prev.lib.extend (libFinal: libPrev: {
-        maintainers = libPrev.maintainers // { inherit kihara777; };
+        maintainers = libPrev.maintainers // { inherit kitsunori; };
       });
     }
   );

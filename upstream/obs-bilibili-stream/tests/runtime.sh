@@ -41,9 +41,9 @@ trap 'rm -f "$PROBE"' EXIT
 cat > "$PROBE" <<PROBE_EOF
 let
   pkgs0 = import (builtins.getFlake "path:$NIXPKGS_PATH") { system = "x86_64-linux"; };
-  kihara777 = import $DIR/../maintainer-entry.nix;   # 单一来源，不在这里再抄一份
+  kitsunori = import $DIR/../maintainer-entry.nix;   # 单一来源，不在这里再抄一份
   pkgs = pkgs0.extend (final: prev: {
-    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kihara777; }; });
+    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kitsunori; }; });
   });
   plugin = pkgs.callPackage $DIR/package.nix { };
 in

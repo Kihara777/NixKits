@@ -1,12 +1,12 @@
 # `maintainer-list.nix` 的落点（已取证）
 
-提交时这段要**单独一个 commit**，标题固定 `maintainers: add kihara777`，
+提交时这段要**单独一个 commit**，标题固定 `maintainers: add kitsunori`，
 并且**排在包那个 commit 之前**。
 
 ## 要插入的内容
 
 ```nix
-  kihara777 = {
+  kitsunori = {
     email = "kitsunori@g41.moe";
     github = "Kihara777";
     githubId = 24633616;
@@ -21,11 +21,12 @@
 `maintainers/maintainer-list.nix` 按 handle 字母序排。实测（上游 master，
 文件 33125 行 / 4898 个条目，`sort` 检查确认**整体有序**）：
 
-- 上一项：`kidsan`
-- 下一项：`kiike`
-- 插入点行号：**15239**（`  kiike = {` 之前）
+- 上一项：`kitsunoff`
+- 下一项：`kittyandrew`
+- 插入点行号：**15393**（`  kittyandrew = {` 之前）
 
-字母序依据：`kidsan` < `kihara777`（`d` < `h`）< `kiike`（`h` < `i`）。
+字母序依据：`kitsunoff` < `kitsunori`（`kitsuno` 之后 `f` < `r`）<
+`kittyandrew`（`kits` 的 `s` < `kitt` 的 `t`）。
 
 ## 四个字段的来源
 
@@ -40,7 +41,7 @@
 > `DEC-011` 记的 `Kitsunome <152935465+GrG41@users.noreply.github.com>`（noreply），
 > 而这里的 `email` 是 nixpkgs 用来联系维护者的地址。
 
-## ⚠️ 为什么从 `grg41` 换成了 `kihara777`（2026-10-12）
+## ⚠️ 为什么从 `grg41` 换成了 `kitsunori`（2026-10-12）
 
 这份文档此前记的是 `grg41`（我自己账号）的条目。**PR #572912 上这条被评审者拒了。**
 
@@ -64,7 +65,7 @@
 
 - **带 `email` 的占多数**：4898 条里 4788 条有（**97.8%**）。不填也合规。
 - **属性名全是纯 ASCII**：4898 个属性名里含非 ASCII 的 **0 个**。
-  新的属性名 `kihara777` 同样是纯 ASCII —— 这一点没有风险。
+  新的属性名 `kitsunori` 同样是纯 ASCII —— 这一点没有风险。
 - **但 `name` 的「值」可以带非 ASCII**，先例很多：实测 **360 条**含非 ASCII，
   其中 5 条是 CJK（`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`、`AsPulse / あすぱる`）。
   这次的 `狐莉　キツのり` 属于这一类。**实测 `nixfmt --check` 与
@@ -76,7 +77,7 @@
 ## 包这一侧必须引用它
 
 ```nix
-    maintainers = [ lib.maintainers.kihara777 ];
+    maintainers = [ lib.maintainers.kitsunori ];
 ```
 
 **`pkgs/README.md:516`**：「`meta.maintainers` **must be set** for new packages.」
@@ -93,7 +94,7 @@
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `kihara777` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
+| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
 | **包能引用到它**（带反证） | ✅ `before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt 两份 | ✅ |

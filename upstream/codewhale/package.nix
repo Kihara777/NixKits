@@ -53,6 +53,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "codewhale";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kihara777 ];
+    maintainers = with lib.maintainers; [ kitsunori ];
   };
 }

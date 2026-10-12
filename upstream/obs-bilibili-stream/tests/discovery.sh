@@ -42,12 +42,12 @@ NOISE
 cat > "$PROBE" <<PROBE
 let
   pkgs0 = import (builtins.getFlake "path:$NIXPKGS_PATH") { system = "x86_64-linux"; };
-  # 包定义引用 lib.maintainers.kihara777，而一棵纯 nixpkgs 里没有这个条目
+  # 包定义引用 lib.maintainers.kitsunori，而一棵纯 nixpkgs 里没有这个条目
   # ——它由本 PR 的**第一个 commit** 加进 maintainer-list.nix。
   # 这里注进去以模拟**合并之后**的状态；三个字段与那个 commit 逐字相同。
-  kihara777 = import $HERE/../../maintainer-entry.nix;
+  kitsunori = import $HERE/../../maintainer-entry.nix;
   pkgs = pkgs0.extend (final: prev: {
-    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kihara777; }; });
+    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kitsunori; }; });
   });
   discovered = pkgs.lib.packagesFromDirectoryRecursive {
     inherit (pkgs) callPackage;
@@ -69,9 +69,9 @@ PROBE
 cat > "$PROBE_NAMES" <<NAMES
 let
   pkgs0 = import (builtins.getFlake "path:$NIXPKGS_PATH") { system = "x86_64-linux"; };
-  kihara777 = import $HERE/../../maintainer-entry.nix;
+  kitsunori = import $HERE/../../maintainer-entry.nix;
   pkgs = pkgs0.extend (final: prev: {
-    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kihara777; }; });
+    lib = prev.lib.extend (lf: lp: { maintainers = lp.maintainers // { inherit kitsunori; }; });
   });
 in
 builtins.attrNames (pkgs.lib.packagesFromDirectoryRecursive {

@@ -9,7 +9,7 @@
 | 文件 | 动作 |
 |---|---|
 | `pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix` | **新增**（内容 = [`package.nix`](package.nix) 逐字节相同） |
-| `maintainers/maintainer-list.nix` | 插入 `kihara777` 条目 —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
+| `maintainers/maintainer-list.nix` | 插入 `kitsunori` 条目 —— 见 [`../MAINTAINER-ENTRY.md`](../MAINTAINER-ENTRY.md) |
 
 **接线文件不用改。** 这一条我最初写错了，见第七节。
 
@@ -18,7 +18,7 @@
 ### commit 1
 
 ```
-maintainers: add kihara777
+maintainers: add kitsunori
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
