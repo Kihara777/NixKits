@@ -71,7 +71,8 @@ buildNpmPackage (finalAttrs: {
     # gcc shim 只在交叉构建时加：x86_64 与 aarch64 都在**原生 runner** 上构建
     # （ubuntu-latest / ubuntu-24.04-arm），PATH 上本来就有裸 `gcc`，不需要它。
     # 少动一个本来正常的构建路径。
-  ] ++ lib.optional stdenv.hostPlatform.isRiscV64 gccShim;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 gccShim;
 
   buildInputs = [ nodejs ] ++ lib.optionals (lib.versionAtLeast nodejs.version "20") [ python3 ];
 
@@ -107,6 +108,26 @@ buildNpmPackage (finalAttrs: {
       node ${pkgs.buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js \
         rebuild --release --force_build=1
     )
+  '';
+
+  # ⚠️ 本包此前**一个测试都不跑**。上游带一整套 vitest 测试，沙箱里跑得动 ——
+  # 实测 **2747 passed / 7 skipped（共 2754）**。
+  #
+  # 这一处有两个坑，都实测踩过，写在这里免得下次再踩：
+  #
+  # ① **退出码证明不了测试跑过**：上游 vitest 配置写着 `passWithNoTests: true`，
+  #    所以「一条都没收集到」也是绿的。**判据是条数。**
+  # ② **条数要从最后一行读**：vitest 边跑边打进度，日志里会出现
+  #    `Tests  0 passed (0)`、`252 passed (633)` … 一长串，
+  #    **只有最后一行是总结**。我第一次 grep 抓到第一行，差点以为一条没跑。
+  #
+  # 基线：2747 / 2754。条数掉下来就该查为什么。
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    export HOME="$TMPDIR"
+    npm test
+    runHook postCheck
   '';
 
   postInstall = ''
