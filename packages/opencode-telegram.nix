@@ -50,16 +50,19 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "opencode-telegram";
-  version = "0.26.3";
+  # 2026-10-12 从上游准备那版回填：0.26.3 → 0.26.4。
+  # 两个 hash 都是**独立算出来的**（src 用 nix-prefetch-url 重下一遍、
+  # npmDepsHash 用 prefetch-npm-deps），不是从别处抄的。
+  version = "0.26.4";
 
   src = fetchFromGitHub {
     owner = "grinev";
     repo = "opencode-telegram-bot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kgD1TXOqDPalocW7HNiZz31bbUMiyJ6xu0cPYBVzjhs=";
+    hash = "sha256-c4VpXRuQuvcKSvbiWxmvtg7fjMriS/6hY3XvISREzQc=";
   };
 
-  npmDepsHash = "sha256-1PeS2g4rU/E2+ITWYO3troB1v3FlnHFWrIWlZWImjHg=";
+  npmDepsHash = "sha256-KbZkgfAgvF/+iPtmzPrfRLgDjzeqYneAnAWCw/Iz6DQ=";
   npmBuildScript = "build";
   npmInstallFlags = [ "--ignore-scripts" ];
 
