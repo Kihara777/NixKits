@@ -16,7 +16,7 @@
 #     email = "kitsunori@g41.moe";
 #     github = "Kihara777";
 #     githubId = 24633616;
-#     name = "狐莉　キツのり";
+#     name = "狐莉";
 #   };
 #
 # **2026-10-12 换成人类账号。** PR #572912 上 K900 的评审（CHANGES_REQUESTED）说：
@@ -28,5 +28,5 @@
   email = "kitsunori@g41.moe";
   github = "Kihara777";
   githubId = 24633616;
-  name = "狐莉　キツのり";
+  name = "狐莉";
 }

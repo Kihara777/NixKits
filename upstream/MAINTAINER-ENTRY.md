@@ -10,7 +10,7 @@
     email = "kitsunori@g41.moe";
     github = "Kihara777";
     githubId = 24633616;
-    name = "狐莉　キツのり";
+    name = "狐莉";
   };
 ```
 
@@ -43,7 +43,7 @@
 |---|---|---|
 | `github` | `Kihara777` | `gh api users/Kihara777` → `login=Kihara777 id=24633616 created=2016-12-18` |
 | `githubId` | `24633616` | 同上；审阅者会核 `api.github.com/user/24633616` 的 `login` 是否吻合 |
-| `name` | `狐莉　キツのり`（含 U+3000 全角空格） | 狐莉 **2026-10-12** 指定 |
+| `name` | `狐莉` | 狐莉 **2026-10-12** 指定 |
 | `email` | `kitsunori@g41.moe` | 狐莉 **2026-10-12** 指定 |
 
 > **注意 `email` 与 commit 身份是两回事**：commit 的 author/committer 仍用
@@ -75,12 +75,13 @@
 - **带 `email` 的占多数**：5293 条里 4786 条有（**90.4%**）。不填也合规。
 - **属性名全是纯 ASCII**：5293 个属性名里含非 ASCII 的 **0 个**。
   新的属性名 `kitsunori` 同样是纯 ASCII —— 这一点没有风险。
-- **但 `name` 的「值」可以带非 ASCII**，先例很多：实测 **362 条**含非 ASCII，
-  其中 5 条是 CJK（`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`、`AsPulse / あすぱる`）。
-  这次的 `狐莉　キツのり` 属于这一类。**实测 `nixfmt --check` 与
-  `nix-instantiate --parse` 都通过。**
-- **那个间隔是全角空格 U+3000**（`IDEOGRAPHIC SPACE`），不是半角 ——
-  7 个字符，逐字符量过。写文件时不能让它被编辑器悄悄换成 U+0020。
+- **但 `name` 的「值」可以带非 ASCII**：实测 **362 条**（6.8%）含非 ASCII，
+  其中 **4 条是 CJK**（`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`），1 条含平假名
+  （`AsPulse / あすぱる`）。**`狐莉` 属于有先例的那一类。**
+  文件的规则只有一句「a name that people would know and recognize you by」——
+  **没有任何字符限制条文**；`maintainers/README.md` 也完全没提字符集。
+- **`狐莉` 是 2 个码点**（`U+72D0 U+8389`），无分隔符、无假名。
+  **实测 `nixfmt --check`、`nix-instantiate --parse`，以及求值取回逐字符相同，三项都过。**
 - `name` 这一格没有格式要求：真名、网名、罗马字都有。
 
 ## 包这一侧必须引用它
@@ -103,7 +104,7 @@
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
+| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉"; }` |
 | **包能引用到它**（带反证） | ✅ `before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt 两份 | ✅ |

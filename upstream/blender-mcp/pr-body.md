@@ -43,7 +43,7 @@ Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
     email = "kitsunori@g41.moe";
     github = "Kihara777";
     githubId = 24633616;
-    name = "狐莉　キツのり";
+    name = "狐莉";
   };
 ```
 
@@ -193,7 +193,7 @@ gh api user --jq .login          # 期望 GrG41
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
+| `kitsunori` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉"; }` |
 | **包真的能引用到它** | ✅ 反证：`before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt（两份） | ✅ 均通过 |

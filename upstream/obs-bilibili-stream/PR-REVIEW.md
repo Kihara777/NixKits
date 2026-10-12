@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 +    email = "kitsunori@g41.moe";
 +    github = "Kihara777";
 +    githubId = 24633616;
-+    name = "狐莉　キツのり";
++    name = "狐莉";
 +  };
    Kitt3120 = {
      email = "nixpkgs@schweren.dev";
@@ -164,7 +164,7 @@ obs-bilibili-stream: init at 2.1.5
 | 插入点 | 第 15393 行，`kittyandrew` 之前 | **第 15387 行，`Kitt3120` 之前** |
 | 条目总数 | 4898 | **5293** |
 | 属性名 | `kihara777` | **`kitsunori`** |
-| `name` | `Kihara777` | **`狐莉　キツのり`**（U+3000） |
+| `name` | `Kihara777` | **`狐莉`** |
 | 包文件路径 | （`PR-POLICY-QUESTION.md` 里我写成了 `by-name/…`，错） | **`pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix`** |
 
 **错因**：算插入点的正则只匹配小写开头的属性名，整个漏掉 340 个大写条目。
