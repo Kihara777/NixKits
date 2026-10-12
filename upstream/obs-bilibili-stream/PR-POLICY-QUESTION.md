@@ -12,9 +12,9 @@
 
 | 改什么 | 怎么改 |
 |---|---|
-| `maintainers/maintainer-list.nix` | 加 **`kihara777`** 而不是 `grg41`（插入点：第 15239 行，`kidsan` 与 `kiike` 之间） |
-| `pkgs/by-name/ob/obs-bilibili-stream/package.nix` | `maintainers = [ lib.maintainers.kihara777 ]` |
-| 分支的第一个 commit | 重做为 `maintainers: add kihara777` |
+| `maintainers/maintainer-list.nix` | 加 **`kitsunori`** 而不是 `grg41`（插入点：**第 15387 行，`Kitt3120` 之前**） |
+| `pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix` | `maintainers = [ lib.maintainers.kitsunori ]` |
+| 分支的第一个 commit | 重做为 `maintainers: add kitsunori` |
 
 **PR 作者仍是 `GrG41`** —— 他要的是「**联络点**」是个人账号，不是把作者换掉。
 （他的原话是 point of contact，不是 author。）
@@ -30,7 +30,7 @@
 | # | 待办 | 谁做 | 状态 |
 |---|---|---|---|
 | 1 | **那条回复缺它自己的披露** | 狐莉（编辑评论） | 仍未做。政策要求评论单独披露，而整场讨论的主题就是政策 |
-| 2 | **维护者那一格换成 `kihara777`** | 狐莉给字段 → 我重建分支 → 她回复 | **K900 已明确要求走这条**，方向不再是猜的 |
+| 2 | **维护者那一格换成 `kitsunori`** | 狐莉已给字段（2026-10-12）→ 我重建分支 → 她回复 | **K900 已明确要求走这条**，方向不再是猜的 |
 
 **没有期限**，但门已经开了 —— 而且是他自己推开的。
 
@@ -103,10 +103,10 @@
 
 | | |
 |---|---|
-| `kihara777` 现在在名单里吗 | **不在**（#572360 从未合入） |
+| `kitsunori` 现在在名单里吗 | **不在**（#572360 从未合入） |
 | `grg41` 现在在名单里吗 | 不在；本 PR 加的就是它 |
 | Kihara777 的 GitHub | login `Kihara777`、id **`24633616`**、注册 **2016-12-18**、`name` 字段在 GitHub 上是**空** |
-| `kihara777` 的插入点 | 第 15239 行，`kidsan` 与 `kiike` 之间 |
+| `kitsunori` 的插入点 | **第 15387 行，`Kitt3120` 之前**（该文件按属性名**忽略大小写**排序） |
 | `grg41` 的插入点 | 第 10907 行，`greydot` 与 `grgi` 之间 |
 | 本 PR 里的 `meta.maintainers` | `[ lib.maintainers.grg41 ]` |
 | `pkgs/README.md:516` | 新包 **must** 设 `meta.maintainers`（所以「摘掉」会留下另一个洞） |
@@ -119,7 +119,7 @@
 |---|---|---|
 | **甲** | 维持现状，回复他 | 他说的是「Please don't.」，而他的理由政策原文支持。顶回去＝开一场政策争论 |
 | **乙** | 摘掉维护者条目 | `meta.maintainers` 会空，撞 `pkgs/README.md:516`（换个人来审同样会拦） |
-| **丙** | 维护者换成 `kihara777`（人） | 正落在他的话上：**自动化照旧干活，担责的是人**。需要定 `name` 与是否 `email` |
+| **丙** | 维护者换成 `kitsunori`（人） | 正落在他的话上：**自动化照旧干活，担责的是人**。**K900 已明确要求走这条** |
 
 **当前选择：甲（先回复，不动代码）。**
 
