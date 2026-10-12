@@ -10,7 +10,7 @@
     email = "kitsunori@g41.moe";
     github = "Kihara777";
     githubId = 24633616;
-    name = "Kihara777";
+    name = "狐莉　キツのり";
   };
 ```
 
@@ -64,7 +64,13 @@
 
 - **带 `email` 的占多数**：4898 条里 4788 条有（**97.8%**）。不填也合规。
 - **属性名全是纯 ASCII**：4898 个属性名里含非 ASCII 的 **0 个**。
-  新的 `kihara777` 同样是纯 ASCII，所以这一点不再是风险。
+  新的属性名 `kihara777` 同样是纯 ASCII —— 这一点没有风险。
+- **但 `name` 的「值」可以带非 ASCII**，先例很多：实测 **360 条**含非 ASCII，
+  其中 5 条是 CJK（`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`、`AsPulse / あすぱる`）。
+  这次的 `狐莉　キツのり` 属于这一类。**实测 `nixfmt --check` 与
+  `nix-instantiate --parse` 都通过。**
+- **那个间隔是全角空格 U+3000**（`IDEOGRAPHIC SPACE`），不是半角 ——
+  7 个字符，逐字符量过。写文件时不能让它被编辑器悄悄换成 U+0020。
 - `name` 这一格没有格式要求：真名、网名、罗马字都有。
 
 ## 包这一侧必须引用它
@@ -87,7 +93,7 @@
 | 判据 | 结果 |
 |---|---|
 | `maintainer-list.nix` 能解析 | ✅ `nix-instantiate --parse` |
-| `kihara777` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "Kihara777"; }` |
+| `kihara777` 条目可读 | ✅ `{ email = "kitsunori@g41.moe"; github = "Kihara777"; githubId = 24633616; name = "狐莉　キツのり"; }` |
 | **包能引用到它**（带反证） | ✅ `before=false`（未加表时不存在）→ `after=true` |
 | `package.nix` 能解析 | ✅ |
 | nixfmt 两份 | ✅ |
