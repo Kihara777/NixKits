@@ -2,6 +2,26 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-13T00:36:29+09:00
+
+**摘要**：dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 — alpha 通道预发布更新
+
+- npm `alpha` dist-tag 前移；84 个 `@deepseek-ai/dsh-*` 子包联动，依赖 83 → 85
+- vendored lock 重生成：与产物里 npm fixup 后那份**逐字节一致**，peer 条目 26 条
+- alpha 与 stable 的内置插件清单差异重测（183 / 185 条）：内容变了，四语文档那条注释重写为差异表
+- 判据：`dsh --version` = 0.2.1-alpha.2；104 行预设插件行对 alpha.2 全部可解析
+- 部署用的仍是 stable 通道，本包不影响运行中的系统
+
+| 提交 | 说明 |
+|------|------|
+| `8c22601` | chore(pkgs): bump dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.1 | 0.2.1-alpha.2 |
+| 　 | src hash | `sha256-hX+TqmyF…` → `sha256-5MrTlEE9…` |
+| 　 | npmDepsHash | `sha256-8p722O0b…` → `sha256-dGYf3Ad8…` |
+
 ## 2026-10-12T13:40:24+09:00
 
 **摘要**：全包扫描（版本/死参数/测试/冗余）；技能沉淀运行层判据

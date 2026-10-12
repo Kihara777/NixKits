@@ -2,6 +2,26 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-13T00:36:29+09:00
+
+**摘要**：dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 — alpha 通道 prerelease 更新
+
+- npm `alpha` dist-tag 前進；`@deepseek-ai/dsh-*` 子 package 84 件 連動、依存数 83 → 85
+- vendored lock 再生成：build 内 npm fixup 済 者 與 **逐 byte 同一**、peer 条目 26 件
+- 内蔵插件一覧 stable 與 差 再測定（183 / 185 条）；差 内容 変、四言語 注記 差異表 書直
+- 判据：`dsh --version` = 0.2.1-alpha.2；預設 插件行 104 件 alpha.2 於 全 解決
+- 配備 依然 stable 通道、本 package 稼働中 system 影響 不
+
+| 提交 | 説明 |
+|------|------|
+| `8c22601` | chore(pkgs): bump dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.1 | 0.2.1-alpha.2 |
+| 　 | src hash | `sha256-hX+TqmyF…` → `sha256-5MrTlEE9…` |
+| 　 | npmDepsHash | `sha256-8p722O0b…` → `sha256-dGYf3Ad8…` |
+
 ## 2026-10-12T13:40:24+09:00
 
 **摘要**：全包 走査 技能 二節 追加

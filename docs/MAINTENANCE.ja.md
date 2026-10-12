@@ -2,6 +2,26 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-13T00:36:29+09:00
+
+**概要**：dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 — alpha チャネルのプレリリース更新
+
+- npm `alpha` dist-tag が前進；`@deepseek-ai/dsh-*` のサブパッケージ 84 件が連動し、依存数は 83 → 85
+- vendored lock を再生成：ビルド内の npm fixup 済みのものと**逐バイト同一**、peer 条目 26 件
+- 内蔵プラグイン一覧の stable との差を再測定（183 / 185 条）；差の内容が変わり四言語の注記を差異表に
+- 判据：`dsh --version` = 0.2.1-alpha.2；プリセットのプラグイン行 104 件が alpha.2 で全て解決
+- 配備は依然 stable チャネルのため、本パッケージは稼働中のシステムに影響しない
+
+| コミット | 説明 |
+|------|------|
+| `8c22601` | chore(pkgs): bump dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.1 | 0.2.1-alpha.2 |
+| 　 | src hash | `sha256-hX+TqmyF…` → `sha256-5MrTlEE9…` |
+| 　 | npmDepsHash | `sha256-8p722O0b…` → `sha256-dGYf3Ad8…` |
+
 ## 2026-10-12T13:40:24+09:00
 
 **概要**：全パッケージ走査と技能への二節追加

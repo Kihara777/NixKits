@@ -2,6 +2,26 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-13T00:36:29+09:00
+
+**Summary**: dsh-alpha 0.2.1-alpha.1 to 0.2.1-alpha.2 — alpha-channel prerelease update
+
+- The npm `alpha` dist-tag moved forward; 84 `@deepseek-ai/dsh-*` sub-packages move together and the dependency count goes from 83 to 85
+- The vendored lock was regenerated and is **byte-identical** to the npm-fixed one inside the build, with 26 peer entries
+- The built-in plugin lists were re-measured against stable (183 vs 185 entries); the content of the difference changed, so the four-language note became a table
+- Criteria: `dsh --version` reports 0.2.1-alpha.2, and all 104 preset plugin rows resolve against alpha.2
+- The deployment still tracks the stable channel, so this package does not affect the running system
+
+| Commit | Description |
+|------|------|
+| `8c22601` | chore(pkgs): bump dsh-alpha 0.2.1-alpha.1 to 0.2.1-alpha.2 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.1 | 0.2.1-alpha.2 |
+| 　 | src hash | `sha256-hX+TqmyF…` to `sha256-5MrTlEE9…` |
+| 　 | npmDepsHash | `sha256-8p722O0b…` to `sha256-dGYf3Ad8…` |
+
 ## 2026-10-12T13:40:24+09:00
 
 **Summary**: a sweep over every package plus two new skill sections
