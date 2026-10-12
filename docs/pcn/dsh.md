@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | 版 | `0.2.0-rc.2` |
-| 開発通道 | `dsh-alpha 0.2.1-alpha.1`（npm `alpha` dist-tag） |
+| 開発通道 | `dsh-alpha 0.2.1-alpha.2`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
 
@@ -22,14 +22,14 @@ NixKits 倣 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数
 | 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag、既定。**預設内容** 指定 rev 凍結 |
-| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.1` | npm **`alpha`** dist-tag、0.2.x 線 最新 prerelease 追跡。**預設内容** repo HEAD 追随 |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.2` | npm **`alpha`** dist-tag、0.2.x 線 最新 prerelease 追跡。**預設内容** repo HEAD 追随 |
 
 ```nix
 # 本機 最新 prerelease 使用
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **`dsh-alpha` 為何 `alpha` 追随**（2026-10-08 復帰）。npm 三 dist-tag 現在値 `alpha` = **`0.2.1-alpha.1`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` 逆 `next` **追越**。2026-10-02 `next` 切替 理由「`alpha` = `0.1.7-alpha.2` 古 0.1.x 線所属、stable 未満」、**該前提 反転済**。`next` 追随継続 = 開発通道 `alpha` 未満 版 固定 同等。判定基準「何 tag 名 一層 prerelease 似」非、**何 tag 0.2.x 線 於 一層新版 指**：再確認毎 dist-tags 読直 両版 対照、`alpha` 先導 無 時 復帰 可。
+> **`dsh-alpha` 為何 `alpha` 追随**（2026-10-08 復帰）。npm 三 dist-tag 現在値 `alpha` = **`0.2.1-alpha.2`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` 逆 `next` **追越**。2026-10-02 `next` 切替 理由「`alpha` = `0.1.7-alpha.2` 古 0.1.x 線所属、stable 未満」、**該前提 反転済**。`next` 追随継続 = 開発通道 `alpha` 未満 版 固定 同等。判定基準「何 tag 名 一層 prerelease 似」非、**何 tag 0.2.x 線 於 一層新版 指**：再確認毎 dist-tags 読直 両版 対照、`alpha` 先導 無 時 復帰 可。
 >
 > 両通道 **挙動差 二点**：① dsh 版（alpha 新、故 hash / `npmDepsHash` / vendored lock **各独立**——版異 間 stable lock 共用 不可）；② **預設内容**：stable 預設 `packages/dsh-nixos-shell-stable.nix` 指定 commit 凍結、alpha repo HEAD 追随（下文「模式」参照）。
 >
@@ -317,7 +317,16 @@ dsh 0.2.0-rc.2 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値�
 
 > **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版輸出為准。本表対応 web profile 之 base + web-app patch 集。
 >
-> ⚠️ **alpha 通道（`0.2.1-alpha.1`）比 本表 多 二 行**：`schedule -> @deepseek-ai/dsh-schedule` 與 `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`（2026-10-08、同一 命令 対 alpha 成果物 実行 実測、183 → 185）。**此 二 行 不 可 写 入 stable 配備**——stable `0.2.0-rc.2` 無 此 二 行、而 dsh ≥ 0.1.6-alpha.2 対 解決不能 之 plugin 行 視為 **硬失敗**（全 預設 不能 掛載、見 上文 改名 注意）。
+> ⚠️ **alpha 通道（`0.2.1-alpha.2`）stable 與 内容 異**（2026-10-12、同 命令 alpha 成果物 対 実行 実測、183 → 185）：
+>
+> | 差異 | 条目 |
+> |---|---|
+> | **alpha 限**（4 条） | `schedule -> @deepseek-ai/dsh-schedule`、`ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`、`working-directory -> @deepseek-ai/dsh-working-directory`、`tool-working-directory -> @deepseek-ai/dsh-tool-working-directory` |
+> | **stable 限**（2 条） | `skill-badge -> @deepseek-ai/dsh-skill-badge`、`tool-ralph -> @deepseek-ai/dsh-tool-ralph` |
+>
+> **alpha 此等行 stable 配備 写 不**——stable `0.2.0-rc.2` 存在 不、dsh ≥ 0.1.6-alpha.2 解決不能 插件行 **硬失敗** 扱（預設全体 掛載 不能。上文 改名 注意 参照）。
+>
+> ⚠️ **「本表 無」＝「package 無」非**：上 4 条 既定設定 載 無 限、package 目录 全 存在。判定基準 `dsh --dump-default-config` 出力、**「插件 tree 見 可否」非**——2026-10-12、後者 交叉照合、実在 四 插件 「無」 誤判定。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
@@ -687,7 +696,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類備份、hot reload）�
 |--------|-------------|--------------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **両通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.1`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **両通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.2`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` 三 目録 **全部 存在**、且 **各目録 image modality 宣言** 唯一 之 id —— 此 模塊 既定値 選択 理由。他 画像対応 id `deepseek-v4-flash-vision-exp` 古 二 目録 限 存在、上流 2026-09-10 廃止 為、既定値 使用 不可。
 

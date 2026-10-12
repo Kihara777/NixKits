@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | Version | `0.2.0-rc.2` |
-| Development channel | `dsh-alpha 0.2.1-alpha.1` (npm `alpha` dist-tag) |
+| Development channel | `dsh-alpha 0.2.1-alpha.2` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -22,14 +22,14 @@ NixKits provides several dsh versions through the same thin-wrapper pattern as r
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
-| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.1` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.2` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
 
 ```nix
 # run the newest prerelease on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **Why `dsh-alpha` follows `alpha`** (switched back 2026-10-08). The npm dist-tags currently read `alpha` = **`0.2.1-alpha.1`** while `latest` = `next` = `0.2.0-rc.2` — `alpha` now **leads** `next` instead of trailing it. The 2026-10-02 switch to `next` rested on `alpha` = `0.1.7-alpha.2` sitting on the older 0.1.x line and being **lower** than stable; **that premise has reversed**, and following `next` now pins the development channel to a version older than `alpha`. The criterion is not "which tag name sounds more like a prerelease" but **which tag points at the newer version on the 0.2.x line**: re-read the dist-tags and compare the two versions when re-checking, and switch back once `alpha` stops leading.
+> **Why `dsh-alpha` follows `alpha`** (switched back 2026-10-08). The npm dist-tags currently read `alpha` = **`0.2.1-alpha.2`** while `latest` = `next` = `0.2.0-rc.2` — `alpha` now **leads** `next` instead of trailing it. The 2026-10-02 switch to `next` rested on `alpha` = `0.1.7-alpha.2` sitting on the older 0.1.x line and being **lower** than stable; **that premise has reversed**, and following `next` now pins the development channel to a version older than `alpha`. The criterion is not "which tag name sounds more like a prerelease" but **which tag points at the newer version on the 0.2.x line**: re-read the dist-tags and compare the two versions when re-checking, and switch back once `alpha` stops leading.
 >
 > The two channels now **differ in two ways**: ① the dsh version (alpha is newer, so hash / `npmDepsHash` / vendored lock are **independent** — they must not share stable's lock while the versions differ); ② **preset content**: stable's presets are frozen at the commit pinned in `packages/dsh-nixos-shell-stable.nix`, alpha's follow repository HEAD (see "Modes" below).
 >
@@ -325,7 +325,16 @@ Built-in plugin entry ids for dsh 0.2.0-rc.2 (valid values for `nixkits.dsh.plug
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 >
-> ⚠️ **The alpha channel (`0.2.1-alpha.1`) has two more rows than this list**: `schedule -> @deepseek-ai/dsh-schedule` and `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule` (measured 2026-10-08 on the alpha artifact with the same command; 183 → 185). **Do not copy them into a stable deployment** — stable `0.2.0-rc.2` does not have them, and dsh ≥ 0.1.6-alpha.2 treats an unresolvable plugin row as a **hard failure** (the whole preset fails to mount; see the rename note above).
+> ⚠️ **The alpha channel (`0.2.1-alpha.2`) differs from stable** (measured 2026-10-12 with the same command against the alpha artifact, 183 → 185):
+>
+> | Difference | Entries |
+> |---|---|
+> | **alpha only** (4) | `schedule -> @deepseek-ai/dsh-schedule`, `ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`, `working-directory -> @deepseek-ai/dsh-working-directory`, `tool-working-directory -> @deepseek-ai/dsh-tool-working-directory` |
+> | **stable only** (2) | `skill-badge -> @deepseek-ai/dsh-skill-badge`, `tool-ralph -> @deepseek-ai/dsh-tool-ralph` |
+>
+> **Do not copy the alpha rows into a stable deployment** — stable `0.2.0-rc.2` does not have them, and dsh ≥ 0.1.6-alpha.2 treats an unresolvable plugin row as a **hard failure** (the whole preset fails to mount; see the rename note above).
+>
+> ⚠️ **"Not in this table" does not mean "the package is absent"**: those four rows are merely not in the default config, while their package directories all exist. The criterion is the output of `dsh --dump-default-config`, **not** whether the plugin is findable in the plugin tree — on 2026-10-12 a cross-check using the latter misjudged four real plugins as missing.
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
@@ -683,7 +692,7 @@ The `deepseek-official` route's model catalogue is **built into** the adapter (`
 |-------------|-------------------|---------------------------------|
 | stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` | `deepseek-flash`, `deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
-| **both channels** (stable `0.2.0-rc.2`, alpha `0.2.1-alpha.1`) | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
+| **both channels** (stable `0.2.0-rc.2`, alpha `0.2.1-alpha.2`) | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` is the only id **present in all three** catalogues **and declaring the image modality in each** — which is why the module default picks it. The other image-capable id, `deepseek-v4-flash-vision-exp`, exists only in the two older catalogues and upstream retired it on 2026-09-10, so it cannot serve as a default.
 

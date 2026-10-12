@@ -23,7 +23,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | blender-mcp | Blender 向 MCP 伺服器（自然言語操作） | [docs/pcn/blender-mcp.md](pcn/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末符号化代理 | [docs/pcn/codewhale.md](pcn/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/pcn/dsh.md](pcn/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.2.1-alpha.1） | [docs/pcn/dsh.md](pcn/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— 開発通道（0.2.1-alpha.2） | [docs/pcn/dsh.md](pcn/dsh.md) |
 | godot-ai | Godot 機関 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
