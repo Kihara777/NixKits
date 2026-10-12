@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T13:40:24+09:00
+
+**Summary**: a sweep over every package plus two new skill sections
+
+- **Version drift: none.** All eight packages with an upstream are on its latest release
+- **Dead parameters: only blender-mcp.** Of every defaulted parameter in the repository, only `blender` is also a nixpkgs top-level attribute
+- **Two packages ran no tests.** Adding them to `opencode-telegram` yields 201 files and 2754 cases with **2747 passing**
+- Two skill sections: the fourth layer needs an equally strong counterexample, and a test criterion is the **count**, not the exit code (`passWithNoTests` makes zero tests green, and only the last vitest line is the summary)
+- My instruments produced two false alarms today: a too-narrow heuristic for redundant `makeWrapper`, and reading a vitest progress line as the summary
+
+| Commit | Description |
+|------|------|
+| `c821a2d` | fix(packages): opencode-telegram now runs its upstream tests, 2747 cases |
+| `53a2d99` | docs(skill): runtime-layer criteria and "count, not exit code" |
+
 ## 2026-10-12T13:12:39+09:00
 
 **Summary**: defects found while preparing the upstream submission flowed back into this repository, saving 4.4 GiB

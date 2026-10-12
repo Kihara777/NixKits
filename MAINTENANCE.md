@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-12T13:40:24+09:00
+
+**摘要**：全包扫描（版本/死参数/测试/冗余）；技能沉淀运行层判据
+
+- **版本漂移：零** —— 8 个有上游的包全在最新版
+- **死参数：只有 blender-mcp**；全仓带默认值的参数里只有 `blender` 同时是 nixpkgs 顶层属性
+- **该跑没跑的测试：两处**。`opencode-telegram` 补上后 201 文件 / 2754 用例、**2747 passed**
+- 技能加两节：第 4 层必须带同强度反证臂；测试的判据是**条数**不是退出码（`passWithNoTests` 会让 0 条也是绿的；vitest 只有最后一行是总结）
+- 我的量具今天两次假警报：多余 makeWrapper 的启发式太窄、把 vitest 进度行当总结
+
+| 提交 | 说明 |
+|------|------|
+| `c821a2d` | fix(packages): opencode-telegram 跑起上游测试（2747 用例） |
+| `53a2d99` | docs(skill): 运行层判据与「条数不是退出码」 |
+
 ## 2026-10-12T13:12:39+09:00
 
 **摘要**：把上游准备阶段查出的缺陷回流本仓（blender-mcp 省 4.4 GiB）

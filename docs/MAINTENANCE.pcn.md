@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-12T13:40:24+09:00
+
+**摘要**：全包 走査 技能 二節 追加
+
+- **版 漂流：無**。上流 持 8 件 全 最新版
+- **死 引数：blender-mcp 限**。既定値 引数 内 nixpkgs 最上位属性 兼 者 `blender` 限
+- **測試 走 無 包：二件**。`opencode-telegram` 追加 201 文件 / 2754 用例、**2747 passed**
+- 技能 二節：第四層 同強度 反例腕 必要；測試 判据 **件数** 終了符号 非（`passWithNoTests` 0 件 緑 化、vitest 最終行 限 要約）
+- 計器 誤警報 本日 二件：冗長 `makeWrapper` 発見法 狭、vitest 進捗行 要約 読
+
+| 提交 | 説明 |
+|------|------|
+| `c821a2d` | fix(packages): opencode-telegram 上流測試 実行、2747 用例 |
+| `53a2d99` | docs(skill): 実行層 判据 「件数 終了符号 非」 |
+
 ## 2026-10-12T13:12:39+09:00
 
 **摘要**：上流準備 発見 欠陥 本倉 回流（blender-mcp 4.4 GiB 削減）
