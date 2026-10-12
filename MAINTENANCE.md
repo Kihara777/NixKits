@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-12T13:12:39+09:00
+
+**摘要**：把上游准备阶段查出的缺陷回流本仓（blender-mcp 省 4.4 GiB）
+
+- **blender-mcp 的 `blender ? null` 从来没挡住自动绑定**：`callPackage { }` 下 drv 里仍有 `blender-5.2.1`，4.7 GiB 的 Blender 闭包进了每个用户；删掉后 266 MiB
+- **blender-mcp 此前一个测试都不跑**，回填后 `102 passed, 9 skipped`
+- **opencode-telegram 0.26.3 → 0.26.4**，两个 hash 独立算的
+- 扫同族写法：只有 `blender` 这个名字在 nixpkgs 里存在，所以只有它会出事
+- 我提交前**手挑了三个检查**而漏掉 `check-doc-versions`，被 CI 抓到，已修 16 处
+
+| 提交 | 说明 |
+|------|------|
+| `856782c` | fix(packages): 上游查出的缺陷回流 —— blender-mcp 省 4.4 GiB、补测试、升版本 |
+| `2fb02a8` | fix(docs): 同步 opencode-telegram 四语文档版本号 |
+
 ## 2026-10-12T05:13:05+09:00
 
 **摘要**：第四个上游草稿 codewhale（Rust，41078 stars）

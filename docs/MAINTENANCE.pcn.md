@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-12T13:12:39+09:00
+
+**摘要**：上流準備 発見 欠陥 本倉 回流（blender-mcp 4.4 GiB 削減）
+
+- **blender-mcp `blender ? null` 自動束縛 止 無**：本倉 flake 呼方 `callPackage { }` drv 依然 `blender-5.2.1` 在、4.7 GiB Blender 閉包 全利用者 到達。引数 postFixup 削除 266 MiB 化
+- **blender-mcp 測試 一 走 無**（`nativeCheckInputs` 無）。回填後 `102 passed, 9 skipped`
+- **opencode-telegram 0.26.3 0.26.4 化**、両 hash 独立算出 実行層 検証
+- 同族 書方 掃引：既定値 引数 内 nixpkgs 存在 名前 `blender` 限、唯一 該当
+- commit 前 検査 手選 漏 `check-doc-versions`、CI 文書 未同期 検出。16 箇所 修正
+
+| 提交 | 説明 |
+|------|------|
+| `856782c` | fix(packages): 上流由来 欠陥 回流、4.4 GiB 削減 測試 追加 |
+| `2fb02a8` | fix(docs): opencode-telegram 版 四言語 同期 |
+
 ## 2026-10-12T05:13:05+09:00
 
 **摘要**：四番目 上流草稿 codewhale（Rust、41078 stars）

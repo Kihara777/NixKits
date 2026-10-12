@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T13:12:39+09:00
+
+**概要**：上流準備で見つけた欠陥を本倉へ回流（blender-mcp で 4.4 GiB 削減）
+
+- **blender-mcp の `blender ? null` は自動束縛を止めていなかった**：本倉 flake の呼び方である `callPackage { }` では drv に依然 `blender-5.2.1` が在り、4.7 GiB の Blender 閉包が全利用者に届いていた。引数と postFixup を削除して 266 MiB に
+- **blender-mcp はテストを一つも走らせていなかった**（`nativeCheckInputs` 無し）。回填後は `102 passed, 9 skipped`
+- **opencode-telegram 0.26.3 から 0.26.4 へ**、両ハッシュは独立に算出し実行層も検証
+- 同族の書き方を掃引：既定値付き引数のうち nixpkgs に存在する名前は `blender` のみで、それが唯一の該当だった
+- コミット前に検査を手選びして `check-doc-versions` を漏らし、CI が文書の未同期を検出。16 箇所を修正
+
+| コミット | 説明 |
+|------|------|
+| `856782c` | fix(packages): 上流由来の欠陥を回流、4.4 GiB 削減とテスト追加 |
+| `2fb02a8` | fix(docs): opencode-telegram の版を四言語で同期 |
+
 ## 2026-10-12T05:13:05+09:00
 
 **概要**：四つ目の上流草稿 codewhale（Rust、41078 stars）

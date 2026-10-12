@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-12T13:12:39+09:00
+
+**Summary**: defects found while preparing the upstream submission flowed back into this repository, saving 4.4 GiB
+
+- **`blender ? null` in blender-mcp never blocked auto-binding**: called as `callPackage { }`, which is how this repository's flake calls it, the derivation still contained `blender-5.2.1`, so the whole 4.7 GiB Blender closure reached every user; removing the parameter and its postFixup brings the closure to 266 MiB
+- **blender-mcp ran no tests at all** because it had no `nativeCheckInputs`; it now reports `102 passed, 9 skipped`
+- **opencode-telegram 0.26.3 to 0.26.4**, with both hashes computed independently and the runtime layer verified
+- A sweep for the same pattern found that `blender` is the only parameter name that also exists in nixpkgs, which is why it was the only one affected
+- I ran a hand-picked subset of checks before committing and missed `check-doc-versions`; CI caught the unsynchronised documentation and the 16 occurrences are fixed
+
+| Commit | Description |
+|------|------|
+| `856782c` | fix(packages): upstream-discovered defects flowed back, saving 4.4 GiB and adding tests |
+| `2fb02a8` | fix(docs): opencode-telegram version synchronised across four languages |
+
 ## 2026-10-12T05:13:05+09:00
 
 **Summary**: a fourth upstream draft, codewhale, a Rust package with 41078 stars
