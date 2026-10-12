@@ -18,15 +18,24 @@
 
 ## 插在哪个位置
 
-`maintainers/maintainer-list.nix` 按 handle 字母序排。实测（上游 master，
-文件 33125 行 / 4898 个条目，`sort` 检查确认**整体有序**）：
+`maintainers/maintainer-list.nix` 按 handle 字母序排 —— **忽略大小写**。
+实测（上游 master，文件 33125 行 / **5293** 个条目）：
 
 - 上一项：`kitsunoff`
-- 下一项：`kittyandrew`
-- 插入点行号：**15393**（`  kittyandrew = {` 之前）
+- 下一项：**`Kitt3120`**（大写 K）
+- 插入点行号：**15387**（`  Kitt3120 = {` 之前）
 
-字母序依据：`kitsunoff` < `kitsunori`（`kitsuno` 之后 `f` < `r`）<
-`kittyandrew`（`kits` 的 `s` < `kitt` 的 `t`）。
+**字母序依据**（忽略大小写）：`kitsunoff` < `kitsunori`（`kitsuno` 之后 `f` < `r`）<
+`Kitt3120`（`kits` 的 `s` < `kitt` 的 `t`）。
+
+> ⚠️ **我在这里错过一次，记下来。** 第一版扫描用的正则是
+> `^  ([a-z0-9_.-]+) = \{` —— **只匹配小写开头**，于是整个漏掉 **340 个大写开头的
+> 属性名**（`A1ca7raz`、`Acconut`、`Kitt3120`…），条目数也从 5293 错成 4898。
+> 按那份残缺名单算出来的插入点是「第 15393 行、`kittyandrew` 之前」——
+> **那会把 `kitsunori` 排到 `Kitt3120` 后面，是错的。**
+>
+> 排序方式也是实测定的，不是假设：**忽略大小写有序 = True，ASCII 原样有序 = False**。
+> 所以 `Kitsune` / `kitsuno*` / `Kitt3120` / `kitty*` 是混在一个区段里的。
 
 ## 四个字段的来源
 
@@ -34,7 +43,7 @@
 |---|---|---|
 | `github` | `Kihara777` | `gh api users/Kihara777` → `login=Kihara777 id=24633616 created=2016-12-18` |
 | `githubId` | `24633616` | 同上；审阅者会核 `api.github.com/user/24633616` 的 `login` 是否吻合 |
-| `name` | `Kihara777` | 狐莉 **2026-10-12** 指定 |
+| `name` | `狐莉　キツのり`（含 U+3000 全角空格） | 狐莉 **2026-10-12** 指定 |
 | `email` | `kitsunori@g41.moe` | 狐莉 **2026-10-12** 指定 |
 
 > **注意 `email` 与 commit 身份是两回事**：commit 的 author/committer 仍用
@@ -63,10 +72,10 @@
 
 ## 该文件的其他惯例（实测，供核对）
 
-- **带 `email` 的占多数**：4898 条里 4788 条有（**97.8%**）。不填也合规。
-- **属性名全是纯 ASCII**：4898 个属性名里含非 ASCII 的 **0 个**。
+- **带 `email` 的占多数**：5293 条里 4786 条有（**90.4%**）。不填也合规。
+- **属性名全是纯 ASCII**：5293 个属性名里含非 ASCII 的 **0 个**。
   新的属性名 `kitsunori` 同样是纯 ASCII —— 这一点没有风险。
-- **但 `name` 的「值」可以带非 ASCII**，先例很多：实测 **360 条**含非 ASCII，
+- **但 `name` 的「值」可以带非 ASCII**，先例很多：实测 **362 条**含非 ASCII，
   其中 5 条是 CJK（`骑士姬`、`藍+85CD`、`夜坂雅`、`山下`、`AsPulse / あすぱる`）。
   这次的 `狐莉　キツのり` 属于这一类。**实测 `nixfmt --check` 与
   `nix-instantiate --parse` 都通过。**
