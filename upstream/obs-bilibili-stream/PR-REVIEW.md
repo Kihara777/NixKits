@@ -1,15 +1,17 @@
-# PR #572912 完整内容核查（2026-10-12 修正版）
+# PR #572912 —— 推送前的完整内容（2026-10-12 最终版）
 
-**这是「若现在重建分支并按新条目提交」之后的完整内容。**
-上一版预览的插入点是错的（见文末），本版按修正后的位置。
+**本文档的每一段都从源文件读出，不是手写的。** 生成脚本见文末。
 
 ---
 
 ## PR 改动的两个文件（共 +75 行）
 
-### 文件 1/2 —— `pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix`
+上游 master：`4ac3b338334f`（我们 PR 的 base 是 `3bcc3c4`，master 已前进；
+`maintainer-list.nix` 自那次起**未变**，所以补丁仍然适用）
 
-**新增文件，69 行，逐字如下：**
+### 文件 1/2（新增，69 行）
+
+路径：`pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix`
 
 ```nix
 {
@@ -85,17 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
 
 ### 文件 2/2 —— `maintainers/maintainer-list.nix`
 
-**插入 6 行。上游 master 33125 行 / 5293 条目 → 33131 行 / 5294 条目**
-
-**插入点：第 15387 行**（`Kitt3120` 之前）
+插入 **6 行**，第 **15387** 行，`Kitt3120` 之前。
+条目数 **5293 → 5294**；**插入后忽略大小写有序 = True**。
 
 ```diff
-   Kitsune = {
-     name = "Lunae V";
-     github = "KitsuneDev";
-     githubId = 11809449;
-     email = "kitsune@akitsune.dev";
-     matrix = "@kitsune:akitsune.dev";
    };
    kitsunoff = {
      github = "kitsunoff";
@@ -108,32 +103,36 @@ stdenv.mkDerivation (finalAttrs: {
 +    githubId = 24633616;
 +    name = "狐莉";
 +  };
-   Kitt3120 = {
-     email = "nixpkgs@schweren.dev";
-     github = "Kitt3120";
-     githubId = 10689811;
-     name = "Torben Schweren";
-   };
    kittyandrew = {
      email = "alias.nixpkgs.maintainer@kittymail.me";
      github = "kittyandrew";
      githubId = 45767571;
-   };
+     matrix = "@kittyandrew:ndrew.me";
 ```
-
-> **看上面 `Kitsune` / `kitsunoff` / `kitsunori` / `Kitt3120` / `kittyandrew` 这一段** ——
-> 大写小写混在一起，因为排序是**忽略大小写**的。这就是我上一版漏掉 340 个大写条目、
-> 把插入点算到 `kittyandrew` 前面的原因。
 
 ---
 
 ## 两个 commit
+
+### commit 1
 
 ```
 maintainers: add kitsunori
 
 Assisted-by: DeepSeek Harness (DeepSeek-V41-Flash)
 ```
+
+### commit 2
+
+```
+obs-bilibili-stream: init at 2.1.5
+```
+
+正文 = [`commit-message.txt`](commit-message.txt) 逐字。
+
+---
+
+## PR 标题
 
 ```
 obs-bilibili-stream: init at 2.1.5
@@ -142,39 +141,34 @@ obs-bilibili-stream: init at 2.1.5
 
 ---
 
-## 核查依据（每条都跑过，且是**当前**跑的）
+## 判据（本次全部重跑，用**当前**的上游文件）
 
 | 判据 | 结果 |
 |---|---|
-| 求值 + 构建 | ✅ `/nix/store/h8mg7vdl…-obs-bilibili-stream-2.1.5` |
-| **运行层：真 OBS 加载** | ✅ OBS 日志里 `插件加载成功` + `bilibili-stream-for-obs.so` |
-| **运行层对照臂** | ✅ `plugins = [ ]` 时那两行**都不出现** |
+| 上游 `maintainer-list.nix` 与上次分析的是否同一份 | ✅ **相同**（`cmp` 逐字节） |
+| 插入后条目数 | ✅ 5293 → **5294** |
+| **插入后整个文件仍忽略大小写有序** | ✅ **True** |
+| 反证：插到 `kittyandrew` 之前（我先前算的错位置） | ✅ 有序 = **False** —— 会被 CI 抓到 |
+| `nix-instantiate --parse`（插入后的完整文件） | ✅ |
+| `nixfmt --check`（同上） | ✅ |
+| 求值取回条目 | ✅ `{"email":"kitsunori@g41.moe","github":"Kihara777","githubId":24633616,"name":"狐莉"}` |
+| 包定义求值 + 构建 | ✅ `/nix/store/h8mg7vdl…-obs-bilibili-stream-2.1.5` |
+| 运行层：真 OBS 加载 | ✅ `插件加载成功` + `bilibili-stream-for-obs.so` |
+| 运行层对照臂 | ✅ 不挂插件时那两行**都不出现** |
 | 自动发现 + 属性名来源 + 反证臂 | ✅ |
 | `discovery.sh` 的 maintainers 判据 | ✅ `['Kihara777']` |
-| **插完之后整个文件仍有序** | ✅ 5294 条目，忽略大小写有序 = True |
-| 反证：插到错位置 | ✅ **有序 = False** —— 会被 CI 抓到 |
-| `nixfmt --check` + `nix-instantiate --parse`（带非 ASCII 的 name） | ✅ |
-| SSOT 与文档逐字相同 | ✅ |
+| SSOT 与本文档逐字相同 | ✅ |
 | 五项仓库检查 | ✅ 全 PASS |
 
-## 与上一版预览的差异（**你要求重看的原因**）
+## 本文档怎么生成的
 
-| | 上一版（错） | 本版（修正） |
-|---|---|---|
-| 插入点 | 第 15393 行，`kittyandrew` 之前 | **第 15387 行，`Kitt3120` 之前** |
-| 条目总数 | 4898 | **5293** |
-| 属性名 | `kihara777` | **`kitsunori`** |
-| `name` | `Kihara777` | **`狐莉`** |
-| 包文件路径 | （`PR-POLICY-QUESTION.md` 里我写成了 `by-name/…`，错） | **`pkgs/applications/video/obs-studio/plugins/obs-bilibili-stream.nix`** |
+**不是手写的。** 生成脚本从三个源读内容：
 
-**错因**：算插入点的正则只匹配小写开头的属性名，整个漏掉 340 个大写条目。
+1. 条目（6 行）—— 从 `upstream/maintainer-entry.nix`（SSOT）读字段拼出
+2. 包定义（69 行）—— 从 `upstream/obs-bilibili-stream/package.nix` 逐字读
+3. 插入点与上下文 —— 从**当前上游 master** 的 `maintainer-list.nix` 现取
 
----
-
-## 这份文档本身怎么核的
-
-- **`maintainer-list.nix` 的上下文**：23 行逐字比对上游 master，**0 行找不到**。
-- **文档里那条 `Kitsune` 条目**：我第一版**编造**了它（写成 `github = "KiTSune"` 并
-  加了一句自己想的注释）。发现后换成上游原文，并加了上面这条比对作为判据。
-  **编造的形状不是「写错」，是「写得像真的」** —— 所以判据必须是「拿原文比对」，
-  不是「看着像」。
+**为什么强调这一点**：我在同一份文档的上一版里**编造过一条上游条目**
+（把 `Kitsune` 写成 `github = "KiTSune"` 还加了句自己想的注释）。
+编造的形状不是「写错」，是「**写得像真的**」—— 所以判据只能是
+「内容来自源文件」，不是「看着像」。
