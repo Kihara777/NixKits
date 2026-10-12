@@ -1,21 +1,38 @@
 # PR #572912 上的政策质询 —— 材料与事实
 
-**状态（2026-10-12 04:32Z 快照）：`CHANGES_REQUESTED`（K900）。狐莉决定「先放着，先干别的」。**
+**状态（2026-10-12 06:36Z 快照）：`CHANGES_REQUESTED`（K900）—— 但方向已经明确。**
+
+## ✅ 最新进展：K900 给出了解法（2026-10-12 06:32:48Z）
+
+> In that case please just use your personal account as a point of contact.
+
+**「那就用你的个人账号作为联络点。」**
+
+翻译成可执行的动作：
+
+| 改什么 | 怎么改 |
+|---|---|
+| `maintainers/maintainer-list.nix` | 加 **`kihara777`** 而不是 `grg41`（插入点：第 15239 行，`kidsan` 与 `kiike` 之间） |
+| `pkgs/by-name/ob/obs-bilibili-stream/package.nix` | `maintainers = [ lib.maintainers.kihara777 ]` |
+| 分支的第一个 commit | 重做为 `maintainers: add kihara777` |
+
+**PR 作者仍是 `GrG41`** —— 他要的是「**联络点**」是个人账号，不是把作者换掉。
+（他的原话是 point of contact，不是 author。）
+
+**待狐莉定**：`name` 那一格写什么；要不要 `email`（`maintainer-list.nix` 里
+488 条没有 email，所以不填也合规）。GitHub 上 `Kihara777` 的显示名是空的，
+所以这两个字段只能她自己给。
+
+**狐莉 2026-10-12 决定：先放着。**
 
 ## ⏳ 悬着的事（先放着 ≠ 忘了）
 
-狐莉 2026-10-12 决定**暂不推进**。以下两条**仍未做**，恢复这条 PR 时要先看这里：
-
-| # | 待办 | 谁做 | 为什么必须做 |
+| # | 待办 | 谁做 | 状态 |
 |---|---|---|---|
-| 1 | **那条回复缺它自己的披露** | 狐莉（编辑评论） | 政策原文：「review comments must be disclosed separately to commits」。整场讨论的主题就是政策，而那条评论自己没带披露 —— 这是**客观缺口** |
-| 2 | **维护者那一格没有具体方案** | 狐莉定字段 → 我重建分支 | K900 反对的是「自动化账户占着担责的位置」。她的回复解释了「谁担责」，但没说「那一格怎么办」。**`CHANGES_REQUESTED` 不会自己解除** |
+| 1 | **那条回复缺它自己的披露** | 狐莉（编辑评论） | 仍未做。政策要求评论单独披露，而整场讨论的主题就是政策 |
+| 2 | **维护者那一格换成 `kihara777`** | 狐莉给字段 → 我重建分支 → 她回复 | **K900 已明确要求走这条**，方向不再是猜的 |
 
-**建议的解法（未执行）**：把维护者条目从 `grg41` 换成 `kihara777`（人）——
-包的维护方式一个字不改，但名单上是能担责的人。需要狐莉定 `name` 与是否 `email`，
-并重做本 PR 的第一个 commit。
-
-**没有期限，但也没有人替我们推进**：`roberth` 自 01:08 被 @ 后始终未回复。
+**没有期限**，但门已经开了 —— 而且是他自己推开的。
 
 ---
 
@@ -28,8 +45,9 @@
 | 2026-10-12 01:54 | `K900` | 评论：「A computer can never be held accountable, etc. **It's fine to use automation to update your packages, but the human needs to be responsible at the end of the day.**」 |
 | 2026-10-12 01:55 | `K900` | **正式评审：`CHANGES_REQUESTED`，正文「Please don't.」** |
 | 2026-10-12 03:26 | `GrG41`（狐莉发） | 说明账号归她、无无人值守自动化、AI 操作受明确许可约束、必要时可关掉重提 |
+| 2026-10-12 06:32 | `K900` | **「In that case please just use your personal account as a point of contact.」** —— 方向明确了 |
 
-**没有人质疑包的实现。** 两位的话都指向同一个点：**担责的位置**。
+**没有人质疑包的实现。** 两位的话都指向同一个点：**担责的位置**；而最后他给出了走法。
 
 ---
 
