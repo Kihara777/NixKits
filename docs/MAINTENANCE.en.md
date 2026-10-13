@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-13T16:14:04+09:00
+
+**Summary**: fix(dsh-nixos-shell): drop `{{cwd}}` from the preset persona — dsh 0.2.1 removed that prompt variable, and referencing it makes the whole preset fail to mount
+
+- `nixos-mode` / `maintenance-mode` each lose one clause; `{{model}}` stays
+- `docs/*/dsh.md` gains two traps: `{{cwd}}` is gone, and the probe must link `@deepseek-ai` itself (4 languages)
+- Criterion: `tests/dsh-preset-mount-probe.sh --self-test` is 5/5 green on 0.2.1-alpha.2, and its self-test proves the criterion has discriminating power
+
+| Commit | Description |
+|------|------|
+| `897a6a3` | fix(dsh-nixos-shell): drop {{cwd}} — dsh 0.2.1 removed that prompt variable |
+
 ## 2026-10-13T00:36:29+09:00
 
 **Summary**: dsh-alpha 0.2.1-alpha.1 to 0.2.1-alpha.2 — alpha-channel prerelease update

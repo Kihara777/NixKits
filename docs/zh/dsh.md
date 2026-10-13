@@ -345,6 +345,38 @@ order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocea
 `@kihara777`，于是「重启 dsh 之后掌灯模式变 broken」——而两者在同一个 `$DSH_HOME` 下互相踩。
 现在模块同时链 `@kihara777` 与 `@deepseek-ai` 两条。
 
+> ⚠️ **同一份判据脚本必须自己补齐这两条链接**（2026-10-13 实测）：模块修好不等于探针修好。
+> `tests/dsh-preset-mount-probe.sh` 起一次性实例时只链了 `@kihara777`，于是凡
+> `import '@deepseek-ai/…'` 的预设插件都**静默 `never started`**——而 roster 只给一句
+> `never started`、不留栈，极易被误读成「那个预设真的坏了」。
+> 实测形态：`lampkeeper-shell`（import `schemastery` + `dsh-tools`）报错，而同目录的
+> `nixos-gate.js`（只 import `node:fs`）正常——**这个对照就是判据**。
+> **探针自己的环境不对时，它报的 broken 不算数。**
+
+#### prompt 变量 `cwd` 在 dsh 0.2.1 被上游删除（2026-10-13）
+
+`{{cwd}}` 曾是合法变量，**dsh 0.2.1-alpha.2 起不再是**：
+
+```
+0.2.0-rc.2    dsh-agent-loop:1564-1566   provider / model / cwd
+0.2.1-alpha.2 dsh-agent-loop:1591-1592   provider / model        ← cwd 没了
+```
+
+而 `dsh-persona` 的 `prefix` 是**严格插值**（`dsh-system-prompt/lib/index.js:169`）：
+引用未注册的变量**抛错**，不是留空——于是**整个预设挂不起来**：
+
+```
+unknown prompt variable "{{cwd}}" in section "deployment:persona-prefix";
+registered variables: provider, model
+```
+
+判据就是报错里那半句 **`registered variables:`** ——它列出该 assembly 里真正可用的变量。
+`{{model}}` 仍注册着；工作目录本就由 harness 的 runtime context 提供，**不需要**这个变量。
+
+> ⚠️ **别把这当成笔误去改措辞**：`{{cwd}}` 在 0.1.x / 0.2.0 一直可用，是 0.2.1 移除的。
+> 判据只能是**目标版本 dsh 的源码**，不是记忆里的 dsh。
+> NixKits 的 `nixos-mode` / `maintenance-mode` 与下游预设均已移除该引用。
+
 **persona 与打包技能（2026-10-02 落地后的修正）**：两处过期说法已改，都不再是未决项。
 
 - **persona**：新格式文件里那句"预设住在 `$DSH_HOME/.agent-presets/<id>/` 目录"已改成 0.2.0 的

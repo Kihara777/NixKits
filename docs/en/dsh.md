@@ -259,6 +259,33 @@ The 2026-10-02 landing acceptance (throwaway `DSH_HOME`, `dsh 0.2.0-rc.2`): **9 
 
 That last row is **a real trap this landing fixed**: a preset's own plugin files live under `$DSH_HOME/.agent-presets/<id>/…`, and when they import peers by bare name Node walks up from the **file's own directory** looking for `node_modules`. The module used to link only `@kihara777`, so after a dsh restart 掌灯模式 turned `broken` — the two were stepping on each other inside one `$DSH_HOME`. The module now links both `@kihara777` and `@deepseek-ai`.
 
+> ⚠️ **The same criterion script must link both itself** (measured 2026-10-13): fixing the module does not fix the probe.
+> `tests/dsh-preset-mount-probe.sh` linked only `@kihara777` when starting its throwaway instance, so every preset plugin that does `import '@deepseek-ai/…'` reported a **silent `never started`** — and the roster gives that one phrase with no stack, which reads far too easily as "that preset really is broken".
+> The measured shape: `lampkeeper-shell` (imports `schemastery` + `dsh-tools`) reported it, while `nixos-gate.js` in the same directory (imports only `node:fs`) was fine — **that contrast is the criterion**.
+> **When the probe's own environment is wrong, the `broken` it reports does not count.**
+
+#### The prompt variable `cwd` was removed upstream in dsh 0.2.1 (2026-10-13)
+
+`{{cwd}}` used to be a legal variable. **From dsh 0.2.1-alpha.2 it is not**:
+
+```
+0.2.0-rc.2    dsh-agent-loop:1564-1566   provider / model / cwd
+0.2.1-alpha.2 dsh-agent-loop:1591-1592   provider / model        ← cwd is gone
+```
+
+And `dsh-persona`'s `prefix` is **strict interpolation** (`dsh-system-prompt/lib/index.js:169`): referencing an unregistered variable **throws** rather than rendering empty — so **the whole preset fails to mount**:
+
+```
+unknown prompt variable "{{cwd}}" in section "deployment:persona-prefix";
+registered variables: provider, model
+```
+
+The criterion is that half-sentence in the error, **`registered variables:`** — it lists the variables this assembly actually has. `{{model}}` is still registered, and the working directory is supplied by the harness runtime context anyway, so **this variable is not needed**.
+
+> ⚠️ **Do not read this as a typo and rewrite the wording**: `{{cwd}}` worked throughout 0.1.x / 0.2.0; 0.2.1 removed it.
+> The criterion can only be **the target dsh version's own source**, never the dsh you remember.
+> NixKits' `nixos-mode` / `maintenance-mode` and the downstream presets have all dropped the reference.
+
 **persona and bundled skills (corrections after the 2026-10-02 landing)**: two stale statements have been corrected, and neither is an undecided item any more.
 
 - **persona**: the sentence in the new-format files — "presets live under the `$DSH_HOME/.agent-presets/<id>/` directory" — has been changed to the accurate 0.2.0 statement: a preset is one `@deepseek-ai/dsh-agent-preset` entry in the profile `cordis.patch.yml`, and **discovery goes through that row**; a preset can still put its own files under `.agent-presets/<id>/` and reference them from the profile by relative path, and several presets in this deployment carry their plugins and skills exactly that way. Rewriting it amounts to changing **the prompt sent to the model** — a behaviour change the maintainer has since approved separately.

@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-13T16:14:04+09:00
+
+**摘要**：fix(dsh-nixos-shell): 移除预设 persona 里的 `{{cwd}}` —— dsh 0.2.1 删除了该 prompt 变量，引用它会让整个预设挂不起来
+
+- `nixos-mode` / `maintenance-mode` 各删去一个 clause，保留 `{{model}}`
+- `docs/*/dsh.md` 补两条陷阱：`{{cwd}}` 已失效、探针自身须链 `@deepseek-ai`（四语）
+- 判据：`tests/dsh-preset-mount-probe.sh --self-test` 在 0.2.1-alpha.2 下 5/5 全绿，且自检证明判据有区分度
+
+| 提交 | 说明 |
+|------|------|
+| `897a6a3` | fix(dsh-nixos-shell): 移除 {{cwd}} —— dsh 0.2.1 已删除该 prompt 变量 |
+
 ## 2026-10-13T00:36:29+09:00
 
 **摘要**：dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 — alpha 通道预发布更新

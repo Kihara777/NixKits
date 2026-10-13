@@ -257,6 +257,33 @@ curl -sS -b cookies -H 'content-type: application/json' \
 
 最後の一行は**今回の落地で実際に直した罠**である：プリセット同梱のプラグインファイルは `$DSH_HOME/.agent-presets/<id>/…` にあり、裸のパッケージ名で peer を import すると Node は**ファイルのあるディレクトリ**から上へ `node_modules` を探す。モジュールは以前 `@kihara777` しか張っておらず、ゆえに「dsh を再起動すると掌灯模式が broken になる」——両者が同じ `$DSH_HOME` の中で互いを踏んでいた。現在は `@kihara777` と `@deepseek-ai` の二本を張る。
 
+> ⚠️ **同じ判定スクリプトも自分でこの二本のリンクを補わねばならない**（2026-10-13 実測）：モジュールが直ったからといって探針が直ったことにはならない。
+> `tests/dsh-preset-mount-probe.sh` は使い捨てインスタンスを起動する際 `@kihara777` しか張っておらず、ゆえに `import '@deepseek-ai/…'` するプリセットプラグインはすべて**静黙に `never started`**——roster は `never started` の一言だけでスタックを残さないため、「あのプリセットが本当に壊れた」と誤読されやすい。
+> 実測形態：`lampkeeper-shell`（`schemastery` + `dsh-tools` を import）が報告し、同じディレクトリの `nixos-gate.js`（`node:fs` のみ import）は正常——**この対照が判定である**。
+> **探針自身の環境が正しくないとき、それが報じる broken は勘定に入らない。**
+
+#### 提示詞変数 `cwd` は dsh 0.2.1 で上流により削除された（2026-10-13）
+
+`{{cwd}}` はかつて合法な変数だったが、**dsh 0.2.1-alpha.2 以降はそうではない**：
+
+```
+0.2.0-rc.2    dsh-agent-loop:1564-1566   provider / model / cwd
+0.2.1-alpha.2 dsh-agent-loop:1591-1592   provider / model        ← cwd が消えた
+```
+
+そして `dsh-persona` の `prefix` は**厳格な補間**（`dsh-system-prompt/lib/index.js:169`）である：未登録の変数を参照すると**例外を投げる**、空にはならない——ゆえに**プリセット全体がマウントできない**：
+
+```
+unknown prompt variable "{{cwd}}" in section "deployment:persona-prefix";
+registered variables: provider, model
+```
+
+判定はエラー文の半句 **`registered variables:`** そのものである——その assembly で実際に使える変数を列挙する。`{{model}}` は依然登録されており、作業ディレクトリはそもそも harness の runtime context が提供するので、**この変数は不要**である。
+
+> ⚠️ **これを誤字と見て文言を直してはいけない**：`{{cwd}}` は 0.1.x / 0.2.0 ではずっと使えたのであり、0.2.1 が削除したのだ。
+> 判定は**目標版 dsh のソース**のみでよく、記憶の中の dsh ではない。
+> NixKits の `nixos-mode` / `maintenance-mode` と下流プリセットはいずれもこの参照を除去済みである。
+
 **persona と同梱技能（2026-10-02 落地後の修正）**：二箇所の陳腐化した記述を改めた。いずれももはや未決項ではない。
 
 - **persona**：新形式ファイルの「プリセットは `$DSH_HOME/.agent-presets/<id>/` ディレクトリに住む」という一句は 0.2.0 の正確な記述へ改めた——プリセットは profile `cordis.patch.yml` にある `@deepseek-ai/dsh-agent-preset` の条目であり、**発見を担うのはその一行である**；プリセットは依然として自分のファイルを `.agent-presets/<id>/` の下に置き、profile から相対経路で参照できる——本配備のいくつかのプリセットはまさにそうやってプラグインと技能を同梱している。これを書き換えれば**モデルへ送る提示詞**が変わる。挙動変更にあたるため、保守者が別途批准した。

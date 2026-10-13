@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-13T16:14:04+09:00
+
+**概要**：fix(dsh-nixos-shell): プリセット persona から `{{cwd}}` を除去 —— dsh 0.2.1 がこの prompt 変数を削除したため、参照するとプリセット全体がマウントできなくなる
+
+- `nixos-mode` / `maintenance-mode` が各々一箇所の clause を削除；`{{model}}` は残す
+- `docs/*/dsh.md` に二つの罠を追記：`{{cwd}}` は無効、探針自身が `@deepseek-ai` を張る必要（四言語）
+- 判定：`tests/dsh-preset-mount-probe.sh --self-test` は 0.2.1-alpha.2 で 5/5 全緑、かつ自検が判定の識別力を証明
+
+| コミット | 説明 |
+|------|------|
+| `897a6a3` | fix(dsh-nixos-shell): {{cwd}} を除去 —— dsh 0.2.1 が該 prompt 変数を削除 |
+
 ## 2026-10-13T00:36:29+09:00
 
 **概要**：dsh-alpha 0.2.1-alpha.1 → 0.2.1-alpha.2 — alpha チャネルのプレリリース更新

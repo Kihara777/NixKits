@@ -256,6 +256,33 @@ curl -sS -b cookies -H 'content-type: application/json' \
 
 最後 一行 **今回 着地 実際 修正 罠**：預設同梱 plugin file `$DSH_HOME/.agent-presets/<id>/…` 存在、裸 package 名 以 peer import 時 Node **file 所在目録** 従 上 `node_modules` 探。模組 以前 `@kihara777` 唯 張、故「dsh 再起動後 掌灯模式 broken 化」——両者 同一 `$DSH_HOME` 内 相互 踏。現在 `@kihara777` 與 `@deepseek-ai` 二本 張。
 
+> ⚠️ **同一 判定 script 自身 此 二本 link 補 必要**（2026-10-13 実測）：模組 修正 故 探針 修正 済 非。
+> `tests/dsh-preset-mount-probe.sh` 使捨 実例 起動 際 `@kihara777` 唯 張、故 `import '@deepseek-ai/…'` 為 預設 plugin 全部 **静黙 `never started`**——roster `never started` 一言 唯 返 跡 残 無 故、「該 預設 真 壊」 誤読 易。
+> 実測 形態：`lampkeeper-shell`（`schemastery` + `dsh-tools` import）報告、同 目録 之 `nixos-gate.js`（`node:fs` 唯 import）正常——**此 対照 即 判定**。
+> **探針 自身 環境 不正 時、其 報 broken 勘定 不。**
+
+#### 提示詞 変数 `cwd` dsh 0.2.1 於 上流 削除 済（2026-10-13）
+
+`{{cwd}}` 以前 合法 変数 也、**dsh 0.2.1-alpha.2 以降 非**：
+
+```
+0.2.0-rc.2    dsh-agent-loop:1564-1566   provider / model / cwd
+0.2.1-alpha.2 dsh-agent-loop:1591-1592   provider / model        ← cwd 消滅
+```
+
+且 `dsh-persona` 之 `prefix` **厳格 補間**（`dsh-system-prompt/lib/index.js:169`）也：未登録 変数 参照 時 **例外 投**、空 非——故 **預設 全体 掛載 不能**：
+
+```
+unknown prompt variable "{{cwd}}" in section "deployment:persona-prefix";
+registered variables: provider, model
+```
+
+判定 該 error 文中 半句 **`registered variables:`** 其 物 也——該 assembly 実 使用 可能 変数 列挙。`{{model}}` 依然 登録 有、作業目録 元々 harness runtime context 提供 故、**此 変数 不要**。
+
+> ⚠️ **此 誤字 見 文言 修正 不可**：`{{cwd}}` 0.1.x / 0.2.0 於 永 使用 可能、0.2.1 削除 之 也。
+> 判定 **目標版 dsh 之 source** 唯 可、記憶 中 dsh 非。
+> NixKits `nixos-mode` / `maintenance-mode` 與 下流 預設 何 也 此 参照 除去 済。
+
 **persona 與 同梱技能（2026-10-02 着地後 之 修正）**：二箇所 之 陳腐化 記述 変更。両者 共 既 未決項 非。
 
 - **persona**：新格式 file 之「預設 `$DSH_HOME/.agent-presets/<id>/` 目録 住」一句 0.2.0 之 正確 記述 変更——預設 = profile `cordis.patch.yml` 内 `@deepseek-ai/dsh-agent-preset` 条目 一本、**発見 担 者 該 一行 也**；預設 依然 自前 file `.agent-presets/<id>/` 下 置、profile 従 相対経路 参照 可能——本配備 之 一部 預設 正 此 様 插件 與 技能 同梱。此 書換 場合 **model 送 prompt** 変——挙動変更 該当 故、維護者 別途 批准 済。
