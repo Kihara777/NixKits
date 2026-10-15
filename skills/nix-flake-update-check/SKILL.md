@@ -328,6 +328,22 @@ hash 不能从 archive tarball 预算、`npmDepsHash` 用 `lib.fakeHash` 占位�
 > 同样的坑在第 9 步（CI 失败分类）的「hash 不符」一格里有记录，但那里只有**失败时**才会查到；
 > 升级流程里**默认就会走到**这里，所以判据放在这一步。
 
+**同族的第二个坑：`/nix/store/…-<新版本>-npm-deps/` 那个路径名不构成证据。**
+2026-10-13 实测（`dsh-alpha`）：报错打印的比对路径
+`/nix/store/ijcblhrs…-dsh-0.2.1-alpha.3-npm-deps/package-lock.json` —— **名字是 alpha.3，
+内容却是 alpha.2**（md5 与 alpha.2 那两份完全相同）：它是按**旧 hash** 命中的旧内容被冠以
+新版本名。照着它做 `cmp` 会得到一个**「关于错东西的绿」**。
+
+> **判据**：任何「比对我生成的东西 vs 构建产物」的证明，先确认那份产物的**自述内容**
+> （lock 里的 `"version"` 字段、`package.json` 的 version、`--version` 输出）确实是新版本，
+> **再**比对。**路径名、目录名、报错里的版本号，都只是标签，不是内容。**
+
+**同族的第三个坑：文档教的那条 lock 生成命令可能与 npm fixup 不一致。**
+同一轮实测：`npm install --package-lock-only`（按当前 registry 解析传递依赖）产出的 lock
+与 fixup（用已钉住的那套）**有 9 处差异**（`zod` 4.6.7 vs 4.6.6），构建直接报
+`npmDepsHash is out of date`。可靠路线是**让 fixup 自己去跑**：置 `npmDepsHash = lib.fakeHash`
+→ 取 `got:` → 复制 fixup 的产物 → 按上一条先验自述再 `cmp`。
+
 ## 第 5 步：更新文档
 
 **文档布局因仓库而异。** 按仓库实际结构选择：
