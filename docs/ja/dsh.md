@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— Everything is a Plugin（すべてがプラグ�
 | タイプ | Node.js アプリ（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | バージョン | `0.2.0-rc.2` |
-| 開発チャネル | `dsh-alpha 0.2.1-alpha.2`（npm `alpha` dist-tag） |
+| 開発チャネル | `dsh-alpha 0.2.1-alpha.3`（npm `alpha` dist-tag） |
 | ライセンス | MIT |
 | コマンド | `dsh` |
 
@@ -22,14 +22,14 @@ NixKits は ruyi と同じ薄いラッパー方式（主定義 + version/hash �
 | パッケージ | チャネル | バージョン | 説明 |
 |----|------|------|------|
 | `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag、既定。**プリセット内容**はピン留めした rev に凍結 |
-| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.2` | npm **`alpha`** dist-tag、0.2.x 線の最新プレリリースを追跡。**プリセット内容**はリポジトリ HEAD に追随 |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.3` | npm **`alpha`** dist-tag、0.2.x 線の最新プレリリースを追跡。**プリセット内容**はリポジトリ HEAD に追随 |
 
 ```nix
 # 本機で最新プレリリースを使う
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **`dsh-alpha` が `alpha` を追う理由**（2026-10-08 に戻した）。npm の三つの dist-tag は現在 `alpha` = **`0.2.1-alpha.2`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` が逆に `next` を**追い越している**。2026-10-02 に `next` へ切り替えた根拠は「`alpha` = `0.1.7-alpha.2` が古い 0.1.x 線に属し stable より**低い**」ことであったが、**その前提は反転した**。`next` を追い続けることは開発チャネルを `alpha` より古い版に固定することに等しい。判定基準は「どちらの tag 名がよりプレリリースらしいか」ではなく、**どちらの tag が 0.2.x 線でより新しい版を指すか**である：再確認のたびに dist-tags を読み直して版を比べ、`alpha` がリードしなくなったら戻せばよい。
+> **`dsh-alpha` が `alpha` を追う理由**（2026-10-08 に戻した）。npm の三つの dist-tag は現在 `alpha` = **`0.2.1-alpha.3`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` が逆に `next` を**追い越している**。2026-10-02 に `next` へ切り替えた根拠は「`alpha` = `0.1.7-alpha.2` が古い 0.1.x 線に属し stable より**低い**」ことであったが、**その前提は反転した**。`next` を追い続けることは開発チャネルを `alpha` より古い版に固定することに等しい。判定基準は「どちらの tag 名がよりプレリリースらしいか」ではなく、**どちらの tag が 0.2.x 線でより新しい版を指すか**である：再確認のたびに dist-tags を読み直して版を比べ、`alpha` がリードしなくなったら戻せばよい。
 >
 > 両チャネルの**挙動差は二点**になった：① dsh バージョン（alpha が新しいため hash / `npmDepsHash` / vendored lock は**各自独立**——版が異なる間は stable の lock を共用できない）；② **プリセット内容**：stable のプリセットは `packages/dsh-nixos-shell-stable.nix` がピン留めした commit に凍結され、alpha はリポジトリ HEAD に追随する（下記「モード」参照）。
 >
@@ -350,7 +350,7 @@ dsh 0.2.0-rc.2 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
 
 > **一覧の生成方法**：`dsh --profile web --dump-default-config`（読み取り専用）の出力がそのまま `id -> name` 形式。dsh を更新したら再実行し、導入版の出力を正とする。本一覧は web プロファイルの base + web-app パッチセットに対応する。
 >
-> ⚠️ **alpha チャネル（`0.2.1-alpha.2`）は stable と内容が異なる**（2026-10-12、同じコマンドを alpha 成果物に対して実行して実測、183 → 185）：
+> ⚠️ **alpha チャネル（`0.2.1-alpha.3`）は stable と内容が異なる**（2026-10-12、同じコマンドを alpha 成果物に対して実行して実測、183 → 185）：
 >
 > | 差異 | 条目 |
 > |---|---|
@@ -729,7 +729,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 |----------------|-----------|-----------------------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **両チャネル**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.2`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **両チャネル**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.3`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` は三つの目録**すべてに存在**し、かつ**いずれでも image モダリティを宣言する**唯一の id であり、モジュールの既定値がこれを選ぶ理由でもある。もう一方の画像対応 id `deepseek-v4-flash-vision-exp` は古い二つの目録にしか無く、上流が 2026-09-10 に廃止したため既定値には使えない。
 
