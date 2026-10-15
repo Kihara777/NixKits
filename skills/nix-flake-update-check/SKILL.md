@@ -305,6 +305,29 @@ gh api repos/<owner>/<known-repo> --jq .full_name || echo "取数链路异常 �
 hash 不能从 archive tarball 预算、`npmDepsHash` 用 `lib.fakeHash` 占位。
 完整说明见 `builders.md` 开头。
 
+### ⚠️ 只改 `version` 而留着旧 hash —— 构建会「成功」，用的却是旧源码
+
+**2026-10-13 实测到的假绿**（`mcp-searxng 2.5.1 → 2.6.0`）：
+
+```
+只改 version、保留旧 src hash → nix build 退出 0
+但产物自述：mcp-searxng 2.5.1        ← 拿旧源码配新版本号建的
+```
+
+根因：`fetchFromGitHub` 是 **fixed-output derivation**，**hash 未变 ⇒ Nix 认定输入没变**，
+直接命中 store 里已有的那份旧源码路径。整个构建没有任何一处会因此报错。
+
+| 不要这样 | 要这样 |
+|---|---|
+| 改 `version` 后先构建看看「hash 要不要动」 | **先把该 hash 置成 `lib.fakeHash`**，构建失败即 `got:` 真值，回填后再构建 |
+
+**判据不只在退出码上**：取出 `got:` 之后，若它与旧值**不同**，那本身就是「刚才那份是旧的」
+的证据。产物到手后再看一眼**产物自述的版本**（`package.json` / `--version` / 握手响应），
+这一条是唯一能当场戳穿该假绿的东西——`nix build` 的成功不会。
+
+> 同样的坑在第 9 步（CI 失败分类）的「hash 不符」一格里有记录，但那里只有**失败时**才会查到；
+> 升级流程里**默认就会走到**这里，所以判据放在这一步。
+
 ## 第 5 步：更新文档
 
 **文档布局因仓库而异。** 按仓库实际结构选择：
