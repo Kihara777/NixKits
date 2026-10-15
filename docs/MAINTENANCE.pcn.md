@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-15T14:09:14+09:00
+
+**摘要**：chore(pkgs): mcp-searxng 2.6.0 與 dsh-alpha 0.2.1-alpha.3 —— 兼 同族 偽緑 三 件 発見
+
+- mcp-searxng → **2.6.0**（minor：HTTP 同時実行上限、原生 Node 構築 chain、依存 引上）；成果物 自述 與 握手 共 新版 報告
+- dsh-alpha → **0.2.1-alpha.3**：file 先頭 判定 再確認 後 実施；vendored lock fixup 産物 與 `cmp` 一致
+- **三 偽緑 根 同一**：fixed-output derivation 之 hash 不変 時 Nix 旧内容 新入力 看做——`version` 限定 変更 旧 hash 残留 時 「成功 但 旧 source 構築」；error 中 store path 名 新版 中身 旧版
+- 判定 技能 還元：**path 名 與 版表記 標籤 非 内容**——比較 前 成果物 自述 確認
+
+| 提交 | 説明 |
+|------|------|
+| `e00d3d6` | chore(pkgs): mcp-searxng 2.5.1 → 2.6.0 |
+| `8aa106a` | chore(dsh-alpha): 0.2.1-alpha.2 → 0.2.1-alpha.3 |
+| `c4599e8` | docs(skill): 更新手順 一節 追加——`version` 限定 変更 旧 source 構築 |
+| `674b1b4` | docs(skill): 同族 二 件 追加——store path 名 証拠 非、doc lock 命令 fixup 與 不一致 有 |
+
 ## 2026-10-13T16:14:04+09:00
 
 **摘要**：fix(dsh-nixos-shell): 預設 persona 従 `{{cwd}}` 除去 —— dsh 0.2.1 該 prompt 変数 削除 故、参照 場合 預設 全体 掛載 不能

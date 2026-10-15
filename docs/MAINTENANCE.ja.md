@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-15T14:09:14+09:00
+
+**概要**：chore(pkgs): mcp-searxng 2.6.0 と dsh-alpha 0.2.1-alpha.3 —— 同族の偽グリーンを三つ発見
+
+- mcp-searxng → **2.6.0**（マイナー：HTTP 同時実行上限、ネイティブ Node 構築チェーン、依存の更新）；成果物の自述と握手がともに新版を報告
+- dsh-alpha → **0.2.1-alpha.3**：ファイル先頭の判定で再確認してから実施；vendored lock は fixup 産物と `cmp` 一致
+- **三つの偽グリーンは根が同じ**：fixed-output derivation の hash が変わらないと Nix は旧内容を新入力と見なす——`version` だけ変えて旧 hash を残すと「成功するが旧ソースで構築」；エラー中の store パスは名が新版・中身が旧版
+- 判定をスキルに還元：**パス名やバージョン表記はラベルであって内容ではない**——比較の前に成果物の自述を確かめる
+
+| コミット | 説明 |
+|------|------|
+| `e00d3d6` | chore(pkgs): mcp-searxng 2.5.1 → 2.6.0 |
+| `8aa106a` | chore(dsh-alpha): 0.2.1-alpha.2 → 0.2.1-alpha.3 |
+| `c4599e8` | docs(skill): 更新手順に一節を追加——`version` だけ変えると旧ソースで構築される |
+| `674b1b4` | docs(skill): 同族を二つ追加——store パス名は証拠にならない、文書の lock コマンドは fixup と食い違うことがある |
+
 ## 2026-10-13T16:14:04+09:00
 
 **概要**：fix(dsh-nixos-shell): プリセット persona から `{{cwd}}` を除去 —— dsh 0.2.1 がこの prompt 変数を削除したため、参照するとプリセット全体がマウントできなくなる

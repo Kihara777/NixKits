@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-15T14:09:14+09:00
+
+**Summary**: chore(pkgs): mcp-searxng 2.6.0 and dsh-alpha 0.2.1-alpha.3 — plus three false greens of one family
+
+- mcp-searxng → **2.6.0** (a minor: HTTP concurrency caps, native-Node build chain, dependency bumps); the artifact and the handshake both report the new version
+- dsh-alpha → **0.2.1-alpha.3**: re-checked against the rule in the file header, then applied; the vendored lock is `cmp`-identical to the fixup output
+- **All three false greens share one root**: when a fixed-output derivation's hash is unchanged, Nix treats the old content as the new input — changing only `version` keeps building "successfully" from the old source; the store path in the error is named for the new version but holds the old content
+- Folded into the skill: **a path name or version tag is a label, not content** — verify the artifact's self-report before comparing
+
+| Commit | Description |
+|------|------|
+| `e00d3d6` | chore(pkgs): mcp-searxng 2.5.1 → 2.6.0 |
+| `8aa106a` | chore(dsh-alpha): 0.2.1-alpha.2 → 0.2.1-alpha.3 |
+| `c4599e8` | docs(skill): the update flow gains a section — bumping only `version` keeps the old source |
+| `674b1b4` | docs(skill): two more of the same family — a store path name is not evidence; a documented lock command may disagree with fixup |
+
 ## 2026-10-13T16:14:04+09:00
 
 **Summary**: fix(dsh-nixos-shell): drop `{{cwd}}` from the preset persona — dsh 0.2.1 removed that prompt variable, and referencing it makes the whole preset fail to mount

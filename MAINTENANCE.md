@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-15T14:09:14+09:00
+
+**摘要**：chore(pkgs): mcp-searxng 2.6.0 与 dsh-alpha 0.2.1-alpha.3 —— 并查出三个同族的假绿
+
+- mcp-searxng → **2.6.0**（次版本号：HTTP 并发上限、原生 Node 构建链、依赖抬版）；产物自述与握手均报新版
+- dsh-alpha → **0.2.1-alpha.3**：按文件头判据复核后照做；vendored lock 与 fixup 产物 `cmp` 一致
+- **三个假绿同一个根**：fixed-output derivation 的 hash 未变时 Nix 把旧内容当新输入——只改 version 留旧 hash 会「构建成功但用旧源码」；报错里的 store 路径名字是新版、内容是旧版
+- 判据沉淀进技能：**路径名与版本号都是标签，不是内容**——比对前先验产物自述
+
+| 提交 | 说明 |
+|------|------|
+| `e00d3d6` | chore(pkgs): mcp-searxng 2.5.1 → 2.6.0 |
+| `8aa106a` | chore(dsh-alpha): 0.2.1-alpha.2 → 0.2.1-alpha.3 |
+| `c4599e8` | docs(skill): 升级流程补一节 —— 「只改 version 留着旧 hash」会构建成功但用旧源码 |
+| `674b1b4` | docs(skill): 同族再补两个坑 —— store 路径名不构成证据、lock 命令可能与 fixup 不一致 |
+
 ## 2026-10-13T16:14:04+09:00
 
 **摘要**：fix(dsh-nixos-shell): 移除预设 persona 里的 `{{cwd}}` —— dsh 0.2.1 删除了该 prompt 变量，引用它会让整个预设挂不起来
