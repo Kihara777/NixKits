@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-16T20:31:31+09:00
+
+**Summary**: feat(skill): route the upstream skills by path, and keep the PR body short
+
+- Added step 0.5, "decide which route you are on": first vs repeat contribution, crossed with new package vs version update
+- The maintainer entry is **one-time** — once merged, later contributions never touch the list, and inserting it again is a duplicate registration
+- An update skips the six feasibility questions and the placement section, and its commit body must link a changelog
+- Added §3.7: keep the PR body short (the reviewer attached "the verification section could be a little shorter" to their approval); details belong in commit messages and the draft directory
+- Criteria: equal item counts across the four languages (12) and the full checker suite passing
+
+| Commit | Description |
+|------|------|
+| `773427a` | feat(skill): route the upstream skills by path, and keep the PR body short |
+
 ## 2026-10-16T16:06:57+09:00
 
 **Summary**: feat(skill): fold this round's field experience into the upstream-contribution skills (generic + adapter)
