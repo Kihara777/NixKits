@@ -21,6 +21,7 @@
 - **Requirements audit**: the `by-name` layout and `nixpkgs-vet`'s 12 checks, its 3 ratchets,
   the mandatory `meta` attributes, nixfmt formatting, commit prefixes driving CI,
   no DCO requirement, and no need to open an issue first
+- **Routing first**: first contribution vs repeat × new package vs version update — the maintainer entry is **one-time**, so a repeat contribution never touches the list, and an update skips both the feasibility and the placement sections
 - **AI contribution policy**: an `Assisted-by:` trailer is the mandatory disclosure format
   while `Co-authored-by:` does not qualify; a responsible person must be in the loop
 - **Where the package goes — three routes**: `by-name`, category directories, and **named
@@ -38,6 +39,7 @@
   nixpkgs tree (four layers of criteria). Comparing artifacts built against different nixpkgs
   revisions: do **not** compare bytes, compare the **output paths**. Comparing artifacts built against different nixpkgs
   revisions: do **not** compare bytes, compare the **output paths**
+- **Keep the PR body short**: the reviewer attached "the verification section could be a little shorter" to their approval — details belong in commit messages and the draft directory; the body only answers what/why/which rules
 - **Submission**: the ordering of the two commits (the maintainer entry comes first),
   branching and the PR, waiting, and how to speed things up
 - **Trap list**: licence gaps, stale self-descriptions in a repository, the same software
