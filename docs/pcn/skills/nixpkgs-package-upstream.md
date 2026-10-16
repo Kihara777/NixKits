@@ -20,7 +20,16 @@
   nixfmt 格式、commit 接頭辞 CI 駆動、DCO 不要、issue 先開 不要
 - **AI 貢献政策**：`Assisted-by:` trailer 強制披露形式、`Co-authored-by:` 形式不満。
   環 内部 責任者 必至
-- **dry-run**：**実際 nixpkgs 樹** 対 評価・構築・産物核験、**産物実行**（四層判据）
+- **包 置場 三種**：by-name、類別目録、**具名集合**（`obs-studio-plugins` 等）。
+  最後 者 加 入口 無、其 発見機制 **評価 以 確認 不能**（`pkgs.<集合> ? <名前>`）。
+  旧 PR 見 機制 既 削除済 可能
+- **身分 硬制約**：名簿 `github` **commit 作者 GitHub 帳号 一致 必須**——是 何 帳号 提出 決定、逆 非
+- **審閲者清単**：`pkgs/README.md` 新包審閲要点、提出前 自己 一巡 当
+- **`nixpkgs-review` 三罠**：空報告 評価失敗、緑 全 cache 検証力 無、
+  `pr` 子命令 fork 内 PR 審査 不能（`rev` head sha 以 使）
+- **dry-run**：**実際 nixpkgs 樹** 対 評価・構築・産物核験、**産物実行**（四層判据）。
+  異 nixpkgs 版 対 build 産物 比較 時 **byte 比較 不**——**産物路径** 比較。
+  異 nixpkgs 版 対 build 産物 比較 時 **byte 比較 不**——**産物路径** 比較
 - **実施**：二 commit 順序（維護者条目 先）、分岐 PR、待機 加速手段
 - **罠一覧**：許諾缺口、倉庫自述陳腐化、同名別包、文書漂移、事前編訳二進、
   符号連結樹 再帰的 chmod nix store 到達

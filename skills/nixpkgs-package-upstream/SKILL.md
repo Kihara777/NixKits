@@ -1,6 +1,6 @@
 ---
 name: nixpkgs-package-upstream
-description: 把一个自建软件包提交到上游 nixpkgs——先评估可行性（是否已在 master、是否有人开着在途 PR、许可依据能不能在**那个 tag 里**指认、有没有维护意愿、依赖会不会与 nixpkgs 共用包集冲突），再审计当前要求（by-name 结构 + nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI），然后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物），**并且逐行通读要提交的那份 diff**（判据抓不到的空 maintainers、内部注释、注释语言、冗余输入、正文错数字，全在这一步），最后才 fork 提 PR。含 AI 贡献政策（Assisted-by trailer）、许可依据的查法、冗余输入与设置的识别、以及自动检查假警报的处置。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 把一个自建软件包提交到上游 nixpkgs——先评估可行性（是否已在 master、是否有人开着在途 PR、许可依据能不能在**那个 tag 里**指认、有没有维护意愿、依赖会不会与 nixpkgs 共用包集冲突），再审计当前要求（by-name 结构 + nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI，以及**名单 handle 必须匹配 commit 作者**这条决定用哪个账号的硬约束），然后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物），**并且逐行通读要提交的那份 diff**（判据抓不到的空 maintainers、内部注释、注释语言、冗余输入、正文错数字，全在这一步），最后才 fork 提 PR（**PR 模板不得删改、fork 的 master 要先快进**）。含 AI 贡献政策（Assisted-by trailer，commit/PR 正文/评论三层各自披露）、包该放哪的第三种去向（具名集合靠求值确认发现机制）、nixpkgs-review 的三个坑（空报告=求值失败、绿但全缓存、pr 子命令审不了 fork PR）、跨 nixpkgs 版本比产物为何不能比字节、以及自动检查假警报的处置。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # 把软件包提交到上游 nixpkgs（通用）
@@ -160,6 +160,52 @@ by-name 的两条限制：只收 `pkgs.callPackage` 风格的包（**排除** `p
 不满足 by-name 时退回类别目录（`pkgs/<类别>/<包名>/default.nix` + `all-packages.nix`），
 但类别目录是**部分弃用、会逐步迁走**的，优先级更低。
 
+#### 2.1.1 第三种去向：包属于某个**具名集合**
+
+by-name 与类别目录不是全部。有一类包住在**自己的属性集**里，由一份专门的
+`*.nix` 组装 —— `obs-studio-plugins`、`vimPlugins`、`python3Packages` 都是。
+这类包**不需要、也无处**往 `all-packages.nix` 加一行，但前提是你要**先确认那个
+集合的发现机制是什么**。
+
+**唯一可信的判据是对着一棵真的树求值：**
+
+```bash
+nix eval --impure --raw --expr '
+let pkgs = import /path/to/nixpkgs { system = "x86_64-linux"; };
+in if pkgs.obs-studio-plugins ? obs-bilibili-stream
+   then "可达：${pkgs.obs-studio-plugins.obs-bilibili-stream.name}"
+   else "不可达"'
+```
+
+**为什么非要用求值**：机制会变，而且变得很彻底。OBS 插件曾经要求在
+`plugins/default.nix` 里手写一行；2026-06-26 的 commit `4a317fa67073`
+（"obs-studio-plugins: migrate to packagesFromDirectoryRecursive"）**把那个文件整个删掉**
+（120 行 → 8 行），换成：
+
+```nix
+# pkgs/applications/video/obs-studio/plugins.nix（全文）
+{ lib, callPackage }:
+lib.packagesFromDirectoryRecursive {
+  inherit callPackage;
+  directory = ./plugins;
+}
+```
+
+此后平铺的 `plugins/<名字>.nix` 自动变成属性（函数文档：
+"If a regular file's name has the `.nix` extension, it is turned into attribute where
+the attribute name is the file name without the `.nix` extension"），
+**再没有任何可加的入口**。
+
+> **踩过的坑（2026-10-16）**：狐莉翻到一条 2026-03 的旧 PR（#500675），它改的正是
+> `plugins/default.nix` —— 从形状上看我们的提交「确实缺了入口」。但那条 PR 是
+> **未合并就关闭**的，而它改的文件三个月后已被删除。**旧 PR 是可靠的历史，
+> 不是可靠的现状。**
+>
+> 复核顺序：**别读旧 PR，读现在组装这个集合的那份文件**，然后求值确认。
+> 三条独立证据一起用：① 求值可达；② `nixpkgs-review` 报 `1 package added`；
+> ③ CI 的 `Eval Summary` 报 `Package: added 1` —— 后两条都要求属性存在，
+> 属性不在的话它们会静默地报 0。
+
 ### 2.2 meta 必填项
 
 | 项 | 要求 |
@@ -194,6 +240,38 @@ by-name 的两条限制：只收 `pkgs.callPackage` 风格的包（**排除** `p
   且**排在包那个 commit 之前**；
 - 条目必填 `name` / `github` / `githubId`，`github` 与 `githubId` 要能对上
   （审阅者会访问 `https://api.github.com/user/<githubId>` 核 `login`）；
+- ⚠️ **名单里的 `github` 必须等于 commit 作者的 GitHub 账号。**
+  原文（`maintainers/README.md`）：
+
+  > First, make sure that the listed GitHub handle matches the author of the commit.
+
+  **这条决定了「用哪个账号提交」——它是硬约束，不是偏好。**
+  不是先挑个账号、再往名单里填个名字；是**名单写谁，就得谁提交**。
+  「想让自动化账号当联络人、又用人类账号提交」这种组合**不可能同时成立**。
+
+  关联依据是 **`noreply` 邮箱里的数字前缀**，名字字符串随便写：
+
+  ```bash
+  # 作者行这么写，GitHub 就把 commit 关联到 Kihara777
+  狐莉 <24633616+Kihara777@users.noreply.github.com>
+  #                     ^^^^^^^^^ 这个数字 = api.github.com/users/Kihara777 的 id
+  ```
+
+  核验方式（推送后读回来，别只看本地）：
+
+  ```bash
+  gh api 'repos/<owner>/<repo>/commits?sha=<branch>&per_page=2' \
+    --jq '.[] | "\(.commit.author.name) → GitHub: \(.author.login // "（未关联）")"'
+  ```
+
+  > **代价实测**：2026-10 的一次提交正是因为忽略了这条 —— 名单写 `Kihara777`、
+  > commit 由另一个账号做，审阅者第二遍 `CHANGES_REQUESTED` 直接引用这条规则，
+  > 并同时援引行为准则里「禁止用低质量贡献浪费他人时间」的条款，PR 被关闭。
+  > **打包本身没问题**（审阅者原话 "The PR itself seems technically fine to me"）——
+  > 死在的是这条身份规则上。
+  >
+  > 修法不是改包，是**换提交账号**：审阅者（K900）的结论就是
+  > "please just use your personal account as a point of contact."。
 - **不需要 `--signoff`，nixpkgs 没有 DCO**；
 - **不需要先开 issue**——package request 模板的原文就是
   「Package requests are no longer accepted. Please open a Pull Request with your desired package instead.」；
@@ -243,6 +321,32 @@ by-name 的两条限制：只收 `pkgs.callPackage` 风格的包（**排除** `p
 
 **不阻断 ≠ 无人看见。** 写下「没有机器看着这条政策」是错的——机器在看，只是不拦。
 提议时就把合规形态做出来：commit trailer 写全，PR 摘要里独立写一段披露。
+
+### 2.6 自套一遍审阅者的清单（提交前）
+
+`pkgs/README.md` 的 **New packages → Reviewed points** 是审阅者会逐条走的表。
+**提交前自己先走一遍**，每条都要能指出现场证据：
+
+| 审阅者会看 | 你要能回答 |
+|---|---|
+| 文件路径合不合规 | 为什么放这里（`by-name` / 类别目录 / 具名集合，见 §2.1） |
+| 包名、版本合不合规 | `pname` 是否等于上游名、`version` 是否数字开头 |
+| 能不能在目标架构上构建 | 建过哪个架构，**没建的不要勾** |
+| **可执行文件都跑了吗** | 有 `bin/` 就跑；**没有 `bin/` 就说清没有**，并说明改用什么判据 |
+| `description` / `license` / `platforms` | 与上游一致，且理由**写在注释里** |
+| **`mainProgram` 该不该设** | 有主可执行文件才设；没有就不设 |
+| 构建期依赖是否都在 `nativeBuildInputs` | |
+| 取源是否官方、是否用了合适的 fetcher | |
+| **特殊打包选择的动机有没有写下来** | 非默认构建标志、被删掉的安装步骤、被禁用的检查 |
+| `phases` 有没有被覆盖 | 覆盖了的话，里面有没有 `runHook preInstall` / `postInstall` |
+| 补丁是否有说明、是否该远程取 | |
+
+**「报告拼写错误」也在清单里** —— 通读一遍拼写与措辞，不是可选项。
+
+> 清单里最容易被当成形式主义、实际最容易翻车的是**「特殊选择的动机」**那一格：
+> 它问的不是「你有没有做过特殊的事」，而是**别人将来能不能安全地把它改掉**。
+> 写了「上游 CMakePresets 打开了这两个开关、而 CMakeLists 默认关」，
+> 后来者才知道什么时候可以删掉这两行。
 
 ---
 
@@ -349,6 +453,33 @@ Tests  2747 passed | 7 skipped (2754)   ← **只有这行是总结**
 
 **两处都是「构建通过」完全看不出来的。**
 
+### 3.2.2 跨 nixpkgs 版本比对产物：**比字节会骗你**
+
+拿「上游 CI / `nixpkgs-review` 建出来的产物」与「你自己对着另一棵 nixpkgs 树的 dry-run
+产物」比 sha256，**常常不相等** —— 而这是**预期**，不是缺陷。
+
+原因：Nix 的路径哈希包含完整依赖闭包。两棵树里 `glibc` 从 `2.42-84` 变到 `2.44-25`、
+`gcc` 从 15 变到 16，同样的源码就会编出**不同的字节**（实测：44.6 万字节里 38.3 万不同，
+但 `NEEDED` 集合与文件清单完全一致）。
+
+**正确的等价判据是「产物路径相同」，而不是「字节相同」：**
+
+```bash
+# 对着与对方**同一棵** nixpkgs 重建，看产物路径是否一致
+NIXPKGS_PATH=/path/to/that/same/tree nix build --impure --no-link --print-out-paths ...
+# 与对方报出的 /nix/store/<hash>-<名字> 逐字比
+```
+
+产物路径相同 ⇒ 派生相同 ⇒ **内容相同**。这是同一棵树内部的比较，所以判据成立；
+问题只出在「我以为两边是同一棵树」。
+
+> **追问链（这次实际走了一遍）**：字节不同 → 是缺陷吗？→ 看 `NEEDED` 集合
+> → 相同，只有 `RUNPATH` 指向不同的 glibc/gcc → 猜测是 nixpkgs 差异
+> → **不猜，用同一棵树重建** → 产物路径完全相同 → **证明**差异 100% 来自 nixpkgs。
+>
+> **「解释得通」和「证明是它」是两件事。** 停在前者的代价是：将来真出问题时，
+> 你会拿同一个解释把自己劝住。
+
 ### 3.3 格式与结构
 
 ```bash
@@ -416,6 +547,50 @@ awk '{printf "%3d| %s\n", NR, $0}' package.nix
 >
 > 「能不能构建」不是判据。**构建不关心注释、不关心 `meta`、不关心你说的是不是实话。**
 
+### 3.6 用 `nixpkgs-review` 复核（它有三个会骗人的坑）
+
+`nixpkgs-review` 是审阅者会看的那份证据，但它**有两处会给出误导性的绿**。
+
+**坑一：报告为空 ≠ 没有问题。**
+
+它只遍历**求值成功**的属性。包求值失败时，那个属性直接从列表里消失，
+于是报告是「没有任何受影响的包」+ 退出码 0 —— **一次失败的求值，读起来像一次干净的通过**。
+
+判据：**你明明新增了一个包，报告里却没有它 = 求值炸了**，不是「没什么可测的」。
+
+**坑二：绿了但全是缓存 —— 那次运行没有验证力。**
+
+产物已在 store 里时不会重建，日志是**空的**。看日志：
+
+```bash
+L=~/.cache/nixpkgs-review/<rev-…>/logs/<attr>-x86_64-linux.log
+wc -l "$L"                       # 0 行 = 没重建，这次的绿是缓存
+grep -c "building '/nix/store" "$L"   # 有这几行才算真建过
+```
+
+**坑三（对本仓库最要命）：`pr` 子命令审不了 fork 里的 PR。**
+
+`nixpkgs-review pr <n>` 把 PR 号**硬查在 `NixOS/nixpkgs`** 上；
+`-r` 只改 git 取源的 remote，不改查询目标。实测：
+
+```bash
+nixpkgs-review pr 1 -r Kihara777/nixpkgs
+# → 取到的是 NixOS/nixpkgs#1（别人的 glibc PR），因为 -r 只是换取源
+```
+
+**fork PR 要用 `rev`，喂它 PR 的 head sha：**
+
+```bash
+cd /path/to/bare-nixpkgs.git          # 需要是**裸仓**；它会验证 nixos/release.nix
+export GITHUB_TOKEN=$(gh auth token)
+HEAD=$(gh pr view <n> --repo <owner>/nixpkgs --json headRefOid --jq .headRefOid)
+nixpkgs-review rev "$HEAD" --no-shell
+```
+
+**等价性要说清楚**：`rev` 用的是本地那个 commit 对象，而它与远端 head **sha 相同**
+（同一个 sha 即同一份内容，这是密码学保证）。所以「`rev` 绿了」= 「PR 这个 commit 绿了」。
+反过来，若只想审 fork PR 而当 PR 号不可用，**这条等价性就是你的依据**。
+
 ---
 
 ## 第 4 步：实操
@@ -427,11 +602,34 @@ awk '{printf "%3d| %s\n", NR, $0}' package.nix
    git fetch upstream
    git switch --create init-<包名> upstream/master
    ```
+   ⚠️ **先看 fork 的 `master` 落后多少。** 很久没同步的 fork 可能落后几千个提交，
+   而 PR 的 diff 是相对 **fork 的 base** 算的 —— base 太旧，diff 里就会混进上游那一堆提交，
+   把「+75 行」变成「+几万行」。先快进：
+
+   ```bash
+   # 确认能快进（fork 的 master 是上游 master 的祖先）再推，否则要 force
+   git merge-base --is-ancestor <fork-master> <upstream-master> && echo 可快进
+   git push https://github.com/<你>/nixpkgs.git <upstream-master>:refs/heads/master
+   ```
+
 2. 两个 commit，**顺序不能反**：
    - `maintainers: add <handle>`（改 `maintainers/maintainer-list.nix`）
    - `<包名>: init at <版本>`（加 `pkgs/by-name/<shard>/<包名>/package.nix`）
    两个 commit 都带 `Assisted-by: <工具> <模型版本>` trailer。
+   **提交账号必须是名单里的那个 `github`** —— 见 §2.4。
+   ⚠️ 提交信息里**不要用 shell 双引号包反引号**：`` `foo(d)` `` 会被当命令替换吃掉，
+   提交信息里那几段会**静默变成空白**。多行信息一律写文件再 `-F` / `--body-file`。
 3. `git push --set-upstream origin HEAD`，按模板开 PR。
+
+   ⚠️ **PR 正文必须保留模板的全部行。** 模板自己写着：
+
+   > please do not remove the template, even when nothing is checked!
+
+   模板的结构是 `## Things done` / `- Built on platform:` / `- Tested, as applicable:` /
+   `- Nixpkgs Release Notes` / `- NixOS Release Notes`，外加底部一批 `[链接]: URL` 定义。
+   **自己另写一套「Things done」= 删了模板**，即使内容意思相同。
+   该勾的勾，不该勾的留空**并写明为什么不适用**（模板的措辞是 "as applicable"）。
+   **没跑过的不许勾** —— 上游 CI 会跑它，但替你打勾是另一回事。
 4. **等**。原文：「It is entirely normal for your PR to sit around without any feedback
    for days, weeks or sometimes even months.」
    加速手段：勾满模板、打全标签、先拿到非 committer 的 review、**至少一周**无活动后再去

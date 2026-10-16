@@ -23,8 +23,21 @@
   no DCO requirement, and no need to open an issue first
 - **AI contribution policy**: an `Assisted-by:` trailer is the mandatory disclosure format
   while `Co-authored-by:` does not qualify; a responsible person must be in the loop
+- **Where the package goes — three routes**: `by-name`, category directories, and **named
+  sets** such as `obs-studio-plugins`. The last has no entry to add, and its discovery
+  mechanism **can only be confirmed by evaluating** (`pkgs.<set> ? <name>`); the mechanism
+  shown by an old PR may already have been deleted upstream
+- **Identity constraint**: the `github` in the maintainer list **must equal the GitHub
+  account that authors the commit** — this decides which account submits, not the reverse
+- **Reviewer checklist**: the new-package review points from `pkgs/README.md`, applied to
+  yourself before submitting
+- **`nixpkgs-review`'s three traps**: an empty report means the evaluation failed; green but
+  entirely cached has no verifying power; and the `pr` subcommand cannot review a PR living
+  in a fork (use `rev` with the head sha)
 - **Dry run**: evaluate, build, verify the artifact, and **run the artifact** against a real
-  nixpkgs tree (four layers of criteria)
+  nixpkgs tree (four layers of criteria). Comparing artifacts built against different nixpkgs
+  revisions: do **not** compare bytes, compare the **output paths**. Comparing artifacts built against different nixpkgs
+  revisions: do **not** compare bytes, compare the **output paths**
 - **Submission**: the ordering of the two commits (the maintainer entry comes first),
   branching and the PR, waiting, and how to speed things up
 - **Trap list**: licence gaps, stale self-descriptions in a repository, the same software

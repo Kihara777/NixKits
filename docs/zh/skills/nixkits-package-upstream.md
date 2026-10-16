@@ -14,6 +14,7 @@
 
 ## 功能
 
+- **fork 排练**：正式提交上游前，先在 `Kihara777/nixpkgs` 把整条流程走一遍——不动上游，却能量出模板合规、diff 干净度、CI 与机器人标签；推 fork 用 `Kihara777`，做完切回 `GrG41`
 - **可行性台账**：13 个包各自「能不能提、为什么」的现状（取证基线 nixpkgs master `78f093ad1`）
 - **三条最容易踩的**：`mcp-searxng` 已在 nixpkgs 里、`dsh` 在 nixpkgs 里叫
   `deepseek-harness` 且已有 3 个在途 PR、`kitsfmt` 的上游仓 404

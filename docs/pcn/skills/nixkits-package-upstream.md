@@ -14,6 +14,7 @@
 
 ## 機能
 
+- **fork 予行**：上流提出前、`Kihara777/nixpkgs` 於 全経路 一巡 走——上流 触 無、然 模板合规・diff 清潔度・CI・bot 標簽 測定 可能。fork push `Kihara777`、終了後 `GrG41` 復帰
 - **実現可能性台帳**：13 包 各「提出可能可否、何故」現状（証拠基線 nixpkgs master `78f093ad1`）
 - **最踏易三点**：`mcp-searxng` 既 nixpkgs 内在、`dsh` nixpkgs 内 `deepseek-harness` 称呼
   在途 PR 既三本、`kitsfmt` 上流倉庫 404

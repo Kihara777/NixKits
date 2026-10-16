@@ -14,6 +14,7 @@
 
 ## 機能
 
+- **fork での予行**：上流へ提出する前に `Kihara777/nixpkgs` で全経路を一度走る——上流には触れずに、模板の合規・diff の清潔さ・CI・bot の標簽を測れる。fork への push は `Kihara777`、終わったら `GrG41` へ戻す
 - **実現可能性台帳**：13 包それぞれ「提出可能か、何故か」の現状（証拠の基線は nixpkgs master `78f093ad1`）
 - **最も踏み易い三点**：`mcp-searxng` は既に nixpkgs に在る、`dsh` は nixpkgs では
   `deepseek-harness` と呼ばれ在途 PR が既に 3 本、`kitsfmt` の上流倉庫は 404

@@ -31,7 +31,7 @@ description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 nixp
 | 包 | 在 nixpkgs 里 | 结论 |
 |---|---|---|
 | blender-mcp | 没有 | **推荐**，许可已查实、测试已打通 |
-| obs-bilibili-stream | 没有 | 可做，先改用 nixpkgs 的 OBS 插件构建助手 |
+| obs-bilibili-stream | 没有 | **已提交 PR #574725**（2026-10-16，CI 全绿待审）。首投 #572912 因身份规则被关闭，见下 |
 | opencode-telegram | 没有 | 可做，先摘掉 riscv64 那段 |
 | ruyi | 没有 | 需评估，426 行补丁要先静态化 |
 | kitsfmt | 没有 | 暂缓，上游仓 404 |
@@ -45,6 +45,9 @@ description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 nixp
 - `mcp-searxng` **已经在 nixpkgs 里**，initial PR #557725 于 2026-09-03 合并，
   且有人开着 2.5.1 的更新 PR。列进「新包清单」是错的。
 - `dsh` 在 nixpkgs 里叫 **`deepseek-harness`**——按我们的包名搜是搜不到的。
+- `obs-bilibili-stream` 的**打包第一遍就通过了审阅**（审阅者原话
+  "The PR itself seems technically fine to me"），死在身份规则上——
+  **台账记「可做」不等于「提交就能过」，还要过身份那一关**（见通用技能 §2.4）。
   三个在途 PR：#552467 / #553134 / #554081，都是 8 月开的，至今未合并。
   我们这份从 npm 制品打、还要 `sed` 改包内文件，**不是 nixpkgs 要的形态**。
 - `kitsfmt` 的 `meta.homepage` 指向本仓，而 `github.com/Kihara777/kitsfmt` 返回 404。
@@ -101,6 +104,33 @@ add-on 的 `blender_manifest.toml` 也声明了。
 
 **不要复制 nixpkgs 树，也不要对它 chmod。** 用 `builtins.getFlake "path:…"` 直接读。
 （本仓踩过：`chmod -R u+w` 顺着符号链接打到了 nix store 里的真实目录。）
+
+### 2.4 排练：先在我们自己的 fork 里开一条 PR
+
+**正式提交上游之前，先在 `Kihara777/nixpkgs` 里把整条流程走一遍。**
+好处是它**完全不动上游**，却能把「PR 模板合不合规、diff 干不干净、CI 会不会红、
+机器人打什么标签」全部量出来。
+
+```bash
+# 1) 切到你的账号（推 Kihara777/nixpkgs 必须用 Kihara777；GrG41 只有 pull 权）
+gh auth switch --user Kihara777
+
+# 2) fork 的 master 先快进到上游 master —— 否则 PR 的 diff 会混进几千个上游提交
+git -C /path/to/bare-nixpkgs.git push https://github.com/Kihara777/nixpkgs.git \
+  <upstream-master-sha>:refs/heads/master
+
+# 3) 推分支 + 开 fork 内 PR（base 也选 master）
+gh pr create --repo Kihara777/nixpkgs --base master --head <分支> \
+  --title "<包名>: init at <版本>" --body-file upstream/<包名>/pr-body.md
+
+# 4) 做完立刻切回 GrG41 —— 我的账号只用于 PR 之外的测试操作
+gh auth switch --user GrG41
+```
+
+**注意 `nixpkgs-review` 审不了 fork 里的 PR**（它把 PR 号硬查在 `NixOS/nixpkgs`）。
+fork PR 用 `rev` + head sha，见通用技能 §3.6。
+
+**这条 PR 之后不必关闭**：它是排练的记录，留着比删掉有信息量。
 
 ---
 

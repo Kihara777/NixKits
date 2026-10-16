@@ -14,6 +14,7 @@
 
 ## Features
 
+- **Fork rehearsal**: walk the whole flow once in `Kihara777/nixpkgs` before submitting upstream — it touches nothing upstream yet measures template compliance, diff cleanliness, CI and the bot's labels; push to the fork as `Kihara777`, then switch back to `GrG41`
 - **Feasibility ledger**: the current state of all 13 packages, each with "can it be submitted, and why" (evidence baseline: nixpkgs master `78f093ad1`)
 - **The three most common missteps**: `mcp-searxng` is already in nixpkgs, `dsh` is called
   `deepseek-harness` there and already has 3 in-flight PRs, and `kitsfmt`'s upstream repository 404s
