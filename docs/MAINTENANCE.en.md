@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-16T16:06:57+09:00
+
+**Summary**: feat(skill): fold this round's field experience into the upstream-contribution skills (generic + adapter)
+
+- Added "the third destination for a package": a named set has no entry point to add, and its discovery mechanism can only be confirmed by evaluating — the mechanism an old PR shows may already have been deleted
+- Added the identity constraint: the list's `github` must equal the commit author's account, and this decides which account submits
+- Added the reviewer checklist to self-apply, and `nixpkgs-review`'s three traps (an empty report means the evaluation failed, green-but-all-cached has no verifying power, and `pr` cannot review a fork PR)
+- Added: comparing artifacts across nixpkgs revisions means comparing output paths, not bytes; fast-forward the fork's master first; the PR template must not be edited
+- Criteria: equal item counts across the four languages (10 generic, 7 adapter) and the full self-check passing
+
+| Commit | Description |
+|------|------|
+| `917f60c` | feat(skill): fold this round's field experience into the upstream-contribution skills (generic + adapter) |
+
 ## 2026-10-15T14:09:14+09:00
 
 **Summary**: chore(pkgs): mcp-searxng 2.6.0 and dsh-alpha 0.2.1-alpha.3 — plus three false greens of one family
