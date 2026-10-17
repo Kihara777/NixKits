@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-18T08:30:12+09:00
+
+**摘要**：fix(skill): 維護記録 錨点導出 —— GitHub **削除** 而 置換 非
+
+- 実測 `href="#2026-10-18t0822450900"`：小文字化 後 非英数字 削除、`:` 與 `+` 直接 消失
+- 旧規則（`-` 置換）死錨点 産出、且 正書法 反「易錯点」標示——二技能 一括 修正
+- 判据：子倉 描画後 page `curl` 以 `href="#…"` 読取、TOC `anchor` 與 歴史条目 書法 一致 確認
+
+| 提交 | 説明 |
+|------|------|
+| `ba7a5c1` | fix(skill): 維護記録 錨点導出（削除式 slug） |
+
 ## 2026-10-18T08:28:27+09:00
 
 **摘要**：dsh-api-balance re-pin —— 子倉 右上 menu「全屏切替」追加（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900)）

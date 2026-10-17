@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:30:12+09:00
+
+**摘要**：fix(skill): 维护日志锚点推导 —— GitHub 的 slug 是**删除**而非替换
+
+- 实测 `href="#2026-10-18t0822450900"`：转小写后删除非字母数字，`:` 与 `+` 直接消失
+- 旧规则（替换为 `-`）产出死锚点，还把正确写法标成「易错点」——两处技能一并改正
+- 判据：`curl` 抓子仓页面渲染后的 `href="#…"`，与 TOC `anchor`、历史条目写法一致
+
+| 提交 | 说明 |
+|------|------|
+| `ba7a5c1` | fix(skill): 维护日志锚点推导（删除式 slug） |
+
 ## 2026-10-18T08:28:27+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 子仓新增右上菜单「切换全屏」（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900)）

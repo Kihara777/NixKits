@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:30:12+09:00
+
+**Summary**: fix(skill): the log-anchor derivation — GitHub **deletes** rather than replaces
+
+- measured `href="#2026-10-18t0822450900"`: lowercase, then drop non-alphanumerics — `:` and `+` simply vanish
+- the old rule (replace with `-`) produced dead anchors and labelled the correct form a 「pitfall」 — both skills corrected
+- criteria: `curl` the rendered sub-repo page and read `href="#…"`, matching the TOC `anchor` field and the historical entries
+
+| Commit | Description |
+|------|------|
+| `ba7a5c1` | fix(skill): log-anchor derivation (delete-style slug) |
+
 ## 2026-10-18T08:28:27+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — a 「Toggle fullscreen」 row in the header menu ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900))
