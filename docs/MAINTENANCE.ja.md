@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:28:27+09:00
+
+**概要**：dsh-api-balance re-pin —— ヘッダーメニューに「フルスクリーン切替」を追加（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900)）
+
+- rev `43f4d18` → `5f63515`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 四語の「UI 強化」概要にフルスクリーン切替と Enter 改行切替を追加し、廃止済みの統計バースクロールを削除
+- 判定：`nix build` 成功；成果物に新シンボルが各 3 箇所、`node --check` 通過
+
+| コミット | 説明 |
+|------|------|
+| `8cfafa1` | chore(dsh-api-balance): re-pin を 5f63515 へ —— ヘッダーメニュー「フルスクリーン切替」を追加 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `43f4d18` → `5f63515` |
+
 ## 2026-10-17T23:57:56+09:00
 
 **概要**：feat(skill): 第 4.5 步「審閲を受けた後」を追加

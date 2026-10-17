@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:28:27+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — a 「Toggle fullscreen」 row in the header menu ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900))
+
+- rev `43f4d18` → `5f63515`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- the four-language 「UI enhancements」 summary lists the fullscreen and Enter-to-newline toggles and drops the retired stats-bar scrolling
+- criteria: `nix build` succeeds; 3 occurrences each of the two new symbols in the output, `node --check` passes
+
+| Commit | Description |
+|------|------|
+| `8cfafa1` | chore(dsh-api-balance): re-pin the wrapper to 5f63515 — the plugin adds a 「Toggle fullscreen」 row to the header menu |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `43f4d18` → `5f63515` |
+
 ## 2026-10-17T23:57:56+09:00
 
 **Summary**: feat(skill): add step 4.5, "after receiving a review"

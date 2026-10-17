@@ -2,6 +2,24 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:28:27+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 子仓新增右上菜单「切换全屏」（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900)）
+
+- rev `43f4d18` → `5f63515`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 四语文档「UI 增强」概要补切换全屏与回车换行开关，删掉已停用的统计条滚动
+- 判据：`nix build` 成功；产物内两处新符号各 3 处、`node --check` 通过
+
+| 提交 | 说明 |
+|------|------|
+| `8cfafa1` | chore(dsh-api-balance): 薄封装 rev 跟进 5f63515 —— 插件新增右上菜单「切换全屏」 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `43f4d18` → `5f63515` |
+
 ## 2026-10-17T23:57:56+09:00
 
 **摘要**：feat(skill): 新增第 4.5 步「收到 review 之后」

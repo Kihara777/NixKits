@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-18T08:28:27+09:00
+
+**摘要**：dsh-api-balance re-pin —— 子倉 右上 menu「全屏切替」追加（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0822450900)）
+
+- rev `43f4d18` → `5f63515`；版本 `0.1.1` 不変——源码変更 実行時挙動 影響、field 級判据 以 更新
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変（依存 與 lock 未変、build 通過 其証）
+- 四語「UI 強化」概要 全屏切替・Enter 改行切替 追加、已停用 統計 bar scroll 削除
+- 判据：`nix build` 成功；産物 新 symbol 各 3 箇所、`node --check` 通過
+
+| 提交 | 説明 |
+|------|------|
+| `8cfafa1` | chore(dsh-api-balance): re-pin 到 5f63515 —— 右上 menu「全屏切替」追加 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `43f4d18` → `5f63515` |
+
 ## 2026-10-17T23:57:56+09:00
 
 **摘要**：feat(skill): 第 4.5 步「審閲 受 後」追加
