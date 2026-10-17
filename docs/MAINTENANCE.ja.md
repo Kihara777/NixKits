@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:54:07+09:00
+
+**概要**：dsh-api-balance re-pin —— プラグイン設定にフルスクリーン切替スイッチと、スイッチ領域の自動列数を追加（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0853180900)）
+
+- rev `5f63515` → `82e0724`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物にスイッチ関連シンボル 6 箇所、自動列テンプレート 1 箇所
+
+| コミット | 説明 |
+|------|------|
+| `80ccdcf` | chore(dsh-api-balance): re-pin を 82e0724 へ —— 設定にフルスクリーンスイッチ + 自動列数 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `5f63515` → `82e0724` |
+
 ## 2026-10-18T08:30:12+09:00
 
 **概要**：fix(skill): ログのアンカー導出 —— GitHub は**削除**であって置換ではない

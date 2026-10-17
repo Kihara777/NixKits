@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:54:07+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 插件设置加全屏开关 + 开关区自适应列数（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0853180900)）
+
+- rev `5f63515` → `82e0724`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内开关符号 6 处、自适应列模板 1 处
+
+| 提交 | 说明 |
+|------|------|
+| `80ccdcf` | chore(dsh-api-balance): 薄封装 rev 跟进 82e0724 —— 设置加全屏开关 + 开关区自适应列数 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `5f63515` → `82e0724` |
+
 ## 2026-10-18T08:30:12+09:00
 
 **摘要**：fix(skill): 维护日志锚点推导 —— GitHub 的 slug 是**删除**而非替换

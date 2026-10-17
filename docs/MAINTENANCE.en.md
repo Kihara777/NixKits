@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T08:54:07+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — the plugin gains a fullscreen switch and an adaptive switch grid ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0853180900))
+
+- rev `5f63515` → `82e0724`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains 6 switch symbols and 1 adaptive-column template
+
+| Commit | Description |
+|------|------|
+| `80ccdcf` | chore(dsh-api-balance): re-pin the wrapper to 82e0724 — fullscreen switch and adaptive switch grid |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `5f63515` → `82e0724` |
+
 ## 2026-10-18T08:30:12+09:00
 
 **Summary**: fix(skill): the log-anchor derivation — GitHub **deletes** rather than replaces
