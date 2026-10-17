@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-17T23:43:30+09:00
+
+**摘要**：feat(skill): Qt 依赖者的必填项 + `__structuredAttrs` 的实测 A/B
+
+- 新增 §2.7：`buildInputs` 含 `qt6.qtbase` 就必须二选一，否则 `qtPreHook` 阶段直接失败
+- 记下差点写错的推断：「没有 bin/ 所以包装钩子无事可做」是错的
+- 判据教训：要验证标志是否被读到，**注释掉再构建**比读源码推理可靠
+- §2.1 深化 `__structuredAttrs`：A/B 实测与产物零影响、数组更抗错、env 只放导出项
+- 判据：四语条目数相等（13），全套检查器通过
+
+| 提交 | 说明 |
+|------|------|
+| `d0dfc96` | feat(skill): Qt 依赖者的必填项 + `__structuredAttrs` 的实测 A/B |
+
 ## 2026-10-16T20:31:31+09:00
 
 **摘要**：feat(skill): 上游贡献技能分路径 + PR 正文要短

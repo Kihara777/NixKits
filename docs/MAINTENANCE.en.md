@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-17T23:43:30+09:00
+
+**Summary**: feat(skill): the Qt requirement, and a measured A/B of `__structuredAttrs`
+
+- Added §2.7: if `buildInputs` contains `qt6.qtbase` you must pick one of two declarations, or the build fails outright at the `qtPreHook` phase
+- Recorded a near-miss inference: "there is no `bin/`, so the wrapping hook has nothing to do" was wrong
+- Criteria lesson: to check whether a flag is read, **comment it out and build** — more reliable than reasoning from the source
+- Deepened §2.1 on `__structuredAttrs`: the A/B measurement, its zero effect on the artifact, why arrays are more robust, and that `env` now holds only what must be exported
+- Criteria: equal item counts across the four languages (13) and the full checker suite passing
+
+| Commit | Description |
+|------|------|
+| `d0dfc96` | feat(skill): the Qt requirement, and a measured A/B of `__structuredAttrs` |
+
 ## 2026-10-16T20:31:31+09:00
 
 **Summary**: feat(skill): route the upstream skills by path, and keep the PR body short

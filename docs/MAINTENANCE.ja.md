@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-17T23:43:30+09:00
+
+**概要**：feat(skill): Qt 依存者の必須事項と `__structuredAttrs` の実測 A/B
+
+- §2.7 を追加：`buildInputs` に `qt6.qtbase` が在れば二択の宣言が必須。否則 `qtPreHook` 段階で失敗
+- 書き間違えかけた推論を記録：「bin/ が無いので包装鉤子は為す事が無い」は誤り
+- 判据の教訓：標識が読まれているか確かめるには**注釈して構築**する方が、源码の推理より確実
+- §2.1 の `__structuredAttrs` を深化：実測 A/B、産物への影響零、配列がより抗錯、env は導出項のみ
+- 判据：四言語の条目数が相等（13）、全検査器通過
+
+| コミット | 説明 |
+|------|------|
+| `d0dfc96` | feat(skill): Qt 依存者の必須事項と `__structuredAttrs` の実測 A/B |
+
 ## 2026-10-16T20:31:31+09:00
 
 **概要**：feat(skill): 上流貢献技能を経路で分流し、PR 本文は短く
