@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-17T23:57:56+09:00
+
+**摘要**：feat(skill): 第 4.5 步「審閲 受 後」追加
+
+- 四分類：合規要求 / 書写規範 / 更 厳密正確 / **彼 判断**——各類 出処 示 必須
+- 「自明 code 重述 注釈 不要」記録：`inherit (obs-studio.meta) platforms` 既 理由 述
+- 「散文 比 連結」記録：断鏈 静 嘘 化 散文 比 誠実
+- Apply suggestion 判据（機械的・異論無・産物 影響 無）與 二 副作用 記録
+- 「批准 ≠ 併合」與 merge bot `allByName` 門 記録
+- 判据：四言語 条目数 相等（15）、全検査器 通過
+
+| 提交 | 説明 |
+|------|------|
+| `f4afd2b` | feat(skill): 第 4.5 步「審閲 受 後」追加 |
+
 ## 2026-10-17T23:43:30+09:00
 
 **摘要**：feat(skill): Qt 依存者 必須事項 + `__structuredAttrs` 実測 A/B

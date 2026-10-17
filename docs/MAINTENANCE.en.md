@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-17T23:57:56+09:00
+
+**Summary**: feat(skill): add step 4.5, "after receiving a review"
+
+- Four kinds: compliance / convention / more-correct / **the reviewer's own judgement** — each must be backed by a citation
+- Recorded that self-documenting code needs no comment restating it: `inherit (obs-studio.meta) platforms` already states the reason
+- Recorded that a link beats prose: a dead link is more honest than prose that quietly becomes a lie
+- Recorded the criterion for clicking Apply suggestion (mechanical, uncontested, no effect on the artifact) and its two side effects
+- Recorded that approval is not a merge, and the merge bot's `allByName` gate
+- Criteria: equal item counts across the four languages (15) and the full checker suite passing
+
+| Commit | Description |
+|------|------|
+| `f4afd2b` | feat(skill): add step 4.5, "after receiving a review" |
+
 ## 2026-10-17T23:43:30+09:00
 
 **Summary**: feat(skill): the Qt requirement, and a measured A/B of `__structuredAttrs`

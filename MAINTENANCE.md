@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-17T23:57:56+09:00
+
+**摘要**：feat(skill): 新增第 4.5 步「收到 review 之后」
+
+- 三分类：合规性要求 / 书写规范 / 更严谨正确 / **他的判断**——每类都要能指出出处
+- 记下「自解释的代码不需要注释重述」：`inherit (obs-studio.meta) platforms` 已表达理由
+- 记下「链接优于散文」：断链比悄悄变成谎言的散文更诚实
+- 记下 Apply suggestion 的判据（机械/无争议/不影响产物）与两个副作用
+- 记下「批准 ≠ 合并」与 merge bot 的 `allByName` 门槛
+- 判据：四语条目数相等（15），全套检查器通过
+
+| 提交 | 说明 |
+|------|------|
+| `f4afd2b` | feat(skill): 新增第 4.5 步「收到 review 之后」 |
+
 ## 2026-10-17T23:43:30+09:00
 
 **摘要**：feat(skill): Qt 依赖者的必填项 + `__structuredAttrs` 的实测 A/B
