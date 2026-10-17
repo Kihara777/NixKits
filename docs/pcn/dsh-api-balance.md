@@ -64,4 +64,4 @@ NixKits 薄 `pkgs.dsh-api-balance` wrapper（新 repo source 自 build）保持�
 - **使用量**：当日 / 当月 / 30 日消費（金額 + token + model 別明細）與 日別 / 月別 chart
 - **platform token**：預設 本機瀏覽器 登録状態 自 自動 scan、手動接続 fallback
 - **音声**：音声 pack + TTS（瀏覽器内蔵 / 自訂 API）、peak・off-peak 課金 自動通知
-- **UI 強化**：peak 時 赤表示、疑問 window scroll 修正、下部統計 bar scroll 等
+- **UI 強化**：peak 時 赤表示、疑問 window scroll 修正、Enter 改行切替、右上「…」menu 全屏切替 等

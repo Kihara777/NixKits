@@ -64,4 +64,4 @@ Full feature documentation lives in the [new repository](https://github.com/Kiha
 - **Usage**: today / this-month / 30-day consumption (cost + tokens + per-model breakdown) with daily / monthly charts
 - **Platform token**: auto-scanned from local browser sessions by default, manual connect as fallback
 - **Voice**: voice packs + TTS (browser built-in / custom API), with automatic peak/off-peak billing notices
-- **UI enhancements**: peak-hour red marking, question-window scroll fixes, bottom stats-bar scrolling, and more
+- **UI enhancements**: peak-hour red marking, question-window scroll fixes, the Enter-to-newline toggle, a fullscreen toggle in the header 「…」 menu, and more
