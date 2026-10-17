@@ -41,6 +41,8 @@
   revisions: do **not** compare bytes, compare the **output paths**
 - **Keep the PR body short**: the reviewer attached "the verification section could be a little shorter" to their approval — details belong in commit messages and the draft directory; the body only answers what/why/which rules
 - **A mandatory declaration for Qt dependents**: if `buildInputs` contains `qt6.qtbase` you must pick one — an application adds `wrapQtAppsHook`, a library/plugin sets `dontWrapQtApps = true`; otherwise the build fails at the `qtPreHook` phase
+- **After review (step 4.5)**: sort each suggestion into compliance / convention / more-correct / the reviewer's own judgement, and **be able to cite the source for each**; what you cannot cite is judgement and is open to discussion
+- **Approval is not a merge**: merging needs a human to press the button, and the merge bot has a gate — if any changed file is outside `pkgs/by-name/`, `@NixOS/nixpkgs-merge-bot merge` cannot merge it
 - **Submission**: the ordering of the two commits (the maintainer entry comes first),
   branching and the PR, waiting, and how to speed things up
 - **Trap list**: licence gaps, stale self-descriptions in a repository, the same software
