@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ cmake ];
 
@@ -29,16 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  # Upstream enables both of these in its CMakePresets.json while CMakeLists.txt
-  # defaults them to OFF:
-  #
-  # - ENABLE_QT finds the Qt headers the dialog needs; without it the build fails
-  #   with "QMenuBar: No such file or directory".
-  # - ENABLE_FRONTEND_API links libobs-frontend-api, which the plugin uses to
-  #   register its menu entry; without it that library is missing from NEEDED.
+  # https://github.com/Zarosmm/obs-bilibili-stream/blob/2.1.5/CMakePresets.json#L12-L15
   cmakeFlags = [
-    "-DENABLE_FRONTEND_API=ON"
-    "-DENABLE_QT=ON"
+    (lib.cmakeBool "ENABLE_FRONTEND_API" true)
+    (lib.cmakeBool "ENABLE_QT" true)
   ];
 
   # The plugin ships a Qt dialog but OBS resolves the Qt libraries itself, so
@@ -57,12 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bilibili streaming plugin for OBS Studio";
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
     changelog = "https://github.com/Zarosmm/obs-bilibili-stream/releases/tag/${finalAttrs.version}";
-    # The project's own appstream metadata declares <project_license>GPL-2.0-only</project_license>.
-    # The LICENSE file is the stock GPLv2 text, and src/plugin-support.{h,c.in} are the
-    # unmodified OBS plugin template (placeholders still unfilled), so the "or any later
-    # version" wording there is boilerplate rather than the author's grant.
     license = lib.licenses.gpl2Only;
-    # A plugin cannot be built where its host cannot: obs-studio has no riscv64.
     inherit (obs-studio.meta) platforms;
     maintainers = with lib.maintainers; [ kitsunori ];
   };

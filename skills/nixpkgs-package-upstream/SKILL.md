@@ -1,6 +1,6 @@
 ---
 name: nixpkgs-package-upstream
-description: 把一个自建软件包提交到上游 nixpkgs——**先分流**（首次贡献 vs 再次贡献 × 全新添加 vs 版本更新：维护者条目是一次性的，再次贡献不再动名单；update 跳过评估与放哪两节），再评估可行性（是否已在 master、是否有人开着在途 PR、许可依据能不能在**那个 tag 里**指认、有没有维护意愿、依赖会不会与 nixpkgs 共用包集冲突），再审计当前要求（by-name 结构 + nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI，以及**名单 handle 必须匹配 commit 作者**这条决定用哪个账号的硬约束），然后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物），**并且逐行通读要提交的那份 diff**（判据抓不到的空 maintainers、内部注释、注释语言、冗余输入、正文错数字，全在这一步），最后才 fork 提 PR（**PR 模板不得删改、fork 的 master 要先快进**）。含 PR 正文要短这条实测反馈（审阅者批准时附的「验证段能再短些」）、AI 贡献政策（Assisted-by trailer，commit/PR 正文/评论三层各自披露）、包该放哪的第三种去向（具名集合靠求值确认发现机制）、nixpkgs-review 的三个坑（空报告=求值失败、绿但全缓存、pr 子命令审不了 fork PR）、跨 nixpkgs 版本比产物为何不能比字节、以及自动检查假警报的处置。仓库特有的文档与日志环节经「仓库适配层」注入。
+description: 把一个自建软件包提交到上游 nixpkgs——**先分流**（首次贡献 vs 再次贡献 × 全新添加 vs 版本更新：维护者条目是一次性的，再次贡献不再动名单；update 跳过评估与放哪两节），再评估可行性（是否已在 master、是否有人开着在途 PR、许可依据能不能在**那个 tag 里**指认、有没有维护意愿、依赖会不会与 nixpkgs 共用包集冲突），再审计当前要求（by-name 结构 + nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI，以及**名单 handle 必须匹配 commit 作者**这条决定用哪个账号的硬约束），然后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物），**并且逐行通读要提交的那份 diff**（判据抓不到的空 maintainers、内部注释、注释语言、冗余输入、正文错数字，全在这一步），最后才 fork 提 PR（**PR 模板不得删改、fork 的 master 要先快进**）。含 Qt 依赖者的必填项（依赖 qtbase 不声明包装意图就在 qtPreHook 阶段失败）、`__structuredAttrs` 的实测 A/B、PR 正文要短这条实测反馈（审阅者批准时附的「验证段能再短些」）、AI 贡献政策（Assisted-by trailer，commit/PR 正文/评论三层各自披露）、包该放哪的第三种去向（具名集合靠求值确认发现机制）、nixpkgs-review 的三个坑（空报告=求值失败、绿但全缓存、pr 子命令审不了 fork PR）、跨 nixpkgs 版本比产物为何不能比字节、以及自动检查假警报的处置。仓库特有的文档与日志环节经「仓库适配层」注入。
 ---
 
 # 把软件包提交到上游 nixpkgs（通用）
@@ -186,6 +186,31 @@ pkgs/by-name/<两字母小写前缀>/<包名>/package.nix
 - 用 `pkgs.callPackage` 的新顶层包**必须**走 package directory，进去就不能搬回类别目录；
 - 新顶层包必须 `strictDeps = true`，且不能回退成 `false`；
 - 新顶层包必须 `__structuredAttrs = true`，且不能回退成 `false`。
+
+**`__structuredAttrs` 到底改了什么 —— 实测过的 A/B**：
+
+| | 不启用 | 启用 |
+|---|---|---|
+| `strictDeps` | `env` 里的**字符串** `"1"` | `structuredAttrs` 里的**布尔** `True` |
+| `cmakeFlags` | **空格拼成的一个字符串** | **JSON 真数组** |
+| `nativeBuildInputs` | env 里的字符串 | store 路径**列表** |
+| `postInstall` 等 | env 变量 | 结构化字段 |
+
+三条实测结论：
+
+- **对产物没有任何影响** —— 同一个包在启用前后，`.so` **逐字节相同**
+  （`4e308a2793ae…`），`config.json`、`en-US.ini` 也相同。store 路径变了、
+  里面装的东西没变。**所以它是纯粹「更正确」，零附带改动。**
+- **数组形态更抗错**：原来的空格拼接在「某个标志里带空格」时会裂开，
+  结构化数组不会。**所以原本用 list 的 `cmakeFlags` 不需要改成字符串。**
+- **`env` 只放要导出的**：属性搬进 JSON 后 `env.strictDeps`、`env.cmakeFlags`
+  都不见了 —— 想让某个变量真的出现在环境里，得写进 `env`。`passAsFile` 同时被禁用。
+
+`doc/stdenv/stdenv.chapter.md` 的原话：**"is the preferred default"**，以及
+**"All new top level packages must enable `__structuredAttrs`"**。
+**后半句限定「顶层包」** —— 住在具名集合里的包（`obs-studio-plugins.*`、
+`python3Packages.*`）**不受 nixpkgs-vet 强制**，但审阅者仍会提
+（原话通常是 "Might also try setting `__structuredAttrs`?"），因为那是全仓方向。
 
 其余要记住的：
 
@@ -393,6 +418,33 @@ the attribute name is the file name without the `.nix` extension"），
 > 它问的不是「你有没有做过特殊的事」，而是**别人将来能不能安全地把它改掉**。
 > 写了「上游 CMakePresets 打开了这两个开关、而 CMakeLists 默认关」，
 > 后来者才知道什么时候可以删掉这两行。
+
+
+### 2.7 依赖 qtbase 就必须声明包装意图（否则构建在最早期就失败）
+
+**任何 `buildInputs` 里有 `qt6.qtbase` 的包，必须在「应用」与「库/插件」之间表明身份**，
+否则 Qt 的钩子直接拒绝构建 —— 实测报错原文：
+
+```
+Running phase: qtPreHook
+Error: this derivation depends on qtbase, but no wrapping behavior was specified.
+  - If this is an application, add wrapQtAppsHook to nativeBuildInputs
+  - If this is a library or you need custom wrapping logic, set dontWrapQtApps = true
+```
+
+| 你打包的是 | 要写 |
+|---|---|
+| **应用**（自己有 `bin/`，要带上 Qt 的运行时环境） | `nativeBuildInputs` 里加 `wrapQtAppsHook` |
+| **库 / 插件**（OBS 插件、KDE 的 `.so`、Qt 插件） | `dontWrapQtApps = true;` |
+
+> **这是「必需」不是「可选」** —— 删掉 `dontWrapQtApps = true;`，构建立刻红。
+>
+> **⚠️ 一个我差点写错的推断**：曾想过「这个包没有 `bin/`，包装钩子无事可做，
+> 所以删掉也没影响」。**错了** —— 钩子在 `qtPreHook` 阶段（早于任何安装）
+> 就检查这个前提，**它不管你有没有 `bin/`**。
+>
+> **判据的教训**：「没量过」不等于「没影响」。要验证某个标志是否被读到，
+> **把它注释掉再构建** —— 报错就是被读到了。这个实验比读源码推理快且可靠。
 
 ---
 

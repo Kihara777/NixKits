@@ -40,6 +40,7 @@
   revisions: do **not** compare bytes, compare the **output paths**. Comparing artifacts built against different nixpkgs
   revisions: do **not** compare bytes, compare the **output paths**
 - **Keep the PR body short**: the reviewer attached "the verification section could be a little shorter" to their approval — details belong in commit messages and the draft directory; the body only answers what/why/which rules
+- **A mandatory declaration for Qt dependents**: if `buildInputs` contains `qt6.qtbase` you must pick one — an application adds `wrapQtAppsHook`, a library/plugin sets `dontWrapQtApps = true`; otherwise the build fails at the `qtPreHook` phase
 - **Submission**: the ordering of the two commits (the maintainer entry comes first),
   branching and the PR, waiting, and how to speed things up
 - **Trap list**: licence gaps, stale self-descriptions in a repository, the same software

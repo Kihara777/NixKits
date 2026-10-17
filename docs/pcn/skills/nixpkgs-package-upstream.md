@@ -32,6 +32,7 @@
   異 nixpkgs 版 対 build 産物 比較 時 **byte 比較 不**——**産物路径** 比較。
   異 nixpkgs 版 対 build 産物 比較 時 **byte 比較 不**——**産物路径** 比較
 - **PR 本文 短**：審閲者 批准 時「検証節 更 短 可能」添——細部 commit message 與 草稿目录 家、本文 「何・何故・何規則 触」 答 限
+- **Qt 依存者 必須事項**：`buildInputs` 内 `qt6.qtbase` 在 場合 二択——応用 `wrapQtAppsHook`、庫/插件 `dontWrapQtApps = true`。否則 `qtPreHook` 段階 失敗
 - **実施**：二 commit 順序（維護者条目 先）、分岐 PR、待機 加速手段
 - **罠一覧**：許諾缺口、倉庫自述陳腐化、同名別包、文書漂移、事前編訳二進、
   符号連結樹 再帰的 chmod nix store 到達

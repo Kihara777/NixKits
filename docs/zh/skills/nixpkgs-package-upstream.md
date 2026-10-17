@@ -32,6 +32,7 @@
 - **`nixpkgs-review` 的三个坑**：空报告 = 求值失败、绿了但全是缓存、`pr` 子命令
   审不了 fork 里的 PR（那要用 `rev` + head sha）
 - **PR 正文要短**：审阅者在批准时附了一句「验证段能再短些」——细则是 commit message 与草稿目录的家，正文只回答「是什么/为什么/有没有踩规则」
+- **Qt 依赖者的必填项**：`buildInputs` 里有 `qt6.qtbase` 就必须二选一——应用加 `wrapQtAppsHook`，库/插件写 `dontWrapQtApps = true`；否则在 `qtPreHook` 阶段直接失败
 - **实操**：两个 commit 的顺序（维护者条目在前）、**fork 的 master 先快进**、
   **PR 模板不得删改**、分支与 PR、等待与加速
 - **陷阱清单**：许可缺口、仓库自述过期、同名不同包、文档漂移、预编译二进制、
