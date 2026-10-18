@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-18T10:51:03+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 翻页区高度加 220ms 过渡（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1050130900)）
+
+- rev `82e0724` → `0de5067`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内过渡函数 5 处
+
+| 提交 | 说明 |
+|------|------|
+| `bb73c21` | chore(dsh-api-balance): 薄封装 rev 跟进 0de5067 —— 翻页区高度过渡 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `82e0724` → `0de5067` |
+
 ## 2026-10-18T08:54:07+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 插件设置加全屏开关 + 开关区自适应列数（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t0853180900)）
