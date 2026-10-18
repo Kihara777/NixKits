@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T08:40:21+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — the width self-lock fixed ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0839440900))
+
+- rev `2799e07` → `528bcd2`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains 4 occurrences of `widthBeforeSettings`
+
+| Commit | Description |
+|------|------|
+| `b8441fe` | chore(dsh-api-balance): re-pin the wrapper to 528bcd2 — width self-lock fix |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `2799e07` → `528bcd2` |
+
 ## 2026-10-19T08:30:33+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — panel width restored after closing settings ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0829500900))
