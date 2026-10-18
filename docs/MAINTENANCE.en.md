@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T12:47:55+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — empty-body fix, inline settings, panel show/hide ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900))
+
+- rev `86b4b9b` → `37ce102`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains 7 new symbols in index.js and 6 in client.js
+
+| Commit | Description |
+|------|------|
+| `3632485` | chore(dsh-api-balance): re-pin the wrapper to 37ce102 — empty-body fix, inline settings, panel show/hide |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `86b4b9b` → `37ce102` |
+
 ## 2026-10-18T12:26:45+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — non-linear easing and interruptible transitions ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1225460900))

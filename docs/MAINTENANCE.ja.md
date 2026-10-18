@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T12:47:55+09:00
+
+**概要**：dsh-api-balance re-pin —— 空応答修正・設定の内聯化・パネル表示/非表示（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900)）
+
+- rev `86b4b9b` → `37ce102`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に新シンボル index.js 7 箇所・client.js 6 箇所
+
+| コミット | 説明 |
+|------|------|
+| `3632485` | chore(dsh-api-balance): re-pin を 37ce102 へ —— 空応答修正・設定内聯化・表示/非表示 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `86b4b9b` → `37ce102` |
+
 ## 2026-10-18T12:26:45+09:00
 
 **概要**：dsh-api-balance re-pin —— 非線形イージングと中断可能な遷移（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1225460900)）
