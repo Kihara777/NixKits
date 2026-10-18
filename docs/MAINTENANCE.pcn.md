@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-19T08:17:27+09:00
+
+**摘要**：dsh-api-balance re-pin —— panel 初回 open 位置偏移 修正（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0816410900)）
+
+- rev `37ce102` → `8137403`；版本 `0.1.1` 不変——源码変更 実行時挙動 影響、field 級判据 以 更新
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変（依存 與 lock 未変、build 通過 其証）
+- 判据：`nix build` 成功；産物 内 `visibility: panelRight !== null` 配置 guard 含
+
+| 提交 | 説明 |
+|------|------|
+| `bdbc978` | chore(dsh-api-balance): re-pin 到 8137403 —— 初回 open 位置 修正 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `37ce102` → `8137403` |
+
 ## 2026-10-18T12:47:55+09:00
 
 **摘要**：dsh-api-balance re-pin —— 空応答修正・設定内聯化・panel 表示/非表示（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900)）

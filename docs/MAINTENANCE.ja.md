@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T08:17:27+09:00
+
+**概要**：dsh-api-balance re-pin —— パネル初回オープン時の位置ずれ修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0816410900)）
+
+- rev `37ce102` → `8137403`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に `visibility: panelRight !== null` の配置ガードを含む
+
+| コミット | 説明 |
+|------|------|
+| `bdbc978` | chore(dsh-api-balance): re-pin を 8137403 へ —— 初回オープン位置の修正 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `37ce102` → `8137403` |
+
 ## 2026-10-18T12:47:55+09:00
 
 **概要**：dsh-api-balance re-pin —— 空応答修正・設定の内聯化・パネル表示/非表示（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900)）

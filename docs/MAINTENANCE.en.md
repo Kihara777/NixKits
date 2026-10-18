@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T08:17:27+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — wrong first-open panel position fixed ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0816410900))
+
+- rev `37ce102` → `8137403`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains the `visibility: panelRight !== null` placement guard
+
+| Commit | Description |
+|------|------|
+| `bdbc978` | chore(dsh-api-balance): re-pin the wrapper to 8137403 — first-open position fix |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `37ce102` → `8137403` |
+
 ## 2026-10-18T12:47:55+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — empty-body fix, inline settings, panel show/hide ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900))

@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-19T08:17:27+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 面板首次打开位置错位修复（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0816410900)）
+
+- rev `37ce102` → `8137403`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内含 `visibility: panelRight !== null` 的定位保护
+
+| 提交 | 说明 |
+|------|------|
+| `bdbc978` | chore(dsh-api-balance): 薄封装 rev 跟进 8137403 —— 首次打开位置修复 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `37ce102` → `8137403` |
+
 ## 2026-10-18T12:47:55+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 空响应修复 + 设置内联与面板显隐（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1246230900)）
