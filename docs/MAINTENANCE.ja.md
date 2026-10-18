@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-18T11:11:53+09:00
+
+**概要**：dsh-api-balance re-pin —— 「用量 ↔ 残高」切替時のパネル高さ遷移（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1111110900)）
+
+- rev `0de5067` → `595dd15`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物にパネル計測・視差軽減のシンボル 6 箇所
+
+| コミット | 説明 |
+|------|------|
+| `22b5601` | chore(dsh-api-balance): re-pin を 595dd15 へ —— パネル高さのトランジション |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `0de5067` → `595dd15` |
+
 ## 2026-10-18T10:51:03+09:00
 
 **概要**：dsh-api-balance re-pin —— ページめくり領域の高さに 220ms のトランジションを追加（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-18t1050130900)）
