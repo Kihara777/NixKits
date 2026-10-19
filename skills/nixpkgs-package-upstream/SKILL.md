@@ -928,6 +928,31 @@ squash commits in this case. Use `git rebase -i`.」，然后明确「**是要�
   都没写它，照样被自动跟新（一个月四次）。
 - **不存在 `meta.dontUpdate` 这个标记**——想让 r-ryantm 跳过，靠的是不设 updateScript。
 - 合并后，你就是维护者：上游发版要跟。
+- 合并后删掉自己的分支（PR 的 head 分支），保持 fork 干净。
+
+### 附：一次完整首次贡献的轨迹（2026-10-10 → 10-19，`obs-bilibili-stream`）
+
+| 阶段 | 动作 | 判据 / 结果 |
+|---|---|---|
+| 选包与审计 | 可行性、许可、上游 issue | 先搜上游有没有人做过；不要先问「要许可」 |
+| 写包 | 定义 + 本地 `nixpkgs-review` | 1 package added / built |
+| 开 PR | `maintainers` commit + init commit | 正文含 AI 披露段（与 commit 分开） |
+| 评审 | 四条建议 | 三分类；全部应用 |
+| 修补 | 两个 follow-up commit | 追加式 `git push` |
+| squash | 维护者要求 | 两个 commit；`--force-with-lease` |
+| 复核 | 评审者 dismiss + 触发 `nixpkgs-review-gha` | 两平台各 1 package built |
+| 合并 | committer 手动合并 | merge commit 进 master |
+
+**三个「下一次会更快」的点：**
+
+1. **规范依据有两个来源：文档 + 社区。** 文档给 must / should；社区（维护者群、PR 评论）
+   给「这一次到底要不要」。问一句「这是建议还是要求」，通常能拿到明确答复——
+   这次就拿到了「nixpkgs 可 force push」与「是要求」。
+2. **`nixpkgs-review` 不必自己跑所有平台。** 评审者可在 PR 上触发
+   `nixpkgs-review-gha`，结果以评论形式贴出（每个平台 `1 package built` 或
+   `No rebuilds`）。本地拉不到的 SHA，可以请他们跑。
+3. **「没有动静」不等于卡住。** 实测：推 squash 到评审者处理隔 **2 小时**；
+   从开 PR 到合并共 **2 天 22 小时**。期间不需要催。
 
 ---
 
