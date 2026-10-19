@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T10:29:17+09:00
+
+**概要**：feat(skill): review 後の commit 構造要件（squash と force-push）
+
+- 2026-10-19、メンテナが明示：review 修正の commit は元の commit に squash し、初回貢献は `maintainers` と `init` の 2 コミットに保つ
+- CONTRIBUTING 第 7 条は「commit の追加」と「履歴の書き換え」を分け、前者は通常の push、後者は `--force-with-lease`（期待値を明示）を要求
+- squash の検証チェーン：ツリー同一 → `outPath` 同一 → 成果物ハッシュ同一。ローカル SHA は取得できないため `nixpkgs-review` は実行不可
+- 実測 2 件：PR のタイトルと本文は force-push の影響を受けない。diff の形が同じなら行内コメントは outdated にならない
+- 判据：四言語の条目数が相等（407）、全検査器通過
+
+| コミット | 説明 |
+|------|------|
+| `f41762d` | feat(skill): review 後の commit 構造要件（squash と force-push） |
+
 ## 2026-10-19T08:40:21+09:00
 
 **概要**：dsh-api-balance re-pin —— 幅の自己ロック修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0839440900)）

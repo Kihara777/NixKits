@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-19T10:29:17+09:00
+
+**摘要**：feat(skill): review 後 commit 構造要件（squash 與 force-push）
+
+- 2026-10-19、維護者 明示：review 修正 commit 元 commit squash、初回貢献 `maintainers` 與 `init` 二 commit 保持
+- CONTRIBUTING 第 7 条「commit 追加」與「履歴書換」分離：前者 通常 push、後者 `--force-with-lease`（期待値 明示）必須
+- squash 検証鏈：樹 同一 → `outPath` 同一 → 産物 hash 同一。local SHA 取得不能、`nixpkgs-review` 実行不能
+- 実測 二件：PR 標題 與 正文 force-push 影響 受 無。diff 形状 同一 時、行内 comment outdated 化 無
+- 判据：四言語 条目数 相等（407）、全検査器 通過
+
+| 提交 | 説明 |
+|------|------|
+| `f41762d` | feat(skill): review 後 commit 構造要件（squash 與 force-push） |
+
 ## 2026-10-19T08:40:21+09:00
 
 **摘要**：dsh-api-balance re-pin —— 幅 自鎖点 修正（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0839440900)）

@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-19T10:29:17+09:00
+
+**摘要**：feat(skill): review 后的 commit 结构要求（squash 与 force-push）
+
+- 维护者 2026-10-19 明确要求：review 修补提交 squash 回原提交，首次贡献最终保留 `maintainers` + `init` 两个 commit
+- CONTRIBUTING 第 7 条把「加提交」与「改写历史」分开：前者普通 push，后者必须 `--force-with-lease` 并显式给期望值
+- squash 验证链：树同 → `outPath` 同 → 产物哈希同；本地 SHA 拉不到，`nixpkgs-review` 跑不了
+- 两个实测：PR 标题/正文不受 force-push 影响；diff 形状相同时行内评论不变 outdated
+- 判据：四语条目数相等（407），全套检查器通过
+
+| 提交 | 说明 |
+|------|------|
+| `f41762d` | feat(skill): review 后的 commit 结构要求（squash 与 force-push） |
+
 ## 2026-10-19T08:40:21+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 宽度卡住自锁点修复（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0839440900)）

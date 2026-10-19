@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T10:29:17+09:00
+
+**Summary**: feat(skill): commit structure requirements after review (squash and force-push)
+
+- Maintainers made it explicit on 2026-10-19: review-fix commits must be squashed into the original commit, and a first contribution keeps exactly two commits, `maintainers` plus `init`
+- CONTRIBUTING section 7 separates adding commits (plain push) from rewriting history (`--force-with-lease` with an explicit expected value)
+- Squash verification chain: same tree → same `outPath` → same artifact hashes; the local SHA cannot be fetched, so `nixpkgs-review` cannot run on it
+- Two measurements: the PR title and body are unaffected by force-push; inline comments do not become outdated when the diff keeps the same shape
+- Criterion: equal entry counts across four languages (407), all checkers pass
+
+| Commit | Description |
+|------|------|
+| `f41762d` | feat(skill): commit structure requirements after review (squash and force-push) |
+
 ## 2026-10-19T08:40:21+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — the width self-lock fixed ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-19t0839440900))
