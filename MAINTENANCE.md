@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T02:11:01+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 宽度测量改读内容固有宽度（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0210120900)）
+
+- rev `528bcd2` → `bee1eb5`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内 `el.style.width = "auto"` 存在
+
+| 提交 | 说明 |
+|------|------|
+| `ff40a46` | chore(dsh-api-balance): 薄封装 rev 跟进 bee1eb5 —— 宽度测量修正 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `528bcd2` → `bee1eb5` |
+
 ## 2026-10-19T14:45:49+09:00
 
 **摘要**：feat(skill): updateScript 的实测结论 —— 不必单独开 PR

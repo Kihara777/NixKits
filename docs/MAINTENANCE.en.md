@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T02:11:01+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — width measurement now reads the intrinsic content width ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0210120900))
+
+- rev `528bcd2` → `bee1eb5`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains `el.style.width = "auto"`
+
+| Commit | Description |
+|------|------|
+| `ff40a46` | chore(dsh-api-balance): re-pin the wrapper to bee1eb5 — measurement fix |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `528bcd2` → `bee1eb5` |
+
 ## 2026-10-19T14:45:49+09:00
 
 **Summary**: feat(skill): measured conclusion on updateScript — no separate PR needed
