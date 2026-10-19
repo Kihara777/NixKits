@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T02:56:40+09:00
+
+**摘要**：dsh-api-balance re-pin —— 幅 陳旧 closure 修正（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900)）
+
+- rev `bee1eb5` → `8be9246`；版本 `0.1.1` 不変——源码変更 実行時挙動 影響、field 級判据 以 更新
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変（依存 與 lock 未変、build 通過 其証）
+- 判据：`nix build` 成功；産物 内 `settingsOpenRef` 4 箇所
+
+| 提交 | 説明 |
+|------|------|
+| `2ae49ed` | chore(dsh-api-balance): re-pin 到 8be9246 —— 陳旧 closure 修正 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `bee1eb5` → `8be9246` |
+
 ## 2026-10-20T02:11:01+09:00
 
 **摘要**：dsh-api-balance re-pin —— 幅計測 内容固有幅 変更（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0210120900)）

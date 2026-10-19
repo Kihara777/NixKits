@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T02:56:40+09:00
+
+**概要**：dsh-api-balance re-pin —— 幅の古いクロージャ修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900)）
+
+- rev `bee1eb5` → `8be9246`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に `settingsOpenRef` が 4 箇所
+
+| コミット | 説明 |
+|------|------|
+| `2ae49ed` | chore(dsh-api-balance): re-pin を 8be9246 へ —— 古いクロージャ修正 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `bee1eb5` → `8be9246` |
+
 ## 2026-10-20T02:11:01+09:00
 
 **概要**：dsh-api-balance re-pin —— 幅の計測を内容固有幅に変更（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0210120900)）

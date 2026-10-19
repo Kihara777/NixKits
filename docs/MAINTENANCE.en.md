@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T02:56:40+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — stale-closure width fix ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900))
+
+- rev `bee1eb5` → `8be9246`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains 4 occurrences of `settingsOpenRef`
+
+| Commit | Description |
+|------|------|
+| `2ae49ed` | chore(dsh-api-balance): re-pin the wrapper to 8be9246 — stale-closure width fix |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `bee1eb5` → `8be9246` |
+
 ## 2026-10-20T02:11:01+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — width measurement now reads the intrinsic content width ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0210120900))
