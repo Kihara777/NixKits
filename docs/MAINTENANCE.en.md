@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T13:52:56+09:00
+
+**Summary**: feat(skill): full trajectory of a first contribution (`obs-bilibili-stream` merged)
+
+- Upstream PR #574725 was merged by Prince213 on 2026-10-19 (merge commit `4f4b7322`); it kept two commits and the head branch is deleted
+- The skill gains a full-trajectory table: package selection and audit → writing the package → opening the PR → review → follow-ups → squash → re-check → merge
+- Three things that speed up next time: normative answers come from docs and from the community; reviewers can trigger `nixpkgs-review-gha`; "no movement" is not a stall (measured 2 hours / 2 days 22 hours)
+- Criterion: equal entry counts across four languages (408), all checkers pass
+
+| Commit | Description |
+|------|------|
+| `86c69cc` | feat(skill): full trajectory of a first contribution (`obs-bilibili-stream` merged) |
+
 ## 2026-10-19T10:29:17+09:00
 
 **Summary**: feat(skill): commit structure requirements after review (squash and force-push)

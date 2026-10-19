@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-19T13:52:56+09:00
+
+**摘要**：feat(skill): 初回貢献 全体軌跡（`obs-bilibili-stream` 併合済）
+
+- 上流 PR #574725 2026-10-19 Prince213 併合（merge commit `4f4b7322`）、2 commit 保持、head branch 削除済
+- skill 「全体軌跡」表 追加：package 選定 與 監査 → package 作成 → PR 作成 → review → 追補 → squash → 再検査 → 併合
+- 次回 高速化 三 点：規範 根拠 文書 與 社群 両方 取得；`nixpkgs-review-gha` review 者 起動 可能；「動 無」停滯 非（実測 2 時間 / 2 日 22 時間）
+- 判据：四言語 条目数 相等（408）、全検査器 通過
+
+| 提交 | 説明 |
+|------|------|
+| `86c69cc` | feat(skill): 初回貢献 全体軌跡（`obs-bilibili-stream` 併合済） |
+
 ## 2026-10-19T10:29:17+09:00
 
 **摘要**：feat(skill): review 後 commit 構造要件（squash 與 force-push）

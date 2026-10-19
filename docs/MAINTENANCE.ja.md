@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T13:52:56+09:00
+
+**概要**：feat(skill): 初回貢献の全体軌跡（`obs-bilibili-stream` はマージ済み）
+
+- 上流 PR #574725 は 2026-10-19 に Prince213 によりマージ（merge commit `4f4b7322`）、2 コミットを保持し head ブランチは削除済み
+- スキルに「全体軌跡」表を追加：パッケージ選定と監査 → パッケージ作成 → PR 作成 → レビュー → 追補 → squash → 再検査 → マージ
+- 次回を速くする三点：規範の根拠はドキュメントとコミュニティの両方から得る；`nixpkgs-review-gha` はレビュアーが起動できる；「動きがない」は停滞ではない（実測 2 時間 / 2 日 22 時間）
+- 判据：四言語の条目数が相等（408）、全検査器通過
+
+| コミット | 説明 |
+|------|------|
+| `86c69cc` | feat(skill): 初回貢献の全体軌跡（`obs-bilibili-stream` はマージ済み） |
+
 ## 2026-10-19T10:29:17+09:00
 
 **概要**：feat(skill): review 後の commit 構造要件（squash と force-push）

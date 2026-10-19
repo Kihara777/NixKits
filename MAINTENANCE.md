@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-19T13:52:56+09:00
+
+**摘要**：feat(skill): 首次贡献完整轨迹（obs-bilibili-stream 已合并）
+
+- 上游 PR #574725 于 2026-10-19 由 Prince213 合并（merge commit `4f4b7322`），保留 2 个 commit，head 分支已删
+- 技能补入「完整轨迹」表：选包审计 → 写包 → 开 PR → 评审 → 修补 → squash → 复核 → 合并
+- 三个提速点：规范依据来自文档 + 社区；`nixpkgs-review-gha` 可由评审者触发；「没动静」不等于卡住（实测 2 小时 / 2 天 22 小时）
+- 判据：四语条目数相等（408），全套检查器通过
+
+| 提交 | 说明 |
+|------|------|
+| `86c69cc` | feat(skill): 首次贡献完整轨迹（obs-bilibili-stream 已合并） |
+
 ## 2026-10-19T10:29:17+09:00
 
 **摘要**：feat(skill): review 后的 commit 结构要求（squash 与 force-push）
