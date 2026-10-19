@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T03:23:54+09:00
+
+**Summary**: refactor(packages): every package definition aligned with upstream conventions
+
+- 13 package files gain `strictDeps = true` / `__structuredAttrs = true`; 12 were actually rebuilt, `codewhale-src` is syntax-checked because it is only used on riscv64
+- `obs-bilibili-stream` now uses `lib.cmakeBool`, `inherit (obs-studio.meta) platforms` and drops the stale `mainProgram` — its output path matches the upstream package
+- Wrappers (dsh-alpha, dsh-nixos-shell-stable, ruyi-beta/alpha) inherit from their base packages and need no change
+- Criterion: `nix flake check --no-build` reports all checks passed; all 13 packages were built or evaluated individually
+- Equal entry counts across four languages (412)
+
+| Commit | Description |
+|------|------|
+| `4e8990b` | refactor(packages): apply upstream conventions to all package definitions |
+
 ## 2026-10-20T02:56:40+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — stale-closure width fix ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900))

@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T03:23:54+09:00
+
+**摘要**：refactor(packages): 全部 package 定義 上流 規範 対齐
+
+- 13 package 文件 `strictDeps = true` / `__structuredAttrs = true` 追加；12 個 実再 build 通過、`codewhale-src` riscv64 専用 故 構文評価 唯
+- `obs-bilibili-stream` `lib.cmakeBool`、`inherit (obs-studio.meta) platforms` 使用、古 `mainProgram` 削除 —— 出力 path 上流 package 一致
+- wrapper（dsh-alpha、dsh-nixos-shell-stable、ruyi-beta/alpha）基底 package 継承 故 変更 不要
+- 判据：`nix flake check --no-build` all checks passed、13 個 個別 build 或 評価
+- 四言語 条目数 相等（412）
+
+| 提交 | 説明 |
+|------|------|
+| `4e8990b` | refactor(packages): apply upstream conventions to all package definitions |
+
 ## 2026-10-20T02:56:40+09:00
 
 **摘要**：dsh-api-balance re-pin —— 幅 陳旧 closure 修正（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900)）

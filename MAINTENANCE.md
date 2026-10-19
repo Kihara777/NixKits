@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T03:23:54+09:00
+
+**摘要**：refactor(packages): 全部包定义对齐上游规范
+
+- 13 个包文件加 `strictDeps = true` / `__structuredAttrs = true`；12 个实际重建通过，`codewhale-src` 仅 riscv64 使用故只做语法求值
+- `obs-bilibili-stream` 改用 `lib.cmakeBool`、`inherit (obs-studio.meta) platforms`、删过时的 `mainProgram`——输出路径与上游包一致
+- 包装器（dsh-alpha、dsh-nixos-shell-stable、ruyi-beta/alpha）从主包继承，无需改动
+- 判据：`nix flake check --no-build` all checks passed，13 个包逐一构建或求值
+- 四语条目数相等（412）
+
+| 提交 | 说明 |
+|------|------|
+| `4e8990b` | refactor(packages): apply upstream conventions to all package definitions |
+
 ## 2026-10-20T02:56:40+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 宽度陈旧闭包修复（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-20t0256040900)）
