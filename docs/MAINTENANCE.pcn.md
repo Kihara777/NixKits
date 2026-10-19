@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T03:30:56+09:00
+
+**摘要**：fix(codewhale-src): 交叉编訳 下 __structuredAttrs 開 無
+
+- 前回 全 package `__structuredAttrs` 追加 後、`Build codewhale (riscv64)` 失敗：stdenv setup:587 `declare: AR_x86_64-…: not a valid identifier` 報告
+- 根因：`__structuredAttrs` 環境変数 shell 識別子 扱、交叉編訳 `AR_<triplet>` `-` 含
+- 修法：`codewhale-src` `strictDeps` 保持、`__structuredAttrs` 意図的 開 無、理由 comment；他 12 package 影響 無
+- 判据：修正後 全 33 workflow 成功（riscv64 交叉 build 含）
+- 四言語 条目数 相等（413）
+
+| 提交 | 説明 |
+|------|------|
+| `d0d6544` | fix(codewhale-src): do not enable __structuredAttrs |
+
 ## 2026-10-20T03:23:54+09:00
 
 **摘要**：refactor(packages): 全部 package 定義 上流 規範 対齐

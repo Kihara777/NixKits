@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T03:30:56+09:00
+
+**概要**：fix(codewhale-src): クロスコンパイルでは __structuredAttrs を有効にしない
+
+- 全パッケージに `__structuredAttrs` を追加した後、`Build codewhale (riscv64)` が失敗：stdenv setup:587 が `declare: AR_x86_64-…: not a valid identifier` を報告
+- 根因：`__structuredAttrs` は環境変数をシェル識別子として扱うが、クロスコンパイルの `AR_<triplet>` には `-` が含まれる
+- 修法：`codewhale-src` は `strictDeps` を残し、`__structuredAttrs` を意図的に有効化せず理由をコメント；他の 12 パッケージは影響なし
+- 判据：修正後、全 33 ワークフローが成功（riscv64 クロスビルドを含む）
+- 四言語の条目数が相等（413）
+
+| コミット | 説明 |
+|------|------|
+| `d0d6544` | fix(codewhale-src): do not enable __structuredAttrs |
+
 ## 2026-10-20T03:23:54+09:00
 
 **概要**：refactor(packages): すべてのパッケージ定義を上流の規約に合わせる

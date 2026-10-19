@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T03:30:56+09:00
+
+**摘要**：fix(codewhale-src): 交叉编译下不开 __structuredAttrs
+
+- 上一轮给全部包加 `__structuredAttrs` 后，`Build codewhale (riscv64)` 失败：stdenv setup:587 报 `declare: AR_x86_64-…: not a valid identifier`
+- 根因：`__structuredAttrs` 把环境变量当 shell 标识符，而交叉编译的 `AR_<triplet>` 含 `-`
+- 修法：`codewhale-src` 保留 `strictDeps`、刻意不开 `__structuredAttrs` 并注释原因；其余 12 个包不受影响
+- 判据：修复后全部 33 个工作流成功（含 riscv64 交叉构建）
+- 四语条目数相等（413）
+
+| 提交 | 说明 |
+|------|------|
+| `d0d6544` | fix(codewhale-src): do not enable __structuredAttrs |
+
 ## 2026-10-20T03:23:54+09:00
 
 **摘要**：refactor(packages): 全部包定义对齐上游规范

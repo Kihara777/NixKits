@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T03:30:56+09:00
+
+**Summary**: fix(codewhale-src): keep __structuredAttrs off for cross-compilation
+
+- After enabling `__structuredAttrs` on every package, `Build codewhale (riscv64)` failed: stdenv setup:587 reported `declare: AR_x86_64-…: not a valid identifier`
+- Root cause: `__structuredAttrs` treats environment variables as shell identifiers, but cross-compilation's `AR_<triplet>` contains `-`
+- Fix: `codewhale-src` keeps `strictDeps` and deliberately leaves `__structuredAttrs` off, with a comment explaining why; the other 12 packages are unaffected
+- Criterion: all 33 workflows pass after the fix (including the riscv64 cross build)
+- Equal entry counts across four languages (413)
+
+| Commit | Description |
+|------|------|
+| `d0d6544` | fix(codewhale-src): do not enable __structuredAttrs |
+
 ## 2026-10-20T03:23:54+09:00
 
 **Summary**: refactor(packages): every package definition aligned with upstream conventions
