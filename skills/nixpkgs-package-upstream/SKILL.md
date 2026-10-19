@@ -868,6 +868,57 @@ const allByName = files.every(({ filename }) =>
 
 **这不是卡住，是这类包的正常通道。**
 
+### review 之后要改 commit 结构：squash 进原提交，再 force-push
+
+**2026-10-19 维护者群里的原话**：
+
+> obs-bilibili-stream 的那三个 commit 应该合成一个
+> 保留 `maintainers: xxx` 和后面的 init，共两个，是比较推荐的
+> nixpkgs 可 force push
+
+并引用 CONTRIBUTING「If you have commits `pkg-name: oh, forgot to insert whitespace`:
+squash commits in this case. Use `git rebase -i`.」，然后明确「**是要求**」。
+
+**三条硬性要求：**
+
+1. **review 产生的修补提交不能留在最终历史里。** 「修 review」不是新的逻辑单元，
+   是同一个 init 的碎片（CONTRIBUTING §Commit conventions：Create one commit for
+   each logical unit）。判据：`git log` 里出现 `init` 后面跟着
+   `enable __structuredAttrs`、`drop comments` 这类续篇 → 该 squash。
+2. **`maintainers: add <handle>` 是独立逻辑单元，squash 时保留。** 首次贡献的
+   最终历史 = **两个 commit**（名单在前、包在后），不是三个、也不是一个。
+3. **改写历史必须 force-push，而 nixpkgs 允许。** CONTRIBUTING 第 7 条把两件事分开写：
+   - 加新提交 → `git push`
+   - 改已有提交 / rebase → `git push --force-with-lease`
+
+   **所以「不碰 force」这条纪律只适用于「加提交」。** 需要 squash 时不带 force
+   根本推不上去——正确动作是 `--force-with-lease`，且**显式给期望值**
+   （本仓 `origin` 指向上游，本地没有 fork 的 tracking ref，无参 lease 不可靠）：
+
+   ```bash
+   git push \
+     --force-with-lease=refs/heads/<分支>:<远端当前 SHA> \
+     <fork URL> \
+     <新 SHA>:refs/heads/<分支>
+   ```
+
+**squash 的验证链（本地 SHA 拉不到，`nixpkgs-review` 跑不了）：**
+
+| 判据 | 怎么量 |
+|---|---|
+| 树未变 | `git diff --stat <旧头> <新头>` 为空 |
+| 派生未变 | 从新树求 `outPath`，与旧头相同 |
+| 产物未变 | 同一 output path 下 `.so` / `config.json` / `en-US.ini` 的 sha256 |
+
+树同 ⇒ 派生同 ⇒ 产物同。这条链比再构建一次更强。
+
+**两个实测事实（别再凭印象说）：**
+
+- **PR 标题与正文不受 force-push 影响**——它们在 PR 记录里，不在 commit 里。
+  推前推后各取 `title` / `body` 的 sha256 即可证明。
+- **行内评审评论不一定变 outdated**：squash 后 diff 形状不变（同样是「新增 N 行
+  文件」）时，锚点依然有效；实测四条评论全部 `outdated=false`。
+
 ---
 
 ## 第五步之后：跟踪与维护
