@@ -13,4 +13,3 @@
 | 项目 | 状态 | 原位置 | 详情 |
 |------|------|--------|------|
 | comfyui-rocm 补丁项目 | 已废弃（2026-09-15） | `modules/comfyui-rocm.nix` + 三个补丁 | [中文](docs/zh/deprecated/comfyui-rocm.md) · [EN](docs/en/deprecated/comfyui-rocm.md) · [JA](docs/ja/deprecated/comfyui-rocm.md) · [PCN](docs/pcn/deprecated/comfyui-rocm.md) |
-| obs-bilibili-stream 自建包 | 已废弃（2026-10-19） | `packages/obs-bilibili-stream.nix` + 两个构建工作流 | [中文](docs/zh/deprecated/obs-bilibili-stream.md) · [EN](docs/en/deprecated/obs-bilibili-stream.md) · [JA](docs/ja/deprecated/obs-bilibili-stream.md) · [PCN](docs/pcn/deprecated/obs-bilibili-stream.md) |

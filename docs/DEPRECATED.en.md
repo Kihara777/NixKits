@@ -15,4 +15,3 @@ ground, and makes past decisions easy to locate if something regresses.
 | Project | Status | Former location | Details |
 |---------|--------|-----------------|---------|
 | comfyui-rocm patch project | Retired (2026-09-15) | `modules/comfyui-rocm.nix` + three patches | [中文](zh/deprecated/comfyui-rocm.md) · [EN](en/deprecated/comfyui-rocm.md) · [JA](ja/deprecated/comfyui-rocm.md) · [PCN](pcn/deprecated/comfyui-rocm.md) |
-| obs-bilibili-stream self-built package | Retired (2026-10-19) | `packages/obs-bilibili-stream.nix` + two build workflows | [中文](zh/deprecated/obs-bilibili-stream.md) · [EN](en/deprecated/obs-bilibili-stream.md) · [JA](ja/deprecated/obs-bilibili-stream.md) · [PCN](pcn/deprecated/obs-bilibili-stream.md) |

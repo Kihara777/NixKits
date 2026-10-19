@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## 軟体
 
-平台対応 二種 分類：多数包 `lib.platforms.all` 宣言（平台制限 無）、上流二進 或 模組 制約 受 物（`codewhale`、`godot-ai`）Linux 限定。構造支援 亦 包毎 異 — 各包文書 構築徽章 参照。
+平台対応 二種 分類：多数包 `lib.platforms.all` 宣言（平台制限 無）、上流二進 或 模組 制約 受 物（`codewhale`、`obs-bilibili-stream`、`godot-ai`）Linux 限定。構造支援 亦 包毎 異 — 各包文書 構築徽章 参照。
 
 | 軟体 | 説明 | 文書 |
 |---|------|------|
@@ -27,6 +27,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | godot-ai | Godot 機関 MCP server 與 AI 工具 | [docs/pcn/godot-ai.md](pcn/godot-ai.md) |
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | mcp-searxng | SearXNG 向 MCP 伺服器 | [docs/pcn/mcp-searxng.md](pcn/mcp-searxng.md) |
+| obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 
@@ -93,7 +94,6 @@ nix registry add nixkits github:Kihara777/NixKits
 | 工程 | 説明 | 詳細 |
 |------|------|------|
 | comfyui-rocm | ComfyUI 之 ROCm 補丁工程 —— 上流 内蔵 済、補丁 全部 削除 | [pcn/deprecated/comfyui-rocm.md](pcn/deprecated/comfyui-rocm.md) |
-| obs-bilibili-stream | OBS Bilibili 配信拡張 —— 上流 nixpkgs 収録済、本倉 上流 参照 | [pcn/deprecated/obs-bilibili-stream.md](pcn/deprecated/obs-bilibili-stream.md) |
 
 ## 技能
 
