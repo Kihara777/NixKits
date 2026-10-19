@@ -12,6 +12,9 @@ buildNpmPackage (finalAttrs: {
   pname = "mcp-searxng";
   version = "2.6.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ihor-sokoliuk";
     repo = "MCP-searxng";

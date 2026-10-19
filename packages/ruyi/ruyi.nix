@@ -23,6 +23,9 @@
 let
   pname = "ruyi";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ruyisdk";
     repo = "ruyi";

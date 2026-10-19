@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage {
 
   src = ./kitsfmt-src;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   cargoVendorDir = "vendor";
 
   doCheck = true;

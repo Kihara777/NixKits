@@ -20,6 +20,9 @@ buildNpmPackage (finalAttrs: {
   pname = "dsh-api-balance";
   version = "0.1.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Kihara777";
     repo = "dsh-api-balance";

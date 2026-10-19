@@ -14,6 +14,9 @@ rustPlatform.buildRustPackage rec {
   pname = "codewhale";
   version = "0.10.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "codewhale-hq";
     repo = "Codewhale";

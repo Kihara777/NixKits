@@ -8,6 +8,9 @@ python3Packages.buildPythonPackage (finalAttrs: {
   pname = "blender-mcp";
   version = "1.0.3";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitea {
     domain = "projects.blender.org";
     owner = "lab";

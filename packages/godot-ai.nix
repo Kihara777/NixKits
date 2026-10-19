@@ -9,6 +9,9 @@ python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
   version = "4.3.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hi-godot";
     repo = "godot-ai";

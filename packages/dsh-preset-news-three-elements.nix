@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
   # 参考源码路径，installPhase 直接复制（与 dsh-nixos-shell 内嵌 skills 同构）。
   src = ./dsh-preset-news-three-elements;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   dontUnpack = true;
   dontBuild = true;
 

@@ -55,6 +55,9 @@ buildNpmPackage (finalAttrs: {
   # npmDepsHash 用 prefetch-npm-deps），不是从别处抄的。
   version = "0.26.4";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "grinev";
     repo = "opencode-telegram-bot";

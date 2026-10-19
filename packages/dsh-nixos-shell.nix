@@ -37,6 +37,9 @@ buildNpmPackage (finalAttrs: {
   pname = "dsh-nixos-shell";
   version = "0.1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = ./dsh-nixos-shell;
 
   # Embed the repository's canonical skills/ tree so the maintenance-skills

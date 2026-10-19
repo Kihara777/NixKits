@@ -40,6 +40,9 @@ buildNpmPackage (finalAttrs: {
   pname = "dsh";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://registry.npmjs.org/@deepseek-ai/dsh/-/dsh-${version}.tgz";
     inherit hash;

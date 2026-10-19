@@ -45,6 +45,9 @@ let
   # kernel boundary.
   sudoPtrace = stdenv.mkDerivation {
     name = "codewhale-sudo-ptrace";
+    strictDeps = true;
+    __structuredAttrs = true;
+
     src = ./codewhale-sudo-ptrace.c;
     dontUnpack = true;
     buildPhase = ''
@@ -60,6 +63,9 @@ in
 stdenv.mkDerivation {
   pname = "codewhale";
   inherit version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   dontUnpack = true;
 
