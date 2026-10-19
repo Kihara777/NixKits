@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:45:49+09:00
+
+**Summary**: feat(skill): measured conclusion on updateScript — no separate PR needed
+
+- Measured on 2026-10-19: only 4 of the 54 package definitions under `obs-studio-plugins` carry `updateScript`, and the members r-ryantm has bumped (obs-vertical-canvas, obs-backgroundremoval, droidcam-obs, obs-plugin-countdown) do not have it
+- Conclusion: r-ryantm bumps GitHub packages by default, so `passthru.updateScript` is not required
+- This corrects the earlier wording "no updateScript means no automatic bumps" — the same-day measurement refutes it
+- A first contribution need not open a separate PR for it: add it to the first upstream-bump PR, or skip it entirely if r-ryantm already tracks the package
+- Criterion: equal entry counts across four languages (409), all checkers pass
+
+| Commit | Description |
+|------|------|
+| `40ebbba` | feat(skill): measured conclusion on updateScript |
+
 ## 2026-10-19T13:52:56+09:00
 
 **Summary**: feat(skill): full trajectory of a first contribution (`obs-bilibili-stream` merged)

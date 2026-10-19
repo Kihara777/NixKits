@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:45:49+09:00
+
+**概要**：feat(skill): updateScript の実測結論 —— 別 PR は不要
+
+- 2026-10-19 実測：`obs-studio-plugins` の 54 個のパッケージ定義のうち `updateScript` を持つのは 4 個だけで、r-ryantm が更新したメンバー（obs-vertical-canvas、obs-backgroundremoval、droidcam-obs、obs-plugin-countdown）はいずれも持っていない
+- 結論：r-ryantm は GitHub のパッケージを既定で追跡するため、`passthru.updateScript` は必須ではない
+- 以前の「書かなければ自動更新されない」という記述を訂正 —— 同日の実測がそれを覆した
+- 初回貢献では別 PR を立てる必要はない：上流の最初の更新 PR に同乗させるか、r-ryantm が既に追跡していれば加えない
+- 判据：四言語の条目数が相等（409）、全検査器通過
+
+| コミット | 説明 |
+|------|------|
+| `40ebbba` | feat(skill): updateScript の実測結論 |
+
 ## 2026-10-19T13:52:56+09:00
 
 **概要**：feat(skill): 初回貢献の全体軌跡（`obs-bilibili-stream` はマージ済み）

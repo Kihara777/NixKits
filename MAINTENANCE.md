@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:45:49+09:00
+
+**摘要**：feat(skill): updateScript 的实测结论 —— 不必单独开 PR
+
+- 实测 `obs-studio-plugins` 目录 54 个包定义只有 4 个带 `updateScript`，而被 r-ryantm 跟新过的成员都没有它
+- 结论：r-ryantm 对 GitHub 包有默认跟新行为，`passthru.updateScript` 不是必需
+- 修正上一版「没写它就不会自动跟新」的表述——同日实测推翻了它
+- 首次贡献不必为它单独开 PR：等上游首个更新 PR 时顺手带上，或发现 r-ryantm 已在跟就不加
+- 判据：四语条目数相等（409），检查器全通过
+
+| 提交 | 说明 |
+|------|------|
+| `40ebbba` | feat(skill): updateScript 的实测结论 |
+
 ## 2026-10-19T13:52:56+09:00
 
 **摘要**：feat(skill): 首次贡献完整轨迹（obs-bilibili-stream 已合并）

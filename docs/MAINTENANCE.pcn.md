@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-19T14:45:49+09:00
+
+**摘要**：feat(skill): updateScript 実測結論 —— 別 PR 不要
+
+- 2026-10-19 実測：`obs-studio-plugins` 54 package 定義 中 `updateScript` 持 4 個 唯、r-ryantm 更新 済 member（obs-vertical-canvas、obs-backgroundremoval、droidcam-obs、obs-plugin-countdown）全部 持 無
+- 結論：r-ryantm GitHub package 既定 追跡、故 `passthru.updateScript` 必須 非
+- 従前「書 無 自動更新 無」記述 訂正 —— 同日実測 其 覆
+- 初回貢献 別 PR 不要：上流 最初 更新 PR 同乗、或 r-ryantm 既 追跡 場合 加 無
+- 判据：四言語 条目数 相等（409）、全検査器 通過
+
+| 提交 | 説明 |
+|------|------|
+| `40ebbba` | feat(skill): updateScript 実測結論 |
+
 ## 2026-10-19T13:52:56+09:00
 
 **摘要**：feat(skill): 初回貢献 全体軌跡（`obs-bilibili-stream` 併合済）
