@@ -15,7 +15,11 @@ rustPlatform.buildRustPackage rec {
   version = "0.10.1";
 
   strictDeps = true;
-  __structuredAttrs = true;
+  # 这个包会被**交叉编译到 riscv64**（build-package.yml 的 Cross-compile 步骤）。
+  # `__structuredAttrs` 与交叉编译不兼容：stdenv 的 setup 用
+  # `declare AR_<target-triplet>=...`，而 triplet 里的 `-` 不是合法 shell 标识符 ——
+  # 实测在 stdenv setup:587 报 `not a valid identifier`，构建失败。
+  # 因此这里**刻意不开** __structuredAttrs。
 
   src = fetchFromGitHub {
     owner = "codewhale-hq";
