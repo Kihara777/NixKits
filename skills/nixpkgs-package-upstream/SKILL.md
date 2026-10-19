@@ -923,9 +923,13 @@ squash commits in this case. Use `git rebase -i`.」，然后明确「**是要�
 
 ## 第五步之后：跟踪与维护
 
-- `passthru.updateScript = nix-update-script { };` **不是硬性要求**，
-  但设了能让 `r-ryantm` 更可靠地跟新。近期合并的同类包（`mcp-searxng`、`godot-mcp`）
-  都没写它，照样被自动跟新（一个月四次）。
+- `passthru.updateScript = nix-update-script { };` **不是必需**。r-ryantm 对 GitHub
+  上的包有默认跟新行为：实测（2026-10-19）`obs-studio-plugins` 目录 54 个包定义里
+  只有 4 个带 updateScript，而被 r-ryantm 跟新过的成员（`obs-vertical-canvas`、
+  `obs-backgroundremoval`、`droidcam-obs`、`obs-plugin-countdown`）**都没有它**。
+- **所以首次贡献时不必为它单独开一个 PR**：等上游第一次发版、开版本更新 PR 时
+  顺手带上（同类模板 `obs-browser-transition.nix`）即可；若那时 r-ryantm 已经在跟，
+  就完全不必要加。
 - **不存在 `meta.dontUpdate` 这个标记**——想让 r-ryantm 跳过，靠的是不设 updateScript。
 - 合并后，你就是维护者：上游发版要跟。
 - 合并后删掉自己的分支（PR 的 head 分支），保持 fork 干净。
