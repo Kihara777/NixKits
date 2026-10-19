@@ -37,8 +37,7 @@
       kitsfmt              = kitsfmtDrv;
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       mcp-searxng          = pkgs.callPackage ./packages/mcp-searxng.nix { };
-      # 上游 nixpkgs 已收录（2026-10-19，PR #574725），不再自行打包
-      obs-bilibili-stream  = pkgs.obs-studio-plugins.obs-bilibili-stream;
+      obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
       ruyi                 = pkgs.callPackage ./packages/ruyi/ruyi.nix { };
       ruyi-beta            = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
