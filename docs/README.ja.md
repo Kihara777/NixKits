@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## ソフトウェア
 
-プラットフォーム対応は二種類に分かれる：大半のパッケージは `lib.platforms.all` を宣言（プラットフォーム制限なし）し、上流バイナリやモジュールの制約を受けるもの（`codewhale`、`obs-bilibili-stream`、`godot-ai`）は Linux 限定である。アーキテクチャ対応もパッケージごとに異なる — 各パッケージ文書のビルドバッジを参照。
+プラットフォーム対応は二種類に分かれる：大半のパッケージは `lib.platforms.all` を宣言（プラットフォーム制限なし）し、上流バイナリやモジュールの制約を受けるもの（`codewhale`、`godot-ai`）は Linux 限定である。アーキテクチャ対応もパッケージごとに異なる — 各パッケージ文書のビルドバッジを参照。
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|
@@ -27,7 +27,6 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | godot-ai | Godot エンジン向けの MCP サーバーと AI ツール | [docs/ja/godot-ai.md](ja/godot-ai.md) |
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | mcp-searxng | SearXNG 向け MCP サーバー | [docs/ja/mcp-searxng.md](ja/mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
@@ -94,6 +93,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | プロジェクト | 説明 | 詳細 |
 |--------------|------|------|
 | comfyui-rocm | ComfyUI の ROCm パッチプロジェクト —— 上流が内蔵済み、パッチはすべて削除 | [ja/deprecated/comfyui-rocm.md](ja/deprecated/comfyui-rocm.md) |
+| obs-bilibili-stream | OBS Bilibili 配信プラグイン —— 上流 nixpkgs が収録済み、本リポジトリは上流を参照 | [ja/deprecated/obs-bilibili-stream.md](ja/deprecated/obs-bilibili-stream.md) |
 
 ## スキル
 

@@ -1,27 +1,16 @@
 # obs-bilibili-stream
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-obs-bilibili-stream-x86_64.yml?branch=main&label=x86_64%20v2.1.5)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-obs-bilibili-stream-aarch64.yml?branch=main&label=aarch64%20v2.1.5)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-
 [中文](../zh/obs-bilibili-stream.md) | English | [日本語](../ja/obs-bilibili-stream.md)  | [偽中国語](../pcn/obs-bilibili-stream.md)
 
-Bilibili live streaming plugin for OBS Studio.
+**Status**: retired (2026-10-19) — upstream nixpkgs now ships this package, so NixKits no longer builds it.
+See the [retirement note](deprecated/obs-bilibili-stream.md).
 
-## Info
+## How to use it now
 
-| Item | Value |
-|------|-------|
-| Version | 2.1.5 |
-| Upstream | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| Platform | x86_64 / aarch64 (**riscv64 unsupported**: the primary dependency `obs-studio 32.2.2` declares `meta.platforms` = `x86_64-linux` / `i686-linux` / `aarch64-linux` only, so evaluation refuses outright: `Refusing to evaluate package 'obs-studio-32.2.2'`) |
-
-## Install
-
-**Recommended: NixOS module**
+**NixOS module (still provided by this repo, pointing at the upstream package)**
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   imports = [ inputs.nixkits.nixosModules.obs-bilibili-stream ];
 
   nixkits.obs-bilibili-stream.enable = true;
@@ -29,29 +18,32 @@ Bilibili live streaming plugin for OBS Studio.
 }
 ```
 
-**Manual**
+**Straight from nixpkgs**
 
 ```nix
 {
-  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
   programs.obs-studio = {
     enable = true;
-    plugins = [ pkgs.obs-bilibili-stream ];
+    plugins = [ pkgs.obs-studio-plugins.obs-bilibili-stream ];
   };
 }
 ```
 
-**Home Manager**
+## Info
 
-```nix
-home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
-```
+| Item | Value |
+|------|-------|
+| Version | 2.1.5 (tracks nixpkgs) |
+| Upstream | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| nixpkgs attribute | `obs-studio-plugins.obs-bilibili-stream` |
+| Our contribution | [NixOS/nixpkgs#574725](https://github.com/NixOS/nixpkgs/pull/574725) (merged 2026-10-19) |
+| Platforms | x86_64 / aarch64 (not riscv64: `obs-studio`'s `meta.platforms` excludes it) |
 
-> Warning -- **installing the package via `home.packages` alone will not make OBS load it**: OBS finds plugins through `OBS_PLUGINS_PATH`, and that variable is only injected by nixpkgs' `wrapOBS` (i.e. `programs.obs-studio.plugins`). `home.packages` merely puts the `.so` into the profile; OBS never scans that path. Therefore:
+> ⚠️ **Installing the package through `home.packages` alone will not make OBS load it**:
+> OBS looks up plugins through `OBS_PLUGINS_PATH`, which only nixpkgs' `wrapOBS`
+> (i.e. `programs.obs-studio.plugins`) injects. `home.packages` merely puts the `.so`
+> into the profile, and OBS does not scan that path. Therefore:
 >
 > - **On NixOS** use the module above or `programs.obs-studio.plugins` (recommended)
-> - **Off NixOS / Home Manager only** you must ensure OBS's plugin search path includes `.../lib/obs-plugins` (e.g. wrap with `wrapOBS`, or place the `.so` manually)
-
-## Cache
-
-`cachix use nixkits` (the flake auto-declares the cache via `nixConfig` when used as a flake input).
+> - **Off NixOS / Home Manager only**: make sure OBS's plugin search path contains
+>   `.../lib/obs-plugins` yourself (wrap OBS with `wrapOBS`, or place the `.so` manually)

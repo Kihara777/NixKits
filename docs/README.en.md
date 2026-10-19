@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## Software
 
-Platform support falls into two groups: most packages declare `lib.platforms.all` (no platform restriction), while those bound by upstream binaries or modules (`codewhale`, `obs-bilibili-stream`, `godot-ai`) are Linux-only. Architecture support also varies per package — see the build badges in each package's documentation.
+Platform support falls into two groups: most packages declare `lib.platforms.all` (no platform restriction), while those bound by upstream binaries or modules (`codewhale`, `godot-ai`) are Linux-only. Architecture support also varies per package — see the build badges in each package's documentation.
 
 | Software | Description | Docs |
 |---|------|------|
@@ -27,7 +27,6 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
-| obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
 
@@ -94,6 +93,7 @@ Projects once maintained and now retired (most because upstream ships equivalent
 | Project | Description | Details |
 |---------|-------------|---------|
 | comfyui-rocm | The ComfyUI ROCm patch project — upstream built it in, all patches removed | [en/deprecated/comfyui-rocm.md](en/deprecated/comfyui-rocm.md) |
+| obs-bilibili-stream | OBS Bilibili streaming plugin — upstream nixpkgs ships it now; this repo points at upstream | [en/deprecated/obs-bilibili-stream.md](en/deprecated/obs-bilibili-stream.md) |
 
 ## Skills
 

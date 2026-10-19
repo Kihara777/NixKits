@@ -15,3 +15,4 @@
 | プロジェクト | 状態 | 旧位置 | 詳細 |
 |--------------|------|--------|------|
 | comfyui-rocm パッチプロジェクト | 廃止（2026-09-15） | `modules/comfyui-rocm.nix` + 三つのパッチ | [中文](zh/deprecated/comfyui-rocm.md) · [EN](en/deprecated/comfyui-rocm.md) · [JA](ja/deprecated/comfyui-rocm.md) · [PCN](pcn/deprecated/comfyui-rocm.md) |
+| obs-bilibili-stream 自前パッケージ | 廃止（2026-10-19） | `packages/obs-bilibili-stream.nix` + 二つのビルドワークフロー | [中文](zh/deprecated/obs-bilibili-stream.md) · [EN](en/deprecated/obs-bilibili-stream.md) · [JA](ja/deprecated/obs-bilibili-stream.md) · [PCN](pcn/deprecated/obs-bilibili-stream.md) |
