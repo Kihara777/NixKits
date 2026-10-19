@@ -6,7 +6,8 @@ final: prev: {
   kitsfmt              = final.callPackage ../packages/kitsfmt.nix { };
   opencode-telegram    = final.callPackage ../packages/opencode-telegram.nix { };
   mcp-searxng          = final.callPackage ../packages/mcp-searxng.nix { };
-  obs-bilibili-stream  = final.callPackage ../packages/obs-bilibili-stream.nix { };
+  # 上游 nixpkgs 已收录（2026-10-19，PR #574725），这里只保留兼容别名
+  obs-bilibili-stream  = final.obs-studio-plugins.obs-bilibili-stream;
   ruyi                 = final.callPackage ../packages/ruyi/ruyi.nix { };
   ruyi-beta            = final.callPackage ../packages/ruyi/ruyi-beta.nix { };
   ruyi-alpha           = final.callPackage ../packages/ruyi/ruyi-alpha.nix { };
