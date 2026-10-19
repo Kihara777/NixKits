@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:03:13+09:00
+
+**Summary**: refactor(obs-bilibili-stream)!: the self-built package retires — upstream nixpkgs ships it now
+
+- Upstream PR #574725 was merged on 2026-10-19 (commit `4f4b7322`), making the definition contributed from here the official nixpkgs implementation
+- `packages/obs-bilibili-stream.nix` and both build workflows are deleted; the module stays and now points at `pkgs.obs-studio-plugins.obs-bilibili-stream`
+- The overlay and flake keep a same-named compatibility alias, so `nixkits.packages.obs-bilibili-stream` keeps working
+- Our old copy lacked `__structuredAttrs`, `cmakeBool` and the correct maintainers entry, so maintaining it would only drift
+- Criterion: equal entry counts across four languages (409), doc-links / workflows / doc-counts / doc-versions all pass
+
+| Commit | Description |
+|------|------|
+| `7c93049` | refactor(obs-bilibili-stream)!: retire the self-built package |
+| `7426b7c` | docs(deprecated): index + four-language details + README/package docs |
+
 ## 2026-10-19T13:52:56+09:00
 
 **Summary**: feat(skill): full trajectory of a first contribution (`obs-bilibili-stream` merged)

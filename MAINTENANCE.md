@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:03:13+09:00
+
+**摘要**：refactor(obs-bilibili-stream)!: 自建包退役 —— 上游 nixpkgs 已收录
+
+- 上游 PR #574725 于 2026-10-19 合并（commit `4f4b7322`），我们贡献的定义成为官方实现
+- 删除 `packages/obs-bilibili-stream.nix` 与两个 build workflow；模块保留并改指上游属性
+- overlay 与 flake 保留同名兼容别名，`nixkits.packages.obs-bilibili-stream` 路径不变
+- 旧版缺 `__structuredAttrs` / `cmakeBool` / maintainers，继续维护只会漂移
+- 判据：四语条目数相等（409），检查器全通过
+
+| 提交 | 说明 |
+|------|------|
+| `7c93049` | refactor(obs-bilibili-stream)!: retire the self-built package |
+| `7426b7c` | docs(deprecated): 索引 + 四语详情 + README/包文档 |
+
 ## 2026-10-19T13:52:56+09:00
 
 **摘要**：feat(skill): 首次贡献完整轨迹（obs-bilibili-stream 已合并）

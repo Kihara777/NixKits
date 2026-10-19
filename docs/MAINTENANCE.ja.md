@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-19T14:03:13+09:00
+
+**概要**：refactor(obs-bilibili-stream)!: 自前パッケージを廃止 —— 上流 nixpkgs が収録済み
+
+- 上流 PR #574725 は 2026-10-19 にマージ（commit `4f4b7322`）、本リポジトリから貢献した定義が nixpkgs 公式の実装になった
+- `packages/obs-bilibili-stream.nix` と二つのビルドワークフローを削除；モジュールは残し `pkgs.obs-studio-plugins.obs-bilibili-stream` を参照
+- overlay と flake は同名の互換別名を保持し、`nixkits.packages.obs-bilibili-stream` のパスは不変
+- 本リポジトリの旧版は `__structuredAttrs` / `cmakeBool` / 正しい maintainers を欠き、保守を続けても乖離するだけ
+- 判据：四言語の条目数が相等（409）、doc-links / workflows / doc-counts / doc-versions すべて通過
+
+| コミット | 説明 |
+|------|------|
+| `7c93049` | refactor(obs-bilibili-stream)!: retire the self-built package |
+| `7426b7c` | docs(deprecated): 索引 + 四言語詳細 + README/パッケージ文書 |
+
 ## 2026-10-19T13:52:56+09:00
 
 **概要**：feat(skill): 初回貢献の全体軌跡（`obs-bilibili-stream` はマージ済み）
