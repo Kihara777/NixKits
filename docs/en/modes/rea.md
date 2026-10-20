@@ -29,7 +29,7 @@ One `@deepseek-ai/dsh-mcp-client` row is appended on top of everything maintenan
 
 That gives three things:
 
-- **The full tool set**: every REA MCP tool is registered as `mcp__rea__*` (**207**, measured through `tools/list`). `dsh-mcp-client` has **no** allowlist or filter option (checked against its README and config field table), so the only way to take a subset is not to mount this row — this mode is for "I want all of it", and a long tool list is its price, not a defect.
+- **The full tool set**: the `mcp-rea` row registers every REA MCP tool as `mcp__rea__*`; the REA server's own `tools/list` reports **207** (**"the row exists" and "the session really has those 207 tools" are two different claims** — see "Verification status" below). `dsh-mcp-client` has **no** allowlist or filter option (checked against its README and config field table), so the only way to take a subset is not to mount this row — this mode is for "I want all of it", and a long tool list is its price, not a defect.
 - **Everything maintenance mode does keeps working**: host validation, `nixos_shell` / `nixos_cli`, the documentation and maintenance-log skills, the four-language convention. When analysis results have to go back into a repository, the workflow is already there.
 - **A dead REA does not break the preset**: `failOnStartupError: false`. If REA fails, the rest of maintenance mode still works; what is missing is the `mcp__rea__*` group (and the log records the connection failure).
 
@@ -48,6 +48,17 @@ Same set as the [rea package docs](../rea.md); not repeated here. The three most
 | `rea doctor` host check | On NixOS it reports `unsupported_host` (upstream recognizes distributions through the apt/dnf/pacman family). **Static analysis works as measured** — that line is a verdict, not a runtime prerequisite |
 | frida dynamic instrumentation | Unavailable in this package (offline build + `--ignore-scripts`) |
 | Hopper / Ghidra / IDA, JADX | Bring your own; the JDK and `ps` ship with `pkgs.rea` |
+
+## Verification status
+
+| Layer | Result |
+|---|---|
+| The declaration is accepted by the platform | ✅ `AgentPresetRegistry.mount()` reports OK (throwaway `DSH_HOME`, 34 plugin rows) |
+| Package resolution and plugin loading | ✅ Same run — every `@kihara777` row resolves |
+| **MCP connection and tool registration** | ⚠️ **Not verified**: in a one-shot `dsh headless` task the agent never selects a custom preset, so the preset's plugins are never activated (measured: **zero** `rea mcp` child processes after mounting, and no `mcp__rea__*` in the model request body). Verifying this layer requires a session that **actually selected** 逆向模式. |
+
+The distinction is worth stating: **"mount() succeeded" is not "an agent is using this preset"**.
+`mount()` proves the declaration is valid, the package resolves, and the platform accepts it; it does not prove the persona, the tools, or the MCP connection take effect in a session.
 
 ## Enable
 
