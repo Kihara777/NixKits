@@ -97,6 +97,10 @@ export function apply(ctx) {
   registerSkill("nixpkgs-package-upstream");
   registerSkill("nixkits-package-upstream");
 
+  // 自我维护的五个机制：日记闸门 / 开局对账 / 事实核查 / 自我观察 / 自检收据。
+  // 机制可移植，数据留在各仓库自己那里（见技能里的「边界」一节）。
+  registerSkill("agent-self-maintenance");
+
   // Language-extension skills, auto-discovered (translate-*).
   let entries = [];
   try {
