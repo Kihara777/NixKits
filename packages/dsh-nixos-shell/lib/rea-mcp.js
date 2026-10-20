@@ -7,7 +7,7 @@
  * root scope —— 于是**掌灯模式的会话**也背上 207 个 `mcp__rea__*`（请求头里
  * 31 + 207 = 238 个工具）。预设的语义是「只有这个模式才有」，那不是它。
  *
- * 所以这里自己开一条 stdio JSON-RPC，并且**只在 `agent/session-start` 时才连**：
+ * 所以这里自己开一条 stdio JSON-RPC，并且**只在 `agent/created` 时才连**：
  * 那个事件是 scope-filtered 到本预设的 agent，连接和注册都绑在 `agent.ctx` 上，
  * 会话结束就断开。没有 agent 就没有进程、没有工具。
  *
@@ -133,7 +133,7 @@ function connect(command, args) {
 
 /**
  * 为一个 agent 起一条连接，并把 REA 的全部工具注册到它的 scope 上。
- * @param agent 已经 live 的 agent（`agent/session-start` 的载荷）
+ * @param agent 已经 live 的 agent（`agent/created` 的载荷）
  * @param config 插件配置：`command` / `args`
  */
 async function attach(agent, config) {
@@ -186,7 +186,15 @@ export function apply(ctx, config = {}) {
   // 刻意**不在 apply 里连接**：apply 发生在预设被 eager activation 的时候，
   // 那时没有 agent，工具只会落到 root scope（2026-10-20 实测：掌灯模式会话
   // 也拿到了 207 个 mcp__rea__*）。
-  ctx.on("agent/session-start", ({ agent }) => {
-    void attach(agent, config);
-  });
+  //
+  // ⚠️ 2026-10-21：这里原先监听 `agent/session-start` —— **那个事件在 dsh 里不存在**。
+  // 实测 `grep 'session-start'` 只在 `dsh-goal` 的文档字符串里命中，`agent/` 命名空间下
+  // 真正的事件是 `agent/created` / `agent/end` / `agent/disposed`。于是一个监听不存在
+  // 事件的插件**永远不会被触发**，而它看起来完全正常（代码在、行挂上了、mount 也成功）。
+  // 换成 `agent/created`（载荷 `{ agent, source, signal? }`）才算接上。
+  //
+  // 它返回 Promise：`agent/created` 是 serial 事件，会 await 监听器 —— 于是 REA 连上
+  // 并注册完工具之后，agent 才算创建完成。代价是新会话创建慢一两秒；换来的是**首轮
+  // 就有工具**。attach 内部把失败都吞成一条 stderr，不会因此卡住创建。
+  return ctx.on("agent/created", ({ agent }) => attach(agent, config));
 }
