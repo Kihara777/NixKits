@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T14:47:23+09:00
+
+**摘要**：docs(skill): 適配層 廃止告知 + 削除 skill 扱 章
+
+- `nixkits-package-upstream` 先頭 廃止告知：汎用手法 `upstream-audit`（読取専用）、提出 掌灯層。本 file 純監査適配層 残
+- 接口表「第 4 步 実操」掌灯層 向、監査層 書込操作 排除
+- `nixkits-skills`「削除 / 改名 skill」章 追加：六 確認点 + 二 規律（履歴 書換 無、install 済 copy 自動移行 無）
+- 判据：check-skill-registry 13 skill 帰属、doc-links 224 file 通過；四言語 条目数 相等（419）
+
+| 提交 | 説明 |
+|------|------|
+| `2e66963` | docs(skill): nixkits-package-upstream 廃止告知 + 削除 skill 扱 章 |
+
 ## 2026-10-20T14:41:14+09:00
 
 **摘要**：refactor(skill)!: 上流貢献 skill 読取専用 監査 與 掌灯 提出層 分割

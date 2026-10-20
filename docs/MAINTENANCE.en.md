@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:47:23+09:00
+
+**Summary**: docs(skill): deprecation notice for the adapter layer, plus a chapter on removing skills
+
+- `nixkits-package-upstream` now carries a deprecation notice at the top: general method belongs to `upstream-audit` (read-only), submission belongs to the lampkeeper layer; the file stays as a pure-audit adapter
+- Its interface table now points "step 4 practice" at the lampkeeper layer, so no write operation appears in the audit layer
+- `nixkits-skills` gains a "removed / renamed skills" chapter: six check points plus two rules (history is not rewritten; installed copies are not migrated automatically)
+- Criterion: check-skill-registry reports 13 skills claimed, doc-links passes on 224 files; equal entry counts across four languages (419)
+
+| Commit | Description |
+|------|------|
+| `2e66963` | docs(skill): nixkits-package-upstream deprecation notice + a chapter on removed skills |
+
 ## 2026-10-20T14:41:14+09:00
 
 **Summary**: refactor(skill)!: upstream contribution split into a read-only audit and a lampkeeper submit layer

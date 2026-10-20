@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:47:23+09:00
+
+**摘要**：docs(skill): 适配层弃用声明 + 已移除技能的处理章节
+
+- `nixkits-package-upstream` 顶部声明弃用：通用方法归 `upstream-audit`（只读）、提交归掌灯层；本文件保留为纯审计适配层
+- 接口表的「第 4 步 实操」改为指向掌灯层，审计层不再出现写操作
+- `nixkits-skills` 新增「已移除 / 改名的技能」：六处检查点 + 两条纪律（历史不追改、已安装副本不自动迁移）
+- 判据：check-skill-registry 13 技能有归属、doc-links 224 文件通过；四语条目数相等（419）
+
+| 提交 | 说明 |
+|------|------|
+| `2e66963` | docs(skill): nixkits-package-upstream 弃用声明 + 已移除技能的处理章节 |
+
 ## 2026-10-20T14:41:14+09:00
 
 **摘要**：refactor(skill)!: 上游贡献技能拆为「只读审计」与「掌灯提交层」
