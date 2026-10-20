@@ -1,0 +1,19 @@
+name: Build rea (aarch64)
+on: [push, pull_request]
+
+# 最小权限：调用方只需读取仓库内容（Cachix 推送凭据经 secrets 传入，
+# 与 GITHUB_TOKEN 的权限无关）。显式声明可避免继承仓库默认的读写权限。
+permissions:
+  contents: read
+
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "rea"
+      # 原生 ARM runner（不是交叉构建）：产物在真 aarch64 上跑得起来才算通过。
+      runs-on: "ubuntu-24.04-arm"
+      riscv64-cross: false
+      # 与 x86_64 同一份烟测脚本——判据是「产物真的能跑」。
+      smoke-test: true
+    secrets: inherit

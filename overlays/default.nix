@@ -6,6 +6,9 @@ final: prev: {
   kitsfmt              = final.callPackage ../packages/kitsfmt.nix { };
   opencode-telegram    = final.callPackage ../packages/opencode-telegram.nix { };
   obs-bilibili-stream  = final.callPackage ../packages/obs-bilibili-stream.nix { };
+  # REA（Reverse Engineer Anything）：npm 包 rea-agents 的 Nix 封装。
+  # 与 flake.nix 的 `packages.rea` 是**两个落点**，改动要同步。
+  rea                  = final.callPackage ../packages/rea.nix { };
   ruyi                 = final.callPackage ../packages/ruyi/ruyi.nix { };
   ruyi-beta            = final.callPackage ../packages/ruyi/ruyi-beta.nix { };
   ruyi-alpha           = final.callPackage ../packages/ruyi/ruyi-alpha.nix { };
