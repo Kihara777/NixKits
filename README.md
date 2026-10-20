@@ -113,7 +113,7 @@ nix registry add nixkits github:Kihara777/NixKits
 ## 作者
 
 - **狐莉 (キツのり)** — 创建和维护
-- **小爪 (キツのめ)** — 设计、开发 feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
+- **小爪 (キツのめ)** — 设计、开发 feat. DeepSeek V4.1 Flash
 - **小小爪 (キツのめ)** — 硬件推理基础设施 feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]

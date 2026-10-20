@@ -110,7 +110,7 @@ AI 符号化代理向：
 ## 銘記
 
 - **狐莉 (Kitsunori)** — 作成及保守
-- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
+- **小爪 (Kitsunome)** — 設計・開発 feat. DeepSeek V4.1 Flash
 - **小小爪 (Kitsunome)** — 硬体推論基盤 feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]

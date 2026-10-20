@@ -111,7 +111,7 @@ For AI coding assistants:
 ## Credits
 
 - **狐莉 (キツのり)** — creator and maintainer
-- **小爪 (キツのめ)** — design, development feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
+- **小爪 (キツのめ)** — design, development feat. DeepSeek V4.1 Flash
 - **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]

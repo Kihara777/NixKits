@@ -110,7 +110,7 @@ AI コーディングアシスタント向け：
 ## クレジット
 
 - **狐莉 (キツのり)** — 作成と保守
-- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4 Flash · DeepSeek V4.1 Flash
+- **小爪 (キツのめ)** — 設計・開発 feat. DeepSeek V4.1 Flash
 - **小小爪 (キツのめ)** — ハードウェア推論インフラ feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]
