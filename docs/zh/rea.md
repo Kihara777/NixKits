@@ -41,7 +41,7 @@ REA 的大部分能力**不需要外部引擎**，这也是本包的主要用途
 | Go / Rust 二进制 | 内嵌编译版本、模块、依赖边 | 无（纯静态） |
 | Godot PCK / IL2CPP / SQLite / 包与资源 | 归档清单、类型与方法名、表结构、digest | 无（纯静态） |
 | 原生二进制（伪代码 / 反汇编） | 伪代码、汇编、字符串、符号、调用与引用 | 外部安装的 Hopper / Ghidra / IDA |
-| Android APK | manifest、类、反编译方法 | JADX + 完整 JDK |
+| Android APK | manifest、类、反编译方法 | JADX（自备 jar）+ JDK（**本包已带**） |
 
 ## 本包的已知边界
 
@@ -51,7 +51,7 @@ REA 的大部分能力**不需要外部引擎**，这也是本包的主要用途
 |------|---------|
 | `rea doctor` 的宿主机判定 | NixOS 上报 `host: unsupported_host`（上游按 apt / dnf / pacman 家族识别发行版，NixOS 不在名单里）。**纯静态分析实测照常可用**，`doctor` 该行是判定口径而非运行前提 |
 | frida 动态插桩 | 上游的 optionalDependency，靠 `prebuild-install` 在安装期**下载**二进制。Nix 构建离线且 `npmRebuildFlags = [ "--ignore-scripts" ]`，所以 frida 的 native binding 不存在——相关命令会失败，不会静默降级 |
-| Hopper / Ghidra / IDA / JADX | 本包一律不提供。用环境变量指过去（如 `GHIDRA_INSTALL_DIR`、`HOPPER_LAUNCHER_PATH`、`REA_JADX_MCP_JAR`） |
+| Hopper / Ghidra / IDA、JADX | 本包一律不提供，用环境变量指过去（`GHIDRA_INSTALL_DIR`、`HOPPER_LAUNCHER_PATH`、`REA_JADX_MCP_JAR`）。**JDK 与 `ps` 由本包提供**——JDK 会进本包闭包（约 +200 MiB），不用 Android 分析的人也带上它，这是有意的取舍 |
 | riscv64 | **不支持**：`@lydell/node-pty` 只发 x64/arm64 预编译件，REA 会 import 它 |
 
 ## 引用

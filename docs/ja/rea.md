@@ -41,7 +41,7 @@ REA の大半は**外部エンジンを必要としない**——これが本パ
 | Go / Rust バイナリ | 埋め込まれたビルド版、モジュール、依存辺 | なし（純静的） |
 | Godot PCK / IL2CPP / SQLite / パッケージとリソース | アーカイブ目録、型とメソッド名、テーブル構造、digest | なし（純静的） |
 | ネイティブバイナリ（擬似コード / 逆アセンブリ） | 擬似コード、アセンブリ、文字列、シンボル、呼び出しと参照 | 外部インストールの Hopper / Ghidra / IDA |
-| Android APK | manifest、クラス、逆コンパイル済みメソッド | JADX と完全な JDK |
+| Android APK | manifest、クラス、逆コンパイル済みメソッド | JADX（jar は自前）と JDK（**本パッケージが同梱**） |
 
 ## 本パッケージの既知の境界
 
@@ -51,7 +51,7 @@ REA の大半は**外部エンジンを必要としない**——これが本パ
 |------|------|
 | `rea doctor` のホスト判定 | NixOS では `host: unsupported_host` を報告する（上流は apt / dnf / pacman 系列でディストリビューションを識別しており、NixOS はその一覧に無い）。**静的解析は実測どおり使える**——この行は判定であり実行前提ではない |
 | frida 動的計装 | 上流の optionalDependency で、インストール時に `prebuild-install` がバイナリを**ダウンロード**する。Nix ビルドはオフラインかつ `npmRebuildFlags = [ "--ignore-scripts" ]` なので frida の native binding は存在しない——関連コマンドは静かに劣化せず失敗する |
-| Hopper / Ghidra / IDA / JADX | 本パッケージは一切提供しない。環境変数で自分のものを指す（`GHIDRA_INSTALL_DIR`、`HOPPER_LAUNCHER_PATH`、`REA_JADX_MCP_JAR`） |
+| Hopper / Ghidra / IDA、JADX | 本パッケージは一切提供しない。環境変数で自分のものを指す（`GHIDRA_INSTALL_DIR`、`HOPPER_LAUNCHER_PATH`、`REA_JADX_MCP_JAR`）。**JDK と `ps` は本パッケージが同梱する**——JDK は本パッケージのクロージャに入る（約 +200 MiB）。Android 解析をしない利用者も抱えることになるが、これは意図した取捨である |
 | riscv64 | **非対応**：`@lydell/node-pty` は x64/arm64 のビルド済み成果物しか公開しておらず、REA はそれを import する |
 
 ## 参照

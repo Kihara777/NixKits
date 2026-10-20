@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   procps,
+  jdk,
   # version/hash/npmDepsHash/lockFile 可覆盖，便于将来拆通道（如需要）。
   version ? "6.7.0",
   # npm registry 的 integrity 是 sha512；这里必须原样写 sha512-，写成 sha256- 会被
@@ -26,9 +27,11 @@
 #     资源、WASM/固件头）**不需要任何外部引擎**，这是本包的主要用途；
 #   · 原生逆向（伪代码/反汇编）需要外部安装的 Hopper / Ghidra / IDA —— 本包不提供，
 #     也不去猜它们的路径；
-#   · Android 需要 JADX + 完整 JDK，同样由使用者提供；
+#   · Android 需要 JADX（外部 jar，见 `REA_JADX_MCP_JAR`）**与完整 JDK**：
+#     JDK 是本包**带上**的（wrapper 把 `java` 放进 PATH），JADX 仍要自备 ——
+#     REA 要的是 `jadx-headless-mcp` 的 jar，不是 nixpkgs 里的 `jadx` 可执行文件；
 #   · Linux 上静态 JS/Electron 分析与固件工具启动需要 procps 的 `ps`（README 明说
-#     进程归属检查依赖它）——这一条是本包**带上**的，不是可选项；
+#     进程归属检查依赖它）——这一条也是本包**带上**的，不是可选项；
 #   · `frida` 是上游的 optionalDependency，靠 prebuild-install 在安装期下载预编译
 #     二进制；Nix 构建离线且 `--ignore-scripts`，因此**动态插桩在本包内不可用**，
 #     frida 的相关命令会失败而不是静默降级。
@@ -96,13 +99,17 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   # bin 由 nodejsInstallExecutables 生成 wrapper（`$out/bin/rea` → `$out/bin/.rea-wrapped`
-  # → node + scripts/rea.mjs）。这里只在 wrapper 上补 PATH：
-  # README 明确指出 Linux 的静态 JS/Electron 分析与固件工具启动依赖 procps 的 `ps`。
+  # → node + scripts/rea.mjs）。这里在 wrapper 上补 PATH：
+  #   · procps 的 `ps`：README 明确说 Linux 的静态 JS/Electron 分析与固件工具启动
+  #     依赖它做进程归属检查；
+  #   · `jdk`：Android 分析要把 `java` 跑起来（REA 调 JADX 的 jar）。代价是这个
+  #     JDK 会进本包的闭包（约 +200 MiB），这是有意的选择而不是遗漏——不用 Android
+  #     分析的人也会带上它。
   makeWrapperArgs = [
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath [ procps ])
+    (lib.makeBinPath [ procps jdk ])
   ];
 
   meta = {

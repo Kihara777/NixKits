@@ -41,7 +41,7 @@ Most of REA needs **no external engine**, which is what this package is for; whe
 | Go / Rust binaries | embedded build version, modules, dependency edges | none (static only) |
 | Godot PCK / IL2CPP / SQLite / packages and resources | archive inventory, type and method names, table shapes, digests | none (static only) |
 | Native binaries (pseudocode / assembly) | pseudocode, assembly, strings, symbols, calls and references | an externally installed Hopper / Ghidra / IDA |
-| Android APKs | manifest, classes, decompiled methods | JADX plus a full JDK |
+| Android APKs | manifest, classes, decompiled methods | JADX (bring the jar) plus a JDK (**shipped here**) |
 
 ## Known limits of this package
 
@@ -51,7 +51,7 @@ Most of REA needs **no external engine**, which is what this package is for; whe
 |------|---------|
 | `rea doctor` host check | On NixOS it reports `host: unsupported_host` (upstream recognizes distributions through the apt / dnf / pacman family; NixOS is not on that list). **Static analysis works as measured**, so this line is a diagnosis verdict, not a runtime prerequisite |
 | frida dynamic instrumentation | An upstream optionalDependency that **downloads** its binary through `prebuild-install` at install time. Nix builds are offline and use `npmRebuildFlags = [ "--ignore-scripts" ]`, so the frida native binding is absent — related commands fail instead of degrading silently |
-| Hopper / Ghidra / IDA / JADX | Never provided by this package. Point to your own through environment variables (`GHIDRA_INSTALL_DIR`, `HOPPER_LAUNCHER_PATH`, `REA_JADX_MCP_JAR`) |
+| Hopper / Ghidra / IDA, JADX | Never provided by this package; point to your own through environment variables (`GHIDRA_INSTALL_DIR`, `HOPPER_LAUNCHER_PATH`, `REA_JADX_MCP_JAR`). **The JDK and `ps` ship here** — the JDK lands in this package's closure (about +200 MiB) even for people who never touch Android analysis, which is a deliberate trade-off |
 | riscv64 | **Unsupported**: `@lydell/node-pty` publishes prebuilt artifacts for x64/arm64 only, and REA imports it |
 
 ## Referencing
