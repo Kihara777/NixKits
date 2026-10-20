@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T14:41:14+09:00
+
+**摘要**：refactor(skill)!: 上流貢献 skill 読取専用 監査 與 掌灯 提出層 分割
+
+- 新 skill `upstream-audit`：第 0〜3 步 + 罠一覧、**明示 読取専用** —— push 無、PR 作成 無、代理 comment 無
+- 提出動作（fork/branch/commit/push/PR、review 対応、merge 後）掌灯層 `lampkeeper-upstream-submit`（Kitsunome）移設。彼女 承認 與 maintainer 条目 handle 一致 account 前提
+- `nixpkgs-package-upstream` 削除；`nixkits-package-upstream` 新名 参照；維護 mode `upstream-audit` 登録
+- `UPSTREAM-AUDIT.md`（2026-10-10 一度限 評価）repo 外 `Kitsunome/audit/` 移動
+- 判据：check-skill-registry 13 skill 全部 帰属、doc-links 224 file 通過；四言語 条目数 相等（418）
+
+| 提交 | 説明 |
+|------|------|
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+
 ## 2026-10-20T14:37:33+09:00
 
 **摘要**：feat(skill): agent-self-maintenance — 五 自己保守機構 下放

@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:41:14+09:00
+
+**摘要**：refactor(skill)!: 上游贡献技能拆为「只读审计」与「掌灯提交层」
+
+- 新技能 `upstream-audit`：第 0–3 步 + 陷阱清单，**只读**——不 push、不建 PR、不代评
+- 提交动作移到掌灯层 `lampkeeper-upstream-submit`（Kitsunome），需她批准且账号与 handle 一致
+- 删除 `nixpkgs-package-upstream`；适配层改指新名；维护模式注册 `upstream-audit`
+- `UPSTREAM-AUDIT.md` 移出仓库到 `Kitsunome/audit/`
+- 判据：check-skill-registry 13 个技能有归属、doc-links 224 文件通过；四语条目数相等（418）
+
+| 提交 | 说明 |
+|------|------|
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+
 ## 2026-10-20T14:37:33+09:00
 
 **摘要**：feat(skill): agent-self-maintenance — 五个自我维护机制下放

@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:41:14+09:00
+
+**Summary**: refactor(skill)!: upstream contribution split into a read-only audit and a lampkeeper submit layer
+
+- New `upstream-audit` skill: steps 0-3 plus the traps list, explicitly read-only — no push, no PR, no comments on anyone's behalf
+- The submission steps (fork/branch/commit/push/PR, review response, post-merge) moved to the lampkeeper layer `lampkeeper-upstream-submit` (Kitsunome), which requires her approval and the account whose handle matches the maintainer entry
+- `nixpkgs-package-upstream` removed; `nixkits-package-upstream` points at the new name; the maintenance mode registers `upstream-audit`
+- `UPSTREAM-AUDIT.md` (a one-off 2026-10-10 evaluation) moved out of the repository into `Kitsunome/audit/`
+- Criterion: check-skill-registry reports 13 skills all claimed, doc-links passes on 224 files; equal entry counts across four languages (418)
+
+| Commit | Description |
+|------|------|
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+
 ## 2026-10-20T14:37:33+09:00
 
 **Summary**: feat(skill): agent-self-maintenance — five self-maintenance mechanisms ported down
