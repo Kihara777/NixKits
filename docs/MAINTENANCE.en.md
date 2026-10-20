@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T15:12:06+09:00
+
+**Summary**: docs(deprecated): the `nixkits-package-upstream` skill name joins the retired list
+
+- The old name implied both "audit" and "submit"; after the split it only carries the adapter's audit duty
+- The file stays a pure-audit adapter (deprecation notice already at the top); the entry records the name's retirement and the migration path
+- Four-language index plus four-language detail pages; the README does not list it (the main doc only navigates)
+- Criterion: doc-links passes on 228 files, maintenance-log passes; equal entry counts across four languages (420)
+
+| Commit | Description |
+|------|------|
+| `8cdc15e` | docs(deprecated): add the nixkits-package-upstream skill name to the retired list |
+
 ## 2026-10-20T14:47:23+09:00
 
 **Summary**: docs(skill): deprecation notice for the adapter layer, plus a chapter on removing skills

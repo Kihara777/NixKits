@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T15:12:06+09:00
+
+**摘要**：docs(deprecated): `nixkits-package-upstream` 技能名加入弃用列表
+
+- 旧名同时暗示「审计」与「提交」；拆分后只剩适配层的审计职责
+- 文件保留为纯审计适配层（顶部已有弃用声明），条目记录名字弃用与迁移路径
+- 四语索引 + 四语详情页；README 不列（主文档只导航）
+- 判据：doc-links 228 文件、maintenance-log 通过；四语条目数相等（420）
+
+| 提交 | 说明 |
+|------|------|
+| `8cdc15e` | docs(deprecated): add the nixkits-package-upstream skill name to the retired list |
+
 ## 2026-10-20T14:47:23+09:00
 
 **摘要**：docs(skill): 适配层弃用声明 + 已移除技能的处理章节

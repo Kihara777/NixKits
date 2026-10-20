@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T15:12:06+09:00
+
+**概要**：docs(deprecated): `nixkits-package-upstream` スキル名を廃止一覧に追加
+
+- 旧名は「監査」と「提出」の両方を暗示していたが、分割後は適配層の監査責務だけを持つ
+- ファイルは純粋な監査適配層として残る（先頭に廃止告知済み）。条目は名前の廃止と移行経路を記録
+- 四言語の索引と四言語の詳細ページ；README には載せない（主文書はナビゲーションのみ）
+- 判据：doc-links は 228 ファイル通過、maintenance-log 通過；四言語の条目数が相等（420）
+
+| コミット | 説明 |
+|------|------|
+| `8cdc15e` | docs(deprecated): add the nixkits-package-upstream skill name to the retired list |
+
 ## 2026-10-20T14:47:23+09:00
 
 **概要**：docs(skill): 適配層の廃止告知 + 削除されたスキルの扱い章
