@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:37:33+09:00
+
+**Summary**: feat(skill): agent-self-maintenance — five self-maintenance mechanisms ported down
+
+- New skill: journal gate / journal catchup / facts check / self-observation / selfcheck receipt, with the boundary stated (mechanisms travel, data does not)
+- Registered in the maintenance mode's `maintenance-skills` via registerSkill; NixOS mode stays lean
+- Four-language doc pages plus README rows; check-skill-registry reports 13 skills, none unclaimed
+- Not done yet: porting the three plugins (journal-gate / journal-catchup / selfcheck)
+- Criterion: check-skill-registry and doc-links pass; equal entry counts across four languages (417)
+
+| Commit | Description |
+|------|------|
+| `a547823` | feat(skill): agent-self-maintenance — five self-maintenance mechanisms, registered in maintenance mode |
+
 ## 2026-10-20T14:14:15+09:00
 
 **Summary**: feat(skill): retirement flow after upstream lands a package, plus two criterion traps

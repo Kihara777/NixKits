@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:37:33+09:00
+
+**摘要**：feat(skill): agent-self-maintenance — 五个自我维护机制下放
+
+- 新技能：日记闸门 / 开局对账 / 事实核查 / 自我观察 / 自检收据，含边界（机制可移植、数据不搬）
+- 注册进维护模式的 `maintenance-skills`（registerSkill），NixOS模式保持不动
+- 四语文档页 + README 四语行；check-skill-registry 13 个技能全部有归属
+- 未完成：三个插件（journal-gate / journal-catchup / selfcheck）的代码下放
+- 判据：check-skill-registry 与 doc-links 通过；四语条目数相等（417）
+
+| 提交 | 说明 |
+|------|------|
+| `a547823` | feat(skill): agent-self-maintenance — 五个自我维护机制，注册进维护模式 |
+
 ## 2026-10-20T14:14:15+09:00
 
 **摘要**：feat(skill): 上游收录后的退役流程 + 两处判据陷阱

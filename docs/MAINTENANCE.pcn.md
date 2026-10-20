@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T14:37:33+09:00
+
+**摘要**：feat(skill): agent-self-maintenance — 五 自己保守機構 下放
+
+- 新 skill：日記 gate / 開始時 照合 / 事実検査 / 自己観察 / 自己検査受領書、境界 明記（仕組 移植可能、data 移 無）
+- 維護 mode `maintenance-skills` registerSkill 登録；NixOS模式 変更 無
+- 四言語 文書 page 與 README 行；check-skill-registry 13 skill 全部 帰属 有
+- 未完了：三 plugin（journal-gate / journal-catchup / selfcheck）code 下放
+- 判据：check-skill-registry 與 doc-links 通過；四言語 条目数 相等（417）
+
+| 提交 | 説明 |
+|------|------|
+| `a547823` | feat(skill): agent-self-maintenance — 五 自己保守機構、維護 mode 登録 |
+
 ## 2026-10-20T14:14:15+09:00
 
 **摘要**：feat(skill): 上流収録後 廃止流程 + 二 判据 罠
