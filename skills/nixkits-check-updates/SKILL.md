@@ -293,6 +293,62 @@ done | sort -u)
 四语同步、提交表按时间升序、推送后核对各语言条目数一致
 （`grep -c '^20' MAINTENANCE.md docs/MAINTENANCE.*.md`）。
 
+## 第 8.5 步：上游收录后的退役（本仓的常规收尾）
+
+某个包被上游 nixpkgs 收录后，本仓应当退役自建版本。判据与步骤都已实测
+（mcp-searxng 成功；obs-bilibili-stream 同形状，但因通道未推进而回退）。
+
+### 判据：**`nixos-unstable` 上有它**，不是「master 上有」
+
+这是唯一会卡住退役的条件——差一天就翻车：
+
+```bash
+gh api "repos/NixOS/nixpkgs/contents/pkgs/by-name/<首两字母>/<包名>/package.nix?ref=nixos-unstable" \
+  --jq '.sha[0:12]'
+```
+
+| 情形 | 处置 |
+|---|---|
+| master 有、`nixos-unstable` 还没有 | **不能退役**——本仓 flake 消费 `nixos-unstable`，退役后 CI 立刻红（`attribute missing`）。obs-bilibili-stream 就是这样被回退的 |
+| 两个都有 | 可以退役（mcp-searxng：nixpkgs 2026-08-29 收录，unstable 已有） |
+
+### 步骤（一个提交，`refactor(<pkg>)!`）
+
+| 位置 | 动作 |
+|---|---|
+| `packages/<pkg>.nix` | 删除 |
+| `flake.nix` | `packages.<pkg> = pkgs.<pkg>;`（兼容别名，路径不变） |
+| `overlays/default.nix` | **整行移除**——写成 `final.<pkg>` 会自引用；nixpkgs 已提供该属性 |
+| `.github/workflows/build-<pkg>-*.yml` | 全部删除（**先数一遍**：mcp-searxng 是 3 个，不是 2 个） |
+| `docs/<lang>/<pkg>.md` | 四语改为退役说明（删掉失效的构建徽章） |
+| `README.md` + `docs/README.*.md` | 四语：从软件列表移除，移入「废弃项目」表 |
+| `DEPRECATED.md` + 三语 | 索引加行 |
+| `docs/<lang>/deprecated/<pkg>.md` | 四语详情 |
+
+### DEPRECATED 索引的「状态」列写**上游状态**，不是我们的动作状态
+
+2026-10-20 修正：原来写 `已废弃（2026-09-15）`，那是**本仓的动作**，不是读者要问的
+「上游发生了什么才让它可退役」。表头现为 `上游状态（废弃原因）`，行内容形如：
+
+```
+| mcp-searxng 自建包 | 上游 nixpkgs 已收录（2026-08-29，当前 2.6.0） | ... |
+```
+
+日期归到**上游事件**（收录 / 内置的时间），不是执行退役的那天。
+详情页里的「状态 / 原位置 / 现状」三件套仍描述本仓，与「为何可以废弃」章节分工。
+
+### 三个坑（都实测过）
+
+1. **`__structuredAttrs` 与交叉编译不兼容**：给所有包统一加它时，交叉编译的包会在
+   stdenv `setup:587` 报 `declare: AR_x86_64-unknown-linux-gnu=...: not a valid identifier`
+   （triplet 里的 `-` 不是合法 shell 标识符）。本仓 `codewhale-src`（riscv64 交叉）
+   必须**刻意不开**它，旁边写注释说明。
+2. **批量替换会穿透历史**：脚本改版本号时，`MAINTENANCE.*` 里的**历史条目**
+   （如「opencode-telegram 0.26.3 to 0.26.4」）也会被改。改完用 `git checkout` 回退
+   这些文件，或替换前就把它们排除。
+3. **glob 别打进 vendor**：`packages/**/*.nix` 会命中 `packages/kitsfmt-src/vendor/rnix/`
+   里的第三方 `.nix`（改了会污染 `src` 哈希）。批量操作前先 `grep -v '/vendor/'`。
+
 ## NixKits 专有排除项
 
 通用排除规则之外，本仓库还有：
