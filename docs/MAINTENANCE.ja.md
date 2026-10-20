@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T12:58:22+09:00
+
+**概要**：refactor(mcp-searxng)!: 自前パッケージを廃止 —— 上流 nixpkgs が収録済み
+
+- nixpkgs は 2026-08-29 に収録（init 2.1.0）、2026-10-13 に 2.6.0 へ更新；バージョンと二つの hash が本リポジトリと完全一致
+- パッケージ定義と三つのビルドワークフローを削除；flake の別名は `pkgs.mcp-searxng` を指し、overlay の行は削除（nixpkgs が提供するため、残すと自己参照になる）
+- 廃止前に `mcp-searxng --help` が動くことを実測 —— nixpkgs 版には手動 wrapper が無く、二つの定義は等価ではない
+- 四言語の文書：パッケージ文書を廃止説明に、README の一覧から退役表へ移動、DEPRECATED に索引行と詳細ページを追加
+- 判据：`nix eval` が mcp-searxng-2.6.0 を返し、opencode devshell も評価可能、doc-links と doc-versions 通過；四言語の条目数が相等（415）
+
+| コミット | 説明 |
+|------|------|
+| `0c6e73a` | refactor(mcp-searxng)!: retire the self-built package in favour of nixpkgs |
+
 ## 2026-10-20T11:52:17+09:00
 
 **概要**：dsh 0.2.1-rc.2、dsh-alpha 0.2.1-alpha.5、opencode-telegram 0.26.5 — 三パッケージ更新

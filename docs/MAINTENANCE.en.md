@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T12:58:22+09:00
+
+**Summary**: refactor(mcp-searxng)!: the self-built package retires — upstream nixpkgs ships it
+
+- nixpkgs added it on 2026-08-29 (init 2.1.0) and bumped it to 2.6.0 on 2026-10-13; the version and both hashes match this repo exactly
+- The package definition and all three build workflows are deleted; the flake alias points at `pkgs.mcp-searxng`, and the overlay line was removed (nixpkgs provides it; keeping it would self-reference)
+- Before retiring, `mcp-searxng --help` was measured working — the nixpkgs definition has no manual wrapper, so the two definitions are not equivalent
+- Four-language docs: the package doc becomes a retirement note, the README list entry moves to the retired table, and DEPRECATED gets the index row plus a detail page
+- Criterion: `nix eval` yields mcp-searxng-2.6.0, the opencode devshell still evaluates, doc-links and doc-versions pass; equal entry counts across four languages (415)
+
+| Commit | Description |
+|------|------|
+| `0c6e73a` | refactor(mcp-searxng)!: retire the self-built package in favour of nixpkgs |
+
 ## 2026-10-20T11:52:17+09:00
 
 **Summary**: dsh 0.2.1-rc.2, dsh-alpha 0.2.1-alpha.5, opencode-telegram 0.26.5 — three bumps
