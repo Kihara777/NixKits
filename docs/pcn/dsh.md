@@ -188,7 +188,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 > **0.2.0 以降、配布方式 唯一**：各模式 = 一本 `@deepseek-ai/dsh-agent-preset` patch 行（模組 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`差込）、插件行本文 該包 `preset.patch.yml` 従 **逐字** 取。0.1.x 二経路（`nixosMode`/`maintenanceMode` seed-once 目録 copy、`newsThreeElements` roster 追加 root）上流変更 共 消滅——`roots` 機構自体 不存在。内容目録 必要 新聞三要素模式 唯一：該插件 npm 包 非、預設同梱 file 故、模組 `$DSH_HOME/.agent-presets/news-three-elements/`組立（整体再構築、seed-once 非）、patch 行 相対経路 参照。各模式 挙動・組合構造・維護規則 上表文書参照。
 
-> **本 repo 配布 不 模式 展開側 二 有**：私有模式 A（私有模式 A、order 12）與 私有模式 B（私有模式 B、order 14）。内容 出処 私有 repo（Kitsunome）、但 0.2.0 形態 上三 與 全同——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/`組立 内容目録、錨 `new URL('../../.agent-presets/<id>/', baseUrl)`（**私有模式 B repo 入 2026-10-02**、以前 展開副本 唯一実体、repo 也 播種 也 無）。両者 一致性検査 亦 彼方：该侧的派生检查脚本。
+> **本 repo 配布 不 模式 展開側 二 有**：私有模式 A（私有模式 A、order 12）與 私有模式 B（私有模式 B、order 14）。内容 出処 私有 repo（Kitsunome）、但 0.2.0 形態 上三 與 全同——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/`組立 内容目録、錨 `new URL('../../.agent-presets/<id>/', baseUrl)`（**私有模式 B repo 入 2026-10-02**、以前 展開副本 唯一実体、repo 也 播種 也 無）。両者 一致性検査 亦 彼方：該側 派生検査 script。
 
 ### dsh 0.2.0 於 預設格式之変化（2026-10-02 着地済）
 
