@@ -94,7 +94,7 @@ export function apply(ctx) {
   // four-language doc pages and README rows — but were never registered here, so
   // no session could ever load them. These two lines are the wiring. Nothing
   // checked that skills/ and this list agree; see develop/check-skill-registry.py.
-  registerSkill("nixpkgs-package-upstream");
+  registerSkill("upstream-audit");
   registerSkill("nixkits-package-upstream");
 
   // 自我维护的五个机制：日记闸门 / 开局对账 / 事实核查 / 自我观察 / 自检收据。

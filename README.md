@@ -51,7 +51,7 @@ Agent 预设（会话形态）与插件同级，各自独立文档：
 | 模式 | id | 说明 | 分发方式 | 文档 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/nixos.md](docs/zh/modes/nixos.md) |
-| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`nixpkgs-package-upstream`/`nixkits-package-upstream`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
+| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`upstream-audit`/`nixkits-package-upstream`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
 | 新闻三要素模式 | `news-three-elements` | 派生自极简模式的**只读**创作模式：「新闻三要素」= 三位必须到齐的主角；素材优先（接不回来才拒）、素材共创先检索再改写（无检索即退稿）、在线抓取技能包、开场问答三选一、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements` | [docs/zh/modes/news-three-elements.md](docs/zh/modes/news-three-elements.md) |
 
 > 前两者随 dsh-nixos-shell 包经 `nixkits.dsh.presets.nixosMode` / `.maintenanceMode` seed-once 写入 `$DSH_HOME/.agent-presets`；新闻三要素模式由独立包 `dsh-preset-news-three-elements` 分发，`nixkits.dsh.presets.newsThreeElements` 把它的 `share/dsh-agent-presets` 注册为预设根（不复制）。详见 [docs/zh/dsh.md](docs/zh/dsh.md) 的「模式」章节。
@@ -104,9 +104,9 @@ nix registry add nixkits github:Kihara777/NixKits
 | news-three-elements | 以真实通讯社格式编造俄式快讯——「新闻三要素」指巴兰尼科夫、尤丁采夫、布亚诺夫三位必须到齐的主角（游戏机制梗 + 素材优先的拒绝服务话术） | [docs/zh/skills/news-three-elements.md](docs/zh/skills/news-three-elements.md) |
 | nix-flake-update-check | **通用**：检查任意 nix flake 仓库的上游软件更新并升级（包型分流 hash 流程 / flake.lock / 补丁内版本 / nixpkgs 漂移陷阱） | [docs/zh/skills/nix-flake-update-check.md](docs/zh/skills/nix-flake-update-check.md) |
 | nixkits-check-updates | NixKits 更新适配层：四语文档、插件清单、维护日志、历史事故教训（依赖 nix-flake-update-check） | [docs/zh/skills/nixkits-check-updates.md](docs/zh/skills/nixkits-check-updates.md) |
-| nixkits-package-upstream | NixKits 上游贡献适配层：13 包的可行性台账、许可缺口处置、四语同步（依赖 nixpkgs-package-upstream） | [docs/zh/skills/nixkits-package-upstream.md](docs/zh/skills/nixkits-package-upstream.md) |
+| nixkits-package-upstream | NixKits 上游贡献适配层：13 包的可行性台账、许可缺口处置、四语同步（依赖 upstream-audit） | [docs/zh/skills/nixkits-package-upstream.md](docs/zh/skills/nixkits-package-upstream.md) |
 | nixkits-skills | NixKits 技能安装器（本地/在线） | [docs/zh/skills/nixkits-skills.md](docs/zh/skills/nixkits-skills.md) |
-| nixpkgs-package-upstream | **通用**：把自建软件包提交到上游 nixpkgs（评估 → 审计 → dry-run → 实操；含 AI 贡献政策与 by-name 要求） | [docs/zh/skills/nixpkgs-package-upstream.md](docs/zh/skills/nixpkgs-package-upstream.md) |
+| upstream-audit | **通用**：把自建软件包提交到上游 nixpkgs（评估 → 审计 → dry-run → 实操；含 AI 贡献政策与 by-name 要求） | [docs/zh/skills/upstream-audit.md](docs/zh/skills/upstream-audit.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
 | agent-self-maintenance | Agent 自我维护的五个机制：日记闸门、开局对账、事实核查、自我观察、自检收据 | [docs/zh/skills/agent-self-maintenance.md](docs/zh/skills/agent-self-maintenance.md) |
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |

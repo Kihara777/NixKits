@@ -18,7 +18,7 @@
 
 在 NixOS模式的全部能力之上追加：
 
-- **运行时技能**：`maintenance-skills` 入口在 apply 时从**构建期嵌入**的仓库 `skills/` 树注册 `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates`、`nixpkgs-package-upstream`、`nixkits-package-upstream`，并自动发现全部 `translate-*` 语言扩展——技能内容以仓库 `skills/` 为单一来源，全新会话即最新。
+- **运行时技能**：`maintenance-skills` 入口在 apply 时从**构建期嵌入**的仓库 `skills/` 树注册 `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates`、`upstream-audit`、`nixkits-package-upstream`，并自动发现全部 `translate-*` 语言扩展——技能内容以仓库 `skills/` 为单一来源，全新会话即最新。
 - **维护工作流提示词，分两层**（与上面技能的分法一致：通用方法 ← 仓库适配层）：
 
   | 段名 | 作用域 | 内容 |

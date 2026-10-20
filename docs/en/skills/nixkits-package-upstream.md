@@ -10,7 +10,7 @@
 |------|-------|
 | Type | Coding Agent Skill |
 | Path | `skills/nixkits-package-upstream/SKILL.md` |
-| Dependencies | [`nixpkgs-package-upstream`](nixpkgs-package-upstream.md) (the general method) |
+| Dependencies | [`upstream-audit`](upstream-audit.md) (the general method) |
 
 ## Features
 

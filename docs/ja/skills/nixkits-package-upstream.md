@@ -10,7 +10,7 @@
 |------|-----|
 | 種別 | Coding Agent Skill |
 | 経路 | `skills/nixkits-package-upstream/SKILL.md` |
-| 依存 | [`nixpkgs-package-upstream`](nixpkgs-package-upstream.md)（汎用手法） |
+| 依存 | [`upstream-audit`](upstream-audit.md)（汎用手法） |
 
 ## 機能
 

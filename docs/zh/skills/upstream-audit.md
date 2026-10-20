@@ -1,6 +1,6 @@
-# nixpkgs-package-upstream (Skill)
+# upstream-audit (Skill)
 
-中文 | [English](../../en/skills/nixpkgs-package-upstream.md) | [日本語](../../ja/skills/nixpkgs-package-upstream.md)  | [偽中国語](../../pcn/skills/nixpkgs-package-upstream.md)
+中文 | [English](../../en/skills/upstream-audit.md) | [日本語](../../ja/skills/upstream-audit.md)  | [偽中国語](../../pcn/skills/upstream-audit.md)
 
 > 把一个自建软件包提交到上游 nixpkgs 的通用流程：评估 → 审计 → dry-run → 实操。
 
@@ -9,7 +9,7 @@
 | 项目 | 值 |
 |------|-----|
 | 类型 | Coding Agent Skill |
-| 路径 | `skills/nixpkgs-package-upstream/SKILL.md` |
+| 路径 | `skills/upstream-audit/SKILL.md` |
 | 依赖 | 无（仓库特有环节由适配层提供） |
 
 ## 功能

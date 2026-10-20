@@ -18,7 +18,7 @@
 
 NixOS模式の全能力に加えて：
 
-- **ランタイムスキル**：`maintenance-skills` エントリは apply 時に、**ビルド時に埋め込まれた**リポジトリの `skills/` ツリーから `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates`、`nixpkgs-package-upstream`、`nixkits-package-upstream` を登録し、全 `translate-*` 言語拡張を自動発見する——技能内容はリポジトリ `skills/` を単一ソースとし、新規セッションでも常に最新。
+- **ランタイムスキル**：`maintenance-skills` エントリは apply 時に、**ビルド時に埋め込まれた**リポジトリの `skills/` ツリーから `write-project-docs`、`write-maintenance-log`、`nix-flake-update-check`、`nixkits-check-updates`、`upstream-audit`、`nixkits-package-upstream` を登録し、全 `translate-*` 言語拡張を自動発見する——技能内容はリポジトリ `skills/` を単一ソースとし、新規セッションでも常に最新。
 - **保守ワークフロープロンプトは二層構成**（上記スキルと同じ分け方：汎用の方法 ← リポジトリ適配層）：
 
   | セクション名 | 適用範囲 | 内容 |

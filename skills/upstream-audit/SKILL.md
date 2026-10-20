@@ -1,16 +1,17 @@
 ---
-name: nixpkgs-package-upstream
-description: 把一个自建软件包提交到上游 nixpkgs——**先分流**（首次贡献 vs 再次贡献 × 全新添加 vs 版本更新：维护者条目是一次性的，再次贡献不再动名单；update 跳过评估与放哪两节），再评估可行性（是否已在 master、是否有人开着在途 PR、许可依据能不能在**那个 tag 里**指认、有没有维护意愿、依赖会不会与 nixpkgs 共用包集冲突），再审计当前要求（by-name 结构 + nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI，以及**名单 handle 必须匹配 commit 作者**这条决定用哪个账号的硬约束），然后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物），**并且逐行通读要提交的那份 diff**（判据抓不到的空 maintainers、内部注释、注释语言、冗余输入、正文错数字，全在这一步），最后才 fork 提 PR（**PR 模板不得删改、fork 的 master 要先快进**）。含收到 review 后如何按『合规/规范/更正确/他的判断』四类分辨建议性质、何时可以点 apply suggestion、以及「批准 ≠ 合并」（非 by-name 的包 merge bot 管不了）、Qt 依赖者的必填项（依赖 qtbase 不声明包装意图就在 qtPreHook 阶段失败）、`__structuredAttrs` 的实测 A/B、PR 正文要短这条实测反馈（审阅者批准时附的「验证段能再短些」）、AI 贡献政策（Assisted-by trailer，commit/PR 正文/评论三层各自披露）、包该放哪的第三种去向（具名集合靠求值确认发现机制）、nixpkgs-review 的三个坑（空报告=求值失败、绿但全缓存、pr 子命令审不了 fork PR）、跨 nixpkgs 版本比产物为何不能比字节、以及自动检查假警报的处置。仓库特有的文档与日志环节经「仓库适配层」注入。
+name: upstream-audit
+description: 审计一个自建软件包能否安全地提交到上游 nixpkgs——**只读，到 dry-run 为止**。做四件事：先分流（首次贡献 vs 再次贡献 × 全新添加 vs 版本更新）、再评估可行性（是否已在 master、有无在途 PR、许可依据能否在**那个 tag 里**指认、维护意愿、依赖冲突）、再审计当前要求（by-name 结构、nixpkgs-vet 的 12 条检查与 3 条棘轮、meta 必填项、nixfmt、commit 前缀驱动 CI、名单 handle 必须匹配 commit 作者）、最后对着**一棵真的 nixpkgs 树**做 dry-run（构建成功不算数，要跑产物；并逐行通读要提交的那份 diff）。**本技能不执行任何写操作**：不 push、不建 PR、不以你的名义评论或回复——它产出「可提交/不可提交 + 证据」，提交动作属于另一层。
 ---
 
-# 把软件包提交到上游 nixpkgs（通用）
+# 上游贡献审计（到 dry-run 为止）
 
-把仓库里自己打的包变成 nixpkgs 的一部分。
+**本技能的边界**：它**只读**。不 `git push`、不 `gh pr create`、不以任何人的名义评论或回复。
+它回答的是「**这个包能不能提交，证据是什么**」，而不是替谁提交。
 
-本技能只包含**与仓库无关**的通用方法。仓库特有的环节（多语文档同步、维护日志、
-自检登记等）由**仓库适配层**提供——见文末。
+需要真正提交时，那些动作属于**带授权与账号约束的那一层**（本机是掌灯模式的
+`lampkeeper-upstream-submit`），不在这里。
 
-**顺序不能换**：评估 → 审计 → dry-run → 实操。跳步的代价在最后一节。
+**顺序不能换**：评估 → 审计 → dry-run。跳步的代价见陷阱清单。
 
 ---
 
@@ -731,234 +732,10 @@ nixpkgs-review rev "$HEAD" --no-shell
 
 ---
 
-## 第 4 步：实操
-
-0. **先确认身份与账号**：`gh auth status`，看当前活跃账号是不是要用的那个。
-   nixpkgs 上的 author/committer 的 name 与 email 必须有效（CI 会校验）。
-1. Fork + 建分支（分支名提示改动内容即可），基于 `master`：
-   ```bash
-   git fetch upstream
-   git switch --create init-<包名> upstream/master
-   ```
-   ⚠️ **先看 fork 的 `master` 落后多少。** 很久没同步的 fork 可能落后几千个提交，
-   而 PR 的 diff 是相对 **fork 的 base** 算的 —— base 太旧，diff 里就会混进上游那一堆提交，
-   把「+75 行」变成「+几万行」。先快进：
-
-   ```bash
-   # 确认能快进（fork 的 master 是上游 master 的祖先）再推，否则要 force
-   git merge-base --is-ancestor <fork-master> <upstream-master> && echo 可快进
-   git push https://github.com/<你>/nixpkgs.git <upstream-master>:refs/heads/master
-   ```
-
-2. 两个 commit，**顺序不能反**：
-   - `maintainers: add <handle>`（改 `maintainers/maintainer-list.nix`）
-   - `<包名>: init at <版本>`（加 `pkgs/by-name/<shard>/<包名>/package.nix`）
-   两个 commit 都带 `Assisted-by: <工具> <模型版本>` trailer。
-   **提交账号必须是名单里的那个 `github`** —— 见 §2.4。
-   ⚠️ 提交信息里**不要用 shell 双引号包反引号**：`` `foo(d)` `` 会被当命令替换吃掉，
-   提交信息里那几段会**静默变成空白**。多行信息一律写文件再 `-F` / `--body-file`。
-3. `git push --set-upstream origin HEAD`，按模板开 PR。
-
-   ⚠️ **PR 正文必须保留模板的全部行。** 模板自己写着：
-
-   > please do not remove the template, even when nothing is checked!
-
-   模板的结构是 `## Things done` / `- Built on platform:` / `- Tested, as applicable:` /
-   `- Nixpkgs Release Notes` / `- NixOS Release Notes`，外加底部一批 `[链接]: URL` 定义。
-   **自己另写一套「Things done」= 删了模板**，即使内容意思相同。
-   该勾的勾，不该勾的留空**并写明为什么不适用**（模板的措辞是 "as applicable"）。
-   **没跑过的不许勾** —— 上游 CI 会跑它，但替你打勾是另一回事。
-4. **等**。原文：「It is entirely normal for your PR to sit around without any feedback
-   for days, weeks or sometimes even months.」
-   加速手段：勾满模板、打全标签、先拿到非 committer 的 review、**至少一周**无活动后再去
-   Discourse 的 review-requests 帖或 Matrix 频道。
-
-**谁按提交按钮、谁答评审**：按 AI 政策，答评审的是那位「在环里负责的人」。
-工具不能代答——把评审意见转发给工具再转回去，是政策明说不允许的。
-
-
-## 第 4.5 步：收到 review 之后（判断建议的性质，再决定怎么动手）
-
-**审阅者的建议不是同一类东西。** 先分类，再决定「改不改」「怎么改」——
-否则会把「风格偏好」当成「硬要求」，或者把「真问题」当成「口味」。
-
-### 三类，判断依据是「能不能指出出处」
-
-| 类型 | 判据 | 处理 |
-|---|---|---|
-| **合规性要求** | 能引到 CI 会拦的规则、或文档里出现 **must** | 必须改；不改会红或会被再次 request changes |
-| **书写规范** | 能引到文档里的 **should / preferred**，或全仓有压倒性的用法 | 通常该改；它决定「像不像 nixpkgs 的代码」 |
-| **更严谨/更正确** | 能指出类型安全、边界条件、可维护性的实质差别 | 该改；但要能说清「改了之后哪里更不容易坏」 |
-
-**每一条都要能说出出处。** 说不出出处的，是**他的判断**（比如「这段注释可以删」），
-那是可以商量的 —— 但要先承认它是判断，别伪装成规则。
-
-### 实例：同一轮 review 里的四条，性质完全不同
-
-| 建议 | 类型 | 依据 |
-|---|---|---|
-| 「加 `__structuredAttrs`」 | **规范 + 合规** | 文档 "is the preferred default"；"All new **top level** packages must enable"（我们不是顶层包，所以未被 CI 强制） |
-| 「用 `lib.cmakeBool`，并链接到上游文件」 | **规范 + 更正确** | 928 个包在用；它 `assert (lib.isBool flag)` 且生成带 `:BOOL` 的明确形态 |
-| 「删掉许可证理由」 | **他的判断** | 结论已由 `license = …gpl2Only;` 本身表达 |
-| 「删掉 `platforms` 那行注释」 | **他的判断** | 见下 |
-
-### 「自解释的代码不需要注释重述」——第四条建议的理由
-
-被删的是这一行注释：
-
-```nix
-    # A plugin cannot be built where its host cannot: obs-studio has no riscv64.
-    inherit (obs-studio.meta) platforms;
-```
-
-**为什么可以删**：`inherit (obs-studio.meta) platforms` **这一行本身就在说**
-「平台集合跟宿主一致」。那句注释是把同一件事用散文再说一遍。
-
-**判据**：**注释应该解释「为什么」，而不是把代码已经说的事复述一遍。**
-一条注释如果删掉之后，读代码的人仍然得到同样的信息，它就是冗余的。
-
-> 注意这与「特殊选择的动机要记录」**不冲突** —— 那条要求的是
-> **代码本身表达不出来的理由**（为什么选这个 upstream、为什么打这个补丁）。
-> `inherit` 已经表达了理由，就不需要散文。
-
-### 「链接优于散文」——第二条建议的一半
-
-审阅者把 6 行解释 CMake 开关的散文，换成一行**指向上游 `CMakePresets.json#L12-L15` 的链接**。
-
-**为什么更好**：证据还在、字数下来了、而且**指向真实行号**。
-上游改了这一行，链接会失效 —— 那比一段永远不会过期的散文**更诚实**：
-散文会悄悄变成谎言，断链会立刻暴露。
-
-### 什么时候可以点 "Apply suggestion"
-
-**判断标准：这条改动是否「机械、无争议、不影响产物」。**
-
-| 可以点 | 不要点 |
-|---|---|
-| 改拼写、改注释措辞 | **改变派生**（构建标志、依赖、`__structuredAttrs`） |
-| 纯文档字句 | 需要你判断「要不要删」的评论删除 |
-| 不碰任何构建输入 | 一处点了、另一处没点会让 PR 停在半截状态 |
-
-**点按钮的两个副作用**：
-
-1. **它生成一个 GitHub 提交**，不带你惯用的 `Assisted-by:` 披露 —— 披露链在那一个提交上断掉；
-2. **它直接改远端分支，你本地一次都没建过** —— 改动若影响派生，就是在**没验证的情况下推上去**。
-
-**多个建议要一起处理时，用 "Add suggestion to batch" 再一次性提交**，
-否则会生成一串零碎提交。
-
-### 批准之后没有动静，是正常的（合并权在别人手里）
-
-**`APPROVED` 不是合并队列。** 合并需要一位**有合并权的人**按下按钮。
-
-实测（六个已合并的「首次贡献 + 新包」PR）：2 个是**批准者自己合并**（几小时），
-1 个是**别人批、committer 合**（约一天半），**3 个根本没有正式批准就合了**。
-
-**而且 nixpkgs 的 merge bot 有一道我们过不去的门槛**（`ci/github-script/merge.ts`）：
-
-```typescript
-const allByName = files.every(({ filename }) =>
-  filename.startsWith('pkgs/by-name/') && filename.split('/').length > 4)
-```
-
-**`allByName` 是检查表里的一项，每一项都必须为真** —— 所以
-**只要改动里有任何文件不在 `pkgs/by-name/` 下**（维护者名单、类别目录里的包、
-具名集合里的插件），**`@NixOS/nixpkgs-merge-bot merge` 就无法合并它**，
-只能等人手动合。
-
-**这不是卡住，是这类包的正常通道。**
-
-### review 之后要改 commit 结构：squash 进原提交，再 force-push
-
-**2026-10-19 维护者群里的原话**：
-
-> obs-bilibili-stream 的那三个 commit 应该合成一个
-> 保留 `maintainers: xxx` 和后面的 init，共两个，是比较推荐的
-> nixpkgs 可 force push
-
-并引用 CONTRIBUTING「If you have commits `pkg-name: oh, forgot to insert whitespace`:
-squash commits in this case. Use `git rebase -i`.」，然后明确「**是要求**」。
-
-**三条硬性要求：**
-
-1. **review 产生的修补提交不能留在最终历史里。** 「修 review」不是新的逻辑单元，
-   是同一个 init 的碎片（CONTRIBUTING §Commit conventions：Create one commit for
-   each logical unit）。判据：`git log` 里出现 `init` 后面跟着
-   `enable __structuredAttrs`、`drop comments` 这类续篇 → 该 squash。
-2. **`maintainers: add <handle>` 是独立逻辑单元，squash 时保留。** 首次贡献的
-   最终历史 = **两个 commit**（名单在前、包在后），不是三个、也不是一个。
-3. **改写历史必须 force-push，而 nixpkgs 允许。** CONTRIBUTING 第 7 条把两件事分开写：
-   - 加新提交 → `git push`
-   - 改已有提交 / rebase → `git push --force-with-lease`
-
-   **所以「不碰 force」这条纪律只适用于「加提交」。** 需要 squash 时不带 force
-   根本推不上去——正确动作是 `--force-with-lease`，且**显式给期望值**
-   （本仓 `origin` 指向上游，本地没有 fork 的 tracking ref，无参 lease 不可靠）：
-
-   ```bash
-   git push \
-     --force-with-lease=refs/heads/<分支>:<远端当前 SHA> \
-     <fork URL> \
-     <新 SHA>:refs/heads/<分支>
-   ```
-
-**squash 的验证链（本地 SHA 拉不到，`nixpkgs-review` 跑不了）：**
-
-| 判据 | 怎么量 |
-|---|---|
-| 树未变 | `git diff --stat <旧头> <新头>` 为空 |
-| 派生未变 | 从新树求 `outPath`，与旧头相同 |
-| 产物未变 | 同一 output path 下 `.so` / `config.json` / `en-US.ini` 的 sha256 |
-
-树同 ⇒ 派生同 ⇒ 产物同。这条链比再构建一次更强。
-
-**两个实测事实（别再凭印象说）：**
-
-- **PR 标题与正文不受 force-push 影响**——它们在 PR 记录里，不在 commit 里。
-  推前推后各取 `title` / `body` 的 sha256 即可证明。
-- **行内评审评论不一定变 outdated**：squash 后 diff 形状不变（同样是「新增 N 行
-  文件」）时，锚点依然有效；实测四条评论全部 `outdated=false`。
 
 ---
 
-## 第五步之后：跟踪与维护
-
-- `passthru.updateScript = nix-update-script { };` **不是必需**。r-ryantm 对 GitHub
-  上的包有默认跟新行为：实测（2026-10-19）`obs-studio-plugins` 目录 54 个包定义里
-  只有 4 个带 updateScript，而被 r-ryantm 跟新过的成员（`obs-vertical-canvas`、
-  `obs-backgroundremoval`、`droidcam-obs`、`obs-plugin-countdown`）**都没有它**。
-- **所以首次贡献时不必为它单独开一个 PR**：等上游第一次发版、开版本更新 PR 时
-  顺手带上（同类模板 `obs-browser-transition.nix`）即可；若那时 r-ryantm 已经在跟，
-  就完全不必要加。
-- **不存在 `meta.dontUpdate` 这个标记**——想让 r-ryantm 跳过，靠的是不设 updateScript。
-- 合并后，你就是维护者：上游发版要跟。
-- 合并后删掉自己的分支（PR 的 head 分支），保持 fork 干净。
-
-### 附：一次完整首次贡献的轨迹（2026-10-10 → 10-19，`obs-bilibili-stream`）
-
-| 阶段 | 动作 | 判据 / 结果 |
-|---|---|---|
-| 选包与审计 | 可行性、许可、上游 issue | 先搜上游有没有人做过；不要先问「要许可」 |
-| 写包 | 定义 + 本地 `nixpkgs-review` | 1 package added / built |
-| 开 PR | `maintainers` commit + init commit | 正文含 AI 披露段（与 commit 分开） |
-| 评审 | 四条建议 | 三分类；全部应用 |
-| 修补 | 两个 follow-up commit | 追加式 `git push` |
-| squash | 维护者要求 | 两个 commit；`--force-with-lease` |
-| 复核 | 评审者 dismiss + 触发 `nixpkgs-review-gha` | 两平台各 1 package built |
-| 合并 | committer 手动合并 | merge commit 进 master |
-
-**三个「下一次会更快」的点：**
-
-1. **规范依据有两个来源：文档 + 社区。** 文档给 must / should；社区（维护者群、PR 评论）
-   给「这一次到底要不要」。问一句「这是建议还是要求」，通常能拿到明确答复——
-   这次就拿到了「nixpkgs 可 force push」与「是要求」。
-2. **`nixpkgs-review` 不必自己跑所有平台。** 评审者可在 PR 上触发
-   `nixpkgs-review-gha`，结果以评论形式贴出（每个平台 `1 package built` 或
-   `No rebuilds`）。本地拉不到的 SHA，可以请他们跑。
-3. **「没有动静」不等于卡住。** 实测：推 squash 到评审者处理隔 **2 小时**；
-   从开 PR 到合并共 **2 天 22 小时**。期间不需要催。
-
----
+## 附：陷阱清单（审计阶段就要知道）
 
 ## 第六节：陷阱清单
 
@@ -1132,13 +909,11 @@ gh api 'repos/NixOS/nixpkgs/contents/<目录>?ref=master' --jq '.[].name'   # �
 
 ---
 
-## 仓库适配层
 
-本技能只含通用方法。仓库特有的环节由适配层提供：
+---
 
-- 多语文档同步（新增内容先写基准语言，再翻译；各语言条目数要相等）、
-- 维护日志（推送后必须补录，且多语同步）、
-- 把新技能登记进仓库自检与文档索引、
-- 各类 `check-*.py` 自检的射程。
+## 提交之后的部分不在这里
 
-NixKits 的适配层见 `skills/nixkits-package-upstream/`。
+原技能的第 4 步（fork/分支/commit/push/PR）、第 4.5 步（回应 review）、
+第五步之后（删分支/跟版本）已移到带授权的那一层。**审计技能不做这些，也不给步骤**
+——不给步骤，才不会有人照着半套步骤去做。

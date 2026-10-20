@@ -1,6 +1,6 @@
-# nixpkgs-package-upstream (Skill)
+# upstream-audit (Skill)
 
-[中文](../../zh/skills/nixpkgs-package-upstream.md) | [English](../../en/skills/nixpkgs-package-upstream.md) | 日本語 | [偽中国語](../../pcn/skills/nixpkgs-package-upstream.md)
+[中文](../../zh/skills/upstream-audit.md) | [English](../../en/skills/upstream-audit.md) | 日本語 | [偽中国語](../../pcn/skills/upstream-audit.md)
 
 > 自前で梱包したソフトウェアを上流の nixpkgs へ提出する汎用手順：評価 → 監査 → dry-run → 実施。
 
@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | 種別 | Coding Agent Skill |
-| 経路 | `skills/nixpkgs-package-upstream/SKILL.md` |
+| 経路 | `skills/upstream-audit/SKILL.md` |
 | 依存 | 無し（倉庫固有の環節は適配層が提供） |
 
 ## 機能

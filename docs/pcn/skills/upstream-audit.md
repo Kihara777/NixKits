@@ -1,6 +1,6 @@
-# nixpkgs-package-upstream (技能)
+# upstream-audit (技能)
 
-[中文](../../zh/skills/nixpkgs-package-upstream.md) | [English](../../en/skills/nixpkgs-package-upstream.md) | [日本語](../../ja/skills/nixpkgs-package-upstream.md)  | 偽中国語
+[中文](../../zh/skills/upstream-audit.md) | [English](../../en/skills/upstream-audit.md) | [日本語](../../ja/skills/upstream-audit.md)  | 偽中国語
 
 > 自前梱包軟体 上流 nixpkgs 提出 汎用手順：評価 → 監査 → dry-run → 実施。
 
@@ -9,7 +9,7 @@
 | 項目 | 値 |
 |------|-----|
 | 種別 | 符号化代理技能 |
-| 路 | `skills/nixpkgs-package-upstream/SKILL.md` |
+| 路 | `skills/upstream-audit/SKILL.md` |
 | 依存 | 無（倉庫固有環節 適配層提供） |
 
 ## 機能

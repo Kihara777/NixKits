@@ -1,6 +1,6 @@
-# nixpkgs-package-upstream (Skill)
+# upstream-audit (Skill)
 
-[中文](../../zh/skills/nixpkgs-package-upstream.md) | English | [日本語](../../ja/skills/nixpkgs-package-upstream.md)  | [偽中国語](../../pcn/skills/nixpkgs-package-upstream.md)
+[中文](../../zh/skills/upstream-audit.md) | English | [日本語](../../ja/skills/upstream-audit.md)  | [偽中国語](../../pcn/skills/upstream-audit.md)
 
 > The general workflow for submitting a self-packaged piece of software upstream to nixpkgs: assess → audit → dry-run → act.
 
@@ -9,7 +9,7 @@
 | Item | Value |
 |------|-------|
 | Type | Coding Agent Skill |
-| Path | `skills/nixpkgs-package-upstream/SKILL.md` |
+| Path | `skills/upstream-audit/SKILL.md` |
 | Dependencies | None (repository-specific steps are supplied by the adaptation layer) |
 
 ## Features

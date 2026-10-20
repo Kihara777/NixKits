@@ -1,11 +1,11 @@
 ---
 name: nixkits-package-upstream
-description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 nixpkgs-package-upstream 之上，补充本仓特有的环节：13 个包的可行性台账（谁已进 nixpkgs、谁有在途 PR、谁不值得提）、许可缺口的处置、四语文档与语言切换器、维护日志补录、新技能登记进 README 与自检，以及本仓历史上写错过的「nixpkgs 已不再提供 X」这类过期自述的更正。依赖 nixpkgs-package-upstream。
+description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 upstream-audit 之上，补充本仓特有的环节：13 个包的可行性台账（谁已进 nixpkgs、谁有在途 PR、谁不值得提）、许可缺口的处置、四语文档与语言切换器、维护日志补录、新技能登记进 README 与自检，以及本仓历史上写错过的「nixpkgs 已不再提供 X」这类过期自述的更正。依赖 upstream-audit。
 ---
 
 # NixKits 上游贡献适配层
 
-本技能是 [`nixpkgs-package-upstream`](../nixpkgs-package-upstream/SKILL.md) 的**仓库适配层**。
+本技能是 [`upstream-audit`](../upstream-audit/SKILL.md) 的**仓库适配层**。
 通用方法（评估六问、by-name 与 nixpkgs-vet 要求、dry-run 四层判据、AI 政策、陷阱清单）
 在那边；这里只写 **NixKits 特有**的东西。
 
