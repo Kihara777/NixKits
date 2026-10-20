@@ -20,7 +20,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 >
 ## 软件
 
-平台支持分两类：多数包声明 `lib.platforms.all`（不限平台），受上游二进制或模块约束的包（`codewhale`、`obs-bilibili-stream`、`godot-ai`）限定为 Linux。另受各包构建架构影响，具体请查看各包文档中的构建徽章。
+平台支持分两类：多数包声明 `lib.platforms.all`（不限平台），受上游二进制或模块约束的包（`codewhale`、`obs-bilibili-stream`、`godot-ai`、`rea`）限定为 Linux。另受各包构建架构影响，具体请查看各包文档中的构建徽章。
 
 | 软件 | 说明 | 文档 |
 |---|------|------|
@@ -32,6 +32,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
+| rea | 逆向工程 CLI + MCP 服务——用 agent 从应用行为一直下探到原生二进制（静态分析不需要外部引擎） | [docs/zh/rea.md](docs/zh/rea.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
 ## 插件

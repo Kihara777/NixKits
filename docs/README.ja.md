@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## ソフトウェア
 
-プラットフォーム対応は二種類に分かれる：大半のパッケージは `lib.platforms.all` を宣言（プラットフォーム制限なし）し、上流バイナリやモジュールの制約を受けるもの（`codewhale`、`obs-bilibili-stream`、`godot-ai`）は Linux 限定である。アーキテクチャ対応もパッケージごとに異なる — 各パッケージ文書のビルドバッジを参照。
+プラットフォーム対応は二種類に分かれる：大半のパッケージは `lib.platforms.all` を宣言（プラットフォーム制限なし）し、上流バイナリやモジュールの制約を受けるもの（`codewhale`、`obs-bilibili-stream`、`godot-ai`、`rea`）は Linux 限定である。アーキテクチャ対応もパッケージごとに異なる — 各パッケージ文書のビルドバッジを参照。
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|
@@ -28,6 +28,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | obs-bilibili-stream | OBS Bilibili 配信プラグイン | [docs/ja/obs-bilibili-stream.md](ja/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
+| rea | リバースエンジニアリング用 CLI と MCP サーバー——agent でアプリの挙動からネイティブバイナリまで（静的解析に外部エンジン不要） | [docs/ja/rea.md](ja/rea.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
 ## プラグイン

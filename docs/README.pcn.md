@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## 軟体
 
-平台対応 二種 分類：多数包 `lib.platforms.all` 宣言（平台制限 無）、上流二進 或 模組 制約 受 物（`codewhale`、`obs-bilibili-stream`、`godot-ai`）Linux 限定。構造支援 亦 包毎 異 — 各包文書 構築徽章 参照。
+平台対応 二種 分類：多数包 `lib.platforms.all` 宣言（平台制限 無）、上流二進 或 模組 制約 受 物（`codewhale`、`obs-bilibili-stream`、`godot-ai`、`rea`）Linux 限定。構造支援 亦 包毎 異 — 各包文書 構築徽章 参照。
 
 | 軟体 | 説明 | 文書 |
 |---|------|------|
@@ -28,6 +28,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | obs-bilibili-stream | OBS Bilibili 配信拡張 | [docs/pcn/obs-bilibili-stream.md](pcn/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
+| rea | 逆工程 CLI 與 MCP 服務器——依 agent 自応用挙動至原生二進制（静的解析不要外部機関） | [docs/pcn/rea.md](pcn/rea.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 
 ## 插件
