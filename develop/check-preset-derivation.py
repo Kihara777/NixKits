@@ -42,13 +42,45 @@ PATCH_MAINTENANCE_DELTA = (
     "            name: '@kihara777/dsh-nixos-shell/maintenance-skills'\n"
 )
 
+# 逆向模式相对维护模式的唯一允许差异（末尾追加块，含注释）。
+# 该块变更时同步更新此常量。
+PATCH_REA_DELTA = (
+    "\n"
+    "\n"
+    "          # ── 逆向模式 ─────────────────────────────────────────────────────────────────\n"
+    "\n"
+    "          # `mcp-rea` connects the NixKits `pkgs.rea` binary (REA — Reverse Engineer\n"
+    "          # Anything) as a stdio MCP server; its tools appear as `mcp__rea__*`.\n"
+    "          #\n"
+    "          # 全量注册是有意的：`dsh-mcp-client` **没有**工具白名单/过滤选项（核过它的\n"
+    "          # README 与 config 字段表），所以「只挑一部分」的唯一办法是不挂这条行。本预设\n"
+    "          # 面向「我要全部逆向能力」的场景 —— 工具表很长是它的代价，不是缺陷。\n"
+    "          #\n"
+    "          # `command` 从 `REA_BIN_PATH` 解析：modules/dsh.nix 在启用本预设时把它设成\n"
+    "          # `pkgs.rea` 的 store 路径，因此这份正文里不出现任何 store 路径（正文要能\n"
+    "          # 逐字节派生，也要能在没有 Nix 的机器上读）。变量缺席时退回 PATH 里的 `rea`，\n"
+    "          # 让手工装配也能跑。\n"
+    "          #\n"
+    "          # `failOnStartupError: false`：REA 起不来时整份预设不该跟着变 broken ——\n"
+    "          # 维护模式的其余能力仍然可用，缺的只是 mcp__rea__* 这一组工具。\n"
+    "          - id: mcp-rea\n"
+    "            name: '@deepseek-ai/dsh-mcp-client'\n"
+    "            config:\n"
+    "              serverName: rea\n"
+    "              transport: stdio\n"
+    "              command: !!js \"(process.env.REA_BIN_PATH || 'rea')\"\n"
+    "              args: ['mcp']\n"
+    "              failOnStartupError: false\n"
+)
+
 # 派生比较的分界行：`plugins:` 键之后到文件末尾就是插件行正文。
 PATCH_MARKER = "        plugins:"
 
-# 预设 id（roster 里的 id）与 `config.order`。order 取 10/11/13：内置预设
-# standard/ptc/minimal/cordis 占 1–4，且必须在 roster 里唯一。
-PATCH_IDS = {"nixos-mode": "nixos", "maintenance-mode": "maintenance"}
-PATCH_ORDERS = {"nixos-mode": 10, "maintenance-mode": 11}
+# 预设 id（roster 里的 id）与 `config.order`。内置预设 standard/ptc/minimal/cordis
+# 占 1–4，且 order 必须在 roster 里唯一：12 = Kitsunome 的掌灯模式、
+# 13 = 新闻三要素模式、14 = Ocean Spiral（均在别的仓库/包），故这里取 10/11/15。
+PATCH_IDS = {"nixos-mode": "nixos", "maintenance-mode": "maintenance", "rea-mode": "rea"}
+PATCH_ORDERS = {"nixos-mode": 10, "maintenance-mode": 11, "rea-mode": 15}
 BUILTIN_PRESET_ORDERS = {1, 2, 3, 4}
 
 # 独立包里的预设（新闻三要素模式）：只有元数据与 order 的核对，没有上游派生关系。
@@ -110,13 +142,20 @@ def check_head(path: str, directory: str, preset_id: str, order: int, orders: li
     orders.append(order)
 
 
-def check_patch_pair(orders: list) -> None:
-    """0.2.0 通道：plugins 正文派生 + 每个文件头部的元数据自洽。"""
+def check_patch_chain(orders: list) -> None:
+    """0.2.0 通道：plugins 正文派生链 + 每个文件头部的元数据自洽。
+
+    派生链是**三段**：nixos → maintenance → rea。逐段核对，不是「三者各自独立」——
+    改 nixos-mode 而漏了维护模式时，第一段先响；只改了维护模式而漏了逆向模式时，
+    第二段响。这正是「维护模式必须完整派生」那条仓库规矩的延长线。
+    """
     nixos_path = os.path.join(PRESETS, "nixos-mode", "preset.patch.yml")
     maint_path = os.path.join(PRESETS, "maintenance-mode", "preset.patch.yml")
+    rea_path = os.path.join(PRESETS, "rea-mode", "preset.patch.yml")
 
     nixos_body = patch_body(nixos_path)
     maint_body = patch_body(maint_path)
+    rea_body = patch_body(rea_path)
     if maint_body != nixos_body + PATCH_MAINTENANCE_DELTA:
         fail(
             "maintenance-mode/preset.patch.yml 与派生规则不符：\n"
@@ -125,10 +164,18 @@ def check_patch_pair(orders: list) -> None:
             "  修改 nixos-mode 后请同步维护模式（注意新格式整体缩进为 10 空格），或按需更新\n"
             "  检查脚本中的 PATCH_MAINTENANCE_DELTA 常量（仅限刻意变更追加块本身）。"
         )
+    if rea_body != maint_body + PATCH_REA_DELTA:
+        fail(
+            "rea-mode/preset.patch.yml 与派生规则不符：\n"
+            "  `plugins:` 正文必须满足 rea == maintenance + 固定追加块。\n"
+            "  修改维护模式后请同步逆向模式（它派生自维护模式，不是另写一份）；\n"
+            "  或按需更新检查脚本中的 PATCH_REA_DELTA 常量（仅限刻意变更追加块本身）。"
+        )
 
     for directory, path in (
         ("nixos-mode", nixos_path),
         ("maintenance-mode", maint_path),
+        ("rea-mode", rea_path),
     ):
         check_head(
             path,
@@ -157,7 +204,7 @@ def fail(message: str) -> None:
 
 def main() -> None:
     orders: list = []
-    check_patch_pair(orders)
+    check_patch_chain(orders)
     check_news(orders)
 
     # 组合撰写技能曾**自带副本**；2026-10-02 起改为挂上游随
@@ -166,7 +213,7 @@ def main() -> None:
     # 模型上，而 0.2.0 的它已改成 patch/bundle 模型并明说「那个目录没人读了」——于是同名两份，
     # 其中一份在教废弃写法。故这里把「不再自带」钉成**断言**，而不是删掉就没人管：
     # 谁把副本加回来，检查就响。0.1.x 兼容用的旧副本在 `dsh-nixos-shell-stable.nix` 钉住的 rev 里。
-    for mode in ("nixos-mode", "maintenance-mode"):
+    for mode in ("nixos-mode", "maintenance-mode", "rea-mode"):
         stray = os.path.join(PRESETS, mode, "skills")
         if os.path.isdir(stray):
             fail(
@@ -176,8 +223,9 @@ def main() -> None:
             )
 
     print(
-        "preset-derivation: OK（维护模式完整派生自 NixOS模式；nixos / maintenance / "
-        "news-three-elements 三个 preset.patch.yml 的头部与 preset.yml 一致，order 互不冲突）"
+        "preset-derivation: OK（维护模式完整派生自 NixOS模式、逆向模式完整派生自维护模式；"
+        "nixos / maintenance / rea-mode / news-three-elements 四个 preset.patch.yml 的头部"
+        "与 preset.yml 一致，order 互不冲突）"
     )
 
 

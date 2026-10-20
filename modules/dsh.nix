@@ -127,15 +127,23 @@ let
     ''}
     ${lib.optionalString cfg.presets.nixosMode (presetRow "nixos-mode")}
     ${lib.optionalString cfg.presets.maintenanceMode (presetRow "maintenance-mode")}
+    ${lib.optionalString cfg.presets.reaMode (presetRow "rea-mode")}
     ${lib.optionalString cfg.presets.newsThreeElements (builtins.readFile cfg.presets.newsThreeElementsPackage.presetPatch)}
   '';
 
   # 两个变体混用时喊一声（不阻断求值）。判据：注入的那个 @kihara777/dsh-nixos-shell
   # 与 presets.package 不是同一个 derivation。
+  #
+  # 逆向模式（rea-mode）也在这条判据的射程内：它的 preset.patch.yml 与其他两个预设
+  # **同一个 presets/ 树**，而它的 skill-filesystem 行同样解析到注入的那个包。
   cordisPatch =
     let
       mismatch =
-        (cfg.presets.nixosMode || cfg.presets.maintenanceMode)
+        (
+          cfg.presets.nixosMode
+          || cfg.presets.maintenanceMode
+          || cfg.presets.reaMode
+        )
         && injectedNixosShell != null
         && injectedNixosShell.package.outPath != presetPackage.outPath;
     in
@@ -993,6 +1001,7 @@ in
       # cordis.patch.yml 的一条 `@deepseek-ai/dsh-agent-preset` 条目。
       nixosMode = lib.mkEnableOption "declare the NixOS模式 agent preset (id `nixos`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml";
       maintenanceMode = lib.mkEnableOption "declare the 维护模式 agent preset (id `maintenance`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml";
+      reaMode = lib.mkEnableOption "declare the 逆向模式 agent preset (id `rea`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml; it derives from 维护模式 and adds the REA MCP server, whose tools appear as mcp__rea__*";
       newsThreeElements = lib.mkEnableOption "declare the 新闻三要素模式 agent preset (id `news-three-elements`) as a `@deepseek-ai/dsh-agent-preset` row, assembling its plugin files under \$DSH_HOME/.agent-presets/news-three-elements";
       package = lib.mkOption {
         type = lib.types.package;
@@ -1005,7 +1014,7 @@ in
           else pkgs.dsh-nixos-shell-stable
         '';
         description = ''
-          提供 `nixos` / `maintenance` 两个预设**正文与技能内容**的
+          提供 `nixos` / `maintenance` / `rea` 三个预设**正文与技能内容**的
           dsh-nixos-shell 变体。默认跟随 dsh 通道（`nixkits.dsh.package` 的
           `passthru.dshChannel`）：
 
@@ -1034,6 +1043,21 @@ in
           dsh 0.2.0 的**分发方式变了**：0.1.x 是把本包的 `share/dsh-agent-presets`
           注册为 `agent-presets` roster 的一个额外 root（roots 机制随复数宿主行一起
           被删除），现在它与另两个预设同路 —— 一条 patch 行 + 一份内容目录。
+        '';
+      };
+      reaPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.rea;
+        defaultText = lib.literalExpression "pkgs.rea";
+        description = ''
+          逆向模式挂载的 REA 可执行包（<https://github.com/morluto/rea>）。
+          `nixkits.dsh.presets.reaMode` 启用时，模块把这个包的 `bin/rea` 以
+          `REA_BIN_PATH` 传进 dsh 服务：预设正文里的 `mcp-rea` 行读它来启动
+          stdio MCP 服务，所以正文本身不含任何 store 路径。
+
+          ⚠️ `pkgs.rea` 来自 NixKits overlay（`nixpkgs.overlays = [
+          inputs.nixkits.overlays.default ]`）。没加 overlay 时请显式传这个选项，
+          否则求值会以「attribute 'rea' missing」失败——这是显式的，不是静默跳过。
         '';
       };
     };
@@ -1189,6 +1213,10 @@ in
           "PATH=/run/current-system/sw/bin:/run/wrappers/bin:/etc/profiles/per-user/${cfg.user}/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
         ]
           ++ lib.optionals cfg.sudo.enable [ "NIXKITS_SUDO_SOCKET=${cfg.sudo.socketPath}" ]
+          # 逆向模式：把 REA 的 store 路径交给预设里的 `mcp-rea` 行（它读
+          # `REA_BIN_PATH` 启动 stdio MCP 服务）。这样 preset.patch.yml 正文里
+          # 不需要出现 store 路径，而「哪个 rea」由 Nix 求值决定。
+          ++ lib.optionals cfg.presets.reaMode [ "REA_BIN_PATH=${lib.getExe cfg.presets.reaPackage}" ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
         # Capture dsh's stdout (it prints the tokenized startup URL once)
         # for ExecStartPost to derive the external launch URLs.

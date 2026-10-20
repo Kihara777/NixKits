@@ -50,11 +50,12 @@ Agent 预设（会话形态）与插件同级，各自独立文档：
 
 | 模式 | id | 说明 | 分发方式 | 文档 |
 |------|-----|------|---------|------|
-| NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/nixos.md](docs/zh/modes/nixos.md) |
-| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`upstream-audit`/`nixkits-package-upstream`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，seed-once | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
+| NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切请求）；加载 `nixos_shell`/`nixos_cli` 与 NixOS 开发提示词 | dsh-nixos-shell 包内，patch 行 | [docs/zh/modes/nixos.md](docs/zh/modes/nixos.md) |
+| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`upstream-audit`/`nixkits-package-upstream`/`translate-*` 技能与仓库维护工作流提示词 | dsh-nixos-shell 包内，patch 行 | [docs/zh/modes/maintenance.md](docs/zh/modes/maintenance.md) |
+| 逆向模式 | `rea` | 派生自维护模式；在其全部能力之上挂载 REA（Reverse Engineer Anything）的 MCP 服务（工具名 `mcp__rea__*`，**全量注册**约百个），用于静态分析应用与二进制、并把结论按维护工作流写回仓库 | dsh-nixos-shell 包内，patch 行 | [docs/zh/modes/rea.md](docs/zh/modes/rea.md) |
 | 新闻三要素模式 | `news-three-elements` | 派生自极简模式的**只读**创作模式：「新闻三要素」= 三位必须到齐的主角；素材优先（接不回来才拒）、素材共创先检索再改写（无检索即退稿）、在线抓取技能包、开场问答三选一、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements` | [docs/zh/modes/news-three-elements.md](docs/zh/modes/news-three-elements.md) |
 
-> 前两者随 dsh-nixos-shell 包经 `nixkits.dsh.presets.nixosMode` / `.maintenanceMode` seed-once 写入 `$DSH_HOME/.agent-presets`；新闻三要素模式由独立包 `dsh-preset-news-three-elements` 分发，`nixkits.dsh.presets.newsThreeElements` 把它的 `share/dsh-agent-presets` 注册为预设根（不复制）。详见 [docs/zh/dsh.md](docs/zh/dsh.md) 的「模式」章节。
+> 前三个（NixOS模式 / 维护模式 / 逆向模式）随 dsh-nixos-shell 包分发：`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` / `.reaMode` 各把一份 `preset.patch.yml` 作为一条 patch 行并进 profile 的 `cordis.patch.yml`（dsh 0.2.0 起**不再复制目录**）；新闻三要素模式由独立包 `dsh-preset-news-three-elements` 分发，`nixkits.dsh.presets.newsThreeElements` 把它的 `share/dsh-agent-presets/news-three-elements` 组装到 `$DSH_HOME/.agent-presets/`，供该 patch 行的相对路径引用。详见 [docs/zh/dsh.md](docs/zh/dsh.md) 的「模式」章节。
 
 ## 开发
 
