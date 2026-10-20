@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:53:06+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — column parsing and fullscreen restore, verified headless ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900))
+
+- rev `55902a5` → `467c86e`; version stays `0.1.1`
+- src hash taken from `nix flake prefetch --json`; `npmDepsHash` unchanged
+- criteria: `nix build` succeeds; the output carries 6 × `preFullscreenCollapsed`, 2 × `fullscreenchange` listeners, 1 × single-track regex replacement, and 0 × whitespace splitting of grid columns
+
+| Commit | Description |
+|------|------|
+| `dc2b144` | chore(dsh-api-balance): wrapper rev bump to 467c86e |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `55902a5` → `467c86e` |
+
 ## 2026-10-21T08:35:59+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — the drawer only writes and never deletes, fixing 「the handle cannot put it back」 ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900))

@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:53:06+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— 列解析と全画面解除時の復元を修正、ヘッドレス実測（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
+
+- rev `55902a5` → `467c86e`；バージョンは `0.1.1` のまま
+- src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変
+- 判据：`nix build` 成功；成果物に `preFullscreenCollapsed` 6 箇所、`fullscreenchange` リスナー 2 箇所、単一トラックの正規表現置換 1 箇所、空白分割によるグリッド列の分解は 0 箇所
+
+| コミット | 説明 |
+|------|------|
+| `dc2b144` | chore(dsh-api-balance): 薄ラッパー rev 追従 467c86e |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `55902a5` → `467c86e` |
+
 ## 2026-10-21T08:35:59+09:00
 
 **摘要**：dsh-api-balance 薄ラッパー再ピン —— ドロワーは書くだけで消さない、「ハンドルで戻せない」を修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）

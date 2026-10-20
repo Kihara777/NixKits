@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:53:06+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 列解析与退出还原修正，headless 实测（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
+
+- rev `55902a5` → `467c86e`；版本仍 `0.1.1`
+- src hash 由 `nix flake prefetch --json` 取得；`npmDepsHash` 未变
+- 判据：`nix build` 成功；产物 `preFullscreenCollapsed` 6 处、`fullscreenchange` 监听 2 处、单列正则替换 1 处；按空白拆列 0 处
+
+| 提交 | 说明 |
+|------|------|
+| `dc2b144` | chore(dsh-api-balance): 薄封装 rev 跟进 467c86e —— 列解析与退出还原 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `55902a5` → `467c86e` |
+
 ## 2026-10-21T08:35:59+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 抽屉只写不删，修「点把手收不回」（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）

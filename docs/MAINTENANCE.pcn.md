@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T08:53:06+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 列解析 與 全屏解除復元 修正、headless 実測（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
+
+- rev `55902a5` → `467c86e`；版本 仍 `0.1.1`
+- src hash `nix flake prefetch --json` 取得；`npmDepsHash` 不変
+- 判据：`nix build` 成功；産物 `preFullscreenCollapsed` 6 箇所、`fullscreenchange` listener 2 箇所、単列 正規表現 置換 1 箇所；空白分割 格子列 分解 0 箇所
+
+| 提交 | 説明 |
+|------|------|
+| `dc2b144` | chore(dsh-api-balance): 薄 wrapper rev 追従 467c86e |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `55902a5` → `467c86e` |
+
 ## 2026-10-21T08:35:59+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— drawer 只写不刪、「把手 押 収納 不能」修正（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
