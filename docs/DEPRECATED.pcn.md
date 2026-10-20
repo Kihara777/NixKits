@@ -14,3 +14,4 @@
 |------|------|--------|
 | [comfyui-rocm 補丁工程](pcn/deprecated/comfyui-rocm.md) | 上流 comfyui-nix 0.34.0 ROCm 支援 内蔵 | `modules/comfyui-rocm.nix` + 三補丁 |
 | [mcp-searxng 自前 package](pcn/deprecated/mcp-searxng.md) | 上流 nixpkgs 収録済（2026-08-29、現在 2.6.0） | `packages/mcp-searxng.nix` + 三 build workflow |
+| [nixkits-package-upstream skill 名](pcn/deprecated/nixkits-package-upstream.md) | `upstream-audit` 置換（2026-10-20 分割：読取専用監査 + 本機私有提出層） | `skills/nixkits-package-upstream/` |

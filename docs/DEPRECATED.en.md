@@ -16,3 +16,4 @@ ground, and makes past decisions easy to locate if something regresses.
 |------|------|--------|
 | [comfyui-rocm patch project](en/deprecated/comfyui-rocm.md) | Upstream comfyui-nix 0.34.0 built ROCm support in | `modules/comfyui-rocm.nix` + three patches |
 | [mcp-searxng self-built package](en/deprecated/mcp-searxng.md) | Upstream nixpkgs ships it (2026-08-29, now 2.6.0) | `packages/mcp-searxng.nix` + three build workflows |
+| [nixkits-package-upstream skill name](en/deprecated/nixkits-package-upstream.md) | Superseded by `upstream-audit` (2026-10-20 split: read-only audit + a private submit layer) | `skills/nixkits-package-upstream/` |
