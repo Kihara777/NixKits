@@ -28,4 +28,4 @@
 
 ## 参考実装
 
-dsh 掌灯 mode（`presets/lampkeeper/`）五 仕組 完全実装。
+dsh 本機私有預設五 仕組 完全実装。

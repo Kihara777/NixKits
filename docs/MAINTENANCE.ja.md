@@ -6,8 +6,8 @@
 
 **概要**：docs(skill): 適配層の廃止告知 + 削除されたスキルの扱い章
 
-- `nixkits-package-upstream` の先頭に廃止告知：汎用手法は `upstream-audit`（読取専用）、提出は掌灯層へ。本ファイルは純粋な監査適配層として残す
-- 接口表の「第 4 步 実操」を掌灯層へ向け、監査層から書き込み操作を排除
+- `nixkits-package-upstream` の先頭に廃止告知：汎用手法は `upstream-audit`（読取専用）、提出は私有提出層へ。本ファイルは純粋な監査適配層として残す
+- 接口表の「第 4 步 実操」を私有提出層へ向け、監査層から書き込み操作を排除
 - `nixkits-skills` に「削除 / 改名されたスキル」章を追加：六つの確認点 + 二つの規律（履歴は書き換えない、インストール済みコピーは自動移行しない）
 - 判据：check-skill-registry は 13 スキルに帰属、doc-links は 224 ファイル通過；四言語の条目数が相等（419）
 
@@ -17,17 +17,17 @@
 
 ## 2026-10-20T14:41:14+09:00
 
-**概要**：refactor(skill)!: 上流貢献スキルを「読取専用の監査」と「掌灯の提出層」に分割
+**概要**：refactor(skill)!: 上流貢献スキルを「読取専用の監査」と「私有提出層」に分割
 
 - 新スキル `upstream-audit`：第 0〜3 步 + 罠一覧、**明示的に読取専用** —— push も PR 作成も代理コメントもしない
-- 提出動作（fork/ブランチ/commit/push/PR、レビュー対応、マージ後）は掌灯層 `lampkeeper-upstream-submit`（Kitsunome）へ移設。彼女の承認と、maintainer 条目の handle と一致するアカウントが前提
+- 提出動作（fork/ブランチ/commit/push/PR、レビュー対応、マージ後）は私有提出層 `（私有提交层）`（Kitsunome）へ移設。彼女の承認と、maintainer 条目の handle と一致するアカウントが前提
 - `nixpkgs-package-upstream` を削除；`nixkits-package-upstream` は新名を参照；維護モードは `upstream-audit` を登録
 - `UPSTREAM-AUDIT.md`（2026-10-10 の一度限りの評価）をリポジトリ外 `Kitsunome/audit/` へ移動
 - 判据：check-skill-registry は 13 スキルすべてに帰属、doc-links は 224 ファイル通過；四言語の条目数が相等（418）
 
 | コミット | 説明 |
 |------|------|
-| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a separate submit layer |
 
 ## 2026-10-20T14:37:33+09:00
 

@@ -6,8 +6,8 @@
 
 **摘要**：docs(skill): 適配層 廃止告知 + 削除 skill 扱 章
 
-- `nixkits-package-upstream` 先頭 廃止告知：汎用手法 `upstream-audit`（読取専用）、提出 掌灯層。本 file 純監査適配層 残
-- 接口表「第 4 步 実操」掌灯層 向、監査層 書込操作 排除
+- `nixkits-package-upstream` 先頭 廃止告知：汎用手法 `upstream-audit`（読取専用）、提出 私有提出層。本 file 純監査適配層 残
+- 接口表「第 4 步 実操」私有提出層 向、監査層 書込操作 排除
 - `nixkits-skills`「削除 / 改名 skill」章 追加：六 確認点 + 二 規律（履歴 書換 無、install 済 copy 自動移行 無）
 - 判据：check-skill-registry 13 skill 帰属、doc-links 224 file 通過；四言語 条目数 相等（419）
 
@@ -17,17 +17,17 @@
 
 ## 2026-10-20T14:41:14+09:00
 
-**摘要**：refactor(skill)!: 上流貢献 skill 読取専用 監査 與 掌灯 提出層 分割
+**摘要**：refactor(skill)!: 上流貢献 skill 読取専用 監査 與 私有 提出層 分割
 
 - 新 skill `upstream-audit`：第 0〜3 步 + 罠一覧、**明示 読取専用** —— push 無、PR 作成 無、代理 comment 無
-- 提出動作（fork/branch/commit/push/PR、review 対応、merge 後）掌灯層 `lampkeeper-upstream-submit`（Kitsunome）移設。彼女 承認 與 maintainer 条目 handle 一致 account 前提
+- 提出動作（fork/branch/commit/push/PR、review 対応、merge 後）私有提出層 `（私有提交层）`（Kitsunome）移設。彼女 承認 與 maintainer 条目 handle 一致 account 前提
 - `nixpkgs-package-upstream` 削除；`nixkits-package-upstream` 新名 参照；維護 mode `upstream-audit` 登録
 - `UPSTREAM-AUDIT.md`（2026-10-10 一度限 評価）repo 外 `Kitsunome/audit/` 移動
 - 判据：check-skill-registry 13 skill 全部 帰属、doc-links 224 file 通過；四言語 条目数 相等（418）
 
 | 提交 | 説明 |
 |------|------|
-| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a separate submit layer |
 
 ## 2026-10-20T14:37:33+09:00
 

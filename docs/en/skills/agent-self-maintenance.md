@@ -28,4 +28,4 @@ Mechanisms travel, **data does not**: fact entries, observation entries and thre
 
 ## Reference implementation
 
-The lampkeeper preset in dsh (`presets/lampkeeper/`) is a complete implementation of these five mechanisms.
+A private preset in this deployment (not distributed by this repository) is a complete implementation of these five mechanisms.

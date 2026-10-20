@@ -6,8 +6,8 @@
 
 **Summary**: docs(skill): deprecation notice for the adapter layer, plus a chapter on removing skills
 
-- `nixkits-package-upstream` now carries a deprecation notice at the top: general method belongs to `upstream-audit` (read-only), submission belongs to the lampkeeper layer; the file stays as a pure-audit adapter
-- Its interface table now points "step 4 practice" at the lampkeeper layer, so no write operation appears in the audit layer
+- `nixkits-package-upstream` now carries a deprecation notice at the top: general method belongs to `upstream-audit` (read-only), submission belongs to the private submit layer; the file stays as a pure-audit adapter
+- Its interface table now points "step 4 practice" at the private submit layer, so no write operation appears in the audit layer
 - `nixkits-skills` gains a "removed / renamed skills" chapter: six check points plus two rules (history is not rewritten; installed copies are not migrated automatically)
 - Criterion: check-skill-registry reports 13 skills claimed, doc-links passes on 224 files; equal entry counts across four languages (419)
 
@@ -17,17 +17,17 @@
 
 ## 2026-10-20T14:41:14+09:00
 
-**Summary**: refactor(skill)!: upstream contribution split into a read-only audit and a lampkeeper submit layer
+**Summary**: refactor(skill)!: upstream contribution split into a read-only audit and a separate submit layer
 
 - New `upstream-audit` skill: steps 0-3 plus the traps list, explicitly read-only — no push, no PR, no comments on anyone's behalf
-- The submission steps (fork/branch/commit/push/PR, review response, post-merge) moved to the lampkeeper layer `lampkeeper-upstream-submit` (Kitsunome), which requires her approval and the account whose handle matches the maintainer entry
+- The submission steps (fork/branch/commit/push/PR, review response, post-merge) moved to the private submit layer `（私有提交层）` (Kitsunome), which requires her approval and the account whose handle matches the maintainer entry
 - `nixpkgs-package-upstream` removed; `nixkits-package-upstream` points at the new name; the maintenance mode registers `upstream-audit`
 - `UPSTREAM-AUDIT.md` (a one-off 2026-10-10 evaluation) moved out of the repository into `Kitsunome/audit/`
 - Criterion: check-skill-registry reports 13 skills all claimed, doc-links passes on 224 files; equal entry counts across four languages (418)
 
 | Commit | Description |
 |------|------|
-| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a separate submit layer |
 
 ## 2026-10-20T14:37:33+09:00
 

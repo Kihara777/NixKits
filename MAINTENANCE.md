@@ -6,8 +6,8 @@
 
 **摘要**：docs(skill): 适配层弃用声明 + 已移除技能的处理章节
 
-- `nixkits-package-upstream` 顶部声明弃用：通用方法归 `upstream-audit`（只读）、提交归掌灯层；本文件保留为纯审计适配层
-- 接口表的「第 4 步 实操」改为指向掌灯层，审计层不再出现写操作
+- `nixkits-package-upstream` 顶部声明弃用：通用方法归 `upstream-audit`（只读）、提交归私有提交层；本文件保留为纯审计适配层
+- 接口表的「第 4 步 实操」改为指向私有提交层，审计层不再出现写操作
 - `nixkits-skills` 新增「已移除 / 改名的技能」：六处检查点 + 两条纪律（历史不追改、已安装副本不自动迁移）
 - 判据：check-skill-registry 13 技能有归属、doc-links 224 文件通过；四语条目数相等（419）
 
@@ -17,17 +17,17 @@
 
 ## 2026-10-20T14:41:14+09:00
 
-**摘要**：refactor(skill)!: 上游贡献技能拆为「只读审计」与「掌灯提交层」
+**摘要**：refactor(skill)!: 上游贡献技能拆为「只读审计」与「私有提交层」
 
 - 新技能 `upstream-audit`：第 0–3 步 + 陷阱清单，**只读**——不 push、不建 PR、不代评
-- 提交动作移到掌灯层 `lampkeeper-upstream-submit`（Kitsunome），需她批准且账号与 handle 一致
+- 提交动作移到本机私有提交层（不随本仓库分发）（Kitsunome），需她批准且账号与 handle 一致
 - 删除 `nixpkgs-package-upstream`；适配层改指新名；维护模式注册 `upstream-audit`
 - `UPSTREAM-AUDIT.md` 移出仓库到 `Kitsunome/audit/`
 - 判据：check-skill-registry 13 个技能有归属、doc-links 224 文件通过；四语条目数相等（418）
 
 | 提交 | 说明 |
 |------|------|
-| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a lampkeeper submit layer |
+| `25be250` | refactor(skill)!: split upstream contribution into a read-only audit and a separate submit layer |
 
 ## 2026-10-20T14:37:33+09:00
 
