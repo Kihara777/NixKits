@@ -12,7 +12,7 @@ ground, and makes past decisions easy to locate if something regresses.
 
 ## List
 
-| Project | Status | Former location | Details |
+| Project | Upstream status (why retired) | Former location | Details |
 |---------|--------|-----------------|---------|
-| comfyui-rocm patch project | Retired (2026-09-15) | `modules/comfyui-rocm.nix` + three patches | [中文](zh/deprecated/comfyui-rocm.md) · [EN](en/deprecated/comfyui-rocm.md) · [JA](ja/deprecated/comfyui-rocm.md) · [PCN](pcn/deprecated/comfyui-rocm.md) |
-| mcp-searxng self-built package | Retired (2026-10-20) | `packages/mcp-searxng.nix` + three build workflows | [中文](zh/deprecated/mcp-searxng.md) · [EN](en/deprecated/mcp-searxng.md) · [JA](ja/deprecated/mcp-searxng.md) · [PCN](pcn/deprecated/mcp-searxng.md) |
+| comfyui-rocm patch project | Upstream comfyui-nix 0.34.0 built ROCm support in | `modules/comfyui-rocm.nix` + three patches | [中文](zh/deprecated/comfyui-rocm.md) · [EN](en/deprecated/comfyui-rocm.md) · [JA](ja/deprecated/comfyui-rocm.md) · [PCN](pcn/deprecated/comfyui-rocm.md) |
+| mcp-searxng self-built package | Upstream nixpkgs ships it (2026-08-29, now 2.6.0) | `packages/mcp-searxng.nix` + three build workflows | [中文](zh/deprecated/mcp-searxng.md) · [EN](en/deprecated/mcp-searxng.md) · [JA](ja/deprecated/mcp-searxng.md) · [PCN](pcn/deprecated/mcp-searxng.md) |
