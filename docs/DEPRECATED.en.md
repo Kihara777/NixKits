@@ -15,3 +15,4 @@ ground, and makes past decisions easy to locate if something regresses.
 | Project | Status | Former location | Details |
 |---------|--------|-----------------|---------|
 | comfyui-rocm patch project | Retired (2026-09-15) | `modules/comfyui-rocm.nix` + three patches | [中文](zh/deprecated/comfyui-rocm.md) · [EN](en/deprecated/comfyui-rocm.md) · [JA](ja/deprecated/comfyui-rocm.md) · [PCN](pcn/deprecated/comfyui-rocm.md) |
+| mcp-searxng self-built package | Retired (2026-10-20) | `packages/mcp-searxng.nix` + three build workflows | [中文](zh/deprecated/mcp-searxng.md) · [EN](en/deprecated/mcp-searxng.md) · [JA](ja/deprecated/mcp-searxng.md) · [PCN](pcn/deprecated/mcp-searxng.md) |

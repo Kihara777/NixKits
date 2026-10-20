@@ -26,7 +26,6 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.2.1-alpha.5) | [docs/en/dsh.md](en/dsh.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
-| mcp-searxng | MCP server for SearXNG | [docs/en/mcp-searxng.md](en/mcp-searxng.md) |
 | obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
@@ -94,6 +93,7 @@ Projects once maintained and now retired (most because upstream ships equivalent
 | Project | Description | Details |
 |---------|-------------|---------|
 | comfyui-rocm | The ComfyUI ROCm patch project — upstream built it in, all patches removed | [en/deprecated/comfyui-rocm.md](en/deprecated/comfyui-rocm.md) |
+| mcp-searxng | MCP server for SearXNG — upstream nixpkgs ships it (2026-08-29) | [en/deprecated/mcp-searxng.md](en/deprecated/mcp-searxng.md) |
 
 ## Skills
 

@@ -30,7 +30,6 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.2.1-alpha.5） | [docs/zh/dsh.md](docs/zh/dsh.md) |
 | godot-ai | Godot 引擎的 MCP Server 与 AI 工具 | [docs/zh/godot-ai.md](docs/zh/godot-ai.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
-| mcp-searxng | SearXNG 的 MCP Server | [docs/zh/mcp-searxng.md](docs/zh/mcp-searxng.md) |
 | obs-bilibili-stream | OBS 的 Bilibili 直播插件 | [docs/zh/obs-bilibili-stream.md](docs/zh/obs-bilibili-stream.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
@@ -95,6 +94,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | 项目 | 说明 | 详情 |
 |------|------|------|
 | comfyui-rocm | ComfyUI 的 ROCm 补丁项目 —— 上游已内置，补丁全部移除 | [docs/zh/deprecated/comfyui-rocm.md](docs/zh/deprecated/comfyui-rocm.md) |
+| mcp-searxng | SearXNG 的 MCP Server —— 上游 nixpkgs 已收录（2026-08-29） | [docs/zh/deprecated/mcp-searxng.md](docs/zh/deprecated/mcp-searxng.md) |
 
 ## 技能
 
