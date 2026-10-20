@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:56:00+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — collapsing the grid's first column ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0755270900))
+
+- rev `977d205` → `23498f8`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains 2 occurrences of `collapseGridColumn`
+
+| Commit | Description |
+|------|------|
+| `0303e7e` | chore(dsh-api-balance): re-pin the wrapper to 23498f8 — grid first-column collapse |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `977d205` → `23498f8` |
+
 ## 2026-10-21T07:49:51+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — finding the rail under fullscreen letterbox ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0749210900))

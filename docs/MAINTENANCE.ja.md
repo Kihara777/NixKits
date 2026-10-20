@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:56:00+09:00
+
+**概要**：dsh-api-balance re-pin —— grid 1 列目の潰し（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0755270900)）
+
+- rev `977d205` → `23498f8`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に `collapseGridColumn` が 2 箇所
+
+| コミット | 説明 |
+|------|------|
+| `0303e7e` | chore(dsh-api-balance): re-pin を 23498f8 へ —— grid 1 列目の潰し |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `977d205` → `23498f8` |
+
 ## 2026-10-21T07:49:51+09:00
 
 **概要**：dsh-api-balance re-pin —— フルスクリーン黒帯時の rail 発見修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0749210900)）
