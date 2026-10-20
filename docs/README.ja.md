@@ -47,8 +47,7 @@ Agent プリセット（セッション形態）はプラグインと同級で�
 | モード | id | 説明 | 配布方式 | ドキュメント |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時に NixOS ホストを検証（非 NixOS は全リクエスト拒否）；`nixos_shell`/`nixos_cli` と NixOS 開発プロンプトを読み込む | dsh-nixos-shell パッケージ内、patch 行 | [docs/ja/modes/nixos.md](ja/modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式から派生；`write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`translate-*` スキルとリポジトリ保守ワークフロープロンプトを注入 | dsh-nixos-shell パッケージ内、patch 行 | [docs/ja/modes/maintenance.md](ja/modes/maintenance.md) |
-| 逆向模式 | `rea` | 維護模式から派生；その全機能の上に REA（Reverse Engineer Anything）の MCP サーバー（`mcp__rea__*`、**全量登録**で `tools/list` 実測 207 個）を接続し、応用とバイナリの静的解析を行い、結論を保守ワークフローでリポジトリへ戻す | dsh-nixos-shell パッケージ内、patch 行 | [docs/ja/modes/rea.md](ja/modes/rea.md) |
+| 狐莉模式 | `foxli` | NixOS模式から派生；**コミュニティへ下放する能力の境界**——保守／文書／更新確認／上流貢献／自己保守の各技能と二層の保守プロンプトを注入し、`rea-mcp` で REA の MCP サーバーを本セッションへ接続する（約 207 個の `mcp__rea__*`、本セッションのみ可視） | dsh-nixos-shell パッケージ内、patch 行 | [docs/ja/modes/foxli.md](ja/modes/foxli.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式から派生した**読取専用**の創作モード：「新聞三要素」は必ず揃う三人の主人公、素材優先（接続できないときだけ拒否）、素材共創は検索してから書き直す（検索が無ければ退稿）、技能パッケージをオンライン取得、開始時問答は三択、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements` | [docs/ja/modes/news-three-elements.md](ja/modes/news-three-elements.md) |
 
 > 最初の三つ（NixOS模式 / 維護模式 / 逆向模式）は dsh-nixos-shell パッケージに同梱され、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` / `.reaMode` がそれぞれの `preset.patch.yml` を patch 行としてプロファイルの `cordis.patch.yml` へ併合する（dsh 0.2.0 以降は**ディレクトリをコピーしない**）；新聞三要素模式は独立パッケージ `dsh-preset-news-three-elements` が配布し、`nixkits.dsh.presets.newsThreeElements` がその `share/dsh-agent-presets/news-three-elements` を `$DSH_HOME/.agent-presets/` へ組み立てて、その patch 行の相対パス解決に供する。詳細は [docs/ja/dsh.md](ja/dsh.md) の「モード」節を参照。

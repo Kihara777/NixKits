@@ -169,7 +169,7 @@ A "mode" is a dsh **Agent preset**: each mode is one session shape with its own 
 | Mode | id | Description | Distribution | Doc |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | validates the NixOS host at initialization (non-NixOS denies all execution); loads `nixos_shell` / `nixos_cli` and the development prompts | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/maintenance.md](modes/maintenance.md) |
+| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/foxli.md](modes/foxli.md) |
 | 新闻三要素模式 | `news-three-elements` | a read-only creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear; material comes first (only what cannot be tied back is refused), co-created material is searched and re-skinned (no search, no dispatch), online skill package, opening picker, anything not in Simplified Chinese refused | **standalone package** `dsh-preset-news-three-elements`, as a **profile patch row + content directory** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix

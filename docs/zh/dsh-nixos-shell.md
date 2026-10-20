@@ -100,7 +100,7 @@ nixos_cli(op = "audit-store-paths")
 | 模式 | id | 说明 | 文档 |
 |------|-----|------|------|
 | NixOS模式 | `nixos` | 宿主校验 + `nixos_shell` / `nixos_cli` + 开发提示词 | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | 派生自 NixOS模式；文档 / 日志 / 更新检查技能 + 维护工作流 | [modes/maintenance.md](modes/maintenance.md) |
+| 维护模式 | `maintenance` | 派生自 NixOS模式；文档 / 日志 / 更新检查技能 + 维护工作流 | [modes/foxli.md](modes/foxli.md) |
 
 两者均由模块经 `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode` **seed-once** 写入 `$DSH_HOME/.agent-presets/<id>`：
 

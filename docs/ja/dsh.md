@@ -169,7 +169,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 | モード | id | 説明 | 配布方式 | 文書 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時にホストが NixOS であることを検証（非 NixOS は一切の実行を拒否）；`nixos_shell` / `nixos_cli` と開発提示詞を読み込む | dsh-nixos-shell パッケージ内、**profile patch 行** | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | NixOS模式から派生；`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能とメンテナンス作業流れを注入 | dsh-nixos-shell パッケージ内、**profile patch 行** | [modes/maintenance.md](modes/maintenance.md) |
+| 维护模式 | `maintenance` | NixOS模式から派生；`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能とメンテナンス作業流れを注入 | dsh-nixos-shell パッケージ内、**profile patch 行** | [modes/foxli.md](modes/foxli.md) |
 | 新闻三要素模式 | `news-three-elements` | 極簡模式から派生した読み取り専用の創作モード：「新聞の三要素」= 必ず揃わねばならない三人の主角；素材優先（引き受けられない物のみ拒否）、素材共同創作は先に検索してから書き換える（検索なしは返稿）、オンライン技能包、開場問答、簡体中文以外は一律拒否 | **独立パッケージ** `dsh-preset-news-three-elements`、**profile patch 行 + 内容ディレクトリ** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix

@@ -99,7 +99,7 @@ This package ships two **Agent presets (modes)**; their behavior, composition st
 | Mode | id | Description | Doc |
 |------|-----|------|------|
 | NixOS模式 | `nixos` | host validation + `nixos_shell` / `nixos_cli` + development prompts | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | derived from NixOS模式; doc / log / update-check skills + maintenance workflow | [modes/maintenance.md](modes/maintenance.md) |
+| 维护模式 | `maintenance` | derived from NixOS模式; doc / log / update-check skills + maintenance workflow | [modes/foxli.md](modes/foxli.md) |
 
 Both are written **seed-once** into `$DSH_HOME/.agent-presets/<id>` by the module through `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode`:
 
