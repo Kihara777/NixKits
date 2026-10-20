@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:04:26+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 回滚 grid 列塌缩（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0803330900)）
+
+- rev `23498f8` → `7c07465`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内 `collapseGridColumn` 为 **0**（确认回滚生效）
+
+| 提交 | 说明 |
+|------|------|
+| `34d6cd3` | chore(dsh-api-balance): 薄封装 rev 跟进 7c07465 —— 回滚 grid 列塌缩 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `23498f8` → `7c07465` |
+
 ## 2026-10-21T07:56:00+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— grid 第一列塌缩（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0755270900)）

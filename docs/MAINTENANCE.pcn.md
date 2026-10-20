@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T08:04:26+09:00
+
+**摘要**：dsh-api-balance re-pin —— grid 列潰 撤回（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0803330900)）
+
+- rev `23498f8` → `7c07465`；版本 `0.1.1` 不変——源码変更 実行時挙動 影響、field 級判据 以 更新
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変
+- 判据：`nix build` 成功；産物 内 `collapseGridColumn` **0**（撤回 有効）
+
+| 提交 | 説明 |
+|------|------|
+| `34d6cd3` | chore(dsh-api-balance): re-pin 到 7c07465 —— grid 列潰 撤回 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `23498f8` → `7c07465` |
+
 ## 2026-10-21T07:56:00+09:00
 
 **摘要**：dsh-api-balance re-pin —— grid 第 1 列 潰（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0755270900)）
