@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T16:09:09+09:00
+
+**Summary**: rea 6.7.0 — new package (Nix packaging of the REA reverse-engineering CLI + MCP server)
+
+- Packages the upstream published tarball (`rea-agents`) without rebuilding; the vendored lock drops devDependencies so both stay in sync
+- `npmRebuildFlags = [ "--ignore-scripts" ]` avoids frida's prebuild download; the wrapper adds procps to PATH
+- Platforms limited to x86_64/aarch64-linux (node-pty ships no riscv64 prebuilds)
+- Criterion: `develop/qemu-smoke-tests/rea.sh` runs one real static analysis (each of the three layers counter-tested)
+
+| Commit | Description |
+|------|------|
+| `39c946f` | feat(pkgs): add rea — REA reverse-engineering CLI from the prebuilt npm tarball |
+| `5c16fd5` | docs(rea): four-language package docs and README rows |
+
+| Package | Old | New |
+|--------|--------|--------|
+| rea | add v6.7.0 | |
+
 ## 2026-10-20T15:20:13+09:00
 
 **Summary**: docs: the main README no longer carries a retired-projects section

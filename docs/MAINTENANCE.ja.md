@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T16:09:09+09:00
+
+**概要**：rea 6.7.0 — 新規パッケージ（REA リバースエンジニアリング CLI + MCP サーバーの npm 梱包）
+
+- 上流の公開済み tarball（`rea-agents`）をそのまま梱包し、自前ビルドはしない。vendored lock は devDependencies を削除して同源にする
+- `npmRebuildFlags = [ "--ignore-scripts" ]` で frida の prebuild ダウンロードを回避。wrapper が procps を PATH に追加
+- プラットフォームは x86_64/aarch64-linux のみ（node-pty に riscv64 のビルド済み成果物が無い）
+- 判定基準：`develop/qemu-smoke-tests/rea.sh` が実際に静的解析を一度走らせる（三層それぞれ反例で確認）
+
+| コミット | 説明 |
+|------|------|
+| `39c946f` | feat(pkgs): add rea — REA reverse-engineering CLI from the prebuilt npm tarball |
+| `5c16fd5` | docs(rea): four-language package docs and README rows |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| rea | 追加 v6.7.0 | |
+
 ## 2026-10-20T15:20:13+09:00
 
 **概要**：docs: 主文書から廃止プロジェクトの節を削除

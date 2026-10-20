@@ -2,6 +2,24 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T16:09:09+09:00
+
+**摘要**：rea 6.7.0 — 新包（REA 逆工程 CLI・MCP 服務器之 npm 梱包）
+
+- 上流公開済 tarball（`rea-agents`）原様梱包、自主構築無。vendored lock 削除 devDependencies 以同源
+- `npmRebuildFlags = [ "--ignore-scripts" ]` 回避 frida 之 prebuild 下載。wrapper 追加 procps 於 PATH
+- 対応平台只 x86_64/aarch64-linux（node-pty 無 riscv64 構築済成果物）
+- 判定基準：`develop/qemu-smoke-tests/rea.sh` 実際一度静的解析実行（三層各反例確認）
+
+| 提交 | 説明 |
+|------|------|
+| `39c946f` | feat(pkgs): add rea — REA reverse-engineering CLI from the prebuilt npm tarball |
+| `5c16fd5` | docs(rea): four-language package docs and README rows |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| rea | 追加 v6.7.0 | |
+
 ## 2026-10-20T15:20:13+09:00
 
 **摘要**：docs: 主文書 廃止工程 節 削除
