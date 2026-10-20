@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T17:05:11+09:00
+
+**Summary**: docs(rea): a "verification status" section for 逆向模式 — mount() succeeding is not the same as taking effect in a session
+
+- Verified: `AgentPresetRegistry.mount()` reports OK (throwaway `DSH_HOME`, 34 plugin rows) — the declaration is valid and the package resolves
+- **Not verified**: the MCP connection and tool registration — a one-shot `dsh headless` task never selects a custom preset, so after mounting there are zero `rea mcp` child processes and no `mcp__rea__*` in the model request body
+- Control arm: the same mcp-client config at host level registers 207 `mcp__rea__*` tools
+- The criterion is the **captured request body** (mock endpoint), not a log inference; all four languages gained a "verification status" section
+
+| Commit | Description |
+|------|------|
+| `211d0e0` | docs(rea): 把「验证状态」写进四语模式文档 —— mount() 成功 ≠ 会话里生效 |
+
 ## 2026-10-20T16:29:23+09:00
 
 **Summary**: 逆向模式 — a REA agent preset derived from 维护模式; the rea package now ships the JDK

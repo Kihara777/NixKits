@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T17:05:11+09:00
+
+**摘要**：docs(rea): 逆向模式 之「検証状態」—— mount() 成功 乃 会話 有効化 非
+
+- 検証済：`AgentPresetRegistry.mount()` OK 報告（一時 `DSH_HOME`、34 行 插件）。宣言 正当、包 解決 可
+- **未検証**：MCP 接続 與 工具 登録——`dsh headless` 単発任務 自訂 預設 選択 無、故 掛載後 `rea mcp` 子過程 0、模型 請求 本文 `mcp__rea__*` 無
+- 対照腕：同 一 mcp-client 設定 宿主層 置 時 207 個 `mcp__rea__*` 登録
+- 判定 乃**捕捉 請求 本文**（mock 端点）、記録 推測 非。四言語 全「検証状態」節 追加
+
+| 提交 | 説明 |
+|------|------|
+| `211d0e0` | docs(rea): 把「验证状态」写进四语模式文档 —— mount() 成功 ≠ 会话里生效 |
+
 ## 2026-10-20T16:29:23+09:00
 
 **摘要**：逆向模式 — 维护模式 派生 之 REA Agent 預設；rea 包 JDK 同梱

@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T17:05:11+09:00
+
+**摘要**：docs(rea): 逆向模式的「验证状态」—— mount() 成功不等于会话里生效
+
+- 已验：`AgentPresetRegistry.mount()` 报 OK（一次性 `DSH_HOME`、34 行插件），声明合法、包能解析
+- **未验**：MCP 连接与工具注册——`dsh headless` 的一次性任务不选自定义预设，挂载后 `rea mcp` 子进程 0 个、模型请求体里无 `mcp__rea__*`
+- 对照臂：同一条 mcp-client 配置在宿主层注册 207 个 `mcp__rea__*`
+- 判据是**抓到的请求体**（mock 端点），不是日志推断；四语文档各加「验证状态」节
+
+| 提交 | 说明 |
+|------|------|
+| `211d0e0` | docs(rea): 把「验证状态」写进四语模式文档 —— mount() 成功 ≠ 会话里生效 |
+
 ## 2026-10-20T16:29:23+09:00
 
 **摘要**：逆向模式 — 派生自维护模式的 REA Agent 预设；rea 包带上 JDK
