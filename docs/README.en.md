@@ -88,12 +88,7 @@ Standalone overlays, not included in `default`:
 
 ## Retired Projects
 
-Projects once maintained and now retired (most because upstream ships equivalent capability). Index: [`DEPRECATED.md`](../DEPRECATED.md):
-
-| Project | Description | Details |
-|---------|-------------|---------|
-| comfyui-rocm | The ComfyUI ROCm patch project — upstream built it in, all patches removed | [en/deprecated/comfyui-rocm.md](en/deprecated/comfyui-rocm.md) |
-| mcp-searxng | MCP server for SearXNG — upstream nixpkgs ships it (2026-08-29) | [en/deprecated/mcp-searxng.md](en/deprecated/mcp-searxng.md) |
+Retired projects live in [`DEPRECATED.md`](../DEPRECATED.md).
 
 ## Skills
 

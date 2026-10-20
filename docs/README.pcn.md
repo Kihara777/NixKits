@@ -88,12 +88,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 ## 廃止工程
 
-曾 保守、現在 廃止 工程（多数 上流 同等 能力 内蔵 故）。索引：[`DEPRECATED.md`](../DEPRECATED.md)：
-
-| 工程 | 説明 | 詳細 |
-|------|------|------|
-| comfyui-rocm | ComfyUI 之 ROCm 補丁工程 —— 上流 内蔵 済、補丁 全部 削除 | [pcn/deprecated/comfyui-rocm.md](pcn/deprecated/comfyui-rocm.md) |
-| mcp-searxng | SearXNG 向 MCP 伺服器 —— 上流 nixpkgs 収録済（2026-08-29） | [pcn/deprecated/mcp-searxng.md](pcn/deprecated/mcp-searxng.md) |
+廃止 工程 [`DEPRECATED.md`](../DEPRECATED.md) 参照。
 
 ## 技能
 

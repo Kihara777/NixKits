@@ -89,12 +89,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 ## 废弃项目
 
-曾经维护、现已废弃的项目（多数因上游已内置等效能力）。索引见 [`DEPRECATED.md`](DEPRECATED.md)：
-
-| 项目 | 说明 | 详情 |
-|------|------|------|
-| comfyui-rocm | ComfyUI 的 ROCm 补丁项目 —— 上游已内置，补丁全部移除 | [docs/zh/deprecated/comfyui-rocm.md](docs/zh/deprecated/comfyui-rocm.md) |
-| mcp-searxng | SearXNG 的 MCP Server —— 上游 nixpkgs 已收录（2026-08-29） | [docs/zh/deprecated/mcp-searxng.md](docs/zh/deprecated/mcp-searxng.md) |
+已废弃项目见 [`DEPRECATED.md`](DEPRECATED.md)。
 
 ## 技能
 

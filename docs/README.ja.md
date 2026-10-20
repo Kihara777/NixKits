@@ -88,12 +88,7 @@ nix registry add nixkits github:Kihara777/NixKits
 
 ## 廃止プロジェクト
 
-かつて保守され、現在は廃止されたプロジェクト（多くは上流が同等の能力を内蔵したため）。索引：[`DEPRECATED.md`](../DEPRECATED.md)：
-
-| プロジェクト | 説明 | 詳細 |
-|--------------|------|------|
-| comfyui-rocm | ComfyUI の ROCm パッチプロジェクト —— 上流が内蔵済み、パッチはすべて削除 | [ja/deprecated/comfyui-rocm.md](ja/deprecated/comfyui-rocm.md) |
-| mcp-searxng | SearXNG 向け MCP サーバー —— 上流 nixpkgs 収録済（2026-08-29） | [ja/deprecated/mcp-searxng.md](ja/deprecated/mcp-searxng.md) |
+廃止されたプロジェクトは [`DEPRECATED.md`](../DEPRECATED.md) を参照。
 
 ## スキル
 
