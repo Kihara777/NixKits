@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:41:33+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 全屏侧栏抽屉（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0740510900)）
+
+- rev `8be9246` → `7402982`；版本仍 `0.1.1`——源码变更影响运行时行为，按字段级判据跟进
+- src hash 取自 `lib.fakeHash` 构建报错；`npmDepsHash` 未变（依赖与 lock 未动，构建通过即证）
+- 判据：`nix build` 成功；产物内 `function RailDrawer` 存在
+
+| 提交 | 说明 |
+|------|------|
+| `a4a98f8` | chore(dsh-api-balance): 薄封装 rev 跟进 7402982 —— 全屏侧栏抽屉 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `8be9246` → `7402982` |
+
 ## 2026-10-20T17:05:11+09:00
 
 **摘要**：docs(rea): 逆向模式的「验证状态」—— mount() 成功不等于会话里生效

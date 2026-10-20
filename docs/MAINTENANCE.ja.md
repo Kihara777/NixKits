@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:41:33+09:00
+
+**概要**：dsh-api-balance re-pin —— フルスクリーン時のサイドバードロワー（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0740510900)）
+
+- rev `8be9246` → `7402982`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に `function RailDrawer` を含む
+
+| コミット | 説明 |
+|------|------|
+| `a4a98f8` | chore(dsh-api-balance): re-pin を 7402982 へ —— フルスクリーン側ドロワー |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `8be9246` → `7402982` |
+
 ## 2026-10-20T17:05:11+09:00
 
 **概要**：docs(rea): 逆向模式の「検証状態」—— mount() 成功はセッションでの有効化ではない
