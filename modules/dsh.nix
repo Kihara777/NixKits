@@ -1289,12 +1289,37 @@ in
     # reverse proxy.  Reuses the lighttpd instance enabled by SearXNG (or the
     # user); lighttpd's extraConfig is types.lines so it merges cleanly.
     assertions =
+      # 逆向模式的预设正文必须真的在 `presets.package` 里。判据落在**文件是否存在**上，
+      # 而不是「通道是 stable 还是 alpha」：
+      #   · stable 通道的 `dsh-nixos-shell-stable` 把 `presets/` 冻结在钉住的 rev，
+      #     而 `rea-mode/` 是后加的目录 —— 那一份里没有它；
+      #   · 不看通道、看内容，`pinnedRev` 往前挪之后这条断言会自动放行，不需要人记得
+      #     回来改它。
+      # 不拦的话症状是一句「path … preset.patch.yml does not exist」，读者要自己逆推
+      # 到「我开的那个通道没有这份预设」。
+      lib.optional
+        (cfg.presets.reaMode
+          && !(builtins.pathExists "${presetSourceDir}/rea-mode/preset.patch.yml"))
+        {
+          assertion = false;
+          message = ''
+            nixkits.dsh.presets.reaMode: `presets.package` 里没有 rea-mode/preset.patch.yml。
+            当前预设来源：${presetSourceDir}
+
+            stable 通道（`pkgs.dsh-nixos-shell-stable`）把 `presets/` 冻结在钉住的 rev，
+            而逆向模式是后加的预设目录。三选一：
+              · 切到 alpha 通道（`nixkits.dsh.package = pkgs.dsh-alpha`），预设跟仓库 HEAD；
+              · 或显式设置 `nixkits.dsh.presets.package = pkgs.dsh-nixos-shell`；
+              · 或把 `packages/dsh-nixos-shell-stable.nix` 的 `pinnedRev` 往前挪到含
+                rea-mode 的提交（并更新其 sha256）。
+          '';
+        }
       # `llm-deepseek` 段的跨字段约束：适配器 resolveAdapterOptions 里写着
       # `thinking === "disabled"` 时只允许 reasoningEffort 为 off（或省略），
       # 否则整段被拒绝。schema 表达不了这种耦合，故在求值期拦下 —— 与类型化
       # 选项同一目的：让错误在这里报，而不是在 dsh 运行期变成「保留上一份好值」
       # 的告警。
-      lib.optional
+      ++ lib.optional
         (cfg.llmDeepSeek.enable
           && cfg.llmDeepSeek.thinking == "disabled"
           && cfg.llmDeepSeek.reasoningEffort != null
