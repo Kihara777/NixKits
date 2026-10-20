@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T15:20:13+09:00
+
+**Summary**: docs: the main README no longer carries a retired-projects section
+
+- The section is deleted outright in all four languages (not even a navigation line); the index stays in `DEPRECATED.md`
+- The main document only covers active content; `DEPRECATED.md` stands on its own at the repository root
+- Criterion: doc-links passes on 228 files; equal entry counts across four languages (421)
+
+| Commit | Description |
+|------|------|
+| `60a366f` | docs: the main README no longer mentions retired projects at all |
+
 ## 2026-10-20T15:12:06+09:00
 
 **Summary**: docs(deprecated): the `nixkits-package-upstream` skill name joins the retired list

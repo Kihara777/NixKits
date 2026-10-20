@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T15:20:13+09:00
+
+**摘要**：docs: 主文書 廃止工程 節 削除
+
+- 四言語 README 節 全 削除（導航行 也 残 無）；索引 `DEPRECATED.md` 残
+- 主文書 現役内容 唯；`DEPRECATED.md` repo 直下 完結
+- 判据：doc-links 228 file 通過；四言語 条目数 相等（421）
+
+| 提交 | 説明 |
+|------|------|
+| `60a366f` | docs: the main README no longer mentions retired projects at all |
+
 ## 2026-10-20T15:12:06+09:00
 
 **摘要**：docs(deprecated): `nixkits-package-upstream` skill 名 廃止一覧 追加

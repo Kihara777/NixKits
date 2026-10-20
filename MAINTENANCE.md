@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T15:20:13+09:00
+
+**摘要**：docs: 主文档不再包含废弃项目章节
+
+- 四语 README 整节删除（连导航句也不留）；索引仍在 `DEPRECATED.md`
+- 主文档只讲现役内容，`DEPRECATED.md` 在仓库根目录自洽
+- 判据：doc-links 228 文件通过；四语条目数相等（421）
+
+| 提交 | 说明 |
+|------|------|
+| `60a366f` | docs: the main README no longer mentions retired projects at all |
+
 ## 2026-10-20T15:12:06+09:00
 
 **摘要**：docs(deprecated): `nixkits-package-upstream` 技能名加入弃用列表
