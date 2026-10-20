@@ -27,9 +27,9 @@
   #
   # `dshChannel` 供 modules/dsh.nix 判断本包属于哪个通道：stable 的**预设内容**
   # 取自钉住的 rev（冻结），alpha 的跟 HEAD。
-  version ? "0.2.0-rc.2",
-  hash ? "sha256-vSeEfERc1opWWsH5HAa7vMdjnvkwcfZ4u1nF66/ziFk=",
-  npmDepsHash ? "sha256-7QtZIz8oDKi2eVHfmbLkdww5XxPvY7NP8ZmP5RxBzNY=",
+  version ? "0.2.1-rc.2",
+  hash ? "sha256-QOPQJcAkDEMW/0Le6b7cdwnA+ziuoQVDtHB27Sr1Lh0=",
+  npmDepsHash ? "sha256-DBhYYf7MI1EwJCiUk0QXtc9pQ2rkdcCPqpO4qQzNLKM=",
   lockFile ? ./dsh-package-lock.json,
   dshChannel ? "stable",
   # 允许局域网（非 loopback）浏览器读写设置，见 postInstall 中的说明。

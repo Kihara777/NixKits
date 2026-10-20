@@ -53,7 +53,7 @@ buildNpmPackage (finalAttrs: {
   # 2026-10-12 从上游准备那版回填：0.26.3 → 0.26.4。
   # 两个 hash 都是**独立算出来的**（src 用 nix-prefetch-url 重下一遍、
   # npmDepsHash 用 prefetch-npm-deps），不是从别处抄的。
-  version = "0.26.4";
+  version = "0.26.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -62,10 +62,10 @@ buildNpmPackage (finalAttrs: {
     owner = "grinev";
     repo = "opencode-telegram-bot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c4VpXRuQuvcKSvbiWxmvtg7fjMriS/6hY3XvISREzQc=";
+    hash = "sha256-Mjku5+XNECO0kQNX2zls18IAlf8kJElaFwTTHfo9xuU=";
   };
 
-  npmDepsHash = "sha256-KbZkgfAgvF/+iPtmzPrfRLgDjzeqYneAnAWCw/Iz6DQ=";
+  npmDepsHash = "sha256-eDXmrs3c8uktWq/rZAVdtemoq/5Fo/fn6G02B4sM9nE=";
   npmBuildScript = "build";
   npmInstallFlags = [ "--ignore-scripts" ];
 

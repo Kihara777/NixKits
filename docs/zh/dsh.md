@@ -10,8 +10,8 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.2.0-rc.2` |
-| 开发通道 | `dsh-alpha 0.2.1-alpha.3`（npm `alpha` dist-tag） |
+| 版本 | `0.2.1-rc.2` |
+| 开发通道 | `dsh-alpha 0.2.1-alpha.5`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
 
@@ -21,8 +21,8 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 
 | 包 | 通道 | 版本 | 说明 |
 |----|------|------|------|
-| `pkgs.dsh` | stable | `0.2.0-rc.2` | npm `latest` dist-tag，默认；**预设内容**冻结在钉住的 rev |
-| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.3` | npm **`alpha`** dist-tag，跟踪 0.2.x 线的最新预发布；**预设内容**跟仓库 HEAD |
+| `pkgs.dsh` | stable | `0.2.1-rc.2` | npm `latest` dist-tag，默认；**预设内容**冻结在钉住的 rev |
+| `pkgs.dsh-alpha` | alpha | `0.2.1-alpha.5` | npm **`alpha`** dist-tag，跟踪 0.2.x 线的最新预发布；**预设内容**跟仓库 HEAD |
 
 ```nix
 # 本机改用最新预发布版本
@@ -30,7 +30,7 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 ```
 
 > **`dsh-alpha` 为什么跟 `alpha`**（2026-10-08 改回）。npm 上三个 dist-tag 的当前值是
-> `alpha` = **`0.2.1-alpha.3`**，而 `latest` = `next` = `0.2.0-rc.2`——`alpha` 反过来
+> `alpha` = **`0.2.1-alpha.5`**，而 `latest` = `next` = `0.2.0-rc.2`——`alpha` 反过来
 > **领跑** `next`。2026-10-02 曾改跟 `next`，理由是当时 `alpha` = `0.1.7-alpha.2` 挂在
 > 0.1.x 旧线上、比 stable **低**；**该前提已经反转**，继续跟 `next` 反而把开发通道钉在
 > 比 `alpha` 旧的版本上。判据不是「哪个 tag 名字更像预发布」，而是**哪个 tag 指到的版本
@@ -409,20 +409,13 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 
 ## 插件清单
 
-dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
+dsh 0.2.1-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
 
 > **清单生成方法**：`dsh --profile web --dump-default-config`（只读）输出即 `id -> name` 格式；升级 dsh 后用它重新生成本表，以所装版本的输出为准。本表对应 web profile 的 base + web-app 补丁集。
 >
-> ⚠️ **alpha 通道（`0.2.1-alpha.3`）与 stable 的清单不同**（2026-10-12 用同一条命令在 alpha 产物上实测，183 → 185 条）：
->
-> | 差异 | 条目 |
-> |---|---|
-> | **只有 alpha 有**（4 条） | `schedule -> @deepseek-ai/dsh-schedule`、`ui-schedule -> @deepseek-ai/dsh-client-ui-schedule`、`working-directory -> @deepseek-ai/dsh-working-directory`、`tool-working-directory -> @deepseek-ai/dsh-tool-working-directory` |
-> | **只有 stable 有**（2 条） | `skill-badge -> @deepseek-ai/dsh-skill-badge`、`tool-ralph -> @deepseek-ai/dsh-tool-ralph` |
->
-> **别把 alpha 那几行抄进 stable 部署**——stable 的 `0.2.0-rc.2` 里没有它们，而 dsh ≥ 0.1.6-alpha.2 对解析不了的插件行是**硬失败**（整份预设挂不起来，见上文那条「插件改名会硬失败」）。
->
-> ⚠️ **「不在本表里」≠「包不存在」**：上面这 4 条只是没进默认配置，包目录都在。判据是 `dsh --dump-default-config` 的输出，**不是**「插件树里找不找得到」——2026-10-12 我用后者做过一次交叉核对，把四个真实存在的插件误判成了「不存在」。
+> ⚠️ **alpha 通道（`0.2.1-alpha.5`）与 stable 的清单**：2026-10-20 用同一条命令在两通道产物上实测，
+> alpha **188** 条、stable **190** 条；**alpha 独有条目为空**，stable 多出
+> `ui-deepseek-model-label-1017` 与 `web-deepseek-api` 两条。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
@@ -436,6 +429,7 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   typert -> @deepseek-ai/dsh-typert-registry
   typert-loader -> @deepseek-ai/dsh-typert-loader
   typert-gateway -> @deepseek-ai/dsh-api-gateway
+  remote-access -> @deepseek-ai/dsh-api-remote-access
   session-title -> @deepseek-ai/dsh-session-title
   session-title-llm -> @deepseek-ai/dsh-session-title-first-prompt-llm
   user-questions -> @deepseek-ai/dsh-user-questions
@@ -453,6 +447,8 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
   attachment-local -> @deepseek-ai/dsh-attachment-local
   session-query-sqlite -> @deepseek-ai/dsh-session-query-sqlite
+  working-directory -> @deepseek-ai/dsh-working-directory
+  tool-working-directory -> @deepseek-ai/dsh-tool-working-directory
   session-projection -> @deepseek-ai/dsh-session-projection
   storage -> @deepseek-ai/dsh-storage
   storage-json -> @deepseek-ai/dsh-storage-json
@@ -477,7 +473,6 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   agent-instructions -> @deepseek-ai/dsh-agent-instructions
   skill -> @deepseek-ai/dsh-skill
   skill-filesystem -> @deepseek-ai/dsh-skill-filesystem
-  skill-badge -> @deepseek-ai/dsh-skill-badge
   tool-skill -> @deepseek-ai/dsh-tool-skill
   commands -> @deepseek-ai/dsh-commands
   command-feedback -> @deepseek-ai/dsh-command-feedback
@@ -506,10 +501,10 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   image-offload -> @deepseek-ai/dsh-compaction-image-offload
   tool-todo -> @deepseek-ai/dsh-tool-todo
   tool-goal -> @deepseek-ai/dsh-tool-goal
-  tool-ralph -> @deepseek-ai/dsh-tool-ralph
   repeat-tool-reminder -> @deepseek-ai/dsh-repeat-tool-reminder
   web -> @deepseek-ai/dsh-web
   web-search-deepseek -> @deepseek-ai/dsh-web-search-deepseek
+  web-deepseek-api -> @deepseek-ai/dsh-web-deepseek-api
   web-fetch-http -> @deepseek-ai/dsh-web-fetch-http
   tool-web -> @deepseek-ai/dsh-tool-web
   mcp-resources -> @deepseek-ai/dsh-mcp-resources
@@ -537,6 +532,7 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   job-controller -> @deepseek-ai/dsh-api-job-controller
   terminal-controller -> @deepseek-ai/dsh-api-terminal-controller
   workspace-files -> @deepseek-ai/dsh-api-workspace-files
+  schedule -> @deepseek-ai/dsh-schedule
   ui-settings-account -> @deepseek-ai/dsh-client-ui-settings-account
   account-controller -> @deepseek-ai/dsh-api-account-controller
   settings-controller -> @deepseek-ai/dsh-api-settings-controller
@@ -546,6 +542,7 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   web-startup -> @deepseek-ai/dsh-web-app/startup
   webserver -> @deepseek-ai/dsh-host-webserver
   web-runtime -> @deepseek-ai/dsh-web-app
+  harness-dev-context -> @deepseek-ai/dsh-harness-dev-context
   client-hmr -> @deepseek-ai/dsh-client-hmr
   modules -> @deepseek-ai/dsh-client-modules
   connection -> @deepseek-ai/dsh-client-connection
@@ -588,10 +585,13 @@ dsh 0.2.0-rc.2 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   ui-skill -> @deepseek-ai/dsh-client-ui-skill
   ui-subagent -> @deepseek-ai/dsh-client-ui-subagent
   ui-reference -> @deepseek-ai/dsh-client-ui-reference
+  ui-secret-mask -> @deepseek-ai/dsh-client-ui-secret-mask
   ui-jobs -> @deepseek-ai/dsh-client-ui-jobs
+  ui-schedule -> @deepseek-ai/dsh-client-ui-schedule
   ui-goal -> @deepseek-ai/dsh-client-ui-goal
   ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
+  ui-deepseek-model-label-1017 -> @deepseek-ai/dsh-client-ui-deepseek-model-label-1017
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
   ui-settings-session-log -> @deepseek-ai/dsh-client-ui-settings-session-log
@@ -794,7 +794,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
 |----------|----------|--------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **两个通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.3`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **两个通道**（stable `0.2.0-rc.2`、alpha `0.2.1-alpha.5`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` 是三个目录**都存在**、且在其中**都声明 image 模态**的唯一 id —— 这也是模块默认值选它的理由。另一个能看图的 `deepseek-v4-flash-vision-exp` 只存在于两个较旧目录，且上游已于 2026-09-10 下线，不能作为默认值。
 
