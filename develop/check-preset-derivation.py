@@ -75,8 +75,12 @@ PATCH_MARKER = "        plugins:"
 # 预设 id（roster 里的 id）与 `config.order`。内置预设 standard/ptc/minimal/cordis
 # 占 1–4，且 order 必须在 roster 里唯一：12 = Kitsunome 的掌灯模式、
 # 13 = 新闻三要素模式、14 = Ocean Spiral（均在别的仓库/包），故这里取 10/11/15。
-PATCH_IDS = {"nixos-mode": "nixos", "maintenance-mode": "maintenance", "rea-mode": "rea"}
-PATCH_ORDERS = {"nixos-mode": 10, "maintenance-mode": 11, "rea-mode": 15}
+PATCH_IDS = {"nixos-mode": "nixos", "foxli-mode": "foxli"}
+PATCH_ORDERS = {"nixos-mode": 10, "foxli-mode": 11}
+
+# 狐利模式 = NixOS模式正文 + 这两块（维护 + 逆向）。两块各自保留独立常量，
+# 是因为它们的注释各自解释一件事；合并成一个 delta 常量会让 diff 读不出「加了什么」。
+PATCH_FOXLI_DELTA = PATCH_MAINTENANCE_DELTA + PATCH_REA_DELTA
 BUILTIN_PRESET_ORDERS = {1, 2, 3, 4}
 
 # 独立包里的预设（新闻三要素模式）：只有元数据与 order 的核对，没有上游派生关系。
@@ -139,39 +143,28 @@ def check_head(path: str, directory: str, preset_id: str, order: int, orders: li
 
 
 def check_patch_chain(orders: list) -> None:
-    """0.2.0 通道：plugins 正文派生链 + 每个文件头部的元数据自洽。
+    """0.2.0 通道：plugins 正文派生 + 每个文件头部的元数据自洽。
 
-    派生链是**三段**：nixos → maintenance → rea。逐段核对，不是「三者各自独立」——
-    改 nixos-mode 而漏了维护模式时，第一段先响；只改了维护模式而漏了逆向模式时，
-    第二段响。这正是「维护模式必须完整派生」那条仓库规矩的延长线。
+    2026-10-21 起派生链只有**一段**：nixos → foxli（狐利模式 = 维护 + 逆向的合并）。
+    掌灯模式**不在这里**——它在 Kitsunome，构建期读本仓的狐利正文再拼私有追加块，
+    由那边的检查器核对。
     """
     nixos_path = os.path.join(PRESETS, "nixos-mode", "preset.patch.yml")
-    maint_path = os.path.join(PRESETS, "maintenance-mode", "preset.patch.yml")
-    rea_path = os.path.join(PRESETS, "rea-mode", "preset.patch.yml")
+    foxli_path = os.path.join(PRESETS, "foxli-mode", "preset.patch.yml")
 
     nixos_body = patch_body(nixos_path)
-    maint_body = patch_body(maint_path)
-    rea_body = patch_body(rea_path)
-    if maint_body != nixos_body + PATCH_MAINTENANCE_DELTA:
+    foxli_body = patch_body(foxli_path)
+    if foxli_body != nixos_body + PATCH_FOXLI_DELTA:
         fail(
-            "maintenance-mode/preset.patch.yml 与派生规则不符：\n"
-            "  两个 preset.patch.yml 的 `plugins:` 正文（该行之后到文件末尾）必须满足\n"
-            "  maintenance == nixos + 固定追加块。\n"
-            "  修改 nixos-mode 后请同步维护模式（注意新格式整体缩进为 10 空格），或按需更新\n"
-            "  检查脚本中的 PATCH_MAINTENANCE_DELTA 常量（仅限刻意变更追加块本身）。"
-        )
-    if rea_body != maint_body + PATCH_REA_DELTA:
-        fail(
-            "rea-mode/preset.patch.yml 与派生规则不符：\n"
-            "  `plugins:` 正文必须满足 rea == maintenance + 固定追加块。\n"
-            "  修改维护模式后请同步逆向模式（它派生自维护模式，不是另写一份）；\n"
-            "  或按需更新检查脚本中的 PATCH_REA_DELTA 常量（仅限刻意变更追加块本身）。"
+            "foxli-mode/preset.patch.yml 与派生规则不符：\n"
+            "  `plugins:` 正文必须满足 foxli == nixos + 固定追加块（维护 + 逆向两块）。\n"
+            "  修改 nixos-mode 后请同步狐利模式，或按需更新检查脚本中的\n"
+            "  PATCH_MAINTENANCE_DELTA / PATCH_REA_DELTA 常量（仅限刻意变更追加块本身）。"
         )
 
     for directory, path in (
         ("nixos-mode", nixos_path),
-        ("maintenance-mode", maint_path),
-        ("rea-mode", rea_path),
+        ("foxli-mode", foxli_path),
     ):
         check_head(
             path,
@@ -209,7 +202,7 @@ def main() -> None:
     # 模型上，而 0.2.0 的它已改成 patch/bundle 模型并明说「那个目录没人读了」——于是同名两份，
     # 其中一份在教废弃写法。故这里把「不再自带」钉成**断言**，而不是删掉就没人管：
     # 谁把副本加回来，检查就响。0.1.x 兼容用的旧副本在 `dsh-nixos-shell-stable.nix` 钉住的 rev 里。
-    for mode in ("nixos-mode", "maintenance-mode", "rea-mode"):
+    for mode in ("nixos-mode", "foxli-mode"):
         stray = os.path.join(PRESETS, mode, "skills")
         if os.path.isdir(stray):
             fail(
@@ -219,9 +212,8 @@ def main() -> None:
             )
 
     print(
-        "preset-derivation: OK（维护模式完整派生自 NixOS模式、逆向模式完整派生自维护模式；"
-        "nixos / maintenance / rea-mode / news-three-elements 四个 preset.patch.yml 的头部"
-        "与 preset.yml 一致，order 互不冲突）"
+        "preset-derivation: OK（狐利模式完整派生自 NixOS模式；nixos / foxli-mode / "
+        "news-three-elements 三个 preset.patch.yml 的头部与 preset.yml 一致，order 互不冲突）"
     )
 
 

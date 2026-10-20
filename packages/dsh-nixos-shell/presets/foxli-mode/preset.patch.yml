@@ -1,30 +1,25 @@
-# 维护模式 Agent 预设（dsh 0.2.0 格式）。
+# 狐莉模式 Agent 预设（dsh 0.2.0 格式）。
 #
-# dsh 0.2.0 起，Agent 预设不再是 `$DSH_HOME/.agent-presets/<id>/` 目录，而是 profile 的
-# 用户 patch 层（`$DSH_HOME/profiles/<profile>/cordis.patch.yml`，一个顶层 YAML 数组）
-# 里的一条 loader patch 条目：`@deepseek-ai/dsh-agent-preset` 行，预设的插件行进它的
-# `config.plugins`。
+# **这是三层派生里的中间层**（2026-10-21 起）：
 #
-# **这是本预设唯一的格式**（2026-10-02 落地）：0.1.x 的目录式 `agent.cordis.yml` 已从
-# 仓库 HEAD 删除——两套格式不并存于 HEAD，只在「取用点」分叉（stable 用
-# packages/dsh-nixos-shell-stable.nix 钉住的 rev，alpha 跟 HEAD）。
-# `modules/dsh.nix` 把本文件**逐字**并进它生成的 cordis.patch.yml。
+#     NixOS模式（最小 NixOS 适配）
+#       └─ 狐莉模式（日常维护 + 开发 + 逆向；**下放社区的能力到此为止**）
+#            └─ 掌灯模式（在 Kitsunome，构建期读本文件的正文 + 私有追加块）
 #
-# 相对旧格式的三处必要差异（不是笔误）：
-#   1. `baseUrl` 语义变了——不再是预设目录，而是 profile 目录，故 skills 根改为从
-#      baseUrl 解析 `@kihara777/dsh-nixos-shell` 包根（见下方 skill-filesystem 注释）。
-#   2. 元数据（原 preset.yml 的 name/description）搬进 `config.name`/`config.description`。
-#   3. `config.order` 是 0.2.0 新增的 roster 排序键；内置预设占 1–4，本预设取 11。
+# 本文件的 `plugins:` 正文 = NixOS模式的正文 + 两块固定追加：**维护**（维护技能与工作流）
+# 与**逆向**（rea-mcp 桥）。派生关系由 develop/check-preset-derivation.py 逐字节核对。
 #
-# 派生关系仍由 develop/check-preset-derivation.py 核对：本文件 = nixos-mode 的
-# `plugins:` 正文 + 固定追加块（末尾的 maintenance-skills 行）。
+# 为什么把原来的维护模式与逆向模式合成这一个：它们各自都是「NixOS + 一块」的形态，
+# 分开放意味着掌灯模式要分别派生两次、技能清单要维护两份。合并之后掌灯只需读这一份。
+#
+# order 取 11（原维护模式的位置）。原逆向模式的 15 空出来，留给将来。
 - insert:
-    - id: preset-maintenance-mode
+    - id: preset-foxli-mode
       name: '@deepseek-ai/dsh-agent-preset'
       config:
-        id: maintenance
-        name: '维护模式'
-        description: '基于 NixOS模式的仓库维护专用 Agent 预设：初始化时注入最新的文档撰写技能（write-project-docs，含 translate-* 语言扩展自动发现）与维护日志技能（write-maintenance-log），并载入仓库维护工作流提示词，用于在全新会话中开箱即用地维护与开发仓库内容。'
+        id: foxli
+        name: '狐莉模式'
+        description: '派生自 NixOS模式的「瑞士军刀」Agent 预设：日常维护、开发与逆向一体——在 NixOS模式全部能力之上，注入文档撰写与维护日志技能、上游更新检查与贡献审计技能，载入分层维护工作流提示词，并用 rea-mcp 在本会话内桥接 REA（Reverse Engineer Anything）的 MCP 服务（全量约 207 个 mcp__rea__* 工具，只对本会话可见）。**这是下放给社区的能力边界**：掌灯模式派生自它，只再加私有适配层。'
         order: 11
         plugins:
           # 2026-10-02：persona 里「预设住在 `.agent-presets/<id>/` 目录」那句已按 dsh 0.2.0
@@ -339,3 +334,25 @@
           # prompt section.  It publishes no services, so no realm is needed.
           - id: maintenance-skills
             name: '@kihara777/dsh-nixos-shell/maintenance-skills'
+
+
+          # ── 逆向模式 ─────────────────────────────────────────────────────────────────
+
+          # `rea-mcp` bridges the REA (Reverse Engineer Anything) MCP server into THIS
+          # session: one stdio connection per agent at `agent/session-start`, carrying
+          # REA's full tool set (207 tools at 6.7.0) on that agent's scope. It publishes
+          # no service, so no realm is needed.
+          #
+          # 为什么不是一条 `@deepseek-ai/dsh-mcp-client` 行（第一版，实测不行）：预设是
+          # eager activation —— dsh 启动 4 秒后 `rea mcp` 就被 spawn，而工具注册落到
+          # root scope。结果是**掌灯模式的会话**也背上 207 个 `mcp__rea__*`（会话请求头
+          # 里 31 + 207 = 238 个工具）。「模式」的语义要求只有选它的会话才有这些工具。
+          #
+          # 工具是全量的：用上游 `createMcpToolDefinition`，把 MCP 的 inputSchema 原样
+          # 交给注册表，不做「JSON Schema → dsh 简写 spec」的转换——那种转换器写歪了会
+          # **静默拒掉合法调用**，是 207 个工具里最难查的一类错。
+          #
+          # `REA_BIN_PATH` 由 modules/dsh.nix 在启用本预设时导出（`pkgs.rea` 的路径），
+          # 所以正文里没有 store 路径；变量缺席时退回 PATH 里的 `rea`。
+          - id: rea-mcp
+            name: '@kihara777/dsh-nixos-shell/rea-mcp'

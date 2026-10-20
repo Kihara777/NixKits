@@ -1,2 +1,0 @@
-name: 逆向模式
-description: 基于维护模式的逆向工程 Agent 预设：在维护模式全部能力之上，用 rea-mcp 插件在**本会话**内桥接 REA（Reverse Engineer Anything）的 MCP 服务（agent/session-start 时连一条 stdio 连接，全量注册约 207 个 mcp__rea__* 工具，只对这个会话可见），用于静态分析 JavaScript/Electron、.NET、Go、Rust、Godot、IL2CPP 应用与原生二进制，并把结论按维护模式的工作流写回仓库；分析用的 rea 二进制由 Nix 提供（wrapper 已带 procps 与 JDK）。
