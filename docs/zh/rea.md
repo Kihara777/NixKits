@@ -21,7 +21,7 @@
 ## 使用
 
 ```bash
-rea --help                                    # 命令一览（约 100 个子命令）
+rea --help                                    # 命令一览（实测 153 个子命令）
 rea doctor                                    # 就绪性诊断（客户端注册 / 分析引擎 / 宿主机）
 rea capabilities                              # provider 能力与副作用清单
 rea analyze-javascript-application <目录> --format json   # 静态重建 JS/Electron 应用

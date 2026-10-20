@@ -48,7 +48,7 @@ Agent 預設（session 形態）插件同等級、各自独立文書持：
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全請求拒否）；`nixos_shell`/`nixos_cli` 與 NixOS 開発 prompt 読込 | dsh-nixos-shell 包内、patch 行 | [docs/pcn/modes/nixos.md](pcn/modes/nixos.md) |
 | 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs`/`write-maintenance-log`/`nix-flake-update-check`/`nixkits-check-updates`/`translate-*` 技能與倉庫維護工作流 prompt 注入 | dsh-nixos-shell 包内、patch 行 | [docs/pcn/modes/maintenance.md](pcn/modes/maintenance.md) |
-| 逆向模式 | `rea` | 維護模式 派生；其 全能力 上 REA（Reverse Engineer Anything）之 MCP 服務器（`mcp__rea__*`、**全量登録** 約 100 個）接続、応用 與 二進制 之 静的解析 行、結論 保守 工作流 倉庫 戻 | dsh-nixos-shell 包内、patch 行 | [docs/pcn/modes/rea.md](pcn/modes/rea.md) |
+| 逆向模式 | `rea` | 維護模式 派生；其 全能力 上 REA（Reverse Engineer Anything）之 MCP 服務器（`mcp__rea__*`、**全量登録**、`tools/list` 実測 207 個）接続、応用 與 二進制 之 静的解析 行、結論 保守 工作流 倉庫 戻 | dsh-nixos-shell 包内、patch 行 | [docs/pcn/modes/rea.md](pcn/modes/rea.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
 
 > 前三（NixOS模式 / 維護模式 / 逆向模式）dsh-nixos-shell 包 同梱、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` / `.reaMode` 各 `preset.patch.yml` patch 行 為 profile 之 `cordis.patch.yml` 併合（dsh 0.2.0 以降 **目録 copy 無**）；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets/news-three-elements` `$DSH_HOME/.agent-presets/` 組立、該 patch 行 相対路径 解決 供。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。

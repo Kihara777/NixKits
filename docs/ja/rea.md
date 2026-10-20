@@ -21,7 +21,7 @@
 ## 使い方
 
 ```bash
-rea --help                                    # コマンド一覧（約 100 個のサブコマンド）
+rea --help                                    # コマンド一覧（実測 153 個のサブコマンド）
 rea doctor                                    # 準備状態の診断（クライアント登録 / 解析エンジン / ホスト）
 rea capabilities                              # provider の能力と副作用の一覧
 rea analyze-javascript-application <dir> --format json   # JS/Electron アプリの静的再構築

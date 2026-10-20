@@ -17,7 +17,7 @@
       config:
         id: rea
         name: '逆向模式'
-        description: '基于维护模式的逆向工程 Agent 预设：在维护模式全部能力之上接入 REA（Reverse Engineer Anything）的 MCP 服务，工具名为 mcp__rea__*（全量注册，约百个），用于静态分析 JavaScript/Electron、.NET、Go、Rust、Godot、IL2CPP 应用与原生二进制，并把结论按维护模式的工作流写回仓库；分析用的 rea 二进制由 Nix 提供（wrapper 已带 procps 与 JDK）。'
+        description: '基于维护模式的逆向工程 Agent 预设：在维护模式全部能力之上接入 REA（Reverse Engineer Anything）的 MCP 服务，工具名为 mcp__rea__*（全量注册，实测 207 个），用于静态分析 JavaScript/Electron、.NET、Go、Rust、Godot、IL2CPP 应用与原生二进制，并把结论按维护模式的工作流写回仓库；分析用的 rea 二进制由 Nix 提供（wrapper 已带 procps 与 JDK）。'
         order: 15
         plugins:
           # 2026-10-02：persona 里「预设住在 `.agent-presets/<id>/` 目录」那句已按 dsh 0.2.0
@@ -342,6 +342,8 @@
           # 全量注册是有意的：`dsh-mcp-client` **没有**工具白名单/过滤选项（核过它的
           # README 与 config 字段表），所以「只挑一部分」的唯一办法是不挂这条行。本预设
           # 面向「我要全部逆向能力」的场景 —— 工具表很长是它的代价，不是缺陷。
+          # 规模是可量的：`rea mcp` 一次 `tools/list` 实测 **207 个工具**（6.7.0），
+          # CLI 侧 153 个命令（`rea --llms`）。
           #
           # `command` 从 `REA_BIN_PATH` 解析：modules/dsh.nix 在启用本预设时把它设成
           # `pkgs.rea` 的 store 路径，因此这份正文里不出现任何 store 路径（正文要能

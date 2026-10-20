@@ -55,6 +55,8 @@ PATCH_REA_DELTA = (
     "          # 全量注册是有意的：`dsh-mcp-client` **没有**工具白名单/过滤选项（核过它的\n"
     "          # README 与 config 字段表），所以「只挑一部分」的唯一办法是不挂这条行。本预设\n"
     "          # 面向「我要全部逆向能力」的场景 —— 工具表很长是它的代价，不是缺陷。\n"
+    "          # 规模是可量的：`rea mcp` 一次 `tools/list` 实测 **207 个工具**（6.7.0），\n"
+    "          # CLI 侧 153 个命令（`rea --llms`）。\n"
     "          #\n"
     "          # `command` 从 `REA_BIN_PATH` 解析：modules/dsh.nix 在启用本预设时把它设成\n"
     "          # `pkgs.rea` 的 store 路径，因此这份正文里不出现任何 store 路径（正文要能\n"

@@ -21,7 +21,7 @@
 ## 使用法
 
 ```bash
-rea --help                                    # 命令一覧（約 100 個之副命令）
+rea --help                                    # 命令一覧（実測 153 個之副命令）
 rea doctor                                    # 就緒性診断（客端登録 / 解析機関 / 宿主机）
 rea capabilities                              # provider 能力与副作用一覧
 rea analyze-javascript-application <dir> --format json   # JS/Electron 応用之静的再構築

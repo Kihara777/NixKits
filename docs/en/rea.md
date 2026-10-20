@@ -21,7 +21,7 @@
 ## Usage
 
 ```bash
-rea --help                                    # command list (about 100 subcommands)
+rea --help                                    # command list (153 subcommands as measured)
 rea doctor                                    # readiness (client registrations / analysis engines / host)
 rea capabilities                              # provider capabilities and side effects
 rea analyze-javascript-application <dir> --format json   # statically reconstruct a JS/Electron app

@@ -29,7 +29,7 @@ One `@deepseek-ai/dsh-mcp-client` row is appended on top of everything maintenan
 
 That gives three things:
 
-- **The full tool set**: every REA MCP tool is registered as `mcp__rea__*` (about a hundred). `dsh-mcp-client` has **no** allowlist or filter option (checked against its README and config field table), so the only way to take a subset is not to mount this row — this mode is for "I want all of it", and a long tool list is its price, not a defect.
+- **The full tool set**: every REA MCP tool is registered as `mcp__rea__*` (**207**, measured through `tools/list`). `dsh-mcp-client` has **no** allowlist or filter option (checked against its README and config field table), so the only way to take a subset is not to mount this row — this mode is for "I want all of it", and a long tool list is its price, not a defect.
 - **Everything maintenance mode does keeps working**: host validation, `nixos_shell` / `nixos_cli`, the documentation and maintenance-log skills, the four-language convention. When analysis results have to go back into a repository, the workflow is already there.
 - **A dead REA does not break the preset**: `failOnStartupError: false`. If REA fails, the rest of maintenance mode still works; what is missing is the `mcp__rea__*` group (and the log records the connection failure).
 
