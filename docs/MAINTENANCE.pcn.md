@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T08:11:29+09:00
+
+**摘要**：dsh-api-balance re-pin —— 公式折畳 + 第 1 列 0 化（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0811130900)）
+
+- rev `7c07465` → `f925ce1`；版本 `0.1.1` 不変
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変
+- 判据：`nix build` 成功；`layout.toggleSidebar()` 7 箇所、旧 fixed overlay 0 箇所
+
+| 提交 | 説明 |
+|------|------|
+| `79ebbe1` | chore(dsh-api-balance): re-pin 到 f925ce1 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `7c07465` → `f925ce1` |
+
 ## 2026-10-21T08:04:26+09:00
 
 **摘要**：dsh-api-balance re-pin —— grid 列潰 撤回（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0803330900)）

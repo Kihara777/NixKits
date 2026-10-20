@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:11:29+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — official collapse plus zeroing the first column ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0811130900))
+
+- rev `7c07465` → `f925ce1`; the version stays `0.1.1` — the source change affects runtime behaviour
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` unchanged
+- criteria: `nix build` succeeds; `layout.toggleSidebar()` appears 7 times and the old fixed overlay 0 times
+
+| Commit | Description |
+|------|------|
+| `79ebbe1` | chore(dsh-api-balance): re-pin the wrapper to f925ce1 |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `7c07465` → `f925ce1` |
+
 ## 2026-10-21T08:04:26+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — grid-column collapse reverted ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0803330900))
