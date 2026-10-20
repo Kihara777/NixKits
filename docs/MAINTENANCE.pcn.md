@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T11:52:17+09:00
+
+**摘要**：dsh 0.2.1-rc.2、dsh-alpha 0.2.1-alpha.5、opencode-telegram 0.26.5 — 三 package 更新
+
+- dsh minor 跨：新版 `@deepseek-ai/cordis-plugin-include ~1.0.10` 追加、故 vendored lock 再生成（9085 → 10763 行）、両 hash 再計算 後 build 通過
+- dsh-alpha 同流程、独立 lock（10729 行）；両通道 清單 実測：stable 190 条、alpha 188 条、**alpha 独有条目 無**
+- opencode-telegram patch 更新、両 hash 独立 再計算
+- 四言語 文書 同期（版本表、dsh 插件清單、通道差異、README 版本行）
+- 判据：三 package `nix build` 成功；doc-versions 9 package 一致、doc-links 通過；四言語 条目数 相等（414）
+
+| 提交 | 説明 |
+|------|------|
+| `441c494` | chore(pkgs): bump dsh 0.2.1-rc.2, dsh-alpha 0.2.1-alpha.5, opencode-telegram 0.26.5 |
+
 ## 2026-10-20T03:30:56+09:00
 
 **摘要**：fix(codewhale-src): 交叉编訳 下 __structuredAttrs 開 無

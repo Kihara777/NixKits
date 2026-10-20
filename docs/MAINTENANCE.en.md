@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T11:52:17+09:00
+
+**Summary**: dsh 0.2.1-rc.2, dsh-alpha 0.2.1-alpha.5, opencode-telegram 0.26.5 — three bumps
+
+- dsh crosses a minor: the new version adds `@deepseek-ai/cordis-plugin-include ~1.0.10`, so the vendored lock was regenerated (9085 → 10763 lines) and both hashes recomputed; builds green
+- dsh-alpha follows the same flow with its own lock (10729 lines); the two channels' plugin lists were measured: stable 190 entries, alpha 188, **no alpha-only entry**
+- opencode-telegram is a patch bump with both hashes recomputed independently
+- Four-language docs synchronised (version tables, the dsh plugin list, the channel diff note, README version rows)
+- Criterion: all three packages build; doc-versions reports 9 packages matching, doc-links passes; equal entry counts across four languages (414)
+
+| Commit | Description |
+|------|------|
+| `441c494` | chore(pkgs): bump dsh 0.2.1-rc.2, dsh-alpha 0.2.1-alpha.5, opencode-telegram 0.26.5 |
+
 ## 2026-10-20T03:30:56+09:00
 
 **Summary**: fix(codewhale-src): keep __structuredAttrs off for cross-compilation

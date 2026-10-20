@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T11:52:17+09:00
+
+**概要**：dsh 0.2.1-rc.2、dsh-alpha 0.2.1-alpha.5、opencode-telegram 0.26.5 — 三パッケージ更新
+
+- dsh はマイナー跨ぎ：新版が `@deepseek-ai/cordis-plugin-include ~1.0.10` を追加したため vendored lock を再生成（9085 → 10763 行）、両ハッシュを再計算してビルド通過
+- dsh-alpha は同じ流れで独立 lock（10729 行）；両チャネルの一覧を実測：stable 190 条、alpha 188 条、**alpha のみの条目は無し**
+- opencode-telegram はパッチ更新で、両ハッシュを独立に再計算
+- 四言語の文書を同期（バージョン表、dsh のプラグイン一覧、チャネル差分、README の版本行）
+- 判据：三パッケージとも `nix build` 成功；doc-versions は 9 パッケージ一致、doc-links 通過；四言語の条目数が相等（414）
+
+| コミット | 説明 |
+|------|------|
+| `441c494` | chore(pkgs): bump dsh 0.2.1-rc.2, dsh-alpha 0.2.1-alpha.5, opencode-telegram 0.26.5 |
+
 ## 2026-10-20T03:30:56+09:00
 
 **概要**：fix(codewhale-src): クロスコンパイルでは __structuredAttrs を有効にしない
