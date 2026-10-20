@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:49:51+09:00
+
+**Summary**: dsh-api-balance wrapper re-pinned — finding the rail under fullscreen letterbox ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0749210900))
+
+- rev `7402982` → `977d205`; the version stays `0.1.1` — the source change affects runtime behaviour, so the field-level criterion bumps it
+- the src hash comes from the build error of `lib.fakeHash`; `npmDepsHash` is unchanged (deps and lock untouched, proven by the passing build)
+- criteria: `nix build` succeeds; the output contains `function isRailBox`
+
+| Commit | Description |
+|------|------|
+| `afba24e` | chore(dsh-api-balance): re-pin the wrapper to 977d205 — rail lookup under letterbox |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (re-pinned rev) |
+| 　 | src rev | `7402982` → `977d205` |
+
 ## 2026-10-21T07:41:33+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — fullscreen sidebar drawer ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0740510900))

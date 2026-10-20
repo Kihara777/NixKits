@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T07:49:51+09:00
+
+**概要**：dsh-api-balance re-pin —— フルスクリーン黒帯時の rail 発見修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0749210900)）
+
+- rev `7402982` → `977d205`；バージョンは `0.1.1` のまま——ソース変更が実行時の挙動に影響するため、フィールド単位の判定で更新
+- src hash は `lib.fakeHash` のビルドエラーから取得；`npmDepsHash` は不変（依存と lock 未変更、ビルド通過が証拠）
+- 判定：`nix build` 成功；成果物に `function isRailBox` を含む
+
+| コミット | 説明 |
+|------|------|
+| `afba24e` | chore(dsh-api-balance): re-pin を 977d205 へ —— 黒帯時の rail 発見 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `7402982` → `977d205` |
+
 ## 2026-10-21T07:41:33+09:00
 
 **概要**：dsh-api-balance re-pin —— フルスクリーン時のサイドバードロワー（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0740510900)）

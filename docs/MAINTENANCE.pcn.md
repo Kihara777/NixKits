@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T07:49:51+09:00
+
+**摘要**：dsh-api-balance re-pin —— 全屏黒帯時 rail 発見 修正（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0749210900)）
+
+- rev `7402982` → `977d205`；版本 `0.1.1` 不変——源码変更 実行時挙動 影響、field 級判据 以 更新
+- src hash `lib.fakeHash` build 報錯 取得；`npmDepsHash` 不変（依存 與 lock 未変、build 通過 其証）
+- 判据：`nix build` 成功；産物 内 `function isRailBox` 含
+
+| 提交 | 説明 |
+|------|------|
+| `afba24e` | chore(dsh-api-balance): re-pin 到 977d205 —— 黒帯時 rail 発見 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `7402982` → `977d205` |
+
 ## 2026-10-21T07:41:33+09:00
 
 **摘要**：dsh-api-balance re-pin —— 全屏時 側欄 drawer（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0740510900)）
