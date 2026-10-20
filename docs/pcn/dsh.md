@@ -188,7 +188,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 > **0.2.0 以降、配布方式 唯一**：各模式 = 一本 `@deepseek-ai/dsh-agent-preset` patch 行（模組 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`差込）、插件行本文 該包 `preset.patch.yml` 従 **逐字** 取。0.1.x 二経路（`nixosMode`/`maintenanceMode` seed-once 目録 copy、`newsThreeElements` roster 追加 root）上流変更 共 消滅——`roots` 機構自体 不存在。内容目録 必要 新聞三要素模式 唯一：該插件 npm 包 非、預設同梱 file 故、模組 `$DSH_HOME/.agent-presets/news-three-elements/`組立（整体再構築、seed-once 非）、patch 行 相対経路 参照。各模式 挙動・組合構造・維護規則 上表文書参照。
 
-> **本 repo 配布 不 模式 展開側 二 有**：掌灯模式（`lampkeeper`、order 12）與 Ocean Spiral（`ocean-spiral`、order 14）。内容 出処 私有 repo（Kitsunome）、但 0.2.0 形態 上三 與 全同——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/`組立 内容目録、錨 `new URL('../../.agent-presets/<id>/', baseUrl)`（**Ocean Spiral repo 入 2026-10-02**、以前 展開副本 唯一実体、repo 也 播種 也 無）。両者 一致性検査 亦 彼方：`develop/check-lampkeeper-derivation.py`、`develop/check-ocean-spiral-derivation.py`。
+> **本 repo 配布 不 模式 展開側 二 有**：私有模式 A（私有模式 A、order 12）與 私有模式 B（私有模式 B、order 14）。内容 出処 私有 repo（Kitsunome）、但 0.2.0 形態 上三 與 全同——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/`組立 内容目録、錨 `new URL('../../.agent-presets/<id>/', baseUrl)`（**私有模式 B repo 入 2026-10-02**、以前 展開副本 唯一実体、repo 也 播種 也 無）。両者 一致性検査 亦 彼方：该侧的派生检查脚本。
 
 ### dsh 0.2.0 於 預設格式之変化（2026-10-02 着地済）
 
@@ -246,19 +246,19 @@ curl -sS -b cookies -H 'content-type: application/json' \
   http://127.0.0.1:<port>/api/agentPresets/list
 ```
 
-2026-10-02 着地検収（臨時 `DSH_HOME`、`dsh 0.2.0-rc.2`）：**9 条目**（内蔵 4 + `nixos` order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocean-spiral` 14）**`broken` 全部 空**；三反証 何 也 **実 file 一箇所** 唯 変更：
+2026-10-02 着地検収（臨時 `DSH_HOME`、`dsh 0.2.0-rc.2`）：**9 条目**（内蔵 4 + `nixos` order 10 + `maintenance` 11 + 私有模式 A 12 + `news-three-elements` 13 + 私有模式 B 14）**`broken` 全部 空**；三反証 何 也 **実 file 一箇所** 唯 変更：
 
 | 反証 | 変更箇所（一箇所） | `agentPresets/list` 報告 `broken` |
 |------|-----------------|-----------------------------------|
 | 包名 | `tool-fs-search` 包名 不存在 `@deepseek-ai/dsh-tool-fs-searchX` | `tool-fs-search (@deepseek-ai/dsh-tool-fs-searchX): never started`（派生元 同一 5 預設 同時 報告） |
-| 錨 | Ocean Spiral 技能根 `../../.agent-presets/ocean-spiral/` → `…ocean-spiral-typo/` | `skill-filesystem (…): ocean-spiral skill roots missing: <経路>` + `oceanspiral-scene (…): never started` |
-| 組立 | `$DSH_HOME/node_modules` 内 `@deepseek-ai` link 一本 欠 | `lampkeeper-shell (../../.agent-presets/lampkeeper/components/lib/index.js): never started` |
+| 錨 | 私有模式 B 技能根 `../../.agent-presets/<id>/` → `…<id>-typo/` | `skill-filesystem (…): 私有模式 B skill roots missing: <経路>` + `oceanspiral-scene (…): never started` |
+| 組立 | `$DSH_HOME/node_modules` 内 `@deepseek-ai` link 一本 欠 | `private-shell (../../.agent-presets/<id>/components/lib/index.js): never started` |
 
-最後 一行 **今回 着地 実際 修正 罠**：預設同梱 plugin file `$DSH_HOME/.agent-presets/<id>/…` 存在、裸 package 名 以 peer import 時 Node **file 所在目録** 従 上 `node_modules` 探。模組 以前 `@kihara777` 唯 張、故「dsh 再起動後 掌灯模式 broken 化」——両者 同一 `$DSH_HOME` 内 相互 踏。現在 `@kihara777` 與 `@deepseek-ai` 二本 張。
+最後 一行 **今回 着地 実際 修正 罠**：預設同梱 plugin file `$DSH_HOME/.agent-presets/<id>/…` 存在、裸 package 名 以 peer import 時 Node **file 所在目録** 従 上 `node_modules` 探。模組 以前 `@kihara777` 唯 張、故「dsh 再起動後 私有模式 A broken 化」——両者 同一 `$DSH_HOME` 内 相互 踏。現在 `@kihara777` 與 `@deepseek-ai` 二本 張。
 
 > ⚠️ **同一 判定 script 自身 此 二本 link 補 必要**（2026-10-13 実測）：模組 修正 故 探針 修正 済 非。
 > `tests/dsh-preset-mount-probe.sh` 使捨 実例 起動 際 `@kihara777` 唯 張、故 `import '@deepseek-ai/…'` 為 預設 plugin 全部 **静黙 `never started`**——roster `never started` 一言 唯 返 跡 残 無 故、「該 預設 真 壊」 誤読 易。
-> 実測 形態：`lampkeeper-shell`（`schemastery` + `dsh-tools` import）報告、同 目録 之 `nixos-gate.js`（`node:fs` 唯 import）正常——**此 対照 即 判定**。
+> 実測 形態：`private-shell`（`schemastery` + `dsh-tools` import）報告、同 目録 之 `nixos-gate.js`（`node:fs` 唯 import）正常——**此 対照 即 判定**。
 > **探針 自身 環境 不正 時、其 報 broken 勘定 不。**
 
 #### 提示詞 変数 `cwd` dsh 0.2.1 於 上流 削除 済（2026-10-13）
@@ -302,7 +302,7 @@ dsh 0.2.0 **会話格式 v4** 導入。此 **各消息 之 `source`** 一条 之
 format v4 message requires a producer-owned source kind
 ```
 
-2026-10-03 実測：掌灯模式 之 `journal-catchup` **新規 session 開始毎** 注意書 一件 steer。故
+2026-10-03 実測：私有模式 A 之 `journal-catchup` **新規 session 開始毎** 注意書 一件 steer。故
 0.2.0-rc.2 上 新規 session 作成毎 崩、session file 消息 一件 亦 残 不（header・三件 之 政策
 event・唯 `session/end-seed`）——維護者 会話 続 為 系統 巻戻 之外 無。同一形状 本 repo 之
 新聞三要素 預設 之 二 插件（`news-language.js` / `news-material.js`）亦 在、同期 修正 不 場合
@@ -674,7 +674,7 @@ dsh 設定菜單項目 `$DSH_HOME/settings.yaml`（書類備份、hot reload）�
     # 新規会話 既定 権限預設（値 組合行 presets 表 由来）
     permission = { enable = true; defaultPreset = "danger-full-access"; };
     # 新規会話 既定  mount 之 Agent 預設
-    agentPresets = { enable = true; default = "lampkeeper"; };
+    agentPresets = { enable = true; default = "<预设 id>"; };
     # 副 agent 深 與 同時実行 上限
     subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
     # 本地 shell 実行器：変 欲 字段 唯 書。未指定 組合基線 自重（timeoutMs 基線 60000）

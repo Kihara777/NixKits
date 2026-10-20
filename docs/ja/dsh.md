@@ -189,7 +189,7 @@ dsh のプラグインは `cordis.patch.yml` からランタイムにホット�
 
 > **0.2.0 以降、配布方式はただ一つ**：各モードは一本の `@deepseek-ai/dsh-agent-preset` patch 行であり（モジュールが `$DSH_HOME/profiles/<profile>/cordis.patch.yml` へ差し込む）、プラグイン行の本文はそのパッケージの `preset.patch.yml` から**逐字**取る。0.1.x の二経路（`nixosMode`/`maintenanceMode` の seed-once ディレクトリ複製、`newsThreeElements` の roster 追加根）は上流の変更とともに消えた——`roots` 機構自体が存在しない。内容ディレクトリを要するのは新闻三要素模式だけである：そのプラグインは npm パッケージではなくプリセット同梱のファイルなので、モジュールが `$DSH_HOME/.agent-presets/news-three-elements/` へ組み立て（整体再構築、seed-once ではない）、patch 行は相対経路で参照する。各モードの挙動・組合構造・保守規則は上表の文書を参照。
 
-> **本リポジトリが配布しないモードが展開側に二つある**：掌灯模式（`lampkeeper`、order 12）と Ocean Spiral（`ocean-spiral`、order 14）。内容の出所は私有リポジトリ（Kitsunome）だが、0.2.0 の形態は上の三つと全く同じ——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/` へ組み立てた内容ディレクトリで、錨は `new URL('../../.agent-presets/<id>/', baseUrl)`（**Ocean Spiral がリポジトリに入ったのは 2026-10-02**、それ以前は展開副本が唯一の実体で、リポジトリも播種も無かった）。両者の一致性検査もそちら側にある：`develop/check-lampkeeper-derivation.py`、`develop/check-ocean-spiral-derivation.py`。
+> **本リポジトリが配布しないモードが展開側に二つある**：私有モード A（私有モード A、order 12）と 私有モード B（私有モード B、order 14）。内容の出所は私有リポジトリ（Kitsunome）だが、0.2.0 の形態は上の三つと全く同じ——patch 行一本 + `$DSH_HOME/.agent-presets/<id>/` へ組み立てた内容ディレクトリで、錨は `new URL('../../.agent-presets/<id>/', baseUrl)`（**私有モード B がリポジトリに入ったのは 2026-10-02**、それ以前は展開副本が唯一の実体で、リポジトリも播種も無かった）。両者の一致性検査もそちら側にある：该侧的派生检查脚本。
 
 ### dsh 0.2.0 におけるプリセット形式の変化（2026-10-02 落地済み）
 
@@ -247,19 +247,19 @@ curl -sS -b cookies -H 'content-type: application/json' \
   http://127.0.0.1:<port>/api/agentPresets/list
 ```
 
-2026-10-02 の落地検収（使い捨て `DSH_HOME`、`dsh 0.2.0-rc.2`）：**9 条目**（内蔵 4 + `nixos` order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocean-spiral` 14）で **`broken` は全て空**；三つの反証はいずれも**実ファイルの一箇所**だけを変えた：
+2026-10-02 の落地検収（使い捨て `DSH_HOME`、`dsh 0.2.0-rc.2`）：**9 条目**（内蔵 4 + `nixos` order 10 + `maintenance` 11 + 私有モード A 12 + `news-three-elements` 13 + 私有モード B 14）で **`broken` は全て空**；三つの反証はいずれも**実ファイルの一箇所**だけを変えた：
 
 | 反証 | 変えた箇所（一箇所） | `agentPresets/list` が報告した `broken` |
 |------|-----------------|-----------------------------------|
 | パッケージ名 | `tool-fs-search` のパッケージ名を存在しない `@deepseek-ai/dsh-tool-fs-searchX` へ | `tool-fs-search (@deepseek-ai/dsh-tool-fs-searchX): never started`（派生元を同じくする 5 プリセットが同時に報告） |
-| 錨 | Ocean Spiral の技能根 `../../.agent-presets/ocean-spiral/` → `…ocean-spiral-typo/` | `skill-filesystem (…): ocean-spiral skill roots missing: <経路>` + `oceanspiral-scene (…): never started` |
-| 組み立て | `$DSH_HOME/node_modules` の `@deepseek-ai` リンクを一本欠かす | `lampkeeper-shell (../../.agent-presets/lampkeeper/components/lib/index.js): never started` |
+| 錨 | 私有モード B の技能根 `../../.agent-presets/<id>/` → `…<id>-typo/` | `skill-filesystem (…): 私有モード B skill roots missing: <経路>` + `oceanspiral-scene (…): never started` |
+| 組み立て | `$DSH_HOME/node_modules` の `@deepseek-ai` リンクを一本欠かす | `private-shell (../../.agent-presets/<id>/components/lib/index.js): never started` |
 
-最後の一行は**今回の落地で実際に直した罠**である：プリセット同梱のプラグインファイルは `$DSH_HOME/.agent-presets/<id>/…` にあり、裸のパッケージ名で peer を import すると Node は**ファイルのあるディレクトリ**から上へ `node_modules` を探す。モジュールは以前 `@kihara777` しか張っておらず、ゆえに「dsh を再起動すると掌灯模式が broken になる」——両者が同じ `$DSH_HOME` の中で互いを踏んでいた。現在は `@kihara777` と `@deepseek-ai` の二本を張る。
+最後の一行は**今回の落地で実際に直した罠**である：プリセット同梱のプラグインファイルは `$DSH_HOME/.agent-presets/<id>/…` にあり、裸のパッケージ名で peer を import すると Node は**ファイルのあるディレクトリ**から上へ `node_modules` を探す。モジュールは以前 `@kihara777` しか張っておらず、ゆえに「dsh を再起動すると私有モード Aが broken になる」——両者が同じ `$DSH_HOME` の中で互いを踏んでいた。現在は `@kihara777` と `@deepseek-ai` の二本を張る。
 
 > ⚠️ **同じ判定スクリプトも自分でこの二本のリンクを補わねばならない**（2026-10-13 実測）：モジュールが直ったからといって探針が直ったことにはならない。
 > `tests/dsh-preset-mount-probe.sh` は使い捨てインスタンスを起動する際 `@kihara777` しか張っておらず、ゆえに `import '@deepseek-ai/…'` するプリセットプラグインはすべて**静黙に `never started`**——roster は `never started` の一言だけでスタックを残さないため、「あのプリセットが本当に壊れた」と誤読されやすい。
-> 実測形態：`lampkeeper-shell`（`schemastery` + `dsh-tools` を import）が報告し、同じディレクトリの `nixos-gate.js`（`node:fs` のみ import）は正常——**この対照が判定である**。
+> 実測形態：`private-shell`（`schemastery` + `dsh-tools` を import）が報告し、同じディレクトリの `nixos-gate.js`（`node:fs` のみ import）は正常——**この対照が判定である**。
 > **探針自身の環境が正しくないとき、それが報じる broken は勘定に入らない。**
 
 #### 提示詞変数 `cwd` は dsh 0.2.1 で上流により削除された（2026-10-13）
@@ -304,7 +304,7 @@ dsh 0.2.0 は**会話フォーマット v4** を持ち込んだ。これは**各
 format v4 message requires a producer-owned source kind
 ```
 
-2026-10-03 の実測：掌灯模式の `journal-catchup` は**新規 session の開始ごと**に注意書きを一件
+2026-10-03 の実測：私有モード Aの `journal-catchup` は**新規 session の開始ごと**に注意書きを一件
 steer する。ゆえに 0.2.0-rc.2 上では新規 session が作成のたびに崩れ、session ファイルには
 メッセージが一件も残らなかった（header・三件のポリシーイベント・`session/end-seed` のみ）
 ——保守者は会話を続けるためにシステムを巻き戻すしかなかった。同じ形状は本リポジトリの
@@ -680,7 +680,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
     # 新規セッションの既定権限プリセット（値は組合行の presets 表から）
     permission = { enable = true; defaultPreset = "danger-full-access"; };
     # 新規セッションが既定でマウントする Agent プリセット
-    agentPresets = { enable = true; default = "lampkeeper"; };
+    agentPresets = { enable = true; default = "<预设 id>"; };
     # サブエージェントの深さと同時実行上限
     subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
     # ローカル shell 実行器：変えたいフィールドだけ書く。未指定は組合基線のまま（timeoutMs の基線は 60000）

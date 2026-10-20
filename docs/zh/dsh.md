@@ -205,12 +205,12 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 > `$DSH_HOME/.agent-presets/news-three-elements/`（整体重建、非 seed-once），patch 行以相对
 > 路径引用。各模式的行为、组合结构与维护规则见上表文档。
 
-> **部署侧还有两个不随本仓分发的模式**：掌灯模式（`lampkeeper`，order 12）与 Ocean Spiral
-> （`ocean-spiral`，order 14）。它们的内容源在私有仓（Kitsunome），但 0.2.0 的形态与上面三个
+> **部署侧还有两个不随本仓分发的模式**：私有模式 A（order 12）与 私有模式 B
+> （order 14）。它们的内容源在私有仓（Kitsunome），但 0.2.0 的形态与上面三个
 > 完全一样——一条 patch 行 + 一份组装到 `$DSH_HOME/.agent-presets/<id>/` 的内容目录，锚点写作
-> `new URL('../../.agent-presets/<id>/', baseUrl)`（**Ocean Spiral 2026-10-02 才搬进仓库**，
+> `new URL('../../.agent-presets/<id>/', baseUrl)`（**私有模式 B 2026-10-02 才搬进仓库**，
 > 在那之前它只有一份部署副本、没有仓库也没有播种）。它们的一致性检查也在那边：
-> `develop/check-lampkeeper-derivation.py`、`develop/check-ocean-spiral-derivation.py`。
+> 该侧的派生检查脚本。
 
 ### 预设格式在 dsh 0.2.0 的变化（2026-10-02 已落地）
 
@@ -276,7 +276,7 @@ dsh 0.2.0 引入**会话格式 v4**。它对**每条消息的 `source`** 有一�
 format v4 message requires a producer-owned source kind
 ```
 
-2026-10-03 实测：掌灯模式的 `journal-catchup` 在**每个新会话开局**都会 steer 一条提醒，
+2026-10-03 实测：某个私有模式的 `journal-catchup` 在**每个新会话开局**都会 steer 一条提醒，
 于是在 0.2.0-rc.2 上「每开一个新会话就崩一次」，会话文件里连一条消息都留不下
 （只有 header + 三条策略事件 + `session/end-seed`）——狐莉只能回滚系统才能继续对话。
 同形状还在本仓新闻三要素预设的两个插件里（`news-language.js` / `news-material.js`），
@@ -331,25 +331,25 @@ curl -sS -b cookies -H 'content-type: application/json' \
 ```
 
 2026-10-02 的落地验收（一次性 `DSH_HOME`，`dsh 0.2.0-rc.2`）：**9 条**（4 个内置 + `nixos`
-order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocean-spiral` 14）
+order 10 + `maintenance` 11 + （私有模式 A） 12 + `news-three-elements` 13 + （私有模式 B） 14）
 **`broken` 全空**；三条反证都改**真文件里的一处**：
 
 | 反证 | 改了什么（一处） | `agentPresets/list` 报出的 `broken` |
 |------|-----------------|-----------------------------------|
 | 包名 | `tool-fs-search` 的包名改成不存在的 `@deepseek-ai/dsh-tool-fs-searchX` | `tool-fs-search (@deepseek-ai/dsh-tool-fs-searchX): never started`（5 条预设同时报——它们都派生自同一份行） |
-| 锚点 | Ocean Spiral 的技能根 `../../.agent-presets/ocean-spiral/` → `…ocean-spiral-typo/` | `skill-filesystem (…): ocean-spiral skill roots missing: <路径>` + `oceanspiral-scene (…): never started` |
-| 组装 | `$DSH_HOME/node_modules` 里少链一条 `@deepseek-ai` | `lampkeeper-shell (../../.agent-presets/lampkeeper/components/lib/index.js): never started` |
+| 锚点 | 私有模式 B 的技能根 `../../.agent-presets/<id>/` → `…<id>-typo/` | `skill-filesystem (…): 私有模式 B skill roots missing: <路径>` + `oceanspiral-scene (…): never started` |
+| 组装 | `$DSH_HOME/node_modules` 里少链一条 `@deepseek-ai` | `private-shell (../../.agent-presets/<id>/components/lib/index.js): never started` |
 
 最后一条是这次落地**真的修掉的一个坑**：预设自带的插件文件在 `$DSH_HOME/.agent-presets/<id>/…`
 下，按裸包名 import peer 时 Node 从**文件所在目录**向上找 `node_modules`；模块此前只链
-`@kihara777`，于是「重启 dsh 之后掌灯模式变 broken」——而两者在同一个 `$DSH_HOME` 下互相踩。
+`@kihara777`，于是「重启 dsh 之后那个模式变 broken」——而两者在同一个 `$DSH_HOME` 下互相踩。
 现在模块同时链 `@kihara777` 与 `@deepseek-ai` 两条。
 
 > ⚠️ **同一份判据脚本必须自己补齐这两条链接**（2026-10-13 实测）：模块修好不等于探针修好。
 > `tests/dsh-preset-mount-probe.sh` 起一次性实例时只链了 `@kihara777`，于是凡
 > `import '@deepseek-ai/…'` 的预设插件都**静默 `never started`**——而 roster 只给一句
 > `never started`、不留栈，极易被误读成「那个预设真的坏了」。
-> 实测形态：`lampkeeper-shell`（import `schemastery` + `dsh-tools`）报错，而同目录的
+> 实测形态：`private-shell`（import `schemastery` + `dsh-tools`）报错，而同目录的
 > `nixos-gate.js`（只 import `node:fs`）正常——**这个对照就是判据**。
 > **探针自己的环境不对时，它报的 broken 不算数。**
 
@@ -746,7 +746,7 @@ dsh 的设置菜单选项通过 `$DSH_HOME/settings.yaml` 文件备份 + 热加�
     # 新会话默认权限预设（取值来自组合行的 presets 表）
     permission = { enable = true; defaultPreset = "danger-full-access"; };
     # 新会话默认挂载的 Agent 预设
-    agentPresets = { enable = true; default = "lampkeeper"; };
+    agentPresets = { enable = true; default = "<预设 id>"; };
     # 子代理深度与并发上限
     subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
     # 本地 shell 执行器：只写要改的字段，未写的不动组合基线（timeoutMs 基线 60000）

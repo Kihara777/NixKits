@@ -190,7 +190,7 @@ A "mode" is a dsh **Agent preset**: each mode is one session shape with its own 
 
 > **As of 0.2.0 there is exactly one distribution mechanism**: every mode is one `@deepseek-ai/dsh-agent-preset` patch row (the module splices it into `$DSH_HOME/profiles/<profile>/cordis.patch.yml`), with the plugin-row body taken **verbatim** from that package's `preset.patch.yml`. The two 0.1.x paths are gone with the upstream change (the `nixosMode`/`maintenanceMode` seed-once directory copy, and the extra roster root for `newsThreeElements`) — the `roots` mechanism no longer exists at all. News Three Elements mode is the only one that still needs a content directory: its plugins are files shipped with the preset rather than an npm package, so the module assembles them under `$DSH_HOME/.agent-presets/news-three-elements/` (rebuilt wholesale, not seed-once) and the patch row refers to them by relative path. Each mode's behavior, composition structure, and maintenance rules live in the docs linked above.
 
-> **Two further modes on the deployment side are not distributed by this repository**: 掌灯模式 (`lampkeeper`, order 12) and Ocean Spiral (`ocean-spiral`, order 14). Their content source is a private repository (Kitsunome), but their 0.2.0 shape is exactly the same as the three above — one patch row plus a content directory assembled under `$DSH_HOME/.agent-presets/<id>/`, with the anchor written as `new URL('../../.agent-presets/<id>/', baseUrl)` (**Ocean Spiral only moved into a repository on 2026-10-02**; before that it existed solely as one deployed copy, with no repository and no seeding). Their consistency checks live there too: `develop/check-lampkeeper-derivation.py` and `develop/check-ocean-spiral-derivation.py`.
+> **Two further modes on the deployment side are not distributed by this repository**: private mode A (order 12) and private mode B (order 14). Their content source is a private repository (Kitsunome), but their 0.2.0 shape is exactly the same as the three above — one patch row plus a content directory assembled under `$DSH_HOME/.agent-presets/<id>/`, with the anchor written as `new URL('../../.agent-presets/<id>/', baseUrl)` (**private mode B only moved into a repository on 2026-10-02**; before that it existed solely as one deployed copy, with no repository and no seeding). Their consistency checks live there too: 该侧的派生检查脚本 and 该侧的派生检查脚本.
 
 ### Preset format changes in dsh 0.2.0 (landed 2026-10-02)
 
@@ -249,19 +249,19 @@ curl -sS -b cookies -H 'content-type: application/json' \
   http://127.0.0.1:<port>/api/agentPresets/list
 ```
 
-The 2026-10-02 landing acceptance (throwaway `DSH_HOME`, `dsh 0.2.0-rc.2`): **9 entries** (4 built-ins + `nixos` order 10 + `maintenance` 11 + `lampkeeper` 12 + `news-three-elements` 13 + `ocean-spiral` 14) with **every `broken` empty**; three counterexamples each changed **one place in a real file**:
+The 2026-10-02 landing acceptance (throwaway `DSH_HOME`, `dsh 0.2.0-rc.2`): **9 entries** (4 built-ins + `nixos` order 10 + `maintenance` 11 + private mode A 12 + `news-three-elements` 13 + private mode B 14) with **every `broken` empty**; three counterexamples each changed **one place in a real file**:
 
 | Counterexample | What was changed (one place) | The `broken` reported by `agentPresets/list` |
 |------|-----------------|-----------------------------------|
 | package name | `tool-fs-search`'s package name changed to the nonexistent `@deepseek-ai/dsh-tool-fs-searchX` | `tool-fs-search (@deepseek-ai/dsh-tool-fs-searchX): never started` (all 5 derived presets report it — they share the same row) |
-| anchor | Ocean Spiral's skill root `../../.agent-presets/ocean-spiral/` → `…ocean-spiral-typo/` | `skill-filesystem (…): ocean-spiral skill roots missing: <path>` + `oceanspiral-scene (…): never started` |
-| assembly | one missing `@deepseek-ai` link under `$DSH_HOME/node_modules` | `lampkeeper-shell (../../.agent-presets/lampkeeper/components/lib/index.js): never started` |
+| anchor | private mode B's skill root `../../.agent-presets/<id>/` → `…<id>-typo/` | `skill-filesystem (…): private mode B skill roots missing: <path>` + `oceanspiral-scene (…): never started` |
+| assembly | one missing `@deepseek-ai` link under `$DSH_HOME/node_modules` | `private-shell (../../.agent-presets/<id>/components/lib/index.js): never started` |
 
-That last row is **a real trap this landing fixed**: a preset's own plugin files live under `$DSH_HOME/.agent-presets/<id>/…`, and when they import peers by bare name Node walks up from the **file's own directory** looking for `node_modules`. The module used to link only `@kihara777`, so after a dsh restart 掌灯模式 turned `broken` — the two were stepping on each other inside one `$DSH_HOME`. The module now links both `@kihara777` and `@deepseek-ai`.
+That last row is **a real trap this landing fixed**: a preset's own plugin files live under `$DSH_HOME/.agent-presets/<id>/…`, and when they import peers by bare name Node walks up from the **file's own directory** looking for `node_modules`. The module used to link only `@kihara777`, so after a dsh restart private mode A turned `broken` — the two were stepping on each other inside one `$DSH_HOME`. The module now links both `@kihara777` and `@deepseek-ai`.
 
 > ⚠️ **The same criterion script must link both itself** (measured 2026-10-13): fixing the module does not fix the probe.
 > `tests/dsh-preset-mount-probe.sh` linked only `@kihara777` when starting its throwaway instance, so every preset plugin that does `import '@deepseek-ai/…'` reported a **silent `never started`** — and the roster gives that one phrase with no stack, which reads far too easily as "that preset really is broken".
-> The measured shape: `lampkeeper-shell` (imports `schemastery` + `dsh-tools`) reported it, while `nixos-gate.js` in the same directory (imports only `node:fs`) was fine — **that contrast is the criterion**.
+> The measured shape: `private-shell` (imports `schemastery` + `dsh-tools`) reported it, while `nixos-gate.js` in the same directory (imports only `node:fs`) was fine — **that contrast is the criterion**.
 > **When the probe's own environment is wrong, the `broken` it reports does not count.**
 
 #### The prompt variable `cwd` was removed upstream in dsh 0.2.1 (2026-10-13)
@@ -306,7 +306,7 @@ it**, and the symptom is an entire session reporting "run failed" with a single 
 format v4 message requires a producer-owned source kind
 ```
 
-Measured on 2026-10-03: lampkeeper's `journal-catchup` steers one notice at **the start of every new
+Measured on 2026-10-03: private mode A's `journal-catchup` steers one notice at **the start of every new
 session**, so on 0.2.0-rc.2 every new session crashed on creation and the session file kept not a
 single message (just the header, three policy events and `session/end-seed`) — the maintainer had to
 roll the system back to keep talking at all. The same shape sits in two plugins of this repo's
@@ -671,7 +671,7 @@ Also, `web-search-deepseek.apiKey` is deliberately not mirrored: it carries `rol
     # default permission preset for new sessions (values come from the composition row's presets table)
     permission = { enable = true; defaultPreset = "danger-full-access"; };
     # agent preset mounted by default for new sessions
-    agentPresets = { enable = true; default = "lampkeeper"; };
+    agentPresets = { enable = true; default = "<预设 id>"; };
     # subagent depth and concurrency ceilings
     subagent = { enable = true; maxDepth = 2; maxActiveSubagents = 12; };
     # local shell executor: declare only what you change; unset fields keep the composition baseline (timeoutMs baseline is 60000)
