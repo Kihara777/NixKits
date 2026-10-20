@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:14:15+09:00
+
+**摘要**：feat(skill): 上游收录后的退役流程 + 两处判据陷阱
+
+- 适配层新增「第 8.5 步」：判据是 `nixos-unstable` 上有该包（不是 master）、六处文件的退役步骤、overlay 行必须移除（避免自引用）
+- DEPRECATED 索引的「状态」列改为**上游状态**（废弃原因），日期归到上游事件
+- 通用技能记下 `gh api` 404 时 `--jq '.name'` 输出字符串 `null` 的判据陷阱（一轮检查因此误报「全部已有」）
+- 适配层补三个实测坑：`__structuredAttrs`×交叉编译、批量替换穿透 MAINTENANCE 历史、glob 打进 vendor
+- 判据：四语条目数相等（416），doc-links 通过
+
+| 提交 | 说明 |
+|------|------|
+| `d022979` | feat(skill): 上游收录后的退役流程 + 两处判据陷阱 |
+
 ## 2026-10-20T12:58:22+09:00
 
 **摘要**：refactor(mcp-searxng)!: 自建包退役 —— 上游 nixpkgs 已收录

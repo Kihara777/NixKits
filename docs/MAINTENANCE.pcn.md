@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T14:14:15+09:00
+
+**摘要**：feat(skill): 上流収録後 廃止流程 + 二 判据 罠
+
+- 適配層「第 8.5 步」追加：判据 `nixos-unstable` 上 存在（master 非）、六 文件 廃止手順、overlay 行 必須 削除（`final.<pkg>` 自己参照 化）
+- DEPRECATED 索引「状態」列 **上流状態**（廃止理由）化、日期 上流 出来事 紐付
+- 通用 skill `gh api` 404 時 `--jq '.name'` 文字列 `null` 出力 罠 記録（一度 検査 全 package「既存」誤報）
+- 適配層 実測 罠 三：`__structuredAttrs`×交叉編訳、一括置換 MAINTENANCE 履歴 到達、glob vendor 巻込
+- 判据：四言語 条目数 相等（416）、doc-links 通過
+
+| 提交 | 説明 |
+|------|------|
+| `d022979` | feat(skill): 上流収録後 廃止流程 + 二 判据 罠 |
+
 ## 2026-10-20T12:58:22+09:00
 
 **摘要**：refactor(mcp-searxng)!: 自前 package 廃止 —— 上流 nixpkgs 収録済

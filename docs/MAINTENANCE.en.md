@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T14:14:15+09:00
+
+**Summary**: feat(skill): retirement flow after upstream lands a package, plus two criterion traps
+
+- The repo adapter gains step 8.5: the criterion is "the package exists on `nixos-unstable`" (not master), the six-file retirement steps, and the rule that the overlay line must be removed (writing `final.<pkg>` would self-reference)
+- The DEPRECATED index status column now states the **upstream** status (the reason), with the date tied to the upstream event
+- The generic skill records that `gh api` on a 404 makes `--jq '.name'` print the string `null` (one sweep wrongly reported every package as "already present")
+- The adapter adds three measured traps: `__structuredAttrs` × cross-compilation, bulk replacement reaching into MAINTENANCE history, and globs hitting vendor code
+- Criterion: equal entry counts across four languages (416), doc-links passes
+
+| Commit | Description |
+|------|------|
+| `d022979` | feat(skill): retirement flow after upstream lands a package, plus two criterion traps |
+
 ## 2026-10-20T12:58:22+09:00
 
 **Summary**: refactor(mcp-searxng)!: the self-built package retires — upstream nixpkgs ships it
