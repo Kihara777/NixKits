@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:35:59+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — the drawer only writes and never deletes, fixing 「the handle cannot put it back」 ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900))
+
+- rev `f925ce1` → `55902a5`; version stays `0.1.1` — a runtime behaviour fix, tracked by field-level criteria
+- src hash taken from `nix flake prefetch --json`; `npmDepsHash` unchanged (package-lock untouched)
+- criteria: `nix build` succeeds; the output carries 6 × `layout.toggleSidebar()`, 6 × `MutationObserver`, 2 × `frame.style.setProperty("grid-template-columns", reactValue)`, and 0 × `getComputedStyle(frame)` / `frame.style.removeProperty`
+
+| Commit | Description |
+|------|------|
+| `5949dbe` | chore(dsh-api-balance): wrapper rev bump to 55902a5 — drawer only writes |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `f925ce1` → `55902a5` |
+
 ## 2026-10-21T08:11:29+09:00
 
 **Summary**: dsh-api-balance wrapper re-pinned — official collapse plus zeroing the first column ([sub-repo log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0811130900))

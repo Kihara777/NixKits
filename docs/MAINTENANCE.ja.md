@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T08:35:59+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— ドロワーは書くだけで消さない、「ハンドルで戻せない」を修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
+
+- rev `f925ce1` → `55902a5`；バージョンは `0.1.1` のまま——実行時挙動の修正なのでフィールド単位の判据で追従
+- src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変（package-lock 未変更）
+- 判据：`nix build` 成功；成果物に `layout.toggleSidebar()` 6 箇所、`MutationObserver` 6 箇所、`frame.style.setProperty("grid-template-columns", reactValue)` 2 箇所、`getComputedStyle(frame)` と `frame.style.removeProperty` は各 0 箇所
+
+| コミット | 説明 |
+|------|------|
+| `5949dbe` | chore(dsh-api-balance): 薄ラッパー rev 追従 55902a5 —— ドロワーは書くだけ |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `f925ce1` → `55902a5` |
+
 ## 2026-10-21T08:11:29+09:00
 
 **概要**：dsh-api-balance re-pin —— 公式折り畳み + 1 列目 0 化（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0811130900)）

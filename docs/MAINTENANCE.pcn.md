@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T08:35:59+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— drawer 只写不刪、「把手 押 収納 不能」修正（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
+
+- rev `f925ce1` → `55902a5`；版本 仍 `0.1.1`——実行時挙動 修正、field 単位 判据 追従
+- src hash `nix flake prefetch --json` 取得；`npmDepsHash` 不変（package-lock 未動）
+- 判据：`nix build` 成功；産物 `layout.toggleSidebar()` 6 箇所、`MutationObserver` 6 箇所、`frame.style.setProperty("grid-template-columns", reactValue)` 2 箇所；`getComputedStyle(frame)` 與 `frame.style.removeProperty` 各 0 箇所
+
+| 提交 | 説明 |
+|------|------|
+| `5949dbe` | chore(dsh-api-balance): 薄 wrapper rev 追従 55902a5 —— drawer 只写 |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `f925ce1` → `55902a5` |
+
 ## 2026-10-21T08:11:29+09:00
 
 **摘要**：dsh-api-balance re-pin —— 公式折畳 + 第 1 列 0 化（[子倉記録](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0811130900)）
