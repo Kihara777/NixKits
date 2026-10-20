@@ -12,5 +12,5 @@
 
 | 项目 | 上游状态（废弃原因） | 原位置 | 详情 |
 |------|------|--------|------|
-| comfyui-rocm 补丁项目 | 上游 comfyui-nix 0.34.0 已内置 ROCm 支持 | `modules/comfyui-rocm.nix` + 三个补丁 | [中文](docs/zh/deprecated/comfyui-rocm.md) · [EN](docs/en/deprecated/comfyui-rocm.md) · [JA](docs/ja/deprecated/comfyui-rocm.md) · [PCN](docs/pcn/deprecated/comfyui-rocm.md) |
-| mcp-searxng 自建包 | 上游 nixpkgs 已收录（2026-08-29，当前 2.6.0） | `packages/mcp-searxng.nix` + 三个构建工作流 | [中文](docs/zh/deprecated/mcp-searxng.md) · [EN](docs/en/deprecated/mcp-searxng.md) · [JA](docs/ja/deprecated/mcp-searxng.md) · [PCN](docs/pcn/deprecated/mcp-searxng.md) |
+| comfyui-rocm 补丁项目 | 上游 comfyui-nix 0.34.0 已内置 ROCm 支持 | `modules/comfyui-rocm.nix` + 三个补丁 | [中文](docs/zh/deprecated/comfyui-rocm.md) |
+| mcp-searxng 自建包 | 上游 nixpkgs 已收录（2026-08-29，当前 2.6.0） | `packages/mcp-searxng.nix` + 三个构建工作流 | [中文](docs/zh/deprecated/mcp-searxng.md) |
