@@ -5,6 +5,15 @@ description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 upst
 
 # NixKits 上游贡献适配层
 
+> ⚠️ **本技能名已弃用（2026-10-20）**
+>
+> 拆分后的归属：通用方法在 [`upstream-audit`](../upstream-audit/SKILL.md)
+> （**只读，到 dry-run 为止，不给提交步骤**）；提交动作（fork / 分支 / commit / push /
+> PR、review 回应）在掌灯层 `lampkeeper-upstream-submit`。
+>
+> 本文件作为 **NixKits 的适配层**保留：只补本仓特有的**审计**环节（可行性台账、许可缺口、
+> 四语文档、维护日志、自检登记），**不再包含任何写操作**。下一次改名时删除本声明。
+
 本技能是 [`upstream-audit`](../upstream-audit/SKILL.md) 的**仓库适配层**。
 通用方法（评估六问、by-name 与 nixpkgs-vet 要求、dry-run 四层判据、AI 政策、陷阱清单）
 在那边；这里只写 **NixKits 特有**的东西。
@@ -188,7 +197,7 @@ done
 | 第 1 步 评估 | 先读台账，只更新变化的部分；按**上游项目名**搜在途 PR |
 | 第 2 步 审计 | 无（通用侧的规则就是全部规则） |
 | 第 3 步 dry-run | 产物落 `upstream/<包名>/`，不落 `/tmp` |
-| 第 4 步 实操 | 账号用 `Kihara777`（本仓 owner），不是默认那个 |
+| 提交（**不在本层**） | 见掌灯层 `lampkeeper-upstream-submit`；本仓账号用 `Kihara777`（owner），不是默认那个 |
 | 收尾 | 四语文档 + 索引 + 维护日志 + 自检登记 |
 
 **账号**：`gh auth status` 后确认活跃账号。本机同时登录了 `GrG41` 与 `Kihara777`，

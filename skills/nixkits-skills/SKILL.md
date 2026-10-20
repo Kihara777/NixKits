@@ -106,6 +106,26 @@ done
 5. **安装** — 将技能复制到各检测到的助手目录
 6. **验证** — 确认安装成功
 
+## 已移除 / 改名的技能
+
+技能改名或下线时，**先 grep 再动**：下面六处有一处没跟上，CI 或会话就会看到旧名字。
+
+| 位置 | 检查什么 |
+|---|---|
+| `README.md` + `docs/README.*.md` | 技能列表行（四语） |
+| `docs/<lang>/skills/<name>.md` | 文档页（改名用 `git mv`，四语都要） |
+| `develop/check-skill-registry.py` | 新名字必须被注入器认领，否则报「没有归属」 |
+| `packages/dsh-nixos-shell/lib/maintenance-skills.js` | 维护模式的 `registerSkill("<name>")` |
+| 其他技能里的引用 | `grep -rn "<旧名>" skills/`（适配层的「接口」表最容易漏） |
+| 预设文件 | `presets/*/preset.patch.yml` 里的技能名 |
+
+**两条纪律**：
+
+1. **历史不追改**：`MAINTENANCE.*` 里的旧技能名是事实记录，批量替换时要排除它们
+   （2026-10-20 实测：一次 `rglob` 替换把根 `MAINTENANCE.md` 也打中了，靠 `git checkout` 回退）。
+2. **已安装副本不自动迁移**：本安装器装到其他助手目录的副本是**快照**，改名后旧目录还在。
+   在安装目标里手动删掉旧目录，或重跑安装（写入新名，但不删旧名）。
+
 ## 风险警示
 
 **Claude Code** 已于 2026-07 移除支持，原因如下：
