@@ -30,7 +30,6 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
 
-
 ## Plugins
 
 DeepSeek Harness (DSH) components are listed separately from software (mounting instructions in [docs/en/dsh.md](en/dsh.md)):
@@ -85,10 +84,6 @@ Standalone overlays, not included in `default`:
 > ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
 
 > ⚠️ **Do not set `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` on StrixHalo devices.** The variable changes the GPU memory allocation path and causes degenerate model output (repeated words, broken sentences) on unified-memory hardware. Measured: the risk **increases significantly as model quantisation precision drops** — low-bit quants (e.g. 1.5 bpw) are affected most. See the [llama-cpp-rocm docs](en/llama-cpp-rocm.md#unified-memory-environment-variable-degeneration-risk).
-
-## Retired Projects
-
-Retired projects live in [`DEPRECATED.md`](../DEPRECATED.md).
 
 ## Skills
 

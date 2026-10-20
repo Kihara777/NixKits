@@ -34,7 +34,6 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
-
 ## 插件
 
 DeepSeek Harness（DSH）组件与软件独立展示（挂载方式见 [docs/zh/dsh.md](docs/zh/dsh.md)）：
@@ -86,10 +85,6 @@ nix registry add nixkits github:Kihara777/NixKits
 > ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。动态追踪版本的项目（如 llama-cpp-rocm）其 hash 随上游发布变化，无法被缓存固定。
 
 > ⚠️ **StrixHalo 设备请勿开启 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1`**。该变量会改变 GPU 显存分配路径，在统一内存设备上导致模型输出退化（重复词、语句崩坏）。实测该风险**随模型量化精度降低而显著提升** —— 低比特量化（如 1.5 bpw）受影响最重。详见 [llama-cpp-rocm 文档](docs/zh/llama-cpp-rocm.md#统一内存环境变量的退化风险)。
-
-## 废弃项目
-
-已废弃项目见 [`DEPRECATED.md`](DEPRECATED.md)。
 
 ## 技能
 
