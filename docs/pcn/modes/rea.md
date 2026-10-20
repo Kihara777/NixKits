@@ -17,21 +17,29 @@
 
 ## 挙動
 
-维护模式 之 全能力 上 `@deepseek-ai/dsh-mcp-client` 之 行 一 追加：
+维护模式 全能力 上、**同梱 插件** `@kihara777/dsh-nixos-shell/rea-mcp` 一行 追加：
 
 | 項目 | 値 |
 |------|-----|
-| `serverName` | `rea` |
-| `transport` | `stdio` |
-| `command` | `$REA_BIN_PATH`（模組 `pkgs.rea` 之 `bin/rea` 為 輸出） |
-| `args` | `['mcp']` |
-| `failOnStartupError` | `false` |
+| 接続 時機 | `agent/session-start` —— **本預設 選択 会話 毎 一本**、会話 終了 切断 |
+| 転送 | stdio JSON-RPC、`args: ['mcp']` |
+| 実行 文件 | `$REA_BIN_PATH`（模組 `pkgs.rea` 之 `bin/rea` 輸出） |
+| 工具名 | `mcp__rea__<原名>`、**該 agent 之 scope** 登録 |
 
 結果 三：
 
-- **全工具**：`mcp-rea` 行 REA 之 MCP 工具 全量 `mcp__rea__*` 為 登録。REA 服務器側 `tools/list` 実測 **207 個**（**「行 書 有」與「会話 実際 該 207 個 有」乃 別 主張**——下「検証状態」参照）。`dsh-mcp-client` 無 許可表 或 濾過 選択肢（README 與 config 字段表 確認済）、「一部 之 只」選 唯一 方法 乃 此 行 張 無 事——本模式 乃「全部 欲」場面 向、**工具表 長 乃 代償 而 非 欠陥**。
-- **维护模式 之 機能 其 儘**：宿主 検証、`nixos_shell` / `nixos_cli`、文書 與 保守 記録 技能、四言語 約束 事 全 残。解析 結果 倉庫 戻 時、作業手順 既 在。
-- **REA 落 而 預設 壊 無**：`failOnStartupError: false`。REA 起動 不能 而 维护模式 他 機能 使用 可、欠 乃 `mcp__rea__*` 之 群 只（記録 接続 失敗 残）。
+- **全工具**：REA 之 207 個（6.7.0 之 `tools/list` 実測）全部 `mcp__rea__*` 登録、`inputSchema` **原様** 登録表 渡 —— 「JSON Schema → dsh 簡略 spec」変換 無。該種 変換器 壊 時 **正当 呼出 静 拒否** 為。工具表 長 乃 代償、本模式 「全部 欲」場面 向。
+- **本模式 会話 只 持**：`rea-mcp` 自作 唯一 理由（下記）。
+- **维护模式 機能 其 儘**：宿主 検証、`nixos_shell` / `nixos_cli`、文書・保守 記録 技能、四言語 約束。
+
+### 為何 `@deepseek-ai/dsh-mcp-client` 不用
+
+初版 乃 該 方式。2026-10-20 実 deployment 測 結果：
+
+- 預設 乃 **eager activation** —— dsh 起動 4 秒後 `rea mcp` spawn、**其時 会話 一 無**；
+- 工具 登録 root scope 落、**掌灯模式 会話** 亦 207 個 `mcp__rea__*` 背負（請求 header 31 + 207 = **238**）。
+
+「模式」 意味 乃「選択 会話 只 持」、故 本層 自前 書：接続 與 登録 `agent.ctx` 束、会話 破棄 切。
 
 ## 前提
 
@@ -53,12 +61,13 @@
 
 | 層 | 結果 |
 |---|---|
-| 預設 宣言 平台 受理 | ✅ `AgentPresetRegistry.mount()` OK 報告（一時 `DSH_HOME`、34 行 插件） |
-| 包 解決 與 插件 読込 | ✅ 同 実行 確認——`@kihara777` 行 全 解決 可 |
-| **MCP 接続 與 工具 登録** | ⚠️ **未検証**：`dsh headless` 単発任務 中 agent 自訂 預設 選択 無、故 預設 插件 有効化 無（実測：掛載後 `rea mcp` 子過程 **0**、模型 請求 本文 亦 `mcp__rea__*` 無）。本層 検証 須 **実際 逆向模式 選択** 会話 工具表 見 他 無。 |
+| 預設 宣言 平台 受理 | ✅ `AgentPresetRegistry.mount()` OK |
+| REA MCP 服務器 実際 起動 | ✅ deployment 後 dsh 起動 **4 秒** spawn（pid 実測、5 時間 以上 生存、dsh 與 8 本 pipe） |
+| 207 個 工具 実際 模型 要求 届 | ✅ 会話 記録 之 `request/header` 内 `mcp__rea__*` **207** 個（工具 総数 238） |
+| **本模式 会話 只 見** | ⏳ `rea-mcp` 変更 後 検証待、非 rea 会話 31 戻、rea 会話 238 應該 |
 
-此 区別 記 価値 有：**「mount() 成功」乃「該 預設 使用 agent 存在」 非**。
-`mount()` 証明 乃 宣言 正当、包 解決 可能、平台 受理 迄。persona・工具・MCP 接続 会話 有効 証明 無。
+最初 二行 與 三行目 別 主張：過程 生存 乃 接続 生存 証拠 過、工具 要求 載 可否 請求 header 数 必要。
+更 一 会話 載 與 本模式 会話 只 載 亦 別 主張、初版 正 該 処 失敗。
 
 ## 有効化
 

@@ -17,21 +17,29 @@
 
 ## Behavior
 
-One `@deepseek-ai/dsh-mcp-client` row is appended on top of everything maintenance mode provides:
+One **bundled plugin** — `@kihara777/dsh-nixos-shell/rea-mcp` — is appended on top of everything maintenance mode provides:
 
-| Field | Value |
-|-------|-------|
-| `serverName` | `rea` |
-| `transport` | `stdio` |
-| `command` | `$REA_BIN_PATH` (exported by the module as `pkgs.rea`'s `bin/rea`) |
-| `args` | `['mcp']` |
-| `failOnStartupError` | `false` |
+| Item | Value |
+|------|-------|
+| When it connects | `agent/session-start` — **one connection per session that selected this preset**, closed when the session ends |
+| Transport | stdio JSON-RPC, `args: ['mcp']` |
+| Executable | `$REA_BIN_PATH` (the module exports it as `pkgs.rea`'s `bin/rea`) |
+| Tool naming | `mcp__rea__<raw name>`, registered on **that agent's scope** |
 
-That gives three things:
+Three consequences:
 
-- **The full tool set**: the `mcp-rea` row registers every REA MCP tool as `mcp__rea__*`; the REA server's own `tools/list` reports **207** (**"the row exists" and "the session really has those 207 tools" are two different claims** — see "Verification status" below). `dsh-mcp-client` has **no** allowlist or filter option (checked against its README and config field table), so the only way to take a subset is not to mount this row — this mode is for "I want all of it", and a long tool list is its price, not a defect.
-- **Everything maintenance mode does keeps working**: host validation, `nixos_shell` / `nixos_cli`, the documentation and maintenance-log skills, the four-language convention. When analysis results have to go back into a repository, the workflow is already there.
-- **A dead REA does not break the preset**: `failOnStartupError: false`. If REA fails, the rest of maintenance mode still works; what is missing is the `mcp__rea__*` group (and the log records the connection failure).
+- **The full tool set**: REA's 207 tools (measured through `tools/list` at 6.7.0) are all registered as `mcp__rea__*`, with `inputSchema` handed to the registry **unchanged** — no "JSON Schema → dsh shorthand spec" converter, because such a converter silently rejects legitimate calls when it is wrong. A long tool list is the price; this mode is for "I want all of it".
+- **Only sessions of this mode get them**: that is the single reason for writing `rea-mcp` instead of mounting a `@deepseek-ai/dsh-mcp-client` row (see below).
+- **Everything maintenance mode does keeps working**: host validation, `nixos_shell` / `nixos_cli`, the documentation and maintenance-log skills, the four-language convention.
+
+### Why not `@deepseek-ai/dsh-mcp-client`
+
+That was the first version. What the real deployment measured on 2026-10-20:
+
+- presets use **eager activation** — `rea mcp` was spawned 4 seconds after dsh started, **before any session existed**;
+- the tools landed on the root scope, so **a lampkeeper session** also carried 207 `mcp__rea__*` tools (31 + 207 = **238** tools in its request header).
+
+"Mode" means only the session that selected it gets those tools, so this layer is written here: the connection and the registrations are bound to `agent.ctx` and torn down with the session.
 
 ## Prerequisites
 
@@ -53,12 +61,13 @@ Same set as the [rea package docs](../rea.md); not repeated here. The three most
 
 | Layer | Result |
 |---|---|
-| The declaration is accepted by the platform | ✅ `AgentPresetRegistry.mount()` reports OK (throwaway `DSH_HOME`, 34 plugin rows) |
-| Package resolution and plugin loading | ✅ Same run — every `@kihara777` row resolves |
-| **MCP connection and tool registration** | ⚠️ **Not verified**: in a one-shot `dsh headless` task the agent never selects a custom preset, so the preset's plugins are never activated (measured: **zero** `rea mcp` child processes after mounting, and no `mcp__rea__*` in the model request body). Verifying this layer requires a session that **actually selected** 逆向模式. |
+| The declaration is accepted by the platform | ✅ `AgentPresetRegistry.mount()` reports OK |
+| The REA MCP server really starts | ✅ After deployment dsh spawned it **4 seconds** after start (measured pid, alive 5h+, 8 pipes to dsh) |
+| The 207 tools really reach the model request | ✅ The session record's `request/header` carries **207** `mcp__rea__*` entries (238 tools total) |
+| **Visible only to this mode's sessions** | ⏳ Pending after the `rea-mcp` change: a non-rea session should be back to 31, a rea session should be 238 |
 
-The distinction is worth stating: **"mount() succeeded" is not "an agent is using this preset"**.
-`mount()` proves the declaration is valid, the package resolves, and the platform accepts it; it does not prove the persona, the tools, or the MCP connection take effect in a session.
+The first two rows and the third are different claims: a live process only proves the connection is alive; whether the tools reach the request has to be counted in the request header.
+And "reached one session" versus "reached only this mode's sessions" are yet another two — the first version failed exactly there.
 
 ## Enable
 

@@ -19,6 +19,9 @@
     },
     "./maintenance-skills": {
       "default": "./lib/maintenance-skills.js"
+    },
+    "./rea-mcp": {
+      "default": "./lib/rea-mcp.js"
     }
   },
   "bin": {
@@ -28,6 +31,7 @@
     "lib/index.js",
     "lib/nixos-gate.js",
     "lib/maintenance-skills.js",
+    "lib/rea-mcp.js",
     "bin/nixkits-sudo-exec.js",
     "presets",
     "skills-embedded"

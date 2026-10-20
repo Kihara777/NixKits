@@ -1,13 +1,14 @@
 # 逆向模式 Agent 预设（dsh 0.2.0 格式）。
 #
 # **完整派生自维护模式**：本文件的 `plugins:` 正文 = 维护模式的正文 + 末尾固定追加块
-# （`mcp-rea` 行）。派生关系由 develop/check-preset-derivation.py 逐字节核对，
+# （`rea-mcp` 行）。派生关系由 develop/check-preset-derivation.py 逐字节核对，
 # 派生链是三段：nixos-mode → maintenance-mode → rea-mode。
 # 改 nixos-mode 要同步维护模式，改维护模式要同步本文件——漏一段，`nix flake check` 就红。
 #
-# 与维护模式唯一的差别是末尾那一行 `@deepseek-ai/dsh-mcp-client`：它把 `mcp__rea__*`
-# 挂进本预设的会话。REA 的可执行文件由 `REA_BIN_PATH` 给出（modules/dsh.nix 在启用
-# 本预设时导出 `pkgs.rea` 的路径），所以正文里**没有** store 路径。
+# 与维护模式唯一的差别是末尾那一行 `@kihara777/dsh-nixos-shell/rea-mcp`：它在本会话
+# 起一条到 REA 的 MCP 连接，把全部 `mcp__rea__*` 工具注册到**这个 agent 的 scope**。
+# 不用 `@deepseek-ai/dsh-mcp-client` 的原因写在那个插件的文件头（实测：预设的 eager
+# activation 会把它连到 root scope，连掌灯模式的会话也一起背上 207 个工具）。
 #
 # order 取 15：内置预设占 1–4，NixKits 的 nixos / maintenance 取 10 / 11，
 # Kitsunome 的掌灯模式 12、新闻三要素 13、Ocean Spiral 14。
@@ -17,7 +18,7 @@
       config:
         id: rea
         name: '逆向模式'
-        description: '基于维护模式的逆向工程 Agent 预设：在维护模式全部能力之上接入 REA（Reverse Engineer Anything）的 MCP 服务，工具名为 mcp__rea__*（全量注册，实测 207 个），用于静态分析 JavaScript/Electron、.NET、Go、Rust、Godot、IL2CPP 应用与原生二进制，并把结论按维护模式的工作流写回仓库；分析用的 rea 二进制由 Nix 提供（wrapper 已带 procps 与 JDK）。'
+        description: '基于维护模式的逆向工程 Agent 预设：在维护模式全部能力之上，用 rea-mcp 插件在**本会话**内桥接 REA（Reverse Engineer Anything）的 MCP 服务（agent/session-start 时连一条 stdio 连接，全量注册约 207 个 mcp__rea__* 工具，只对这个会话可见），用于静态分析 JavaScript/Electron、.NET、Go、Rust、Godot、IL2CPP 应用与原生二进制，并把结论按维护模式的工作流写回仓库；分析用的 rea 二进制由 Nix 提供（wrapper 已带 procps 与 JDK）。'
         order: 15
         plugins:
           # 2026-10-02：persona 里「预设住在 `.agent-presets/<id>/` 目录」那句已按 dsh 0.2.0
@@ -336,27 +337,21 @@
 
           # ── 逆向模式 ─────────────────────────────────────────────────────────────────
 
-          # `mcp-rea` connects the NixKits `pkgs.rea` binary (REA — Reverse Engineer
-          # Anything) as a stdio MCP server; its tools appear as `mcp__rea__*`.
+          # `rea-mcp` bridges the REA (Reverse Engineer Anything) MCP server into THIS
+          # session: one stdio connection per agent at `agent/session-start`, carrying
+          # REA's full tool set (207 tools at 6.7.0) on that agent's scope. It publishes
+          # no service, so no realm is needed.
           #
-          # 全量注册是有意的：`dsh-mcp-client` **没有**工具白名单/过滤选项（核过它的
-          # README 与 config 字段表），所以「只挑一部分」的唯一办法是不挂这条行。本预设
-          # 面向「我要全部逆向能力」的场景 —— 工具表很长是它的代价，不是缺陷。
-          # 规模是可量的：`rea mcp` 一次 `tools/list` 实测 **207 个工具**（6.7.0），
-          # CLI 侧 153 个命令（`rea --llms`）。
+          # 为什么不是一条 `@deepseek-ai/dsh-mcp-client` 行（第一版，实测不行）：预设是
+          # eager activation —— dsh 启动 4 秒后 `rea mcp` 就被 spawn，而工具注册落到
+          # root scope。结果是**掌灯模式的会话**也背上 207 个 `mcp__rea__*`（会话请求头
+          # 里 31 + 207 = 238 个工具）。「模式」的语义要求只有选它的会话才有这些工具。
           #
-          # `command` 从 `REA_BIN_PATH` 解析：modules/dsh.nix 在启用本预设时把它设成
-          # `pkgs.rea` 的 store 路径，因此这份正文里不出现任何 store 路径（正文要能
-          # 逐字节派生，也要能在没有 Nix 的机器上读）。变量缺席时退回 PATH 里的 `rea`，
-          # 让手工装配也能跑。
+          # 工具是全量的：用上游 `createMcpToolDefinition`，把 MCP 的 inputSchema 原样
+          # 交给注册表，不做「JSON Schema → dsh 简写 spec」的转换——那种转换器写歪了会
+          # **静默拒掉合法调用**，是 207 个工具里最难查的一类错。
           #
-          # `failOnStartupError: false`：REA 起不来时整份预设不该跟着变 broken ——
-          # 维护模式的其余能力仍然可用，缺的只是 mcp__rea__* 这一组工具。
-          - id: mcp-rea
-            name: '@deepseek-ai/dsh-mcp-client'
-            config:
-              serverName: rea
-              transport: stdio
-              command: !!js "(process.env.REA_BIN_PATH || 'rea')"
-              args: ['mcp']
-              failOnStartupError: false
+          # `REA_BIN_PATH` 由 modules/dsh.nix 在启用本预设时导出（`pkgs.rea` 的路径），
+          # 所以正文里没有 store 路径；变量缺席时退回 PATH 里的 `rea`。
+          - id: rea-mcp
+            name: '@kihara777/dsh-nixos-shell/rea-mcp'
