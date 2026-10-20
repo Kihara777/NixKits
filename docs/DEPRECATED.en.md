@@ -12,7 +12,7 @@ ground, and makes past decisions easy to locate if something regresses.
 
 ## List
 
-| Project | Upstream status (why retired) | Former location | Details |
-|---------|--------|-----------------|---------|
-| comfyui-rocm patch project | Upstream comfyui-nix 0.34.0 built ROCm support in | `modules/comfyui-rocm.nix` + three patches | [EN](en/deprecated/comfyui-rocm.md) |
-| mcp-searxng self-built package | Upstream nixpkgs ships it (2026-08-29, now 2.6.0) | `packages/mcp-searxng.nix` + three build workflows | [EN](en/deprecated/mcp-searxng.md) |
+| Project | Upstream status (why retired) | Former location |
+|------|------|--------|
+| [comfyui-rocm patch project](en/deprecated/comfyui-rocm.md) | Upstream comfyui-nix 0.34.0 built ROCm support in | `modules/comfyui-rocm.nix` + three patches |
+| [mcp-searxng self-built package](en/deprecated/mcp-searxng.md) | Upstream nixpkgs ships it (2026-08-29, now 2.6.0) | `packages/mcp-searxng.nix` + three build workflows |

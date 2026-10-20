@@ -12,7 +12,7 @@
 
 ## 一覧
 
-| プロジェクト | 上流の状態（廃止理由） | 旧位置 | 詳細 |
-|--------------|------|--------|------|
-| comfyui-rocm パッチプロジェクト | 上流 comfyui-nix 0.34.0 が ROCm サポートを内蔵 | `modules/comfyui-rocm.nix` + 三つのパッチ | [JA](ja/deprecated/comfyui-rocm.md) |
-| mcp-searxng 自前パッケージ | 上流 nixpkgs が収録済み（2026-08-29、現在 2.6.0） | `packages/mcp-searxng.nix` + 三つのビルドワークフロー | [JA](ja/deprecated/mcp-searxng.md) |
+| プロジェクト | 上流の状態（廃止理由） | 旧位置 |
+|------|------|--------|
+| [comfyui-rocm パッチプロジェクト](ja/deprecated/comfyui-rocm.md) | 上流 comfyui-nix 0.34.0 が ROCm サポートを内蔵 | `modules/comfyui-rocm.nix` + 三つのパッチ |
+| [mcp-searxng 自前パッケージ](ja/deprecated/mcp-searxng.md) | 上流 nixpkgs が収録済み（2026-08-29、現在 2.6.0） | `packages/mcp-searxng.nix` + 三つのビルドワークフロー |
