@@ -21,6 +21,10 @@ let
     "nixos-modern-cli"
     "recover-nixos-config"
     "nixos-specialisation-tuning"
+    # 五个自我维护机制（日记闸门 / 开局对账 / 事实核查 / 自我观察 / 自检收据）。
+    # 它讲的是「agent 怎么不让自己的记忆烂掉」，与 NixOS 无关，但 NixOS 模式同样是
+    # 长期会话——2026-10-21 决定加：此前只有维护模式与逆向模式有它。
+    "agent-self-maintenance"
   ];
   # The subset must live INSIDE each preset directory: the NixOS module seeds a
   # preset with `cp -r presets/<mode> $DSH_HOME/.agent-presets/<id>`, so a root
