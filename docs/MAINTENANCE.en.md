@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T16:29:23+09:00
+
+**Summary**: 逆向模式 — a REA agent preset derived from 维护模式; the rea package now ships the JDK
+
+- `presets/rea-mode/`: the 维护模式 body plus a fixed `mcp-rea` row (full `mcp__rea__*`), making the derivation chain three segments nixos → maintenance → rea
+- `modules/dsh.nix`: new `presets.reaMode` / `.reaPackage`, exporting `REA_BIN_PATH` into the service when enabled
+- `packages/rea.nix`: the wrapper now injects the JDK (Android analysis needs `java`; the JADX jar is still yours)
+- The assertion judges **content**: a frozen stable preset set without rea-mode fails loudly instead of reporting a missing path
+- Criterion: `nixosSystem` evaluation compared across both variants plus a green `nix flake check`; four stale self-descriptions fixed along the way
+
+| Commit | Description |
+|------|------|
+| `420476d` | feat(pkgs): rea 带上 JDK —— Android 分析要 `java`，JADX 的 jar 仍自备 |
+| `defc1e8` | feat(presets): 逆向模式 — 完整派生自维护模式的 REA 预设 |
+| `bdb1ed5` | fix(dsh): 逆向模式的断言补上缺失的 `++`，并让判据看内容而不是通道 |
+
 ## 2026-10-20T16:09:09+09:00
 
 **Summary**: rea 6.7.0 — new package (Nix packaging of the REA reverse-engineering CLI + MCP server)

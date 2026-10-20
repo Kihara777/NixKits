@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-20T16:29:23+09:00
+
+**摘要**：逆向模式 — 维护模式 派生 之 REA Agent 預設；rea 包 JDK 同梱
+
+- `presets/rea-mode/`：维护模式 本文 + 固定 `mcp-rea` 行（全量 `mcp__rea__*`）。派生 鎖 三段 nixos → maintenance → rea
+- `modules/dsh.nix`：`presets.reaMode` / `.reaPackage` 追加、有効時 `REA_BIN_PATH` 服務 輸出
+- `packages/rea.nix`：wrapper JDK 注入（Android 解析 `java` 必要。JADX jar 自備 其 儘）
+- 断言 **内容** 判定：凍結 stable 預設群 rea-mode 無 時 明示 失敗（「path 無」 非）
+- 判定基準：両変数 `nixosSystem` 求値 比較 + `nix flake check` 全緑。同時 古 自己記述 四処 修正
+
+| 提交 | 説明 |
+|------|------|
+| `420476d` | feat(pkgs): rea 带上 JDK —— Android 分析要 `java`，JADX の jar 仍自备 |
+| `defc1e8` | feat(presets): 逆向模式 — 完整派生自维护模式的 REA 预设 |
+| `bdb1ed5` | fix(dsh): 逆向模式的断言补上缺失的 `++`，并让判据看内容而不是通道 |
+
 ## 2026-10-20T16:09:09+09:00
 
 **摘要**：rea 6.7.0 — 新包（REA 逆工程 CLI・MCP 服務器之 npm 梱包）

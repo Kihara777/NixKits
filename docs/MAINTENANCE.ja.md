@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-20T16:29:23+09:00
+
+**概要**：逆向模式 — 维护模式から派生した REA Agent プリセット；rea パッケージが JDK を同梱
+
+- `presets/rea-mode/`：维护模式の本文 + 固定 `mcp-rea` 行（全量 `mcp__rea__*`）。派生チェーンは三段 nixos → maintenance → rea になる
+- `modules/dsh.nix`：`presets.reaMode` / `.reaPackage` を追加し、有効時は `REA_BIN_PATH` をサービスへエクスポート
+- `packages/rea.nix`：wrapper が JDK を注入（Android 解析には `java` が要る。JADX の jar は自前のまま）
+- 断言は**内容**で判定：凍結された stable のプリセット群に rea-mode が無ければ明示的に失敗する（「path が無い」ではない）
+- 判定基準：両変数の `nixosSystem` 求値比較 + `nix flake check` 全緑。ついでに古い自己記述を四か所修正
+
+| コミット | 説明 |
+|------|------|
+| `420476d` | feat(pkgs): rea 带上 JDK —— Android 分析要 `java`，JADX の jar 仍自备 |
+| `defc1e8` | feat(presets): 逆向模式 — 完整派生自维护模式的 REA 预设 |
+| `bdb1ed5` | fix(dsh): 逆向模式的断言补上缺失的 `++`，并让判据看内容而不是通道 |
+
 ## 2026-10-20T16:09:09+09:00
 
 **概要**：rea 6.7.0 — 新規パッケージ（REA リバースエンジニアリング CLI + MCP サーバーの npm 梱包）
