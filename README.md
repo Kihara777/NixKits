@@ -73,7 +73,6 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | 补丁 | 说明 | 文档 |
 |------|------|------|
-| llama-cpp-rocm | 动态追踪上游最新 Release 的 ROCm 加速构建 | [docs/zh/llama-cpp-rocm.md](docs/zh/llama-cpp-rocm.md) |
 | rcc-fix | 修补 asusctl 的二合一设备体验 | [docs/zh/rcc-fix.md](docs/zh/rcc-fix.md) |
 | asusd-pd-profile | 按供电类型选择平台档位（区分 USB-C PD 与原生 AC） | [docs/zh/asusd-pd-profile.md](docs/zh/asusd-pd-profile.md) |
 | asusd-thermal-guard | 温度看门狗：过热时自动降档，冷却后恢复 | [docs/zh/asusd-thermal-guard.md](docs/zh/asusd-thermal-guard.md) |
@@ -82,9 +81,8 @@ nix registry add nixkits github:Kihara777/NixKits
 | breeze-black | Plasma 6 高对比度 Breeze Black 无障碍主题 | [docs/zh/breeze-black.md](docs/zh/breeze-black.md) |
 | codewhale-sudo | overlay — 恢复 codewhale v0.9.0 起被阻止的 sudo 功能（ptrace 拦截器） | [docs/zh/codewhale-sudo.md](docs/zh/codewhale-sudo.md) |
 
-> ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。动态追踪版本的项目（如 llama-cpp-rocm）其 hash 随上游发布变化，无法被缓存固定。
+> ⚠️ 补丁均为 overlay，修改上游 nixpkgs 包而非独立构建，不在二进制缓存中。
 
-> ⚠️ **StrixHalo 设备请勿开启 `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1`**。该变量会改变 GPU 显存分配路径，在统一内存设备上导致模型输出退化（重复词、语句崩坏）。实测该风险**随模型量化精度降低而显著提升** —— 低比特量化（如 1.5 bpw）受影响最重。详见 [llama-cpp-rocm 文档](docs/zh/llama-cpp-rocm.md#统一内存环境变量的退化风险)。
 
 ## 技能
 

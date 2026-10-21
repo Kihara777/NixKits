@@ -72,7 +72,6 @@ Standalone overlays, not included in `default`:
 
 | Patch | Description | Docs |
 |------|------|------|
-| llama-cpp-rocm | ROCm-accelerated builds tracking latest upstream release | [docs/en/llama-cpp-rocm.md](en/llama-cpp-rocm.md) |
 | rcc-fix | Fixes 2-in-1 device experience for asusctl | [docs/en/rcc-fix.md](en/rcc-fix.md) |
 | asusd-pd-profile | Selects platform profile by power source (USB-C PD vs native AC) | [docs/en/asusd-pd-profile.md](en/asusd-pd-profile.md) |
 | asusd-thermal-guard | Thermal watchdog: steps the profile down when overheating, restores after cooling | [docs/en/asusd-thermal-guard.md](en/asusd-thermal-guard.md) |
@@ -81,9 +80,8 @@ Standalone overlays, not included in `default`:
 | breeze-black | Plasma 6 high-contrast Breeze Black accessibility theme | [docs/en/breeze-black.md](en/breeze-black.md) |
 | codewhale-sudo | overlay — restore sudo (blocked since codewhale v0.9.0) (ptrace interceptor) | [docs/en/codewhale-sudo.md](en/codewhale-sudo.md) |
 
-> ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache. Dynamically versioned projects (e.g. llama-cpp-rocm) have hashes that change with upstream releases and cannot be cached.
+> ⚠️ Patches are overlays that modify upstream nixpkgs packages rather than independent builds, and are not in the binary cache.
 
-> ⚠️ **Do not set `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` on StrixHalo devices.** The variable changes the GPU memory allocation path and causes degenerate model output (repeated words, broken sentences) on unified-memory hardware. Measured: the risk **increases significantly as model quantisation precision drops** — low-bit quants (e.g. 1.5 bpw) are affected most. See the [llama-cpp-rocm docs](en/llama-cpp-rocm.md#unified-memory-environment-variable-degeneration-risk).
 
 ## Skills
 

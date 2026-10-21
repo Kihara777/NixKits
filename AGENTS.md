@@ -18,7 +18,7 @@ gh auth status 2>/dev/null && \
 
 ## 初次启动
 
-每个新 session 启动时，首先执行完整的项目审计与评估，汇报发现。审计范围包括：所有组件状态（包、模块、overlay、补丁、技能）、文档一致性、CI/CD 状态，以及未提交变更。**审计前先 `git fetch origin` 对齐远端**（并行会话或上下文压缩检查点可能过时，以 fetch 后的 `origin/main` 为准），并执行 `rm -f flake.lock` 确保后续操作使用最新 nixpkgs。
+每个新 session 启动时，首先执行完整的项目审计与评估，汇报发现。审计范围包括：所有组件状态（包、模块、overlay、补丁、技能）、文档一致性、CI/CD 状态，以及未提交变更。**审计前先 `git fetch origin` 对齐远端**（并行会话或上下文压缩检查点可能过时，以 fetch 后的 `origin/main` 为准）。**不要删 `flake.lock`**——2026-10-21 起它是已提交的受测基线；要更新输入请显式 `nix flake update <input>` 并同批提交新的 lock。
 
 ## 语言要求
 
@@ -44,10 +44,10 @@ NixKits 是一个 Nix flake 合集：软件包、NixOS 模块、补丁、overlay
 
 ### flake 相关
 
-- **`flake.lock` 不提交**：`.gitignore` 中保留 `flake.lock`。原因是 `llama-cpp-ver` 为浮动输入，锁定后随上游发布而过期。
-- **本地操作前先移除 `flake.lock`**：执行 `nix build`、`nix develop`、`nix flake check` 等命令前，先执行 `rm -f flake.lock`。锁定的 nixpkgs snapshot 可能缺少部分包（如自建包 `godot-ai`），移除后 Nix 重新解析输入确保使用最新可用版本。CI 中无需此操作——CI 按 `check.yml` 配置独立解析。
-- **`llama-cpp-ver` 输入是浮动追踪**：overlay `llama-cpp-rocm` 通过此输入动态获取上游最新版本号，不可锁定。
-- **overlay `llama-cpp-rocm` 的 curried 形式是有意的**：`{ llama-cpp-ver }: (final: prev: ...)` — 勿改为标准 overlay。
+- **`flake.lock` 提交**（2026-10-21 起）：唯一的浮动输入 `llama-cpp-ver` 已迁到 `impure` 分支，main 因此可以锁死——lock 就是**受测基线**。升级输入要显式 `nix flake update <input>` 并同批提交新的 lock。
+- **本地操作直接用已提交的 `flake.lock`**：不要 `rm -f flake.lock`（那是旧约定）。若 lock 里的 nixpkgs 缺某个包（例如 `godot-ai` 尚未进入该 snapshot），正确做法是 `nix flake update nixpkgs` 并**把新 lock 一起提交**——不是删掉 lock 让结果不可复现。CI 用同一份 lock。
+- **`llama-cpp-rocm` 不在本仓**（2026-10-21 起）：`llama-cpp-ver` 浮动输入、overlay 与 NixOS 模块都已迁到 **`impure` 分支**（`github:Kihara777/NixKits/impure`；orphan 分支、**不提交 lock**、只装这一个包）。本仓 README 与文档不再提供它，用法见该分支的 README。
+- **impure 分支里 overlay 的 curried 形式仍是有意的**：`{ llama-cpp-ver }: (final: prev: ...)` — 勿改为标准 overlay（要改请在该分支改）。
 - **新模块/包/overlay 加入 `flake.nix` 后必须 `nix flake check` 验证**。
 - **新增文件先 `git add` 再跑 `nix flake check`**：flake 源＝git 跟踪的文件集合，未跟踪的新文件不会进入 store——典型症状是检查里报 `ERR_MODULE_NOT_FOUND` 或「文件缺失」，而本地直接跑同一脚本却通过。先暂存（`git add -A <路径>`）再检查；CI 只看跟踪文件，所以这一步只在本地生效。
 - **Overlay 的 `patches` 列表必须用 `lib.unique` 去重**。
@@ -152,7 +152,8 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 维护者本机通过 **GitHub 引用**本仓库（`/etc/nixos/flake.nix`：`nixkits.url = "github:Kihara777/NixKits"`；**曾是 `path:` 输入，2026-09-28 核实已改**）：
 
 - **仓库变更后必须「先推送、再重锁」**：机器消费的是 GitHub 上的 rev，**本地提交不推送，重锁就锁不到它**——届时 `nixos apply` 看起来成功、实际没带上你的改动。推送后才执行 `nix flake lock --update-input nixkits /etc/nixos` 并清 eval 缓存。
-  > ⚠️ **重锁会顺带拖动本仓的浮动子输入**（本仓按约定不提交 `flake.lock`，故 `nixkits/nixpkgs` 的 `nixos-unstable` 与 `nixkits/llama-cpp-ver` 的 GitHub latest release 都会重新解析）。实测 2026-09-28：一次 `--update-input nixkits` 把 **llama-cpp 0.4.1 → 0.5.0** 一并拉了进来。所以「为了修一行预设而重锁」= 顺手升级 llama.cpp：要么接受它并**单独验证** llama.cpp（本机统一内存调优、模型服务参数另有一套，见 `nixos-specialisation-tuning`），要么就别为小事重锁，等例行更新一起走。
+  > **2026-10-21 起这一条不再成立（这是搬走浮动输入的直接收益）**：本仓提交了 `flake.lock` 且不再含浮动输入，`--update-input nixkits` **只把 nixkits 的 rev 前移**，不会再顺带拖动 `nixkits/nixpkgs` 与 llama.cpp 版本（2026-09-28 那次「为修一行预设把 llama.cpp 0.4.1→0.5.0 拉进来」不会再发生）。
+  > 要升级 llama.cpp 时**单独**做：`nix flake lock --update-input nixkits-impure /etc/nixos`，并单独验证（本机统一内存调优见 `nixos-specialisation-tuning`）。
 - **部署命令**：`nixos apply -y /etc/nixos`（nixos 0.16.1 无 `rebuild` 子命令）。
 - **预设／插件包更新后：先 `systemctl daemon-reload`，再 `systemctl restart dsh`**。`nixos apply` 不重启 dsh（稳定挂载点），而单跑 restart 有时仍执行**上一代**的 pre-start 脚本——它才是把 `cordis.patch.yml` 拷进 `$DSH_HOME` 的那一步，预设根就写在那份文件里，症状为「服务确实重启了、预设还是旧的」。重启后要核对的是**单元引用**，不是文件内容：
 
@@ -254,25 +255,19 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 
 `.github/workflows/check.yml` 在每次 push / PR 时自动执行 `nix flake check`。
 
-> **浮动输入 `llama-cpp-ver` 在 CI 里走「认证取回 + 本地覆盖」**（2026-10-05 起）：
-> 它是**普通 URL 输入**（`api.github.com/.../releases/latest`），而 Nix **不会**把
-> `access-tokens` / `netrc-file` 附加到这类 fetch 上——实测判据：给该 host 配一个
-> **假 token** 再取一个从未取过的同 host URL，若认证头真的送出，GitHub 必然回 401
-> `Bad credentials`；实际 fetch 成功、未认证额度 −1。于是每个 job 各打一次未认证请求，
-> 共享 runner IP 的 60 次/小时用尽即 403（实测红过两次，响应体
-> `API rate limit exceeded for <ip>`：`Build ruyi-beta (x86_64)` 2026-10-02、
-> `Build kitsfmt (x86_64)` 2026-10-04）。
+> **`llama-cpp-ver` 已不在本仓**（2026-10-21 起）：overlay、模块与那个浮动 URL 输入都迁到了
+> `impure` 分支，CI 里「认证取回 + `--override-input`」的两道步骤随之删除。
+> 本仓 CI 现在**只用提交的 `flake.lock`**（`check.yml` 与 `build-package.yml` 都不再写 lock，
+> 也不再需要那两步）——同一个 commit 在不同时间跑出的是同一套输入，这正是搬走浮动输入的目的。
 >
-> 因此 `build-package.yml` 与 `check.yml` 各有一道步骤：先用 `gh api`（认证，
-> 5000 次/小时）取回**同一份** JSON，再以 `--override-input llama-cpp-ver path:<json>`
-> 喂给 Nix。语义不变（overlay 只读 `json.tag_name`，见 `overlays/llama-cpp-rocm.nix`），
-> 但不再依赖未认证额度；取不回或缺 `tag_name` 即**显式失败**。
-> **改 workflow 时不要删这两步**——删了就退回未认证路径，403 会随机回来。
+> 历史上那两步存在的原因是：`llama-cpp-ver` 是普通 URL 输入，Nix 不会给这类 fetch 附加
+> `access-tokens`，每个 job 各打一次**未认证**请求，共享 runner IP 的 60 次/小时用尽即 403
+> （实测红过：`Build ruyi-beta (x86_64)` 2026-10-02、`Build kitsfmt (x86_64)` 2026-10-04）。
+> **该教训随输入一起搬到了 `impure` 分支**——那边要自己在 CI 里做认证取回。
 >
-> `access-tokens` 仍要**同时列出** `github.com` 与 `api.github.com`：它管的是
-> **`github:` 取源**（flake 输入的 nixpkgs / flake-utils，以及 riscv64 交叉路径里的
-> `builtins.getFlake github:NixOS/nixpkgs`），那些请求确实会带认证头。两个文件
-> 保持一致。
+> `access-tokens` 现在只剩 `github.com` 一项：它管的是 **`github:` 取源**（flake 输入的
+> nixpkgs / flake-utils，以及 riscv64 交叉路径里的 `builtins.getFlake github:NixOS/nixpkgs`）。
+> `api.github.com` 那条是为已迁走的 URL 输入准备的，一并删除了。
 
 ### `nix flake check` 的 11 项自检
 

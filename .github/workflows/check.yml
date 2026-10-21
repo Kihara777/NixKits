@@ -11,30 +11,14 @@ jobs:
         with:
           extra-conf: |
             # `access-tokens` 覆盖的是 **`github:` 取源**（flake 输入的 nixpkgs /
-            # flake-utils）——那些请求会带认证头。
-            # ⚠️ 它**不覆盖**浮动输入 `llama-cpp-ver`：那是普通 URL 输入，实测
-            # （2026-10-05）即便列了 api.github.com，该 fetch 仍是**未认证**的
-            # （判据与实测见 build-package.yml 里同名步骤的注释）。
-            # 所以下面的 `nix flake check` 也走「认证取回 + 覆盖」，不再依赖
-            # 未认证的 60 次/小时额度。
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }} api.github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Resolve the floating llama-cpp-ver input (authenticated)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          json="$RUNNER_TEMP/llama-cpp-ver.json"
-          gh api repos/ggml-org/llama.cpp/releases/latest > "$json"
-          tag="$(jq -r '.tag_name // empty' "$json")"
-          if [ -z "$tag" ]; then
-            echo "::error::取回的 release JSON 里没有 tag_name——拒绝继续（不静默回落到旧版本）"
-            exit 1
-          fi
-          echo "llama-cpp-ver = $tag（认证取回，作为本地输入覆盖）"
-          echo "LLAMA_CPP_VER_OVERRIDE=--override-input llama-cpp-ver path:$json" >> "$GITHUB_ENV"
+            # flake-utils，以及 riscv64 交叉路径里的 `builtins.getFlake
+            # github:NixOS/nixpkgs`）——那些请求会带认证头。
+            # 2026-10-21 起本仓不再有 URL 输入（llama-cpp-rocm 与它的浮动版本已迁到
+            # `impure` 分支），所以这里只需列出 github.com，也不再需要
+            # `--override-input` 那一套认证取回。
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Check
         run: |
           set -euo pipefail
-          # 同 build-package.yml：覆盖参数为空就**显式失败**，不静默退回未认证取回。
-          : "${LLAMA_CPP_VER_OVERRIDE:?认证取回步骤没有导出覆盖参数——拒绝退回未认证路径}"
-          nix flake check --no-write-lock-file $LLAMA_CPP_VER_OVERRIDE
+          # 用仓库里**已提交**的 flake.lock：main 已无浮动输入，lock 就是受测基线。
+          nix flake check

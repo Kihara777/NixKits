@@ -4,16 +4,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-
-    llama-cpp-ver.url = "https://api.github.com/repos/ggml-org/llama.cpp/releases/latest";
-    llama-cpp-ver.flake = false;
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
-    llama-cpp-ver,
   } @ inputs:
   let
     allSystems = flake-utils.lib.defaultSystems ++ [ "riscv64-linux" ];
@@ -186,7 +182,6 @@
 
     nixosModules.obs-bilibili-stream   = import ./modules/obs-bilibili-stream.nix;
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
-    nixosModules.llama-cpp-rocm        = import ./modules/llama-cpp-rocm.nix;
     nixosModules.comfyui               = import ./modules/comfyui.nix;
     nixosModules.dsh                   = import ./modules/dsh.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
@@ -197,7 +192,6 @@
     overlays = {
       default           = import ./overlays/default.nix;
       efl-cross-fix     = import ./overlays/efl-cross-fix.nix;
-      llama-cpp-rocm    = import ./overlays/llama-cpp-rocm.nix { inherit llama-cpp-ver; };
       rcc-fix           = import ./overlays/rcc-fix.nix;
       "codewhale-sudo-fix" = import ./overlays/codewhale-sudo-fix.nix;
       breeze-black       = import ./overlays/breeze-black.nix;

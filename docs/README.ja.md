@@ -72,7 +72,6 @@ nix registry add nixkits github:Kihara777/NixKits
 
 | パッチ | 説明 | ドキュメント |
 |------|------|------|
-| llama-cpp-rocm | 上流最新リリースを追跡する ROCm アクセラレーション | [docs/ja/llama-cpp-rocm.md](ja/llama-cpp-rocm.md) |
 | rcc-fix | asusctl の 2-in-1 デバイス体験を修正 | [docs/ja/rcc-fix.md](ja/rcc-fix.md) |
 | asusd-pd-profile | 電源種別でプラットフォームプロファイルを選択（USB-C PD と原生 AC を区別） | [docs/ja/asusd-pd-profile.md](ja/asusd-pd-profile.md) |
 | asusd-thermal-guard | 温度監視：過熱時にプロファイルを降格し、冷却後に復帰 | [docs/ja/asusd-thermal-guard.md](ja/asusd-thermal-guard.md) |
@@ -81,9 +80,8 @@ nix registry add nixkits github:Kihara777/NixKits
 | breeze-black | Plasma 6 高コントラスト Breeze Black アクセシビリティテーマ | [docs/ja/breeze-black.md](ja/breeze-black.md) |
 | codewhale-sudo | overlay — codewhale v0.9.0 以降で阻まれた sudo 機能を復元（ptrace インターセプター） | [docs/ja/codewhale-sudo.md](ja/codewhale-sudo.md) |
 
-> ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。動的バージョン追跡プロジェクト（llama-cpp-rocm など）はハッシュが上流リリースごとに変化し、キャッシュ固定不可です。
+> ⚠️ パッチは overlay であり、上流の nixpkgs パッケージを変更するもので、独立したビルドではありません。そのためバイナリキャッシュに含まれません。
 
-> ⚠️ **StrixHalo デバイスでは `GGML_CUDA_ENABLE_UNIFIED_MEMORY=1` を設定しないでください。** この変数は GPU メモリ割り当て経路を変更し、ユニファイドメモリ環境でモデル出力の退化（単語の繰り返し、文の崩壊）を引き起こします。実測により、このリスクは**モデルの量子化精度が下がるほど著しく増大**します —— 低ビット量子化（例：1.5 bpw）が最も影響を受けます。詳細は [llama-cpp-rocm ドキュメント](ja/llama-cpp-rocm.md#ユニファイドメモリ環境変数による退化リスク) を参照。
 
 ## スキル
 

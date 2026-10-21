@@ -13,7 +13,6 @@
 /.vscode/
 BUILD_REPORT.md
 TESTING.md
-flake.lock
 packages/kitsfmt-src/target/
 result*
 venv/
