@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T15:07:27+09:00
+
+**摘要**：docs(skill): 「pipe 終了 code 飲」罠 追記
+
+- `check-x.py | tail -1 && git commit` 内 `&&` 見 tail 終了 code（0）、検査器 失敗 也 commit
+- 2026-10-21 実測：維護 log 摘要 長過 push、amend + --force-with-lease 修正
+- 正 書方（pipefail / 終了 code 明示 取）與「log 無 断言 検証 非」同類性 明記
+- 判据：doc-links 241 file 通過；四言語 条目数 相等（441）
+
+| 提交 | 説明 |
+|------|------|
+| `fa35416` | docs(skill): pipeline 最後 command 終了 code 決定 |
+
 ## 2026-10-21T14:18:50+09:00
 
 **摘要**：refactor(skills): maintenance-skills whitelist 排除集合 変更

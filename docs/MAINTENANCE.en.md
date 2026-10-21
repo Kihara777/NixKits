@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T15:07:27+09:00
+
+**Summary**: docs(skill): the "pipe swallows the exit code" trap
+
+- In `check-x.py | tail -1 && git commit`, `&&` looks at tail's exit code (0), so a failing checker still commits
+- Measured on 2026-10-21: an over-length maintenance summary was pushed and had to be fixed with amend + --force-with-lease
+- Records the correct forms (pipefail or capturing the exit code) and ties it to "an assertion without a log is no verification"
+- Criterion: doc-links passes on 241 files; equal entry counts across four languages (441)
+
+| Commit | Description |
+|------|------|
+| `fa35416` | docs(skill): the last command in a pipeline decides the exit code |
+
 ## 2026-10-21T14:18:50+09:00
 
 **Summary**: refactor(skills): maintenance-skills switches from a whitelist to an exclusion set

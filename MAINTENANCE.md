@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T15:07:27+09:00
+
+**摘要**：docs(skill): 补「管道吞退出码」陷阱
+
+- `check-x.py | tail -1 && git commit` 里 `&&` 看的是 tail 的退出码，检查器失败也照常提交
+- 2026-10-21 实测：维护日志摘要超长被推上去，只能 amend + --force-with-lease 修
+- 写清正确做法（pipefail / 显式取退出码），并点明它与「没有日志的断言等于没验证」同类
+- 判据：doc-links 241 文件；四语条目数相等（441）
+
+| 提交 | 说明 |
+|------|------|
+| `fa35416` | docs(skill): 补「管道的最后一道命令决定退出码」 |
+
 ## 2026-10-21T14:18:50+09:00
 
 **摘要**：refactor(skills): maintenance-skills 白名单改排除表
