@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T09:08:12+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— 常駐マウントと全画面時のキーボード追従（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）
+
+- rev `467c86e` → `af105f7`；バージョンは `0.1.1` のまま
+- src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変
+- 判据：`nix build` 成功；成果物は `shell.overlay` への登録、`RailOverlay`、`visualViewport` による追従を含む
+
+| コミット | 説明 |
+|------|------|
+| `4766ac5` | chore(dsh-api-balance): 薄ラッパー rev 追従 af105f7 |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `467c86e` → `af105f7` |
+
 ## 2026-10-21T08:53:06+09:00
 
 **摘要**：dsh-api-balance 薄ラッパー再ピン —— 列解析と全画面解除時の復元を修正、ヘッドレス実測（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）

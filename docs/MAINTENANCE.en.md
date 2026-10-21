@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T09:08:12+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — resident mount and fullscreen keyboard fitting ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900))
+
+- rev `467c86e` → `af105f7`; version stays `0.1.1`
+- src hash taken from `nix flake prefetch --json`; `npmDepsHash` unchanged
+- criteria: `nix build` succeeds; the output registers `shell.overlay`, adds `RailOverlay`, and fits the viewport through `visualViewport`
+
+| Commit | Description |
+|------|------|
+| `4766ac5` | chore(dsh-api-balance): wrapper rev bump to af105f7 |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `467c86e` → `af105f7` |
+
 ## 2026-10-21T08:53:06+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — column parsing and fullscreen restore, verified headless ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900))

@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T09:08:12+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 常驻挂载 + 全屏键盘适配（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）
+
+- rev `467c86e` → `af105f7`；版本仍 `0.1.1`
+- src hash 由 `nix flake prefetch --json` 取得；`npmDepsHash` 未变
+- 判据：`nix build` 成功；产物含 `shell.overlay` 注册、`RailOverlay`、`visualViewport` 适配
+
+| 提交 | 说明 |
+|------|------|
+| `4766ac5` | chore(dsh-api-balance): 薄封装 rev 跟进 af105f7 —— 常驻挂载 + 键盘适配 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `467c86e` → `af105f7` |
+
 ## 2026-10-21T08:53:06+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 列解析与退出还原修正，headless 实测（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）

@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T09:08:12+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 常駐 mount 與 全屏 keyboard 追従（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）
+
+- rev `467c86e` → `af105f7`；版本 仍 `0.1.1`
+- src hash `nix flake prefetch --json` 取得；`npmDepsHash` 不変
+- 判据：`nix build` 成功；産物 `shell.overlay` 登録、`RailOverlay`、`visualViewport` 追従 含
+
+| 提交 | 説明 |
+|------|------|
+| `4766ac5` | chore(dsh-api-balance): 薄 wrapper rev 追従 af105f7 |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `467c86e` → `af105f7` |
+
 ## 2026-10-21T08:53:06+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 列解析 與 全屏解除復元 修正、headless 実測（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
