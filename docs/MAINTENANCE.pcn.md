@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-22T06:18:19+09:00
+
+**摘要**：llama-cpp-rocm 本倉 移出 —— 浮動入力 `impure` 分支 閉込、`flake.lock` 提交 方式 変更
+
+- 主倉 `llama-cpp-ver` 入力・overlay・模組・四言語文書 削除；CI 「認証取得 + override-input」二段 削除
+- orphan 分支 `impure` 新設：該一包 限、lock 非 提交；実測 `0.7.0`、対照臂 nixpkgs 自身 `0.6.0`
+- `flake.lock` 提交、AGENTS.md lock 規約 同批次 改訂：再 lock 時 llama.cpp 巻込 無
+- 監査 指摘 `skill-registry` 注入器 陳腐化 修正、「排除表 読出 不可 即 失敗」追加 偽緑 防止
+- 判据：`nix flake check` 全緑、`self-tests` 12/12（別 負例 3 件）
+
+| 提交 | 説明 |
+|------|------|
+| `9c27ba9` | fix(skill-registry): 注入器 実装 追随、判据 静 緑 不可能 |
+| `733dbef` | refactor!: llama-cpp-rocm 本倉 移出、flake.lock 提交 |
+| `9c50e5e` | feat(impure): 零 起因 impure 通道（`impure` 分支） |
+| `0f15570` | docs(impure): 四言語文書 組件 同伴 移設 |
+
 ## 2026-10-21T15:07:27+09:00
 
 **摘要**：docs(skill): 「pipe 終了 code 飲」罠 追記

@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T06:18:19+09:00
+
+**概要**：llama-cpp-rocm を本リポジトリから移出 —— 浮動入力は `impure` ブランチへ、`flake.lock` はコミットする方式に変更
+
+- 主リポジトリから `llama-cpp-ver` 入力・overlay・モジュール・四言語ドキュメントを削除；CI の「認証取得 + override-input」二段も削除
+- orphan ブランチ `impure` を新設：この一パッケージのみ、lock はコミットしない；実測 `0.7.0`、対照アームは nixpkgs 自身の `0.6.0`
+- `flake.lock` をコミットし、AGENTS.md の lock 規約も同一バッチで改訂：再ロックが llama.cpp を巻き込むことはなくなった
+- 監査が指摘した `skill-registry` 注入器の陳腐化を修正し、「排除表が読めない場合は失敗」を追加して偽緑を防ぐ
+- 判据：`nix flake check` 全緑、`self-tests` 12/12（別に負例 3 件）
+
+| コミット | 説明 |
+|------|------|
+| `9c27ba9` | fix(skill-registry): 注入器を実装に追随させ、判据が静かに緑にならないようにする |
+| `733dbef` | refactor!: llama-cpp-rocm を本リポジトリから移出し、flake.lock をコミット |
+| `9c50e5e` | feat(impure): ゼロからの impure チャネル（`impure` ブランチ） |
+| `0f15570` | docs(impure): 四言語ドキュメントをコンポーネントと共に移設 |
+
 ## 2026-10-21T15:07:27+09:00
 
 **概要**：docs(skill): 「パイプが終了コードを飲む」罠を追記

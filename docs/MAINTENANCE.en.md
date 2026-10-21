@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T06:18:19+09:00
+
+**Summary**: llama-cpp-rocm moved out — the floating input is confined to the `impure` branch, and `flake.lock` is now committed
+
+- The main repo drops the `llama-cpp-ver` input, the overlay, the module and the four-language docs; both CI "authenticated fetch + override-input" steps are gone
+- New orphan branch `impure`: only this one package, no lockfile; measured `0.7.0` against a control arm of nixpkgs' own `0.6.0`
+- `flake.lock` is committed and the AGENTS.md lock rules are rewritten in the same batch: re-locking no longer drags llama.cpp along
+- The audit-flagged stale `skill-registry` injector is fixed, plus "an unreadable exclusion table fails" to stop silent greening
+- Evidence: `nix flake check` green, `self-tests` 12/12 (plus 3 negative cases)
+
+| Commit | Description |
+|------|------|
+| `9c27ba9` | fix(skill-registry): the injector follows the implementation; the check can no longer silently green |
+| `733dbef` | refactor!: move llama-cpp-rocm out of this repo and commit flake.lock |
+| `9c50e5e` | feat(impure): from-scratch impure channel (on the `impure` branch) |
+| `0f15570` | docs(impure): four-language docs move with the component |
+
 ## 2026-10-21T15:07:27+09:00
 
 **Summary**: docs(skill): the "pipe swallows the exit code" trap

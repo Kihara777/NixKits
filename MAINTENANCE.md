@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-22T06:18:19+09:00
+
+**摘要**：llama-cpp-rocm 迁出本仓 —— 浮动输入关进 `impure` 分支，flake.lock 改为提交
+
+- 主仓移除 `llama-cpp-ver` 输入、overlay、模块与四语文档；CI 的「认证取回 + override-input」两道步骤一并删除
+- 新建 orphan 分支 `impure`：只装这一个包、不提交 lock；实测 `0.7.0`，对照臂 nixpkgs 自带 `0.6.0`
+- `flake.lock` 提交、AGENTS.md 的 lock 约定同批改写：重锁不再顺带拖动 llama.cpp
+- 审计指出的 `skill-registry` 注入器过期已修，并补「排除表读不出即失败」防假绿
+- 判据：`nix flake check` 全绿、`self-tests` 12/12（另 3 条负例）
+
+| 提交 | 说明 |
+|------|------|
+| `9c27ba9` | fix(skill-registry): 注入器跟着实现改，判据不再可能静默变绿 |
+| `733dbef` | refactor!: llama-cpp-rocm 迁出本仓，flake.lock 改为提交 |
+| `9c50e5e` | feat(impure): from scratch 的 impure 通道（在 `impure` 分支） |
+| `0f15570` | docs(impure): 四语文档随组件搬进 impure 分支 |
+
 ## 2026-10-21T15:07:27+09:00
 
 **摘要**：docs(skill): 补「管道吞退出码」陷阱
