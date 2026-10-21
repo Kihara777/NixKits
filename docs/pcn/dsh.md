@@ -159,7 +159,7 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 
 | 插件 | 説明 | 文書 |
 |------|------|------|
-| dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 維護模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS 場景能力統合：`nixos_shell` 実行器（PATH 注入 / `nix shell` 工具引導 / sudo 守護路由）+ `nixos_cli` 読取専用診断；NixOS模式 / 狐莉模式二 Agent 預設同梱 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量面板「用量 / 残高」切替：勘定残高、日 / 月 / 30 日内消耗図表與音声放送（音声 pack 形式指南含） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## 模式
@@ -169,14 +169,14 @@ dsh 插件 `cordis.patch.yml` runtime hot reload（再起動不要）。`nixkits
 | 模式 | id | 説明 | 配布方式 | 文書 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初期化時 NixOS 宿主検証（非 NixOS 全実行拒否）；`nixos_shell` / `nixos_cli` 與開発 prompt 読込 | dsh-nixos-shell 包内、**profile patch 行** | [modes/nixos.md](modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式派生；`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能與維護工作流注入 | dsh-nixos-shell 包内、**profile patch 行** | [modes/foxli.md](modes/foxli.md) |
+| 狐莉模式 | `foxli` | NixOS模式派生、更 **維護塊**（`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能與階層維護工作流）及 **逆向塊**（`rea-mcp` 本 session 内 REA 之 MCP 服務 橋渡、約 207 個 `mcp__rea__*` 工具 本 session 限定 公開）追加 | dsh-nixos-shell 包内、**profile patch 行** | [modes/foxli.md](modes/foxli.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式派生之読取専用創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、online 技能包、開始時問答、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements`、**profile patch 行 + 内容目録** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
     nixosMode = true;         # id `nixos` — NixOS模式
-    maintenanceMode = true;   # id `maintenance` — 維護模式（NixOS模式派生）
+    foxliMode = true;         # id `foxli` — 狐莉模式（NixOS模式派生；維護 + 逆向）
     newsThreeElements = true; # id `news-three-elements` — 独立包
     # 預設内容 出処：既定 dsh 通道 従（stable → dsh-nixos-shell-stable、
     # 預設 指定 rev 凍結；alpha → dsh-nixos-shell、HEAD 追随）。通常 記述 不要。

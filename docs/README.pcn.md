@@ -50,7 +50,7 @@ Agent 預設（session 形態）插件同等級、各自独立文書持：
 | 狐莉模式 | `foxli` | NixOS模式 派生；**共同体 下放 能力 之 境界**——保守／文書／更新確認／上流貢献／自己保守 各技能 與 二層 保守 prompt 注入、`rea-mcp` 経由 REA 之 MCP 服務器 本会話 接続（約 207 個 `mcp__rea__*`、本会話 只 可視） | dsh-nixos-shell 包内、patch 行 | [docs/pcn/modes/foxli.md](pcn/modes/foxli.md) |
 | 新聞三要素模式 | `news-three-elements` | 極簡模式派生之**読取専用**創作模式：「新聞三要素」必到三人主人公、素材優先（接続不能時 唯拒否）、素材共創 検索後 書直（検索無 退稿）、技能包 online 取得、開始時問答三択、簡体中文以外一律拒否 | **独立包** `dsh-preset-news-three-elements` | [docs/pcn/modes/news-three-elements.md](pcn/modes/news-three-elements.md) |
 
-> 前三（NixOS模式 / 維護模式 / 逆向模式）dsh-nixos-shell 包 同梱、`nixkits.dsh.presets.nixosMode` / `.maintenanceMode` / `.reaMode` 各 `preset.patch.yml` patch 行 為 profile 之 `cordis.patch.yml` 併合（dsh 0.2.0 以降 **目録 copy 無**）；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets/news-three-elements` `$DSH_HOME/.agent-presets/` 組立、該 patch 行 相対路径 解決 供。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。
+> 前二（NixOS模式 / 狐莉模式）dsh-nixos-shell 包 同梱、`nixkits.dsh.presets.nixosMode` / `.foxliMode` 各 `preset.patch.yml` patch 行 為 profile 之 `cordis.patch.yml` 併合（dsh 0.2.0 以降 **目録 copy 無**）；新聞三要素模式 独立包 `dsh-preset-news-three-elements` 配布、`nixkits.dsh.presets.newsThreeElements` 該 `share/dsh-agent-presets/news-three-elements` `$DSH_HOME/.agent-presets/` 組立、該 patch 行 相対路径 解決 供。詳細 [docs/pcn/dsh.md](pcn/dsh.md) 「模式」節参照。
 
 ## 開発
 
@@ -115,7 +115,7 @@ AI 符号化代理向：
 - **小小爪 (Kitsunome)** — 硬体推論基盤 feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]
-> 关于 DeepSeek Harness (DSH) 生态 —— 小爪与小小爪使用 dsh-nixos-shell 插件，以及 NixOS模式 / 维护模式 Agent 预设武装了自己☆
+> 关于 DeepSeek Harness (DSH) 生态 —— 小爪与小小爪使用 dsh-nixos-shell 插件，以及 NixOS模式 / 狐莉模式 Agent 预设武装了自己☆
 
 ## 許諾
 

@@ -99,9 +99,9 @@ This package ships two **Agent presets (modes)**; their behavior, composition st
 | Mode | id | Description | Doc |
 |------|-----|------|------|
 | NixOS模式 | `nixos` | host validation + `nixos_shell` / `nixos_cli` + development prompts | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | derived from NixOS模式; doc / log / update-check skills + maintenance workflow | [modes/foxli.md](modes/foxli.md) |
+| 狐莉模式 | `foxli` | derived from NixOS模式; doc / log / update-check skills + maintenance workflow, plus the `rea-mcp` bridge to the REA MCP server (this session only) | [modes/foxli.md](modes/foxli.md) |
 
-Both are written **seed-once** into `$DSH_HOME/.agent-presets/<id>` by the module through `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode`:
+Both are emitted **as patch rows** into the profile's `cordis.patch.yml` by the module through `nixkits.dsh.presets.nixosMode` / `presets.foxliMode` (as of dsh 0.2.0 nothing is written to `$DSH_HOME/.agent-presets/<id>`):
 
 ```nix
 {
@@ -112,7 +112,7 @@ Both are written **seed-once** into `$DSH_HOME/.agent-presets/<id>` by the modul
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
-    presets.maintenanceMode = true;
+    presets.foxliMode = true;
   };
 }
 ```

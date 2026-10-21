@@ -99,9 +99,9 @@ nixos_cli(op = "audit-store-paths")
 | 模式 | id | 説明 | 文書 |
 |------|-----|------|------|
 | NixOS模式 | `nixos` | 宿主検証 + `nixos_shell` / `nixos_cli` + 開発 prompt | [modes/nixos.md](modes/nixos.md) |
-| 維護模式 | `maintenance` | NixOS模式派生；文書 / 日誌 / 更新点検技能 + 維護工作流 | [modes/foxli.md](modes/foxli.md) |
+| 狐莉模式 | `foxli` | NixOS模式派生；文書 / 日誌 / 更新点検技能 + 維護工作流、及 `rea-mcp` 経由 REA MCP 服務橋渡（本 session 限定） | [modes/foxli.md](modes/foxli.md) |
 
-両者共 模組 `nixkits.dsh.presets.nixosMode` / `presets.maintenanceMode` 経由 **seed-once** 方式 `$DSH_HOME/.agent-presets/<id>` 書込：
+両者共 模組 `nixkits.dsh.presets.nixosMode` / `presets.foxliMode` 経由 **patch 行** 方式 profile 之 `cordis.patch.yml` 発行（dsh 0.2.0 以降 `$DSH_HOME/.agent-presets/<id>` 何 書 無）：
 
 ```nix
 {
@@ -112,7 +112,7 @@ nixos_cli(op = "audit-store-paths")
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
-    presets.maintenanceMode = true;
+    presets.foxliMode = true;
   };
 }
 ```

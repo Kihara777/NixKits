@@ -50,7 +50,7 @@ Agent presets (session shapes) sit at the same level as plugins, each with its o
 | 狐莉模式 | `foxli` | Derived from NixOS模式; **the boundary of what is released to the community** — injects the maintenance/documentation/update-check/upstream-contribution/self-maintenance skills plus the layered maintenance prompts, and bridges REA's MCP server into this session through `rea-mcp` (about 207 `mcp__rea__*` tools, visible only to this session) | inside the dsh-nixos-shell package, patch row | [docs/en/modes/foxli.md](en/modes/foxli.md) |
 | 新闻三要素模式 | `news-three-elements` | **read-only** creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear, material comes first (only what cannot be tied back is refused), co-created material is searched and re-skinned (no search, no dispatch), it fetches the skill package online, opens with a three-way picker, and refuses anything not written in Simplified Chinese | **standalone package** `dsh-preset-news-three-elements` | [docs/en/modes/news-three-elements.md](en/modes/news-three-elements.md) |
 
-> The first three (NixOS模式 / 维护模式 / 逆向模式) ship inside the dsh-nixos-shell package: `nixkits.dsh.presets.nixosMode` / `.maintenanceMode` / `.reaMode` each merge one `preset.patch.yml` into the profile's `cordis.patch.yml` as a patch row (dsh 0.2.0 **no longer copies directories**); 新闻三要素模式 comes from the standalone package `dsh-preset-news-three-elements`, and `nixkits.dsh.presets.newsThreeElements` assembles its `share/dsh-agent-presets/news-three-elements` into `$DSH_HOME/.agent-presets/` for that patch row's relative paths. See the "Modes" section of [docs/en/dsh.md](en/dsh.md).
+> The first two (NixOS模式 / 狐莉模式) ship inside the dsh-nixos-shell package: `nixkits.dsh.presets.nixosMode` / `.foxliMode` each merge one `preset.patch.yml` into the profile's `cordis.patch.yml` as a patch row (dsh 0.2.0 **no longer copies directories**); 新闻三要素模式 comes from the standalone package `dsh-preset-news-three-elements`, and `nixkits.dsh.presets.newsThreeElements` assembles its `share/dsh-agent-presets/news-three-elements` into `$DSH_HOME/.agent-presets/` for that patch row's relative paths. See the "Modes" section of [docs/en/dsh.md](en/dsh.md).
 
 ## Development
 
@@ -116,7 +116,7 @@ For AI coding assistants:
 - **小小爪 (キツのめ)** — hardware inference infrastructure feat. llama-cpp-rocm: DeepSeek-V4-Flash-Vision-Exp (UD-IQ3_S)
 
 > [!NOTE]
-> 关于 DeepSeek Harness (DSH) 生态 —— 小爪与小小爪使用 dsh-nixos-shell 插件，以及 NixOS模式 / 维护模式 Agent 预设武装了自己☆
+> 关于 DeepSeek Harness (DSH) 生态 —— 小爪与小小爪使用 dsh-nixos-shell 插件，以及 NixOS模式 / 狐莉模式 Agent 预设武装了自己☆
 
 ## License
 

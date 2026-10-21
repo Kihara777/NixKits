@@ -159,7 +159,7 @@ Plugins developed in this repo for dsh are **not expanded in this document** —
 
 | Plugin | Description | Doc |
 |------|------|------|
-| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / maintenance mode Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | Consolidated NixOS scenario capabilities: the `nixos_shell` executor (PATH injection / `nix shell` tool bootstrap / sudo-daemon routing) + `nixos_cli` read-only diagnostics; ships the NixOS mode / 狐莉模式 Agent presets | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | 「Usage / Balance」 tab switch in the webui usage panel: account balance, daily / monthly / 30-day consumption charts and voice broadcast (incl. the voice-pack format guide) | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## Modes
@@ -169,14 +169,14 @@ A "mode" is a dsh **Agent preset**: each mode is one session shape with its own 
 | Mode | id | Description | Distribution | Doc |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | validates the NixOS host at initialization (non-NixOS denies all execution); loads `nixos_shell` / `nixos_cli` and the development prompts | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | derived from NixOS模式; injects the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the maintenance workflow | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/foxli.md](modes/foxli.md) |
+| 狐莉模式 | `foxli` | derived from NixOS模式, then appends two blocks: **maintenance** (the `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` skills and the layered maintenance workflow) and **reverse** (`rea-mcp` bridges the REA MCP server into this session — the full ~207 `mcp__rea__*` tools, visible only to this session) | inside the dsh-nixos-shell package, as a **profile patch row** | [modes/foxli.md](modes/foxli.md) |
 | 新闻三要素模式 | `news-three-elements` | a read-only creation mode derived from minimal mode: the "three elements of news" are the three protagonists who must all appear; material comes first (only what cannot be tied back is refused), co-created material is searched and re-skinned (no search, no dispatch), online skill package, opening picker, anything not in Simplified Chinese refused | **standalone package** `dsh-preset-news-three-elements`, as a **profile patch row + content directory** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
     nixosMode = true;         # id `nixos` — NixOS模式
-    maintenanceMode = true;   # id `maintenance` — 维护模式 (derived from NixOS模式)
+    foxliMode = true;         # id `foxli` — 狐莉模式 (derived from NixOS模式; maintenance + reverse)
     newsThreeElements = true; # id `news-three-elements` — standalone package
     # Preset content source: by default it follows the dsh channel (stable →
     # dsh-nixos-shell-stable, presets frozen at the pinned rev; alpha →

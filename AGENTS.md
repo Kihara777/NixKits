@@ -86,20 +86,22 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 - `modules/dsh.nix` 按 dsh 包自己声明的 `passthru.dshChannel` 二选一，
   并把它读到的 `preset.patch.yml` **逐字**并进生成的 cordis.patch.yml。
 
-`packages/dsh-nixos-shell/presets/` 下的两个预设（NixOS模式 → 维护模式）是**派生关系**，
+`packages/dsh-nixos-shell/presets/` 下的两个预设（NixOS模式 → 狐莉模式）是**派生关系**，
 不是两份独立配置：
 
-- **维护模式必须完整派生自 NixOS模式**：`maintenance-mode/preset.patch.yml` 的
+- **狐莉模式必须完整派生自 NixOS模式**：`foxli-mode/preset.patch.yml` 的
   `plugins:` 正文（该行之后到文件末尾）= `nixos-mode/preset.patch.yml` 的同段 + 固定的
-  `maintenance-skills` 行块（含注释），除此之外不得有任何差异。文件头里的
+  追加块——**维护块**（`maintenance-skills` 行）与**逆向块**（`rea-mcp` 行），连注释一起，
+  除此之外不得有任何差异。文件头里的
   `id` / `name` / `description` / `order` 是各自的元数据，不参与字节派生
   （由脚本按 `preset.yml` 与常量核对）。
-- **逆向模式必须完整派生自维护模式**：`rea-mode/preset.patch.yml` 的 `plugins:` 正文
-  = `maintenance-mode/` 的同段 + 固定的 `mcp-rea` 行块（含注释）。派生链因此是**三段**
-  （nixos → maintenance → rea）：改 nixos 漏了 maintenance 由第一段报，改 maintenance
-  漏了 rea 由第二段报。逆向模式只追加 MCP 客户端那一行，**不复制**维护模式的任何内容。
-  它的 `mcp-rea` 行从 `REA_BIN_PATH` 取可执行文件（模块在 `presets.reaMode = true` 时
-  导出 `pkgs.rea` 的路径），所以预设正文里**不允许出现 store 路径**。
+- **派生链只有一段**（2026-10-21 起）：原来的维护模式与逆向模式各自都是「NixOS + 一块」，
+  分开放意味着下游要派生两次、技能清单要维护两份，而掌灯那份清单**没有任何判据在看**。
+  合并成狐莉模式后下游只读这一份：掌灯模式（在 Kitsunome，私有）派生自它，**原样继承逆向块**。
+  `rea-mcp` 行从 `REA_BIN_PATH` 取可执行文件（模块在 `presets.foxliMode = true` 时
+  导出 `pkgs.rea` 的路径），所以预设正文里**不允许出现 store 路径**；反过来，
+  **只开掌灯而没开 `presets.foxliMode` 的部署，那一行拿不到可执行文件路径**（模块导的环境
+  变量是它唯一来源）。
 - **预设不自带组合撰写技能副本**：`cordis-plugin-development` 与
   `editing-cordis-compositions` 由上游随 `@deepseek-ai/dsh-agent-preset` 分发，两个预设的
   `skill-filesystem` 行**直接挂上游那份**（与内置 `cordis` 预设同一表达式），只保留上游没有的
@@ -107,16 +109,15 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
   格式（0.1.x 目录式 vs 0.2.0 patch/bundle，上游新版明说旧目录没人读了）。
   `develop/check-preset-derivation.py` 把「不再自带」钉成断言——副本被加回来，检查即响。
   旧副本仍可从 stable 通道钉住的 rev 取用（0.1.x 兼容）。
-- **修改 nixos 模式后必须同步维护模式，改维护模式后必须同步逆向模式**：改
-  `nixos-mode/` 的任意文件（行、元数据、技能）后，立即把相同改动镜像到
-  `maintenance-mode/`，再镜像到 `rea-mode/`——注意：**`plugins:` 正文里连注释也算**，
-  两边注释不一致同样判漂。
+- **修改 NixOS模式后必须同步狐莉模式**：改 `nixos-mode/` 的任意文件（行、元数据、技能）后，
+  立即把相同改动镜像到 `foxli-mode/`——注意：**`plugins:` 正文里连注释也算**，
+  两边注释不一致同样判漂。派生到下游（掌灯模式）的那一份不在本仓，改了这一段要另行同步。
 - **漂移检查**：`develop/check-preset-derivation.py` 校验上述派生关系，已挂入
   `nix flake check`（CI 每次 push 执行）；漂移时检查失败，修复后才能提交。刻意变更追加块
   本身时，同步更新脚本内 `PATCH_MAINTENANCE_DELTA` / `PATCH_REA_DELTA` 常量。
-- **`order` 必须在 roster 里唯一**：内置预设占 1–4；NixKits 的 nixos / maintenance /
-  rea 取 10 / 11 / 15；独立包 news-three-elements 取 13；私有仓（Kitsunome）的掌灯模式取
-  12、Ocean Spiral 取 14。新增预设前先看这几个占用。
+- **`order` 必须在 roster 里唯一**：内置预设占 1–4；NixKits 的 nixos / foxli 取 10 / 11；
+  独立包 news-three-elements 取 13；私有仓（Kitsunome）的掌灯模式取 12、Ocean Spiral 取 14
+  （原逆向模式占的 15 已空出）。新增预设前先看这几个占用。
 - **回车键行为**：会话内的「回车换行 + Shift+回车发送」交换行为由 dsh-api-balance 客户端插件的「⚙ 设置 → 界面」开关实现（全局生效、浏览器 localStorage 持久化，默认开启；DSH 原生为回车发送）；预设组合文件本身不含该逻辑，无需在预设间同步。
 
 ### 文档
@@ -280,7 +281,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 
 | 检查 | 脚本 | 校验内容 |
 |------|------|---------|
-| `preset-derivation` | `develop/check-preset-derivation.py` | 维护模式**完整派生**自 NixOS模式（末尾恰好追加固定块，`MAINTENANCE_DELTA` 常量） |
+| `preset-derivation` | `develop/check-preset-derivation.py` | 狐莉模式**完整派生**自 NixOS模式（末尾恰好追加固定块：维护块 + 逆向块，`PATCH_MAINTENANCE_DELTA` + `PATCH_REA_DELTA`） |
 | `preset-bundle` | `develop/check-preset-bundle.py` | 包内技能快照与仓库 `skills/` 树**逐字节一致** |
 | `workflow-coverage` | `develop/check-workflows.py` | 每个包都有 `build-<包>-<架构>.yml`（例外须在脚本内登记；**文件名必须以 `.yml` 结尾**——2026-10-05 写反证用例时发现，只判前缀会把 `build-x-….yml.disabled` 这种「禁用了但文件还在」也算成覆盖） |
 | `doc-links` | `develop/check-doc-links.py` | 文档相对链接可达 + 语言切换器四语齐全（**`docs/` 下必须存在，且在全文里查找**；其余文件只看文件头） |

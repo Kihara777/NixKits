@@ -170,7 +170,7 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 
 | 插件 | 说明 | 文档 |
 |------|------|------|
-| dsh-nixos-shell | NixOS 场景能力整合：`nixos_shell` 执行器（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）+ `nixos_cli` 只读诊断；随包分发 NixOS模式 / 维护模式两个 Agent 预设 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
+| dsh-nixos-shell | NixOS 场景能力整合：`nixos_shell` 执行器（PATH 注入 / `nix shell` 工具引导 / sudo 守护路由）+ `nixos_cli` 只读诊断；随包分发 NixOS模式 / 狐莉模式两个 Agent 预设 | [dsh-nixos-shell.md](dsh-nixos-shell.md) |
 | dsh-api-balance | webui 用量面板「用量 / 余额」切换：账户余额、日 / 月 / 30 日消耗图表与语音播报（含语音包格式指南） | [dsh-api-balance.md](dsh-api-balance.md) |
 
 ## 模式
@@ -180,14 +180,14 @@ dsh 的插件通过 `cordis.patch.yml` 运行时热加载（无需重启）。`n
 | 模式 | id | 说明 | 分发方式 | 文档 |
 |------|-----|------|---------|------|
 | NixOS模式 | `nixos` | 初始化校验 NixOS 宿主（非 NixOS 拒绝一切执行）；加载 `nixos_shell` / `nixos_cli` 与开发提示词 | dsh-nixos-shell 包内，**profile patch 行** | [modes/nixos.md](modes/nixos.md) |
-| 维护模式 | `maintenance` | 派生自 NixOS模式；注入 `write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能与维护工作流 | dsh-nixos-shell 包内，**profile patch 行** | [modes/foxli.md](modes/foxli.md) |
+| 狐莉模式 | `foxli` | 派生自 NixOS模式，再追加**维护块**（`write-project-docs` / `write-maintenance-log` / `nix-flake-update-check` / `nixkits-check-updates` / `translate-*` 技能与分层维护工作流）与**逆向块**（`rea-mcp` 在本会话内桥接 REA 的 MCP 服务，全量约 207 个 `mcp__rea__*` 工具，只对本会话可见） | dsh-nixos-shell 包内，**profile patch 行** | [modes/foxli.md](modes/foxli.md) |
 | 新闻三要素模式 | `news-three-elements` | 派生自极简模式的只读创作模式：「新闻三要素」= 三位必须到齐的主角；素材优先（接不回来才拒）、素材共创先检索再改写（无检索即退稿）、在线技能包、开场问答、非简体中文一律拒绝 | **独立包** `dsh-preset-news-three-elements`，**profile patch 行 + 内容目录** | [modes/news-three-elements.md](modes/news-three-elements.md) |
 
 ```nix
 {
   nixkits.dsh.presets = {
     nixosMode = true;         # id `nixos` —— NixOS模式
-    maintenanceMode = true;   # id `maintenance` —— 维护模式（派生自 NixOS模式）
+    foxliMode = true;         # id `foxli` —— 狐莉模式（派生自 NixOS模式；维护 + 逆向）
     newsThreeElements = true; # id `news-three-elements` —— 独立包
     # 预设内容来源：默认按 dsh 通道二选一（stable → dsh-nixos-shell-stable，
     # 预设冻结在钉住的 rev；alpha → dsh-nixos-shell，跟 HEAD）。一般不用手写，
