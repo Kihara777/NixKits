@@ -4,7 +4,7 @@
 
 ## 2026-10-21T12:30:10+09:00
 
-**摘要**：dsh-api-balance ドキュメント同期 —— フルスクリーン項目に緩動・余白・キーボード（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900)）
+**概要**：dsh-api-balance ドキュメント同期 —— フルスクリーン項目に緩動・余白・キーボード（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900)）
 
 - ドキュメントのみの変更なので **re-pin しない**：ラッパーは `980201d` のまま（その版が現在の実行時挙動）、再ビルド不要
 - 子リポジトリは四言語で揃っている（`###` 各 9、pcn に仮名残留なし）、子リポジトリのログに `bd6adbd` を追記
@@ -16,7 +16,7 @@
 
 ## 2026-10-21T12:28:05+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列の非線形イージング（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列の非線形イージング（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）
 
 - rev `b65fcae` → `980201d`；バージョンは `0.1.1` のまま
 - 判据：`nix build` 成功
@@ -32,7 +32,7 @@
 
 ## 2026-10-21T12:14:10+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列を隠した後の左右余白調整（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列を隠した後の左右余白調整（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900)）
 
 - rev `6ba8f5b` → `b65fcae`；バージョンは `0.1.1` のまま
 - 判据：`nix build` 成功
@@ -48,7 +48,7 @@
 
 ## 2026-10-21T11:33:20+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— ハンドルの対象をアイコン列へ（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— ハンドルの対象をアイコン列へ（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
 
 - rev `af105f7` → `6ba8f5b`；バージョンは `0.1.1` のまま
 - 判据：`nix build` 成功
@@ -64,7 +64,7 @@
 
 ## 2026-10-21T09:08:12+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— 常駐マウントと全画面時のキーボード追従（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— 常駐マウントと全画面時のキーボード追従（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）
 
 - rev `467c86e` → `af105f7`；バージョンは `0.1.1` のまま
 - src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変
@@ -81,7 +81,7 @@
 
 ## 2026-10-21T08:53:06+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— 列解析と全画面解除時の復元を修正、ヘッドレス実測（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— 列解析と全画面解除時の復元を修正、ヘッドレス実測（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0852380900)）
 
 - rev `55902a5` → `467c86e`；バージョンは `0.1.1` のまま
 - src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変
@@ -98,7 +98,7 @@
 
 ## 2026-10-21T08:35:59+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— ドロワーは書くだけで消さない、「ハンドルで戻せない」を修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— ドロワーは書くだけで消さない、「ハンドルで戻せない」を修正（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
 
 - rev `f925ce1` → `55902a5`；バージョンは `0.1.1` のまま——実行時挙動の修正なのでフィールド単位の判据で追従
 - src hash は `nix flake prefetch --json` から取得；`npmDepsHash` は不変（package-lock 未変更）

@@ -98,11 +98,11 @@
 
 ## 2026-10-21T08:35:59+09:00
 
-**摘要**：dsh-api-balance 薄封装 re-pin —— 抽屉只写不删，修「点把手收不回」（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
+**摘要**：薄封装 re-pin —— 抽屉只写不删（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t0835110900)）
 
-- rev `f925ce1` → `55902a5`；版本仍 `0.1.1`——运行时行为修复，按字段级判据跟进
+- rev `f925ce1` → `55902a5`；版本仍 `0.1.1`
 - src hash 由 `nix flake prefetch --json` 取得；`npmDepsHash` 未变（package-lock 未动）
-- 判据：`nix build` 成功；产物 `layout.toggleSidebar()` 6 处、`MutationObserver` 6 处、`frame.style.setProperty("grid-template-columns", reactValue)` 2 处；`getComputedStyle(frame)` 与 `frame.style.removeProperty` 各 0 处
+- 判据：`nix build` 成功；产物 `toggleSidebar` 6 处、`MutationObserver` 6 处；`getComputedStyle(frame)`/`frame.style.removeProperty` 各 0 处
 
 | 提交 | 说明 |
 |------|------|
