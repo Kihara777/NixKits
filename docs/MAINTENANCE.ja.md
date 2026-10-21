@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:28:05+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列の非線形イージング（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）
+
+- rev `b65fcae` → `980201d`；バージョンは `0.1.1` のまま
+- 判据：`nix build` 成功
+
+| コミット | 説明 |
+|------|------|
+| `cf2b0c5` | chore(dsh-api-balance): 薄ラッパー rev 追従 980201d |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `b65fcae` → `980201d` |
+
 ## 2026-10-21T12:14:10+09:00
 
 **摘要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列を隠した後の左右余白調整（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900)）

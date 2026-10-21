@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:28:05+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — non-linear easing for the icon strip ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900))
+
+- rev `b65fcae` → `980201d`; version stays `0.1.1`
+- criteria: `nix build` succeeds
+
+| Commit | Description |
+|------|------|
+| `cf2b0c5` | chore(dsh-api-balance): wrapper rev bump to 980201d |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `b65fcae` → `980201d` |
+
 ## 2026-10-21T12:14:10+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — balanced content gaps after hiding the strip ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900))
