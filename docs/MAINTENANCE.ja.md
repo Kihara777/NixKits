@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:24:24+09:00
+
+**概要**：feat(skill): nix-packaging —— ゼロからのパッケージ化フロー
+
+- 缺口：既存スキルは「既存パッケージの更新」と「上流への投稿」を扱うが、「このソフトにはまだパッケージが無い」を扱っていなかった
+- 四層の受入（評価 / 実ビルド / 成果物 / 実行）、各層で何に騙されるかを明記
+- 来源別の分岐（Gitea 403、プラグイン集合の属性を含む）、hash の二段階、vendored lock、wrapper、本リポジトリの約束と罠六件
+- 維護モードに登録；四言語の文書ページと README 行（ja/pcn に欠けていた agent-self-maintenance 行も補完）
+- 判据：check-skill-registry は 14 スキルに帰属、doc-links は 241 ファイル通過；四言語の条目数が相等（439）
+
+| コミット | 説明 |
+|------|------|
+| `f5d3545` | feat(skill): nix-packaging — the packaging workflow from scratch |
+
 ## 2026-10-21T13:15:27+09:00
 
 **概要**：refactor(obs-bilibili-stream)!: 自前パッケージを廃止、上流が収録済み

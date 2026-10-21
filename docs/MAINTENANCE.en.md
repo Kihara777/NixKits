@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:24:24+09:00
+
+**Summary**: feat(skill): nix-packaging — the packaging workflow from scratch
+
+- The gap: existing skills cover updating an existing package and submitting upstream, but not "this software has no package yet"
+- Four-layer acceptance (evaluate / real build / artifact / run), each layer naming what can fool you
+- Routing by source type (including the Gitea 403 and plugin-set attributes), the two-stage hash, vendored lock, wrapper rules, repo conventions and six traps
+- Registered in the maintenance mode; four-language doc pages and README rows (also filling in the ja/pcn rows missing for agent-self-maintenance)
+- Criterion: check-skill-registry reports 14 skills all claimed, doc-links passes on 241 files; equal entry counts across four languages (439)
+
+| Commit | Description |
+|------|------|
+| `f5d3545` | feat(skill): nix-packaging — the packaging workflow from scratch |
+
 ## 2026-10-21T13:15:27+09:00
 
 **Summary**: refactor(obs-bilibili-stream)!: the self-built package retires — upstream ships it

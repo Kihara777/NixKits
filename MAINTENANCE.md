@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:24:24+09:00
+
+**摘要**：feat(skill): nix-packaging —— 从零打包流程
+
+- 缺口：现有技能覆盖「更新已有包」与「提交上游」，不覆盖「这个软件还没有包」
+- 四层验收（求值 / 真实构建 / 产物 / 运行），每层写明会骗人的地方
+- 按来源分流（含 Gitea 403、插件集合属性）、hash 两段式、vendored lock、wrapper、本仓约定与六条陷阱
+- 注册进维护模式；四语文档页 + README 四语行（顺带补齐 ja/pcn 缺失的 agent-self-maintenance 行）
+- 判据：check-skill-registry 14 技能有归属、doc-links 241 文件通过；四语条目数相等（439）
+
+| 提交 | 说明 |
+|------|------|
+| `f5d3545` | feat(skill): nix-packaging — the packaging workflow from scratch |
+
 ## 2026-10-21T13:15:27+09:00
 
 **摘要**：refactor(obs-bilibili-stream)!: 退役自建包，上游已收录
