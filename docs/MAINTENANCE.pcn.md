@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T11:33:20+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 把手 対象 図標列 変更（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
+
+- rev `af105f7` → `6ba8f5b`；版本 仍 `0.1.1`
+- 判据：`nix build` 成功
+
+| 提交 | 説明 |
+|------|------|
+| `a35a95a` | chore(dsh-api-balance): 薄 wrapper rev 追従 6ba8f5b |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `af105f7` → `6ba8f5b` |
+
 ## 2026-10-21T09:08:12+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 常駐 mount 與 全屏 keyboard 追従（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）

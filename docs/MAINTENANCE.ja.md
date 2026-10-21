@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T11:33:20+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— ハンドルの対象をアイコン列へ（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
+
+- rev `af105f7` → `6ba8f5b`；バージョンは `0.1.1` のまま
+- 判据：`nix build` 成功
+
+| コミット | 説明 |
+|------|------|
+| `a35a95a` | chore(dsh-api-balance): 薄ラッパー rev 追従 6ba8f5b |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `af105f7` → `6ba8f5b` |
+
 ## 2026-10-21T09:08:12+09:00
 
 **摘要**：dsh-api-balance 薄ラッパー再ピン —— 常駐マウントと全画面時のキーボード追従（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）

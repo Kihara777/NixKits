@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T11:33:20+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 把手改管图标栏（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
+
+- rev `af105f7` → `6ba8f5b`；版本仍 `0.1.1`
+- 判据：`nix build` 成功
+
+| 提交 | 说明 |
+|------|------|
+| `a35a95a` | chore(dsh-api-balance): 薄封装 rev 跟进 6ba8f5b —— 把手改管图标栏 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `af105f7` → `6ba8f5b` |
+
 ## 2026-10-21T09:08:12+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 常驻挂载 + 全屏键盘适配（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900)）

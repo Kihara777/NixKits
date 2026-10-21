@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T11:33:20+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — the handle targets the icon strip ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900))
+
+- rev `af105f7` → `6ba8f5b`; version stays `0.1.1`
+- criteria: `nix build` succeeds
+
+| Commit | Description |
+|------|------|
+| `a35a95a` | chore(dsh-api-balance): wrapper rev bump to 6ba8f5b |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `af105f7` → `6ba8f5b` |
+
 ## 2026-10-21T09:08:12+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — resident mount and fullscreen keyboard fitting ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1048400900))
