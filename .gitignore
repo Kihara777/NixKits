@@ -1,0 +1,9 @@
+# 本分支**故意**不提交 flake.lock ——「impure」就是这个意思。
+# 每次求值都重新解析 nixpkgs 与 llama.cpp 的最新版本；要可复现请用 main。
+flake.lock
+
+result
+result-*
+__pycache__/
+.codewhale/
+.deepseek/
