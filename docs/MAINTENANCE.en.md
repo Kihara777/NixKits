@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:30:10+09:00
+
+**Summary**: dsh-api-balance docs sync — fullscreen entry covers easing, gaps and keyboard ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900))
+
+- documentation only, so **no re-pin**: the wrapper stays pinned at `980201d` (that revision already is the running behaviour) and no rebuild is needed
+- child repo keeps four languages aligned (`###` sections 9 each, no kana residue in pcn); its log gained an entry for `bd6adbd`
+- criteria: nothing changed in NixKits (`packages/dsh-api-balance.nix` untouched)
+
+| Commit | Description |
+|------|------|
+| — | child repo docs only; no commit here |
+
 ## 2026-10-21T12:28:05+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — non-linear easing for the icon strip ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900))

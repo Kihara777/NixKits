@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:30:10+09:00
+
+**摘要**：dsh-api-balance ドキュメント同期 —— フルスクリーン項目に緩動・余白・キーボード（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900)）
+
+- ドキュメントのみの変更なので **re-pin しない**：ラッパーは `980201d` のまま（その版が現在の実行時挙動）、再ビルド不要
+- 子リポジトリは四言語で揃っている（`###` 各 9、pcn に仮名残留なし）、子リポジトリのログに `bd6adbd` を追記
+- 判据：NixKits 側に変更なし（`packages/dsh-api-balance.nix` 未変更）
+
+| コミット | 説明 |
+|------|------|
+| — | 子リポジトリのドキュメントのみ、本リポジトリにコミットなし |
+
 ## 2026-10-21T12:28:05+09:00
 
 **摘要**：dsh-api-balance 薄ラッパー再ピン —— アイコン列の非線形イージング（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）

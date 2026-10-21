@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:30:10+09:00
+
+**摘要**：dsh-api-balance 文档同步 —— 全屏侧栏条目补齐缓动/留白/键盘（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900))
+
+- 纯文档改动，**不触发 re-pin**：包装仍钉 `980201d`（那一版就是当前运行时行为），系统无需重建
+- 子仓四语对齐：`###` 段落各 9、pcn 无假名残留；子仓维护日志补了 `bd6adbd` 一条
+- 判据：NixKits 侧无包装变更（`packages/dsh-api-balance.nix` 未动）
+
+| 提交 | 说明 |
+|------|------|
+| — | 仅子仓文档更新，本仓无提交 |
+
 ## 2026-10-21T12:28:05+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 图标栏显隐缓动（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）

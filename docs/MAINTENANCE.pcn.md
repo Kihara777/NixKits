@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T12:30:10+09:00
+
+**摘要**：dsh-api-balance 文書 同期 —— 全屏側欄 条項 緩動・余白・keyboard（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900)）
+
+- 文書 変更 限定、**re-pin 不**：wrapper `980201d` 固定（該版 現実行時挙動）、再 build 不要
+- 子倉 四言語 揃（`###` 各 9、pcn 仮名 残留 無）、子倉 log `bd6adbd` 追記
+- 判据：NixKits 側 変更 無（`packages/dsh-api-balance.nix` 未変更）
+
+| 提交 | 説明 |
+|------|------|
+| — | 子倉 文書 限定、本倉 commit 無 |
+
 ## 2026-10-21T12:28:05+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 図標列 非線形 easing（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1226400900)）
