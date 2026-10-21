@@ -101,6 +101,8 @@ AI コーディングアシスタント向け：
 | nixkits-skills | NixKits スキルインストーラー（ローカル/オンライン） | [docs/ja/skills/nixkits-skills.md](ja/skills/nixkits-skills.md) |
 | upstream-audit | **汎用**：自前で梱包したソフトウェアを上流 nixpkgs へ提出（評価 → 監査 → dry-run → 実施。AI 貢献政策と by-name 要求を含む） | [docs/ja/skills/upstream-audit.md](ja/skills/upstream-audit.md) |
 | nixos-modern-cli | NixOS モダン CLI ガイド（AI モデル向け） | [docs/ja/skills/nixos-modern-cli.md](ja/skills/nixos-modern-cli.md) |
+| agent-self-maintenance | エージェント自己保守の五つの仕組み：日記ゲート、開始時の照合、事実検査、自己観察、自己検査受領書 | [docs/ja/skills/agent-self-maintenance.md](ja/skills/agent-self-maintenance.md) |
+| nix-packaging | ゼロからのパッケージ化：四層の受入、来源別の分岐、hash の二段階、本リポジトリの約束と罠 | [docs/ja/skills/nix-packaging.md](ja/skills/nix-packaging.md) |
 | recover-nixos-config | 削除された /etc/nixos 設定を Nix store から復元 | [docs/ja/skills/recover-nixos-config.md](ja/skills/recover-nixos-config.md) |
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/ja/skills/translate-pseudocn.md](ja/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様に沿った MAINTENANCE.md エントリの作成（ソフトウェア更新 + バグ修正） | [docs/ja/skills/write-maintenance-log.md](ja/skills/write-maintenance-log.md) |

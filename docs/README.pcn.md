@@ -101,6 +101,8 @@ AI 符号化代理向：
 | nixkits-skills | NixKits 技能導入器（局所/線上） | [docs/pcn/skills/nixkits-skills.md](pcn/skills/nixkits-skills.md) |
 | upstream-audit | **汎用**：自前梱包軟体 上流 nixpkgs 提出（評価 → 監査 → dry-run → 実施。AI 貢献政策 by-name 要求 含） | [docs/pcn/skills/upstream-audit.md](pcn/skills/upstream-audit.md) |
 | nixos-modern-cli | NixOS 現代 CLI 手引（AI 模型向） | [docs/pcn/skills/nixos-modern-cli.md](pcn/skills/nixos-modern-cli.md) |
+| agent-self-maintenance | Agent 自己保守 五 仕組：日記 gate、開始時 照合、事実検査、自己観察、自己検査受領書 | [docs/pcn/skills/agent-self-maintenance.md](pcn/skills/agent-self-maintenance.md) |
+| nix-packaging | 零 從 package 化：四層 受入、来源別 分岐、hash 二段階、本 repo 約束 與 罠 | [docs/pcn/skills/nix-packaging.md](pcn/skills/nix-packaging.md) |
 | recover-nixos-config | 削除済 /etc/nixos 設定 Nix store 自復元 | [docs/pcn/skills/recover-nixos-config.md](pcn/skills/recover-nixos-config.md) |
 | translate-pseudocn | 偽中国語翻訳（日本語→仮名除去＋語順変換） | [docs/pcn/skills/translate-pseudocn.md](pcn/skills/translate-pseudocn.md) |
 | write-maintenance-log | NixKits 仕様沿 MAINTENANCE.md 条目作成（軟体更新 + 誤修正） | [docs/pcn/skills/write-maintenance-log.md](pcn/skills/write-maintenance-log.md) |

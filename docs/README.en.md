@@ -102,6 +102,7 @@ For AI coding assistants:
 | upstream-audit | **Generic**: submit a self-packaged piece of software upstream to nixpkgs (assess → audit → dry-run → act; covers the AI contribution policy and by-name requirements) | [docs/en/skills/upstream-audit.md](en/skills/upstream-audit.md) |
 | nixos-modern-cli | NixOS modern CLI guide (for AI models) | [docs/en/skills/nixos-modern-cli.md](en/skills/nixos-modern-cli.md) |
 | agent-self-maintenance | Five mechanisms for agent self-maintenance: journal gate, catchup, facts, self-observation, selfcheck receipt | [docs/en/skills/agent-self-maintenance.md](en/skills/agent-self-maintenance.md) |
+| nix-packaging | Packaging from scratch: four-layer acceptance, source routing, two-stage hashes, repo conventions and traps | [docs/en/skills/nix-packaging.md](en/skills/nix-packaging.md) |
 | recover-nixos-config | Recover deleted /etc/nixos config from Nix store | [docs/en/skills/recover-nixos-config.md](en/skills/recover-nixos-config.md) |
 | translate-pseudocn | Pseudo-Chinese translation (kana stripping + word order conversion from Japanese) | [docs/en/skills/translate-pseudocn.md](en/skills/translate-pseudocn.md) |
 | write-maintenance-log | Write MAINTENANCE.md entries per NixKits spec (software updates + bug fixes) | [docs/en/skills/write-maintenance-log.md](en/skills/write-maintenance-log.md) |

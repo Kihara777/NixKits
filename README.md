@@ -104,6 +104,7 @@ nix registry add nixkits github:Kihara777/NixKits
 | upstream-audit | **通用**：把自建软件包提交到上游 nixpkgs（评估 → 审计 → dry-run → 实操；含 AI 贡献政策与 by-name 要求） | [docs/zh/skills/upstream-audit.md](docs/zh/skills/upstream-audit.md) |
 | nixos-modern-cli | NixOS 现代 CLI 操作指南（面向 AI 模型） | [docs/zh/skills/nixos-modern-cli.md](docs/zh/skills/nixos-modern-cli.md) |
 | agent-self-maintenance | Agent 自我维护的五个机制：日记闸门、开局对账、事实核查、自我观察、自检收据 | [docs/zh/skills/agent-self-maintenance.md](docs/zh/skills/agent-self-maintenance.md) |
+| nix-packaging | 从零打包：四层验收、按来源分流、hash 两段式、本仓约定与陷阱 | [docs/zh/skills/nix-packaging.md](docs/zh/skills/nix-packaging.md) |
 | recover-nixos-config | 从 Nix store 恢复误删的 /etc/nixos 配置 | [docs/zh/skills/recover-nixos-config.md](docs/zh/skills/recover-nixos-config.md) |
 | translate-pseudocn | 偽中国語翻译（日语假名剥离 + 语序转换） | [docs/zh/skills/translate-pseudocn.md](docs/zh/skills/translate-pseudocn.md) |
 | write-maintenance-log | 按 NixKits 规范撰写维护日志（软件更新 + 错误修复） | [docs/zh/skills/write-maintenance-log.md](docs/zh/skills/write-maintenance-log.md) |

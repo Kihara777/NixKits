@@ -101,6 +101,9 @@ export function apply(ctx) {
   // 机制可移植，数据留在各仓库自己那里（见技能里的「边界」一节）。
   registerSkill("agent-self-maintenance");
 
+  // 从零打包：四层验收、按来源分流、hash 两段式、本仓约定与陷阱。
+  registerSkill("nix-packaging");
+
   // Language-extension skills, auto-discovered (translate-*).
   let entries = [];
   try {
