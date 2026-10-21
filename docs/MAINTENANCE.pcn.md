@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T12:14:10+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 図標列 隠 後 左右余白 調整（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900)）
+
+- rev `6ba8f5b` → `b65fcae`；版本 仍 `0.1.1`
+- 判据：`nix build` 成功
+
+| 提交 | 説明 |
+|------|------|
+| `f72b32c` | chore(dsh-api-balance): 薄 wrapper rev 追従 b65fcae |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `6ba8f5b` → `b65fcae` |
+
 ## 2026-10-21T11:33:20+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 把手 対象 図標列 変更（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）

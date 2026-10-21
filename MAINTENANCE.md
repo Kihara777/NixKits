@@ -2,6 +2,22 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:14:10+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 全屏隐藏后左右留白对齐（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1212300900)）
+
+- rev `6ba8f5b` → `b65fcae`；版本仍 `0.1.1`
+- 判据：`nix build` 成功
+
+| 提交 | 说明 |
+|------|------|
+| `f72b32c` | chore(dsh-api-balance): 薄封装 rev 跟进 b65fcae |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `6ba8f5b` → `b65fcae` |
+
 ## 2026-10-21T11:33:20+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 把手改管图标栏（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1131420900)）
