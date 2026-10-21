@@ -16,7 +16,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 ## Software
 
-Platform support falls into two groups: most packages declare `lib.platforms.all` (no platform restriction), while those bound by upstream binaries or modules (`codewhale`, `obs-bilibili-stream`, `godot-ai`, `rea`) are Linux-only. Architecture support also varies per package — see the build badges in each package's documentation.
+Platform support falls into two groups: most packages declare `lib.platforms.all` (no platform restriction), while those bound by upstream binaries or modules (`codewhale`, `godot-ai`, `rea`) are Linux-only. Architecture support also varies per package — see the build badges in each package's documentation.
 
 | Software | Description | Docs |
 |---|------|------|
@@ -26,7 +26,6 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.2.1-alpha.5) | [docs/en/dsh.md](en/dsh.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
-| obs-bilibili-stream | OBS Bilibili streaming plugin | [docs/en/obs-bilibili-stream.md](en/obs-bilibili-stream.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | rea | Reverse-engineering CLI and MCP server — take an agent from app behavior down to native binaries (static analysis needs no external engine) | [docs/en/rea.md](en/rea.md) |
 | ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |

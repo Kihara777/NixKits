@@ -17,3 +17,4 @@
 | [comfyui-rocm パッチプロジェクト](ja/deprecated/comfyui-rocm.md) | 上流 comfyui-nix 0.34.0 が ROCm サポートを内蔵 | `modules/comfyui-rocm.nix` + 三つのパッチ |
 | [mcp-searxng 自前パッケージ](ja/deprecated/mcp-searxng.md) | 上流 nixpkgs が収録済み（2026-08-29、現在 2.6.0） | `packages/mcp-searxng.nix` + 三つのビルドワークフロー |
 | [nixkits-package-upstream スキル名](ja/deprecated/nixkits-package-upstream.md) | `upstream-audit` に置換（2026-10-20 分割：読取専用監査 + 本機私有提出層） | `skills/nixkits-package-upstream/` |
+| [obs-bilibili-stream 自前パッケージ](ja/deprecated/obs-bilibili-stream.md) | 上流 nixpkgs が収録（PR #574725、2026-10-19 マージ、10-20 に `nixos-unstable` へ） | `packages/obs-bilibili-stream.nix` + 二つのビルドワークフロー |

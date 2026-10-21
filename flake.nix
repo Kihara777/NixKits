@@ -38,7 +38,8 @@
       opencode-telegram    = pkgs.callPackage ./packages/opencode-telegram.nix { };
       # 上游 nixpkgs 已收录（2026-08-29 加入，2026-10-13 到 2.6.0），只保留同名别名
       mcp-searxng          = pkgs.mcp-searxng;
-      obs-bilibili-stream  = pkgs.callPackage ./packages/obs-bilibili-stream.nix { };
+      # 上游 nixpkgs 已收录（PR #574725，2026-10-19 合并），只保留同名别名
+      obs-bilibili-stream  = pkgs.obs-studio-plugins.obs-bilibili-stream;
       # REA（Reverse Engineer Anything）：npm 包 rea-agents 的 Nix 封装。
       # 平台只声明 x86_64/aarch64-linux —— @lydell/node-pty 只发这两个架构的
       # 预编译件，riscv64 上会缺 node-pty（不是「没测过」，是「不支持」）。

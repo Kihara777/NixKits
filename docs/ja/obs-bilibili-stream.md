@@ -1,57 +1,28 @@
 # obs-bilibili-stream
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-obs-bilibili-stream-x86_64.yml?branch=main&label=x86_64%20v2.1.5)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-obs-bilibili-stream-aarch64.yml?branch=main&label=aarch64%20v2.1.5)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-
 [中文](../zh/obs-bilibili-stream.md) | [English](../en/obs-bilibili-stream.md) | 日本語  | [偽中国語](../pcn/obs-bilibili-stream.md)
 
-OBS Studio の Bilibili ライブ配信プラグイン。
+**状態**：廃止（2026-10-21）—— 本リポジトリの投稿が上流 nixpkgs に取り込まれたため、自前ビルドを終了した。
+詳細は[廃止プロジェクトの説明](deprecated/obs-bilibili-stream.md)。
+
+## 現在の使い方
+
+**nixpkgs の obs-studio-plugins 集合から取る**
+
+```nix
+programs.obs-studio.plugins = [ pkgs.obs-studio-plugins.obs-bilibili-stream ];
+```
+
+本リポジトリの別名は等価（`inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream` は同じパッケージを指す）。
+`nixkits.obs-bilibili-stream` モジュールは残り、内部は上流集合を参照する。
 
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| バージョン | 2.1.5 |
-| アップストリーム | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
-| プラットフォーム | x86_64 / aarch64（**riscv64 非対応**：主依存 `obs-studio 32.2.2` の `meta.platforms` は `x86_64-linux` / `i686-linux` / `aarch64-linux` のみで、評価時点で拒否：`Refusing to evaluate package 'obs-studio-32.2.2'`） |
+| バージョン | 2.1.5（nixpkgs に追従） |
+| 上流 | [Zarosmm/obs-bilibili-stream](https://github.com/Zarosmm/obs-bilibili-stream) |
+| nixpkgs 属性 | `obs-studio-plugins.obs-bilibili-stream` |
+| 取り込み | PR #574725、2026-10-19 マージ；2026-10-20 に `nixos-unstable` へ |
 
-## 参照
-
-**推奨：NixOS モジュール**
-
-```nix
-{
-  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
-  imports = [ inputs.nixkits.nixosModules.obs-bilibili-stream ];
-
-  nixkits.obs-bilibili-stream.enable = true;
-  programs.obs-studio.enable = true;
-}
-```
-
-**手動**
-
-```nix
-{
-  nixpkgs.overlays = [ inputs.nixkits.overlays.default ];
-  programs.obs-studio = {
-    enable = true;
-    plugins = [ pkgs.obs-bilibili-stream ];
-  };
-}
-```
-
-**Home Manager**
-
-```nix
-home.packages = [ inputs.nixkits.packages.${pkgs.system}.obs-bilibili-stream ];
-```
-
-> 警告 -- **`home.packages` で入れるだけでは OBS はこれを読み込みません**：OBS は `OBS_PLUGINS_PATH` でプラグインを探し、この変数は nixpkgs の `wrapOBS`（＝ `programs.obs-studio.plugins`）だけが注入します。`home.packages` は `.so` をプロファイルに置くだけで、OBS はそのパスを走査しません。したがって：
->
-> - **NixOS では**上のモジュールか `programs.obs-studio.plugins` を使用（推奨）
-> - **非 NixOS / Home Manager のみ**の場合は、OBS のプラグイン探索パスに `.../lib/obs-plugins` が含まれるよう自分で確保してください（`wrapOBS` で包装する、または `.so` を手動配置）
-
-## キャッシュ
-
-`cachix use nixkits`（flake は `nixConfig` で自動宣言、flake input として使用時に自動案内）。
+> OBS Studio 向け Bilibili 配信プラグイン。

@@ -5,7 +5,6 @@ final: prev: {
     else final.callPackage ../packages/codewhale.nix { };
   kitsfmt              = final.callPackage ../packages/kitsfmt.nix { };
   opencode-telegram    = final.callPackage ../packages/opencode-telegram.nix { };
-  obs-bilibili-stream  = final.callPackage ../packages/obs-bilibili-stream.nix { };
   # REA（Reverse Engineer Anything）：npm 包 rea-agents 的 Nix 封装。
   # 与 flake.nix 的 `packages.rea` 是**两个落点**，改动要同步。
   rea                  = final.callPackage ../packages/rea.nix { };

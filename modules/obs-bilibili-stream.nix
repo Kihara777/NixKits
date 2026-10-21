@@ -9,6 +9,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.obs-studio.plugins = [ pkgs.obs-bilibili-stream ];
+    programs.obs-studio.plugins = [ pkgs.obs-studio-plugins.obs-bilibili-stream ];
   };
 }
