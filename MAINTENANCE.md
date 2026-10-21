@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:44:01+09:00
+
+**摘要**：fix(selftests): CI 连红的根因是反证用例的射程过期
+
+- 合并删掉 `maintenance-mode/` 后注入器仍指着它——注入抛异常，`checks.preset-derivation` 一直 ✅ 而 `CI` 自 22:43 起每推必红
+- 注入改落 `foxli-mode/preset.patch.yml`（断言片段不变），并把「注入目标必须是现存路径」写进脚本头注释
+- 自述同步到狐莉模式：`AGENTS.md`、`README.md`、`docs/<lang>/dsh.md`、`docs/<lang>/dsh-nixos-shell.md`（四语）
+- 判据：`nix flake check` 全绿（`self-tests` 12/12；注入后的树里 `preset-derivation` 退出 1）
+
+| 提交 | 说明 |
+|------|------|
+| `32d4f93` | fix(selftests): 注入目标改到狐莉模式 —— 合并后 maintenance-mode 已不存在 |
+| `bb98f6f` | docs(selftests): 把「注入目标必须是现存路径」写成硬要求 |
+| `753b0f2` | docs: 四语同步「维护 / 逆向」并入狐莉模式后的自述 |
+
 ## 2026-10-21T12:30:10+09:00
 
 **摘要**：dsh-api-balance 文档同步 —— 全屏侧栏条目补齐缓动/留白/键盘（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900))

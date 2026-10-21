@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T12:44:01+09:00
+
+**摘要**：fix(selftests): CI 連続赤 原因 反証用例 射程切
+
+- 合併 `maintenance-mode/` 消滅後 注入器 尚 其処 指 —— 注入 例外 投、`checks.preset-derivation` ✅ 状態 継続、`CI` 22:43 以降 push 毎 赤
+- 注入先 `foxli-mode/preset.patch.yml` 変更（期待断片 不変）、「注入対象 現存経路 必須」 脚本冒頭 明記
+- 自己記述 狐莉模式 同期：`AGENTS.md`、`README.md`、`docs/<lang>/dsh.md`、`docs/<lang>/dsh-nixos-shell.md`（四言語）
+- 判据：`nix flake check` 全緑（`self-tests` 12/12、注入木 `preset-derivation` 終了 code 1）
+
+| 提交 | 説明 |
+|------|------|
+| `32d4f93` | fix(selftests): 注入先 狐莉模式 変更 —— 合併 後 maintenance-mode 既 消滅 |
+| `bb98f6f` | docs(selftests): 「注入対象 現存経路」 必須条件 明記 |
+| `753b0f2` | docs: 維護・逆向 → 狐莉模式 自述 四言語 同期 |
+
 ## 2026-10-21T12:30:10+09:00
 
 **摘要**：dsh-api-balance 文書 同期 —— 全屏側欄 条項 緩動・余白・keyboard（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900)）

@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T12:44:01+09:00
+
+**Summary**: fix(selftests): the CI streak was a stale counterexample, not a broken check
+
+- After the merge deleted `maintenance-mode/` the injector still pointed there — the injection threw, `checks.preset-derivation` stayed ✅, and `CI` went red on every push since 22:43
+- The injection now targets `foxli-mode/preset.patch.yml` (expected fragment unchanged), and "an injector's target must exist" is written into the script header
+- Self-descriptions synced to 狐莉模式: `AGENTS.md`, `README.md`, `docs/<lang>/dsh.md`, `docs/<lang>/dsh-nixos-shell.md` (four languages)
+- Evidence: `nix flake check` green (`self-tests` 12/12; an injected tree makes `preset-derivation` exit 1)
+
+| Commit | Description |
+|------|------|
+| `32d4f93` | fix(selftests): retarget the injector at 狐莉模式 — maintenance-mode is gone after the merge |
+| `bb98f6f` | docs(selftests): record "an injector's target must exist" as a hard requirement |
+| `753b0f2` | docs: sync the maintenance / reverse → 狐莉模式 wording across four languages |
+
 ## 2026-10-21T12:30:10+09:00
 
 **Summary**: dsh-api-balance docs sync — fullscreen entry covers easing, gaps and keyboard ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-21t1228430900))
