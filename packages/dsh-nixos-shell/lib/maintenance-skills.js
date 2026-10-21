@@ -80,31 +80,27 @@ export function apply(ctx) {
     });
   };
 
-  // Fixed maintenance/doc skills.
-  registerSkill("write-project-docs");
-  registerSkill("write-maintenance-log");
-  // Update checking is split into a repo-agnostic core plus a NixKits adapter
-  // layer; both are registered so a maintenance session can load either.
-  registerSkill("nix-flake-update-check");
-  registerSkill("nixkits-check-updates");
-  // Upstream contribution follows the same split: a repo-agnostic skill for
-  // getting a package into nixpkgs, plus the NixKits-specific adapter layer.
+  // **默认注册全部技能**，只排除明确不该注入的。
   //
-  // ⚠️ 2026-10-12: both skills had existed under skills/ since 10-10 with their
-  // four-language doc pages and README rows — but were never registered here, so
-  // no session could ever load them. These two lines are the wiring. Nothing
-  // checked that skills/ and this list agree; see develop/check-skill-registry.py.
-  registerSkill("upstream-audit");
-  registerSkill("nixkits-package-upstream");
+  // 2026-10-21 从「白名单」改为「排除表」：白名单是第二份清单，它漂过——
+  // dsh-lampkeeper 的分叉副本漏了 4 个技能（upstream-audit /
+  // nixkits-package-upstream / agent-self-maintenance / nix-packaging），
+  // 而 registerSkill 对不存在的文件是静默 return，所以「漏了」看起来像「没问题」。
+  //
+  // 排除的三类理由：
+  //  1. nixkits-skills —— 安装器，把技能装到别的编码助手目录，不是给 session 用的；
+  //  2. news-three-elements —— news 预设在它自己的插件里用 SKILL_ID 注册；
+  //  3. 三个 NixOS 运维技能 —— 由 skill-filesystem 的 skills-nixos/ 根提供
+  //     （NixOS模式与维护模式共用），在这里再注册一次是重复。
+  const EXCLUDED = new Set([
+    "nixkits-skills",
+    "news-three-elements",
+    "nixos-modern-cli",
+    "nixos-specialisation-tuning",
+    "recover-nixos-config",
+  ]);
 
-  // 自我维护的五个机制：日记闸门 / 开局对账 / 事实核查 / 自我观察 / 自检收据。
-  // 机制可移植，数据留在各仓库自己那里（见技能里的「边界」一节）。
-  registerSkill("agent-self-maintenance");
-
-  // 从零打包：四层验收、按来源分流、hash 两段式、本仓约定与陷阱。
-  registerSkill("nix-packaging");
-
-  // Language-extension skills, auto-discovered (translate-*).
+  // 全量遍历：排除表之外的全部技能（translate-* 也在其中，不再单列）。
   let entries = [];
   try {
     entries = readdirSync(root);
@@ -112,7 +108,7 @@ export function apply(ctx) {
     entries = [];
   }
   for (const entry of entries) {
-    if (!/^translate-/.test(entry)) continue;
+    if (EXCLUDED.has(entry)) continue;
     try {
       if (statSync(`${root}/${entry}`).isDirectory()) registerSkill(entry);
     } catch {

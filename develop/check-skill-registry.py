@@ -61,6 +61,24 @@ def find(pattern: str, suffix: str) -> set[str]:
 
 
 
+def read_excluded() -> set[str]:
+    """读 maintenance-skills.js 的 EXCLUDED 集合 —— 默认注册 = skills/ 全部 − 排除。
+
+    2026-10-21 起 maintenance-skills 改成「排除表」：不再逐个 registerSkill，
+    而是遍历 skills-embedded/ 并跳过 EXCLUDED 里的条目。判据随之改：
+    一个技能只要不在排除表里，就**默认被注册**。
+    """
+    for p in Path(".").rglob("maintenance-skills.js"):
+        try:
+            text = p.read_text()
+        except OSError:
+            continue
+        m = re.search(r"EXCLUDED\s*=\s*new Set\(\[(.*?)\]\)", text, re.S)
+        if m:
+            return set(re.findall(r'"([^"]+)"', m.group(1)))
+    return set()
+
+
 def main() -> int:
     if not SKILLS.is_dir():
         print(f"✗ 找不到 {SKILLS}")
@@ -78,13 +96,20 @@ def main() -> int:
     # 3. 插件里以常量形式钉住技能 id 的（news 预设那种）
     skill_ids = find(r'SKILL_ID\s*=\s*"([^"]+)"', ".js")
 
-    injected = registered_js | registered_nix | skill_ids
+    # 4. 默认注册：maintenance-skills 遍历 skills-embedded/ 并跳过 EXCLUDED。
+    excluded = read_excluded()
+    auto_registered = set(dirs) - excluded
+    stale_excluded = excluded - set(dirs)
+
+    injected = registered_js | registered_nix | skill_ids | auto_registered
 
     print(f"  skills/ 下 {len(dirs)} 个技能")
     print(f"    运行时注册（registerSkill）: {len(registered_js & set(dirs))} 个")
     print(f"    构建期列表（.nix 列表项）: {len(registered_nix & set(dirs))} 个")
     print(f"    auto（translate-*）:         "
           f"{len([d for d in dirs if d.startswith('translate-')])} 个")
+    print(f"    默认注册（排除表之外）:      {len(auto_registered)} 个")
+    print(f"    排除表（默认不注入）:        {len(excluded & set(dirs))} 个")
     print(f"    有意不注入（已写理由）:      {len(NOT_INJECTED)} 个")
     print()
 
@@ -92,8 +117,8 @@ def main() -> int:
     for d in dirs:
         if d in injected:
             print(f"  \033[32m✓\033[0m {d}")
-        elif d.startswith("translate-"):
-            print(f"  \033[32m✓\033[0m {d}  （translate-* 自动发现）")
+        elif d in excluded:
+            print(f"  \033[32m✓\033[0m {d}  （排除表：默认不注入，理由见 maintenance-skills.js）")
         elif d in NOT_INJECTED:
             reason = NOT_INJECTED[d].strip()
             if not reason:
@@ -115,6 +140,10 @@ def main() -> int:
             fail = 1
 
     print()
+    if stale_excluded:
+        for s in sorted(stale_excluded):
+            print(f"  \033[31m✗\033[0m 排除表里的 {s} 在 skills/ 下不存在（拼写错误或已删除？）")
+        fail = 1
     if fail:
         print("失败：有技能没有归属。")
         return 1
