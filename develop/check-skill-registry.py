@@ -61,12 +61,16 @@ def find(pattern: str, suffix: str) -> set[str]:
 
 
 
-def read_excluded() -> set[str]:
+def read_excluded() -> set[str] | None:
     """读 maintenance-skills.js 的 EXCLUDED 集合 —— 默认注册 = skills/ 全部 − 排除。
 
     2026-10-21 起 maintenance-skills 改成「排除表」：不再逐个 registerSkill，
     而是遍历 skills-embedded/ 并跳过 EXCLUDED 里的条目。判据随之改：
     一个技能只要不在排除表里，就**默认被注册**。
+
+    ⚠️ 读不出来时返回 None（**不是空集**）：空集会让「全部技能默认注册」成立，
+    于是判据在源码改形状之后**静默变绿**——那是 2026-10-05 那类「判据不管事了
+    还在打印通过」的翻版。调用方必须把 None 当成失败。
     """
     for p in Path(".").rglob("maintenance-skills.js"):
         try:
@@ -76,7 +80,7 @@ def read_excluded() -> set[str]:
         m = re.search(r"EXCLUDED\s*=\s*new Set\(\[(.*?)\]\)", text, re.S)
         if m:
             return set(re.findall(r'"([^"]+)"', m.group(1)))
-    return set()
+    return None
 
 
 def main() -> int:
@@ -98,6 +102,10 @@ def main() -> int:
 
     # 4. 默认注册：maintenance-skills 遍历 skills-embedded/ 并跳过 EXCLUDED。
     excluded = read_excluded()
+    if excluded is None:
+        print("✗ 无法读出 maintenance-skills.js 的排除表（EXCLUDED）——"
+              "判据的输入源坏了，不能当成「全部默认注册」继续判绿。")
+        return 1
     auto_registered = set(dirs) - excluded
     stale_excluded = excluded - set(dirs)
 
