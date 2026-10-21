@@ -48,17 +48,38 @@ jobs:
             "https://api.github.com/repos/$REPO/actions/runs?per_page=100&status=completed&head_sha=$HEAD_SHA" \
             ) || { echo "::error::GitHub API 请求失败（限流或网络）—— 保留现有徽章，不写入错误状态"; exit 1; }
 
-          # Find "Build *" workflows whose LATEST run on this commit failed.
-          # Filter out non-object entries (API may return error strings interleaved).
+          # 两条腿都要统计：包构建（`Build *`）与仓库检查（`CI`）。
+          #
+          # 2026-10-21 之前只统计前者，于是 `nix flake check` 红着、徽章照样
+          # passing——外部审计（Copilot CLI）拿真实运行对出来：同一 commit 下
+          # 28 个包构建成功、主 `CI` 的 Check 步骤失败，而 `ci-status.json` 仍是
+          # `passing`。**质量信号不可信比没有信号更坏**。
+          #
+          # 结论不能只看 `failure`：cancelled / timed_out / startup_failure /
+          # action_required / stale 同样是「没通过」。只有 skipped 与 neutral
+          # 表示「条件未触发」，不算红。
+          #
+          # 已知边界（有意）：本轮**尚未完成**的 workflow 不出现在这里
+          # （查询带 `status=completed`），因此徽章会短暂显示 passing，由整点
+          # 的 schedule 或下一次 push 修正。立即报 pending 会和 push 触发的构建
+          # 先后顺序打架，制造噪声。
           FAILED=$(echo "$RUNS" | jq -r '
             [.workflow_runs[]? | select(type == "object")]
-            | map(select(.name? | startswith("Build ")))
+            | map(select((.name? == "CI") or (.name? | startswith("Build "))))
             | group_by(.workflow_id)
             | map(sort_by(.run_number) | .[-1] // empty)
-            | map(select(.conclusion? == "failure"))
+            | map(select(
+                (.conclusion? != "success")
+                and (.conclusion? != "skipped")
+                and (.conclusion? != "neutral")
+              ))
             | map(.name | sub("^Build "; "") | sub(" \\("; " ") | sub("\\)"; "") | gsub(" "; "-"))
             | join(" ")
           ' 2>/dev/null || true)
+
+          if [ -n "$FAILED" ]; then
+            echo "非绿的 workflow：$FAILED"
+          fi
 
           if [ -z "$FAILED" ] || [ "$FAILED" = "null" ] || [ "$FAILED" = "" ]; then
             echo '{"schemaVersion":1,"label":"CI","message":"passing","color":"success"}' > ci-status.json
