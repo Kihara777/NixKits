@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:15:27+09:00
+
+**Summary**: refactor(obs-bilibili-stream)!: the self-built package retires — upstream ships it
+
+- PR #574725 merged on 2026-10-19 and the file reached `nixos-unstable` on 2026-10-20 (head `02c087f3`); the criterion is the artifact-layer file, not "the PR is merged"
+- The package definition and both workflows are deleted; the flake alias points at `pkgs.obs-studio-plugins.obs-bilibili-stream`; the overlay line was removed; the module now references the upstream set
+- Four-language docs: the package page becomes a retirement note, the README drops its row and platform-line entry, DEPRECATED gains the entry (upstream status), and each language gets a detail page
+- Also: added the `backport release-26.05` label to PR #574725 (as Kihara777)
+- Criterion: the alias evaluates to `obs-bilibili-stream-2.1.5`; doc-links passes on 236 files, doc-versions on 8 packages, maintenance-log passes; equal entry counts across four languages (438)
+
+| Commit | Description |
+|------|------|
+| `f38b5d0` | refactor(obs-bilibili-stream)!: retire the self-built package in favour of nixpkgs |
+
 ## 2026-10-21T12:44:01+09:00
 
 **Summary**: fix(selftests): the CI streak was a stale counterexample, not a broken check

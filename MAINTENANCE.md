@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:15:27+09:00
+
+**摘要**：refactor(obs-bilibili-stream)!: 退役自建包，上游已收录
+
+- PR #574725 于 2026-10-19 合并，2026-10-20 进 `nixos-unstable`；退役判据是产物层文件存在
+- 删包定义与两个 workflow；flake 别名指向 `pkgs.obs-studio-plugins.obs-bilibili-stream`；overlay 行移除；模块改引上游集合
+- 四语文档：包页、README、DEPRECATED、详情页均已更新
+- 另：给 PR #574725 打 `backport release-26.05` 标签
+- 判据：别名求值 2.1.5；doc-links 236 文件、maintenance-log 通过（438 条）
+
+| 提交 | 说明 |
+|------|------|
+| `f38b5d0` | refactor(obs-bilibili-stream)!: retire the self-built package in favour of nixpkgs |
+
 ## 2026-10-21T12:44:01+09:00
 
 **摘要**：fix(selftests): CI 连红的根因是反证用例的射程过期

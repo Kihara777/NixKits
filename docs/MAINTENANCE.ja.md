@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T13:15:27+09:00
+
+**概要**：refactor(obs-bilibili-stream)!: 自前パッケージを廃止、上流が収録済み
+
+- PR #574725 は 2026-10-19 にマージ、2026-10-20 に `nixos-unstable` へ（head `02c087f3`）；判据は成果物層のファイル実在で、「PR がマージされた」ではない
+- パッケージ定義と二つのワークフローを削除；flake の別名は `pkgs.obs-studio-plugins.obs-bilibili-stream` を指す；overlay の行は削除；モジュールは上流集合を参照
+- 四言語の文書：パッケージページを廃止説明に、README から該当行とプラットフォーム説明の項目を削除、DEPRECATED に索引行（上流の状態）、各国語に詳細ページ
+- 併せて：PR #574725 に `backport release-26.05` ラベルを付与（Kihara777 アカウント）
+- 判据：別名の評価は `obs-bilibili-stream-2.1.5`；doc-links 236 ファイル、doc-versions 8 パッケージ、maintenance-log 通過；四言語の条目数が相等（438）
+
+| コミット | 説明 |
+|------|------|
+| `f38b5d0` | refactor(obs-bilibili-stream)!: retire the self-built package in favour of nixpkgs |
+
 ## 2026-10-21T12:44:01+09:00
 
 **概要**：fix(selftests): CI 連続赤の原因は反証用例の射程切れ
