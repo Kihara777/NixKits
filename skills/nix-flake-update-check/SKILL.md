@@ -675,6 +675,27 @@ gh api "repos/$OWNER/$SUB/compare/$PINNED_REV...$SUB_HEAD" \
 > 都用同一套标题格式时可直接推导。**具体的推导规则与易错点由仓库适配层给出**
 > （它知道本仓用哪套记录格式）；给不出锚点就退化为给记录文件链接 + 条目标题文本。
 
+### ⚠️ 管道的最后一道命令决定退出码
+
+`python3 develop/check-x.py 2>&1 | tail -1 && git commit -m … && git push`
+—— **`&&` 看的是 `tail` 的退出码（0），不是检查器的**。检查器失败了，提交照常执行。
+
+实测（2026-10-21，NixKits 维护日志）：`check-maintenance-log` 报「摘要 427 字符 > 400」，
+命令链仍然走了 commit + push，超长摘要被推上去，只能 `amend` + `--force-with-lease` 修。
+
+判据：**要让失败阻断后续命令，就不能让管道当最后一道**。
+
+```bash
+set -o pipefail          # 立即可用，管道内任一失败 → 整个管道失败
+# 或者显式取退出码：
+out=$(python3 develop/check-x.py 2>&1); code=$?
+printf '%s\n' "$out" | tail -1
+[ "$code" -eq 0 ] || exit 1
+git commit …
+```
+
+这条和「没有日志的断言等于没验证」是同一类：**判据跑了、也报了红，但没人读它**。
+
 ## 推送后：验证 CI 构建
 
 **本地构建成功 ≠ CI 会绿。** 第 7 步的构建跑在**你这台机器**上：可能命中了二进制缓存、
