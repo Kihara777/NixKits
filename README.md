@@ -71,11 +71,12 @@ nix flake update llama-cpp-ver
 
 ## 边界
 
-- **不**含 `main` 的任何其他包、模块、技能、文档——这里只有三个文件的事；
+- **不**含 `main` 的任何其他包、模块、技能；
 - **不**跑 `main` 的自检（那些判据与文件都不在这个分支上）；
-- 完整文档（模型预设、UMA 调优、热管理、故障排查）仍在 `main` 的
-  `docs/zh/llama-cpp-rocm.md` 与 `nixos-specialisation-tuning` 技能里——本分支不复制它们，
-  副本一定会漂。
+- 完整文档（模型预设、UMA 调优、热管理、故障排查）在 `docs/zh/llama-cpp-rocm.md`
+  （四语齐全），**随组件一起搬到了本分支**——主仓不再保留副本，避免两份必然漂移。
+  调优方法论（分面架构、统一内存、热管理）仍在 `main` 的 `nixos-specialisation-tuning`
+  技能里，那是可移植的方法，不属于这个包。
 
 ## 许可
 
