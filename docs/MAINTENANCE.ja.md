@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T14:18:50+09:00
+
+**概要**：refactor(skills): maintenance-skills をホワイトリストから除外集合へ
+
+- ホワイトリストは第二のリストであり、実際に漂った：掌灯の分岐コピーは 4 スキルを欠いていた（upstream-audit / nixkits-package-upstream / agent-self-maintenance / nix-packaging）
+- `registerSkill` はファイルが無いと静かに return する ——「欠けている」は「問題なし」と見分けがつかない
+- 現在は `skills-embedded/` 配下の全スキルを既定で登録し、五つだけ除外する（インストーラ、news が自前登録するもの、skills-nixos/ が提供する三つの NixOS 運用スキル）
+- 検査器は「既定 − 除外集合」で判定し、除外項目の実在も確認；dsh-lampkeeper も同じ判据に揃えた
+- 判据：check-skill-registry は 14 スキルに帰属（既定 9 / 除外 5）、doc-links は 241 ファイル通過；四言語の条目数が相等（440）
+
+| コミット | 説明 |
+|------|------|
+| `3158ea3` | refactor(skills): maintenance-skills をホワイトリストから除外集合へ |
+| `ee3fca7` | refactor(maintenance-skills): ホワイトリストを除外集合へ（dsh-lampkeeper） |
+
 ## 2026-10-21T13:24:24+09:00
 
 **概要**：feat(skill): nix-packaging —— ゼロからのパッケージ化フロー

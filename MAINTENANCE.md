@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-21T14:18:50+09:00
+
+**摘要**：refactor(skills): maintenance-skills 白名单改排除表
+
+- 白名单是第二份清单，它漂过：掌灯分叉副本漏了 4 个技能（含 nix-packaging）
+- `registerSkill` 对不存在的文件静默 return——「漏了」看起来和「没问题」一样
+- 默认注册 `skills-embedded/` 全部，只排除五类（安装器、news 自注册、三个 NixOS 运维技能）
+- 检查器改为「默认注册 − 排除表」并核对条目存在；dsh-lampkeeper 同步
+- 判据：check-skill-registry 14 技能全归属（默认 9 / 排除 5）、doc-links 241 文件（440 条）
+
+| 提交 | 说明 |
+|------|------|
+| `3158ea3` | refactor(skills): maintenance-skills 从白名单改为排除表 |
+| `ee3fca7` | refactor(maintenance-skills): 白名单改为排除表（dsh-lampkeeper） |
+
 ## 2026-10-21T13:24:24+09:00
 
 **摘要**：feat(skill): nix-packaging —— 从零打包流程

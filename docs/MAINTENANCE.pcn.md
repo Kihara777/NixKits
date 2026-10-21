@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-21T14:18:50+09:00
+
+**摘要**：refactor(skills): maintenance-skills whitelist 排除集合 変更
+
+- whitelist 第二 清單、実際 漂：掌灯 分岐 copy 4 skill 欠（upstream-audit / nixkits-package-upstream / agent-self-maintenance / nix-packaging）
+- `registerSkill` file 無 静 return ——「欠」與「問題 無」区別 不能
+- 現在 `skills-embedded/` 配下 全 skill 既定登録、五 唯 除外（installer、news 自登録、skills-nixos/ 提供 三 NixOS 運用 skill）
+- 検査器「既定 − 排除集合」判定、排除項目 実在 確認；dsh-lampkeeper 同判据
+- 判据：check-skill-registry 14 skill 帰属（既定 9 / 除外 5）、doc-links 241 file 通過；四言語 条目数 相等（440）
+
+| 提交 | 説明 |
+|------|------|
+| `3158ea3` | refactor(skills): maintenance-skills whitelist 排除集合 変更 |
+| `ee3fca7` | refactor(maintenance-skills): whitelist 排除集合 変更（dsh-lampkeeper） |
+
 ## 2026-10-21T13:24:24+09:00
 
 **摘要**：feat(skill): nix-packaging —— 零 從 package 化 流程

@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-21T14:18:50+09:00
+
+**Summary**: refactor(skills): maintenance-skills switches from a whitelist to an exclusion set
+
+- A whitelist is a second list, and it drifted: the lampkeeper fork was missing four skills (upstream-audit / nixkits-package-upstream / agent-self-maintenance / nix-packaging)
+- `registerSkill` silently returns when the file is absent — "missing" looks exactly like "fine"
+- Now every skill under `skills-embedded/` is registered by default; only five are excluded (the installer, the news skill that registers itself, and three NixOS ops skills provided by `skills-nixos/`)
+- The checker now computes "default minus exclusion set" and verifies that excluded entries exist; dsh-lampkeeper adopts the same criterion
+- Criterion: check-skill-registry reports 14 skills all claimed (9 default, 5 excluded), doc-links passes on 241 files; equal entry counts across four languages (440)
+
+| Commit | Description |
+|------|------|
+| `3158ea3` | refactor(skills): maintenance-skills switches from a whitelist to an exclusion set |
+| `ee3fca7` | refactor(maintenance-skills): whitelist becomes an exclusion set (dsh-lampkeeper) |
+
 ## 2026-10-21T13:24:24+09:00
 
 **Summary**: feat(skill): nix-packaging — the packaging workflow from scratch
