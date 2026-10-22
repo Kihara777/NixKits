@@ -17,8 +17,21 @@ jobs:
             # `impure` 分支），所以这里只需列出 github.com，也不再需要
             # `--override-input` 那一套认证取回。
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: flake.lock 完整性（受测基线）
+        run: |
+          set -euo pipefail
+          # main 自 2026-10-21 起提交 flake.lock（唯一的浮动输入 llama-cpp-ver
+          # 已迁到 `impure` 分支）。这三条都是判据，缺一不可：
+          #   ① 文件在——有人把它加回 .gitignore 就会丢
+          #   ② 被 git 跟踪——本地存在但没 add 不算
+          #   ③ 与 flake.nix 一致——由下一个步骤的 `--no-write-lock-file` 保证：
+          #      需要更新时**直接失败**，而不是静默写一份新的（那会让 CI 自己
+          #      生成 lock 再判绿，受测基线就飘了）
+          test -f flake.lock || { echo "::error::flake.lock 缺失——受测基线不存在"; exit 1; }
+          git ls-files --error-unmatch flake.lock >/dev/null \
+            || { echo "::error::flake.lock 未被 git 跟踪（未提交的 lock 不是基线）"; exit 1; }
       - name: Check
         run: |
           set -euo pipefail
           # 用仓库里**已提交**的 flake.lock：main 已无浮动输入，lock 就是受测基线。
-          nix flake check
+          nix flake check --no-write-lock-file

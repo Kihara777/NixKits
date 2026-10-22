@@ -66,7 +66,8 @@ jobs:
         run: |
           set -euo pipefail
           # 用仓库里**已提交**的 flake.lock：main 已无浮动输入，lock 就是受测基线。
-          out="$(nix build --print-build-logs --print-out-paths ".#${{ inputs.package }}")"
+          # `--no-write-lock-file`：需要更新时直接失败，不静默生成新 lock。
+          out="$(nix build --no-write-lock-file --print-build-logs --print-out-paths ".#${{ inputs.package }}")"
           echo "out=$out" >> "$GITHUB_OUTPUT"
           echo "产物：$out"
 
