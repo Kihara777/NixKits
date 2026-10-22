@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T12:48:05+09:00
+
+**概要**：CI バッジが `CI` workflow を対象に；`flake.lock` を「ついでに使う」から判据へ昇格；二つのスキル規約を同期
+
+- `ci-summary` は `Build *` しか数えておらず、主 `CI` が赤でもバッジは passing のままだった；`CI` を含め、`success` 以外はすべて非緑として扱う（`skipped`/`neutral` を除く）
+- CI に lock 完全性の検査を追加：ファイルの存在・git 追跡下にあること・`--no-write-lock-file` による暗黙生成の拒否
+- `nixkits-check-updates` と `nixkits-package-upstream` の「lock を提交しない／先に `rm -f`」を「lock を提交する／削除しない」に変更
+- 判据：`nix flake check` 全緑；バッジは赤アーム `4034799` と緑アーム `af0635a` で双方向に検証
+
+| コミット | 説明 |
+|------|------|
+| `a1d7d22` | fix(ci-summary): `CI` を含め、success 以外は非緑として扱う |
+| `8ac82d2` | ci: flake.lock の完全性を判据に |
+| `d025ef6` | docs(skills): lock 反転後の古い規約二箇所を同期 |
+
 ## 2026-10-22T06:18:19+09:00
 
 **概要**：llama-cpp-rocm を本リポジトリから移出 —— 浮動入力は `impure` ブランチへ、`flake.lock` はコミットする方式に変更

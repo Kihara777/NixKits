@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T12:48:05+09:00
+
+**Summary**: the CI badge now covers the `CI` workflow; `flake.lock` is promoted from "used in passing" to a criterion; two skill conventions updated
+
+- `ci-summary` only counted `Build *`, so the badge stayed `passing` while the main `CI` failed; it now includes `CI` and treats every non-`success` conclusion as not-green (`skipped`/`neutral` excepted)
+- CI gains a lock-integrity step: the file exists, is tracked by git, and `--no-write-lock-file` refuses to generate one silently
+- The "do not commit the lock / `rm -f` first" rules in `nixkits-check-updates` and `nixkits-package-upstream` become "commit the lock / do not delete it"
+- Evidence: `nix flake check` green; the badge was verified both ways with the red arm `4034799` and the green arm `af0635a`
+
+| Commit | Description |
+|------|------|
+| `a1d7d22` | fix(ci-summary): include `CI`; every non-success conclusion counts as not-green |
+| `8ac82d2` | ci: lock integrity becomes a criterion |
+| `d025ef6` | docs(skills): sync the two stale conventions after the lock flip |
+
 ## 2026-10-22T06:18:19+09:00
 
 **Summary**: llama-cpp-rocm moved out — the floating input is confined to the `impure` branch, and `flake.lock` is now committed

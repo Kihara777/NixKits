@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-22T12:48:05+09:00
+
+**摘要**：CI 徽章 `CI` workflow 対象化；`flake.lock` 「随手使用」→ 判据 昇格；二技能規約 同期
+
+- `ci-summary` 元 只 `Build *` 統計、主 `CI` 赤 時 徽章 仍 passing；`CI` 包含、`success` 以外 全 非緑 扱（`skipped`/`neutral` 除）
+- CI lock 完全性 検査 追加：文件 存在 + git 追跡 + `--no-write-lock-file` 暗黙生成 拒否
+- `nixkits-check-updates` ＋ `nixkits-package-upstream` 内「lock 非提交 / 先 `rm -f`」→「lock 提交 / 削除 不可」
+- 判据：`nix flake check` 全緑；徽章 赤臂 `4034799` ＋ 緑臂 `af0635a` 双方向 検証
+
+| 提交 | 説明 |
+|------|------|
+| `a1d7d22` | fix(ci-summary): `CI` 包含、success 以外 非緑 |
+| `8ac82d2` | ci: flake.lock 完全性 判据 化 |
+| `d025ef6` | docs(skills): lock 反転後 古 規約 二箇所 同期 |
+
 ## 2026-10-22T06:18:19+09:00
 
 **摘要**：llama-cpp-rocm 本倉 移出 —— 浮動入力 `impure` 分支 閉込、`flake.lock` 提交 方式 変更

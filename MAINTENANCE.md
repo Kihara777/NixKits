@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-22T12:48:05+09:00
+
+**摘要**：CI 徽章纳入 `CI` workflow；`flake.lock` 从「顺手用」升级为判据；两份技能约定同步
+
+- `ci-summary` 原来只统计 `Build *`，主 `CI` 红时徽章仍 passing；改为纳入 `CI`、非 `success` 一律算非绿（`skipped`/`neutral` 除外）
+- CI 新增 lock 完整性检查：文件存在 + 被 git 跟踪 + `--no-write-lock-file` 拒绝静默生成
+- `nixkits-check-updates` 与 `nixkits-package-upstream` 里「lock 不提交 / 先 `rm -f`」的旧约定改为「lock 提交 / 不要删」
+- 判据：`nix flake check` 全绿；徽章用红臂 `4034799` 与绿臂 `af0635a` 双向验证
+
+| 提交 | 说明 |
+|------|------|
+| `a1d7d22` | fix(ci-summary): 徽章纳入 `CI`，非 success 一律算非绿 |
+| `8ac82d2` | ci: flake.lock 完整性成为判据 |
+| `d025ef6` | docs(skills): lock 提交后的两处旧约定同步 |
+
 ## 2026-10-22T06:18:19+09:00
 
 **摘要**：llama-cpp-rocm 迁出本仓 —— 浮动输入关进 `impure` 分支，flake.lock 改为提交
