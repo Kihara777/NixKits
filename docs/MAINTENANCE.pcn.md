@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-22T15:15:34+09:00
+
+**摘要**：文書頁 README 由 到達 可能 必須；self-tests 反証 二件 與 覆蓋 完全性 検査 追加
+
+- 四言語 README 「已廃棄」入口 追加（従来 `DEPRECATED.md` 一度 非 連結、廃止体系 全体 README 由 到達 不能）
+- `check-doc-links` 到達性 規則 追加：最上位 `docs/<lang>/*.md` 各 README 由 参照 必須（廃止 兜底 頁 例外）
+- `self-tests` `maintenance-skills-tests` 用例 與 負例 追加；`module-eval` 「sandbox 内 反証 不能」理由付 登録
+- `self-tests` 覆蓋 完全性 検査 追加：`flake.nix` 由 checks 鍵 読 CASES 照合、欠落 即 失敗
+
+| 提交 | 説明 |
+|------|------|
+| `cd11eb3` | docs + fix(self-tests): 文書 到達性 判据；self-tests 覆蓋 |
+
 ## 2026-10-22T13:48:44+09:00
 
 **摘要**：外部監査 第 4・5 項 実施 —— 模組求値検査 ＋ 技能読込 静 降格 廃止

@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T15:15:34+09:00
+
+**概要**：文書ページは README から到達可能でなければならない；self-tests は反証二件とカバレッジ検査を追加
+
+- 四言語 README に「廃止済み」入口を追加（これまで `DEPRECATED.md` を一度もリンクせず、廃止体系全体が README から到達不能だった）
+- `check-doc-links` に到達性規則を追加：最上位の `docs/<lang>/*.md` は各 README から参照必須（廃止フォールバック頁は例外）
+- `self-tests` に `maintenance-skills-tests` の用例と負例を追加；`module-eval` は「サンドボックス内で反証不能」として理由付きで登録
+- `self-tests` にカバレッジ検査を追加：`flake.nix` から checks キーを読み CASES と照合し、欠落すれば失敗
+
+| コミット | 説明 |
+|------|------|
+| `cd11eb3` | docs + fix(self-tests): 文書到達性の判据；self-tests カバレッジ |
+
 ## 2026-10-22T13:48:44+09:00
 
 **概要**：外部監査の第 4・5 項を実装 —— モジュール求値検査と、技能読込の静かな降格を廃止

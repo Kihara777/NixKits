@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-22T15:15:34+09:00
+
+**摘要**：文档页必须从 README 可达；self-tests 补齐两项反证并加覆盖完整性检查
+
+- 四语 README 加「已废弃」入口（此前从不链 `DEPRECATED.md`，整个废弃体系从 README 不可达）
+- `check-doc-links` 新增可达性规则：顶层 `docs/<lang>/*.md` 每页必须被 README 引用（废弃兜底页例外）
+- `self-tests` 新增 `maintenance-skills-tests` 用例与负例；`module-eval` 登记为「无法在沙箱内反证」并附理由
+- `self-tests` 新增覆盖完整性检查：从 `flake.nix` 读 checks 键与 CASES 比对，漏一项即红
+
+| 提交 | 说明 |
+|------|------|
+| `cd11eb3` | docs + fix(self-tests): 文档可达性判据；self-tests 覆盖完整性 |
+
 ## 2026-10-22T13:48:44+09:00
 
 **摘要**：外部审计第 4、5 条落地 —— 模块求值检查 + 技能加载不再静默降级

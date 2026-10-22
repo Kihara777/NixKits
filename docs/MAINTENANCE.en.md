@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T15:15:34+09:00
+
+**Summary**: doc pages must be reachable from the README; self-tests gain two counterexamples and a coverage check
+
+- All four READMEs gain a "Deprecated" entry (they never linked `DEPRECATED.md`, so the whole deprecation system was unreachable from the README)
+- `check-doc-links` gains a reachability rule: every top-level `docs/<lang>/*.md` must be referenced by its README (deprecated fallback pages excepted)
+- `self-tests` gains a `maintenance-skills-tests` case and its negative; `module-eval` is registered as "cannot be countered inside the sandbox" with its reason
+- `self-tests` gains a coverage check: it reads the `checks` keys from `flake.nix` and compares them with `CASES`, failing on any missing one
+
+| Commit | Description |
+|------|------|
+| `cd11eb3` | docs + fix(self-tests): doc reachability criterion; self-tests coverage |
+
 ## 2026-10-22T13:48:44+09:00
 
 **Summary**: audit items 4 and 5 land — a module-evaluation check, and skill loading no longer degrades silently
