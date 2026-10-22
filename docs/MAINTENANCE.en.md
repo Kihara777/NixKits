@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:48:44+09:00
+
+**Summary**: audit items 4 and 5 land — a module-evaluation check, and skill loading no longer degrades silently
+
+- New 13th self-check `module-eval`: each of the 8 `nixosModules` gets a minimal config, is enabled, and is evaluated to `drvPath`; missing fixtures are rejected, and `comfyui` is registered with an explicit reason (it depends on an external flake)
+- The three silent failures in `maintenance-skills` now throw (unreadable directory / missing `SKILL.md`), with a node behaviour test as the 12th self-check
+- `doc-counts` fixed along the way: it only recognised the `pkgs.runCommand` form, so 13 checks were counted as 12 and passed silently; it now counts the keys structurally
+- Evidence: `nix flake check` 13 checks green; `doc-counts` 13 == 13
+
+| Commit | Description |
+|------|------|
+| `a053486` | fix(maintenance-skills): skill loading no longer degrades silently (audit item 5) |
+| `b27279d` | feat(module-eval): every nixosModules must evaluate under a minimal config (audit item 4) |
+
 ## 2026-10-22T13:07:53+09:00
 
 **Summary**: riscv64 cross-builds follow the lock; locking logic written into the update skills

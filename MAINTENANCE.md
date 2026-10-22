@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:48:44+09:00
+
+**摘要**：外部审计第 4、5 条落地 —— 模块求值检查 + 技能加载不再静默降级
+
+- 新增第 13 项自检 `module-eval`：8 个 `nixosModules` 各配最小配置、enable 后求值到 `drvPath`；漏登记会被拦下，`comfyui` 因依赖外部 flake 而显式登记理由
+- `maintenance-skills` 的三处静默失败改为抛错（目录不可读 / 缺 `SKILL.md`），并加 node 行为测试（第 12 项自检）
+- 连带修 `doc-counts`：它只认 `pkgs.runCommand` 写法，导致 13 项被数成 12 而静默通过；改为按结构数 checks 键
+- 判据：`nix flake check` 13 项全绿；`doc-counts` 13 == 13
+
+| 提交 | 说明 |
+|------|------|
+| `a053486` | fix(maintenance-skills): 技能加载失败不再静默降级（审计第 5 条） |
+| `b27279d` | feat(module-eval): 每个 nixosModules 都要在最小配置下求值（审计第 4 条） |
+
 ## 2026-10-22T13:07:53+09:00
 
 **摘要**：riscv64 交叉构建跟 lock；更新技能里写入锁定逻辑

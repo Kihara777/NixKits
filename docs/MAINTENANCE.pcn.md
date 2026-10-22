@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-22T13:48:44+09:00
+
+**摘要**：外部監査 第 4・5 項 実施 —— 模組求値検査 ＋ 技能読込 静 降格 廃止
+
+- 第 13 番目 自検 `module-eval` 追加：8 個 `nixosModules` 各 最小設定、enable 後 `drvPath` 求値。fixture 未登録 拒否、`comfyui` 外部 flake 依存 故 理由付 登録
+- `maintenance-skills` 三箇所 静 失敗 throw 化（目录 読不可／`SKILL.md` 欠落）、node 挙動試験 第 12 番目 自検 追加
+- 併 `doc-counts` 修正：`pkgs.runCommand` 書方 只 認識、13 項 12 数 静 通過。checks 鍵 構造 数 方式 変更
+- 判据：`nix flake check` 13 項 全緑、`doc-counts` 13 == 13
+
+| 提交 | 説明 |
+|------|------|
+| `a053486` | fix(maintenance-skills): 技能読込 失敗 静 降格 廃止（監査 第 5 項） |
+| `b27279d` | feat(module-eval): 全 nixosModules 最小設定 求値（監査 第 4 項） |
+
 ## 2026-10-22T13:07:53+09:00
 
 **摘要**：riscv64 交叉構建 lock 追随；更新技能 内 锁定論理 明記

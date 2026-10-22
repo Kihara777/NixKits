@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:48:44+09:00
+
+**概要**：外部監査の第 4・5 項を実装 —— モジュール求値検査と、技能読込の静かな降格を廃止
+
+- 13 番目の自検 `module-eval` を追加：8 個の `nixosModules` それぞれに最小設定を与え、enable 後に `drvPath` まで求値。fixture 未登録は拒否、`comfyui` は外部 flake 依存のため理由付きで登録
+- `maintenance-skills` の三箇所の静かな失敗を throw に変更（ディレクトリ読めず／`SKILL.md` 欠落）、node の挙動テストを 12 番目の自検として追加
+- 併せて `doc-counts` を修正：`pkgs.runCommand` の書き方しか認識せず、13 項を 12 と数えて静かに通過していた。checks のキーを構造で数える方式へ
+- 判据：`nix flake check` 13 項全緑、`doc-counts` 13 == 13
+
+| コミット | 説明 |
+|------|------|
+| `a053486` | fix(maintenance-skills): 技能読込の失敗を静かに降格しない（監査第 5 項） |
+| `b27279d` | feat(module-eval): 全 nixosModules を最小設定で求値（監査第 4 項） |
+
 ## 2026-10-22T13:07:53+09:00
 
 **概要**：riscv64 クロスビルドが lock に従う；更新スキルにロックの論理を明記
