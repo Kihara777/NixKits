@@ -240,6 +240,46 @@ def inj_news_mode_tests(root):
 # 每个用例：(名字, 命令, 正例注入, 期望片段, 负例注入列表)
 # 负例的语义是**反向**的：注入一个「本该无害」的输入，检查**必须仍然通过**。
 # 它和正例是一对——正例防「判据哑了」，负例防「判据乱咬」（把豁免区也判失败同样是失灵）。
+def inj_maintenance_skills_silent(root):
+    """把「缺 SKILL.md」从抛错改回静默 return —— 行为测试必须因此变红。"""
+    rel = "packages/dsh-nixos-shell/lib/maintenance-skills.js"
+    text = read(root, rel)
+    old = '      problems.push(`${skillId}: 缺少 SKILL.md（${file}）`);\n      return;'
+    if old not in text:
+        raise RuntimeError("找不到「缺 SKILL.md」的判据（源码已改？）")
+    write(root, rel, text.replace(old, "      return;", 1))
+
+
+def inj_maintenance_skills_silent_negative(root):
+    """负例：只改注释，不该让它变红。"""
+    rel = "packages/dsh-nixos-shell/lib/maintenance-skills.js"
+    text = read(root, rel)
+    old = "  // ⚠️ 失败不再静默跳过（2026-10-22，外部审计第 5 条）："
+    if old not in text:
+        raise RuntimeError("找不到注释锚点")
+    write(root, rel, text.replace(old, "  // 注释改动（负例）", 1))
+
+
+# 无法在 self-tests 里自动反证的检查，**必须在这里登记理由**。
+#
+# `module-eval` 要求值一个完整 NixOS 系统；而 self-tests 的临时副本会剥掉 `.git`
+# （flake 源不可用），`nix eval .#checks...` 在那里跑不起来。它的失败路径已在
+# 2026-10-22 人工验证：fixture 缺项时它报 "这些 nixosModules 没有 fixture"；
+# fixture 里写坏选项时它报 "这些模块在最小配置下求值失败"。
+# 登记在此是为了让「没被覆盖」**可见**，而不是静默。
+NO_COUNTEREXAMPLE = {
+    "module-eval": "需要 NixOS 求值；self-tests 的临时副本无 .git（flake 源不可用）",
+}
+
+
+def checks_in_flake(root):
+    """flake.nix 的 checks 键（与 check-doc-counts 同一口径：按结构数）。"""
+    text = read(root, "flake.nix")
+    start = text.index("checks = {")
+    end = text.index("\n    };", start)
+    return set(re.findall(r"(?m)^      ([\w-]+)\s*=", text[start:end]))
+
+
 CASES = [
     ("preset-derivation", ["python3", "develop/check-preset-derivation.py"],
      inj_preset_derivation, "preset-derivation:", ()),
@@ -266,6 +306,10 @@ CASES = [
      inj_session_sources, "kind", ()),
     ("news-mode-tests", ["node", "packages/dsh-preset-news-three-elements/tests/mode.test.mjs"],
      inj_news_mode_tests, "selftest-injected-failure", ()),
+    ("maintenance-skills-tests",
+     ["node", "packages/dsh-nixos-shell/tests/maintenance-skills.test.mjs"],
+     inj_maintenance_skills_silent, "Missing expected exception",
+     (inj_maintenance_skills_silent_negative,)),
 ]
 
 
@@ -293,6 +337,27 @@ def make_writable(tmp):
 
 def main() -> None:
     problems, skipped, negatives_run = [], [], 0
+
+    # ── 覆盖完整性：每个 checks 都必须有反证（或登记理由）──────────────────
+    # 2026-10-22 审计发现：加了 `module-eval` 与 `maintenance-skills-tests` 之后，
+    # 它们的反证用例一直没补，而本检查**只跑 CASES、不比对 checks**——于是它
+    # 一直绿。判据的射程比实际范围窄，是这一天里的第四个同形问题。
+    covered = {name for name, *_ in CASES}
+    missing = []
+    for key in sorted(checks_in_flake(ROOT)):
+        if key == "self-tests" or key in NO_COUNTEREXAMPLE:
+            continue
+        if not any(c == key or c.startswith(key + "-") for c in covered):
+            missing.append(key)
+    if missing:
+        problems.append(
+            "这些检查没有任何反证用例（self-tests 的判据是「每个自检都能被坏输入撞响」）："
+            + "、".join(missing)
+        )
+    for key in sorted(NO_COUNTEREXAMPLE):
+        print(f"— {key}: 无反证用例（已登记理由：{NO_COUNTEREXAMPLE[key]}）")
+    print(f"覆盖：{len(covered)} 个用例，{len(NO_COUNTEREXAMPLE)} 项登记豁免")
+
     for name, cmd, inject, expect, negatives in CASES:
         if shutil.which(cmd[0]) is None:
             skipped.append(f"{name}（{cmd[0]} 不在 PATH）")

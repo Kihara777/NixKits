@@ -107,6 +107,11 @@ For AI coding assistants:
 | write-project-docs | Write multilingual documentation for any project in NixKits style | [docs/en/skills/write-project-docs.md](en/skills/write-project-docs.md) |
 | nixos-specialisation-tuning | Design NixOS specialisation faces and tune llama.cpp on unified-memory devices | [docs/en/skills/nixos-specialisation-tuning.md](en/skills/nixos-specialisation-tuning.md) |
 
+## Deprecated
+
+Projects that were once maintained and are now deprecated — with the reason and the
+replacement — are indexed in [DEPRECATED.md](DEPRECATED.en.md).
+
 ## Credits
 
 - **狐莉 (キツのり)** — creator and maintainer

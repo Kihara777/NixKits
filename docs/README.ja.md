@@ -107,6 +107,11 @@ AI コーディングアシスタント向け：
 | write-project-docs | 任意のプロジェクトに NixKits スタイルの多言語ドキュメントを作成 | [docs/ja/skills/write-project-docs.md](ja/skills/write-project-docs.md) |
 | nixos-specialisation-tuning | NixOS の specialisation 面を設計し、ユニファイドメモリ機器で llama.cpp を最適化 | [docs/ja/skills/nixos-specialisation-tuning.md](ja/skills/nixos-specialisation-tuning.md) |
 
+## 廃止済み
+
+かつて維持し、現在は廃止したプロジェクト（廃止理由と代替手段を含む）は
+[DEPRECATED.md](DEPRECATED.ja.md) に索引している。
+
 ## クレジット
 
 - **狐莉 (キツのり)** — 作成と保守

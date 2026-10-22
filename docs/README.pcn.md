@@ -107,6 +107,11 @@ AI 符号化代理向：
 | write-project-docs | 任意計画 NixKits 式多言語文書作成 | [docs/pcn/skills/write-project-docs.md](pcn/skills/write-project-docs.md) |
 | nixos-specialisation-tuning | NixOS specialisation 面設計、統一記憶域機器 llama.cpp 最適化 | [docs/pcn/skills/nixos-specialisation-tuning.md](pcn/skills/nixos-specialisation-tuning.md) |
 
+## 已廃棄
+
+曾經 維護、現在 廃止 項目（廃止 理由 與 代替 手法 含）
+[DEPRECATED.md](DEPRECATED.pcn.md) 内 索引 有。
+
 ## 銘記
 
 - **狐莉 (Kitsunori)** — 作成及保守

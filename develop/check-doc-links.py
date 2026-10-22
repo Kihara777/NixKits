@@ -27,6 +27,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 语言切换器必须出现的四个标签（各自语言的 display_name）。
 SWITCHER_LABELS = ("中文", "English", "日本語", "偽中国語")
 
+# 文档语言目录（与 SWITCHER_LABELS 一一对应）。
+LANGUAGES = ("zh", "en", "ja", "pcn")
+
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 SWITCHER_LINE = re.compile(r"\[?(中文|English|日本語|偽中国語)\]?")
 
@@ -148,6 +151,53 @@ def check_kana(path: str, lines: list) -> list:
     return problems
 
 
+def check_readme_reachability() -> list:
+    """每份顶层文档页都必须能从 README 到达（废弃兜底页例外）。
+
+    2026-10-22 审计实测：`docs/zh/mcp-searxng.md` 与 `docs/zh/obs-bilibili-stream.md`
+    在四语 README 里出现 **0 次**——文档存在、页内链接也都可达（其余检查全绿），
+    但读者从 README 根本走不到。`check_links` 只查「写出来的链接是否可达」，
+    不查「页面有没有被链接」——这是两件事。
+
+    废弃兜底页（顶层指针 + `deprecated/` 详情，且详情被 DEPRECATED 索引链到）
+    不要求 README 直达：它的作用是让旧链接不 404，入口在弃用索引里。
+    """
+    problems = []
+    for lang in LANGUAGES:
+        readme = "README.md" if lang == "zh" else f"docs/README.{lang}.md"
+        deprec = "DEPRECATED.md" if lang == "zh" else f"docs/DEPRECATED.{lang}.md"
+        if not os.path.exists(readme):
+            continue
+        with open(readme, encoding="utf-8") as handle:
+            readme_text = handle.read()
+        deprec_text = ""
+        if os.path.exists(deprec):
+            with open(deprec, encoding="utf-8") as handle:
+                deprec_text = handle.read()
+
+        if "DEPRECATED" not in readme_text:
+            problems.append(
+                f"{readme}: 没有指向 DEPRECATED 的入口——废弃项目从 README 不可达"
+            )
+
+        doc_dir = os.path.join("docs", lang)
+        if not os.path.isdir(doc_dir):
+            continue
+        for name in sorted(os.listdir(doc_dir)):
+            if not name.endswith(".md") or name == "README.md":
+                continue
+            stem = name[:-3]
+            if stem in readme_text:
+                continue
+            if (os.path.exists(os.path.join(doc_dir, "deprecated", name))
+                    and f"deprecated/{stem}.md" in deprec_text):
+                continue
+            problems.append(
+                f"{doc_dir}/{name}: 未从 {readme} 引用（文档存在，但从 README 不可达）"
+            )
+    return problems
+
+
 def main() -> None:
     problems = []
     files = markdown_files()
@@ -159,6 +209,8 @@ def main() -> None:
             problems.extend(check_links(path, text))
         problems.extend(check_switcher(path, lines))
         problems.extend(check_kana(path, lines))
+
+    problems.extend(check_readme_reachability())
 
     for problem in problems:
         print(f"doc-links: {problem}", file=sys.stderr)

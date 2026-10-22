@@ -109,6 +109,10 @@ nix registry add nixkits github:Kihara777/NixKits
 | write-project-docs | 按 NixKits 风格为任意项目编写多语言文档系统 | [docs/zh/skills/write-project-docs.md](docs/zh/skills/write-project-docs.md) |
 | nixos-specialisation-tuning | 设计 NixOS specialisation 分面并在统一内存设备上调优 llama.cpp | [docs/zh/skills/nixos-specialisation-tuning.md](docs/zh/skills/nixos-specialisation-tuning.md) |
 
+## 已废弃
+
+曾经维护、现已废弃的项目（含废弃原因与替代做法）见 [DEPRECATED.md](DEPRECATED.md)。
+
 ## 作者
 
 - **狐莉 (キツのり)** — 创建和维护
