@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:17:02+09:00
+
+**摘要**：docs(skill): 毎回 nixpkgs 更新 + 依存 version 衝突 二 調方
+
+- 規則：更新 check 毎回 先 nixpkgs 更新（単独 commit）。「依存 古過」version 確認 前 消
+- 依存 新過 場合、version 付 変体（`<name>_<major>`、例 `python3Packages.mcp_1`）先 調、「提出不可」結論 前 確認
+- 実測根拠：blender-mcp `mcp<2` 要求、master `mcp` 2.2.0、但 同 tree `mcp_1`（1.29.0）有——`mcp` 唯 見「必失敗」誤判定
+- 今回 nixpkgs 既 最新（`02c087f3` = `nixos-unstable` head、10-20）
+- 判据：doc-links 237 file 通過；四言語 条目数 相等（442）
+
+| 提交 | 説明 |
+|------|------|
+| `edd2bef` | docs(skill): 毎回 nixpkgs 更新 + 依存 version 衝突 二 調方 |
+
 ## 2026-10-22T15:15:34+09:00
 
 **摘要**：文書頁 README 由 到達 可能 必須；self-tests 反証 二件 與 覆蓋 完全性 検査 追加

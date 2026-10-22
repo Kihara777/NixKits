@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:17:02+09:00
+
+**Summary**: docs(skill): update nixpkgs every round, plus the two lookups for dependency version conflicts
+
+- Rule: every update check starts by updating nixpkgs (its own commit), so "dependency too old" disappears before version checking
+- When a dependency is too new, look for a versioned variant (`<name>_<major>`, e.g. `python3Packages.mcp_1`) before concluding "cannot submit"
+- Evidence: blender-mcp needs `mcp<2` while master has `mcp` 2.2.0, but the same tree has `mcp_1` (1.29.0) — checking only `mcp` caused a wrong "will always fail" conclusion
+- nixpkgs was already current this round (`02c087f3` = `nixos-unstable` head, 10-20)
+- Criterion: doc-links passes on 237 files; equal entry counts across four languages (442)
+
+| Commit | Description |
+|------|------|
+| `edd2bef` | docs(skill): update nixpkgs every round + two lookups for dependency version conflicts |
+
 ## 2026-10-22T15:15:34+09:00
 
 **Summary**: doc pages must be reachable from the README; self-tests gain two counterexamples and a coverage check

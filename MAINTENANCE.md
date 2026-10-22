@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:17:02+09:00
+
+**摘要**：docs(skill): 每轮更新 nixpkgs + 依赖版本冲突两条查法
+
+- 规则：每轮检查软件更新时先更新 nixpkgs（单独提交），让「依赖太旧」在查版本前消失
+- 依赖太新时查版本化变体（`<name>_<major>`，如 `python3Packages.mcp_1`），再下「不可提交」结论
+- 实测依据：blender-mcp 需 `mcp<2`，master 的 `mcp` 是 2.2.0，但同树有 `mcp_1`（1.29.0）——当初只查 `mcp` 误判成「提交必红」
+- 本轮 nixpkgs 已最新（`02c087f3` = `nixos-unstable` head，10-20），无需更新
+- 判据：doc-links 237 文件；四语条目数相等（442）
+
+| 提交 | 说明 |
+|------|------|
+| `edd2bef` | docs(skill): 每轮更新 nixpkgs + 依赖版本冲突的两条查法 |
+
 ## 2026-10-22T15:15:34+09:00
 
 **摘要**：文档页必须从 README 可达；self-tests 补齐两项反证并加覆盖完整性检查
