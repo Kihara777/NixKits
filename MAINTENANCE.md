@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:22:50+09:00
+
+**摘要**：docs(skill): `/etc/nixos` 是 git 仓库时的适配操作
+
+- 实测：`/etc/nixos` 是 git 仓库、`flake.lock` 被跟踪、无远端（纯本地版本追踪）
+- `nix flake update nixkits` 后必须提交 `flake.lock`，否则「改了没提交」与「没改」无法区分
+- 只 `add flake.lock`（工作区常有长期未提交项，`git add -A` 会混进来），不 push
+- 同轮已执行：`/etc/nixos` 的 nixkits input `4d21da7` → `2d34257`（待 rebuild 后提交）
+- 判据：doc-links 237 文件；四语条目数相等（449）
+
+| 提交 | 说明 |
+|------|------|
+| `2d34257` | docs(skill): /etc/nixos 是 git 仓库时的适配操作 |
+
 ## 2026-10-23T07:21:00+09:00
 
 **摘要**：docs(skill): 本地构建与切换也是更新流程的一步

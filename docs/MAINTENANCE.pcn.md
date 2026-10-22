@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:22:50+09:00
+
+**摘要**：docs(skill): `/etc/nixos` git repo 場合 適配操作
+
+- 実測：`/etc/nixos` git repo、`flake.lock` 追跡下、remote 無（local 版管理 唯）
+- `nix flake update nixkits` 後 `flake.lock` 必 commit。否「変更 未 commit」與「未変更」区別 不能
+- `flake.lock` 唯 add（作業 tree 長期未 commit file 常有、`git add -A` 巻込）。push 無
+- 同 round 実行：`/etc/nixos` nixkits input `4d21da7` → `2d34257`（rebuild 後 commit）
+- 判据：doc-links 237 file 通過；四言語 条目数 相等（449）
+
+| 提交 | 説明 |
+|------|------|
+| `2d34257` | docs(skill): `/etc/nixos` git repo 場合 適配操作 |
+
 ## 2026-10-23T07:21:00+09:00
 
 **摘要**：docs(skill): 本地 build 與 switch 也 更新 flow 一部

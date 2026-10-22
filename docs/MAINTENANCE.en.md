@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:22:50+09:00
+
+**Summary**: docs(skill): what to do when `/etc/nixos` is a git repository
+
+- Measured: `/etc/nixos` is a git repo, `flake.lock` is tracked, and it has no remote (local version tracking only)
+- After `nix flake update nixkits` you must commit `flake.lock`, otherwise "changed but uncommitted" is indistinguishable from "unchanged"
+- Add only `flake.lock` (the worktree often carries long-uncommitted files; `git add -A` would mix them in) and do not push
+- Same round: the nixkits input in `/etc/nixos` moved `4d21da7` → `2d34257` (commit after rebuild)
+- Criterion: doc-links passes on 237 files; equal entry counts across four languages (449)
+
+| Commit | Description |
+|------|------|
+| `2d34257` | docs(skill): what to do when `/etc/nixos` is a git repository |
+
 ## 2026-10-23T07:21:00+09:00
 
 **Summary**: docs(skill): local build and switch are part of the update flow too

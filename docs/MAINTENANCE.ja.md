@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:22:50+09:00
+
+**概要**：docs(skill): `/etc/nixos` が git リポジトリである場合の適配操作
+
+- 実測：`/etc/nixos` は git リポジトリ、`flake.lock` は追跡下、リモート無し（ローカルのみの版管理）
+- `nix flake update nixkits` の後は `flake.lock` を必ずコミットする。そうしないと「変更したが未コミット」と「未変更」が区別できない
+- `flake.lock` だけを add する（作業ツリーには長期未コミットのファイルがよくあり、`git add -A` はそれらを巻き込む）。push はしない
+- 同ラウンドで実行：`/etc/nixos` の nixkits input を `4d21da7` → `2d34257` へ（rebuild 後にコミット）
+- 判据：doc-links は 237 ファイル通過；四言語の条目数が相等（449）
+
+| コミット | 説明 |
+|------|------|
+| `2d34257` | docs(skill): /etc/nixos が git リポジトリである場合の適配操作 |
+
 ## 2026-10-23T07:21:00+09:00
 
 **概要**：docs(skill): ローカルビルドと切替も更新フローの一部
