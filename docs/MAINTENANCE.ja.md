@@ -4,7 +4,7 @@
 
 ## 2026-10-23T07:37:53+09:00
 
-**摘要**：dsh-api-balance 薄ラッパー再ピン —— 前 / 次の質問ボタン（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）
+**概要**：dsh-api-balance 薄ラッパー再ピン —— 前 / 次の質問ボタン（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）
 
 - rev `980201d` → `50ab55e`；バージョンは `0.1.1` のまま
 - 判据：`nix build` 成功
