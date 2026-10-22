@@ -43,10 +43,21 @@ def dictionary_entry_count() -> int:
 
 
 def flake_checks() -> tuple:
-    """`flake.nix` 的 checks 键集合、注释清单里列出的名字集合、python 实现数。"""
+    """`flake.nix` 的 checks 键集合、注释清单里列出的名字集合、python 实现数。
+
+    ⚠️ 计数口径是「checks 块里 6 空格缩进的键」，**不是**「用某种写法赋值的键」。
+    2026-10-22 实测的教训：原先用 `pkgs.runCommand "check-…"` 匹配，新检查
+    `module-eval` 写成 `let … in if … then throw … else pkgs.runCommand …`，
+    于是 13 项被数成 12，而 AGENTS.md 声明 12「一致」，整条判据静默通过。
+    形态会变，键不会——所以按结构数。
+    """
     text = read("flake.nix")
-    segment = text[text.index("checks = {"):]
-    keys = set(re.findall(r'(\w[\w-]*)\s*=\s*pkgs\.runCommand "check-', segment))
+    start = text.index("checks = {")
+    # checks 块以 4 空格缩进的 `};` 结束；限定在这里，避免误抓后面的
+    # formatter / packages 内部的键。
+    end = text.index("\n    };", start)
+    segment = text[start:end]
+    keys = set(re.findall(r"(?m)^      ([\w-]+)\s*=", segment))
     comment = set(re.findall(r"(?m)^\s*# - ([\w-]+)：", text))
     python_scripts = set(re.findall(r"python3 (develop/check-\S+\.py)", segment))
     return keys, comment, len(python_scripts)

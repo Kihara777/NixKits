@@ -269,10 +269,11 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 > nixpkgs / flake-utils，以及 riscv64 交叉路径里的 `builtins.getFlake github:NixOS/nixpkgs`）。
 > `api.github.com` 那条是为已迁走的 URL 输入准备的，一并删除了。
 
-### `nix flake check` 的 12 项自检
+### `nix flake check` 的 13 项自检
 
 仓库的**自检契约**——任一项失败即阻断提交。10 项由 `develop/check-*.py` 实现，
-`news-mode-tests` 与 `maintenance-skills-tests` 为 node 行为测试（`node --test`）：
+`news-mode-tests` 与 `maintenance-skills-tests` 为 node 行为测试（`node --test`），
+`module-eval` 由 `flake.nix` 内的 Nix 求值实现：
 
 | 检查 | 脚本 | 校验内容 |
 |------|------|---------|
@@ -288,6 +289,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 | `skill-registry` | `develop/check-skill-registry.py` | `skills/` 下每个技能**必须有归属**：被某个注入器登记（JS 的 `registerSkill` / `.nix` 的列表项）、命中 `translate-*` 自动发现、或写进脚本的 `NOT_INJECTED` **并写明理由**。来历：2026-10-12 发现两个 `*-package-upstream` 技能在 `skills/` 里躺了两天、四语文档页与 README 行都齐，**却从没被注册过**——任何 session 都加载不到 |
 | `self-tests` | `develop/check-selftests.py` | **每个自检都必须能被「已知的坏输入」撞响**：把仓库拷进临时树 → 先跑一遍（对照，必须通过）→ 注入一处已知坏输入 → 再跑（必须失败且输出含预期片段）。来历是 2026-10-05 一天里出现三次「判据静默失灵而仍报绿」（验收脚本的正则让 en/ja 永远匹配不到；「目标 ≤ 400」不是判据；解析在空行处截断让清单掉出预算）——**判据还在跑、还在打印通过，但已经不管那件事了**。写这套用例时它立刻抓出一个真洞（见上表 `workflow-coverage`） |
 | `maintenance-skills-tests` | `packages/dsh-nixos-shell/tests/maintenance-skills.test.mjs` | 维护技能注入的行为测试（node）：技能目录**不可读**、目录里**缺 SKILL.md** 时必须抛错，而不是静默降级成「维护模式正常、只是技能不在」。2026-10-22 起（外部审计第 5 条）；测试用 `options.root` 注入坏输入，因此不依赖构建期生成的 `skills-embedded/` |
+| `module-eval` | `flake.nix` 的 `checks.module-eval` | 每个 `nixosModules.*` 都要在**最小配置**下求值到 toplevel `drvPath`（不构建）。新增模块必须在 `fixtures` 里登记，`uncovered` 会拦下漏登记；`comfyui` 因依赖外部 flake `comfyui-nix` 提供的 `services.comfyui` 而登记在 `uncoveredAllowed`（附具体理由）。来历：2026-10-21 实测 obs 模块引用 nixpkgs 尚不存在的属性，仓库全绿而 `nixos apply` 才炸 |
 
 > 各脚本可**单独本地运行**（`python3 develop/check-doc-links.py`），便于快速定位而不必
 > 跑完整的 `nix flake check`。上表各项的当前规模随仓库演进，以脚本实跑输出为准——

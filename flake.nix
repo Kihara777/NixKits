@@ -70,6 +70,7 @@
     # - self-tests：每个自检都必须能被「已知的坏输入」撞响（对照 + 注入 + 断言红得对）
     # - news-mode-tests：新闻三要素模式插件的行为测试
     # - maintenance-skills-tests：维护技能注入在目录不可读/缺 SKILL.md 时必须抛错
+    # - module-eval：每个 nixosModules.* 都要能在最小配置下求值到 toplevel drvPath
     checks = {
       preset-derivation = pkgs.runCommand "check-preset-derivation" {
         nativeBuildInputs = [ pkgs.python3 ];
@@ -178,6 +179,69 @@
         node ${./packages/dsh-nixos-shell}/tests/maintenance-skills.test.mjs
         touch $out
       '';
+
+      # ── 模块求值检查（外部审计第 4 条，2026-10-22）─────────────────────────
+      # `nix flake check` 原本从不 eval `nixosModules.*`：obs 模块引用 nixpkgs
+      # 尚不存在的 `obs-studio-plugins.obs-bilibili-stream` 时仓库全绿，直到
+      # 某台机器 `nixos apply` 才炸（2026-10-21 实测两次）。
+      #
+      # 每个模块都用一份**最小可用配置** enable 后求值到 toplevel drvPath（不构建）。
+      # 新增模块必须同时在这里加 fixture——`uncovered` 会拦下漏登记，
+      # 所以「模块没被测到」不会是静默的。
+      module-eval = let
+        lib' = nixpkgs.lib;
+        base = {
+          system.stateVersion = "26.11";
+          boot.loader.grub.enable = false;
+          fileSystems."/".device = "/dev/null";
+          fileSystems."/".fsType = "ext4";
+          nixpkgs.overlays = [ self.overlays.default ];
+        };
+        fixtures = {
+          ruyi = { nixkits.ruyi.enable = true; };
+          rcc-fix = { nixkits.rcc-fix.enable = true; };
+          asusd-pd-profile = { nixkits.asusd-pd-profile.enable = true; };
+          asusd-thermal-guard = { nixkits.asusd-thermal-guard.enable = true; };
+          opencode-telegram = { nixkits.opencode-telegram.enable = true; };
+          obs-bilibili-stream = { nixkits.obs-bilibili-stream.enable = true; };
+          dsh = { nixkits.dsh.enable = true; };
+        };
+        # 无法在本仓 env 里求值的模块，**必须在这里登记理由**（不许静默跳过）。
+        # 理由要具体到「缺哪一样东西」，不是「不好测」。
+        uncoveredAllowed = {
+          comfyui = ''
+            它扩展的是 `services.comfyui`，而那一整套选项（enable / listen /
+            environment / gpuSupport …）由外部 flake `comfyui-nix` 提供，本仓
+            的 checks 不引入该依赖。要覆盖它，需要在下游（引入了 comfyui-nix 的
+            仓库）里求值，或给本仓 checks 加一条可选 input。
+          '';
+        };
+        evalOne = name: extra:
+          (lib'.nixosSystem {
+            inherit system;
+            modules = [ base (self.nixosModules.${name}) ]
+              ++ (if builtins.isList extra then extra else [ extra ]);
+          }).config.system.build.toplevel.drvPath;
+        results = lib'.mapAttrs (n: v: builtins.tryEval (evalOne n v)) fixtures;
+        failures = lib'.filterAttrs (n: _: !results.${n}.success) fixtures;
+        uncovered = builtins.filter
+          (n: !(builtins.hasAttr n fixtures) && !(builtins.hasAttr n uncoveredAllowed))
+          (builtins.attrNames self.nixosModules);
+      in
+        if failures != { } then
+          throw ("module-eval: 这些模块在最小配置下求值失败："
+            + lib'.concatStringsSep ", " (builtins.attrNames failures))
+        else if uncovered != [ ] then
+          throw ("module-eval: 这些 nixosModules 没有 fixture（新增模块请在 flake.nix 的 fixtures 里登记）："
+            + lib'.concatStringsSep ", " uncovered)
+        else
+          # 用 `pkgs.runCommand "check-…"` 形态：`develop/check-doc-counts.py`
+          # 靠这个形态数 checks 条目（2026-10-22 发现它只认这一种写法，
+          # 先写成 writeText 时整项检查被静默漏计数——判据的射程比实际窄）。
+          pkgs.runCommand "check-module-eval" { } ''
+            echo "module-eval: ${toString (builtins.length (builtins.attrNames fixtures))} 个模块都能在最小配置下求值"
+            touch $out
+          '';
     };
 
     formatter = pkgs.writeShellScriptBin "kitsfmt-fmt" ''
