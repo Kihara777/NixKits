@@ -266,37 +266,65 @@ src = fetchzip {
 
 #### 前置检测
 
-根据仓库状态决定如何处理 `flake.lock`：
+先判断仓库属于哪一种——**处置顺序有意义**：
 
 ```bash
-# 情况 1：flake.lock 已被 .gitignore 排除 → 跳过，无需提交
+# 情况 1：flake.lock 已被 .gitignore 排除 → 跳过
 if grep -qx 'flake.lock' .gitignore 2>/dev/null; then
-  echo "SKIP: flake.lock 已在 .gitignore 中，无需提交"
+  echo "SKIP: flake.lock 已在 .gitignore 中"
   exit 0
 fi
 
-# 情况 2：仓库包含动态版本包 → 必须排除 flake.lock
-# 检测特征：builtins.fetchurl 无 hash 参数、flake input 指向 API URL 等
-if grep -rq 'builtins.fetchurl.*releases/latest\|\.url\s*=\s*"https\?://api\.' \
+# 情况 2：仓库含**浮动输入**（动态版本包 / API URL input）
+if grep -rq 'builtins.fetchurl.*releases/latest|\.url\s*=\s*"https?://api\.' \
    overlays/ flake.nix 2>/dev/null; then
-  echo "WARN: 检测到动态版本包，flake.lock 不可复现"
-  if ! grep -qx 'flake.lock' .gitignore 2>/dev/null; then
-    echo "flake.lock" >> .gitignore
-    echo "已添加 flake.lock 到 .gitignore"
-  fi
-  exit 0
+  echo "WARN: 检测到浮动输入——正确处置见下，不要直接 gitignore"
 fi
 ```
 
-> **判断逻辑**：已排除 → 跳过；有动态版本 → 必须排除；其他情况 → 正常提交。
+> **情况 2 的正确处置不是「把 flake.lock 加进 .gitignore」**（2026-10-22 修正）。
+> 那样做等于宣布本仓不可复现，代价会一路传染：CI 判的是浮动输入、徽章可能在主
+> 检查红着时仍显示 passing、追溯时无法回答「那次跑的是哪个 nixpkgs」。
+> 优先做法是**把浮动的那一个输入隔离出去**：
+>
+> - 迁到独立分支或独立仓库。NixKits 的做法：`llama-cpp-rocm`、它的 overlay/模块，
+>   以及那个 `api.github.com/.../releases/latest` 的 URL input 一起搬进 orphan 分支
+>   `impure`（该分支**不提交 lock**、只装这一个包）；
+> - 主仓用一条钉 rev 的 input 引用它，升级时只 bump 那一条。
+>
+> 只有「隔离不可行」时才排除 lock，并且必须在 README / AGENTS 里写明
+> 「本仓 CI 不可复现」这条代价——不要让它悄悄存在。
 
-#### 提交要求
+#### 提交要求（lock 已提交的仓库）
 
-在不属于上述两种情况时，每次 `nix build` 后 Nix 会根据实际获取的资源更新
-`flake.lock` 中的 input hash。**必须在提交 hash 变更的同时提交 `flake.lock`**，
-确保锁文件与包定义一致。
+`nix build` 之后先看 lock 有没有被动过：
 
 ```bash
-git diff flake.lock
+git diff --stat flake.lock
 ```
 
+| 情况 | 意味着什么 | 怎么办 |
+|---|---|---|
+| **没变** | 只改了包定义（hash / version 都在 `.nix` 里） | 正常提交包改动 |
+| **变了** | 某个 input 被重新解析 | **单独审视**：是 `nix flake update` 的预期结果，还是某条命令顺带刷新了 nixpkgs？后者不要混进包更新提交 |
+
+三条硬规则：
+
+1. **lock 与 `flake.nix` 必须一致**：提交前跑
+   `nix flake check --no-write-lock-file`——lock 缺 input 或有未写回的变更时它会
+   **直接失败**，不会自己生成一份新 lock 再判绿。
+2. **升 nixpkgs 单独一次提交**，不要与「包版本升级」混在一起。混在一起会失去归因：
+   产物变了到底是包升级还是 nixpkgs 升级引起的？2026-10-21 实测，一次
+   `--update-input nixpkgs` 顺带让三个包构建失败（`v4l2loopback` × 内核、
+   `mozc` × 新 Qt、`syrupy` 测试过期），与业务改动毫无关系。
+3. **交叉构建必须跟 lock**：不要在 CI 里用
+   `builtins.getFlake "github:NixOS/nixpkgs/nixos-unstable"` 取「最新 nixpkgs」——
+   同一个 commit 在不同时间会产出不同二进制，riscv64 尤其明显。从 `flake.lock`
+   读 rev 再求值：
+
+   ```bash
+   NP_REV="$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock)"
+   nix build --impure --no-write-lock-file --expr \
+     "let np = builtins.getFlake \"github:NixOS/nixpkgs/$NP_REV\";
+      in np.legacyPackages.x86_64-linux.pkgsCross.riscv64.callPackage ./packages/<pkg>.nix { }"
+   ```

@@ -95,6 +95,23 @@ grep -rc '<owner>/<repo>@' .github/workflows/*.yml | grep -v ':0'
 > `actions/checkout` 分布在 `build-package.yml` / `check.yml` / `ci-summary.yml`
 > **三个独立文件**（不是单一可复用 workflow），故改它是 3 处而非 1 处。
 
+## 第 4 步补充：lock 收尾（本仓 lock 已提交）
+
+本仓 `flake.lock` **提交**（2026-10-21 起，浮动输入已迁到 `impure` 分支），
+所以改完包定义要多做三步——顺序别反：
+
+1. **`git diff --stat flake.lock`：没变是正常的**。hash 与 version 都在 `.nix` 里，
+   真正的包更新**不应该**动 lock。变了说明某条命令顺带重解析了 input（最常见是
+   无参数 `nix flake lock`），单独审视，别混进包更新提交。
+2. **`nix flake check --no-write-lock-file`**：lock 与 `flake.nix` 不一致时直接失败。
+   CI 的 `check.yml` 用的是同一条命令，外加「文件存在 + 被 git 跟踪」两项检查。
+3. **交叉构建跟 lock**：`build-package.yml` 的 riscv64 步骤从 `flake.lock` 读
+   nixpkgs rev，**不要改回 `nixos-unstable`**——同一 commit 会产出不同二进制。
+
+**升 nixpkgs 是单独一次提交**，不与包版本升级混：2026-10-21 实测一次
+`--update-input nixpkgs` 顺带让三个包构建失败（`v4l2loopback` × 内核 7.3、
+`mozc` × 新 Qt、`syrupy` 测试过期），与业务改动毫无关系；混在一起就无法归因。
+
 ## 收尾：确认 CI 结果时不要被徽章误导
 
 本仓的 CI 徽章由 `ci-summary.yml` 生成（写入 `gh-pages/ci-status.json`），
