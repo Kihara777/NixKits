@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:07:53+09:00
+
+**Summary**: riscv64 cross-builds follow the lock; locking logic written into the update skills
+
+- The riscv64 step in `build-package.yml` reads the nixpkgs rev from `flake.lock` instead of taking the latest `nixos-unstable` — cross artifacts for one commit are finally reproducible
+- `builders.md` no longer says "floating input → add the lock to .gitignore"; it says "isolate the floating input", plus three hard rules once the lock is committed
+- `nixkits-check-updates` gains "step 4 addendum: lock wrap-up": package edits do not touch the lock, a changed lock must be reviewed separately, cross-builds follow the lock, and nixpkgs upgrades get their own commit
+- Evidence: `nix flake check` green; a cross evaluation actually produced `kitsfmt-riscv64-…drv`
+
+| Commit | Description |
+|------|------|
+| `07d9b95` | ci(rv64): cross-builds follow the lock instead of the latest nixos-unstable |
+| `0c0124a` | docs(skills): locking logic written into the update rules (generic + repo adapter) |
+
 ## 2026-10-22T12:48:05+09:00
 
 **Summary**: the CI badge now covers the `CI` workflow; `flake.lock` is promoted from "used in passing" to a criterion; two skill conventions updated

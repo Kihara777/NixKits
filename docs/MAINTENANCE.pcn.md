@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-22T13:07:53+09:00
+
+**摘要**：riscv64 交叉構建 lock 追随；更新技能 内 锁定論理 明記
+
+- `build-package.yml` riscv64 段 `flake.lock` 読 nixpkgs rev、`nixos-unstable` 最新 非取得——同一 commit 交叉産物 再現可能
+- `builders.md` 「浮動入力 有 → lock .gitignore 追加」→「浮動入力 隔離」改写；lock 提交済 場合 三硬則 追加
+- `nixkits-check-updates` 「第 4 步補充：lock 收尾」新設：包変更 lock 非動・動 場合 単独精査・交叉 lock 追随・nixpkgs 昇格 単独提交
+- 判据：`nix flake check` 全緑；交叉求値 `kitsfmt-riscv64-…drv` 実測
+
+| 提交 | 説明 |
+|------|------|
+| `07d9b95` | ci(rv64): 交叉構建 lock 追随 |
+| `0c0124a` | docs(skills): 更新規則 锁定論理 明記（汎用＋本倉適配層） |
+
 ## 2026-10-22T12:48:05+09:00
 
 **摘要**：CI 徽章 `CI` workflow 対象化；`flake.lock` 「随手使用」→ 判据 昇格；二技能規約 同期

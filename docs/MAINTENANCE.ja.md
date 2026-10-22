@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:07:53+09:00
+
+**概要**：riscv64 クロスビルドが lock に従う；更新スキルにロックの論理を明記
+
+- `build-package.yml` の riscv64 ステップは `flake.lock` から nixpkgs rev を読む（`nixos-unstable` 最新は取らない）——同一 commit のクロス成果物が再現可能に
+- `builders.md` の「浮動入力あり → lock を .gitignore へ」を「浮動入力を隔離する」に改写；lock 提交済みの場合の三つの硬い規則を追加
+- `nixkits-check-updates` に「第 4 步補充：lock 收尾」を新設：パッケージ変更で lock は動かない・動いたら単独で精査・クロスは lock に従う・nixpkgs 昇格は単独コミット
+- 判据：`nix flake check` 全緑；クロス求値で `kitsfmt-riscv64-…drv` を実測
+
+| コミット | 説明 |
+|------|------|
+| `07d9b95` | ci(rv64): クロスビルドを lock に従わせる |
+| `0c0124a` | docs(skills): 更新規則にロックの論理を明記（汎用＋本リポジトリ適合層） |
+
 ## 2026-10-22T12:48:05+09:00
 
 **概要**：CI バッジが `CI` workflow を対象に；`flake.lock` を「ついでに使う」から判据へ昇格；二つのスキル規約を同期

@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-22T13:07:53+09:00
+
+**摘要**：riscv64 交叉构建跟 lock；更新技能里写入锁定逻辑
+
+- `build-package.yml` 的 riscv64 步骤从 `flake.lock` 读 nixpkgs rev，不再取 `nixos-unstable` 最新——同 commit 的交叉产物终于可复现
+- `builders.md` 的「有浮动输入 → 把 lock 加进 .gitignore」改写为「把浮动输入隔离出去」；新增 lock 已提交时的三条硬规则
+- `nixkits-check-updates` 新增「第 4 步补充：lock 收尾」：改包不动 lock、变了要单独审视、交叉构建跟 lock、升 nixpkgs 单独提交
+- 判据：`nix flake check` 全绿；交叉求值实测产出 `kitsfmt-riscv64-…drv`
+
+| 提交 | 说明 |
+|------|------|
+| `07d9b95` | ci(rv64): 交叉构建跟 lock，不再取 nixos-unstable 最新 |
+| `0c0124a` | docs(skills): 把锁定逻辑写进更新规则（通用 + 本仓适配） |
+
 ## 2026-10-22T12:48:05+09:00
 
 **摘要**：CI 徽章纳入 `CI` workflow；`flake.lock` 从「顺手用」升级为判据；两份技能约定同步
