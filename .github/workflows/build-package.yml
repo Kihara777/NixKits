@@ -76,8 +76,19 @@ jobs:
         if: ${{ inputs.riscv64-cross }}
         run: |
           set -euo pipefail
+          # nixpkgs 取自**仓库 lock**，而不是 `nixos-unstable` 的最新：
+          # 后者会让同一个 commit 在不同时间交叉构建出不同的产物（不可复现）。
+          # 2026-10-22 起 main 提交 flake.lock，所以「lock 里的 nixpkgs rev」
+          # 就是 riscv64 的受测基线。这条不再随上游漂移。
+          NP_REV="$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock)"
+          if [ -z "$NP_REV" ] || [ "$NP_REV" = "null" ]; then
+            echo "::error::flake.lock 里取不到 nixpkgs rev——交叉构建拒绝退回浮动版本"
+            exit 1
+          fi
+          echo "riscv64 交叉构建使用 nixpkgs $NP_REV（来自 flake.lock）"
           out="$(nix build --no-link --print-build-logs --impure --print-out-paths \
-            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/nixos-unstable\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ${{ steps.pkg.outputs.file }} { }")"
+            --no-write-lock-file \
+            --expr "let pkgsHost = (builtins.getFlake \"github:NixOS/nixpkgs/$NP_REV\").legacyPackages.x86_64-linux; in pkgsHost.pkgsCross.riscv64.callPackage ${{ steps.pkg.outputs.file }} { }")"
           echo "out=$out" >> "$GITHUB_OUTPUT"
           echo "产物：$out"
 
