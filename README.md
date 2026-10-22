@@ -1,5 +1,7 @@
 # NixKits · impure 分支
 
+[中文](README.md) | [English](docs/README.en.md) | [日本語](docs/README.ja.md)  | [偽中国語](docs/README.pcn.md)
+
 **这个分支只做一件事：把「浮动」关在这里，好让 `main` 可以锁死。**
 
 | 项 | 内容 |
