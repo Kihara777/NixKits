@@ -6,6 +6,18 @@ SHAs, and list-style summaries.
 
 > **The SHAs here are this branch's own** — they are a different set from `main`'s.
 
+## 2026-10-22T14:05:07+09:00
+
+**Summary**: add AGENTS, SECURITY, four-language README and the maintenance log
+
+- New `AGENTS.md` (branch-specific rules only) and `SECURITY.md` (the non-reproducibility risk and its mitigations)
+- Language switcher added to `README.md`; `docs/README.{en,ja,pcn}.md` added
+- The branch's maintenance log is created (recording 9c50e5e and 0f15570)
+
+| Commit | Description |
+|------|------|
+| `3c5da27` | docs(impure): add AGENTS / SECURITY / four-language README and the maintenance log |
+
 ## 2026-10-22T06:18:45+09:00
 
 **Summary**: the four-language llama-cpp-rocm docs move here together with the component

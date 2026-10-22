@@ -5,6 +5,18 @@
 
 > **本分支的 SHA 与 `main` 的 SHA 不是同一套**——这里只记本分支自己的提交。
 
+## 2026-10-22T14:05:07+09:00
+
+**摘要**：补齐 AGENTS、SECURITY、四语 README 与维护日志
+
+- 新增 `AGENTS.md`（只写本分支特有约定）与 `SECURITY.md`（不可复现的风险与缓解）
+- `README.md` 加语言切换器，补 `docs/README.{en,ja,pcn}.md`
+- 建立本分支维护日志（记录 9c50e5e、0f15570 两个提交）
+
+| 提交 | 说明 |
+|------|------|
+| `3c5da27` | docs(impure): 补齐仓库文件 —— AGENTS / SECURITY / 四语 README 与维护日志 |
+
 ## 2026-10-22T06:18:45+09:00
 
 **摘要**：四语 llama-cpp-rocm 文档随组件搬进本分支

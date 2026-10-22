@@ -5,6 +5,18 @@
 
 > **本分支 SHA 與 `main` SHA 別系統** —— 此処 只 本分支 自身 之 commit 記録。
 
+## 2026-10-22T14:05:07+09:00
+
+**摘要**：AGENTS・SECURITY・四言語 README・維護記録 補完
+
+- `AGENTS.md`（本分支 固有 規約 只）與 `SECURITY.md`（再現不能 危険 與 緩和）追加
+- `README.md` 語言切替器 追加、`docs/README.{en,ja,pcn}.md` 補完
+- 本分支 維護記録 建立（9c50e5e 與 0f15570 記録）
+
+| 提交 | 説明 |
+|------|------|
+| `3c5da27` | docs(impure): AGENTS / SECURITY / 四言語 README / 記録 補完 |
+
 ## 2026-10-22T06:18:45+09:00
 
 **摘要**：四言語 llama-cpp-rocm 文書 與 component 一緒 本分支 移
