@@ -6,7 +6,7 @@
 
 **摘要**：dsh-api-balance component 文書 同期 —— 全屏 図標列 與「前 / 次 質問」追記
 
-- `docs/{zh,en,ja,pcn}/dsh-api-balance.md` の「UI 強化」全屏切替 迄 記述。子倉 後 追加 二件 追記：全屏時 図標列 共 収納、左縁 把手 出 入 可能；会話 上下 二 丸 button scroll 中 出現、静止 fade out
+- `docs/{zh,en,ja,pcn}/dsh-api-balance.md` 「UI 強化」全屏切替 迄 記述。子倉 後 追加 二件 追記：全屏時 図標列 共 収納、左縁 把手 出 入 可能；会話 上下 二 丸 button scroll 中 出現、静止 fade out
 - 文書 限定 変更、re-pin 不：wrapper `50ab55e` 固定（該版 現実行時挙動）
 - 判据：四言語 行数 不変、pcn 仮名 残留 無
 
