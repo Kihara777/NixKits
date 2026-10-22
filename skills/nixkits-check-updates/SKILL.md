@@ -539,6 +539,41 @@ dsh tarball **不含** lock，需自行生成。踩到的坑：用
 peer 条目（与仓库既有可工作的 `dsh-package-lock.json` 结构一致，均为 24 条）。
 详见通用技能 npm 节的「vendored lock 必须包含 peer 依赖条目」。
 
+## 第 6 步补充：本地构建与切换（本机消费方）
+
+本仓是 `/etc/nixos` 的 flake input（`nixkits.url = "github:Kihara777/NixKits"`）——
+**推送不等于生效**：系统上跑的是 `/etc/nixos/flake.lock` 里锁的那个 rev。
+在线更新完成后，必须**本地构建并切换**，否则系统还是旧版本。
+
+### 流程（在线之后）
+
+1. **在线侧**：按上文更新 nixpkgs（flake.lock）+ 包版本，推送；
+2. **本地侧**（在 `/etc/nixos`）：
+
+   ```bash
+   nix flake update nixkits        # 只更新 nixkits input，不动其他
+   sudo nixos-rebuild switch        # 构建 + 切换
+   ```
+
+3. **切换后核对**：`command -v <pkg>` 与 `<pkg> --version` 和仓库声明的一致；
+4. **失败处置**：rebuild 失败时系统**停留在上一代际**——修配置后重试，不要忽略失败继续。
+
+### 判据：核对「实际版本」，不是「rebuild 返回 0」
+
+**忘了 `nix flake update nixkits` 时 rebuild 照样成功**——系统切换了，但 input 还是旧 rev，
+跑的还是旧版。判据必须落在：
+
+```bash
+nixos-rebuild switch && <pkg> --version    # 版本要对上仓库声明
+```
+
+### 两个陷阱
+
+1. **`nixkits-impure` 是另一个 input**：`llama-cpp-*` 在它上面，
+   更新它要单独 `nix flake update nixkits-impure`——两个 input 的 rev 可以不同步。
+2. **本机 `binfmt` 比 CI 宽松**（见上文「本机的构建条件」）：本地构建绿**不证明** CI 绿，
+   反之亦然。跨架构包两边都要看。
+
 ## 第 9 步补充：本仓的子项目引用关系
 
 通用技能第 9 步给出「同账户子项目链式检查」的方法与前提判据。**本仓的实际
