@@ -8,6 +8,17 @@ SHAs, and list-style summaries.
 
 > **The SHAs here are this branch's own** — they are a different set from `main`'s.
 
+## 2026-10-22T14:32:43+09:00
+
+**Summary**: four-language security policy, and language switchers on the maintenance log
+
+- `SECURITY.md` gains a switcher; `docs/SECURITY.{en,ja,pcn}.md` added
+- Each of the four `MAINTENANCE.*` files gains a switcher (entries unchanged)
+
+| Commit | Description |
+|------|------|
+| `4cb0059` | docs(impure): four-language security policy and maintenance-log switchers |
+
 ## 2026-10-22T14:05:07+09:00
 
 **Summary**: add AGENTS, SECURITY, four-language README and the maintenance log
