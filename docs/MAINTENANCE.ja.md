@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:30:47+09:00
+
+**概要**：docs(skill): 残留 unit により switch が半端になる
+
+- 実測：rebuild はビルド成功・世代も作成（`system-674`）だが、activate が「Unit … already loaded」で失敗
+- 症状は半端な切替：profile は新世代を指すが、動作中のサービスは旧版のまま
+- 処置：unit が無いことを確認 → switch をそのまま再実行 → `/run/current-system` を照合 → 実バージョンを確認
+- 判据：終了コードは activate 完了を証明しない。journal に `finished switching to system configuration` があるかを見る
+- 今回のローカル切替は検証済み：system running、failed unit 0、`obs-bilibili-stream-2.1.5`（上流 alias）
+- 判据：doc-links は 237 ファイル通過；四言語の条目数が相等（450）
+
+| コミット | 説明 |
+|------|------|
+| `b63b636` | docs(skill): 残留 switch-to-configuration unit により switch が半端になる |
+
 ## 2026-10-23T07:22:50+09:00
 
 **概要**：docs(skill): `/etc/nixos` が git リポジトリである場合の適配操作

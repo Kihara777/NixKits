@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:30:47+09:00
+
+**摘要**：docs(skill): 残留 unit switch 半端化
+
+- 実測：rebuild build 成功、世代 作成（`system-674`）、activate「Unit … already loaded」失敗
+- 症状 半端切替：profile 新世代 指、動作中 service 旧版 残
+- 処置：unit 無 確認 → switch 其 再実行 → `/run/current-system` 照合 → 実 version 確認
+- 判据：終了 code activate 完了 証明 非。journal `finished switching to system configuration` 有無 見
+- 今回 local 切替 検証済：system running、failed unit 0、`obs-bilibili-stream-2.1.5`（上流 alias）
+- 判据：doc-links 237 file 通過；四言語 条目数 相等（450）
+
+| 提交 | 説明 |
+|------|------|
+| `b63b636` | docs(skill): 残留 switch-to-configuration unit switch 半端化 |
+
 ## 2026-10-23T07:22:50+09:00
 
 **摘要**：docs(skill): `/etc/nixos` git repo 場合 適配操作

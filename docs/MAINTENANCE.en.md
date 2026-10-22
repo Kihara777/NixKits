@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:30:47+09:00
+
+**Summary**: docs(skill): a stale unit makes the switch half-done
+
+- Measured: rebuild built successfully and the generation existed (`system-674`), but activation failed with "Unit … already loaded"
+- The symptom is a half switch: the profile points at the new generation while running services are still the old ones
+- Handling: confirm the unit is gone → rerun the switch directly → check `/run/current-system` → verify the actual version
+- Criterion: the exit code does not prove activation finished; look for `finished switching to system configuration` in the journal
+- Local switch verified this round: system running, 0 failed units, `obs-bilibili-stream-2.1.5` (upstream alias)
+- Criterion: doc-links passes on 237 files; equal entry counts across four languages (450)
+
+| Commit | Description |
+|------|------|
+| `b63b636` | docs(skill): a stale switch-to-configuration unit makes the switch half-done |
+
 ## 2026-10-23T07:22:50+09:00
 
 **Summary**: docs(skill): what to do when `/etc/nixos` is a git repository

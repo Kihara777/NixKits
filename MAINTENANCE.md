@@ -2,6 +2,21 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:30:47+09:00
+
+**摘要**：docs(skill): 残留 unit 会让 switch 半切换
+
+- 实测：rebuild 构建成功、代际已建（`system-674`），激活报「Unit … already loaded」而失败
+- 症状是半切换：profile 指向新代际，运行中的服务还是旧的
+- 处置：确认 unit 不在 → 直接重跑 switch → 核对 `/run/current-system` → 验证实际版本
+- 判据：退出码不证明激活完成，看 journal 有无 `finished switching to system configuration`
+- 本轮本地切换已验证：系统 running、0 failed units、`obs-bilibili-stream-2.1.5`（上游别名）
+- 判据：doc-links 237 文件；四语条目数相等（450）
+
+| 提交 | 说明 |
+|------|------|
+| `b63b636` | docs(skill): 残留的 switch-to-configuration unit 会让 switch 半切换 |
+
 ## 2026-10-23T07:22:50+09:00
 
 **摘要**：docs(skill): `/etc/nixos` 是 git 仓库时的适配操作
