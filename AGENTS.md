@@ -22,17 +22,25 @@
 3. **只装 `llama-cpp-rocm`**。本分支是「浮动的隔离区」，不是第二个主仓。
    往里加第二个包会扩大浮动面，而浮动面越小越好审。
 
-4. **验证方式与 `main` 不同**：本分支没有 `nix flake check` 的那些自检脚本
+4. **没有 lock 带来的一个坑**：直接
+   `nix flake metadata github:.../impure` 会报
+   `cannot write modified lock file` —— 本分支没有 lock，而该命令想写一份。
+   求值请加 `--no-write-lock-file`：
+   `nix eval --no-write-lock-file --raw 'github:Kihara777/NixKits/impure#packages.x86_64-linux.llama-cpp-rocm.name'`
+   （2026-10-22 实测 → `llama-cpp-0.7.0`）。下游正常用法不受影响：它在自己的
+   `flake.lock` 里记下本分支的 rev（`nix flake lock --update-input nixkits-impure`）。
+
+5. **验证方式与 `main` 不同**：本分支没有 `nix flake check` 的那些自检脚本
    （它们不在这个分支上）。改动的判据是：
    - `nix flake check`——至少确认 flake 能求值；
    - `nix build .#llama-cpp-rocm`——**真构建**，不是 `--dry-run`；
    - 改了 `module.nix` 的话：在本机 `nixos apply` 一次并核对服务起来。
 
-5. **四语文档同步**：`README.md`（zh）→ `docs/README.{en,ja,pcn}.md`；
+6. **四语文档同步**：`README.md`（zh）→ `docs/README.{en,ja,pcn}.md`；
    `docs/zh/llama-cpp-rocm.md` → `docs/<lang>/llama-cpp-rocm.md`。
    改哪一份就**同批**改全部四份。
 
-6. **维护日志**：`MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`，
+7. **维护日志**：`MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`，
    记录**本分支**的提交 SHA（不是 `main` 的）。其余规则同 `main`：
    四语条目数一致、时间戳精确到秒、SHA 全局去重。
 
