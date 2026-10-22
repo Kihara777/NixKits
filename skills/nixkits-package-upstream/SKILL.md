@@ -24,8 +24,10 @@ description: NixKits 的 nixpkgs 上游贡献适配层——在通用技能 upst
 
 ## 第 0 步：本仓的两条硬约定
 
-**① `flake.lock` 不提交，本地操作前先 `rm -f flake.lock`。**
-（理由见 `AGENTS.md`：`llama-cpp-ver` 是浮动输入。）
+**① `flake.lock` 提交，不要删它。**
+（2026-10-21 起：唯一的浮动输入 `llama-cpp-ver` 已迁到 `impure` 分支，lock 现在是
+**受测基线**。要更新输入就显式 `nix flake update <input>` 并同批提交新 lock——
+`rm -f flake.lock` 是旧约定，会让 CI 自己生成一份再判绿。）
 
 **② 开工前先 `git fetch origin` 对齐远端。**
 并行会话可能已经动过同一批文件。

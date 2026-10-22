@@ -24,7 +24,7 @@ NixKits 特有环节。
 | 包目录 | `packages/*.nix`（部分包在同名子目录内，如 `packages/ruyi/`） |
 | 文档布局 | `docs/<lang>/<pkg>.md`，**四语**：`zh`（基准）/ `en` / `ja` / `pcn` |
 | 变更记录 | `MAINTENANCE.md` + `docs/MAINTENANCE.{en,ja,pcn}.md`，由 `write-maintenance-log` 技能维护 |
-| 不可锁定输入 | `llama-cpp-ver`（浮动追踪 llama.cpp 最新版），故 **`flake.lock` 不提交** |
+| 不可锁定输入 | **无**（2026-10-21 起）：`llama-cpp-ver` 与 `llama-cpp-rocm` 已迁到 `impure` 分支，本仓 `flake.lock` **提交** |
 | 额外同步 | 升级 `dsh` 时须同步内置插件清单（见下） |
 | 远端信号 | 每轮开工前先核对未关闭 issue / PR（第 0 步）——本仓有与更新重叠的历史先例（见下） |
 | 子项目 | `dsh-api-balance` 薄封装引用同账户子仓 `Kihara777/dsh-api-balance`（见下） |
@@ -353,10 +353,11 @@ gh api "repos/NixOS/nixpkgs/contents/pkgs/by-name/<首两字母>/<包名>/packag
 
 通用排除规则之外，本仓库还有：
 
-- **`llama-cpp-ver` 浮动输入**：overlay `llama-cpp-rocm` 通过该输入动态获取
-  上游最新版本号，**不可锁定**——这是 `flake.lock` 不进 `.gitignore` 之外的
-  必然结果：`flake.lock` 已被 `.gitignore` 排除，故第 4 步的 flake.lock
-  前置检测会命中「情况 1」直接跳过。
+- **浮动输入已不存在**（2026-10-21 起）：`llama-cpp-rocm`、它的 overlay/模块与
+  `llama-cpp-ver` 都迁到了 **`impure` 分支**（orphan、只装这一个包、**不提交 lock**）。
+  所以本仓 `flake.lock` **提交**、第 4 步的 flake.lock 前置检测走「情况 3：随 hash
+  一并提交」那一支。要升 llama.cpp 时改的是 `/etc/nixos` 的 `nixkits-impure` input，
+  不在本仓。
 - **`godot-ai`**：受上游依赖限制，无独立构建 workflow（详见 AGENTS.md）。
 - **`codewhale-src`**：不是独立包，而是 `codewhale.nix` 在 riscv64 上的源构建分支。
 
