@@ -294,6 +294,38 @@ gh api repos/<owner>/<known-repo> --jq .full_name || echo "取数链路异常 �
 
 ## 第 4 步：更新构建配置
 
+### 依赖版本冲突：两个方向，两条查法
+
+升级或新打包时依赖版本对不上，**先别急着 override 或放弃**——先看 nixpkgs 有没有解。
+
+| 方向 | 症状 | 先查什么 |
+|---|---|---|
+| **依赖太旧**（nixpkgs 的包版本 < 软件要求） | 构建报 `requires >=X`，或运行时缺 API | **先更新 flake input（nixpkgs）**——新 nixpkgs 可能已包含新版依赖 |
+| **依赖太新**（nixpkgs 的包版本 > 软件要求的上限） | 构建报版本约束不满足（如 `mcp<2` 而 nixpkgs 是 2.2.0） | **查 nixpkgs 是否提供版本化变体**：`<name>_<major>`（如 `python3Packages.mcp_1`） |
+
+实测（2026-10-21）：`blender-mcp` 声明 `mcp[cli]>=1.2.0,<2`，nixpkgs master 的
+`python3Packages.mcp` 是 2.2.0——但同一棵树里有
+
+```nix
+mcp    = callPackage ../development/python-modules/mcp { };       # 2.2.0
+mcp_1  = callPackage ../development/python-modules/mcp/1.nix { }; # 1.29.0
+```
+
+`mcp_1` 是 2026-10-19 专门为这类场景加的（提交信息 `python3Packages.mcp_1: init at 1.29.0`）。
+**先查 `python3Packages.<name>_<major>`，再下「不可提交」的结论**——当初就是因为只查了
+`mcp` 的版本，把「可以提交」误判成「必然红」。
+
+⚠️ **版本化变体存在 ≠ 每棵 nixpkgs 都有**：`mcp_1` 在 master 上有，而某仓锁定的
+10-20 rev 上**还没有**（那里 `mcp` 本身就是 1.29.0，命名为 `mcp_2` 的是另一条线）。
+查之前先确认你查的是**哪一棵** nixpkgs：
+
+```bash
+gh api "repos/NixOS/nixpkgs/contents/pkgs/top-level/python-packages.nix?ref=master" \
+  -H "Accept: application/vnd.github.raw" | grep -n '^  mcp'
+nix eval --impure --raw "github:NixOS/nixpkgs/<你锁的 rev>#python3Packages.mcp_1.version"
+```
+
+
 **按包型选择流程**——包型由 `.nix` 文件中的 builder 决定，不是由包名决定。
 
 > **📖 详见配套文件 [`builders.md`](builders.md)**，其中按 builder 列出：

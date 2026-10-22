@@ -95,6 +95,23 @@ grep -rc '<owner>/<repo>@' .github/workflows/*.yml | grep -v ':0'
 > `actions/checkout` 分布在 `build-package.yml` / `check.yml` / `ci-summary.yml`
 > **三个独立文件**（不是单一可复用 workflow），故改它是 3 处而非 1 处。
 
+## 第 4 步补充：每轮都要把 nixpkgs 更新到最新
+
+2026-10-22 起：**每轮检查软件更新时，先更新 nixpkgs**，再查包版本。
+
+理由：包的上游依赖常常要更新的 nixpkgs 才满足——先更新，能让「依赖太旧」
+这类问题在查版本之前就消失（判定方法见通用技能「依赖版本冲突：两个方向」）。
+
+```bash
+nix flake update nixpkgs     # 只更新 nixpkgs，不动其他 input
+```
+
+**单独一次提交**（不与包升级混）。历史事故：一次顺带更新让三个包构建失败
+（`v4l2loopback` × 内核 7.3、`mozc` × 新 Qt、`syrupy` 测试过期），混在一起就无法归因。
+
+提交后用 `nix flake check --no-write-lock-file` + 关键包构建验证；有失败先按
+通用技能的「依赖版本冲突」两条查法排查，再考虑回退。
+
 ## 第 4 步补充：lock 收尾（本仓 lock 已提交）
 
 本仓 `flake.lock` **提交**（2026-10-21 起，浮动输入已迁到 `impure` 分支），
