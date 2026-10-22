@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:37:53+09:00
+
+**摘要**：dsh-api-balance 薄ラッパー再ピン —— 前 / 次の質問ボタン（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）
+
+- rev `980201d` → `50ab55e`；バージョンは `0.1.1` のまま
+- 判据：`nix build` 成功
+
+| コミット | 説明 |
+|------|------|
+| `c673260` | chore(dsh-api-balance): 薄ラッパー rev 追従 50ab55e |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `980201d` → `50ab55e` |
+
 ## 2026-10-23T07:30:47+09:00
 
 **概要**：docs(skill): 残留 unit により switch が半端になる

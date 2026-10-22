@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:37:53+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 前 / 次 質問 button（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）
+
+- rev `980201d` → `50ab55e`；版本 仍 `0.1.1`
+- 判据：`nix build` 成功
+
+| 提交 | 説明 |
+|------|------|
+| `c673260` | chore(dsh-api-balance): 薄 wrapper rev 追従 50ab55e |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `980201d` → `50ab55e` |
+
 ## 2026-10-23T07:30:47+09:00
 
 **摘要**：docs(skill): 残留 unit switch 半端化

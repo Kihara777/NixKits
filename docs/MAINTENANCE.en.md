@@ -2,6 +2,22 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:37:53+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — previous/next message buttons ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900))
+
+- rev `980201d` → `50ab55e`; version stays `0.1.1`
+- criteria: `nix build` succeeds
+
+| Commit | Description |
+|------|------|
+| `c673260` | chore(dsh-api-balance): wrapper rev bump to 50ab55e |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `980201d` → `50ab55e` |
+
 ## 2026-10-23T07:30:47+09:00
 
 **Summary**: docs(skill): a stale unit makes the switch half-done
