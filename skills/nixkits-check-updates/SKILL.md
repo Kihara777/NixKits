@@ -599,6 +599,29 @@ git add flake.lock && git commit -m "chore(flake): update nixkits <old> -> <new>
 ⚠️ **先看现状再动手**：`git status --short` 若已有未提交改动，先判断它们是「该提交」还是
 「长期挂着的」——不要用一次 `git add -A` 把两者混在一起。
 
+### ⚠️ 残留的 `switch-to-configuration` unit 会让 switch 在「构建成功之后」失败
+
+实测（2026-10-23）：`nixos-rebuild switch` **构建成功、代际已建**（`system-674`），
+但激活那一步失败：
+
+```
+Failed to start transient service unit: Unit nixos-rebuild-switch-to-configuration.service
+was already loaded or has a fragment file.
+```
+
+症状是**半切换**：`/nix/var/nix/profiles/system` 已指向新代际，但运行中的服务还是旧的
+——看起来「切了」，实际不一致。
+
+处置：
+
+1. `systemctl status nixos-rebuild-switch-to-configuration` 查它还在不在
+   （本机实测这次它已自动消失）；
+2. 不在 → **直接重跑 `nixos-rebuild switch`**，不要重跑整个构建链；
+3. 重跑后核对 `/run/current-system` 与 rebuild 输出的 store 路径一致，再验证 `<pkg> --version`。
+
+**判据**：`nixos-rebuild switch` 的退出码**不证明激活完成**——要看 journal 里有没有
+`finished switching to system configuration`。缺这一句 = 没切完。
+
 ## 第 9 步补充：本仓的子项目引用关系
 
 通用技能第 9 步给出「同账户子项目链式检查」的方法与前提判据。**本仓的实际
