@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:43:10+09:00
+
+**概要**：ja メンテナンスログが中文の摘要マーカーを使っていたのを修正
+
+- `docs/MAINTENANCE.ja.md` の 2026-10-23 エントリが `**摘要**`（本語は `**概要**`）を使っており、解析に失敗してリストが 0 と数えられた
+- 判据：`check-maintenance-log` → 451 entries、summary markers in-language が全緑
+
+| コミット | 説明 |
+|------|------|
+| `61b204d` | fix(maintenance-log): ja エントリが中文の摘要マーカーを使用 |
+
 ## 2026-10-23T07:37:53+09:00
 
 **概要**：dsh-api-balance 薄ラッパー再ピン —— 前 / 次の質問ボタン（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）

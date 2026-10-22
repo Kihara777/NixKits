@@ -2,6 +2,17 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:43:10+09:00
+
+**摘要**：修复 ja 维护日志误用中文摘要标记
+
+- `docs/MAINTENANCE.ja.md` 的 2026-10-23 条目把标记写成 `**摘要**`（本语应为 `**概要**`），解析失败连带清单被读成 0
+- 判据：`check-maintenance-log` → 451 entries，summary markers in-language 全绿
+
+| 提交 | 说明 |
+|------|------|
+| `61b204d` | fix(maintenance-log): ja 条目误用中文摘要标记 |
+
 ## 2026-10-23T07:37:53+09:00
 
 **摘要**：dsh-api-balance 薄封装 re-pin —— 上一条/下一条提问按钮（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）

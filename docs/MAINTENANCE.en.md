@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:43:10+09:00
+
+**Summary**: fix a Chinese summary marker in the ja maintenance log
+
+- The 2026-10-23 entry in `docs/MAINTENANCE.ja.md` used `**摘要**` where Japanese requires `**概要**`, so parsing failed and its list was counted as 0
+- Criterion: `check-maintenance-log` → 451 entries, summary markers in-language
+
+| Commit | Description |
+|------|------|
+| `61b204d` | fix(maintenance-log): ja entry used a Chinese summary marker |
+
 ## 2026-10-23T07:37:53+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — previous/next message buttons ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900))

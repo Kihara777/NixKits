@@ -2,6 +2,17 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:43:10+09:00
+
+**摘要**：ja 維護記録 中文 摘要 標記 誤用 修正
+
+- `docs/MAINTENANCE.ja.md` 2026-10-23 条目 `**摘要**`（本語 `**概要**` 必須）使用、解析 失敗 連 清単 0 読
+- 判据：`check-maintenance-log` → 451 entries、summary markers in-language 全緑
+
+| 提交 | 説明 |
+|------|------|
+| `61b204d` | fix(maintenance-log): ja 条目 中文 摘要 標記 誤用 |
+
 ## 2026-10-23T07:37:53+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 前 / 次 質問 button（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0737260900)）
