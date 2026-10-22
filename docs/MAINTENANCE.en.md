@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:45:36+09:00
+
+**Summary**: dsh-api-balance component docs sync — fullscreen icon strip and previous/next message buttons
+
+- the 「UI enhancements」 line in `docs/{zh,en,ja,pcn}/dsh-api-balance.md` stopped at the fullscreen toggle; the two capabilities added later in the child repo are now listed: fullscreen folds the icon strip away with an edge handle to pull it back, and the conversation's two round buttons appear while scrolling and fade when idle
+- documentation only, so no re-pin: the wrapper stays at `50ab55e` (that revision is the running behaviour)
+- criteria: the four languages keep the same row counts, and pcn carries no kana residue
+
+| Commit | Description |
+|------|------|
+| — | docs only |
+
 ## 2026-10-23T07:43:10+09:00
 
 **Summary**: fix a Chinese summary marker in the ja maintenance log

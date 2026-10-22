@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:45:36+09:00
+
+**摘要**：dsh-api-balance component 文書 同期 —— 全屏 図標列 與「前 / 次 質問」追記
+
+- `docs/{zh,en,ja,pcn}/dsh-api-balance.md` の「UI 強化」全屏切替 迄 記述。子倉 後 追加 二件 追記：全屏時 図標列 共 収納、左縁 把手 出 入 可能；会話 上下 二 丸 button scroll 中 出現、静止 fade out
+- 文書 限定 変更、re-pin 不：wrapper `50ab55e` 固定（該版 現実行時挙動）
+- 判据：四言語 行数 不変、pcn 仮名 残留 無
+
+| 提交 | 説明 |
+|------|------|
+| — | 文書 限定 |
+
 ## 2026-10-23T07:43:10+09:00
 
 **摘要**：ja 維護記録 中文 摘要 標記 誤用 修正
