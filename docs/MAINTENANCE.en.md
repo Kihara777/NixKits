@@ -8,6 +8,17 @@ SHAs, and list-style summaries.
 
 > **The SHAs here are this branch's own** — they are a different set from `main`'s.
 
+## 2026-10-22T15:59:01+09:00
+
+**Summary**: document the pitfall that `nix flake metadata` fails without a lock
+
+- `AGENTS.md` gains hard rule 4: add `--no-write-lock-file` when evaluating
+- Includes the command that was actually verified (`llama-cpp-0.7.0`) and a note that downstream usage is unaffected
+
+| Commit | Description |
+|------|------|
+| `43f6f44` | docs(impure): document the no-lock `nix flake metadata` failure |
+
 ## 2026-10-22T14:32:43+09:00
 
 **Summary**: four-language security policy, and language switchers on the maintenance log

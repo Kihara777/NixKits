@@ -7,6 +7,17 @@
 
 > **本分支 SHA 與 `main` SHA 別系統** —— 此処 只 本分支 自身 之 commit 記録。
 
+## 2026-10-22T15:59:01+09:00
+
+**摘要**：lock 無 時 `nix flake metadata` 失敗 落穴 記録
+
+- `AGENTS.md` 硬 規約 第 4 条 追加：求値 時 `--no-write-lock-file` 付与
+- 実測 command 與 結果（`llama-cpp-0.7.0`）、下流 用法 影響 無 旨 明記
+
+| 提交 | 説明 |
+|------|------|
+| `43f6f44` | docs(impure): lock 無 時 nix flake metadata 失敗 記録 |
+
 ## 2026-10-22T14:32:43+09:00
 
 **摘要**：安全策略 四言語化、維護記録 語言切替器 追加
