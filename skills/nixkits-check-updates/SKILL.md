@@ -574,6 +574,31 @@ nixos-rebuild switch && <pkg> --version    # 版本要对上仓库声明
 2. **本机 `binfmt` 比 CI 宽松**（见上文「本机的构建条件」）：本地构建绿**不证明** CI 绿，
    反之亦然。跨架构包两边都要看。
 
+### 若 `/etc/nixos` 是 git 仓库（本机就是）
+
+实测（2026-10-23）：`/etc/nixos` **是 git 仓库**（`git rev-parse --is-inside-work-tree` → `true`），
+`flake.lock` **被跟踪**，`.gitignore` 只忽略 `.flake-lock-heads.json`（辅助文件），**没有远端**
+（纯本地版本追踪，不 push）。
+
+所以 `nix flake update nixkits` 之后还要多做一步：
+
+```bash
+cd /etc/nixos
+nix flake update nixkits
+sudo nixos-rebuild switch
+git add flake.lock && git commit -m "chore(flake): update nixkits <old> -> <new>"
+```
+
+| 要点 | 理由 |
+|---|---|
+| **必须提交** `flake.lock` | 否则下次更新时「改了没提交」与「没改」无法区分 |
+| **只 add `flake.lock`** | 本机工作区常有长期未提交的文件（如 `tests/ab-kb-deploy.sh`），`git add -A` 会把它们卷进来 |
+| **不 push** | 没有远端 |
+| 判据 | `git -C /etc/nixos status --short` 更新后只剩预期的 `flake.lock`（或已知的长期未提交项） |
+
+⚠️ **先看现状再动手**：`git status --short` 若已有未提交改动，先判断它们是「该提交」还是
+「长期挂着的」——不要用一次 `git add -A` 把两者混在一起。
+
 ## 第 9 步补充：本仓的子项目引用关系
 
 通用技能第 9 步给出「同账户子项目链式检查」的方法与前提判据。**本仓的实际
