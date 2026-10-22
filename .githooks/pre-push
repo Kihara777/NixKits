@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# pre-push 钩子：推之前对着**要推的那棵树**跑一遍自检。
+#
+# ── 定位：这是「追加」，不是「兜底」─────────────────────────────────────────
+# 兜底是 CI（`.github/workflows/check.yml`）：它跑同一套 `nix flake check`
+# 13 项，且不依赖本地是否装好了钩子、也不依赖本地 python/node/nix 齐不齐。
+# 这个钩子唯一的增量价值，是把「推之前忘了跑检查」这种**流程失误**挡在本地——
+# 2026-10-22/23 连续两次栽在这里（ja 摘要标记写成 `**摘要**`、pcn 混进假名），
+# 两次都是 CI 先发现。
+#
+# 所以：钩子跑不过 → 别推；钩子跑不了（缺 python/node/nix）→ 照样别把「跳过」
+# 当成「通过」，CI 会补上这一课。
+#
+# 安装：`develop/install-hooks.sh`（等价于 `git config core.hooksPath .githooks`）
+# 临时绕过：`git push --no-verify` —— 但那就是把判断交给 CI。
+set -euo pipefail
+exec "$(git rev-parse --show-toplevel)/develop/precheck.sh" HEAD

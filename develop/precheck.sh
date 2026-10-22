@@ -47,14 +47,34 @@ for script in develop/check-*.py; do
 done
 
 if command -v node >/dev/null 2>&1; then
-  printf '  %-34s' "news-mode-tests"
-  if out="$(node packages/dsh-preset-news-three-elements/tests/mode.test.mjs 2>&1)"; then
+  for pair in \
+    "news-mode-tests:packages/dsh-preset-news-three-elements/tests/mode.test.mjs" \
+    "maintenance-skills-tests:packages/dsh-nixos-shell/tests/maintenance-skills.test.mjs"
+  do
+    label="${pair%%:*}"
+    file="${pair#*:}"
+    printf '  %-34s' "$label"
+    if out="$(node "$file" 2>&1)"; then
+      echo "OK"
+    else
+      echo "FAIL"; echo "$out" | sed 's/^/      /'; fail=1
+    fi
+  done
+else
+  echo "  news-mode-tests / maintenance-skills-tests 跳过（node 不在 PATH）"
+fi
+
+# `module-eval` 是 13 项里唯一不在 python/node 里的：它走 Nix 求值（不构建，约十秒）。
+# 漏掉它的话「这棵树全过」就不成立——本脚本此前只跑 11/13，与 `checks` 不同步。
+if command -v nix >/dev/null 2>&1; then
+  printf '  %-34s' "module-eval"
+  if out="$(nix eval --raw '.#checks.x86_64-linux.module-eval.drvPath' 2>&1)"; then
     echo "OK"
   else
-    echo "FAIL"; echo "$out" | sed 's/^/      /'; fail=1
+    echo "FAIL"; echo "$out" | tail -5 | sed 's/^/      /'; fail=1
   fi
 else
-  echo "  news-mode-tests                   跳过（node 不在 PATH）"
+  echo "  module-eval                       跳过（nix 不在 PATH）"
 fi
 
 if [ "$fail" -ne 0 ]; then

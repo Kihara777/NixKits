@@ -202,6 +202,14 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
    > ```
    > 推之前再用 `bash develop/precheck.sh [commit]` 对着**那棵树**验一遍（见上一条）。
 5. **`nix flake check`**：代码修改后必须先通过验证再提交
+
+   > **本地钩子是「追加」，CI 是「兜底」。** `develop/install-hooks.sh` 把
+   > `core.hooksPath` 指向 `.githooks/`，推之前跑 `develop/precheck.sh`——它对着
+   > **要推的那棵树**（临时 worktree）跑全部 **13 项**，约 20 秒。它的唯一增量价值是
+   > 把「推之前忘了跑检查」这类**流程失误**挡在本地：2026-10-22/23 连续两次
+   > （ja 摘要标记写成 `**摘要**`、pcn 混进假名）都是 CI 先发现的。
+   > **兜底永远是 CI**：它不依赖本地是否装过钩子，也不依赖本地 python/node/nix 齐不齐。
+   > 临时绕过用 `git push --no-verify`——那等于把判断交给 CI，而不是变成「没问题」。
 6. **推 workflow 改动要用仓库所有者账号**：本机默认账号的 OAuth 令牌没有 `workflow` 权限，改 `.github/workflows/` 下任何文件会被 remote 拒（`refusing to allow an OAuth App to create or update workflow … without 'workflow' scope`）。处置：`gh auth switch --user Kihara777` → 推 → 切回（详见 `nixkits-check-updates` 技能）。
 
 ### 维护记录
