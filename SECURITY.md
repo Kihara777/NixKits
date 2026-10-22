@@ -1,5 +1,7 @@
 # 安全策略 — impure 分支
 
+中文 | [English](docs/SECURITY.en.md) | [日本語](docs/SECURITY.ja.md) | [偽中国語](docs/SECURITY.pcn.md)
+
 ## 本分支的特殊风险：它故意不可复现
 
 `llama-cpp-ver` 每次求值都取 GitHub 上 llama.cpp 的**最新 release JSON**，

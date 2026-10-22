@@ -1,5 +1,7 @@
 # メンテナンスログ
 
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
+
 本ファイルは `impure` ブランチの変更を記録する。規則は `main` と同じ：
 四言語で条目数一致、タイムスタンプは秒単位、commit SHA は全体で重複なし、
 摘要は必ず箇条書き。

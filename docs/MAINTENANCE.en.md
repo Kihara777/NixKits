@@ -1,5 +1,7 @@
 # Maintenance Log
 
+[中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
+
 This file records changes on the `impure` branch. The rules match `main`: the same number
 of entries in all four languages, second-precision timestamps, globally unique commit
 SHAs, and list-style summaries.

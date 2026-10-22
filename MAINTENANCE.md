@@ -1,5 +1,7 @@
 # 维护日志
 
+中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
+
 本文件记录 `impure` 分支的变更。规则同 `main`：四语条目数一致、时间戳精确到秒、
 提交 SHA 全局去重、摘要一律清单式。
 

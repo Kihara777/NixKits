@@ -1,5 +1,7 @@
 # 維護記録
 
+[中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
+
 本文件 記録 `impure` 分支 之 変更。規則 與 `main` 同：四言語 条目数 一致、時刻 秒単位
 正確、commit SHA 全体 重複 無、摘要 必 箇条書。
 
