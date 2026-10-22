@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:21:00+09:00
+
+**概要**：docs(skill): ローカルビルドと切替も更新フローの一部
+
+- 本リポジトリは `/etc/nixos` の flake input（`github:Kihara777/NixKits`）。**push は反映ではない**——システムは `flake.lock` が固定した rev を動かす
+- フローを補完：オンライン更新 → `nix flake update nixkits` → `nixos-rebuild switch` → 実バージョン確認
+- 判据は「`<pkg> --version` が一致」であり、「rebuild が 0 を返した」ではない。input を更新し忘れても rebuild は成功し、古い版が動き続ける
+- 併記：`nixkits-impure` は別 input、本機の binfmt はローカルビルドを CI より緩くする
+- 判据：doc-links は 237 ファイル通過；四言語の条目数が相等（448）
+
+| コミット | 説明 |
+|------|------|
+| `3c1d307` | docs(skill): ローカルビルドと切替も更新フローの一部 |
+
 ## 2026-10-23T07:17:02+09:00
 
 **概要**：docs(skill): 毎回 nixpkgs を更新 + 依存バージョン衝突の二つの調べ方

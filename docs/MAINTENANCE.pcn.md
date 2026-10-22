@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T07:21:00+09:00
+
+**摘要**：docs(skill): 本地 build 與 switch 也 更新 flow 一部
+
+- 本 repo `/etc/nixos` flake input（`github:Kihara777/NixKits`）。**push 反映 非**——system `flake.lock` 固定 rev 動作
+- flow 補完：online 更新 → `nix flake update nixkits` → `nixos-rebuild switch` → 実 version 確認
+- 判据「`<pkg> --version` 一致」、「rebuild 0 返」 非。input 更新忘 也 rebuild 成功、旧版 動作 続
+- 併記：`nixkits-impure` 別 input、本機 binfmt 本地 build CI 比 緩
+- 判据：doc-links 237 file 通過；四言語 条目数 相等（448）
+
+| 提交 | 説明 |
+|------|------|
+| `3c1d307` | docs(skill): 本地 build 與 switch 也 更新 flow 一部 |
+
 ## 2026-10-23T07:17:02+09:00
 
 **摘要**：docs(skill): 毎回 nixpkgs 更新 + 依存 version 衝突 二 調方

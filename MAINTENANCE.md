@@ -2,6 +2,20 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:21:00+09:00
+
+**摘要**：docs(skill): 本地构建与切换也是更新流程的一步
+
+- 本仓是 `/etc/nixos` 的 flake input（`github:Kihara777/NixKits`），**推送不等于生效**——系统跑的是 flake.lock 里锁的 rev
+- 流程补完：在线更新 → `nix flake update nixkits` → `nixos-rebuild switch` → 核对实际版本
+- 判据是「`<pkg> --version` 对得上」，不是「rebuild 返回 0」：忘了 update input 时 rebuild 照样成功，跑的还是旧版
+- 另记 `nixkits-impure` 是独立 input；本机 binfmt 让本地构建比 CI 宽松
+- 判据：doc-links 237 文件；四语条目数相等（448）
+
+| 提交 | 说明 |
+|------|------|
+| `3c1d307` | docs(skill): 本地构建与切换也是更新流程的一步 |
+
 ## 2026-10-23T07:17:02+09:00
 
 **摘要**：docs(skill): 每轮更新 nixpkgs + 依赖版本冲突两条查法

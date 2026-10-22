@@ -2,6 +2,20 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T07:21:00+09:00
+
+**Summary**: docs(skill): local build and switch are part of the update flow too
+
+- This repo is a flake input of `/etc/nixos` (`github:Kihara777/NixKits`); **pushing does not make it live** — the system runs whatever rev `flake.lock` pins
+- The flow is now complete: update online → `nix flake update nixkits` → `nixos-rebuild switch` → verify the actual version
+- The criterion is "`<pkg> --version` matches", not "rebuild returned 0": without updating the input, rebuild still succeeds while the old version keeps running
+- Also noted: `nixkits-impure` is a separate input, and local binfmt makes local builds looser than CI
+- Criterion: doc-links passes on 237 files; equal entry counts across four languages (448)
+
+| Commit | Description |
+|------|------|
+| `3c1d307` | docs(skill): local build and switch are part of the update flow too |
+
 ## 2026-10-23T07:17:02+09:00
 
 **Summary**: docs(skill): update nixpkgs every round, plus the two lookups for dependency version conflicts
