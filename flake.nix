@@ -69,6 +69,7 @@
     # - session-sources：预设插件写进会话的消息来源不得用 v3 旧形状（kind: "plugin"）
     # - self-tests：每个自检都必须能被「已知的坏输入」撞响（对照 + 注入 + 断言红得对）
     # - news-mode-tests：新闻三要素模式插件的行为测试
+    # - maintenance-skills-tests：维护技能注入在目录不可读/缺 SKILL.md 时必须抛错
     checks = {
       preset-derivation = pkgs.runCommand "check-preset-derivation" {
         nativeBuildInputs = [ pkgs.python3 ];
@@ -162,6 +163,19 @@
         nativeBuildInputs = [ pkgs.nodejs ];
       } ''
         node ${./packages/dsh-preset-news-three-elements}/tests/mode.test.mjs
+        touch $out
+      '';
+
+      # maintenance-skills 插件的行为测试：技能目录读不到、或缺 SKILL.md 时
+      # **必须抛错**，不能静默降级成「维护模式正常、只是技能不在」。
+      # 2026-10-22 起（外部审计第 5 条）。测试用 options.root 注入坏输入，
+      # 因此不依赖构建期生成的 skills-embedded/。
+      maintenance-skills-tests = pkgs.runCommand "check-maintenance-skills" {
+        nativeBuildInputs = [ pkgs.nodejs ];
+      } ''
+        # 整个包目录进 store：测试用相对 import（../lib/maintenance-skills.js），
+        # 只投单个 .mjs 文件会让它解析到 store 根下的 /nix/lib（不存在）。
+        node ${./packages/dsh-nixos-shell}/tests/maintenance-skills.test.mjs
         touch $out
       '';
     };

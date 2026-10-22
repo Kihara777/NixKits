@@ -60,13 +60,23 @@ const MAINTENANCE_WORKFLOW = `## 维护模式 — NixKits 仓库维护工作流
 - **泛化**：修复后总结业务逻辑，评估可泛化内容并更新到对应技能。
 - 技能内容来自本预设注入的运行时技能（write-project-docs / write-maintenance-log / translate-*），调用 skill 工具加载；仓库 skills/ 是内容单一来源。`;
 
-export function apply(ctx) {
+export function apply(ctx, options = {}) {
   // Embedded canonical tree: <package>/skills-embedded/<skillId>/SKILL.md.
-  const root = fileURLToPath(new URL("../skills-embedded/", import.meta.url));
+  // `options.root` 只给测试用（自测需要造「目录不可读」这类坏输入）。
+  const root = options.root ?? fileURLToPath(new URL("../skills-embedded/", import.meta.url));
+
+  // ⚠️ 失败不再静默跳过（2026-10-22，外部审计第 5 条）：
+  // 过去三处 `catch` / 提前 `return` 会让「技能目录里少了几个」表现为
+  // 「维护模式正常启动，只是技能不在」——与 2026-10-21 漏注册 4 个技能同形。
+  // 现在：读不到目录直接抛；单个条目失败先累计，结束时一并抛。
+  const problems = [];
 
   const registerSkill = (skillId) => {
     const file = `${root}/${skillId}/SKILL.md`;
-    if (!existsSync(file)) return;
+    if (!existsSync(file)) {
+      problems.push(`${skillId}: 缺少 SKILL.md（${file}）`);
+      return;
+    }
     const { metadata, content } = parseSkillDocument(readFileSync(file, "utf8"));
     const skillName = String(metadata.name ?? "");
     const description = String(metadata.description ?? "");
@@ -101,19 +111,31 @@ export function apply(ctx) {
   ]);
 
   // 全量遍历：排除表之外的全部技能（translate-* 也在其中，不再单列）。
-  let entries = [];
+  let entries;
   try {
     entries = readdirSync(root);
-  } catch {
-    entries = [];
+  } catch (err) {
+    throw new Error(
+      `maintenance-skills: 技能目录不可读（${root}）：${err instanceof Error ? err.message : String(err)}\n` +
+        "拒绝以「维护模式已加载、但一个技能都没有」的状态继续——" +
+        "这会让会话看起来正常而实际缺少全部维护技能。",
+    );
   }
+
   for (const entry of entries) {
     if (EXCLUDED.has(entry)) continue;
     try {
       if (statSync(`${root}/${entry}`).isDirectory()) registerSkill(entry);
-    } catch {
-      // skip unreadable entries
+    } catch (err) {
+      problems.push(`${entry}: ${err instanceof Error ? err.message : String(err)}`);
     }
+  }
+
+  if (problems.length > 0) {
+    throw new Error(
+      `maintenance-skills: ${problems.length} 个技能无法加载（不静默跳过）：\n` +
+        problems.map((p) => `  - ${p}`).join("\n"),
+    );
   }
 
   ctx.systemPrompt.section({
