@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T16:39:25+09:00
+
+**摘要**：docs(skill): 預演 PR upstream-audit 第 3.5 步 化
+
+- dry-run「package build 可」証明、預演 PR「変更 PR 清潔」証明——互 代 不能
+- 四段：local 分支 → fork 同源基準分支 → head push → fork 内 `gh pr create`
+- 判据 `changedFiles: 1`、「PR 作成成功」 非。実測：base 不同源時 6907 file 表示
+- `nixpkgs-review` fork 内 PR 使 不能 七 実測 併記（浅 clone merge、`-b` upstream 同名分支 取得、`wip` unstaged 唯、`pr` upstream 固定）
+- 同 round 実践：fork 内 預演 PR `Kihara777/nixpkgs#2`（1 file / 1 commit / MERGEABLE）
+- 判据：doc-links 237 file 通過；四言語 条目数 相等（451）
+
+| 提交 | 説明 |
+|------|------|
+| `bf5949f` | docs(skill): 第 3.5 步 —— fork 内 預演 PR |
+
 ## 2026-10-23T09:06:01+09:00
 
 **摘要**：dsh-api-balance 薄 wrapper re-pin —— 上矢印 折畳履歴 自動 展開（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900)）

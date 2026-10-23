@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T16:39:25+09:00
+
+**概要**：docs(skill): upstream-audit の第 3.5 歩として予演 PR
+
+- dry-run は「パッケージがビルドできる」こと、予演 PR は「変更が PR として清潔か」を証明する——互いに代われない
+- 四段階：ローカル分支 → fork の同源基準分支 → head を push → fork 内で `gh pr create`
+- 判据は `changedFiles: 1` であり「PR 作成成功」ではない。実測：base が同源でないと 6907 ファイルになった
+- `nixpkgs-review` が fork 内 PR に使えない七つの実測を併記（浅い clone のと merge、`-b` が upstream の同名分支を取得、`wip` は unstaged のみ、`pr` は upstream 固定）
+- 同ラウンドの実践：fork 内予演 PR `Kihara777/nixpkgs#2`（1 file / 1 commit / MERGEABLE）
+- 判据：doc-links は 237 ファイル通過；四言語の条目数が相等（451）
+
+| コミット | 説明 |
+|------|------|
+| `bf5949f` | docs(skill): 第 3.5 歩 —— fork 内で予演 PR |
+
 ## 2026-10-23T09:06:01+09:00
 
 **概要**：dsh-api-balance 薄ラッパー再ピン —— 上矢印で折り畳み履歴を自動展開（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900)）

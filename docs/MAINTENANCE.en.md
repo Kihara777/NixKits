@@ -2,6 +2,21 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T16:39:25+09:00
+
+**Summary**: docs(skill): the rehearsal PR becomes step 3.5 of upstream-audit
+
+- Dry-run proves "the package builds"; a rehearsal PR proves "the change is clean as a PR" — neither replaces the other
+- Four steps: local branch → a same-base fork branch → push head → `gh pr create` inside the fork
+- The criterion is `changedFiles: 1`, not "the PR was created"; measured: a mismatched base showed 6907 files
+- Records seven measured reasons `nixpkgs-review` cannot serve fork-only PRs (shallow-clone merge, `-b` fetching the upstream branch of the same name, `wip` seeing only unstaged changes, `pr` hardcoding upstream)
+- Same round: rehearsal PR `Kihara777/nixpkgs#2` (1 file / 1 commit / MERGEABLE)
+- Criterion: doc-links passes on 237 files; equal entry counts across four languages (451)
+
+| Commit | Description |
+|------|------|
+| `bf5949f` | docs(skill): step 3.5 — a rehearsal PR inside the fork |
+
 ## 2026-10-23T09:06:01+09:00
 
 **Summary**: dsh-api-balance wrapper re-pin — the up arrow auto-expands collapsed history ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900))
