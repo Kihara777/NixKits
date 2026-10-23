@@ -735,6 +735,78 @@ nixpkgs-review rev "$HEAD" --no-shell
 
 ---
 
+## 第 3.5 步：预演 PR（在 fork 内建，不碰上游）
+
+第 3 步的 dry-run 证明「包能构建、产物能跑」。这一步证明另一件事：
+**这个改动作为 PR 是干净的**——一个文件、一个 commit、可合并。
+
+两者不能互相替代：dry-run 不知道你的 git 历史长什么样，而 reviewer 第一眼看的是 diff。
+
+### 为什么值得做
+
+- 把「包对不对」与「提交形态对不对」分开验证；
+- 全程不碰上游：PR 建在**自己的 fork** 里，base 也是 fork 里的分支；
+- upstream PR 真开出来时，预演过的分支可以直接用，不用重来。
+
+### 步骤
+
+```bash
+# ① 本地：基于最新 master 建分支并提交
+cd /path/to/nixpkgs
+git fetch origin master --depth=1 && git checkout -B <branch> FETCH_HEAD
+# 写 pkgs/by-name/<前缀>/<pkg>/package.nix
+git add -A && git commit -m "<pkg>: init at <ver>"
+
+# ② fork 侧：先建一个与 head 同源的基准分支
+git push fork <base-sha>:refs/heads/staging
+
+# ③ 推 head 分支
+git push fork <branch>:<branch>
+
+# ④ 在 fork 内建 PR（--repo 指 fork，不是 NixOS/nixpkgs）
+gh pr create --repo <owner>/nixpkgs --base staging --head <branch> \
+  --title "<pkg>: init at <ver> (dry-run, do not merge)" \
+  --body "Dry-run PR inside the fork only. Not intended for upstream."
+```
+
+### 判据：看 diff 大小，不是「PR 建成功」
+
+```bash
+gh pr view <号> --repo <owner>/nixpkgs \
+  --json baseRefName,changedFiles,commits,mergeable \
+  --jq '{base: .baseRefName, changedFiles, commits: (.commits | length), mergeable}'
+```
+
+- ✅ `changedFiles: 1`、`commits: 1`、`mergeable: MERGEABLE`
+- ❌ `changedFiles: 6907` —— **base 与 head 不同源**。实测：fork 的 `staging` 停在旧
+  master 时，PR 把 upstream 的全部提交都算进了 diff，显示 6907 个文件、`CONFLICTING`
+
+### ⚠️ 这一步**不能**用 `nixpkgs-review`
+
+实测（2026-10-23，七次尝试）：
+
+| 尝试 | 结果 |
+|---|---|
+| `rev HEAD`（本地 commit） | 浅克隆下 `git merge` 失败（exit 128）；补全历史后仍报若干「removed」误报，且**不构建新包** |
+| `rev -b staging` | 它去 **upstream** 拉同名分支（`git fetch https://github.com/NixOS/nixpkgs staging`），base 不是我们的 |
+| `wip` | 只看 unstaged；`git add -N` 后能应用 diff，但仍只报 removed |
+| `pr <号>` | 写死查 `NixOS/nixpkgs/pulls/<号>`，看不到 fork 内的 PR |
+
+**结论**：`nixpkgs-review` 在设计上只服务 upstream PR。fork 内的预演 PR，它能提供的
+唯一证据是「diff 干净」——而那由上面的 `changedFiles` 判据给出，不需要 bot。
+
+**真正跑 review bot 的时机**：upstream PR 建好之后，`nixpkgs-review-gha` 会自动跑
+（obs 的先例：`1 package built`、`failed: []`）。
+
+### 收尾
+
+预演 PR 不要留着让人误会。可以关闭，也可以当记录留着——它带
+`(dry-run, do not merge)` 标题，且只存在于 fork 里：
+
+```bash
+gh pr close <号> --repo <owner>/nixpkgs --comment "Dry-run finished; closing."
+```
+
 ## 附：陷阱清单（审计阶段就要知道）
 
 ## 第六节：陷阱清单
