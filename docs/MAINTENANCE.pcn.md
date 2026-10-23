@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-23T09:06:01+09:00
+
+**摘要**：dsh-api-balance 薄 wrapper re-pin —— 上矢印 折畳履歴 自動 展開（[子倉 log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900)）
+
+- rev `25b97f3` → `225a791`；版本 仍 `0.1.1`
+- 子倉 README 既知 制限（load 直後 移動 届 不 場合 有）記載、此処 参照
+- 判据：`nix build` 成功
+
+| 提交 | 説明 |
+|------|------|
+| `d5a8b8e` | chore(dsh-api-balance): 薄 wrapper rev 追従 225a791 |
+
+| package | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再 pin） |
+| 　 | src rev | `25b97f3` → `225a791` |
+
 ## 2026-10-23T07:45:36+09:00
 
 **摘要**：dsh-api-balance component 文書 同期 —— 全屏 図標列 與「前 / 次 質問」追記

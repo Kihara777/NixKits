@@ -2,6 +2,23 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-23T09:06:01+09:00
+
+**摘要**：dsh-api-balance 薄封装 re-pin —— 上箭头自动展开折叠历史（[子仓日志](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900)）
+
+- rev `25b97f3` → `225a791`；版本仍 `0.1.1`
+- 子仓同期补了 README 的「已知限制」一段（加载后跳转不到位），一并带进本仓引用
+- 判据：`nix build` 成功
+
+| 提交 | 说明 |
+|------|------|
+| `d5a8b8e` | chore(dsh-api-balance): 薄封装 rev 跟进 225a791 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 重钉） |
+| 　 | src rev | `25b97f3` → `225a791` |
+
 ## 2026-10-23T07:45:36+09:00
 
 **摘要**：dsh-api-balance 组件文档同步 —— 补上全屏图标栏与「上一条 / 下一条提问」

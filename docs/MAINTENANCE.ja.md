@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T09:06:01+09:00
+
+**概要**：dsh-api-balance 薄ラッパー再ピン —— 上矢印で折り畳み履歴を自動展開（[子リポジトリのログ](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900)）
+
+- rev `25b97f3` → `225a791`；バージョンは `0.1.1` のまま
+- 子リポジトリでは既知の制限（読み込み直後の移動が届かないことがある）も README に記載し、ここから参照している
+- 判据：`nix build` 成功
+
+| コミット | 説明 |
+|------|------|
+| `d5a8b8e` | chore(dsh-api-balance): 薄ラッパー rev 追従 225a791 |
+
+| パッケージ | 旧バージョン | 新バージョン |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1（rev 再ピン） |
+| 　 | src rev | `25b97f3` → `225a791` |
+
 ## 2026-10-23T07:45:36+09:00
 
 **概要**：dsh-api-balance コンポーネント文書の同期 —— 全画面のアイコン列と「前 / 次の質問」を追記

@@ -2,6 +2,23 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-23T09:06:01+09:00
+
+**Summary**: dsh-api-balance wrapper re-pin — the up arrow auto-expands collapsed history ([child log](https://github.com/Kihara777/dsh-api-balance/blob/main/MAINTENANCE.md#2026-10-23t0758360900))
+
+- rev `25b97f3` → `225a791`; version stays `0.1.1`
+- the child repo also documented a known limit (a jump right after loading may not land), referenced from here
+- criteria: `nix build` succeeds
+
+| Commit | Description |
+|------|------|
+| `d5a8b8e` | chore(dsh-api-balance): wrapper rev bump to 225a791 |
+
+| Package | Old version | New version |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.1 | 0.1.1 (rev re-pin) |
+| 　 | src rev | `25b97f3` → `225a791` |
+
 ## 2026-10-23T07:45:36+09:00
 
 **Summary**: dsh-api-balance component docs sync — fullscreen icon strip and previous/next message buttons
