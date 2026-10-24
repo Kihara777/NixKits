@@ -781,6 +781,16 @@ gh pr view <号> --repo <owner>/nixpkgs \
 - ❌ `changedFiles: 6907` —— **base 与 head 不同源**。实测：fork 的 `staging` 停在旧
   master 时，PR 把 upstream 的全部提交都算进了 diff，显示 6907 个文件、`CONFLICTING`
 
+### 它还能暴露 `nix-build` 看不见的错误
+
+实测（2026-10-23）：`meta.maintainers = [ Kihara777 ]`（GitHub handle，而不是
+maintainer-list 的属性名 `kitsunori`）时，**四层验收全绿**——因为 `nix-build` 不读 `meta`
+（懒求值）。而 `nixpkgs-review` 用 `nix-eval-jobs --meta` 求值，一读就报
+`undefined variable`，整个包被丢弃，表现为「Impacted packages 里根本没有它」。
+
+所以预演 PR（连同背后的 `--meta` 求值）验证的是**另一类正确性**：不只是「构建能过」，
+还有「review 能看见它」。两层都过，包才算可提交。
+
 ### ⚠️ 这一步**不能**用 `nixpkgs-review`
 
 实测（2026-10-23，七次尝试）：

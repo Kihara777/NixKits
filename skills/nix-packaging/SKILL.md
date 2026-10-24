@@ -82,3 +82,19 @@ npm 包 tarball **不带 lock 文件**，必须自己 vendor：
 4. **`__structuredAttrs` 与交叉编译冲突**（见第 5 步例外）。
 5. **Gitea 取源 403**（见第 1 步）。
 6. **徽章竞态**：workflow 删了而文档里徽章还在 → 断链。文档与 workflow 同一次提交改。
+7. **`meta.maintainers` 的属性名不是 GitHub handle**：`lib.maintainers` 里放的是
+   maintainer-list 的**属性名**（如 `kitsunori`），而 GitHub handle 是另一个字段
+   （`github = "Kihara777"`）。写错时 **`nix-build` 照样成功**——`meta` 是懒求值，
+   构建根本不读它。只有 `nix-eval-jobs --meta` 或显式求值才会暴露：
+
+   ```
+   error: undefined variable 'Kihara777'
+     at package.nix:83:43
+   ```
+
+   验证方式（四层验收之外的第 5 层）：
+
+   ```bash
+   nix eval --raw .#packages.<system>.<pkg>.meta.maintainers \
+     --apply 'ms: builtins.concatStringsSep "," (map (m: m.name) ms)'
+   ```

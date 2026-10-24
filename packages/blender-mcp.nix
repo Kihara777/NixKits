@@ -110,6 +110,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "blender-mcp";
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kitsunori ];
   };
 })
