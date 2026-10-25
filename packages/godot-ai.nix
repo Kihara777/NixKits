@@ -7,7 +7,7 @@
 
 python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
-  version = "4.3.0";
+  version = "4.3.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ python312.pkgs.buildPythonApplication rec {
     # ⚠️ 改 version 必须连 hash 一起改，且**先把 hash 置成 lib.fakeHash 再构建**取真值：
     # 固定输出派生的输出路径由 hash 决定，留着旧 hash 改 version 会让 Nix 直接复用旧版本
     # 的源码树——构建在一份与 version 不符的代码上跑完，而且**不报任何错**。
-    hash = "sha256-GJvmt9TYLAVwIPFV21sC7LguZeIevnwxGhRBcAqwn4Q=";
+    hash = "sha256-6hND7eRKh2B5t63DONFkdMv7pySWQ0BfzCmA13ouhsM=";
   };
 
   pyproject = true;
@@ -33,9 +33,13 @@ python312.pkgs.buildPythonApplication rec {
   # setuptools==84.0.0 wanted: ==84.0.0 found: 83.0.0"。该 pin 是可复现性守卫、
   # 不是功能需求——放宽到 nixpkgs 的版本，而不是再 vendor 一份 setuptools，
   # 这样整个闭包都用同一套工具链构建。4.3.0 仍保留这个 pin，故 postPatch 继续有效。
+  # 版本变过两回：4.3.0 是 `setuptools==84.0.0`，4.3.1 是 `84.2.1`。
+  # 精确匹配会随上游每次抬 pin 失效，故用**模式**匹配（只放宽 `setuptools==X.Y.Z`，
+  # 不动其它依赖；随后 grep 断言替换真的发生了，避免静默失效）。
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["setuptools==84.0.0"]' 'requires = ["setuptools"]'
+    sed -i -E 's/"setuptools==[0-9.]+"/"setuptools"/' pyproject.toml
+    grep -q 'requires = \["setuptools"\]' pyproject.toml \
+      || { echo "godot-ai: pyproject.toml 的 setuptools pin 未被放宽" >&2; exit 1; }
   '';
 
   build-system = with python312.pkgs; [

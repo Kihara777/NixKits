@@ -48,8 +48,8 @@
   mcpSrc = prev.fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
-    tag = "v2.2.0";
-    hash = "sha256-nnpNXnQiFSGx5KQBDXHCOH0wE3cznlmI6s7vtchcj3A=";
+    tag = "v2.3.0";
+    hash = "sha256-CnXi78zYxm0/R4fON/DzRYMSDYM/XM/9SE3s+Cf1BR0=";
   };
   # 2.x 起上游把仓库改成 uv workspace，wire types 拆成独立发行版 `mcp-types`，
   # 源码在同一 tag 的 `src/mcp-types/` 子目录下——**同一份 tarball**，
@@ -100,8 +100,8 @@
   websocketsSrc = prev.fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
-    tag = "17.1";
-    hash = "sha256-fribsGeH4+AfePbGSkqjP8UPJIGjSeOnaCA1y+7POEc=";
+    tag = "17.3";
+    hash = "sha256-XIr7mbGlWIroV5tnPm7QBfGDZeJmtpGflVpyrYXnSPE=";
   };
 in {
   # 与 overlays/fastmcp.nix 一样，走 `pythonPackagesExtensions`（可叠加）而不是
@@ -212,7 +212,7 @@ in {
       # 得到一堆与代码无关的失败。要恢复得先按 2.x 的 tests/ 重写这份测试配置。
       mcp = pyPrev.mcp.overridePythonAttrs (old:
         (noTests old) // {
-          version = "2.2.0";
+          version = "2.3.0";
           src = mcpSrc;
           dependencies = with pyFinal; [
             anyio
@@ -241,7 +241,7 @@ in {
       # 保证 dist-info 的版本号等于本文件的 `version`——运行期校验读的就是它）。
       mcp-types = pyFinal.buildPythonPackage (finalAttrs: {
         pname = "mcp-types";
-        version = "2.2.0";
+        version = "2.3.0";
         pyproject = true;
         src = mcpTypesSrc;
         sourceRoot = "${finalAttrs.src.name}/src/mcp-types";
@@ -363,7 +363,7 @@ in {
       });
 
       websockets = pyPrev.websockets.overridePythonAttrs (old: {
-        version = "17.1";
+        version = "17.3";
         src = websocketsSrc;
         # 17.1 多出 `tests/trio/` 测试集，而 nixpkgs 的 check inputs 里没有 trio，
         # 于是测试直接报 "ModuleNotFoundError: No module named 'trio'"

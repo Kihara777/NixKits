@@ -35,8 +35,8 @@
   fastmcpSrc = prev.fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "fastmcp";
-    tag = "v4.0.10";
-    hash = "sha256-GAoBN+tvwRGLrq3+XXvJYaeL3X5HoHFzyQodzNMLAwY=";
+    tag = "v4.1.3";
+    hash = "sha256-33EHBcZmyWgl+DZLIkVviz5CV2zaexs2lGZVdmsl2nI=";
   };
 
 in {
@@ -72,7 +72,7 @@ in {
 
       fastmcp = pyPrev.fastmcp.overridePythonAttrs (old:
         (noTests old) // {
-          version = "4.0.10";
+          version = "4.1.3";
           src = fastmcpSrc;
           patches = [ ];
           # 4.0.5 起的 fastmcp 本体是**空壳发行版**（root pyproject 里
@@ -101,7 +101,7 @@ in {
 
       fastmcp-slim = pyPrev.fastmcp-slim.overridePythonAttrs (old:
         (noTests old) // {
-          version = "4.0.10";
+          version = "4.1.3";
           src = fastmcpSrc;
           patches = [ ];
           dependencies =
