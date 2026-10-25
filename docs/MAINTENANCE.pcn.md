@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-26T02:41:41+09:00
+
+**摘要**：godot-ai 4.3.0 → 4.3.1 —— 依存 pin 表 全面 更新
+
+- 上流 当該回 FastMCP 安全勧告 対応 pin 全体 更新（14 項）：fastmcp/fastmcp-slim 4.0.10 → 4.1.3、mcp/mcp-types 2.2.0 → 2.3.0、websockets 17.1 → 17.3
+- 両 overlay src tag 與 hash 同期；`packages/godot-ai.nix` postPatch **pattern 一致** 変更（4.3.1 setuptools pin 84.0.0 → 84.2.1、literal 一致 失敗）
+- 判据：`godot-ai-4.3.1` 構建、`--version` 実走 exit 0（起動時 14 項 pin 表 検証）、13 項 自検 全緑。本包 専用 workflow 無、本地 構建 唯一 判据
+
+| 提交 | 説明 |
+|------|------|
+| `ccbb180` | chore(godot-ai): 4.3.0 → 4.3.1 —— 依存 pin 表 全面 更新 |
+
 ## 2026-10-25T16:27:37+09:00
 
 **摘要**：blender-mcp mcp_1 固定 —— nixpkgs 既定 mcp 2.x 化 後 本包 実際 動作 不能

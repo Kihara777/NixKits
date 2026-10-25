@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-26T02:41:41+09:00
+
+**Summary**: godot-ai 4.3.0 → 4.3.1 — the whole dependency pin table is refreshed
+
+- Upstream refreshed every pin for that release's FastMCP advisories (still 14 entries): fastmcp/fastmcp-slim 4.0.10 → 4.1.3, mcp/mcp-types 2.2.0 → 2.3.0, websockets 17.1 → 17.3
+- Both overlays get new src tags and hashes; `packages/godot-ai.nix` postPatch switched to **pattern matching** (4.3.1 moved the setuptools pin from 84.0.0 to 84.2.1, so the literal match would fail)
+- Criteria: builds `godot-ai-4.3.1`, running `--version` exits 0 (startup validates the 14-entry pin table), all 13 checks green; this package has no dedicated workflow, so the local build is the only criterion
+
+| Commit | Description |
+|------|------|
+| `ccbb180` | chore(godot-ai): 4.3.0 → 4.3.1 — whole dependency pin table refreshed |
+
 ## 2026-10-25T16:27:37+09:00
 
 **Summary**: pin blender-mcp to mcp_1 — it genuinely breaks once nixpkgs ships mcp 2.x
