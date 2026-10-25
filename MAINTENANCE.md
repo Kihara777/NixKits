@@ -2,6 +2,30 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-25T15:24:05+09:00
+
+**摘要**：nixpkgs 升到 3ec63636，并修 fastmcp-slim 的 broken 条件
+
+- nixpkgs `02c087f3`（10-20）→ `3ec63636`（10-23）
+- 新 nixpkgs 给 fastmcp-slim 加了 `broken = lib.versionAtLeast mcp.version "2"`，而本 overlay 为 godot-ai 恰好把 mcp 抬到 2.2.0 → 拒绝求值；在 overlay 内显式清掉并注释理由
+- 顺带（上游自带）：`mcp-searxng` 2.6.0 → 2.7.0、`obs-bilibili-stream` 2.1.5 → 2.1.6
+
+| 提交 | 说明 |
+|------|------|
+| `e7a88ca` | chore(flake): 升 nixpkgs 02c087f3 → 3ec63636，并修 fastmcp-slim 的 broken 条件 |
+
+## 2026-10-25T15:42:08+09:00
+
+**摘要**：codewhale 0.10.1 → 0.10.2
+
+- 预编译变体：version + 4 个资产 hash（cli/tui 的 hash 相同，仍分列）
+- 源构建变体：version + src hash，**Cargo.lock 同步**（7567 行 → 上游 7609 行）
+- 四语文档：版本行与构建徽章同步
+
+| 提交 | 说明 |
+|------|------|
+| `820f469` | chore(codewhale): 0.10.1 → 0.10.2 |
+
 ## 2026-10-23T16:39:25+09:00
 
 **摘要**：docs(skill): 预演 PR 成为 upstream-audit 第 3.5 步

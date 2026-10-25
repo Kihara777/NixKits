@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-25T15:24:05+09:00
+
+**概要**：nixpkgs を 3ec63636 へ、fastmcp-slim の broken 条件も修正
+
+- nixpkgs `02c087f3`（10-20）→ `3ec63636`（10-23）
+- 新しい nixpkgs が fastmcp-slim に `broken = lib.versionAtLeast mcp.version "2"` を追加。本 overlay は godot-ai のため mcp を 2.2.0 に上げており条件が成立 → 求値拒否。overlay 内で明示的に解除し理由を記載
+- 併せて（上流由来）：`mcp-searxng` 2.6.0 → 2.7.0、`obs-bilibili-stream` 2.1.5 → 2.1.6
+
+| コミット | 説明 |
+|------|------|
+| `e7a88ca` | chore(flake): nixpkgs を 02c087f3 → 3ec63636 へ、fastmcp-slim の broken 条件を修正 |
+
+## 2026-10-25T15:42:08+09:00
+
+**概要**：codewhale 0.10.1 → 0.10.2
+
+- プリビルド変体：version ＋ 資産ハッシュ 4 個（cli/tui は同じ値だが個別に記入）
+- ソースビルド変体：version ＋ src ハッシュ、**Cargo.lock を同期**（7567 行 → 上流 7609 行）
+- 四言語ドキュメント：バージョン行とビルドバッジを同期
+
+| コミット | 説明 |
+|------|------|
+| `820f469` | chore(codewhale): 0.10.1 → 0.10.2 |
+
 ## 2026-10-23T16:39:25+09:00
 
 **概要**：docs(skill): upstream-audit の第 3.5 歩として予演 PR

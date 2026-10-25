@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-25T15:24:05+09:00
+
+**Summary**: bump nixpkgs to 3ec63636 and clear fastmcp-slim's broken condition
+
+- nixpkgs `02c087f3` (10-20) → `3ec63636` (10-23)
+- The new nixpkgs marks fastmcp-slim `broken = lib.versionAtLeast mcp.version "2"`; our overlay raises mcp to 2.2.0 for godot-ai, so evaluation was refused — cleared in the overlay with the reason written down
+- Carried upstream changes: `mcp-searxng` 2.6.0 → 2.7.0, `obs-bilibili-stream` 2.1.5 → 2.1.6
+
+| Commit | Description |
+|------|------|
+| `e7a88ca` | chore(flake): bump nixpkgs 02c087f3 → 3ec63636 and fix fastmcp-slim's broken condition |
+
+## 2026-10-25T15:42:08+09:00
+
+**Summary**: codewhale 0.10.1 → 0.10.2
+
+- Prebuilt variant: version + four asset hashes (cli/tui hashes are identical but still filled separately)
+- Source variant: version + src hash, with **Cargo.lock synced** (7567 lines → upstream 7609)
+- Four-language docs: version row and build badges updated
+
+| Commit | Description |
+|------|------|
+| `820f469` | chore(codewhale): 0.10.1 → 0.10.2 |
+
 ## 2026-10-23T16:39:25+09:00
 
 **Summary**: docs(skill): the rehearsal PR becomes step 3.5 of upstream-audit
