@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "codewhale";
-  version = "0.10.1";
+  version = "0.10.2";
 
   strictDeps = true;
   # 这个包会被**交叉编译到 riscv64**（build-package.yml 的 Cross-compile 步骤）。
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     # version 不同步时不会报错：固定输出派生（fixed-output derivation）的路径
     # 由 hash 决定，旧 hash 对应的 store 路径若仍在，Nix 直接复用**旧版本的
     # 源码树**，构建在一份与 version 不符的代码上跑完，全程无提示。
-    hash = "sha256-/aTVxY+l3S30wm31BlWExbkIZx8s2R2lqCsQJVZa7TE=";
+    hash = "sha256-kjVbSpc/tcl4MUBdJ/FO5SzjrFB13cZDEoyCJQacbIU=";
   };
 
   # Cargo.lock is in workspace root
