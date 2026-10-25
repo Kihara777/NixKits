@@ -43,10 +43,18 @@ python3Packages.buildPythonPackage (finalAttrs: {
   # 判据：drv 里不再出现 blender-*。
 
   dependencies = [
-    python3Packages.mcp
+    python3Packages.mcp_1
     python3Packages.docutils
     python3Packages.pyyaml
   ];
+
+  # ⚠️ 必须用 `mcp_1`（1.29.0），不能用默认的 `mcp`（2.2.0）：
+  # 上游 pyproject 声明 `mcp<2,>=1.2.0`，而 nixpkgs `3ec63636` 起默认 mcp 已是 2.x
+  # ——`pythonRuntimeDepsCheckHook` 会在构建期直接判失败
+  # （`mcp<2,>=1.2.0 not satisfied by version 2.2.0`）。
+  # 而且这不是过严的声明：实测跳过检查后，运行期立刻 `ModuleNotFoundError:
+  # No module named 'mcp.server.fastmcp'`（mcp 2.x 把 FastMCP 改名为 MCPServer）。
+  # nixpkgs 同时提供 `mcp_1` 与 `mcp_2` 两个别名，这里钉前者。
 
   # The build cd's into mcp/ via preConfigure. The addon lives at ../addon/
   # alongside it. Ship it so users can install it from the package.
