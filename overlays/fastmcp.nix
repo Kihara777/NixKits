@@ -162,6 +162,19 @@ in {
               websockets
             ]) ++ mcpExtra ++ keyValueExtras;
           };
+          # nixpkgs `3ec63636`（2026-10-23）给 fastmcp-slim 加了**条件标记**：
+          #
+          #     broken = lib.versionAtLeast mcp.version "2";
+          #
+          # 而本 overlay 为了 godot-ai 4.3.0 恰好把 `mcp` 抬到 2.2.0（上游 4.x 的
+          # 运行时校验表要求）——两边一撞，nixpkgs 判它 broken、**直接拒绝求值**
+          # （`Refusing to evaluate package 'python3.12-fastmcp-slim-4.0.10'`），
+          # `godot-ai` 整个包因此不可求值。
+          #
+          # 这条标记是**保守的**：fastmcp-slim 4.0.10 + mcp 2.x 正是 godot-ai 官方
+          # 要求的组合，本仓一直这么用（构建与运行都验过）。故在本 overlay 内显式
+          # 清掉，并在升级 fastmcp/mcp 时重新核对。
+          meta = (old.meta or {}) // { broken = false; };
         });
     })
   ];
