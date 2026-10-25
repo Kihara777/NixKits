@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-25T16:27:37+09:00
+
+**摘要**：blender-mcp mcp_1 固定 —— nixpkgs 既定 mcp 2.x 化 後 本包 実際 動作 不能
+
+- 原因：nixpkgs `3ec63636` 既定 `mcp` 2.2.0 上、本包 `mcp<2` 要求
+- `dontCheckRuntimeDeps` **不足** 実証：構建 通、起動 直後 `ModuleNotFoundError: mcp.server.fastmcp`
+- nixpkgs `mcp_1`（1.29.0）別名 依存 切替、因果 包 comment 明記
+- 判据：構建 成功 ＋ `--help` 実走 exit 0 ＋ 13 項 自検 全緑
+
+| 提交 | 説明 |
+|------|------|
+| `ee189cd` | fix(blender-mcp): mcp_1 固定 —— 既定 mcp 2.x 化 後 実際 動作 不能 |
+
 ## 2026-10-25T15:24:05+09:00
 
 **摘要**：nixpkgs 3ec63636 昇格、fastmcp-slim broken 条件 修正

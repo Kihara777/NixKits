@@ -2,6 +2,19 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-25T16:27:37+09:00
+
+**摘要**：blender-mcp 钉 mcp_1 —— nixpkgs 默认 mcp 升到 2.x 后本包跑不起来
+
+- 根因：nixpkgs `3ec63636` 把默认 `mcp` 推到 2.2.0，而本包要求 `mcp<2`
+- 验证 `dontCheckRuntimeDeps` **不够**：构建能过，一启动就 `ModuleNotFoundError: mcp.server.fastmcp`
+- 依赖改用 nixpkgs 的 `mcp_1`（1.29.0）别名，并把因果写进包注释
+- 判据：构建成功 + 实跑 `--help` exit 0 + 13 项自检全绿
+
+| 提交 | 说明 |
+|------|------|
+| `ee189cd` | fix(blender-mcp): 钉 mcp_1 —— 默认 mcp 到 2.x 后本包真的跑不起来 |
+
 ## 2026-10-25T15:24:05+09:00
 
 **摘要**：nixpkgs 升到 3ec63636，并修 fastmcp-slim 的 broken 条件

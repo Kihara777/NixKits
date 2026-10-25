@@ -2,6 +2,19 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-25T16:27:37+09:00
+
+**Summary**: pin blender-mcp to mcp_1 — it genuinely breaks once nixpkgs ships mcp 2.x
+
+- Root cause: nixpkgs `3ec63636` moved the default `mcp` to 2.2.0 while this package requires `mcp<2`
+- Proved `dontCheckRuntimeDeps` is **not enough**: the build passes, then startup fails with `ModuleNotFoundError: mcp.server.fastmcp`
+- Depend on nixpkgs' `mcp_1` alias (1.29.0) and record the causal chain in the package comment
+- Criteria: build succeeds + running `--help` exits 0 + all 13 checks green
+
+| Commit | Description |
+|------|------|
+| `ee189cd` | fix(blender-mcp): pin mcp_1 — it really breaks once the default mcp is 2.x |
+
 ## 2026-10-25T15:24:05+09:00
 
 **Summary**: bump nixpkgs to 3ec63636 and clear fastmcp-slim's broken condition
