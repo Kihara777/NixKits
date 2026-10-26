@@ -373,6 +373,17 @@ in {
 
       # test-only 依赖链：经 pydantic 的 check inputs 抵达，见 noTests 的说明。
       inline-snapshot = pyPrev.inline-snapshot.overridePythonAttrs noTests;
+
+      # backrefs 经 `griffelib`（fastmcp-slim 的 server extra）的**构建**依赖链进来
+      # （griffelib → mkdocstrings → backrefs），与运行期无关。
+      #
+      # 它带一个 **flaky 超时测试**：
+      #   tests/test_bregex.py::TestExceptions::test_timeout
+      # 期望 0.5 秒内触发 TimeoutError，但在快机器上正则直接跑完 →
+      # `Failed: DID NOT RAISE TimeoutError`（2026-10-26 CI 实测 1 failed / 566 passed）。
+      # 本地此前看不出，是因为该 drv 早已在 store 里（当初侥幸通过）。
+      # 这正是「补上 workflow 才暴露的问题」——干净环境里每次都要重跑这个测试。
+      backrefs = pyPrev.backrefs.overridePythonAttrs noTests;
     })
   ];
 })
