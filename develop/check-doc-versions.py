@@ -51,10 +51,6 @@ EXEMPT = {
     # 薄封装：主仓不承载源码，版本由子仓决定，文档刻意不标版本号
     # （见 docs/*/dsh-api-balance.md「NixKits 侧角色」）。
     "dsh-api-balance": "薄封装，版本由子仓 dsh-api-balance 决定，文档刻意不标版本",
-    # dsh-alpha 是 dsh 的通道包装：它的版本记在 dsh.md 的通道表里，
-    # 而 dsh.md 的「版本」行描述的是 stable 通道（见 CHANNEL_ROWS）。
-    "dsh": "多通道：stable 版本见文档版本行，alpha 版本见通道表（见 CHANNEL_DOCS）",
-    "dsh-alpha": "多通道：版本记在 dsh.md 的通道表中",
     "codewhale-src": "不是独立包，而是 codewhale.nix 在 riscv64 上的源构建分支",
 }
 
