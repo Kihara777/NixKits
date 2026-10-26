@@ -2,6 +2,32 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-27T03:33:54+09:00
+
+**Summary**: add x86_64 / aarch64 build workflows for godot-ai
+
+- It sat in `EXEMPT` with the reason "limited by upstream dependencies (see AGENTS.md)", but AGENTS.md contains no such note — the exemption had gone stale, and a local build works
+- Two new workflows call the shared build-package.yml (aarch64 uses ubuntu-24.04-arm)
+- The EXEMPT entry is removed and AGENTS.md's "no dedicated build workflow" statement corrected
+- Criteria: `check-workflows` covers 9 packages (godot-ai no longer exempt); both workflows succeed in real CI runs
+
+| Commit | Description |
+|------|------|
+| `a5f946f` | ci(godot-ai): add x86_64 / aarch64 build workflows |
+
+## 2026-10-27T03:44:49+09:00
+
+**Summary**: skip backrefs' flaky timeout test
+
+- The first clean-environment build after adding the workflow failed on `test_bregex.py::TestExceptions::test_timeout`, which expects a 0.5 s timeout; on a fast machine the regex finishes first
+- backrefs arrives through griffelib → mkdocstrings as a **build** dependency, unrelated to runtime, so the existing noTests override is used
+- It was invisible locally because that drv was already in the store — exactly what adding the workflow buys
+- Criteria: both new workflows (x86_64 / aarch64) succeed in CI
+
+| Commit | Description |
+|------|------|
+| `8ecbbde` | fix(godot-ai): skip backrefs' flaky timeout test |
+
 ## 2026-10-26T02:41:41+09:00
 
 **Summary**: godot-ai 4.3.0 → 4.3.1 — the whole dependency pin table is refreshed

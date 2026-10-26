@@ -2,6 +2,32 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-27T03:33:54+09:00
+
+**概要**：godot-ai に x86_64 / aarch64 のビルド workflow を追加
+
+- 従来は `EXEMPT` に「上流依存の制約（AGENTS.md 参照）」とあったが、AGENTS.md にその記述は無く、豁免の根拠は失効。ローカル構築も可能だった
+- 共有 build-package.yml を呼ぶ workflow を二本追加（aarch64 は ubuntu-24.04-arm）
+- EXEMPT の項目を削除し、AGENTS.md の「専用 workflow 無し」記述も訂正
+- 判据：`check-workflows` が 9 パッケージをカバー（godot-ai は豁免外）；CI 実走で二本とも success
+
+| コミット | 説明 |
+|------|------|
+| `a5f946f` | ci(godot-ai): x86_64 / aarch64 のビルド workflow を追加 |
+
+## 2026-10-27T03:44:49+09:00
+
+**概要**：backrefs の flaky なタイムアウトテストをスキップ
+
+- workflow 追加後の初回クリーン構築で godot-ai が即赤：`test_bregex.py::TestExceptions::test_timeout` は 0.5 秒のタイムアウトを期待するが、速いマシンでは正規表現が先に終わる
+- backrefs は griffelib → mkdocstrings の**ビルド**依存として入り、実行時とは無関係。既存の noTests で上書き
+- ローカルで見えなかったのは、その drv が既に store にあったため。これこそ workflow 追加の成果
+- 判据：CI の新規 workflow 二本（x86_64 / aarch64）がいずれも success
+
+| コミット | 説明 |
+|------|------|
+| `8ecbbde` | fix(godot-ai): backrefs の flaky なタイムアウトテストをスキップ |
+
 ## 2026-10-26T02:41:41+09:00
 
 **概要**：godot-ai 4.3.0 → 4.3.1 —— 依存 pin 表を全面的に更新

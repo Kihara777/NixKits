@@ -2,6 +2,32 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-27T03:33:54+09:00
+
+**摘要**：godot-ai x86_64 / aarch64 構建 workflow 追加
+
+- 従来 `EXEMPT` 内「上流依存 制約（AGENTS.md 参照）」記載、AGENTS.md 該当記述 無、豁免 根拠 失効。本地 構建 可能
+- 共有 build-package.yml 呼出 workflow 二本 追加（aarch64 ubuntu-24.04-arm）
+- EXEMPT 項目 削除、AGENTS.md 「専用 workflow 無」記述 訂正
+- 判据：`check-workflows` 9 package 覆（godot-ai 豁免外）；CI 実走 二本 共 success
+
+| 提交 | 説明 |
+|------|------|
+| `a5f946f` | ci(godot-ai): x86_64 / aarch64 構建 workflow 追加 |
+
+## 2026-10-27T03:44:49+09:00
+
+**摘要**：backrefs flaky 超時 test 跳過
+
+- workflow 追加 後 初回 清浄 環境 構建 即 赤：`test_bregex.py::TestExceptions::test_timeout` 0.5 秒 超時 期待、高速 machine 上 正規表現 先 完了
+- backrefs griffelib → mkdocstrings **構建** 依存 経由、実行時 無関係、既存 noTests 上書
+- 本地 見 得 無 理由：該 drv 既 store 内。workflow 追加 成果 正 此
+- 判据：CI 新規 workflow 二本（x86_64 / aarch64）全 success
+
+| 提交 | 説明 |
+|------|------|
+| `8ecbbde` | fix(godot-ai): backrefs flaky 超時 test 跳過 |
+
 ## 2026-10-26T02:41:41+09:00
 
 **摘要**：godot-ai 4.3.0 → 4.3.1 —— 依存 pin 表 全面 更新

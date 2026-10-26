@@ -2,6 +2,32 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-27T03:33:54+09:00
+
+**摘要**：给 godot-ai 补上 x86_64 / aarch64 构建 workflow
+
+- 它此前挂在 `EXEMPT` 里，理由写「受上游依赖限制（详见 AGENTS.md）」，但 AGENTS 里并没有这条内容——豁免依据已过期，且本地实测可构建
+- 新增两个 workflow（走共享 build-package.yml；aarch64 用 ubuntu-24.04-arm）
+- 同步移除 EXEMPT 条目并更正 AGENTS 的「无独立构建 workflow」表述
+- 判据：`check-workflows` 覆盖 9 个包（godot-ai 不再豁免）；CI 实跑两个 workflow 均 success
+
+| 提交 | 说明 |
+|------|------|
+| `a5f946f` | ci(godot-ai): 补上 x86_64 / aarch64 构建 workflow |
+
+## 2026-10-27T03:44:49+09:00
+
+**摘要**：跳过 backrefs 的 flaky 超时测试
+
+- 补 workflow 后第一次在干净环境构建 godot-ai 即红：`test_bregex.py::TestExceptions::test_timeout` 期望 0.5 秒超时，快机器上正则直接跑完
+- backrefs 经 griffelib → mkdocstrings 的**构建**依赖链进入，与运行期无关，用既有 noTests 覆盖
+- 本地此前看不出，是因为该 drv 早已在 store 里；这也正是补 workflow 的收益
+- 判据：CI 两个新 workflow（x86_64 / aarch64）均 success
+
+| 提交 | 说明 |
+|------|------|
+| `8ecbbde` | fix(godot-ai): 跳过 backrefs 的 flaky 超时测试 |
+
 ## 2026-10-26T02:41:41+09:00
 
 **摘要**：godot-ai 4.3.0 → 4.3.1 —— 依赖 pin 表整体刷新
