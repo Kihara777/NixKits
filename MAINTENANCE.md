@@ -2,6 +2,30 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-27T04:15:54+09:00
+
+**摘要**：收回 doc-versions 里 dsh / dsh-alpha 的过宽豁免
+
+- `dsh` 的豁免让版本行检查白白不工作：移除后 `8 → 9 packages match`，说明它本来就能校验
+- `dsh-alpha` 无独立文档，主循环本就会跳过；其版本由通道表独立循环校验，豁免纯属冗余
+- 判据：`doc-versions` → 9 packages match、2 exempt（都是真豁免）；13 项自检全绿
+
+| 提交 | 说明 |
+|------|------|
+| `4179550` | fix(doc-versions): 收回 dsh / dsh-alpha 的过宽豁免 |
+
+## 2026-10-27T04:16:56+09:00
+
+**摘要**：给 dsh 补上 x86_64 / aarch64 构建 workflow
+
+- 复查发现 dsh 的豁免与 godot-ai 同类：理由写「随上游发布，无独立构建矩阵」，但实测可构建
+- 新增两个 workflow；dsh-alpha 保留豁免，理由改准确（薄包装，构建逻辑与 dsh 相同）
+- 判据：`check-workflows` 覆盖 10 个包；两个新 workflow 在 CI 均 success
+
+| 提交 | 说明 |
+|------|------|
+| `93adc54` | ci(dsh): 补上 x86_64 / aarch64 构建 workflow |
+
 ## 2026-10-27T03:33:54+09:00
 
 **摘要**：给 godot-ai 补上 x86_64 / aarch64 构建 workflow

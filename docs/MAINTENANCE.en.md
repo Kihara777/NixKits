@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-27T04:15:54+09:00
+
+**Summary**: narrow the over-broad dsh / dsh-alpha exemptions in doc-versions
+
+- `dsh`'s exemption kept the version-row check from running at all: removing it yields `8 → 9 packages match`, proving it could be validated
+- `dsh-alpha` has no standalone doc, so the main loop skips it anyway; its version is checked by the separate channel-table loop, making the exemption pure redundancy
+- Criteria: `doc-versions` → 9 packages match, 2 exempt (both genuine); all 13 checks green
+
+| Commit | Description |
+|------|------|
+| `4179550` | fix(doc-versions): narrow dsh / dsh-alpha exemptions |
+
+## 2026-10-27T04:16:56+09:00
+
+**Summary**: add x86_64 / aarch64 build workflows for dsh
+
+- The review found dsh's exemption was the same kind as godot-ai's: it claimed "shipped with upstream releases, no build matrix", yet a local build works
+- Two new workflows added; dsh-alpha keeps its exemption with a more accurate reason (a thin wrapper whose build logic equals dsh's)
+- Criteria: `check-workflows` covers 10 packages; both new workflows succeed in CI
+
+| Commit | Description |
+|------|------|
+| `93adc54` | ci(dsh): add x86_64 / aarch64 build workflows |
+
 ## 2026-10-27T03:33:54+09:00
 
 **Summary**: add x86_64 / aarch64 build workflows for godot-ai

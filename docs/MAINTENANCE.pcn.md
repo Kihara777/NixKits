@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-27T04:15:54+09:00
+
+**摘要**：doc-versions dsh / dsh-alpha 過大 豁免 收回
+
+- `dsh` 豁免 版本行 検査 空転：外 結果 `8 → 9 packages match`、本来 検査 可能 判明
+- `dsh-alpha` 独立 文書 無、主 loop 元  skip。版本 通道表 別 loop 検査。豁免 純粋 冗長
+- 判据：`doc-versions` → 9 packages match、2 exempt（共 真 豁免）；13 項 自検 全緑
+
+| 提交 | 説明 |
+|------|------|
+| `4179550` | fix(doc-versions): dsh / dsh-alpha 過大 豁免 收回 |
+
+## 2026-10-27T04:16:56+09:00
+
+**摘要**：dsh x86_64 / aarch64 構建 workflow 追加
+
+- 再調査 結果 dsh 豁免 godot-ai 同種 判明：理由「上流 release 追随、専用 build 無」、実測 構建 可能
+- workflow 二本 追加；dsh-alpha 豁免 維持、理由 正確化（薄包装、構建 logic dsh 同一）
+- 判据：`check-workflows` 10 package 覆；新規 workflow 二本 共 CI success
+
+| 提交 | 説明 |
+|------|------|
+| `93adc54` | ci(dsh): x86_64 / aarch64 構建 workflow 追加 |
+
 ## 2026-10-27T03:33:54+09:00
 
 **摘要**：godot-ai x86_64 / aarch64 構建 workflow 追加

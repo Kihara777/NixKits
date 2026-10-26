@@ -2,6 +2,30 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-27T04:15:54+09:00
+
+**概要**：doc-versions の dsh / dsh-alpha の過大な豁免を收回
+
+- `dsh` の豁免はバージョン行の検査を空回りさせていた：外すと `8 → 9 packages match` で、本来検査可能だったと判明
+- `dsh-alpha` は独立ドキュメントが無く主ループで元々スキップされ、バージョンはチャンネル表の別ループが検査する。豁免は純粋な冗長
+- 判据：`doc-versions` → 9 packages match、2 exempt（いずれも真の豁免）；13 項の自検全緑
+
+| コミット | 説明 |
+|------|------|
+| `4179550` | fix(doc-versions): dsh / dsh-alpha の過大な豁免を收回 |
+
+## 2026-10-27T04:16:56+09:00
+
+**概要**：dsh に x86_64 / aarch64 のビルド workflow を追加
+
+- 再調査で dsh の豁免が godot-ai と同種と判明：理由は「上流リリースに追随、専用ビルド無し」だが、実測ではビルド可能
+- workflow 二本を追加；dsh-alpha は豁免を維持しつつ理由を正確化（薄包装でビルド論理は dsh と同一）
+- 判据：`check-workflows` が 10 パッケージをカバー；新規 workflow 二本とも CI で success
+
+| コミット | 説明 |
+|------|------|
+| `93adc54` | ci(dsh): x86_64 / aarch64 ビルド workflow を追加 |
+
 ## 2026-10-27T03:33:54+09:00
 
 **概要**：godot-ai に x86_64 / aarch64 のビルド workflow を追加
