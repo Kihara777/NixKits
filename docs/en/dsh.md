@@ -426,7 +426,7 @@ Built-in plugin entry ids for dsh 0.2.1-rc.2 (valid values for `nixkits.dsh.plug
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
-  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control/list-agents
+  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control
   tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-fork -> @deepseek-ai/dsh-tool-subagent
   ptc-runtime -> @deepseek-ai/dsh-ptc-runtime-node
