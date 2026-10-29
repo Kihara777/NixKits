@@ -1,7 +1,7 @@
 # rea
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-rea-x86_64.yml?branch=main&label=x86_64%20v6.7.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-rea-aarch64.yml?branch=main&label=aarch64%20v6.7.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-rea-x86_64.yml?branch=main&label=x86_64%20v6.8.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-rea-aarch64.yml?branch=main&label=aarch64%20v6.8.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/rea.md) | English | [日本語](../ja/rea.md)  | [偽中国語](../pcn/rea.md)
 
@@ -11,7 +11,7 @@
 
 | Item | Value |
 |------|-------|
-| Version | 6.7.0 |
+| Version | 6.8.0 |
 | Upstream | <https://github.com/morluto/rea> |
 | npm name | `rea-agents` |
 | License | MIT |

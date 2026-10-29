@@ -29,9 +29,9 @@
 # dsh-nixos-shell-stable 钉住的 commit（稳定通道的预设内容冻结）。
 { callPackage, lib, allowLanSettings ? false }:
 callPackage ./dsh.nix {
-  version = "0.2.1-alpha.5";
-  hash = "sha256-/MQz+aNWJ6IlUzHucDnWoawBk04FOErnBiTbza4RlpU=";
-  npmDepsHash = "sha256-ous0JuZBs4KxOkCMAxjxUMivig8YiXoIazQRWmPhtp8=";
+  version = "0.2.2-alpha.2";
+  hash = "sha256-PI/SM40OibGnJISrwi/J90UgiKWtjhIlZgZe9agD6no=";
+  npmDepsHash = "sha256-w5e0skqP4S/dY1U9lQLPsMJn6M5MfMjmBfHUyCJJZ9A=";
   # 与 stable 版本不同 ⇒ 不同 tarball ⇒ 独立的 vendored lock。生成方式（AGENTS.md
   # 的 npm 流程）：tarball 的 package.json 经 dsh.nix postPatch **同一段** awk 去掉
   # devDependencies，再 `npm install --package-lock-only`（**不加** --legacy-peer-deps，

@@ -45,7 +45,7 @@ NixOS模式 全能力 上 **二 塊** 追加。
 | 実行 文件 | `$REA_BIN_PATH`（模組 `pkgs.rea` 之 `bin/rea` 輸出） |
 | 工具名 | `mcp__rea__<原名>`、**該 agent 之 scope** 登録 |
 
-REA 之 207 個（6.7.0 之 `tools/list` 実測）全部 登録、`inputSchema` **原様** 渡 —— 「JSON Schema → dsh 簡略 spec」変換 無（壊 時 正当 呼出 静 拒否 為）。
+REA 之 207 個（6.8.0 之 `tools/list` 実測）全部 登録、`inputSchema` **原様** 渡 —— 「JSON Schema → dsh 簡略 spec」変換 無（壊 時 正当 呼出 静 拒否 為）。
 
 **為何 `@deepseek-ai/dsh-mcp-client` 不用**：初版 該 方式。2026-10-20 実 deployment 実測：預設 **eager activation**（dsh 起動 4 秒後 `rea mcp` spawn、其時 会話 一 無）、工具 登録 root scope 落（**掌灯模式 会話** 亦 207 個 背負、請求 header 31 + 207 = **238**）。「模式」 意味 乃「選択 会話 只 持」、故 本層 自前 書。
 

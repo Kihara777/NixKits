@@ -45,7 +45,7 @@ One bundled plugin `@kihara777/dsh-nixos-shell/rea-mcp`:
 | Executable | `$REA_BIN_PATH` (exported by the module as `pkgs.rea`'s `bin/rea`) |
 | Tool naming | `mcp__rea__<raw name>`, registered on **that agent's scope** |
 
-All 207 REA tools (measured via `tools/list` at 6.7.0) are registered with `inputSchema` handed over **unchanged** — no "JSON Schema → dsh shorthand spec" converter, because such a converter silently rejects legitimate calls when it is wrong.
+All 207 REA tools (measured via `tools/list` at 6.8.0) are registered with `inputSchema` handed over **unchanged** — no "JSON Schema → dsh shorthand spec" converter, because such a converter silently rejects legitimate calls when it is wrong.
 
 **Why not `@deepseek-ai/dsh-mcp-client`**: that was the first version. The 2026-10-20 deployment measured eager activation (the `rea mcp` process spawned 4 seconds after dsh started, before any session existed) and tools landing on the root scope — so **a 掌灯模式 session** carried 207 `mcp__rea__*` tools too (31 + 207 = **238** in its request header). "Mode" means only the session that selected it gets those tools.
 

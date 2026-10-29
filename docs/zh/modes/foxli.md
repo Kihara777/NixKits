@@ -52,7 +52,7 @@ NixOS模式（最小 NixOS 适配）
 | 可执行文件 | `$REA_BIN_PATH`（模块导出为 `pkgs.rea` 的 `bin/rea`） |
 | 工具命名 | `mcp__rea__<原名>`，注册到**该 agent 的 scope** |
 
-REA 的 207 个工具（6.7.0 的 `tools/list` 实测）全部注册，`inputSchema` **原样**交给注册表——不做「JSON Schema → dsh 简写 spec」的转换，因为那种转换器写歪了会**静默拒掉合法调用**。工具表很长是它的代价。
+REA 的 207 个工具（6.8.0 的 `tools/list` 实测）全部注册，`inputSchema` **原样**交给注册表——不做「JSON Schema → dsh 简写 spec」的转换，因为那种转换器写歪了会**静默拒掉合法调用**。工具表很长是它的代价。
 
 **为什么不用 `@deepseek-ai/dsh-mcp-client`**：第一版就是那么做的。2026-10-20 的真实部署量到：预设是 **eager activation**（dsh 启动 4 秒后 `rea mcp` 就 spawn，那时还没有任何会话），工具注册落到 root scope，于是**掌灯模式的会话**也背上 207 个 `mcp__rea__*`（请求头里 31 + 207 = **238** 个工具）。「模式」的语义是「只有选它的会话才有」，所以这一层自己写。
 
