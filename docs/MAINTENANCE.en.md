@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+
+## 2026-10-29T18:14:10+09:00
+
+**Summary**: dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — three upstream updates
+
+- dsh-alpha and rea both needed vendored lock regeneration (the new versions add @deepseek-ai/cordis and @bufbuild/protobuf; the old lock lacked both and the build failed with ENOTCACHED)
+- opencode-telegram's lock ships with the upstream repo, so only the src hash changed
+- Criterion: each artifact's package.json reports 0.2.2-alpha.2 / 6.8.0 / 0.26.6 respectively
+
+| Commit | Description |
+|------|------|
+| `935fdc8` | chore(nixpkgs): 3ec6363 → 31ecbaca |
+| `e28d05d` | chore(pkgs): bump dsh-alpha / rea / opencode-telegram |
+
+| Package | Old | New |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.5 | 0.2.2-alpha.2 |
+| rea | 6.7.0 | 6.8.0 |
+| opencode-telegram | 0.26.5 | 0.26.6 |
+| 　 | dsh-alpha src hash | `sha256-/MQz+…` → `sha256-PI/SM…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-ous0…` → `sha256-w5e0…` |
+| 　 | rea npmDepsHash | `sha256-t6CB…` → `sha256-XsCQ…` |
+| 　 | opencode-telegram src hash | `sha256-Mjku…` → `sha256-ysLq…` |
 ## 2026-10-29T17:25:20+09:00
 
 **Summary**: dsh preStart no longer recursively chowns $DSH_HOME

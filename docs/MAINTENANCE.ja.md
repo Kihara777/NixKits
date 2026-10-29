@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+
+## 2026-10-29T18:14:10+09:00
+
+**概要**：dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — 上流 3 件の更新
+
+- dsh-alpha と rea はどちらも vendored lock の再生成が必要（新版が @deepseek-ai/cordis と @bufbuild/protobuf を持ち込み、旧 lock に無いため ENOTCACHED で失敗）
+- opencode-telegram の lock は上流リポジトリ同梱のため src hash のみ変更
+- 判定：生成物の package.json が示す版は 0.2.2-alpha.2 / 6.8.0 / 0.26.6
+
+| コミット | 説明 |
+|------|------|
+| `935fdc8` | chore(nixpkgs): 3ec6363 → 31ecbaca |
+| `e28d05d` | chore(pkgs): bump dsh-alpha / rea / opencode-telegram |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.5 | 0.2.2-alpha.2 |
+| rea | 6.7.0 | 6.8.0 |
+| opencode-telegram | 0.26.5 | 0.26.6 |
+| 　 | dsh-alpha src hash | `sha256-/MQz+…` → `sha256-PI/SM…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-ous0…` → `sha256-w5e0…` |
+| 　 | rea npmDepsHash | `sha256-t6CB…` → `sha256-XsCQ…` |
+| 　 | opencode-telegram src hash | `sha256-Mjku…` → `sha256-ysLq…` |
 ## 2026-10-29T17:25:20+09:00
 
 **概要**：dsh preStart が $DSH_HOME を再帰 chown しなくなる

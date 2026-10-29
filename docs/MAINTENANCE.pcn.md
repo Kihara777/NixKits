@@ -2,6 +2,29 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+
+## 2026-10-29T18:14:10+09:00
+
+**摘要**：dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — 上流三件更新
+
+- dsh-alpha 与 rea 皆需再生成 vendored lock（新版持入 @deepseek-ai/cordis 与 @bufbuild/protobuf，旧 lock 無此二条，構建報 ENOTCACHED）
+- opencode-telegram 之 lock 由上游仓库同梱，只换 src hash
+- 判定：産物 package.json 自述版本為 0.2.2-alpha.2 / 6.8.0 / 0.26.6
+
+| 提交 | 説明 |
+|------|------|
+| `935fdc8` | chore(nixpkgs): 3ec6363 → 31ecbaca |
+| `e28d05d` | chore(pkgs): bump dsh-alpha / rea / opencode-telegram |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-alpha | 0.2.1-alpha.5 | 0.2.2-alpha.2 |
+| rea | 6.7.0 | 6.8.0 |
+| opencode-telegram | 0.26.5 | 0.26.6 |
+| 　 | dsh-alpha src hash | `sha256-/MQz+…` → `sha256-PI/SM…` |
+| 　 | dsh-alpha npmDepsHash | `sha256-ous0…` → `sha256-w5e0…` |
+| 　 | rea npmDepsHash | `sha256-t6CB…` → `sha256-XsCQ…` |
+| 　 | opencode-telegram src hash | `sha256-Mjku…` → `sha256-ysLq…` |
 ## 2026-10-29T17:25:20+09:00
 
 **摘要**：dsh preStart 再帰 chown $DSH_HOME 中止
