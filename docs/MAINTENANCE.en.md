@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-29T17:25:20+09:00
+
+**Summary**: dsh preStart no longer recursively chowns $DSH_HOME
+
+- `chown -R $DSH_HOME` narrowed to a non-recursive fix of three paths (dshHome, profiles, profiles/web): preStart runs as the service user without CAP_CHOWN, so any inode it does not own in the subtree makes set -e exit 1
+- The trigger was `nix build` run as root inside $DSH_HOME without `--no-link`, leaving a root:root `result` symlink; preStart then failed for all 26 generations (cross-generation shared state, so rollback does not help)
+- nixos-shell's NixOS-mode guidance now requires `--no-link` for `nix build` in non-store directories
+
+| Commit | Description |
+|------|------|
+| `7bb2dbc` | fix(dsh): preStart no longer recursively chowns $DSH_HOME — one root-owned symlink breaks every generation |
+
 ## 2026-10-27T04:15:54+09:00
 
 **Summary**: narrow the over-broad dsh / dsh-alpha exemptions in doc-versions

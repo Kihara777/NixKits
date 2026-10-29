@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
+## 2026-10-29T17:25:20+09:00
+
+**概要**：dsh preStart が $DSH_HOME を再帰 chown しなくなる
+
+- `chown -R $DSH_HOME` を、三つのパス（dshHome、profiles、profiles/web）への非再帰修正に狭めた。preStart は CAP_CHOWN を持たないサービスユーザで動くため、部分木に自分が所有しない inode があると set -e で exit 1 になる
+- 原因は root が $DSH_HOME 内で `--no-link` 無しに `nix build` を実行し、root:root の `result` symlink を残したこと。26 世代の preStart がすべて失敗（世代をまたぐ共有状態なので rollback は効かない）
+- nixos-shell の NixOS モード指針に、非 store ディレクトリでの `nix build` には `--no-link` を必須とする項目を追加
+
+| コミット | 説明 |
+|------|------|
+| `7bb2dbc` | fix(dsh): preStart が $DSH_HOME を再帰 chown しない — root 所有の symlink 一つで全世代が起動不能 |
+
 ## 2026-10-27T04:15:54+09:00
 
 **概要**：doc-versions の dsh / dsh-alpha の過大な豁免を收回

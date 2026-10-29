@@ -2,6 +2,18 @@
 
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
+## 2026-10-29T17:25:20+09:00
+
+**摘要**：dsh preStart 不再递归 chown $DSH_HOME
+
+- `chown -R $DSH_HOME` 收窄为只非递归修正三层（dshHome、profiles、profiles/web）：preStart 以服务用户运行且无 CAP_CHOWN，子树上任何非本用户拥有的 inode 都会让 set -e 直接 exit 1
+- 起因是 root 在 $DSH_HOME 里跑 `nix build` 未加 `--no-link`，留下 root:root 的 `result` 软链，26 个世代的 preStart 全部失败（跨世代共享状态，回滚无效）
+- nixos-shell 的 NixOS 模式指引补上：非 store 目录跑 `nix build` 必须带 `--no-link`
+
+| 提交 | 说明 |
+|------|------|
+| `7bb2dbc` | fix(dsh): preStart 不再递归 chown $DSH_HOME —— 一条 root 拥有的软链会让所有世代起不来 |
+
 ## 2026-10-27T04:15:54+09:00
 
 **摘要**：收回 doc-versions 里 dsh / dsh-alpha 的过宽豁免

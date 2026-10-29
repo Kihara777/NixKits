@@ -2,6 +2,18 @@
 
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
+## 2026-10-29T17:25:20+09:00
+
+**摘要**：dsh preStart 再帰 chown $DSH_HOME 中止
+
+- `chown -R $DSH_HOME` 三 path（dshHome、profiles、profiles/web）非再帰 修正 限定：preStart service user 実行、CAP_CHOWN 無、部分木 自己 所有 外 inode 存在 時 set -e exit 1
+- 原因：root $DSH_HOME 内 `--no-link` 無 `nix build` 実行、root:root `result` symlink 残留。26 世代 preStart 全部 失敗（世代 across 共有 状態、rollback 無効）
+- nixos-shell NixOS mode guide：非 store directory `nix build` 必須 `--no-link`
+
+| 提交 | 説明 |
+|------|------|
+| `7bb2dbc` | fix(dsh): preStart 不再递归 chown $DSH_HOME —— 一条 root 拥有的软链会让所有世代起不来 |
+
 ## 2026-10-27T04:15:54+09:00
 
 **摘要**：doc-versions dsh / dsh-alpha 過大 豁免 收回
