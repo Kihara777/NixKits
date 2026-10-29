@@ -1110,7 +1110,25 @@ in
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p ${cfg.dshHome}/profiles/web
-        chown -R ${cfg.user}:${cfg.group} ${cfg.dshHome}
+        # 只修正 preStart 自己依赖的顶层路径，**不要递归整个 $DSH_HOME**
+        # （2026-10-29 实测事故）。递归 chown 在这里有两个独立问题：
+        #
+        #   ① preStart 以服务用户（cfg.user）运行，没有 CAP_CHOWN。子树里
+        #      任何**非本用户拥有**的 inode 都会让它报 `Operation not
+        #      permitted`，而 set -e 把这一句变成 exit 1 —— preStart 失败即
+        #      整个 dsh.service 起不来，Restart=always 再把它变成每 5 秒一次的
+        #      无限重启。实测形态：root 在 $DSH_HOME 里跑过 `nix build`
+        #      （未加 --no-link）留下 root:root 的 `result` 软链，于是 26 个
+        #      世代的 preStart 全都失败 —— 因为 $DSH_HOME 是跨世代共享的
+        #      可变状态，污染一次就与版本无关地复现（回滚世代无效）。
+        #
+        #   ② $DSH_HOME 是用户数据（sessions/、storages/… 实测 566M、3382
+        #      个条目），每次启动全量遍历没有必要。
+        #
+        # 非递归只覆盖 preStart 需要写的这三层。子树的属主由 dsh 在其下创建
+        # 时确定；若真有外部污染，让它在具体失败处显式报错，而不是被一个会
+        # 自杀的递归 chown 掩盖。
+        chown ${cfg.user}:${cfg.group} ${cfg.dshHome} ${cfg.dshHome}/profiles ${cfg.dshHome}/profiles/web
         # dsh's settings-file rewrites settings.yaml as owner-only/read-only;
         # preStart runs as the service user, so rm first (rm works on the
         # owning user's dir) then cp recreates a writable file.

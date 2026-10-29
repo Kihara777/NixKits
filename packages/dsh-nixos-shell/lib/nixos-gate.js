@@ -67,6 +67,7 @@ const GUIDANCE = `## NixOS模式 — NixOS 高效开发指南
 
 - 配置文件中不要写入 /nix/store/ 绝对路径——gc 后立即失效。优先裸命令名（$PATH 解析）或 /run/current-system/sw/bin 稳定符号链接；可用 nixos_cli op=audit-store-paths 审计。
 - 修改 /etc/nixos 配置后必须 rebuild 才生效；rebuild 失败时系统停留在上一代际，修复配置后重试。
+- **在 $DSH_HOME 或任何非 store 目录里跑 nix build 必须加 --no-link。** 不加会按惯例在当前目录留下一个 result 软链；若该命令经 sudo 以 root 执行，这个软链就归 root:root，而 dsh 的 preStart 以服务用户身份修正属主——一条 root 拥有的软链就足以让 dsh 此后**每次启动都失败**（2026-10-29 实测：26 个世代的 preStart 全部因 chown 报 Operation not permitted 而退出，只能手工删掉软链恢复）。nix shell 不生成软链，无需处理。
 - 本地 Nix 操作前按仓库约定处理 flake.lock（NixKits 仓库不提交 flake.lock）。`;
 
 export function apply(ctx) {
