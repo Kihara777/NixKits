@@ -286,6 +286,12 @@ def check_upstream_drift() -> None:
     live = live_standard()
     if not live:
         # 没量到 ≠ 没事，但也 ≠ 失败：CI 里通常没有安装的 dsh。
+        #
+        # ⚠️ **跨仓耦合点**：下面这句文案被 Kitsunome 的
+        # `develop/check-upstream-preset.py` 匹配——它靠这句话判断「本判据是跳过
+        # 了快照核对，还是在真核对后绿的」，跳过了就上报「没量到」（退出码 2）。
+        # 改这句话（哪怕只是措辞）会让那边**静默失效**：匹配不上 → 它会以为没跳过
+        # → 把一次假绿报成通过。改这里要同步改那边，两处都有这条注释。
         print(
             "preset-derivation: 跳过「快照 vs 当前安装」核对"
             "（找不到安装的 dsh；设 DSH_STANDARD_PRESET 可指定）"
