@@ -52,6 +52,15 @@
             config:
               maxBytes: 65536
 
+          # ── time ────────────────────────────────────────────────────────────────────
+
+          # 每一步都带上当前时间与已用时长。缺了它，模型就没有「现在几点」——
+          # 本仓日记里反复出现的「ls 了日记目录、拿最新文件名当当天」，正是这个洞的
+          # 地面表现。2026-11-02 从上游 standard 补回：此前整条派生链
+          # （nixos → foxli → 掌灯）都没有这一行，而少一行不会报错，只会安静地少一项能力。
+          - id: time-context
+            name: '@deepseek-ai/dsh-time-context'
+
           # ── shell ───────────────────────────────────────────────────────────────────
 
           # `shell-env` stays in the HOST composition: `apps/cli/src/web.ts` injects it to
@@ -95,8 +104,15 @@
 
           # ── goals ───────────────────────────────────────────────────────────────────
 
-          # Only the model-facing tool. The goal SERVICE, its session driver, and the
-          # `/goal` command stay on the host plane: the Gateway serves the goal domain as
+          # `/goal` 命令在这里启用。此前这段写着「`/goal` 命令留在 host 平面」——host 那份
+          # 组合确实有它（`dsh-command-goal`），但那一行是 `disabled: true`：以「留在 host」
+          # 为由不写预设行，结果是两边都没开。上游靠预设在预设层启用它，本行就是那个启用
+          # （2026-11-02 补）。
+          - id: command-goal
+            name: '@deepseek-ai/dsh-command-goal'
+
+          # Only the model-facing tool. The goal SERVICE, its session driver stay on the
+          # host plane: the Gateway serves the goal domain as
           # Remote endpoints whose receiver comes from a generated descriptor, so it
           # resolves `goals` on the host and an entry-local realm here would hide it. The
           # registry is keyed by session anyway, so one host instance serves every
