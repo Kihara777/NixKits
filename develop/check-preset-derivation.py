@@ -20,6 +20,7 @@ dsh 0.2.0 起预设只有一种格式：profile patch 层里的一条
 挂入 `nix flake check`（checks.preset-derivation），CI 每次 push 执行。
 """
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -186,15 +187,160 @@ def check_news(orders: list) -> None:
     )
 
 
+# ── 上游预设漂移（2026-11-02 加）─────────────────────────────────────────────
+#
+# 上面的派生检查管的是「我们和上游的关系有没有漂」；它**看不见上游加了什么**。
+# 实测代价：dsh 0.2.2 的 standard 预设比 0.1.2 多了六行，整条派生链
+# （nixos → foxli → 掌灯）一条都没跟。少一行不报错，只安静地少一项能力——
+# 本仓日记里反复出现的「ls 了日记目录、拿最新文件名当当天」，就是
+# `time-context` 缺席的地面表现（它每步给当前时间）。
+#
+# 判据两层：
+#   ① `UPSTREAM_STANDARD_IDS − 我们的 id 集` 必须逐条登记在 `UPSTREAM_SKIP`（带理由）。
+#      没登记 = 红；登记了但上游已经没有 = 也红（豁免表不许变墓碑）。
+#   ② 本机若装着 dsh，核对钉住的快照与**当前安装**是否一致。不一致说明上游又变了，
+#      该重采样。找不到 dsh 就显式跳过——「没量到」不是「没事」，也不该冒充失败。
+
+# dsh 0.2.2-alpha.2 的 `dsh-web-app/presets/standard.patch.yml` 里的 id 集
+# （按源文件顺序；`preset-standard` 本身不计）。升级 dsh 后重采样：
+#     UPDATE_UPSTREAM_IDS=1 nix shell nixpkgs#python3 --command \
+#         python3 develop/check-preset-derivation.py
+UPSTREAM_STANDARD_IDS = (
+    "persona", "agent-instructions", "time-context", "tool-bash", "tool-pwsh",
+    "tool-fs", "tool-fs-search", "tool-jobs", "tool-schedule", "skill-filesystem",
+    "tool-skill", "command-goal", "tool-goal", "planning", "plan-mode",
+    "compaction", "compaction-basic", "command-compact", "tool-result-pruner",
+    "delegation", "tool-subagent-control", "tool-subagent", "tool-subagent-fork",
+    "workflow-ptc", "tool-workflow", "tool-ask-user", "tool-todo", "tool-web",
+    "present", "tool-plugin-manager", "tool-plugin-market",
+)
+
+# 上游有、我们**有意不跟**的行。键是 id，值是理由（必须写清日期与代价判断）。
+UPSTREAM_SKIP = {
+    "tool-schedule": (
+        "宿主级持久提醒。本仓已有 proactive/sentinel 两套定时语义，再引一套互不知情的"
+        "「定时」比少一个工具更难查。（2026-11-02）"
+    ),
+    "tool-plugin-manager": (
+        "运行时改写 profile 的插件管理工具。NixKits 的用户走声明式安装，开它等于给"
+        "「绕过声明式」开一条路。（2026-11-02）"
+    ),
+    "tool-plugin-market": (
+        "插件市场（Web Discover 页 + plugin_market 工具）。理由同上一条：声明式安装下"
+        "它没有要解决的问题。（2026-11-02）"
+    ),
+    "present": (
+        "上游包 dsh-agent-tool-presentation 自述已 deprecated（改用 "
+        "dsh-tool-executor-native / dsh-tool-executor-ptc）。跟一行废弃选择器不划算。"
+        "（2026-11-02）"
+    ),
+}
+
+ID_LINE = re.compile(r"^\s+- id: ([A-Za-z0-9_.-]+)\s*$", re.M)
+LIVE_STANDARD = (
+    "/run/dsh/current/lib/node_modules/@deepseek-ai/dsh/node_modules"
+    "/@deepseek-ai/dsh-web-app/presets/standard.patch.yml"
+)
+
+
+def preset_ids(path: str) -> list:
+    """取一个 preset.patch.yml 里所有插件行 id（不含 `preset-` 开头的预设自身行）。"""
+    return [
+        m.group(1)
+        for m in ID_LINE.finditer(read_text(path))
+        if not m.group(1).startswith("preset-")
+    ]
+
+
+def live_standard() -> str:
+    """当前安装的 dsh 里的 standard 预设源文件；找不到返回空串。"""
+    override = os.environ.get("DSH_STANDARD_PRESET", "")
+    if override and os.path.isfile(override):
+        return override
+    return LIVE_STANDARD if os.path.isfile(LIVE_STANDARD) else ""
+
+
+def check_upstream_drift() -> None:
+    ours = set(preset_ids(os.path.join(PRESETS, "nixos-mode", "preset.patch.yml")))
+    upstream = list(dict.fromkeys(UPSTREAM_STANDARD_IDS))
+
+    missing = [i for i in upstream if i not in ours]
+    unregistered = [i for i in missing if i not in UPSTREAM_SKIP]
+    if unregistered:
+        fail(
+            "上游 standard 预设有、nixos-mode 没有，而 UPSTREAM_SKIP 里也没登记：\n"
+            + "\n".join(f"  · {i}" for i in unregistered)
+            + "\n  两条路：把这一行补进 nixos-mode（并同步 foxli-mode），"
+            "或在 UPSTREAM_SKIP 里登记**为什么有意不跟**（带日期）。\n"
+            "  代价：少一行不会报错，只会安静地少一项能力。"
+        )
+
+    dead = [i for i in UPSTREAM_SKIP if i not in upstream]
+    if dead:
+        fail(
+            "UPSTREAM_SKIP 里登记了上游已经没有（或从未有过）的行：\n"
+            + "\n".join(f"  · {i}" for i in dead)
+            + "\n  豁免表不是墓碑：上游删了就把它从表里删掉。"
+        )
+
+    live = live_standard()
+    if not live:
+        # 没量到 ≠ 没事，但也 ≠ 失败：CI 里通常没有安装的 dsh。
+        print(
+            "preset-derivation: 跳过「快照 vs 当前安装」核对"
+            "（找不到安装的 dsh；设 DSH_STANDARD_PRESET 可指定）"
+        )
+        return
+
+    live_ids = preset_ids(live)
+    if live_ids != upstream:
+        added = [i for i in live_ids if i not in upstream]
+        removed = [i for i in upstream if i not in live_ids]
+        detail = []
+        if added:
+            detail.append("  上游新增：" + "、".join(added))
+        if removed:
+            detail.append("  上游移除：" + "、".join(removed))
+        fail(
+            "钉住的 standard id 快照与当前安装的 dsh 不一致——上游预设变了：\n"
+            + "\n".join(detail)
+            + f"\n  来源：{live}"
+            + "\n  先 `UPDATE_UPSTREAM_IDS=1` 重采样，再决定每条是新补还是登记豁免。"
+        )
+
+
+def dump_upstream_ids() -> None:
+    """把当前安装的 dsh 的 standard id 集打印成可粘贴的常量。"""
+    live = live_standard()
+    if not live:
+        fail("重采样需要一个安装的 dsh：找不到 " + LIVE_STANDARD)
+    print(f"# 采样自 {live}")
+    print("UPSTREAM_STANDARD_IDS = (")
+    line = "   "
+    for i in preset_ids(live):
+        piece = f' "{i}",'
+        if len(line) + len(piece) > 96:
+            print(line)
+            line = "   "
+        line += piece
+    print(line)
+    print(")")
+
+
 def fail(message: str) -> None:
     print(f"preset-derivation: {message}", file=sys.stderr)
     sys.exit(1)
 
 
 def main() -> None:
+    if os.environ.get("UPDATE_UPSTREAM_IDS") == "1":
+        dump_upstream_ids()
+        return
+
     orders: list = []
     check_patch_chain(orders)
     check_news(orders)
+    check_upstream_drift()
 
     # 组合撰写技能曾**自带副本**；2026-10-02 起改为挂上游随
     # `@deepseek-ai/dsh-agent-preset` 分发的那份（见 preset.patch.yml 的 `skill-filesystem` 行）。
