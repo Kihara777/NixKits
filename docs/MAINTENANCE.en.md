@@ -3,6 +3,21 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-02T13:05:22+09:00
+
+**Summary**: Restored two upstream `standard` rows; added an upstream-drift check
+
+- 0.2.2's `standard` carries six rows 0.1.2 did not, and the chain followed none of them — derivation checks compare relations, they cannot see what upstream added
+- Restored `time-context` (per-step current time; the real cause of the "took the newest filename for today" accidents) and `command-goal` (the host row is `disabled: true`, so "stays on the host plane" meant off)
+- The other four are registered exemptions with reasons; a snapshot that disagrees with the live install is red, and so is an exemption whose upstream row vanished
+
+| Commit | Description |
+|--------|-------------|
+| `4973c1a` | fix(preset): restore time-context and command-goal from upstream standard |
+| `e830240` | feat(check): upstream preset drift check |
+
+Verified: adding a row to the snapshot that we do not carry → red and named; adding an exemption for a row upstream never had → red; both restored byte-identical, exit codes 0 / 1 distinguishable. The lampkeeper preset lives in Kitsunome (`a463c6e`) and is checked there by `check-lampkeeper-derivation.py`.
+
 ## 2026-10-29T18:14:10+09:00
 
 **Summary**: dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — three upstream updates

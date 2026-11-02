@@ -3,6 +3,21 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-11-02T13:05:22+09:00
+
+**摘要**：予設派生連鎖、上流 `standard` 之二行復元、「上流予設漂流」判定追加
+
+- 0.2.2 之 `standard`、比 0.1.2 多六行、全連鎖一行也不追従——派生判定只看「関係有無漂流」、看不見上流加了何物
+- 復元 `time-context`（各段之現在時刻、「以最新文件名為当日」事故之正体）與 `command-goal`（host 側之行乃 `disabled: true`、「留在 host 平面」実際是関）
+- 残四行登録除外並記理由。固定快照與実導入不一致亦紅、除外行之於上流消失亦紅
+
+| 提交 | 説明 |
+|------|------|
+| `4973c1a` | fix(preset): 从上游 standard 补回 time-context 与 command-goal |
+| `e830240` | feat(check): 上游预设漂移判据——上游加了什么，不再没人知道 |
+
+検証：往快照塞一行我々没有之行 → 紅並指名。往除外表塞一行上流从未有之行 → 紅。両者復原後逐字節一致、退出碼 0 / 1 可分。掌灯模式在 Kitsunome（`a463c6e`）、由該処之 `check-lampkeeper-derivation.py` 照合。
+
 ## 2026-10-29T18:14:10+09:00
 
 **摘要**：dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — 上流三件更新

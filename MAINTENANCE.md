@@ -3,6 +3,21 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-02T13:05:22+09:00
+
+**摘要**：预设派生链补回上游 standard 两行；新增「上游预设漂移」判据
+
+- 0.2.2 的 standard 比 0.1.2 多六行，整条链一条没跟——派生判据只看「关系有没有漂」，看不见上游加了什么
+- 补 `time-context`（每步当前时间，「拿最新文件名当当天」事故的正体）与 `command-goal`（host 那行是 `disabled: true`，「留在 host」实际是关的）
+- 其余四行登记豁免并写理由；快照与当前安装不一致也红，豁免行的上游消失也算红
+
+| 提交 | 说明 |
+|------|------|
+| `4973c1a` | fix(preset): 从上游 standard 补回 time-context 与 command-goal |
+| `e830240` | feat(check): 上游预设漂移判据——上游加了什么，不再没人知道 |
+
+验证：往快照塞一条我们没有的行 → 红并指名；往豁免表塞一条上游没有的 → 红；两处还原后逐字节一致，退出码 0 / 1 分得开。掌灯模式在 Kitsunome（`a463c6e`），由那边的 `check-lampkeeper-derivation.py` 核对。
+
 ## 2026-10-29T18:14:10+09:00
 
 **摘要**：dsh-alpha 0.2.2-alpha.2 / rea 6.8.0 / opencode-telegram 0.26.6 — 三个上游更新
