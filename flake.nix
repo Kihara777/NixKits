@@ -51,6 +51,10 @@
       bili-agent           = pkgs.callPackage ./packages/bili-agent.nix {
         inherit bilibili-api-python;
       };
+      # 素材库 → AI 出片（TTS + Remotion）→ 审核发布的完整插件（2026-11-04 加）。
+      # Chromium 打进了它的闭包——Remotion 要有 Chromium 内核，而它的探测只认
+      # Windows 路径，所以包内 `postPatch` 把默认浏览器钉到闭包里那个。
+      dsh-bili-workbench   = pkgs.callPackage ./packages/dsh-bili-workbench.nix { };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
