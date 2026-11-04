@@ -55,6 +55,10 @@
       # Chromium 打进了它的闭包——Remotion 要有 Chromium 内核，而它的探测只认
       # Windows 路径，所以包内 `postPatch` 把默认浏览器钉到闭包里那个。
       dsh-bili-workbench   = pkgs.callPackage ./packages/dsh-bili-workbench.nix { };
+      # XDNA NPU 的用户态（XRT）——2026-11-04 加。内核那半由内核自带
+      # （`amdxdna` 0.10.0），这里只有运行时。版本钉死 `amd/xdna-driver` 的
+      # submodule 指的 commit，不用 XRT master。
+      xrt                  = pkgs.callPackage ./packages/xrt.nix { };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
