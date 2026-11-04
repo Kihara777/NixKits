@@ -1,0 +1,18 @@
+name: Build xrt (x86_64)
+on: [push, pull_request]
+
+# 最小权限：调用方只需读取仓库内容（Cachix 推送凭据经 secrets 传入，
+# 与 GITHUB_TOKEN 的权限无关）。显式声明可避免继承仓库默认的读写权限。
+permissions:
+  contents: read
+
+# 只打 x86_64：XRT 的 NPU 用户态只对这台机器的 Strix Halo 验过，
+# aarch64 的可用性**没验过**——不写就不承诺。
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "xrt"
+      runs-on: "ubuntu-latest"
+      riscv64-cross: false
+    secrets: inherit
