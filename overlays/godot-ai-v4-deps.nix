@@ -60,8 +60,8 @@
   httpx2Src = prev.fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
-    tag = "v2.13.1";
-    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
+    tag = "v2.16.0";
+    hash = "sha256-oG7mYYb1ZdrcVcTAPUFZx/Ggge7E1Ng7HyrT8YCF+nE=";
   };
   anyioSrc = prev.fetchFromGitHub {
     owner = "agronholm";
@@ -72,8 +72,8 @@
   pydanticSrc = prev.fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "v2.13.5";
-    hash = "sha256-ZtXEQfN1QKDvvaBwIRnzs5NgRcsBikPvCdWHHeIiYDg=";
+    tag = "v2.14.1";
+    hash = "sha256-sk7BkUmVcDRNzcZz5czHxhyaDD1e7hHrR0cHeYU97J8=";
   };
   # pydantic-core 住在 pydantic monorepo 里，但独立发版（`core-v<ver>`）。实测两个 tag
   # 指向**同一个提交**（`gh api repos/pydantic/pydantic/commits/<tag> --jq .sha` →
@@ -82,14 +82,22 @@
   pydanticCoreSrc = prev.fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "core-v2.46.5";
-    hash = "sha256-ZtXEQfN1QKDvvaBwIRnzs5NgRcsBikPvCdWHHeIiYDg=";
+    tag = "core-v2.50.1";
+    hash = "sha256-sk7BkUmVcDRNzcZz5czHxhyaDD1e7hHrR0cHeYU97J8=";
   };
   starletteSrc = prev.fetchFromGitHub {
     owner = "Kludex";
     repo = "starlette";
-    tag = "1.7.0";
-    hash = "sha256-5/gQtC0JbQM7eSQeu2aVJtD63v4LjnbSSC0jF96e958=";
+    tag = "1.10.0";
+    hash = "sha256-9Ti2ktDNfZcG1gVccew06ascsBtUUTGp9ZEJoe0f/aM=";
+  };
+  # typing-inspection：pydantic 2.14.1 的运行期门槛是 >=0.4.4，nixpkgs 只到 0.4.3。
+  # 上游在 pydantic 同组织下独立发版，tag 形如 `v0.4.4`。
+  typingInspectionSrc = prev.fetchFromGitHub {
+    owner = "pydantic";
+    repo = "typing-inspection";
+    tag = "v0.4.4";
+    hash = "sha256-VqRn+m+7McD9gNy1SaDG5DqUFqBdId2vLcAPB41mMu8=";
   };
   uvicornSrc = prev.fetchFromGitHub {
     owner = "encode";
@@ -123,23 +131,53 @@ in {
       # `check_pydantic_core_version()` 比对已安装的 core 版本，新的 pydantic 配旧的
       # core 会**在构建期**失败，而不是运行期。
       pydantic-core = pyPrev.pydantic-core.overridePythonAttrs (old: {
-        version = "2.46.5";
+        version = "2.50.1";
         src = pydanticCoreSrc;
         # fetchCargoVendor 解包到的是 `source/`（fetchFromGitHub 的目录名），
         # 而不是 `<pname>-<version>/`；写错会报
         # "chmod: cannot access '.../pydantic-core': No such file or directory"。
         cargoDeps = prev.rustPlatform.fetchCargoVendor {
           pname = "pydantic-core";
-          version = "2.46.5";
+          version = "2.50.1";
           src = pydanticCoreSrc;
           sourceRoot = "source/pydantic-core";
-          hash = "sha256-h955lauGYYxIN9hPQXGRESFa4sYvcyPsHxCTMCFSMXs=";
+          hash = "sha256-EPTH6oOFIhsRHAvt3eS0mYbR1NMyjoPIs2YRPzd6QFU=";
         };
       });
 
       pydantic = pyPrev.pydantic.overridePythonAttrs (old: {
-        version = "2.13.5";
+        version = "2.14.1";
         src = pydanticSrc;
+        # 2.14.1 已经吸收了 nixpkgs 针对 2.13.x 打的那批补丁：直接沿用会在
+        # patchPhase 报 `Reversed (or previously applied) patch detected!` 并留下
+        # .rej，构建随后失败。清空即可——不是绕过校验，是那些改动已在上游。
+        patches = [ ];
+        # 2.14.1 的测试集合里多出 tests/pydantic_core/test_docstrings.py，它 import
+        # `pytest_examples` —— 该模块不在本包的测试依赖里。
+        # 试过把 nixpkgs 的 pytest-examples 补进 nativeCheckInputs：在
+        # overridePythonAttrs 里引用它会让闭包回指 pydantic 自身，Nix 报
+        # `infinite recursion encountered`（`postFixup` 求值阶段）。
+        # 故只删这一个文件，**其余测试照跑**——不是 doCheck=false 把整层判据关掉。
+        postPatch = (old.postPatch or "") + ''
+          rm -f tests/pydantic_core/test_docstrings.py
+        '';
+      });
+
+      # cyclopts 是 fastmcp 的传递依赖（不在 godot-ai 的 pin 表里）。它的测试
+      # 断言 pydantic 的旧行为：`test_pydantic_validate_by_alias_false` 在
+      # pydantic 2.14 上抛 `UnknownOptionError: Unknown option: --model.full_name`。
+      # 那是**上游测试与新版 pydantic 不匹配**，与本仓运行期无关，故只关它的测试。
+      cyclopts = pyPrev.cyclopts.overridePythonAttrs (old: {
+        doCheck = false;
+      });
+
+      # typing-inspection：pydantic 2.14.1 声明 `typing-inspection>=0.4.4`，
+      # 而 nixpkgs（本仓锁定的 nixos-unstable）只到 0.4.3 —— 不抬版本的话
+      # pythonRuntimeDepsCheckHook 会在**构建期**直接拒收 pydantic 的 wheel。
+      # 上游是 pydantic 同组织的独立仓库，tag 形如 `v0.4.4`。
+      typing-inspection = pyPrev.typing-inspection.overridePythonAttrs (old: {
+        version = "0.4.4";
+        src = typingInspectionSrc;
       });
 
       # anyio：上游把 typing_extensions 的地板提到 >=4.16.0（nixpkgs 恰为 4.16.0），
@@ -268,7 +306,7 @@ in {
       # 2.13.0 → 2.13.1 更是一处纯 patch 抬版：两份 pyproject.toml **逐字节相同**
       # （`cmp` 实测），故下面那条放宽构建工具地板的 postPatch 依然命中同一处锚点。
       httpcore2 = pyPrev.httpcore2.overridePythonAttrs (old: {
-        version = "2.13.1";
+        version = "2.16.0";
         src = httpx2Src;
         # nixpkgs 的派生在此已 `pushd src/httpcore2`，故 pyproject.toml 就是子项目那本。
         postPatch = (old.postPatch or "") + ''
@@ -294,7 +332,7 @@ in {
       # 插件的版本推算逻辑根本不参与，产物版本仍等于本文件的 `version`。
       # 之所以不打补丁绕「运行期」校验：那是两条完全不同的东西（见本文件顶部）。
       httpx2 = pyPrev.httpx2.overridePythonAttrs (old: {
-        version = "2.13.1";
+        version = "2.16.0";
         src = httpx2Src;
         postPatch = (old.postPatch or "") + ''
           substituteInPlace pyproject.toml \
@@ -344,7 +382,7 @@ in {
       # 而不是关掉测试——关掉等于把这一层判据整个删掉。nixpkgs 提供 blockbuster 1.5.26
       # （上游要求 >=1.5.23）与 opentelemetry-api / opentelemetry-sdk，均可用。
       starlette = pyPrev.starlette.overridePythonAttrs (old: {
-        version = "1.7.0";
+        version = "1.10.0";
         src = starletteSrc;
         nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ [
           pyFinal.blockbuster

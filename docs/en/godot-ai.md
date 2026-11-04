@@ -12,7 +12,7 @@ Production-grade MCP server and AI tools for the Godot engine — connects MCP c
 |------|-------|
 | Type | Python application (MCP server) |
 | Upstream | [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) |
-| Version | `4.3.1` |
+| Version | `4.4.1` |
 | License | MIT |
 | Python | ≥ 3.11, < 3.15 |
 
