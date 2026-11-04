@@ -14,7 +14,7 @@
 # 没有它。用 nixpkgs 的未来版本会撞上运行期行为差异，而且 `==` 本来就是硬约束。
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bili-agent";
-  version = "1.2.1";
+  version = "1.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # PyPI 名 `bili-agent`，`pname` 取规范化后的下划线形式。
     pname = "bili_agent";
     inherit (finalAttrs) version;
-    hash = "sha256-SUcjUasWmWhmtQgS5FTuaEGAUf9HLOK3xKizjryiSac=";
+    hash = "sha256-9K7bxKiultU/0xDx8h2ibL5ME06f9FnUJbLkOcyPlyk=";
   };
 
   pyproject = true;
