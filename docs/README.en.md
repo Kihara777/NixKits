@@ -23,12 +23,12 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | dsh | DeepSeek Harness (DSH) — Everything is a Plugin | [docs/en/dsh.md](en/dsh.md) |
-| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.2.2-alpha.2) | [docs/en/dsh.md](en/dsh.md) |
+| dsh-alpha | DeepSeek Harness (DSH) — alpha development channel (0.2.2-alpha.3) | [docs/en/dsh.md](en/dsh.md) |
 | godot-ai | MCP server and AI tools for the Godot engine | [docs/en/godot-ai.md](en/godot-ai.md) |
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | rea | Reverse-engineering CLI and MCP server — take an agent from app behavior down to native binaries (static analysis needs no external engine) | [docs/en/rea.md](en/rea.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
 
 ## Plugins
 

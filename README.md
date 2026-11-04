@@ -27,12 +27,12 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | blender-mcp | Blender 的 MCP Server（自然语言控制 Blender） | [docs/zh/blender-mcp.md](docs/zh/blender-mcp.md) |
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/zh/dsh.md](docs/zh/dsh.md) |
-| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.2.2-alpha.2） | [docs/zh/dsh.md](docs/zh/dsh.md) |
+| dsh-alpha | DeepSeek Harness（DSH）— alpha 开发通道（0.2.2-alpha.3） | [docs/zh/dsh.md](docs/zh/dsh.md) |
 | godot-ai | Godot 引擎的 MCP Server 与 AI 工具 | [docs/zh/godot-ai.md](docs/zh/godot-ai.md) |
 | kitsfmt | Nix 格式化器（AST 排序 + Best-Practice 自动修正） | [docs/zh/kitsfmt.md](docs/zh/kitsfmt.md) |
 | opencode-telegram | OpenCode 的 Telegram Bot 客户端 | [docs/zh/opencode-telegram.md](docs/zh/opencode-telegram.md) |
 | rea | 逆向工程 CLI + MCP 服务——用 agent 从应用行为一直下探到原生二进制（静态分析不需要外部引擎） | [docs/zh/rea.md](docs/zh/rea.md) |
-| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.53.0 · beta 0.53.0-beta.20260917 · alpha 0.54.0-alpha.20260918 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
+| ruyi | RuyiSDK 包管理器（RISC-V 开发工具）<br>stable 0.53.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/zh/ruyi.md](docs/zh/ruyi.md) |
 
 ## 插件
 
