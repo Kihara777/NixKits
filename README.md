@@ -24,6 +24,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 | 软件 | 说明 | 文档 |
 |---|------|------|
+| bili-agent | 为 AI 代理设计的 B 站 CLI（`bili`：每条命令一个 JSON、零交互） | [docs/zh/bili-agent.md](docs/zh/bili-agent.md) |
 | blender-mcp | Blender 的 MCP Server（自然语言控制 Blender） | [docs/zh/blender-mcp.md](docs/zh/blender-mcp.md) |
 | codewhale | DeepSeek V4 终端编码代理 | [docs/zh/codewhale.md](docs/zh/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— 万物皆插件 | [docs/zh/dsh.md](docs/zh/dsh.md) |

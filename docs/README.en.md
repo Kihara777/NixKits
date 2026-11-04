@@ -20,6 +20,7 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 
 | Software | Description | Docs |
 |---|------|------|
+| bili-agent | Bilibili CLI designed for AI agents (`bili`: one JSON per command, zero interaction) | [docs/en/bili-agent.md](en/bili-agent.md) |
 | blender-mcp | MCP server for Blender (natural language control of Blender) | [docs/en/blender-mcp.md](en/blender-mcp.md) |
 | codewhale | DeepSeek V4 terminal coding agent | [docs/en/codewhale.md](en/codewhale.md) |
 | dsh | DeepSeek Harness (DSH) — Everything is a Plugin | [docs/en/dsh.md](en/dsh.md) |

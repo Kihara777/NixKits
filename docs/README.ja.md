@@ -20,6 +20,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 
 | ソフトウェア | 説明 | ドキュメント |
 |---|------|------|
+| bili-agent | AI エージェント向け Bilibili CLI（`bili`：コマンドごとに JSON ひとつ、対話なし） | [docs/ja/bili-agent.md](ja/bili-agent.md) |
 | blender-mcp | Blender 向け MCP サーバー（自然言語による Blender 操作） | [docs/ja/blender-mcp.md](ja/blender-mcp.md) |
 | codewhale | DeepSeek V4 端末コーディングエージェント | [docs/ja/codewhale.md](ja/codewhale.md) |
 | dsh | DeepSeek Harness（DSH）— すべてがプラグイン | [docs/ja/dsh.md](ja/dsh.md) |
