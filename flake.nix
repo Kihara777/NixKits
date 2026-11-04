@@ -44,6 +44,13 @@
       ruyi-beta            = pkgs.callPackage ./packages/ruyi/ruyi-beta.nix { };
       ruyi-alpha           = pkgs.callPackage ./packages/ruyi/ruyi-alpha.nix { };
       godot-ai             = godotPkgs.callPackage ./packages/godot-ai.nix { };
+      # 掌灯模式的 B 站能力（2026-11-04 加）。`bili-agent` 钉死
+      # `bilibili-api-python==17.4.2`，而 nixpkgs 没有那个包——所以自带一个，
+      # 并在下面显式传进去（`packages` 是 `rec`，兄弟属性可直接引用）。
+      bilibili-api-python  = pkgs.callPackage ./packages/bilibili-api-python.nix { };
+      bili-agent           = pkgs.callPackage ./packages/bili-agent.nix {
+        inherit bilibili-api-python;
+      };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
