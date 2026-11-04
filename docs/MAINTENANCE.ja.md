@@ -3,6 +3,31 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T14:59:45+09:00
+
+**概要**：五つのパッケージ版更新 — bili-agent / dsh 二チャネル / ruyi-beta / godot-ai
+
+- bili-agent 1.2.1 → 1.3.0；dsh 0.2.1-rc.2 → rc.5、alpha 0.2.2-alpha.2 → alpha.3、両チャネルの vendored lock と npmDepsHash をそれぞれ再計算
+- ruyi-beta 0.53.0-beta → 0.54.0-beta
+- godot-ai 4.3.1 → 4.4.1：pin 表を HTTPX2/HTTPCore2 2.16.0、Pydantic 2.14.1、Starlette 1.10.0 へ引き上げ、overlay に typing-inspection 0.4.4 を追加
+- 判据：五つの成果物が自称する版が一致；godot-ai は `--version` 実走で fail-closed 検証を通る；`nix flake check` と CI 38/38 全緑
+
+| コミット | 説明 |
+|----------|------|
+| `df92617` | chore(bili-agent): 1.2.1 → 1.3.0 |
+| `bda1fca` | chore(dsh): stable 0.2.1-rc.2 → rc.5、alpha 0.2.2-alpha.2 → alpha.3 |
+| `6159197` | chore(ruyi): beta 0.53.0-beta.20260917 → 0.54.0-beta.20261102 |
+| `47bc180` | docs: 今回の版番号を同期 |
+| `80e09d0` | chore(godot-ai): 4.3.1 → 4.4.1 |
+
+| パッケージ | 旧 | 新 |
+|------------|-----|-----|
+| bili-agent | 1.2.1 | 1.3.0 |
+| dsh | 0.2.1-rc.2 | 0.2.1-rc.5 |
+| dsh-alpha | 0.2.2-alpha.2 | 0.2.2-alpha.3 |
+| ruyi-beta | 0.53.0-beta.20260917 | 0.54.0-beta.20261102 |
+| godot-ai | 4.3.1 | 4.4.1 |
+
 ## 2026-11-02T13:05:22+09:00
 
 **概要**：プリセット派生チェーンへ上流 `standard` の 2 行を復元、「上流プリセット漂流」の判定を追加

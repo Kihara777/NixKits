@@ -3,6 +3,31 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T14:59:45+09:00
+
+**Summary**: Five package version updates — bili-agent / both dsh channels / ruyi-beta / godot-ai
+
+- bili-agent 1.2.1 → 1.3.0; dsh 0.2.1-rc.2 → rc.5 and alpha 0.2.2-alpha.2 → alpha.3, each channel's vendored lock and npmDepsHash recomputed separately
+- ruyi-beta 0.53.0-beta → 0.54.0-beta
+- godot-ai 4.3.1 → 4.4.1: pin table raised to HTTPX2/HTTPCore2 2.16.0, Pydantic 2.14.1, Starlette 1.10.0; overlay gains typing-inspection 0.4.4
+- Criteria: all five artifacts self-report the new versions; godot-ai passes its fail-closed startup check by actually running; `nix flake check` and CI 38/38 green
+
+| Commit | Description |
+|--------|-------------|
+| `df92617` | chore(bili-agent): 1.2.1 → 1.3.0 |
+| `bda1fca` | chore(dsh): stable 0.2.1-rc.2 → rc.5, alpha 0.2.2-alpha.2 → alpha.3 |
+| `6159197` | chore(ruyi): beta 0.53.0-beta.20260917 → 0.54.0-beta.20261102 |
+| `47bc180` | docs: sync version numbers for this round |
+| `80e09d0` | chore(godot-ai): 4.3.1 → 4.4.1 |
+
+| Package | Old | New |
+|---------|-----|-----|
+| bili-agent | 1.2.1 | 1.3.0 |
+| dsh | 0.2.1-rc.2 | 0.2.1-rc.5 |
+| dsh-alpha | 0.2.2-alpha.2 | 0.2.2-alpha.3 |
+| ruyi-beta | 0.53.0-beta.20260917 | 0.54.0-beta.20261102 |
+| godot-ai | 4.3.1 | 4.4.1 |
+
 ## 2026-11-02T13:05:22+09:00
 
 **Summary**: Restored two upstream `standard` rows; added an upstream-drift check

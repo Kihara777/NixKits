@@ -3,6 +3,31 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T14:59:45+09:00
+
+**摘要**：五个包版本更新 — bili-agent / dsh 两通道 / ruyi-beta / godot-ai
+
+- bili-agent 1.2.1 → 1.3.0；dsh rc.2 → rc.5、alpha.2 → alpha.3，两通道 lock 与 npmDepsHash 各自重算
+- ruyi-beta 0.53.0-beta → 0.54.0-beta
+- godot-ai 4.3.1 → 4.4.1：pin 表 HTTPX2/HTTPCore2 2.16.0、Pydantic 2.14.1、Starlette 1.10.0，overlay 加 typing-inspection 0.4.4
+- 判据：五产物自述版本对上；`--version` 过 fail-closed 校验；`nix flake check` 与 CI 38/38 全绿
+
+| 提交 | 说明 |
+|------|------|
+| `df92617` | chore(bili-agent): 1.2.1 → 1.3.0 |
+| `bda1fca` | chore(dsh): stable 0.2.1-rc.2 → rc.5，alpha 0.2.2-alpha.2 → alpha.3 |
+| `6159197` | chore(ruyi): beta 0.53.0-beta.20260917 → 0.54.0-beta.20261102 |
+| `47bc180` | docs: 同步本轮升级的版本号 |
+| `80e09d0` | chore(godot-ai): 4.3.1 → 4.4.1 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| bili-agent | 1.2.1 | 1.3.0 |
+| dsh | 0.2.1-rc.2 | 0.2.1-rc.5 |
+| dsh-alpha | 0.2.2-alpha.2 | 0.2.2-alpha.3 |
+| ruyi-beta | 0.53.0-beta.20260917 | 0.54.0-beta.20261102 |
+| godot-ai | 4.3.1 | 4.4.1 |
+
 ## 2026-11-02T13:05:22+09:00
 
 **摘要**：预设派生链补回上游 standard 两行；新增「上游预设漂移」判据
