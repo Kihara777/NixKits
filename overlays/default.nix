@@ -34,5 +34,16 @@ final: prev: {
   dsh-api-balance      = final.callPackage ../packages/dsh-api-balance.nix { };
   # 独立分发的 Agent 预设包（新闻三要素模式）。
   dsh-preset-news-three-elements = final.callPackage ../packages/dsh-preset-news-three-elements.nix { };
+  # B 站 CLI（掌灯模式用，2026-11-04 加）。⚠️ 与 `flake.nix` 的
+  # `packages.bilibili-api-python` / `packages.bili-agent` 是**两个落点**，
+  # 改动要同步——`/etc/nixos` 走 overlay，`nix build .#bili-agent` 走 flake。
+  #
+  # `bilibili-api-python` 也一起暴露：它不是给人执行的程序，而是 `bili-agent`
+  # 闭包里被钉死的那个依赖（`==17.4.2`，nixpkgs 没有）。暴露出来是为了让
+  # 「谁在用它」可查，不是为了让人 `nix run`。
+  bilibili-api-python  = final.callPackage ../packages/bilibili-api-python.nix { };
+  bili-agent           = final.callPackage ../packages/bili-agent.nix {
+    bilibili-api-python = final.bilibili-api-python;
+  };
   # NixKits skills as native dsh skill plugins (one plugin entry per skill).
 }
