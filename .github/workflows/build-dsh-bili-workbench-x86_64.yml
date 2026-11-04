@@ -1,0 +1,18 @@
+name: Build dsh-bili-workbench (x86_64)
+on: [push, pull_request]
+
+# 最小权限：调用方只需读取仓库内容（Cachix 推送凭据经 secrets 传入，
+# 与 GITHUB_TOKEN 的权限无关）。显式声明可避免继承仓库默认的读写权限。
+permissions:
+  contents: read
+
+# 只打 x86_64：包内有 Chromium 与 Remotion 的 compositor 预编译件，
+# aarch64 上的可用性**没验过**——不写就不承诺（与 blender-mcp 的架构取舍同一原则）。
+jobs:
+  call:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      package: "dsh-bili-workbench"
+      runs-on: "ubuntu-latest"
+      riscv64-cross: false
+    secrets: inherit
