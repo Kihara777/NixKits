@@ -3,6 +3,27 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T15:33:04+09:00
+
+**Summary**: Added two packages — bili-agent and bilibili-api-python
+
+- bili-agent 1.3.0: a Bilibili CLI for AI agents, with x86_64 / aarch64 workflows
+- bilibili-api-python 17.4.2: nixpkgs does not have it and bili-agent pins `==17.4.2`, so this repository ships its own
+- the overlay and the flake `packages` expose `pkgs.bili-agent` from both landing points
+- four-layer acceptance: evaluation / a real `building` / `$out/bin/bili` / `--version`
+- four-language docs and README index rows completed
+
+| Commit | Description |
+|------|------|
+| `90bd2b3` | feat(bili-agent): package the Bilibili CLI for lampkeeper — two packages, four-layer acceptance |
+| `2369869` | feat(bili-agent): expose it through the overlay |
+| `396ac9e` | docs(bili-agent): four-language docs + README index rows |
+
+| Package | Old | New |
+|--------|--------|--------|
+| bili-agent | — | 1.3.0 |
+| bilibili-api-python | — | 17.4.2 |
+
 ## 2026-11-04T14:59:45+09:00
 
 **Summary**: Five package version updates — bili-agent / both dsh channels / ruyi-beta / godot-ai

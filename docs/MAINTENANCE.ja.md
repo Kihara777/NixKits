@@ -3,6 +3,27 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T15:33:04+09:00
+
+**概要**：bili-agent と bilibili-api-python の 2 パッケージを追加
+
+- bili-agent 1.3.0：AI エージェント向け Bilibili CLI、x86_64 / aarch64 の workflow 付き
+- bilibili-api-python 17.4.2：nixpkgs に無く、bili-agent が `==17.4.2` を固定しているため本リポジトリが同梱
+- overlay と flake の `packages` の両方から `pkgs.bili-agent` を公開
+- 四層検収：評価 / 実際の `building` / `$out/bin/bili` / `--version`
+- 四語ドキュメントと README 索引も補完
+
+| コミット | 説明 |
+|------|------|
+| `90bd2b3` | feat(bili-agent): lampkeeper 向け Bilibili CLI のパッケージ化 |
+| `2369869` | feat(bili-agent): overlay からも公開 |
+| `396ac9e` | docs(bili-agent): 四語ドキュメント + README 索引行 |
+
+| パッケージ | 旧 | 新 |
+|--------|--------|--------|
+| bili-agent | — | 1.3.0 |
+| bilibili-api-python | — | 17.4.2 |
+
 ## 2026-11-04T14:59:45+09:00
 
 **概要**：五つのパッケージ版更新 — bili-agent / dsh 二チャネル / ruyi-beta / godot-ai

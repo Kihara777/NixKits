@@ -3,6 +3,27 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-04T15:33:04+09:00
+
+**摘要**：新增 bili-agent 与 bilibili-api-python 两个包
+
+- bili-agent 1.3.0：AI 代理向的 B 站 CLI，x86_64 / aarch64 各一条 workflow
+- bilibili-api-python 17.4.2：nixpkgs 没有这个库，而 bili-agent 钉死 `==17.4.2`，故本仓自带
+- overlay 与 flake 的 `packages` 两个落点同步暴露 `pkgs.bili-agent`
+- 四层验收：求值 / 真的 `building` / `$out/bin/bili` / `--version`
+- 四语文档与 README 索引补齐
+
+| 提交 | 说明 |
+|------|------|
+| `90bd2b3` | feat(bili-agent): 给掌灯模式打包 B 站 CLI——两个包，四层验收全过 |
+| `2369869` | feat(bili-agent): 加进 overlay |
+| `396ac9e` | docs(bili-agent): 四语文档 + README 索引行 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| bili-agent | — | 1.3.0 |
+| bilibili-api-python | — | 17.4.2 |
+
 ## 2026-11-04T14:59:45+09:00
 
 **摘要**：五个包版本更新 — bili-agent / dsh 两通道 / ruyi-beta / godot-ai
