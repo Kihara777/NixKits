@@ -59,6 +59,12 @@
       # （`amdxdna` 0.10.0），这里只有运行时。版本钉死 `amd/xdna-driver` 的
       # submodule 指的 commit，不用 XRT master。
       xrt                  = pkgs.callPackage ./packages/xrt.nix { };
+      # XRT 与 NPU 之间的那层胶水（2026-11-04 加）。XRT 基座认的是 PCIe 板卡，
+      # 装上它之后 `xrt-smi` 仍是 `0 devices`；这个 shim 才是让 amdxdna 设备
+      # 出现在 XRT 里的那一步。内核模块由内核自带，本包只有用户态。
+      xdna-xrt-plugin      = pkgs.callPackage ./packages/xdna-xrt-plugin.nix {
+        inherit xrt;
+      };
       dsh                  = pkgs.callPackage ./packages/dsh.nix { };
       dsh-alpha            = pkgs.callPackage ./packages/dsh-alpha.nix { };
       dsh-nixos-shell      = pkgs.callPackage ./packages/dsh-nixos-shell.nix { };
