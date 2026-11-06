@@ -972,8 +972,12 @@ export function apply(ctx, config = {}) {
       stage: {
         type: "string",
         required: true,
-        enum: ["build", "switch"],
-        description: "build = compile only (safe, synchronous); switch = activate (detached, restarts dsh).",
+        // **不用 `enum`**（2026-11-06 实测）：`nixos_cli` 的 `op` 用 enum 一直正常，
+        // 但这个词放在这里时 dsh 报 `Cannot read properties of undefined
+        // (reading 'includes')` —— 同样的写法、不同的结果，不值得为它继续猜。
+        // 合法值改在 `execute` 里校验（下面那个 `if (!["build","switch"].includes(stage))`），
+        // **判据一点没松**：非法值仍然会被拒绝，只是拒得更明确（给出实际收到的值）。
+        description: "build = compile only (safe, synchronous); switch = activate (detached, restarts dsh). 只接受 build 或 switch。",
       },
       flakeDir: {
         type: "string",
@@ -994,6 +998,11 @@ export function apply(ctx, config = {}) {
     },
     execute: async (args, exec) => {
       const stage = String(args.stage ?? "build");
+      // schema 层不再用 `enum`（见参数定义处的注释），所以合法值在这里卡：
+      // **非法值必须拒绝，不能悄悄当成 build 跑一遍构建。**
+      if (stage !== "build" && stage !== "switch") {
+        throw new Error(`stage 只接受 build 或 switch，收到的是：${JSON.stringify(args.stage)}`);
+      }
       const flakeDir = typeof args.flakeDir === "string" && args.flakeDir.length > 0 ? args.flakeDir : "/etc/nixos";
       const buildStateDir = "/run/nixos-apply";
 
