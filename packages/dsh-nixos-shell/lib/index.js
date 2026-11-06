@@ -372,6 +372,23 @@ export function apply(ctx, config = {}) {
     };
   }
 
+  // **薄封装**：`runLocal` 收的是 argv 数组（它直接交给 `ctx.subprocess.spawn`），
+  // 而判断逻辑写成 shell 字符串更清楚。包一层 `bash -c`，免得每处各自拼数组。
+  //
+  // ⚠️ 作用域：**必须定义在 `apply()` 里**，不能放进某个 execute 函数内部——
+  // 2026-11-06 实测：我最初把它写在 `executeCli` 里，于是 `nixos_apply` 的
+  // `execute` 根本看不到它，第一次真实调用就报 `sh is not defined`。
+  // `node --check` 只查语法、不查作用域，这类错只有**真跑一次**才暴露——
+  // 这正是四层验收里第四层（运行）不能省的原因。
+  //
+  // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
+  // 路径都过了 `shq`）。别把工具参数直接喂进来。
+  const sh = (command, opts = {}) =>
+    runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
+      timeoutMs: opts.timeoutMs ?? 15000,
+      env: { PATH: pathEnv },
+    });
+
   /**
    * Background job hooks for one local spawn: no timeout, incremental output,
    * cancel via terminate. `readOutput` returns only the delta since the last
@@ -685,18 +702,6 @@ export function apply(ctx, config = {}) {
 
   /** Read-only NixOS diagnostics (nixos-modern-cli "system maintenance" + pitfalls). */
   async function executeCli(args, exec) {
-    // **薄封装**：`runLocal` 收的是 argv 数组（它直接交给 `ctx.subprocess.spawn`），
-    // 而下面这些判断逻辑写起来是 shell 字符串更清楚。所以在这儿包一层
-    // `bash -c`，免得每处调用各自拼数组。
-    //
-    // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
-    // 路径都过了 `shq`）。别把工具参数直接喂进来。
-    const sh = (command, opts = {}) =>
-      runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
-        timeoutMs: opts.timeoutMs ?? 15000,
-        env: { PATH: pathEnv },
-      });
-
     const op = args.op;
     const cwd = typeof args.workdir === "string" && args.workdir.length > 0
       ? args.workdir
