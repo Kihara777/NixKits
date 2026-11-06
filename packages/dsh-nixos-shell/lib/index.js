@@ -104,11 +104,25 @@ function isSystemRebuildCommand(command) {
 function wrapDetachedSystemCommand(command, cwd, pathEnv) {
   const unitPrefix = isSystemRebuildCommand(command) ? "nixkits-rebuild" : "nixkits-dsh-restart";
   const unit = `${unitPrefix}-${Date.now().toString(36)}`;
-  const inner = `export PATH=${shq(pathEnv)}; cd ${shq(cwd)} && ${command}`;
+  // **结局落盘**（2026-11-06 加）：detach 解决了「激活被 socket 重启杀掉」，
+  // 但没有解决「dsh 重启后这次 apply 成没成没人知道」——unit 的退出码只躺在
+  // journal 里，而重启后的新会话不会去翻 journal。
+  //
+  // 所以在 unit 内把结局写成一行：`done <ISO> exit=<code>`。位置在 /run 下，
+  // 按 unit 名一一对应；`nixos_cli op=apply-status` 读它，是「唤醒之后先看什么」
+  // 的依据。用 /run 而不是 /var：apply 不重启机器，/run 活得够久；
+  // 真重启了那些状态本来也就过期了。
+  const statusDir = "/run/nixos-apply";
+  const statusFile = `${statusDir}/${unit}.status`;
+  const inner =
+    `mkdir -p ${shq(statusDir)} 2>/dev/null; ` +
+    `printf 'running %s\\n' "$(date --iso-8601=seconds)" > ${shq(statusFile)} 2>/dev/null; ` +
+    `export PATH=${shq(pathEnv)}; cd ${shq(cwd)} && ${command}; ` +
+    `rc=$?; printf 'done %s exit=%d\\n' "$(date --iso-8601=seconds)" "$rc" >> ${shq(statusFile)} 2>/dev/null; exit "$rc"`;
   const wrapped =
     `/run/current-system/sw/bin/systemd-run --collect --unit=${unit} -- ` +
     `/run/current-system/sw/bin/bash -c ${shq(inner)}`;
-  return { unit, wrapped };
+  return { unit, statusFile, wrapped };
 }
 
 /** POSIX tool → nixpkgs package mapping (nixos-modern-cli requirement). */
@@ -185,7 +199,7 @@ function shellDescription(sudoConfigured) {
     : base;
 }
 
-const CLI_OPS = ["capabilities", "system-status", "generations", "journal", "audit-store-paths"];
+const CLI_OPS = ["capabilities", "system-status", "generations", "journal", "audit-store-paths", "apply-status"];
 
 function cliDescription() {
   return (
@@ -671,6 +685,18 @@ export function apply(ctx, config = {}) {
 
   /** Read-only NixOS diagnostics (nixos-modern-cli "system maintenance" + pitfalls). */
   async function executeCli(args, exec) {
+    // **薄封装**：`runLocal` 收的是 argv 数组（它直接交给 `ctx.subprocess.spawn`），
+    // 而下面这些判断逻辑写起来是 shell 字符串更清楚。所以在这儿包一层
+    // `bash -c`，免得每处调用各自拼数组。
+    //
+    // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
+    // 路径都过了 `shq`）。别把工具参数直接喂进来。
+    const sh = (command, opts = {}) =>
+      runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
+        timeoutMs: opts.timeoutMs ?? 15000,
+        env: { PATH: pathEnv },
+      });
+
     const op = args.op;
     const cwd = typeof args.workdir === "string" && args.workdir.length > 0
       ? args.workdir
@@ -815,6 +841,45 @@ export function apply(ctx, config = {}) {
       };
     }
 
+    // **上一次 apply 的结局**（2026-11-06 加）。dsh 在激活中途会被重启，重启后
+    // 的新会话不知道那次 apply 成没成——unit 的退出码只躺在 journal 里，而没人会
+    // 主动去翻。`wrapDetachedSystemCommand` 现在把 `running …` / `done … exit=N`
+    // 写进 `/run/nixos-apply/<unit>.status`，这个分支把它们读出来。
+    //
+    // **只读**：不清理、不标记已读。消费与否由调用方决定（清理是另一条判断）。
+    if (op === "apply-status") {
+      const dir = "/run/nixos-apply";
+      const listing = await sh(`ls -1t ${shq(dir)}/*.status 2>/dev/null | head -20`, { timeoutMs: 15000 });
+      const files = String(listing.stdout ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
+      if (files.length === 0) {
+        return {
+          runs: [],
+          note: "还没有 detached 的 apply/rebuild 记录（或机器重启过——/run 是易失的）。",
+        };
+      }
+      const runs = [];
+      for (const file of files) {
+        const body = await sh(`cat ${shq(file)} 2>/dev/null`, { timeoutMs: 10000 });
+        const text = String(body.stdout ?? "");
+        const unit = file.split("/").pop().replace(/\.status$/, "");
+        const doneLine = text.split("\n").find((l) => l.startsWith("done "));
+        const runningLine = text.split("\n").find((l) => l.startsWith("running "));
+        runs.push({
+          unit,
+          statusFile: file,
+          // `done` 存在 = 已经结束；否则还跑着（或者 unit 被杀，连 done 都没写）。
+          finished: Boolean(doneLine),
+          exitCode: doneLine ? Number(/exit=(-?\d+)/.exec(doneLine)?.[1] ?? NaN) : null,
+          startedAt: runningLine ? runningLine.slice("running ".length) : null,
+          finishedAt: doneLine ? doneLine.split(" ")[1] : null,
+        });
+      }
+      return {
+        runs,
+        hint: "finished=false 可能是还在跑，也可能是 unit 被杀、连 done 都没写——两种都要看 `nixos_cli op=journal unit=<unit>` 再判。",
+      };
+    }
+
     throw new Error(`unknown op: ${op} — available: ${CLI_OPS.join(", ")}`);
   }
 
@@ -872,6 +937,128 @@ export function apply(ctx, config = {}) {
       render: (_args, value) => [{ type: "text", text: JSON.stringify(value, null, 2) }],
     },
     execute: executeShell,
+  }));
+
+  // ── nixos_apply：构建与应用分开 ────────────────────────────────────────────
+  //
+  // 2026-11-06 加。起因是一个反复出现的形状：`nixos apply` 一条命令里同时做了
+  // 「构建」和「切换」，于是**构建失败但切换已经开始**这种情况无法表达——
+  // 更糟的是激活阶段会重启 dsh，会话当场断掉，重启后的新会话不知道成没成。
+  //
+  // 这个工具把两段分开：
+  //   1. build（同步、可失败）：只构建，不碰系统；失败就停，**不切换**；
+  //   2. switch（detach）：构建确认通过后才重置系统，结局落盘到 /run/nixos-apply。
+  //
+  // 判据：`nixos build` 的退出码为 0 才进入第 2 段。这是「构建失败不导致应用失败」
+  // 的机制化——不是靠人记得先 build。
+  ctx.tools.register(defineTool({
+    name: "nixos_apply",
+    description:
+      "Build the NixOS configuration and only then switch to it — as two separate steps. " +
+      "`stage: build` (default) runs `nixos build` synchronously: it does NOT touch the running " +
+      "system and it fails loudly, so a broken configuration never reaches activation. " +
+      "`stage: switch` runs the activation DETACHED in a transient systemd unit (the activation " +
+      "restarts dsh mid-way, so a normal call would be killed) and writes the outcome to " +
+      "`/run/nixos-apply/<unit>.status` (`running …` then `done … exit=N`); read it back with " +
+      "`nixos_cli op=apply-status`. Refuses to switch unless the most recent build for the same " +
+      "flake directory exited 0 — that is the point of the tool, not a formality. " +
+      "Use nixos_shell for anything else.",
+    parameters: {
+      stage: {
+        type: "string",
+        required: true,
+        enum: ["build", "switch"],
+        description: "build = compile only (safe, synchronous); switch = activate (detached, restarts dsh).",
+      },
+      flakeDir: {
+        type: "string",
+        description: "Flake directory (default /etc/nixos). Also used to match a build to a switch.",
+      },
+      justification: {
+        type: "string",
+        description: "Required with stage=switch: one sentence for the user explaining why this activation is needed.",
+      },
+      timeoutMs: {
+        type: "number",
+        description: "stage=build only: timeout in milliseconds (capped by the plugin configuration).",
+      },
+    },
+    output: {
+      schema: { type: "object", additionalProperties: true },
+      render: (_args, value) => [{ type: "text", text: JSON.stringify(value, null, 2) }],
+    },
+    execute: async (args, exec) => {
+      const stage = String(args.stage ?? "build");
+      const flakeDir = typeof args.flakeDir === "string" && args.flakeDir.length > 0 ? args.flakeDir : "/etc/nixos";
+      const buildStateDir = "/run/nixos-apply";
+
+      if (stage === "switch") {
+        if (!sudoConfigured) {
+          throw new Error("stage=switch 需要 sudo 守护进程，但插件未配置（sudoConfigured=false）");
+        }
+        if (typeof args.justification !== "string" || args.justification.trim() === "") {
+          throw new Error("stage=switch 需要 justification：一句话说明为什么现在要切换");
+        }
+        // **门**：必须有一次同一 flakeDir 的成功构建记录。这是这个工具存在的理由，
+        // 不是流程装饰——它挡的正是「构建没验过就直接切换」。
+        const gatePath = `${buildStateDir}/build-${flakeDir.replace(/[^a-zA-Z0-9]/g, "_")}.status`;
+        const gate = await sh(`tail -1 ${shq(gatePath)} 2>/dev/null`, { timeoutMs: 10000 });
+        const lastLine = String(gate.stdout ?? "").trim();
+        const okBuild = /^done .* exit=0$/.test(lastLine);
+        if (!okBuild) {
+          throw new Error(
+            `拒绝切换：${flakeDir} 没有一次通过的构建记录（${gatePath} 最后一行：${lastLine || "（空）"}）。` +
+            "先跑 `nixos_apply --stage build`，构建过了再来切换——这正是「构建失败不该走到切换」那条判据。",
+          );
+        }
+        const detached = wrapDetachedSystemCommand(
+          `/run/current-system/sw/bin/nixos apply ${shq(flakeDir)} -y`,
+          flakeDir,
+          pathEnv,
+        );
+        const res = await sh(detached.wrapped, { timeoutMs: 60000 });
+        return {
+          detached: true,
+          unit: detached.unit,
+          statusFile: detached.statusFile,
+          caller: String(res.stderr ?? "").trim() || undefined,
+          note:
+            "handoff 不是结局。激活会重启 dsh（会话可能断），完成后用 `nixos_cli op=apply-status` 读结局，再用 op=generations 确认世代。",
+        };
+      }
+
+      // stage=build：同步跑，不碰系统。
+      const cmd = `/run/current-system/sw/bin/nixos build ${shq(flakeDir)}`;
+      const statePath = `${buildStateDir}/build-${flakeDir.replace(/[^a-zA-Z0-9]/g, "_")}.status`;
+      const stamp = () => new Date().toISOString();
+      await sh(`mkdir -p ${shq(buildStateDir)} 2>/dev/null; printf 'running %s\\n' ${shq(stamp())} > ${shq(statePath)} 2>/dev/null`, { timeoutMs: 10000 });
+      const timeoutMs = typeof args.timeoutMs === "number" && args.timeoutMs > 0
+        ? Math.min(args.timeoutMs, maxTimeoutMs)
+        : defaultTimeoutMs;
+      let exitCode = 0, out = "", err = "";
+      try {
+        const r = await sh(cmd, { timeoutMs });
+        exitCode = Number(r.exitCode ?? 0);
+        out = String(r.stdout ?? "");
+        err = String(r.stderr ?? "");
+      } catch (error) {
+        exitCode = Number(error?.exitCode ?? 1);
+        err = String(error?.message ?? error);
+      }
+      await sh(`printf 'done %s exit=%d\\n' ${shq(stamp())} ${exitCode} >> ${shq(statePath)} 2>/dev/null`, { timeoutMs: 10000 });
+      return {
+        stage: "build",
+        flakeDir,
+        exitCode,
+        ok: exitCode === 0,
+        statusFile: statePath,
+        stdoutTail: out.slice(-4000),
+        stderrTail: err.slice(-4000),
+        note: exitCode === 0
+          ? "构建通过。确认无误后用 `nixos_apply --stage switch` 激活（那一步会重启 dsh）。"
+          : "构建失败，**没有**切换；修好再来。",
+      };
+    },
   }));
 
   ctx.tools.register(defineTool({
