@@ -3,6 +3,19 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T13:13:16+09:00
+
+**摘要**：dsh-api-balance 源更新到 97d7ffe（手机端把手找不到 AppFrame 的修复）
+
+- 版本仍是 0.1.1，只换 `rev` 与 `hash`：390px 视口下 `pI_x6G_frame` 是单列 `56px`（不含 `minmax`），`layoutFrame()` 因此跳过它、退到内容容器 `_tabLayout`
+- 上游两处改动：按 class 后缀 `_frame` 认 AppFrame；压列守卫允许 `px` 后面是结尾
+- 单包构建通过；产物里 `byClass` 5 处、旧压列守卫 0 处
+- headless 390px 验证：把手 left 56 → tap 0 → tap 56，`centerCol` 334 ↔ 390
+
+| 提交 | 说明 |
+|------|------|
+| `a1941e3` | fix(dsh-api-balance): 源更新到 97d7ffe |
+
 ## 2026-11-04T15:33:04+09:00
 
 **摘要**：新增 bili-agent 与 bilibili-api-python 两个包

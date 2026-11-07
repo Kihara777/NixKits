@@ -3,6 +3,19 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T13:13:16+09:00
+
+**概要**：dsh-api-balance のソースを 97d7ffe へ更新（モバイルで把手が AppFrame を見つけられない不具合の修正）
+
+- バージョンは 0.1.1 のまま。`rev` と `hash` のみ変更。390px 視口では `pI_x6G_frame` が単列の `56px`（`minmax` を含まない）ため、`layoutFrame()` がそれを飛ばして内容容器 `_tabLayout` へ後退していた
+- 上流の変更は 2 箇所：class の接尾辞 `_frame` で AppFrame を認識する。圧列のガードで `px` の後ろが末尾でも許す
+- 単体のビルドは通過。産物に `byClass` が 5 箇所、旧圧列ガードは 0 箇所
+- headless 390px で検証：把手 left 56 → tap 0 → tap 56、`centerCol` 334 ↔ 390
+
+| コミット | 説明 |
+|----------|------|
+| `a1941e3` | fix(dsh-api-balance): ソースを 97d7ffe へ更新 |
+
 ## 2026-11-04T15:33:04+09:00
 
 **概要**：bili-agent と bilibili-api-python の 2 パッケージを追加

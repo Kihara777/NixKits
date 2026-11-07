@@ -3,6 +3,19 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T13:13:16+09:00
+
+**Summary**: Bumped dsh-api-balance source to 97d7ffe (mobile handle missed the AppFrame)
+
+- Version stays 0.1.1; only `rev` and `hash` change. At a 390px viewport `pI_x6G_frame` is a single-column `56px` (no `minmax`), so `layoutFrame()` skipped it and fell back to the content container `_tabLayout`
+- Two upstream changes: identify the AppFrame by the `_frame` class suffix; let the collapse guard accept `px` at end of value
+- Standalone build passes; the artifact has 5 `byClass` hits and 0 old collapse guards
+- Verified at headless 390px: handle left 56 → tap 0 → tap 56, `centerCol` 334 ↔ 390
+
+| Commit | Description |
+|--------|-------------|
+| `a1941e3` | fix(dsh-api-balance): bump source to 97d7ffe |
+
 ## 2026-11-04T15:33:04+09:00
 
 **Summary**: Added two packages — bili-agent and bilibili-api-python
