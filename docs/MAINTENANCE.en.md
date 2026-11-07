@@ -3,6 +3,19 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T13:45:18+09:00
+
+**Summary**: dsh-api-balance bumped twice more (mobile stand-down, restore keeps column structure)
+
+- `f2e81c7`: on mobile the AppFrame's first column is always 0 (the sidebar is a drawer opened by a native button), so the plugin short-circuits sync and renders no handle; mobile layout returns to the no-plugin baseline
+- `df0d125`: restoring the collapsed state now swaps only the first column and keeps the other two; writing a bare `56px` collapsed three columns into one (centerCol 714 → 585 at 770px)
+- Measured: at 770px 56/714 → 0/770 → 56/714 stays three columns; at 390px zero handles and center 0/390
+
+| Commit | Description |
+|--------|-------------|
+| `4e3017b` | fix(dsh-api-balance): bump source to f2e81c7 |
+| `4a5b897` | fix(dsh-api-balance): bump source to df0d125 |
+
 ## 2026-11-07T13:13:16+09:00
 
 **Summary**: Bumped dsh-api-balance source to 97d7ffe (mobile handle missed the AppFrame)

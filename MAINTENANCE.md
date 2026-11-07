@@ -3,6 +3,19 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T13:45:18+09:00
+
+**摘要**：dsh-api-balance 再更新两次（移动端闭嘴、写回保留列结构）
+
+- `f2e81c7`：移动端 AppFrame 第一列官方恒为 0（侧栏是抽屉、由原生按钮开合），插件短路 sync 并不渲染把手，移动端布局回到无插件基线
+- `df0d125`：折叠态恢复时只换第一列、后两列原样带走；固定写 `56px` 会把三列写成单列（770 宽 centerCol 714 → 585）
+- 实测：770 宽 56/714 → 0/770 → 56/714 全程三列；390 宽把手 0 个、center 0/390
+
+| 提交 | 说明 |
+|------|------|
+| `4e3017b` | fix(dsh-api-balance): 源更新到 f2e81c7 |
+| `4a5b897` | fix(dsh-api-balance): 源更新到 df0d125 |
+
 ## 2026-11-07T13:13:16+09:00
 
 **摘要**：dsh-api-balance 源更新到 97d7ffe（手机端把手找不到 AppFrame 的修复）
