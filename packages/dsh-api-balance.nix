@@ -26,8 +26,8 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kihara777";
     repo = "dsh-api-balance";
-    rev = "b99fe16b12d76d2a1139e9b9d636e85c0f7c49a4";
-    hash = "sha256-rPDW/Cr0yLoOBnbaGjSyB28a9yml5unjJTI3YCesvRY=";
+    rev = "16bd095de17ba1ab7227ce93a073a128219e3e14";
+    hash = "sha256-Qwgx8tUAIiflrNJr06jr6wgN2w1+jgCIdh9O+7UDvP4=";
   };
 
   # dsh ecosystem packages declare peers against same-release prereleases;
