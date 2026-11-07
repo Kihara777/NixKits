@@ -3,6 +3,24 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-07T14:31:30+09:00
+
+**Summary**: Six consecutive dsh-api-balance updates (settings row, ring layout, handle wording)
+
+- The setting "Hide the sidebar in fullscreen" is renamed "Sidebar handle" and now says it does not apply to compact mobile layouts
+- The handle row is disabled while "Toggle fullscreen" is off; visually it stays un-indented (she asked for no visual hierarchy)
+- The usage ring follows the original layout: ring on the left, percentage on the right at 11px, instead of a 6px number squeezed inside the circle
+- Fixed the ring rendering as `41%%` (`reading` already contains the percent sign)
+
+| Commit | Description |
+|--------|-------------|
+| `34df05a` | Add the percentage number to the ring |
+| `deea601` | Make "hide sidebar in fullscreen" a sub-option |
+| `6dca3e8` | Fix `41%%` and the sub-option layout |
+| `ed50578` | Drop the visual indent on the settings row |
+| `e880b96` | Ring follows the original layout (ring left, number right) |
+| `3b47b4a` | Handle wording notes it does not apply on mobile |
+
 ## 2026-11-07T13:45:18+09:00
 
 **Summary**: dsh-api-balance bumped twice more (mobile stand-down, restore keeps column structure)
