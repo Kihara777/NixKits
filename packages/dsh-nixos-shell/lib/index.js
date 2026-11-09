@@ -563,7 +563,9 @@ export function apply(ctx, config = {}) {
       if (parsed !== null && typeof parsed === "object") {
         data = {
           system: parsed.system !== null && typeof parsed.system === "object" ? parsed.system : {},
-          attrs: new Set(Array.isArray(parsed.nixpkgsAttributes) ? parsed.nixpkgsAttributes : []),
+          // `null` = 索引里**没有**属性表（includeNixpkgsAttributes 关掉了），
+          // 不是「属性表是空的」。两者混同会把「判不了」说成「仓库里没有」。
+          attrs: Array.isArray(parsed.nixpkgsAttributes) ? new Set(parsed.nixpkgsAttributes) : null,
           rev: (parsed.nixpkgs ?? {}).rev ?? null,
         };
       }
@@ -607,6 +609,16 @@ export function apply(ctx, config = {}) {
         path: index.system[name].path ?? null,
         package: index.system[name].package ?? null,
         note: "索引说系统里已经有这个命令。那不是「缺工具」，是 PATH 或调用方式的问题——先看 path 那一格",
+      };
+    }
+    // 属性表缺席：只知道系统里没有它，**不知道仓库里有没有**。不许把这句话说成
+    // 「命令打错」——那是拿判据的缺席冒充一个否定结论。
+    if (index.attrs === null) {
+      return {
+        triggered: name,
+        kind: "no-attrs",
+        nixpkgsRev: index.rev,
+        note: `系统里没有 \`${name}\`，而这份索引没带 nixpkgs 属性表（includeNixpkgsAttributes = false）：判不了仓库里有没有。要自动拉就打开那张表，否则用 tools: ['pkg:<属性>'] 显式指定`,
       };
     }
     // `rg` 这种「命令名不是包名」的，会落到这里。不猜：报出来并给出显式通道。

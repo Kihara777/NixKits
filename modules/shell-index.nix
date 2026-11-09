@@ -62,6 +62,10 @@ let
     nixpkgsAttrsJson = builtins.toJSON (
       if cfg.includeNixpkgsAttributes then builtins.attrNames pkgs else [ ]
     );
+    # **关掉属性表时不要输出 `[]`。** 空数组与「没生成」在 JSON 里长得一样，
+    # 而下游会把「不在空集合里」读成「仓库里没有」——那是把判据的缺席冒充成
+    # 一个否定结论（2026-11-09 自查发现）。这里用一个独立标志说明「表在不在」。
+    includeAttrs = if cfg.includeNixpkgsAttributes then "1" else "";
     nixpkgsRev = config.system.nixos.revision or "unknown";
     nixpkgsLabel = config.system.nixos.label or "";
   } ''
@@ -91,14 +95,19 @@ let
                 "path": "/run/current-system/sw/bin/" + name,
             }
 
-    print(json.dumps({
+    out = {
         "nixpkgs": {
             "rev": os.environ.get("nixpkgsRev", "unknown"),
             "label": os.environ.get("nixpkgsLabel", ""),
         },
         "system": system,
-        "nixpkgsAttributes": attrs,
-    }, ensure_ascii=False, sort_keys=True))
+    }
+    # 只在真的生成了属性表时才写这一栏——缺了它，下游必须说「判不了」，
+    # 而不是说「仓库里没有」。
+    if os.environ.get("includeAttrs"):
+        out["nixpkgsAttributes"] = attrs
+
+    print(json.dumps(out, ensure_ascii=False, sort_keys=True))
     PY
   '';
 in

@@ -99,6 +99,15 @@ test("索引说系统里已经有 → already-in-path（不是缺工具）", asy
   assert.ok(typeof r.bootstrap.path === "string");
 });
 
+test("属性表缺席 → no-attrs，不许滑成「命令打错」", async () => {
+  // 索引里没有 `nixpkgsAttributes`（includeNixpkgsAttributes = false）时，
+  // 「不在属性表里」不等于「仓库里没有」——把两者混同就是拿判据的缺席当结论。
+  const tool = withIndex({ nixpkgs: { rev: "testrev" }, system: {} });
+  const r = await tool.execute({ command: "definitely-not-a-command-zzz" }, {});
+  assert.equal(r.bootstrap.kind, "no-attrs");
+  assert.match(r.bootstrap.note, /includeNixpkgsAttributes/);
+});
+
 test("退出码不是 127 就不兜底（差一个字母也不该触发下载）", async () => {
   const tool = withIndex(INDEX);
   const r = await tool.execute({ command: "false" }, {});
