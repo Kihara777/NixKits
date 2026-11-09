@@ -70,7 +70,9 @@ def inj_preset_derivation(root):
     # 2026-11-09：fuli-mode 的成品改成构建产物（父 + overlay 生成），仓库里没有它了。
     # 反证注入必须落在**仓库里真有的**那份上，否则它报的是「我跑不起来」（MIND 记过同一形状）。
     rel = "packages/dsh-nixos-shell/presets/nixos-mode/preset.patch.yml"
-    write(root, rel, read(root, rel) + "\n      - selftest-stray-line: true\n")
+    # 注入点必须是这条检查**真的会看**的地方：成品层面只剩头部自洽
+    # （正文比对随 fuli 成品一起退役了），所以改 description。
+    write(root, rel, read(root, rel).replace("description: '", "description: 'SELFTEST ", 1))
 
 
 def inj_preset_bundle(root):
