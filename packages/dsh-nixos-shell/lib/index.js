@@ -1166,6 +1166,11 @@ export function apply(ctx, config = {}) {
       render: (_args, value) => [{ type: "text", text: JSON.stringify(value, null, 2) }],
     },
     execute: async (args, exec) => {
+      // **探针**（2026-11-10）：这个工具长期报 `Cannot read properties of undefined
+      // (reading 'includes')`，而 execute 在 dsh 之外跑得好好的。所以第一件事是
+      // 分清「execute 进来了没有」——这行日志出现而结果仍是那个错，说明崩在它内部；
+      // 完全不出现，说明崩在 dsh 的调用层（参数校验 / pre-execute / 呈现）。
+      console.log(`PROBE-APPLY-ENTER ${JSON.stringify({ stage: args?.stage ?? null, keys: Object.keys(args ?? {}) })}`);
       const stage = String(args.stage ?? "build");
       // schema 层不再用 `enum`（见参数定义处的注释），所以合法值在这里卡：
       // **非法值必须拒绝，不能悄悄当成 build 跑一遍构建。**
