@@ -320,6 +320,10 @@ export function apply(ctx, config = {}) {
       maxBytes,
       spill: { maxBytes: stdoutSpillMaxBytes },
     };
+    // **探针**（2026-11-10）：`nixos_apply` 崩在 `await sh(...)`，而 `sh` 与
+    // `nixos_shell` 的前台路径不共用（后者直接 runLocal）。这条日志能分开
+    // 「进到了 spawnLocal」与「崩在 spawnLocal 之前」。
+    console.log(`PROBE-SPAWN ${JSON.stringify({ tail: argv[argv.length - 1]?.slice(0, 40), maxBytes, graceMs, envKeys: Object.keys(env ?? {}) })}`);
     return ctx.subprocess.spawn({
       argv,
       cwd,
@@ -383,11 +387,13 @@ export function apply(ctx, config = {}) {
   //
   // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
   // 路径都过了 `shq`）。别把工具参数直接喂进来。
-  const sh = (command, opts = {}) =>
-    runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
+  const sh = (command, opts = {}) => {
+    console.log(`PROBE-SH ${JSON.stringify({ head: command.slice(0, 40), timeoutMs: opts.timeoutMs ?? 15000 })}`);
+    return runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
       timeoutMs: opts.timeoutMs ?? 15000,
       env: { PATH: pathEnv },
     });
+  };
 
   /**
    * Background job hooks for one local spawn: no timeout, incremental output,
