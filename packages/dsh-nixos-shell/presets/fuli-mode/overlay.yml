@@ -1,0 +1,25 @@
+# 狐莉模式 = NixOS模式 + 这两件事。
+#
+# 这一份是**唯一需要维护**的东西：父预设从 nixkits 输入取（跟着锁），
+# 成品在构建期由 lib/apply-overlay.py 生成。
+#
+# 2026-11-09 之前，这里是一份 371 行的整份拷贝，靠 check-preset-derivation.py
+# 逐行比对才和父保持一致——73 行差异里 54 行是「同一段注释换个说法」。
+meta:
+  id: fuli-mode
+  agentId: fuli
+  name: '狐莉模式'
+  description: '派生于 NixOS 模式的「瑞士军刀」：日常维护、开发与逆向一体，含 REA MCP 桥接。'
+  order: 11
+  comment: |
+    日常维护、开发与逆向合并成一个模式（2026-10-21）。
+    下面两条追加在 nixos-shell 之后，顺序对外不可见，但保持与历史一致。
+
+insert:
+  - after: nixos-shell
+    entry:
+      id: maintenance-skills
+      name: '@kihara777/dsh-nixos-shell/maintenance-skills'
+  - entry:
+      id: rea-mcp
+      name: '@kihara777/dsh-nixos-shell/rea-mcp'
