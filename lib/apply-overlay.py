@@ -71,7 +71,18 @@ def from_python(obj):
 
 
 def items(node):
-    return node.value if isinstance(node, yaml.MappingNode) else []
+    """MappingNode 的键值对。**带诊断**：如果某一项不是二元组，说明有节点被
+    错误地换成了子树（或反过来），而这种坏结构只会在下游 unpack 时才炸，
+    报的是一个看不出位置的 ValueError（2026-11-09 构建里撞过）。"""
+    if not isinstance(node, yaml.MappingNode):
+        return []
+    for idx, kv in enumerate(node.value):
+        if not (isinstance(kv, tuple) and len(kv) == 2):
+            raise SystemExit(
+                f"[apply-overlay] 内部错误：MappingNode 第 {idx} 项不是二元组"
+                f"（{type(kv).__name__}）——有节点被换成了子树却没清干净"
+            )
+    return node.value
 
 
 def get(node, key):
@@ -103,8 +114,13 @@ def set_scalar(node, key, value):
     return True
 
 
-def set_at(node, dotted, text):
-    """按 `a.b.c` 往下走，缺的层就地建 mapping。"""
+def set_at(node, dotted, value):
+    """按 `a.b.c` 往下走，缺的层就地建 mapping。
+
+    值可以是**标量或子树**（dict / list）。子树走 `from_python` 整块替换——
+    因为有些字段本身就是一整段结构（掌灯层的 `persona.config` 里是 160 行身份文本，
+    `skill-filesystem.config` 里是一整段 JS），拆成标量逐字塞反而更容易写错。
+    """
     keys = dotted.split(".")
     cursor = node
     for key in keys[:-1]:
@@ -119,7 +135,44 @@ def set_at(node, dotted, text):
             else:
                 cursor.value.append((scalar(key), nxt))
         cursor = nxt
-    set_scalar(cursor, keys[-1], text)
+
+    last = keys[-1]
+    if isinstance(value, dict):
+        # **递归合并，不整块替换。** 整块替换会用 `from_python` 造一棵全新的子树，
+        # 里面每个标量都变成 `!!str`——而父里可能有 `!!js`（2026-11-09 实测：
+        # `skill-filesystem.config.customSkillDirs` 就是），于是「代码」被降级成
+        # 「文本」，内容对、语义错，且不报错。合并只碰真的变了的键。
+        target = None
+        for k, v in items(cursor):
+            if isinstance(k, yaml.ScalarNode) and k.value == last and isinstance(v, yaml.MappingNode):
+                target = v
+                break
+        if target is None:
+            cursor.value.append((scalar(last), from_python(value)))
+            return
+        for sub_key, sub_value in value.items():
+            set_at(target, sub_key, sub_value)
+        return
+    if isinstance(value, list):
+        fresh = from_python(value)
+        for k, v in items(cursor):
+            if isinstance(k, yaml.ScalarNode) and k.value == last:
+                v.tag, v.value = fresh.tag, fresh.value
+                return
+        cursor.value.append((scalar(last), fresh))
+        return
+
+    # **标量也要看目标原来的 tag**（2026-11-09 实测）：父里 `customSkillDirs` 是
+    # `!!js` ——内容是 JS 源码，语义是「当程序求值」。整段替换内容、把 tag 写成
+    # `!!str`，看起来只差一个字，实际是把「代码」降级成「文本」：loader 读到的
+    # 不再是函数而是一串字符，**而且不会报错**。
+    for k, v in items(cursor):
+        if isinstance(k, yaml.ScalarNode) and k.value == last and isinstance(v, yaml.ScalarNode):
+            if v.tag != STR:
+                v.value = str(value)
+                return
+            break
+    set_scalar(cursor, last, value)
 
 
 def walk_nodes(node):
@@ -196,6 +249,26 @@ def main() -> int:
             return 1
         for dotted, value in fields.items():
             set_at(target, dotted, value)
+
+    # ── 2b. rename：改节点自己的 id ──────────────────────────────────
+    #
+    # **必须排在 set 之后**：set 是按 id 定位的，先把 id 改了，后面的 set 就找不到了。
+    # 掌灯那层有两个节点要换 id（nixos-gate → lampkeeper-gate、
+    # nixos-shell → lampkeeper-shell），而且换完 name 也要跟着换——
+    # 所以顺序是「先 set name，再 rename id」。
+    for old_id, new_id in (ov.get("rename") or {}).items():
+        node = find_by_id(doc, old_id)
+        if node is None:
+            print(f"rename: 父文件里没有 id={old_id}", file=sys.stderr)
+            return 1
+        if find_by_id(doc, new_id) is not None:
+            print(f"rename: 目标 id={new_id} 已经存在", file=sys.stderr)
+            return 1
+        ident = get(node, "id")
+        if not isinstance(ident, yaml.ScalarNode):
+            print(f"rename: id={old_id} 的节点没有可改的 id 标量", file=sys.stderr)
+            return 1
+        ident.value = new_id
 
     # ── 3. delete ────────────────────────────────────────────────────
     for node_id in ov.get("delete") or []:
