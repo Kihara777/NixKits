@@ -383,6 +383,10 @@ export function apply(ctx, config = {}) {
   //
   // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
   // 路径都过了 `shq`）。别把工具参数直接喂进来。
+  /** 构建记录的目录：用户可写（`/run` 属 root，dsh 写不进去）。 */
+  const buildStateDirPath = () =>
+    path.join(process.env.DSH_HOME ?? path.join(os.homedir(), ".dsh"), "nixos-apply");
+
   const sh = (command, opts = {}) => {
     return runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
       timeoutMs: opts.timeoutMs ?? 15000,
@@ -1018,13 +1022,15 @@ export function apply(ctx, config = {}) {
     //
     // **只读**：不清理、不标记已读。消费与否由调用方决定（清理是另一条判断）。
     if (op === "apply-status") {
-      const dir = "/run/nixos-apply";
-      const listing = await sh(`ls -1t ${shq(dir)}/*.status 2>/dev/null | head -20`, { timeoutMs: 15000 });
+      // **两个目录**（2026-11-10）：build 记录在用户目录（`/run` 是 root 的，
+      // dsh 以 kix 跑，写不进去），switch 的结局在 `/run`（detached unit 以 root 跑）。
+      const dirs = [buildStateDirPath(), "/run/nixos-apply"];
+      const listing = await sh(`ls -1t ${dirs.map((d) => `${shq(d)}/*.status`).join(" ")} 2>/dev/null | head -20`, { timeoutMs: 15000 });
       const files = String(listing.stdout ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
       if (files.length === 0) {
         return {
           runs: [],
-          note: "还没有 detached 的 apply/rebuild 记录（或机器重启过——/run 是易失的）。",
+          note: "还没有 apply/rebuild 记录（构建记录在 $DSH_HOME/nixos-apply，切换结局在 /run/nixos-apply；后者机器重启就没了）。",
         };
       }
       const runs = [];
@@ -1179,7 +1185,11 @@ export function apply(ctx, config = {}) {
         throw new Error(`stage 只接受 build 或 switch，收到的是：${JSON.stringify(args.stage)}`);
       }
       const flakeDir = typeof args.flakeDir === "string" && args.flakeDir.length > 0 ? args.flakeDir : "/etc/nixos";
-      const buildStateDir = "/run/nixos-apply";
+      // **build 记录必须落在用户可写的地方**（2026-11-10）：`/run` 属 root，而 dsh
+      // 以 kix 跑，`mkdir -p /run/nixos-apply` 直接 Permission denied——那条 sh 带着
+      // `2>/dev/null`，于是「构建成功但没记下」一声不响，直到 switch 阶段说
+      // 「没有一次通过的构建记录」才暴露。那是个假阴性：构建真过了，记录没写成。
+      const buildStateDir = buildStateDirPath();
 
       if (stage === "switch") {
         if (!sudoConfigured) {
