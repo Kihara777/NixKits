@@ -357,8 +357,10 @@ def main() -> None:
             )
 
     print(
-        "preset-derivation: OK（狐利模式完整派生自 NixOS模式；nixos / fuli-mode / "
-        "news-three-elements 三个 preset.patch.yml 的头部与 preset.yml 一致，order 互不冲突）"
+        "preset-derivation: OK（nixos-mode 与 news-three-elements 的 preset.patch.yml "
+        "头部与 preset.yml 一致，order 互不冲突；fuli-mode 的正文是构建产物——"
+        "由 packages/dsh-nixos-shell.nix 的 presetsDerived 从 nixos-mode + overlay.yml 生成，"
+        "仓库里没有可比的成品）"
     )
 
 

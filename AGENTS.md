@@ -89,7 +89,7 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 `packages/dsh-nixos-shell/presets/` 下的两个预设（NixOS模式 → 狐莉模式）是**派生关系**，
 不是两份独立配置：
 
-- **狐莉模式必须完整派生自 NixOS模式**：`foxli-mode/preset.patch.yml` 的
+- **狐莉模式必须完整派生自 NixOS模式**：`fuli-mode/preset.patch.yml` 的
   `plugins:` 正文（该行之后到文件末尾）= `nixos-mode/preset.patch.yml` 的同段 + 固定的
   追加块——**维护块**（`maintenance-skills` 行）与**逆向块**（`rea-mcp` 行），连注释一起，
   除此之外不得有任何差异。文件头里的
@@ -98,9 +98,9 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
 - **派生链只有一段**（2026-10-21 起）：原来的维护模式与逆向模式各自都是「NixOS + 一块」，
   分开放意味着下游要派生两次、技能清单要维护两份，而掌灯那份清单**没有任何判据在看**。
   合并成狐莉模式后下游只读这一份：掌灯模式（在 Kitsunome，私有）派生自它，**原样继承逆向块**。
-  `rea-mcp` 行从 `REA_BIN_PATH` 取可执行文件（模块在 `presets.foxliMode = true` 时
+  `rea-mcp` 行从 `REA_BIN_PATH` 取可执行文件（模块在 `presets.fuliMode = true` 时
   导出 `pkgs.rea` 的路径），所以预设正文里**不允许出现 store 路径**；反过来，
-  **只开掌灯而没开 `presets.foxliMode` 的部署，那一行拿不到可执行文件路径**（模块导的环境
+  **只开掌灯而没开 `presets.fuliMode` 的部署，那一行拿不到可执行文件路径**（模块导的环境
   变量是它唯一来源）。
 - **预设不自带组合撰写技能副本**：`cordis-plugin-development` 与
   `editing-cordis-compositions` 由上游随 `@deepseek-ai/dsh-agent-preset` 分发，两个预设的
@@ -110,12 +110,12 @@ dsh 0.2.0 起 Agent 预设只有一种格式：profile 用户 patch 层
   `develop/check-preset-derivation.py` 把「不再自带」钉成断言——副本被加回来，检查即响。
   旧副本仍可从 stable 通道钉住的 rev 取用（0.1.x 兼容）。
 - **修改 NixOS模式后必须同步狐莉模式**：改 `nixos-mode/` 的任意文件（行、元数据、技能）后，
-  立即把相同改动镜像到 `foxli-mode/`——注意：**`plugins:` 正文里连注释也算**，
+  立即把相同改动镜像到 `fuli-mode/`——注意：**`plugins:` 正文里连注释也算**，
   两边注释不一致同样判漂。派生到下游（掌灯模式）的那一份不在本仓，改了这一段要另行同步。
 - **漂移检查**：`develop/check-preset-derivation.py` 校验上述派生关系，已挂入
   `nix flake check`（CI 每次 push 执行）；漂移时检查失败，修复后才能提交。刻意变更追加块
   本身时，同步更新脚本内 `PATCH_MAINTENANCE_DELTA` / `PATCH_REA_DELTA` 常量。
-- **`order` 必须在 roster 里唯一**：内置预设占 1–4；NixKits 的 nixos / foxli 取 10 / 11；
+- **`order` 必须在 roster 里唯一**：内置预设占 1–4；NixKits 的 nixos / fuli 取 10 / 11；
   独立包 news-three-elements 取 13；私有仓（Kitsunome）的掌灯模式取 12、Ocean Spiral 取 14
   （原逆向模式占的 15 已空出）。新增预设前先看这几个占用。
 - **回车键行为**：会话内的「回车换行 + Shift+回车发送」交换行为由 dsh-api-balance 客户端插件的「⚙ 设置 → 界面」开关实现（全局生效、浏览器 localStorage 持久化，默认开启；DSH 原生为回车发送）；预设组合文件本身不含该逻辑，无需在预设间同步。

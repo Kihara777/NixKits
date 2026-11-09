@@ -1,6 +1,6 @@
 # 狐莉模式 (Agent 预设)
 
-中文 | [English](../../en/modes/foxli.md) | [日本語](../../ja/modes/foxli.md)  | [偽中国語](../../pcn/modes/foxli.md)
+中文 | [English](../../en/modes/fuli.md) | [日本語](../../ja/modes/fuli.md)  | [偽中国語](../../pcn/modes/fuli.md)
 
 > 派生自 NixOS 模式的「瑞士军刀」预设：**日常维护、开发与逆向一体**。它同时是**下放给社区的能力边界**——掌灯模式派生自它，只再加私有适配层。
 
@@ -8,9 +8,9 @@
 
 | 项目 | 值 |
 |------|-----|
-| 模式 id | `foxli` |
-| 分发方式 | dsh-nixos-shell 包内 `presets/foxli-mode/preset.patch.yml`，作为一条 `@deepseek-ai/dsh-agent-preset` patch 行 |
-| 开启选项 | `nixkits.dsh.presets.foxliMode = true` |
+| 模式 id | `fuli` |
+| 分发方式 | dsh-nixos-shell 包内 `presets/fuli-mode/preset.patch.yml`，作为一条 `@deepseek-ai/dsh-agent-preset` patch 行 |
+| 开启选项 | `nixkits.dsh.presets.fuliMode = true` |
 | 派生自 | [NixOS模式](nixos.md)（正文 + 两块固定追加：**维护**、**逆向**） |
 | 依赖包 | `nixkits.dsh.presets.reaPackage`（默认 `pkgs.rea`） |
 | 文档 | [dsh-nixos-shell.md](../dsh-nixos-shell.md)（分发本模式的包）、[rea.md](../rea.md)（REA 包本身） |
@@ -60,7 +60,7 @@ REA 的 207 个工具（6.8.0 的 `tools/list` 实测）全部注册，`inputSch
 
 `pkgs.rea` 来自 NixKits overlay（`nixpkgs.overlays = [ inputs.nixkits.overlays.default ]`）。没加 overlay 时显式传 `presets.reaPackage`，否则求值会以「attribute 'rea' missing」失败——**显式失败，不是静默跳过**。
 
-模块在 `presets.foxliMode = true` 时把 `REA_BIN_PATH` 注入 dsh 服务，预设正文里因此**不含任何 store 路径**（正文要能逐字节派生，也要能在没有 Nix 的机器上读）。
+模块在 `presets.fuliMode = true` 时把 `REA_BIN_PATH` 注入 dsh 服务，预设正文里因此**不含任何 store 路径**（正文要能逐字节派生，也要能在没有 Nix 的机器上读）。
 
 ## 已知边界
 
@@ -95,7 +95,7 @@ REA 的 207 个工具（6.8.0 的 `tools/list` 实测）全部注册，`inputSch
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;     # 狐莉模式派生自它
-    presets.foxliMode = true;
+    presets.fuliMode = true;
   };
 }
 ```
@@ -119,4 +119,4 @@ REA 的 207 个工具（6.8.0 的 `tools/list` 实测）全部注册，`inputSch
 
 ## 怎么确认它真的挂上了
 
-看会话里有没有 `mcp__rea__*` 工具；或看设置里 `preset-foxli` 那一行的 `fiberPhase`。**「配置文件里写了」不等于「挂载成功」**——预设行的激活失败会留在 roster 上并带诊断信息，不会静默消失。
+看会话里有没有 `mcp__rea__*` 工具；或看设置里 `preset-fuli` 那一行的 `fiberPhase`。**「配置文件里写了」不等于「挂载成功」**——预设行的激活失败会留在 roster 上并带诊断信息，不会静默消失。

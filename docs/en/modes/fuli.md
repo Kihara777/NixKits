@@ -1,6 +1,6 @@
 # 狐莉模式 (Agent preset)
 
-[中文](../../zh/modes/foxli.md) | English | [日本語](../../ja/modes/foxli.md)  | [偽中国語](../../pcn/modes/foxli.md)
+[中文](../../zh/modes/fuli.md) | English | [日本語](../../ja/modes/fuli.md)  | [偽中国語](../../pcn/modes/fuli.md)
 
 > A "Swiss army knife" preset derived from NixOS模式: **daily maintenance, development and reverse engineering in one**. It is also **the boundary of what is released to the community** — 掌灯模式 derives from it and adds only its private adapter layer.
 
@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| Mode id | `foxli` |
-| Distribution | `presets/foxli-mode/preset.patch.yml` inside the dsh-nixos-shell package, as one `@deepseek-ai/dsh-agent-preset` patch row |
-| Enable with | `nixkits.dsh.presets.foxliMode = true` |
+| Mode id | `fuli` |
+| Distribution | `presets/fuli-mode/preset.patch.yml` inside the dsh-nixos-shell package, as one `@deepseek-ai/dsh-agent-preset` patch row |
+| Enable with | `nixkits.dsh.presets.fuliMode = true` |
 | Derives from | [NixOS模式](nixos.md) (body + two fixed blocks: **maintenance**, **reverse**) |
 | Package | `nixkits.dsh.presets.reaPackage` (default `pkgs.rea`) |
 | Docs | [dsh-nixos-shell.md](../dsh-nixos-shell.md), [rea.md](../rea.md) |
@@ -53,7 +53,7 @@ All 207 REA tools (measured via `tools/list` at 6.8.0) are registered with `inpu
 
 `pkgs.rea` comes from the NixKits overlay; without it, pass `presets.reaPackage` explicitly — evaluation fails with "attribute 'rea' missing", which is a **loud** failure.
 
-With `presets.foxliMode = true` the module exports `REA_BIN_PATH` into the dsh service, so the preset body contains **no store path at all**.
+With `presets.fuliMode = true` the module exports `REA_BIN_PATH` into the dsh service, so the preset body contains **no store path at all**.
 
 ## Verification status
 
@@ -75,7 +75,7 @@ With `presets.foxliMode = true` the module exports `REA_BIN_PATH` into the dsh s
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
-    presets.foxliMode = true;
+    presets.fuliMode = true;
   };
 }
 ```

@@ -1,6 +1,6 @@
 # 狐莉模式 (Agent 預設)
 
-[中文](../../zh/modes/foxli.md) | [English](../../en/modes/foxli.md) | [日本語](../../ja/modes/foxli.md)  | 偽中国語
+[中文](../../zh/modes/fuli.md) | [English](../../en/modes/fuli.md) | [日本語](../../ja/modes/fuli.md)  | 偽中国語
 
 > NixOS模式 派生 之「瑞士万能刀」預設：**日常保守・開発・逆工程 一体**。同時 **共同体 下放 能力 之 境界**——掌灯模式 此 派生、私有 適配層 只 追加。
 
@@ -8,9 +8,9 @@
 
 | 項目 | 値 |
 |------|-----|
-| 模式 id | `foxli` |
-| 配布方法 | dsh-nixos-shell 包内 `presets/foxli-mode/preset.patch.yml`、`@deepseek-ai/dsh-agent-preset` 之 patch 行 一 |
-| 有効化 選択肢 | `nixkits.dsh.presets.foxliMode = true` |
+| 模式 id | `fuli` |
+| 配布方法 | dsh-nixos-shell 包内 `presets/fuli-mode/preset.patch.yml`、`@deepseek-ai/dsh-agent-preset` 之 patch 行 一 |
+| 有効化 選択肢 | `nixkits.dsh.presets.fuliMode = true` |
 | 派生元 | [NixOS模式](nixos.md)（本文 + 固定 二 塊：**保守**・**逆工程**） |
 | 依存包 | `nixkits.dsh.presets.reaPackage`（既定 `pkgs.rea`） |
 | 文書 | [dsh-nixos-shell.md](../dsh-nixos-shell.md)、[rea.md](../rea.md) |
@@ -53,7 +53,7 @@ REA 之 207 個（6.8.0 之 `tools/list` 実測）全部 登録、`inputSchema` 
 
 `pkgs.rea` 乃 NixKits overlay 由来。無 場合 `presets.reaPackage` 明示——求値 「attribute 'rea' missing」 明示 失敗。
 
-`presets.foxliMode = true` 時 模組 `REA_BIN_PATH` dsh 服務 輸出、故 預設 本文 **store 路径 一切 不出現**。
+`presets.fuliMode = true` 時 模組 `REA_BIN_PATH` dsh 服務 輸出、故 預設 本文 **store 路径 一切 不出現**。
 
 ## 検証状態
 
@@ -75,7 +75,7 @@ REA 之 207 個（6.8.0 之 `tools/list` 実測）全部 登録、`inputSchema` 
       name = "@kihara777/dsh-nixos-shell";
     }];
     presets.nixosMode = true;
-    presets.foxliMode = true;
+    presets.fuliMode = true;
   };
 }
 ```

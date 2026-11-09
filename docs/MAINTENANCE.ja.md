@@ -503,7 +503,7 @@
 **概要**：fix(selftests): CI 連続赤の原因は反証用例の射程切れ
 
 - 合併で `maintenance-mode/` が消えた後も注入器がそこを指していた——注入が例外を投げ、`checks.preset-derivation` は ✅ のまま `CI` は 22:43 以降 push ごとに赤
-- 注入先を `foxli-mode/preset.patch.yml` へ変更（期待断片は不変）、「注入対象は現存する経路でなければならない」をスクリプト冒頭に明記
+- 注入先を `fuli-mode/preset.patch.yml` へ変更（期待断片は不変）、「注入対象は現存する経路でなければならない」をスクリプト冒頭に明記
 - 自己記述を狐莉模式へ同期：`AGENTS.md`、`README.md`、`docs/<lang>/dsh.md`、`docs/<lang>/dsh-nixos-shell.md`（四言語）
 - 判据：`nix flake check` 全緑（`self-tests` 12/12、注入した木では `preset-derivation` が終了コード 1）
 

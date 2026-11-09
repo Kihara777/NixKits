@@ -503,7 +503,7 @@
 **摘要**：fix(selftests): CI 連続赤 原因 反証用例 射程切
 
 - 合併 `maintenance-mode/` 消滅後 注入器 尚 其処 指 —— 注入 例外 投、`checks.preset-derivation` ✅ 状態 継続、`CI` 22:43 以降 push 毎 赤
-- 注入先 `foxli-mode/preset.patch.yml` 変更（期待断片 不変）、「注入対象 現存経路 必須」 脚本冒頭 明記
+- 注入先 `fuli-mode/preset.patch.yml` 変更（期待断片 不変）、「注入対象 現存経路 必須」 脚本冒頭 明記
 - 自己記述 狐莉模式 同期：`AGENTS.md`、`README.md`、`docs/<lang>/dsh.md`、`docs/<lang>/dsh-nixos-shell.md`（四言語）
 - 判据：`nix flake check` 全緑（`self-tests` 12/12、注入木 `preset-derivation` 終了 code 1）
 

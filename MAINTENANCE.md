@@ -503,7 +503,7 @@
 **摘要**：fix(selftests): CI 连红的根因是反证用例的射程过期
 
 - 合并删掉 `maintenance-mode/` 后注入器仍指着它——注入抛异常，`checks.preset-derivation` 一直 ✅ 而 `CI` 自 22:43 起每推必红
-- 注入改落 `foxli-mode/preset.patch.yml`（断言片段不变），并把「注入目标必须是现存路径」写进脚本头注释
+- 注入改落 `fuli-mode/preset.patch.yml`（断言片段不变），并把「注入目标必须是现存路径」写进脚本头注释
 - 自述同步到狐莉模式：`AGENTS.md`、`README.md`、`docs/<lang>/dsh.md`、`docs/<lang>/dsh-nixos-shell.md`（四语）
 - 判据：`nix flake check` 全绿（`self-tests` 12/12；注入后的树里 `preset-derivation` 退出 1）
 

@@ -503,7 +503,7 @@ Verified: adding a row to the snapshot that we do not carry → red and named; a
 **Summary**: fix(selftests): the CI streak was a stale counterexample, not a broken check
 
 - After the merge deleted `maintenance-mode/` the injector still pointed there — the injection threw, `checks.preset-derivation` stayed ✅, and `CI` went red on every push since 22:43
-- The injection now targets `foxli-mode/preset.patch.yml` (expected fragment unchanged), and "an injector's target must exist" is written into the script header
+- The injection now targets `fuli-mode/preset.patch.yml` (expected fragment unchanged), and "an injector's target must exist" is written into the script header
 - Self-descriptions synced to 狐莉模式: `AGENTS.md`, `README.md`, `docs/<lang>/dsh.md`, `docs/<lang>/dsh-nixos-shell.md` (four languages)
 - Evidence: `nix flake check` green (`self-tests` 12/12; an injected tree makes `preset-derivation` exit 1)
 
