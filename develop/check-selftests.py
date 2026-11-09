@@ -67,7 +67,7 @@ def edit(root, rel, pattern, replacement, count=1):
 # ── 各检查的「已知坏输入」 ───────────────────────────────────────────────
 def inj_preset_derivation(root):
     """狐莉模式不再完整派生自 NixOS模式：往狐莉模式的 plugins 正文里塞一行。"""
-    rel = "packages/dsh-nixos-shell/presets/foxli-mode/preset.patch.yml"
+    rel = "packages/dsh-nixos-shell/presets/fuli-mode/preset.patch.yml"
     write(root, rel, read(root, rel) + "\n      - selftest-stray-line: true\n")
 
 

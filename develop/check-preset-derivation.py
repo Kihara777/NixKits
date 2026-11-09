@@ -76,8 +76,8 @@ PATCH_MARKER = "        plugins:"
 # 预设 id（roster 里的 id）与 `config.order`。内置预设 standard/ptc/minimal/cordis
 # 占 1–4，且 order 必须在 roster 里唯一：12 = Kitsunome 的掌灯模式、
 # 13 = 新闻三要素模式、14 = Ocean Spiral（均在别的仓库/包），故这里取 10/11/15。
-PATCH_IDS = {"nixos-mode": "nixos", "foxli-mode": "foxli"}
-PATCH_ORDERS = {"nixos-mode": 10, "foxli-mode": 11}
+PATCH_IDS = {"nixos-mode": "nixos", "fuli-mode": "fuli"}
+PATCH_ORDERS = {"nixos-mode": 10, "fuli-mode": 11}
 
 # 狐利模式 = NixOS模式正文 + 这两块（维护 + 逆向）。两块各自保留独立常量，
 # 是因为它们的注释各自解释一件事；合并成一个 delta 常量会让 diff 读不出「加了什么」。
@@ -146,26 +146,26 @@ def check_head(path: str, directory: str, preset_id: str, order: int, orders: li
 def check_patch_chain(orders: list) -> None:
     """0.2.0 通道：plugins 正文派生 + 每个文件头部的元数据自洽。
 
-    2026-10-21 起派生链只有**一段**：nixos → foxli（狐利模式 = 维护 + 逆向的合并）。
+    2026-10-21 起派生链只有**一段**：nixos → fuli（狐利模式 = 维护 + 逆向的合并）。
     掌灯模式**不在这里**——它在 Kitsunome，构建期读本仓的狐利正文再拼私有追加块，
     由那边的检查器核对。
     """
     nixos_path = os.path.join(PRESETS, "nixos-mode", "preset.patch.yml")
-    foxli_path = os.path.join(PRESETS, "foxli-mode", "preset.patch.yml")
+    fuli_path = os.path.join(PRESETS, "fuli-mode", "preset.patch.yml")
 
     nixos_body = patch_body(nixos_path)
-    foxli_body = patch_body(foxli_path)
-    if foxli_body != nixos_body + PATCH_FOXLI_DELTA:
+    fuli_body = patch_body(fuli_path)
+    if fuli_body != nixos_body + PATCH_FOXLI_DELTA:
         fail(
-            "foxli-mode/preset.patch.yml 与派生规则不符：\n"
-            "  `plugins:` 正文必须满足 foxli == nixos + 固定追加块（维护 + 逆向两块）。\n"
+            "fuli-mode/preset.patch.yml 与派生规则不符：\n"
+            "  `plugins:` 正文必须满足 fuli == nixos + 固定追加块（维护 + 逆向两块）。\n"
             "  修改 nixos-mode 后请同步狐利模式，或按需更新检查脚本中的\n"
             "  PATCH_MAINTENANCE_DELTA / PATCH_REA_DELTA 常量（仅限刻意变更追加块本身）。"
         )
 
     for directory, path in (
         ("nixos-mode", nixos_path),
-        ("foxli-mode", foxli_path),
+        ("fuli-mode", fuli_path),
     ):
         check_head(
             path,
@@ -191,7 +191,7 @@ def check_news(orders: list) -> None:
 #
 # 上面的派生检查管的是「我们和上游的关系有没有漂」；它**看不见上游加了什么**。
 # 实测代价：dsh 0.2.2 的 standard 预设比 0.1.2 多了六行，整条派生链
-# （nixos → foxli → 掌灯）一条都没跟。少一行不报错，只安静地少一项能力——
+# （nixos → fuli → 掌灯）一条都没跟。少一行不报错，只安静地少一项能力——
 # 本仓日记里反复出现的「ls 了日记目录、拿最新文件名当当天」，就是
 # `time-context` 缺席的地面表现（它每步给当前时间）。
 #
@@ -270,7 +270,7 @@ def check_upstream_drift() -> None:
         fail(
             "上游 standard 预设有、nixos-mode 没有，而 UPSTREAM_SKIP 里也没登记：\n"
             + "\n".join(f"  · {i}" for i in unregistered)
-            + "\n  两条路：把这一行补进 nixos-mode（并同步 foxli-mode），"
+            + "\n  两条路：把这一行补进 nixos-mode（并同步 fuli-mode），"
             "或在 UPSTREAM_SKIP 里登记**为什么有意不跟**（带日期）。\n"
             "  代价：少一行不会报错，只会安静地少一项能力。"
         )
@@ -354,7 +354,7 @@ def main() -> None:
     # 模型上，而 0.2.0 的它已改成 patch/bundle 模型并明说「那个目录没人读了」——于是同名两份，
     # 其中一份在教废弃写法。故这里把「不再自带」钉成**断言**，而不是删掉就没人管：
     # 谁把副本加回来，检查就响。0.1.x 兼容用的旧副本在 `dsh-nixos-shell-stable.nix` 钉住的 rev 里。
-    for mode in ("nixos-mode", "foxli-mode"):
+    for mode in ("nixos-mode", "fuli-mode"):
         stray = os.path.join(PRESETS, mode, "skills")
         if os.path.isdir(stray):
             fail(
@@ -364,7 +364,7 @@ def main() -> None:
             )
 
     print(
-        "preset-derivation: OK（狐利模式完整派生自 NixOS模式；nixos / foxli-mode / "
+        "preset-derivation: OK（狐利模式完整派生自 NixOS模式；nixos / fuli-mode / "
         "news-three-elements 三个 preset.patch.yml 的头部与 preset.yml 一致，order 互不冲突）"
     )
 

@@ -14,10 +14,10 @@
 #
 # order 取 11（原维护模式的位置）。原逆向模式的 15 空出来，留给将来。
 - insert:
-    - id: preset-foxli-mode
+    - id: preset-fuli-mode
       name: '@deepseek-ai/dsh-agent-preset'
       config:
-        id: foxli
+        id: fuli
         name: '狐莉模式'
         description: '派生自 NixOS模式的「瑞士军刀」Agent 预设：日常维护、开发与逆向一体——在 NixOS模式全部能力之上，注入文档撰写与维护日志技能、上游更新检查与贡献审计技能，载入分层维护工作流提示词，并用 rea-mcp 在本会话内桥接 REA（Reverse Engineer Anything）的 MCP 服务（全量约 207 个 mcp__rea__* 工具，只对本会话可见）。**这是下放给社区的能力边界**：掌灯模式派生自它，只再加私有适配层。'
         order: 11
@@ -49,7 +49,7 @@
           # 每一步都带上当前时间与已用时长。缺了它，模型就没有「现在几点」——
           # 本仓日记里反复出现的「ls 了日记目录、拿最新文件名当当天」，正是这个洞的
           # 地面表现。2026-11-02 从上游 standard 补回：此前整条派生链
-          # （nixos → foxli → 掌灯）都没有这一行，而少一行不会报错，只会安静地少一项能力。
+          # （nixos → fuli → 掌灯）都没有这一行，而少一行不会报错，只会安静地少一项能力。
           - id: time-context
             name: '@deepseek-ai/dsh-time-context'
 

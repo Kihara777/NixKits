@@ -126,21 +126,21 @@ let
         config: ${builtins.toJSON { default = presetDefault; }}
     ''}
     ${lib.optionalString cfg.presets.nixosMode (presetRow "nixos-mode")}
-    ${lib.optionalString cfg.presets.foxliMode (presetRow "foxli-mode")}
+    ${lib.optionalString cfg.presets.fuliMode (presetRow "fuli-mode")}
     ${lib.optionalString cfg.presets.newsThreeElements (builtins.readFile cfg.presets.newsThreeElementsPackage.presetPatch)}
   '';
 
   # 两个变体混用时喊一声（不阻断求值）。判据：注入的那个 @kihara777/dsh-nixos-shell
   # 与 presets.package 不是同一个 derivation。
   #
-  # 狐莉模式（foxli-mode）也在这条判据的射程内：它的 preset.patch.yml 与其他预设
+  # 狐莉模式（fuli-mode）也在这条判据的射程内：它的 preset.patch.yml 与其他预设
   # **同一个 presets/ 树**，而它的 skill-filesystem 行同样解析到注入的那个包。
   cordisPatch =
     let
       mismatch =
         (
           cfg.presets.nixosMode
-          || cfg.presets.foxliMode
+          || cfg.presets.fuliMode
         )
         && injectedNixosShell != null
         && injectedNixosShell.package.outPath != presetPackage.outPath;
@@ -1001,7 +1001,7 @@ in
       # 2026-10-21：原来的 `maintenanceMode` 与 `reaMode` 合并成本项。它们各自都是
       # 「NixOS + 一块」的形态，分开放意味着掌灯模式要派生两次、技能清单要维护两份。
       # 合并之后：狐莉模式 = NixOS + 维护块 + 逆向块，掌灯模式只派生它。
-      foxliMode = lib.mkEnableOption "declare the 狐莉模式 agent preset (id `foxli`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml; it derives from NixOS模式, carries the maintenance block and the REA MCP bridge, and is what 掌灯模式 derives from";
+      fuliMode = lib.mkEnableOption "declare the 狐莉模式 agent preset (id `fuli`) as a `@deepseek-ai/dsh-agent-preset` row in the profile cordis.patch.yml; it derives from NixOS模式, carries the maintenance block and the REA MCP bridge, and is what 掌灯模式 derives from";
       newsThreeElements = lib.mkEnableOption "declare the 新闻三要素模式 agent preset (id `news-three-elements`) as a `@deepseek-ai/dsh-agent-preset` row, assembling its plugin files under \$DSH_HOME/.agent-presets/news-three-elements";
       package = lib.mkOption {
         type = lib.types.package;
@@ -1051,7 +1051,7 @@ in
         defaultText = lib.literalExpression "pkgs.rea";
         description = ''
           逆向模式挂载的 REA 可执行包（<https://github.com/morluto/rea>）。
-          `nixkits.dsh.presets.foxliMode` 启用时，模块把这个包的 `bin/rea` 以
+          `nixkits.dsh.presets.fuliMode` 启用时，模块把这个包的 `bin/rea` 以
           `REA_BIN_PATH` 传进 dsh 服务：预设正文里的 `mcp-rea` 行读它来启动
           stdio MCP 服务，所以正文本身不含任何 store 路径。
 
@@ -1234,7 +1234,7 @@ in
           # 逆向模式：把 REA 的 store 路径交给预设里的 `mcp-rea` 行（它读
           # `REA_BIN_PATH` 启动 stdio MCP 服务）。这样 preset.patch.yml 正文里
           # 不需要出现 store 路径，而「哪个 rea」由 Nix 求值决定。
-          ++ lib.optionals cfg.presets.foxliMode [ "REA_BIN_PATH=${lib.getExe cfg.presets.reaPackage}" ]
+          ++ lib.optionals cfg.presets.fuliMode [ "REA_BIN_PATH=${lib.getExe cfg.presets.reaPackage}" ]
           ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment;
         # Capture dsh's stdout (it prints the tokenized startup URL once)
         # for ExecStartPost to derive the external launch URLs.
@@ -1310,18 +1310,18 @@ in
       # 逆向模式的预设正文必须真的在 `presets.package` 里。判据落在**文件是否存在**上，
       # 而不是「通道是 stable 还是 alpha」：
       #   · stable 通道的 `dsh-nixos-shell-stable` 把 `presets/` 冻结在钉住的 rev，
-      #     而 `foxli-mode/` 是 2026-10-21 才合并出来的目录 —— 那一份里没有它；
+      #     而 `fuli-mode/` 是 2026-10-21 才合并出来的目录 —— 那一份里没有它；
       #   · 不看通道、看内容，`pinnedRev` 往前挪之后这条断言会自动放行，不需要人记得
       #     回来改它。
       # 不拦的话症状是一句「path … preset.patch.yml does not exist」，读者要自己逆推
       # 到「我开的那个通道没有这份预设」。
       lib.optional
-        (cfg.presets.foxliMode
-          && !(builtins.pathExists "${presetSourceDir}/foxli-mode/preset.patch.yml"))
+        (cfg.presets.fuliMode
+          && !(builtins.pathExists "${presetSourceDir}/fuli-mode/preset.patch.yml"))
         {
           assertion = false;
           message = ''
-            nixkits.dsh.presets.foxliMode: `presets.package` 里没有 foxli-mode/preset.patch.yml。
+            nixkits.dsh.presets.fuliMode: `presets.package` 里没有 fuli-mode/preset.patch.yml。
             当前预设来源：${presetSourceDir}
 
             stable 通道（`pkgs.dsh-nixos-shell-stable`）把 `presets/` 冻结在钉住的 rev，
@@ -1329,7 +1329,7 @@ in
               · 切到 alpha 通道（`nixkits.dsh.package = pkgs.dsh-alpha`），预设跟仓库 HEAD；
               · 或显式设置 `nixkits.dsh.presets.package = pkgs.dsh-nixos-shell`；
               · 或把 `packages/dsh-nixos-shell-stable.nix` 的 `pinnedRev` 往前挪到含
-                foxli-mode 的提交（并更新其 sha256）。
+                fuli-mode 的提交（并更新其 sha256）。
           '';
         }
       # `llm-deepseek` 段的跨字段约束：适配器 resolveAdapterOptions 里写着
