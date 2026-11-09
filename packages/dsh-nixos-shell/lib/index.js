@@ -1219,7 +1219,9 @@ export function apply(ctx, config = {}) {
       const cmd = `/run/current-system/sw/bin/nixos build ${shq(flakeDir)}`;
       const statePath = `${buildStateDir}/build-${flakeDir.replace(/[^a-zA-Z0-9]/g, "_")}.status`;
       const stamp = () => new Date().toISOString();
+      console.log("PROBE-APPLY-BEFORE-MKDIR");
       await sh(`mkdir -p ${shq(buildStateDir)} 2>/dev/null; printf 'running %s\\n' ${shq(stamp())} > ${shq(statePath)} 2>/dev/null`, { timeoutMs: 10000 });
+      console.log("PROBE-APPLY-BEFORE-BUILD");
       const timeoutMs = typeof args.timeoutMs === "number" && args.timeoutMs > 0
         ? Math.min(args.timeoutMs, maxTimeoutMs)
         : defaultTimeoutMs;
