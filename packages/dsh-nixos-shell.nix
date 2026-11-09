@@ -1,5 +1,7 @@
 {
   lib,
+  # 构建期派生预设树要用 runCommand（见 presetsDerived），所以显式接 pkgs。
+  pkgs,
   buildNpmPackage,
   # 预设内容来源：一个含 `<mode>/preset.patch.yml` + `<mode>/skills/` 的目录。
   #
@@ -14,6 +16,26 @@
 }:
 
 let
+  # ── 预设树：成品在构建期由「父 + 差异」生成（2026-11-09）──────────────
+  #
+  # 每个带 `overlay.yml` 的预设目录只维护差异，成品在这里生成。**成品不进 git**：
+  # 同一段内容有两个来源就一定会漂，而 2026-11-09 那天的一份 916 行拷贝让
+  # 「改上游」变成了「改一份没人用的代码」。
+  #
+  # 用 runCommand 而不是 IFD：`modules/dsh.nix` 靠 `builtins.readFile` 在**求值期**
+  # 读这张树，IFD 会让纯求值失效。派生树本身就是 store 路径，读它没有副作用。
+  presetsDerived = pkgs.runCommand "dsh-nixos-shell-presets" {
+    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ])) ];
+  } ''
+    cp -r ${presetsSource} $out
+    chmod -R u+w $out
+    for layer in "$out"/*/overlay.yml; do
+      [ -f "$layer" ] || continue
+      dir=$(dirname "$layer")
+      python3 ${../lib/apply-overlay.py} "$out/nixos-mode/preset.patch.yml" "$layer" > "$dir/preset.patch.yml"
+    done
+  '';
+
   # Skills registered by the NixOS模式 preset (and inherited by 维护模式).
   # Sourced from the repo `skills/` tree at build time; keep in sync with the
   # `customSkillDirs` entry that points at `skills-nixos/`.
@@ -65,7 +87,7 @@ buildNpmPackage (finalAttrs: {
     # 用 rm -rf + cp -r 整体替换，而不是逐文件覆盖：两个 rev 的预设**集合**可能
     # 不同（增删过预设目录），逐文件覆盖会把 HEAD 独有的旧目录留在树里。
     rm -rf ./presets
-    cp -r ${presetsSource} ./presets
+    cp -r ${presetsDerived} ./presets
     # store 里的源树是只读的（0555 目录），而下面要往每个预设目录里建
     # skills-nixos/ —— 先放开写权限，否则 mkdir 直接 Permission denied。
     chmod -R u+w ./presets
@@ -83,7 +105,7 @@ buildNpmPackage (finalAttrs: {
   # modules/dsh.nix 从 `passthru.presetsSource` 在**求值期**读 preset.patch.yml
   # 正文（stable 变体给的是 builtins.fetchTarball 取到的路径，故没有
   # import-from-derivation）。少了它，模块会明确报错而不是猜路径。
-  passthru = { inherit presetsSource; };
+  passthru = { presetsSource = presetsDerived; };
 
   # dsh ecosystem packages declare peers against same-release prereleases;
   # the plugin resolves those peers from the host dsh tree at runtime.
