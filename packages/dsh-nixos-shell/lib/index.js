@@ -388,9 +388,14 @@ export function apply(ctx, config = {}) {
   // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
   // 路径都过了 `shq`）。别把工具参数直接喂进来。
   const sh = (command, opts = {}) => {
-    console.log(`PROBE-SH ${JSON.stringify({ head: command.slice(0, 40), timeoutMs: opts.timeoutMs ?? 15000 })}`);
+    console.log(`PROBE-SH ${JSON.stringify({ head: command.slice(0, 40), timeoutMs: opts.timeoutMs ?? 15000, cwd: opts.cwd ?? null })}`);
     return runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
       timeoutMs: opts.timeoutMs ?? 15000,
+      // **cwd 必须给**（2026-11-10）：`nixos_shell` 的前台路径一直传 cwd，而 `sh()` 原来
+      // 不传，于是 `spawnLocal` 把 `cwd: undefined` 交给 `ctx.subprocess.spawn`——
+      // 那条路在 dsh 内部报 `Cannot read properties of undefined (reading 'includes')`。
+      // `sh()` 是 `nixos_apply` 唯一的执行手段，所以整个工具从上线起就没跑通过。
+      cwd: opts.cwd ?? process.cwd(),
       env: { PATH: pathEnv },
     });
   };
