@@ -513,19 +513,122 @@ export function apply(ctx, config = {}) {
 
   /** Build the nix shell tool-bootstrap wrapper (nixos-modern-cli "Shell environment"). */
   function wrapWithTools(command, tools) {
-    const unknown = tools.filter((t) => !Object.prototype.hasOwnProperty.call(TOOL_PACKAGES, t));
-    if (unknown.length > 0) {
-      const known = Object.keys(TOOL_PACKAGES).join(", ");
-      throw new Error(`unknown tool(s): ${unknown.join(", ")} — known names: ${known}`);
-    }
-    const pkgs = [...new Set(tools.map((t) => TOOL_PACKAGES[t]))]
-      .map((p) => `nixpkgs#${p}`)
-      .join(" ");
+    const pkgs = [...new Set(tools.map((t) => {
+      if (Object.prototype.hasOwnProperty.call(TOOL_PACKAGES, t)) return TOOL_PACKAGES[t];
+      // `pkg:<属性>`：显式点名一个 nixpkgs 属性，绕过短表。
+      const explicit = t.startsWith("pkg:") ? t.slice(4) : t;
+      // **表外不再一律报错**（2026-11-09）：`ripgrep`、`chromium`、`ffmpeg`
+      // 这些名字本身就是 nixpkgs 的顶层属性，硬拦会让 agent 为「差一个别名」
+      // 付一次失败。但属性名要**校验**——它会被拼进 bash 命令，不校验就是注入。
+      if (!/^[A-Za-z0-9][A-Za-z0-9._+-]*$/.test(explicit)) {
+        throw new Error(`invalid tool name: ${JSON.stringify(t)} — 只接受短表里的名字、或 pkg:<nixpkgs 属性>（字母数字 . _ + -）`);
+      }
+      return explicit;
+    }))].map((p) => `nixpkgs#${p}`).join(" ");
     // Uniform wrapper string: safe for both the local argv path (via bash -c)
     // and the sudo daemon path (the daemon itself runs bash -c).
     // NOT bash -lc: a login shell sources the /etc/profile chain, which
     // resets PATH and discards the `nix shell` injection entirely.
     return `exec nix shell ${pkgs} --command bash -c ${shq(command)}`;
+  }
+
+  // ── 缺工具时的自动兜底（2026-11-09）──────────────────────────────────────
+  //
+  // 设计前提是「你来干活，办法工具想」：agent 只写命令，不必知道这台机器上装了什么、
+  // 缺的包叫什么。但**执行可以无感，收据不能没有**——每次兜底都在结果里留一格
+  // `bootstrap`，否则下一次我会以为「本机有 jq」，而那个误会正是 2026-11-07
+  // 「12 次空转被记成成功」同一个形状。
+  //
+  // 四档判定分开说，一种都不许并进别的：
+  //   not-in-nixpkgs     命令打错（系统没有、仓库也没有）
+  //   already-in-path    系统里其实有（那不是缺工具，是 PATH/调用方式的问题）
+  //   installable        仓库里有、环境里没有 → 可以拉
+  //   needs-authorization 能拉，但闭包太大或体积未知 → 要显式 allowHeavy
+  // 索引路径可配：默认读系统位置，测试与探针用 `shellIndexPath` 指到夹具上。
+  // **不做进程级全局**——`indexCache` 是 apply() 的局部变量，每个 ctx 一份，
+  // 否则同一进程里两个 profile 会互相看到对方的索引。
+  const SHELL_INDEX_PATH = config.shellIndexPath
+    ?? process.env.NIXOS_SHELL_INDEX
+    ?? "/etc/kitsunome/shell-index.json";
+  const HEAVY_BYTES = 300 * 1024 * 1024;
+  let indexCache = null;
+
+  /** 读构建期索引。读不到返回 null——**「没有索引」与「索引里没有」是两件事**。 */
+  function readShellIndex() {
+    const now = Date.now();
+    if (indexCache !== null && now - indexCache.at < 60_000) return indexCache.data;
+    let data = null;
+    try {
+      const parsed = JSON.parse(readFileSync(SHELL_INDEX_PATH, "utf8"));
+      if (parsed !== null && typeof parsed === "object") {
+        data = {
+          system: parsed.system !== null && typeof parsed.system === "object" ? parsed.system : {},
+          attrs: new Set(Array.isArray(parsed.nixpkgsAttributes) ? parsed.nixpkgsAttributes : []),
+          rev: (parsed.nixpkgs ?? {}).rev ?? null,
+        };
+      }
+    } catch {
+      data = null;
+    }
+    indexCache = { at: now, data };
+    return data;
+  }
+
+  /**
+   * 从 stderr 里点名那个缺失的命令。
+   *
+   * **只认 bash/sh 的标准说法**——`bash: jq: command not found` /
+   * `jq: command not found`。别的失败形态（退出码 1、超时、set -e）一律不认，
+   * 因为「差一个字母的命令」绝不该触发一次下载。
+   */
+  function missingCommand(stderr) {
+    const text = String(stderr ?? "");
+    // `bash: line 1: jq: command not found` 的**最后一段**才是命令名。
+    // 加前缀组（`(?:[^:\n]*:\s*)?`）反而会截到 `line`——第一版就是这么错的。
+    const m = text.match(/([A-Za-z0-9._+-]+): command not found/)
+      ?? text.match(/command not found:\s*([A-Za-z0-9._+-]+)/);
+    return m === null ? null : m[1];
+  }
+
+  /** 这一次缺失该怎么处置。纯判定，不跑任何命令。 */
+  function planBootstrap(name) {
+    const index = readShellIndex();
+    if (index === null) {
+      return {
+        triggered: name,
+        kind: "no-index",
+        note: `读不到 ${SHELL_INDEX_PATH}：先开 nixkits.shellIndex.enable 并 rebuild。没有索引就无法区分「命令打错」与「环境里没有」——而这两件事的处置完全不同`,
+      };
+    }
+    if (Object.prototype.hasOwnProperty.call(index.system, name)) {
+      return {
+        triggered: name,
+        kind: "already-in-path",
+        path: index.system[name].path ?? null,
+        package: index.system[name].package ?? null,
+        note: "索引说系统里已经有这个命令。那不是「缺工具」，是 PATH 或调用方式的问题——先看 path 那一格",
+      };
+    }
+    // `rg` 这种「命令名不是包名」的，会落到这里。不猜：报出来并给出显式通道。
+    if (!index.attrs.has(name)) {
+      return {
+        triggered: name,
+        kind: "not-in-nixpkgs",
+        nixpkgsRev: index.rev,
+        note: `系统里没有、nixpkgs 属性里也没有 \`${name}\`：多半是命令拼错，或者它属于某个包但不是同名属性（用 tools: ['pkg:<属性>'] 显式指定）`,
+      };
+    }
+    return { triggered: name, kind: "installable", package: name, nixpkgsRev: index.rev };
+  }
+
+  /** 闭包体积：先离线问。问不到 = 本地 store 里没有 = 需要下载。 */
+  async function closureBytes(packageName, cwd, env) {
+    const r = await runLocal(["nix", "path-info", "-S", "--offline", `nixpkgs#${packageName}`], {
+      cwd, env, timeoutMs: 8000, maxBytes: 8192,
+    });
+    if (r.exitCode !== 0) return null;
+    const n = Number(String(r.stdout ?? "").trim().split(/\s+/).pop());
+    return Number.isFinite(n) && n > 0 ? n : null;
   }
 
   async function executeShell(args, exec) {
@@ -697,7 +800,51 @@ export function apply(ctx, config = {}) {
       shell = shellPath;
     }
 
-    return runLocal([shell, "-c", finalCommand], { cwd, env, timeoutMs });
+    const first = await runLocal([shell, "-c", finalCommand], { cwd, env, timeoutMs });
+
+    // ── 只在这一种失败上兜底 ──────────────────────────────────────────────
+    //
+    // 127 + stderr 点名。且四类不碰：调用方已经显式给了 tools（再兜就是叠两层）、
+    // sudo 路径（那是另一条授权链）、后台任务（要另算记账）、非 127。
+    const mayBootstrap = first.exitCode === 127
+      && tools.length === 0
+      && args.sudo !== true
+      && args.run_in_background !== true;
+    const missing = mayBootstrap ? missingCommand(first.stderr) : null;
+    if (missing === null) return first;
+
+    const plan = planBootstrap(missing);
+    if (plan.kind !== "installable") return { ...first, bootstrap: plan };
+
+    const bytes = await closureBytes(plan.package, cwd, env);
+    const heavy = bytes !== null && bytes > HEAVY_BYTES;
+    if ((heavy || bytes === null) && args.allowHeavy !== true) {
+      return {
+        ...first,
+        bootstrap: {
+          ...plan,
+          kind: "needs-authorization",
+          closureBytes: bytes,
+          reason: heavy
+            ? `闭包 ${(bytes / 1024 / 1024).toFixed(0)} MB，超过 ${HEAVY_BYTES / 1024 / 1024} MB 阈值`
+            : "本地 store 里没有它，体积未知——多半要下载",
+          hint: "确认要拉就带 allowHeavy: true 再调一次；它用 `nix shell` 临时提供，不进系统、不改配置",
+        },
+      };
+    }
+
+    const t0 = Date.now();
+    const second = await runLocal([shell, "-c", wrapWithTools(command, [plan.package])], { cwd, env, timeoutMs });
+    return {
+      ...second,
+      bootstrap: {
+        ...plan,
+        closureBytes: bytes,
+        ms: Date.now() - t0,
+        providedBy: `nix shell nixpkgs#${plan.package}`,
+        note: "这一趟自动补了缺的工具。它只活在这一条命令里，系统没有被改动",
+      },
+    };
   }
 
   /** Read-only NixOS diagnostics (nixos-modern-cli "system maintenance" + pitfalls). */
@@ -901,9 +1048,19 @@ export function apply(ctx, config = {}) {
         type: "array",
         items: { type: "string" },
         description:
-          "Optional POSIX tool names to provide via `nix shell`. Whitelist: " +
+          "Optional extra provider packages for `nix shell`. Either a known short name (" +
           Object.keys(TOOL_PACKAGES).join(", ") +
-          ". The command then runs inside `nix shell nixpkgs#<pkg>… --command`.",
+          ") or `pkg:<nixpkgs attribute>` for anything else (e.g. `pkg:ripgrep`, `pkg:chromium`). " +
+          "**You usually do not need this**: when a command fails with `command not found`, " +
+          "the tool consults the build-time shell index and bootstraps the missing package " +
+          "by itself, reporting what it did in the `bootstrap` field of the result.",
+      },
+      allowHeavy: {
+        type: "boolean",
+        description:
+          "Authorize bootstrapping a package whose closure is large (>300 MB) or not already " +
+          "in the local store. Only relevant when the automatic bootstrap answers " +
+          "`needs-authorization`; without it, such a package is not downloaded.",
       },
       workdir: {
         type: "string",
