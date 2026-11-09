@@ -320,10 +320,6 @@ export function apply(ctx, config = {}) {
       maxBytes,
       spill: { maxBytes: stdoutSpillMaxBytes },
     };
-    // **探针**（2026-11-10）：`nixos_apply` 崩在 `await sh(...)`，而 `sh` 与
-    // `nixos_shell` 的前台路径不共用（后者直接 runLocal）。这条日志能分开
-    // 「进到了 spawnLocal」与「崩在 spawnLocal 之前」。
-    console.log(`PROBE-SPAWN ${JSON.stringify({ tail: argv[argv.length - 1]?.slice(0, 40), maxBytes, graceMs, envKeys: Object.keys(env ?? {}) })}`);
     return ctx.subprocess.spawn({
       argv,
       cwd,
@@ -388,7 +384,6 @@ export function apply(ctx, config = {}) {
   // 注意它**不是**给用户输入用的：调用方都是本文件里写死的命令（其中拼进去的
   // 路径都过了 `shq`）。别把工具参数直接喂进来。
   const sh = (command, opts = {}) => {
-    console.log(`PROBE-SH ${JSON.stringify({ head: command.slice(0, 40), timeoutMs: opts.timeoutMs ?? 15000, cwd: opts.cwd ?? null })}`);
     return runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
       timeoutMs: opts.timeoutMs ?? 15000,
       // **cwd 必须给**（2026-11-10）：`nixos_shell` 的前台路径一直传 cwd，而 `sh()` 原来
@@ -1177,11 +1172,6 @@ export function apply(ctx, config = {}) {
       render: (_args, value) => [{ type: "text", text: JSON.stringify(value, null, 2) }],
     },
     execute: async (args, exec) => {
-      // **探针**（2026-11-10）：这个工具长期报 `Cannot read properties of undefined
-      // (reading 'includes')`，而 execute 在 dsh 之外跑得好好的。所以第一件事是
-      // 分清「execute 进来了没有」——这行日志出现而结果仍是那个错，说明崩在它内部；
-      // 完全不出现，说明崩在 dsh 的调用层（参数校验 / pre-execute / 呈现）。
-      console.log(`PROBE-APPLY-ENTER ${JSON.stringify({ stage: args?.stage ?? null, keys: Object.keys(args ?? {}) })}`);
       const stage = String(args.stage ?? "build");
       // schema 层不再用 `enum`（见参数定义处的注释），所以合法值在这里卡：
       // **非法值必须拒绝，不能悄悄当成 build 跑一遍构建。**
@@ -1230,9 +1220,7 @@ export function apply(ctx, config = {}) {
       const cmd = `/run/current-system/sw/bin/nixos build ${shq(flakeDir)}`;
       const statePath = `${buildStateDir}/build-${flakeDir.replace(/[^a-zA-Z0-9]/g, "_")}.status`;
       const stamp = () => new Date().toISOString();
-      console.log("PROBE-APPLY-BEFORE-MKDIR");
       await sh(`mkdir -p ${shq(buildStateDir)} 2>/dev/null; printf 'running %s\\n' ${shq(stamp())} > ${shq(statePath)} 2>/dev/null`, { timeoutMs: 10000 });
-      console.log("PROBE-APPLY-BEFORE-BUILD");
       const timeoutMs = typeof args.timeoutMs === "number" && args.timeoutMs > 0
         ? Math.min(args.timeoutMs, maxTimeoutMs)
         : defaultTimeoutMs;
