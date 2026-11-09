@@ -151,22 +151,15 @@ def check_patch_chain(orders: list) -> None:
     由那边的检查器核对。
     """
     nixos_path = os.path.join(PRESETS, "nixos-mode", "preset.patch.yml")
-    fuli_path = os.path.join(PRESETS, "fuli-mode", "preset.patch.yml")
-
     nixos_body = patch_body(nixos_path)
-    fuli_body = patch_body(fuli_path)
-    if fuli_body != nixos_body + PATCH_FOXLI_DELTA:
-        fail(
-            "fuli-mode/preset.patch.yml 与派生规则不符：\n"
-            "  `plugins:` 正文必须满足 fuli == nixos + 固定追加块（维护 + 逆向两块）。\n"
-            "  修改 nixos-mode 后请同步狐利模式，或按需更新检查脚本中的\n"
-            "  PATCH_MAINTENANCE_DELTA / PATCH_REA_DELTA 常量（仅限刻意变更追加块本身）。"
-        )
 
-    for directory, path in (
-        ("nixos-mode", nixos_path),
-        ("fuli-mode", fuli_path),
-    ):
+    # **fuli-mode 的成品不在仓库里**（2026-11-09）：它由
+    # packages/dsh-nixos-shell.nix 的 presetsDerived 在构建期，用
+    # lib/apply-overlay.py 从 nixos-mode + fuli-mode/overlay.yml 生成。
+    # 所以这里没有可比的正文——"fuli == nixos + 固定追加块" 这条判据的对象消失了。
+    # 取而代之的是构建期生成器：父里没有 id、锚点不存在、overlay 缺 meta.id，
+    # 都是构建失败，而不是等到加载时才空转。
+    for directory, path in (("nixos-mode", nixos_path),):
         check_head(
             path,
             os.path.join(PRESETS, directory),
