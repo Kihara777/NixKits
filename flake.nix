@@ -226,6 +226,7 @@
           opencode-telegram = { nixkits.opencode-telegram.enable = true; };
           obs-bilibili-stream = { nixkits.obs-bilibili-stream.enable = true; };
           dsh = { nixkits.dsh.enable = true; };
+          shell-index = { nixkits.shellIndex.enable = true; };
         };
         # 无法在本仓 env 里求值的模块，**必须在这里登记理由**（不许静默跳过）。
         # 理由要具体到「缺哪一样东西」，不是「不好测」。
@@ -283,6 +284,7 @@
     nixosModules.opencode-telegram     = import ./modules/opencode-telegram.nix;
     nixosModules.comfyui               = import ./modules/comfyui.nix;
     nixosModules.dsh                   = import ./modules/dsh.nix;
+    nixosModules.shell-index           = import ./modules/shell-index.nix;
     nixosModules.rcc-fix = import ./modules/rcc-fix.nix;
     nixosModules.asusd-pd-profile = import ./modules/asusd-pd-profile.nix;
     nixosModules.asusd-thermal-guard = import ./modules/asusd-thermal-guard.nix;
