@@ -42,6 +42,7 @@ import z from "@deepseek-ai/schemastery";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { existsSync, readFileSync, readdirSync, lstatSync, readlinkSync } from "node:fs";
 import { homedir } from "node:os";
+import path from "node:path";
 import net from "node:net";
 
 export const name = "nixos-shell";
@@ -385,7 +386,7 @@ export function apply(ctx, config = {}) {
   // 路径都过了 `shq`）。别把工具参数直接喂进来。
   /** 构建记录的目录：用户可写（`/run` 属 root，dsh 写不进去）。 */
   const buildStateDirPath = () =>
-    path.join(process.env.DSH_HOME ?? path.join(os.homedir(), ".dsh"), "nixos-apply");
+    path.join(process.env.DSH_HOME ?? path.join(homedir(), ".dsh"), "nixos-apply");
 
   const sh = (command, opts = {}) => {
     return runLocal(["/run/current-system/sw/bin/bash", "-c", command], {
