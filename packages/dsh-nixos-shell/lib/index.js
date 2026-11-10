@@ -116,10 +116,15 @@ function wrapDetachedSystemCommand(command, cwd, pathEnv) {
   const statusDir = "/run/nixos-apply";
   const statusFile = `${statusDir}/${unit}.status`;
   const inner =
-    `mkdir -p ${shq(statusDir)} 2>/dev/null; ` +
-    `printf 'running %s\\n' "$(date --iso-8601=seconds)" > ${shq(statusFile)} 2>/dev/null; ` +
-    `export PATH=${shq(pathEnv)}; cd ${shq(cwd)} && ${command}; ` +
-    `rc=$?; printf 'done %s exit=%d\\n' "$(date --iso-8601=seconds)" "$rc" >> ${shq(statusFile)} 2>/dev/null; exit "$rc"`;
+    // **`export PATH` 必须在最前面**（2026-11-10 实测）：原来它排在 `mkdir` 与 `date` 之后，
+    // 而 transient unit 的默认 PATH 里没有 coreutils——于是 `mkdir` 与 `date` 都 command not found，
+    // 三条 `2>/dev/null` 把这两条错误一起吞了，结局是「unit 成功了、账没记上」。
+    // 这个坑一天里出现三次，都是同一个形状：可能失败的命令 + 吞错误 + 没人看退出码。
+    `export PATH=${shq(pathEnv)}; ` +
+    `mkdir -p ${shq(statusDir)}; ` +
+    `printf 'running %s\\n' "$(date --iso-8601=seconds)" > ${shq(statusFile)}; ` +
+    `cd ${shq(cwd)} && ${command}; ` +
+    `rc=$?; printf 'done %s exit=%d\\n' "$(date --iso-8601=seconds)" "$rc" >> ${shq(statusFile)}; exit "$rc"`;
   const wrapped =
     `/run/current-system/sw/bin/systemd-run --collect --unit=${unit} -- ` +
     `/run/current-system/sw/bin/bash -c ${shq(inner)}`;
