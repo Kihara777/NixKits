@@ -1216,12 +1216,22 @@ export function apply(ctx, config = {}) {
           flakeDir,
           pathEnv,
         );
-        const res = await sh(detached.wrapped, { timeoutMs: 60000 });
+        // **必须走 sudo daemon**（2026-11-10 实测）：`systemd-run` 以普通用户调用时
+        // 需要 polkit 交互式认证，直接报 `Access denied as the requested operation
+        // requires interactive authentication`——而那条错误只会出现在 `caller` 字段里，
+        // handoff 看起来是成功的（unit 名、statusFile 都有），其实什么都没起来。
+        const res = await sudoExec(
+          { command: detached.wrapped, cwd: flakeDir, env: { PATH: pathEnv }, timeoutMs: 60000 },
+          sudoSocketPath,
+          SUDO_DAEMON_TIMEOUT_MS,
+        );
         return {
           detached: true,
           unit: detached.unit,
           statusFile: detached.statusFile,
-          caller: String(res.stderr ?? "").trim() || undefined,
+          caller: (typeof res.error === "string" && res.error !== ""
+            ? res.error
+            : String(res.stderr ?? "")).trim() || undefined,
           note:
             "handoff 不是结局。激活会重启 dsh（会话可能断），完成后用 `nixos_cli op=apply-status` 读结局，再用 op=generations 确认世代。",
         };
