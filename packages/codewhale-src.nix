@@ -60,6 +60,24 @@ rustPlatform.buildRustPackage rec {
     stdenv.cc.cc.libgcc
   ];
 
+  # 2026-11-12：nixpkgs 177d05409 的 `cargo-setup-hook.sh`（commit 44cddf9）
+  # **无条件** `export` 了一整套「用系统库」的开关：aws-lc、oniguruma、sqlite3、
+  # zstd、libgit2、openssl、libsodium、libssh2。旧 nixpkgs（31ecbaca1）没有这些行。
+  #
+  # 这套策略对**交叉构建**天生不友好，而本文件只在 riscv64 分支被使用：
+  #   · 加 `buildInputs = [ aws-lc ]`（nixpkgs 对 codex 的修法，PR #584667）走不通——
+  #     aws-lc 自己的交叉构建坏了：cmake 用 `go run err_data_generate.go` 生成
+  #     err_data.c，Go 的 linker 拿 riscv64 gcc 去链接 x86_64 目标并传 `-m64`，
+  #     报 `unrecognized command-line option '-m64'`；
+  #   · 逐个补 buildInputs 是打地鼠（oniguruma 之后还有 sqlite3 / zstd / …）。
+  # 故一次性全部退回 crate 自带的 vendored 源码构建：不需要任何系统库，
+  # 也就不受这些开关影响。代价是编译时间变长，收益是 riscv64 能真的产出产物。
+  preBuild = ''
+    unset AWS_LC_SYS_USE_SYSTEM RUSTONIG_SYSTEM_LIBONIG LIBSQLITE3_SYS_USE_PKG_CONFIG \
+          ZSTD_SYS_USE_PKG_CONFIG LIBGIT2_NO_VENDOR SODIUM_USE_PKG_CONFIG \
+          LIBSSH2_SYS_USE_PKG_CONFIG OPENSSL_NO_VENDOR SYSTEM_DEPS_BUILD_INTERNAL
+  '';
+
   # Only build CLI and TUI (default workspace members)
   buildAndTestSubdir = "crates/cli";
 
