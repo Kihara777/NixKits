@@ -29,7 +29,7 @@ Platform support falls into two groups: most packages declare `lib.platforms.all
 | kitsfmt | Nix formatter (AST sorting + best-practice auto-fixes) | [docs/en/kitsfmt.md](en/kitsfmt.md) |
 | opencode-telegram | Telegram Bot client for OpenCode | [docs/en/opencode-telegram.md](en/opencode-telegram.md) |
 | rea | Reverse-engineering CLI and MCP server — take an agent from app behavior down to native binaries (static analysis needs no external engine) | [docs/en/rea.md](en/rea.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.53.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK Package Manager (RISC-V dev tools)<br>stable 0.54.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/en/ruyi.md](en/ruyi.md) |
 
 ## Plugins
 

@@ -29,7 +29,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | kitsfmt | Nix フォーマッタ（AST ソート + ベストプラクティス自動修正） | [docs/ja/kitsfmt.md](ja/kitsfmt.md) |
 | opencode-telegram | OpenCode 向け Telegram Bot クライアント | [docs/ja/opencode-telegram.md](ja/opencode-telegram.md) |
 | rea | リバースエンジニアリング用 CLI と MCP サーバー——agent でアプリの挙動からネイティブバイナリまで（静的解析に外部エンジン不要） | [docs/ja/rea.md](ja/rea.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.53.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/ja/ruyi.md](ja/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK パッケージマネージャ（RISC-V 開発ツール）<br>stable 0.54.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/ja/ruyi.md](ja/ruyi.md) |
 
 ## プラグイン
 

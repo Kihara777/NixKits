@@ -29,7 +29,7 @@ inputs.nixkits.url = "git+file:///path/to/NixKits";
 | kitsfmt | Nix 整形器（AST 整序 + 最善慣行自動修正） | [docs/pcn/kitsfmt.md](pcn/kitsfmt.md) |
 | opencode-telegram | OpenCode 向 Telegram Bot 依頼者 | [docs/pcn/opencode-telegram.md](pcn/opencode-telegram.md) |
 | rea | 逆工程 CLI 與 MCP 服務器——依 agent 自応用挙動至原生二進制（静的解析不要外部機関） | [docs/pcn/rea.md](pcn/rea.md) |
-| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.53.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
+| ruyi<br>ruyi-beta<br>ruyi-alpha | RuyiSDK 包管理器（RISC-V 開發工具）<br>stable 0.54.0 · beta 0.54.0-beta.20261102 · alpha 0.54.0-alpha.20260918 | [docs/pcn/ruyi.md](pcn/ruyi.md) |
 
 ## 插件
 
