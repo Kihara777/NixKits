@@ -3,6 +3,38 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-12T14:56:05+09:00
+
+**摘要**：五包更新 + nixpkgs 升级 — 例行检查
+
+- nixpkgs `31ecbaca1` → `177d0540`（nixos-unstable 2026-11-09）
+- ruyi stable `0.53.0` → `0.54.0`；beta/alpha 未动
+- opencode-telegram `0.26.6` → `0.27.0`
+- dsh stable `0.2.1-rc.5` → `0.2.2-rc.1`：lock 重生、清单 196 条
+- xdna-xrt-plugin / xrt 配套重钉（11-11/11-10）——跟 xdna submodule
+- fix：godot-ai 的 django `test_filefield` 撞 sandbox 时序
+- 判据：六包 `nix build` 绿；`nix flake check` 七项全过
+
+| 提交 | 说明 |
+|------|------|
+| `d525a47` | chore(flake): nixpkgs 31ecbaca1 → 177d0540 |
+| `6f1468d` | fix(godot-ai): django test_filefield 撞 sandbox 时序 |
+| `1b5be11` | feat(opencode-telegram): 0.26.6 → 0.27.0 |
+| `55a4112` | feat(dsh): stable 0.2.1-rc.5 → 0.2.2-rc.1 |
+| `fbfe9f2` | feat(ruyi): stable 0.53.0 → 0.54.0 |
+| `63d218b` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| ruyi | 0.53.0 | 0.54.0 |
+| opencode-telegram | 0.26.6 | 0.27.0 |
+| dsh | 0.2.1-rc.5 | 0.2.2-rc.1 |
+| xdna-xrt-plugin | unstable-2026-11-03 | unstable-2026-11-11 |
+| xrt | unstable-2026-11-03 | unstable-2026-11-10 |
+| 　 | src hash (opencode-telegram) | `sha256-ysLqNhDlRMZJIvRhFtF5iFvmHIOkhd1esO4VvWs6Jqc=` → `sha256-EbnsnXa0H4ZUn3UNCH4FSdqFViSZRtE3FxUJ+g0RVwE=` |
+| 　 | npmDepsHash (dsh) | `sha256-fmG48z22NUOQtXNjLz1/w6ujzrNp9Jm03bLCGRWSrTE=` → `sha256-kPptnZsNI5ax2AwcNUpxDXPe6sltjXsB6CU5VI98rj4=` |
+| 　 | hash (xrt) | `sha256-pb2dHNPiTBV+P2wKSXdU03rMYGg9XBhQHUFItkid2uI=` → `sha256-TBw+VOyA0fAvj3qLhtUicmeaKa9Rpr8W6LRv/oiZHjg=` |
+
 ## 2026-11-07T14:31:30+09:00
 
 **摘要**：dsh-api-balance 连续六次更新（设置项、圆环排版、把手描述）

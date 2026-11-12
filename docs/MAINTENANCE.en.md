@@ -3,6 +3,38 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-12T14:56:05+09:00
+
+**Summary**: five package updates plus a nixpkgs bump — a full routine check
+
+- nixpkgs `31ecbaca1` → `177d0540` (nixos-unstable 2026-11-09), as its own commit
+- ruyi stable `0.53.0` → `0.54.0`; the beta/alpha channels are untouched
+- opencode-telegram `0.26.6` → `0.27.0`
+- dsh stable `0.2.1-rc.5` → `0.2.2-rc.1`: vendored lock regenerated (724 packages), plugin list 196 entries
+- xdna-xrt-plugin / xrt re-pinned together (11-11 / 11-10) — xrt follows xdna's submodule pointer, not XRT's own HEAD
+- fix: godot-ai's django `test_filefield` races the sandbox; only that file is removed
+- Criteria: each of the six packages builds green; `nix flake check` passes all seven checks
+
+| Commit | Description |
+|------|------|
+| `d525a47` | chore(flake): nixpkgs 31ecbaca1 → 177d0540 |
+| `6f1468d` | fix(godot-ai): django test_filefield 撞 sandbox 时序 |
+| `1b5be11` | feat(opencode-telegram): 0.26.6 → 0.27.0 |
+| `55a4112` | feat(dsh): stable 0.2.1-rc.5 → 0.2.2-rc.1 |
+| `fbfe9f2` | feat(ruyi): stable 0.53.0 → 0.54.0 |
+| `63d218b` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+
+| Package | Old | New |
+|--------|-----|-----|
+| ruyi | 0.53.0 | 0.54.0 |
+| opencode-telegram | 0.26.6 | 0.27.0 |
+| dsh | 0.2.1-rc.5 | 0.2.2-rc.1 |
+| xdna-xrt-plugin | unstable-2026-11-03 | unstable-2026-11-11 |
+| xrt | unstable-2026-11-03 | unstable-2026-11-10 |
+| 　 | src hash (opencode-telegram) | `sha256-ysLqNhDlRMZJIvRhFtF5iFvmHIOkhd1esO4VvWs6Jqc=` → `sha256-EbnsnXa0H4ZUn3UNCH4FSdqFViSZRtE3FxUJ+g0RVwE=` |
+| 　 | npmDepsHash (dsh) | `sha256-fmG48z22NUOQtXNjLz1/w6ujzrNp9Jm03bLCGRWSrTE=` → `sha256-kPptnZsNI5ax2AwcNUpxDXPe6sltjXsB6CU5VI98rj4=` |
+| 　 | hash (xrt) | `sha256-pb2dHNPiTBV+P2wKSXdU03rMYGg9XBhQHUFItkid2uI=` → `sha256-TBw+VOyA0fAvj3qLhtUicmeaKa9Rpr8W6LRv/oiZHjg=` |
+
 ## 2026-11-07T14:31:30+09:00
 
 **Summary**: Six consecutive dsh-api-balance updates (settings row, ring layout, handle wording)
