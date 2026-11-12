@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.2.1-rc.5` |
+| 版本 | `0.2.2-rc.1` |
 | 开发通道 | `dsh-alpha 0.2.2-alpha.3`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
@@ -21,7 +21,7 @@ NixKits 仿 ruyi 的薄包装模式（主定义 + 版本/hash 覆盖包装）同
 
 | 包 | 通道 | 版本 | 说明 |
 |----|------|------|------|
-| `pkgs.dsh` | stable | `0.2.1-rc.5` | npm `latest` dist-tag，默认；**预设内容**冻结在钉住的 rev |
+| `pkgs.dsh` | stable | `0.2.2-rc.1` | npm `latest` dist-tag，默认；**预设内容**冻结在钉住的 rev |
 | `pkgs.dsh-alpha` | alpha | `0.2.2-alpha.3` | npm **`alpha`** dist-tag，跟踪 0.2.x 线的最新预发布；**预设内容**跟仓库 HEAD |
 
 ```nix
@@ -409,13 +409,14 @@ dsh 沙箱中 `sudo` 的 setuid 被剥离，代理无法提权（如 `nixos-rebu
 
 ## 插件清单
 
-dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
+dsh 0.2.2-rc.1 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可用值，`id -> 插件包`）：
 
 > **清单生成方法**：`dsh --profile web --dump-default-config`（只读）输出即 `id -> name` 格式；升级 dsh 后用它重新生成本表，以所装版本的输出为准。本表对应 web profile 的 base + web-app 补丁集。
 >
-> ⚠️ **alpha 通道（`0.2.2-alpha.3`）与 stable 的清单**：2026-10-20 用同一条命令在两通道产物上实测，
-> alpha **188** 条、stable **190** 条；**alpha 独有条目为空**，stable 多出
-> `ui-deepseek-model-label-1017` 与 `web-deepseek-api` 两条。
+> ⚠️ **alpha 通道（`0.2.2-alpha.3`）与 stable 的清单**：stable 于 **2026-11-12** 用同一条命令
+> 在本仓产物上实测 **196** 条。alpha 的对照仍是 2026-10-20 的旧实测（alpha **188** 条、
+> 当时 stable **190** 条；alpha 独有条目为空，stable 多出 `ui-deepseek-model-label-1017`
+> 与 `web-deepseek-api` 两条）——**本次升级未重测 alpha**，那两条差异是否仍成立未知。
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
@@ -487,7 +488,6 @@ dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
-  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control
   tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-fork -> @deepseek-ai/dsh-tool-subagent
   ptc-runtime -> @deepseek-ai/dsh-ptc-runtime-node
@@ -509,6 +509,8 @@ dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   tool-web -> @deepseek-ai/dsh-tool-web
   mcp-resources -> @deepseek-ai/dsh-mcp-resources
   tools -> @deepseek-ai/dsh-tools
+  tool-executor-native -> @deepseek-ai/dsh-tool-executor-native
+  tool-executor-ptc -> @deepseek-ai/dsh-tool-executor-ptc
   system-prompt -> @deepseek-ai/dsh-system-prompt
   agent-loop -> @deepseek-ai/dsh-agent-loop
   fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
@@ -520,6 +522,8 @@ dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   message-feedback -> @deepseek-ai/dsh-message-feedback
   session-log-download -> @deepseek-ai/dsh-session-log-export
   open-in-app -> @deepseek-ai/dsh-host-open-in-app
+  ui-file-actions -> @deepseek-ai/dsh-client-ui-file-actions
+  ui-context-menu -> @deepseek-ai/dsh-client-ui-context-menu
   ui-open-in-app -> @deepseek-ai/dsh-client-ui-open-in-app
   workspace -> @deepseek-ai/dsh-workspace
   session-reference -> @deepseek-ai/dsh-session-reference
@@ -571,11 +575,14 @@ dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   ui-settings-plugin-inventory -> @deepseek-ai/dsh-client-ui-settings-plugin-inventory
   ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
   ui-approval -> @deepseek-ai/dsh-client-ui-approval
+  message-quotes -> @deepseek-ai/dsh-message-quotes
   ui-chat -> @deepseek-ai/dsh-client-ui-chat
   ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
   ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
+  ui-file-drag -> @deepseek-ai/dsh-client-ui-file-drag
   ui-tool -> @deepseek-ai/dsh-client-ui-tool
   ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
+  deliverable-file-references -> @deepseek-ai/dsh-deliverable-file-references
   ui-deliverables -> @deepseek-ai/dsh-client-ui-deliverables
   workspace-changes -> @deepseek-ai/dsh-workspace-changes
   ui-workspace -> @deepseek-ai/dsh-client-ui-workspace
@@ -591,9 +598,9 @@ dsh 0.2.1-rc.5 的内置插件 entry id（`nixkits.dsh.plugins.disabled` 的可�
   ui-goal -> @deepseek-ai/dsh-client-ui-goal
   ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
-  ui-deepseek-model-label-1017 -> @deepseek-ai/dsh-client-ui-deepseek-model-label-1017
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  entry-customization -> @deepseek-ai/dsh-client-ui-entry-customization
   ui-settings-session-log -> @deepseek-ai/dsh-client-ui-settings-session-log
   ui-settings-plugins -> @deepseek-ai/dsh-client-ui-settings-plugins
   ui-settings-shell -> @deepseek-ai/dsh-client-ui-settings-shell

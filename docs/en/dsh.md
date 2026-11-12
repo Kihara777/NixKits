@@ -10,7 +10,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 |------|-------|
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| Version | `0.2.1-rc.5` |
+| Version | `0.2.2-rc.1` |
 | Development channel | `dsh-alpha 0.2.2-alpha.3` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
@@ -21,7 +21,7 @@ NixKits provides several dsh versions through the same thin-wrapper pattern as r
 
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
-| `pkgs.dsh` | stable | `0.2.1-rc.5` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
+| `pkgs.dsh` | stable | `0.2.2-rc.1` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
 | `pkgs.dsh-alpha` | alpha | `0.2.2-alpha.3` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
 
 ```nix
@@ -348,13 +348,16 @@ Inside the dsh sandbox `sudo` loses its setuid bit, so the agent cannot elevate 
 
 ## Plugin inventory
 
-Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
+Built-in plugin entry ids for dsh 0.2.2-rc.1 (valid values for `nixkits.dsh.plugins.disabled`, `id -> package`):
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 >
-> ⚠️ **alpha channel (`0.2.2-alpha.3`) vs stable**: measured on 2026-10-20 with the same command on both
-> artifacts — alpha has **188** entries, stable **190**; **no entry is alpha-only**, and stable has
-> `ui-deepseek-model-label-1017` and `web-deepseek-api` extra.
+> ⚠️ **alpha channel (`0.2.2-alpha.3`) vs stable**: stable was measured at **196** entries on
+> **2026-11-12** with the same command against this repo's artifact. The alpha comparison is
+> still the older 2026-10-20 measurement (alpha **188**, stable **190** at the time; no
+> alpha-only entry, stable had two extra: `ui-deepseek-model-label-1017` and
+> `web-deepseek-api`) — **alpha was not re-measured in this upgrade**, so whether those two
+> differences still hold is unknown.
 
 ```text
   tool-plugin-manager -> @deepseek-ai/dsh-plugin-manager/tools
@@ -426,7 +429,6 @@ Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plug
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
-  tool-subagent-list-agents -> @deepseek-ai/dsh-tool-subagent-control
   tool-subagent -> @deepseek-ai/dsh-tool-subagent
   tool-subagent-fork -> @deepseek-ai/dsh-tool-subagent
   ptc-runtime -> @deepseek-ai/dsh-ptc-runtime-node
@@ -448,6 +450,8 @@ Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plug
   tool-web -> @deepseek-ai/dsh-tool-web
   mcp-resources -> @deepseek-ai/dsh-mcp-resources
   tools -> @deepseek-ai/dsh-tools
+  tool-executor-native -> @deepseek-ai/dsh-tool-executor-native
+  tool-executor-ptc -> @deepseek-ai/dsh-tool-executor-ptc
   system-prompt -> @deepseek-ai/dsh-system-prompt
   agent-loop -> @deepseek-ai/dsh-agent-loop
   fs-sandbox -> @deepseek-ai/dsh-fs-sandbox
@@ -459,6 +463,8 @@ Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plug
   message-feedback -> @deepseek-ai/dsh-message-feedback
   session-log-download -> @deepseek-ai/dsh-session-log-export
   open-in-app -> @deepseek-ai/dsh-host-open-in-app
+  ui-file-actions -> @deepseek-ai/dsh-client-ui-file-actions
+  ui-context-menu -> @deepseek-ai/dsh-client-ui-context-menu
   ui-open-in-app -> @deepseek-ai/dsh-client-ui-open-in-app
   workspace -> @deepseek-ai/dsh-workspace
   session-reference -> @deepseek-ai/dsh-session-reference
@@ -510,11 +516,14 @@ Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plug
   ui-settings-plugin-inventory -> @deepseek-ai/dsh-client-ui-settings-plugin-inventory
   ui-conversation -> @deepseek-ai/dsh-client-ui-conversation
   ui-approval -> @deepseek-ai/dsh-client-ui-approval
+  message-quotes -> @deepseek-ai/dsh-message-quotes
   ui-chat -> @deepseek-ai/dsh-client-ui-chat
   ui-brand-official -> @deepseek-ai/dsh-client-ui-brand-official
   ui-attachment -> @deepseek-ai/dsh-client-ui-attachment
+  ui-file-drag -> @deepseek-ai/dsh-client-ui-file-drag
   ui-tool -> @deepseek-ai/dsh-client-ui-tool
   ui-cordis -> @deepseek-ai/dsh-client-ui-cordis
+  deliverable-file-references -> @deepseek-ai/dsh-deliverable-file-references
   ui-deliverables -> @deepseek-ai/dsh-client-ui-deliverables
   workspace-changes -> @deepseek-ai/dsh-workspace-changes
   ui-workspace -> @deepseek-ai/dsh-client-ui-workspace
@@ -530,9 +539,9 @@ Built-in plugin entry ids for dsh 0.2.1-rc.5 (valid values for `nixkits.dsh.plug
   ui-goal -> @deepseek-ai/dsh-client-ui-goal
   ui-message-feedback -> @deepseek-ai/dsh-client-ui-message-feedback
   ui-model-selection -> @deepseek-ai/dsh-client-ui-model-selection
-  ui-deepseek-model-label-1017 -> @deepseek-ai/dsh-client-ui-deepseek-model-label-1017
   ui-permission -> @deepseek-ai/dsh-client-ui-permission-presets
   ui-agent-preset -> @deepseek-ai/dsh-client-ui-agent-preset
+  entry-customization -> @deepseek-ai/dsh-client-ui-entry-customization
   ui-settings-session-log -> @deepseek-ai/dsh-client-ui-settings-session-log
   ui-settings-plugins -> @deepseek-ai/dsh-client-ui-settings-plugins
   ui-settings-shell -> @deepseek-ai/dsh-client-ui-settings-shell
