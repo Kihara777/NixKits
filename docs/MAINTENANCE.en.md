@@ -12,7 +12,7 @@
 - opencode-telegram `0.26.6` → `0.27.0`
 - dsh stable `0.2.1-rc.5` → `0.2.2-rc.1`: vendored lock regenerated (724 packages), plugin list 196 entries
 - xdna-xrt-plugin / xrt re-pinned together (11-11 / 11-10) — xrt follows xdna's submodule pointer, not XRT's own HEAD
-- fix: godot-ai's django `test_filefield` races the sandbox; only that file is removed
+- fix: godot-ai's django `test_filefield` races the sandbox; codewhale-src riscv64 falls back to vendored
 - Criteria: each of the six packages builds green; `nix flake check` passes all seven checks
 
 | Commit | Description |
@@ -23,6 +23,7 @@
 | `55a4112` | feat(dsh): stable 0.2.1-rc.5 → 0.2.2-rc.1 |
 | `fbfe9f2` | feat(ruyi): stable 0.53.0 → 0.54.0 |
 | `63d218b` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+| `648ff6e` | codewhale-src: riscv64 falls back to vendored |
 
 | Package | Old | New |
 |--------|-----|-----|

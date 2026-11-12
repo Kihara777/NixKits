@@ -5,14 +5,14 @@
 
 ## 2026-11-12T14:56:05+09:00
 
-**摘要**：五包更新 + nixpkgs 升级 — 例行检查
+**摘要**：五包 + nixpkgs — 例行检查
 
 - nixpkgs `31ecbaca1` → `177d0540`（nixos-unstable 2026-11-09）
 - ruyi stable `0.53.0` → `0.54.0`；beta/alpha 未动
 - opencode-telegram `0.26.6` → `0.27.0`
 - dsh stable `0.2.1-rc.5` → `0.2.2-rc.1`：lock 重生、清单 196 条
-- xdna-xrt-plugin / xrt 配套重钉（11-11/11-10）——跟 xdna submodule
-- fix：godot-ai 的 django `test_filefield` 撞 sandbox 时序
+- xdna-xrt-plugin / xrt 重钉（11-11/11-10）
+- fix：godot-ai django `test_filefield` 撞 sandbox 时序；codewhale-src riscv64 退回 vendored
 - 判据：六包 `nix build` 绿；`nix flake check` 七项全过
 
 | 提交 | 说明 |
@@ -23,6 +23,7 @@
 | `55a4112` | feat(dsh): stable 0.2.1-rc.5 → 0.2.2-rc.1 |
 | `fbfe9f2` | feat(ruyi): stable 0.53.0 → 0.54.0 |
 | `63d218b` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+| `648ff6e` | codewhale-src: riscv64 退回 vendored |
 
 | 软件名 | 旧版本 | 新版本 |
 |--------|--------|--------|

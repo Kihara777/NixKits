@@ -12,7 +12,7 @@
 - opencode-telegram `0.26.6` → `0.27.0`
 - dsh stable `0.2.1-rc.5` → `0.2.2-rc.1`：vendored lock 再生成（724 パッケージ）、プラグイン一覧 196 条
 - xdna-xrt-plugin / xrt を配套で再ピン（11-11 / 11-10）——xrt は XRT 自身の HEAD ではなく xdna の submodule ポインタに従う
-- fix: godot-ai の django `test_filefield` が sandbox で時序衝突、当該ファイルのみ削除
+- fix: godot-ai の django `test_filefield` が sandbox で時序衝突、codewhale-src の riscv64 は vendored に戻す
 - 判据：6 パッケージを個別に `nix build` して緑、`nix flake check` は 7 項目すべて通過
 
 | コミット | 説明 |
@@ -23,6 +23,7 @@
 | `55a4112` | feat(dsh): stable 0.2.1-rc.5 → 0.2.2-rc.1 |
 | `fbfe9f2` | feat(ruyi): stable 0.53.0 → 0.54.0 |
 | `63d218b` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+| `648ff6e` | codewhale-src: riscv64 を vendored に戻す |
 
 | パッケージ | 旧 | 新 |
 |------------|----|----|
