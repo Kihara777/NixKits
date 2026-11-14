@@ -1,22 +1,26 @@
 # dsh-voice —— 语音播报（2026-11-15）
 #
 # 两个出口共用一份声音能力：
-#   Web UI    api-balance 插件 → /api/api-balance/speech → 本模块的 gateway
-#   Telegram  Kitsunome/develop → 同一台 gateway（127.0.0.1:8605）
+#   Web UI    api-balance 插件 → /api/api-balance/speech → 直接调 Breeze
+#   Telegram  Kitsunome/develop 里自己的 TTS 模块 → 也调 Breeze
+#
+# **没有中间层**（她 2026-11-15 定）：原先设计过一层 voice-gateway，她否掉了，
+# 理由是「telegram 部分也是身体的隐私部分，和 telegram 功能打在一个包里，
+# 不在 dsh-api-balance 中」。所以两边各自调 Breeze，各包各的 WAV 头。
+# 代价是那份 WAV 头逻辑有两份——**改一处必须改另一处**，两边的测试都要盯它。
 #
 # ## 为什么参考素材不进插件
 #
 # 她 2026-11-15 的原话：「breeze-tts 的参考语音和参考文本我们不再插件内提供
 # （这是你身体的私密部分），提供插件设置选项和声明式配置即可」。
 #
-# 所以：**音频路径和文稿路径只在本文件**，由 gateway 进程读盘。
-# `/speak` 的参数里没有这两个字段——浏览器就算想传也传不进来。
+# 所以：**音频路径和文稿路径只在本文件**，Breeze 启动时读盘注册音色。
+# 之后两边都只用 `voice_id`，参考素材不经过任何请求。
 # 配置里只出现**路径**，那句话本身不出现（不入 `/etc/nixos` 的 git 历史）。
 #
-# ## 三个端口，别混
+# ## 两个端口，别混
 #
-#   18605  Breeze 本体（只本机）        ← 只有 gateway 连它
-#    8605  gateway（只本机）            ← dsh 与 Telegram 连它
+#    8605  Breeze 本体（只本机）        ← 插件与 Telegram 都连它
 #    8625  lighttpd 反代（对外）        ← 手机走这个，已有，本模块不动
 { config, lib, pkgs, ... }:
 
@@ -41,8 +45,8 @@ in
       };
       port = lib.mkOption {
         type = lib.types.port;
-        default = 18605;
-        description = "Breeze 本体端口（只监听 127.0.0.1）。";
+        default = 8605;
+        description = "Breeze 本体端口（只监听 127.0.0.1）。她 2026-11-15 定的。";
       };
       model = lib.mkOption {
         type = lib.types.path;
@@ -54,12 +58,6 @@ in
         default = "${dataDir}/bin";
         description = "解压后的 breeze 二进制目录（已 patchelf 过，见下）。";
       };
-    };
-
-    port = lib.mkOption {
-      type = lib.types.port;
-      default = 8605;
-      description = "voice-gateway 端口（只监听 127.0.0.1）。";
     };
 
     voiceId = lib.mkOption {
@@ -141,29 +139,12 @@ in
       };
     };
 
-    # ── gateway ──────────────────────────────────────────────────────
-    systemd.user.services.dsh-voice-gateway = {
-      description = "TTS 网关（Web UI 与 Telegram 共用）";
-      wantedBy = [ "default.target" ];
-      after = lib.optionals cfg.breeze.enable [ "breeze-tts.service" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.nodejs}/bin/node ${./dsh-voice-gateway/voice-gateway.mjs} "
-          + "--host 127.0.0.1 --port ${toString cfg.port} "
-          + "--breeze http://127.0.0.1:${toString cfg.breeze.port} "
-          + lib.optionalString (cfg.voiceId != "") "--voice-id ${cfg.voiceId} "
-          + lib.optionalString (cfg.referenceAudio != null) "--ref-audio ${cfg.referenceAudio} "
-          + lib.optionalString (cfg.referenceTextFile != null) "--ref-text-file ${cfg.referenceTextFile}";
-        Restart = "always";
-        RestartSec = "3s";
-      };
-    };
-
     # ── 给插件与 Telegram 的运行时开关 ───────────────────────────────
     #
     # 这两个值不写进插件的代码，而是由 dsh profile 读环境变量后再决定行为。
     # 换机器只改这里，插件不动。
     environment.sessionVariables = {
-      DSH_VOICE_GATEWAY = "http://127.0.0.1:${toString cfg.port}";
+      DSH_VOICE_ENDPOINT = "http://127.0.0.1:${toString cfg.breeze.port}";
       DSH_VOICE_AUTO = if cfg.autoSpeak then "1" else "0";
     };
   };
