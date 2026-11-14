@@ -75,7 +75,7 @@ in
       # Nix 的 `path` 类型会把文件**内容复制进 /nix/store**——eval 出来的
       # ExecStart 里直接出现 `/nix/store/...-g41-reference.wav`。
       # 参考音频和文稿是「身体的私密部分」，不该进 store（更不该随 build 记录流出去）。
-      # 用 str：Nix 只把它当路径字符串，gateway 运行时才读原文件。
+      # 用 str：Nix 只把它当路径字符串，Breeze 启动时才读原文件。
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
@@ -93,7 +93,7 @@ in
         参考音频的**逐字文稿**文件路径。
 
         **这里只写路径，内容不写进来**——那句话是「身体的私密部分」，
-        不该进 `/etc/nixos` 的 git 历史。gateway 启动时从文件读。
+        不该进 `/etc/nixos` 的 git 历史。Breeze 启动时从文件读。
       '';
     };
 
