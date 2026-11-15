@@ -132,8 +132,13 @@ in
       description = "Breeze-TTS-2 本地语音合成（Vulkan）";
       wantedBy = [ "default.target" ];
       serviceConfig = {
+        # **--parallel 2 是必需的**（2026-11-15 实测）：
+        # Breeze 默认单槽，一个请求在生成时第二个直接被 409 拒掉
+        #（docs/performance.md：「409 from the HTTP routes | Every slot is taken」）。
+        # 前端 abort 只是不再等，服务端那次生成仍在跑——所以连点两下必定 409。
         ExecStart = "${cfg.breeze.package}/breeze-server ${cfg.breeze.model} "
           + "--host 127.0.0.1 --port ${toString cfg.breeze.port} "
+          + "--parallel 2 "
           + "--voices-dir ${dataDir}/voices";
         Restart = "on-failure";
         RestartSec = "5s";
