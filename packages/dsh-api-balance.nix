@@ -18,7 +18,7 @@
 # in the `nix-flake-update-check` skill.
 buildNpmPackage (finalAttrs: {
   pname = "dsh-api-balance";
-  version = "0.1.37";
+  version = "0.1.38";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -26,8 +26,8 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kihara777";
     repo = "dsh-api-balance";
-    rev = "7d05380f2fcabad6e493d119bf6370bce6cf3d89";
-    hash = "sha256-yHpA6lCddm+uTvovaE+4aBdRjwBqRF2gGcENvn0vDjk=";
+    rev = "d2aab6bf7bb84f14efce42686064e7332aa5c981";
+    hash = "sha256-h34lsF/e9gvzVEgRdmaylU9iSL0O1Cf84kz8Ycud2v4=";
   };
 
   # dsh ecosystem packages declare peers against same-release prereleases;
