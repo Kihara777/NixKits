@@ -132,6 +132,18 @@ in
       description = "Breeze-TTS-2 本地语音合成（Vulkan）";
       wantedBy = [ "default.target" ];
       serviceConfig = {
+        # **--split-chars 100 是流式能不能用的关键**（2026-11-17 实测）。
+        #
+        # 文档：「| --split-chars | 600 | Default length long text is broken up at.
+        #         0 sends the whole thing through in one pass. |」
+        #
+        # 默认 600，而插件最多送 500 字 —— **它从不切片，一次性生成整段 47 秒音频
+        # 再一次性吐出来**。实测首块 28785ms、总耗时 28981ms，首块几乎等于全程。
+        # 切到 100 之后它才会真的「生成一段、发一段」。
+        #
+        # **--parallel 2（不是 4）**：文档说 chunk-first 会在
+        # 「GPU too busy」时自己变大 —— 4 个流抢 GPU 只会让首块更晚。
+        #
         # **--parallel 4**（2026-11-15 从 1 提到 2，2026-11-17 提到 4）：
         # Breeze 默认单槽，一个请求在生成时第二个直接被 409 拒掉
         #（docs/performance.md：「409 from the HTTP routes | Every slot is taken」）。
@@ -140,7 +152,7 @@ in
         # 每个槽约 700MB 显存（q8_0），8060S 的 UMA 吃得下。
         ExecStart = "${cfg.breeze.package}/breeze-server ${cfg.breeze.model} "
           + "--host 127.0.0.1 --port ${toString cfg.breeze.port} "
-          + "--parallel 4 "
+          + "--parallel 2 --split-chars 100 "
           + "--voices-dir ${dataDir}/voices";
         Restart = "on-failure";
         RestartSec = "5s";

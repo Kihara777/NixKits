@@ -1388,6 +1388,19 @@ in
       ([ "mod_proxy" "mod_setenv" ] ++ lib.optional cfg.reverseProxy.autoAuth "mod_magnet");
 
     services.lighttpd.extraConfig = lib.mkIf cfg.reverseProxy.enable ''
+      # **服务端流式响应**（2026-11-17，语音播报实测出来的）。
+      #
+      # lighttpd 1.4 的 `server.stream-response-body` **默认是 0** ——
+      # 即「先把整个响应收完再发给客户端」。对普通页面没影响，
+      # 但对流式音频是致命的：实测直连 dsh 首块 283ms，经 8625 反代
+      # **41736ms**，整个 67 秒音频缓冲完才吐出来。
+      #
+      # 我为此改了五版插件、两版 Breeze 参数都没对，因为问题在这一层。
+      # 1 = 边收边发；2 = 强制流式（含 HTTP/1.0）。取 1。
+      #
+      # 这是**全局指令**，不能放进 $SERVER["socket"] 块里。
+      server.stream-response-body = 1
+
       $SERVER["socket"] == "0.0.0.0:${toString cfg.reverseProxy.port}" {
         proxy.server = ( "" => (("host" => "127.0.0.1", "port" => ${toString cfg.port})) )
         # dsh 的 /api/events.* 是 WebSocket（Upgrade: websocket）。
