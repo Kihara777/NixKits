@@ -333,7 +333,7 @@ let
   # single quotes.
   launchUrlScript = pkgs.writeShellApplication {
     name = "dsh-launch-url";
-    runtimeInputs = [ pkgs.coreutils pkgs.gnugrep ];
+    runtimeInputs = [ pkgs.coreutils pkgs.gnugrep pkgs.curl ];
     text = ''
       token=""
       for _ in $(seq 1 60); do
@@ -359,6 +359,24 @@ let
       # autoAuth 模式下 token 不再是秘密（反代会自动使用），world-readable。
       echo "$token" > /run/dsh/launch-token
       chmod 644 /run/dsh/launch-token
+
+      # ── 就绪探测（2026-11-24 加）─────────────────────────────────────
+      # 打印 token 只说明进程起来了，**不说明它在 accept 连接**。
+      # 2026-11-24 实测一次重启：06:44:16 Starting → 06:44:20 Started，
+      # 而前端在 06:44:14–18 拿到 503；后端那之后 130 个请求全 200，
+      # 前端却停在「会话不可用」。把"Started"推迟到真正能应答之后，
+      # 切换期间浏览器看到的是**连不上**（会自己重试），而不是一条被
+      # 前端当终态缓存的 503 —— 后者才是让它卡死的那一半。
+      #
+      # 上限 15 秒：等不到就照常退出（`|| true`），绝不让探测本身
+      # 拖垮服务启动 —— 历史上 ExecStartPost 失败曾把整个服务拖死。
+      for _ in $(seq 1 30); do
+        if ${pkgs.curl}/bin/curl -fsS -o /dev/null --max-time 1 \
+             "http://127.0.0.1:${toString cfg.port}/" 2>/dev/null; then
+          break
+        fi
+        sleep 0.5
+      done || true
     '';
   };
 
@@ -1203,7 +1221,14 @@ in
         # disposed，rc.6 实测 13 小时触发）；rc.7 尚未修复该上游问题，缩短
         # 重启间隔把中断窗口压到最小。always 覆盖 exit 0 退出（on-failure
         # 不重启 exit 0，dsh 某些异常路径会以 0 退出）。
-        RestartSec = 5;
+        #
+        # 2026-11-24：5 → 1 秒。实测切换时 dsh 停机 6 秒（06:44:10 停、
+        # 06:44:16 起、06:44:20 就绪），前端在这段拿到 503 后**不会自己重连**，
+        # 于是标题退化成 session id、输入框变成「会话不可用」——后端同期
+        # 130 个请求全 200，坏的是前端的状态机。压短停机窗是这条链的第一环。
+        # 1 秒仍高于「服务启动失败时的抖动保护」需求：真起不来时
+        # TimeoutStopSec + 下面 dsh-watchdog 的 15 秒巡检仍在兜底。
+        RestartSec = 1;
         TimeoutStopSec = 30;
         User = cfg.user;
         Group = cfg.group;
