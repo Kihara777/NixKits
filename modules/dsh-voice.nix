@@ -158,6 +158,26 @@ in
         # 前端 abort 只是不再等，服务端那次生成仍在跑——所以连点两下必定 409。
         # 提到 4 是因为句队列会同时开两个请求，再叠上流式重试就撞满了；
         # 每个槽约 700MB 显存（q8_0），8060S 的 UMA 吃得下。
+        # **必须给出 Vulkan ICD 的位置**（2026-11-23 定位）。
+        #
+        # 症状：她报「流式一卡一卡的」，但功能正常。
+        # 查下来 Breeze 本次开机回落到 CPU 后端：
+        #     backend: CPU, sample rate: 24000
+        #     warm up 从 10:43:55 拖到 12:48:40，first audio 稳定 2500-3600ms
+        # 而 11-15 那次是 `backend: Vulkan0`，首块 187ms——**差 13 倍**。
+        #
+        # 根因：本机 **`/run/opengl-driver` 整个目录不存在**（没启用硬件图形栈），
+        # 于是 Vulkan loader 找不到 ICD，Breeze 静默降级到 CPU。
+        # llama-cpp 走 ROCm，不依赖 ICD，所以它一直有 GPU——**这就是为什么
+        # 「GPU 上明明有进程，TTS 却慢」看着很矛盾**。
+        #
+        # mesa 的 radeon ICD 在 store 里就有，直接把路径给它。手动带上这一条
+        # 重启，日志立刻回到 `ggml_vulkan: Found 1 Vulkan devices` +
+        # `backend: Vulkan0`，首块 169-187ms。
+        Environment = [
+          "VK_ICD_FILENAMES=${pkgs.mesa}/share/vulkan/icd.d/radeon_icd.x86_64.json"
+          "VK_DRIVER_FILES=${pkgs.mesa}/share/vulkan/icd.d/radeon_icd.x86_64.json"
+        ];
         ExecStart = "${cfg.breeze.package}/breeze-server ${cfg.breeze.model} "
           + "--host 127.0.0.1 --port ${toString cfg.breeze.port} "
           + "--parallel 2 --split-chars 1000 "

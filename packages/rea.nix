@@ -6,11 +6,11 @@
   procps,
   jdk,
   # version/hash/npmDepsHash/lockFile 可覆盖，便于将来拆通道（如需要）。
-  version ? "6.8.0",
+  version ? "6.10.1",
   # npm registry 的 integrity 是 sha512；这里必须原样写 sha512-，写成 sha256- 会被
   # 「base64 长度对不上」拒掉（错误会出现在 npmDeps 的求值栈里，看起来像别处的错）。
-  hash ? "sha512-9QDeRnGqEDzABZyr04eLnBXBv/c6I9/TWu/6M0MD4pEfkySI/BIgwTODIbAReX3C1x6hjw9+Jlx4A2yUSPZ9ww==",
-  npmDepsHash ? "sha256-XsCQF6ZzgmAhWkgFsRBc4ymzfYdldqkyEDSJ89qgMSM=",
+  hash ? "sha256-6M8IyfqVTpmPyIaMI/qOX1GM25VTSI7CJ7MaO7aQMVA=",
+  npmDepsHash ? "sha256-EqIFpg3oE3sLihhhQFaMmOPgSUidxAyqNfEommX7AH8=",
   lockFile ? ./rea-package-lock.json,
 }:
 

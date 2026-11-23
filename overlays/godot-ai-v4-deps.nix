@@ -72,8 +72,8 @@
   pydanticSrc = prev.fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "v2.14.1";
-    hash = "sha256-sk7BkUmVcDRNzcZz5czHxhyaDD1e7hHrR0cHeYU97J8=";
+    tag = "v2.14.3";
+    hash = "sha256-Q5dvfgbbYw3QeB1nY+eUIBoVsUpxgLKE8jTX6CJV+Zs=";
   };
   # pydantic-core 住在 pydantic monorepo 里，但独立发版（`core-v<ver>`）。实测两个 tag
   # 指向**同一个提交**（`gh api repos/pydantic/pydantic/commits/<tag> --jq .sha` →
@@ -82,8 +82,8 @@
   pydanticCoreSrc = prev.fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "core-v2.50.1";
-    hash = "sha256-sk7BkUmVcDRNzcZz5czHxhyaDD1e7hHrR0cHeYU97J8=";
+    tag = "core-v2.50.4";
+    hash = "sha256-Q5dvfgbbYw3QeB1nY+eUIBoVsUpxgLKE8jTX6CJV+Zs=";
   };
   starletteSrc = prev.fetchFromGitHub {
     owner = "Kludex";
@@ -108,7 +108,7 @@
   websocketsSrc = prev.fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
-    tag = "17.3";
+    tag = "17.4";
     hash = "sha256-XIr7mbGlWIroV5tnPm7QBfGDZeJmtpGflVpyrYXnSPE=";
   };
 in {
@@ -131,22 +131,22 @@ in {
       # `check_pydantic_core_version()` 比对已安装的 core 版本，新的 pydantic 配旧的
       # core 会**在构建期**失败，而不是运行期。
       pydantic-core = pyPrev.pydantic-core.overridePythonAttrs (old: {
-        version = "2.50.1";
+        version = "2.50.4";
         src = pydanticCoreSrc;
         # fetchCargoVendor 解包到的是 `source/`（fetchFromGitHub 的目录名），
         # 而不是 `<pname>-<version>/`；写错会报
         # "chmod: cannot access '.../pydantic-core': No such file or directory"。
         cargoDeps = prev.rustPlatform.fetchCargoVendor {
           pname = "pydantic-core";
-          version = "2.50.1";
+          version = "2.50.4";
           src = pydanticCoreSrc;
           sourceRoot = "source/pydantic-core";
-          hash = "sha256-EPTH6oOFIhsRHAvt3eS0mYbR1NMyjoPIs2YRPzd6QFU=";
+          hash = "sha256-AHOFlhGY5ka6wFl4LmhBbmie1einzoyMde7YJ5yWhzw=";
         };
       });
 
       pydantic = pyPrev.pydantic.overridePythonAttrs (old: {
-        version = "2.14.1";
+        version = "2.14.3";
         src = pydanticSrc;
         # 2.14.1 已经吸收了 nixpkgs 针对 2.13.x 打的那批补丁：直接沿用会在
         # patchPhase 报 `Reversed (or previously applied) patch detected!` 并留下
@@ -418,7 +418,7 @@ in {
       });
 
       websockets = pyPrev.websockets.overridePythonAttrs (old: {
-        version = "17.3";
+        version = "17.4";
         src = websocketsSrc;
         # 17.1 多出 `tests/trio/` 测试集，而 nixpkgs 的 check inputs 里没有 trio，
         # 于是测试直接报 "ModuleNotFoundError: No module named 'trio'"

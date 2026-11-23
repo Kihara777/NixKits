@@ -7,7 +7,7 @@
 
 python312.pkgs.buildPythonApplication rec {
   pname = "godot-ai";
-  version = "4.4.1";
+  version = "4.4.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ python312.pkgs.buildPythonApplication rec {
     # ⚠️ 改 version 必须连 hash 一起改，且**先把 hash 置成 lib.fakeHash 再构建**取真值：
     # 固定输出派生的输出路径由 hash 决定，留着旧 hash 改 version 会让 Nix 直接复用旧版本
     # 的源码树——构建在一份与 version 不符的代码上跑完，而且**不报任何错**。
-    hash = "sha256-YcUmX2MURkyiUkt/PaR4mfwBcKaVPfwPojAKp7K2+Fs=";
+    hash = "sha256-LNuH+OOpAetxUscoZVkvREcuN7XhvEWY/nThrOBTV9w=";
   };
 
   pyproject = true;

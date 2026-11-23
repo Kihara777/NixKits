@@ -27,8 +27,8 @@
   #
   # `dshChannel` 供 modules/dsh.nix 判断本包属于哪个通道：stable 的**预设内容**
   # 取自钉住的 rev（冻结），alpha 的跟 HEAD。
-  version ? "0.2.2-rc.1",
-  hash ? "sha256-rSGWiu0DN6MmuFNQeiOzDqy77E1nqwfztv3mm3WxnNY=",
+  version ? "0.2.2-rc.5",
+  hash ? "sha256-Z9paPEWPRs0njg7satDjpE6Z/RMIfG8RobNiJokApSw=",
   npmDepsHash ? "sha256-kPptnZsNI5ax2AwcNUpxDXPe6sltjXsB6CU5VI98rj4=",
   lockFile ? ./dsh-package-lock.json,
   dshChannel ? "stable",
