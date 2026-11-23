@@ -41,7 +41,7 @@
 # 「这个包不含内核模块」是有意的。
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdna-xrt-plugin";
-  version = "unstable-2026-11-11";
+  version = "unstable-2026-11-19";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -50,9 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amd";
     repo = "xdna-driver";
     # 与 `packages/xrt.nix` 里钉的 XRT commit 来自**同一次** submodule 更新
-    # （`amd/xdna-driver@1d3e56f8` 的 `xrt` 指向 `06c43a7f`）。驱动与运行时错配的症状
+    # （`amd/xdna-driver@8a5d53da` 的 `xrt` 指向 `4f7d2610`）。驱动与运行时错配的症状
     # 是「设备在、就是打不开」，比编译失败难查。
-    rev = "1d3e56f8cfe2033ddd35b534b8b598e94ea2663b";
+    rev = "8a5d53da974897260839f1592b1c8d436b361313";
     # **必须带子模块**（2026-11-04 实测）：shim 直接 `#include "core/common/system.h"`，
     # 那是 XRT **源码树里**的内部头，XRT 装包时并不安装它。所以 `XRT_UPSTREAM=ON`
     # （只编 shim、XRT 由外部提供）这条路走不通——试过，报
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     # **裁剪过**的 XRT（排除了 xocl / edge / tools / xrt 等）。代价是 XRT 编两遍，
     # 收益是 shim 拿到它真正依赖的内部头。
     fetchSubmodules = true;
-    hash = "sha256-lo6JOh3259ITAPuWOV3NdpxeLvjve1HYxQGmFLIv7ZQ=";
+    hash = "sha256-RWIYRD+yNdpIPUb35KWM08EOnAW5xeW8pjBm84A0/xk=";
   };
 
   # `git`：子模块里的 XRT 在 `src/CMake/settings.cmake:46` 硬要求它

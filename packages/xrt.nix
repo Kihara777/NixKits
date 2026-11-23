@@ -43,11 +43,11 @@
 # 而不是去改它的源码。
 gcc13Stdenv.mkDerivation (finalAttrs: {
   pname = "xrt";
-  version = "unstable-2026-11-10";
+  version = "unstable-2026-11-16";
 
   src = fetchgit {
     url = "https://github.com/Xilinx/XRT";
-    rev = "06c43a7f93fee129d32def1d372e17a8e69c05d2";
+    rev = "4f7d26105937680818e7cdc519205dcefbc3078a";
     # **必须带子模块**（2026-11-04 实测）：`src/runtime_src/xdp` 与
     # `core/common/aiebu` 是 git submodule，`fetchFromGitHub` 的 tarball 里是**空目录**，
     # 于是配置阶段直接崩：
@@ -57,7 +57,7 @@ gcc13Stdenv.mkDerivation (finalAttrs: {
     #
     # 而且 `xrt_add_subdirectory(xdp)` 是**无条件**的——关不掉，只能把内容取回来。
     fetchSubmodules = true;
-    hash = "sha256-TBw+VOyA0fAvj3qLhtUicmeaKa9Rpr8W6LRv/oiZHjg=";
+    hash = "sha256-3lvZ+G7o2uuWvg8SG9sGiv4qw63cdYMfeFqYFHlcAvo=";
   };
 
   # 2026-11-04：配置阶段已通过（依赖齐、子模块齐、LINUX_FLAVOR 兜住），
