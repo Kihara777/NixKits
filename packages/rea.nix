@@ -5,6 +5,7 @@
   makeWrapper,
   procps,
   jdk,
+  nodejs,
   # version/hash/npmDepsHash/lockFile 可覆盖，便于将来拆通道（如需要）。
   version ? "6.10.1",
   # npm registry 的 integrity 是 sha512；这里必须原样写 sha512-，写成 sha256- 会被
@@ -105,11 +106,17 @@ buildNpmPackage (finalAttrs: {
   #   · `jdk`：Android 分析要把 `java` 跑起来（REA 调 JADX 的 jar）。代价是这个
   #     JDK 会进本包的闭包（约 +200 MiB），这是有意的选择而不是遗漏——不用 Android
   #     分析的人也会带上它。
+  #   · **`nodejs`（2026-11-23 实测必须显式给）**：6.10.1 起 REA 在入口做硬校验
+  #     `REA requires Node.js 22.x (>=22.23.4), 24.x (>=24.22.1), …`，不满足直接
+  #     exit 1。而 wrapper **不**自带 node——它会落到调用方 PATH 里的 `node`。
+  #     升级前那台机器 PATH 里恰好够新，所以没暴露；nixpkgs 11-21 的系统 node 是
+  #     24.21.0，差一个补丁号就挂，`rea-mcp` 于是每次 spawn 都 `exited (1)`。
+  #     把本包的 `nodejs`（当前 24.22.2）前置进 PATH，运行时不再依赖宿主。
   makeWrapperArgs = [
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath [ procps jdk ])
+    (lib.makeBinPath [ procps jdk nodejs ])
   ];
 
   meta = {
