@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) — Everything is a Plugin.
 | Type | Node.js application (CLI) |
 | Upstream | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | Version | `0.2.2-rc.5` |
-| Development channel | `dsh-alpha 0.2.2-alpha.3` (npm `alpha` dist-tag) |
+| Development channel | `dsh-alpha 0.2.3-alpha.2` (npm `alpha` dist-tag) |
 | License | MIT |
 | Command | `dsh` |
 
@@ -22,14 +22,14 @@ NixKits provides several dsh versions through the same thin-wrapper pattern as r
 | Package | Channel | Version | Notes |
 |---------|---------|---------|-------|
 | `pkgs.dsh` | stable | `0.2.2-rc.5` | npm `latest` dist-tag, the default; its **preset content** is frozen at a pinned rev |
-| `pkgs.dsh-alpha` | alpha | `0.2.2-alpha.3` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
+| `pkgs.dsh-alpha` | alpha | `0.2.3-alpha.2` | npm **`alpha`** dist-tag, tracking the newest prerelease on the 0.2.x line; its **preset content** follows repository HEAD |
 
 ```nix
 # run the newest prerelease on this machine
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **Why `dsh-alpha` follows `alpha`** (switched back 2026-10-08). The npm dist-tags currently read `alpha` = **`0.2.2-alpha.3`** while `latest` = `next` = `0.2.0-rc.2` — `alpha` now **leads** `next` instead of trailing it. The 2026-10-02 switch to `next` rested on `alpha` = `0.1.7-alpha.2` sitting on the older 0.1.x line and being **lower** than stable; **that premise has reversed**, and following `next` now pins the development channel to a version older than `alpha`. The criterion is not "which tag name sounds more like a prerelease" but **which tag points at the newer version on the 0.2.x line**: re-read the dist-tags and compare the two versions when re-checking, and switch back once `alpha` stops leading.
+> **Why `dsh-alpha` follows `alpha`** (switched back 2026-10-08). The npm dist-tags currently read `alpha` = **`0.2.3-alpha.2`** while `latest` = `next` = `0.2.0-rc.2` — `alpha` now **leads** `next` instead of trailing it. The 2026-10-02 switch to `next` rested on `alpha` = `0.1.7-alpha.2` sitting on the older 0.1.x line and being **lower** than stable; **that premise has reversed**, and following `next` now pins the development channel to a version older than `alpha`. The criterion is not "which tag name sounds more like a prerelease" but **which tag points at the newer version on the 0.2.x line**: re-read the dist-tags and compare the two versions when re-checking, and switch back once `alpha` stops leading.
 >
 > The two channels now **differ in two ways**: ① the dsh version (alpha is newer, so hash / `npmDepsHash` / vendored lock are **independent** — they must not share stable's lock while the versions differ); ② **preset content**: stable's presets are frozen at the commit pinned in `packages/dsh-nixos-shell-stable.nix`, alpha's follow repository HEAD (see "Modes" below).
 >
@@ -352,8 +352,8 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
 
 > **Regenerating this list**: `dsh --profile web --dump-default-config` (read-only) prints the `id -> name` pairs directly; re-run it after upgrading and treat the installed version's output as authoritative. This list covers the web profile's base + web-app patch set.
 >
-> ⚠️ **alpha channel (`0.2.2-alpha.3`) vs stable**: stable was measured at **196** entries on
-> **2026-11-12** with the same command against this repo's artifact. The alpha comparison is
+> ⚠️ **alpha channel (`0.2.3-alpha.2`) vs stable**: stable was measured at **202** entries on
+> **2026-11-23** with the same command against this repo's artifact. The alpha comparison is
 > still the older 2026-10-20 measurement (alpha **188**, stable **190** at the time; no
 > alpha-only entry, stable had two extra: `ui-deepseek-model-label-1017` and
 > `web-deepseek-api`) — **alpha was not re-measured in this upgrade**, so whether those two
@@ -383,7 +383,7 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
   config-editor -> @deepseek-ai/dsh-config-editor
   settings -> @deepseek-ai/dsh-settings
   authorization -> @deepseek-ai/dsh-authorization
-  deepseek-account -> @deepseek-ai/dsh-deepseek-account-platform
+  deepseek-account -> @deepseek-ai/dsh-deepseek-account
   credentials -> @deepseek-ai/dsh-credentials-local
   llm-pi-ai -> @deepseek-ai/dsh-llm-pi-ai
   session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
@@ -426,6 +426,8 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
   compaction-basic -> @deepseek-ai/dsh-compaction-basic
   command-compact -> @deepseek-ai/dsh-command-compact
   subagent -> @deepseek-ai/dsh-subagent
+  agent-team -> @deepseek-ai/dsh-agent-team
+  tool-agent-team -> @deepseek-ai/dsh-tool-agent-team
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
@@ -479,8 +481,9 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
   workspace-files -> @deepseek-ai/dsh-api-workspace-files
   schedule -> @deepseek-ai/dsh-schedule
   ui-settings-account -> @deepseek-ai/dsh-client-ui-settings-account
-  account-controller -> @deepseek-ai/dsh-api-account-controller
+  ui-account-notifications -> @deepseek-ai/dsh-client-ui-account-notifications
   settings-controller -> @deepseek-ai/dsh-api-settings-controller
+  mcp-manager -> @deepseek-ai/dsh-mcp-manager
   workspace-controller -> @deepseek-ai/dsh-api-workspace-controller
   cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
   cordis-inspect-providers -> @deepseek-ai/dsh-tool-cordis/host
@@ -504,7 +507,9 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
   resources -> @deepseek-ai/dsh-client-resources
   ui-sidebar -> @deepseek-ai/dsh-client-ui-sidebar
   ui-sidebar-right -> @deepseek-ai/dsh-client-ui-sidebar-right
-  office-to-pdf -> @deepseek-ai/dsh-office-to-pdf
+  office-kit -> @deepseek-ai/dsh-office-kit
+  workspace-dependencies -> @deepseek-ai/dsh-tool-workspace-dependencies
+  skill-office -> @deepseek-ai/dsh-skill-office
   ui-sidebar-documentpreview -> @deepseek-ai/dsh-client-ui-sidebar-documentpreview
   ui-sidebar-browser -> @deepseek-ai/dsh-client-ui-sidebar-browser
   ui-sidebar-terminal -> @deepseek-ai/dsh-client-ui-sidebar-terminal
@@ -531,6 +536,7 @@ Built-in plugin entry ids for dsh 0.2.2-rc.5 (valid values for `nixkits.dsh.plug
   ui-input-trigger -> @deepseek-ai/dsh-client-ui-input-trigger
   ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-skill -> @deepseek-ai/dsh-client-ui-skill
+  ui-agent-team -> @deepseek-ai/dsh-client-ui-agent-team
   ui-subagent -> @deepseek-ai/dsh-client-ui-subagent
   ui-reference -> @deepseek-ai/dsh-client-ui-reference
   ui-secret-mask -> @deepseek-ai/dsh-client-ui-secret-mask
@@ -728,7 +734,7 @@ The `deepseek-official` route's model catalogue is **built into** the adapter (`
 |-------------|-------------------|---------------------------------|
 | stable `0.1.5-rc.2`, alpha `0.1.6-alpha.1` | `deepseek-flash`, `deepseek-v4-flash`, `deepseek-v4-pro`, `deepseek-v4-flash-vision-exp` | `deepseek-flash`, `deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
-| **both channels** (stable `0.2.0-rc.2`, alpha `0.2.2-alpha.3`) | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
+| **both channels** (stable `0.2.0-rc.2`, alpha `0.2.3-alpha.2`) | `deepseek-flash`, `deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` is the only id **present in all three** catalogues **and declaring the image modality in each** — which is why the module default picks it. The other image-capable id, `deepseek-v4-flash-vision-exp`, exists only in the two older catalogues and upstream retired it on 2026-09-10, so it cannot serve as a default.
 

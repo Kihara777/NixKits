@@ -11,7 +11,7 @@ DeepSeek Harness（DSH）—— Everything is a Plugin（すべてがプラグ�
 | タイプ | Node.js アプリ（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
 | バージョン | `0.2.2-rc.5` |
-| 開発チャネル | `dsh-alpha 0.2.2-alpha.3`（npm `alpha` dist-tag） |
+| 開発チャネル | `dsh-alpha 0.2.3-alpha.2`（npm `alpha` dist-tag） |
 | ライセンス | MIT |
 | コマンド | `dsh` |
 
@@ -22,14 +22,14 @@ NixKits は ruyi と同じ薄いラッパー方式（主定義 + version/hash �
 | パッケージ | チャネル | バージョン | 説明 |
 |----|------|------|------|
 | `pkgs.dsh` | stable | `0.2.2-rc.5` | npm `latest` dist-tag、既定。**プリセット内容**はピン留めした rev に凍結 |
-| `pkgs.dsh-alpha` | alpha | `0.2.2-alpha.3` | npm **`alpha`** dist-tag、0.2.x 線の最新プレリリースを追跡。**プリセット内容**はリポジトリ HEAD に追随 |
+| `pkgs.dsh-alpha` | alpha | `0.2.3-alpha.2` | npm **`alpha`** dist-tag、0.2.x 線の最新プレリリースを追跡。**プリセット内容**はリポジトリ HEAD に追随 |
 
 ```nix
 # 本機で最新プレリリースを使う
 { nixkits.dsh.package = pkgs.dsh-alpha; }
 ```
 
-> **`dsh-alpha` が `alpha` を追う理由**（2026-10-08 に戻した）。npm の三つの dist-tag は現在 `alpha` = **`0.2.2-alpha.3`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` が逆に `next` を**追い越している**。2026-10-02 に `next` へ切り替えた根拠は「`alpha` = `0.1.7-alpha.2` が古い 0.1.x 線に属し stable より**低い**」ことであったが、**その前提は反転した**。`next` を追い続けることは開発チャネルを `alpha` より古い版に固定することに等しい。判定基準は「どちらの tag 名がよりプレリリースらしいか」ではなく、**どちらの tag が 0.2.x 線でより新しい版を指すか**である：再確認のたびに dist-tags を読み直して版を比べ、`alpha` がリードしなくなったら戻せばよい。
+> **`dsh-alpha` が `alpha` を追う理由**（2026-10-08 に戻した）。npm の三つの dist-tag は現在 `alpha` = **`0.2.3-alpha.2`**、一方 `latest` = `next` = `0.2.0-rc.2` —— `alpha` が逆に `next` を**追い越している**。2026-10-02 に `next` へ切り替えた根拠は「`alpha` = `0.1.7-alpha.2` が古い 0.1.x 線に属し stable より**低い**」ことであったが、**その前提は反転した**。`next` を追い続けることは開発チャネルを `alpha` より古い版に固定することに等しい。判定基準は「どちらの tag 名がよりプレリリースらしいか」ではなく、**どちらの tag が 0.2.x 線でより新しい版を指すか**である：再確認のたびに dist-tags を読み直して版を比べ、`alpha` がリードしなくなったら戻せばよい。
 >
 > 両チャネルの**挙動差は二点**になった：① dsh バージョン（alpha が新しいため hash / `npmDepsHash` / vendored lock は**各自独立**——版が異なる間は stable の lock を共用できない）；② **プリセット内容**：stable のプリセットは `packages/dsh-nixos-shell-stable.nix` がピン留めした commit に凍結され、alpha はリポジトリ HEAD に追随する（下記「モード」参照）。
 >
@@ -350,8 +350,8 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
 
 > **一覧の生成方法**：`dsh --profile web --dump-default-config`（読み取り専用）の出力がそのまま `id -> name` 形式。dsh を更新したら再実行し、導入版の出力を正とする。本一覧は web プロファイルの base + web-app パッチセットに対応する。
 >
-> ⚠️ **alpha チャネル（`0.2.2-alpha.3`）と stable の一覧**：stable は **2026-11-12** に
-> 同じコマンドで本リポジトリの成果物に対して実測し **196** 条。alpha の比較は
+> ⚠️ **alpha チャネル（`0.2.3-alpha.2`）と stable の一覧**：stable は **2026-11-23** に
+> 同じコマンドで本リポジトリの成果物に対して実測し **202** 条。alpha の比較は
 > 2026-10-20 の旧実測のまま（alpha **188** 条、当時 stable **190** 条；alpha のみの条目は
 > 無し、stable は `ui-deepseek-model-label-1017` と `web-deepseek-api` の 2 条が多い）
 > ——**今回のアップグレードでは alpha を再測していない**ため、その 2 条の差が今も
@@ -381,7 +381,7 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   config-editor -> @deepseek-ai/dsh-config-editor
   settings -> @deepseek-ai/dsh-settings
   authorization -> @deepseek-ai/dsh-authorization
-  deepseek-account -> @deepseek-ai/dsh-deepseek-account-platform
+  deepseek-account -> @deepseek-ai/dsh-deepseek-account
   credentials -> @deepseek-ai/dsh-credentials-local
   llm-pi-ai -> @deepseek-ai/dsh-llm-pi-ai
   session-persistence-jsonl -> @deepseek-ai/dsh-session-persistence-jsonl
@@ -424,6 +424,8 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   compaction-basic -> @deepseek-ai/dsh-compaction-basic
   command-compact -> @deepseek-ai/dsh-command-compact
   subagent -> @deepseek-ai/dsh-subagent
+  agent-team -> @deepseek-ai/dsh-agent-team
+  tool-agent-team -> @deepseek-ai/dsh-tool-agent-team
   subagent-spawn-in-process -> @deepseek-ai/dsh-subagent-spawn-in-process
   subagent-fork-in-process -> @deepseek-ai/dsh-subagent-fork-in-process
   tool-subagent-control -> @deepseek-ai/dsh-tool-subagent-control
@@ -477,8 +479,9 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   workspace-files -> @deepseek-ai/dsh-api-workspace-files
   schedule -> @deepseek-ai/dsh-schedule
   ui-settings-account -> @deepseek-ai/dsh-client-ui-settings-account
-  account-controller -> @deepseek-ai/dsh-api-account-controller
+  ui-account-notifications -> @deepseek-ai/dsh-client-ui-account-notifications
   settings-controller -> @deepseek-ai/dsh-api-settings-controller
+  mcp-manager -> @deepseek-ai/dsh-mcp-manager
   workspace-controller -> @deepseek-ai/dsh-api-workspace-controller
   cordis-host-runner -> @deepseek-ai/dsh-cordis-host-runner
   cordis-inspect-providers -> @deepseek-ai/dsh-tool-cordis/host
@@ -502,7 +505,9 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   resources -> @deepseek-ai/dsh-client-resources
   ui-sidebar -> @deepseek-ai/dsh-client-ui-sidebar
   ui-sidebar-right -> @deepseek-ai/dsh-client-ui-sidebar-right
-  office-to-pdf -> @deepseek-ai/dsh-office-to-pdf
+  office-kit -> @deepseek-ai/dsh-office-kit
+  workspace-dependencies -> @deepseek-ai/dsh-tool-workspace-dependencies
+  skill-office -> @deepseek-ai/dsh-skill-office
   ui-sidebar-documentpreview -> @deepseek-ai/dsh-client-ui-sidebar-documentpreview
   ui-sidebar-browser -> @deepseek-ai/dsh-client-ui-sidebar-browser
   ui-sidebar-terminal -> @deepseek-ai/dsh-client-ui-sidebar-terminal
@@ -529,6 +534,7 @@ dsh 0.2.2-rc.5 の内蔵プラグイン entry id（`nixkits.dsh.plugins.disabled
   ui-input-trigger -> @deepseek-ai/dsh-client-ui-input-trigger
   ui-commands -> @deepseek-ai/dsh-client-ui-commands
   ui-skill -> @deepseek-ai/dsh-client-ui-skill
+  ui-agent-team -> @deepseek-ai/dsh-client-ui-agent-team
   ui-subagent -> @deepseek-ai/dsh-client-ui-subagent
   ui-reference -> @deepseek-ai/dsh-client-ui-reference
   ui-secret-mask -> @deepseek-ai/dsh-client-ui-secret-mask
@@ -738,7 +744,7 @@ dsh の設定メニュー項目は `$DSH_HOME/settings.yaml`（ファイルバ�
 |----------------|-----------|-----------------------------------|
 | stable `0.1.5-rc.2`、alpha `0.1.6-alpha.1` | `deepseek-flash`、`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp` | `deepseek-flash`、`deepseek-v4-flash-vision-exp` |
 | alpha `0.1.6-alpha.2` | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
-| **両チャネル**（stable `0.2.0-rc.2`、alpha `0.2.2-alpha.3`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
+| **両チャネル**（stable `0.2.0-rc.2`、alpha `0.2.3-alpha.2`） | `deepseek-flash`、`deepseek-v4-pro` | `deepseek-flash` |
 
 `deepseek-flash` は三つの目録**すべてに存在**し、かつ**いずれでも image モダリティを宣言する**唯一の id であり、モジュールの既定値がこれを選ぶ理由でもある。もう一方の画像対応 id `deepseek-v4-flash-vision-exp` は古い二つの目録にしか無く、上流が 2026-09-10 に廃止したため既定値には使えない。
 
