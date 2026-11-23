@@ -3,6 +3,6 @@
 # Thin wrapper around the stable ruyi.nix with version + hash overrides.
 { callPackage }:
 callPackage ./ruyi.nix {
-  version = "0.54.0-beta.20261102";
-  hash = "sha256-+adc3vV1yPElIxPLhbMttQBqp/Dl6jmQoFzFPJC1VzM=";
+  version = "0.55.0-beta.20261120";
+  hash = "sha256-X1P9Geyr+AY18MKpCWExTLZjaz25k9eZJJTJ887VuIc=";
 }
