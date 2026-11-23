@@ -3,6 +3,42 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | 日本語 | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-23T13:11:19+09:00
+
+**概要**：6 パッケージ更新 + nixpkgs 更新 — 定例チェックの完全な実施
+
+- nixpkgs `177d05409` → `2786a2a72`（nixos-unstable 2026-11-21）
+- bili-agent 1.4.0、rea 6.10.1、opencode-telegram 0.28.0
+- godot-ai 4.4.2：fail-closed 検証が fastmcp 4.1.6、pydantic 2.14.3、websockets 17.4 を要求し、overlay の依存 4 件をそれぞれ一版上げた
+- dsh stable 0.2.2-rc.5 と alpha 0.2.3-alpha.2：vendored lock を両方再生成、プラグイン一覧は 202 条
+- ruyi-beta 0.55.0-beta.20261120、alpha 0.56.0-alpha.20261123（stable は未変更）
+- codewhale 0.10.3（プリビルト 4 ハッシュ + src 変体の Cargo.lock）、xdna/xrt を 11-19 / 11-16 に配套で再ピン
+- 判据：8 パッケージを個別に `nix build` して緑、`nix flake check` は 7 項目すべて通過、プリセット行解析は 75 行で 0 失敗
+
+| コミット | 説明 |
+|------|------|
+| `cbbffa7` | nixpkgs 177d05409 → 2786a2a72（混在 dsh-voice 提交里） |
+| `f03de55` | docs: 版本号对齐包定义（四语 20 处） |
+| `fe22ea6` | dsh: 回填 npmDepsHash |
+| `244ccca` | feat(dsh-alpha): 0.2.3-alpha.2 |
+| `31e7bfb` | feat(ruyi): beta / alpha 通道 |
+| `92add8d` | feat(codewhale): 0.10.3 |
+| `ecdc5d5` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+
+| パッケージ | 旧 | 新 |
+|------------|----|----|
+| bili-agent | 1.3.0 | 1.4.0 |
+| rea | 6.8.0 | 6.10.1 |
+| godot-ai | 4.4.1 | 4.4.2 |
+| opencode-telegram | 0.27.0 | 0.28.0 |
+| dsh | 0.2.2-rc.1 | 0.2.2-rc.5 |
+| dsh-alpha | 0.2.2-alpha.3 | 0.2.3-alpha.2 |
+| ruyi-beta | 0.54.0-beta.20261102 | 0.55.0-beta.20261120 |
+| ruyi-alpha | 0.54.0-alpha.20260918 | 0.56.0-alpha.20261123 |
+| codewhale | 0.10.2 | 0.10.3 |
+| xdna-xrt-plugin | unstable-2026-11-11 | unstable-2026-11-19 |
+| xrt | unstable-2026-11-10 | unstable-2026-11-16 |
+
 ## 2026-11-12T14:56:05+09:00
 
 **概要**：5 パッケージ更新 + nixpkgs 更新 — 定例チェックの完全な実施

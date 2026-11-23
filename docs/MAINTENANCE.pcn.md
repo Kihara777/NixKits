@@ -3,6 +3,42 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-11-23T13:11:19+09:00
+
+**摘要**：六包更新 + nixpkgs 昇級 — 定例検査 完全実施
+
+- nixpkgs `177d05409` → `2786a2a72`（nixos-unstable 2026-11-21）
+- bili-agent 1.4.0、rea 6.10.1、opencode-telegram 0.28.0
+- godot-ai 4.4.2：fail-closed 検証 fastmcp 4.1.6、pydantic 2.14.3、websockets 17.4 要求、overlay 四依存 各 一版 上
+- dsh stable 0.2.2-rc.5、alpha 0.2.3-alpha.2：vendored lock 両方 再生成、插件清単 202 条
+- ruyi-beta 0.55.0-beta.20261120、alpha 0.56.0-alpha.20261123（stable 未変更）
+- codewhale 0.10.3（予備構築 4 hash + src 変体 Cargo.lock）、xdna/xrt 配套 再釘 11-19 / 11-16
+- 判据：八包 個別 `nix build` 緑、`nix flake check` 七項 全通過、preset 行解析 75 行 0 失敗
+
+| 提交 | 説明 |
+|------|------|
+| `cbbffa7` | nixpkgs 177d05409 → 2786a2a72（混在 dsh-voice 提交里） |
+| `f03de55` | docs: 版本号对齐包定义（四语 20 处） |
+| `fe22ea6` | dsh: 回填 npmDepsHash |
+| `244ccca` | feat(dsh-alpha): 0.2.3-alpha.2 |
+| `31e7bfb` | feat(ruyi): beta / alpha 通道 |
+| `92add8d` | feat(codewhale): 0.10.3 |
+| `ecdc5d5` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| bili-agent | 1.3.0 | 1.4.0 |
+| rea | 6.8.0 | 6.10.1 |
+| godot-ai | 4.4.1 | 4.4.2 |
+| opencode-telegram | 0.27.0 | 0.28.0 |
+| dsh | 0.2.2-rc.1 | 0.2.2-rc.5 |
+| dsh-alpha | 0.2.2-alpha.3 | 0.2.3-alpha.2 |
+| ruyi-beta | 0.54.0-beta.20261102 | 0.55.0-beta.20261120 |
+| ruyi-alpha | 0.54.0-alpha.20260918 | 0.56.0-alpha.20261123 |
+| codewhale | 0.10.2 | 0.10.3 |
+| xdna-xrt-plugin | unstable-2026-11-11 | unstable-2026-11-19 |
+| xrt | unstable-2026-11-10 | unstable-2026-11-16 |
+
 ## 2026-11-12T14:56:05+09:00
 
 **摘要**：五包更新 + nixpkgs 昇級 — 定例検査 完全実施

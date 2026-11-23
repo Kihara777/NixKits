@@ -3,6 +3,42 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-23T13:11:19+09:00
+
+**Summary**: six package updates plus a nixpkgs bump — a full routine check
+
+- nixpkgs `177d05409` → `2786a2a72` (nixos-unstable 2026-11-21)
+- bili-agent 1.4.0, rea 6.10.1, opencode-telegram 0.28.0
+- godot-ai 4.4.2: the fail-closed runtime check demands fastmcp 4.1.6, pydantic 2.14.3 and websockets 17.4, so each overlay dependency moves up one release
+- dsh stable 0.2.2-rc.5 and alpha 0.2.3-alpha.2: both vendored locks regenerated, plugin list at 202 entries
+- ruyi-beta 0.55.0-beta.20261120 and alpha 0.56.0-alpha.20261123 (stable untouched)
+- codewhale 0.10.3 (four prebuilt hashes plus Cargo.lock in the src variant), xdna/xrt re-pinned together to 11-19 / 11-16
+- Criteria: eight packages build green one by one; `nix flake check` passes all seven; preset row parsing finds 0 failures across 75 rows
+
+| Commit | Description |
+|------|------|
+| `cbbffa7` | nixpkgs 177d05409 → 2786a2a72（混在 dsh-voice 提交里） |
+| `f03de55` | docs: 版本号对齐包定义（四语 20 处） |
+| `fe22ea6` | dsh: 回填 npmDepsHash |
+| `244ccca` | feat(dsh-alpha): 0.2.3-alpha.2 |
+| `31e7bfb` | feat(ruyi): beta / alpha 通道 |
+| `92add8d` | feat(codewhale): 0.10.3 |
+| `ecdc5d5` | feat(xdna-xrt-plugin,xrt): 配套重钉 |
+
+| Package | Old | New |
+|--------|-----|-----|
+| bili-agent | 1.3.0 | 1.4.0 |
+| rea | 6.8.0 | 6.10.1 |
+| godot-ai | 4.4.1 | 4.4.2 |
+| opencode-telegram | 0.27.0 | 0.28.0 |
+| dsh | 0.2.2-rc.1 | 0.2.2-rc.5 |
+| dsh-alpha | 0.2.2-alpha.3 | 0.2.3-alpha.2 |
+| ruyi-beta | 0.54.0-beta.20261102 | 0.55.0-beta.20261120 |
+| ruyi-alpha | 0.54.0-alpha.20260918 | 0.56.0-alpha.20261123 |
+| codewhale | 0.10.2 | 0.10.3 |
+| xdna-xrt-plugin | unstable-2026-11-11 | unstable-2026-11-19 |
+| xrt | unstable-2026-11-10 | unstable-2026-11-16 |
+
 ## 2026-11-12T14:56:05+09:00
 
 **Summary**: five package updates plus a nixpkgs bump — a full routine check
