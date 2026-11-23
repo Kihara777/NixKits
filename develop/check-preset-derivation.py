@@ -194,7 +194,7 @@ def check_news(orders: list) -> None:
 #   ② 本机若装着 dsh，核对钉住的快照与**当前安装**是否一致。不一致说明上游又变了，
 #      该重采样。找不到 dsh 就显式跳过——「没量到」不是「没事」，也不该冒充失败。
 
-# dsh 0.2.2-alpha.2 的 `dsh-web-app/presets/standard.patch.yml` 里的 id 集
+# dsh 0.2.2-rc.5 的 `dsh-web-app/presets/standard.patch.yml` 里的 id 集
 # （按源文件顺序；`preset-standard` 本身不计）。升级 dsh 后重采样：
 #     UPDATE_UPSTREAM_IDS=1 nix shell nixpkgs#python3 --command \
 #         python3 develop/check-preset-derivation.py
@@ -205,11 +205,22 @@ UPSTREAM_STANDARD_IDS = (
     "compaction", "compaction-basic", "command-compact", "tool-result-pruner",
     "delegation", "tool-subagent-control", "tool-subagent", "tool-subagent-fork",
     "workflow-ptc", "tool-workflow", "tool-ask-user", "tool-todo", "tool-web",
-    "present", "tool-plugin-manager", "tool-plugin-market",
+    # 2026-11-23 dsh 升级后上游新增这两个（重采样得到的顺序）
+    "tool-cordis", "present", "tool-office", "tool-plugin-manager", "tool-plugin-market",
 )
 
 # 上游有、我们**有意不跟**的行。键是 id，值是理由（必须写清日期与代价判断）。
 UPSTREAM_SKIP = {
+    "tool-cordis": (
+        "运行时手术工具集，**有意不跟**。它的 Inspect provider 在宿主平面按进程注册一次，"
+        "并发的 shipped `cordis` 预设会话（或任何动态 cordis 工具）会占住它，第二次挂载直接失败"
+        "——只要有一个创作模式会话活着，整个预设都拒挂。组合撰写技能留着，"
+        "自改工具集不留：NixOS 模式要的是编码面，不是运行时手术。（2026-11-02 定的，2026-11-23 登记）"
+    ),
+    "tool-office": (
+        "Office 文档读写（docx/xlsx 之类）。掌灯模式的工作面是代码、文档与系统，"
+        "不处理 Office 文件；真需要时再加，而不是默认背着一个用不上的工具。（2026-11-23）"
+    ),
     "tool-schedule": (
         "宿主级持久提醒。本仓已有 proactive/sentinel 两套定时语义，再引一套互不知情的"
         "「定时」比少一个工具更难查。（2026-11-02）"
