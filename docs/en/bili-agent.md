@@ -1,7 +1,7 @@
 # bili-agent
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-x86_64.yml?branch=main&label=x86_64%20v1.3.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-aarch64.yml?branch=main&label=aarch64%20v1.3.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-x86_64.yml?branch=main&label=x86_64%20v1.4.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-aarch64.yml?branch=main&label=aarch64%20v1.4.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/bili-agent.md) | English | [日本語](../ja/bili-agent.md)  | [偽中国語](../pcn/bili-agent.md)
 
@@ -13,7 +13,7 @@ log and a DM allowlist. The command is `bili`.
 
 | Item | Value |
 |------|-------|
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Upstream | [kukemc/bili-cli](https://github.com/kukemc/bili-cli) |
 | Type | Python application (hatchling) |
 | License | MIT |

@@ -1,7 +1,7 @@
 # bili-agent
 
-[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-x86_64.yml?branch=main&label=x86_64%20v1.3.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
-[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-aarch64.yml?branch=main&label=aarch64%20v1.3.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![x86_64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-x86_64.yml?branch=main&label=x86_64%20v1.4.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
+[![aarch64](https://img.shields.io/github/actions/workflow/status/Kihara777/NixKits/build-bili-agent-aarch64.yml?branch=main&label=aarch64%20v1.4.0)](https://github.com/Kihara777/NixKits/actions/workflows/check.yml)
 
 [中文](../zh/bili-agent.md) | [English](../en/bili-agent.md) | [日本語](../ja/bili-agent.md)  | 偽中国語
 
@@ -12,7 +12,7 @@ AI 代理為設計之 B 站命令行工具。各命令只於 stdout 出**一箇 
 
 | 項目 | 値 |
 |------|-----|
-| 版本 | 1.3.0 |
+| 版本 | 1.4.0 |
 | 上流 | [kukemc/bili-cli](https://github.com/kukemc/bili-cli) |
 | 類型 | Python 応用（hatchling） |
 | 許可 | MIT |

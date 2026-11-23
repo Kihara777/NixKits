@@ -29,7 +29,7 @@
   # 取自钉住的 rev（冻结），alpha 的跟 HEAD。
   version ? "0.2.2-rc.5",
   hash ? "sha256-Z9paPEWPRs0njg7satDjpE6Z/RMIfG8RobNiJokApSw=",
-  npmDepsHash ? "sha256-kPptnZsNI5ax2AwcNUpxDXPe6sltjXsB6CU5VI98rj4=",
+  npmDepsHash ? lib.fakeHash,
   lockFile ? ./dsh-package-lock.json,
   dshChannel ? "stable",
   # 允许局域网（非 loopback）浏览器读写设置，见 postInstall 中的说明。

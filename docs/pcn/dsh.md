@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 類型 | Node.js 応用（CLI） |
 | 上流 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版 | `0.2.2-rc.1` |
+| 版 | `0.2.2-rc.5` |
 | 開発通道 | `dsh-alpha 0.2.2-alpha.3`（npm `alpha` dist-tag） |
 | 許可 | MIT |
 | 命令 | `dsh` |
@@ -21,7 +21,7 @@ NixKits 倣 ruyi 薄包装模式（本体定義 + 版/hash 上書包装）複数
 
 | 包 | 通道 | 版 | 説明 |
 |---------|---------|---------|-------|
-| `pkgs.dsh` | stable | `0.2.2-rc.1` | npm `latest` dist-tag、既定。**預設内容** 指定 rev 凍結 |
+| `pkgs.dsh` | stable | `0.2.2-rc.5` | npm `latest` dist-tag、既定。**預設内容** 指定 rev 凍結 |
 | `pkgs.dsh-alpha` | alpha | `0.2.2-alpha.3` | npm **`alpha`** dist-tag、0.2.x 線 最新 prerelease 追跡。**預設内容** repo HEAD 追随 |
 
 ```nix
@@ -340,7 +340,7 @@ dsh 沙箱内 `sudo` setuid 喪失、代理昇格不能（例：`nixos-rebuild`�
 
 ## 插件清單
 
-dsh 0.2.2-rc.1 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
+dsh 0.2.2-rc.5 内建插件 entry id（`nixkits.dsh.plugins.disabled` 有效値、`id -> 插件包`）：
 
 > **清單生成方法**：`dsh --profile web --dump-default-config`（読取専用）輸出即 `id -> name` 形式；dsh 升級後再実行、以所装版輸出為准。本表対応 web profile 之 base + web-app patch 集。
 >

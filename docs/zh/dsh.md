@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）—— 万物皆插件（Everything is a Plugin）。
 |------|-----|
 | 类型 | Node.js 应用（CLI） |
 | 上游 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) |
-| 版本 | `0.2.2-rc.1` |
+| 版本 | `0.2.2-rc.5` |
 | 开发通道 | `dsh-alpha 0.2.2-alpha.3`（npm `alpha` dist-tag） |
 | 许可 | MIT |
 | 命令 | `dsh` |
