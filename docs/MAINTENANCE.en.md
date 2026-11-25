@@ -3,6 +3,39 @@
 [中文](../MAINTENANCE.md) | English | [日本語](MAINTENANCE.ja.md) | [偽中国語](MAINTENANCE.pcn.md)
 
 
+## 2026-11-25T17:21:14+09:00
+
+**Summary**: fix: three failures that dsh 0.2.3-alpha.2 brought to the surface, and one check measuring from the wrong source
+
+- rea 6.10.1's entry gate demands nodejs ≥24.22.1 while the host PATH has 24.21.0 — nodejs now goes into the wrapper
+- the frontend treats a single 503 as terminal during dsh's restart window — window shortened, Started held back until it really answers
+- the preset-check snapshot must follow the **currently installed** dsh: 30 items sampled on the 11-24 rollback, 33 after the 11-25 move back up, with both exemptions restored as they were
+- Criteria: `nix flake check` fully green; `check-upstream-preset.py` turns from red to green
+
+| Commit | Description |
+|--------|-------------|
+| `b07ea95` | fix(rea): bind nodejs into the wrapper — the 6.10.1 entry gate demands ≥24.22.1, the host PATH has 24.21.0 |
+| `fd14237` | fix(dsh): shorten the restart window and hold Started until it really answers — the frontend took a single 503 as terminal, so sessions read "unavailable" |
+| `13d372a` | chore(preset-check): re-sample the snapshot against the current install (0.2.2-alpha.3) — upstream has no tool-cordis/tool-office after the rollback |
+| `9453baa` | fix(preset-check): re-sample to 33 items against 0.2.3-alpha.2 — the two exemptions removed during the rollback come back verbatim |
+
+## 2026-11-23T15:13:31+09:00
+
+**Summary**: dsh-api-balance 0.1.64; preset-check catches up with dsh 0.2.2-rc.5's upstream presets
+
+- dsh-api-balance 0.1.64 — sentence-final punctuation: assembling leaves room to breathe, the exit gets its period; rev and hash move together
+- the preset-check standard id snapshot gains rc.5's two entries; `tool-cordis` / `tool-office` enter `UPSTREAM_SKIP` for the first time
+
+| Commit | Description |
+|--------|-------------|
+| `b5de151` | dsh-api-balance: 0.1.64 (end-of-sentence punctuation: assembling gives breathing room + exit appends a period) |
+| `6b7c5a1` | preset: catch up with dsh 0.2.2-rc.5's upstream preset changes |
+
+| Package | Old | New |
+|---------|-----|-----|
+| dsh-api-balance | 0.1.63 | 0.1.64 |
+| 　 | src rev | `917ecea` → `55d1f1c` |
+
 ## 2026-11-23T13:11:19+09:00
 
 **Summary**: six package updates plus a nixpkgs bump — a full routine check

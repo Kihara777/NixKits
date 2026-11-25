@@ -3,6 +3,39 @@
 中文 | [English](docs/MAINTENANCE.en.md) | [日本語](docs/MAINTENANCE.ja.md) | [偽中国語](docs/MAINTENANCE.pcn.md)
 
 
+## 2026-11-25T17:21:14+09:00
+
+**摘要**：fix: dsh 0.2.3-alpha.2 落地暴露的三处失败，和一条判据的采样源错位
+
+- rea 6.10.1 入口硬校验要 nodejs ≥24.22.1，宿主 PATH 是 24.21.0 —— 把 nodejs 绑进 wrapper
+- dsh 重启空窗里前端把一次 503 当终态 —— 压短空窗、Started 推迟到真能应答
+- preset-check 快照必须跟着**当前安装**走：11-24 回退采 30 项、11-25 升回采 33 项，两条豁免按原样恢复
+- 判据：`nix flake check` 全过、`check-upstream-preset.py` 由红转绿
+
+| 提交 | 说明 |
+|------|------|
+| `b07ea95` | fix(rea): 把 nodejs 绑进 wrapper —— 6.10.1 入口硬校验要 ≥24.22.1，而宿主 PATH 里是 24.21.0 |
+| `fd14237` | fix(dsh): 压短重启空窗 + 推迟 Started 到真能应答 —— 前端把一次 503 当终态，导致「会话不可用」 |
+| `13d372a` | chore(preset-check): 快照按当前安装（0.2.2-alpha.3）重采样 —— 系统回退后上游无 tool-cordis/tool-office |
+| `9453baa` | fix(preset-check): 快照按 0.2.3-alpha.2 重采样成 33 项 —— 回退期摘掉的两条豁免按原样恢复 |
+
+## 2026-11-23T15:13:31+09:00
+
+**摘要**：dsh-api-balance 0.1.64；preset-check 跟上 dsh 0.2.2-rc.5 的上游预设
+
+- dsh-api-balance 0.1.64 —— 句尾标点：拼装给呼吸 + 出口补句号；rev 与 hash 同步
+- preset-check 的 standard id 快照补上 rc.5 的两项，`tool-cordis` / `tool-office` 首次进 `UPSTREAM_SKIP`
+
+| 提交 | 说明 |
+|------|------|
+| `b5de151` | dsh-api-balance: 0.1.64（句尾标点：拼装给呼吸 + 出口补句号） |
+| `6b7c5a1` | preset: 跟上 dsh 0.2.2-rc.5 的上游预设变化 |
+
+| 软件名 | 旧版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.63 | 0.1.64 |
+| 　 | src rev | `917ecea` → `55d1f1c` |
+
 ## 2026-11-23T13:11:19+09:00
 
 **摘要**：六包更新 + nixpkgs 升级 — 例行检查

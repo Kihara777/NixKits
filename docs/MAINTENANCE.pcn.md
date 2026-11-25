@@ -3,6 +3,39 @@
 [中文](../MAINTENANCE.md) | [English](MAINTENANCE.en.md) | [日本語](MAINTENANCE.ja.md) | 偽中国語
 
 
+## 2026-11-25T17:21:14+09:00
+
+**摘要**：fix: dsh 0.2.3-alpha.2 適用 露出 三失敗、一判据 采样元 偏差
+
+- rea 6.10.1 入口硬検証 nodejs ≥24.22.1 要求、宿主 PATH 24.21.0 —— nodejs wrapper 縛込
+- dsh 再起動空白 前端 一度 503 終端 看做 —— 空白 詰、Started 実際 応答可能 迄 遅延
+- preset-check 快照 **現在安装** 版 追随：11-24 回退時 30 項、11-25 復帰 33 項、二豁免 原様 復元
+- 判据：`nix flake check` 全通過、`check-upstream-preset.py` 赤 緑 転
+
+| 提交 | 説明 |
+|------|------|
+| `b07ea95` | fix(rea): nodejs wrapper 縛込 —— 6.10.1 入口硬検証 ≥24.22.1 要求、宿主 PATH 24.21.0 |
+| `fd14237` | fix(dsh): 再起動空白 詰、Started 実際 応答可能 迄 遅延 —— 前端 一度 503 終端 看做「会話使用不可」 |
+| `13d372a` | chore(preset-check): 現在安装（0.2.2-alpha.3） snapshot 再採樣 —— 回退後 上流 tool-cordis/tool-office 無 |
+| `9453baa` | fix(preset-check): 0.2.3-alpha.2 33 項 再採樣 —— 回退期 外 二豁免 原様 復元 |
+
+## 2026-11-23T15:13:31+09:00
+
+**摘要**：dsh-api-balance 0.1.64、preset-check dsh 0.2.2-rc.5 上流 preset 追随
+
+- dsh-api-balance 0.1.64 —— 文末句読点：組立 呼吸 与、出口 句点 補；rev 与 hash 同時 更新
+- preset-check standard id snapshot rc.5 二項 追加、`tool-cordis` / `tool-office` 初 `UPSTREAM_SKIP` 入
+
+| 提交 | 説明 |
+|------|------|
+| `b5de151` | dsh-api-balance: 0.1.64（文末句読点：組立 呼吸 + 出口 句点） |
+| `6b7c5a1` | preset: dsh 0.2.2-rc.5 上流 preset 変化 追随 |
+
+| 軟件名 | 舊版本 | 新版本 |
+|--------|--------|--------|
+| dsh-api-balance | 0.1.63 | 0.1.64 |
+| 　 | src rev | `917ecea` → `55d1f1c` |
+
 ## 2026-11-23T13:11:19+09:00
 
 **摘要**：六包更新 + nixpkgs 昇級 — 定例検査 完全実施
