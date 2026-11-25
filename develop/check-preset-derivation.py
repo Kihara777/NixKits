@@ -194,10 +194,16 @@ def check_news(orders: list) -> None:
 #   ② 本机若装着 dsh，核对钉住的快照与**当前安装**是否一致。不一致说明上游又变了，
 #      该重采样。找不到 dsh 就显式跳过——「没量到」不是「没事」，也不该冒充失败。
 
-# dsh 0.2.2-rc.5 的 `dsh-web-app/presets/standard.patch.yml` 里的 id 集
+# dsh 0.2.3-alpha.2 的 `dsh-web-app/presets/standard.patch.yml` 里的 id 集
 # （按源文件顺序；`preset-standard` 本身不计）。升级 dsh 后重采样：
 #     UPDATE_UPSTREAM_IDS=1 nix shell nixpkgs#python3 --command \
 #         python3 develop/check-preset-derivation.py
+#
+# ⚠️ 本快照必须跟着**当前安装**的版本走，不是跟着最新版走。对照的是
+# 「快照 vs 运行时那份 standard.patch.yml」，所以回退到旧版就得按旧版采样
+# （11-24 退回 0.2.2-alpha.3 时采成 30 项，11-25 升回 0.2.3-alpha.2 又采成 33 项）。
+# 停在旧版而快照按新版写，每次 push 都会判「上游移除」；那是版本回退的正确
+# 反映，不是缺陷——判据没错，采样源错了。
 UPSTREAM_STANDARD_IDS = (
     "persona", "agent-instructions", "time-context", "tool-bash", "tool-pwsh",
     "tool-fs", "tool-fs-search", "tool-jobs", "tool-schedule", "skill-filesystem",
@@ -205,30 +211,26 @@ UPSTREAM_STANDARD_IDS = (
     "compaction", "compaction-basic", "command-compact", "tool-result-pruner",
     "delegation", "tool-subagent-control", "tool-subagent", "tool-subagent-fork",
     "workflow-ptc", "tool-workflow", "tool-ask-user", "tool-todo", "tool-web",
-    "present", "tool-plugin-manager", "tool-plugin-market",
-    # ⚠️ 2026-11-24 重采样退回 30 项：当前**安装**的 dsh 是 0.2.2-alpha.3
-    # （11-24 回退），它没有 `tool-cordis` / `tool-office`。本判据对照的是
-    # 「快照 vs 当前安装」，所以系统停在旧版时快照也必须按旧版采样，否则
-    # 每次 push 都会被判「上游移除」——那是版本回退的正确反映，不是缺陷。
-    #
-    # **升回 0.2.3-alpha.2（或更新）后必须再采样一次**，届时这两项会回来。
+    "tool-cordis", "present", "tool-office", "tool-plugin-manager",
+    "tool-plugin-market",
 )
 
 # 上游有、我们**有意不跟**的行。键是 id，值是理由（必须写清日期与代价判断）。
 UPSTREAM_SKIP = {
-    # ⚠️ 2026-11-24 起这两个键**不上游**（系统回退到 0.2.2-alpha.3，它没有这两项）。
-    # 豁免表不许有墓碑（上游没有 = 红），所以删掉键本身；**理由保留在这里**，
-    # 等升回 0.2.3+ 重采样后按原样恢复：
-    #
-    #   tool-cordis（2026-11-02 定的，2026-11-23 登记）：
-    #     运行时手术工具集，**有意不跟**。它的 Inspect provider 在宿主平面按进程
-    #     注册一次，并发的 shipped `cordis` 预设会话（或任何动态 cordis 工具）会
-    #     占住它，第二次挂载直接失败——只要有一个创作模式会话活着，整个预设都拒挂。
-    #     组合撰写技能留着，自改工具集不留：NixOS 模式要的是编码面，不是运行时手术。
-    #
-    #   tool-office（2026-11-23）：
-    #     Office 文档读写（docx/xlsx 之类）。掌灯模式的工作面是代码、文档与系统，
-    #     不处理 Office 文件；真需要时再加，而不是默认背着一个用不上的工具。
+    # 豁免表不许有墓碑（上游没有 = 红）。11-24 回退到 0.2.2-alpha.3 时这两项不在
+    # 上游，键被摘掉过；11-25 升回 0.2.3-alpha.2 后又回来，按原样恢复。
+    "tool-cordis": (
+        "运行时手术工具集，**有意不跟**。它的 Inspect provider 在宿主平面按进程"
+        "注册一次，并发的 shipped `cordis` 预设会话（或任何动态 cordis 工具）会"
+        "占住它，第二次挂载直接失败——只要有一个创作模式会话活着，整个预设都拒挂。"
+        "组合撰写技能留着，自改工具集不留：NixOS 模式要的是编码面，不是运行时手术。"
+        "（2026-11-02 定的，2026-11-23 登记）"
+    ),
+    "tool-office": (
+        "Office 文档读写（docx/xlsx 之类）。掌灯模式的工作面是代码、文档与系统，"
+        "不处理 Office 文件；真需要时再加，而不是默认背着一个用不上的工具。"
+        "（2026-11-23）"
+    ),
     "tool-schedule": (
         "宿主级持久提醒。本仓已有 proactive/sentinel 两套定时语义，再引一套互不知情的"
         "「定时」比少一个工具更难查。（2026-11-02）"
